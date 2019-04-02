@@ -37,7 +37,15 @@ export default async () => {
     link
   });
   const transformedSchema = transformSchema(executableSchema, [
-    new FilterRootFields((operation, rootField) => rootField !== "viewer")
+    new FilterRootFields(
+      (operation, rootField) =>
+        ![
+          "viewer",
+          "saveAggsState",
+          "saveColumnsState",
+          "saveMatchBoxState"
+        ].includes(rootField)
+    )
   ]);
   return transformedSchema;
 };
