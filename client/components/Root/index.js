@@ -88,9 +88,22 @@ const Root = ({ name }) => (
   </div>
 );
 
-Root.getInitialProps = ({ req }) => {
+Root.getInitialProps = async ({ req }) => {
+  console.log(
+    await req.runQuery({
+      query: `
+        query ($iserId: ID!){
+          user(id: $iserId) {
+            name
+          }
+        }`,
+      variables: {
+        userId: req.query.id
+      }
+    })
+  );
   return {
-    name: req.query.name
+    name: req.query.id
   };
 };
 

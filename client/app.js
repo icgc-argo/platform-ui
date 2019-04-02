@@ -1,6 +1,9 @@
 import express from "express";
 import NextJS from "next";
-import { PORT } from "./config";
+import fetch from "isomorphic-fetch";
+import urlJoin from "url-join";
+
+import { PORT, API_ROOT } from "./config";
 
 const dev = process.env.NODE_ENV !== "production";
 const app = NextJS({
@@ -10,10 +13,18 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
   const server = express();
-  server.use("*", (req, res, next) => {
-    next();
-  });
   server.get("*", (req, res) => {
+    req.runQuery = ({ query, variables }) =>
+      fetch(urlJoin(API_ROOT, "graphql"), {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          query,
+          variables
+        })
+      });
     return handle(req, res);
   });
   server.listen(PORT, err => {
