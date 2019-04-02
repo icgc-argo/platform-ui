@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "nodemon index.js",
     "build": "next build",
-    "start": "NODE_ENV=production npm run build && node index.js"
+    "start": "NODE_ENV=production npm run build && node index.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -26,6 +28,12 @@
     "url-join": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "@storybook/react": "^5.0.6",
+    "@storybook/addon-actions": "^5.0.6",
+    "@storybook/addon-links": "^5.0.6",
+    "@storybook/addons": "^5.0.6",
+    "@babel/core": "^7.4.3",
+    "babel-loader": "^8.0.5"
   }
 }
