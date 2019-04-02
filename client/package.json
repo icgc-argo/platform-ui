@@ -1,7 +1,7 @@
 {
   "name": "create-next-example-app",
   "scripts": {
-    "dev": "node index.js",
+    "dev": "nodemon index.js",
     "build": "next build",
     "start": "NODE_ENV=production npm run build && node index.js"
   },
@@ -10,12 +10,20 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
+    "babel-plugin-graphql-tag": "^2.1.0",
+    "babel-plugin-import-graphql": "^2.7.0",
     "babel-polyfill": "^6.26.0",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "graphql": "^14.2.1",
+    "graphql-import": "^0.7.1",
+    "graphql-tag": "^2.10.1",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.11",
     "next": "^8.0.3",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "url-join": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
