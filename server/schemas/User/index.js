@@ -9,11 +9,11 @@ const users = [
   },
   {
     id: 2,
-    name: "Jon"
+    name: "Minh"
   },
   {
     id: 3,
-    name: "Jon"
+    name: "Justin"
   }
 ];
 
