@@ -24,7 +24,7 @@ app.prepare().then(async () => {
           query,
           variables
         })
-      });
+      }).then(res => res.json());
     return handle(req, res);
   });
   server.listen(PORT, err => {
