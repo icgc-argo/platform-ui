@@ -1,7 +1,7 @@
 {
   "name": "create-next-example-app",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "node index.js",
     "build": "next build",
     "start": "NODE_ENV=production npm run build && node index.js"
   },

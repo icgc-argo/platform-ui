@@ -89,7 +89,6 @@ const Root = ({ name }) => (
 );
 
 Root.getInitialProps = ({ req }) => {
-  console.log("req: ", req);
   return {
     name: req.query.name
   };
