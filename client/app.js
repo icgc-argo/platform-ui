@@ -11,6 +11,10 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
   const server = express();
+  server.get("/", (req, res) => {
+    const queryParams = { id: req.params.id };
+    app.render(req, res, "/", queryParams);
+  });
   server.get("*", (req, res) => handle(req, res));
   server.listen(PORT, err => {
     if (err) throw err;
