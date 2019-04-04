@@ -66,7 +66,7 @@ const Root = ({ name }) => (
 
         <div className="row">
           {[1, 2, 3].map(id => (
-            <Link href={`/?id=${id}`}>
+            <Link key={id} href={`/?id=${id}`}>
               <a className="card">
                 <h3>User {id}</h3>
                 <p>User name</p>
