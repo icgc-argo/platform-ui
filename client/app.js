@@ -5,19 +5,19 @@ import bodyParser from "body-parser";
 import { PORT } from "./config";
 
 const dev = process.env.NODE_ENV !== "production";
-const app = NextJS({
+const Next = NextJS({
   dev
 });
-const handle = app.getRequestHandler();
+const handle = Next.getRequestHandler();
 
-app.prepare().then(async () => {
+Next.prepare().then(async () => {
   const server = express();
   server.use(bodyParser.urlencoded({ extended: false }));
   server.use(bodyParser.json());
 
   server.get("/", (req, res) => {
     const queryParams = { id: req.query.id };
-    app.render(req, res, "/", queryParams);
+    Next.render(req, res, "/", queryParams);
   });
   server.get("*", (req, res) => handle(req, res));
   server.listen(PORT, err => {
