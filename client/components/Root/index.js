@@ -3,9 +3,9 @@ import Link from "next/link";
 import _ from "lodash";
 import gql from "graphql-tag";
 
-import Head from "../head";
-import Nav from "../nav";
-import runQuery from "../../utils/runQuery";
+import Head from "components/head";
+import Nav from "components/nav";
+import runQuery from "utils/runQuery";
 
 const Root = ({ name }) => (
   <div>
