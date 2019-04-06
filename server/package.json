@@ -16,6 +16,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
+    "apollo-link-context": "^1.0.17",
     "apollo-link-http": "^1.5.14",
     "apollo-server-express": "^2.4.8",
     "babel-polyfill": "^6.26.0",

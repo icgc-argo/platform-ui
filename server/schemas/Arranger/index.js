@@ -4,33 +4,32 @@ import {
   transformSchema,
   FilterRootFields
 } from "graphql-tools";
+import { setContext } from "apollo-link-context";
 import { HttpLink } from "apollo-link-http";
 import fetch from "node-fetch";
+import urlJoin from "url-join";
+
 import {
   ARRANGER_ROOT,
   ARRANGER_PROJECT_ID,
   EGO_JWT_SECRET
 } from "../../config";
-import urlJoin from "url-join";
 
 const apiRoot = urlJoin(ARRANGER_ROOT, ARRANGER_PROJECT_ID, "graphql");
 
-const createFetcher = ({ egoSecret }) => (_, rest) =>
-  fetch(apiRoot, {
-    method: "POST",
-    ...rest,
-    headers: {
-      ...(rest.headers || {}),
-      Authorization: `Bearer ${egoSecret}`,
-      "Content-Type": "application/json"
-    }
-  });
-
 export default async () => {
-  const link = new HttpLink({
-    uri: apiRoot,
-    fetch: createFetcher({ egoSecret: EGO_JWT_SECRET })
-  });
+  const link = setContext((request, { graphqlContext = {} } = {}) => ({
+    headers: {
+      Authorization: graphqlContext.isUserRequest
+        ? `Bearer ${graphqlContext.egoToken}`
+        : `Bearer ${EGO_JWT_SECRET}`
+    }
+  })).concat(
+    new HttpLink({
+      uri: apiRoot,
+      fetch
+    })
+  );
   const schema = await introspectSchema(link);
   const executableSchema = makeRemoteExecutableSchema({
     schema: schema,

@@ -5,19 +5,23 @@ import DataLoader from "dataloader";
 const users = [
   {
     id: 1,
-    name: "Jon"
+    name: "Jon",
+    friends: [2, 3]
   },
   {
     id: 2,
-    name: "Minh"
+    name: "Minh",
+    friends: [3, 4, 1]
   },
   {
     id: 3,
-    name: "Justin"
+    name: "Justin",
+    friends: [2, 4]
   },
   {
     id: 4,
-    name: "Ciaran"
+    name: "Ciaran",
+    friends: [1, 3, 2, 4]
   }
 ];
 
@@ -26,6 +30,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     name: String
+    friends: [User]
   }
   type Query {
     user(id: ID!): User
@@ -35,17 +40,39 @@ const typeDefs = gql`
   }
 `;
 
+const userResolver = async (obj, args, context, info) => {
+  const { userLoader } = context.dataLoaders;
+  const user = await userLoader.load(args.id);
+  return {
+    ...user,
+    friends: () =>
+      user.friends.map(id => userResolver(obj, { id }, context, info))
+  };
+};
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    user: (obj, args, context, info) =>
-      context.dataLoaders.userLoader.load(args.id)
+    user: async (obj, args, context, info) => {
+      const { userLoader } = context.dataLoaders;
+      const user = await userLoader.load(args.id);
+      return {
+        ...user,
+        friends: (args, context, info) =>
+          user.friends.map(id => userResolver(user, { id }, context, info))
+      };
+    }
   },
   Mutation: {
-    setUserName: (obj, args, context, info) => {
-      const user = context.dataLoaders.userLoader.load(args.id);
+    setUserName: async (obj, args, context, info) => {
+      const { userLoader } = context.dataLoaders;
+      const user = await userLoader.load(args.id);
       user.name = args.name;
-      return user;
+      return {
+        ...user,
+        friends: (args, context, info) =>
+          user.friends.map(id => userResolver(user, { id }, context, info))
+      };
     }
   }
 };

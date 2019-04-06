@@ -14,6 +14,8 @@ Promise.all([createExecutableUserSchema(), createExecutableSearchModel()]).then(
         schemas
       }),
       context: ({ req }) => ({
+        isUserRequest: true,
+        egoToken: req.headers.authorization,
         dataLoaders: {
           userLoader: createUserLoader()
         }
