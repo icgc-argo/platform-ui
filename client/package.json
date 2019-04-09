@@ -17,6 +17,7 @@
     "babel-polyfill": "^6.26.0",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "gql-loader": "^1.0.0",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "graphql-tag": "^2.10.1",
