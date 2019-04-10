@@ -4,7 +4,10 @@ import Button from ".";
 
 const ButtonStories = storiesOf(`${__dirname}`, module).add(
   "A basic button",
-  () => <Button>Cognito Argo Sum</Button>
+  () => <Button>Cognito Argo Sum</Button>,
+  {
+    info: { text: "word" }
+  }
 );
 
 export default ButtonStories;
