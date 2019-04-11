@@ -6,6 +6,8 @@
 
 A basic button
 
+<!-- PROPS -->
+
 ### Import
 
 ```js
