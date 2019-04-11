@@ -36,7 +36,6 @@
     "@storybook/addons": "^5.0.6",
     "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5",
-    "nodemon": "^1.18.10",
-    "storybook-readme": "^5.0.2"
+    "nodemon": "^1.18.10"
   }
 }
