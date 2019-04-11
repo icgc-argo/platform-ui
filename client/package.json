@@ -31,11 +31,11 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@storybook/addon-actions": "^5.0.6",
-    "@storybook/addon-info": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
     "@storybook/addons": "^5.0.6",
     "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "storybook-readme": "^5.0.2"
   }
 }
