@@ -6,7 +6,7 @@
     "start": "NODE_ENV=production npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "mocha uikit/**/*.test.js"
+    "test": "mocha --require @babel/register uikit/**/*.test.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -31,12 +31,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
     "@storybook/addon-actions": "^5.0.6",
     "@storybook/addon-info": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
     "@storybook/addons": "^5.0.6",
     "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",

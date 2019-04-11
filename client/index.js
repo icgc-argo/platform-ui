@@ -4,7 +4,7 @@ require("babel-polyfill");
 // require("babel-plugin-import-graphql");
 require("dotenv").config();
 require("@babel/register")({
-  presets: ["@babel/env"],
+  presets: ["@babel/preset-env"],
   plugins: [
     // "graphql-tag",
     // "import-graphql",
