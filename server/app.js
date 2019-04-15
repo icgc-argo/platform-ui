@@ -7,29 +7,34 @@ import createExecutableUserSchema, { createUserLoader } from "./schemas/User";
 import createExecutableSearchModel from "./schemas/Arranger";
 import { PORT } from "./config";
 
-Promise.all([createExecutableUserSchema(), createExecutableSearchModel()]).then(
-  schemas => {
-    const server = new ApolloServer({
-      schema: mergeSchemas({
-        schemas
-      }),
-      context: ({ req }) => ({
-        isUserRequest: true,
-        egoToken: req.headers.authorization,
-        dataLoaders: {
-          userLoader: createUserLoader()
-        }
-      })
-    });
+const init = async () => {
+  const schemas = await Promise.all([
+    createExecutableUserSchema()
+    // createExecutableSearchModel()
+  ]);
 
-    const app = express();
-    app.use(cors());
-    server.applyMiddleware({ app });
+  const server = new ApolloServer({
+    schema: mergeSchemas({
+      schemas
+    }),
+    context: ({ req }) => ({
+      isUserRequest: true,
+      egoToken: req.headers.authorization,
+      dataLoaders: {
+        userLoader: createUserLoader()
+      }
+    })
+  });
 
-    app.listen(PORT, () =>
-      console.log(
-        `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
-      )
-    );
-  }
-);
+  const app = express();
+  app.use(cors());
+  server.applyMiddleware({ app });
+
+  app.listen(PORT, () =>
+    console.log(
+      `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+    )
+  );
+};
+
+init();
