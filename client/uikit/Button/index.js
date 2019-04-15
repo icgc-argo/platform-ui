@@ -1,15 +1,15 @@
 import React from "react";
-import PropTypes from "propTypes";
+import PropTypes from "prop-types";
 
 /*
-* Please edit me!
-*/
+ * Please edit me!
+ */
 const Button = () => <h1>Button</h1>;
 
 Button.propTypes = {
-/*
-* Don't forget about little old prop types!
-*/
+  /*
+   * Don't forget about little old prop types!
+   */
 };
 
 export default Button;
