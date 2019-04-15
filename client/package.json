@@ -6,7 +6,7 @@
     "start": "NODE_ENV=production npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "mocha --require @babel/register uikit/**/*.test.js",
+    "test": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
     "create-component": "plop --plopfile ./uikit/plopfile.js"
   },
   "dependencies": {
