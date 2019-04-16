@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-/*
- * Please edit me!
- */
-const Button = () => <h1>Button</h1>;
+const Button = ({ children, onClick, disabled = false }) => (
+  <button onClick={onClick} disabled={disabled}>
+    {children}
+  </button>
+);
 
 Button.propTypes = {
-  /*
-   * Don't forget about little old prop types!
-   */
+  children: PropTypes.node.isRequired,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func.isRequired
 };
 
 export default Button;
