@@ -8,4 +8,5 @@ function loadStories() {
 }
 
 addDecorator(withInfo);
+
 configure(loadStories, module);
