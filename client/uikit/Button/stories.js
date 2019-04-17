@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/react";
 import React from "react";
 import Button from ".";
+import { asyncDummyFunc } from "../testUtil";
 
 const dummyClick = () => console.log("..button..clickity click click..");
 
@@ -46,8 +47,8 @@ const ButtonStories = storiesOf(`${__dirname}`, module)
     </div>
   ))
   .add("Button with loading", () => (
-    <Button onClick={dummyClick} loading={true}>
-      Loading Button
+    <Button onClick={asyncDummyFunc} showLoader={true}>
+      Click me to load!
     </Button>
   ));
 

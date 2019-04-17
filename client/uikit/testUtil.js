@@ -5,3 +5,6 @@ import React from "react";
 export const wrapTheme = component => (
   <ThemeProvider theme={theme}>{component}</ThemeProvider>
 );
+
+export const asyncDummyFunc = () =>
+  new Promise(resolve => setTimeout(resolve, 2500));

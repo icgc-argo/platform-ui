@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 
@@ -18,17 +18,26 @@ const Button = ({
   disabled,
   variant = "primary",
   size = "md",
-  loading = false
-}) => (
-  <StyledButton
-    onClick={onClick}
-    disabled={disabled}
-    size={size}
-    variant={variant}
-  >
-    {loading ? "Loading..." : children}
-  </StyledButton>
-);
+  showLoader = false
+}) => {
+  const [isLoading, setLoading] = useState(false);
+  const onClickFn = async () => {
+    setLoading(true);
+    await onClick();
+    setLoading(false);
+  };
+
+  return (
+    <StyledButton
+      onClick={showLoader ? onClickFn : onClick}
+      disabled={disabled}
+      size={size}
+      variant={variant}
+    >
+      {isLoading ? "Loading..." : children}
+    </StyledButton>
+  );
+};
 
 Button.propTypes = {
   variant: PropTypes.oneOf(["primary", "secondary", "warning"]),
