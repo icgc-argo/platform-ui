@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 
 const StyledButton = styled("button")`
-  color: ${({ theme, variant }) => theme.button[variant].color};
+  background-color: ${({ theme, variant }) => theme.button[variant].color};
+  color: white;
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   line-height: ${({ theme, size }) => theme.button.sizes[size]};
   display: flex;
@@ -11,9 +12,17 @@ const StyledButton = styled("button")`
   justify-content: center;
   outline: none;
   box-shadow: none;
+  border: none;
   border-radius: 5px;
 
+  ::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
   &:hover {
+    background-color: ${({ theme, variant }) => theme.button[variant].hover};
+    color: ;
   }
 
   &:focus {
