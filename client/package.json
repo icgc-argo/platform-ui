@@ -6,7 +6,7 @@
     "start": "NODE_ENV=production npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "mocha --require @babel/register uikit/**/*.test.js",
+    "test": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
     "create-component": "plop --plopfile ./uikit/plopfile.js"
   },
   "dependencies": {
@@ -14,10 +14,13 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
+    "@emotion/core": "^10.0.10",
+    "@emotion/styled": "^10.0.10",
     "babel-plugin-graphql-tag": "^2.1.0",
     "babel-plugin-import-graphql": "^2.7.0",
     "babel-polyfill": "^6.26.0",
     "dotenv": "^7.0.0",
+    "emotion-theming": "^10.0.10",
     "express": "^4.16.4",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
