@@ -8,3 +8,5 @@ export const wrapTheme = component => (
 
 export const asyncDummyFunc = () =>
   new Promise(resolve => setTimeout(resolve, 2500));
+
+export const placeholderImageURLRoot = "http://placekitten.com/";

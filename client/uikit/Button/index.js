@@ -11,6 +11,7 @@ const StyledButton = styled("button")`
   justify-content: center;
   outline: none;
   box-shadow: none;
+  border-radius: 5px;
 
   &:hover {
   }
