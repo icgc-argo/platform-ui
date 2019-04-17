@@ -18,7 +18,6 @@ const Button = ({
     disabled={disabled}
     size={size}
     variant={variant}
-    children={children}
   >
     {children}
   </StyledButton>
