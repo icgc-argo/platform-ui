@@ -40,11 +40,21 @@ const Button = ({
 };
 
 Button.propTypes = {
+  /**
+   * Button variant type eg. primary
+   */
   variant: PropTypes.oneOf(["primary", "secondary", "warning"]),
+  /**
+   * Button size
+   */
   size: PropTypes.oneOf(["sm", "md", "lg"]),
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  /**
+   * Use with async onClick handlers to set loading indicator
+   */
+  showLoader: PropTypes.boolean
 };
 
 export default Button;

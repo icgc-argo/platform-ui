@@ -47,7 +47,7 @@ const ButtonStories = storiesOf(`${__dirname}`, module)
     </div>
   ))
   .add("Button with loading", () => (
-    <Button onClick={asyncDummyFunc} showLoader={true}>
+    <Button onClick={asyncDummyFunc} showLoader>
       Click me to load!
     </Button>
   ));
