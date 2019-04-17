@@ -10,6 +10,19 @@ const StyledButton = styled("button")`
   align-items: center;
   justify-content: center;
   outline: none;
+  box-shadow: none;
+
+  &:hover {
+  }
+
+  &:focus {
+  }
+
+  &:active {
+  }
+
+  &:disabled {
+  }
 `;
 
 const Button = ({
