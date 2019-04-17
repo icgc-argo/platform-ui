@@ -22,7 +22,6 @@ const StyledButton = styled("button")`
 
   &:hover {
     background-color: ${({ theme, variant }) => theme.button[variant].hover};
-    color: ;
   }
 
   &:focus {
@@ -32,6 +31,7 @@ const StyledButton = styled("button")`
   }
 
   &:disabled {
+    pointer-events: none;
   }
 `;
 
