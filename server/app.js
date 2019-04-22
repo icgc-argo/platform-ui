@@ -6,6 +6,9 @@ import { mergeSchemas } from "graphql-tools";
 import createExecutableUserSchema, { createUserLoader } from "./schemas/User";
 import createExecutableSearchModel from "./schemas/Arranger";
 import { PORT } from "./config";
+import config from "./package.json";
+
+const { version } = config;
 
 const init = async () => {
   const schemas = await Promise.all([
@@ -28,7 +31,10 @@ const init = async () => {
 
   const app = express();
   app.use(cors());
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: "/graphql" });
+  app.get("/status", (req, res) => {
+    res.json(version);
+  });
 
   app.listen(PORT, () =>
     console.log(
