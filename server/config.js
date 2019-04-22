@@ -1,4 +1,4 @@
-export const PORT = process.env.PORT || 9000;
+export const PORT = Number(process.env.PORT) || 9000;
 
 // Arranger configs
 export const ARRANGER_ROOT =
