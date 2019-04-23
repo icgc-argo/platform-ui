@@ -44,9 +44,9 @@ const Button = ({
   showLoader = false
 }) => {
   const [isLoading, setLoading] = useState(false);
-  const onClickFn = async () => {
+  const onClickFn = async event => {
     setLoading(true);
-    await onClick();
+    await onClick(event);
     setLoading(false);
   };
 
@@ -57,7 +57,7 @@ const Button = ({
       size={size}
       variant={variant}
     >
-      {isLoading ? "Loading..." : children}
+      {isLoading && showLoader ? "Loading..." : children}
     </StyledButton>
   );
 };
@@ -77,7 +77,7 @@ Button.propTypes = {
   /**
    * Use with async onClick handlers to set loading indicator
    */
-  showLoader: PropTypes.boolean
+  showLoader: PropTypes.bool
 };
 
 export default Button;

@@ -1,9 +1,10 @@
 import { storiesOf } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
 import React from "react";
 import Button from ".";
 import { asyncDummyFunc, placeholderImageURLRoot } from "../testUtil";
 
-const dummyClick = () => console.log("..button..clickity click click..");
+const dummyClick = action("Clicked!");
 
 const ButtonStories = storiesOf(`${__dirname}`, module)
   .add("Basic", () => <Button onClick={dummyClick}>Skeleton</Button>)

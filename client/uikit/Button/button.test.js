@@ -9,7 +9,6 @@ describe("Button", () => {
   it("should render", () => {
     const wrapper = shallow(wrapTheme(<Button />));
     const find = wrapper.find(Button);
-    console.log("find", find, wrapper);
     expect(false).to.be.true;
   });
 });
