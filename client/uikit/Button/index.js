@@ -44,6 +44,7 @@ const Button = ({
   showLoader = false
 }) => {
   const [isLoading, setLoading] = useState(false);
+
   const onClickFn = async event => {
     setLoading(true);
     await onClick(event);
