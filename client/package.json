@@ -6,7 +6,10 @@
     "start": "NODE_ENV=production npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+<<<<<<< HEAD
     "test": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js -w",
+=======
+>>>>>>> remove tests
     "create-component": "plop --plopfile ./uikit/plopfile.js"
   },
   "dependencies": {
@@ -27,10 +30,13 @@
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "graphql-tag": "^2.10.1",
+<<<<<<< HEAD
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
     "jsdom": "^14.0.0",
     "jwt-decode": "^2.2.0",
+=======
+>>>>>>> remove tests
     "lodash": "^4.17.11",
     "next": "^8.0.3",
     "next-cookies": "^1.1.2",
@@ -49,11 +55,14 @@
     "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5",
     "babel-preset-env": "^1.7.0",
+<<<<<<< HEAD
     "chai": "^4.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "husky": "^2.1.0",
     "mocha": "^6.1.2",
+=======
+>>>>>>> remove tests
     "nodemon": "^1.18.10",
     "plop": "^2.3.0",
     "prettier": "1.17.0",
