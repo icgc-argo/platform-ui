@@ -6,6 +6,8 @@ module.exports = {
     config.node = {
       fs: "empty"
     };
+    config.resolve.modules.push(path.resolve("./"));
+
     config.module.rules = [
       ...config.module.rules,
       {
