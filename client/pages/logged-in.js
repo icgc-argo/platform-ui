@@ -1,10 +1,12 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
-import Axios from "axios";
+import jwtDecode from "jwt-decode";
 
-const test = x => alert(x);
+class LoggedIn extends React.Component {
+  state = {
+    name: ""
+  };
 
-class ABC extends React.Component {
   componentDidMount() {
     fetch(
       "https://ego.qa.cancercollaboratory.org/api/oauth/ego-token?client_id=argo-client",
@@ -16,35 +18,20 @@ class ABC extends React.Component {
         mode: "cors"
       }
     )
-      .then(resp => {
-        return resp.text();
-        // console.log("resp", resp);
-      })
-      .catch(err => console.log("err", err))
-      // .then(console.log)
-      .then(test);
-    /* Axios.create()
-      .post(
-        "https://ego.qa.cancercollaboratory.org/api/oauth/ego-token?client_id=argo-client",
-        null,
-        {
-          withCredentials: true
-        }
-      )
-      .then(resp => {
-        console.log("fetch resp", resp, resp.data, resp.status);
+      .then(resp => resp.text())
+      .then(token => jwtDecode(token))
+      .then(data => {
+        this.setState({
+          name: `${data.context.user.firstName} ${data.context.user.lastName}`
+        });
 
-        if (resp.status === 200) {
-          return resp.data;
-        } else {
-          return "";
-        }
+        return data;
       })
-      .catch(err => console.log("fetch err", err));*/
+      .catch(err => console.log("err", err));
   }
   render() {
-    return <div>ABC</div>;
+    return <div>Logged in user: {this.state.name}</div>;
   }
 }
 
-export default ABC;
+export default LoggedIn;
