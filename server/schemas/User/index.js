@@ -15,7 +15,7 @@ const users = [
   },
   {
     id: 3,
-    name: "Justin",
+    name: "Dusan",
     friends: [2, 4]
   },
   {
