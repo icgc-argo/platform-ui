@@ -7,6 +7,7 @@ import Head from "components/head";
 import Nav from "components/nav";
 import runQuery from "utils/runQuery";
 import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
+import { egoApiRoot, egoClientId } from "common/injectGlobals";
 
 const Root = ({ name }) => (
   <div>
@@ -77,7 +78,7 @@ const Root = ({ name }) => (
         </div>
         <div className="row">
           <GoogleLogin
-            link={`https://ego.qa.cancercollaboratory.org/api/oauth/login/google?client_id=argo-client`}
+            link={`${egoApiRoot}/oauth/login/google?client_id=${egoClientId}`}
           />
         </div>
       </div>
