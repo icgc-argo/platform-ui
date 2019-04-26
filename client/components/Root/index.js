@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import Head from "components/head";
 import Nav from "components/nav";
 import runQuery from "utils/runQuery";
+import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
 
 const Root = ({ name }) => (
   <div>
@@ -73,6 +74,11 @@ const Root = ({ name }) => (
               </a>
             </Link>
           ))}
+        </div>
+        <div className="row">
+          <GoogleLogin
+            link={`https://ego.qa.cancercollaboratory.org/api/oauth/login/google?client_id=argo-client`}
+          />
         </div>
       </div>
     }
