@@ -1,5 +1,6 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
+import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
 
 import { EGO_JWT_KEY } from "global/constants";
@@ -34,5 +35,5 @@ export default () => {
       setResolving(false);
     })();
   }, []);
-  return { token, resolving };
+  return { token, resolving, data: token ? jwtDecode(token) : null };
 };
