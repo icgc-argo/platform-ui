@@ -2,7 +2,7 @@ import urlJoin from "url-join";
 import fetch from "isomorphic-fetch";
 import { print } from "graphql/language/printer";
 
-import { API_ROOT } from "../config";
+import { API_ROOT } from "global/config";
 
 export default ({ query, variables }) =>
   fetch(urlJoin(API_ROOT, "graphql"), {
