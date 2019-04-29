@@ -27,8 +27,11 @@
     "graphql-import": "^0.7.1",
     "graphql-tag": "^2.10.1",
     "isomorphic-fetch": "^2.2.1",
+<<<<<<< HEAD
     "jsdom": "^14.0.0",
     "isomorphic-unfetch": "^3.0.0",
+=======
+>>>>>>> removed isomorphic-unfetch
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
     "next": "^8.0.3",

@@ -1,5 +1,5 @@
 import React from "react";
-import fetch from "isomorphic-unfetch";
+import fetch from "isomorphic-fetch";
 import jwtDecode from "jwt-decode";
 
 class LoggedIn extends React.Component {
