@@ -2,13 +2,10 @@ import React from "react";
 import Link from "next/link";
 import _ from "lodash";
 import gql from "graphql-tag";
-import urlJoin from "url-join";
 
 import Head from "components/head";
 import Nav from "components/nav";
 import runQuery from "utils/runQuery";
-import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
-import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
 
 const Root = ({ name }) => (
   <div>
@@ -78,12 +75,7 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <GoogleLogin
-            link={urlJoin(
-              EGO_API_ROOT,
-              `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`
-            )}
-          />
+          <Link href={`/login`}>Login</Link>
         </div>
       </div>
     }

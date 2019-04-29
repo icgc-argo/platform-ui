@@ -11,7 +11,7 @@ const egoLoginUrl = urlJoin(
   `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`
 );
 
-export default () => {
+export default ({ onError = () => {} }) => {
   const [token, setToken] = React.useState(null);
   const [resolving, setResolving] = React.useState(false);
   React.useEffect(() => {
@@ -31,6 +31,7 @@ export default () => {
         setToken(egoToken);
       } catch (err) {
         console.warn("err", err);
+        onError(err);
       }
       setResolving(false);
     })();
