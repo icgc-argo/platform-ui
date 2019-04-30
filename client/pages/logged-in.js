@@ -1,9 +1,10 @@
 import React from "react";
 import { get } from "lodash";
 import Router from "next/router";
+import nextCookies from "next-cookies";
 
 import useEgoToken from "global/hooks/useEgoToken";
-import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
+import { LOCAL_STORAGE_REDIRECT_KEY, EGO_JWT_KEY } from "global/constants";
 
 const LoggedIn = () => {
   const { data, token } = useEgoToken({

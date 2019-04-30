@@ -4,13 +4,11 @@ import Router from "next/router";
 
 import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
 import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
-import { EGO_JWT_KEY, LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
+import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
 
-const Login = ({ redirect }) => {
+const Login = ({ redirect, egoJwt }) => {
   React.useEffect(() => {
-    const existingToken = localStorage.getItem(EGO_JWT_KEY);
-    if (existingToken) {
-      console.log("redirect: ", redirect);
+    if (egoJwt) {
       Router.replace(redirect);
     } else {
       localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirect);
@@ -28,7 +26,8 @@ const Login = ({ redirect }) => {
   );
 };
 
-Login.getInitialProps = ({ query }) => {
+Login.getInitialProps = ({ query, egoJwt }) => {
+  console.log("egoJwt: ", egoJwt);
   return {
     redirect: query.redirect || "/"
   };

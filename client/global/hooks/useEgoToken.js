@@ -2,6 +2,7 @@ import React from "react";
 import fetch from "isomorphic-fetch";
 import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
+import Cookies from "js-cookie";
 
 import { EGO_JWT_KEY } from "global/constants";
 import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
@@ -11,7 +12,7 @@ const egoLoginUrl = urlJoin(
   `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`
 );
 
-export default ({ onError = () => {} }) => {
+export default ({ onError = () => {} } = {}) => {
   const [token, setToken] = React.useState(null);
   const [resolving, setResolving] = React.useState(false);
   React.useEffect(() => {
@@ -19,7 +20,7 @@ export default ({ onError = () => {} }) => {
       setResolving(true);
       try {
         const egoToken =
-          localStorage.getItem(EGO_JWT_KEY) ||
+          Cookies.get(EGO_JWT_KEY) ||
           (await fetch(egoLoginUrl, {
             credentials: "include",
             headers: { accept: "*/*" },
@@ -27,7 +28,7 @@ export default ({ onError = () => {} }) => {
             method: "GET",
             mode: "cors"
           }).then(resp => resp.text()));
-        localStorage.setItem(EGO_JWT_KEY, egoToken);
+        Cookies.set(EGO_JWT_KEY, egoToken);
         setToken(egoToken);
       } catch (err) {
         console.warn("err", err);
