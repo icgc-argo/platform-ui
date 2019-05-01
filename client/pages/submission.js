@@ -1,12 +1,14 @@
 import React from "react";
-import { get } from "lodash";
 import jwtDecode from "jwt-decode";
+import { get } from "lodash";
 
+import { isDccMember } from "global/utils/egoJwt";
 import { LOGIN_PAGE_PATH } from "global/constants";
 
 const Page = ({ egoJwt, firstName, lastName }) => {
   return (
     <div>
+      <div>DCC Overview Dashboard</div>
       Logged in user: {firstName} {lastName}
     </div>
   );
@@ -23,12 +25,7 @@ Page.isAccessible = ({ egoJwt, ctx }) => {
   if (!egoJwt) {
     ctx.res.redirect(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
   }
-  try {
-    jwtDecode(egoJwt);
-    return true;
-  } catch {
-    return false;
-  }
+  return isDccMember(egoJwt);
 };
 
 export default Page;
