@@ -79,6 +79,9 @@ const Root = ({ name }) => (
           <Link href={`${LOGIN_PAGE_PATH}?redirect=${encodeURI("/logged-in")}`}>
             Login
           </Link>
+          <Link href={`/programs`}>/programs</Link>
+          <Link href={`/program`}>/program</Link>
+          <Link href={`/submission`}>/submission</Link>
         </div>
       </div>
     }

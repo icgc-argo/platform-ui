@@ -24,4 +24,6 @@ const Page = () => {
   );
 };
 
+Page.isPublic = true;
+
 export default Page;
