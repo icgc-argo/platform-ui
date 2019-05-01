@@ -16,7 +16,7 @@ const isValidJwt = jwt => {
 };
 
 // this makes egoJwt available to every page client-side
-const Root = ({ Component, pageProps, egoJwt }) => {
+const Root = ({ Component, pageProps, egoJwt, unauthorized }) => {
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
     Router.push("/");
@@ -29,9 +29,15 @@ const Root = ({ Component, pageProps, egoJwt }) => {
   return (
     <div>
       <div>
+        {/* this button is just for demo */}
         <button onClick={logOut}>LOG OUT</button>
       </div>
-      <Component {...{ egoJwt, ...pageProps }} />
+      {unauthorized ? (
+        // placeholder, needs design
+        "You are not authorized"
+      ) : (
+        <Component {...{ egoJwt, ...pageProps }} />
+      )}
     </div>
   );
 };
@@ -39,25 +45,27 @@ const Root = ({ Component, pageProps, egoJwt }) => {
 // this makes egoJwt available to every page server-side
 Root.getInitialProps = async ({ Component, ctx, router }) => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
-  const targetRoute = router.route;
   const { res } = ctx;
-  if (egoJwt && res) {
+  if (egoJwt) {
     try {
       if (!isValidJwt(egoJwt)) {
         throw new Error("invalid token");
       }
     } catch (err) {
       res.clearCookie(EGO_JWT_KEY);
-      router.replace(`/login?redirect=${encodeURI(targetRoute)}`);
+      router.replace(`/login?redirect=${encodeURI(ctx.asPath)}`);
     }
   }
 
   const pageProps = await (Component.getInitialProps
     ? Component.getInitialProps({ ...ctx, egoJwt })
     : {});
+
   return {
     egoJwt,
-    pageProps
+    pageProps,
+    unauthorized:
+      Component.canBeAccessed && !Component.canBeAccessed({ egoJwt, ctx })
   };
 };
 

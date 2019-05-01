@@ -6,7 +6,7 @@ import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
 import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
 import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
 
-const Login = ({ redirect, egoJwt }) => {
+const Page = ({ redirect, egoJwt }) => {
   React.useEffect(() => {
     if (egoJwt) {
       Router.replace(redirect);
@@ -26,11 +26,11 @@ const Login = ({ redirect, egoJwt }) => {
   );
 };
 
-Login.getInitialProps = ({ query, egoJwt }) => {
+Page.getInitialProps = ({ query, egoJwt }) => {
   return {
     redirect: query.redirect || "/",
     egoJwt
   };
 };
 
-export default Login;
+export default Page;

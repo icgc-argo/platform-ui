@@ -5,7 +5,7 @@ import Link from "next/link";
 import useEgoToken from "global/hooks/useEgoToken";
 import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
 
-const LoggedIn = () => {
+const Page = () => {
   const { data, token } = useEgoToken({
     onError: () => Router.replace("/login")
   });
@@ -19,9 +19,9 @@ const LoggedIn = () => {
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-      <Link href={`user_demo`}>User page</Link>
+      <Link href="/user_demo">User page</Link>
     </div>
   );
 };
 
-export default LoggedIn;
+export default Page;
