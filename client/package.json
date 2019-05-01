@@ -6,9 +6,10 @@
     "start": "NODE_ENV=production npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "create-component": "plop --plopfile ./uikit/plopfile.js",
     "flow": "flow",
-    "flow-typed": "flow-typed"
+    "flow-typed": "flow-typed",
+    "create-component": "plop --plopfile ./uikit/plopfile.js",
+    "e2e": "nightwatch"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -59,10 +60,12 @@
     "prettier": "1.17.0",
     "pretty-quick": "^1.10.0",
     "chai": "^4.2.0",
+    "chromedriver": "^74.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "mocha": "^6.1.2",
     "plop": "^2.3.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "nightwatch": "^1.0.19"
   }
 }
