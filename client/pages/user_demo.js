@@ -22,7 +22,7 @@ Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
   }
 };
 
-Page.canBeAccessed = ({ egoJwt, ctx }) => {
+Page.isAccessible = ({ egoJwt, ctx }) => {
   try {
     jwtDecode(egoJwt);
     return true;

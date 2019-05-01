@@ -65,7 +65,7 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
     egoJwt,
     pageProps,
     unauthorized:
-      Component.canBeAccessed && !Component.canBeAccessed({ egoJwt, ctx })
+      Component.isAccessible && !Component.isAccessible({ egoJwt, ctx })
   };
 };
 
