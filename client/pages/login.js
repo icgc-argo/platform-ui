@@ -27,9 +27,9 @@ const Login = ({ redirect, egoJwt }) => {
 };
 
 Login.getInitialProps = ({ query, egoJwt }) => {
-  console.log("egoJwt: ", egoJwt);
   return {
-    redirect: query.redirect || "/"
+    redirect: query.redirect || "/",
+    egoJwt
   };
 };
 

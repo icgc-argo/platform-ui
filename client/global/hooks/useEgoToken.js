@@ -16,26 +16,32 @@ export default ({ onError = () => {} } = {}) => {
   const [token, setToken] = React.useState(null);
   const [resolving, setResolving] = React.useState(false);
   React.useEffect(() => {
-    (async () => {
-      setResolving(true);
-      try {
-        const egoToken =
-          Cookies.get(EGO_JWT_KEY) ||
-          (await fetch(egoLoginUrl, {
-            credentials: "include",
-            headers: { accept: "*/*" },
-            body: null,
-            method: "GET",
-            mode: "cors"
-          }).then(resp => resp.text()));
-        Cookies.set(EGO_JWT_KEY, egoToken);
-        setToken(egoToken);
-      } catch (err) {
-        console.warn("err", err);
-        onError(err);
-      }
+    setResolving(true);
+    const existingToken = Cookies.get(EGO_JWT_KEY);
+    if (existingToken) {
+      setToken(existingToken);
       setResolving(false);
-    })();
+    } else {
+      fetch(egoLoginUrl, {
+        credentials: "include",
+        headers: { accept: "*/*" },
+        body: null,
+        method: "GET",
+        mode: "cors"
+      })
+        .then(res => res.text())
+        .then(egoToken => {
+          jwtDecode(egoToken);
+          Cookies.set(EGO_JWT_KEY, egoToken);
+          setToken(egoToken);
+          setResolving(false);
+        })
+        .catch(err => {
+          console.warn("err: ", err);
+          setResolving(false);
+          onError(err);
+        });
+    }
   }, []);
   return { token, resolving, data: token ? jwtDecode(token) : null };
 };

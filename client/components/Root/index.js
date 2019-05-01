@@ -75,7 +75,7 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <Link href={`/login?redirect=/logged-in`}>Login</Link>
+          <Link href={`/login?redirect=${encodeURI("/logged-in")}`}>Login</Link>
         </div>
       </div>
     }
