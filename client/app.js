@@ -2,7 +2,7 @@ import express from "express";
 import NextJS from "next";
 import bodyParser from "body-parser";
 
-import { PORT } from "./config";
+import { PORT } from "./global/config";
 
 const dev = process.env.NODE_ENV !== "production";
 const Next = NextJS({

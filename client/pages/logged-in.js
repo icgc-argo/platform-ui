@@ -1,37 +1,27 @@
 import React from "react";
-import fetch from "isomorphic-fetch";
-import jwtDecode from "jwt-decode";
+import Router from "next/router";
+import Link from "next/link";
 
-class LoggedIn extends React.Component {
-  state = {
-    name: ""
-  };
+import useEgoToken from "global/hooks/useEgoToken";
+import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 
-  componentDidMount() {
-    fetch(
-      "https://ego.qa.cancercollaboratory.org/api/oauth/ego-token?client_id=argo-client",
-      {
-        credentials: "include",
-        headers: { accept: "*/*" },
-        body: null,
-        method: "GET",
-        mode: "cors"
-      }
-    )
-      .then(resp => resp.text())
-      .then(token => jwtDecode(token))
-      .then(data => {
-        this.setState({
-          name: `${data.context.user.firstName} ${data.context.user.lastName}`
-        });
+const Page = () => {
+  const { data, token } = useEgoToken({
+    onError: () => Router.replace(LOGIN_PAGE_PATH)
+  });
+  React.useEffect(() => {
+    const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
+    if (token && currentRedirect) {
+      localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
+      Router.replace(currentRedirect);
+    }
+  });
+  return (
+    <div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Link href="/user_demo">User page</Link>
+    </div>
+  );
+};
 
-        return data;
-      })
-      .catch(err => console.log("err", err));
-  }
-  render() {
-    return <div>Logged in user: {this.state.name}</div>;
-  }
-}
-
-export default LoggedIn;
+export default Page;

@@ -5,9 +5,8 @@ import gql from "graphql-tag";
 
 import Head from "components/head";
 import Nav from "components/nav";
-import runQuery from "utils/runQuery";
-import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
-import { egoApiRoot, egoClientId } from "common/injectGlobals";
+import runQuery from "global/utils/runQuery";
+import { LOGIN_PAGE_PATH } from "global/constants";
 
 const Root = ({ name }) => (
   <div>
@@ -77,9 +76,9 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <GoogleLogin
-            link={`${egoApiRoot}/oauth/login/google?client_id=${egoClientId}`}
-          />
+          <Link href={`${LOGIN_PAGE_PATH}?redirect=${encodeURI("/logged-in")}`}>
+            Login
+          </Link>
         </div>
       </div>
     }
