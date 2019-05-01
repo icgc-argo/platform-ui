@@ -1,6 +1,6 @@
 {
   "src_folders": ["tests"],
-
+  "output_folder": "./test_reports",
   "webdriver": {
     "start_process": true,
     "server_path": "/usr/bin/chromedriver",
