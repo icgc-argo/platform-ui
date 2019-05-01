@@ -1,10 +1,8 @@
 import React from "react";
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
-import Router from "next/router";
 
 import { isDccMember } from "global/utils/egoJwt";
-import { LOGIN_PAGE_PATH } from "global/constants";
 
 const Page = ({ egoJwt, firstName, lastName }) => {
   return (
