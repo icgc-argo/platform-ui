@@ -63,7 +63,7 @@ spec:
                     withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
                         sh 'helm init --client-only'
                         sh 'helm ls --kubeconfig $KUBECONFIG'
-                        sh 'helm repo add icgcargo https://icgc-argo.github.io/argo-charts/'
+                        sh 'helm repo add icgcargo https://icgc-argo.github.io/charts/'
                         sh 'helm repo update'
                         sh "helm upgrade argo-gateway icgcargo/argo-gateway --reuse-values --set image.tag=${commit}-alpine"
                     }
