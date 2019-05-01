@@ -20,9 +20,6 @@ Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
 };
 
 Page.isAccessible = ({ egoJwt, ctx }) => {
-  if (!egoJwt) {
-    ctx.res.redirect(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
-  }
   try {
     jwtDecode(egoJwt);
     return true;

@@ -12,6 +12,7 @@ const Page = ({ redirect, egoJwt }) => {
       Router.replace(redirect);
     } else {
       localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirect);
+      console.log("did we get here?");
     }
   }, []);
   return (
@@ -26,10 +27,9 @@ const Page = ({ redirect, egoJwt }) => {
   );
 };
 
-Page.getInitialProps = ({ query, egoJwt, res }) => {
-  if (egoJwt) {
-    res.redirect(query.redirect || "/");
-  }
+Page.isPublic = true;
+
+Page.getInitialProps = ({ query, egoJwt }) => {
   return {
     redirect: query.redirect || "/",
     egoJwt

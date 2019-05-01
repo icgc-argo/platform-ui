@@ -2,6 +2,7 @@ import React from "react";
 import nextCookies from "next-cookies";
 import Router from "next/router";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { isValidJwt } from "global/utils/egoJwt";
@@ -21,6 +22,7 @@ const Root = ({ Component, pageProps, egoJwt, unauthorized }) => {
     <div>
       <div>
         {/* this button is just for demo */}
+        <Link href="/">Home</Link>
         <button onClick={logOut}>LOG OUT</button>
       </div>
       {unauthorized ? (
@@ -31,6 +33,15 @@ const Root = ({ Component, pageProps, egoJwt, unauthorized }) => {
       )}
     </div>
   );
+};
+
+const enforceLogin = ({ ctx }) => {
+  const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
+  if (typeof window === "undefined") {
+    ctx.res.redirect(loginRedirect);
+  } else {
+    Router.replace(loginRedirect);
+  }
 };
 
 // this makes egoJwt available to every page server-side
@@ -46,7 +57,13 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
       res.clearCookie(EGO_JWT_KEY);
       router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
     }
+  } else {
+    if (!Component.isPublic) {
+      enforceLogin({ ctx });
+    }
   }
+  const unauthorized =
+    Component.isAccessible && !Component.isAccessible({ egoJwt, ctx });
 
   const pageProps = await (Component.getInitialProps
     ? Component.getInitialProps({ ...ctx, egoJwt })
@@ -55,8 +72,7 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
   return {
     egoJwt,
     pageProps,
-    unauthorized:
-      Component.isAccessible && !Component.isAccessible({ egoJwt, ctx })
+    unauthorized
   };
 };
 
