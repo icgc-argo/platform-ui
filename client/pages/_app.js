@@ -46,6 +46,12 @@ const enforceLogin = ({ ctx }) => {
 
 // this makes egoJwt available to every page server-side
 Root.getInitialProps = async ({ Component, ctx, router }) => {
+  const {
+    isPublic = false,
+    isAccessible = () => true,
+    getInitialProps = () => ({})
+  } = Component;
+
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
@@ -58,16 +64,14 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
       router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
     }
   } else {
-    if (!Component.isPublic) {
+    if (!isPublic) {
       enforceLogin({ ctx });
     }
   }
-  const unauthorized =
-    Component.isAccessible && !Component.isAccessible({ egoJwt, ctx });
 
-  const pageProps = await (Component.getInitialProps
-    ? Component.getInitialProps({ ...ctx, egoJwt })
-    : {});
+  const unauthorized = !isAccessible({ egoJwt, ctx });
+
+  const pageProps = await getInitialProps({ ...ctx, egoJwt });
 
   return {
     egoJwt,
