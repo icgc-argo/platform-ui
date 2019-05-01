@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 
 import Head from "components/head";
 import Nav from "components/nav";
-import runQuery from "utils/runQuery";
+import runQuery from "global/utils/runQuery";
 
 const Root = ({ name }) => (
   <div>
