@@ -26,7 +26,10 @@ const Page = ({ redirect, egoJwt }) => {
   );
 };
 
-Page.getInitialProps = ({ query, egoJwt }) => {
+Page.getInitialProps = ({ query, egoJwt, res }) => {
+  if (egoJwt) {
+    res.redirect(query.redirect || "/");
+  }
   return {
     redirect: query.redirect || "/",
     egoJwt
