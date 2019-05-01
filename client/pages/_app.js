@@ -3,7 +3,7 @@ import nextCookies from "next-cookies";
 import Router from "next/router";
 import Cookies from "js-cookie";
 
-import { EGO_JWT_KEY } from "global/constants";
+import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { isValidJwt } from "global/utils/egoJwt";
 
 // this makes egoJwt available to every page client-side
@@ -44,7 +44,7 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
       }
     } catch (err) {
       res.clearCookie(EGO_JWT_KEY);
-      router.replace(`/login?redirect=${encodeURI(ctx.asPath)}`);
+      router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
     }
   }
 

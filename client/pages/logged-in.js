@@ -3,11 +3,11 @@ import Router from "next/router";
 import Link from "next/link";
 
 import useEgoToken from "global/hooks/useEgoToken";
-import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
+import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 
 const Page = () => {
   const { data, token } = useEgoToken({
-    onError: () => Router.replace("/login")
+    onError: () => Router.replace(LOGIN_PAGE_PATH)
   });
   React.useEffect(() => {
     const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);

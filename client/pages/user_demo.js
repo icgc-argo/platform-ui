@@ -2,6 +2,8 @@ import React from "react";
 import { get } from "lodash";
 import jwtDecode from "jwt-decode";
 
+import { LOGIN_PAGE_PATH } from "global/constants";
+
 const Page = ({ egoJwt, firstName, lastName }) => {
   return (
     <div>
@@ -17,7 +19,7 @@ Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
     const lastName = get(data, "context.user.lastName", "");
     return { firstName, lastName };
   } catch (err) {
-    res.redirect(`/login?redirect=${encodeURI(asPath)}`);
+    res.redirect(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);
     console.log("error!");
   }
 };

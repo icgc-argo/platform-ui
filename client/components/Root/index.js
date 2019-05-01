@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import Head from "components/head";
 import Nav from "components/nav";
 import runQuery from "global/utils/runQuery";
+import { LOGIN_PAGE_PATH } from "global/constants";
 
 const Root = ({ name }) => (
   <div>
@@ -75,7 +76,9 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <Link href={`/login?redirect=${encodeURI("/logged-in")}`}>Login</Link>
+          <Link href={`${LOGIN_PAGE_PATH}?redirect=${encodeURI("/logged-in")}`}>
+            Login
+          </Link>
         </div>
       </div>
     }
