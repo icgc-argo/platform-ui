@@ -94,7 +94,6 @@ export const getAuthorizedProgramPolicies = egoJwt => {
 };
 
 export const hasAccessToProgram = ({ egoJwt, programId }) => {
-  const data = jwtDecode(egoJwt);
   const authorizedProgramPolicies = getAuthorizedProgramPolicies(egoJwt);
   return authorizedProgramPolicies.some(policy => policy.includes(programId));
 };

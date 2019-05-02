@@ -6,7 +6,13 @@ import gql from "graphql-tag";
 import Head from "components/head";
 import Nav from "components/nav";
 import runQuery from "global/utils/runQuery";
-import { LOGIN_PAGE_PATH } from "global/constants";
+import {
+  LOGIN_PAGE_PATH,
+  PROGRAMS_LIST_PATH,
+  PROGRAM_ENTITY_PATH,
+  DCC_OVERVIEW_PATH,
+  USER_PAGE_PATH
+} from "global/constants";
 
 const Root = ({ name }) => (
   <div>
@@ -76,13 +82,11 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <Link href={`${LOGIN_PAGE_PATH}?redirect=${encodeURI("/logged-in")}`}>
-            Login
-          </Link>
-          <Link href={`/programs`}>/programs</Link>
-          <Link href={`/program`}>/program</Link>
-          <Link href={`/submission`}>/submission</Link>
-          <Link href={`/user`}>/user</Link>
+          <Link href={`${LOGIN_PAGE_PATH}`}>Login</Link>
+          <Link href={`${PROGRAMS_LIST_PATH}`}>{PROGRAMS_LIST_PATH}</Link>
+          <Link href={`${PROGRAM_ENTITY_PATH}`}>{PROGRAM_ENTITY_PATH}</Link>
+          <Link href={`${DCC_OVERVIEW_PATH}`}>{DCC_OVERVIEW_PATH}</Link>
+          <Link href={`${USER_PAGE_PATH}`}>{USER_PAGE_PATH}</Link>
         </div>
       </div>
     }
