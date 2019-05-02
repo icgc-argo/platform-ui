@@ -19,8 +19,21 @@ module.exports = {
       .url("http://localhost:8080")
       .waitForElementVisible("body")
       .click(".card:nth-of-type(2)")
-      .pause(1000)
+      .pause(5000)
       .assert.containsText("h1", "Minh")
       .end();
   }
 };
+
+/*
+module.exports = {
+  "BrowserStack Local Testing": function(browser) {
+    browser
+      .url("http://bs-local.com:45691/check")
+      .waitForElementVisible("body", 1000)
+      .pause(5000)
+      .assert.containsText("body", "Up and running")
+      .end();
+  }
+};
+*/
