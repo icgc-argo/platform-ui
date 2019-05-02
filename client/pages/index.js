@@ -1,5 +1,8 @@
 import Root from "../components/Root";
+import { withPathConfigValidation } from "./_app";
 
-Root.isPublic = true;
+const Page = withPathConfigValidation(Root);
 
-export default Root;
+Page.isPublic = true;
+
+export default Page;

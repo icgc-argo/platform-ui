@@ -1,19 +1,11 @@
-export const ENVIRONMENTS = new Proxy(
+import { asEnum } from "./utils/common";
+
+export const ENVIRONMENTS = asEnum(
   {
     development: "development",
     production: "production"
   },
-  {
-    get: (obj, prop) => {
-      if (obj[prop]) {
-        return obj[prop];
-      } else {
-        const error = new Error(`${prop} is not a valid environment`);
-        console.error(error);
-        throw error;
-      }
-    }
-  }
+  { name: "environment" }
 );
 
 export const PORT = process.env.PORT || 8080;

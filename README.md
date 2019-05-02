@@ -10,7 +10,7 @@ argo-platform
 |   |__ pages (Next.js routing wrappers)
 |   |__ components (layout & stateful components)
 |   |__ uikits (pure presentational components)
-|   |__ utils (utility functions)
+|   |__ global (utility functions, configs and constants)
 |   |__ stories (Storybook stories, pulling from uikits)
 |__ server (GraphQl API)
     |__ schemas (individual domain schemas,

@@ -3,15 +3,16 @@ import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
 import { isDccMember } from "global/utils/egoJwt";
+import { withPathConfigValidation } from "./_app";
 
-const Page = ({ egoJwt, firstName, lastName }) => {
+const Page = withPathConfigValidation(({ egoJwt, firstName, lastName }) => {
   return (
     <div>
       <div>DCC Overview Dashboard</div>
       Logged in user: {firstName} {lastName}
     </div>
   );
-};
+});
 
 Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
   const data = jwtDecode(egoJwt);

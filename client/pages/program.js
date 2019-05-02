@@ -2,36 +2,41 @@ import React from "react";
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
-import {
-  isRdpcMember,
-  getAuthorizedProgramPolicies
-} from "global/utils/egoJwt";
+import { isRdpcMember, hasAccessToProgram } from "global/utils/egoJwt";
+import { withPathConfigValidation } from "./_app";
 
-const Page = ({ egoJwt, firstName, lastName, authorizedPrograms = [] }) => {
-  return (
-    <div>
-      <div>Programs list</div>
-      Logged in user: {firstName} {lastName}
+const Page = withPathConfigValidation(
+  ({ egoJwt, firstName, lastName, programId }) => {
+    return (
       <div>
-        <div>authorized program policies: </div>
-        {authorizedPrograms.map(policy => (
-          <div key={policy}>{policy}</div>
-        ))}
+        <div>Programs list</div>
+        Logged in user: {firstName} {lastName}
+        <div>
+          <div>Program id: {programId}</div>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 Page.getInitialProps = ({ egoJwt, asPath, query }) => {
   const data = jwtDecode(egoJwt);
   const firstName = get(data, "context.user.firstName", "");
   const lastName = get(data, "context.user.lastName", "");
-  const authorizedPrograms = getAuthorizedProgramPolicies(egoJwt);
-  return { firstName, lastName, authorizedPrograms };
+  return { firstName, lastName, programId: query.id };
 };
 
 Page.isAccessible = ({ egoJwt, ctx }) => {
-  return !isRdpcMember(egoJwt);
+  const {
+    query: { id }
+  } = ctx;
+  if (id) {
+    return !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, id });
+  } else {
+    return true;
+  }
 };
+
+Page.isPublic = false;
 
 export default Page;
