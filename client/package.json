@@ -9,7 +9,8 @@
     "flow": "flow",
     "flow-typed": "flow-typed",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
-    "e2e": "nightwatch"
+    "e2e": "nightwatch",
+    "e2e-local": "./e2e/local/runner.js -c e2e/local/conf.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -61,7 +62,6 @@
     "pretty-quick": "^1.10.0",
     "browserstack-local": "^1.3.7",
     "chai": "^4.2.0",
-    "chromedriver": "^74.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "mocha": "^6.1.2",
