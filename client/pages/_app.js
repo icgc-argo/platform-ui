@@ -17,8 +17,12 @@ const DEFAULT_PAGE_CONFIG = {
   getInitialProps: () => ({})
 };
 
+const HAS_VALIDATION_FLAG = "HAS_VALIDATION_FLAG";
 export const withPathConfigValidation = Page =>
   new Proxy(Page, {
+    get: (page, prop) => {
+      return prop === HAS_VALIDATION_FLAG ? true : page[prop];
+    },
     set: (page, prop, value) => {
       const typeInPrototype = typeof DEFAULT_PAGE_CONFIG[prop];
       if (typeInPrototype === "undefined") {
@@ -93,6 +97,12 @@ const Root = props => {
 
 // this makes egoJwt available to every page server-side
 Root.getInitialProps = async ({ Component, ctx, router }) => {
+  if (!Component[HAS_VALIDATION_FLAG]) {
+    console.warn(
+      `WARNING! Page at ${ctx.asPath} does not have config validation`
+    );
+  }
+
   const { isPublic, isAccessible, getInitialProps } = {
     ...DEFAULT_PAGE_CONFIG,
     ...Component
