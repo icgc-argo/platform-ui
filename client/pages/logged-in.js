@@ -19,7 +19,7 @@ const Page = () => {
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-      <Link href="/user_demo">User page</Link>
+      <Link href="/user">User page</Link>
     </div>
   );
 };

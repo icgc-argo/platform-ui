@@ -16,6 +16,7 @@ Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
   const data = jwtDecode(egoJwt);
   const firstName = get(data, "context.user.firstName", "");
   const lastName = get(data, "context.user.lastName", "");
+  throw new Error("yoooo!");
   return { firstName, lastName };
 };
 
@@ -27,5 +28,7 @@ Page.isAccessible = ({ egoJwt, ctx }) => {
     return false;
   }
 };
+
+Page.isPublic = false;
 
 export default Page;

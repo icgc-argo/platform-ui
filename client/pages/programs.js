@@ -23,15 +23,11 @@ const Page = ({ egoJwt, firstName, lastName, authorizedPrograms = [] }) => {
 };
 
 Page.getInitialProps = ({ egoJwt, asPath, query }) => {
-  try {
-    const data = jwtDecode(egoJwt);
-    const firstName = get(data, "context.user.firstName", "");
-    const lastName = get(data, "context.user.lastName", "");
-    const authorizedPrograms = getAuthorizedProgramPolicies(egoJwt);
-    return { firstName, lastName, authorizedPrograms };
-  } catch (err) {
-    return {};
-  }
+  const data = jwtDecode(egoJwt);
+  const firstName = get(data, "context.user.firstName", "");
+  const lastName = get(data, "context.user.lastName", "");
+  const authorizedPrograms = getAuthorizedProgramPolicies(egoJwt);
+  return { firstName, lastName, authorizedPrograms };
 };
 
 Page.isAccessible = ({ egoJwt, ctx }) => {
