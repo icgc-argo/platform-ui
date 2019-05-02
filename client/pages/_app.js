@@ -5,10 +5,19 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
+import { NODE_ENV, ENVIRONMENTS } from "global/config";
 import { isValidJwt } from "global/utils/egoJwt";
 
 // this makes egoJwt available to every page client-side
-const Root = ({ Component, pageProps, egoJwt, unauthorized }) => {
+const Root = props => {
+  const {
+    Component,
+    pageProps,
+    egoJwt,
+    unauthorized,
+    isProduction,
+    error
+  } = props;
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
     Router.push("/");
@@ -21,12 +30,18 @@ const Root = ({ Component, pageProps, egoJwt, unauthorized }) => {
   return (
     <div>
       <div>
-        {/* this button is just for demo */}
         <Link href="/">Home</Link>
         <button onClick={logOut}>LOG OUT</button>
       </div>
-      {unauthorized ? (
-        // placeholder, needs design
+      {error ? (
+        isProduction ? (
+          <div>
+            Something went wrong, please refresh the page or try again later
+          </div>
+        ) : (
+          <pre>{error.stack || error.message}</pre>
+        )
+      ) : unauthorized ? (
         "You are not authorized"
       ) : (
         <Component {...{ egoJwt, ...pageProps }} />
@@ -69,15 +84,19 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
     }
   }
 
-  const unauthorized = !isAccessible({ egoJwt, ctx });
-
-  const pageProps = await getInitialProps({ ...ctx, egoJwt });
-
-  return {
-    egoJwt,
-    pageProps,
-    unauthorized
-  };
+  try {
+    const unauthorized = !(await isAccessible({ egoJwt, ctx }));
+    const pageProps = await getInitialProps({ ...ctx, egoJwt });
+    const isProduction = NODE_ENV === environments.production;
+    return {
+      egoJwt,
+      pageProps,
+      unauthorized,
+      isProduction
+    };
+  } catch (error) {
+    return { egoJwt, error };
+  }
 };
 
 export default Root;

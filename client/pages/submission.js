@@ -14,14 +14,10 @@ const Page = ({ egoJwt, firstName, lastName }) => {
 };
 
 Page.getInitialProps = ({ egoJwt, asPath, query, res }) => {
-  try {
-    const data = jwtDecode(egoJwt);
-    const firstName = get(data, "context.user.firstName", "");
-    const lastName = get(data, "context.user.lastName", "");
-    return { firstName, lastName };
-  } catch {
-    return {};
-  }
+  const data = jwtDecode(egoJwt);
+  const firstName = get(data, "context.user.firstName", "");
+  const lastName = get(data, "context.user.lastName", "");
+  return { firstName, lastName };
 };
 
 Page.isAccessible = ({ egoJwt, ctx }) => {

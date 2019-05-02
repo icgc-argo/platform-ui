@@ -82,6 +82,7 @@ const Root = ({ name }) => (
           <Link href={`/programs`}>/programs</Link>
           <Link href={`/program`}>/program</Link>
           <Link href={`/submission`}>/submission</Link>
+          <Link href={`/user`}>/user</Link>
         </div>
       </div>
     }
