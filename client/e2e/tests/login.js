@@ -12,9 +12,10 @@
   }
 };
 */
-
+const bs = require("../helpers");
 module.exports = {
   "Demo test homepage": function(browser) {
+    //const sessionId = bs.updateStatus(browser);
     browser
       .url("http://localhost:8080")
       .waitForElementVisible("body")
