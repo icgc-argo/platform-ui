@@ -2,23 +2,8 @@ import React from "react";
 import Router from "next/router";
 
 import useEgoToken from "global/hooks/useEgoToken";
-import { isDccMember } from "global/utils/egoJwt";
-import {
-  LOCAL_STORAGE_REDIRECT_KEY,
-  LOGIN_PAGE_PATH,
-  PROGRAMS_LIST_PATH,
-  PROGRAM_ENTITY_PATH,
-  DCC_OVERVIEW_PATH,
-  USER_PAGE_PATH
-} from "global/constants";
-
-const getRedirectPathForUser = egoJwt => {
-  if (isDccMember(egoJwt)) {
-    return DCC_OVERVIEW_PATH;
-  } else {
-    return USER_PAGE_PATH;
-  }
-};
+import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from "global/constants";
+import { getRedirectPathForUser } from "global/utils/pages";
 
 const Page = () => {
   const { data, token, resolving } = useEgoToken({
