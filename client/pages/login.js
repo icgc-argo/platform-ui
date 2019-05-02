@@ -12,7 +12,11 @@ const Page = withPathConfigValidation(({ redirect, egoJwt }) => {
     if (egoJwt) {
       Router.replace(redirect);
     } else {
-      localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirect);
+      if (redirect) {
+        localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirect);
+      } else {
+        localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
+      }
     }
   }, []);
   return (
@@ -31,7 +35,7 @@ Page.isPublic = true;
 
 Page.getInitialProps = ({ query, egoJwt }) => {
   return {
-    redirect: query.redirect || "/",
+    redirect: query.redirect,
     egoJwt
   };
 };
