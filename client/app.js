@@ -10,10 +10,18 @@ const Next = NextJS({
 });
 const handle = Next.getRequestHandler();
 
+const applyUrlMasks = server => {
+  server.get("/program/:id", (req, res) => {
+    res.redirect(`/program?id=${req.params.id}`);
+  });
+};
+
 Next.prepare().then(async () => {
   const server = express();
   server.use(bodyParser.urlencoded({ extended: false }));
   server.use(bodyParser.json());
+
+  applyUrlMasks(server);
 
   server.get("/", (req, res) => {
     const queryParams = { id: req.query.id };

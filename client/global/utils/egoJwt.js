@@ -1,12 +1,17 @@
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
-const PERMISSIONS = {
-  READ: "READ",
-  WRITE: "WRITE",
-  ADMIN: "ADMIN",
-  DENY: "DENY"
-};
+import { asEnum } from "./common";
+
+const PERMISSIONS = asEnum(
+  {
+    READ: "READ",
+    WRITE: "WRITE",
+    ADMIN: "ADMIN",
+    DENY: "DENY"
+  },
+  { name: "Ego permission" }
+);
 const DCC_PREFIX = "DCC_";
 const RDPC_PREFIX = "RDPC_PREFIX_";
 const PROGRAM_PREFIX = "PROGRAM_";
@@ -86,4 +91,10 @@ export const getAuthorizedProgramPolicies = egoJwt => {
     }
     return acc;
   }, []);
+};
+
+export const hasAccessToProgram = ({ egoJwt, programId }) => {
+  const data = jwtDecode(egoJwt);
+  const authorizedProgramPolicies = getAuthorizedProgramPolicies(egoJwt);
+  return authorizedProgramPolicies.some(policy => policy.includes(programId));
 };
