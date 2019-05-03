@@ -1,3 +1,4 @@
+//@flow
 import {
   LOCAL_STORAGE_REDIRECT_KEY,
   LOGIN_PAGE_PATH,
@@ -8,7 +9,7 @@ import {
 } from "../constants";
 import { isDccMember } from "./egoJwt";
 
-export const getRedirectPathForUser = egoJwt => {
+export const getRedirectPathForUser = (egoJwt: string) => {
   if (isDccMember(egoJwt)) {
     return DCC_OVERVIEW_PATH;
   } else {
