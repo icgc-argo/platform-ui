@@ -22,8 +22,8 @@ export default createPage({
   },
   getInitialProps: ({ egoJwt, asPath, query }) => {
     const data = decodeToken(egoJwt);
-    const firstName = get(data, "context.user.firstName", "");
-    const lastName = get(data, "context.user.lastName", "");
+    const firstName = data.context.user.firstName;
+    const lastName = data.context.user.lastName;
     return { firstName, lastName, programId: query.id };
   }
 })(({ egoJwt, firstName, lastName, programId }) => {
