@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import * as React from "react";
 import nextCookies from "next-cookies";
 import Router from "next/router";
 import Cookies from "js-cookie";
@@ -12,24 +12,21 @@ import { isValidJwt } from "global/utils/egoJwt";
 /**
  * Configuration structure for each page
  */
-type PageConfig = {
-  isPublic?: boolean,
-  isAccessible?: Function,
-  getInitialProps?: Function
-};
 type PageConfigProps = {
   isPublic: boolean,
   isAccessible: Function,
   getInitialProps: Function
 };
-type PageWithConfig = PageConfigProps | Function;
+type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
   isPublic = false,
   isAccessible = () => true,
   getInitialProps = () => ({})
-}: PageConfig) => (
-  page: Function = () => <div>Here's a page</div>
-): PageWithConfig => {
+}: {
+  isPublic?: boolean,
+  isAccessible?: Function,
+  getInitialProps?: Function
+}) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
   page.getInitialProps = getInitialProps;
