@@ -11,35 +11,16 @@ import { isValidJwt } from "global/utils/egoJwt";
 /**
  * Configuration structure for each page
  */
-const DEFAULT_PAGE_CONFIG = {
-  isPublic: false,
-  isAccessible: () => true,
-  getInitialProps: () => ({})
+export const createPage = ({
+  isPublic = false,
+  isAccessible = () => true,
+  getInitialProps = () => ({})
+}) => (page = () => <div>Here's a page</div>) => {
+  page.isPublic = isPublic;
+  page.isAccessible = isAccessible;
+  page.getInitialProps = getInitialProps;
+  return page;
 };
-
-const HAS_VALIDATION_FLAG = "HAS_VALIDATION_FLAG";
-export const withPathConfigValidation = Page =>
-  new Proxy(Page, {
-    get: (page, prop) => {
-      return prop === HAS_VALIDATION_FLAG ? true : page[prop];
-    },
-    set: (page, prop, value) => {
-      const typeInPrototype = typeof DEFAULT_PAGE_CONFIG[prop];
-      if (typeInPrototype === "undefined") {
-        console.warn(
-          new Error(`property ${prop} is not a defined configuration for page`)
-        );
-      } else if (typeInPrototype !== typeof value) {
-        console.warn(
-          new Error(
-            `expected type ${typeInPrototype} for page property ${prop} but received ${typeof value}`
-          )
-        );
-      }
-      page[prop] = value;
-      return true;
-    }
-  });
 
 const enforceLogin = ({ ctx }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -97,16 +78,7 @@ const Root = props => {
 
 // this makes egoJwt available to every page server-side
 Root.getInitialProps = async ({ Component, ctx, router }) => {
-  if (!Component[HAS_VALIDATION_FLAG]) {
-    console.warn(
-      `WARNING! Page at ${ctx.asPath} does not have config validation`
-    );
-  }
-
-  const { isPublic, isAccessible, getInitialProps } = {
-    ...DEFAULT_PAGE_CONFIG,
-    ...Component
-  };
+  const { isPublic, isAccessible, getInitialProps } = Component;
 
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
