@@ -9,7 +9,7 @@ import { createPage } from "./_app";
 
 export default createPage({ isPublic: true })(() => {
   const { data, token, resolving } = useEgoToken({
-    onError: () => Router.replace(LOGIN_PAGE_PATH)
+    onError: err => Router.replace(LOGIN_PAGE_PATH)
   });
   React.useEffect(() => {
     const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
