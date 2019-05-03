@@ -8,8 +8,6 @@ require("@babel/register")({
   plugins: [
     // "graphql-tag",
     // "import-graphql",
-    "@babel/plugin-proposal-optional-chaining",
-    "@babel/plugin-proposal-object-rest-spread"
   ]
 });
 
