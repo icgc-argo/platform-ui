@@ -1,3 +1,4 @@
+//@flow
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
@@ -17,19 +18,48 @@ const RDPC_PREFIX = "RDPC_PREFIX_";
 const PROGRAM_PREFIX = "PROGRAM_";
 const PROGRAM_DATA_PREFIX = "PROGRAM_DATA_";
 
-export const isValidJwt = jwt => {
+type EgoJwtData = {
+  iat: number,
+  exp: number,
+  sub: string,
+  iss: string,
+  aud: string[],
+  jti: string,
+  context: {
+    scope: string[],
+    user: {
+      name: string,
+      email: string,
+      status: "APPROVED" | "DISABLED" | "PENDING" | "REJECTED",
+      firstName: string,
+      lastName: string,
+      createdAt: number,
+      lastLogin: number,
+      preferredLanguage: ?string,
+      type: "ADMIN" | "USER",
+      permissions: string[]
+    }
+  },
+  scope: string[]
+};
+
+export const decodeToken = (egoJwt: string): EgoJwtData => {
+  return jwtDecode(egoJwt);
+};
+
+export const isValidJwt = (egoJwt: string) => {
   try {
-    const { exp } = jwtDecode(jwt);
+    const { exp } = decodeToken(egoJwt);
     return exp * 1000 > Date.now();
   } catch (err) {
     return false;
   }
 };
 
-export const isDccMember = egoJwt => {
+export const isDccMember = (egoJwt: string) => {
   try {
-    const data = jwtDecode(egoJwt);
-    const permissions = get(data, "context.user.permissions", []);
+    const data = decodeToken(egoJwt);
+    const permissions = data.context.user.permissions;
     const dccPermissions = permissions.filter(p => {
       const policy = p.split(".")[0];
       return policy.indexOf(DCC_PREFIX) === 0;
@@ -47,10 +77,10 @@ export const isDccMember = egoJwt => {
   }
 };
 
-export const isRdpcMember = egoJwt => {
+export const isRdpcMember = (egoJwt: string) => {
   try {
-    const data = jwtDecode(egoJwt);
-    const permissions = get(data, "context.user.permissions", []);
+    const data = decodeToken(egoJwt);
+    const permissions = data.context.user.permissions;
     const rdpcPermissions = permissions.filter(p => {
       const policy = p.split(".")[0];
       return policy.indexOf(RDPC_PREFIX) === 0;
@@ -68,9 +98,9 @@ export const isRdpcMember = egoJwt => {
   }
 };
 
-export const getAuthorizedProgramPolicies = egoJwt => {
-  const data = jwtDecode(egoJwt);
-  const permissions = get(data, "context.user.permissions", []);
+export const getAuthorizedProgramPolicies = (egoJwt: string) => {
+  const data = decodeToken(egoJwt);
+  const permissions = data.context.user.permissions;
   const programPermissions = permissions.filter(p => {
     const policy = p.split(".")[0];
     const output =
@@ -78,7 +108,7 @@ export const getAuthorizedProgramPolicies = egoJwt => {
       policy.indexOf(PROGRAM_DATA_PREFIX) !== 0;
     return output;
   });
-  return programPermissions.reduce((acc, p) => {
+  return programPermissions.reduce((acc: string[], p) => {
     const permission = p.split(".")[1];
     const policy = p.split(".")[0];
     if (
@@ -93,7 +123,13 @@ export const getAuthorizedProgramPolicies = egoJwt => {
   }, []);
 };
 
-export const hasAccessToProgram = ({ egoJwt, programId }) => {
+export const hasAccessToProgram = ({
+  egoJwt,
+  programId
+}: {
+  egoJwt: string,
+  programId: string
+}) => {
   const authorizedProgramPolicies = getAuthorizedProgramPolicies(egoJwt);
   return authorizedProgramPolicies.some(policy => policy.includes(programId));
 };
