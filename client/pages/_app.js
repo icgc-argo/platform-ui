@@ -12,10 +12,23 @@ import { isValidJwt } from "global/utils/egoJwt";
 /**
  * Configuration structure for each page
  */
+type GetInitialPropsContext = {
+  pathName: string,
+  query: {
+    [key: string]: any
+  },
+  asPath: string,
+  req: any,
+  res: any,
+  err?: Error
+};
+type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
+  egoJwt: string
+};
 type PageConfigProps = {
   isPublic: boolean,
-  isAccessible: ({ egoJwt: string, ctx: any }) => boolean,
-  getInitialProps: ({ egoJwt: string } & any) => any
+  isAccessible: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
+  getInitialProps: GetInitialPropsContextWithEgo => any
 };
 type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
@@ -24,8 +37,8 @@ export const createPage = ({
   getInitialProps = () => ({})
 }: {
   isPublic?: boolean,
-  isAccessible?: ({ egoJwt: string, ctx: any }) => boolean,
-  getInitialProps?: ({ egoJwt: string } & any) => any
+  isAccessible?: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
+  getInitialProps?: GetInitialPropsContextWithEgo => any
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
