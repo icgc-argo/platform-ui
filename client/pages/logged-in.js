@@ -5,7 +5,7 @@ import Router from "next/router";
 import useEgoToken from "global/hooks/useEgoToken";
 import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { getRedirectPathForUser } from "global/utils/pages";
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 
 export default createPage({ isPublic: true })(() => {
   const { data, token, resolving } = useEgoToken({
