@@ -1,10 +1,11 @@
+//@flow
 import React from "react";
-import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
 import {
   isRdpcMember,
-  getAuthorizedProgramPolicies
+  getAuthorizedProgramPolicies,
+  decodeToken
 } from "global/utils/egoJwt";
 import { createPage } from "./_app";
 
@@ -14,7 +15,7 @@ export default createPage({
     return !isRdpcMember(egoJwt);
   },
   getInitialProps: ({ egoJwt, asPath, query }) => {
-    const data = jwtDecode(egoJwt);
+    const data = decodeToken(egoJwt);
     const firstName = get(data, "context.user.firstName", "");
     const lastName = get(data, "context.user.lastName", "");
     const authorizedPrograms = getAuthorizedProgramPolicies(egoJwt);
