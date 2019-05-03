@@ -1,3 +1,4 @@
+// @flow
 import React from "react";
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
