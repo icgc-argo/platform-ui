@@ -13,7 +13,9 @@ export default createPage({
       query: { id }
     } = ctx;
     if (id) {
-      return !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, id });
+      return (
+        !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, programId: id })
+      );
     } else {
       return true;
     }
