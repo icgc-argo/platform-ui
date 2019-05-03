@@ -46,7 +46,14 @@ const enforceLogin = ({ ctx }) => {
  * Root level component that wraps every page
  */
 // this makes egoJwt available to every page client-side
-const Root = (props: any) => {
+const Root = (props: {
+  Component: React.ComponentType<any>,
+  pageProps: {},
+  egoJwt: string,
+  unauthorized: boolean,
+  isProduction: boolean,
+  error: Error
+}) => {
   const {
     Component,
     pageProps,

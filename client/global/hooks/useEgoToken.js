@@ -1,4 +1,5 @@
-import React from "react";
+// @flow
+import * as React from "react";
 import fetch from "isomorphic-fetch";
 import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
@@ -12,7 +13,10 @@ const egoLoginUrl = urlJoin(
   `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`
 );
 
-export default ({ onError = () => {} } = {}) => {
+type UseEgoTokenInput = {
+  onError?: (error: Error) => void
+};
+export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
   const [token, setToken] = React.useState(null);
   const [resolving, setResolving] = React.useState(false);
   React.useEffect(() => {
