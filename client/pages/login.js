@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 import urlJoin from "url-join";
 import Router from "next/router";
@@ -6,7 +7,7 @@ import GoogleLogin from "uikit/SocialLoginButtons/GoogleLogin";
 import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
 import { LOCAL_STORAGE_REDIRECT_KEY } from "global/constants";
 import { getRedirectPathForUser } from "global/utils/pages";
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: true,

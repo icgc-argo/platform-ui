@@ -1,5 +1,7 @@
+// @flow
+import React from "react";
 import Root from "../components/Root";
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: true,
