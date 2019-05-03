@@ -8,45 +8,13 @@ import Link from "next/link";
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { NODE_ENV, ENVIRONMENTS } from "global/config";
 import { isValidJwt } from "global/utils/egoJwt";
+import { createPage } from "global/utils/pages";
+import type {
+  PageWithConfig,
+  GetInitialPropsContext
+} from "global/utils/pages";
 
-/**
- * Configuration structure for each page
- */
-type GetInitialPropsContext = {
-  pathName: string,
-  query: {
-    [key: string]: any
-  },
-  asPath: string,
-  req: any,
-  res: any,
-  err?: Error
-};
-type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
-  egoJwt: string
-};
-type PageConfigProps = {
-  isPublic: boolean,
-  isAccessible: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
-  getInitialProps: GetInitialPropsContextWithEgo => any
-};
-type PageWithConfig = PageConfigProps & React.ComponentType<any>;
-export const createPage = ({
-  isPublic = false,
-  isAccessible = () => true,
-  getInitialProps = () => ({})
-}: {
-  isPublic?: boolean,
-  isAccessible?: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
-  getInitialProps?: GetInitialPropsContextWithEgo => any
-}) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
-  page.isPublic = isPublic;
-  page.isAccessible = isAccessible;
-  page.getInitialProps = getInitialProps;
-  return page;
-};
-
-const enforceLogin = ({ ctx }) => {
+const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
   if (typeof window === "undefined") {
     ctx.res.redirect(loginRedirect);
@@ -114,7 +82,7 @@ Root.getInitialProps = async ({
   router
 }: {
   Component: PageWithConfig,
-  ctx: any,
+  ctx: GetInitialPropsContext,
   router: any
 }) => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];

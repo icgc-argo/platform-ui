@@ -2,7 +2,7 @@
 import React from "react";
 import { get } from "lodash";
 
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 import { decodeToken } from "global/utils/egoJwt";
 
 export default createPage({

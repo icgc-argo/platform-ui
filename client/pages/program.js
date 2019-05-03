@@ -4,7 +4,7 @@ import { get } from "lodash";
 
 import { decodeToken } from "global/utils/egoJwt";
 import { isRdpcMember, hasAccessToProgram } from "global/utils/egoJwt";
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: false,

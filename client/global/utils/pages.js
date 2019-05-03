@@ -1,4 +1,5 @@
 //@flow
+import * as React from "react";
 import {
   LOCAL_STORAGE_REDIRECT_KEY,
   LOGIN_PAGE_PATH,
@@ -15,4 +16,38 @@ export const getRedirectPathForUser = (egoJwt: string) => {
   } else {
     return USER_PAGE_PATH;
   }
+};
+
+export type GetInitialPropsContext = {
+  pathName: string,
+  query: {
+    [key: string]: any
+  },
+  asPath: string,
+  req: any,
+  res: any,
+  err?: Error
+};
+export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
+  egoJwt: string
+};
+type PageConfigProps = {
+  isPublic: boolean,
+  isAccessible: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
+  getInitialProps: GetInitialPropsContextWithEgo => any
+};
+export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
+export const createPage = ({
+  isPublic = false,
+  isAccessible = () => true,
+  getInitialProps = () => ({})
+}: {
+  isPublic?: boolean,
+  isAccessible?: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
+  getInitialProps?: GetInitialPropsContextWithEgo => any
+}) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
+  page.isPublic = isPublic;
+  page.isAccessible = isAccessible;
+  page.getInitialProps = getInitialProps;
+  return page;
 };

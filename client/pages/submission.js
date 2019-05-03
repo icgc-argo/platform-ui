@@ -3,7 +3,7 @@ import React from "react";
 import { get } from "lodash";
 
 import { isDccMember, decodeToken } from "global/utils/egoJwt";
-import { createPage } from "./_app";
+import { createPage } from "global/utils/pages";
 
 export default createPage({
   isAccessible: ({ egoJwt, ctx }) => {
