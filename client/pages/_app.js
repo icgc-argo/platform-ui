@@ -1,3 +1,4 @@
+// @flow
 import React from "react";
 import nextCookies from "next-cookies";
 import Router from "next/router";
@@ -11,11 +12,24 @@ import { isValidJwt } from "global/utils/egoJwt";
 /**
  * Configuration structure for each page
  */
+type PageConfig = {
+  isPublic?: boolean,
+  isAccessible?: Function,
+  getInitialProps?: Function
+};
+type PageConfigProps = {
+  isPublic: boolean,
+  isAccessible: Function,
+  getInitialProps: Function
+};
+type PageWithConfig = PageConfigProps | Function;
 export const createPage = ({
   isPublic = false,
   isAccessible = () => true,
   getInitialProps = () => ({})
-}) => (page = () => <div>Here's a page</div>) => {
+}: PageConfig) => (
+  page: Function = () => <div>Here's a page</div>
+): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
   page.getInitialProps = getInitialProps;
@@ -35,7 +49,7 @@ const enforceLogin = ({ ctx }) => {
  * Root level component that wraps every page
  */
 // this makes egoJwt available to every page client-side
-const Root = props => {
+const Root = (props: any) => {
   const {
     Component,
     pageProps,
@@ -77,9 +91,15 @@ const Root = props => {
 };
 
 // this makes egoJwt available to every page server-side
-Root.getInitialProps = async ({ Component, ctx, router }) => {
-  const { isPublic, isAccessible, getInitialProps } = Component;
-
+Root.getInitialProps = async ({
+  Component,
+  ctx,
+  router
+}: {
+  Component: PageWithConfig,
+  ctx: any,
+  router: any
+}) => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
@@ -92,14 +112,14 @@ Root.getInitialProps = async ({ Component, ctx, router }) => {
       router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
     }
   } else {
-    if (!isPublic) {
+    if (!Component.isPublic) {
       enforceLogin({ ctx });
     }
   }
 
   try {
-    const unauthorized = !(await isAccessible({ egoJwt, ctx }));
-    const pageProps = await getInitialProps({ ...ctx, egoJwt });
+    const unauthorized = !(await Component.isAccessible({ egoJwt, ctx }));
+    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
     const isProduction = NODE_ENV === ENVIRONMENTS.production;
     return {
       egoJwt,

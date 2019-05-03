@@ -1,0 +1,15 @@
+[ignore]
+.*/node_modules/*
+
+[include]
+
+[libs]
+
+[options]
+
+module.name_mapper='^global\(.*\)$' -> '<PROJECT_ROOT>/global/\1'
+module.name_mapper='^components\(.*\)$' -> '<PROJECT_ROOT>/components/\1'
+module.name_mapper='^uikit\(.*\)$' -> '<PROJECT_ROOT>/uikit/\1'
+
+[lints]
+deprecated-utility=off
