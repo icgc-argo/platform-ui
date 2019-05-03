@@ -10,7 +10,7 @@ import {
 import { createPage } from "global/utils/pages";
 
 export default createPage({
-  isPublic: true,
+  isPublic: false,
   isAccessible: ({ egoJwt, ctx }) => {
     return !isRdpcMember(egoJwt);
   },
