@@ -1,10 +1,10 @@
 // @flow
 import * as React from "react";
 import fetch from "isomorphic-fetch";
-import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
 import Cookies from "js-cookie";
 
+import { decodeToken } from "global/utils/egoJwt";
 import { EGO_JWT_KEY } from "global/constants";
 import { EGO_API_ROOT, EGO_CLIENT_ID } from "global/config";
 
@@ -35,7 +35,7 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
       })
         .then(res => res.text())
         .then(egoToken => {
-          jwtDecode(egoToken);
+          decodeToken(egoToken);
           Cookies.set(EGO_JWT_KEY, egoToken);
           setToken(egoToken);
           setResolving(false);
@@ -47,5 +47,5 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
         });
     }
   }, []);
-  return { token, resolving, data: token ? jwtDecode(token) : null };
+  return { token, resolving, data: token ? decodeToken(token) : null };
 };

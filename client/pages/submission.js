@@ -1,8 +1,8 @@
+//@flow
 import React from "react";
-import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
-import { isDccMember } from "global/utils/egoJwt";
+import { isDccMember, decodeToken } from "global/utils/egoJwt";
 import { createPage } from "./_app";
 
 export default createPage({
@@ -10,7 +10,7 @@ export default createPage({
     return isDccMember(egoJwt);
   },
   getInitialProps: ({ egoJwt, asPath, query, res }) => {
-    const data = jwtDecode(egoJwt);
+    const data = decodeToken(egoJwt);
     const firstName = get(data, "context.user.firstName", "");
     const lastName = get(data, "context.user.lastName", "");
     return { firstName, lastName };
