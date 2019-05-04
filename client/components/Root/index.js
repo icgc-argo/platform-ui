@@ -82,11 +82,21 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <Link href={`${LOGIN_PAGE_PATH}`}>Login</Link>
-          <Link href={`${PROGRAMS_LIST_PATH}`}>{PROGRAMS_LIST_PATH}</Link>
-          <Link href={`${PROGRAM_ENTITY_PATH}`}>{PROGRAM_ENTITY_PATH}</Link>
-          <Link href={`${DCC_OVERVIEW_PATH}`}>{DCC_OVERVIEW_PATH}</Link>
-          <Link href={`${USER_PAGE_PATH}`}>{USER_PAGE_PATH}</Link>
+          <Link prefetch href={`${LOGIN_PAGE_PATH}`}>
+            Login
+          </Link>
+          <Link prefetch href={`${PROGRAMS_LIST_PATH}`}>
+            {PROGRAMS_LIST_PATH}
+          </Link>
+          <Link prefetch href={`${PROGRAM_ENTITY_PATH}`}>
+            {PROGRAM_ENTITY_PATH}
+          </Link>
+          <Link prefetch href={`${DCC_OVERVIEW_PATH}`}>
+            {DCC_OVERVIEW_PATH}
+          </Link>
+          <Link prefetch href={`${USER_PAGE_PATH}`}>
+            {USER_PAGE_PATH}
+          </Link>
         </div>
       </div>
     }

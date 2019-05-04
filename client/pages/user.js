@@ -18,8 +18,8 @@ import UserPage from "components/UserPage";
 export default createPage({
   getInitialProps: async ({ egoJwt, asPath, query, res }) => {
     const data = decodeToken(egoJwt);
-    const firstName = get(data, "context.user.firstName", "");
-    const lastName = get(data, "context.user.lastName", "");
+    const firstName = data.context.user.firstName;
+    const lastName = data.context.user.lastName;
     const extractedData = await precomputeApolloCache({
       query: UserQuery,
       variables: {}
