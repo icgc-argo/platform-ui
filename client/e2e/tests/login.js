@@ -12,21 +12,35 @@
   }
 };
 */
+
 const bs = require("../helpers");
 module.exports = {
-  "Demo test homepage": function(browser) {
+  "Demo test homepage": browser => {
     //const sessionId = bs.updateStatus(browser);
+
     browser
       .url("http://localhost:8080")
       .waitForElementVisible("body")
       .click(".card:nth-of-type(2)")
+      .assert.title("Google")
       .pause(5000)
       .assert.containsText("h1", "Minh")
       .end();
+  },
+
+  afterEach: (browser, done) => {
+    const result = browser.currentTest.results;
+    // manual failure check for external APIs
+    if (result.failed > 0) {
+      const err = result.lastError.message;
+      bs.updateStatus(browser, "failed", err);
+    }
+    done();
   }
 };
 
 /*
+// remote working check
 module.exports = {
   "BrowserStack Local Testing": function(browser) {
     browser

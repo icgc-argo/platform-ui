@@ -20,19 +20,16 @@ const updateStatus = (browser, status, reason) => {
   headers.set("Content-Type", "application/json");
 
   const params = {
-    status: "error" // Completed, Error or Timeout.
-    //  reason: "api update status call ran successfuly"
+    status: status, // Completed, Error or Timeout.
+    reason: reason
   };
 
-  fetch(
-    `${BS_API_ROOT}/sessions/bff41777b98c313a4a63f1993205ad96f9efa915.json`,
-    {
-      method: "PUT",
-      headers: headers,
-      auth: `${BS_USER}:${BS_KEY}`,
-      body: JSON.stringify(params)
-    }
-  )
+  fetch(`${BS_API_ROOT}/sessions/${sessionId}.json`, {
+    method: "PUT",
+    headers: headers,
+    auth: `${BS_USER}:${BS_KEY}`,
+    body: JSON.stringify(params)
+  })
     .then(resp => resp.json())
     .then(console.log)
     .catch(err => console.log("err", err));
