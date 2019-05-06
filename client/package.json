@@ -9,7 +9,7 @@
     "flow": "flow",
     "flow-typed": "flow-typed",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
-    "e2e": "nightwatch; exit 0",
+    "e2e": "nightwatch -c e2e/conf/dev.js; exit 0",
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0"
   },
   "dependencies": {

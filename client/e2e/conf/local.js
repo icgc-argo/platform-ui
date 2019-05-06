@@ -1,35 +1,38 @@
+const {
+  WINDOWS_CHROME_LATEST,
+  WINDOWS_FIREFOX_LATEST,
+  WINDOWS_EDGE_LATEST,
+  OSX_CHROME_LATEST,
+  OSX_FIREFOX_LATEST,
+  OSX_SAFARI_LATEST
+} = require("./browsers");
+
 const commonCapabilities = {
   "browserstack.user": process.env.BROWSERSTACK_USER,
   "browserstack.key": process.env.BROWSERSTACK_ACCESS_KEY,
   "browserstack.local": "true",
   "browserstack.networkLogs": "true",
-  project: "argo-platform"
+  "browserstack.debug": "true",
+  "browserstack.networkLogs": "true",
+  "browserstack.console": "info",
+  project: process.env.BROWSERSTACK_PROJECT_NAME,
+  host: process.env.BROWSERSTACK_SELENIUM_HOST,
+  port: 80,
+  browser: "chrome"
 };
 
-module.exports = {
+const config = {
   src_folders: ["../tests"],
+  output_folder: "./e2e/test_reports",
   selenium: {
     start_process: false,
-    host: "hub-cloud.browserstack.com",
+    host: process.env.BROWSERSTACK_SELENIUM_HOST,
     port: 80
   },
 
   test_settings: {
-    default: {
-      desiredCapabilities: {
-        browser: "chrome"
-      }
-    }
+    default: { desiredCapabilities: commonCapabilities }
   }
 };
 
-// Copy common capabilites
-for (var i in nightwatch_config.test_settings) {
-  var config = nightwatch_config.test_settings[i];
-  config["selenium_host"] = nightwatch_config.selenium.host;
-  config["selenium_port"] = nightwatch_config.selenium.port;
-  config["browserstack.user"] = commonCapabilities["browserstack.user"];
-  config["browserstack.key"] = commonCapabilities["browserstack.key"];
-  config["browserstack.local"] = commonCapabilities["browserstack.local"];
-  config["project"] = commonCapabilities.project;
-}
+module.exports = config;
