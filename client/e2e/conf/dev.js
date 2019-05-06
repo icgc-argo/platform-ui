@@ -1,3 +1,5 @@
+const { CHROME_LATEST } = require("../env/dev");
+
 const config = {
   src_folders: ["./e2e/tests"],
   output_folder: "./e2e/test_reports",
@@ -12,7 +14,8 @@ const config = {
       desiredCapabilities: {
         browserName: "chrome"
       }
-    }
+    },
+    CHROME_LATEST
   }
 };
 

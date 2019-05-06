@@ -5,7 +5,7 @@ const {
   OSX_CHROME_LATEST,
   OSX_FIREFOX_LATEST,
   OSX_SAFARI_LATEST
-} = require("./browsers");
+} = require("../env/browserstack");
 
 const commonCapabilities = {
   "browserstack.user": process.env.BROWSERSTACK_USER,

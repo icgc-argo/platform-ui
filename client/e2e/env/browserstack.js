@@ -58,15 +58,13 @@ const OSX_SAFARI_LATEST = {
   }
 };
 
-const browers = {
-  desiredCapabilities: {
-    WINDOWS_CHROME_LATEST,
-    WINDOWS_EDGE_LATEST,
-    WINDOWS_FIREFOX_LATEST,
-    OSX_CHROME_LATEST,
-    OSX_FIREFOX_LATEST,
-    OSX_SAFARI_LATEST
-  }
+const env = {
+  WINDOWS_CHROME_LATEST,
+  WINDOWS_EDGE_LATEST,
+  WINDOWS_FIREFOX_LATEST,
+  OSX_CHROME_LATEST,
+  OSX_FIREFOX_LATEST,
+  OSX_SAFARI_LATEST
 };
 
-module.exports = browers;
+module.exports = env;

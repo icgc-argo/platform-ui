@@ -15,6 +15,7 @@ module.exports = {
       .end();
   },
 
+  /*
   "User can login": browser => {
     browser
       .url("http://localhost:8080")
@@ -23,6 +24,7 @@ module.exports = {
       .waitForElementVisible("#google-log-in")
       .click("#google-log-in");
   },
+  */
 
   afterEach: (browser, done) => {
     const result = browser.currentTest.results;
