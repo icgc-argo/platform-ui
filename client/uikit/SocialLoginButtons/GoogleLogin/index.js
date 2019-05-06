@@ -10,7 +10,9 @@ const StyledLink = styled("a")`
 `;
 
 const GoogleLogin = ({ link }) => (
-  <StyledLink href={link}>Log in with the Google</StyledLink>
+  <StyledLink id="google-log-in" href={link}>
+    Log in with the Google
+  </StyledLink>
 );
 
 GoogleLogin.propTypes = { link: PropTypes.string.isRequired };

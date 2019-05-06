@@ -4,7 +4,8 @@ module.exports = {
   desiredCapabilities: {
     name: "Login"
   },
-  "Demo user login": browser => {
+
+  "User page exists": browser => {
     browser
       .url("http://localhost:8080")
       .waitForElementVisible("body")
@@ -12,6 +13,13 @@ module.exports = {
       .pause(5000)
       .assert.containsText("h1", "Minh")
       .end();
+  },
+
+  "User can login": browser => {
+    browser
+      .url("http://localhost:8080")
+      .waitForElementVisible("#google-log-in")
+      .click();
   },
 
   afterEach: (browser, done) => {
