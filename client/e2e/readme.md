@@ -1,6 +1,6 @@
 # E2E Testing
 
-## Setup
+## Local Setup
 
 ### Chrome Driver
 
@@ -17,6 +17,8 @@ Move binary to path and make executable
 sudo mv chromedriver /usr/bin/chromedriver
 sudo chmod +x /usr/bin/chromedriver
 ```
+
+## Browserstack
 
 ## Running
 
