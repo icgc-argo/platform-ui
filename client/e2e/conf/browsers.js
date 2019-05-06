@@ -6,42 +6,67 @@
  * Windows
  */
 
-export const WINDOWS_CHROME_LATEST = {
-  os: "Windows",
-  os_version: "10",
-  browserName: "Chrome"
+const WINDOWS_CHROME_LATEST = {
+  desiredCapabilities: {
+    os: "Windows",
+    os_version: "10",
+    browserName: "Chrome"
+  }
 };
 
-export const WINDOWS_FIREFOX_LATEST = {
-  os: "Windows",
-  os_version: "10",
-  browserName: "Firefox"
+const WINDOWS_FIREFOX_LATEST = {
+  desiredCapabilities: {
+    os: "Windows",
+    os_version: "10",
+    browserName: "Firefox"
+  }
 };
 
-export const WINDOWS_EDGE_LATEST = {
-  os: "Windows",
-  os_version: "10",
-  browserName: "Edge"
+const WINDOWS_EDGE_LATEST = {
+  desiredCapabilities: {
+    os: "Windows",
+    os_version: "10",
+    browserName: "Edge"
+  }
 };
 
 /**
  * OSX
  */
 
-export const OSX_CHROME_LATEST = {
-  os: "OS X",
-  os_version: "Mojave",
-  browserName: "Chrome"
+const OSX_CHROME_LATEST = {
+  desiredCapabilities: {
+    os: "OS X",
+    os_version: "Mojave",
+    browserName: "Chrome"
+  }
 };
 
-export const OSX_FIREFOX_LATEST = {
-  os: "OS X",
-  os_version: "Mojave",
-  browserName: "Firefox"
+const OSX_FIREFOX_LATEST = {
+  desiredCapabilities: {
+    os: "OS X",
+    os_version: "Mojave",
+    browserName: "Firefox"
+  }
 };
 
-export const OSX_SAFARI_LATEST = {
-  os: "OS X",
-  os_version: "Mojave",
-  browserName: "Safari"
+const OSX_SAFARI_LATEST = {
+  desiredCapabilities: {
+    os: "OS X",
+    os_version: "Mojave",
+    browserName: "Safari"
+  }
 };
+
+const browers = {
+  desiredCapabilities: {
+    WINDOWS_CHROME_LATEST,
+    WINDOWS_EDGE_LATEST,
+    WINDOWS_FIREFOX_LATEST,
+    OSX_CHROME_LATEST,
+    OSX_FIREFOX_LATEST,
+    OSX_SAFARI_LATEST
+  }
+};
+
+module.exports = browers;
