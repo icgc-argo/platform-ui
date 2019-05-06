@@ -8,7 +8,6 @@ import Link from "next/link";
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { NODE_ENV, ENVIRONMENTS } from "global/config";
 import { isValidJwt } from "global/utils/egoJwt";
-import { createPage } from "global/utils/pages";
 import type {
   PageWithConfig,
   GetInitialPropsContext
