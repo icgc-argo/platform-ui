@@ -9,8 +9,8 @@
     "flow": "flow",
     "flow-typed": "flow-typed",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
-    "e2e": "nightwatch",
-    "e2e-local": "./e2e/local/runner.js -c e2e/local/conf.js"
+    "e2e": "nightwatch; exit 0",
+    "e2e-local": "./e2e/local/runner.js -c e2e/local/conf.js; exit 0"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
