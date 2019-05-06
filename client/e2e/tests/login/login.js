@@ -19,6 +19,8 @@ module.exports = {
     browser
       .url("http://localhost:8080")
       .waitForElementVisible("body")
+      .click("#link-login")
+      .waitForElementVisible("#google-log-in")
       .click("#google-log-in");
   },
 
