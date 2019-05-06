@@ -62,6 +62,3 @@ typings/
 
 # storybook build
 storybook-static
-
-# VSCode
-.vscode
