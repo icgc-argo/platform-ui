@@ -18,8 +18,8 @@ module.exports = {
   "User can login": browser => {
     browser
       .url("http://localhost:8080")
-      .waitForElementVisible("#google-log-in")
-      .click();
+      .waitForElementVisible("body")
+      .click("#google-log-in");
   },
 
   afterEach: (browser, done) => {
