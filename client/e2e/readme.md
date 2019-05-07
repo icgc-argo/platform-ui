@@ -62,7 +62,7 @@ Tests can be logically grouped into folders
 
 At the time of writing Selenium IDE doesn't have export for scripts
 
-This recorder gets use half way there: https://github.com/vvscode/js--nightwatch-recorder
+This recorder allows basic recording: https://github.com/vvscode/js--nightwatch-recorder
 
 ## Guidelines
 

@@ -9,8 +9,8 @@ const StyledLink = styled("a")`
   font-size: 30px;
 `;
 
-const GoogleLogin = ({ link }) => (
-  <StyledLink id="google-log-in" href={link}>
+const GoogleLogin = ({ link, id }) => (
+  <StyledLink id={id} href={link}>
     Log in with the Google
   </StyledLink>
 );
