@@ -82,7 +82,7 @@ const Root = ({ name }) => (
           ))}
         </div>
         <div className="row">
-          <Link prefetch href={`${LOGIN_PAGE_PATH}`}>
+          <Link id="link-login" prefetch href={`${LOGIN_PAGE_PATH}`}>
             Login
           </Link>
           <Link prefetch href={`${PROGRAMS_LIST_PATH}`}>

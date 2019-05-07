@@ -62,3 +62,9 @@ typings/
 
 # storybook build
 storybook-static
+
+# Testing
+test_reports
+client/e2e/test_reports
+browserstack.err
+chromedriver.log
