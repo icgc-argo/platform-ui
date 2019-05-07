@@ -4,7 +4,7 @@ const inquirer = require("inquirer");
 const chalk = require("chalk");
 const browserstackEnvs = require("../env/browserstack");
 const devEnvs = require("../env/dev");
-var shell = require("shelljs");
+const shell = require("shelljs");
 
 const log = console.log;
 const info = chalk.magenta.bold;
