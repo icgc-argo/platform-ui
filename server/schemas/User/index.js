@@ -1,28 +1,28 @@
-import { gql } from "apollo-server-express";
-import { makeExecutableSchema } from "graphql-tools";
-import DataLoader from "dataloader";
+import { gql } from 'apollo-server-express';
+import { makeExecutableSchema } from 'graphql-tools';
+import DataLoader from 'dataloader';
 
 const users = [
   {
     id: 1,
-    name: "Jon",
-    friends: [2, 3]
+    name: 'Jon',
+    friends: [2, 3],
   },
   {
     id: 2,
-    name: "Minh",
-    friends: [3, 4, 1]
+    name: 'Minh',
+    friends: [3, 4, 1],
   },
   {
     id: 3,
-    name: "Dusan",
-    friends: [2, 4]
+    name: 'Dusan',
+    friends: [2, 4],
   },
   {
     id: 4,
-    name: "Ciaran",
-    friends: [1, 3, 2, 4]
-  }
+    name: 'Ciaran',
+    friends: [1, 3, 2, 4],
+  },
 ];
 
 // Construct a schema, using GraphQL schema language
@@ -45,8 +45,7 @@ const userResolver = async (obj, args, context, info) => {
   const user = await userLoader.load(args.id);
   return {
     ...user,
-    friends: () =>
-      user.friends.map(id => userResolver(obj, { id }, context, info))
+    friends: () => user.friends.map(id => userResolver(obj, { id }, context, info)),
   };
 };
 
@@ -59,9 +58,9 @@ const resolvers = {
       return {
         ...user,
         friends: (args, context, info) =>
-          user.friends.map(id => userResolver(user, { id }, context, info))
+          user.friends.map(id => userResolver(user, { id }, context, info)),
       };
-    }
+    },
   },
   Mutation: {
     setUserName: async (obj, args, context, info) => {
@@ -71,25 +70,23 @@ const resolvers = {
       return {
         ...user,
         friends: (args, context, info) =>
-          user.friends.map(id => userResolver(user, { id }, context, info))
+          user.friends.map(id => userResolver(user, { id }, context, info)),
       };
-    }
-  }
+    },
+  },
 };
 
 export const createUserLoader = () =>
   new DataLoader(ids =>
     Promise.all(
-      ids.map(uid =>
-        Promise.resolve(users.find(({ id }) => String(uid) === String(id)))
-      )
-    )
+      ids.map(uid => Promise.resolve(users.find(({ id }) => String(uid) === String(id)))),
+    ),
   );
 
 export default () =>
   Promise.resolve(
     makeExecutableSchema({
       typeDefs,
-      resolvers
-    })
+      resolvers,
+    }),
   );
