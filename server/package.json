@@ -16,6 +16,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
+    "@grpc/proto-loader": "^0.5.0",
     "apollo-link-context": "^1.0.17",
     "apollo-link-http": "^1.5.14",
     "apollo-server-express": "^2.4.8",
@@ -27,10 +28,16 @@
     "express": "^4.16.4",
     "graphql": "^14.2.1",
     "graphql-tools": "^4.0.4",
+    "grpc": "^1.20.3",
     "node-fetch": "^2.3.0",
     "url-join": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "trailingComma": "all",
+    "singleQuote": true
   }
 }
