@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import LoadingSpinner from "../loadingSpinner";
 
 const StyledButton = styled("button")`
-  background-color: ${({ theme }) => theme.button.primary.default};
   color: white;
-  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   line-height: ${({ theme, size }) => theme.button.sizes[size]};
   display: flex;
   align-items: center;
@@ -14,7 +14,9 @@ const StyledButton = styled("button")`
   box-shadow: none;
   border: none;
   border-radius: 20px;
+
   padding: 10px 24px;
+  background-color: ${({ theme }) => theme.button.primary.default};
 
   &:hover {
     background-color: ${({ theme }) => theme.button.primary.hover};
@@ -30,7 +32,6 @@ const StyledButton = styled("button")`
 
   &:disabled {
     background-color: ${({ theme }) => theme.button.primary.disabled};
-    pointer-events: none;
   }
 `;
 
@@ -57,7 +58,7 @@ const Button = ({
       size={size}
       variant={variant}
     >
-      {isLoading && showLoader ? "Loading..." : children}
+      {isLoading && showLoader ? "loading" : children}
     </StyledButton>
   );
 };
@@ -66,7 +67,7 @@ Button.propTypes = {
   /**
    * Button variant type eg. primary
    */
-  variant: PropTypes.oneOf(["primary", "secondary", "warning"]),
+  variant: PropTypes.oneOf(["primary", "secondary"]),
   /**
    * Button size
    */
