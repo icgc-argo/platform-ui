@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 
 const StyledButton = styled("button")`
-  background-color: ${({ theme, variant }) => theme.button[variant].color};
+  background-color: ${({ theme }) => theme.button.primary.default};
   color: white;
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   line-height: ${({ theme, size }) => theme.button.sizes[size]};
@@ -13,24 +13,23 @@ const StyledButton = styled("button")`
   outline: none;
   box-shadow: none;
   border: none;
-  border-radius: 5px;
-
-  ::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-  }
+  border-radius: 20px;
+  padding: 10px 24px;
 
   &:hover {
-    background-color: ${({ theme, variant }) => theme.button[variant].hover};
+    background-color: ${({ theme }) => theme.button.primary.hover};
   }
 
   &:focus {
+    background-color: ${({ theme }) => theme.button.primary.focus};
   }
 
   &:active {
+    background-color: ${({ theme }) => theme.button.primary.active};
   }
 
   &:disabled {
+    background-color: ${({ theme }) => theme.button.primary.disabled};
     pointer-events: none;
   }
 `;
