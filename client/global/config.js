@@ -16,9 +16,7 @@ export const API_ROOT = process.env.API_ROOT || `http://localhost:9000`;
 export const EGO_API_ROOT = String(process.env.EGO_API_ROOT);
 export const EGO_CLIENT_ID = String(process.env.EGO_CLIENT_ID);
 
-export const NODE_ENV = String(
-  process.env.NODE_ENV || ENVIRONMENTS.development
-);
+export const NODE_ENV = String(process.env.ENV || ENVIRONMENTS.development);
 
 /* checks for EGO_API_ROOT */
 if (!EGO_API_ROOT) {

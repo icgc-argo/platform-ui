@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { NODE_ENV, ENVIRONMENTS } from "global/config";
-import { isValidJwt } from "global/utils/egoJwt";
+import { isValidJwt, decodeToken } from "global/utils/egoJwt";
 import type {
   PageWithConfig,
   GetInitialPropsContext
@@ -51,6 +51,20 @@ const Root = (props: {
       logOut();
     }
   });
+
+  React.useEffect(() => {
+    /**
+     * Enables convenience debugging back-door
+     */
+    const userData = decodeToken(props.egoJwt);
+    if (
+      userData.context.user.type === "ADMIN" &&
+      localStorage.getItem("DEBUGGING")
+    ) {
+      window.env = process.env;
+    }
+  });
+
   return (
     <div>
       <div>
