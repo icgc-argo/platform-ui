@@ -52,8 +52,8 @@ spec:
                     script {
                         commit = sh(returnStdout: true, script: 'git describe --always').trim()
                     }
-                    sh "cd ./client && docker build --network=host -f Dockerfile . -t icgcargo/argo-gateway:${commit}-alpine"
-                    sh "docker push icgcargo/argo-gateway:${commit}-alpine"
+                    sh "cd ./client && docker build --network=host -f Dockerfile . -t icgcargo/platform-ui:${commit}-alpine"
+                    sh "docker push icgcargo/platform-ui:${commit}-alpine"
                 }
             }
         }
@@ -71,7 +71,7 @@ spec:
                         sh 'helm ls --kubeconfig $KUBECONFIG'
                         sh 'helm repo add icgcargo https://icgc-argo.github.io/charts/'
                         sh 'helm repo update'
-                        sh "helm upgrade argo-gateway icgcargo/argo-gateway --reuse-values --set image.tag=${commit}-alpine"
+                        sh "helm upgrade platform-ui icgcargo/platform-ui --reuse-values --set image.tag=${commit}-alpine"
                     }
                 }
             }
