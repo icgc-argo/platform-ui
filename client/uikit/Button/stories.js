@@ -40,13 +40,19 @@ const ButtonStories = storiesOf(`${__dirname}`, module)
       />
     );
   })
-  .add("Button with multiple child nodes", () => (
-    <Button onClick={dummyClick}>
-      <img src={`${placeholderImageURLRoot}/12/20`} />
-      <span style={{ color: "#64D518" }}>Red Span</span>
-      <img src={`${placeholderImageURLRoot}/20/20`} />
-      <img src={`${placeholderImageURLRoot}/7/7`} />
-    </Button>
-  ));
+  .add("Button with multiple child nodes", () => {
+    const props = createKnobs();
+    return (
+      <Button
+        {...props}
+        onClick={props.showLoader ? asyncDummyFunc : dummyClick}
+      >
+        <img src={`${placeholderImageURLRoot}/12/20`} />
+        <span style={{ color: "#64D518" }}>Red Span</span>
+        <img src={`${placeholderImageURLRoot}/20/20`} />
+        <img src={`${placeholderImageURLRoot}/7/7`} />
+      </Button>
+    );
+  });
 
 export default ButtonStories;
