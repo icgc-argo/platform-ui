@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { radios, boolean, text } from '@storybook/addon-knobs';
+import { radios, boolean, text } from "@storybook/addon-knobs";
 import React from "react";
 import Button from ".";
 import { asyncDummyFunc, placeholderImageURLRoot } from "../testUtil";
@@ -11,29 +11,34 @@ const createKnobs = () => {
   const variant = radios("variant", {
     primary: "primary",
     secondary: "secondary",
-    warning: "warning",
-  })
+    warning: "warning"
+  });
   const size = radios("size", {
     sm: "sm",
     md: "md",
-    lg: "lg",
-  })
-  const disabled=boolean("disabled", false)
-  const showLoader=boolean("showLoader", false)
-  const children=text("children", "some button")
+    lg: "lg"
+  });
+  const disabled = boolean("disabled", false);
+  const showLoader = boolean("showLoader", false);
+  const children = text("children", "some button");
   return {
     variant,
     size,
     disabled,
     showLoader,
-    children,
-  }
-}
+    children
+  };
+};
 
 const ButtonStories = storiesOf(`${__dirname}`, module)
   .add("Basic", () => {
-    const props = createKnobs()
-    return <Button {...props} onClick={props.showLoader ? asyncDummyFunc : dummyClick}/>
+    const props = createKnobs();
+    return (
+      <Button
+        {...props}
+        onClick={props.showLoader ? asyncDummyFunc : dummyClick}
+      />
+    );
   })
   .add("Button with multiple child nodes", () => (
     <Button onClick={dummyClick}>
