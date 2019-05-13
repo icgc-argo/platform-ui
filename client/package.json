@@ -12,7 +12,7 @@
     "e2e": "./e2e/scripts/interactive.js",
     "e2e-dev": "nightwatch -c e2e/conf/dev.js; exit 0",
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
-    "test": "echo no test specified"
+    "unit-test": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",

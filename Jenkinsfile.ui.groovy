@@ -37,7 +37,7 @@ spec:
                 container('node') {
                     git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
                     sh "cd ./client && npm ci"
-                    sh "cd ./client && npm run test"
+                    sh "cd ./client && npm run unit-test"
                 }
             }
         }

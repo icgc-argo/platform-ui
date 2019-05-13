@@ -7,8 +7,11 @@ import Button from ".";
 
 describe("Button", () => {
   it("should render", () => {
-    const wrapper = shallow(wrapTheme(<Button />));
-    const find = wrapper.find(Button);
-    expect(false).to.be.true;
+    const wrapper = shallow(
+      <div>
+        <Button />
+      </div>
+    );
+    expect(wrapper.find(Button)).to.have.lengthOf(1);
   });
 });
