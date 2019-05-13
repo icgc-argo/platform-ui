@@ -2,7 +2,7 @@
 import jwtDecode from "jwt-decode";
 import { get } from "lodash";
 
-import { asEnum } from "./common";
+import { asEnum } from "../common";
 
 const PERMISSIONS = asEnum(
   {
