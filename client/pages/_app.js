@@ -56,14 +56,16 @@ const Root = (props: {
     /**
      * Enables convenience debugging back-door
      */
-    const userData = decodeToken(props.egoJwt);
-    if (
-      userData.context.user.type === "ADMIN" &&
-      localStorage.getItem("DEBUGGING")
-    ) {
-      window.env = process.env;
-    }
-  });
+    try {
+      const userData = decodeToken(props.egoJwt);
+      if (
+        userData.context.user.type === "ADMIN" &&
+        localStorage.getItem("DEBUGGING")
+      ) {
+        window.env = process.env;
+      }
+    } catch (err) {}
+  }, []);
 
   return (
     <div>
