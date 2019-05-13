@@ -11,7 +11,7 @@ import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: true,
-  getInitialProps: ({ query, egoJwt, res }) => {
+  getInitialProps: async ({ query, egoJwt, res }) => {
     const { redirect } = query;
     if (egoJwt && res) {
       res.redirect(redirect || getRedirectPathForUser(egoJwt));

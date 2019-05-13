@@ -33,18 +33,24 @@ export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
 };
 type PageConfigProps = {
   isPublic: boolean,
-  isAccessible: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
-  getInitialProps: GetInitialPropsContextWithEgo => any
+  isAccessible: ({
+    egoJwt: string,
+    ctx: GetInitialPropsContext
+  }) => Promise<boolean>,
+  getInitialProps: GetInitialPropsContextWithEgo => Promise<any>
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
   isPublic = false,
-  isAccessible = () => true,
-  getInitialProps = () => ({})
+  isAccessible = async () => true,
+  getInitialProps = async () => ({})
 }: {
   isPublic?: boolean,
-  isAccessible?: ({ egoJwt: string, ctx: GetInitialPropsContext }) => boolean,
-  getInitialProps?: GetInitialPropsContextWithEgo => any
+  isAccessible?: ({
+    egoJwt: string,
+    ctx: GetInitialPropsContext
+  }) => Promise<boolean>,
+  getInitialProps?: GetInitialPropsContextWithEgo => Promise<any>
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;

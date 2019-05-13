@@ -6,10 +6,10 @@ import { isDccMember, decodeToken } from "global/utils/egoJwt";
 import { createPage } from "global/utils/pages";
 
 export default createPage({
-  isAccessible: ({ egoJwt, ctx }) => {
+  isAccessible: async ({ egoJwt, ctx }) => {
     return isDccMember(egoJwt);
   },
-  getInitialProps: ({ egoJwt, asPath, query, res }) => {
+  getInitialProps: async ({ egoJwt, asPath, query, res }) => {
     const data = decodeToken(egoJwt);
     const firstName = get(data, "context.user.firstName", "");
     const lastName = get(data, "context.user.lastName", "");

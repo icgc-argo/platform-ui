@@ -11,10 +11,10 @@ import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: false,
-  isAccessible: ({ egoJwt, ctx }) => {
+  isAccessible: async ({ egoJwt, ctx }) => {
     return !isRdpcMember(egoJwt);
   },
-  getInitialProps: ({ egoJwt, asPath, query }) => {
+  getInitialProps: async ({ egoJwt, asPath, query }) => {
     const data = decodeToken(egoJwt);
     const firstName = get(data, "context.user.firstName", "");
     const lastName = get(data, "context.user.lastName", "");

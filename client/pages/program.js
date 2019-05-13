@@ -8,7 +8,7 @@ import { createPage } from "global/utils/pages";
 
 export default createPage({
   isPublic: false,
-  isAccessible: ({ egoJwt, ctx }) => {
+  isAccessible: async ({ egoJwt, ctx }) => {
     const {
       query: { id }
     } = ctx;
@@ -20,7 +20,7 @@ export default createPage({
       return true;
     }
   },
-  getInitialProps: ({ egoJwt, asPath, query }) => {
+  getInitialProps: async ({ egoJwt, asPath, query }) => {
     const data = decodeToken(egoJwt);
     const firstName = data.context.user.firstName;
     const lastName = data.context.user.lastName;
