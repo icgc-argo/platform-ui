@@ -3,6 +3,7 @@ import { withInfo } from "@storybook/addon-info";
 import { withKnobs, text, boolean, number } from "@storybook/addon-knobs";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import React from "react";
 
 // automatically import all files ending in *.stories.js
 const req = require.context("../stories", true, /\.stories\.js$/);
