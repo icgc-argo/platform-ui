@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import LoadingSpinner from "../loadingSpinner";
+//import LoadingSpinner from "./loadingSpinner";
 
 const StyledButton = styled("button")`
   color: white;
@@ -16,22 +16,22 @@ const StyledButton = styled("button")`
   border-radius: 20px;
 
   padding: 10px 24px;
-  background-color: ${({ theme }) => theme.button.primary.default};
+  background-color: ${({ theme, variant }) => theme.button[variant].default};
 
   &:hover {
-    background-color: ${({ theme }) => theme.button.primary.hover};
+    background-color: ${({ theme, variant }) => theme.button[variant].hover};
   }
 
   &:focus {
-    background-color: ${({ theme }) => theme.button.primary.focus};
+    background-color: ${({ theme, variant }) => theme.button[variant].focus};
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.button.primary.active};
+    background-color: ${({ theme, variant }) => theme.button[variant].active};
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.button.primary.disabled};
+    background-color: ${({ theme, variant }) => theme.button[variant].disabled};
   }
 `;
 

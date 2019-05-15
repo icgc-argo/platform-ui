@@ -10,17 +10,19 @@ const dummyClick = action("Clicked!");
 const createKnobs = () => {
   const variant = radios("variant", {
     primary: "primary",
-    secondary: "secondary",
-    warning: "warning"
+    secondary: "secondary"
   });
+
   const size = radios("size", {
     sm: "sm",
     md: "md",
     lg: "lg"
   });
+
   const disabled = boolean("disabled", false);
   const showLoader = boolean("showLoader", false);
   const children = text("children", "some button");
+
   return {
     variant,
     size,
