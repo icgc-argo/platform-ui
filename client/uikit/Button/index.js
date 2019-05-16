@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import Icon from "../Icon";
+import useTheme from "../utils/useTheme";
 
 const StyledButton = styled("button")`
   display: flex;
@@ -60,28 +61,39 @@ const Button = ({
   disabled,
   variant = "primary",
   size = "md",
-  showLoader = false
+  async = false
 }) => {
   const [isLoading, setLoading] = useState(false);
-
+  const theme = useTheme();
+  const shouldShowLoading = isLoading && async;
   const onClickFn = async event => {
     setLoading(true);
     await onClick(event);
     setLoading(false);
   };
-
   return (
     <StyledButton
-      onClick={showLoader ? onClickFn : onClick}
+      onClick={async ? onClickFn : onClick}
       disabled={disabled}
       size={size}
       variant={variant}
     >
-      {isLoading && showLoader ? (
-        <Icon name="spinner" width={"40px"} height={"40px"} fill={"#fff"} />
-      ) : (
-        children
-      )}
+      <span style={{ visibility: shouldShowLoading ? "hidden" : "visible" }}>
+        {children}
+      </span>
+      <span
+        style={{
+          position: "absolute",
+          visibility: shouldShowLoading ? "visible" : "hidden"
+        }}
+      >
+        <Icon
+          name="spinner"
+          width={"20px"}
+          height={"20px"}
+          fill={theme.button.textColors[variant].default}
+        />
+      </span>
     </StyledButton>
   );
 };
@@ -101,7 +113,7 @@ Button.propTypes = {
   /**
    * Use with async onClick handlers to set loading indicator
    */
-  showLoader: PropTypes.bool
+  async: PropTypes.bool
 };
 
 export default Button;

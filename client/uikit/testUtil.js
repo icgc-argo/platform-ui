@@ -1,5 +1,5 @@
 import { ThemeProvider } from "emotion-theming";
-import theme from "./defaultTheme";
+import theme from "./theme/defaultTheme";
 import React from "react";
 
 export const wrapTheme = component => (
