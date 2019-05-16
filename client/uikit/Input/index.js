@@ -3,38 +3,34 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
-const borderStyle = ({ error, theme: { colors } }) =>
-  css`
-    border: solid 1px ${colors.grey_1};
-    &:hover {
-      border: solid 1px ${colors.light_blue};
-    }
-
-    &:focus {
-      border: solid 1px ${colors.grey};
-    }
-
-    &:active {
-      border: solid 1px ${colors.grey};
-    }
-
-    &:disabled {
-      color: ${colors.light_blue_grey};
-      border: solid 1px ${colors.grey_2};
-      background-color: ${colors.pale_grey};
-    }
-  `;
-
 const StyledInput = styled("input")`
   border-radius: 8px;
   padding: 8px 10px;
   background-color: white;
   outline: none;
-  ${borderStyle}
+
+  border: solid 1px ${({ theme }) => theme.input.borderColors.grey_1};
+  &:hover {
+    border: solid 1px ${({ theme }) => theme.input.borderColors.lightBlue};
+  }
+
+  &:focus {
+    border: solid 1px ${({ theme }) => theme.input.borderColors.grey};
+  }
+
+  &:active {
+    border: solid 1px ${({ theme }) => theme.input.borderColors.grey};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.grey_1};
+    border: solid 1px ${({ theme }) => theme.input.borderColors.grey_1};
+    background-color: ${({ theme }) => theme.input.borderColors.grey_1};
+  }
 `;
 
 /**
- * Basic controlled input component
+ * Basic  input component
  */
 const Input = ({
   placeholder,
