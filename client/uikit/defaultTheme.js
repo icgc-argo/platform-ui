@@ -49,6 +49,11 @@ const colors = {
 const button = {
   focusBorder: "#38dfba",
   fontSizes: { sm: "12px", md: "13px", lg: "24px" },
+  borderWeights: {
+    sm: "1px",
+    md: "2px",
+    lg: "3px"
+  },
   paddings: {
     sm: "8px 15px",
     md: "10px 24px",
