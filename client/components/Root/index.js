@@ -13,7 +13,6 @@ import {
   DCC_OVERVIEW_PATH,
   USER_PAGE_PATH
 } from "global/constants";
-import LoadingSpinner from "../../uikit/Button/loadingSpinner";
 
 const Root = ({ name }) => (
   <div>
@@ -71,7 +70,6 @@ const Root = ({ name }) => (
         <p className="description">
           To get started, edit <code>pages/index.js</code> and save to reload.
         </p>
-        <LoadingSpinner />
         <div className="row">
           {[1, 2, 3, 4].map(id => (
             <Link key={id} href={`/?id=${id}`}>
