@@ -4,6 +4,7 @@ import Input from ".";
 import { withKnobs, text, boolean, radios } from "@storybook/addon-knobs";
 
 const createKnobs = () => {
+  const error = boolean("error", error);
   const disabled = boolean("disabled", false);
   const value = text("Value", "I entered some input...");
   const placeholder = text("Placeholder", "State typing here..");
@@ -13,6 +14,7 @@ const createKnobs = () => {
   });
 
   return {
+    error,
     disabled,
     value,
     placeholder,
