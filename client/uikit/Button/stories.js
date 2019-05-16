@@ -20,14 +20,14 @@ const createKnobs = () => {
   });
 
   const disabled = boolean("disabled", false);
-  const showLoader = boolean("showLoader", false);
+  const async = boolean("async", false);
   const children = text("children", "some button");
 
   return {
     variant,
     size,
     disabled,
-    showLoader,
+    async,
     children
   };
 };
@@ -36,19 +36,13 @@ const ButtonStories = storiesOf(`${__dirname}`, module)
   .add("Basic", () => {
     const props = createKnobs();
     return (
-      <Button
-        {...props}
-        onClick={props.showLoader ? asyncDummyFunc : dummyClick}
-      />
+      <Button {...props} onClick={props.async ? asyncDummyFunc : dummyClick} />
     );
   })
   .add("Button with multiple child nodes", () => {
     const props = createKnobs();
     return (
-      <Button
-        {...props}
-        onClick={props.showLoader ? asyncDummyFunc : dummyClick}
-      >
+      <Button {...props} onClick={props.async ? asyncDummyFunc : dummyClick}>
         <img src={`${placeholderImageURLRoot}/12/20`} />
         <span style={{ color: "#64D518" }}>Red Span</span>
         <img src={`${placeholderImageURLRoot}/20/20`} />
