@@ -13,8 +13,9 @@ const StyledButton = styled("button")`
   border-radius: 100px;
   font-weight: 600;
   text-transform: uppercase;
-  border: 2px solid;
+  border-style: solid;
 
+  border-width: ${({ theme, size }) => theme.button.borderWeights[size]};
   padding: ${({ theme, size }) => theme.button.paddings[size]};
   color: ${({ theme, variant }) => theme.button.textColors[variant].default};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
