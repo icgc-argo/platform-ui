@@ -16,18 +16,8 @@ module.exports = function(plop) {
       },
       {
         type: "add",
-        path: "./{{properCase name}}/readme.md",
-        templateFile: "./template/readme.hbs"
-      },
-      {
-        type: "add",
         path: "./{{properCase name}}/stories.js",
         templateFile: "./template/stories.hbs"
-      },
-      {
-        type: "add",
-        path: "./{{properCase name}}/{{lowerCase name}}.test.js",
-        templateFile: "./template/test.hbs"
       }
     ]
   });
