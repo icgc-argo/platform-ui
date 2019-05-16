@@ -1,19 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icons from "./icons";
-import { css, jsx } from "@emotion/core";
+import { css } from "@emotion/core";
 
-const aCSSObj = css`
-  background-color: green;
-`;
-console.log("css", aCSSObj);
-
-const Icon = ({ name, width, height, fill, className }) => {
+const Icon = ({ name, width, height, fill }) => {
   const svg = Icons[name];
+
   return (
     <svg
       css={css`
-        height: 100px;
+        ${svg.css};
+        height: ${height};
+        width: ${width};
       `}
       width={width}
       height={height}

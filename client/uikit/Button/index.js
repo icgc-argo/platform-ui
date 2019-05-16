@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-//import LoadingSpinner from "./loadingSpinner";
+import Icon from "../Icon";
 
 const StyledButton = styled("button")`
   color: white;
@@ -58,7 +58,11 @@ const Button = ({
       size={size}
       variant={variant}
     >
-      {isLoading && showLoader ? "loading" : children}
+      {isLoading && showLoader ? (
+        <Icon name="spinner" width={"40px"} height={"40px"} fill={"#fff"} />
+      ) : (
+        children
+      )}
     </StyledButton>
   );
 };
