@@ -4,35 +4,52 @@ import styled from "@emotion/styled";
 import Icon from "../Icon";
 
 const StyledButton = styled("button")`
-  color: white;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  line-height: ${({ theme, size }) => theme.button.sizes[size]};
   display: flex;
   align-items: center;
   justify-content: center;
   outline: none;
   box-shadow: none;
   border: none;
-  border-radius: 20px;
+  border-radius: 100px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 2px solid;
 
-  padding: 10px 24px;
-  background-color: ${({ theme, variant }) => theme.button[variant].default};
-
-  &:hover {
-    background-color: ${({ theme, variant }) => theme.button[variant].hover};
-  }
+  padding: ${({ theme, size }) => theme.button.paddings[size]};
+  color: ${({ theme, variant }) => theme.button.textColors[variant].default};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  font-size: ${({ theme, size }) => theme.button.fontSizes[size]};
+  background-color: ${({ theme, variant }) =>
+    theme.button.colors[variant].default};
+  border-color: ${({ theme, variant }) =>
+    theme.button.borderColors[variant].default};
 
   &:focus {
-    background-color: ${({ theme, variant }) => theme.button[variant].focus};
-    border: 2px solid ${({ theme }) => theme.button.focusBorder};
+    background-color: ${({ theme, variant }) =>
+      theme.button.colors[variant].focus};
+    border-color: ${({ theme }) => theme.button.focusBorder};
+  }
+
+  &:hover {
+    background-color: ${({ theme, variant }) =>
+      theme.button.colors[variant].hover};
+    border-color: ${({ theme, variant }) =>
+      theme.button.borderColors[variant].hover};
   }
 
   &:active {
-    background-color: ${({ theme, variant }) => theme.button[variant].active};
+    background-color: ${({ theme, variant }) =>
+      theme.button.colors[variant].active};
+    border-color: ${({ theme, variant }) =>
+      theme.button.borderColors[variant].active};
   }
 
   &:disabled {
-    background-color: ${({ theme, variant }) => theme.button[variant].disabled};
+    background-color: ${({ theme, variant }) =>
+      theme.button.colors[variant].disabled};
+    border-color: ${({ theme, variant }) =>
+      theme.button.borderColors[variant].disabled};
+    color: ${({ theme, variant }) => theme.button.textColors[variant].disabled};
   }
 `;
 
