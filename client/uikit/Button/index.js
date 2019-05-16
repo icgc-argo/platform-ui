@@ -24,6 +24,7 @@ const StyledButton = styled("button")`
 
   &:focus {
     background-color: ${({ theme, variant }) => theme.button[variant].focus};
+    border: 2px solid ${({ theme }) => theme.button.focusBorder};
   }
 
   &:active {
