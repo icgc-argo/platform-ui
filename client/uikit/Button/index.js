@@ -61,11 +61,11 @@ const Button = ({
   disabled,
   variant = "primary",
   size = "md",
-  async = false
+  isAsync = false
 }) => {
   const [isLoading, setLoading] = useState(false);
   const theme = useTheme();
-  const shouldShowLoading = isLoading && async;
+  const shouldShowLoading = isLoading && isAsync;
   const onClickFn = async event => {
     setLoading(true);
     await onClick(event);
@@ -73,7 +73,7 @@ const Button = ({
   };
   return (
     <StyledButton
-      onClick={async ? onClickFn : onClick}
+      onClick={isAsync ? onClickFn : onClick}
       disabled={disabled}
       size={size}
       variant={variant}
