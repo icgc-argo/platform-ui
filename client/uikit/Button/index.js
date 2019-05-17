@@ -60,7 +60,7 @@ const Button = ({
   onClick,
   disabled,
   variant = "primary",
-  size = "md",
+  size = variant === "secondary" ? "sm" : "md",
   isAsync = false
 }) => {
   const [isLoading, setLoading] = useState(false);
@@ -106,7 +106,7 @@ Button.propTypes = {
   /**
    * Button size
    */
-  size: PropTypes.oneOf(["sm", "md", "lg"]),
+  size: PropTypes.oneOf(["sm", "md"]),
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,

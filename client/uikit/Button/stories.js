@@ -15,8 +15,7 @@ const createKnobs = () => {
 
   const size = radios("size", {
     sm: "sm",
-    md: "md",
-    lg: "lg"
+    md: "md"
   });
 
   const disabled = boolean("disabled", false);
