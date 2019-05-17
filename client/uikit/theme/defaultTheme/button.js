@@ -8,7 +8,7 @@ export default {
     lg: "3px"
   },
   paddings: {
-    sm: "8px 15px",
+    sm: "5px 10px",
     md: "10px 24px",
     lg: "15px 30px"
   },
