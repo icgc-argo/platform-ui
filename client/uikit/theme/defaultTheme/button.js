@@ -1,16 +1,17 @@
 import colors from "./colors";
 export default {
   focusBorder: "#38dfba",
-  fontSizes: { sm: "12px", md: "13px", lg: "24px" },
+  fontSizes: {
+    sm: "12px",
+    md: "13px"
+  },
   borderWeights: {
     sm: "1px",
-    md: "2px",
-    lg: "3px"
+    md: "2px"
   },
   paddings: {
     sm: "5px 10px",
-    md: "10px 24px",
-    lg: "15px 30px"
+    md: "6px 20px"
   },
   textColors: {
     primary: {

@@ -54,7 +54,11 @@ addDecorator(
             accessor: "description",
             style: { "white-space": "unset" }
           },
-          { Header: "default value", accessor: "defaultValue" }
+          {
+            Header: "default value",
+            accessor: "defaultValue",
+            style: { "white-space": "unset" }
+          }
         ]}
       />
     );
