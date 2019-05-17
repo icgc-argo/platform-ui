@@ -1,6 +1,5 @@
 import colors from "./colors";
 export default {
-  focusBorder: "#38dfba",
   fontSizes: {
     sm: "12px",
     md: "13px"
@@ -28,14 +27,14 @@ export default {
       default: "#8258d0",
       hover: "#9e78e1",
       active: "#6d41bd",
-      focus: "#8258d0",
+      focus: "#523785",
       disabled: "#cecfd3"
     },
     secondary: {
       default: colors.grey_1,
       hover: colors.grey_1,
       active: colors.grey_1,
-      focus: colors.white,
+      focus: "#8a8d9f",
       disabled: "#cecfd3"
     }
   },

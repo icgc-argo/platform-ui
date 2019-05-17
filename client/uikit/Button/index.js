@@ -29,7 +29,8 @@ const StyledButton = styled("button")`
   &:focus {
     background-color: ${({ theme, variant }) =>
       theme.button.colors[variant].focus};
-    border-color: ${({ theme }) => theme.button.focusBorder};
+    border-color: ${({ theme, variant }) =>
+      theme.button.borderColors[variant].focus};
   }
 
   &:hover {
