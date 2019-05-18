@@ -47,6 +47,8 @@ const Input = ({
     type={type}
     onChange={onChange}
     disabled={disabled}
+    size={size}
+    error={error}
   />
 );
 
