@@ -12,7 +12,7 @@ export default {
   },
   textColors: {
     default: colors.white,
-    disabled: colors.white
+    disabled: colors.accent1
   },
   borderColors: {
     default: colors.grey_1,

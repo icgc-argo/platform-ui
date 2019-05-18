@@ -1,10 +1,10 @@
 import { storiesOf } from "@storybook/react";
 import React from "react";
 import Input from ".";
-import { withKnobs, text, boolean, radios } from "@storybook/addon-knobs";
+import { text, boolean, radios } from "@storybook/addon-knobs";
 
 const createKnobs = () => {
-  const error = boolean("error", error);
+  const error = boolean("error", false);
   const disabled = boolean("disabled", false);
   const value = text("Value", "I entered some input...");
   const placeholder = text("Placeholder", "State typing here..");
