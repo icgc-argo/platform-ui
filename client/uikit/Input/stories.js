@@ -6,17 +6,19 @@ import { text, boolean, radios } from "@storybook/addon-knobs";
 const createKnobs = () => {
   const error = boolean("error", false);
   const disabled = boolean("disabled", false);
-  const value = text("Value", "I entered some input...");
   const placeholder = text("Placeholder", "State typing here..");
-  const size = radios("size", {
-    sm: "sm",
-    lg: "lg"
-  });
+  const size = radios(
+    "size",
+    {
+      sm: "sm",
+      lg: "lg"
+    },
+    "sm"
+  );
 
   return {
     error,
     disabled,
-    value,
     placeholder,
     size
   };
