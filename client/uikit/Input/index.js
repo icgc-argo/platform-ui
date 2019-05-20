@@ -5,11 +5,18 @@ import { css } from "@emotion/core";
 
 const StyledInput = styled("input")`
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: ${({ theme, size }) => theme.input.paddings[size]};
+
   background-color: white;
   outline: none;
 
+<<<<<<< HEAD
   border: solid 1px ${({ theme }) => theme.input.borderColors.grey_1};
+=======
+  font-size: ${({ theme, size }) => theme.input.fontSizes[size]};
+
+  border: solid 1px ${({ theme }) => theme.input.borderColors.default};
+>>>>>>> style updates
   &:hover {
     border: solid 1px ${({ theme }) => theme.input.borderColors.lightBlue};
   }

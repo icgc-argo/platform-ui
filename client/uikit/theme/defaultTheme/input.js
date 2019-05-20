@@ -1,14 +1,9 @@
 import colors from "./colors";
 export default {
-  //  focusBorder: "#38dfba",
-  //  fontSizes: { sm: "12px", md: "13px", lg: "24px" },
-  //  borderWeights: {
-  //    sm: "1px",
-  //    lg: "3px"
-  // },
+  fontSizes: { sm: "12px", lg: "14px" },
   paddings: {
-    sm: "8px 15px",
-    lg: "15px 30px"
+    sm: "8px 10px",
+    lg: "7px 10px"
   },
   textColors: {
     default: colors.white,
