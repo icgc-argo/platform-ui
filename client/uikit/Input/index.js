@@ -4,19 +4,21 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 const StyledInput = styled("input")`
+  width: 100%;
   border-radius: 8px;
   padding: ${({ theme, size }) => theme.input.paddings[size]};
-
   background-color: white;
   outline: none;
 
-<<<<<<< HEAD
   border: solid 1px ${({ theme }) => theme.input.borderColors.grey_1};
-=======
   font-size: ${({ theme, size }) => theme.input.fontSizes[size]};
 
   border: solid 1px ${({ theme }) => theme.input.borderColors.default};
->>>>>>> style updates
+
+  border: solid 1px
+    ${({ theme, error }) =>
+      theme.input.borderColors[error ? "error" : "default"]};
+
   &:hover {
     border: solid 1px ${({ theme }) => theme.input.borderColors.lightBlue};
   }
@@ -36,6 +38,13 @@ const StyledInput = styled("input")`
   }
 `;
 
+const ErrorMsg = styled("div")`
+  color: ${({ theme }) => theme.input.textColors.error};
+  margin-top: 1px;
+  margin-left: 5px;
+  font-size: 11px;
+`;
+
 /**
  * Basic  input component
  */
@@ -46,23 +55,28 @@ const Input = ({
   type,
   disabled,
   size = "sm",
-  error = false
+  error = false,
+  errorMessage = ""
 }) => (
-  <StyledInput
-    placeholder={placeholder}
-    value={value}
-    type={type}
-    onChange={onChange}
-    disabled={disabled}
-    size={size}
-    error={error}
-  />
+  <React.Fragment>
+    <StyledInput
+      placeholder={placeholder}
+      value={value}
+      type={type}
+      onChange={onChange}
+      disabled={disabled}
+      size={size}
+      error={error}
+    />
+    {error && errorMessage ? <ErrorMsg> {errorMessage}</ErrorMsg> : null}
+  </React.Fragment>
 );
 
 Input.propTypes = {
   placeholder: PropTypes.string,
   size: PropTypes.oneOf(["sm", "lg"]),
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  errorMessage: PropTypes.string
 };
 
 export default Input;
