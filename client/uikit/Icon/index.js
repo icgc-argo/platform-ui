@@ -23,10 +23,16 @@ const Icon = ({ name, width, height, fill }) => {
     >
       <title lang="en">{svg.title}</title>
       <g>
+        {svg.mask ? (
+          <mask id="mask" fill="#fff">
+            <path d={svg.mask} />
+          </mask>
+        ) : null}
         <path
-          fill={theme.colors[fill] || fill}
+          fill={theme.colors[fill] || fill || svg.defaultFill}
           fillRule={svg.fillRule || 'nonezero'}
           d={svg.path}
+          mask={svg.mask ? 'url(#mask)' : ''}
         />
       </g>
     </svg>
