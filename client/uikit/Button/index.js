@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import { css } from "@emotion/core";
 import Icon from "../Icon";
 import useTheme from "../utils/useTheme";
 
@@ -47,13 +48,18 @@ const StyledButton = styled("button")`
       theme.button.borderColors[variant].active};
   }
 
-  &:disabled {
-    background-color: ${({ theme, variant }) =>
-      theme.button.colors[variant].disabled};
-    border-color: ${({ theme, variant }) =>
-      theme.button.borderColors[variant].disabled};
-    color: ${({ theme, variant }) => theme.button.textColors[variant].disabled};
-  }
+  ${({ isLoading }) =>
+    !isLoading &&
+    css`
+      &:disabled {
+        background-color: ${({ theme, variant }) =>
+          theme.button.colors[variant].disabled};
+        border-color: ${({ theme, variant }) =>
+          theme.button.borderColors[variant].disabled};
+        color: ${({ theme, variant }) =>
+          theme.button.textColors[variant].disabled};
+      }
+    `}
 `;
 
 const Button = ({
@@ -77,11 +83,12 @@ const Button = ({
   return (
     <StyledButton
       onClick={isAsync ? onClickFn : onClick}
-      disabled={disabled}
+      disabled={disabled || shouldShowLoading}
       size={size}
       variant={variant}
       className={className}
       id={id}
+      isLoading={shouldShowLoading}
     >
       <span style={{ visibility: shouldShowLoading ? "hidden" : "visible" }}>
         {children}
