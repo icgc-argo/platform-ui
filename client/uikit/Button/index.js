@@ -62,7 +62,9 @@ const Button = ({
   disabled,
   variant = "primary",
   size = variant === "secondary" ? "sm" : "md",
-  isAsync = false
+  isAsync = false,
+  className,
+  id
 }) => {
   const [isLoading, setLoading] = useState(false);
   const theme = useTheme();
@@ -78,6 +80,8 @@ const Button = ({
       disabled={disabled}
       size={size}
       variant={variant}
+      className={className}
+      id={id}
     >
       <span style={{ visibility: shouldShowLoading ? "hidden" : "visible" }}>
         {children}
@@ -114,7 +118,16 @@ Button.propTypes = {
   /**
    * Use with async onClick handlers to set loading indicator
    */
-  async: PropTypes.bool
+  async: PropTypes.bool,
+
+  /**
+   * DOM pass through
+   */
+  className: PropTypes.string,
+  /**
+   * DOM pass through
+   */
+  id: PropTypes.string
 };
 
 export default Button;
