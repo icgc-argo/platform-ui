@@ -14,6 +14,9 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
   const LinkToFileRepo = props => (
     <div {...props} onClick={() => action("navigate")("/file_repo")} />
   );
+  const LinkToSubmission = props => (
+    <div {...props} onClick={() => action("navigate")("/submission")} />
+  );
   return (
     <AppBar>
       <Section>
@@ -28,12 +31,9 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
       </Section>
       <Section />
       <Section>
-        <MenuGroup>
-          <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
-          <MenuItem DomComponent={LinkToFileRepo} active>
-            File Repository
-          </MenuItem>
-        </MenuGroup>
+        <MenuItem active DomComponent={LinkToSubmission}>
+          SubmissionSystem
+        </MenuItem>
       </Section>
     </AppBar>
   );
