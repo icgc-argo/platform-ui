@@ -28,18 +28,19 @@ addDecorator(
           {
             Header: "type",
             accessor: "propType",
-            Cell: ({ original }) => (
-              <React.Fragment>
-                {original.propType.name}
-                {original.propType.name === "enum" && (
-                  <div>
-                    {original.propType.value.map(({ value }) => (
-                      <div>- {value}</div>
-                    ))}{" "}
-                  </div>
-                )}
-              </React.Fragment>
-            )
+            Cell: ({ original }) =>
+              !original.propType ? null : (
+                <React.Fragment>
+                  {original.propType.name}
+                  {original.propType.name === "enum" && (
+                    <div>
+                      {original.propType.value.map(({ value }) => (
+                        <div>- {value}</div>
+                      ))}{" "}
+                    </div>
+                  )}
+                </React.Fragment>
+              )
           },
           {
             Header: "required",
@@ -57,7 +58,12 @@ addDecorator(
           {
             Header: "default value",
             accessor: "defaultValue",
-            style: { "white-space": "unset" }
+            style: { "white-space": "unset" },
+            Cell: ({ original }) => {
+              return (
+                <React.Fragment>{String(original.defaultValue)}</React.Fragment>
+              );
+            }
           }
         ]}
       />
