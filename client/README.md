@@ -8,3 +8,13 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 
 - Install dependencies: `npm i`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
+
+## Uikit
+
+`/uikit` contains the reusable UI components for Argo.
+
+- ### Development:
+  - `npm run storybook` to run start a local storybook.
+  - creating a new component: `npm run create-component`
+- ### Restriction:
+  - `uikit` components should not reference (`import`) anything outside of the `uikit` directory
