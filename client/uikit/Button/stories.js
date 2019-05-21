@@ -1,4 +1,5 @@
 import { storiesOf } from "@storybook/react";
+import { renderToString } from "react-dom/server";
 import { action } from "@storybook/addon-actions";
 import { radios, boolean, text } from "@storybook/addon-knobs";
 import React from "react";
@@ -22,12 +23,17 @@ const createKnobs = () => {
   const isAsync = boolean("isAsync", false);
   const children = text("children", "some button");
 
+  const className = text("className", undefined);
+  const id = text("id", undefined);
+
   return {
     variant,
     size,
     disabled,
     isAsync,
-    children
+    children,
+    className,
+    id
   };
 };
 
