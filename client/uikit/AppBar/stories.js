@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
-import AppBar, { MenuGroup, MenuItem } from ".";
+import AppBar, { Logo, MenuGroup, MenuItem, Section } from ".";
 
 const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
   const LinkToExploration = props => (
@@ -16,21 +16,25 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
   );
   return (
     <AppBar>
-      <MenuGroup>
-        <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
-        <MenuItem DomComponent={LinkToAnalysis}>Analysis</MenuItem>
-        <MenuItem DomComponent={LinkToFileRepo} active>
-          File Repository
-        </MenuItem>
-      </MenuGroup>
-      <div />
-      <MenuGroup>
-        <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
-        <MenuItem DomComponent={LinkToAnalysis}>Analysis</MenuItem>
-        <MenuItem DomComponent={LinkToFileRepo} active>
-          File Repository
-        </MenuItem>
-      </MenuGroup>
+      <Section>
+        <Logo />
+        <MenuGroup>
+          <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
+          <MenuItem DomComponent={LinkToAnalysis}>Analysis</MenuItem>
+          <MenuItem DomComponent={LinkToFileRepo} active>
+            File Repository
+          </MenuItem>
+        </MenuGroup>
+      </Section>
+      <Section />
+      <Section>
+        <MenuGroup>
+          <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
+          <MenuItem DomComponent={LinkToFileRepo} active>
+            File Repository
+          </MenuItem>
+        </MenuGroup>
+      </Section>
     </AppBar>
   );
 });

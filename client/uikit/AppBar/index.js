@@ -42,8 +42,11 @@ const AppBarContainer = styled("div")`
   height: 64px;
   background-color: ${({ theme }) => theme.colors.primary};
 `;
+const SectionDisplay = styled("div")`
+  display: flex;
+`;
 
-export const DefaultLogo = () => (
+export const Logo = () => (
   <span
     css={css`
       margin: 0px 24px;
@@ -57,14 +60,10 @@ export const DefaultLogo = () => (
 );
 
 const AppBar = ({ children }) => <AppBarContainer>{children}</AppBarContainer>;
-AppBar.propTypes = {
-  Logo: PropTypes.func
-};
+AppBar.propTypes = {};
 export default AppBar;
 
-export const Left = styled("div")`
-  display: flex;
-`;
+export const Section = props => <SectionDisplay {...props} />;
 
 export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
