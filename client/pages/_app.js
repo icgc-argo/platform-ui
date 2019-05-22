@@ -35,7 +35,8 @@ const Root = (props: {
   egoJwt: string,
   unauthorized: boolean,
   isProduction: boolean,
-  error: Error
+  error: Error,
+  pathname: string
 }) => {
   const {
     Component,
@@ -43,7 +44,8 @@ const Root = (props: {
     egoJwt,
     unauthorized,
     isProduction,
-    error
+    error,
+    pathname
   } = props;
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
@@ -73,7 +75,7 @@ const Root = (props: {
   return (
     <ThemeProvider>
       <div>
-        <NavBar />
+        <NavBar path={pathname} />
         {error ? (
           isProduction ? (
             <div>
@@ -127,7 +129,8 @@ Root.getInitialProps = async ({
       egoJwt,
       pageProps,
       unauthorized,
-      isProduction
+      isProduction,
+      pathname: ctx.pathname
     };
   } catch (error) {
     return { egoJwt, error };

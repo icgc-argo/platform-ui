@@ -7,8 +7,8 @@ import logo from "../assets/logo_white.png";
 
 export const MenuItemContent = styled("span")`
   margin: 0px 24px;
-  color: ${({ theme }) => theme.colors.white};
   text-align: center;
+  text-decoration: none;
 
   font-family: ${({ theme }) => theme.typography.navigation.fontFamily};
   font-size: ${({ theme }) => theme.typography.navigation.fontSize};
@@ -24,7 +24,9 @@ export const MenuItemContainer = styled("div")`
   align-items: center;
   min-width: 148px;
   cursor: pointer;
+  text-decoration: none;
 
+  color: ${({ theme }) => theme.colors.white};
   border-left: solid 0.5px ${({ theme }) => theme.colors.grey};
   border-right: solid 0.5px ${({ theme }) => theme.colors.grey};
   border-bottom: solid 3px
@@ -32,7 +34,7 @@ export const MenuItemContainer = styled("div")`
   background-color: ${({ active, theme }) =>
     active ? theme.appBar.menuItem.background.active : "none"};
 
-  &:hover > ${MenuItemContent} {
+  &:hover {
     color: ${({ theme }) => theme.colors.accent1};
   }
 `;
