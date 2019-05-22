@@ -1,6 +1,6 @@
 //@flow
 import jwtDecode from "jwt-decode";
-import { get } from "lodash";
+import { get, memoize } from "lodash";
 
 import { asEnum } from "../common";
 
@@ -43,9 +43,9 @@ type EgoJwtData = {
   scope: string[]
 };
 
-export const decodeToken = (egoJwt: string): EgoJwtData => {
+export const decodeToken = memoize<[string], EgoJwtData>(egoJwt => {
   return jwtDecode(egoJwt);
-};
+});
 
 export const isValidJwt = (egoJwt: string) => {
   try {
