@@ -1,92 +1,77 @@
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import DataLoader from 'dataloader';
+import { get } from 'lodash';
 
-const users = [
-  {
-    id: 1,
-    name: 'Jon',
-    friends: [2, 3],
-  },
-  {
-    id: 2,
-    name: 'Minh',
-    friends: [3, 4, 1],
-  },
-  {
-    id: 3,
-    name: 'Dusan',
-    friends: [2, 4],
-  },
-  {
-    id: 4,
-    name: 'Ciaran',
-    friends: [1, 3, 2, 4],
-  },
-];
+import egoService from '../../services/ego';
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
   type User {
-    id: ID!
+    id: String!
+    email: String!
+    firstName: String
+    lastName: String
+    createdAt: String
+    lastLogin: String
     name: String
-    friends: [User]
+    preferredLanguage: String
+    status: String
+    type: String
+    applications: [String]
+    groups: [String]
+    scopes: [String]
   }
   type Query {
-    user(id: ID!): User
-  }
-  type Mutation {
-    setUserName(id: ID!, name: String!): User
+    """
+    retrieve User data by id
+    """
+    user(id: String!): User
+
+    """
+    retrieve paginated list of user data
+    """
+    users(pageNum: Int, limit: Int, sort: String, groups: [String], query: String): [User]
   }
 `;
 
-const userResolver = async (obj, args, context, info) => {
-  const { userLoader } = context.dataLoaders;
-  const user = await userLoader.load(args.id);
-  return {
-    ...user,
-    friends: () => user.friends.map(id => userResolver(obj, { id }, context, info)),
-  };
-};
+const convertEgoUser = user => ({
+  id: get(user, 'id.value'),
+  email: get(user, 'email.value'),
+  firstName: get(user, 'first_name.value'),
+  lastName: get(user, 'last_name.value'),
+  createdAt: get(user, 'created_at.value'),
+  lastLogin: get(user, 'last_login.value'),
+  name: get(user, 'name.value'),
+  preferredLanguage: get(user, 'preferred_language.value'),
+  status: get(user, 'status.value'),
+  type: get(user, 'type.value'),
+  applications: get(user, 'applications'),
+  groups: get(user, 'groups'),
+  scopes: get(user, 'scopes'),
+});
 
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
     user: async (obj, args, context, info) => {
-      const { userLoader } = context.dataLoaders;
-      const user = await userLoader.load(args.id);
-      return {
-        ...user,
-        friends: (args, context, info) =>
-          user.friends.map(id => userResolver(user, { id }, context, info)),
-      };
+      const { egoToken } = context;
+      const egoUser = await egoService.getUser(args.id, egoToken);
+      return convertEgoUser(egoUser);
     },
-  },
-  Mutation: {
-    setUserName: async (obj, args, context, info) => {
-      const { userLoader } = context.dataLoaders;
-      const user = await userLoader.load(args.id);
-      user.name = args.name;
-      return {
-        ...user,
-        friends: (args, context, info) =>
-          user.friends.map(id => userResolver(user, { id }, context, info)),
+    users: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const options = {
+        ...args,
       };
+      const response = await egoService.listUsers(options, egoToken);
+      const egoUserList = get(response, 'users', []);
+      return egoUserList.map(egoUser => convertEgoUser(egoUser));
     },
   },
 };
 
-export const createUserLoader = () =>
-  new DataLoader(ids =>
-    Promise.all(
-      ids.map(uid => Promise.resolve(users.find(({ id }) => String(uid) === String(id)))),
-    ),
-  );
-
-export default () =>
-  Promise.resolve(
-    makeExecutableSchema({
-      typeDefs,
-      resolvers,
-    }),
-  );
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
