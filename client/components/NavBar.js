@@ -17,35 +17,65 @@ import AppBar, {
   UserBadge
 } from "uikit/AppBar";
 
-const LoginLink = props => (
-  <Link {...{ props }} id="link-login" prefetch href={`${LOGIN_PAGE_PATH}`} />
-);
-const ProgramsLink = props => (
-  <Link {...props} prefetch href={`${PROGRAMS_LIST_PATH}`} />
-);
-const ProgramLink = props => (
-  <Link {...props} prefetch href={`${PROGRAM_ENTITY_PATH}`} />
-);
-const DccLink = props => (
-  <Link {...props} prefetch href={`${DCC_OVERVIEW_PATH}`} />
-);
-const UserPageLink = props => (
-  <Link {...props} prefetch href={`${USER_PAGE_PATH}`} />
-);
+const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
+  const titles = {
+    [LOGIN_PAGE_PATH]: "Login",
+    [PROGRAMS_LIST_PATH]: "Programs",
+    [PROGRAM_ENTITY_PATH]: "Program",
+    [DCC_OVERVIEW_PATH]: "Dcc Admin",
+    [USER_PAGE_PATH]: "User"
+  };
+  return (
+    <MenuItem
+      DomComponent={props => (
+        <Link prefetch href={path}>
+          <a {...props} id="link-login" />
+        </Link>
+      )}
+      active={active}
+    >
+      {titles[path]}
+    </MenuItem>
+  );
+};
 
-export default (props: {}) => (
+export default (props: { path: string }) => (
   <AppBar>
     <Section>
-      <Logo />
+      <Logo
+        DomComponent={props => (
+          <Link prefetch href={`/`}>
+            <a {...props} id="home-login" />
+          </Link>
+        )}
+      />
       <MenuGroup>
-        <MenuItem>File Repository</MenuItem>
+        <NavbarLink
+          path={PROGRAMS_LIST_PATH}
+          active={props.path === PROGRAMS_LIST_PATH}
+        />
+        <NavbarLink
+          path={PROGRAM_ENTITY_PATH}
+          active={props.path === PROGRAM_ENTITY_PATH}
+        />
+        <NavbarLink
+          path={DCC_OVERVIEW_PATH}
+          active={props.path === DCC_OVERVIEW_PATH}
+        />
+        <NavbarLink
+          path={USER_PAGE_PATH}
+          active={props.path === USER_PAGE_PATH}
+        />
       </MenuGroup>
     </Section>
     <Section />
     <Section>
       <MenuGroup>
         <MenuItem>Submission System</MenuItem>
-        <MenuItem>Login</MenuItem>
+        <NavbarLink
+          path={LOGIN_PAGE_PATH}
+          active={props.path === LOGIN_PAGE_PATH}
+        />
         <MenuItem>
           <UserBadge
             name="Sarah"

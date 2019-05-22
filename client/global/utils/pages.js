@@ -19,7 +19,7 @@ export const getRedirectPathForUser = (egoJwt: string) => {
 };
 
 export type GetInitialPropsContext = {
-  pathName: string,
+  pathname: string,
   query: {
     [key: string]: any
   },
