@@ -1,9 +1,10 @@
 require("dotenv").config();
 
+const withImages = require("next-images");
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 
-module.exports = {
+module.exports = withImages({
   webpack: config => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
@@ -32,4 +33,4 @@ module.exports = {
     EGO_API_ROOT: process.env.EGO_API_ROOT,
     EGO_CLIENT_ID: process.env.EGO_CLIENT_ID
   }
-};
+});

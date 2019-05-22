@@ -8,6 +8,7 @@ import logo from "../assets/logo_white.png";
 export const MenuItemContent = styled("span")`
   margin: 0px 24px;
   color: ${({ theme }) => theme.colors.white};
+  text-align: center;
 
   font-family: ${({ theme }) => theme.typography.navigation.fontFamily};
   font-size: ${({ theme }) => theme.typography.navigation.fontSize};
@@ -66,6 +67,7 @@ export const LogoImage = styled("img")`
   align-items: center;
 `;
 export const UserBadgeContainer = styled("div")`
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: center;

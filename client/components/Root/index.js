@@ -3,9 +3,8 @@ import Link from "next/link";
 import _ from "lodash";
 import gql from "graphql-tag";
 
-import Head from "components/head";
-import Nav from "components/nav";
 import runQuery from "global/utils/runQuery";
+import NavBar from "components/NavBar";
 import {
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
@@ -61,44 +60,43 @@ const Root = ({ name }) => (
         font-size: 13px;
         color: #333;
       }
+      body {
+        margin: 0px;
+      }
     `}</style>
-    <Head title="Home" />
-    <Nav />
-    {
-      <div className="hero">
-        <h1 className="title">Welcome to Next! {name}</h1>
-        <p className="description">
-          To get started, edit <code>pages/index.js</code> and save to reload.
-        </p>
-        <div className="row">
-          {[1, 2, 3, 4].map(id => (
-            <Link key={id} href={`/?id=${id}`}>
-              <a className="card">
-                <h3>User {id}</h3>
-                <p>User name</p>
-              </a>
-            </Link>
-          ))}
-        </div>
-        <div className="row">
-          <Link id="link-login" prefetch href={`${LOGIN_PAGE_PATH}`}>
-            Login
+    <div className="hero">
+      <h1 className="title">Welcome to Next! {name}</h1>
+      <p className="description">
+        To get started, edit <code>pages/index.js</code> and save to reload.
+      </p>
+      <div className="row">
+        {[1, 2, 3, 4].map(id => (
+          <Link key={id} href={`/?id=${id}`}>
+            <a className="card">
+              <h3>User {id}</h3>
+              <p>User name</p>
+            </a>
           </Link>
-          <Link prefetch href={`${PROGRAMS_LIST_PATH}`}>
-            {PROGRAMS_LIST_PATH}
-          </Link>
-          <Link prefetch href={`${PROGRAM_ENTITY_PATH}`}>
-            {PROGRAM_ENTITY_PATH}
-          </Link>
-          <Link prefetch href={`${DCC_OVERVIEW_PATH}`}>
-            {DCC_OVERVIEW_PATH}
-          </Link>
-          <Link prefetch href={`${USER_PAGE_PATH}`}>
-            {USER_PAGE_PATH}
-          </Link>
-        </div>
+        ))}
       </div>
-    }
+      <div className="row">
+        <Link id="link-login" prefetch href={`${LOGIN_PAGE_PATH}`}>
+          Login
+        </Link>
+        <Link prefetch href={`${PROGRAMS_LIST_PATH}`}>
+          {PROGRAMS_LIST_PATH}
+        </Link>
+        <Link prefetch href={`${PROGRAM_ENTITY_PATH}`}>
+          {PROGRAM_ENTITY_PATH}
+        </Link>
+        <Link prefetch href={`${DCC_OVERVIEW_PATH}`}>
+          {DCC_OVERVIEW_PATH}
+        </Link>
+        <Link prefetch href={`${USER_PAGE_PATH}`}>
+          {USER_PAGE_PATH}
+        </Link>
+      </div>
+    </div>
   </div>
 );
 

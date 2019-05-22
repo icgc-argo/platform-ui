@@ -5,6 +5,7 @@ import Router from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
 
+import { ThemeProvider } from "uikit";
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { NODE_ENV, ENVIRONMENTS } from "global/config";
 import { isValidJwt, decodeToken } from "global/utils/egoJwt";
@@ -12,6 +13,8 @@ import type {
   PageWithConfig,
   GetInitialPropsContext
 } from "global/utils/pages";
+
+import NavBar from "components/NavBar";
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -68,25 +71,24 @@ const Root = (props: {
   }, []);
 
   return (
-    <div>
+    <ThemeProvider>
       <div>
-        <Link href="/">Home</Link>
-        <button onClick={logOut}>LOG OUT</button>
-      </div>
-      {error ? (
-        isProduction ? (
-          <div>
-            Something went wrong, please refresh the page or try again later
-          </div>
+        <NavBar />
+        {error ? (
+          isProduction ? (
+            <div>
+              Something went wrong, please refresh the page or try again later
+            </div>
+          ) : (
+            <pre>{error.stack || error.message}</pre>
+          )
+        ) : unauthorized ? (
+          "You are not authorized"
         ) : (
-          <pre>{error.stack || error.message}</pre>
-        )
-      ) : unauthorized ? (
-        "You are not authorized"
-      ) : (
-        <Component {...{ egoJwt, ...pageProps }} />
-      )}
-    </div>
+          <Component {...{ egoJwt, ...pageProps }} />
+        )}
+      </div>
+    </ThemeProvider>
   );
 };
 
