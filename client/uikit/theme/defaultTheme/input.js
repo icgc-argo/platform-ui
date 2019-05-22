@@ -6,7 +6,7 @@ export default {
     lg: "7px 10px"
   },
   textColors: {
-    default: colors.white,
+    default: colors.black,
     disabled: colors.light_blue_grey,
     error: colors.red_error_message
   },
@@ -19,6 +19,7 @@ export default {
     error: colors.error
   },
   colors: {
-    disabled: colors.light_blue_grey
+    default: colors.white,
+    disabled: colors.pale_grey
   }
 };
