@@ -38,6 +38,7 @@ const StyledInput = styled("input")`
   width: 100%;
   background-color: inherit;
   color: inherit;
+  font-size: inherit;
 `;
 
 const ErrorMsg = styled("div")`
