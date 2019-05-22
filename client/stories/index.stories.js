@@ -8,6 +8,16 @@ function loadStories() {
   req.keys().forEach(filename => req(filename));
 }
 
-addDecorator(story => <ThemeProvider theme={theme}>{story()}</ThemeProvider>);
+addDecorator(story => (
+  <ThemeProvider theme={theme}>
+    <>
+      <link
+        href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap"
+        rel="stylesheet"
+      />
+      {story()}
+    </>
+  </ThemeProvider>
+));
 
 configure(loadStories, module);

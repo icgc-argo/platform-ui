@@ -1,6 +1,6 @@
 export default {
   hero: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "44px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -9,7 +9,7 @@ export default {
     letterSpacing: "normal"
   },
   title: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "30px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -18,7 +18,7 @@ export default {
     letterSpacing: "normal"
   },
   subtitle: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "22px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -27,7 +27,7 @@ export default {
     letterSpacing: "normal"
   },
   subtitle2: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "18px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -36,7 +36,7 @@ export default {
     letterSpacing: "normal"
   },
   navigation: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "15px",
     fontWeight: "600",
     fontStyle: "normal",
@@ -45,7 +45,7 @@ export default {
     letterSpacing: "normal"
   },
   paragraph: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "14px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -54,7 +54,7 @@ export default {
     letterSpacing: "normal"
   },
   paragraphBold: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "14px",
     fontWeight: "600",
     fontStyle: "normal",
@@ -63,7 +63,7 @@ export default {
     letterSpacing: "normal"
   },
   data: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "12px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -72,7 +72,7 @@ export default {
     letterSpacing: "normal"
   },
   dataBold: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "13px",
     fontWeight: "600",
     fontStyle: "normal",
@@ -81,7 +81,7 @@ export default {
     letterSpacing: "normal"
   },
   caption: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "11px",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -90,7 +90,7 @@ export default {
     letterSpacing: "normal"
   },
   captionBold: {
-    fontFamily: "WorkSans",
+    fontFamily: "Work Sans, sans-serif",
     fontSize: "11px",
     fontWeight: "600",
     fontStyle: "normal",

@@ -9,25 +9,46 @@ import {
   MenuItemContainer,
   MenuGroupDisplay,
   AppBarContainer,
-  SectionDisplay
+  SectionDisplay,
+  LogoImage,
+  LogoContainer,
+  UserBadgeContainer
 } from "./styledComponents";
 
-export const Logo = () => (
-  <span
-    css={css`
-      margin: 0px 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    `}
-  >
-    <img src={logo} />
-  </span>
+export const UserBadge = ({ name, title, imageUrl }) => (
+  <UserBadgeContainer>
+    <div>
+      <div>Hello, {name}</div>
+      <div>{title}</div>
+    </div>
+    <img
+      style={{
+        width: "40px",
+        height: "40px",
+        marginLeft: "20px",
+        borderRadius: "1000px"
+      }}
+      src={imageUrl}
+    />
+  </UserBadgeContainer>
 );
+UserBadge.propTypes = {
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired
+};
 
-const AppBar = ({ children }) => <AppBarContainer>{children}</AppBarContainer>;
-AppBar.propTypes = {};
-export default AppBar;
+export const Logo = ({ DomComponent = props => <span {...props} /> }) => {
+  const ContainerComponent = LogoContainer.withComponent(DomComponent);
+  return (
+    <ContainerComponent>
+      <LogoImage src={logo} />
+    </ContainerComponent>
+  );
+};
+Logo.propTypes = {
+  DomComponent: PropTypes.func
+};
 
 export const Section = props => <SectionDisplay {...props} />;
 
@@ -54,3 +75,7 @@ MenuItem.propTypes = {
   className: PropTypes.string,
   DomComponent: PropTypes.func
 };
+
+const AppBar = ({ children }) => <AppBarContainer>{children}</AppBarContainer>;
+AppBar.propTypes = {};
+export default AppBar;
