@@ -5,9 +5,11 @@ import { boolean, button } from "@storybook/addon-knobs";
 
 const createKnobs = () => {
   const checked = boolean("checked", false);
+  const disabled = boolean("disabled", false);
 
   return {
-    checked
+    checked,
+    disabled
   };
 };
 

@@ -4,13 +4,23 @@ import styled from "@emotion/styled";
 import useTheme from "../utils/useTheme";
 
 const StyledRadio = styled("div")`
-  border: 1px solid #dcdde1;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
+
+  color: ${({ theme, disabled }) =>
+    theme.radiocheckbox.textColors[disabled ? "disabled" : "default"]};
+
+  background-color: ${({ theme, disabled }) =>
+    disabled ? theme.radiocheckbox.colors.disabled : "#fff"};
+
   padding: 4px 6px 4px 8px;
 
   label {
     position: relative;
     margin-left: 11px;
     cursor: pointer;
+    color: inherit;
   }
 
   input {
@@ -28,7 +38,8 @@ const StyledRadio = styled("div")`
       width: 0.75rem;
       height: 0.75rem;
 
-      background: #0774d3;
+      background: ${({ theme, disabled }) =>
+        theme.radiocheckbox.colors[disabled ? "disabled" : "checked"]};
       border-radius: 50%;
 
       transition: transform 0.65s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -52,14 +63,27 @@ const StyledRadio = styled("div")`
 
       background-color: white;
 
-      border: 1px solid #babcc2;
       border-radius: 50%;
+      border: 1px solid
+        ${({ theme, disabled, checked }) =>
+          theme.radiocheckbox.borderColors[
+            disabled && !checked ? "disabled" : "default"
+          ]};
     }
   }
 `;
 
-const Radio = ({ id, name, value, label, children, checked, onChange }) => (
-  <StyledRadio>
+const Radio = ({
+  id,
+  name,
+  value,
+  label,
+  children,
+  checked,
+  onChange,
+  disabled
+}) => (
+  <StyledRadio disabled={disabled} checked={checked}>
     <input
       type="radio"
       id={id}
@@ -67,6 +91,7 @@ const Radio = ({ id, name, value, label, children, checked, onChange }) => (
       value={value}
       checked={checked}
       onChange={onChange}
+      disabled={disabled}
     />
     <label htmlFor={name}>{children}</label>
   </StyledRadio>

@@ -7,6 +7,7 @@ import table from './table';
 import titleBar from './titleBar';
 import input from './input';
 import multiSelect from './multiSelect';
+import radiocheckbox from './radiocheckbox';
 
 export default {
   colors,
@@ -18,4 +19,5 @@ export default {
   titleBar,
   input,
   multiSelect,
+  radiocheckbox,
 };
