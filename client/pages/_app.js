@@ -5,6 +5,7 @@ import Router from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
 
+import Button from "uikit/Button";
 import { ThemeProvider } from "uikit";
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from "global/constants";
 import { NODE_ENV, ENVIRONMENTS } from "global/config";
@@ -75,7 +76,7 @@ const Root = (props: {
   return (
     <ThemeProvider>
       <div>
-        <NavBar path={pathname} />
+        <NavBar path={pathname} egoJwt={egoJwt} />
         {error ? (
           isProduction ? (
             <div>
@@ -87,7 +88,10 @@ const Root = (props: {
         ) : unauthorized ? (
           "You are not authorized"
         ) : (
-          <Component {...{ egoJwt, ...pageProps }} />
+          <>
+            <Button onClick={logOut}> logout </Button>
+            <Component {...{ egoJwt, ...pageProps }} />
+          </>
         )}
       </div>
     </ThemeProvider>
