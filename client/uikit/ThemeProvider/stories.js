@@ -3,6 +3,7 @@ import React from "react";
 import ReactJson from "react-json-view";
 
 import ThemeProvider, { useTheme } from ".";
+import defaultTheme from "../theme/defaultTheme";
 
 const ThemeViewer = () => {
   const myTheme = useTheme();
@@ -12,7 +13,7 @@ const ThemeViewer = () => {
 const ThemeProviderStories = storiesOf(`${__dirname}`, module).add(
   "Basic",
   () => (
-    <ThemeProvider>
+    <ThemeProvider theme={"default"}>
       <ThemeViewer />
     </ThemeProvider>
   )

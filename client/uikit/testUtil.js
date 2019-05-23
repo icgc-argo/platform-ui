@@ -6,7 +6,7 @@ export const wrapTheme = component => (
   <ThemeProvider theme={theme}>{component}</ThemeProvider>
 );
 
-export const asyncDummyFunc = (data) =>
+export const asyncDummyFunc = data =>
   new Promise(resolve => setTimeout(() => resolve(data), 2500));
 
 export const placeholderImageURLRoot = "http://placekitten.com/";
