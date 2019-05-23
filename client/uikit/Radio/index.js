@@ -11,16 +11,14 @@ const StyledRadio = styled("div")`
   color: ${({ theme, disabled }) =>
     theme.radiocheckbox.textColors[disabled ? "disabled" : "default"]};
 
-  background-color: ${({ theme, disabled }) =>
-    disabled ? theme.radiocheckbox.colors.disabled : "#fff"};
-
   padding: 4px 6px 4px 8px;
 
   label {
     position: relative;
-    margin-left: 11px;
+    margin-left: 8px;
     cursor: pointer;
     color: inherit;
+    font-size: 14px;
   }
 
   input {
@@ -31,15 +29,15 @@ const StyledRadio = styled("div")`
     &:before {
       content: "";
       position: absolute;
-      top: 1px;
-      left: 3px;
+      top: 2px;
+      left: 1px;
       z-index: 1;
 
-      width: 0.75rem;
-      height: 0.75rem;
+      width: 0.65rem;
+      height: 0.65rem;
 
       background: ${({ theme, disabled }) =>
-        theme.radiocheckbox.colors[disabled ? "disabled" : "checked"]};
+        theme.radiocheckbox.radio[disabled ? "disabled" : "checked"]};
       border-radius: 50%;
 
       transition: transform 0.65s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -55,18 +53,18 @@ const StyledRadio = styled("div")`
     &:after {
       content: "";
       position: absolute;
-      top: -0.125rem;
-      left: 0;
+      top: -1px;
+      left: -2px;
 
-      width: 1rem;
-      height: 1rem;
+      width: 14px;
+      height: 14px;
 
       background-color: white;
 
       border-radius: 50%;
       border: 1px solid
         ${({ theme, disabled, checked }) =>
-          theme.radiocheckbox.borderColors[
+          theme.radiocheckbox.radio[
             disabled && !checked ? "disabled" : "default"
           ]};
     }
