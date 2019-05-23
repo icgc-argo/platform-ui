@@ -48,9 +48,18 @@ const Typography = ({
 };
 
 Typography.propTypes = {
+  /**
+   * a typography as defined in theme.typography
+   */
   variant: PropTypes.oneOf(Object.keys(defaultTheme.typography)),
-  component: PropTypes.string,
+  /**
+   * could be either an html tag name, or a react component
+   */
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   bold: PropTypes.bool,
+  /**
+   * could be a theme colorname, or css color
+   */
   color: PropTypes.oneOf(Object.keys(defaultTheme.colors))
 };
 
