@@ -2,21 +2,19 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
+import { withProps } from "recompose";
 
 import logo from "../assets/logo_white.png";
+import Typography from "../Typography";
 
-export const MenuItemContent = styled("span")`
+const MenuItemTypography = withProps(() => ({
+  variant: "navigation"
+}))(Typography);
+
+export const MenuItemContent = styled(MenuItemTypography)`
   margin: 0px 24px;
   text-align: center;
   text-decoration: none;
-
-  font-family: ${({ theme }) => theme.typography.navigation.fontFamily};
-  font-size: ${({ theme }) => theme.typography.navigation.fontSize};
-  font-weight: ${({ theme }) => theme.typography.navigation.fontWeight};
-  font-style: ${({ theme }) => theme.typography.navigation.fontStyle};
-  font-stretch: ${({ theme }) => theme.typography.navigation.fontStretch};
-  line-height: ${({ theme }) => theme.typography.navigation.lineHeight};
-  letter-spacing: ${({ theme }) => theme.typography.navigation.letterSpacing};
 `;
 export const MenuItemContainer = styled("div")`
   display: flex;
@@ -41,7 +39,7 @@ export const MenuItemContainer = styled("div")`
 export const MenuGroupDisplay = styled("div")`
   display: flex;
   flex-direction: row;
-  & > :not(:first-child) {
+  & > :not(:first-of-type) {
     border-left: none;
   }
 `;
