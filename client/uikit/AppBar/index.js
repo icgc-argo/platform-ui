@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 import logo from "../assets/logo_white.png";
+import Typography from "../Typography";
 import {
   MenuItemContent,
   MenuItemContainer,
@@ -18,8 +19,12 @@ import {
 export const UserBadge = ({ name, title, imageUrl }) => (
   <UserBadgeContainer>
     <div>
-      <div>Hello, {name}</div>
-      <div>{title}</div>
+      <Typography variant="navigation" component="div" bold>
+        Hello, {name}
+      </Typography>
+      <Typography variant="navigation" component="div" color="grey_1">
+        {title}
+      </Typography>
     </div>
     <img
       style={{
@@ -65,7 +70,7 @@ export const MenuItem = ({
   const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
   return (
     <ComposedContainer className={className} id={id} ref={ref} active={active}>
-      <MenuItemContent>{children}</MenuItemContent>
+      <MenuItemContent bold>{children}</MenuItemContent>
     </ComposedContainer>
   );
 };
