@@ -32,6 +32,7 @@ const Typography = ({
   variant = "paragraph",
   component = null,
   bold = false,
+  color = null,
   ...rest
 }) => {
   const theme = useTheme();
@@ -41,6 +42,8 @@ const Typography = ({
     : components[variant];
   const StyledText = styled(Component)`
     font-weight: ${bold ? `bold` : `normal`};
+    color: ${({ theme }) =>
+      color ? theme.colors[color] || color : theme.colors.black};
   `;
   return <StyledText {...rest} />;
 };
@@ -48,7 +51,8 @@ const Typography = ({
 Typography.propTypes = {
   variant: PropTypes.oneOf(Object.keys(defaultTheme.typography)),
   component: PropTypes.string,
-  bold: PropTypes.bool
+  bold: PropTypes.bool,
+  color: PropTypes.oneOf(Object.keys(defaultTheme.colors))
 };
 
 export default Typography;
