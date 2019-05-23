@@ -34,9 +34,11 @@ addDecorator(
                   {original.propType.name}
                   {original.propType.name === "enum" && (
                     <div>
-                      {original.propType.value.map(({ value }) => (
-                        <div>- {value}</div>
-                      ))}{" "}
+                      {Array.isArray(original.propType.value)
+                        ? original.propType.value.map(({ value }, i) => (
+                            <div key={i}>- {value}</div>
+                          ))
+                        : original.propType.value}{" "}
                     </div>
                   )}
                 </React.Fragment>
@@ -53,12 +55,12 @@ addDecorator(
           {
             Header: "description",
             accessor: "description",
-            style: { "white-space": "unset" }
+            style: { whiteSpace: "unset" }
           },
           {
             Header: "default value",
             accessor: "defaultValue",
-            style: { "white-space": "unset" },
+            style: { whiteSpace: "unset" },
             Cell: ({ original }) => {
               return (
                 <React.Fragment>{String(original.defaultValue)}</React.Fragment>
