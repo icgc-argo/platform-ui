@@ -42,8 +42,7 @@ const Typography = ({
     : components[variant];
   const StyledText = styled(Component)`
     font-weight: ${bold ? `bold` : `normal`};
-    color: ${({ theme }) =>
-      color ? theme.colors[color] || color : theme.colors.black};
+    color: ${({ theme }) => (color ? theme.colors[color] || color : "inherit")};
   `;
   return <StyledText {...rest} />;
 };
