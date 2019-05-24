@@ -65,7 +65,11 @@ const warning = {
   warning_3: "#fef6ea"
 };
 const success = {
-  ...accent1
+  success_dark: accent1.accent1_dark,
+  success: accent1.accent1,
+  success_1: accent1.accent1_1,
+  success_2: accent1.accent1_2,
+  success_3: accent1.accent1_3
 };
 
 export default {
