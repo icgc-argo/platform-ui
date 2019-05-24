@@ -4,13 +4,14 @@ import { ApolloServer } from 'apollo-server-express';
 import { mergeSchemas } from 'graphql-tools';
 
 import userSchema from './schemas/User';
+import programSchema from './schemas/Program';
 import { PORT } from './config';
 import config from './package.json';
 
 const { version } = config;
 
 const init = async () => {
-  const schemas = [userSchema];
+  const schemas = [userSchema, programSchema];
 
   const server = new ApolloServer({
     schema: mergeSchemas({
