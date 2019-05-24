@@ -84,11 +84,11 @@ const StyledCheckbox = styled("input")`
 
     position: absolute;
     top: 4px;
-    left: 2px;
+    left: 3px;
     z-index: 1;
 
-    width: 8px;
-    height: 3px;
+    width: 10px;
+    height: 4px;
 
     border: 2px solid white;
     border-top-style: none;
@@ -110,7 +110,7 @@ const StyledCheckbox = styled("input")`
     content: "";
 
     position: absolute;
-    top: -1px;
+    top: -2px;
     left: 0;
 
     width: 16px;
