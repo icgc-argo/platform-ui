@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/react";
 import React from "react";
-import Input from ".";
+import Input, { Select } from ".";
 import { text, boolean, radios } from "@storybook/addon-knobs";
 import Icon from "../Icon";
 
@@ -46,6 +46,11 @@ const InputStories = storiesOf(`${__dirname}`, module)
         <Input {...props} icon={<Icon name="search" />} />
       </div>
     );
-  });
+  })
+  .add("Select", () => (
+    <div style={{ width: "200px" }}>
+      <Select />
+    </div>
+  ));
 
 export default InputStories;

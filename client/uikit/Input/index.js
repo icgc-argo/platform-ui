@@ -3,54 +3,12 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import Icon from "../Icon";
-
-const StyledInputWrapper = styled("div")`
-  display: flex;
-  border-radius: 8px;
-  outline: none;
-  overflow: hidden;
-  border-style: solid;
-  border-width: 1px;
-  color: ${({ theme, disabled }) =>
-    theme.input.textColors[disabled ? "disabled" : "default"]};
-  background-color: ${({ theme, disabled }) =>
-    theme.input.colors[disabled ? "disabled" : "default"]};
-  font-size: ${({ theme, size }) => theme.input.fontSizes[size]};
-  border-color: ${({ theme, inputState, error, disabled }) => {
-    const state = error ? "error" : disabled ? "disabled" : inputState;
-    return theme.input.borderColors[state];
-  }};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.input.borderColors.hover};
-  }
-`;
-
-const StyledInput = styled("input")`
-  padding: ${({ theme, size }) => theme.input.paddings[size]};
-  border: none;
-  outline: none;
-  flex: 1;
-  width: 100%;
-  background-color: inherit;
-  color: inherit;
-  font-size: inherit;
-`;
-
-const ErrorMsg = styled("div")`
-  color: ${({ theme }) => theme.input.textColors.error};
-  margin-top: 1px;
-  margin-left: 5px;
-  font-size: 12px;
-`;
-
-const IconWrapper = styled("div")`
-  display: flex;
-  align-items: center;
-  margin-left: 11px;
-  background-color: inherit;
-  color: inherit;
-`;
+import {
+  StyledInput,
+  StyledInputWrapper,
+  ErrorMsg,
+  IconWrapper
+} from "./styledComponents";
 
 const Input = ({
   placeholder,
@@ -110,3 +68,39 @@ Input.propTypes = {
 };
 
 export default Input;
+
+const DropdownIcon = styled(Icon)`
+  height: 10px;
+  width: 10px;
+  padding: 13px;
+`;
+
+export const Select = ({
+  placeholder,
+  value,
+  onChange,
+  type,
+  disabled,
+  size = "sm"
+}) => {
+  const [activeState, setActive] = useState("default");
+  const [isExpanded, setExpanded] = useState(false);
+  return (
+    <StyledInputWrapper
+      onFocus={() => setActive("focus")}
+      onBlur={() => setActive("default")}
+      disabled={disabled}
+      size={size}
+      inputState={activeState}
+    >
+      <div
+        css={css`
+          flex: 1;
+        `}
+      >
+        - Select an option -
+      </div>
+      <DropdownIcon name="arrow" />
+    </StyledInputWrapper>
+  );
+};
