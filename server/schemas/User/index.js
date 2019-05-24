@@ -12,8 +12,6 @@ const typeDefs = gql`
     email: String!
     firstName: String
     lastName: String
-    createdAt: String
-    lastLogin: String
     name: String
     preferredLanguage: String
     status: String
@@ -21,7 +19,18 @@ const typeDefs = gql`
     applications: [String]
     groups: [String]
     scopes: [String]
+
+    """
+    ISO Formatted DateTime:
+    """
+    createdAt: String
+
+    """
+    ISO Formatted DateTime:
+    """
+    lastLogin: String
   }
+
   type Query {
     """
     retrieve User data by id
@@ -57,7 +66,7 @@ const resolvers = {
     user: async (obj, args, context, info) => {
       const { egoToken } = context;
       const egoUser = await egoService.getUser(args.id, egoToken);
-      return convertEgoUser(egoUser);
+      return egoUser === null ? null : convertEgoUser(egoUser);
     },
     users: async (obj, args, context, info) => {
       const { egoToken } = context;
