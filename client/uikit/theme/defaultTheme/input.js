@@ -15,8 +15,7 @@ export default {
     hover: colors.lightblue,
     active: colors.grey,
     focus: colors.grey,
-    disabled: colors.grey_2,
-    error: colors.error
+    disabled: colors.red
   },
   colors: {
     default: colors.white,

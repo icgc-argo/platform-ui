@@ -11,15 +11,11 @@ const StyledInputWrapper = styled("div")`
   overflow: hidden;
   border-style: solid;
   border-width: 1px;
-
   color: ${({ theme, disabled }) =>
     theme.input.textColors[disabled ? "disabled" : "default"]};
   background-color: ${({ theme, disabled }) =>
     theme.input.colors[disabled ? "disabled" : "default"]};
-
-  border: solid 1px ${({ theme }) => theme.input.borderColors.grey_1};
   font-size: ${({ theme, size }) => theme.input.fontSizes[size]};
-
   border-color: ${({ theme, inputState, error, disabled }) => {
     const state = error ? "error" : disabled ? "disabled" : inputState;
     return theme.input.borderColors[state];
@@ -56,13 +52,6 @@ const IconWrapper = styled("div")`
   color: inherit;
 `;
 
-/**
-<<<<<<< HEAD
- * Basic  input component
-=======
- * Basic input component
->>>>>>> styling
- */
 const Input = ({
   placeholder,
   value,
@@ -77,7 +66,7 @@ const Input = ({
   const [activeState, setActive] = useState("default");
 
   return (
-    <React.Fragment>
+    <div>
       <StyledInputWrapper
         onFocus={() => setActive("focus")}
         onBlur={() => setActive("default")}
@@ -97,7 +86,7 @@ const Input = ({
         />
       </StyledInputWrapper>
       {error && errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
-    </React.Fragment>
+    </div>
   );
 };
 
