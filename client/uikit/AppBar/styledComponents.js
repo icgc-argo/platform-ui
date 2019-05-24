@@ -24,7 +24,8 @@ export const MenuItemContainer = styled("div")`
   cursor: pointer;
   text-decoration: none;
 
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ active, theme }) =>
+    active ? theme.colors.accent1 : theme.colors.white};
   border-left: solid 0.5px ${({ theme }) => theme.colors.grey};
   border-right: solid 0.5px ${({ theme }) => theme.colors.grey};
   border-bottom: solid 3px
