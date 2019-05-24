@@ -169,7 +169,7 @@ const resolvers = {
       const { egoToken } = context;
       const program = convertCreateProgramInputToGrpc(get(args, 'program', {}));
       const response = await programService.createProgram(program, egoToken);
-      return get(response, 'id');
+      return get(response, 'id.value');
     },
   },
 };
