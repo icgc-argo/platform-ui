@@ -13,7 +13,7 @@ import {
   USER_PAGE_PATH
 } from "global/constants";
 
-const Root = ({ name }) => (
+const Root = () => (
   <div>
     <style jsx>{`
       .hero {
@@ -65,44 +65,10 @@ const Root = ({ name }) => (
       }
     `}</style>
     <div className="hero">
-      <h1 className="title">Welcome to Next! {name}</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
-      <div className="row">
-        {[1, 2, 3, 4].map(id => (
-          <Link key={id} href={`/?id=${id}`}>
-            <a className="card">
-              <h3>User {id}</h3>
-              <p>User name</p>
-            </a>
-          </Link>
-        ))}
-      </div>
+      <h1 className="title">Welcome to Argo!</h1>
+      <p className="description">We've got fun and games</p>
     </div>
   </div>
 );
-
-export const query = gql`
-  query User($userId: ID!) {
-    user(id: $userId) {
-      name
-      id
-    }
-  }
-`;
-
-Root.getInitialProps = async context => {
-  const { id } = context.query;
-  const { data } = await runQuery({
-    query,
-    variables: {
-      userId: id
-    }
-  });
-  return {
-    name: _.get(data, `user.name`)
-  };
-};
 
 export default Root;
