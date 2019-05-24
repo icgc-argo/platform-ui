@@ -48,18 +48,13 @@ const StyledButton = styled("button")`
       theme.button.borderColors[variant].active};
   }
 
-  ${({ isLoading }) =>
-    !isLoading &&
-    css`
-      &:disabled {
-        background-color: ${({ theme, variant }) =>
-          theme.button.colors[variant].disabled};
-        border-color: ${({ theme, variant }) =>
-          theme.button.borderColors[variant].disabled};
-        color: ${({ theme, variant }) =>
-          theme.button.textColors[variant].disabled};
-      }
-    `}
+  &:disabled {
+    background-color: ${({ theme, variant }) =>
+      theme.button.colors[variant].disabled};
+    border-color: ${({ theme, variant }) =>
+      theme.button.borderColors[variant].disabled};
+    color: ${({ theme, variant }) => theme.button.textColors[variant].disabled};
+  }
 `;
 
 const Button = ({
