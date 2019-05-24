@@ -75,6 +75,18 @@ const DropdownIcon = styled(Icon)`
   padding: 13px;
 `;
 
+const Options = styled("ul")`
+  display: ${({ isExpanded }) => (isExpanded ? "block" : "none")};
+  margin: 0;
+  padding: 0;
+  border: 1px solid grey;
+
+  li:hover {
+    background-color: green;
+    cursor: pointer;
+  }
+`;
+
 export const Select = ({
   placeholder,
   value,
@@ -83,24 +95,29 @@ export const Select = ({
   disabled,
   size = "sm"
 }) => {
-  const [activeState, setActive] = useState("default");
   const [isExpanded, setExpanded] = useState(false);
+
   return (
-    <StyledInputWrapper
-      onFocus={() => setActive("focus")}
-      onBlur={() => setActive("default")}
-      disabled={disabled}
-      size={size}
-      inputState={activeState}
-    >
-      <div
-        css={css`
-          flex: 1;
-        `}
+    <div>
+      <StyledInputWrapper
+        onClick={() => setExpanded(!isExpanded)}
+        disabled={disabled}
+        size={size}
+        inputState={activeState}
       >
-        - Select an option -
-      </div>
-      <DropdownIcon name="arrow" />
-    </StyledInputWrapper>
+        <div
+          css={css`
+            flex: 1;
+          `}
+        >
+          - Select an option -
+        </div>
+        <DropdownIcon name="arrow" />
+      </StyledInputWrapper>
+      <Options isExpanded={isExpanded}>
+        <li>Value 1</li>
+        <li>Value 2</li>
+      </Options>
+    </div>
   );
 };
