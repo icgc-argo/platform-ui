@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import { withProps } from "recompose";
 
-import logo from "../assets/logo_white.png";
 import Typography from "../Typography";
 
 const MenuItemTypography = withProps(() => ({
