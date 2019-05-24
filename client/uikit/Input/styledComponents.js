@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 export const StyledInputWrapper = styled("div")`
+  cursor: pointer;
   display: flex;
   align-items: center;
   border-radius: 8px;
