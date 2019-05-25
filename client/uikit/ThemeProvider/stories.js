@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/react";
 import React from "react";
 import ReactJson from "react-json-view";
+import { radios } from "@storybook/addon-knobs";
 
 import ThemeProvider, { useTheme } from ".";
 import defaultTheme from "../theme/defaultTheme";
@@ -38,14 +39,18 @@ const ColorViewer = () => {
   ));
 };
 
+const createThemeKnobs = () => {
+  theme: radios("theme", { default: "default" });
+};
+
 const ThemeProviderStories = storiesOf(`${__dirname}`, module)
   .add("Basic", () => (
-    <ThemeProvider theme={"default"}>
+    <ThemeProvider {...createThemeKnobs()}>
       <ThemeViewer />
     </ThemeProvider>
   ))
   .add("Colors", () => (
-    <ThemeProvider theme={"default"}>
+    <ThemeProvider {...createThemeKnobs()}>
       <ColorViewer />
     </ThemeProvider>
   ));
