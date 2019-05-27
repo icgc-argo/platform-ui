@@ -1,6 +1,6 @@
 /*
  * This file dynamically generates a gRPC client from Ego.proto.
- * The content of Ego.proto is copied directly from:
+ * The content of Ego.proto is copied directly from: https://github.com/overture-stack/ego/blob/develop/src/main/proto/Ego.proto
  */
 import grpc from 'grpc';
 import * as loader from '@grpc/proto-loader';
