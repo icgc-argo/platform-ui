@@ -71,7 +71,7 @@ spec:
                         sh 'helm ls --kubeconfig $KUBECONFIG'
                         sh 'helm repo add icgcargo https://icgc-argo.github.io/charts/'
                         sh 'helm repo update'
-                        sh "helm upgrade argo-gateway icgcargo/argo-gateway --reuse-values --set image.tag=${commit}-alpine"
+                        sh "helm upgrade argo-gateway icgcargo/argo-gateway --set image.tag=${commit}-alpine,appConfig.EGO_ROOT_GRPC=ego-qa:50051,appConfig.PROGRAM_SERVICE_ROOT=program-service-qa:50051"
                     }
                 }
             }
