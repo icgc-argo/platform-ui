@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import ReactTable from "react-table";
-import selectTable from "react-table/lib/hoc/selectTable";
-import { get } from "lodash";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import ReactTable from 'react-table';
+import selectTable from 'react-table/lib/hoc/selectTable';
+import { get } from 'lodash';
 
-import reactTableDefaultStyle from "./reactTableDefaultStyle";
-import Typography from "../Typography";
-import ascending from "../assets/table/ascending.svg";
-import descending from "../assets/table/descending.svg";
-import unsorted from "../assets/table/unsorted.svg";
-import TablePagination from "./TablePagination";
-import { useTheme } from "../ThemeProvider";
+import reactTableDefaultStyle from './reactTableDefaultStyle';
+import Typography from '../Typography';
+import ascending from '../assets/table/ascending.svg';
+import descending from '../assets/table/descending.svg';
+import unsorted from '../assets/table/unsorted.svg';
+import TablePagination from './TablePagination';
+import { useTheme } from '../ThemeProvider';
 
 const StyledTable = styled(ReactTable)`
   ${reactTableDefaultStyle}
@@ -95,29 +95,22 @@ const StyledTable = styled(ReactTable)`
 `;
 
 const Table = ({
-  className = "",
+  className = '',
   stripped = true,
   highlight = true,
   PaginationComponent = TablePagination,
-  primaryKey = "id",
+  primaryKey = 'id',
   selectedIds = [],
   TrComponent = props => {
     const thisRowId = get(props, `rowInfo.original.${primaryKey}`);
     const selected = selectedIds.some(id => id === thisRowId);
-    return (
-      <div
-        {...props}
-        className={`rt-tr ${props.className} ${selected ? "selected" : ""}`}
-      />
-    );
+    return <div {...props} className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`} />;
   },
   getTrProps = () => ({}),
   ...rest
 }) => (
   <StyledTable
-    className={`${className} ${stripped ? "-striped" : ""} ${
-      highlight ? "-highlight" : ""
-    }`}
+    className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
     TrComponent={TrComponent}
     getTrProps={(state, rowInfo, column) => {
       return { rowInfo, ...getTrProps(state, rowInfo, column) };
@@ -139,7 +132,7 @@ Table.propTypes = {
    * Whether to highlight hovered row
    */
   highlight: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Table;
@@ -147,8 +140,6 @@ export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
   const Component = selectTable(Table);
-  return (
-    <Component {...props} primaryKey={keyField} selectedIds={selectedIds} />
-  );
+  return <Component {...props} primaryKey={keyField} selectedIds={selectedIds} />;
 };
-export { default as TablePagination } from "./TablePagination";
+export { default as TablePagination } from './TablePagination';
