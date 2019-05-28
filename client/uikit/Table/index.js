@@ -50,6 +50,9 @@ const StyledTable = styled(ReactTable)`
       text-align: left;
       display: flex;
       justify-content: space-between;
+    }
+    /* .-cursor-pointer idicates a sortable column */
+    & .rt-th.-cursor-pointer {
       ${({ sortable }) =>
         sortable
           ? css`

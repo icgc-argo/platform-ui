@@ -24,7 +24,8 @@ const TableStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
       columns={[
         {
           Header: "Property 1",
-          accessor: "prop1"
+          accessor: "prop1",
+          sortable: false
         },
         {
           Header: "Property 2",
