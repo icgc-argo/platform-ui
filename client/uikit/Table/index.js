@@ -8,6 +8,7 @@ import reactTableDefaultStyle from "./reactTableDefaultStyle";
 import Typography from "../Typography";
 import ascending from "../assets/table/ascending.svg";
 import descending from "../assets/table/descending.svg";
+import unsorted from "../assets/table/unsorted.svg";
 
 const StyledTable = styled(ReactTable)`
   ${reactTableDefaultStyle}
@@ -52,17 +53,15 @@ const StyledTable = styled(ReactTable)`
       ${({ sortable }) =>
         sortable
           ? css`
+              &:after {
+                content: url(${unsorted});
+              }
               &.-sort-asc {
                 box-shadow: none;
                 &:after {
                   content: url(${ascending});
                 }
               }
-            `
-          : css``}
-      ${({ sortable }) =>
-        sortable
-          ? css`
               &.-sort-desc {
                 box-shadow: none;
                 &:after {
