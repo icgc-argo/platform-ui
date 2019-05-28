@@ -1,14 +1,14 @@
 //@flow
-import * as React from "react";
+import * as React from 'react';
 import {
   LOCAL_STORAGE_REDIRECT_KEY,
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   PROGRAM_ENTITY_PATH,
   DCC_OVERVIEW_PATH,
-  USER_PAGE_PATH
-} from "../constants";
-import { isDccMember } from "./egoJwt";
+  USER_PAGE_PATH,
+} from '../constants';
+import { isDccMember } from './egoJwt';
 
 export const getRedirectPathForUser = (egoJwt: string) => {
   if (isDccMember(egoJwt)) {
@@ -21,36 +21,36 @@ export const getRedirectPathForUser = (egoJwt: string) => {
 export type GetInitialPropsContext = {
   pathname: string,
   query: {
-    [key: string]: any
+    [key: string]: any,
   },
   asPath: string,
   req: any,
   res: any,
-  err?: Error
+  err?: Error,
 };
 export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
-  egoJwt: string
+  egoJwt: string,
 };
 type PageConfigProps = {
   isPublic: boolean,
   isAccessible: ({
     egoJwt: string,
-    ctx: GetInitialPropsContext
+    ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
-  getInitialProps: GetInitialPropsContextWithEgo => Promise<any>
+  getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
   isPublic = false,
   isAccessible = async () => true,
-  getInitialProps = async () => ({})
+  getInitialProps = async () => ({}),
 }: {
   isPublic?: boolean,
   isAccessible?: ({
     egoJwt: string,
-    ctx: GetInitialPropsContext
+    ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
-  getInitialProps?: GetInitialPropsContextWithEgo => Promise<any>
+  getInitialProps?: GetInitialPropsContextWithEgo => Promise<any>,
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;

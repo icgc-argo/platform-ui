@@ -81,5 +81,10 @@
     "pretty-quick": "^1.10.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "trailingComma": "all",
+    "singleQuote": true
   }
 }

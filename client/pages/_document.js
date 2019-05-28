@@ -1,7 +1,7 @@
 //@flow
-import React from "react";
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import type { GetInitialPropsContext } from "global/utils/pages";
+import React from 'react';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import type { GetInitialPropsContext } from 'global/utils/pages';
 
 export default class extends Document {
   static async getInitialProps(ctx: GetInitialPropsContext) {

@@ -1,3 +1,3 @@
-import { ThemeContext } from "@emotion/core";
-import { useContext } from "react";
+import { ThemeContext } from '@emotion/core';
+import { useContext } from 'react';
 export default () => useContext(ThemeContext);

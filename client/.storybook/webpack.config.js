@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 
 // Export a function. Accept the base config as the only param.
 module.exports = async ({ config, mode }) => {
@@ -9,7 +9,7 @@ module.exports = async ({ config, mode }) => {
   // Make whatever fine-grained changes you need
   config.node = {
     __dirname: true,
-    __filename: true
+    __filename: true,
   };
 
   // Return the altered config

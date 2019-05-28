@@ -1,32 +1,26 @@
-import React from "react";
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
-import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from ".";
+import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from '.';
 
-const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
+const AppBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const LinkToHome = props => (
-    <a
-      style={{ cursor: "pointer" }}
-      {...props}
-      onClick={() => action("fake navigate")("/")}
-    />
+    <a style={{ cursor: 'pointer' }} {...props} onClick={() => action('fake navigate')('/')} />
   );
   const LinkToExploration = props => (
-    <a {...props} onClick={() => action("fake navigate")("/exploration")} />
+    <a {...props} onClick={() => action('fake navigate')('/exploration')} />
   );
   const LinkToAnalysis = props => (
-    <a {...props} onClick={() => action("fake navigate")("/analysis")} />
+    <a {...props} onClick={() => action('fake navigate')('/analysis')} />
   );
   const LinkToFileRepo = props => (
-    <a {...props} onClick={() => action("fake navigate")("/file_repo")} />
+    <a {...props} onClick={() => action('fake navigate')('/file_repo')} />
   );
   const LinkToSubmission = props => (
-    <a {...props} onClick={() => action("fake navigate")("/submission")} />
+    <a {...props} onClick={() => action('fake navigate')('/submission')} />
   );
-  const UserBadgeDom = props => (
-    <a {...props} onClick={action("user badge clicked")} />
-  );
+  const UserBadgeDom = props => <a {...props} onClick={action('user badge clicked')} />;
   return (
     <AppBar>
       <Section>
@@ -50,7 +44,7 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
               name="Sarah"
               title="DCC Member"
               imageUrl={
-                "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'
               }
             />
           </MenuItem>

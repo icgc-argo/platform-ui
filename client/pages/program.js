@@ -1,21 +1,19 @@
 // @flow
-import React from "react";
-import { get } from "lodash";
+import React from 'react';
+import { get } from 'lodash';
 
-import { decodeToken } from "global/utils/egoJwt";
-import { isRdpcMember, hasAccessToProgram } from "global/utils/egoJwt";
-import { createPage } from "global/utils/pages";
+import { decodeToken } from 'global/utils/egoJwt';
+import { isRdpcMember, hasAccessToProgram } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: false,
   isAccessible: async ({ egoJwt, ctx }) => {
     const {
-      query: { id }
+      query: { id },
     } = ctx;
     if (id) {
-      return (
-        !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, programId: id })
-      );
+      return !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, programId: id });
     } else {
       return true;
     }
@@ -25,7 +23,7 @@ export default createPage({
     const firstName = data.context.user.firstName;
     const lastName = data.context.user.lastName;
     return { firstName, lastName, programId: query.id };
-  }
+  },
 })(({ egoJwt, firstName, lastName, programId }) => {
   return (
     <div>
