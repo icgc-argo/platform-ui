@@ -15,12 +15,22 @@ const StyledTable = styled(ReactTable)`
   ${reactTableDefaultStyle}
   &.ReactTable {
     border: none;
+    & .rt-table {
+      ${({ theme, showPagination, showPaginationBottom }) =>
+        !(showPagination && showPaginationBottom) &&
+        css`
+          border-bottom: solid 1px ${theme.colors.grey_2};
+        `};
+    }
   }
 
   &.ReactTable .rt-th {
     ${({ theme }) => css(theme.typography.data)};
     font-weight: bold;
     background: ${({ theme }) => theme.table.th.background};
+  }
+  &.ReactTable .rt-tr {
+    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
   &.ReactTable .rt-td {
     ${({ theme }) => css(theme.typography.data)}
@@ -42,7 +52,6 @@ const StyledTable = styled(ReactTable)`
 
   &.ReactTable .rt-thead.-header {
     box-shadow: none;
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
     border-bottom: solid 2px ${({ theme }) => theme.colors.grey_2};
     & .rt-th {
       padding: 10px 16px;
