@@ -9,6 +9,7 @@ import Typography from "../Typography";
 import ascending from "../assets/table/ascending.svg";
 import descending from "../assets/table/descending.svg";
 import unsorted from "../assets/table/unsorted.svg";
+import TablePagination from "./TablePagination";
 
 const StyledTable = styled(ReactTable)`
   ${reactTableDefaultStyle}
@@ -81,6 +82,7 @@ const Table = ({
   className = "",
   stripped = true,
   highlight = true,
+  PaginationComponent = TablePagination,
   ...rest
 }) => (
   <StyledTable
@@ -89,6 +91,7 @@ const Table = ({
     }`}
     minRows={0}
     showPagination={false}
+    PaginationComponent={PaginationComponent}
     {...rest}
   />
 );
