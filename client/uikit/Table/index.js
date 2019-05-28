@@ -142,4 +142,28 @@ export const SelectTable = props => {
   const Component = selectTable(Table);
   return <Component {...props} primaryKey={keyField} selectedIds={selectedIds} />;
 };
+SelectTable.propTypes = {
+  ...SelectTable.propTypes,
+  /**
+   * returns true if the key passed is selected otherwise it should return false
+   */
+  isSelected: PropTypes.func.isRequired,
+  /**
+   * a property that indicates if the selectAll is set (true|false)
+   */
+  selectAll: PropTypes.bool.isRequired,
+  /**
+   * called when the user clicks the selectAll checkbox/radio
+   */
+  toggleAll: PropTypes.func.isRequired,
+  /**
+   * called when the use clicks a specific checkbox/radio in a row
+   */
+  toggleSelection: PropTypes.func.isRequired,
+  /**
+   * either checkbox|radio to indicate what type of selection is required
+   */
+  selectType: PropTypes.oneOf(['checkbox', 'radio']),
+};
+
 export { default as TablePagination } from './TablePagination';

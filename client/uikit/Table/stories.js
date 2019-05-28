@@ -6,6 +6,7 @@ import { range } from 'lodash';
 
 import Table, { SelectTable } from '.';
 import readme from './readme.md';
+import selectTableDoc from './selectTable.md';
 
 const TableStories = storiesOf(`${__dirname}`, module)
   .add(
@@ -48,8 +49,9 @@ const TableStories = storiesOf(`${__dirname}`, module)
     },
     { info: { text: readme } },
   )
-  .add('SelectTable', () => {
-    return (
+  .add(
+    'SelectTable',
+    () => (
       <SelectTable
         //props to control selection
         keyField="idField"
@@ -80,7 +82,12 @@ const TableStories = storiesOf(`${__dirname}`, module)
           },
         ]}
       />
-    );
-  });
+    ),
+    {
+      info: {
+        text: `${readme} ${selectTableDoc}`,
+      },
+    },
+  );
 
 export default TableStories;
