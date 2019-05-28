@@ -32,9 +32,10 @@ const StyledTable = styled(ReactTable)`
   &.ReactTable .rt-tr {
     border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
-  &.ReactTable .rt-td {
+  &.ReactTable .rt-tbody .rt-td {
     ${({ theme }) => css(theme.typography.data)}
     padding: 10px 16px;
+    border-right: none;
   }
 
   /* overrides stripped rows style */
