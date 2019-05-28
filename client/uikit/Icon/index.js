@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Icons from "./icons";
-import { css } from "@emotion/core";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Icons from './icons';
+import { css } from '@emotion/core';
 
 const Icon = ({ name, width, height, fill }) => {
   const svg = Icons[name];
@@ -20,7 +20,7 @@ const Icon = ({ name, width, height, fill }) => {
     >
       <title lang="en">{svg.title}</title>
       <g>
-        <path fill={fill} fillRule={svg.fillRule || "nonezero"} d={svg.path} />
+        <path fill={fill} fillRule={svg.fillRule || 'nonezero'} d={svg.path} />
       </g>
     </svg>
   );
@@ -30,7 +30,7 @@ Icon.propTypes = {
   name: PropTypes.string.isRequired,
   width: PropTypes.string,
   height: PropTypes.string,
-  fill: PropTypes.string
+  fill: PropTypes.string,
 };
 
 export default Icon;

@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-export default styled("div")`
+export default styled('div')`
   .ReactTable {
     position: relative;
     display: -webkit-box;
@@ -121,7 +121,7 @@ export default styled("div")`
     left: 100%;
     top: 50%;
     border: solid transparent;
-    content: " ";
+    content: ' ';
     height: 0;
     width: 0;
     position: absolute;
@@ -219,7 +219,7 @@ export default styled("div")`
     margin: 0 10px;
   }
   .ReactTable .rt-expander:after {
-    content: "";
+    content: '';
     position: absolute;
     width: 0;
     height: 0;

@@ -1,17 +1,17 @@
-import React from "react";
-import Link from "next/link";
-import _ from "lodash";
-import gql from "graphql-tag";
+import React from 'react';
+import Link from 'next/link';
+import _ from 'lodash';
+import gql from 'graphql-tag';
 
-import runQuery from "global/utils/runQuery";
-import NavBar from "components/NavBar";
+import runQuery from 'global/utils/runQuery';
+import NavBar from 'components/NavBar';
 import {
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   PROGRAM_ENTITY_PATH,
   DCC_OVERVIEW_PATH,
-  USER_PAGE_PATH
-} from "global/constants";
+  USER_PAGE_PATH,
+} from 'global/constants';
 
 const Root = () => (
   <div>

@@ -1,13 +1,9 @@
 //@flow
-import React from "react";
-import { get } from "lodash";
+import React from 'react';
+import { get } from 'lodash';
 
-import {
-  isRdpcMember,
-  getAuthorizedProgramPolicies,
-  decodeToken
-} from "global/utils/egoJwt";
-import { createPage } from "global/utils/pages";
+import { isRdpcMember, getAuthorizedProgramPolicies, decodeToken } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: false,
@@ -16,11 +12,11 @@ export default createPage({
   },
   getInitialProps: async ({ egoJwt, asPath, query }) => {
     const data = decodeToken(egoJwt);
-    const firstName = get(data, "context.user.firstName", "");
-    const lastName = get(data, "context.user.lastName", "");
+    const firstName = get(data, 'context.user.firstName', '');
+    const lastName = get(data, 'context.user.lastName', '');
     const authorizedPrograms = getAuthorizedProgramPolicies(egoJwt);
     return { firstName, lastName, authorizedPrograms };
-  }
+  },
 })(({ egoJwt, firstName, lastName, authorizedPrograms = [] }) => {
   return (
     <div>

@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
 
 /**
  * Social login for Google
  */
-const StyledLink = styled("a")`
+const StyledLink = styled('a')`
   font-size: 30px;
 `;
 

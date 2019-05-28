@@ -1,15 +1,15 @@
 // @flow
-import React from "react";
-import Router from "next/router";
+import React from 'react';
+import Router from 'next/router';
 
-import useEgoToken from "global/hooks/useEgoToken";
-import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from "global/constants";
-import { getRedirectPathForUser } from "global/utils/pages";
-import { createPage } from "global/utils/pages";
+import useEgoToken from 'global/hooks/useEgoToken';
+import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
+import { getRedirectPathForUser } from 'global/utils/pages';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({ isPublic: true })(() => {
   const { data, token, resolving } = useEgoToken({
-    onError: err => Router.replace(LOGIN_PAGE_PATH)
+    onError: err => Router.replace(LOGIN_PAGE_PATH),
   });
   React.useEffect(() => {
     const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);

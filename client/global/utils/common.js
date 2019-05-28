@@ -1,4 +1,4 @@
-export const asEnum = (obj, { name = "enum" } = {}) =>
+export const asEnum = (obj, { name = 'enum' } = {}) =>
   new Proxy(obj, {
     get: (obj, prop) => {
       if (obj[prop]) {
@@ -10,6 +10,6 @@ export const asEnum = (obj, { name = "enum" } = {}) =>
       }
     },
     set: () => {
-      throw new Error("enums are immutable");
-    }
+      throw new Error('enums are immutable');
+    },
   });

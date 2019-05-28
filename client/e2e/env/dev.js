@@ -1,11 +1,11 @@
 const CHROME_LATEST = {
   desiredCapabilities: {
-    browserName: "Chrome"
-  }
+    browserName: 'Chrome',
+  },
 };
 
 const env = {
-  CHROME_LATEST
+  CHROME_LATEST,
 };
 
 module.exports = env;
