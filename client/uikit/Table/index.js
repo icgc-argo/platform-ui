@@ -16,6 +16,11 @@ import { useTheme } from '../ThemeProvider';
 
 const StyledTable = styled(ReactTable)`
   ${reactTableDefaultStyle}
+
+  &.ReactTable .-loading.-active .-loading-inner {
+    font-family: ${({ theme }) => theme.typography.data.fontFamily};
+  }
+
   &.ReactTable {
     border: none;
     & .rt-table {
