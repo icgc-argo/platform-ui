@@ -14,14 +14,20 @@ const TableStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
   return (
     <Table
       {...knobs}
-      data={[{ prop1: 1, prop2: 2 }, { prop1: 2, prop2: 3 }]}
+      data={[
+        { prop1: 1, prop2: 2 },
+        { prop1: 2, prop2: 3 },
+        { prop1: 3, prop2: 3 },
+        { prop1: 3, prop2: 3 },
+        { prop1: 3, prop2: 3 }
+      ]}
       columns={[
         {
-          Header: "property1",
+          Header: "Property 1",
           accessor: "prop1"
         },
         {
-          Header: "property2",
+          Header: "Property 2",
           accessor: "prop2"
         }
       ]}
