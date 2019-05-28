@@ -114,7 +114,7 @@ const convertGrpcProgramToGql = program => ({
   institutions: get(program, 'institutions.value'),
   countries: get(program, 'countries.value'),
   regions: get(program, 'regions.value'),
-  membershipType: get(program, 'membership_type'),
+  membershipType: get(program, 'membership_type.value'),
   cancerTypes: get(program, 'cancer_types', []).map(x => convertCancerType(x)),
   primarySites: get(program, 'primary_sites', []).map(x => convertPrimarySite(x)),
 
