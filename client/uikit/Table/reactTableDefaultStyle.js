@@ -1,4 +1,4 @@
-import { css } from "@emotion/core";
+import { css } from '@emotion/core';
 
 /**
  * This is the default react table styling with minor tweeks:
@@ -104,7 +104,7 @@ export default css`
     left: 100%;
     top: 50%;
     border: solid transparent;
-    content: " ";
+    content: ' ';
     height: 0;
     width: 0;
     position: absolute;
@@ -180,7 +180,7 @@ export default css`
     margin: 0 10px;
   }
   &.ReactTable .rt-expander:after {
-    content: "";
+    content: '';
     position: absolute;
     width: 0;
     height: 0;
