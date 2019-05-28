@@ -19,6 +19,20 @@ const StyledTable = styled(ReactTable)`
   &.ReactTable {
     border: none;
     & .rt-table {
+      & .rt-thead .rt-tr .rt-th:first-child,
+      & .rt-tr .rt-td:first-child {
+        ${({ isSelectTable, theme }) =>
+          isSelectTable &&
+          css`
+            padding: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 0px !important;
+            border-right: solid 1px ${theme.colors.grey_2};
+            margin: 0px;
+          `}
+      }
       ${({ theme, showPagination, showPaginationBottom }) =>
         !(showPagination && showPaginationBottom) &&
         css`
@@ -92,6 +106,8 @@ const StyledTable = styled(ReactTable)`
           : css``}
     }
   }
+
+  /* &.ReactTable .rt-tbody  */
 `;
 
 const Table = ({
@@ -101,6 +117,7 @@ const Table = ({
   PaginationComponent = TablePagination,
   primaryKey = 'id',
   selectedIds = [],
+  isSelectTable = false,
   TrComponent = ({ rowInfo, ...props }) => {
     const thisRowId = get(rowInfo, `original.${primaryKey}`);
     const selected = selectedIds.some(id => id === thisRowId);
@@ -110,6 +127,7 @@ const Table = ({
   ...rest
 }) => (
   <StyledTable
+    isSelectTable={isSelectTable}
     className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
     TrComponent={TrComponent}
     getTrProps={(state, rowInfo, column) => {
@@ -140,7 +158,7 @@ export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
   const Component = selectTable(Table);
-  return <Component {...props} primaryKey={keyField} selectedIds={selectedIds} />;
+  return <Component {...props} isSelectTable primaryKey={keyField} selectedIds={selectedIds} />;
 };
 SelectTable.propTypes = {
   ...SelectTable.propTypes,
