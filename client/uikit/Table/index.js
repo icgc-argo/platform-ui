@@ -101,8 +101,8 @@ const Table = ({
   PaginationComponent = TablePagination,
   primaryKey = 'id',
   selectedIds = [],
-  TrComponent = props => {
-    const thisRowId = get(props, `rowInfo.original.${primaryKey}`);
+  TrComponent = ({ rowInfo, ...props }) => {
+    const thisRowId = get(rowInfo, `original.${primaryKey}`);
     const selected = selectedIds.some(id => id === thisRowId);
     return <div {...props} className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`} />;
   },
