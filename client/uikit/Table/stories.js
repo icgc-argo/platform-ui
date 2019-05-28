@@ -15,11 +15,11 @@ const TableStories = storiesOf(`${__dirname}`, module).add("Basic", () => {
     <Table
       {...knobs}
       data={[
-        { prop1: 1, prop2: 2, prop3: "some text" },
-        { prop1: 2, prop2: 3, prop3: "some text" },
-        { prop1: 3, prop2: 3, prop3: "some text" },
-        { prop1: 3, prop2: 3, prop3: "some text" },
-        { prop1: 3, prop2: 3, prop3: "some text" }
+        { prop1: 1, prop2: 5, prop3: "some text 1" },
+        { prop1: 2, prop2: 4, prop3: "some text 2" },
+        { prop1: 3, prop2: 3, prop3: "some text 3" },
+        { prop1: 4, prop2: 2, prop3: "some text 4" },
+        { prop1: 5, prop2: 1, prop3: "some text 5" }
       ]}
       columns={[
         {
