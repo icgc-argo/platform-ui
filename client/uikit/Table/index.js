@@ -105,7 +105,8 @@ Table.propTypes = {
   /**
    * Whether to highlight hovered row
    */
-  highlight: PropTypes.bool
+  highlight: PropTypes.bool,
+  className: PropTypes.string
 };
 
 export default Table;
