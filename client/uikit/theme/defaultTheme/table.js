@@ -1,7 +1,10 @@
-import colors from "./colors";
+import colors from './colors';
 
 export default {
-  th: {
-    background: "#f2f2f8"
-  }
+  header: {
+    background: '#f2f2f8',
+  },
+  body: {
+    stripedRowBackground: '#f2f2f8',
+  },
 };
