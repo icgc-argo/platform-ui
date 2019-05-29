@@ -13,107 +13,7 @@ import descending from '../assets/table/descending.svg';
 import unsorted from '../assets/table/unsorted.svg';
 import TablePagination from './TablePagination';
 import { useTheme } from '../ThemeProvider';
-
-const StyledTable = styled(ReactTable)`
-  ${reactTableDefaultStyle}
-
-  &.ReactTable .-loading.-active .-loading-inner {
-    font-family: ${({ theme }) => theme.typography.data.fontFamily};
-  }
-
-  &.ReactTable {
-    border: none;
-    & .rt-table {
-      & .rt-thead .rt-tr .rt-th:first-child,
-      & .rt-tr .rt-td:first-child {
-        ${({ isSelectTable, theme }) =>
-          isSelectTable &&
-          css`
-            padding: 0px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 0px !important;
-            border-right: solid 1px ${theme.colors.grey_2};
-            margin: 0px;
-          `}
-      }
-      ${({ theme, showPagination, showPaginationBottom }) =>
-        !(showPagination && showPaginationBottom) &&
-        css`
-          border-bottom: solid 1px ${theme.colors.grey_2};
-        `};
-    }
-  }
-
-  &.ReactTable .rt-th {
-    ${({ theme }) => css(theme.typography.data)};
-    font-weight: bold;
-    background: ${({ theme }) => theme.table.th.background};
-  }
-  &.ReactTable .rt-tr {
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
-    &.selected {
-      background-color: ${({ theme }) => theme.colors.secondary_3} !important;
-    }
-  }
-  &.ReactTable .rt-tbody .rt-td {
-    ${({ theme }) => css(theme.typography.data)}
-    padding: 10px 16px;
-    border-right: none;
-  }
-
-  /* overrides stripped rows style */
-  &.ReactTable.-striped .rt-tr:not(.-odd) {
-    background: ${({ theme }) => theme.table.th.background};
-  }
-  &.ReactTable.-striped .rt-tr.-odd {
-    background: ${({ theme }) => theme.colors.white};
-  }
-
-  /* overrides hover highlight rows style */
-  &.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
-    background: ${({ theme }) => theme.colors.grey_3};
-  }
-
-  &.ReactTable .rt-thead.-header {
-    box-shadow: none;
-    border-bottom: solid 2px ${({ theme }) => theme.colors.grey_2};
-    & .rt-th {
-      padding: 10px 16px;
-      border-left: none;
-      border-right: none;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-    }
-    ${({ sortable }) =>
-      sortable
-        ? css`
-            /* .-cursor-pointer idicates a sortable column */
-            & .rt-th.-cursor-pointer {
-              &:after {
-                content: url(${unsorted});
-              }
-              &.-sort-asc {
-                box-shadow: none;
-                &:after {
-                  content: url(${ascending});
-                }
-              }
-              &.-sort-desc {
-                box-shadow: none;
-                &:after {
-                  content: url(${descending});
-                }
-              }
-            }
-          `
-        : css``}
-  }
-
-  /* &.ReactTable .rt-tbody  */
-`;
+import { StyledTable } from './styledComponent';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -163,6 +63,10 @@ Table.propTypes = {
 };
 export default Table;
 
+/**
+ * SelectTable provides the row selection capability with the
+ * selectTable HOC.
+ */
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
@@ -170,7 +74,7 @@ export const SelectTable = props => {
   return <Component {...props} isSelectTable primaryKey={keyField} selectedIds={selectedIds} />;
 };
 SelectTable.propTypes = {
-  ...SelectTable.propTypes,
+  ...ReactTable.propTypes,
   /**
    * returns true if the key passed is selected otherwise it should return false
    */
