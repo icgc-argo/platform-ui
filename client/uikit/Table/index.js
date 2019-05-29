@@ -1,18 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
-import css from '@emotion/css';
 import ReactTable from 'react-table';
 import selectTable from 'react-table/lib/hoc/selectTable';
 import { get } from 'lodash';
 
-import reactTableDefaultStyle from './reactTableDefaultStyle';
-import Typography from '../Typography';
-import ascending from '../assets/table/ascending.svg';
-import descending from '../assets/table/descending.svg';
-import unsorted from '../assets/table/unsorted.svg';
 import TablePagination from './TablePagination';
-import { useTheme } from '../ThemeProvider';
 import { StyledTable } from './styledComponent';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
