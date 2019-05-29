@@ -87,11 +87,11 @@ const StyledTable = styled(ReactTable)`
       display: flex;
       justify-content: space-between;
     }
-    /* .-cursor-pointer idicates a sortable column */
-    & .rt-th.-cursor-pointer {
-      ${({ sortable }) =>
-        sortable
-          ? css`
+    ${({ sortable }) =>
+      sortable
+        ? css`
+            /* .-cursor-pointer idicates a sortable column */
+            & .rt-th.-cursor-pointer {
               &:after {
                 content: url(${unsorted});
               }
@@ -107,9 +107,9 @@ const StyledTable = styled(ReactTable)`
                   content: url(${descending});
                 }
               }
-            `
-          : css``}
-    }
+            }
+          `
+        : css``}
   }
 
   /* &.ReactTable .rt-tbody  */
