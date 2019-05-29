@@ -115,36 +115,40 @@ const StyledTable = styled(ReactTable)`
   /* &.ReactTable .rt-tbody  */
 `;
 
+export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
+  const thisRowId = get(rowInfo, `original.${primaryKey}`);
+  const selected = selectedIds.some(id => id === thisRowId);
+  return <div {...props} className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`} />;
+};
+
 const Table = ({
   className = '',
   stripped = true,
   highlight = true,
   PaginationComponent = TablePagination,
-  primaryKey = 'id',
-  selectedIds = [],
-  isSelectTable = false,
-  TrComponent = ({ rowInfo, ...props }) => {
-    const thisRowId = get(rowInfo, `original.${primaryKey}`);
-    const selected = selectedIds.some(id => id === thisRowId);
-    return <div {...props} className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`} />;
-  },
-  getTrProps = () => ({}),
   ...rest
-}) => (
-  <StyledTable
-    isSelectTable={isSelectTable}
-    className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
-    TrComponent={TrComponent}
-    getTrProps={(state, rowInfo, column) => {
-      return { rowInfo, ...getTrProps(state, rowInfo, column) };
-    }}
-    minRows={0}
-    showPagination={false}
-    PaginationComponent={PaginationComponent}
-    {...rest}
-  />
-);
-
+}) => {
+  // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
+  const TrComponent = rest.TrComponent || DefaultTrComponent;
+  const getTrProps = rest.getTrProps || (() => ({}));
+  const selectedIds = rest.selectedIds || [];
+  const isSelectTable = rest.isSelectTable || false;
+  const primaryKey = rest.primaryKey || 'id';
+  return (
+    <StyledTable
+      isSelectTable={isSelectTable}
+      className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
+      TrComponent={props => (
+        <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
+      )}
+      getTrProps={(state, rowInfo, column) => ({ rowInfo, ...getTrProps(state, rowInfo, column) })}
+      minRows={0}
+      showPagination={false}
+      PaginationComponent={PaginationComponent}
+      {...rest}
+    />
+  );
+};
 Table.propTypes = {
   ...ReactTable.propTypes,
   /**
@@ -157,8 +161,8 @@ Table.propTypes = {
   highlight: PropTypes.bool,
   className: PropTypes.string,
 };
-
 export default Table;
+
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
@@ -186,7 +190,7 @@ SelectTable.propTypes = {
   /**
    * either checkbox|radio to indicate what type of selection is required
    */
-  selectType: PropTypes.oneOf(['checkbox', 'radio']),
+  selectType: PropTypes.oneOf(['checkbox', 'radio']).isRequired,
 };
 
 export { default as TablePagination } from './TablePagination';
