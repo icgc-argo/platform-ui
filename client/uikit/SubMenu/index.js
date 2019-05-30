@@ -6,13 +6,11 @@ import css from '@emotion/css';
 const level2Style = ({ selected, theme }) => css`
   border: none;
   border-left: solid 2px;
-  padding-left: 40px;
   border-left-color: ${selected ? theme.colors.secondary : theme.colors.white};
   background: ${selected ? theme.colors.grey_3 : 'none'};
 `;
 
 const level3Style = ({ selected, theme }) => css`
-  padding-left: 12px;
   border: none;
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
@@ -33,13 +31,17 @@ const MenuItemContainer = styled('div')`
     cursor: pointer;
   }
   .MenuItemContainer > & {
+    & > div:first-child {
+      padding-left: 40px;
+    }
     ${({ selected, theme }) => level2Style({ selected, theme })}
     .MenuItemContainer > & {
+      & > div:first-child {
+        padding-left: 52px;
+      }
       ${({ selected, theme }) => level3Style({ selected, theme })}
     }
   }
-  ${({ selected, theme, level }) => (level === 2 ? level2Style({ selected, theme }) : css``)}
-  ${({ selected, theme, level }) => (level === 3 ? level3Style({ selected, theme }) : css``)}
 `;
 
 export const MenuItem = ({ className = '', selected: expanded = false, children, content }) => {
