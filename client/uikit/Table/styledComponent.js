@@ -48,7 +48,7 @@ export const StyledTable = styled(ReactTable)`
   &.ReactTable .rt-tr {
     border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
     &.selected {
-      background-color: ${({ theme }) => theme.colors.secondary_3} !important;
+      background-color: ${({ theme }) => theme.colors.secondary_4} !important;
     }
   }
   &.ReactTable .rt-tbody .rt-td {
