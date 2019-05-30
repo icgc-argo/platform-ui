@@ -12,7 +12,7 @@ const SubMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
       <MenuItem
         content={
           <Button variant="secondary" size="sm">
-            Some random button
+            Click me!!
           </Button>
         }
       />
@@ -24,7 +24,7 @@ const SubMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
             <span style={{ display: 'flex', alignItems: 'center' }}>
               ID Registration:
               <Button variant="secondary" size="sm">
-                Some random button
+                Click me Tooo!!!
               </Button>
             </span>
           }
