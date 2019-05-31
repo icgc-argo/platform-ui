@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 
+import Icon from '../Icon';
+import useTheme from '../utils/useTheme';
+
 const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
   background: ${theme.colors.white};
   color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
   & > .MenuItemContent:first-of-type {
-    padding: 15px;
-    cursor: pointer;
+    padding: 12px;
   }
 `;
 
@@ -23,6 +25,7 @@ const level2Style = ({ selected, theme }) => css`
   background: ${selected ? theme.colors.grey_3 : 'none'};
   & > .MenuItemContent:first-of-type {
     padding-left: 40px;
+    padding-right: 18px;
   }
 `;
 
@@ -43,6 +46,13 @@ const defaultStyle = props => css`
     .MenuItemContainer > & {
       ${level3Style(props)}
     }
+  }
+  & > .MenuItemContent:first-of-type {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -68,6 +78,7 @@ export const MenuItem = ({
   const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
   const isSelected =
     typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
+  const theme = useTheme();
   return (
     <MenuItemContainer
       level={level}
@@ -79,7 +90,15 @@ export const MenuItem = ({
       }}
       className={`${className} MenuItemContainer`}
     >
-      <div className="MenuItemContent">{content}</div>
+      <div className="MenuItemContent">
+        <span>{content}</span>
+        {children && content && (
+          <Icon
+            name={isSelected ? 'chevron_down' : 'chevron_right'}
+            fill={isSelected ? theme.colors.secondary : theme.colors.black}
+          />
+        )}
+      </div>
       {isSelected && children}
     </MenuItemContainer>
   );
