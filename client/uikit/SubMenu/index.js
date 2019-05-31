@@ -3,43 +3,50 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 
-const level2Style = ({ selected, theme }) => css`
-  border: none;
-  border-left: solid 2px;
-  border-left-color: ${selected ? theme.colors.secondary : theme.colors.white};
-  background: ${selected ? theme.colors.grey_3 : 'none'};
-`;
-
-const level3Style = ({ selected, theme }) => css`
-  border: none;
-  font-weight: normal;
-  background: ${selected ? theme.colors.secondary_4 : 'none'};
-`;
-
-const MenuItemContainer = styled('div')`
-  ${({ theme }) => css(theme.typography.navigation)}
+const level1Style = ({ selected, theme }) => css`
+  ${css(theme.typography.navigation)}
   border-top: solid 1px;
-  background: ${({ theme }) => theme.colors.white};
-  color: ${({ selected, theme }) => (selected ? theme.colors.secondary : 'black')};
-  border-top-color: ${({ theme }) => theme.colors.grey_2};
+  background: ${theme.colors.white};
+  color: ${selected ? theme.colors.secondary : 'black'};
+  border-top-color: ${theme.colors.grey_2};
+  animation: all 1s;
   &:last-child {
     border-bottom: solid 1px;
-    border-bottom-color: ${({ theme }) => theme.colors.grey_2};
+    border-bottom-color: ${theme.colors.grey_2};
   }
   & > div:first-child {
     padding: 15px;
     cursor: pointer;
   }
+`;
+
+const level2Style = ({ selected, theme }) => css`
+  ${css(theme.typography.navigation)}
+  border: none;
+  border-left: solid 2px;
+  border-left-color: ${selected ? theme.colors.secondary : theme.colors.white};
+  background: ${selected ? theme.colors.grey_3 : 'none'};
+  & > div:first-child {
+    padding-left: 40px;
+  }
+`;
+
+const level3Style = ({ selected, theme }) => css`
+  ${css(theme.typography.navigation)}
+  border: none;
+  font-weight: normal;
+  background: ${selected ? theme.colors.secondary_4 : 'none'};
+  & > div:first-child {
+    padding-left: 52px;
+  }
+`;
+
+const MenuItemContainer = styled('div')`
+  ${props => level1Style(props)}
   .MenuItemContainer > & {
-    & > div:first-child {
-      padding-left: 40px;
-    }
-    ${({ selected, theme }) => level2Style({ selected, theme })}
+    ${props => level2Style(props)}
     .MenuItemContainer > & {
-      & > div:first-child {
-        padding-left: 52px;
-      }
-      ${({ selected, theme }) => level3Style({ selected, theme })}
+      ${props => level3Style(props)}
     }
   }
 `;
