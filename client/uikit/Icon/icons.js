@@ -23,6 +23,24 @@ const Icons = {
       animation: ${spin} 1.4s linear infinite;
     `,
   },
+  chevron_down: {
+    title: 'Chevron Down',
+    viewBox: '0 0 12 12',
+    path:
+      'M9.952 3.342a1.224 1.224 0 0 1 1.697 0 1.147 1.147 0 0 1 0 1.65l-4.8 4.666a1.224 1.224 0 0 1-1.697 0l-4.8-4.666a1.143 1.143 0 0 1 0-1.65 1.224 1.224 0 0 1 1.696 0L6 7.184l3.952-3.842z',
+    css: css`
+      height: 12px;
+    `,
+  },
+  chevron_right: {
+    title: 'Chevron Down',
+    viewBox: '0 0 12 12',
+    path:
+      'M3.342 9.952a1.224 1.224 0 0 0 0 1.697 1.147 1.147 0 0 0 1.65 0l4.666-4.8a1.224 1.224 0 0 0 0-1.697L4.992.352a1.143 1.143 0 0 0-1.65 0 1.224 1.224 0 0 0 0 1.696L7.184 6 3.342 9.952z',
+    css: css`
+      height: 12px;
+    `,
+  },
 };
 
 export default Icons;
