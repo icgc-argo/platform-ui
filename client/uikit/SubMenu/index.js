@@ -6,7 +6,7 @@ import css from '@emotion/css';
 const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
   background: ${theme.colors.white};
-  color: ${selected ? theme.colors.secondary : 'black'};
+  color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
   & > .MenuItemContent:first-of-type {
     padding: 15px;
