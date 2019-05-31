@@ -34,6 +34,7 @@ export const UserBadge = ({ name, title, imageUrl }) => (
         borderRadius: '1000px',
       }}
       src={imageUrl}
+      alt="User Image"
     />
   </UserBadgeContainer>
 );
@@ -47,7 +48,7 @@ export const Logo = ({ DomComponent = props => <span {...props} /> }) => {
   const ContainerComponent = LogoContainer.withComponent(DomComponent);
   return (
     <ContainerComponent>
-      <LogoImage src={logo} />
+      <LogoImage src={logo} alt="Argo Logo" />
     </ContainerComponent>
   );
 };

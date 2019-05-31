@@ -10,7 +10,13 @@ import { StyledTable } from './styledComponent';
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
   const selected = selectedIds.some(id => id === thisRowId);
-  return <div {...props} className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`} />;
+  return (
+    <div
+      {...props}
+      role="row"
+      className={`rt-tr ${props.className} ${selected ? 'selected' : ''}`}
+    />
+  );
 };
 
 const Table = ({
