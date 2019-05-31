@@ -84,6 +84,26 @@ export const MenuItem = ({
     </MenuItemContainer>
   );
 };
+MenuItem.propTypes = {
+  className: PropTypes.string,
+  /**
+   * provide this if you want to control the state, leave undefined otherwise
+   */
+  selected: PropTypes.bool,
+  /**
+   * indicates what nesting level to render as. undefined will respect DOM structure
+   */
+  level: PropTypes.oneOf([1, 2, 3, undefined]),
+  /**
+   * content that appears in label, can provide primitives and/or React elements
+   */
+  content: PropTypes.any,
+  /**
+   * nodes that will appear when opened
+   */
+  children: PropTypes.any,
+  onClick: PropTypes.func,
+};
 
 /*
  * Please edit me!
