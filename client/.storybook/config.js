@@ -1,6 +1,8 @@
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
+import { withA11y } from '@storybook/addon-a11y';
+
 import ReactTable from 'react-table';
 import React from 'react';
 import ReactTableContainer from './ReactTableContainer';
@@ -16,6 +18,7 @@ addParameters({
     addonPanelInRight: true,
   },
 });
+addDecorator(withA11y);
 addDecorator(
   (() => {
     const TableComponent = ({ propDefinitions }) => (
