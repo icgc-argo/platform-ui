@@ -1,8 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+
 import SubMenu, { MenuItem } from '.';
-import Button from 'uikit/Button';
-import Typography from 'uikit/Typography';
+import Button from '../Button';
+import Typography from '../Typography';
 
 const SubMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
   <SubMenu>
