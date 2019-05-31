@@ -5,16 +5,10 @@ import css from '@emotion/css';
 
 const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
-  border-top: solid 1px;
   background: ${theme.colors.white};
   color: ${selected ? theme.colors.secondary : 'black'};
-  border-top-color: ${theme.colors.grey_2};
   animation: all 1s;
-  &:last-child {
-    border-bottom: solid 1px;
-    border-bottom-color: ${theme.colors.grey_2};
-  }
-  & > div:first-child {
+  & > .MenuItemContent:first-of-type {
     padding: 15px;
     cursor: pointer;
   }
@@ -24,9 +18,10 @@ const level2Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
   border: none;
   border-left: solid 2px;
+  font-weight: normal;
   border-left-color: ${selected ? theme.colors.secondary : theme.colors.white};
   background: ${selected ? theme.colors.grey_3 : 'none'};
-  & > div:first-child {
+  & > .MenuItemContent:first-of-type {
     padding-left: 40px;
   }
 `;
@@ -36,34 +31,56 @@ const level3Style = ({ selected, theme }) => css`
   border: none;
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
-  & > div:first-child {
+  & > .MenuItemContent:first-of-type {
     padding-left: 52px;
   }
 `;
 
-const MenuItemContainer = styled('div')`
-  ${props => level1Style(props)}
+const defaultStyle = props => css`
+  ${level1Style(props)}
   .MenuItemContainer > & {
-    ${props => level2Style(props)}
+    ${level2Style(props)}
     .MenuItemContainer > & {
-      ${props => level3Style(props)}
+      ${level3Style(props)}
     }
   }
 `;
 
-export const MenuItem = ({ className = '', selected: expanded = false, children, content }) => {
-  const [selected, setselected] = React.useState(expanded);
+const MenuItemContainer = styled('div')`
+  ${({ level, ...rest }) =>
+    level === 1
+      ? level1Style(rest)
+      : level === 2
+      ? level2Style(rest)
+      : level === 3
+      ? level3Style(rest)
+      : defaultStyle(rest)}
+`;
+
+export const MenuItem = ({
+  className = '',
+  selected: controlledSelectedState,
+  level,
+  children,
+  content,
+  onClick = e => {},
+}) => {
+  const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
+  const isSelected =
+    typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
   return (
     <MenuItemContainer
-      selected={selected}
+      level={level}
+      selected={isSelected}
       onClick={e => {
         e.stopPropagation();
-        setselected(!selected);
+        setLocalSelectedState(!isSelected);
+        onClick(e);
       }}
       className={`${className} MenuItemContainer`}
     >
-      <div>{content}</div>
-      {selected && children}
+      <div className="MenuItemContent">{content}</div>
+      {isSelected && children}
     </MenuItemContainer>
   );
 };
@@ -73,6 +90,13 @@ export const MenuItem = ({ className = '', selected: expanded = false, children,
  */
 const SubMenu = styled('div')`
   background: ${({ theme }) => theme.colors.white};
+  & > ${MenuItemContainer} {
+    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
+
+    &:last-child {
+      border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
+    }
+  }
 `;
 
 SubMenu.propTypes = {
@@ -80,5 +104,7 @@ SubMenu.propTypes = {
    * Don't forget about little old prop types!
    */
 };
+
+SubMenu.Item = MenuItem;
 
 export default SubMenu;
