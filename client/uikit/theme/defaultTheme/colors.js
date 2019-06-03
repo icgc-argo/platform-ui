@@ -6,7 +6,8 @@ const grey = {
   grey: '#525767',
   grey_1: '#babcc2',
   grey_2: '#dcdde1',
-  grey_3: '#f8f8fb',
+  grey_3: '#f2f2f8',
+  grey_4: '#f8f8fb',
 };
 const primary = {
   primary_dark: '#0c1024',

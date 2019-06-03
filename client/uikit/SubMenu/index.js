@@ -11,7 +11,7 @@ const level1Style = ({ selected, theme }) => css`
   background: ${theme.colors.white};
   color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
-  & > .MenuItemContent:first-of-type {
+  & > .MenuItemContent {
     padding: 12px;
   }
 `;
@@ -22,8 +22,8 @@ const level2Style = ({ selected, theme }) => css`
   border-left: solid 2px;
   font-weight: normal;
   border-left-color: ${selected ? theme.colors.secondary : theme.colors.white};
-  background: ${selected ? theme.colors.grey_3 : 'none'};
-  & > .MenuItemContent:first-of-type {
+  background: ${selected ? theme.colors.grey_4 : 'none'};
+  & > .MenuItemContent {
     padding-left: 40px;
     padding-right: 18px;
   }
@@ -34,7 +34,7 @@ const level3Style = ({ selected, theme }) => css`
   border: none;
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
-  & > .MenuItemContent:first-of-type {
+  & > .MenuItemContent {
     padding-left: 52px;
   }
 `;
@@ -47,12 +47,15 @@ const defaultStyle = props => css`
       ${level3Style(props)}
     }
   }
-  & > .MenuItemContent:first-of-type {
+  & > .MenuItemContent {
     cursor: pointer;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    &:hover {
+      background: ${props.theme.colors.grey_3};
+    }
   }
 `;
 
