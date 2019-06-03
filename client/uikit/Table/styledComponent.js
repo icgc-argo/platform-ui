@@ -67,7 +67,7 @@ export const StyledTable = styled(ReactTable)`
 
   /* overrides hover highlight rows style */
   &.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
-    background: ${({ theme }) => theme.colors.grey_3};
+    background: ${({ theme }) => theme.colors.grey_4};
   }
 
   &.ReactTable .rt-thead.-header {

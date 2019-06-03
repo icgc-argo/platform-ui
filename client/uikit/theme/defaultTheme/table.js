@@ -2,9 +2,9 @@ import colors from './colors';
 
 export default {
   header: {
-    background: '#f2f2f8',
+    background: colors.grey_3,
   },
   body: {
-    stripedRowBackground: '#f2f2f8',
+    stripedRowBackground: colors.grey_3,
   },
 };
