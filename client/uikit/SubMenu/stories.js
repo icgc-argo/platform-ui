@@ -5,20 +5,9 @@ import React from 'react';
 import SubMenu from '.';
 import Button from '../Button';
 import Typography from '../Typography';
-import readme from './readme.md';
+import Hook from '../utils/Hook';
 
-//just a convenience component for using react hooks in storybook
-const Hook = ({
-  children = () => null,
-  render = () => null,
-  initialState,
-  effect = () => {},
-  watch,
-}) => {
-  const [state, setState] = React.useState(initialState);
-  React.useEffect(effect, watch);
-  return render ? render({ state, setState }) : children();
-};
+import readme from './readme.md';
 
 const SubMenuStories = storiesOf(`${__dirname}`, module).add(
   'Basic',
@@ -46,7 +35,7 @@ const SubMenuStories = storiesOf(`${__dirname}`, module).add(
         >
           <Hook
             initialState={0}
-            render={({ state: selectedItem, setState: setSelectedItem }) => (
+            render={([selectedItem, setSelectedItem]) => (
               <>
                 <SubMenu.Item
                   onClick={() => setSelectedItem(0)}
