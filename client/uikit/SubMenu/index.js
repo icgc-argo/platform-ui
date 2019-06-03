@@ -6,8 +6,22 @@ import css from '@emotion/css';
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 
+const defaultLabelStyle = ({ selected, theme }) => css`
+  & > .MenuItemContent {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    &:hover {
+      background: ${theme.colors.grey_3};
+    }
+  }
+`;
+
 const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
+  ${defaultLabelStyle({ theme, selected })}
   background: ${theme.colors.white};
   color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
@@ -18,6 +32,7 @@ const level1Style = ({ selected, theme }) => css`
 
 const level2Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
+  ${defaultLabelStyle({ theme, selected })}
   border: none;
   border-left: solid 2px;
   font-weight: normal;
@@ -31,6 +46,7 @@ const level2Style = ({ selected, theme }) => css`
 
 const level3Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
+  ${defaultLabelStyle({ theme, selected })}
   border: none;
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
@@ -41,20 +57,11 @@ const level3Style = ({ selected, theme }) => css`
 
 const defaultStyle = props => css`
   ${level1Style(props)}
+  ${defaultLabelStyle(props)}
   .MenuItemContainer > & {
     ${level2Style(props)}
     .MenuItemContainer > & {
       ${level3Style(props)}
-    }
-  }
-  & > .MenuItemContent {
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    &:hover {
-      background: ${props.theme.colors.grey_3};
     }
   }
 `;
@@ -130,7 +137,7 @@ MenuItem.propTypes = {
 /*
  * Please edit me!
  */
-const SubMenu = styled('div')`
+export const SubMenu = styled('div')`
   background: ${({ theme }) => theme.colors.white};
   & > ${MenuItemContainer} {
     border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
