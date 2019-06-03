@@ -27,7 +27,7 @@ const IconStories = storiesOf(`${__dirname}`, module)
   })
   .add('list', () => {
     const { fill } = createKnobs();
-    const IconDisplay = ({ iconName }) => (
+    const IconStoryDisplay = ({ iconName }) => (
       <Col md={2}>
         <div
           style={{
@@ -51,7 +51,7 @@ const IconStories = storiesOf(`${__dirname}`, module)
     return (
       <Row nogutter>
         {Object.keys(icons).map(iconName => (
-          <IconDisplay iconName={iconName} />
+          <IconStoryDisplay iconName={iconName} />
         ))}
       </Row>
     );
