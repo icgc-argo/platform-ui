@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icons from './icons';
 import { css } from '@emotion/core';
+import useTheme from '../utils/useTheme';
 
 const Icon = ({ name, width, height, fill }) => {
+  const theme = useTheme();
+
   const svg = Icons[name];
 
   return (
@@ -20,7 +23,11 @@ const Icon = ({ name, width, height, fill }) => {
     >
       <title lang="en">{svg.title}</title>
       <g>
-        <path fill={fill} fillRule={svg.fillRule || 'nonezero'} d={svg.path} />
+        <path
+          fill={theme.colors[fill] || fill}
+          fillRule={svg.fillRule || 'nonezero'}
+          d={svg.path}
+        />
       </g>
     </svg>
   );

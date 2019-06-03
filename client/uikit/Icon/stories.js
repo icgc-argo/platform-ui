@@ -1,22 +1,32 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Icon from '.';
-import icons from './icons';
 import { select } from '@storybook/addon-knobs';
+import { Container, Row, Col } from 'react-grid-system';
+import defaultTheme from '../theme/defaultTheme';
 
 import Typography from '../Typography';
-import { Container, Row, Col } from 'react-grid-system';
+import icons from './icons';
+import Icon from '.';
+
+const createKnobs = () => {
+  const fill = select('fill', [null, '#00f', ...Object.keys(defaultTheme.colors)], null);
+  return {
+    fill,
+  };
+};
 
 const IconStories = storiesOf(`${__dirname}`, module)
   .add('Icons', () => {
     const name = select('name', Object.keys(icons), 'spinner');
+    const { fill } = createKnobs();
     return (
       <div>
-        <Icon name={name} />
+        <Icon name={name} fill={fill} />
       </div>
     );
   })
   .add('list', () => {
+    const { fill } = createKnobs();
     const IconDisplay = ({ iconName }) => (
       <Col md={2}>
         <div
@@ -33,7 +43,7 @@ const IconStories = storiesOf(`${__dirname}`, module)
         >
           <Typography>{iconName}</Typography>
           <div style={{ flex: 1 }}>
-            <Icon name={iconName} />
+            <Icon name={iconName} fill={fill} />
           </div>
         </div>
       </Col>
