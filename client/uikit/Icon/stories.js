@@ -16,7 +16,7 @@ const createKnobs = () => {
 };
 
 const IconStories = storiesOf(`${__dirname}`, module)
-  .add('Icons', () => {
+  .add('Basic', () => {
     const name = select('name', Object.keys(icons), 'spinner');
     const { fill } = createKnobs();
     return (
@@ -25,7 +25,7 @@ const IconStories = storiesOf(`${__dirname}`, module)
       </div>
     );
   })
-  .add('list', () => {
+  .add('All Icons', () => {
     const { fill } = createKnobs();
     const IconStoryDisplay = ({ iconName }) => (
       <Col md={2}>
