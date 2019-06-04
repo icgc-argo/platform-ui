@@ -22,6 +22,6 @@ export const StyledInputWrapper = styled('div')`
   }};
 
   &:hover {
-    border-color: ${({ theme }) => theme.input.borderColors.hover};
+    border-color: ${({ theme, disabled }) => (!disabled ? theme.colors.secondary_1 : 'initial')};
   }
 `;
