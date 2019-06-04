@@ -21,6 +21,7 @@ const Input = ({
   size = 'sm',
   error = false,
   errorMessage = '',
+  ...props
 }) => {
   const [activeState, setActive] = useState('default');
   return (
@@ -36,6 +37,7 @@ const Input = ({
       >
         {icon && <IconWrapper>{icon}</IconWrapper>}
         <StyledInput
+          aria-label={props['aria-label']}
           placeholder={disabled ? '' : placeholder}
           value={value}
           type={type}
@@ -50,6 +52,7 @@ const Input = ({
 };
 
 Input.propTypes = {
+  ['aria-label']: PropTypes.string.isRequired,
   /**
    * commonly used configuration aliases
    */
