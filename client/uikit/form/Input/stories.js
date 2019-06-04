@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { text, boolean, radios } from '@storybook/addon-knobs';
+import { text, boolean, radios, select } from '@storybook/addon-knobs';
 
-import Input from '.';
+import Input, { INPUT_PRESETS } from '.';
 import Icon from '../../Icon';
 
 const createKnobs = () => {
@@ -37,7 +37,15 @@ const InputStories = storiesOf(`${__dirname}`, module)
       </div>
     );
   })
-  .add('With Icon', () => {
+  .add('With preset', () => {
+    const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
+    return (
+      <div style={{ width: '200px' }}>
+        <Input preset={INPUT_PRESETS.SEARCH} />
+      </div>
+    );
+  })
+  .add('With icon', () => {
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>

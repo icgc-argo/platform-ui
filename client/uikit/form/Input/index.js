@@ -5,13 +5,19 @@ import { css } from '@emotion/core';
 import Icon from '../../Icon';
 import { StyledInput, StyledInputWrapper, ErrorMsg, IconWrapper } from './styledComponents';
 
+export const INPUT_PRESETS = {
+  DEFAULT: 'default',
+  SEARCH: 'search',
+};
+
 const Input = ({
-  placeholder,
+  preset = INPUT_PRESETS.DEFAULT,
   value,
   onChange,
   type,
   disabled,
-  icon = null,
+  placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
+  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
   size = 'sm',
   error = false,
   errorMessage = '',
@@ -29,7 +35,7 @@ const Input = ({
         error={error}
         inputState={activeState}
       >
-        {icon ? <IconWrapper>{icon}</IconWrapper> : null}
+        {icon && <IconWrapper>{icon}</IconWrapper>}
         <StyledInput
           placeholder={disabled ? '' : placeholder}
           value={value}
@@ -45,6 +51,7 @@ const Input = ({
 };
 
 Input.propTypes = {
+  preset: PropTypes.oneOf([INPUT_PRESETS.DEFAULT, INPUT_PRESETS.SEARCH]),
   /**
    * Placeholder
    */
