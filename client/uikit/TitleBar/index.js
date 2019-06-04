@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import Icon from '../Icon';
+import useTheme from '../utils/useTheme';
 
-const StyledTitleBar = styled('nav')`
+const Nav = styled('nav')`
   padding: 18px 29px;
+  font-family: ${({ theme }) => theme.typography.title.fontFamily};
+
+  & a {
+    color: ${({ theme }) => theme.titleBar.linkColor};
+    text-decoration: none;
+  }
 `;
 
 const Ol = styled('ol')`
@@ -33,10 +41,13 @@ const interleave = ([x, ...xs], y) => {
 };
 
 const TitleBar = ({ children, className, id }) => {
-  /*   const theme = useTheme(); */
+  const theme = useTheme();
+
   const allItems = interleave(
     React.Children.toArray(children).filter(child => React.isValidElement(child)),
-    <Sep>/</Sep>,
+    <Sep>
+      <Icon name="slash" fill={theme.titleBar.separatorColor} />
+    </Sep>,
   ).map((child, index) =>
     child.type === Sep ? (
       <React.Fragment key={`child-${index}`}>{child}</React.Fragment>
@@ -46,9 +57,9 @@ const TitleBar = ({ children, className, id }) => {
   );
 
   return (
-    <StyledTitleBar className={className} id={id}>
+    <Nav className={className} id={id}>
       <Ol>{allItems}</Ol>
-    </StyledTitleBar>
+    </Nav>
   );
 };
 

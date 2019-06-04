@@ -1,11 +1,10 @@
-import { css } from '@emotion/core';
-
 import spinner from './collection/spinner';
 import chevron_down from './collection/chevron_down';
 import chevron_right from './collection/chevron_right';
 import dashboard from './collection/dashboard';
 import programs from './collection/programs';
 import rdpc from './collection/rdpc';
+import slash from './collection/slash';
 
 /**
  * Icon path and property lookup object
@@ -18,6 +17,7 @@ const Icons = {
   dashboard,
   programs,
   rdpc,
+  slash,
 };
 
 export default Icons;
