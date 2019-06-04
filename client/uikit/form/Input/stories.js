@@ -41,7 +41,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
     return (
       <div style={{ width: '200px' }}>
-        <Input preset={INPUT_PRESETS.SEARCH} />
+        <Input preset={preset} />
       </div>
     );
   })

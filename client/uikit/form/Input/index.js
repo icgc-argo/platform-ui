@@ -23,7 +23,6 @@ const Input = ({
   errorMessage = '',
 }) => {
   const [activeState, setActive] = useState('default');
-
   return (
     <div>
       <StyledInputWrapper
@@ -51,6 +50,9 @@ const Input = ({
 };
 
 Input.propTypes = {
+  /**
+   * commonly used configuration aliases
+   */
   preset: PropTypes.oneOf([INPUT_PRESETS.DEFAULT, INPUT_PRESETS.SEARCH]),
   /**
    * Placeholder
