@@ -1,7 +1,7 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 
-export const StyledInputWrapper = styled("div")`
+export const StyledInputWrapper = styled('div')`
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -10,13 +10,14 @@ export const StyledInputWrapper = styled("div")`
   overflow: hidden;
   border-style: solid;
   border-width: 1px;
-  color: ${({ theme, disabled }) =>
-    theme.input.textColors[disabled ? "disabled" : "default"]};
+
+  color: ${({ theme, disabled, error }) =>
+    theme.input.textColors[disabled ? 'disabled' : 'default']};
   background-color: ${({ theme, disabled }) =>
-    theme.input.colors[disabled ? "disabled" : "default"]};
+    theme.input.colors[disabled ? 'disabled' : 'default']};
   font-size: ${({ theme, size }) => theme.input.fontSizes[size]};
   border-color: ${({ theme, inputState, error, disabled }) => {
-    const state = error ? "error" : disabled ? "disabled" : inputState;
+    const state = error ? 'error' : disabled ? 'disabled' : inputState;
     return theme.input.borderColors[state];
   }};
 
@@ -25,7 +26,7 @@ export const StyledInputWrapper = styled("div")`
   }
 `;
 
-export const StyledInput = styled("input")`
+export const StyledInput = styled('input')`
   padding: ${({ theme, size }) => theme.input.paddings[size]};
   border: none;
   outline: none;
@@ -36,14 +37,14 @@ export const StyledInput = styled("input")`
   font-size: inherit;
 `;
 
-export const ErrorMsg = styled("div")`
-  color: ${({ theme }) => theme.input.textColors.error};
+export const ErrorMsg = styled('div')`
+  ${({ theme }) => css(theme.typography.caption)}
+  color: ${({ theme }) => theme.colors.error};
   margin-top: 1px;
   margin-left: 5px;
-  font-size: 12px;
 `;
 
-export const IconWrapper = styled("div")`
+export const IconWrapper = styled('div')`
   display: flex;
   align-items: center;
   margin-left: 11px;
