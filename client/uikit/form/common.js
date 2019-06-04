@@ -25,7 +25,11 @@ export const StyledInputWrapper = styled('div')`
   }};
 
   &:hover {
-    border-color: ${({ theme, disabled }) => (!disabled ? theme.colors.secondary_1 : 'initial')};
+    border-color: ${({ theme, disabled, error }) => {
+      if (disabled) return 'initial';
+      else if (error) return theme.colors.error;
+      else return theme.colors.secondary_1;
+    }};
   }
 `;
 StyledInputWrapper.propTypes = {
