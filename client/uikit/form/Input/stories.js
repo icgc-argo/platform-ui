@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import Input, { Select } from '.';
 import { text, boolean, radios } from '@storybook/addon-knobs';
-import Icon from '../Icon';
+import Icon from '../../Icon';
 
 const createKnobs = () => {
   const error = boolean('error', false);

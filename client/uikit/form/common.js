@@ -25,29 +25,3 @@ export const StyledInputWrapper = styled('div')`
     border-color: ${({ theme }) => theme.input.borderColors.hover};
   }
 `;
-
-export const StyledInput = styled('input')`
-  padding: ${({ theme, size }) => theme.input.paddings[size]};
-  border: none;
-  outline: none;
-  flex: 1;
-  width: 100%;
-  background-color: inherit;
-  color: inherit;
-  font-size: inherit;
-`;
-
-export const ErrorMsg = styled('div')`
-  ${({ theme }) => css(theme.typography.caption)}
-  color: ${({ theme }) => theme.colors.error};
-  margin-top: 1px;
-  margin-left: 5px;
-`;
-
-export const IconWrapper = styled('div')`
-  display: flex;
-  align-items: center;
-  margin-left: 11px;
-  background-color: inherit;
-  color: inherit;
-`;
