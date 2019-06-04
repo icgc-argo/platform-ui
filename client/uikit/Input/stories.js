@@ -1,24 +1,21 @@
-import { storiesOf } from "@storybook/react";
-import React from "react";
-import Input, { Select } from ".";
-import { text, boolean, radios } from "@storybook/addon-knobs";
-import Icon from "../Icon";
+import { storiesOf } from '@storybook/react';
+import React from 'react';
+import Input, { Select } from '.';
+import { text, boolean, radios } from '@storybook/addon-knobs';
+import Icon from '../Icon';
 
 const createKnobs = () => {
-  const error = boolean("error", false);
-  const disabled = boolean("disabled", false);
-  const placeholder = text("Placeholder", "Start typing here..");
-  const errorMessage = text(
-    "Error Message",
-    "Please fill out the required field."
-  );
+  const error = boolean('error', false);
+  const disabled = boolean('disabled', false);
+  const placeholder = text('Placeholder', 'Start typing here..');
+  const errorMessage = text('Error Message', 'Please fill out the required field.');
   const size = radios(
-    "size",
+    'size',
     {
-      sm: "sm",
-      lg: "lg"
+      sm: 'sm',
+      lg: 'lg',
     },
-    "sm"
+    'sm',
   );
 
   return {
@@ -26,29 +23,29 @@ const createKnobs = () => {
     errorMessage,
     disabled,
     placeholder,
-    size
+    size,
   };
 };
 
 const InputStories = storiesOf(`${__dirname}`, module)
-  .add("Basic", () => {
+  .add('Basic', () => {
     const props = createKnobs();
     return (
-      <div style={{ width: "200px" }}>
+      <div style={{ width: '200px' }}>
         <Input {...props} />
       </div>
     );
   })
-  .add("With Icon", () => {
+  .add('With Icon', () => {
     const props = createKnobs();
     return (
-      <div style={{ width: "200px" }}>
+      <div style={{ width: '200px' }}>
         <Input {...props} icon={<Icon name="search" />} />
       </div>
     );
   })
-  .add("Select", () => (
-    <div style={{ width: "200px" }}>
+  .add('Select', () => (
+    <div style={{ width: '200px' }}>
       <Select />
     </div>
   ));

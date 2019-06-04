@@ -1,14 +1,9 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
-import Icon from "../Icon";
-import {
-  StyledInput,
-  StyledInputWrapper,
-  ErrorMsg,
-  IconWrapper
-} from "./styledComponents";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
+import Icon from '../Icon';
+import { StyledInput, StyledInputWrapper, ErrorMsg, IconWrapper } from './styledComponents';
 
 const Input = ({
   placeholder,
@@ -17,17 +12,17 @@ const Input = ({
   type,
   disabled,
   icon = null,
-  size = "sm",
+  size = 'sm',
   error = false,
-  errorMessage = ""
+  errorMessage = '',
 }) => {
-  const [activeState, setActive] = useState("default");
+  const [activeState, setActive] = useState('default');
 
   return (
     <div>
       <StyledInputWrapper
-        onFocus={() => setActive("focus")}
-        onBlur={() => setActive("default")}
+        onFocus={() => setActive('focus')}
+        onBlur={() => setActive('default')}
         error={error}
         disabled={disabled}
         size={size}
@@ -36,11 +31,12 @@ const Input = ({
       >
         {icon ? <IconWrapper>{icon}</IconWrapper> : null}
         <StyledInput
-          placeholder={disabled ? "" : placeholder}
+          placeholder={disabled ? '' : placeholder}
           value={value}
           type={type}
           onChange={onChange}
           size={size}
+          disabled={disabled}
         />
       </StyledInputWrapper>
       {error && errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
@@ -56,7 +52,7 @@ Input.propTypes = {
   /**
    * Size
    */
-  size: PropTypes.oneOf(["sm", "lg"]),
+  size: PropTypes.oneOf(['sm', 'lg']),
   /**
    * Show an error?
    */
@@ -64,7 +60,7 @@ Input.propTypes = {
   /**
    * Error message to show
    */
-  errorMessage: PropTypes.string
+  errorMessage: PropTypes.string,
 };
 
 export default Input;
@@ -75,8 +71,8 @@ const DropdownIcon = styled(Icon)`
   padding: 13px;
 `;
 
-const Options = styled("ul")`
-  display: ${({ isExpanded }) => (isExpanded ? "block" : "none")};
+const Options = styled('ul')`
+  display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
   margin: 0;
   padding: 0;
   border: 1px solid grey;
@@ -87,14 +83,7 @@ const Options = styled("ul")`
   }
 `;
 
-export const Select = ({
-  placeholder,
-  value,
-  onChange,
-  type,
-  disabled,
-  size = "sm"
-}) => {
+export const Select = ({ placeholder, value, onChange, type, disabled, size = 'sm' }) => {
   const [isExpanded, setExpanded] = useState(false);
 
   return (
