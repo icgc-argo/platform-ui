@@ -44,7 +44,7 @@ const Select = ({ placeholder, value, onChange, type, disabled, size = 'sm' }) =
         >
           - Select an option -
         </div>
-        <DropdownIcon name="arrow" />
+        <DropdownIcon name="chevron_down" />
       </StyledInputWrapper>
       <Options isExpanded={isExpanded}>
         <li>Value 1</li>
