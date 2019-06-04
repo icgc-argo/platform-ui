@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import css from '@emotion/css';
+
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 
 const Nav = styled('nav')`
+  ${({ theme }) => css(theme.typography.title)};
   padding: 18px 29px;
-  font-family: ${({ theme }) => theme.typography.title.fontFamily};
-
   & a {
     color: ${({ theme }) => theme.titleBar.linkColor};
     text-decoration: none;
@@ -24,7 +25,6 @@ const Ol = styled('ol')`
 
 const Li = styled('li')`
   list-style: none;
-  font-size: 30px;
 `;
 
 const Sep = styled('li')`
@@ -33,7 +33,6 @@ const Sep = styled('li')`
   userselect: none;
   margin-left: 8px;
   margin-right: 8px;
-  font-size: 30px;
 `;
 
 const interleave = ([x, ...xs], y) => {
