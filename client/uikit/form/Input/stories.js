@@ -34,7 +34,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input onChange={action('onChange')} {...props} />
+        <Input aria-label="demo-input" onChange={action('onChange')} {...props} />
       </div>
     );
   })
@@ -42,7 +42,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
     return (
       <div style={{ width: '200px' }}>
-        <Input onChange={action('onChange')} preset={preset} />
+        <Input aria-label="demo-input" onChange={action('onChange')} preset={preset} />
       </div>
     );
   })
@@ -50,7 +50,12 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input onChange={action('onChange')} {...props} icon={<Icon name="search" />} />
+        <Input
+          aria-label="demo-input"
+          onChange={action('onChange')}
+          {...props}
+          icon={<Icon name="search" />}
+        />
       </div>
     );
   });
