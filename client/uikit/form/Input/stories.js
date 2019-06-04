@@ -1,7 +1,8 @@
-import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Input, { Select } from '.';
+import { storiesOf } from '@storybook/react';
 import { text, boolean, radios } from '@storybook/addon-knobs';
+
+import Input from '.';
 import Icon from '../../Icon';
 
 const createKnobs = () => {
@@ -43,11 +44,6 @@ const InputStories = storiesOf(`${__dirname}`, module)
         <Input {...props} icon={<Icon name="search" />} />
       </div>
     );
-  })
-  .add('Select', () => (
-    <div style={{ width: '200px' }}>
-      <Select />
-    </div>
-  ));
+  });
 
 export default InputStories;
