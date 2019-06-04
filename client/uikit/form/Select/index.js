@@ -4,60 +4,133 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import Icon from '../../Icon';
 import { StyledInputWrapper } from '../common';
+import Typography from 'uikit/Typography';
+import reactTableDefaultStyle from 'uikit/Table/reactTableDefaultStyle';
 
 const DropdownIcon = styled(Icon)`
   height: 10px;
   width: 10px;
   padding: 13px;
+  border-left: solid 1px ${({ theme }) => theme.colors.grey_1};
 `;
 
-const Options = styled('ul')`
-  display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
+const OptionsList = styled('ol')`
+  list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid grey;
+  display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
+  border: solid 1px ${({ theme }) => theme.colors.grey_1};
+  background: ${({ theme }) => theme.colors.white};
+  min-width: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 100%;
+`;
 
-  li:hover {
-    background-color: green;
+const Option = styled('li')`
+  list-style: none;
+  min-width: 100%;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondary_4};
     cursor: pointer;
   }
 `;
 
-const Select = ({ placeholder, value, onChange, type, disabled, size = 'sm' }) => {
-  const [isExpanded, setExpanded] = useState(false);
+const OffScreenSelect = styled('select')`
+  opacity: 0px;
+  position: absolute;
+  left: -90000px;
+`;
+
+const Select = ({
+  placeholder = '- Select an option -',
+  value,
+  onChange,
+  type,
+  disabled,
+  size = 'sm',
+  options = [],
+  ...props
+}) => {
   const [activeState, setActive] = useState('default');
+  const [isExpanded, setExpanded] = useState(false);
+
+  const offScreenSelectRef = React.createRef();
+  const onContainerClick = () => {
+    if (document.activeElement !== offScreenSelectRef.current) {
+      console.log('clicked');
+      offScreenSelectRef.current.focus();
+    }
+  };
+  const ariaLabel = props['aria-label'];
 
   return (
-    <div>
+    <div style={{ position: 'relative', ...(props.style || {}) }} onClick={onContainerClick}>
+      <OffScreenSelect
+        aria-label={ariaLabel}
+        ref={offScreenSelectRef}
+        value={value}
+        onChange={e => {
+          setActive('default');
+          setExpanded(false);
+          onChange(e.target.value);
+          console.log('onChange');
+        }}
+        onFocus={() => {
+          setActive('focus');
+          setExpanded(true);
+          console.log('onFocus');
+        }}
+        onBlur={() => {
+          setActive('default');
+          setExpanded(false);
+          console.log('onBlur');
+        }}
+      >
+        {options.map(({ content, value: optionValue }) => (
+          <option key={optionValue} value={optionValue}>
+            {content}
+          </option>
+        ))}
+      </OffScreenSelect>
+      <OptionsList isExpanded={isExpanded} role="listbox">
+        {options.map(({ content, value }) => (
+          <Option key={value} onClick={() => onChange(value)} role="option">
+            <Typography variant="caption">{content}</Typography>
+          </Option>
+        ))}
+      </OptionsList>
       <StyledInputWrapper
-        onFocus={() => setActive('focus')}
-        onBlur={() => setActive('default')}
-        onClick={() => setExpanded(!isExpanded)}
+        style={{ zIndex: 1 }}
         disabled={disabled}
         size={size}
         inputState={activeState}
+        role="button"
       >
-        <div
+        <Typography
+          variant="caption"
           css={css`
             flex: 1;
+            padding-left: 10px;
           `}
         >
-          - Select an option -
-        </div>
+          {(value && options.find(({ value: optionValue }) => optionValue === value).content) ||
+            placeholder}
+        </Typography>
         <DropdownIcon name="chevron_down" />
       </StyledInputWrapper>
-      <Options isExpanded={isExpanded}>
-        <li>Value 1</li>
-        <li>Value 2</li>
-      </Options>
     </div>
   );
 };
 
 Select.propTypes = {
-  /*
-   * Don't forget about little old prop types!
-   */
+  ['aria-label']: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      content: PropTypes.node.isRequired,
+    }),
+  ),
 };
 
 export default Select;

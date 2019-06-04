@@ -18,7 +18,9 @@ export const ErrorMsg = styled('div')`
   ${({ theme }) => css(theme.typography.caption)}
   color: ${({ theme }) => theme.colors.error};
   margin-top: 1px;
-  margin-left: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 100%;
 `;
 
 export const IconWrapper = styled('div')`
