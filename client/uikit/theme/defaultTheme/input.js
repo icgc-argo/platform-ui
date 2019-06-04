@@ -7,15 +7,14 @@ export default {
   },
   textColors: {
     default: colors.black,
-    disabled: colors.light_blue_grey,
-    error: colors.red_error_message,
+    disabled: '#d0d1d8',
+    error: '#d0d1d8',
   },
   borderColors: {
     default: colors.grey_1,
-    hover: colors.lightblue,
     active: colors.grey,
     focus: colors.grey,
-    disabled: colors.red,
+    disabled: colors.grey_2,
     error: colors.error,
   },
   colors: {
