@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 import { css } from '@emotion/core';
+
+import { INPUT_STATES } from '../theme/defaultTheme/input';
 
 export const StyledInputWrapper = styled('div')`
   cursor: pointer;
@@ -25,3 +28,8 @@ export const StyledInputWrapper = styled('div')`
     border-color: ${({ theme, disabled }) => (!disabled ? theme.colors.secondary_1 : 'initial')};
   }
 `;
+StyledInputWrapper.propTypes = {
+  disabled: PropTypes.bool,
+  error: PropTypes.bool,
+  inputState: PropTypes.oneOf(Object.values(INPUT_STATES)),
+};
