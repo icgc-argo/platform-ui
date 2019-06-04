@@ -4,6 +4,7 @@ import { text, boolean, radios, select } from '@storybook/addon-knobs';
 
 import Input, { INPUT_PRESETS } from '.';
 import Icon from '../../Icon';
+import { action } from '@storybook/addon-actions';
 
 const createKnobs = () => {
   const error = boolean('error', false);
@@ -33,7 +34,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input {...props} />
+        <Input onChange={action('onChange')} {...props} />
       </div>
     );
   })
@@ -41,7 +42,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
     return (
       <div style={{ width: '200px' }}>
-        <Input preset={preset} />
+        <Input onChange={action('onChange')} preset={preset} />
       </div>
     );
   })
@@ -49,7 +50,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input {...props} icon={<Icon name="search" />} />
+        <Input onChange={action('onChange')} {...props} icon={<Icon name="search" />} />
       </div>
     );
   });
