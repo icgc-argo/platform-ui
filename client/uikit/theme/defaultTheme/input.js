@@ -19,6 +19,6 @@ export default {
   },
   colors: {
     default: colors.white,
-    disabled: colors.pale_grey,
+    disabled: '#f6f6f7',
   },
 };
