@@ -12,6 +12,6 @@ describe('TitleBar', () => {
         </TitleBar>
       </ThemeProvider>,
     );
-    expect(wrapper.contains('link in titlebar '));
+    expect(wrapper.contains('link in title'));
   });
 });

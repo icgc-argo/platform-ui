@@ -17,8 +17,8 @@ const TitleBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const props = createKnobs();
   return (
     <TitleBar {...props}>
-      <span>Main Section</span>
-      <a href="">Subsection</a>
+      <>Program Name</>
+      <>Subsection</>
     </TitleBar>
   );
 });

@@ -46,7 +46,7 @@ const TitleBar = ({ children, className, id }) => {
   const allItems = interleave(
     React.Children.toArray(children).filter(child => React.isValidElement(child)),
     <Sep>
-      <Icon name="slash" fill={theme.titleBar.separatorColor} />
+      <Icon width="12px" height="12px" name="chevron_right" fill={theme.titleBar.separatorColor} />
     </Sep>,
   ).map((child, index) =>
     child.type === Sep ? (
