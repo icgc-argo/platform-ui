@@ -80,11 +80,7 @@ MenuItem.propTypes = {
 export const SubMenu = styled('div')`
   background: ${({ theme }) => theme.colors.white};
   & > ${MenuItemContainer} {
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
-
-    &:last-child {
-      border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-    }
+    border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
 `;
 
