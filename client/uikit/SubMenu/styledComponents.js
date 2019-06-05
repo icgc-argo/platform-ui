@@ -75,6 +75,9 @@ export const MenuItemContainer = styled('div')`
 
 export const IconContainer = styled('span')`
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ContentContainer = styled('span')`
