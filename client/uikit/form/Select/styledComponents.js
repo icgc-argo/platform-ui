@@ -27,7 +27,8 @@ export const OptionsList = styled('ol')`
 
 const OptionContainer = styled('li')`
   list-style: none;
-  min-width: 100%;
+  min: 100%;
+  padding: 5px 7px;
   &:hover {
     background-color: ${({ theme }) => theme.colors.secondary_4};
     cursor: pointer;
@@ -37,10 +38,7 @@ const OptionContainer = styled('li')`
 const OptionContent = withProps(() => ({
   variant: 'paragraph',
   component: 'span',
-}))(styled(Typography)`
-  padding: 7px;
-  line-height: 14px;
-`);
+}))(Typography);
 
 export const Option = ({ value, children, ...props }) => (
   <OptionContainer role="option" {...props}>
