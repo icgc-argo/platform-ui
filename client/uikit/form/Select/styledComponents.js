@@ -16,7 +16,7 @@ export const OptionsList = styled('ol')`
   list-style: none;
   margin: 0;
   padding: 0;
-  display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
+  display: block;
   border: solid 1px ${({ theme }) => theme.colors.grey_1};
   background: ${({ theme }) => theme.colors.white};
   min-width: 100%;

@@ -61,13 +61,6 @@ const Select = ({
           </option>
         ))}
       </HiddenSelect>
-      <OptionsList isExpanded={isExpanded} role="listbox">
-        {options.map(({ content, value: optionValue }) => (
-          <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
-            {content}
-          </Option>
-        ))}
-      </OptionsList>
       <StyledInputWrapper
         size={size}
         style={{ zIndex: 1 }}
@@ -89,6 +82,15 @@ const Select = ({
         </Typography>
         <DropdownIcon name="chevron_down" />
       </StyledInputWrapper>
+      {isExpanded && (
+        <OptionsList role="listbox">
+          {options.map(({ content, value: optionValue }) => (
+            <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
+              {content}
+            </Option>
+          ))}
+        </OptionsList>
+      )}
     </div>
   );
 };
