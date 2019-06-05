@@ -23,6 +23,7 @@ export const OptionsList = styled('ol')`
   box-sizing: border-box;
   position: absolute;
   top: 100%;
+  z-index: 100;
 `;
 
 const OptionContainer = styled('li')`
