@@ -29,7 +29,7 @@ export const OptionsList = styled('ol')`
 const OptionContainer = styled('li')`
   list-style: none;
   min: 100%;
-  padding: 5px 7px;
+  padding: 5px 10px;
   &:hover {
     background-color: ${({ theme }) => theme.colors.secondary_4};
     cursor: pointer;
