@@ -47,6 +47,9 @@ const level3Style = ({ selected, theme }) => css`
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
   & > .MenuItemContent {
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     padding-left: 52px;
   }
 `;
