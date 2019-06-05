@@ -9,6 +9,7 @@ const defaultLabelStyle = ({ selected, theme }) => css`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    color: ${selected ? theme.colors.secondary_dark : theme.colors.primary};
     &:hover {
       background: ${theme.colors.grey_3};
     }
@@ -19,7 +20,6 @@ const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
   ${defaultLabelStyle({ theme, selected })}
   background: ${theme.colors.white};
-  color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
   & > .MenuItemContent {
     padding: 12px;
