@@ -94,8 +94,8 @@ const Select = ({
         ))}
       </OffScreenSelect>
       <OptionsList isExpanded={isExpanded} role="listbox">
-        {options.map(({ content, value }) => (
-          <Option key={value} onClick={() => onChange(value)} role="option">
+        {options.map(({ content, value: optionValue }) => (
+          <Option key={optionValue} onClick={() => onChange(optionValue)} role="option">
             <Typography variant="caption">{content}</Typography>
           </Option>
         ))}
