@@ -12,10 +12,11 @@ const Select = ({
   placeholder = '- Select an option -',
   value,
   onChange,
-  type,
   disabled,
   size = 'sm',
   options = [],
+  error = false,
+  errorMessage = '',
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
@@ -74,6 +75,7 @@ const Select = ({
       >
         <Typography
           variant="paragraph"
+          disabled={disabled}
           color={isSomethingSelected || isExpanded ? 'black' : 'grey'}
           css={css`
             flex: 1;
@@ -107,6 +109,8 @@ Select.propTypes = {
       content: PropTypes.node.isRequired,
     }),
   ),
+  error: PropTypes.bool,
+  errorMessage: PropTypes.string,
 };
 
 export default Select;
