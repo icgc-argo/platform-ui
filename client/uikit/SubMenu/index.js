@@ -36,7 +36,7 @@ export const MenuItem = ({
           {icon && (
             <IconContainer>
               {React.cloneElement(icon, {
-                fill: isSelected ? theme.colors.secondary_dark : theme.colors.black,
+                fill: isSelected ? 'secondary_dark' : 'primary',
               })}
             </IconContainer>
           )}
@@ -45,7 +45,7 @@ export const MenuItem = ({
         {children && content && (
           <Icon
             name={isSelected ? 'chevron_down' : 'chevron_right'}
-            fill={isSelected ? theme.colors.secondary : theme.colors.black}
+            fill={isSelected ? 'secondary' : 'primary'}
           />
         )}
       </div>
