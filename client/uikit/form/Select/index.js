@@ -37,6 +37,10 @@ const Select = ({
         }
       }}
     >
+      {/**
+       * This HiddenSelect component exists to sync up the focus state with the browser's
+       * native behavior as much as possible for improved accessibility
+       **/}
       <HiddenSelect
         aria-label={ariaLabel}
         ref={HiddenSelectRef}
