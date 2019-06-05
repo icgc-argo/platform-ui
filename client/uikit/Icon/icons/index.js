@@ -6,6 +6,7 @@ import programs from './collection/programs';
 import rdpc from './collection/rdpc';
 import slash from './collection/slash';
 import search from './collection/search';
+import times from './collection/times';
 
 /**
  * Icon path and property lookup object
@@ -20,6 +21,7 @@ const Icons = {
   rdpc,
   slash,
   search,
+  times,
 };
 
 export default Icons;

@@ -4,8 +4,8 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import Icon from '../../Icon';
 import { StyledInputWrapper } from '../common';
-import Typography from 'uikit/Typography';
-import reactTableDefaultStyle from 'uikit/Table/reactTableDefaultStyle';
+import Typography from '../../Typography';
+import reactTableDefaultStyle from '../../Table/reactTableDefaultStyle';
 
 const DropdownIcon = styled(Icon)`
   height: 10px;
