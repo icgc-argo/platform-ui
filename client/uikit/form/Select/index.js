@@ -24,6 +24,10 @@ const Select = ({
   const HiddenSelectRef = React.createRef();
   const ariaLabel = props['aria-label'];
 
+  const isSomethingSelected = !!(
+    value && options.find(({ value: optionValue }) => optionValue === value).content
+  );
+
   return (
     <div
       style={{ position: 'relative', ...(props.style || {}) }}
@@ -73,6 +77,7 @@ const Select = ({
       >
         <Typography
           variant="paragraph"
+          color={isSomethingSelected || isExpanded ? 'black' : 'grey'}
           css={css`
             flex: 1;
             padding-left: 10px;
