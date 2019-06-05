@@ -6,6 +6,7 @@ import SubMenu from '.';
 import Button from '../Button';
 import Typography from '../Typography';
 import Hook from '../utils/Hook';
+import Icon from '../Icon';
 
 import readme from './readme.md';
 
@@ -13,9 +14,19 @@ const SubMenuStories = storiesOf(`${__dirname}`, module).add(
   'Basic',
   () => (
     <SubMenu>
-      <SubMenu.Item content="DCC Dashboard" selected={false} onClick={action('clicked')} />
-      <SubMenu.Item content="RDPCs" selected={false} onClick={action('clicked')} />
-      <SubMenu.Item content="Programs" selected>
+      <SubMenu.Item
+        icon={<Icon name="dashboard" />}
+        content={'DCC Dashboard'}
+        selected={false}
+        onClick={action('clicked')}
+      />
+      <SubMenu.Item
+        icon={<Icon name="rdpc" />}
+        content="RDPCs"
+        selected={false}
+        onClick={action('clicked')}
+      />
+      <SubMenu.Item icon={<Icon name="programs" />} content="Programs" selected>
         <SubMenu.Item
           level={1}
           selected={false}

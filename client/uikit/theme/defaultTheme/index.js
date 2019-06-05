@@ -4,6 +4,7 @@ import appBar from './appBar';
 import typography from './typography';
 import table from './table';
 import titleBar from './titleBar';
+import input from './input';
 
 export default {
   colors,
@@ -12,4 +13,5 @@ export default {
   typography,
   table,
   titleBar,
+  input,
 };

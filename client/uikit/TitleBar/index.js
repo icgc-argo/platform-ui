@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import css from '@emotion/css';
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 
 const Nav = styled('nav')`
   padding: 18px 29px;
-  font-family: ${({ theme }) => theme.typography.title.fontFamily};
-
+  ${({ theme }) => css(theme.typography.title)};
   & a {
     color: ${({ theme }) => theme.titleBar.linkColor};
     text-decoration: none;

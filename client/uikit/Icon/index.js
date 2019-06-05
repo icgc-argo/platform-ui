@@ -4,9 +4,8 @@ import Icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 
-const Icon = ({ name, width, height, fill }) => {
+const Icon = ({ name, width, height, fill, className }) => {
   const theme = useTheme();
-
   const svg = Icons[name];
 
   return (
@@ -16,6 +15,7 @@ const Icon = ({ name, width, height, fill }) => {
         height: ${height};
         width: ${width};
       `}
+      className={className}
       width={width}
       height={height}
       viewBox={svg.viewBox}
@@ -23,10 +23,16 @@ const Icon = ({ name, width, height, fill }) => {
     >
       <title lang="en">{svg.title}</title>
       <g>
+        {svg.mask ? (
+          <mask id="mask" fill="#fff">
+            <path d={svg.mask} />
+          </mask>
+        ) : null}
         <path
-          fill={theme.colors[fill] || fill}
+          fill={theme.colors[fill] || fill || svg.defaultFill}
           fillRule={svg.fillRule || 'nonezero'}
           d={svg.path}
+          mask={svg.mask ? 'url(#mask)' : ''}
         />
       </g>
     </svg>
