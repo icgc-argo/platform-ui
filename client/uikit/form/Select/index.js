@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import Icon from '../../Icon';
+
 import { StyledInputWrapper } from '../common';
-import Typography from 'uikit/Typography';
-import reactTableDefaultStyle from 'uikit/Table/reactTableDefaultStyle';
+import Icon from '../../Icon';
+import Typography from '../../Typography';
 
 const DropdownIcon = styled(Icon)`
   height: 10px;
