@@ -27,6 +27,7 @@ const Input = ({
   return (
     <div>
       <StyledInputWrapper
+        size={size}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
         error={error}

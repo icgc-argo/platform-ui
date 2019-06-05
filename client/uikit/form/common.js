@@ -13,6 +13,16 @@ export const StyledInputWrapper = styled('div')`
   overflow: hidden;
   border-style: solid;
   border-width: 1px;
+  height: ${({ size = 'sm' }) => {
+    switch (size) {
+      case 'sm':
+        return '30px';
+      case 'lg':
+        return '36px';
+      default:
+        return '30px';
+    }
+  }};
 
   color: ${({ theme, disabled, error }) =>
     theme.input.textColors[disabled ? 'disabled' : 'default']};
