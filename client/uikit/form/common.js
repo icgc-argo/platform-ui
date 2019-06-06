@@ -4,6 +4,11 @@ import { css } from '@emotion/core';
 
 import { INPUT_STATES } from '../theme/defaultTheme/input';
 
+export const INPUT_SIZES = {
+  SM: 'sm',
+  LG: 'lg',
+};
+
 export const StyledInputWrapper = styled('div')`
   cursor: pointer;
   display: flex;
@@ -13,11 +18,11 @@ export const StyledInputWrapper = styled('div')`
   overflow: hidden;
   border-style: solid;
   border-width: 1px;
-  height: ${({ size = 'sm' }) => {
+  height: ${({ size = INPUT_SIZES.SM }) => {
     switch (size) {
-      case 'sm':
+      case INPUT_SIZES.SM:
         return '30px';
-      case 'lg':
+      case INPUT_SIZES.LG:
         return '36px';
       default:
         return '30px';
@@ -46,4 +51,5 @@ StyledInputWrapper.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,
   inputState: PropTypes.oneOf(Object.values(INPUT_STATES)),
+  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
 };
