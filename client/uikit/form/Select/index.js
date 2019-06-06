@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { withProps } from 'recompose';
 
-import { StyledInputWrapper } from '../common';
+import { StyledInputWrapper, INPUT_SIZES } from '../common';
 import Typography from '../../Typography';
 import { DropdownIcon, OptionsList, Option, HiddenSelect } from './styledComponents';
 
@@ -13,7 +13,7 @@ const Select = ({
   value,
   onChange,
   disabled,
-  size = 'sm',
+  size = INPUT_SIZES.SM,
   options = [],
   error = false,
   errorMessage = '',
@@ -109,6 +109,7 @@ Select.propTypes = {
       content: PropTypes.node.isRequired,
     }),
   ),
+  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
 };
