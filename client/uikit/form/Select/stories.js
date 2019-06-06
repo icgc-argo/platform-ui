@@ -28,19 +28,32 @@ const createKnobs = () => {
   };
 };
 
-const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <div style={{ width: '200px' }}>
-    <Select
-      aria-label="demo-select"
-      options={[
-        { content: 'Value 1', value: 'v1' },
-        { content: 'Value 2', value: 'v2' },
-        { content: 'Value 3', value: 'v3' },
-        { content: 'Value 4', value: 'v4' },
-      ]}
-      onChange={action('onChange')}
-    />
-  </div>
-));
+const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  return (
+    <div style={{ width: '200px' }}>
+      <Select
+        aria-label="demo-select"
+        options={[
+          { content: 'Value 1', value: 'v1' },
+          { content: 'Value 2', value: 'v2' },
+          { content: 'Value 3', value: 'v3' },
+          { content: 'Value 4', value: 'v4' },
+        ]}
+        onChange={action('onChange')}
+      />
+      <Select
+        aria-label="demo-select"
+        value="v1"
+        options={[
+          { content: 'Value 1', value: 'v1' },
+          { content: 'Value 2', value: 'v2' },
+          { content: 'Value 3', value: 'v3' },
+          { content: 'Value 4', value: 'v4' },
+        ]}
+        onChange={action('onChange')}
+      />
+    </div>
+  );
+});
 
 export default InputStories;

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+
 import Icon from '../../Icon';
-import { StyledInput, StyledInputWrapper, ErrorMsg, IconWrapper } from './styledComponents';
+import { INPUT_SIZES, StyledInputWrapper } from '../common';
+import { StyledInput, ErrorMsg, IconWrapper } from './styledComponents';
 
 export const INPUT_PRESETS = {
   DEFAULT: 'default',
@@ -18,7 +20,7 @@ const Input = ({
   disabled,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
-  size = 'sm',
+  size = INPUT_SIZES.SM,
   error = false,
   errorMessage = '',
   ...props
@@ -27,6 +29,7 @@ const Input = ({
   return (
     <div>
       <StyledInputWrapper
+        size={size}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
         error={error}
@@ -64,7 +67,7 @@ Input.propTypes = {
   /**
    * Size
    */
-  size: PropTypes.oneOf(['sm', 'lg']),
+  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
   /**
    * Show an error?
    */

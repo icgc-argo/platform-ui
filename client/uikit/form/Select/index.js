@@ -2,89 +2,62 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import { withProps } from 'recompose';
 
-import { StyledInputWrapper } from '../common';
-import Icon from '../../Icon';
+import { StyledInputWrapper, INPUT_SIZES } from '../common';
 import Typography from '../../Typography';
-
-const DropdownIcon = styled(Icon)`
-  height: 10px;
-  width: 10px;
-  padding: 13px;
-  border-left: solid 1px ${({ theme }) => theme.colors.grey_1};
-`;
-
-const OptionsList = styled('ol')`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
-  border: solid 1px ${({ theme }) => theme.colors.grey_1};
-  background: ${({ theme }) => theme.colors.white};
-  min-width: 100%;
-  box-sizing: border-box;
-  position: absolute;
-  top: 100%;
-`;
-
-const Option = styled('li')`
-  list-style: none;
-  min-width: 100%;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.secondary_4};
-    cursor: pointer;
-  }
-`;
-
-const OffScreenSelect = styled('select')`
-  opacity: 0px;
-  position: absolute;
-  left: -90000px;
-`;
+import { DropdownIcon, OptionsList, Option, HiddenSelect } from './styledComponents';
 
 const Select = ({
   placeholder = '- Select an option -',
   value,
   onChange,
-  type,
   disabled,
-  size = 'sm',
+  size = INPUT_SIZES.SM,
   options = [],
+  error = false,
+  errorMessage = '',
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
   const [isExpanded, setExpanded] = useState(false);
 
-  const offScreenSelectRef = React.createRef();
-  const onContainerClick = () => {
-    if (document.activeElement !== offScreenSelectRef.current) {
-      console.log('clicked');
-      offScreenSelectRef.current.focus();
-    }
-  };
+  const HiddenSelectRef = React.createRef();
   const ariaLabel = props['aria-label'];
 
+  const isSomethingSelected = !!(
+    value && options.find(({ value: optionValue }) => optionValue === value).content
+  );
+
   return (
-    <div style={{ position: 'relative', ...(props.style || {}) }} onClick={onContainerClick}>
-      <OffScreenSelect
+    <div
+      style={{ position: 'relative', ...(props.style || {}) }}
+      onClick={() => {
+        if (document.activeElement !== HiddenSelectRef.current) {
+          HiddenSelectRef.current.focus();
+        }
+      }}
+    >
+      {/**
+       * This HiddenSelect component exists to sync up the focus state with the browser's
+       * native behavior as much as possible for improved accessibility
+       **/}
+      <HiddenSelect
         aria-label={ariaLabel}
-        ref={offScreenSelectRef}
+        ref={HiddenSelectRef}
         value={value}
         onChange={e => {
           setActive('default');
           setExpanded(false);
           onChange(e.target.value);
-          console.log('onChange');
         }}
         onFocus={() => {
           setActive('focus');
           setExpanded(true);
-          console.log('onFocus');
         }}
         onBlur={() => {
           setActive('default');
           setExpanded(false);
-          console.log('onBlur');
         }}
       >
         {options.map(({ content, value: optionValue }) => (
@@ -92,26 +65,22 @@ const Select = ({
             {content}
           </option>
         ))}
-      </OffScreenSelect>
-      <OptionsList isExpanded={isExpanded} role="listbox">
-        {options.map(({ content, value: optionValue }) => (
-          <Option key={optionValue} onClick={() => onChange(optionValue)} role="option">
-            <Typography variant="caption">{content}</Typography>
-          </Option>
-        ))}
-      </OptionsList>
+      </HiddenSelect>
       <StyledInputWrapper
+        size={size}
         style={{ zIndex: 1 }}
         disabled={disabled}
-        size={size}
         inputState={activeState}
         role="button"
       >
         <Typography
-          variant="caption"
+          variant="paragraph"
+          disabled={disabled}
+          color={isSomethingSelected || isExpanded ? 'black' : 'grey'}
           css={css`
             flex: 1;
             padding-left: 10px;
+            line-height: 0;
           `}
         >
           {(value && options.find(({ value: optionValue }) => optionValue === value).content) ||
@@ -119,6 +88,15 @@ const Select = ({
         </Typography>
         <DropdownIcon name="chevron_down" />
       </StyledInputWrapper>
+      {isExpanded && (
+        <OptionsList role="listbox">
+          {options.map(({ content, value: optionValue }) => (
+            <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
+              {content}
+            </Option>
+          ))}
+        </OptionsList>
+      )}
     </div>
   );
 };
@@ -131,6 +109,9 @@ Select.propTypes = {
       content: PropTypes.node.isRequired,
     }),
   ),
+  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
+  error: PropTypes.bool,
+  errorMessage: PropTypes.string,
 };
 
 export default Select;
