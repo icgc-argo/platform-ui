@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { withProps } from 'recompose';
-import useTheme from 'uikit/utils/useTheme';
 
 import { StyledInputWrapper, INPUT_SIZES } from '../common';
 import Typography from '../../Typography';
 import { DropdownIcon, OptionsList, Option, HiddenSelect } from './styledComponents';
-import { themes } from '@storybook/theming';
+import useTheme from '../../utils/useTheme';
 
 const Select = ({
   placeholder = '- Select an option -',
