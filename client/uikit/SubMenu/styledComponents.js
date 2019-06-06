@@ -9,6 +9,7 @@ const defaultLabelStyle = ({ selected, theme }) => css`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    color: ${selected ? theme.colors.secondary_dark : theme.colors.primary};
     &:hover {
       background: ${theme.colors.grey_3};
     }
@@ -19,7 +20,6 @@ const level1Style = ({ selected, theme }) => css`
   ${css(theme.typography.navigation)}
   ${defaultLabelStyle({ theme, selected })}
   background: ${theme.colors.white};
-  color: ${selected ? theme.colors.secondary_dark : 'black'};
   animation: all 1s;
   & > .MenuItemContent {
     padding: 12px;
@@ -47,6 +47,9 @@ const level3Style = ({ selected, theme }) => css`
   font-weight: normal;
   background: ${selected ? theme.colors.secondary_4 : 'none'};
   & > .MenuItemContent {
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     padding-left: 52px;
   }
 `;
@@ -75,6 +78,9 @@ export const MenuItemContainer = styled('div')`
 
 export const IconContainer = styled('span')`
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ContentContainer = styled('span')`

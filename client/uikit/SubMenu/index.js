@@ -36,7 +36,7 @@ export const MenuItem = ({
           {icon && (
             <IconContainer>
               {React.cloneElement(icon, {
-                fill: isSelected ? theme.colors.secondary_dark : theme.colors.black,
+                fill: isSelected ? 'secondary_dark' : 'primary',
               })}
             </IconContainer>
           )}
@@ -45,7 +45,7 @@ export const MenuItem = ({
         {children && content && (
           <Icon
             name={isSelected ? 'chevron_down' : 'chevron_right'}
-            fill={isSelected ? theme.colors.secondary : theme.colors.black}
+            fill={isSelected ? 'secondary' : 'primary'}
           />
         )}
       </div>
@@ -80,11 +80,7 @@ MenuItem.propTypes = {
 export const SubMenu = styled('div')`
   background: ${({ theme }) => theme.colors.white};
   & > ${MenuItemContainer} {
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
-
-    &:last-child {
-      border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-    }
+    border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
 `;
 
