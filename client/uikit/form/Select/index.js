@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { withProps } from 'recompose';
+import useTheme from 'uikit/utils/useTheme';
 
 import { StyledInputWrapper, INPUT_SIZES } from '../common';
 import Typography from '../../Typography';
 import { DropdownIcon, OptionsList, Option, HiddenSelect } from './styledComponents';
+import { themes } from '@storybook/theming';
 
 const Select = ({
   placeholder = '- Select an option -',
   value,
   onChange,
-  disabled,
+  disabled = false,
   size = INPUT_SIZES.SM,
   options = [],
   error = false,
@@ -28,6 +30,8 @@ const Select = ({
   const isSomethingSelected = !!(
     value && options.find(({ value: optionValue }) => optionValue === value).content
   );
+
+  const theme = useTheme();
 
   return (
     <div
@@ -59,6 +63,7 @@ const Select = ({
           setActive('default');
           setExpanded(false);
         }}
+        disabled={disabled}
       >
         {options.map(({ content, value: optionValue }) => (
           <option key={optionValue} value={optionValue}>
@@ -72,11 +77,18 @@ const Select = ({
         disabled={disabled}
         inputState={activeState}
         role="button"
+        disabled={disabled}
       >
         <Typography
           variant="paragraph"
           disabled={disabled}
-          color={isSomethingSelected || isExpanded ? 'black' : 'grey'}
+          color={
+            disabled
+              ? theme.input.textColors.disabled
+              : isSomethingSelected || isExpanded
+              ? 'black'
+              : 'grey'
+          }
           css={css`
             flex: 1;
             padding-left: 10px;
@@ -86,7 +98,7 @@ const Select = ({
           {(value && options.find(({ value: optionValue }) => optionValue === value).content) ||
             placeholder}
         </Typography>
-        <DropdownIcon name="chevron_down" />
+        <DropdownIcon disabled={disabled} theme={theme} />
       </StyledInputWrapper>
       {isExpanded && (
         <OptionsList role="listbox">
@@ -112,6 +124,7 @@ Select.propTypes = {
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default Select;
