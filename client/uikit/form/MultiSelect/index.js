@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Icon from '../../Icon';
 import Option from './Option';
 import css from '@emotion/css';
+import Tag from '../../Tag';
 
 const Container = styled('div')`
   position: relative;
@@ -81,19 +82,11 @@ const PlaceHolder = styled('span')`
   pointer-events: none;
 `;
 
-const SelectedItem = styled('span')`
+const SelectedItem = styled(Tag)`
   box-sizing: border-box;
-  display: block;
-  min-height: 14px;
-  ${({ theme }) => css(theme.typography.paragraph)};
   font-size: 11px;
   margin-bottom: 7px;
-  line-height: 14px;
-  font-weight: bold;
-  padding: 3px 8px;
-  border-radius: 8px;
-  background-color: #0774d3;
-  color: white;
+  margin-top: 0;
   margin-right: 5px;
   cursor: pointer;
 `;
