@@ -14,7 +14,6 @@
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "test-uikit": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
     "test": "mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
-    "ngrok": "ngrok"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -77,7 +76,6 @@
     "husky": "^2.2.0",
     "inquirer": "^6.3.1",
     "mocha": "^6.1.2",
-    "ngrok": "^3.1.1",
     "nightwatch": "^1.0.19",
     "nodemon": "^1.19.0",
     "plop": "^2.3.0",
