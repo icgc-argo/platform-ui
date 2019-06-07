@@ -23,11 +23,12 @@ const Input = ({
   size = INPUT_SIZES.SM,
   error = false,
   errorMessage = '',
+  className,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
   return (
-    <div>
+    <div className={className}>
       <StyledInputWrapper
         size={size}
         onFocus={() => setActive('focus')}

@@ -87,4 +87,5 @@ export const ContentContainer = styled('span')`
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex: 1;
 `;
