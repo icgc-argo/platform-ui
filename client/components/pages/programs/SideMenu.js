@@ -19,8 +19,15 @@ import {
 import { mockPrograms } from './mockData';
 import Table from 'uikit/Table';
 
+const useToggledSelectState = (initialIndex = -1) => {
+  const [activeItem, setActiveItem] = React.useState(initialIndex);
+  const toggleItem = itemIndex =>
+    itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
+  return [activeItem, toggleItem];
+};
+
 const ProgramsSection = ({ initialProgram, programs }) => {
-  const [activeProgramShortName, setActiveProgramShortName] = React.useState(initialProgram);
+  const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const filteredPrograms = programs.filter(
     ({ shortName }) =>
@@ -43,32 +50,35 @@ const ProgramsSection = ({ initialProgram, programs }) => {
           />
         }
       />
-      {filteredPrograms.map(program => (
-        <MenuItem
-          key={program.shortName}
-          content={program.shortName}
-          onClick={() => setActiveProgramShortName(program.shortName)}
-          selected={activeProgramShortName === program.shortName}
-        >
-          <MenuItem content="Dashboard" />
-          <MenuItem content="ID Registration" />
-          <MenuItem content="Clinical Submission" />
-          <MenuItem content="Genomic Submission" />
-          <MenuItem content="Manage Token" />
-        </MenuItem>
-      ))}
+      {filteredPrograms.map((program, programIndex) => {
+        return (
+          <MenuItem
+            key={program.shortName}
+            content={program.shortName}
+            onClick={() => toggleProgramIndex(programIndex)}
+            selected={programIndex === activeProgramIndex}
+          >
+            <MenuItem content="Dashboard" />
+            <MenuItem content="ID Registration" />
+            <MenuItem content="Clinical Submission" />
+            <MenuItem content="Genomic Submission" />
+            <MenuItem content="Manage Token" />
+          </MenuItem>
+        );
+      })}
     </>
   );
 };
 
-export default ({ programs }) => {
+export default ({ programs, initialShownItem = -1 }) => {
+  const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
   return (
     <Submenu>
       <MenuItem content={'DCC Dashboard'} />
-      <MenuItem content={'RDPCs'}>
+      <MenuItem content={'RDPCs'} selected={activeItem === 0} onClick={() => toggleItem(0)}>
         <MenuItem content="what goes here?" />
       </MenuItem>
-      <MenuItem content={'Programs'}>
+      <MenuItem content={'Programs'} selected={activeItem === 1} onClick={() => toggleItem(1)}>
         <ProgramsSection initialProgram={''} programs={programs} />
       </MenuItem>
     </Submenu>
