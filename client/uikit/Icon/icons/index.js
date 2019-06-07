@@ -7,6 +7,7 @@ import rdpc from './collection/rdpc';
 import slash from './collection/slash';
 import search from './collection/search';
 import times from './collection/times';
+import asterisk from './collection/asterisk';
 
 /**
  * Icon path and property lookup object
@@ -22,6 +23,7 @@ const Icons = {
   slash,
   search,
   times,
+  asterisk,
 };
 
 export default Icons;

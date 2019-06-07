@@ -91,7 +91,7 @@ const SelectedItem = styled(Tag)`
   cursor: pointer;
 `;
 
-function MultiSelect({ name, value, children, onChange, placeholder }) {
+function MultiSelect({ name, value, children, onChange, placeholder, inputProps }) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
 
@@ -188,7 +188,7 @@ function MultiSelect({ name, value, children, onChange, placeholder }) {
           </OptionsContainer>
         </OptionsWrapper>
       )}
-      <input value={value} name={name} type="hidden" />
+      <input value={value} name={name} type="hidden" {...inputProps} />
     </Container>
   );
 }

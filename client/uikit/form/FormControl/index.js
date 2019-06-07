@@ -13,10 +13,18 @@ const FormControl = React.forwardRef(function FormControl(
   },
   ref,
 ) {
+  const [focused, setFocused] = React.useState(false);
+
   const childContext = {
     disabled,
     error,
     required,
+    focused,
+    handleFocus: () => {
+      setFocused(true);
+      console.log('handle focus');
+    },
+    handleBlur: () => setFocused(false),
   };
 
   return (
