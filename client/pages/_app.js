@@ -62,7 +62,7 @@ const Root = (props: {
   return (
     <ThemeProvider>
       <div>
-        <NavBar path={pathname} egoJwt={egoJwt} />
+        <NavBar path={pathname} egoJwt={egoJwt} logOut={logOut} />
         {error ? (
           isProduction ? (
             <div>Something went wrong, please refresh the page or try again later</div>
@@ -73,7 +73,6 @@ const Root = (props: {
           'You are not authorized'
         ) : (
           <>
-            <Button onClick={logOut}> logout </Button>
             <Component {...{ egoJwt, ...pageProps }} />
           </>
         )}
