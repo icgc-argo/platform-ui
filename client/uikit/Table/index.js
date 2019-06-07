@@ -22,12 +22,19 @@ export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props 
 
 export const DefaultLoadingComponent = ({ loading, loadingText }) => (
   <div
+    role="alert"
+    aria-busy="true"
     className={`-loading ${loading ? '-active' : ''}`}
     style={{ display: 'flex', alignItems: 'center' }}
   >
     <div
       className="-loading-inner"
-      style={{ display: 'flex', justifyContent: 'center', transform: 'none', top: 'initial' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        transform: 'none',
+        top: 'initial',
+      }}
     >
       <DnaLoader />
     </div>
