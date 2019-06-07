@@ -11,6 +11,7 @@ import {
 } from 'global/constants';
 import { decodeToken } from 'global/utils/egoJwt';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
+import Button from 'uikit/Button';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -34,7 +35,7 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
-export default (props: { path: string, egoJwt: string }) => {
+export default (props: { path: string, egoJwt: string, logOut: void => void }) => {
   const userModel = (() => {
     try {
       return decodeToken(props.egoJwt);
@@ -63,6 +64,9 @@ export default (props: { path: string, egoJwt: string }) => {
       <Section>
         <MenuGroup>
           <MenuItem>Submission System</MenuItem>
+          <MenuItem>
+            <Button onClick={props.logOut}> logout </Button>
+          </MenuItem>
           <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
           {userModel && (
             <MenuItem>
