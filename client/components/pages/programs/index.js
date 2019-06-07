@@ -33,6 +33,25 @@ export default ({
   pathname,
   programs = mockPrograms,
 }: any) => {
+  const tableColumns = [
+    {
+      Header: 'Program Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Short Name',
+      accessor: 'shortName',
+    },
+    {
+      Header: 'Country',
+      accessor: 'countries',
+    },
+    {
+      Header: 'Memebership',
+      accessor: 'membershipType',
+    },
+  ];
+
   return (
     <PageContainer>
       <NavBar
@@ -45,7 +64,7 @@ export default ({
       />
       <PageBody>
         <Panel>
-          <SideMenu programs={programs} />
+          <SideMenu programs={programs} initialShownItem={1} />
         </Panel>
         <PageContent>
           <ContentHeader>
@@ -68,24 +87,10 @@ export default ({
               >
                 <Table
                   data={programs}
-                  columns={[
-                    {
-                      Header: 'Program Name',
-                      accessor: 'name',
-                    },
-                    {
-                      Header: 'Short Name',
-                      accessor: 'shortName',
-                    },
-                    {
-                      Header: 'Country',
-                      accessor: 'countries',
-                    },
-                    {
-                      Header: 'Memebership',
-                      accessor: 'membershipType',
-                    },
-                  ]}
+                  showPagination
+                  showPaginationTop
+                  showPaginationBottom
+                  columns={tableColumns}
                 />
               </Typography>
             </ContentBox>
