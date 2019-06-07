@@ -61,8 +61,7 @@ const Root = (props: {
 
   return (
     <ThemeProvider>
-      <div>
-        {!Component.noNavBar && <NavBar path={pathname} egoJwt={egoJwt} logOut={logOut} />}
+      <>
         {error ? (
           isProduction ? (
             <div>Something went wrong, please refresh the page or try again later</div>
@@ -76,7 +75,7 @@ const Root = (props: {
             <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
           </>
         )}
-      </div>
+      </>
     </ThemeProvider>
   );
 };

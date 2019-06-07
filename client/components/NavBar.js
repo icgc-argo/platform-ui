@@ -55,9 +55,10 @@ export default (props: { path: string, egoJwt: string, logOut: void => void }) =
         />
         <MenuGroup>
           <NavbarLink path={PROGRAMS_LIST_PATH} active={props.path === PROGRAMS_LIST_PATH} />
-          <NavbarLink path={PROGRAM_ENTITY_PATH} active={props.path === PROGRAM_ENTITY_PATH} />
+          {/* <NavbarLink path={PROGRAM_ENTITY_PATH} active={props.path === PROGRAM_ENTITY_PATH} />
           <NavbarLink path={DCC_OVERVIEW_PATH} active={props.path === DCC_OVERVIEW_PATH} />
-          <NavbarLink path={USER_PAGE_PATH} active={props.path === USER_PAGE_PATH} />
+          <NavbarLink path={USER_PAGE_PATH} active={props.path === USER_PAGE_PATH} /> */}
+          {/* <MenuItem>File Repository</MenuItem> */}
         </MenuGroup>
       </Section>
       <Section />

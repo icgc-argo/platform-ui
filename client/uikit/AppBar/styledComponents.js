@@ -15,7 +15,9 @@ export const MenuItemContent = styled(MenuItemTypography)`
   text-align: center;
   text-decoration: none;
 `;
-export const MenuItemContainer = styled('div')`
+export const MenuItemContainer = styled('div', {
+  shouldForwardProp: propName => propName !== 'active',
+})`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,7 +48,7 @@ export const AppBarContainer = styled('div')`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  height: 64px;
+  min-height: 64px;
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 export const SectionDisplay = styled('div')`
