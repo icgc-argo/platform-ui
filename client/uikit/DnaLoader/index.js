@@ -10,10 +10,10 @@ const LoaderContainer = styled('div')`
   padding-bottom: 15px;
   width: ${({ dotsCount }) => dotsCount * 10}px;
 
-  div:nth-child(odd) {
+  div:nth-of-type(odd) {
     position: absolute;
   }
-  div:nth-child(even) {
+  div:nth-of-type(even) {
     width: ${({ dotsCount }) => dotsCount * 10}px;
   }
   span {
@@ -29,12 +29,12 @@ const LoaderContainer = styled('div')`
   ${({ dotsCount }) =>
     range(1, dotsCount + 1).map(
       i => css`
-        div:nth-child(odd) span:nth-child(${i}) {
+        div:nth-of-type(odd) span:nth-of-type(${i}) {
           animation: animateFirstDots 0.8s ease-in-out infinite;
           animation-direction: alternate;
           animation-delay: ${i * 0.2}s;
         }
-        div:nth-child(even) span:nth-child(${i}) {
+        div:nth-of-type(even) span:nth-of-type(${i}) {
           animation: animateSecondDots 0.8s ease-in-out infinite;
           animation-direction: alternate-reverse;
           animation-delay: ${i * 0.2}s;
