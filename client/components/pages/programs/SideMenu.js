@@ -3,6 +3,7 @@ import css from '@emotion/css';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
+import Icon from 'uikit/Icon';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -59,11 +60,21 @@ export default ({ programs, initialShownItem = -1 }) => {
   const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
   return (
     <Submenu>
-      <MenuItem content={'DCC Dashboard'} />
-      <MenuItem content={'RDPCs'} selected={activeItem === 0} onClick={() => toggleItem(0)}>
+      <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
+      <MenuItem
+        icon={<Icon name="rdpc" />}
+        content={'RDPCs'}
+        selected={activeItem === 0}
+        onClick={() => toggleItem(0)}
+      >
         <MenuItem content="what goes here?" />
       </MenuItem>
-      <MenuItem content={'Programs'} selected={activeItem === 1} onClick={() => toggleItem(1)}>
+      <MenuItem
+        icon={<Icon name="programs" />}
+        content={'Programs'}
+        selected={activeItem === 1}
+        onClick={() => toggleItem(1)}
+      >
         <ProgramsSection initialProgram={''} programs={programs} />
       </MenuItem>
     </Submenu>
