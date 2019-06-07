@@ -43,7 +43,7 @@ export const MenuGroupDisplay = styled('div')`
     border-left: none;
   }
 `;
-export const AppBarContainer = styled('div')`
+export const AppBarContainer = styled('nav')`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
