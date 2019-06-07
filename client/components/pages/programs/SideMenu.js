@@ -1,23 +1,8 @@
 import React from 'react';
-import get from 'lodash/get';
 import css from '@emotion/css';
-import styled from '@emotion/styled';
 
-import Typography from 'uikit/Typography';
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
-import NavBar from 'components/NavBar';
-import {
-  PageContainer,
-  Panel,
-  PageBody,
-  PageContent,
-  ContentHeader,
-  ContentBody,
-  ContentBox,
-} from 'components/pages/pageLayoutComponents';
-import { mockPrograms } from './mockData';
-import Table from 'uikit/Table';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
