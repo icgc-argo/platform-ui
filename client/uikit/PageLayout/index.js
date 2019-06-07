@@ -37,7 +37,7 @@ export const ContentHeader = styled('div')`
 `;
 
 export const ContentBody = styled('div')`
-  padding: 25px;
+  padding: 25px 30px;
 `;
 
 export const ContentBox = styled('div')`
