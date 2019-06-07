@@ -9,6 +9,7 @@ import {
   DCC_OVERVIEW_PATH,
   USER_PAGE_PATH,
 } from 'global/constants';
+import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
 import Button from 'uikit/Button';
@@ -35,10 +36,11 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
-export default (props: { path: string, egoJwt: string, logOut: void => void }) => {
+export default (props: { path: string, logOut: void => void }) => {
+  const { token: egoJwt } = useEgoToken();
   const userModel = (() => {
     try {
-      return decodeToken(props.egoJwt);
+      return decodeToken(egoJwt || '');
     } catch (err) {
       return null;
     }
