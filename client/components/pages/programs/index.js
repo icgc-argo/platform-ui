@@ -9,7 +9,6 @@ import styled from '@emotion/styled';
 import Typography from 'uikit/Typography';
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
-import NavBar from 'components/NavBar';
 import {
   PageContainer,
   Panel,
@@ -19,9 +18,11 @@ import {
   ContentBody,
   ContentBox,
   PageFooter,
-} from 'components/pages/pageLayoutComponents';
+} from 'uikit/PageLayout';
 import { mockPrograms } from './mockData';
 import Table from 'uikit/Table';
+
+import NavBar from 'components/NavBar';
 import SideMenu from './SideMenu';
 
 export default ({
