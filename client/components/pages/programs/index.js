@@ -59,7 +59,6 @@ export default ({
           flex: 1;
         `}
         path={pathname}
-        egoJwt={egoJwt}
         logOut={logOut}
       />
       <PageBody>
