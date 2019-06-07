@@ -13,7 +13,23 @@ export default class extends Document {
     return (
       <Html>
         <Head>
-          <style>{`body { margin: 0 } /* custom! */`}</style>
+          <style>{`
+            body { 
+              margin: 0;
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            } /* custom! */
+            #__next {
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            }
+          `}</style>
         </Head>
         <body>
           <Main />

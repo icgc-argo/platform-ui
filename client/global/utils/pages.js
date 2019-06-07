@@ -33,7 +33,6 @@ export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
 };
 type PageConfigProps = {
   isPublic: boolean,
-  noNavBar: boolean,
   isAccessible: ({
     egoJwt: string,
     ctx: GetInitialPropsContext,
@@ -45,17 +44,14 @@ export const createPage = ({
   isPublic = false,
   isAccessible = async () => true,
   getInitialProps = async () => ({}),
-  noNavBar = false,
 }: {
   isPublic?: boolean,
-  noNavBar?: boolean,
   isAccessible?: ({
     egoJwt: string,
     ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
   getInitialProps?: GetInitialPropsContextWithEgo => Promise<any>,
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
-  page.noNavBar = noNavBar;
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
   page.getInitialProps = getInitialProps;

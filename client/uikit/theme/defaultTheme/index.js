@@ -1,4 +1,5 @@
 import colors from './colors';
+import shadows from './shadows';
 import button from './button';
 import appBar from './appBar';
 import typography from './typography';
@@ -9,9 +10,10 @@ import multiSelect from './multiSelect';
 
 export default {
   colors,
+  typography,
+  shadows,
   button,
   appBar,
-  typography,
   table,
   titleBar,
   input,
