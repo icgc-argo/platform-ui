@@ -2,6 +2,7 @@
   "name": "create-next-example-app",
   "scripts": {
     "dev": "nodemon index.js",
+    "dev-ui": "node index.js",
     "build": "next build",
     "start-prod": "npm run build && node index.js",
     "storybook": "start-storybook -p 6006",
