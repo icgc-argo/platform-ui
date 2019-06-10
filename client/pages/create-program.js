@@ -9,6 +9,7 @@ import FormHelperText from 'uikit/form/FormHelperText';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import { Row, Col } from 'react-grid-system';
 import Button from 'uikit/Button';
+import Typography from 'uikit/Typography';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -181,6 +182,11 @@ export default createPage({
           <Row>
             <Col>
               <SectionTitle>Program Administrator</SectionTitle>
+              <Typography variant="paragraph">
+                Please assign a program administrator who will add and manage program members and
+                collaborators. Note: the provided email address must be Gmail for login purposes.
+              </Typography>
+              <p />
             </Col>
           </Row>
           <Row>
