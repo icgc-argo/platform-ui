@@ -19,7 +19,7 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
-import { mockPrograms } from './mockData';
+import { mockPrograms } from '../../mockData';
 import Table from 'uikit/Table';
 
 import NavBar from 'components/NavBar';
@@ -64,7 +64,7 @@ export default ({
       />
       <PageBody>
         <Panel>
-          <SideMenu programs={programs} initialShownItem={1} />
+          <SideMenu initialShownItem={1} />
         </Panel>
         <PageContent>
           <ContentHeader>

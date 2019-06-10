@@ -4,6 +4,7 @@ import css from '@emotion/css';
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
 import Icon from 'uikit/Icon';
+import { mockPrograms } from './mockData';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -56,7 +57,7 @@ const ProgramsSection = ({ initialProgram, programs }) => {
   );
 };
 
-export default ({ programs, initialShownItem = -1 }) => {
+export default ({ programs = mockPrograms, initialShownItem = -1 }) => {
   const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
   return (
     <Submenu>
