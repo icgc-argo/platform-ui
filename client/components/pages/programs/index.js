@@ -23,7 +23,7 @@ import { mockPrograms } from './mockData';
 import Table from 'uikit/Table';
 
 import NavBar from 'components/NavBar';
-import SideMenu from './SideMenu';
+import SideMenu from 'components/SideMenu';
 
 export default ({
   egoJwt,
