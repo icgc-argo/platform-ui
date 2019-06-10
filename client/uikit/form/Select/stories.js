@@ -8,7 +8,7 @@ import Select from '.';
 const createKnobs = () => {
   const error = boolean('error', false);
   const disabled = boolean('disabled', false);
-  const placeholder = text('Placeholder', 'Start typing here..');
+  const placeholder = text('Placeholder', '- Select an option -');
   const errorMessage = text('Error Message', 'Please fill out the required field.');
   const size = radios(
     'size',
@@ -29,6 +29,7 @@ const createKnobs = () => {
 };
 
 const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  const knobs = createKnobs();
   return (
     <div style={{ width: '200px' }}>
       <Select
@@ -40,6 +41,7 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           { content: 'Value 4', value: 'v4' },
         ]}
         onChange={action('onChange')}
+        {...knobs}
       />
       <Select
         aria-label="demo-select"
@@ -51,6 +53,7 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           { content: 'Value 4', value: 'v4' },
         ]}
         onChange={action('onChange')}
+        {...knobs}
       />
     </div>
   );

@@ -5,12 +5,16 @@ import { withProps } from 'recompose';
 import Icon from '../../Icon';
 import Typography from '../../Typography';
 
-export const DropdownIcon = styled(Icon)`
+export const DropdownIcon = withProps(({ disabled, theme }) => ({
+  name: 'chevron_down',
+  fill: disabled ? theme.input.textColors.disabled : 'black',
+}))(styled(Icon)`
   height: 100%;
   width: 10px;
   padding: 10px;
-  border-left: solid 1px ${({ theme }) => theme.colors.grey_1};
-`;
+  border-left: solid 1px
+    ${({ theme, disabled }) => (disabled ? theme.colors.grey_2 : theme.colors.grey_1)};
+`);
 
 export const OptionsList = styled('ol')`
   list-style: none;

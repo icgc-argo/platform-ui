@@ -6,6 +6,7 @@ import { get } from 'lodash';
 
 import TablePagination from './TablePagination';
 import { StyledTable } from './styledComponent';
+import DnaLoader from '../DnaLoader';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -19,11 +20,33 @@ export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props 
   );
 };
 
+export const DefaultLoadingComponent = ({ loading, loadingText }) => (
+  <div
+    role="alert"
+    aria-busy="true"
+    className={`-loading ${loading ? '-active' : ''}`}
+    style={{ display: 'flex', alignItems: 'center' }}
+  >
+    <div
+      className="-loading-inner"
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        transform: 'none',
+        top: 'initial',
+      }}
+    >
+      <DnaLoader />
+    </div>
+  </div>
+);
+
 const Table = ({
   className = '',
   stripped = true,
   highlight = true,
   PaginationComponent = TablePagination,
+  LoadingComponent = DefaultLoadingComponent,
   ...rest
 }) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
@@ -39,7 +62,11 @@ const Table = ({
       TrComponent={props => (
         <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
       )}
-      getTrProps={(state, rowInfo, column) => ({ rowInfo, ...getTrProps(state, rowInfo, column) })}
+      LoadingComponent={LoadingComponent}
+      getTrProps={(state, rowInfo, column) => ({
+        rowInfo,
+        ...getTrProps(state, rowInfo, column),
+      })}
       minRows={0}
       showPagination={false}
       PaginationComponent={PaginationComponent}

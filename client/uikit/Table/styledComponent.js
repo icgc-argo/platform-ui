@@ -18,8 +18,8 @@ export const StyledTable = styled(ReactTable)`
   &.ReactTable {
     border: none;
     & .rt-table {
-      & .rt-thead .rt-tr .rt-th:first-child,
-      & .rt-tr .rt-td:first-child {
+      & .rt-thead .rt-tr .rt-th:first-of-type,
+      & .rt-tr .rt-td:first-of-type {
         ${({ isSelectTable, theme }) =>
           isSelectTable &&
           css`
