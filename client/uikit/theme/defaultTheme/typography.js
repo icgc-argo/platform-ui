@@ -53,6 +53,15 @@ export default {
     lineHeight: '1.57',
     letterSpacing: 'normal',
   },
+  label: {
+    fontFamily: 'Work Sans, sans-serif',
+    fontSize: '14px',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontStretch: 'normal',
+    lineHeight: '1.57',
+    letterSpacing: 'normal',
+  },
   data: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '12px',
