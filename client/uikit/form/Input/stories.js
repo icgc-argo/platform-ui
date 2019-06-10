@@ -7,7 +7,6 @@ import Icon from '../../Icon';
 import { action } from '@storybook/addon-actions';
 
 const createKnobs = () => {
-  const error = boolean('error', false);
   const disabled = boolean('disabled', false);
   const placeholder = text('Placeholder', 'Start typing here..');
   const size = radios(
@@ -20,7 +19,6 @@ const createKnobs = () => {
   );
 
   return {
-    error,
     disabled,
     placeholder,
     size,
