@@ -37,7 +37,7 @@ export default createPage({
     <div>
       <GoogleLogin
         id="google-login"
-        link={urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
+        link={urlJoin(EGO_API_ROOT, `/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
       />
     </div>
   );

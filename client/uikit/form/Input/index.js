@@ -5,7 +5,8 @@ import { css } from '@emotion/core';
 
 import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper } from '../common';
-import { StyledInput, ErrorMsg, IconWrapper } from './styledComponents';
+import { StyledInput, IconWrapper } from './styledComponents';
+import FormControlContext from '../FormControl/FormControlContext';
 
 export const INPUT_PRESETS = {
   DEFAULT: 'default',
@@ -17,40 +18,40 @@ const Input = ({
   value,
   onChange,
   type,
-  disabled,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
   size = INPUT_SIZES.SM,
-  error = false,
-  errorMessage = '',
   className,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
   return (
     <div className={className}>
-      <StyledInputWrapper
-        size={size}
-        onFocus={() => setActive('focus')}
-        onBlur={() => setActive('default')}
-        error={error}
-        disabled={disabled}
-        size={size}
-        error={error}
-        inputState={activeState}
-      >
-        {icon && <IconWrapper>{icon}</IconWrapper>}
-        <StyledInput
-          aria-label={props['aria-label']}
-          placeholder={disabled ? '' : placeholder}
-          value={value}
-          type={type}
-          onChange={onChange}
-          size={size}
-          disabled={disabled}
-        />
-      </StyledInputWrapper>
-      {error && errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
+      <FormControlContext.Consumer>
+        {contextValue => (
+          <StyledInputWrapper
+            size={size}
+            onFocus={() => setActive('focus')}
+            onBlur={() => setActive('default')}
+            error={contextValue.error}
+            disabled={contextValue.disabled}
+            size={size}
+            inputState={activeState}
+          >
+            {icon && <IconWrapper>{icon}</IconWrapper>}
+            <StyledInput
+              aria-label={props['aria-label']}
+              placeholder={contextValue.disabled ? '' : placeholder}
+              value={value}
+              type={type}
+              onChange={onChange}
+              size={size}
+              disabled={contextValue.disabled}
+              id={props.id}
+            />
+          </StyledInputWrapper>
+        )}
+      </FormControlContext.Consumer>
     </div>
   );
 };
@@ -69,14 +70,6 @@ Input.propTypes = {
    * Size
    */
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
-  /**
-   * Show an error?
-   */
-  error: PropTypes.bool,
-  /**
-   * Error message to show
-   */
-  errorMessage: PropTypes.string,
 };
 
 export default Input;

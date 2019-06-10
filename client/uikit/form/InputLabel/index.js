@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import clsx from 'clsx';
 import css from '@emotion/css';
 import Icon from '../../Icon';
+import _ from 'lodash';
 
 const InputLabel = React.forwardRef(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;

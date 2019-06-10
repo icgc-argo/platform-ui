@@ -10,7 +10,6 @@ const createKnobs = () => {
   const error = boolean('error', false);
   const disabled = boolean('disabled', false);
   const placeholder = text('Placeholder', 'Start typing here..');
-  const errorMessage = text('Error Message', 'Please fill out the required field.');
   const size = radios(
     'size',
     {
@@ -22,7 +21,6 @@ const createKnobs = () => {
 
   return {
     error,
-    errorMessage,
     disabled,
     placeholder,
     size,

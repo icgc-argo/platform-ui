@@ -24,7 +24,7 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   };
   return (
     <MenuItem
-      DomComponent={props => (
+      DomComponent={({ active, ...props }) => (
         <Link prefetch href={path}>
           <a {...props} id="link-login" />
         </Link>

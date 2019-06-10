@@ -66,7 +66,7 @@ export const MenuItem = ({
   id,
   ref,
   active = false,
-  DomComponent = props => <a {...props} />,
+  DomComponent = ({ active, ...others }) => <a {...others} />,
 }) => {
   const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
   return (

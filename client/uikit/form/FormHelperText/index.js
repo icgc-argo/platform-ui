@@ -4,6 +4,7 @@ import FormControlContext from '../FormControl/FormControlContext';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import css from '@emotion/css';
+import _ from 'lodash';
 
 const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
   const { component: Component = 'p', className: classNameProp, ...other } = props;
