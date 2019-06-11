@@ -49,7 +49,6 @@ export default (props: { path: string, logOut: void => void }) => {
   return (
     <AppBar
       css={css`
-        flex: 1;
         position: sticky;
         top: 0px;
         z-index: 2;
