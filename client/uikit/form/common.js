@@ -70,11 +70,8 @@ export const RadioCheckboxWrapper = styled('div')`
 
   label {
     ${({ theme }) => css(theme.typography.paragraph)};
-
     position: relative;
-    margin-left: 8px;
     cursor: pointer;
     color: inherit;
-    font-size: 14px;
   }
 `;

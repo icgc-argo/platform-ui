@@ -6,7 +6,7 @@ export const StyledCheckbox = styled('input')`
   margin: 0;
 
   &:before {
-    transition: transform 0.65s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    transition: transform 0.25s ease;
     transform: rotate(-45deg) scale(0, 0);
 
     content: '';
@@ -56,4 +56,8 @@ export const StyledCheckbox = styled('input')`
     border-radius: 2px;
     cursor: pointer;
   }
+`;
+
+export const StyledLabel = styled('label')`
+  margin-left: 14px;
 `;
