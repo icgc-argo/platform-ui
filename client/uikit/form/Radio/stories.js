@@ -15,20 +15,29 @@ const createKnobs = () => {
   };
 };
 
-const RadioStories = storiesOf(`${__dirname}`, module).add('Radio', () => (
-  <Hook
-    initialState={false}
-    render={([isChecked, setChecked]) => (
-      <RadioGroup onChange={() => console.log('radio group')} selectedItem="two">
-        <Radio {...createKnobs()} value="one">
-          One
-        </Radio>
-        <Radio {...createKnobs()} value="two">
-          Two
-        </Radio>
+const WithState = ({ children }) => {
+  const [selectedItem, setSelected] = React.useState('one');
+
+  return React.cloneElement(children, {
+    selectedItem,
+    onChange: e => setSelected(e.target.value),
+  });
+};
+
+const RadioStories = storiesOf(`${__dirname}`, module)
+  .add('Radio', () => (
+    <Radio {...createKnobs()} onChange={x => x}>
+      Single Radio Button
+    </Radio>
+  ))
+  .add('Radio Group', () => (
+    <WithState>
+      <RadioGroup onChange="[parent func]" selectedItem="[parent func]">
+        <Radio value="one">One</Radio>
+        <Radio value="two">Two</Radio>
+        <Radio value="three">Three</Radio>
       </RadioGroup>
-    )}
-  />
-));
+    </WithState>
+  ));
 
 export default RadioStories;

@@ -19,17 +19,21 @@ const Radio = ({ id, name, value, label, children, checked, onChange, disabled }
   </RadioCheckboxWrapper>
 );
 
-export const RadioGroup = ({ onChange, children, selectedItem }) => {
-  return React.Children.map(children, child => {
-    console.log('child props', child.props);
-    return React.cloneElement(child, {
+export const RadioGroup = ({ onChange, children, selectedItem }) =>
+  React.Children.map(children, child =>
+    React.cloneElement(child, {
       checked: child.props.value === selectedItem,
       onChange: e => {
-        console.log('on change!');
         onChange(e);
       },
-    });
-  });
+    }),
+  );
+
+RadioGroup.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  selectedItem: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool])
+    .isRequired,
 };
 
 Radio.propTypes = {
@@ -37,7 +41,7 @@ Radio.propTypes = {
   name: PropTypes.string,
   value: PropTypes.any,
   label: PropTypes.string,
-  children: PropTypes.children,
+  children: PropTypes.node.isRequired,
   checked: PropTypes.bool,
   onChange: PropTypes.func,
 };
