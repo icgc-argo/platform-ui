@@ -27,7 +27,7 @@ const level1Style = ({ selected, theme }) => css`
 `;
 
 const level2Style = ({ selected, theme }) => css`
-  ${css(theme.typography.navigation)}
+  ${css(theme.typography.paragraph)}
   ${defaultLabelStyle({ theme, selected })}
   border: none;
   border-left: solid 2px;
@@ -37,6 +37,11 @@ const level2Style = ({ selected, theme }) => css`
   & > .MenuItemContent {
     padding-left: 40px;
     padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    & > ${ContentContainer} {
+      line-height: 20px;
+    }
   }
 `;
 
