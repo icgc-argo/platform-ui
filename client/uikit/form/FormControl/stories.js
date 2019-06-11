@@ -24,7 +24,7 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
         <MultiSelect
           inputProps={{ id: 'country' }}
           value="[parent state]"
-          onChange="[parent setter]"
+          onChange={() => '[parent setter]'}
           placeholder="Add one or more..."
         >
           <Option value="Australia">Australia</Option>

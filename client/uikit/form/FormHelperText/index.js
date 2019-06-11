@@ -23,18 +23,18 @@ const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
     }
   `;
 
+  const contextValue = React.useContext(FormControlContext);
+
   return (
-    <FormControlContext.Consumer>
-      {contextValue => (
-        <StyledComponent
-          ref={ref}
-          className={clsx(_.pick(contextValue, ['error', 'disabled']), classNameProp)}
-          {...other}
-        />
-      )}
-    </FormControlContext.Consumer>
+    <StyledComponent
+      ref={ref}
+      className={clsx(_.pick(contextValue, ['error', 'disabled']), classNameProp)}
+      {...other}
+    />
   );
 });
+
+FormHelperText.displayName = 'FormHelperText';
 
 FormHelperText.propTypes = {
   /**

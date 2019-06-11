@@ -43,6 +43,8 @@ const FormControl = React.forwardRef(function FormControl(
   );
 });
 
+FormControl.displayName = 'FormControl';
+
 FormControl.propTypes = {
   /**
    * The contents of the form control.
