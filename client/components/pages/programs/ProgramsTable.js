@@ -71,8 +71,8 @@ export default (props: { programs: Array<ProgramsTableProgram> }) => {
                 justify-content: space-around;
               `}
             >
-              <Icon name="dashboard" fill="accent2" />
-              <Icon name="rdpc" fill="accent2" />
+              <Icon name="users" height={'20px'} width={'20px'} fill="accent2" />
+              <Icon name="edit" height={'20px'} width={'20px'} fill="accent2" />
             </div>
           ),
         },
