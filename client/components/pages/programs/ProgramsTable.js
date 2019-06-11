@@ -5,31 +5,30 @@ import get from 'lodash/get';
 import Table from 'uikit/Table';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
+import Icon from 'uikit/Icon';
 
-interface ProgramsTableProgram {
-  id: string;
-  shortName: string;
-  name: string;
-  cancerTypes: Array<{ id: string, name: string }>;
-  countries: string;
-  membershipType: string;
-  genomicDonors: number;
-  submittedDonors: number;
-  commitmentDonors: number;
-}
-
-const DonorStatusCell = ({ original }: { original: ProgramsTableProgram }) => (
-  <PercentageBar nom={original.submittedDonors} denom={original.commitmentDonors} />
-);
+type ProgramsTableProgram = {
+  id: string,
+  shortName: string,
+  name: string,
+  cancerTypes: Array<{ id: string, name: string }>,
+  countries: string,
+  membershipType: string,
+  genomicDonors: number,
+  submittedDonors: number,
+  commitmentDonors: number,
+};
 
 export default (props: { programs: Array<ProgramsTableProgram> }) => {
-  const DONOR_PERCENTAGE_KEY = 'donorPercentage';
+  type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
+  type CellProps = { original: TableProgramInternal };
+  const data: Array<TableProgramInternal> = props.programs.map(p => ({
+    ...p,
+    donorPercentage: p.submittedDonors / p.commitmentDonors,
+  }));
   return (
     <Table
-      data={props.programs.map(p => ({
-        ...p,
-        [DONOR_PERCENTAGE_KEY]: p.submittedDonors / p.commitmentDonors,
-      }))}
+      data={data}
       showPagination
       showPaginationTop
       showPaginationBottom
@@ -52,8 +51,30 @@ export default (props: { programs: Array<ProgramsTableProgram> }) => {
         },
         {
           Header: 'Donor Status',
-          accessor: DONOR_PERCENTAGE_KEY,
-          Cell: DonorStatusCell,
+          accessor: 'donorPercentage',
+          Cell: ({ original }: CellProps) => (
+            <PercentageBar nom={original.submittedDonors} denom={original.commitmentDonors} />
+          ),
+        },
+        {
+          Header: 'Actions',
+          sortable: false,
+          width: 100,
+          headerStyle: css`
+            display: flex;
+            justify-content: center;
+          `,
+          Cell: ({ original }: CellProps) => (
+            <div
+              css={css`
+                display: flex;
+                justify-content: space-around;
+              `}
+            >
+              <Icon name="dashboard" fill="accent2" />
+              <Icon name="rdpc" fill="accent2" />
+            </div>
+          ),
         },
       ]}
     />
