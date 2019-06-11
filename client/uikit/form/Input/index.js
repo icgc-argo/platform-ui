@@ -22,31 +22,33 @@ const Input = ({
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
   size = INPUT_SIZES.SM,
   className,
+  error,
+  disabled,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
   return (
     <div className={className}>
       <FormControlContext.Consumer>
-        {contextValue => (
+        {({ disabled: calcDisabled = disabled, error: calcError = error } = {}) => (
           <StyledInputWrapper
             size={size}
             onFocus={() => setActive('focus')}
             onBlur={() => setActive('default')}
-            error={contextValue.error}
-            disabled={contextValue.disabled}
+            error={calcError}
+            disabled={calcDisabled}
             size={size}
             inputState={activeState}
           >
             {icon && <IconWrapper>{icon}</IconWrapper>}
             <StyledInput
               aria-label={props['aria-label']}
-              placeholder={contextValue.disabled ? '' : placeholder}
+              placeholder={calcDisabled ? '' : placeholder}
               value={value}
               type={type}
               onChange={onChange}
               size={size}
-              disabled={contextValue.disabled}
+              disabled={calcDisabled}
               id={props.id}
             />
           </StyledInputWrapper>

@@ -2,15 +2,18 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import MultiSelect, { Option } from '.';
 
-function Basic() {
-  const [countries, setCountries] = React.useState('');
+function WithState({ children }) {
+  const [value, setValue] = React.useState([]);
 
-  const handleChange = event => {
-    setCountries(event.target.value);
-  };
+  return React.cloneElement(children, {
+    value,
+    onChange: event => setValue(event.target.value),
+  });
+}
 
-  return (
-    <MultiSelect value={countries} onChange={handleChange} placeholder="Add one or more...">
+const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
+  <WithState>
+    <MultiSelect value="[parent state]" onChange="[parent func]" placeholder="Add one or more...">
       <Option value="Australia">Australia</Option>
       <Option value="Cambodia">Cambodia</Option>
       <Option value="Cameroon">Cameroon</Option>
@@ -31,15 +34,7 @@ function Basic() {
       <Option value="Barbados">Barbados</Option>
       <Option value="Belarus">Belarus</Option>
     </MultiSelect>
-  );
-}
-
-const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => <Basic />, {
-  info: {
-    source: false,
-    propTables: [MultiSelect, Option],
-    propTablesExclude: [Basic],
-  },
-});
+  </WithState>
+));
 
 export default MultiSelectStories;

@@ -7,7 +7,7 @@ export default {
   listBorderColor: colors.grey_1,
   input: {
     borderColor: colors.grey_1,
-    focusedBorderColor: colors.grey,
+    focusedBorderColor: colors.secondary_1,
   },
   placeHolderColor: colors.grey,
 };

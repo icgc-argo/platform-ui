@@ -63,6 +63,10 @@ const InputBox = styled('div')`
       : props.theme.multiSelect.input.borderColor};
 
   font-size: 14px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.multiSelect.input.focusedBorderColor};
+  }
 `;
 
 const Input = styled('input')`
