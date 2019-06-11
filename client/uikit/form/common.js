@@ -60,6 +60,9 @@ export const RadioCheckboxWrapper = styled('div')`
   border-style: solid;
   border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
 
+  background-color: ${({ theme, disabled }) =>
+    theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
+
   color: ${({ theme, disabled }) =>
     theme.radiocheckbox.textColors[disabled ? 'disabled' : 'default']};
 

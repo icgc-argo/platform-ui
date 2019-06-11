@@ -1,4 +1,5 @@
 import colors from './colors';
+
 export default {
   fontSizes: {
     default: '14px',
@@ -6,6 +7,10 @@ export default {
   textColors: {
     default: colors.black,
     disabled: '#d0d1d8',
+  },
+  backgroundColors: {
+    default: colors.white,
+    disabled: colors.grey_4,
   },
   borderColors: {
     default: colors.grey_2,
