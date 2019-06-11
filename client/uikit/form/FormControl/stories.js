@@ -18,7 +18,7 @@ function WithState({ children }) {
 
 const FormControlStories = storiesOf(`${__dirname}`, module)
   .add('MultiSelect', () => (
-    <FormControl error={boolean('error', true)} required={boolean('required', true)}>
+    <FormControl error={boolean('error', false)} required={boolean('required', true)}>
       <InputLabel htmlFor="country">Country</InputLabel>
       <WithState>
         <MultiSelect
@@ -40,7 +40,7 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
     <FormControl
       required={boolean('required', true)}
       disabled={boolean('disabled', false)}
-      error={boolean('error', true)}
+      error={boolean('error', false)}
     >
       <InputLabel htmlFor="text-input">text input</InputLabel>
       <Input aria-label="text input" id="text-input" placeholder="put some text" />
