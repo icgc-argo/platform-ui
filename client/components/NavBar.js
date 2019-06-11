@@ -1,8 +1,6 @@
 // @flow
 import React from 'react';
 import Link from 'next/link';
-// $FlowFixMe @emotion/css isn't typed
-import css from '@emotion/css';
 
 import {
   LOGIN_PAGE_PATH,
@@ -15,6 +13,7 @@ import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
 import Button from 'uikit/Button';
+import { css } from 'uikit';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {

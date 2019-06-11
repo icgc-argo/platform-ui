@@ -1,9 +1,10 @@
 import React from 'react';
-import css from '@emotion/css';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
 import Icon from 'uikit/Icon';
+import { css } from 'uikit';
+
 import { mockPrograms } from './mockData';
 
 const useToggledSelectState = (initialIndex = -1) => {

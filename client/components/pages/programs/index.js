@@ -1,10 +1,6 @@
 //@flow
 import React from 'react';
 import get from 'lodash/get';
-//$FlowFixMe
-import css from '@emotion/css';
-//$FlowFixMe
-import styled from '@emotion/styled';
 
 import Typography from 'uikit/Typography';
 import Submenu, { MenuItem } from 'uikit/SubMenu';
@@ -24,6 +20,7 @@ import Table from 'uikit/Table';
 
 import NavBar from 'components/NavBar';
 import SideMenu from 'components/SideMenu';
+import { css } from 'uikit';
 
 export default ({
   egoJwt,
