@@ -26,9 +26,8 @@ const Input = ({
 }) => {
   const [activeState, setActive] = useState('default');
 
-  const { disabled: calcDisabled = disabled, error: calcError = error } = useContext(
-    FormControlContext,
-  );
+  const { disabled: calcDisabled = disabled, error: calcError = error } =
+    useContext(FormControlContext) || {};
 
   return (
     <div className={className}>
