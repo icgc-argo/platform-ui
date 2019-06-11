@@ -40,6 +40,7 @@ const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
           bottom: 0px;
           left: ${((denom - nom) / denom) * 100}%;
           background: ${theme.colors[color] || color || theme.colors.secondary_2};
+          opacity: 0.3;
           z-index: -1;
         `}
       />

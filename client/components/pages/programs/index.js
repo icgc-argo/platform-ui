@@ -21,6 +21,8 @@ import Table from 'uikit/Table';
 import NavBar from 'components/NavBar';
 import SideMenu from 'components/SideMenu';
 import { css } from 'uikit';
+import PercentageBar from 'uikit/PercentageBar';
+import ProgramsTable from './ProgramsTable';
 
 export default ({
   egoJwt,
@@ -31,25 +33,6 @@ export default ({
   pathname,
   programs = mockPrograms,
 }: any) => {
-  const tableColumns = [
-    {
-      Header: 'Program Name',
-      accessor: 'name',
-    },
-    {
-      Header: 'Short Name',
-      accessor: 'shortName',
-    },
-    {
-      Header: 'Country',
-      accessor: 'countries',
-    },
-    {
-      Header: 'Memebership',
-      accessor: 'membershipType',
-    },
-  ];
-
   return (
     <PageContainer>
       <NavBar path={pathname} logOut={logOut} />
@@ -71,13 +54,7 @@ export default ({
           </ContentHeader>
           <ContentBody>
             <ContentBox>
-              <Table
-                data={programs}
-                showPagination
-                showPaginationTop
-                showPaginationBottom
-                columns={tableColumns}
-              />
+              <ProgramsTable programs={programs} />
             </ContentBox>
           </ContentBody>
         </PageContent>
