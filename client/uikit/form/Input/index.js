@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
 
 import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper } from '../common';
@@ -27,33 +25,34 @@ const Input = ({
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
+
+  const { disabled: calcDisabled = disabled, error: calcError = error } = useContext(
+    FormControlContext,
+  );
+
   return (
     <div className={className}>
-      <FormControlContext.Consumer>
-        {({ disabled: calcDisabled = disabled, error: calcError = error } = {}) => (
-          <StyledInputWrapper
-            size={size}
-            onFocus={() => setActive('focus')}
-            onBlur={() => setActive('default')}
-            error={calcError}
-            disabled={calcDisabled}
-            size={size}
-            inputState={activeState}
-          >
-            {icon && <IconWrapper>{icon}</IconWrapper>}
-            <StyledInput
-              aria-label={props['aria-label']}
-              placeholder={calcDisabled ? '' : placeholder}
-              value={value}
-              type={type}
-              onChange={onChange}
-              size={size}
-              disabled={calcDisabled}
-              id={props.id}
-            />
-          </StyledInputWrapper>
-        )}
-      </FormControlContext.Consumer>
+      <StyledInputWrapper
+        size={size}
+        onFocus={() => setActive('focus')}
+        onBlur={() => setActive('default')}
+        error={calcError}
+        disabled={calcDisabled}
+        size={size}
+        inputState={activeState}
+      >
+        {icon && <IconWrapper>{icon}</IconWrapper>}
+        <StyledInput
+          aria-label={props['aria-label']}
+          placeholder={calcDisabled ? '' : placeholder}
+          value={value}
+          type={type}
+          onChange={onChange}
+          size={size}
+          disabled={calcDisabled}
+          id={props.id}
+        />
+      </StyledInputWrapper>
     </div>
   );
 };
