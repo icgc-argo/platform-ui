@@ -4,7 +4,7 @@ import Icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 
-const Icon = ({ name, width, height, fill, className }) => {
+const Icon = ({ name, width, height, fill, className, ...rest }) => {
   const theme = useTheme();
   const svg = Icons[name];
 
@@ -20,6 +20,7 @@ const Icon = ({ name, width, height, fill, className }) => {
       height={height}
       viewBox={svg.viewBox}
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
     >
       <title lang="en">{svg.title}</title>
       <g>

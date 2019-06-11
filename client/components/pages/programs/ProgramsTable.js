@@ -18,10 +18,28 @@ type ProgramsTableProgram = {
   submittedDonors: number,
   commitmentDonors: number,
 };
+type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
+type CellProps = { original: TableProgramInternal };
+
+const InteractiveIcon = props => {
+  const [hovvered, setHovered] = React.useState(false);
+  return (
+    <Icon
+      height="20px"
+      width="20px"
+      css={css`
+        cursor: pointer;
+      `}
+      onMouseOver={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      fill={hovvered ? 'accent2_1' : 'accent2'}
+      {...props}
+    />
+  );
+};
+InteractiveIcon.propTypes = Icon.propTypes;
 
 export default (props: { programs: Array<ProgramsTableProgram> }) => {
-  type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
-  type CellProps = { original: TableProgramInternal };
   const data: Array<TableProgramInternal> = props.programs.map(p => ({
     ...p,
     donorPercentage: p.submittedDonors / p.commitmentDonors,
@@ -64,15 +82,15 @@ export default (props: { programs: Array<ProgramsTableProgram> }) => {
             display: flex;
             justify-content: center;
           `,
-          Cell: ({ original }: CellProps) => (
+          Cell: (props: CellProps) => (
             <div
               css={css`
                 display: flex;
                 justify-content: space-around;
               `}
             >
-              <Icon name="users" height={'20px'} width={'20px'} fill="accent2" />
-              <Icon name="edit" height={'20px'} width={'20px'} fill="accent2" />
+              <InteractiveIcon name="users" onClick={console.log} />
+              <InteractiveIcon name="edit" onClick={console.log} />
             </div>
           ),
         },
