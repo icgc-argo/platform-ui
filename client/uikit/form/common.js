@@ -69,6 +69,8 @@ export const RadioCheckboxWrapper = styled('div')`
   padding: 4px 6px 4px 8px;
 
   label {
+    ${({ theme }) => css(theme.typography.paragraph)};
+
     position: relative;
     margin-left: 8px;
     cursor: pointer;
