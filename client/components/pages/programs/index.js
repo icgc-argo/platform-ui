@@ -71,19 +71,13 @@ export default ({
           </ContentHeader>
           <ContentBody>
             <ContentBox>
-              <Typography
-                css={css`
-                  margin: 0px;
-                `}
-              >
-                <Table
-                  data={programs}
-                  showPagination
-                  showPaginationTop
-                  showPaginationBottom
-                  columns={tableColumns}
-                />
-              </Typography>
+              <Table
+                data={programs}
+                showPagination
+                showPaginationTop
+                showPaginationBottom
+                columns={tableColumns}
+              />
             </ContentBox>
           </ContentBody>
         </PageContent>
