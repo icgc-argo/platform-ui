@@ -61,7 +61,7 @@ const Root = (props: {
 
   return (
     <>
-      <style global>
+      <style>
         {`
             body {
               margin: 0;
