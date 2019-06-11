@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const base = {
   black: '#000000',
   white: '#ffffff',
@@ -82,50 +81,6 @@ const success = {
   success_3: accent1.accent1_3,
   success_4: accent1.accent1_4,
 };
-=======
-export default {
-  black: "#000000",
-  white: "#ffffff",
-
-  light_blue_grey: "#d0d1d8",
-
-  grey: "#525767",
-  grey_1: "#babcc2",
-  grey_2: "#dcdde1",
-  grey_3: "#f8f8fb",
-
-  primary: "#151c3d",
-  primary_1: "#a1a4b1",
-  primary_2: "#e8e8eb",
-
-  secondary: "#0774d3",
-  secondary_1: "#a1c8ec",
-  secondary_2: "#e8f1fa",
-
-  accent1: "#38dfba",
-  accent1_1: "#b3f1e3",
-  accent1_2: "#ecfbf8",
-
-  accent2: "#7f55cc",
-  accent2_1: "#cdbdeb",
-  accent2_2: "#f2effa",
-
-  accent3: "#e8348a",
-  accent3_1: "#f5afd0",
-  accent3_2: "#fcebf3",
-
-  accent4: "#ff6633",
-  accent4_1: "#fdc2b1",
-  accent4_2: "#fef0eb",
-
-  error: "#e00548",
-  error1: "#f19fb7",
-  error2: "#fbe7ed",
-
-  warning: "#fea430",
-  warning1: "#fedaac",
-  warning2: "#fef6ea",
->>>>>>> add themeing
 
 export default {
   ...base,

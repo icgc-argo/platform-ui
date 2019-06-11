@@ -47,9 +47,29 @@ export const StyledInputWrapper = styled('div')`
     }};
   }
 `;
+
 StyledInputWrapper.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,
   inputState: PropTypes.oneOf(Object.values(INPUT_STATES)),
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
 };
+
+export const RadioCheckboxWrapper = styled('div')`
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
+
+  color: ${({ theme, disabled }) =>
+    theme.radiocheckbox.textColors[disabled ? 'disabled' : 'default']};
+
+  padding: 4px 6px 4px 8px;
+
+  label {
+    position: relative;
+    margin-left: 8px;
+    cursor: pointer;
+    color: inherit;
+    font-size: 14px;
+  }
+`;
