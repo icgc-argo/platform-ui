@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import Link from 'next/link';
+// $FlowFixMe @emotion/css isn't typed
+import css from '@emotion/css';
 
 import {
   LOGIN_PAGE_PATH,
@@ -46,7 +48,14 @@ export default (props: { path: string, logOut: void => void }) => {
     }
   })();
   return (
-    <AppBar>
+    <AppBar
+      css={css`
+        flex: 1;
+        position: sticky;
+        top: 0px;
+        z-index: 2;
+      `}
+    >
       <Section>
         <Logo
           DomComponent={props => (

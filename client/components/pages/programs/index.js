@@ -55,13 +55,7 @@ export default ({
 
   return (
     <PageContainer>
-      <NavBar
-        css={css`
-          flex: 1;
-        `}
-        path={pathname}
-        logOut={logOut}
-      />
+      <NavBar path={pathname} logOut={logOut} />
       <PageBody>
         <Panel>
           <SideMenu initialShownItem={1} />
