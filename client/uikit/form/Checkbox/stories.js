@@ -27,11 +27,7 @@ const WithState = ({ children }) => {
 };
 
 const CheckboxStories = storiesOf(`${__dirname}`, module)
-  .add('Default', () => (
-    <Checkbox id="checkbox_1" {...createKnobs()}>
-      Item
-    </Checkbox>
-  ))
+  .add('Default', () => <Checkbox {...createKnobs()}>Item</Checkbox>)
   .add('Checkbox Group', () => (
     <WithState>
       <CheckboxGroup onChange="[parent func]" selectedItems="[parent func]">
