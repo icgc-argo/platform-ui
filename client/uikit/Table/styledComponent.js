@@ -55,7 +55,6 @@ export const StyledTable = styled(ReactTable)`
     ${({ theme }) => css(theme.typography.data)}
     padding: 10px 16px;
     border-right: none;
-    align-self: center;
   }
 
   /* overrides stripped rows style */
