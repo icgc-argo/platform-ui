@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 
-//cubic-bezier(0.45, 1.8, 0.5, 0.75);
-
 export const StyledRadio = styled('input')`
   outline: none;
   position: absolute;
@@ -14,10 +12,10 @@ export const StyledRadio = styled('input')`
     position: absolute;
     z-index: 1;
     top: 3px;
-    left: -22px;
+    left: -28px;
 
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
 
     background: ${({ theme, disabled }) =>
       theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
@@ -37,7 +35,7 @@ export const StyledRadio = styled('input')`
     content: '';
     position: absolute;
     top: 50%;
-    left: -26px;
+    left: -32px;
 
     width: 15px;
     height: 15px;
@@ -61,5 +59,5 @@ export const StyledRadioGroup = styled('div')`
 `;
 
 export const StyledLabel = styled('label')`
-  margin-left: 20px;
+  margin-left: 32px;
 `;
