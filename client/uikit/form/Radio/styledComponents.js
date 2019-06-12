@@ -1,50 +1,63 @@
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 
-export const StyledRadio = styled('input')`
-  position: relative;
-  cursor: pointer;
-  margin: 0;
+//cubic-bezier(0.45, 1.8, 0.5, 0.75);
 
-  &:before {
+export const StyledRadio = styled('input')`
+  outline: none;
+  position: absolute;
+  left: -999px;
+  cursor: pointer;
+
+  & + label:before {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 1px;
     z-index: 1;
+    top: 1px;
+    left: -22px;
 
-    width: 0.65rem;
-    height: 0.65rem;
+    width: 10px;
+    height: 10px;
 
     background: ${({ theme, disabled }) =>
       theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
     border-radius: 50%;
 
-    transition: transform 0.65s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    transition: transform 0.35s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     transform: scale(0, 0);
   }
 
   &:checked {
-    &:before {
-      transform: scale(1, 1);
+    & + label:before {
+      transform: scale(1);
     }
   }
 
-  &:after {
+  & + label:after {
     content: '';
     position: absolute;
-    top: -1px;
-    left: -2px;
+    top: -3px;
+    left: -26px;
 
-    width: 14px;
-    height: 14px;
-
-    background-color: ${({ theme, disabled }) =>
-      theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
+    width: 15px;
+    height: 15px;
 
     border-radius: 50%;
     border: 1px solid
       ${({ theme, disabled, checked }) =>
         theme.radiocheckbox.radio[disabled && !checked ? 'disabled' : 'default']};
   }
+`;
+
+export const StyledRadioGroup = styled('div')`
+  div {
+    border-top: none;
+  }
+  div:first-child {
+    border-top: 1px solid ${({ theme }) => theme.radiocheckbox.borderColors.default};
+  }
+`;
+
+export const StyledLabel = styled('label')`
+  margin-left: 20px;
 `;

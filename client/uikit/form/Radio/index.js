@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyledRadio } from './styledComponents';
+import { StyledRadio, StyledLabel, StyledRadioGroup } from './styledComponents';
 import { RadioCheckboxWrapper } from '../common';
 
-const Radio = ({ id, name, value, label, children, checked, onChange, disabled }) => (
-  <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-    <StyledRadio
-      type="radio"
-      id={id}
-      name={name}
-      value={value}
-      checked={checked}
-      onChange={onChange}
-      disabled={disabled}
-    />
+const Radio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
+  const onClick = () => onChange(value);
+  return (
+    <RadioCheckboxWrapper disabled={disabled} checked={checked}>
+      <StyledRadio
+        type="radio"
+        id={id}
+        name={name}
+        value={value}
+        checked={checked}
+        disabled={disabled}
+      />
 
-    <label htmlFor={name}>{children}</label>
-  </RadioCheckboxWrapper>
-);
-
-export const RadioGroup = ({ onChange, children, selectedItem }) =>
-  React.Children.map(children, child =>
-    React.cloneElement(child, {
-      checked: child.props.value === selectedItem,
-      onChange: e => {
-        onChange(e);
-      },
-    }),
+      <StyledLabel onClick={onClick}>{children}</StyledLabel>
+    </RadioCheckboxWrapper>
   );
+};
+
+export const RadioGroup = ({ onChange, children, selectedItem }) => (
+  <StyledRadioGroup>
+    {React.Children.map(children, child =>
+      React.cloneElement(child, {
+        checked: child.props.value === selectedItem,
+        onChange: e => {
+          onChange(e);
+        },
+      }),
+    )}
+  </StyledRadioGroup>
+);
 
 RadioGroup.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -37,7 +42,7 @@ RadioGroup.propTypes = {
 };
 
 Radio.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string,
   value: PropTypes.any,
   label: PropTypes.string,

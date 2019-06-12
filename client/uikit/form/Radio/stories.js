@@ -4,6 +4,7 @@ import { boolean, button } from '@storybook/addon-knobs';
 import Radio, { RadioGroup } from '.';
 import { action } from '@storybook/addon-actions';
 import Hook from '../../utils/Hook';
+import Checkbox from '../Checkbox';
 
 const createKnobs = () => {
   const checked = boolean('checked', false);
@@ -20,13 +21,13 @@ const WithState = ({ children }) => {
 
   return React.cloneElement(children, {
     selectedItem,
-    onChange: e => setSelected(e.target.value),
+    onChange: value => setSelected(value),
   });
 };
 
 const RadioStories = storiesOf(`${__dirname}`, module)
   .add('Radio', () => (
-    <Radio {...createKnobs()} onChange={x => x}>
+    <Radio {...createKnobs()} id="radio_1">
       Single Radio Button
     </Radio>
   ))
