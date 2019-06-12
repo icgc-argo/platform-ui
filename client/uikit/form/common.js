@@ -47,6 +47,7 @@ export const StyledInputWrapper = styled('div')`
     }};
   }
 `;
+
 StyledInputWrapper.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,

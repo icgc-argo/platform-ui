@@ -24,7 +24,7 @@ export default {
   borderColors: {
     [INPUT_STATES.default]: colors.grey_1,
     [INPUT_STATES.active]: colors.grey,
-    [INPUT_STATES.focus]: colors.grey,
+    [INPUT_STATES.focus]: colors.secondary_1,
     [INPUT_STATES.disabled]: colors.grey_2,
     [INPUT_STATES.error]: colors.error,
   },
