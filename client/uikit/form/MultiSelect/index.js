@@ -65,7 +65,7 @@ const InputBox = styled('div')`
   font-size: 14px;
 
   &:hover {
-    border-color: ${({ theme }) => theme.multiSelect.input.focusedBorderColor};
+    border-color: ${({ theme }) => theme.multiSelect.input.hoverBorderColor};
   }
 `;
 

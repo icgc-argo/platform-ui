@@ -26,8 +26,11 @@ const Textarea = ({ error, disabled, className, ...props }) => {
         border-color: ${theme.input.borderColors.default};
         background-color: ${theme.input.colors.default};
 
-        &:focus,
         &:hover {
+          border-color: ${theme.input.borderColors.hover} !important;
+        }
+
+        &:focus {
           outline: 0;
           border-color: ${theme.input.borderColors.focus};
         }
