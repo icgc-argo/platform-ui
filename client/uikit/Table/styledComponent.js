@@ -57,7 +57,7 @@ export const StyledTable = styled(ReactTable)`
   }
   /* overrides stripped rows style */
   &.ReactTable.-striped .rt-tr:not(.-odd) {
-    background: ${({ theme }) => theme.table.body.stripedRowBackground};
+    background: ${({ theme }) => theme.colors.grey_3};
   }
   &.ReactTable.-striped .rt-tr.-odd {
     background: ${({ theme }) => theme.colors.white};
