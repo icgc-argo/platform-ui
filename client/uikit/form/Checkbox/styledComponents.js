@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 export const StyledCheckbox = styled('input')`
+  appearance: none;
   position: relative;
   cursor: pointer;
   margin: 0;
@@ -12,7 +13,7 @@ export const StyledCheckbox = styled('input')`
     content: '';
 
     position: absolute;
-    top: 4px;
+    top: -11px;
     left: 3px;
     z-index: 1;
 
@@ -39,11 +40,11 @@ export const StyledCheckbox = styled('input')`
     content: '';
 
     position: absolute;
-    top: -2px;
+    top: -15px;
     left: 0;
 
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
 
     background-color: ${({ theme, disabled }) =>
       theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
@@ -60,5 +61,5 @@ export const StyledCheckbox = styled('input')`
 `;
 
 export const StyledLabel = styled('label')`
-  margin-left: 14px;
+  margin-left: 24px;
 `;
