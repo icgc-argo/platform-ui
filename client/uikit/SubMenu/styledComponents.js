@@ -88,7 +88,15 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('span')`
+export const ContentContainer = styled('button')`
+  /* overrides button styles */
+  border: none;
+  width: 100%;
+  padding: 0px;
+  background: none;
+  font-size: inherit;
+  font-weight: inherit;
+
   display: flex;
   flex-direction: row;
   align-items: center;
