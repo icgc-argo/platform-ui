@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledCheckbox, StyledLabel } from './styledComponents';
-import { RadioCheckboxWrapper } from '../common';
+import { RadioCheckboxWrapper, StyledGroup } from '../common';
 
 const Checkbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
   const onClick = () => onChange(value);
@@ -21,15 +21,18 @@ const Checkbox = ({ id, name, value, label, children, checked, onChange, disable
   );
 };
 
-export const CheckboxGroup = ({ onChange, children, selectedItems }) =>
-  React.Children.map(children, child =>
-    React.cloneElement(child, {
-      checked: selectedItems.has(child.props.value),
-      onChange: e => {
-        onChange(e);
-      },
-    }),
-  );
+export const CheckboxGroup = ({ onChange, children, selectedItems }) => (
+  <StyledGroup>
+    {React.Children.map(children, child =>
+      React.cloneElement(child, {
+        checked: selectedItems.has(child.props.value),
+        onChange: e => {
+          onChange(e);
+        },
+      }),
+    )}
+  </StyledGroup>
+);
 
 Checkbox.propTypes = {
   id: PropTypes.string,

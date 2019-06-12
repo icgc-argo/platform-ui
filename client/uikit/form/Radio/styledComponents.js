@@ -49,12 +49,12 @@ export const StyledRadio = styled('input')`
   }
 `;
 
-export const StyledRadioGroup = styled('div')`
+export const StyledGroup = styled('div')`
   div {
-    border-top: none;
+    margin-top: 2px;
   }
   div:first-child {
-    border-top: 1px solid ${({ theme }) => theme.radiocheckbox.borderColors.default};
+    margin: 0;
   }
 `;
 

@@ -75,3 +75,12 @@ export const RadioCheckboxWrapper = styled('div')`
     color: inherit;
   }
 `;
+
+export const StyledGroup = styled('div')`
+  div {
+    margin-top: 2px;
+  }
+  div:first-child {
+    margin: 0;
+  }
+`;

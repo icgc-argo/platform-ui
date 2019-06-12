@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyledRadio, StyledLabel, StyledRadioGroup } from './styledComponents';
-import { RadioCheckboxWrapper } from '../common';
+import { StyledRadio, StyledLabel } from './styledComponents';
+import { RadioCheckboxWrapper, StyledGroup } from '../common';
 
 const Radio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
   const onClick = () => onChange(value);
@@ -22,7 +22,7 @@ const Radio = ({ id, name, value, label, children, checked, onChange, disabled }
 };
 
 export const RadioGroup = ({ onChange, children, selectedItem }) => (
-  <StyledRadioGroup>
+  <StyledGroup>
     {React.Children.map(children, child =>
       React.cloneElement(child, {
         checked: child.props.value === selectedItem,
@@ -31,7 +31,7 @@ export const RadioGroup = ({ onChange, children, selectedItem }) => (
         },
       }),
     )}
-  </StyledRadioGroup>
+  </StyledGroup>
 );
 
 RadioGroup.propTypes = {
