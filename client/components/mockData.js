@@ -33,7 +33,7 @@ export const mockPrograms = [
     countries: 'hi',
     membershipType: 'FULL',
     genomicDonors: 50000,
-    submittedDonors: 50000,
+    submittedDonors: 30000,
     commitmentDonors: 50000,
   },
   {
