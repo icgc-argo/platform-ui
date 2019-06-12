@@ -21,6 +21,7 @@ import Table from 'uikit/Table';
 import NavBar from 'components/NavBar';
 import SideMenu from 'components/SideMenu';
 import { css } from 'uikit';
+import Button from 'uikit/Button';
 import PercentageBar from 'uikit/PercentageBar';
 import ProgramsTable from './ProgramsTable';
 
@@ -42,15 +43,24 @@ export default ({
         </Panel>
         <PageContent>
           <ContentHeader>
-            <Typography
-              variant="title"
-              color="primary"
+            <div
               css={css`
-                margin: 0px;
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
               `}
             >
-              All Programs
-            </Typography>
+              <Typography
+                variant="title"
+                color="primary"
+                css={css`
+                  margin: 0px;
+                `}
+              >
+                All Programs
+              </Typography>
+              <Button>Create a program</Button>
+            </div>
           </ContentHeader>
           <ContentBody>
             <ContentBox>
