@@ -45,7 +45,8 @@ export const StyledCheckbox = styled('input')`
     width: 16px;
     height: 16px;
 
-    background: #fff;
+    background-color: ${({ theme, disabled }) =>
+      theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
 
     border: 1px solid
       ${({ theme, checked, disabled }) =>

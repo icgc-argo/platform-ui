@@ -40,6 +40,9 @@ export const StyledRadio = styled('input')`
     width: 15px;
     height: 15px;
 
+    background: ${({ theme, disabled }) =>
+      theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
+
     border-radius: 50%;
     border: 1px solid
       ${({ theme, disabled, checked }) =>
