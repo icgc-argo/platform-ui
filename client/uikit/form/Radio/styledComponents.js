@@ -49,15 +49,6 @@ export const StyledRadio = styled('input')`
   }
 `;
 
-export const StyledGroup = styled('div')`
-  div {
-    margin-top: 2px;
-  }
-  div:first-child {
-    margin: 0;
-  }
-`;
-
 export const StyledLabel = styled('label')`
   margin-left: 32px;
 `;

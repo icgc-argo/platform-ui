@@ -7,8 +7,7 @@ const Checkbox = ({ id, name, value, label, children, checked, onChange, disable
   const onClick = () => onChange(value);
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-      <StyledCheckbox
-        type="checkbox"
+      <Checkbox
         id={id}
         name={name}
         value={value}
