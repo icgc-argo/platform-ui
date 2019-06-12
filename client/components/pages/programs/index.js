@@ -54,7 +54,11 @@ export default ({
           </ContentHeader>
           <ContentBody>
             <ContentBox>
-              <ProgramsTable programs={programs} />
+              <ProgramsTable
+                programs={programs}
+                onProgramUsersClick={console.log}
+                onProgramEditClick={console.log}
+              />
             </ContentBox>
           </ContentBody>
         </PageContent>

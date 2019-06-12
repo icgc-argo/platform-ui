@@ -43,8 +43,12 @@ const InteractiveIcon = props => {
 };
 InteractiveIcon.propTypes = Icon.propTypes;
 
-export default (props: { programs: Array<ProgramsTableProgram> }) => {
-  const data: Array<TableProgramInternal> = props.programs.map(p => ({
+export default (tableProps: {
+  programs: Array<ProgramsTableProgram>,
+  onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
+  onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
+}) => {
+  const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
     donorPercentage: p.submittedDonors / p.commitmentDonors,
   }));
@@ -125,8 +129,18 @@ export default (props: { programs: Array<ProgramsTableProgram> }) => {
             align-items: center;
           `}
         >
-          <InteractiveIcon height="15px" width="15px" name="users" onClick={console.log} />
-          <InteractiveIcon height="15px" width="15px" name="edit" onClick={console.log} />
+          <InteractiveIcon
+            height="15px"
+            width="15px"
+            name="users"
+            onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
+          />
+          <InteractiveIcon
+            height="15px"
+            width="15px"
+            name="edit"
+            onClick={() => tableProps.onProgramEditClick({ program: props.original })}
+          />
         </div>
       ),
     },
