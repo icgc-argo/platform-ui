@@ -21,7 +21,10 @@ const WithState = ({ children }) => {
 
   return React.cloneElement(children, {
     selectedItem,
-    onChange: value => setSelected(value),
+    onChange: value => {
+      action('radio button clicked')(value);
+      setSelected(value);
+    },
   });
 };
 
