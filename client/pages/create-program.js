@@ -3,6 +3,7 @@ import Container from 'uikit/Container';
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 import Input from 'uikit/form/Input';
+import Textarea from 'uikit/form/Textarea';
 import FormControl from 'uikit/form/FormControl';
 import InputLabel from 'uikit/form/InputLabel';
 import FormHelperText from 'uikit/form/FormHelperText';
@@ -151,7 +152,7 @@ export default createPage({
                 <InputLabel htmlFor="description">Description</InputLabel>
               </Col>
               <Col sm={9}>
-                <Input aria-label="Description" id="description" />
+                <Textarea aria-label="Description" id="description" />
                 {/*               <FormHelperText>Some helper text</FormHelperText> */}
               </Col>
             </Row>

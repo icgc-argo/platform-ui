@@ -20,6 +20,7 @@ const Textarea = ({ error, disabled, className, ...props }) => {
         ${css(theme.typography.paragraph)};
         resize: vertical;
         width: 100%;
+        box-sizing: border-box;
         padding: 8px 10px;
         border: 1px solid;
         border-radius: 8px;
