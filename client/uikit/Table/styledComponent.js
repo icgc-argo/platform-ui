@@ -17,6 +17,8 @@ export const StyledTable = styled(ReactTable)`
 
   &.ReactTable {
     border: none;
+    border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
+    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
     & .rt-table {
       & .rt-thead .rt-tr .rt-th:first-of-type,
       & .rt-tr .rt-td:first-of-type {
@@ -32,31 +34,27 @@ export const StyledTable = styled(ReactTable)`
             margin: 0px;
           `}
       }
-      ${({ theme, showPagination, showPaginationBottom }) =>
-        !(showPagination && showPaginationBottom) &&
-        css`
-          border-bottom: solid 1px ${theme.colors.grey_2};
-        `};
     }
   }
 
-  &.ReactTable .rt-th {
+  &.ReactTable .rt-thead.-header .rt-tr .rt-th {
     ${({ theme }) => css(theme.typography.data)};
     font-weight: bold;
-    background: ${({ theme }) => theme.table.header.background};
-  }
-  &.ReactTable .rt-tr {
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
-    &.selected {
-      background-color: ${({ theme }) => theme.colors.secondary_4} !important;
+    background: ${({ theme }) => theme.colors.white};
+    &:not(:last-of-type) {
+      border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
     }
   }
   &.ReactTable .rt-tbody .rt-td {
     ${({ theme }) => css(theme.typography.data)}
     padding: 10px 16px;
-    border-right: none;
+    border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
-
+  &.ReactTable .rt-tr {
+    &.selected {
+      background-color: ${({ theme }) => theme.colors.secondary_4} !important;
+    }
+  }
   /* overrides stripped rows style */
   &.ReactTable.-striped .rt-tr:not(.-odd) {
     background: ${({ theme }) => theme.table.body.stripedRowBackground};
@@ -72,7 +70,7 @@ export const StyledTable = styled(ReactTable)`
 
   &.ReactTable .rt-thead.-header {
     box-shadow: none;
-    border-bottom: solid 2px ${({ theme }) => theme.colors.grey_2};
+    border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
     & .rt-th {
       padding: 10px 16px;
       border-left: none;
