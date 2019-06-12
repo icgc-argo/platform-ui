@@ -13,7 +13,7 @@ export const StyledRadio = styled('input')`
     content: '';
     position: absolute;
     z-index: 1;
-    top: 1px;
+    top: 3px;
     left: -22px;
 
     width: 10px;
@@ -36,7 +36,7 @@ export const StyledRadio = styled('input')`
   & + label:after {
     content: '';
     position: absolute;
-    top: -3px;
+    top: 50%;
     left: -26px;
 
     width: 15px;
@@ -46,6 +46,8 @@ export const StyledRadio = styled('input')`
     border: 1px solid
       ${({ theme, disabled, checked }) =>
         theme.radiocheckbox.radio[disabled && !checked ? 'disabled' : 'default']};
+
+    transform: translateY(-55%);
   }
 `;
 
