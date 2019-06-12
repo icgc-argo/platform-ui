@@ -25,7 +25,11 @@ export const mockPrograms = [
     id: null,
     shortName: 'June5TestRB_CancerTypes2',
     name: 'June5TestRB_CancerTypes2',
-    cancerTypes: [],
+    cancerTypes: [
+      { id: 'cancer_1', name: 'Breast Cancer' },
+      { id: 'cancer_2', name: 'Cervical Cancer' },
+      { id: 'cancer_3', name: 'Pancreatic Cancer' },
+    ],
     countries: 'hi',
     membershipType: 'FULL',
     genomicDonors: 50000,

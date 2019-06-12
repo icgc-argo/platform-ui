@@ -29,7 +29,7 @@ const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
       `}
     >
       <ValignedText>
-        {nom} <Icon name="slash" fill="grey_2" /> {denom}
+        {nom} <Icon name="slash" height="15px" fill="grey_2" /> {denom}
       </ValignedText>
       <ValignedText>{((nom / denom) * 100).toFixed(2)}%</ValignedText>
       <div
