@@ -66,7 +66,7 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const RadioInput = ({ value, disabled, checked }) => {
+const Radio = ({ value, disabled, checked }) => {
   const HiddenRadioRef = React.createRef();
 
   return (
@@ -90,6 +90,6 @@ const RadioInput = ({ value, disabled, checked }) => {
   );
 };
 
-RadioInput.propTypes = {};
+Radio.propTypes = {};
 
-export default RadioInput;
+export default Radio;
