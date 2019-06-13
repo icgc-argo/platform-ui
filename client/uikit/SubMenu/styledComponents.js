@@ -88,7 +88,7 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('div')`
+export const ContentContainer = styled('button')`
   /* overrides button styles */
   border: none;
   width: 100%;
