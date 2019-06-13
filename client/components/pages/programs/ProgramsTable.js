@@ -74,7 +74,7 @@ export default (tableProps: {
       Cell: ({ original: { cancerTypes } }) => (
         <div>
           {cancerTypes.map(({ name }, i) => (
-            <div>
+            <div key={name}>
               {name} {i < cancerTypes.length - 1 && ','}
             </div>
           ))}
@@ -89,7 +89,7 @@ export default (tableProps: {
         return (
           <div>
             {list.map((country, i) => (
-              <div>
+              <div key={country}>
                 {country} {i < list.length - 1 && ','}
               </div>
             ))}
