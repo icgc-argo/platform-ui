@@ -46,10 +46,12 @@ export const StyledInputWrapper = styled('div')`
       else return theme.colors.secondary_1;
     }};
   }
+  ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
 StyledInputWrapper.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,
   inputState: PropTypes.oneOf(Object.values(INPUT_STATES)),
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
+  getOverrideCss: PropTypes.func,
 };
