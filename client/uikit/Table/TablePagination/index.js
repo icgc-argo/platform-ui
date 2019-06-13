@@ -1,25 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
+import { withProps } from 'recompose';
 
-import Typography from "../../Typography";
+import Typography from '../../Typography';
+import { StyledInputWrapper } from '../../form/common';
 
-const PaginationContainer = styled("div")`
-  min-height: 40px;
+export const TableActionBar = withProps(() => ({
+  variant: 'label',
+  color: 'grey',
+  component: 'div',
+}))(styled(Typography)`
+  min-height: 32px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background: ${({ theme }) => theme.colors.white};
-  border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
-  border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-`;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+`);
 
 /*
  * Please edit me!
  */
 const TablePagination = () => (
-  <PaginationContainer>
+  <TableActionBar>
     <Typography variant="caption">TablePagination coming soon</Typography>
-  </PaginationContainer>
+  </TableActionBar>
 );
 
 TablePagination.propTypes = {

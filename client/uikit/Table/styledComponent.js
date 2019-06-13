@@ -17,9 +17,9 @@ export const StyledTable = styled(ReactTable)`
 
   &.ReactTable {
     border: none;
-    border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-    border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
     & .rt-table {
+      border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
+      border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
       & .rt-thead .rt-tr .rt-th:first-of-type,
       & .rt-tr .rt-td:first-of-type {
         ${({ isSelectTable, theme }) =>
