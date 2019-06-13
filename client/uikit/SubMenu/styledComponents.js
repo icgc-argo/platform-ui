@@ -97,6 +97,7 @@ export const ContentContainer = styled('button')`
   font-size: inherit;
   font-weight: inherit;
   color: inherit;
+  cursor: pointer;
 
   display: flex;
   flex-direction: row;
