@@ -88,7 +88,7 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('button')`
+export const ContentContainer = styled('div')`
   /* overrides button styles */
   border: none;
   width: 100%;
@@ -96,6 +96,7 @@ export const ContentContainer = styled('button')`
   background: none;
   font-size: inherit;
   font-weight: inherit;
+  color: inherit;
 
   display: flex;
   flex-direction: row;
