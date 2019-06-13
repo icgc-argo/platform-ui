@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyledRadio, StyledLabel } from './styledComponents';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
+import RadioInput from '../../RadioInput';
+import css from '@emotion/css';
 
 const Radio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
   const onClick = () => onChange(value);
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-      <StyledRadio
-        type="radio"
-        id={id}
-        name={name}
-        value={value}
-        checked={checked}
-        disabled={disabled}
-      />
-
-      <StyledLabel onClick={onClick}>{children}</StyledLabel>
+    <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
+      <RadioInput id={id} name={name} value={value} checked={checked} disabled={disabled} />
+      <label
+        css={css`
+          margin-left: 32px;
+        `}
+      >
+        {children}
+      </label>
     </RadioCheckboxWrapper>
   );
 };
 
 export const RadioGroup = ({ onChange, children, selectedItem }) => (
-  <StyledGroup>
+  <StyledGroup role="radiogroup">
     {React.Children.map(children, child =>
       React.cloneElement(child, {
         checked: child.props.value === selectedItem,

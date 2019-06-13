@@ -29,11 +29,7 @@ const WithState = ({ children }) => {
 };
 
 const RadioStories = storiesOf(`${__dirname}`, module)
-  .add('Radio', () => (
-    <Radio {...createKnobs()} id="radio_1">
-      Single Radio Button
-    </Radio>
-  ))
+  .add('Radio', () => <Radio {...createKnobs()}>Single Radio Button</Radio>)
   .add('Radio Group', () => (
     <WithState>
       <RadioGroup onChange="[parent func]" selectedItem="[parent func]">
