@@ -15,15 +15,31 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
-import { mockPrograms } from '../../mockData';
-import Table from 'uikit/Table';
-
 import NavBar from 'components/NavBar';
 import SideMenu from 'components/SideMenu';
 import { css } from 'uikit';
+import Table, { TableActionBar } from 'uikit/Table';
 import Button from 'uikit/Button';
 import PercentageBar from 'uikit/PercentageBar';
+import { INPUT_PRESETS } from 'uikit/form/Input';
+import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
+import { mockPrograms } from '../../mockData';
+
+const TableFilterInput = props => (
+  <Input
+    aria-label="tableFilter"
+    preset={INPUT_PRESETS.SEARCH}
+    getOverrideCss={({ theme, inputState }) =>
+      inputState === INPUT_STATES.default
+        ? css`
+            border-color: ${theme.colors.grey_2};
+          `
+        : ''
+    }
+    {...props}
+  />
+);
 
 export default ({
   egoJwt,
@@ -59,11 +75,19 @@ export default ({
               >
                 All Programs
               </Typography>
-              <Button>Create a program</Button>
+              <Button onClick={console.log}>Create a program</Button>
             </div>
           </ContentHeader>
           <ContentBody>
-            <ContentBox>
+            <ContentBox
+              css={css`
+                padding-top: 0px;
+              `}
+            >
+              <TableActionBar>
+                {pathname.length} results
+                <TableFilterInput />
+              </TableActionBar>
               <ProgramsTable
                 programs={programs}
                 onProgramUsersClick={console.log}
