@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledCheckbox, StyledLabel } from './styledComponents';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
+import { default as CheckboxInput } from '../../input/Checkbox';
+import css from '@emotion/css';
 
 const Checkbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
   const onClick = () => onChange(value);
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-      <Checkbox
+      <CheckboxInput
         id={id}
         name={name}
         value={value}
@@ -15,7 +16,14 @@ const Checkbox = ({ id, name, value, label, children, checked, onChange, disable
         onChange={onClick}
         disabled={disabled}
       />
-      <StyledLabel onClick={onClick}>{children}</StyledLabel>
+      <label
+        css={css`
+          margin-left: 24px;
+        `}
+        onClick={onClick}
+      >
+        {children}
+      </label>
     </RadioCheckboxWrapper>
   );
 };

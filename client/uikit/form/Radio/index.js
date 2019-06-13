@@ -11,7 +11,7 @@ const Radio = ({ id, name, value, label, children, checked, onChange, disabled }
       <RadioInput id={id} name={name} value={value} checked={checked} disabled={disabled} />
       <label
         css={css`
-          margin-left: 32px;
+          margin-left: 28px;
         `}
       >
         {children}
