@@ -76,5 +76,20 @@ spec:
                 }
             }
         }
+
+        stage('Deploy to argo-qa') {
+            when {
+                expression {
+                    GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                    return GIT_BRANCH == 'origin/master' || params.FORCE_FULL_BUILD
+                }
+            }
+            steps {
+                build(job: "/ARGO/provision/platform-ui", parameters: [
+                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set image.tag=${commit}" ]
+                ])
+            }
+        }
     }
 }
