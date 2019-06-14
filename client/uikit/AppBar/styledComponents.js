@@ -48,7 +48,7 @@ export const AppBarContainer = styled('nav')`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  min-height: 64px;
+  min-height: 58px;
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 export const SectionDisplay = styled('div')`

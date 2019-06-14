@@ -60,23 +60,42 @@ const Root = (props: {
   }, []);
 
   return (
-    <ThemeProvider>
-      <>
-        {error ? (
-          isProduction ? (
-            <div>Something went wrong, please refresh the page or try again later</div>
+    <>
+      <style>
+        {`
+            body {
+              margin: 0;
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            } /* custom! */
+            #__next {
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            }
+        `}
+      </style>
+      <ThemeProvider>
+        <>
+          {error ? (
+            isProduction ? (
+              <div>Something went wrong, please refresh the page or try again later</div>
+            ) : (
+              <pre>{error.stack || error.message}</pre>
+            )
+          ) : unauthorized ? (
+            'You are not authorized'
           ) : (
-            <pre>{error.stack || error.message}</pre>
-          )
-        ) : unauthorized ? (
-          'You are not authorized'
-        ) : (
-          <>
             <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-          </>
-        )}
-      </>
-    </ThemeProvider>
+          )}
+        </>
+      </ThemeProvider>
+    </>
   );
 };
 

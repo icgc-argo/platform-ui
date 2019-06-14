@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import Root from '../components/Root';
+import LandingPage from 'components/pages/landing';
 import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: true,
-  getInitialProps: Root.getInitialProps,
-})(props => <Root {...props} />);
+  getInitialProps: LandingPage.getInitialProps,
+})(props => <LandingPage {...props} />);

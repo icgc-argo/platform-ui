@@ -8,6 +8,8 @@ import slash from './collection/slash';
 import search from './collection/search';
 import times from './collection/times';
 import asterisk from './collection/asterisk';
+import users from './collection/users';
+import edit from './collection/edit';
 
 /**
  * Icon path and property lookup object
@@ -24,6 +26,8 @@ const Icons = {
   search,
   times,
   asterisk,
+  users,
+  edit,
 };
 
 export default Icons;

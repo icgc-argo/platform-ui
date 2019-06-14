@@ -1,10 +1,6 @@
 //@flow
 import React from 'react';
 import get from 'lodash/get';
-//$FlowFixMe
-import css from '@emotion/css';
-//$FlowFixMe
-import styled from '@emotion/styled';
 
 import Typography from 'uikit/Typography';
 import Submenu, { MenuItem } from 'uikit/SubMenu';
@@ -19,11 +15,31 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
-import { mockPrograms } from './mockData';
-import Table from 'uikit/Table';
-
 import NavBar from 'components/NavBar';
 import SideMenu from 'components/SideMenu';
+import { css } from 'uikit';
+import Table, { TableActionBar } from 'uikit/Table';
+import Button from 'uikit/Button';
+import PercentageBar from 'uikit/PercentageBar';
+import { INPUT_PRESETS } from 'uikit/form/Input';
+import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
+import ProgramsTable from './ProgramsTable';
+import { mockPrograms } from '../../mockData';
+
+const TableFilterInput = props => (
+  <Input
+    aria-label="tableFilter"
+    preset={INPUT_PRESETS.SEARCH}
+    getOverrideCss={({ theme, inputState }) =>
+      inputState === INPUT_STATES.default
+        ? css`
+            border-color: ${theme.colors.grey_2};
+          `
+        : ''
+    }
+    {...props}
+  />
+);
 
 export default ({
   egoJwt,
@@ -34,65 +50,49 @@ export default ({
   pathname,
   programs = mockPrograms,
 }: any) => {
-  const tableColumns = [
-    {
-      Header: 'Program Name',
-      accessor: 'name',
-    },
-    {
-      Header: 'Short Name',
-      accessor: 'shortName',
-    },
-    {
-      Header: 'Country',
-      accessor: 'countries',
-    },
-    {
-      Header: 'Memebership',
-      accessor: 'membershipType',
-    },
-  ];
-
   return (
     <PageContainer>
-      <NavBar
-        css={css`
-          flex: 1;
-        `}
-        path={pathname}
-        logOut={logOut}
-      />
+      <NavBar path={pathname} logOut={logOut} />
       <PageBody>
         <Panel>
-          <SideMenu programs={programs} initialShownItem={1} />
+          <SideMenu initialShownItem={1} />
         </Panel>
         <PageContent>
           <ContentHeader>
-            <Typography
-              variant="title"
-              color="primary"
+            <div
               css={css`
-                margin: 0px;
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
               `}
             >
-              All Programs
-            </Typography>
-          </ContentHeader>
-          <ContentBody>
-            <ContentBox>
               <Typography
+                variant="title"
+                color="primary"
                 css={css`
                   margin: 0px;
                 `}
               >
-                <Table
-                  data={programs}
-                  showPagination
-                  showPaginationTop
-                  showPaginationBottom
-                  columns={tableColumns}
-                />
+                All Programs
               </Typography>
+              <Button onClick={console.log}>Create a program</Button>
+            </div>
+          </ContentHeader>
+          <ContentBody>
+            <ContentBox
+              css={css`
+                padding-top: 0px;
+              `}
+            >
+              <TableActionBar>
+                {pathname.length} results
+                <TableFilterInput />
+              </TableActionBar>
+              <ProgramsTable
+                programs={programs}
+                onProgramUsersClick={console.log}
+                onProgramEditClick={console.log}
+              />
             </ContentBox>
           </ContentBody>
         </PageContent>

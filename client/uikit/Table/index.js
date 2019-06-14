@@ -8,6 +8,8 @@ import TablePagination from './TablePagination';
 import { StyledTable } from './styledComponent';
 import DnaLoader from '../DnaLoader';
 
+export { TableActionBar } from './TablePagination';
+
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
   const selected = selectedIds.some(id => id === thisRowId);

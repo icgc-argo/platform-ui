@@ -13,6 +13,7 @@ import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
 import Button from 'uikit/Button';
+import { css } from 'uikit';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -46,7 +47,13 @@ export default (props: { path: string, logOut: void => void }) => {
     }
   })();
   return (
-    <AppBar>
+    <AppBar
+      css={css`
+        position: sticky;
+        top: 0px;
+        z-index: 2;
+      `}
+    >
       <Section>
         <Logo
           DomComponent={props => (

@@ -27,7 +27,7 @@ const level1Style = ({ selected, theme }) => css`
 `;
 
 const level2Style = ({ selected, theme }) => css`
-  ${css(theme.typography.navigation)}
+  ${css(theme.typography.paragraph)}
   ${defaultLabelStyle({ theme, selected })}
   border: none;
   border-left: solid 2px;
@@ -37,6 +37,11 @@ const level2Style = ({ selected, theme }) => css`
   & > .MenuItemContent {
     padding-left: 40px;
     padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    & > ${ContentContainer} {
+      line-height: 20px;
+    }
   }
 `;
 
@@ -83,7 +88,17 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('span')`
+export const ContentContainer = styled('button')`
+  /* overrides button styles */
+  border: none;
+  width: 100%;
+  padding: 0px;
+  background: none;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  cursor: pointer;
+
   display: flex;
   flex-direction: row;
   align-items: center;

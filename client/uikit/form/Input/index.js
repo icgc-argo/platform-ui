@@ -22,6 +22,7 @@ const Input = ({
   className,
   error,
   disabled,
+  getOverrideCss,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
@@ -39,6 +40,7 @@ const Input = ({
         disabled={calcDisabled}
         size={size}
         inputState={activeState}
+        getOverrideCss={getOverrideCss}
       >
         {icon && <IconWrapper>{icon}</IconWrapper>}
         <StyledInput
@@ -70,6 +72,22 @@ Input.propTypes = {
    * Size
    */
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
+  /**
+   * Show an error?
+   */
+  error: PropTypes.bool,
+  /**
+   * Whether this input is disabled
+   */
+  disabled: PropTypes.bool,
+  /**
+   * Error message to show
+   */
+  errorMessage: PropTypes.string,
+  /**
+   * Used for providing css override of the container with access to the internal state
+   */
+  getOverrideCss: PropTypes.func,
 };
 
 export default Input;

@@ -22,17 +22,13 @@ const applyUrlMasks = server => {
 const server = express();
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
+server.use(express.static('static'));
 server.use('/status', (req, res) => {
   res.json(version);
 });
 
 Next.prepare().then(async () => {
   applyUrlMasks(server);
-
-  server.get('/', (req, res) => {
-    const queryParams = { id: req.query.id };
-    Next.render(req, res, '/', queryParams);
-  });
   server.get('*', (req, res) => handle(req, res));
   server.listen(PORT, err => {
     if (err) throw err;

@@ -20,19 +20,21 @@ export const MenuItem = ({
   const isSelected =
     typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
   const theme = useTheme();
+  const contentContainerRef = React.createRef();
   return (
     <MenuItemContainer
       level={level}
       selected={isSelected}
       onClick={e => {
         e.stopPropagation();
+        contentContainerRef.current.blur();
         setLocalSelectedState(!isSelected);
         onClick(e);
       }}
       className={`${className} MenuItemContainer`}
     >
       <div className="MenuItemContent">
-        <ContentContainer>
+        <ContentContainer ref={contentContainerRef}>
           {icon && (
             <IconContainer>
               {React.cloneElement(icon, {

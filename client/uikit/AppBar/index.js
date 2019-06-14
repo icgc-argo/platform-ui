@@ -82,6 +82,6 @@ MenuItem.propTypes = {
   DomComponent: PropTypes.func,
 };
 
-const AppBar = ({ children }) => <AppBarContainer>{children}</AppBarContainer>;
+const AppBar = AppBarContainer;
 AppBar.propTypes = {};
 export default AppBar;
