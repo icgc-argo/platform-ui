@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
 
 import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper } from '../common';
-import { StyledInput, ErrorMsg, IconWrapper } from './styledComponents';
+import { StyledInput, IconWrapper } from './styledComponents';
+import FormControlContext from '../FormControl/FormControlContext';
 
 export const INPUT_PRESETS = {
   DEFAULT: 'default',
@@ -17,42 +16,44 @@ const Input = ({
   value,
   onChange,
   type,
-  disabled,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
   size = INPUT_SIZES.SM,
-  error = false,
-  errorMessage = '',
   className,
+  error,
+  disabled,
   getOverrideCss,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
+
+  const { disabled: calcDisabled = disabled, error: calcError = error } =
+    useContext(FormControlContext) || {};
+
   return (
     <div className={className}>
       <StyledInputWrapper
         size={size}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
-        error={error}
-        disabled={disabled}
+        error={calcError}
+        disabled={calcDisabled}
         size={size}
-        error={error}
         inputState={activeState}
         getOverrideCss={getOverrideCss}
       >
         {icon && <IconWrapper>{icon}</IconWrapper>}
         <StyledInput
           aria-label={props['aria-label']}
-          placeholder={disabled ? '' : placeholder}
+          placeholder={calcDisabled ? '' : placeholder}
           value={value}
           type={type}
           onChange={onChange}
           size={size}
-          disabled={disabled}
+          disabled={calcDisabled}
+          id={props.id}
         />
       </StyledInputWrapper>
-      {error && errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
     </div>
   );
 };
@@ -75,6 +76,10 @@ Input.propTypes = {
    * Show an error?
    */
   error: PropTypes.bool,
+  /**
+   * Whether this input is disabled
+   */
+  disabled: PropTypes.bool,
   /**
    * Error message to show
    */

@@ -48,6 +48,7 @@ export const StyledInputWrapper = styled('div')`
   }
   ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
+
 StyledInputWrapper.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,

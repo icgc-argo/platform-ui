@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
+import css from '@emotion/css';
 
 const FormControl = React.forwardRef(function FormControl(
   {
@@ -29,12 +30,20 @@ const FormControl = React.forwardRef(function FormControl(
 
   return (
     <FormControlContext.Provider value={childContext}>
-      <Component ref={ref} {...other}>
+      <Component
+        ref={ref}
+        {...other}
+        css={css`
+          margin-bottom: 10px;
+        `}
+      >
         {children}
       </Component>
     </FormControlContext.Provider>
   );
 });
+
+FormControl.displayName = 'FormControl';
 
 FormControl.propTypes = {
   /**

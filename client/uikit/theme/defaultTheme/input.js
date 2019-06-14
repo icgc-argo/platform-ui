@@ -6,6 +6,7 @@ export const INPUT_STATES = {
   focus: 'focus',
   disabled: 'disabled',
   error: 'error',
+  hover: 'hover',
 };
 
 export default {
@@ -27,6 +28,7 @@ export default {
     [INPUT_STATES.focus]: colors.grey,
     [INPUT_STATES.disabled]: colors.grey_2,
     [INPUT_STATES.error]: colors.error,
+    [INPUT_STATES.hover]: colors.secondary_1,
   },
   colors: {
     [INPUT_STATES.default]: colors.white,

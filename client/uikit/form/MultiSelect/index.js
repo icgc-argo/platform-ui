@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Icon from '../../Icon';
 import Option from './Option';
 import css from '@emotion/css';
+import _ from 'lodash';
 import Tag from '../../Tag';
 
 const Container = styled('div')`
@@ -62,6 +63,10 @@ const InputBox = styled('div')`
       : props.theme.multiSelect.input.borderColor};
 
   font-size: 14px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.multiSelect.input.hoverBorderColor};
+  }
 `;
 
 const Input = styled('input')`
@@ -148,10 +153,10 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
   });
 
   const selectedItems = _.map(value, v => {
-    const c = _.find(children, { props: { value: v } });
+    const c = _.find(React.Children.toArray(children), { props: { value: v } });
     return {
       value: c.props.value,
-      displayName: c.props.value,
+      displayName: c.props.children,
     };
   });
 

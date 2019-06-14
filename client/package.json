@@ -2,6 +2,7 @@
   "name": "create-next-example-app",
   "scripts": {
     "dev": "nodemon index.js",
+    "dev:fast": "next",
     "dev-ui": "node index.js",
     "build": "next build",
     "start-prod": "npm run build && node index.js",
