@@ -21,7 +21,6 @@ function Option({ ...other }) {
 
 Option.propTypes = {
   value: PropTypes.any,
-  children: PropTypes.string,
 };
 
 export default Option;

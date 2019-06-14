@@ -6,6 +6,7 @@ import Option from './Option';
 import css from '@emotion/css';
 import _ from 'lodash';
 import Tag from '../../Tag';
+import useTheme from '../../utils/useTheme';
 
 const Container = styled('div')`
   position: relative;
@@ -13,17 +14,18 @@ const Container = styled('div')`
 
 const OptionsWrapper = styled('div')`
   position: absolute;
+  box-sizing: border-box;
   width: 100%;
   z-index: 1;
   background-color: white;
+  border: solid 1px;
+  border-top: 0;
+  border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
+  border-radius: 0 0 4px 4px;
 `;
 
 const OptionsContainer = styled('div')`
   box-sizing: border-box;
-  border-radius: 0 0 4px 4px;
-  border: solid 1px;
-  border-top: 0;
-  border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
   position: relative;
   max-height: 200px;
   overflow: auto;
@@ -36,8 +38,8 @@ const OptionList = styled('ul')`
 `;
 
 const Gap = styled('div')`
-  box-sizing: border-box;
   position: absolute;
+  left: -1px;
   border: solid 1px;
   border-top: none;
   border-bottom: none;
@@ -96,7 +98,51 @@ const SelectedItem = styled(Tag)`
   cursor: pointer;
 `;
 
-function MultiSelect({ name, value, children, onChange, placeholder, inputProps }) {
+const SectionTitle = styled('li')`
+  list-style: none;
+  font-size: 11px;
+  height: 27px;
+  line-height: 27px;
+  padding-left: 7px;
+  font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
+  color: ${({ theme }) => theme.colors.grey};
+`;
+
+function Highlight({ string, searchText }) {
+  if (_.isEmpty(searchText)) {
+    return <>{string}</>;
+  }
+
+  const idx = _.toLower(string).indexOf(_.toLower(searchText));
+
+  const theme = useTheme();
+
+  if (idx === -1) {
+    return <>{string}</>;
+  } else {
+    const before = string.substring(0, idx);
+
+    const match = string.substring(idx, idx + searchText.length);
+
+    const after = string.substring(idx + searchText.length, string.length);
+
+    return (
+      <>
+        {before}
+        <span
+          css={css`
+            background-color: ${theme.colors.warning_3};
+          `}
+        >
+          {match}
+        </span>
+        {after}
+      </>
+    );
+  }
+}
+
+function MultiSelect({ name, value, children, onChange, placeholder, inputProps, allowNew }) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
 
@@ -108,6 +154,15 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
     };
     setSearchString('');
     onChange(event, child);
+  };
+
+  const handleNewItemClick = event => {
+    event.target = {
+      value: _.uniq([...value, searchString]),
+      name,
+    };
+    setSearchString('');
+    onChange(event, null);
   };
 
   const handleInputChange = e => {
@@ -148,12 +203,21 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
       role: 'option',
       selected,
       value: undefined,
+      children: <Highlight string={child.props.children} searchText={searchString} />,
       'data-value': child.props.value,
     });
   });
 
   const selectedItems = _.map(value, v => {
     const c = _.find(React.Children.toArray(children), { props: { value: v } });
+
+    if (allowNew && typeof c === 'undefined' && _.isString(v)) {
+      return {
+        value: v,
+        displayName: v,
+      };
+    }
+
     return {
       value: c.props.value,
       displayName: c.props.children,
@@ -162,7 +226,9 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
 
   const showPlaceHolder = _.isEmpty(value) && searchString === '';
 
-  const showOptions = focusState && !_.isEmpty(_.compact(items));
+  const showOptions = allowNew || (focusState && !_.isEmpty(_.compact(items)));
+
+  const theme = useTheme();
 
   return (
     <Container>
@@ -186,12 +252,36 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
         />
       </InputBox>
       {showOptions && (
-        <OptionsWrapper>
-          <Gap />
-          <OptionsContainer>
-            <OptionList>{items}</OptionList>
-          </OptionsContainer>
-        </OptionsWrapper>
+        <>
+          <OptionsWrapper>
+            <Gap />
+            <OptionsContainer>
+              <OptionList>
+                {allowNew && !_.isEmpty(items) && <SectionTitle>SUGGESTIONS</SectionTitle>}
+                {items}
+              </OptionList>
+            </OptionsContainer>
+            {allowNew && !_.isEmpty(searchString) && (
+              <Option
+                css={css`
+                  border-top: ${_.isEmpty(items) ? 'none' : '1px solid ' + theme.colors.grey_2};
+                `}
+                onMouseDown={handleNewItemClick}
+              >
+                {searchString}
+                <span
+                  css={css`
+                    color: ${theme.colors.grey};
+                    margin-left: 0.5em;
+                  `}
+                >
+                  (New Value)
+                </span>
+              </Option>
+            )}
+          </OptionsWrapper>
+          }
+        </>
       )}
       <input value={value} name={name} type="hidden" {...inputProps} />
     </Container>
@@ -199,10 +289,20 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps 
 }
 
 MultiSelect.propTypes = {
+  /* Name of the input */
   name: PropTypes.string,
+
+  /* Value of the input */
   value: PropTypes.any.isRequired,
+
+  /* Placehoder of the input */
   placeholder: PropTypes.string,
+
+  /* Handler of onChange event */
   onChange: PropTypes.func.isRequired,
+
+  /* Whether to allow user to add new value */
+  allowNew: PropTypes.bool,
 };
 
 export default MultiSelect;
