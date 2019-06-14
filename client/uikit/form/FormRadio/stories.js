@@ -1,10 +1,10 @@
 import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
 import { boolean, button } from '@storybook/addon-knobs';
-import Radio, { RadioGroup } from '.';
+import FormRadio, { RadioGroup } from '.';
 import { action } from '@storybook/addon-actions';
 import Hook from '../../utils/Hook';
-import Checkbox from '../Checkbox';
+import Checkbox from '../FormCheckbox';
 
 const createKnobs = () => {
   const checked = boolean('checked', false);
@@ -29,13 +29,13 @@ const WithState = ({ children }) => {
 };
 
 const RadioStories = storiesOf(`${__dirname}`, module)
-  .add('Radio', () => <Radio {...createKnobs()}>Single Radio Button</Radio>)
+  .add('Radio', () => <FormRadio {...createKnobs()}>Single Radio Button</FormRadio>)
   .add('Radio Group', () => (
     <WithState>
       <RadioGroup onChange="[parent func]" selectedItem="[parent func]">
-        <Radio value="one">One</Radio>
-        <Radio value="two">Two</Radio>
-        <Radio value="three">Three</Radio>
+        <FormRadio value="one">One</FormRadio>
+        <FormRadio value="two">Two</FormRadio>
+        <FormRadio value="three">Three</FormRadio>
       </RadioGroup>
     </WithState>
   ));

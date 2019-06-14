@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
-import { default as CheckboxInput } from '../../input/Checkbox';
+import Checkbox from '../../input/Checkbox';
 import css from '@emotion/css';
 
-const Checkbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
+const FormCheckbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
   const onClick = () => onChange(value);
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-      <CheckboxInput
+      <Checkbox
         id={id}
         name={name}
         value={value}
@@ -51,4 +51,4 @@ Checkbox.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default Checkbox;
+export default FormCheckbox;

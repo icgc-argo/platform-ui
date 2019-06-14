@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
-import { default as RadioInput } from '../../input/Radio';
+import Radio from '../../input/Radio';
 import css from '@emotion/css';
 
-const Radio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
+const FormRadio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
   const onClick = () => onChange(value);
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
-      <RadioInput id={id} name={name} value={value} checked={checked} disabled={disabled} />
+      <Radio id={id} name={name} value={value} checked={checked} disabled={disabled} />
       <label
         css={css`
           margin-left: 28px;
@@ -40,7 +40,7 @@ RadioGroup.propTypes = {
     .isRequired,
 };
 
-Radio.propTypes = {
+FormRadio.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   value: PropTypes.any,
@@ -50,4 +50,4 @@ Radio.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default Radio;
+export default FormRadio;

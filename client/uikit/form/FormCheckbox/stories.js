@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
-import Checkbox, { CheckboxGroup } from '.';
+import FormCheckbox, { CheckboxGroup } from '.';
 import { boolean, button } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
@@ -29,14 +29,14 @@ const WithState = ({ children }) => {
 };
 
 const CheckboxStories = storiesOf(`${__dirname}`, module)
-  .add('Default', () => <Checkbox {...createKnobs()}>Item</Checkbox>)
+  .add('Default', () => <FormCheckbox {...createKnobs()}>Item</FormCheckbox>)
   .add('Checkbox Group', () => (
     <WithState>
       <CheckboxGroup onChange="[parent func]" selectedItems="[parent func]">
-        <Checkbox value="sausage">Sausage</Checkbox>
-        <Checkbox value="rashers">Rashers</Checkbox>
-        <Checkbox value="black_pudding">Black Pudding</Checkbox>
-        <Checkbox value="grilled_tomato">Grilled Tomato</Checkbox>
+        <FormCheckbox value="sausage">Sausage</FormCheckbox>
+        <FormCheckbox value="rashers">Rashers</FormCheckbox>
+        <FormCheckbox value="black_pudding">Black Pudding</FormCheckbox>
+        <FormCheckbox value="grilled_tomato">Grilled Tomato</FormCheckbox>
       </CheckboxGroup>
     </WithState>
   ));
