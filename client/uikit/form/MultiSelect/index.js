@@ -226,7 +226,7 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps,
 
   const showPlaceHolder = _.isEmpty(value) && searchString === '';
 
-  const showOptions = allowNew || (focusState && !_.isEmpty(_.compact(items)));
+  const showOptions = focusState && (allowNew || !_.isEmpty(_.compact(items)));
 
   const theme = useTheme();
 
