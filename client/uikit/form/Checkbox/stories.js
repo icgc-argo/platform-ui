@@ -21,7 +21,9 @@ const WithState = ({ children }) => {
     selectedItems,
     onChange: value => {
       selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
-      setSelected(new Set(selectedItems));
+      const newSelectedItems = new Set(selectedItems);
+      action('checkbox clicked')(value, Array.from(newSelectedItems));
+      setSelected(newSelectedItems);
     },
   });
 };
