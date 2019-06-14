@@ -1,13 +1,17 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import MultiSelect, { Option } from '.';
+import { action } from '@storybook/addon-actions';
 
 function WithState({ children }) {
   const [value, setValue] = React.useState([]);
 
   return React.cloneElement(children, {
     value,
-    onChange: event => setValue(event.target.value),
+    onChange: event => {
+      action('value change')(event);
+      setValue(event.target.value);
+    },
   });
 }
 
