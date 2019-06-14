@@ -56,3 +56,33 @@ StyledInputWrapper.propTypes = {
   size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
   getOverrideCss: PropTypes.func,
 };
+
+export const RadioCheckboxWrapper = styled('div')`
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
+
+  background-color: ${({ theme, disabled }) =>
+    theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
+
+  color: ${({ theme, disabled }) =>
+    theme.radiocheckbox.textColors[disabled ? 'disabled' : 'default']};
+
+  padding: 4px 6px 4px 8px;
+
+  label {
+    ${({ theme }) => css(theme.typography.paragraph)};
+    position: relative;
+    cursor: pointer;
+    color: inherit;
+  }
+`;
+
+export const StyledGroup = styled('div')`
+  div {
+    margin-top: 2px;
+  }
+  div:first-child {
+    margin: 0;
+  }
+`;
