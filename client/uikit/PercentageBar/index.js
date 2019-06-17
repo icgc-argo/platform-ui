@@ -4,16 +4,18 @@ import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
 import Icon from '../Icon';
 import { css } from '../';
-import { withProps } from 'recompose';
 
-const VAlignedText = withProps(() => ({
-  variant: 'data',
-  component: 'span',
-  css: css`
-    display: flex;
-    align-items: center;
-  `,
-}))(Typography);
+const VAlignedText = props => (
+  <Typography
+    variant="data"
+    component="span"
+    css={css`
+      display: flex;
+      align-items: center;
+    `}
+    {...props}
+  />
+);
 
 const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
   const theme = useTheme();
