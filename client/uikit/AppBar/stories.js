@@ -40,13 +40,7 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
             Submission System
           </MenuItem>
           <MenuItem DomComponent={UserBadgeDom}>
-            <UserBadge
-              name="Sarah"
-              title="DCC Member"
-              imageUrl={
-                'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'
-              }
-            />
+            <UserBadge firstName="Harvey" lastName="Specter" title="DCC Member" />
           </MenuItem>
         </MenuGroup>
       </Section>
