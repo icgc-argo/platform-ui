@@ -117,7 +117,7 @@ Input.propTypes = {
   /**
    * Whether to show the clear button
    */
-  showClear: PropTypes.string,
+  showClear: PropTypes.bool,
 };
 
 export default Input;
