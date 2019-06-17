@@ -84,9 +84,6 @@ export default (props: { path: string, logOut: void => void }) => {
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
                 title={'Some Role'}
-                imageUrl={
-                  'https://i.pinimg.com/originals/fa/0c/05/fa0c05778206cb2b2dddf89267b7a31c.jpg'
-                }
               />
             </MenuItem>
           )}
