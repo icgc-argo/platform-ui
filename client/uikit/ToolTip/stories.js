@@ -6,7 +6,6 @@ import { radios, select, boolean, number } from '@storybook/addon-knobs';
 import readme from './readme.md';
 import ToolTip from '.';
 import Icon from '../Icon';
-import Typography from 'uikit/Typography';
 
 const ToolTipStories = storiesOf(`${__dirname}`, module).add(
   'Basic',

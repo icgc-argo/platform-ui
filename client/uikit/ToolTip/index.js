@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip as ReactTippy } from 'react-tippy';
 
 import { css, styled } from '..';
-import useTheme from 'uikit/utils/useTheme';
+import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
 
 const ToolTip = ({ html, ...rest }) => {
