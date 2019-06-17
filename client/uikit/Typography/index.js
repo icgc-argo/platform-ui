@@ -15,14 +15,15 @@ const defaultTags = {
   paragraph: 'p',
 };
 
-const createTypographyComponentsFromTheme = themeObj =>
+const createTypographyComponentsFromTheme = memoize(themeObj =>
   Object.entries(themeObj.typography).reduce(
     (acc, [key, value]) => ({
       ...acc,
       [key]: styled(defaultTags[key] || 'span')({}, ({ theme }) => theme.typography[key]),
     }),
     {},
-  );
+  ),
+);
 
 const Typography = ({
   variant = 'paragraph',
