@@ -6,7 +6,7 @@ import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
 
-const ToolTip = ({ html, ...rest }) => {
+const Tooltip = ({ html, ...rest }) => {
   const theme = useTheme();
   const TooltipContainer = styled('div')`
     ${css(theme.typography.label)}
@@ -20,7 +20,7 @@ const ToolTip = ({ html, ...rest }) => {
 };
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
-ToolTip.propTypes = {
+Tooltip.propTypes = {
   disabled: PropTypes.bool,
   open: PropTypes.bool,
   useContext: PropTypes.bool,
@@ -56,4 +56,4 @@ ToolTip.propTypes = {
   style: PropTypes.PropTypes.object,
 };
 
-export default ToolTip;
+export default Tooltip;

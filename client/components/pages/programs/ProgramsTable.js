@@ -6,7 +6,7 @@ import Table from 'uikit/Table';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Icon from 'uikit/Icon';
-import ToolTip from 'uikit/ToolTip';
+import Tooltip from 'uikit/Tooltip';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -130,22 +130,22 @@ export default (tableProps: {
             align-items: center;
           `}
         >
-          <ToolTip interactive position="bottom" html={<span>Manage users</span>}>
+          <Tooltip interactive position="bottom" html={<span>Manage users</span>}>
             <InteractiveIcon
               height="15px"
               width="15px"
               name="users"
               onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
             />
-          </ToolTip>
-          <ToolTip interactive position="bottom" html={<span>Edit program</span>}>
+          </Tooltip>
+          <Tooltip interactive position="bottom" html={<span>Edit program</span>}>
             <InteractiveIcon
               height="15px"
               width="15px"
               name="edit"
               onClick={() => tableProps.onProgramEditClick({ program: props.original })}
             />
-          </ToolTip>
+          </Tooltip>
         </div>
       ),
     },
