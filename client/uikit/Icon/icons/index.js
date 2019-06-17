@@ -10,6 +10,7 @@ import times from './collection/times';
 import asterisk from './collection/asterisk';
 import users from './collection/users';
 import edit from './collection/edit';
+import times_circle from './collection/times_circle';
 
 /**
  * Icon path and property lookup object
@@ -25,6 +26,7 @@ const Icons = {
   slash,
   search,
   times,
+  times_circle,
   asterisk,
   users,
   edit,
