@@ -1,5 +1,4 @@
 import { configure, addDecorator } from '@storybook/react';
-import { withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 
 import { ThemeProvider } from '../uikit';
@@ -10,7 +9,5 @@ function loadStories() {
 }
 
 addDecorator(story => <ThemeProvider>{story()}</ThemeProvider>);
-
-addDecorator(withKnobs);
 
 configure(loadStories, module);
