@@ -9,6 +9,7 @@ import { action } from '@storybook/addon-actions';
 const createKnobs = () => {
   const disabled = boolean('disabled', false);
   const placeholder = text('Placeholder', 'Start typing here..');
+  const showClear = boolean('showClear', false);
   const size = radios(
     'size',
     {
@@ -17,20 +18,39 @@ const createKnobs = () => {
     },
     'sm',
   );
-
   return {
+    showClear,
     disabled,
     placeholder,
     size,
   };
 };
 
+function State({ children }) {
+  const [value, setValue] = React.useState('');
+
+  return React.cloneElement(children, {
+    value,
+    onChange: event => {
+      action('onChange')(event);
+      setValue(event.target.value);
+    },
+  });
+}
+
 const InputStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input aria-label="demo-input" onChange={action('onChange')} {...props} />
+        <State>
+          <Input
+            aria-label="demo-input"
+            value="[parent state]"
+            onChange={() => '[parent func]'}
+            {...props}
+          />
+        </State>
       </div>
     );
   })
@@ -38,7 +58,14 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
     return (
       <div style={{ width: '200px' }}>
-        <Input aria-label="demo-input" onChange={action('onChange')} preset={preset} />
+        <State>
+          <Input
+            aria-label="demo-input"
+            value="[parent state]"
+            onChange={() => '[parent func]'}
+            preset={preset}
+          />
+        </State>
       </div>
     );
   })
@@ -46,12 +73,15 @@ const InputStories = storiesOf(`${__dirname}`, module)
     const props = createKnobs();
     return (
       <div style={{ width: '200px' }}>
-        <Input
-          aria-label="demo-input"
-          onChange={action('onChange')}
-          {...props}
-          icon={<Icon name="search" />}
-        />
+        <State>
+          <Input
+            aria-label="demo-input"
+            value="[parent state]"
+            onChange={() => '[parent func]'}
+            {...props}
+            icon={<Icon name="search" />}
+          />
+        </State>
       </div>
     );
   });

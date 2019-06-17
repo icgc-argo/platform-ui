@@ -5,6 +5,7 @@ import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper } from '../common';
 import { StyledInput, IconWrapper } from './styledComponents';
 import FormControlContext from '../FormControl/FormControlContext';
+import css from '@emotion/css';
 
 export const INPUT_PRESETS = {
   DEFAULT: 'default',
@@ -22,6 +23,7 @@ const Input = ({
   className,
   error,
   disabled,
+  showClear = preset === INPUT_PRESETS.SEARCH || false,
   getOverrideCss,
   ...props
 }) => {
@@ -29,6 +31,11 @@ const Input = ({
 
   const { disabled: calcDisabled = disabled, error: calcError = error } =
     useContext(FormControlContext) || {};
+
+  const onClearClick = e => {
+    e.target.value = '';
+    onChange(e);
+  };
 
   return (
     <div className={className}>
@@ -53,6 +60,26 @@ const Input = ({
           disabled={calcDisabled}
           id={props.id}
         />
+        {showClear && value && value.length && (
+          <div
+            css={css`
+              margin-right: 5px;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            `}
+          >
+            <Icon
+              title="Clear"
+              name="times_circle"
+              width="20px"
+              height="20px"
+              fill="grey_1"
+              onClick={onClearClick}
+            />
+          </div>
+        )}
       </StyledInputWrapper>
     </div>
   );
@@ -88,6 +115,10 @@ Input.propTypes = {
    * Used for providing css override of the container with access to the internal state
    */
   getOverrideCss: PropTypes.func,
+  /**
+   * Whether to show the clear button
+   */
+  showClear: PropTypes.bool,
 };
 
 export default Input;

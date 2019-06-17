@@ -4,7 +4,7 @@ import Icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 
-const Icon = ({ name, width, height, fill, className, ...rest }) => {
+const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
   const theme = useTheme();
   const svg = Icons[name];
 
@@ -22,7 +22,7 @@ const Icon = ({ name, width, height, fill, className, ...rest }) => {
       xmlns="http://www.w3.org/2000/svg"
       {...rest}
     >
-      <title lang="en">{svg.title}</title>
+      <title lang="en">{title || svg.title}</title>
       <g>
         {svg.mask ? (
           <mask id="mask" fill="#fff">
@@ -42,6 +42,7 @@ const Icon = ({ name, width, height, fill, className, ...rest }) => {
 
 Icon.propTypes = {
   name: PropTypes.string.isRequired,
+  title: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
   fill: PropTypes.string,
