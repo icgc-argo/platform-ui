@@ -57,25 +57,6 @@ spec:
                 }
             }
         }
-        stage('Deploy to QA') {
-            when {
-                expression {
-                    GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                    return GIT_BRANCH == 'origin/master' || params.FORCE_FULL_BUILD
-                }
-            }
-            steps {
-                container('helm') {
-                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
-                        sh 'helm init --client-only'
-                        sh 'helm ls --kubeconfig $KUBECONFIG'
-                        sh 'helm repo add icgcargo https://icgc-argo.github.io/charts/'
-                        sh 'helm repo update'
-                        sh "helm upgrade platform-ui icgcargo/platform-ui --reuse-values --set image.tag=${commit}"
-                    }
-                }
-            }
-        }
 
         stage('Deploy to argo-qa') {
             when {
