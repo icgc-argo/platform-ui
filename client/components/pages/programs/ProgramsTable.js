@@ -6,7 +6,7 @@ import Table from 'uikit/Table';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Icon from 'uikit/Icon';
-import Tooltip from 'uikit/Tooltip';
+import Tooltip from 'uikit/TemporaryNameSpace';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
