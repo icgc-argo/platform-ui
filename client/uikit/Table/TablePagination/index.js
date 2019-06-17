@@ -26,37 +26,28 @@ export const TableActionBar = props => {
   );
 };
 
-const DoubleArrow = ({ theme, transform }) => (
+const Arrow = ({ transform, className }) => (
+  <Icon
+    className={className}
+    width="6px"
+    height="6px"
+    name="chevron_right"
+    fill="grey"
+    transform={transform}
+  />
+);
+
+const DoubleArrow = ({ transform }) => (
   <>
-    <Icon
-      width="6px"
-      height="6px"
-      name="chevron_right"
-      fill={theme.colors.grey}
-      transform={transform}
-    />
-    <Icon
+    <Arrow transform={transform} />
+    <Arrow
       css={css`
         position: relative;
         left: -3px;
       `}
-      width="6px"
-      height="6px"
-      name="chevron_right"
-      fill={theme.colors.grey}
       transform={transform}
     />
   </>
-);
-
-const Arrow = ({ theme, transform }) => (
-  <Icon
-    width="6px"
-    height="6px"
-    name="chevron_right"
-    fill={theme.colors.grey}
-    transform={transform}
-  />
 );
 
 function TablePagination(props) {
