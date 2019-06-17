@@ -71,6 +71,7 @@ const Input = ({
             `}
           >
             <Icon
+              title="Clear"
               name="times_circle"
               width="20px"
               height="20px"
