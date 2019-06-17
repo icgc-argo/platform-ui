@@ -70,7 +70,6 @@ const Table = ({
         ...getTrProps(state, rowInfo, column),
       })}
       minRows={0}
-      showPagination={false}
       PaginationComponent={PaginationComponent}
       {...rest}
     />
