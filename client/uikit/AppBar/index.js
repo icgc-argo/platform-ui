@@ -44,8 +44,8 @@ export const UserBadge = ({ firstName = '', lastName = '', title }) => {
           background: ${theme.colors.accent1_3};
         `}
       >
-        {firstName[0].toUpperCase()}
-        {lastName[0].toUpperCase()}
+        {(firstName[0] || '').toUpperCase()}
+        {(lastName[0] || '').toUpperCase()}
       </Typography>
     </UserBadgeContainer>
   );
