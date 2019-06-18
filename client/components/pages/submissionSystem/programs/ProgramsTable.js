@@ -7,6 +7,8 @@ import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Icon from 'uikit/Icon';
 import Tooltip from 'uikit/Tooltip';
+import { programsQuery } from './queries';
+import { Query } from 'react-apollo';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -44,7 +46,7 @@ const InteractiveIcon = props => {
 };
 InteractiveIcon.propTypes = Icon.propTypes;
 
-export default (tableProps: {
+const ProgramsTable = (tableProps: {
   programs: Array<ProgramsTableProgram>,
   onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
   onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
@@ -152,3 +154,17 @@ export default (tableProps: {
   ];
   return <Table data={data} columns={columns} />;
 };
+
+export default ({ onProgramEditClick, onProgramUsersClick }: any) => (
+  <Query query={programsQuery}>
+    {({ data }: any) =>
+      data && (
+        <ProgramsTable
+          programs={data.programs}
+          onProgramEditClick={onProgramEditClick}
+          onProgramUsersClick={onProgramUsersClick}
+        />
+      )
+    }
+  </Query>
+);

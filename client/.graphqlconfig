@@ -2,8 +2,8 @@
   "schemaPath": "schema.graphql",
   "extensions": {
     "endpoints": {
-      "local": {
-        "url": "http://localhost:9000/graphql"
+      "qa": {
+        "url": "https://argo-gateway.qa.argo.cancercollaboratory.org/graphql"
       }
     }
   }
