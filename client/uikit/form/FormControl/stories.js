@@ -20,7 +20,11 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
   .add(
     'MultiSelect',
     () => (
-      <FormControl error={boolean('error', false)} required={boolean('required', true)}>
+      <FormControl
+        error={boolean('error', false)}
+        required={boolean('required', true)}
+        disabled={boolean('disabled', false)}
+      >
         <InputLabel htmlFor="country">Country</InputLabel>
         <WithState>
           <MultiSelect

@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import MultiSelect, { Option } from '.';
 import { action } from '@storybook/addon-actions';
+import { boolean } from '@storybook/addon-knobs';
 
 function WithState({ children }) {
   const [value, setValue] = React.useState([]);
@@ -22,6 +23,8 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module)
         value="[parent state]"
         onChange={() => '[parent func]'}
         placeholder="Add one or more..."
+        disabled={boolean('disabled', false)}
+        error={boolean('error', false)}
       >
         <Option value="Australia">Australia</Option>
         <Option value="Cambodia">Cambodia</Option>

@@ -7,6 +7,8 @@ import css from '@emotion/css';
 import _ from 'lodash';
 import Tag from '../../Tag';
 import useTheme from '../../utils/useTheme';
+import clsx from 'clsx';
+import FormControlContext from '../FormControl/FormControlContext';
 
 const Container = styled('div')`
   position: relative;
@@ -22,6 +24,9 @@ const OptionsWrapper = styled('div')`
   border-top: 0;
   border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
   border-radius: 0 0 4px 4px;
+
+  box-shadow: ${props =>
+    props.focused ? '0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08)' : 'none'};
 `;
 
 const OptionsContainer = styled('div')`
@@ -47,27 +52,42 @@ const Gap = styled('div')`
   transform: translateY(-5px);
   width: 100%;
   border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
+  z-index: 2;
+  background-color: white;
 `;
 
 const InputBox = styled('div')`
+  background-color: white;
+  border-radius: 8px;
+  border: solid 1px;
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  box-sizing: border-box;
-  min-height: 36px;
-  width: 100%;
-  line-height: 22px;
-  border-radius: 8px;
-  padding: 7px 7px 0 7px;
-  border: solid 1px;
-  border-color: ${props =>
-    props.focused
-      ? props.theme.multiSelect.input.focusedBorderColor
-      : props.theme.multiSelect.input.borderColor};
-
   font-size: 14px;
+  line-height: 22px;
+  min-height: 36px;
+  padding: 7px 7px 0 7px;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+
+  border-color: ${({ theme }) => theme.colors.grey_1};
 
   &:hover {
-    border-color: ${({ theme }) => theme.multiSelect.input.hoverBorderColor};
+    border-color: ${({ theme }) => theme.colors.grey};
+  }
+
+  &.focused {
+    border-color: ${({ theme }) => theme.colors.grey};
+  }
+
+  &.disabled {
+    background-color: ${({ theme }) => theme.colors.grey_2};
+    pointer-events: none;
+  }
+
+  &.error {
+    border-color: ${({ theme }) => theme.colors.error};
   }
 `;
 
@@ -77,6 +97,7 @@ const Input = styled('input')`
   flex-grow: 1;
   min-width: 50px;
   margin-bottom: 7px;
+  background-color: transparent;
   &:focus {
     outline: none;
   }
@@ -142,9 +163,25 @@ function Highlight({ string, searchText }) {
   }
 }
 
-function MultiSelect({ name, value, children, onChange, placeholder, inputProps, allowNew }) {
+function MultiSelect({
+  name,
+  value,
+  children,
+  onChange,
+  placeholder,
+  inputProps,
+  allowNew,
+  disabled,
+  error,
+}) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
+
+  const contextValue = React.useContext(FormControlContext);
+  if (!_.isEmpty(contextValue)) {
+    disabled = contextValue.disabled;
+    error = contextValue.error;
+  }
 
   const handleItemClick = child => event => {
     event.persist();
@@ -232,7 +269,7 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps,
 
   return (
     <Container>
-      <InputBox focused={focusState}>
+      <InputBox className={clsx({ disabled, error, focused: focusState })}>
         {showPlaceHolder ? (
           <PlaceHolder>{placeholder}</PlaceHolder>
         ) : (
@@ -249,11 +286,12 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps,
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
+          disabled={disabled}
         />
       </InputBox>
       {showOptions && (
         <>
-          <OptionsWrapper>
+          <OptionsWrapper focused={focusState}>
             <Gap />
             <OptionsContainer>
               <OptionList>
@@ -280,10 +318,9 @@ function MultiSelect({ name, value, children, onChange, placeholder, inputProps,
               </Option>
             )}
           </OptionsWrapper>
-          }
         </>
       )}
-      <input value={value} name={name} type="hidden" {...inputProps} />
+      <input value={value} name={name} type="hidden" disabled={disabled} {...inputProps} />
     </Container>
   );
 }
@@ -303,6 +340,8 @@ MultiSelect.propTypes = {
 
   /* Whether to allow user to add new value */
   allowNew: PropTypes.bool,
+
+  disabled: PropTypes.bool,
 };
 
 export default MultiSelect;
