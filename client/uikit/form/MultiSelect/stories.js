@@ -25,6 +25,7 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module)
         placeholder="Add one or more..."
         disabled={boolean('disabled', false)}
         error={boolean('error', false)}
+        single={boolean('single', false)}
       >
         <Option value="Australia">Australia</Option>
         <Option value="Cambodia">Cambodia</Option>
@@ -54,6 +55,7 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module)
         value="[parent state]"
         onChange={() => '[parent func]'}
         placeholder="Add one or more..."
+        single={boolean('single', false)}
         allowNew
       >
         <Option value="Australia">Australia</Option>

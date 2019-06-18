@@ -57,6 +57,7 @@ const Gap = styled('div')`
 `;
 
 const InputBox = styled('div')`
+  ${({ theme }) => css(theme.typography.paragraph)};
   background-color: white;
   border-radius: 8px;
   border: solid 1px;
@@ -173,6 +174,7 @@ function MultiSelect({
   allowNew,
   disabled,
   error,
+  single,
 }) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
@@ -185,8 +187,11 @@ function MultiSelect({
 
   const handleItemClick = child => event => {
     event.persist();
+
+    const newValue = single ? [child.props.value] : _.uniq([...value, child.props.value]);
+
     event.target = {
-      value: _.uniq([...value, child.props.value]),
+      value: newValue,
       name,
     };
     setSearchString('');
@@ -194,8 +199,10 @@ function MultiSelect({
   };
 
   const handleNewItemClick = event => {
+    const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+
     event.target = {
-      value: _.uniq([...value, searchString]),
+      value: newValue,
       name,
     };
     setSearchString('');
@@ -204,6 +211,35 @@ function MultiSelect({
 
   const handleInputChange = e => {
     setSearchString(e.target.value);
+  };
+
+  const handleInputKeyDown = e => {
+    if (e.key === 'Backspace') {
+      if (searchString.length === 0) {
+        e.persist();
+        e.target = {
+          value: _.initial(value),
+          name,
+        };
+        onChange(e);
+      }
+    }
+
+    if (e.key === 'Enter' && allowNew) {
+      if (searchString.length !== 0) {
+        e.persist();
+
+        const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+
+        e.target = {
+          value: newValue,
+          name,
+        };
+
+        setSearchString('');
+        onChange(e);
+      }
+    }
   };
 
   const handleInputFocus = () => {
@@ -272,6 +308,14 @@ function MultiSelect({
       <InputBox className={clsx({ disabled, error, focused: focusState })}>
         {showPlaceHolder ? (
           <PlaceHolder>{placeholder}</PlaceHolder>
+        ) : single ? (
+          <span
+            css={css`
+              margin-right: 0.3em;
+            `}
+          >
+            {_.get(_.head(selectedItems), 'displayName')}
+          </span>
         ) : (
           selectedItems.map(item => (
             <SelectedItem key={item.value} onClick={handleSelectedItemClick(item)}>
@@ -284,6 +328,7 @@ function MultiSelect({
           aria-label="search"
           value={searchString}
           onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           disabled={disabled}
@@ -313,7 +358,7 @@ function MultiSelect({
                     margin-left: 0.5em;
                   `}
                 >
-                  (New Value)
+                  (NEW VALUE)
                 </span>
               </Option>
             )}
