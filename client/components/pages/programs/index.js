@@ -25,6 +25,7 @@ import { INPUT_PRESETS } from 'uikit/form/Input';
 import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
 import { mockPrograms } from '../../mockData';
+import SubmissionLayout from '../../layouts/submission';
 
 const TableFilterInput = props => (
   <Input
@@ -51,53 +52,21 @@ export default ({
   programs = mockPrograms,
 }: any) => {
   return (
-    <PageContainer>
-      <NavBar path={pathname} logOut={logOut} />
-      <PageBody>
-        <Panel>
-          <SideMenu initialShownItem={1} />
-        </Panel>
-        <PageContent>
-          <ContentHeader>
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-              `}
-            >
-              <Typography
-                variant="title"
-                color="primary"
-                css={css`
-                  margin: 0px;
-                `}
-              >
-                All Programs
-              </Typography>
-              <Button onClick={console.log}>Create a program</Button>
-            </div>
-          </ContentHeader>
-          <ContentBody>
-            <ContentBox
-              css={css`
-                padding-top: 0px;
-              `}
-            >
-              <TableActionBar>
-                {pathname.length} results
-                <TableFilterInput />
-              </TableActionBar>
-              <ProgramsTable
-                programs={programs}
-                onProgramUsersClick={console.log}
-                onProgramEditClick={console.log}
-              />
-            </ContentBox>
-          </ContentBody>
-        </PageContent>
-      </PageBody>
-      <PageFooter />
-    </PageContainer>
+    <SubmissionLayout
+      navBar={<NavBar path={pathname} logOut={logOut} />}
+      sideMenu={<SideMenu initialShownItem={1} />}
+      headerTitle="All Programs"
+      headerButton={<Button onClick={console.log}>Create a program</Button>}
+    >
+      <TableActionBar>
+        {pathname.length} results
+        <TableFilterInput />
+      </TableActionBar>
+      <ProgramsTable
+        programs={programs}
+        onProgramUsersClick={console.log}
+        onProgramEditClick={console.log}
+      />
+    </SubmissionLayout>
   );
 };
