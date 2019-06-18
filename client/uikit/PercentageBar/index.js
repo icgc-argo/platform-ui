@@ -4,16 +4,18 @@ import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
 import Icon from '../Icon';
 import { css } from '../';
-import { withProps } from 'recompose';
 
-const ValignedText = withProps(() => ({
-  variant: 'data',
-  component: 'span',
-  css: css`
-    display: flex;
-    align-items: center;
-  `,
-}))(Typography);
+const VAlignedText = props => (
+  <Typography
+    variant="data"
+    component="span"
+    css={css`
+      display: flex;
+      align-items: center;
+    `}
+    {...props}
+  />
+);
 
 const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
   const theme = useTheme();
@@ -23,15 +25,22 @@ const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
       css={css`
         position: relative;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         /* the transform creates a stacking-context so the z-index applies only locally*/
         transform: scale(1);
       `}
     >
-      <ValignedText>
+      <VAlignedText>
         {nom} <Icon name="slash" height="15px" fill="grey_2" /> {denom}
-      </ValignedText>
-      <ValignedText>{((nom / denom) * 100).toFixed(2)}%</ValignedText>
+      </VAlignedText>
+      <VAlignedText
+        css={css`
+          min-width: 65px;
+          justify-content: flex-end;
+        `}
+      >
+        ({((nom / denom) * 100).toFixed(2)}%)
+      </VAlignedText>
       <div
         css={css`
           position: absolute;
