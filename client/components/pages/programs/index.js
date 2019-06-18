@@ -55,18 +55,42 @@ export default ({
     <SubmissionLayout
       navBar={<NavBar path={pathname} logOut={logOut} />}
       sideMenu={<SideMenu initialShownItem={1} />}
-      headerTitle="All Programs"
-      headerButton={<Button onClick={console.log}>Create a program</Button>}
+      contentHeader={
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+          `}
+        >
+          <Typography
+            variant="title"
+            color="primary"
+            css={css`
+              margin: 0px;
+            `}
+          >
+            All Programs
+          </Typography>
+          <Button onClick={console.log}>Create a program</Button>
+        </div>
+      }
     >
-      <TableActionBar>
-        {pathname.length} results
-        <TableFilterInput />
-      </TableActionBar>
-      <ProgramsTable
-        programs={programs}
-        onProgramUsersClick={console.log}
-        onProgramEditClick={console.log}
-      />
+      <ContentBox
+        css={css`
+          padding-top: 0px;
+        `}
+      >
+        <TableActionBar>
+          {pathname.length} results
+          <TableFilterInput />
+        </TableActionBar>
+        <ProgramsTable
+          programs={programs}
+          onProgramUsersClick={console.log}
+          onProgramEditClick={console.log}
+        />
+      </ContentBox>
     </SubmissionLayout>
   );
 };

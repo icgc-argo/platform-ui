@@ -13,41 +13,14 @@ import css from '@emotion/css';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
 
-const SubmissionLayout = ({ navBar, sideMenu, headerTitle, headerButton, children }) => (
+const SubmissionLayout = ({ navBar, sideMenu, contentHeader, children }) => (
   <PageContainer>
     {navBar}
     <PageBody>
       <Panel>{sideMenu}</Panel>
       <PageContent>
-        <ContentHeader>
-          <div
-            css={css`
-              display: flex;
-              justify-content: space-between;
-              width: 100%;
-            `}
-          >
-            <Typography
-              variant="title"
-              color="primary"
-              css={css`
-                margin: 0px;
-              `}
-            >
-              {headerTitle}
-            </Typography>
-            {headerButton}
-          </div>
-        </ContentHeader>
-        <ContentBody>
-          <ContentBox
-            css={css`
-              padding-top: 0px;
-            `}
-          >
-            {children}
-          </ContentBox>
-        </ContentBody>
+        <ContentHeader>{contentHeader}</ContentHeader>
+        <ContentBody>{children}</ContentBody>
       </PageContent>
     </PageBody>
     <PageFooter />
