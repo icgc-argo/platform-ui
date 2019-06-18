@@ -22,6 +22,7 @@ export const TableActionBar = props => {
         padding-bottom: 8px;
         padding-left: 8px;
       `}
+      {...props}
     />
   );
 };
