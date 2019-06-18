@@ -12,6 +12,10 @@ export const TableActionBar = props => {
 
   return (
     <Typography
+      {...props}
+      variant={variant}
+      color={color}
+      component={component}
       css={css`
         min-height: 32px;
         display: flex;
@@ -22,7 +26,6 @@ export const TableActionBar = props => {
         padding-bottom: 8px;
         padding-left: 8px;
       `}
-      {...props}
     />
   );
 };
