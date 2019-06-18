@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
-import Checkbox from '../../input/Checkbox';
+import Checkbox from '../Checkbox';
 import css from '@emotion/css';
 
 const FormCheckbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
