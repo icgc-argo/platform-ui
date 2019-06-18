@@ -9,7 +9,7 @@ import Typography from '../Typography';
 const Tooltip = ({ html, ...rest }) => {
   const theme = useTheme();
   const TooltipContainer = styled('div')`
-    ${css(theme.typography.label)}
+    ${css(theme.typography.caption)}
     background: ${theme.colors.primary_1};
     border-radius: 2px;
     padding: 2px 4px;
