@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
-import Radio from '../../input/Radio';
+import Radio from '../Radio';
 import css from '@emotion/css';
 
 const FormRadio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
