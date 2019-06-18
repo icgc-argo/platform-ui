@@ -3,7 +3,7 @@ import React from 'react';
 import urlJoin from 'url-join';
 import Router from 'next/router';
 
-import GoogleLogin from 'uikit/SocialLoginButtons/GoogleLogin';
+import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { getRedirectPathForUser } from 'global/utils/pages';
