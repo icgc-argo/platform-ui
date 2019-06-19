@@ -11,25 +11,14 @@ import { isRdpcMember, getAuthorizedProgramPolicies, decodeToken } from 'global/
 import { createPage } from 'global/utils/pages';
 import ProgramsPage from 'components/pages/submissionSystem/programs';
 import { programsQuery } from 'components/pages/programs/queries';
+import createInMemoryCache from 'global/utils/createInMemoryCache';
+import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 
 export default createPage({
   isPublic: true,
-  isAccessible: async ({ egoJwt, ctx }) => {
-    return !isRdpcMember(egoJwt);
-  },
+  isAccessible: async ({ egoJwt, ctx }) => !isRdpcMember(egoJwt),
   getInitialProps: async ({ egoJwt, asPath, query }) => {
-    const apolloClient = new ApolloClient({
-      ssrMode: typeof window === 'undefined',
-      // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-      link: createHttpLink({
-        uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
-      }),
-      cache: new InMemoryCache(),
-    });
-    await apolloClient.query({
-      query: programsQuery,
-    });
-    const cache = apolloClient.extract();
+    const cache = await getApolloCacheForQueries([{ query: programsQuery }]);
     return { cache };
   },
 })(({ cache, ...props }) => {
@@ -38,7 +27,7 @@ export default createPage({
     link: createHttpLink({
       uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
     }),
-    cache: new InMemoryCache().restore(cache),
+    cache: createInMemoryCache().restore(cache),
   });
   return (
     <ApolloProvider client={client}>
