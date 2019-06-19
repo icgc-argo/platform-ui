@@ -9,20 +9,12 @@ import Typography from '../../Typography';
 const FormCheckbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
   const onClick = () => onChange(value);
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={checked}>
-      <Checkbox
-        id={id}
-        name={name}
-        value={value}
-        checked={checked}
-        onChange={onClick}
-        disabled={disabled}
-      />
+    <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
+      <Checkbox id={id} name={name} value={value} checked={checked} disabled={disabled} />
       <label
         css={css`
           margin-left: 24px;
         `}
-        onClick={onClick}
       >
         {children}
       </label>

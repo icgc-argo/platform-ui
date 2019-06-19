@@ -76,6 +76,10 @@ export const RadioCheckboxWrapper = styled('div')`
     cursor: pointer;
     color: inherit;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const StyledGroup = styled('div')`
