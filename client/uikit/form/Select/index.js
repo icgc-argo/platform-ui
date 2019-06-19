@@ -36,6 +36,7 @@ const Select = ({
 
   return (
     <div
+      className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
       onClick={() => {
         if (document.activeElement !== HiddenSelectRef.current) {
@@ -92,7 +93,7 @@ const Select = ({
           }
           css={css`
             flex: 1;
-            padding-left: 10px;
+            padding: 0 10px;
             line-height: 0;
           `}
         >
@@ -117,7 +118,7 @@ Select.propTypes = {
   ['aria-label']: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string.isRequired,
+      value: PropTypes.any.isRequired,
       content: PropTypes.node.isRequired,
     }),
   ),

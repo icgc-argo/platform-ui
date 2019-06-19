@@ -11,7 +11,7 @@ export default storiesOf(`${__dirname}`, module).add(
   () => {
     return (
       <Table
-        data={_.times(100, idx => ({
+        data={_.times(104, idx => ({
           id: idx,
           prop2: idx,
           prop3: 'some text of ' + idx,
@@ -32,7 +32,7 @@ export default storiesOf(`${__dirname}`, module).add(
           },
         ]}
         showPagination={boolean('showPagination', true)}
-        showPageSizeOptions={boolean('showPageSizeOptions', false)}
+        showPageSizeOptions={boolean('showPageSizeOptions', true)}
       />
     );
   },
