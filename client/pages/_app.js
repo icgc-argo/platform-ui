@@ -8,16 +8,17 @@ import { ApolloProvider } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
 import urlJoin from 'url-join';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
 import { NODE_ENV, ENVIRONMENTS, API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
-import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
-
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
+
+import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -95,21 +96,23 @@ const Root = (props: {
         `}
       </style>
       <ApolloProvider client={client}>
-        <ThemeProvider>
-          <>
-            {error ? (
-              isProduction ? (
-                <div>Something went wrong, please refresh the page or try again later</div>
+        <ApolloHooksProvider client={client}>
+          <ThemeProvider>
+            <>
+              {error ? (
+                isProduction ? (
+                  <div>Something went wrong, please refresh the page or try again later</div>
+                ) : (
+                  <pre>{error.stack || error.message}</pre>
+                )
+              ) : unauthorized ? (
+                'You are not authorized'
               ) : (
-                <pre>{error.stack || error.message}</pre>
-              )
-            ) : unauthorized ? (
-              'You are not authorized'
-            ) : (
-              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-            )}
-          </>
-        </ThemeProvider>
+                <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+              )}
+            </>
+          </ThemeProvider>
+        </ApolloHooksProvider>
       </ApolloProvider>
     </>
   );

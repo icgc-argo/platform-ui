@@ -46,7 +46,7 @@ const InteractiveIcon = props => {
 };
 InteractiveIcon.propTypes = Icon.propTypes;
 
-const ProgramsTable = (tableProps: {
+export default (tableProps: {
   programs: Array<ProgramsTableProgram>,
   onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
   onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
@@ -154,20 +154,3 @@ const ProgramsTable = (tableProps: {
   ];
   return <Table data={data} columns={columns} />;
 };
-
-/**
- * TODO: remove this wrapper and create a `useQuery` hook to be used in ./index.js
- */
-export default ({ onProgramEditClick, onProgramUsersClick }: any) => (
-  <Query query={programsQuery}>
-    {({ data }: any) =>
-      data && (
-        <ProgramsTable
-          programs={data.programs}
-          onProgramEditClick={onProgramEditClick}
-          onProgramUsersClick={onProgramUsersClick}
-        />
-      )
-    }
-  </Query>
-);
