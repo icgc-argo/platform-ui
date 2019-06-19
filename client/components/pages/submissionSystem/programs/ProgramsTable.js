@@ -155,6 +155,9 @@ const ProgramsTable = (tableProps: {
   return <Table data={data} columns={columns} />;
 };
 
+/**
+ * TODO: remove this wrapper and create a `useQuery` hook to be used in ./index.js
+ */
 export default ({ onProgramEditClick, onProgramUsersClick }: any) => (
   <Query query={programsQuery}>
     {({ data }: any) =>
