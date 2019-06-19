@@ -14,6 +14,11 @@ const createKnobs = () => {
   };
 };
 
+const createGroupKnobs = () => {
+  const hasError = boolean('hasError', false);
+  return { hasError };
+};
+
 const WithState = ({ children }) => {
   const [selectedItems, setSelected] = React.useState(new Set([]));
 
@@ -32,11 +37,13 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
   .add('Default', () => <FormCheckbox {...createKnobs()}>Item</FormCheckbox>)
   .add('Checkbox Group', () => (
     <WithState>
-      <CheckboxGroup onChange="[parent func]" selectedItems="[parent func]">
+      <CheckboxGroup {...createGroupKnobs()} onChange="[parent func]" selectedItems="[parent func]">
         <FormCheckbox value="sausage">Sausage</FormCheckbox>
         <FormCheckbox value="rashers">Rashers</FormCheckbox>
         <FormCheckbox value="black_pudding">Black Pudding</FormCheckbox>
         <FormCheckbox value="grilled_tomato">Grilled Tomato</FormCheckbox>
+        <FormCheckbox value="tayto_crisps">Tayto Crisps</FormCheckbox>
+        <FormCheckbox value="three_in_one">3-in-1</FormCheckbox>
       </CheckboxGroup>
     </WithState>
   ));
