@@ -38,22 +38,25 @@ type PageConfigProps = {
     ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
   getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
+  getPreCachedGqlQueries: (contextInfo: {}) => Promise<
+    Array<{ query: any, variables: { [key: string]: any } }>,
+  >,
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
   isPublic = false,
   isAccessible = async () => true,
   getInitialProps = async () => ({}),
+  getPreCachedGqlQueries = async () => [],
 }: {
-  isPublic?: boolean,
-  isAccessible?: ({
-    egoJwt: string,
-    ctx: GetInitialPropsContext,
-  }) => Promise<boolean>,
-  getInitialProps?: GetInitialPropsContextWithEgo => Promise<any>,
+  isPublic?: $PropertyType<PageConfigProps, 'isPublic'>,
+  isAccessible?: $PropertyType<PageConfigProps, 'isAccessible'>,
+  getInitialProps?: $PropertyType<PageConfigProps, 'getInitialProps'>,
+  getPreCachedGqlQueries?: $PropertyType<PageConfigProps, 'getPreCachedGqlQueries'>,
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
+  page.getPreCachedGqlQueries = getPreCachedGqlQueries;
   page.getInitialProps = getInitialProps;
   return page;
 };
