@@ -70,6 +70,9 @@ const Root = (props: {
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
       uri: urlJoin(API_ROOT, '/graphql'),
+      headers: {
+        authorization: `Bearer ${props.egoJwt}`,
+      },
     }),
     cache: createInMemoryCache().restore(props.apolloCache),
   });
