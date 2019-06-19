@@ -24,8 +24,8 @@ import PercentageBar from 'uikit/PercentageBar';
 import { INPUT_PRESETS } from 'uikit/form/Input';
 import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
-import { mockPrograms } from '../../mockData';
-import SubmissionLayout from '../../layouts/submission';
+import { mockPrograms } from '../../../mockData';
+import SubmissionLayout from '../layout';
 
 const TableFilterInput = props => (
   <Input
