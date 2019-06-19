@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/core';
+import { Row, Col } from 'react-grid-system';
+import Typography from '../Typography';
+import React from 'react';
 
 import { INPUT_STATES } from '../theme/defaultTheme/input';
 
@@ -90,3 +93,53 @@ export const StyledGroup = styled('div')`
     margin: 0;
   }
 `;
+
+export const RadioCheckboxGroup = ({ onChange, children, hasError, isChecked, limit = 4 }) => {
+  const ERROR_TEXT = 'Please fill out the required field.';
+
+  const chunkedChildren = _.chunk(children, limit);
+
+  const cloneChild = (child, i) =>
+    React.cloneElement(child, {
+      checked: isChecked(child.props.value),
+      onChange: e => {
+        onChange(e);
+      },
+      key: i,
+    });
+
+  return (
+    <div>
+      <Row
+        css={css`
+          margin-bottom: 6px;
+        `}
+      >
+        <Col md={6} style={{ marginTop: '2px' }}>
+          <StyledGroup>{chunkedChildren[0].map(cloneChild)}</StyledGroup>
+        </Col>
+
+        <Col md={6} style={{ marginTop: '2px' }}>
+          <StyledGroup>{chunkedChildren[1].map(cloneChild)}</StyledGroup>
+        </Col>
+      </Row>
+
+      {hasError ? (
+        <Typography variant="caption" color="error">
+          {ERROR_TEXT}
+        </Typography>
+      ) : null}
+    </div>
+  );
+};
+
+RadioCheckboxGroup.propTypes = {
+  onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+  children: PropTypes.arrayOf(PropTypes.node),
+  selectedItems: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.object]),
+  hasError: PropTypes.bool,
+  /**
+   * Number of items in alpha order column on normal display
+   */
+  limit: PropTypes.number,
+};

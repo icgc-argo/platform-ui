@@ -77,12 +77,18 @@ export const StyledCheckbox = styled('div')`
 /*
  * Basic checkbox input
  */
-const Checkbox = ({ checked, disabled }) => {
+const Checkbox = ({ checked, disabled, onChange }) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
     <StyledCheckbox checked={checked} disabled={disabled}>
-      <input type="checkbox" ref={HiddenCheckboxRef} checked={checked} disabled={disabled} />
+      <input
+        type="checkbox"
+        ref={HiddenCheckboxRef}
+        checked={checked}
+        disabled={disabled}
+        onChange={onChange}
+      />
       <div
         className="checkbox"
         onClick={e => {
