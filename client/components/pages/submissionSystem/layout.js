@@ -12,8 +12,20 @@ import {
 import css from '@emotion/css';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
+import NavBar from './NavBar';
+import SideMenu from './SideMenu';
 
-const SubmissionLayout = ({ navBar, sideMenu, contentHeader, children }) => (
+/**
+ * TODO: `pathname` and `logOut` should just be available through context
+ */
+const SubmissionLayout = ({
+  pathname,
+  logOut,
+  navBar = <NavBar path={pathname} logOut={logOut} />,
+  sideMenu = <SideMenu initialShownItem={1} />,
+  contentHeader,
+  children,
+}) => (
   <PageContainer>
     {navBar}
     <PageBody>
