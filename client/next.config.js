@@ -17,7 +17,7 @@ module.exports = withImages({
       {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        loader: 'gql-loader',
+        loader: 'graphql-tag/loader',
       },
     ];
 

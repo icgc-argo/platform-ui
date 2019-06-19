@@ -1,0 +1,16 @@
+query programsListQuery {
+  programs {
+    id
+    shortName
+    name
+    cancerTypes {
+      id
+      name
+    }
+    countries
+    membershipType
+    genomicDonors
+    submittedDonors
+    commitmentDonors
+  }
+}
