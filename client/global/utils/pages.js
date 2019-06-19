@@ -24,8 +24,8 @@ export type GetInitialPropsContext = {
     [key: string]: any,
   },
   asPath: string,
-  req: any,
-  res: any,
+  req?: any,
+  res?: any,
   err?: Error,
 };
 export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
@@ -38,7 +38,7 @@ type PageConfigProps = {
     ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
   getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
-  getPreCachedGqlQueries: (contextInfo: {}) => Promise<
+  getPreCachedGqlQueries: GetInitialPropsContextWithEgo => Promise<
     Array<{ query: any, variables: { [key: string]: any } }>,
   >,
 };

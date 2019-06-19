@@ -14,7 +14,7 @@ import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages'
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
-  if (typeof window === 'undefined') {
+  if (ctx.res) {
     ctx.res.redirect(loginRedirect);
   } else {
     Router.replace(loginRedirect);
@@ -105,7 +105,7 @@ Root.getInitialProps = async ({
 }: {
   Component: PageWithConfig,
   ctx: GetInitialPropsContext,
-  router: any,
+  router?: any,
 }) => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
@@ -115,8 +115,8 @@ Root.getInitialProps = async ({
         throw new Error('invalid token');
       }
     } catch (err) {
-      res.clearCookie(EGO_JWT_KEY);
-      router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+      res ? res.clearCookie(EGO_JWT_KEY) : null;
+      router ? router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`) : null;
     }
   } else {
     if (!Component.isPublic) {
