@@ -41,7 +41,7 @@ export const StyledRadio = styled('div')`
         theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
 
       transform: scale(0, 0);
-      transition: transform 0.35s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+      transition: transform 0.2s ease-in;
     }
 
     &:after {

@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 /**
  * Checkbox styles
  * ::before - checkmark
- * :: after - box
+ * ::after - box
  */
 
 export const StyledCheckbox = styled('div')`
@@ -32,7 +32,7 @@ export const StyledCheckbox = styled('div')`
 
   .checkbox {
     &:before {
-      transition: transform 0.25s ease;
+      transition: transform 0.2s ease-in;
       transform: rotate(-45deg) scale(0, 0);
 
       content: '';
