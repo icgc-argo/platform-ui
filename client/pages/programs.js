@@ -21,5 +21,5 @@ export default createPage({
     const cache = await getApolloCacheForQueries([{ query: programsQuery }]);
     return { cache };
   },
-  getPreCachedGqlQueries: async () => [{ query: programsQuery }],
+  getGqlQueriesToPrefetch: async () => [{ query: programsQuery }],
 })(ProgramsPage);
