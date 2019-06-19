@@ -36,6 +36,9 @@ const RadioStories = storiesOf(`${__dirname}`, module)
         <FormRadio value="one">One</FormRadio>
         <FormRadio value="two">Two</FormRadio>
         <FormRadio value="three">Three</FormRadio>
+        <FormRadio value="four">Four</FormRadio>
+        <FormRadio value="five">Five</FormRadio>
+        <FormRadio value="six">Six</FormRadio>
       </RadioGroup>
     </WithState>
   ));
