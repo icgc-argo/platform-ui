@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import { isRdpcMember, getAuthorizedProgramPolicies, decodeToken } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 import ProgramsPage from 'components/pages/submissionSystem/programs';
-import { programsQuery } from 'components/pages/programs/queries';
+import { programsQuery } from 'components/pages/submissionSystem/programs/queries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 
