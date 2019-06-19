@@ -12,8 +12,6 @@ import { NODE_ENV, ENVIRONMENTS } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
-import NavBar from 'components/NavBar';
-
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
   if (typeof window === 'undefined') {

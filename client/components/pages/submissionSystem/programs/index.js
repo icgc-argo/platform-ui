@@ -15,8 +15,6 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
-import NavBar from 'components/NavBar';
-import SideMenu from 'components/SideMenu';
 import { css } from 'uikit';
 import Table, { TableActionBar } from 'uikit/Table';
 import Button from 'uikit/Button';
@@ -24,7 +22,7 @@ import PercentageBar from 'uikit/PercentageBar';
 import { INPUT_PRESETS } from 'uikit/form/Input';
 import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
-import { mockPrograms } from '../../../mockData';
+import { mockPrograms } from '../mockData';
 import SubmissionLayout from '../layout';
 
 const TableFilterInput = props => (
@@ -53,8 +51,8 @@ export default ({
 }: any) => {
   return (
     <SubmissionLayout
-      navBar={<NavBar path={pathname} logOut={logOut} />}
-      sideMenu={<SideMenu initialShownItem={1} />}
+      pathname={pathname}
+      logOut={logOut}
       contentHeader={
         <div
           css={css`
