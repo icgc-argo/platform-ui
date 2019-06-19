@@ -146,7 +146,7 @@ Root.getInitialProps = async ({
     const isProduction = NODE_ENV === ENVIRONMENTS.production;
     const unauthorized = !(await Component.isAccessible({ egoJwt, ctx }));
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
-    const graphqlQueriesToChache = await Component.getPreCachedGqlQueries({ ...ctx, egoJwt });
+    const graphqlQueriesToChache = await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt });
     const apolloCache = await getApolloCacheForQueries(graphqlQueriesToChache);
     return {
       egoJwt,

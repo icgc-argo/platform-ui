@@ -38,7 +38,7 @@ type PageConfigProps = {
     ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
   getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
-  getPreCachedGqlQueries: GetInitialPropsContextWithEgo => Promise<
+  getGqlQueriesToPrefetch: GetInitialPropsContextWithEgo => Promise<
     Array<{ query: any, variables?: { [key: string]: any } }>,
   >,
 };
@@ -47,16 +47,16 @@ export const createPage = ({
   isPublic = false,
   isAccessible = async () => true,
   getInitialProps = async () => ({}),
-  getPreCachedGqlQueries = async () => [],
+  getGqlQueriesToPrefetch = async () => [],
 }: {
   isPublic?: $PropertyType<PageConfigProps, 'isPublic'>,
   isAccessible?: $PropertyType<PageConfigProps, 'isAccessible'>,
   getInitialProps?: $PropertyType<PageConfigProps, 'getInitialProps'>,
-  getPreCachedGqlQueries?: $PropertyType<PageConfigProps, 'getPreCachedGqlQueries'>,
+  getGqlQueriesToPrefetch?: $PropertyType<PageConfigProps, 'getGqlQueriesToPrefetch'>,
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;
-  page.getPreCachedGqlQueries = getPreCachedGqlQueries;
+  page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch;
   page.getInitialProps = getInitialProps;
   return page;
 };
