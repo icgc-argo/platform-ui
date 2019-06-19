@@ -6,6 +6,9 @@ import Icon from 'uikit/Icon';
 import { css } from 'uikit';
 
 import { mockPrograms } from './mockData';
+import { useQuery } from 'react-apollo-hooks';
+import { programsQuery } from './programs/queries';
+import DnaLoader from 'uikit/DnaLoader';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -14,7 +17,10 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const ProgramsSection = ({ initialProgram, programs }) => {
+const ProgramsSection = ({ initialProgram }) => {
+  const { data = {}, loading } = useQuery(programsQuery);
+
+  const { programs = [] } = data;
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const filteredPrograms = programs.filter(
@@ -38,27 +44,31 @@ const ProgramsSection = ({ initialProgram, programs }) => {
           />
         }
       />
-      {filteredPrograms.map((program, programIndex) => {
-        return (
-          <MenuItem
-            key={program.shortName}
-            content={program.shortName}
-            onClick={() => toggleProgramIndex(programIndex)}
-            selected={programIndex === activeProgramIndex}
-          >
-            <MenuItem content="Dashboard" />
-            <MenuItem content="ID Registration" />
-            <MenuItem content="Clinical Submission" />
-            <MenuItem content="Genomic Submission" />
-            <MenuItem content="Manage Token" />
-          </MenuItem>
-        );
-      })}
+      {loading ? (
+        <DnaLoader />
+      ) : (
+        filteredPrograms.map((program, programIndex) => {
+          return (
+            <MenuItem
+              key={program.shortName}
+              content={program.shortName}
+              onClick={() => toggleProgramIndex(programIndex)}
+              selected={programIndex === activeProgramIndex}
+            >
+              <MenuItem content="Dashboard" />
+              <MenuItem content="ID Registration" />
+              <MenuItem content="Clinical Submission" />
+              <MenuItem content="Genomic Submission" />
+              <MenuItem content="Manage Token" />
+            </MenuItem>
+          );
+        })
+      )}
     </>
   );
 };
 
-export default ({ programs = mockPrograms, initialShownItem = -1 }) => {
+export default ({ initialShownItem = -1 }) => {
   const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
   return (
     <Submenu>
@@ -77,7 +87,7 @@ export default ({ programs = mockPrograms, initialShownItem = -1 }) => {
         selected={activeItem === 1}
         onClick={() => toggleItem(1)}
       >
-        <ProgramsSection initialProgram={''} programs={programs} />
+        <ProgramsSection initialProgram={''} />
       </MenuItem>
     </Submenu>
   );
