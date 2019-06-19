@@ -24,6 +24,9 @@ import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
 import { mockPrograms } from '../mockData';
 import SubmissionLayout from '../layout';
+import { useQuery } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
+import { programsQuery } from './queries';
 
 const TableFilterInput = props => (
   <Input
@@ -47,8 +50,8 @@ export default ({
   authorizedPrograms = [],
   logOut,
   pathname,
-  programs = mockPrograms,
 }: any) => {
+  const { data, loading, errors } = useQuery(programsQuery);
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -84,7 +87,8 @@ export default ({
           <TableFilterInput />
         </TableActionBar>
         <ProgramsTable
-          programs={programs}
+          loading={loading}
+          programs={data.programs || []}
           onProgramUsersClick={console.log}
           onProgramEditClick={console.log}
         />
