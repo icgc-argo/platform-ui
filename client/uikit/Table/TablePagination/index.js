@@ -7,6 +7,8 @@ import css from '@emotion/css';
 import Typography from '../../Typography';
 import useTheme from '../../utils/useTheme';
 
+import styled from '@emotion/styled';
+
 export const TableActionBar = props => {
   const { variant = 'label', color = 'grey', component = 'div' } = props;
 
@@ -54,6 +56,37 @@ const DoubleArrow = ({ transform }) => (
   </>
 );
 
+const A = styled('a')`
+  ${({ theme }) => css(theme.typography.data)};
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  width: 24px;
+  margin-right: 2px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary_4};
+  }
+`;
+
+// given 1 5 5 or 2 5 5, return [0,1,2,3,4]
+function getPagesAround(p, num, pages) {
+  const l = p - _.floor(num / 2);
+  const r = p + _.ceil(num / 2);
+  if (r > pages) {
+    return _.range(pages - num, pages);
+  }
+
+  if (l < 0) {
+    return _.range(0, num);
+  }
+  return _.range(l, r);
+}
+
 function TablePagination(props) {
   const { pages, page, showPageSizeOptions, pageSizeOptions, pageSize, onPageSizeChange } = props;
 
@@ -71,32 +104,37 @@ function TablePagination(props) {
         }
         & a > svg {
           position: relative;
-          top: -2px;
         }
       `}
     >
       {showPageSizeOptions ? (
         <div
           css={css`
+            ${css(theme.typography.data)};
             display: flex;
             align-items: center;
-            font-size: 12px;
+            margin-left: 9px;
           `}
         >
-          Show&nbsp;
+          Show
           <div
             css={css`
               transform: scale(0.8);
             `}
           >
             <Select
+              css={css`
+                & [role='button'] {
+                  min-width: 70px;
+                }
+              `}
               aria-label="Select page size"
               options={pageSizeOptions.map(v => ({ content: v.toString(), value: v }))}
               onChange={onPageSizeChange}
               value={pageSize}
             />
           </div>
-          &nbsp;Rows
+          rows
         </div>
       ) : (
         <div />
@@ -115,60 +153,49 @@ function TablePagination(props) {
         `}
       >
         <div>
-          <a
+          <A
             onClick={() => {
               props.onPageChange(0);
             }}
           >
             <DoubleArrow theme={theme} transform="rotate(180)" />
-          </a>
-          <a
+          </A>
+          <A
             onClick={() => {
               props.onPageChange(page - 1);
             }}
           >
             <Arrow theme={theme} transform="rotate(180)" />
-          </a>
-          {[page - 1, page, page + 1].map(
+          </A>
+          {getPagesAround(page, 5, pages).map(
             p =>
               p > -1 &&
               p < pages && (
-                <a
+                <A
+                  key={p}
                   onClick={() => props.onPageChange(p)}
                   css={css`
-                    display: inline-block;
-                    cursor: pointer;
-                    line-height: 24px;
-                    text-align: center;
-                    background-color: #fff;
-                    border-radius: 50%;
-                    width: 24px;
-                    height: 24px;
                     background-color: ${page === p ? theme.colors.secondary_4 : ''};
-
-                    &:hover {
-                      background-color: ${theme.colors.primary_4};
-                    }
                   `}
                 >
                   {p + 1}
-                </a>
+                </A>
               ),
           )}
-          <a
+          <A
             onClick={() => {
               props.onPageChange(page + 1);
             }}
           >
             <Arrow theme={theme} />
-          </a>
-          <a
+          </A>
+          <A
             onClick={() => {
               props.onPageChange(pages);
             }}
           >
             <DoubleArrow theme={theme} />
-          </a>
+          </A>
         </div>
       </div>
     </div>
