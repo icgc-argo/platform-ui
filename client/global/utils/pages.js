@@ -39,7 +39,7 @@ type PageConfigProps = {
   }) => Promise<boolean>,
   getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
   getPreCachedGqlQueries: GetInitialPropsContextWithEgo => Promise<
-    Array<{ query: any, variables: { [key: string]: any } }>,
+    Array<{ query: any, variables?: { [key: string]: any } }>,
   >,
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
