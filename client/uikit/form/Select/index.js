@@ -26,9 +26,11 @@ const Select = ({
   const HiddenSelectRef = React.createRef();
   const ariaLabel = props['aria-label'];
 
-  const isSomethingSelected = !!(
-    value && options.find(({ value: optionValue }) => optionValue === value).content
+  const selectedOption = options.find(
+    ({ value: optionValue }) => String(optionValue) === String(value),
   );
+
+  const isSomethingSelected = !!(value && selectedOption);
 
   const theme = useTheme();
 
@@ -94,8 +96,7 @@ const Select = ({
             line-height: 0;
           `}
         >
-          {(value && options.find(({ value: optionValue }) => optionValue === value).content) ||
-            placeholder}
+          {(value && selectedOption ? selectedOption.content : false) || placeholder}
         </Typography>
         <DropdownIcon disabled={disabled} theme={theme} />
       </StyledInputWrapper>
