@@ -52,6 +52,7 @@ export default ({
   pathname,
 }: any) => {
   const { data, loading, errors } = useQuery(programsQuery);
+  const { programs = [] } = data;
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -83,12 +84,12 @@ export default ({
         `}
       >
         <TableActionBar>
-          {pathname.length} results
+          {programs.length} results
           <TableFilterInput />
         </TableActionBar>
         <ProgramsTable
           loading={loading}
-          programs={data.programs || []}
+          programs={programs}
           onProgramUsersClick={console.log}
           onProgramEditClick={console.log}
         />
