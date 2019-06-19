@@ -7,7 +7,6 @@ import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Icon from 'uikit/Icon';
 import Tooltip from 'uikit/Tooltip';
-import { programsQuery } from './queries';
 import { Query } from 'react-apollo';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';

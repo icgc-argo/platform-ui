@@ -1,3 +1,4 @@
+//@flow
 import React from 'react';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
@@ -7,8 +8,10 @@ import { css } from 'uikit';
 
 import { mockPrograms } from './mockData';
 import { useQuery } from 'react-apollo-hooks';
-import { programsQuery } from './programs/queries';
 import DnaLoader from 'uikit/DnaLoader';
+
+// $FlowFixMe .gql file not supported
+import { programsListQuery } from './programs/queries.gql';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -18,7 +21,7 @@ const useToggledSelectState = (initialIndex = -1) => {
 };
 
 const ProgramsSection = ({ initialProgram }) => {
-  const { data = {}, loading } = useQuery(programsQuery);
+  const { data = {}, loading } = useQuery(programsListQuery);
   const { programs = [] } = data;
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
@@ -77,7 +80,7 @@ const ProgramsSection = ({ initialProgram }) => {
   );
 };
 
-export default ({ initialShownItem = -1 }) => {
+export default ({ initialShownItem = -1 }: { initialShownItem: number }) => {
   const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
   return (
     <Submenu>
