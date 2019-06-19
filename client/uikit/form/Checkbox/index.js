@@ -51,6 +51,7 @@ export const StyledCheckbox = styled('div')`
     }
 
     &:after {
+      transition: background-color 0.2s ease-in;
       cursor: pointer;
       content: '';
       position: absolute;
