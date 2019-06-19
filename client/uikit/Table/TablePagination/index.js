@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from '../../form/Select';
-import Icon from '../../Icon';
-
+import _ from 'lodash';
 import css from '@emotion/css';
+import styled from '@emotion/styled';
+
 import Typography from '../../Typography';
 import useTheme from '../../utils/useTheme';
-
-import styled from '@emotion/styled';
+import Select from '../../form/Select';
+import Icon from '../../Icon';
 
 export const TableActionBar = props => {
   const { variant = 'label', color = 'grey', component = 'div' } = props;
