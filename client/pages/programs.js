@@ -4,7 +4,7 @@ import { get } from 'lodash';
 
 import { isRdpcMember, getAuthorizedProgramPolicies, decodeToken } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
-import ProgramsPage from 'components/pages/programs';
+import ProgramsPage from 'components/pages/submissionSystem/programs';
 
 export default createPage({
   isPublic: true,

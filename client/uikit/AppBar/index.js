@@ -52,7 +52,7 @@ export const UserBadge = ({ firstName = '', lastName = '', title }) => {
 };
 UserBadge.propTypes = {
   firstName: PropTypes.string.isRequired,
-  lastirstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 
