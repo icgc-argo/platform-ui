@@ -73,6 +73,17 @@ const A = styled('a')`
   }
 `;
 
+const PageControl = styled('div')`
+  display: flex;
+  align-items: center;
+  & a {
+    cursor: pointer;
+    display: inline-block;
+    width: 24px;
+    text-align: center;
+  }
+`;
+
 // given 1 5 5 or 2 5 5, return [0,1,2,3,4]
 function getPagesAround(p, num, pages) {
   const l = p - _.floor(num / 2);
@@ -93,12 +104,8 @@ function TablePagination(props) {
   const theme = useTheme();
 
   return (
-    <div
+    <TableActionBar
       css={css`
-        display: flex;
-        color: ${theme.colors.grey};
-        justify-content: space-between;
-        height: 30px;
         & svg {
           box-sizing: content-box !important;
         }
@@ -110,10 +117,8 @@ function TablePagination(props) {
       {showPageSizeOptions ? (
         <div
           css={css`
-            ${css(theme.typography.data)};
             display: flex;
             align-items: center;
-            margin-left: 9px;
           `}
         >
           Show
@@ -140,18 +145,7 @@ function TablePagination(props) {
         <div />
       )}
 
-      <div
-        css={css`
-          display: flex;
-          align-items: center;
-          & a {
-            cursor: pointer;
-            display: inline-block;
-            width: 24px;
-            text-align: center;
-          }
-        `}
-      >
+      <PageControl>
         <div>
           <A
             onClick={() => {
@@ -197,8 +191,8 @@ function TablePagination(props) {
             <DoubleArrow theme={theme} />
           </A>
         </div>
-      </div>
-    </div>
+      </PageControl>
+    </TableActionBar>
   );
 }
 
