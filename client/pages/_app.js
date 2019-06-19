@@ -4,6 +4,9 @@ import nextCookies from 'next-cookies';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
+import { ApolloProvider } from 'react-apollo';
+import { createHttpLink } from 'apollo-link-http';
+import ApolloClient from 'apollo-client';
 
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
@@ -11,6 +14,9 @@ import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
 import { NODE_ENV, ENVIRONMENTS } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
+
+import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
+import createInMemoryCache from 'global/utils/createInMemoryCache';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -33,6 +39,7 @@ const Root = (props: {
   isProduction: boolean,
   error: Error,
   pathname: string,
+  apolloCache: {},
 }) => {
   const { Component, pageProps, egoJwt, unauthorized, isProduction, error, pathname } = props;
   const logOut = () => {
@@ -57,6 +64,14 @@ const Root = (props: {
     } catch (err) {}
   }, []);
 
+  const client = new ApolloClient({
+    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
+    link: createHttpLink({
+      uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
+    }),
+    cache: createInMemoryCache().restore(props.apolloCache),
+  });
+
   return (
     <>
       <style>
@@ -78,21 +93,23 @@ const Root = (props: {
             }
         `}
       </style>
-      <ThemeProvider>
-        <>
-          {error ? (
-            isProduction ? (
-              <div>Something went wrong, please refresh the page or try again later</div>
+      <ApolloProvider client={client}>
+        <ThemeProvider>
+          <>
+            {error ? (
+              isProduction ? (
+                <div>Something went wrong, please refresh the page or try again later</div>
+              ) : (
+                <pre>{error.stack || error.message}</pre>
+              )
+            ) : unauthorized ? (
+              'You are not authorized'
             ) : (
-              <pre>{error.stack || error.message}</pre>
-            )
-          ) : unauthorized ? (
-            'You are not authorized'
-          ) : (
-            <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-          )}
-        </>
-      </ThemeProvider>
+              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+            )}
+          </>
+        </ThemeProvider>
+      </ApolloProvider>
     </>
   );
 };
@@ -125,15 +142,18 @@ Root.getInitialProps = async ({
   }
 
   try {
+    const isProduction = NODE_ENV === ENVIRONMENTS.production;
     const unauthorized = !(await Component.isAccessible({ egoJwt, ctx }));
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
-    const isProduction = NODE_ENV === ENVIRONMENTS.production;
+    const graphqlQueriesToChache = await Component.getPreCachedGqlQueries({ ...ctx, egoJwt });
+    const apolloCache = await getApolloCacheForQueries(graphqlQueriesToChache);
     return {
       egoJwt,
       pageProps,
       unauthorized,
       isProduction,
       pathname: ctx.pathname,
+      apolloCache,
     };
   } catch (error) {
     return { egoJwt, error };

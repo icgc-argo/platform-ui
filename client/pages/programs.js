@@ -21,17 +21,5 @@ export default createPage({
     const cache = await getApolloCacheForQueries([{ query: programsQuery }]);
     return { cache };
   },
-})(({ cache, ...props }) => {
-  const client = new ApolloClient({
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createHttpLink({
-      uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
-    }),
-    cache: createInMemoryCache().restore(cache),
-  });
-  return (
-    <ApolloProvider client={client}>
-      <ProgramsPage {...props} />
-    </ApolloProvider>
-  );
-});
+  getPreCachedGqlQueries: async () => [{ query: programsQuery }],
+})(ProgramsPage);
