@@ -7,11 +7,12 @@ import Link from 'next/link';
 import { ApolloProvider } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
+import urlJoin from 'url-join';
 
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
-import { NODE_ENV, ENVIRONMENTS } from 'global/config';
+import { NODE_ENV, ENVIRONMENTS, API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
@@ -67,7 +68,7 @@ const Root = (props: {
   const client = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
-      uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
+      uri: urlJoin(API_ROOT, '/graphql'),
     }),
     cache: createInMemoryCache().restore(props.apolloCache),
   });

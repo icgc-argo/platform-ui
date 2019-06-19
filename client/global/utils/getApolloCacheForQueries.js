@@ -1,9 +1,11 @@
 //@flow
+import urlJoin from 'url-join';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
+import { API_ROOT } from 'global/config';
 import createInMemoryCache from './createInMemoryCache';
 
 export default async (queries: Array<{ query: any, variables?: { [key: string]: any } }>) => {
@@ -11,7 +13,7 @@ export default async (queries: Array<{ query: any, variables?: { [key: string]: 
     ssrMode: typeof window === 'undefined',
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
-      uri: 'https://argo-gateway.qa.argo.cancercollaboratory.org/graphql',
+      uri: urlJoin(API_ROOT, '/graphql'),
     }),
     cache: createInMemoryCache(),
   });
