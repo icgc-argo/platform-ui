@@ -19,7 +19,6 @@ const useToggledSelectState = (initialIndex = -1) => {
 
 const ProgramsSection = ({ initialProgram }) => {
   const { data = {}, loading } = useQuery(programsQuery);
-
   const { programs = [] } = data;
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
@@ -45,7 +44,17 @@ const ProgramsSection = ({ initialProgram }) => {
         }
       />
       {loading ? (
-        <DnaLoader />
+        <div
+          css={css`
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            padding-top: 32px;
+            padding-bottom: 32px;
+          `}
+        >
+          <DnaLoader />
+        </div>
       ) : (
         filteredPrograms.map((program, programIndex) => {
           return (
