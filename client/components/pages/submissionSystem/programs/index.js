@@ -26,7 +26,9 @@ import { mockPrograms } from '../mockData';
 import SubmissionLayout from '../layout';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
-import { programsQuery } from './queries';
+
+// $FlowFixMe .gql file not supported
+import { programsListQuery } from './queries.gql';
 
 const TableFilterInput = props => (
   <Input
@@ -51,7 +53,7 @@ export default ({
   logOut,
   pathname,
 }: any) => {
-  const { data: { programs = [] } = {}, loading, errors } = useQuery(programsQuery);
+  const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
   return (
     <SubmissionLayout
       pathname={pathname}
