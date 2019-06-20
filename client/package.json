@@ -15,7 +15,8 @@
     "e2e-dev": "nightwatch -c e2e/conf/dev.js; exit 0",
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "test-uikit": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
-    "test": "mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js"
+    "test": "mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
+    "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -40,11 +41,13 @@
     "dotenv-webpack": "^1.7.0",
     "emotion-theming": "^10.0.10",
     "express": "^4.16.4",
+    "file-regex": "^3.0.1",
     "flow-bin": "^0.98.0",
     "flow-typed": "^2.5.1",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4",
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
     "jsdom": "^14.0.0",
