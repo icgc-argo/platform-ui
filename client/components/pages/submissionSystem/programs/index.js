@@ -51,8 +51,7 @@ export default ({
   logOut,
   pathname,
 }: any) => {
-  const { data, loading, errors } = useQuery(programsQuery);
-  const { programs = [] } = data;
+  const { data: { programs = [] } = {}, loading, errors } = useQuery(programsQuery);
   return (
     <SubmissionLayout
       pathname={pathname}
