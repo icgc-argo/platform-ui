@@ -13,22 +13,11 @@ require('dotenv').config();
 
 const GRAPHQL_URL = urlJoin(process.env.API_ROOT, 'graphql');
 
-const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
-  const queryFilePath = path.resolve(dir, file);
-  let queryAst;
-  try {
-    queryAst = gql`
-      ${fs.readFileSync(queryFilePath)}
-    `;
-  } catch (err) {
-    throw new Error(`failed to parse AST for ${queryFilePath}: ${err}`);
-  }
-  const errors = validate(schema, queryAst);
-  if (errors.length) {
-    throw new Error(`validation failed for ${queryFilePath}: ${errors}`);
-  }
-  expect(errors).to.be.empty;
-};
+describe('all gql queries', () => {
+  it(`must be compliant with gql API at ${GRAPHQL_URL}`, async () => {
+    await runTest();
+  });
+});
 
 const runTest = async () => {
   const apolloLink = new HttpLink({
@@ -45,8 +34,19 @@ const runTest = async () => {
   gqlFiles.forEach(validateGqlFileAgainstSchema(schema));
 };
 
-describe('all gql queries', () => {
-  it(`must be compliant with gql API at ${GRAPHQL_URL}`, async () => {
-    await runTest();
-  });
-});
+const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
+  const queryFilePath = path.resolve(dir, file);
+  let queryAst;
+  try {
+    queryAst = gql`
+      ${fs.readFileSync(queryFilePath)}
+    `;
+  } catch (err) {
+    throw new Error(`failed to parse AST for ${queryFilePath}: ${err}`);
+  }
+  const errors = validate(schema, queryAst);
+  if (errors.length) {
+    throw new Error(`validation failed for ${queryFilePath}: ${errors}`);
+  }
+  expect(errors).to.be.empty;
+};
