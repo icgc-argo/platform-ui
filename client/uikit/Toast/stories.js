@@ -16,10 +16,14 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     'content',
     'Lorem ipsum dolor amet helvetica post-ironic fingerstache trust fund pitchfork tofu venmo live-edge',
   );
+  const expandText = text('expandText', undefined);
+  const dismissText = text('dismissText', undefined);
   return (
     <>
       <Toast
         variant={variant}
+        expandText={expandText}
+        dismissText={dismissText}
         interactionType={interactionType}
         title={title}
         content={content}
@@ -27,6 +31,8 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       />
       <Toast
         variant={variant}
+        expandText={expandText}
+        dismissText={dismissText}
         interactionType={interactionType}
         title={title}
         content={content}

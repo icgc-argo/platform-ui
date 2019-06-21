@@ -84,9 +84,7 @@ const Toast = ({
       )}
       <div
         css={css`
-          margin-top: 8px;
-          margin-bottom: 8px;
-          margin-left: 8px;
+          margin: 8px;
           flex: 1;
         `}
       >
