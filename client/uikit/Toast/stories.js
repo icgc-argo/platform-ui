@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Toast, { TOAST_VARIANTS, TOAST_INTERACTION_EVENTS, TOAST_INTERACTION } from '.';
+import Toast, { TOAST_VARIANTS, TOAST_INTERACTION_EVENTS, TOAST_INTERACTION, TOAST_SIZES } from '.';
 import { action } from '@storybook/addon-actions';
 import { select, text } from '@storybook/addon-knobs';
 
@@ -11,6 +11,7 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     [undefined, ...Object.values(TOAST_INTERACTION)],
     undefined,
   );
+  const size = select('size', [undefined, ...Object.values(TOAST_SIZES)], undefined);
   const title = text('title', 'Hipster Ipsum');
   const content = text(
     'content',
@@ -22,18 +23,20 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     <>
       <Toast
         variant={variant}
+        interactionType={interactionType}
+        size={size}
         expandText={expandText}
         dismissText={dismissText}
-        interactionType={interactionType}
         title={title}
         content={content}
         onInteraction={action('RECEIVED EVENT')}
       />
       <Toast
         variant={variant}
+        interactionType={interactionType}
+        size={size}
         expandText={expandText}
         dismissText={dismissText}
-        interactionType={interactionType}
         title={title}
         content={content}
         onInteraction={action('RECEIVED EVENT')}
