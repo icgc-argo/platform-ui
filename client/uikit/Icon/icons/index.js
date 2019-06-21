@@ -11,6 +11,7 @@ import asterisk from './collection/asterisk';
 import users from './collection/users';
 import edit from './collection/edit';
 import times_circle from './collection/times_circle';
+import info from './collection/info';
 
 /**
  * Icon path and property lookup object
@@ -30,6 +31,7 @@ const Icons = {
   asterisk,
   users,
   edit,
+  info,
 };
 
 export default Icons;
