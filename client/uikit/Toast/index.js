@@ -13,6 +13,7 @@ import {
   ActionButton,
   getBorderColor,
 } from './styledComponents';
+import { constant } from 'change-case';
 
 const getDefaultInteractionType = variant =>
   ({
@@ -22,41 +23,49 @@ const getDefaultInteractionType = variant =>
     [TOAST_VARIANTS.ERROR]: TOAST_INTERACTION.CLOSE,
   }[variant]);
 
-const DefaultIcon = ({ variant }) => (
-  <Icon
-    name="info"
-    fill={
-      {
-        [TOAST_VARIANTS.INFO]: 'secondary',
-        [TOAST_VARIANTS.SUCCESS]: 'success',
-        [TOAST_VARIANTS.WARNING]: 'warning',
-        [TOAST_VARIANTS.ERROR]: 'error',
-      }[variant]
-    }
-    width="30px"
-    height="30px"
-  />
-);
+const DefaultIcon = ({ variant, size }) => {
+  const fill = {
+      [TOAST_VARIANTS.INFO]: 'secondary',
+      [TOAST_VARIANTS.SUCCESS]: 'success',
+      [TOAST_VARIANTS.WARNING]: 'warning',
+      [TOAST_VARIANTS.ERROR]: 'error',
+    }[variant],
+    width = {
+      [TOAST_SIZES.MD]: '30px',
+      [TOAST_SIZES.SM]: '20px',
+    }[size],
+    height = width;
+  return <Icon name="info" fill={fill} width={width} height={height} />;
+};
 
 const Toast = ({
   variant = TOAST_VARIANTS.INFO,
+  size = TOAST_SIZES.MD,
   interactionType = getDefaultInteractionType(variant),
   title,
   content = 'Lorem ipsum dolor amet helvetica post-ironic fingerstache trust fund pitchfork tofu venmo live-edge',
   expandText = 'VIEW',
   dismissText = 'DISMISS',
-  icon = <DefaultIcon variant={variant} />,
+  icon = <DefaultIcon variant={variant} size={size} />,
   onInteraction = ({ type, event }) => {},
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
+  const titleTypographyVariant = {
+    [TOAST_SIZES.MD]: 'subtitle2',
+    [TOAST_SIZES.SM]: 'paragraph',
+  }[size];
+  const bodyTypographyVariant = {
+    [TOAST_SIZES.MD]: 'paragraph',
+    [TOAST_SIZES.SM]: 'data',
+  }[size];
   return (
     <ToastContainer variant={variant}>
       {icon && <IconContainer>{icon}</IconContainer>}
       <ToastBodyContainer>
         {title && (
           <Typography
-            variant="subtitle2"
+            variant={titleTypographyVariant}
             bold
             css={css`
               margin: 0px;
@@ -68,7 +77,7 @@ const Toast = ({
           </Typography>
         )}
         <Typography
-          variant="paragraph"
+          variant={bodyTypographyVariant}
           css={css`
             margin: 0px;
           `}
@@ -95,12 +104,12 @@ const Toast = ({
             `}
             onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.EXPAND)}
           >
-            <Typography variant="paragraph" component="div" bold>
+            <Typography variant={bodyTypographyVariant} component="div" bold>
               {expandText}
             </Typography>
           </ActionButton>
           <ActionButton variant={variant} onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.DISMISS)}>
-            <Typography variant="paragraph" component="div" bold>
+            <Typography variant={bodyTypographyVariant} component="div" bold>
               {dismissText}
             </Typography>
           </ActionButton>
@@ -128,6 +137,11 @@ export const TOAST_INTERACTION = {
   NONE: 'NONE',
 };
 
+export const TOAST_SIZES = {
+  MD: 'md',
+  SM: 'sm',
+};
+
 Toast.propTypes = {
   title: PropTypes.node,
   content: PropTypes.node,
@@ -146,6 +160,7 @@ Toast.propTypes = {
   ]),
   expandText: PropTypes.string,
   dismissText: PropTypes.string,
+  size: PropTypes.oneOf([TOAST_SIZES.MD, TOAST_SIZES.SM]),
 };
 
 export default Toast;
