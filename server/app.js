@@ -22,6 +22,7 @@ const init = async () => {
       egoToken: req.headers.authorization,
       dataLoaders: {},
     }),
+    introspection: true,
     tracing: NODE_ENV !== 'production',
   });
 
