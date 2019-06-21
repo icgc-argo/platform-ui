@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
 import Checkbox from '../Checkbox';
 import css from '@emotion/css';
+import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
-const FormCheckbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
+/**
+ * Checkbox for Form
+ * To be used with RadioCheckboxGroup
+ */
+const FormCheckbox = props => {
+  const { id, name, value, label, children, disabled, type } = props;
+
+  const { onChange, isChecked = props.isChecked } = useContext(RadioCheckContext) || props;
   const onClick = () => onChange(value);
+  const checked = isChecked(value);
+
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
       <Checkbox
