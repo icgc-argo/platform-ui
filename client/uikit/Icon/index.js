@@ -29,12 +29,25 @@ const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
             <path d={svg.mask} />
           </mask>
         ) : null}
-        <path
-          fill={theme.colors[fill] || fill || svg.defaultFill}
-          fillRule={svg.fillRule || 'nonezero'}
-          d={svg.path}
-          mask={svg.mask ? 'url(#mask)' : ''}
-        />
+        {svg.pathDefinitions ? (
+          svg.pathDefinitions.map(pathDef => (
+            <path
+              fill={
+                pathDef.fill || theme.colors[fill] || fill || pathDef.defaultFill || svg.defaultFill
+              }
+              fillRule={pathDef.fillRule || svg.fillRule || 'nonezero'}
+              d={pathDef.d}
+              mask={pathDef.mask || svg.mask ? 'url(#mask)' : ''}
+            />
+          ))
+        ) : (
+          <path
+            fill={theme.colors[fill] || fill || svg.defaultFill}
+            fillRule={svg.fillRule || 'nonezero'}
+            d={svg.path}
+            mask={svg.mask ? 'url(#mask)' : ''}
+          />
+        )}
       </g>
     </svg>
   );
