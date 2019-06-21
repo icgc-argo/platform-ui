@@ -11,15 +11,14 @@ import { Query } from 'react-apollo';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
-  id: string,
   shortName: string,
-  name: string,
+  name: string | null,
   cancerTypes: Array<{ id: string, name: string }>,
   countries: string | null,
-  membershipType: ArgoMembershipKey,
-  genomicDonors: number,
-  submittedDonors: number,
-  commitmentDonors: number,
+  membershipType: ArgoMembershipKey | null,
+  genomicDonors: number | null,
+  submittedDonors: number | null,
+  commitmentDonors: number | null,
 };
 type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
 type CellProps = { original: TableProgramInternal };
@@ -52,7 +51,7 @@ export default (tableProps: {
 }) => {
   const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
-    donorPercentage: p.submittedDonors / p.commitmentDonors,
+    donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
   const columns: Array<{
     Header: string,
@@ -102,7 +101,8 @@ export default (tableProps: {
     {
       Header: 'Memebership',
       accessor: 'membershipType',
-      Cell: ({ original }) => MembershipDisplayName[original.membershipType],
+      Cell: ({ original }) =>
+        original.membershipType ? MembershipDisplayName[original.membershipType] : '',
     },
     {
       Header: 'Administrators',

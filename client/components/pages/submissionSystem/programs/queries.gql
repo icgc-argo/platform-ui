@@ -1,6 +1,5 @@
 query programsListQuery {
   programs {
-    id
     shortName
     name
     cancerTypes {
