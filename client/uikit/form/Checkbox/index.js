@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 /**
  * Checkbox styles
  * ::before - checkmark
- * :: after - box
+ * ::after - box
  */
 
 export const StyledCheckbox = styled('div')`
@@ -32,7 +32,7 @@ export const StyledCheckbox = styled('div')`
 
   .checkbox {
     &:before {
-      transition: transform 0.25s ease;
+      transition: transform 0.2s ease-in;
       transform: rotate(-45deg) scale(0, 0);
 
       content: '';
@@ -51,6 +51,7 @@ export const StyledCheckbox = styled('div')`
     }
 
     &:after {
+      transition: background-color 0.2s ease-in;
       cursor: pointer;
       content: '';
       position: absolute;
@@ -77,12 +78,18 @@ export const StyledCheckbox = styled('div')`
 /*
  * Basic checkbox input
  */
-const Checkbox = ({ checked, disabled }) => {
+const Checkbox = ({ checked, disabled, onChange }) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
     <StyledCheckbox checked={checked} disabled={disabled}>
-      <input type="checkbox" ref={HiddenCheckboxRef} checked={checked} disabled={disabled} />
+      <input
+        type="checkbox"
+        ref={HiddenCheckboxRef}
+        checked={checked}
+        disabled={disabled}
+        onChange={onChange}
+      />
       <div
         className="checkbox"
         onClick={e => {

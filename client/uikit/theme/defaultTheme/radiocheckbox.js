@@ -11,6 +11,7 @@ export default {
   backgroundColors: {
     default: colors.white,
     disabled: colors.grey_4,
+    checked: colors.secondary_4,
   },
   borderColors: {
     default: colors.grey_2,

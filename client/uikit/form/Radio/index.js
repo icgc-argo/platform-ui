@@ -41,7 +41,7 @@ export const StyledRadio = styled('div')`
         theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
 
       transform: scale(0, 0);
-      transition: transform 0.35s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+      transition: transform 0.2s ease-in;
     }
 
     &:after {
@@ -66,7 +66,7 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const Radio = ({ value, disabled, checked }) => {
+const Radio = ({ value, disabled, checked, onChange }) => {
   const HiddenRadioRef = React.createRef();
 
   return (
@@ -77,6 +77,7 @@ const Radio = ({ value, disabled, checked }) => {
         checked={checked}
         disabled={disabled}
         aria-checked={checked}
+        onChange={onChange}
       />
       <div
         className="radio"
