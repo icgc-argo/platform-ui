@@ -1,4 +1,5 @@
 export const PORT = Number(process.env.PORT) || 9000;
+export const NODE_ENV = process.env.NODE_ENV;
 
 // Arranger configs
 export const ARRANGER_ROOT = process.env.ARRANGER_ROOT || 'http://localhost:5050';

@@ -5,7 +5,7 @@ import { mergeSchemas } from 'graphql-tools';
 
 import userSchema from './schemas/User';
 import programSchema from './schemas/Program';
-import { PORT } from './config';
+import { PORT, NODE_ENV } from './config';
 import config from './package.json';
 
 const { version } = config;
@@ -22,6 +22,7 @@ const init = async () => {
       egoToken: req.headers.authorization,
       dataLoaders: {},
     }),
+    tracing: NODE_ENV !== 'production',
   });
 
   const app = express();
