@@ -5,21 +5,15 @@ import Typography from '../Typography';
 import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 import useTheme from '../utils/useTheme';
+import {
+  ToastBodyContainer,
+  IconContainer,
+  ToastContainer,
+  ActionButtonsContainer,
+  ActionButton,
+  getBorderColor,
+} from './styledComponents';
 
-const getBackgroundColor = ({ theme, variant }) =>
-  ({
-    [TOAST_VARIANTS.INFO]: theme.colors.secondary_4,
-    [TOAST_VARIANTS.SUCCESS]: theme.colors.success_4,
-    [TOAST_VARIANTS.WARNING]: theme.colors.warning_4,
-    [TOAST_VARIANTS.ERROR]: theme.colors.error_4,
-  }[variant]);
-const getBorderColor = ({ theme, variant }) =>
-  ({
-    [TOAST_VARIANTS.INFO]: theme.colors.secondary_2,
-    [TOAST_VARIANTS.SUCCESS]: theme.colors.success_2,
-    [TOAST_VARIANTS.WARNING]: theme.colors.warning_2,
-    [TOAST_VARIANTS.ERROR]: theme.colors.error_2,
-  }[variant]);
 const getDefaultInteractionType = variant =>
   ({
     [TOAST_VARIANTS.INFO]: TOAST_INTERACTION.CLOSE,
@@ -27,20 +21,6 @@ const getDefaultInteractionType = variant =>
     [TOAST_VARIANTS.WARNING]: TOAST_INTERACTION.CLOSE,
     [TOAST_VARIANTS.ERROR]: TOAST_INTERACTION.CLOSE,
   }[variant]);
-
-const ToastContainer = styled('div')`
-  display: flex;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px 0 ${({ theme }) => theme.colors.grey_2};
-  border: solid 1px ${getBorderColor};
-  background-color: ${getBackgroundColor};
-`;
-
-const ToastBodyContainer = styled('div')`
-  margin-top: 8px;
-  margin-bottom: 8px;
-  flex: 1;
-`;
 
 const DefaultIcon = ({ variant }) => (
   <Icon
@@ -72,22 +52,8 @@ const Toast = ({
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
   return (
     <ToastContainer variant={variant}>
-      {icon && (
-        <div
-          css={css`
-            margin-top: 8px;
-            margin-left: 8px;
-          `}
-        >
-          {icon}
-        </div>
-      )}
-      <div
-        css={css`
-          margin: 8px;
-          flex: 1;
-        `}
-      >
+      {icon && <IconContainer>{icon}</IconContainer>}
+      <ToastBodyContainer>
         {title && (
           <Typography
             variant="subtitle2"
@@ -109,55 +75,36 @@ const Toast = ({
         >
           {content}
         </Typography>
-      </div>
+      </ToastBodyContainer>
       {interactionType === TOAST_INTERACTION.CLOSE && (
-        <div
+        <FocusWrapper
           css={css`
             margin: 8px;
+            height: 15px;
           `}
+          onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.CLOSE)}
         >
-          <FocusWrapper onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.CLOSE)}>
-            <Icon name="times" width="15px" height="15px" fill="primary_1" />
-          </FocusWrapper>
-        </div>
+          <Icon name="times" width="15px" height="15px" fill="primary_1" />
+        </FocusWrapper>
       )}
       {interactionType === TOAST_INTERACTION.EXAPAND_DISMISS && (
-        <div
-          css={css`
-            min-width: 80px;
-            border-left: solid 1px ${getBorderColor({ theme, variant })};
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <FocusWrapper
-            onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.EXPAND)}
+        <ActionButtonsContainer variant={variant}>
+          <ActionButton
             css={css`
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              flex: 1;
               border-bottom: solid 1px ${getBorderColor({ theme, variant })};
             `}
+            onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.EXPAND)}
           >
             <Typography variant="paragraph" component="div" bold>
               {expandText}
             </Typography>
-          </FocusWrapper>
-          <FocusWrapper
-            onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.DISMISS)}
-            css={css`
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              flex: 1;
-            `}
-          >
+          </ActionButton>
+          <ActionButton variant={variant} onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.DISMISS)}>
             <Typography variant="paragraph" component="div" bold>
               {dismissText}
             </Typography>
-          </FocusWrapper>
-        </div>
+          </ActionButton>
+        </ActionButtonsContainer>
       )}
     </ToastContainer>
   );
