@@ -10,19 +10,19 @@ import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
  * To be used with RadioCheckboxGroup
  */
 const FormCheckbox = props => {
-  const { id, name, value, label, children, disabled, type } = props;
+  const { id, name, value, label, children, disabled, type, checked } = props;
 
   const { onChange, isChecked = props.isChecked } = useContext(RadioCheckContext) || props;
   const onClick = () => onChange(value);
-  const checked = isChecked(value);
+  const calcChecked = isChecked ? isChecked(value) : checked;
 
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
+    <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
       <Checkbox
         id={id}
         name={name}
         value={value}
-        checked={checked}
+        checked={calcChecked}
         disabled={disabled}
         onChange={onChange}
       />
