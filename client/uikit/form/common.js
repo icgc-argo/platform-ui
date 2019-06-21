@@ -61,6 +61,7 @@ StyledInputWrapper.propTypes = {
 };
 
 export const RadioCheckboxWrapper = styled('div')`
+  margin-bottom: 2px;
   border-width: 1px;
   border-style: solid;
   border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};

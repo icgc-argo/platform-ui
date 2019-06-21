@@ -5,7 +5,7 @@ import FormRadio from '.';
 import { action } from '@storybook/addon-actions';
 import Hook from '../../utils/Hook';
 import Checkbox from '../FormCheckbox';
-import { RadioCheckboxGroup } from '../common';
+import RadioCheckboxGroup from '../RadioCheckboxGroup';
 
 const createKnobs = () => {
   const checked = boolean('checked', false);
