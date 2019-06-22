@@ -28,7 +28,7 @@ const FormCheckbox = props => {
       />
       <label
         css={css`
-          margin-left: 24px;
+          margin-left: 8px;
         `}
       >
         {children}
