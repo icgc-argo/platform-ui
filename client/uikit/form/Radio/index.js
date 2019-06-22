@@ -12,9 +12,13 @@ import css from '@emotion/css';
 export const StyledRadio = styled('div')`
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   input {
     position: absolute;
+    margin: 0;
     top: 0;
     opacity: 0;
     pointer-events: none;
@@ -25,11 +29,15 @@ export const StyledRadio = styled('div')`
   }
 
   .radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     &:before {
       content: '';
       position: absolute;
       z-index: 1;
-      border-radius: 50%;
+      border-radius: 9999px;
 
       top: 4px;
       left: 4px;
@@ -46,10 +54,8 @@ export const StyledRadio = styled('div')`
 
     &:after {
       content: '';
-      position: absolute;
-      border-radius: 50%;
-      top: 0;
-      left: 0;
+      border-radius: 9999px;
+      display: inline-block;
 
       width: 16px;
       height: 16px;
