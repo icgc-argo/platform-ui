@@ -6,18 +6,20 @@ import css from '@emotion/css';
 /*
  * :before
  * Outer box (border) offset
- * half the width & height, minus border
- * can't use transform to place it or it will transition
  */
 export const StyledRadio = styled('div')`
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   input {
-    position: absolute;
+    margin: 0;
     top: 0;
-    opacity: 0;
     pointer-events: none;
+    position: absolute;
+    opacity: 0;
   }
 
   input:checked + .radio:before {
@@ -25,11 +27,15 @@ export const StyledRadio = styled('div')`
   }
 
   .radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     &:before {
       content: '';
       position: absolute;
       z-index: 1;
-      border-radius: 50%;
+      border-radius: 9999px;
 
       top: 4px;
       left: 4px;
@@ -45,11 +51,9 @@ export const StyledRadio = styled('div')`
     }
 
     &:after {
+      border-radius: 9999px;
       content: '';
-      position: absolute;
-      border-radius: 50%;
-      top: 0;
-      left: 0;
+      display: inline-block;
 
       width: 16px;
       height: 16px;
