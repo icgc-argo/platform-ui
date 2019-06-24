@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import Tabs, { Tab } from '.';
 import Typography from '../Typography';
+import { action } from '@storybook/addon-actions';
 
 function TabContainer(props) {
   return (
@@ -11,11 +12,13 @@ function TabContainer(props) {
   );
 }
 
+// forwardRef is used to display the source in storybook
 const SimpleTabs = React.forwardRef(() => {
   const [value, setValue] = React.useState(0);
 
-  function handleChange(_event, newValue) {
+  function handleChange(event, newValue) {
     setValue(newValue);
+    action('tab foucs changed')(event, newValue);
   }
 
   return (
@@ -38,8 +41,9 @@ const SimpleTabs = React.forwardRef(() => {
 const SimpleTabs2 = React.forwardRef(() => {
   const [value, setValue] = React.useState(0);
 
-  function handleChange(_event, newValue) {
+  function handleChange(event, newValue) {
     setValue(newValue);
+    action('tab foucs changed')(event, newValue);
   }
 
   return (
