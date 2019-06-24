@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/core';
+import { Row, Col } from 'react-grid-system';
+import Typography from '../Typography';
+import React from 'react';
 
 import { INPUT_STATES } from '../theme/defaultTheme/input';
 
@@ -58,12 +61,16 @@ StyledInputWrapper.propTypes = {
 };
 
 export const RadioCheckboxWrapper = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 2px;
   border-width: 1px;
   border-style: solid;
   border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
 
-  background-color: ${({ theme, disabled }) =>
-    theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
+  background-color: ${({ theme, disabled, checked }) =>
+    theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : checked ? 'checked' : 'default']};
 
   color: ${({ theme, disabled }) =>
     theme.radiocheckbox.textColors[disabled ? 'disabled' : 'default']};
@@ -72,9 +79,14 @@ export const RadioCheckboxWrapper = styled('div')`
 
   label {
     ${({ theme }) => css(theme.typography.paragraph)};
+    line-height: normal;
     position: relative;
     cursor: pointer;
     color: inherit;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 

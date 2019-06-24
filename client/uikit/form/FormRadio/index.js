@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
 import Radio from '../Radio';
 import css from '@emotion/css';
+import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
-const FormRadio = ({ id, name, value, label, children, checked, onChange, disabled }) => {
+/**
+ * FormRadio to be used with RadioCheckboxGroup
+ */
+const FormRadio = props => {
+  const { id, name, value, label, children, disabled, checked = false } = props;
+  const { onChange, isChecked } = useContext(RadioCheckContext) || props;
   const onClick = () => onChange(value);
+  const calcChecked = isChecked ? isChecked(value) : checked;
+
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={checked} onClick={onClick}>
-      <Radio id={id} name={name} value={value} checked={checked} disabled={disabled} />
+    <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
+      <Radio
+        id={id}
+        name={name}
+        value={value}
+        checked={calcChecked}
+        disabled={disabled}
+        onChange={onChange}
+      />
       <label
         css={css`
-          margin-left: 28px;
+          margin-left: 8px;
         `}
       >
         {children}
@@ -20,28 +35,8 @@ const FormRadio = ({ id, name, value, label, children, checked, onChange, disabl
   );
 };
 
-export const RadioGroup = ({ onChange, children, selectedItem }) => (
-  <StyledGroup role="radiogroup">
-    {React.Children.map(children, child =>
-      React.cloneElement(child, {
-        checked: child.props.value === selectedItem,
-        onChange: e => {
-          onChange(e);
-        },
-      }),
-    )}
-  </StyledGroup>
-);
-
-RadioGroup.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  selectedItem: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool])
-    .isRequired,
-};
-
 FormRadio.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.any,
   label: PropTypes.string,

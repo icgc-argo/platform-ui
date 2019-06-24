@@ -12,9 +12,13 @@ import css from '@emotion/css';
 export const StyledRadio = styled('div')`
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   input {
     position: absolute;
+    margin: 0;
     top: 0;
     opacity: 0;
     pointer-events: none;
@@ -25,11 +29,15 @@ export const StyledRadio = styled('div')`
   }
 
   .radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     &:before {
       content: '';
       position: absolute;
       z-index: 1;
-      border-radius: 50%;
+      border-radius: 9999px;
 
       top: 4px;
       left: 4px;
@@ -41,15 +49,13 @@ export const StyledRadio = styled('div')`
         theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
 
       transform: scale(0, 0);
-      transition: transform 0.35s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+      transition: transform 0.2s ease-in;
     }
 
     &:after {
       content: '';
-      position: absolute;
-      border-radius: 50%;
-      top: 0;
-      left: 0;
+      border-radius: 9999px;
+      display: inline-block;
 
       width: 16px;
       height: 16px;
@@ -66,7 +72,7 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const Radio = ({ value, disabled, checked }) => {
+const Radio = ({ value, disabled, checked, onChange }) => {
   const HiddenRadioRef = React.createRef();
 
   return (
@@ -77,6 +83,7 @@ const Radio = ({ value, disabled, checked }) => {
         checked={checked}
         disabled={disabled}
         aria-checked={checked}
+        onChange={onChange}
       />
       <div
         className="radio"

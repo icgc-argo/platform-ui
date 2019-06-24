@@ -1,26 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
 import Checkbox from '../Checkbox';
 import css from '@emotion/css';
+import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
-const FormCheckbox = ({ id, name, value, label, children, checked, onChange, disabled, type }) => {
+/**
+ * Checkbox for Form
+ * To be used with RadioCheckboxGroup
+ */
+const FormCheckbox = props => {
+  const { id, name, value, label, children, disabled, type, checked } = props;
+
+  const { onChange, isChecked = props.isChecked } = useContext(RadioCheckContext) || props;
   const onClick = () => onChange(value);
+  const calcChecked = isChecked ? isChecked(value) : checked;
+
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={checked}>
+    <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
       <Checkbox
         id={id}
         name={name}
         value={value}
-        checked={checked}
-        onChange={onClick}
+        checked={calcChecked}
         disabled={disabled}
+        onChange={onChange}
       />
       <label
         css={css`
-          margin-left: 24px;
+          margin-left: 8px;
         `}
-        onClick={onClick}
       >
         {children}
       </label>
@@ -28,20 +37,7 @@ const FormCheckbox = ({ id, name, value, label, children, checked, onChange, dis
   );
 };
 
-export const CheckboxGroup = ({ onChange, children, selectedItems }) => (
-  <StyledGroup>
-    {React.Children.map(children, child =>
-      React.cloneElement(child, {
-        checked: selectedItems.has(child.props.value),
-        onChange: e => {
-          onChange(e);
-        },
-      }),
-    )}
-  </StyledGroup>
-);
-
-Checkbox.propTypes = {
+FormCheckbox.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.any,
