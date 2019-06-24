@@ -59,6 +59,10 @@ const Toast = ({
     [TOAST_SIZES.MD]: 'paragraph',
     [TOAST_SIZES.SM]: 'data',
   }[size];
+  const headerVerticalMargin = {
+    [TOAST_SIZES.MD]: '4px',
+    [TOAST_SIZES.SM]: '0px',
+  }[size];
   return (
     <ToastContainer variant={variant}>
       {icon && <IconContainer>{icon}</IconContainer>}
@@ -69,8 +73,8 @@ const Toast = ({
             bold
             css={css`
               margin: 0px;
-              margin-top: 4px;
-              margin-bottom: 4px;
+              margin-top: ${headerVerticalMargin};
+              margin-bottom: ${headerVerticalMargin};
             `}
           >
             {title}
@@ -119,28 +123,28 @@ const Toast = ({
   );
 };
 
-export const TOAST_INTERACTION_EVENTS = {
+export const TOAST_INTERACTION_EVENTS = Object.freeze({
   CLOSE: 'CLOSE',
   EXPAND: 'EXPAND',
   DISMISS: 'DISMISS',
-};
+});
 
-export const TOAST_VARIANTS = {
+export const TOAST_VARIANTS = Object.freeze({
   INFO: 'INFO',
   SUCCESS: 'SUCCESS',
   WARNING: 'WARNING',
   ERROR: 'ERROR',
-};
-export const TOAST_INTERACTION = {
+});
+export const TOAST_INTERACTION = Object.freeze({
   CLOSE: 'CLOSE',
   EXAPAND_DISMISS: 'EXAPAND_DISMISS',
   NONE: 'NONE',
-};
+});
 
-export const TOAST_SIZES = {
+export const TOAST_SIZES = Object.freeze({
   MD: 'md',
   SM: 'sm',
-};
+});
 
 Toast.propTypes = {
   title: PropTypes.node,
