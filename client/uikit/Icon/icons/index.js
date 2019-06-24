@@ -12,6 +12,9 @@ import users from './collection/users';
 import edit from './collection/edit';
 import times_circle from './collection/times_circle';
 import checkmark from './collection/checkmark';
+import info from './collection/info';
+import success from './collection/success';
+import warning from './collection/warning';
 
 /**
  * Icon path and property lookup object
@@ -32,6 +35,9 @@ const Icons = {
   users,
   edit,
   checkmark,
+  info,
+  success,
+  warning,
 };
 
 export default Icons;
