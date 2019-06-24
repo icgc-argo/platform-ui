@@ -1,49 +1,106 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '../';
+import { differenceBy } from 'lodash';
 
+import { styled } from '../';
 import Toast from '../Toast';
 
-/*
- * Please edit me!
- */
+const usePrevious = value => {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+};
+
+const ANIMATION_DURATION = 350;
+
 const StackContainer = styled('div')`
   max-width: 400px;
 `;
-const ToastContainer = styled('div')`
+const AnimatedContainer = styled('div')`
   margin-top: 10px;
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+  @keyframes exit {
+    from {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+  }
+  animation: ${({ unMounting }) => (unMounting ? 'exit' : 'enter')} ${ANIMATION_DURATION / 1000}s
+    ease-in-out;
 `;
-const ToastStack = ({ toastConfigs = [], onInteraction = ({ toastIndex, payload }) => {} }) => {
-  const animation = {
-    opacity: [0, 1],
-    translationX: [-100, 0],
-    easing: 'easeOutSine',
-  };
+const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payload }) => {} }) => {
+  // holds on to a local copy of toastConfigs for timing with animation
+  const convertToLocalStack = toastConfigs => toastConfigs.map(i => ({ ...i, unMounting: false }));
+  const [stack, setStack] = React.useState(convertToLocalStack(toastConfigs));
+  const previousToastConfigs = usePrevious(toastConfigs);
+  const currentlyUnmountingItems = React.createRef();
+
+  // observes toastConfigs from props to sync up with local state, with some delay for animation
+  React.useEffect(
+    stuff => {
+      const [itemToRemove] = differenceBy(previousToastConfigs, toastConfigs);
+      if (itemToRemove) {
+        setStack(
+          convertToLocalStack(previousToastConfigs).map(item => ({
+            ...item,
+            unMounting: item.id === itemToRemove.id,
+          })),
+        );
+        setTimeout(() => {
+          setStack(convertToLocalStack(toastConfigs));
+        }, ANIMATION_DURATION);
+      } else {
+        setStack(convertToLocalStack(toastConfigs));
+      }
+    },
+    [toastConfigs],
+  );
+
   return (
     <StackContainer>
-      {toastConfigs.map((config, i) => (
-        <ToastContainer key={i}>
+      {stack.map(({ id, unMounting, ...rest }, i) => (
+        <AnimatedContainer key={id} unMounting={unMounting}>
           <Toast
-            animation={animation}
-            {...config}
+            {...rest}
             onInteraction={payload => {
               onInteraction({
                 toastIndex: i,
+                id,
                 payload,
               });
-              if (config.onInteraction) {
-                config.onInteraction(payload);
+              if (rest.onInteraction) {
+                rest.onInteraction(payload);
               }
             }}
           />
-        </ToastContainer>
+        </AnimatedContainer>
       ))}
     </StackContainer>
   );
 };
 
 ToastStack.propTypes = {
-  toastConfigs: PropTypes.arrayOf(PropTypes.shape(Toast.propTypes)),
+  toastConfigs: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      ...Toast.propTypes,
+    }),
+  ),
   onInteraction: PropTypes.func,
 };
 
