@@ -57,7 +57,6 @@
     "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-anime": "^2.2.0",
     "react-apollo": "^2.5.6",
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
