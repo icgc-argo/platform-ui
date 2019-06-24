@@ -15,7 +15,8 @@
     "e2e-dev": "nightwatch -c e2e/conf/dev.js; exit 0",
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "test-uikit": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
-    "test": "mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js"
+    "test": "mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
+    "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -53,9 +54,9 @@
     "next": "^8.0.3",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
+    "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-anime": "^2.2.0",
     "react-apollo": "^2.5.6",
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
@@ -84,6 +85,8 @@
     "chalk": "^2.4.2",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
+    "file-regex": "^3.0.1",
+    "graphql-tools": "^4.0.4",
     "husky": "^2.2.0",
     "inquirer": "^6.3.1",
     "mocha": "^6.1.2",

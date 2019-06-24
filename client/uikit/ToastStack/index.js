@@ -95,6 +95,10 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
 };
 
 ToastStack.propTypes = {
+  /**
+   * This is directly the props that goes to `Toast` component, with addition of a unique `id` field.
+   * Check out https://argo-ui-storybook.netlify.com/?path=/story/uikit-toast--basic
+   */
   toastConfigs: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

@@ -17,6 +17,8 @@ import { NODE_ENV, ENVIRONMENTS, API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
+// $FlowFixMe
+import fetch from 'node-fetch';
 
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
@@ -70,6 +72,7 @@ const Root = (props: {
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
       uri: urlJoin(API_ROOT, '/graphql'),
+      fetch: fetch,
       headers: {
         authorization: `Bearer ${props.egoJwt}`,
       },
