@@ -1,31 +1,18 @@
 //@flow
 import React from 'react';
-import get from 'lodash/get';
 
 import Typography from 'uikit/Typography';
-import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
-import {
-  PageContainer,
-  Panel,
-  PageBody,
-  PageContent,
-  ContentHeader,
-  ContentBody,
-  ContentBox,
-  PageFooter,
-} from 'uikit/PageLayout';
 import { css } from 'uikit';
-import Table, { TableActionBar } from 'uikit/Table';
+import { TableActionBar } from 'uikit/Table';
 import Button from 'uikit/Button';
-import PercentageBar from 'uikit/PercentageBar';
 import { INPUT_PRESETS } from 'uikit/form/Input';
 import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import ProgramsTable from './ProgramsTable';
-import { mockPrograms } from '../mockData';
 import SubmissionLayout from '../layout';
 import { useQuery } from 'react-apollo-hooks';
-import gql from 'graphql-tag';
+
+import { ContentBox } from 'uikit/PageLayout';
 
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './queries.gql';

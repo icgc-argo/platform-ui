@@ -53,6 +53,7 @@
     "next": "^8.0.3",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
+    "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.6",
