@@ -1,10 +1,13 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ToastStack from '.';
-import { TOAST_VARIANTS } from 'uikit/Toast';
+import { TOAST_VARIANTS } from '../Toast';
+import Button from '../Button';
+import { action } from '@storybook/addon-actions';
 
 const ToastStackStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
   <ToastStack
+    onInteraction={action('onInteraction')}
     toastConfigs={[
       {
         title: 'Hipster Ipsum',
