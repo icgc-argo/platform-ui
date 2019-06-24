@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Anime from 'react-anime';
+
 import { styled, css } from '../';
 import Typography from '../Typography';
 import Icon from '../Icon';
@@ -13,7 +15,6 @@ import {
   ActionButton,
   getBorderColor,
 } from './styledComponents';
-import { constant } from 'change-case';
 
 const getDefaultInteractionType = variant =>
   ({
@@ -54,6 +55,7 @@ const Toast = ({
   dismissText = 'DISMISS',
   icon = <DefaultIcon variant={variant} size={size} />,
   onInteraction = ({ type, event }) => {},
+  animation = {},
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
@@ -70,64 +72,69 @@ const Toast = ({
     [TOAST_SIZES.SM]: '0px',
   }[size];
   return (
-    <ToastContainer variant={variant}>
-      {icon && <IconContainer>{icon}</IconContainer>}
-      <ToastBodyContainer>
-        {title && (
-          <Typography
-            variant={titleTypographyVariant}
-            bold
-            css={css`
-              margin: 0px;
-              margin-top: ${headerVerticalMargin};
-              margin-bottom: ${headerVerticalMargin};
-            `}
-          >
-            {title}
-          </Typography>
-        )}
-        {content && (
-          <Typography
-            variant={bodyTypographyVariant}
-            css={css`
-              margin: 0px;
-            `}
-          >
-            {content}
-          </Typography>
-        )}
-      </ToastBodyContainer>
-      {interactionType === TOAST_INTERACTION.CLOSE && (
-        <FocusWrapper
-          css={css`
-            margin: 8px;
-            height: 15px;
-          `}
-          onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.CLOSE)}
-        >
-          <Icon name="times" width="15px" height="15px" fill="primary_1" />
-        </FocusWrapper>
-      )}
-      {interactionType === TOAST_INTERACTION.EXAPAND_DISMISS && (
-        <ActionButtonsContainer variant={variant}>
-          <ActionButton
-            css={css`
-              border-bottom: solid 1px ${getBorderColor({ theme, variant })};
-            `}
-            onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.EXPAND)}
-          >
-            <Typography variant={bodyTypographyVariant} component="div" bold>
-              {expandText}
+    <Anime {...animation}>
+      <ToastContainer variant={variant}>
+        {icon && <IconContainer>{icon}</IconContainer>}
+        <ToastBodyContainer>
+          {title && (
+            <Typography
+              variant={titleTypographyVariant}
+              bold
+              css={css`
+                margin: 0px;
+                margin-top: ${headerVerticalMargin};
+                margin-bottom: ${headerVerticalMargin};
+              `}
+            >
+              {title}
             </Typography>
-          </ActionButton>
-          <ActionButton variant={variant} onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.DISMISS)}>
-            <Typography variant={bodyTypographyVariant} component="div" bold>
-              {dismissText}
+          )}
+          {content && (
+            <Typography
+              variant={bodyTypographyVariant}
+              css={css`
+                margin: 0px;
+              `}
+            >
+              {content}
             </Typography>
-          </ActionButton>
-        </ActionButtonsContainer>
-      )}
-    </ToastContainer>
+          )}
+        </ToastBodyContainer>
+        {interactionType === TOAST_INTERACTION.CLOSE && (
+          <FocusWrapper
+            css={css`
+              margin: 8px;
+              height: 15px;
+            `}
+            onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.CLOSE)}
+          >
+            <Icon name="times" width="15px" height="15px" fill="primary_1" />
+          </FocusWrapper>
+        )}
+        {interactionType === TOAST_INTERACTION.EXAPAND_DISMISS && (
+          <ActionButtonsContainer variant={variant}>
+            <ActionButton
+              css={css`
+                border-bottom: solid 1px ${getBorderColor({ theme, variant })};
+              `}
+              onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.EXPAND)}
+            >
+              <Typography variant={bodyTypographyVariant} component="div" bold>
+                {expandText}
+              </Typography>
+            </ActionButton>
+            <ActionButton
+              variant={variant}
+              onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.DISMISS)}
+            >
+              <Typography variant={bodyTypographyVariant} component="div" bold>
+                {dismissText}
+              </Typography>
+            </ActionButton>
+          </ActionButtonsContainer>
+        )}
+      </ToastContainer>
+    </Anime>
   );
 };
 
@@ -173,6 +180,10 @@ Toast.propTypes = {
   expandText: PropTypes.string,
   dismissText: PropTypes.string,
   size: PropTypes.oneOf([TOAST_SIZES.MD, TOAST_SIZES.SM]),
+  /**
+   * refer to https://animejs.com/documentation/#cssProperties
+   */
+  animation: PropTypes.object,
 };
 
 export default Toast;
