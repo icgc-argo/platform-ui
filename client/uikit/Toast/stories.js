@@ -30,11 +30,6 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         title={title}
         content={content}
         onInteraction={action('RECEIVED EVENT')}
-        animation={{
-          opacity: [0, 1],
-          translateX: [100, 0],
-          easing: 'easeOutSine',
-        }}
       />
       <Toast
         variant={variant}
@@ -45,11 +40,6 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         title={title}
         content={content}
         onInteraction={action('RECEIVED EVENT')}
-        animation={{
-          opacity: [0, 1],
-          translateX: [100, 0],
-          easing: 'easeOutSine',
-        }}
         icon={null}
       />
     </>
