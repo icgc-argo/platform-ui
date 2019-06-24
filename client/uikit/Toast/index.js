@@ -25,17 +25,23 @@ const getDefaultInteractionType = variant =>
 
 const DefaultIcon = ({ variant, size }) => {
   const fill = {
-      [TOAST_VARIANTS.INFO]: 'secondary',
-      [TOAST_VARIANTS.SUCCESS]: 'success',
-      [TOAST_VARIANTS.WARNING]: 'warning',
-      [TOAST_VARIANTS.ERROR]: 'error',
-    }[variant],
-    width = {
-      [TOAST_SIZES.MD]: '30px',
-      [TOAST_SIZES.SM]: '20px',
-    }[size],
-    height = width;
-  return <Icon name="info" fill={fill} width={width} height={height} />;
+    [TOAST_VARIANTS.INFO]: 'secondary',
+    [TOAST_VARIANTS.SUCCESS]: 'success',
+    [TOAST_VARIANTS.WARNING]: 'warning',
+    [TOAST_VARIANTS.ERROR]: 'error',
+  }[variant];
+  const name = {
+    [TOAST_VARIANTS.INFO]: 'info',
+    [TOAST_VARIANTS.SUCCESS]: 'success',
+    [TOAST_VARIANTS.WARNING]: 'warning',
+    [TOAST_VARIANTS.ERROR]: 'times_circle',
+  }[variant];
+  const width = {
+    [TOAST_SIZES.MD]: '30px',
+    [TOAST_SIZES.SM]: '20px',
+  }[size];
+  const height = width;
+  return <Icon name={name} fill={fill} width={width} height={height} />;
 };
 
 const Toast = ({
