@@ -9,6 +9,7 @@ import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
 import urlJoin from 'url-join';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import fetch from 'isomorphic-fetch';
 
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
@@ -17,8 +18,6 @@ import { NODE_ENV, ENVIRONMENTS, API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
-// $FlowFixMe
-import fetch from 'node-fetch';
 
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
