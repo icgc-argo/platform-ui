@@ -26,7 +26,7 @@ const FormRadio = props => {
       />
       <label
         css={css`
-          margin-left: 28px;
+          margin-left: 8px;
         `}
       >
         {children}

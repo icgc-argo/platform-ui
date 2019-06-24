@@ -13,6 +13,7 @@ export const StyledCheckbox = styled('div')`
   cursor: pointer;
 
   input {
+    margin: 0;
     position: absolute;
     top: 0;
     opacity: 0;
@@ -31,6 +32,10 @@ export const StyledCheckbox = styled('div')`
   }
 
   .checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     &:before {
       transition: transform 0.2s ease-in;
       transform: rotate(-45deg) scale(0, 0);
@@ -51,12 +56,10 @@ export const StyledCheckbox = styled('div')`
     }
 
     &:after {
+      display: inline-block;
       transition: background-color 0.2s ease-in;
       cursor: pointer;
       content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
 
       width: 15px;
       height: 15px;
