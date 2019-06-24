@@ -12,7 +12,8 @@ import { ThemeContext } from '@emotion/core';
 import Icon from 'uikit/Icon';
 
 export default ({ logOut, pathname, router }) => {
-  const [activeTab, setActiveTab] = React.useState('PROFILE');
+  const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
+  const [activeTab, setActiveTab] = React.useState(TABS.PROFILE);
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
@@ -47,8 +48,8 @@ export default ({ logOut, pathname, router }) => {
           <Tab value="PROFILE" label="Profile" />
           <Tab empty />
         </Tabs>
-        {activeTab === 'USERS' && <div>users</div>}
-        {activeTab === 'PROFILE' && <Profile />}
+        {activeTab === TABS.USERS && <div>users</div>}
+        {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
     </SubmissionLayout>
   );
