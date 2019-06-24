@@ -19,7 +19,7 @@ import {
 const getDefaultInteractionType = variant =>
   ({
     [TOAST_VARIANTS.INFO]: TOAST_INTERACTION.CLOSE,
-    [TOAST_VARIANTS.SUCCESS]: TOAST_INTERACTION.EXAPAND_DISMISS,
+    [TOAST_VARIANTS.SUCCESS]: TOAST_INTERACTION.EXPAND_DISMISS,
     [TOAST_VARIANTS.WARNING]: TOAST_INTERACTION.CLOSE,
     [TOAST_VARIANTS.ERROR]: TOAST_INTERACTION.CLOSE,
   }[variant]);
@@ -111,7 +111,7 @@ const Toast = ({
             <Icon name="times" width="15px" height="15px" fill="primary_1" />
           </FocusWrapper>
         )}
-        {interactionType === TOAST_INTERACTION.EXAPAND_DISMISS && (
+        {interactionType === TOAST_INTERACTION.EXPAND_DISMISS && (
           <ActionButtonsContainer variant={variant}>
             <ActionButton
               css={css`
@@ -152,7 +152,7 @@ export const TOAST_VARIANTS = Object.freeze({
 });
 export const TOAST_INTERACTION = Object.freeze({
   CLOSE: 'CLOSE',
-  EXAPAND_DISMISS: 'EXAPAND_DISMISS',
+  EXPAND_DISMISS: 'EXPAND_DISMISS',
   NONE: 'NONE',
 });
 
@@ -175,7 +175,7 @@ Toast.propTypes = {
   interactionType: PropTypes.oneOf([
     TOAST_INTERACTION.NONE,
     TOAST_INTERACTION.CLOSE,
-    TOAST_INTERACTION.EXAPAND_DISMISS,
+    TOAST_INTERACTION.EXPAND_DISMISS,
   ]),
   expandText: PropTypes.string,
   dismissText: PropTypes.string,
