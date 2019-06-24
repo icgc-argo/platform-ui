@@ -30,8 +30,9 @@ const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
           </mask>
         ) : null}
         {svg.pathDefinitions ? (
-          svg.pathDefinitions.map(pathDef => (
+          svg.pathDefinitions.map((pathDef, i) => (
             <path
+              key={i}
               fill={
                 pathDef.fill || theme.colors[fill] || fill || pathDef.defaultFill || svg.defaultFill
               }
