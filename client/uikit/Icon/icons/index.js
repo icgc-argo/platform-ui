@@ -11,6 +11,7 @@ import asterisk from './collection/asterisk';
 import users from './collection/users';
 import edit from './collection/edit';
 import times_circle from './collection/times_circle';
+import checkmark from './collection/checkmark';
 import info from './collection/info';
 import success from './collection/success';
 import warning from './collection/warning';
@@ -33,6 +34,7 @@ const Icons = {
   asterisk,
   users,
   edit,
+  checkmark,
   info,
   success,
   warning,
