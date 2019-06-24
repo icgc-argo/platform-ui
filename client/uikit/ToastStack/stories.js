@@ -32,6 +32,7 @@ const State = ({ children }) => {
   const onInteraction = data => {
     const { id } = data;
     setStack(stack.filter(({ id: _id }) => id !== _id));
+    action('onInteraction')(data);
   };
   return React.cloneElement(children, {
     onInteraction,
