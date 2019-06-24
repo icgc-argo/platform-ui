@@ -43,7 +43,7 @@ const Toast = ({
   size = TOAST_SIZES.MD,
   interactionType = getDefaultInteractionType(variant),
   title,
-  content = 'Lorem ipsum dolor amet helvetica post-ironic fingerstache trust fund pitchfork tofu venmo live-edge',
+  content,
   expandText = 'VIEW',
   dismissText = 'DISMISS',
   icon = <DefaultIcon variant={variant} size={size} />,
@@ -80,14 +80,16 @@ const Toast = ({
             {title}
           </Typography>
         )}
-        <Typography
-          variant={bodyTypographyVariant}
-          css={css`
-            margin: 0px;
-          `}
-        >
-          {content}
-        </Typography>
+        {content && (
+          <Typography
+            variant={bodyTypographyVariant}
+            css={css`
+              margin: 0px;
+            `}
+          >
+            {content}
+          </Typography>
+        )}
       </ToastBodyContainer>
       {interactionType === TOAST_INTERACTION.CLOSE && (
         <FocusWrapper
