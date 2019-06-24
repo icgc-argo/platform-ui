@@ -44,6 +44,7 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ toastIndex, payload 
 
 ToastStack.propTypes = {
   toastConfigs: PropTypes.arrayOf(PropTypes.shape(Toast.propTypes)),
+  onInteraction: PropTypes.func,
 };
 
 export default ToastStack;
