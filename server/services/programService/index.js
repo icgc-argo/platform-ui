@@ -4,11 +4,11 @@
  */
 import grpc from 'grpc';
 import * as loader from '@grpc/proto-loader';
+import protoPath from '@icgc-argo/program-service-proto';
 
 import { PROGRAM_SERVICE_ROOT } from '../../config';
 
-const PROTO_PATH = __dirname + '/ProgramService.proto';
-const packageDefinition = loader.loadSync(PROTO_PATH, {
+const packageDefinition = loader.loadSync(protoPath, {
   keepCase: true,
   longs: String,
   enums: String,
