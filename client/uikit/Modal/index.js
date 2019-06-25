@@ -7,6 +7,17 @@ import Button from '../Button';
 import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 
+const hexToRgb = hex => {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
 const ModalContainer = styled('div')`
   position: relative;
   overflow: auto;
@@ -35,18 +46,6 @@ const ButtonContainer = styled('div')`
   display: flex;
   flex-direction: row;
 `;
-
-const hexToRgb = hex => {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-};
-
 const ModalOverlay = styled('div')`
   width: 100%;
   height: 100%;
