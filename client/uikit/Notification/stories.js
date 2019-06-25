@@ -1,17 +1,26 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Toast, { TOAST_VARIANTS, TOAST_INTERACTION_EVENTS, TOAST_INTERACTION, TOAST_SIZES } from '.';
+import Notification, {
+  NOTIFICATION_VARIANTS,
+  NOTIFICATION_INTERACTION_EVENTS,
+  NOTIFICATION_INTERACTION,
+  NOTIFICATION_SIZES,
+} from '.';
 import { action } from '@storybook/addon-actions';
 import { select, text } from '@storybook/addon-knobs';
 
-const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  const variant = select('variant', [undefined, ...Object.values(TOAST_VARIANTS)], undefined);
-  const interactionType = select(
-    'interactionType',
-    [undefined, ...Object.values(TOAST_INTERACTION)],
+const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  const variant = select(
+    'variant',
+    [undefined, ...Object.values(NOTIFICATION_VARIANTS)],
     undefined,
   );
-  const size = select('size', [undefined, ...Object.values(TOAST_SIZES)], undefined);
+  const interactionType = select(
+    'interactionType',
+    [undefined, ...Object.values(NOTIFICATION_INTERACTION)],
+    undefined,
+  );
+  const size = select('size', [undefined, ...Object.values(NOTIFICATION_SIZES)], undefined);
   const title = text('title', 'Hipster Ipsum');
   const content = text(
     'content',
@@ -21,7 +30,7 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const dismissText = text('dismissText', undefined);
   return (
     <>
-      <Toast
+      <Notification
         variant={variant}
         interactionType={interactionType}
         size={size}
@@ -31,7 +40,7 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         content={content}
         onInteraction={action('RECEIVED EVENT')}
       />
-      <Toast
+      <Notification
         variant={variant}
         interactionType={interactionType}
         size={size}
@@ -46,4 +55,4 @@ const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   );
 });
 
-export default ToastStories;
+export default NotificationStories;

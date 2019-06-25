@@ -3,26 +3,26 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import ToastStack from '.';
-import { TOAST_VARIANTS } from '../Toast';
+import { NOTIFICATION_VARIANTS } from '../Notification';
 
 const State = ({ children }) => {
   const [stack, setStack] = React.useState([
     {
       id: String(Math.random()),
-      variant: TOAST_VARIANTS.SUCCESS,
+      variant: NOTIFICATION_VARIANTS.SUCCESS,
       title: 'Hipster Ipsum',
       content:
         'Tilde gentrify single-origin coffee lo-fi roof party twee. Chillwave stumptown street art four dollar toast literally cred artisan',
     },
     {
       id: String(Math.random()),
-      variant: TOAST_VARIANTS.WARNING,
+      variant: NOTIFICATION_VARIANTS.WARNING,
       title: 'Hipster Ipsum',
       content: 'Cold-pressed beard narwhal ennui',
     },
     {
       id: String(Math.random()),
-      variant: TOAST_VARIANTS.ERROR,
+      variant: NOTIFICATION_VARIANTS.ERROR,
       title: 'Hipster Ipsum',
       content:
         'Thundercats la croix microdosing shoreditch, green juice VHS YOLO taxidermy adaptogen literally',
@@ -47,20 +47,20 @@ const ToastStackStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
       toastConfigs={[
         {
           id: String(Math.random()),
-          variant: TOAST_VARIANTS.SUCCESS,
+          variant: NOTIFICATION_VARIANTS.SUCCESS,
           title: 'Hipster Ipsum',
           content:
             'Tilde gentrify single-origin coffee lo-fi roof party twee. Chillwave stumptown street art four dollar toast literally cred artisan',
         },
         {
           id: String(Math.random()),
-          variant: TOAST_VARIANTS.WARNING,
+          variant: NOTIFICATION_VARIANTS.WARNING,
           title: 'Hipster Ipsum',
           content: 'Cold-pressed beard narwhal ennui',
         },
         {
           id: String(Math.random()),
-          variant: TOAST_VARIANTS.ERROR,
+          variant: NOTIFICATION_VARIANTS.ERROR,
           title: 'Hipster Ipsum',
           content:
             'Thundercats la croix microdosing shoreditch, green juice VHS YOLO taxidermy adaptogen literally',
