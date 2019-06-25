@@ -38,6 +38,7 @@ const Modal = ({
   cancelText = 'Cancel',
   onActionClick = () => {},
   onCancelClick = () => {},
+  actionDisabled = false,
   children,
 }) => (
   <ModalContainer>
@@ -58,7 +59,9 @@ const Modal = ({
     </ModalBody>
     <ModalFooter>
       <ButtonContainer>
-        <Button onClick={onActionClick}>{actionButtonText}</Button>
+        <Button disabled={actionDisabled} onClick={onActionClick}>
+          {actionButtonText}
+        </Button>
         <Button
           css={css`
             border: none;
