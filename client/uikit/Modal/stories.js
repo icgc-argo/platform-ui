@@ -30,7 +30,7 @@ const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
             {children}
             <div style={{ margin: '20px' }}>
               BTW you can use <strong style={{ color: 'red' }}>Modal.Overlay</strong> for the
-              overlay{' '}
+              overlay. Storybook doesn't show it in Story Source very well.
             </div>
           </div>
         }
