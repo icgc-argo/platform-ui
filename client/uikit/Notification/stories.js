@@ -7,7 +7,7 @@ import Notification, {
   NOTIFICATION_SIZES,
 } from '.';
 import { action } from '@storybook/addon-actions';
-import { select, text } from '@storybook/addon-knobs';
+import { select, text, boolean } from '@storybook/addon-knobs';
 
 const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const variant = select(
@@ -28,6 +28,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
   );
   const actionText = text('actionText', undefined);
   const dismissText = text('dismissText', undefined);
+  const noShadow = boolean('noShadow', false);
   return (
     <>
       <Notification
@@ -38,6 +39,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         dismissText={dismissText}
         title={title}
         content={content}
+        noShadow={noShadow}
         onInteraction={action('RECEIVED EVENT')}
       />
       <Notification
@@ -48,6 +50,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         dismissText={dismissText}
         title={title}
         content={content}
+        noShadow={noShadow}
         onInteraction={action('RECEIVED EVENT')}
         icon={null}
       />

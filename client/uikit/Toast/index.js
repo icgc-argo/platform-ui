@@ -25,6 +25,7 @@ Toast.propTypes = omit(Notification.propTypes, [
   'interactionType',
   'actionText',
   'dismissText',
+  'noShadow',
 ]);
 
 export default Toast;

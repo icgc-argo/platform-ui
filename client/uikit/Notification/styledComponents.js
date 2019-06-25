@@ -20,7 +20,7 @@ export const getBorderColor = ({ theme, variant }) =>
 export const NotificationContainer = styled('div')`
   display: flex;
   border-radius: 8px;
-  box-shadow: 0 2px 4px 0 ${({ theme }) => theme.colors.grey_2};
+  box-shadow: ${({ theme, noShadow }) => !noShadow && `0 2px 4px 0 ${theme.colors.grey_2}`};
   border: solid 1px ${getBorderColor};
   background-color: ${getBackgroundColor};
 `;
