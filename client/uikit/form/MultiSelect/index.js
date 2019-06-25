@@ -83,8 +83,8 @@ const InputBox = styled('div')`
   }
 
   &.disabled {
-    background-color: #f6f6f7;
     pointer-events: none;
+    background-color: ${({ theme }) => theme.multiSelect.disabledBackgroundColor};
     border-color: ${({ theme }) => theme.colors.grey_2};
   }
 
@@ -113,7 +113,7 @@ const PlaceHolder = styled('span')`
   pointer-events: none;
 
   &.disabled {
-    color: #d0d1d8;
+    color: ${({ theme }) => theme.multiSelect.disabledTextColor};
   }
 `;
 
@@ -146,7 +146,7 @@ const SingleValue = styled('span')`
   margin-right: 0.3em;
 
   &.disabled {
-    color: #d0d1d8;
+    color: ${({ theme }) => theme.multiSelect.disabledTextColor};
   }
 `;
 
@@ -189,16 +189,15 @@ function MultiSelect({
   value,
   children,
   onChange,
-  placeholder: placeholderProp,
+  single,
+  placeholder = single ? '' : 'Add one or more...',
   inputProps,
   allowNew,
   disabled,
   error,
-  single,
 }) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
-  const placeholder = _.defaultTo(placeholderProp, single ? '' : 'Add one or more...');
 
   const contextValue = React.useContext(FormControlContext);
   if (!_.isEmpty(contextValue)) {
