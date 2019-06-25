@@ -37,7 +37,7 @@ const DefaultIcon = ({ variant, size }) => {
     [NOTIFICATION_VARIANTS.ERROR]: 'times_circle',
   }[variant];
   const width = {
-    [NOTIFICATION_SIZES.MD]: '30px',
+    [NOTIFICATION_SIZES.MD]: '25px',
     [NOTIFICATION_SIZES.SM]: '20px',
   }[size];
   const height = width;
@@ -78,6 +78,11 @@ const Notification = ({
             variant={titleTypographyVariant}
             bold
             css={css`
+              ${size === NOTIFICATION_SIZES.MD
+                ? css`
+                    font-size: 16px;
+                  `
+                : ''}
               margin: 0px;
               margin-top: ${headerVerticalMargin};
               margin-bottom: ${headerVerticalMargin};
@@ -106,7 +111,7 @@ const Notification = ({
           `}
           onClick={dispatchEvent(NOTIFICATION_INTERACTION_EVENTS.CLOSE)}
         >
-          <Icon name="times" width="15px" height="15px" fill="primary_1" />
+          <Icon name="times" width="12px" height="12px" fill="primary_1" />
         </FocusWrapper>
       )}
       {interactionType === NOTIFICATION_INTERACTION.ACTION_DISMISS && (
@@ -117,7 +122,7 @@ const Notification = ({
             `}
             onClick={dispatchEvent(NOTIFICATION_INTERACTION_EVENTS.ACTION)}
           >
-            <Typography variant={bodyTypographyVariant} component="div" bold>
+            <Typography variant="data" component="div" bold>
               {actionText}
             </Typography>
           </ActionButton>
@@ -125,7 +130,7 @@ const Notification = ({
             variant={variant}
             onClick={dispatchEvent(NOTIFICATION_INTERACTION_EVENTS.DISMISS)}
           >
-            <Typography variant={bodyTypographyVariant} component="div" bold>
+            <Typography variant="data" component="div" bold>
               {dismissText}
             </Typography>
           </ActionButton>
