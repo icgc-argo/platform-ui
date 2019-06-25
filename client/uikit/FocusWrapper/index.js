@@ -9,8 +9,7 @@ const FocusWrapper = styled('button')`
   cursor: pointer;
   box-shadow: none;
   outline: none;
-  transition: box-shadow 0.2s ease-in;
-  line-height: 0px;
+  transition: box-shadow 0.1s ease-in;
   &:focus {
     box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
   }

@@ -102,6 +102,7 @@ const Toast = ({
           css={css`
             margin: 8px;
             height: 15px;
+            line-height: 0px;
           `}
           onClick={dispatchEvent(TOAST_INTERACTION_EVENTS.CLOSE)}
         >

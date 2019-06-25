@@ -4,8 +4,9 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
+import FocusWrapper from '../FocusWrapper';
 
-const StyledButton = styled('button')`
+const StyledButton = styled(FocusWrapper)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +28,6 @@ const StyledButton = styled('button')`
 
   &:focus {
     background-color: ${({ theme, variant }) => theme.button.colors[variant].focus};
-    border-color: ${({ theme, variant }) => theme.button.borderColors[variant].focus};
   }
 
   &:hover {
