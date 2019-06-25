@@ -78,9 +78,13 @@ const Modal = ({
 );
 
 Modal.propTypes = {
-  /*
-   * Don't forget about little old prop types!
-   */
+  title: PropTypes.node,
+  actionButtonText: PropTypes.node,
+  cancelText: PropTypes.node,
+  onActionClick: PropTypes.func,
+  onCancelClick: PropTypes.func,
+  actionDisabled: PropTypes.bool,
+  children: PropTypes.node,
 };
 
 export default Modal;
