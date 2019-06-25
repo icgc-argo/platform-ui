@@ -4,7 +4,6 @@ import { action } from '@storybook/addon-actions';
 
 import ToastStack from '.';
 import { TOAST_VARIANTS } from '../Toast';
-import Button from 'uikit/Button';
 
 const State = ({ children }) => {
   const [stack, setStack] = React.useState([
