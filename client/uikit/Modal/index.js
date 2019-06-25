@@ -117,7 +117,10 @@ const Modal = ({
     </ModalFooter>
   </ModalContainer>
 );
-Modal.Overlay = props => <ModalOverlay {...props} />;
+
+Modal.Overlay = function Overlay(props) {
+  return <ModalOverlay {...props} />;
+};
 
 Modal.propTypes = {
   title: PropTypes.node,
