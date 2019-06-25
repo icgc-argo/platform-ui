@@ -1,6 +1,7 @@
 //@flow
 import React from 'react';
 
+import { css } from 'uikit';
 import Table from 'uikit/Table';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
@@ -60,6 +61,7 @@ const UsersTable = (tableProps: {
       Header: 'Daco Approved',
       accessor: 'isDacoApproved',
       Cell: ({ original }) => (original.isDacoApproved ? 'Yes' : 'No'),
+      headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
     },
     {
       Header: 'Status',
