@@ -91,6 +91,7 @@ const UsersTable = (tableProps: {
               height="15px"
               width="15px"
               name="mail"
+              disabled
               onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
             />
           </Tooltip>
