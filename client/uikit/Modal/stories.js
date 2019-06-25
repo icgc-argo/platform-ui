@@ -21,6 +21,7 @@ const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       actionDisabled={actionDisabled}
       onActionClick={action('onActionClick')}
       onCancelClick={action('onCancelClick')}
+      onCloseClick={action('onCloseClick')}
     >
       {children}
     </Modal>

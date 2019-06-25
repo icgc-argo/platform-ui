@@ -4,8 +4,11 @@ import PropTypes from 'prop-types';
 import { styled, css } from '..';
 import Typography from '../Typography';
 import Button from '../Button';
+import Icon from '../Icon';
+import FocusWrapper from '../FocusWrapper';
 
 const ModalContainer = styled('div')`
+  position: relative;
   overflow: auto;
   border-radius: 20px;
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
@@ -38,6 +41,7 @@ const Modal = ({
   cancelText = 'Cancel',
   onActionClick = () => {},
   onCancelClick = () => {},
+  onCloseClick = () => {},
   actionDisabled = false,
   children,
 }) => (
@@ -74,16 +78,28 @@ const Modal = ({
         </Button>
       </ButtonContainer>
     </ModalFooter>
+    <FocusWrapper
+      onClick={onCloseClick}
+      css={css`
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        line-height: 0px;
+      `}
+    >
+      <Icon name="times" fill="primary_1" width="13px" height="13px" />
+    </FocusWrapper>
   </ModalContainer>
 );
 
 Modal.propTypes = {
   title: PropTypes.node,
   actionButtonText: PropTypes.node,
+  actionDisabled: PropTypes.bool,
   cancelText: PropTypes.node,
   onActionClick: PropTypes.func,
   onCancelClick: PropTypes.func,
-  actionDisabled: PropTypes.bool,
+  onCloseClick: PropTypes.func,
   children: PropTypes.node,
 };
 
