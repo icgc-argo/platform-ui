@@ -1,8 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Modal from '.';
 import { action } from '@storybook/addon-actions';
 import { text, boolean } from '@storybook/addon-knobs';
+
+import Modal from '.';
 
 const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const title = text('title', 'Hipster');
@@ -14,17 +15,27 @@ const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const cancelText = text('cancelText', 'nevermind');
   const actionDisabled = boolean('actionDisabled', false);
   return (
-    <Modal
-      title={title}
-      actionButtonText={actionButtonText}
-      cancelText={cancelText}
-      actionDisabled={actionDisabled}
-      onActionClick={action('onActionClick')}
-      onCancelClick={action('onCancelClick')}
-      onCloseClick={action('onCloseClick')}
-    >
-      {children}
-    </Modal>
+    <Modal.Overlay>
+      <Modal
+        title={title}
+        actionButtonText={actionButtonText}
+        cancelText={cancelText}
+        actionDisabled={actionDisabled}
+        onActionClick={action('onActionClick')}
+        onCancelClick={action('onCancelClick')}
+        onCloseClick={action('onCloseClick')}
+      >
+        {
+          <div>
+            {children}
+            <div style={{ margin: '20px' }}>
+              BTW you can use <strong style={{ color: 'red' }}>Modal.Overlay</strong> for the
+              overlay{' '}
+            </div>
+          </div>
+        }
+      </Modal>
+    </Modal.Overlay>
   );
 });
 
