@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import Modal from '.';
 import { action } from '@storybook/addon-actions';
-import { text } from '@storybook/addon-knobs';
+import { text, boolean } from '@storybook/addon-knobs';
 
 const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const title = text('title', 'Hipster');
@@ -12,11 +12,13 @@ const ModalStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   );
   const actionButtonText = text('actionButtonText', 'Beer Me');
   const cancelText = text('cancelText', 'nevermind');
+  const actionDisabled = boolean('actionDisabled', false);
   return (
     <Modal
       title={title}
       actionButtonText={actionButtonText}
       cancelText={cancelText}
+      actionDisabled={actionDisabled}
       onActionClick={action('onActionClick')}
       onCancelClick={action('onCancelClick')}
     >
