@@ -14,7 +14,7 @@ import fetch from 'isomorphic-fetch';
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
-import { NODE_ENV, ENVIRONMENTS, API_ROOT } from 'global/config';
+import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
@@ -70,7 +70,7 @@ const Root = (props: {
   const client = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
-      uri: urlJoin(API_ROOT, '/graphql'),
+      uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
       headers: {
         authorization: `Bearer ${props.egoJwt}`,

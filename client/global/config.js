@@ -11,7 +11,7 @@ export const ENVIRONMENTS = asEnum(
 );
 
 export const PORT = Number(process.env.PORT) || 8080;
-export const API_ROOT = process.env.API_ROOT || `http://localhost:9000`;
+export const GATEWAY_API_ROOT = process.env.GATEWAY_API_ROOT || `http://localhost:9000`;
 
 export const EGO_API_ROOT = String(process.env.EGO_API_ROOT);
 export const EGO_CLIENT_ID = String(process.env.EGO_CLIENT_ID);
