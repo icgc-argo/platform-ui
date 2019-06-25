@@ -15,6 +15,8 @@ import checkmark from './collection/checkmark';
 import info from './collection/info';
 import success from './collection/success';
 import warning from './collection/warning';
+import mail from './collection/mail';
+import trash from './collection/trash';
 
 /**
  * Icon path and property lookup object
@@ -38,6 +40,8 @@ const Icons = {
   info,
   success,
   warning,
+  mail,
+  trash,
 };
 
 export default Icons;

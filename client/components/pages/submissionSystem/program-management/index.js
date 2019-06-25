@@ -14,7 +14,7 @@ import UsersTable from './UsersTable';
 
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(TABS.PROFILE);
+  const [activeTab, setActiveTab] = React.useState(TABS.USERS);
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);

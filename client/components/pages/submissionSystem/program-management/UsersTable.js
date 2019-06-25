@@ -34,9 +34,9 @@ const StatusDisplayName: { [key: StatusKey]: string } = {
 
 const UsersTable = (tableProps: {
   users: Array<UsersTableUser>,
-  onUsersEditClick: ({ user: UsersTableUser }) => void,
-  onUsersDeleteClick: ({ user: UsersTableUser }) => void,
-  onUsersResendInviteClick: ({ user: UsersTableUser }) => void,
+  onUserEditClick: ({ user: UsersTableUser }) => void,
+  onUserDeleteClick: ({ user: UsersTableUser }) => void,
+  onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
   const columns: Array<{
     Header: string,
@@ -78,14 +78,36 @@ const UsersTable = (tableProps: {
       Header: 'Actions',
       sortable: false,
       headerStyle: { display: 'flex', justifyContent: 'center' },
+      width: 125,
       Cell: (props: CellProps) => (
-        <div>
-          <Tooltip interactive position="bottom" html={<span>Resend Invitation</span>}>
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-around;
+          `}
+        >
+          <Tooltip interactive position="bottom" html={<span>Resend invitation</span>}>
             <InteractiveIcon
               height="15px"
               width="15px"
-              name="users"
-              onClick={() => console.log('clicky clicky!')}
+              name="mail"
+              onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
+            />
+          </Tooltip>
+          <Tooltip interactive position="bottom" html={<span>Edit user</span>}>
+            <InteractiveIcon
+              height="15px"
+              width="15px"
+              name="edit"
+              onClick={() => tableProps.onUserEditClick({ user: props.original })}
+            />
+          </Tooltip>
+          <Tooltip interactive position="bottom" html={<span>Delete user</span>}>
+            <InteractiveIcon
+              height="15px"
+              width="15px"
+              name="trash"
+              onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
             />
           </Tooltip>
         </div>
@@ -97,6 +119,22 @@ const UsersTable = (tableProps: {
   const data = [
     {
       name: 'Homer Simpson',
+      email: 'test@email.com',
+      role: 'ADMINISTRATOR',
+      isDacoApproved: true,
+      status: 'PENDING_INVITATION',
+      joinDate: '03-02-2018',
+    },
+    {
+      name: 'Bart Simpson',
+      email: 'test@email.com',
+      role: 'ADMINISTRATOR',
+      isDacoApproved: true,
+      status: 'PENDING_INVITATION',
+      joinDate: '03-02-2018',
+    },
+    {
+      name: 'Lisa Simpson',
       email: 'test@email.com',
       role: 'ADMINISTRATOR',
       isDacoApproved: true,
