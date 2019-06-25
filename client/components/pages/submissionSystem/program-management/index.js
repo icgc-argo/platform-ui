@@ -12,6 +12,9 @@ import { ThemeContext } from '@emotion/core';
 import Icon from 'uikit/Icon';
 import UsersTable from './UsersTable';
 import Button from 'uikit/Button';
+import { TableActionBar } from 'uikit/Table';
+import users from 'uikit/Icon/icons/collection/users';
+import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -65,16 +68,48 @@ export default ({ logOut, pathname, router }) => {
             Add Users
           </Button>
         </div>
-        {activeTab === TABS.USERS && <Users />}
+        {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
         {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
     </SubmissionLayout>
   );
 };
 
-const Users = () => (
+// TODO: Remove dummy data
+const FAKE_USERS = [
+  {
+    id: '1',
+    name: 'Homer Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '2',
+    name: 'Bart Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '3',
+    name: 'Lisa Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+];
+
+const Users = ({ users }) => (
   <div>
-    <UsersTable />
+    <TableActionBar>{users.length} results</TableActionBar>
+    <UsersTable users={users} />
   </div>
 );
 

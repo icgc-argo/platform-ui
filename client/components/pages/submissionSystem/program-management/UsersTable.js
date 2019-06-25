@@ -121,69 +121,15 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  // TODO: Remove dummy data
-  const data = [
-    {
-      id: '1',
-      name: 'Homer Simpson',
-      email: 'test@email.com',
-      role: 'ADMINISTRATOR',
-      isDacoApproved: true,
-      status: 'PENDING_INVITATION',
-      joinDate: '03-02-2018',
-    },
-    {
-      id: '2',
-      name: 'Bart Simpson',
-      email: 'test@email.com',
-      role: 'ADMINISTRATOR',
-      isDacoApproved: true,
-      status: 'PENDING_INVITATION',
-      joinDate: '03-02-2018',
-    },
-    {
-      id: '3',
-      name: 'Lisa Simpson',
-      email: 'test@email.com',
-      role: 'ADMINISTRATOR',
-      isDacoApproved: true,
-      status: 'PENDING_INVITATION',
-      joinDate: '03-02-2018',
-    },
-  ];
-
-  const mySet = new Set([1, 2, 3, 3, 3]);
-  console.log('myset', mySet);
-  console.log('myset has', mySet.has(3));
-  console.log('delete', mySet.delete(3), mySet.has(3));
-
   return (
     <SelectTable
       keyField={'id'}
-      isSelected={id => {
-        console.log('iselecleted()', id, selectedUsers, selectedUsers.has(id));
-        selectedUsers.has(id);
-      }}
+      isSelected={x => true}
       selectAll={selectAll}
-      toggleAll={() => {
-        const d = data.map(user => user.id);
-        console.log('d', d);
-        const newSelectedUsers = new Set(d);
-        console.log('toggleAll() ', newSelectedUsers);
-        setSelectedUsers(newSelectedUsers);
-        setSelectAll(!selectAll);
-      }}
-      toggleSelection={id => {
-        const noPrefixId = id.substring(7);
-        console.log('toggle selection', noPrefixId);
-        selectedUsers.has(noPrefixId)
-          ? selectedUsers.delete(noPrefixId)
-          : selectedUsers.add(noPrefixId);
-        console.log('toggleSelectiomn() ', selectedUsers);
-        setSelectedUsers(new Set([1]));
-      }}
+      toggleAll={() => {}}
+      toggleSelection={id => {}}
       selectType="checkbox"
-      data={data}
+      data={tableProps.users}
       columns={columns}
       showPagination={false}
     />
