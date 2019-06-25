@@ -3,9 +3,9 @@ import React from 'react';
 import get from 'lodash/get';
 
 import Table from 'uikit/Table';
+import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
-import Icon from 'uikit/Icon';
 import Tooltip from 'uikit/Tooltip';
 import { Query } from 'react-apollo';
 
@@ -27,22 +27,6 @@ const MembershipDisplayName: { [key: ArgoMembershipKey]: string } = {
   FULL: 'ARGO Member',
   ASSOCIATE: 'ARGO Associate',
 };
-
-const InteractiveIcon = props => {
-  const [hovvered, setHovered] = React.useState(false);
-  return (
-    <Icon
-      css={css`
-        cursor: pointer;
-      `}
-      onMouseOver={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      fill={hovvered ? 'accent2_1' : 'accent2'}
-      {...props}
-    />
-  );
-};
-InteractiveIcon.propTypes = Icon.propTypes;
 
 export default (tableProps: {
   programs: Array<ProgramsTableProgram>,

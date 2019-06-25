@@ -3,6 +3,8 @@ import React from 'react';
 
 import { css } from 'uikit';
 import Table from 'uikit/Table';
+import InteractiveIcon from 'uikit/Table/InteractiveIcon';
+import Tooltip from 'uikit/Tooltip';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
@@ -71,6 +73,23 @@ const UsersTable = (tableProps: {
     {
       Header: 'Joined On',
       accessor: 'joinDate',
+    },
+    {
+      Header: 'Actions',
+      sortable: false,
+      headerStyle: { display: 'flex', justifyContent: 'center' },
+      Cell: (props: CellProps) => (
+        <div>
+          <Tooltip interactive position="bottom" html={<span>Resend Invitation</span>}>
+            <InteractiveIcon
+              height="15px"
+              width="15px"
+              name="users"
+              onClick={() => console.log('clicky clicky!')}
+            />
+          </Tooltip>
+        </div>
+      ),
     },
   ];
 
