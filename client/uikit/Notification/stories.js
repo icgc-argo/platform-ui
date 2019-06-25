@@ -26,7 +26,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
     'content',
     'Lorem ipsum dolor amet helvetica post-ironic fingerstache trust fund pitchfork tofu venmo live-edge',
   );
-  const expandText = text('expandText', undefined);
+  const actionText = text('actionText', undefined);
   const dismissText = text('dismissText', undefined);
   return (
     <>
@@ -34,7 +34,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         variant={variant}
         interactionType={interactionType}
         size={size}
-        expandText={expandText}
+        actionText={actionText}
         dismissText={dismissText}
         title={title}
         content={content}
@@ -44,7 +44,7 @@ const NotificationStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         variant={variant}
         interactionType={interactionType}
         size={size}
-        expandText={expandText}
+        actionText={actionText}
         dismissText={dismissText}
         title={title}
         content={content}

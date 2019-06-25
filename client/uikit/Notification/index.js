@@ -18,7 +18,7 @@ import {
 const getDefaultInteractionType = variant =>
   ({
     [NOTIFICATION_VARIANTS.INFO]: NOTIFICATION_INTERACTION.CLOSE,
-    [NOTIFICATION_VARIANTS.SUCCESS]: NOTIFICATION_INTERACTION.EXPAND_DISMISS,
+    [NOTIFICATION_VARIANTS.SUCCESS]: NOTIFICATION_INTERACTION.ACTION_DISMISS,
     [NOTIFICATION_VARIANTS.WARNING]: NOTIFICATION_INTERACTION.CLOSE,
     [NOTIFICATION_VARIANTS.ERROR]: NOTIFICATION_INTERACTION.CLOSE,
   }[variant]);
@@ -50,7 +50,7 @@ const Notification = ({
   interactionType = getDefaultInteractionType(variant),
   title,
   content,
-  expandText = 'VIEW',
+  actionText = 'VIEW',
   dismissText = 'DISMISS',
   icon = <DefaultIcon variant={variant} size={size} />,
   onInteraction = ({ type, event }) => {},
@@ -109,16 +109,16 @@ const Notification = ({
           <Icon name="times" width="15px" height="15px" fill="primary_1" />
         </FocusWrapper>
       )}
-      {interactionType === NOTIFICATION_INTERACTION.EXPAND_DISMISS && (
+      {interactionType === NOTIFICATION_INTERACTION.ACTION_DISMISS && (
         <ActionButtonsContainer variant={variant}>
           <ActionButton
             css={css`
               border-bottom: solid 1px ${getBorderColor({ theme, variant })};
             `}
-            onClick={dispatchEvent(NOTIFICATION_INTERACTION_EVENTS.EXPAND)}
+            onClick={dispatchEvent(NOTIFICATION_INTERACTION_EVENTS.ACTION)}
           >
             <Typography variant={bodyTypographyVariant} component="div" bold>
-              {expandText}
+              {actionText}
             </Typography>
           </ActionButton>
           <ActionButton
@@ -137,7 +137,7 @@ const Notification = ({
 
 export const NOTIFICATION_INTERACTION_EVENTS = Object.freeze({
   CLOSE: 'CLOSE',
-  EXPAND: 'EXPAND',
+  ACTION: 'ACTION',
   DISMISS: 'DISMISS',
 });
 
@@ -149,7 +149,7 @@ export const NOTIFICATION_VARIANTS = Object.freeze({
 });
 export const NOTIFICATION_INTERACTION = Object.freeze({
   CLOSE: 'CLOSE',
-  EXPAND_DISMISS: 'EXPAND_DISMISS',
+  ACTION_DISMISS: 'ACTION_DISMISS',
   NONE: 'NONE',
 });
 
@@ -172,9 +172,9 @@ Notification.propTypes = {
   interactionType: PropTypes.oneOf([
     NOTIFICATION_INTERACTION.NONE,
     NOTIFICATION_INTERACTION.CLOSE,
-    NOTIFICATION_INTERACTION.EXPAND_DISMISS,
+    NOTIFICATION_INTERACTION.ACTION_DISMISS,
   ]),
-  expandText: PropTypes.string,
+  actionText: PropTypes.string,
   dismissText: PropTypes.string,
   size: PropTypes.oneOf([NOTIFICATION_SIZES.MD, NOTIFICATION_SIZES.SM]),
 };
