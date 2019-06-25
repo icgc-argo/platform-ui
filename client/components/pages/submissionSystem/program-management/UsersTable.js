@@ -2,15 +2,17 @@
 import React from 'react';
 
 import { css } from 'uikit';
-import Table from 'uikit/Table';
+import { SelectTable } from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
+import Checkbox from 'uikit/form/Checkbox';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
 type StatusKey = 'APPROVED' | 'PENDING_INVITATION';
 
 type UsersTableUser = {
+  id: string,
   name: string,
   email: string,
   role: RoleKey,
@@ -38,6 +40,9 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void,
   onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
+  const [selectedUsers, setSelectedUsers] = React.useState(new Set());
+  const [selectAll, setSelectAll] = React.useState(false);
+
   const columns: Array<{
     Header: string,
     accessor?: $Keys<UsersTableUser>,
@@ -103,7 +108,7 @@ const UsersTable = (tableProps: {
               onClick={() => tableProps.onUserEditClick({ user: props.original })}
             />
           </Tooltip>
-          <Tooltip interactive position="bottom" html={<span>Delete user</span>}>
+          <Tooltip interactive position="bottom" html={<span>Remove user</span>}>
             <InteractiveIcon
               height="15px"
               width="15px"
@@ -119,6 +124,7 @@ const UsersTable = (tableProps: {
   // TODO: Remove dummy data
   const data = [
     {
+      id: '1',
       name: 'Homer Simpson',
       email: 'test@email.com',
       role: 'ADMINISTRATOR',
@@ -127,6 +133,7 @@ const UsersTable = (tableProps: {
       joinDate: '03-02-2018',
     },
     {
+      id: '2',
       name: 'Bart Simpson',
       email: 'test@email.com',
       role: 'ADMINISTRATOR',
@@ -135,6 +142,7 @@ const UsersTable = (tableProps: {
       joinDate: '03-02-2018',
     },
     {
+      id: '3',
       name: 'Lisa Simpson',
       email: 'test@email.com',
       role: 'ADMINISTRATOR',
@@ -144,7 +152,42 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  return <Table data={data} columns={columns} showPagination={false} />;
+  const mySet = new Set([1, 2, 3, 3, 3]);
+  console.log('myset', mySet);
+  console.log('myset has', mySet.has(3));
+  console.log('delete', mySet.delete(3), mySet.has(3));
+
+  return (
+    <SelectTable
+      keyField={'id'}
+      isSelected={id => {
+        console.log('iselecleted()', id, selectedUsers, selectedUsers.has(id));
+        selectedUsers.has(id);
+      }}
+      selectAll={selectAll}
+      toggleAll={() => {
+        const d = data.map(user => user.id);
+        console.log('d', d);
+        const newSelectedUsers = new Set(d);
+        console.log('toggleAll() ', newSelectedUsers);
+        setSelectedUsers(newSelectedUsers);
+        setSelectAll(!selectAll);
+      }}
+      toggleSelection={id => {
+        const noPrefixId = id.substring(7);
+        console.log('toggle selection', noPrefixId);
+        selectedUsers.has(noPrefixId)
+          ? selectedUsers.delete(noPrefixId)
+          : selectedUsers.add(noPrefixId);
+        console.log('toggleSelectiomn() ', selectedUsers);
+        setSelectedUsers(new Set([1]));
+      }}
+      selectType="checkbox"
+      data={data}
+      columns={columns}
+      showPagination={false}
+    />
+  );
 };
 
 export default UsersTable;
