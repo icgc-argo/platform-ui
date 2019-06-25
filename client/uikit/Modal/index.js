@@ -73,6 +73,17 @@ const Modal = ({
   children,
 }) => (
   <ModalContainer>
+    <FocusWrapper
+      onClick={onCloseClick}
+      css={css`
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        line-height: 0px;
+      `}
+    >
+      <Icon name="times" fill="primary_1" width="13px" height="13px" />
+    </FocusWrapper>
     <ModalTitle>
       <Typography
         css={css`
@@ -105,17 +116,6 @@ const Modal = ({
         </Button>
       </ButtonContainer>
     </ModalFooter>
-    <FocusWrapper
-      onClick={onCloseClick}
-      css={css`
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        line-height: 0px;
-      `}
-    >
-      <Icon name="times" fill="primary_1" width="13px" height="13px" />
-    </FocusWrapper>
   </ModalContainer>
 );
 Modal.Overlay = props => <ModalOverlay {...props} />;
