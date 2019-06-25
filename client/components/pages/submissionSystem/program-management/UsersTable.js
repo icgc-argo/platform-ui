@@ -144,7 +144,7 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  return <Table data={data} columns={columns} />;
+  return <Table data={data} columns={columns} showPagination={false} />;
 };
 
 export default UsersTable;
