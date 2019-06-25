@@ -1,23 +1,23 @@
 import { styled, css } from '../';
-import { TOAST_VARIANTS } from '.';
+import { NOTIFICATION_VARIANTS } from '.';
 import FocusWrapper from '../FocusWrapper';
 
 const getBackgroundColor = ({ theme, variant }) =>
   ({
-    [TOAST_VARIANTS.INFO]: theme.colors.secondary_4,
-    [TOAST_VARIANTS.SUCCESS]: theme.colors.success_4,
-    [TOAST_VARIANTS.WARNING]: theme.colors.warning_4,
-    [TOAST_VARIANTS.ERROR]: theme.colors.error_4,
+    [NOTIFICATION_VARIANTS.INFO]: theme.colors.secondary_4,
+    [NOTIFICATION_VARIANTS.SUCCESS]: theme.colors.success_4,
+    [NOTIFICATION_VARIANTS.WARNING]: theme.colors.warning_4,
+    [NOTIFICATION_VARIANTS.ERROR]: theme.colors.error_4,
   }[variant]);
 export const getBorderColor = ({ theme, variant }) =>
   ({
-    [TOAST_VARIANTS.INFO]: theme.colors.secondary_2,
-    [TOAST_VARIANTS.SUCCESS]: theme.colors.success_2,
-    [TOAST_VARIANTS.WARNING]: theme.colors.warning_2,
-    [TOAST_VARIANTS.ERROR]: theme.colors.error_2,
+    [NOTIFICATION_VARIANTS.INFO]: theme.colors.secondary_2,
+    [NOTIFICATION_VARIANTS.SUCCESS]: theme.colors.success_2,
+    [NOTIFICATION_VARIANTS.WARNING]: theme.colors.warning_2,
+    [NOTIFICATION_VARIANTS.ERROR]: theme.colors.error_2,
   }[variant]);
 
-export const ToastContainer = styled('div')`
+export const NotificationContainer = styled('div')`
   display: flex;
   border-radius: 8px;
   box-shadow: 0 2px 4px 0 ${({ theme }) => theme.colors.grey_2};
@@ -25,7 +25,7 @@ export const ToastContainer = styled('div')`
   background-color: ${getBackgroundColor};
 `;
 
-export const ToastBodyContainer = styled('div')`
+export const NotificationBodyContainer = styled('div')`
   margin: 8px;
   flex: 1;
 `;
