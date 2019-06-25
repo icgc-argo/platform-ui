@@ -48,26 +48,31 @@ export default ({ logOut, pathname, router }) => {
           padding-top: 0px;
         `}
       >
-        <div
+        <Tabs
+          value={activeTab}
+          onChange={handleChange}
           css={css`
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            width: 100%;
           `}
         >
-          <Tabs value={activeTab} onChange={handleChange}>
-            <Tab value="USERS" label="Users" />
-            <Tab value="PROFILE" label="Profile" />
-            <Tab empty />
-          </Tabs>
-          <Button
+          <Tab value="USERS" label="Users" />
+          <Tab value="PROFILE" label="Profile" />
+          <Tab
+            empty
             css={css`
-              margin: 9px 0;
+              padding: 0;
+              justify-content: flex-end;
             `}
           >
-            Add Users
-          </Button>
-        </div>
+            <Button
+              css={css`
+                margin: 9px 0;
+              `}
+            >
+              Add Users
+            </Button>
+          </Tab>
+        </Tabs>
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
         {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
