@@ -19,6 +19,12 @@ const Toast = ({ variant, title, content, onInteraction }) => (
 );
 export const TOAST_VARIANTS = NOTIFICATION_VARIANTS;
 
-Toast.propTypes = omit(Notification.propTypes, ['icon', 'size', 'interactionType']);
+Toast.propTypes = omit(Notification.propTypes, [
+  'icon',
+  'size',
+  'interactionType',
+  'actionText',
+  'dismissText',
+]);
 
 export default Toast;
