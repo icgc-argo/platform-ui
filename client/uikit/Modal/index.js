@@ -13,6 +13,7 @@ const ModalContainer = styled('div')`
   border-radius: 20px;
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
+  max-width: 776px;
 `;
 const ModalTitle = styled('div')`
   margin: 24px;
@@ -35,6 +36,32 @@ const ButtonContainer = styled('div')`
   flex-direction: row;
 `;
 
+const hexToRgb = hex => {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+const ModalOverlay = styled('div')`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme }) => {
+    const { r, g, b } = hexToRgb(theme.colors.primary_dark);
+    return `rgba(${r}, ${g}, ${b}, 0.8)`;
+  }};
+`;
+
+/**
+ * Can use <Modal.overlay /> for the overlay
+ */
 const Modal = ({
   title = 'Add Users',
   actionButtonText = 'Apply',
@@ -91,6 +118,7 @@ const Modal = ({
     </FocusWrapper>
   </ModalContainer>
 );
+Modal.Overlay = props => <ModalOverlay {...props} />;
 
 Modal.propTypes = {
   title: PropTypes.node,
