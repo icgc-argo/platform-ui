@@ -11,6 +11,7 @@ import { Row, Col } from 'react-grid-system';
 import { ThemeContext } from '@emotion/core';
 import Icon from 'uikit/Icon';
 import UsersTable from './UsersTable';
+import Button from 'uikit/Button';
 
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -44,11 +45,26 @@ export default ({ logOut, pathname, router }) => {
           padding-top: 0px;
         `}
       >
-        <Tabs value={activeTab} onChange={handleChange}>
-          <Tab value="USERS" label="Users" />
-          <Tab value="PROFILE" label="Profile" />
-          <Tab empty />
-        </Tabs>
+        <div
+          css={css`
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          `}
+        >
+          <Tabs value={activeTab} onChange={handleChange}>
+            <Tab value="USERS" label="Users" />
+            <Tab value="PROFILE" label="Profile" />
+            <Tab empty />
+          </Tabs>
+          <Button
+            css={css`
+              margin: 9px 0;
+            `}
+          >
+            Add Users
+          </Button>
+        </div>
         {activeTab === TABS.USERS && <Users />}
         {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
