@@ -3,7 +3,6 @@ import React from 'react';
 
 import Table from 'uikit/Table';
 
-// TODO: These might be declared somewhere already
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
 type StatusKey = 'APPROVED' | 'PENDING_INVITATION';
@@ -60,6 +59,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Daco Approved',
       accessor: 'isDacoApproved',
+      Cell: ({ original }) => (original.isDacoApproved ? 'Yes' : 'No'),
     },
     {
       Header: 'Status',
@@ -71,7 +71,20 @@ const UsersTable = (tableProps: {
       accessor: 'joinDate',
     },
   ];
-  return <Table data={[]} columns={columns} />;
+
+  // TODO: Remove dummy data
+  const data = [
+    {
+      name: 'Homer Simpson',
+      email: 'test@email.com',
+      role: 'ADMINISTRATOR',
+      isDacoApproved: true,
+      status: 'PENDING_INVITATION',
+      joinDate: '03-02-2018',
+    },
+  ];
+
+  return <Table data={data} columns={columns} />;
 };
 
 export default UsersTable;

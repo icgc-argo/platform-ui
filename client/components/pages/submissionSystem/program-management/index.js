@@ -10,6 +10,7 @@ import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { ThemeContext } from '@emotion/core';
 import Icon from 'uikit/Icon';
+import UsersTable from './UsersTable';
 
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -48,12 +49,18 @@ export default ({ logOut, pathname, router }) => {
           <Tab value="PROFILE" label="Profile" />
           <Tab empty />
         </Tabs>
-        {activeTab === TABS.USERS && <div>users</div>}
+        {activeTab === TABS.USERS && <Users />}
         {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
     </SubmissionLayout>
   );
 };
+
+const Users = () => (
+  <div>
+    <UsersTable />
+  </div>
+);
 
 function Profile() {
   const theme = React.useContext(ThemeContext);
