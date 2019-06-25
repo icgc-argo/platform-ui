@@ -26,7 +26,7 @@ module.exports = withImages({
   env: {
     ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
-    API_ROOT: process.env.API_ROOT,
+    GATEWAY_API_ROOT: process.env.GATEWAY_API_ROOT,
     EGO_API_ROOT: process.env.EGO_API_ROOT,
     EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
   },

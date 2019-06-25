@@ -11,7 +11,7 @@ import urlJoin from 'url-join';
 
 require('dotenv').config();
 
-const GRAPHQL_URL = urlJoin(process.env.API_ROOT, 'graphql');
+const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
 
 describe('all gql queries', () => {
   it(`must be compliant with gql API at ${GRAPHQL_URL}`, async () => {

@@ -6,7 +6,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'isomorphic-fetch';
 
-import { API_ROOT } from 'global/config';
+import { GATEWAY_API_ROOT } from 'global/config';
 import createInMemoryCache from './createInMemoryCache';
 
 export default async (queries: Array<{ query: any, variables?: { [key: string]: any } }>) => {
@@ -14,7 +14,7 @@ export default async (queries: Array<{ query: any, variables?: { [key: string]: 
     ssrMode: typeof window === 'undefined',
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
-      uri: urlJoin(API_ROOT, '/graphql'),
+      uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
     }),
     cache: createInMemoryCache(),

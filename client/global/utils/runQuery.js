@@ -2,10 +2,10 @@ import urlJoin from 'url-join';
 import fetch from 'isomorphic-fetch';
 import { print } from 'graphql/language/printer';
 
-import { API_ROOT } from 'global/config';
+import { GATEWAY_API_ROOT } from 'global/config';
 
 export default ({ query, variables }) =>
-  fetch(urlJoin(API_ROOT, 'graphql'), {
+  fetch(urlJoin(GATEWAY_API_ROOT, 'graphql'), {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -19,7 +19,7 @@ export default ({ query, variables }) =>
 export const runBatchQueries = async (queries = []) =>
   !queries.length
     ? await []
-    : fetch(urlJoin(API_ROOT, 'graphql'), {
+    : fetch(urlJoin(GATEWAY_API_ROOT, 'graphql'), {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
