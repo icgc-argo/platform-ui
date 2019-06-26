@@ -95,6 +95,10 @@ export default Table;
  * SelectTable provides the row selection capability with the
  * selectTable HOC.
  */
+const SelectTableCheckbox = ({ checked, onClick, id }) => (
+  <Checkbox checked={checked} onChange={() => onClick(id)} />
+);
+
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
@@ -105,12 +109,8 @@ export const SelectTable = props => {
       isSelectTable
       primaryKey={keyField}
       selectedIds={selectedIds}
-      SelectInputComponent={({ checked, onClick, id }) => (
-        <Checkbox checked={checked} onChange={e => onClick(id)} />
-      )}
-      SelectAllInputComponent={({ checked, onClick }) => (
-        <Checkbox checked={checked} onChange={e => onClick()} />
-      )}
+      SelectInputComponent={SelectTableCheckbox}
+      SelectAllInputComponent={SelectTableCheckbox}
     />
   );
 };

@@ -133,7 +133,6 @@ const UsersTable = (tableProps: {
         setSelectAll(!selectAll);
       }}
       toggleSelection={prefixedKeyField => {
-        console.log('toggle selection', prefixedKeyField);
         /**
          * keyField comes in prefixed with 'select-'
          * solution on github by author is to use the new alpha as he's not supporting v6 anymore
