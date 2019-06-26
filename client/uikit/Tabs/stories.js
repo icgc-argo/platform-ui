@@ -28,7 +28,7 @@ const SimpleTabs = React.forwardRef(() => {
         <Tab value={1} label="Item Two" />
         <Tab value={2} label="Item Three" />
         <Tab empty style={{ flexDirection: 'row-reverse' }}>
-          Children of empty tab goes here
+          <button>Child of empty tab</button>
         </Tab>
       </Tabs>
       {value === 0 && <TabContainer>Item One</TabContainer>}

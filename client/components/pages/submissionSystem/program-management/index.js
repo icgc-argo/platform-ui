@@ -83,7 +83,8 @@ function Profile() {
   return (
     <div
       css={css`
-        padding: 17px 41px;
+        ${css(theme.typography.paragraph)}
+        padding: 17px 41px 41px 41px;
       `}
     >
       <SectionTitle>Program Details</SectionTitle>
@@ -141,7 +142,14 @@ function Profile() {
         <Left>
           <InputLabel>Description</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+          est laborum.
+        </Right>
       </Row>
 
       <SectionTitle>Affiliated Institutions</SectionTitle>
@@ -170,7 +178,8 @@ function Profile() {
             padding: 7px 0;
           `}
         >
-          <Icon name="checkmark" fill="success_dark" />
+          <Icon width="15px" height="15px" name="checkmark" fill="success_dark" />
+          &nbsp;Arica, North America
         </Col>
       </Row>
 
@@ -191,7 +200,8 @@ function Profile() {
             padding: 7px 0;
           `}
         >
-          <Icon name="times" fill="error_dark" />
+          <Icon width="15px" height="15px" name="times" fill="error_dark" />
+          &nbsp;Asia, Europe, Oceania, South America
         </Col>
       </Row>
     </div>
