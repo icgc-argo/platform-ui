@@ -13,7 +13,7 @@ type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
   shortName: string,
   name: string | null,
-  cancerTypes: Array<{ id: string, name: string }>,
+  cancerTypes: Array<string>,
   countries: string | null,
   membershipType: ArgoMembershipKey | null,
   genomicDonors: number | null,
@@ -74,9 +74,9 @@ export default (tableProps: {
       accessor: 'cancerTypes',
       Cell: ({ original: { cancerTypes } }) => (
         <div>
-          {cancerTypes.map(({ name }, i) => (
-            <div key={name}>
-              {name} {i < cancerTypes.length - 1 && ','}
+          {cancerTypes.map((cancerType, i) => (
+            <div key={cancerType}>
+              {cancerType} {i < cancerTypes.length - 1 && ','}
             </div>
           ))}
         </div>
