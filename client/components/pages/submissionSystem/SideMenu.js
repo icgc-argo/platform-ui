@@ -27,7 +27,7 @@ const ProgramsSection = ({ initialProgram }) => {
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const filteredPrograms = programs.filter(
     ({ shortName }) =>
-      !programNameSearch.length || programNameSearch.search(new RegExp(shortName, 'i')) > -1,
+      !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
   );
   return (
     <>
