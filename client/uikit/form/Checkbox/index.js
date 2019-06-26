@@ -85,7 +85,7 @@ const Checkbox = ({ checked, disabled, onChange }) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
-    <StyledCheckbox checked={checked} disabled={disabled}>
+    <StyledCheckbox checked={checked} disabled={disabled} onClick={onChange}>
       <input
         type="checkbox"
         ref={HiddenCheckboxRef}

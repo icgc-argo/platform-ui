@@ -10,6 +10,8 @@ import DnaLoader from '../DnaLoader';
 
 export { TableActionBar } from './TablePagination';
 
+import Checkbox from '../form/Checkbox';
+
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
   const selected = selectedIds.some(id => id === thisRowId);
@@ -96,9 +98,21 @@ export default Table;
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
-  console.log('table selectedIds', selectedIds);
   const Component = selectTable(Table);
-  return <Component {...props} isSelectTable primaryKey={keyField} selectedIds={selectedIds} />;
+  return (
+    <Component
+      {...props}
+      isSelectTable
+      primaryKey={keyField}
+      selectedIds={selectedIds}
+      SelectInputComponent={({ checked, onClick, id }) => (
+        <Checkbox checked={checked} onChange={e => onClick(id)} />
+      )}
+      SelectAllInputComponent={({ checked, onClick }) => (
+        <Checkbox checked={checked} onChange={e => onClick()} />
+      )}
+    />
+  );
 };
 SelectTable.propTypes = {
   ...ReactTable.propTypes,
