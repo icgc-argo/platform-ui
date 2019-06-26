@@ -1,22 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Color from 'color';
 
 import { styled, css } from '..';
 import Typography from '../Typography';
 import Button from '../Button';
 import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
-
-const hexToRgb = hex => {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-};
 
 const ModalContainer = styled('div')`
   position: relative;
@@ -52,10 +42,11 @@ const ModalOverlay = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) => {
-    const { r, g, b } = hexToRgb(theme.colors.primary_dark);
-    return `rgba(${r}, ${g}, ${b}, 0.8)`;
-  }};
+  background: ${({ theme }) =>
+    Color(theme.colors.primary_dark)
+      .alpha(0.8)
+      .hsl()
+      .string()};
 `;
 
 /**
