@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { differenceBy } from 'lodash';
 
 import { styled } from '../';
-import Toast from '../Notification';
+import Toast from '../Toast';
 
 const usePrevious = value => {
   const ref = React.useRef();
