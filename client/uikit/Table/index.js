@@ -96,6 +96,7 @@ export default Table;
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
+  console.log('table selectedIds', selectedIds);
   const Component = selectTable(Table);
   return <Component {...props} isSelectTable primaryKey={keyField} selectedIds={selectedIds} />;
 };
