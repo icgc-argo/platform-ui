@@ -87,7 +87,7 @@ const typeDefs = gql`
     Create new program
     Returns the shortName of the program if successfully created
     """
-    createProgram(program: ProgramInput!): String
+    createProgram(program: ProgramInput!): Program
 
     """
     Invite a user to join a program
@@ -139,8 +139,13 @@ const resolvers = {
     createProgram: async (obj, args, context, info) => {
       const { egoToken } = context;
       const program = get(args, 'program', {});
-      const response = await programService.createProgram(program, egoToken);
-      return get(args, 'program.shortName');
+      const createResponse = await programService.createProgram(program, egoToken);
+      const programResponse = await programService.getProgram(
+        get(args, 'program.shortName'),
+        egoToken,
+      );
+      const programDetails = get(programResponse, 'program');
+      return programResponse === null ? null : convertGrpcProgramToGql(programDetails);
     },
     inviteUser: async (obj, args, context, info) => {
       const { egoToken } = context;
