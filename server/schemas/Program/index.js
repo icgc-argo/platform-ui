@@ -11,9 +11,16 @@ const typeDefs = gql`
     ASSOCIATE
   }
 
+  enum UserRole {
+    COLLABORATOR
+    ADMIN
+    CURATOR
+    SUBMITTER
+    BANNED
+  }
+
   type Program {
-    id: String
-    shortName: String
+    shortName: String!
     description: String
     name: String
     commitmentDonors: Int
@@ -25,29 +32,11 @@ const typeDefs = gql`
     regions: String
     membershipType: MembershipType
 
-    cancerTypes: [Cancer]
-    primarySites: [PrimarySite]
+    cancerTypes: [String]
+    primarySites: [String]
+  }
 
-    """
-    ISO Formatted DateTime:
-    """
-    createdAt: String
-
-    """
-    ISO Formatted DateTime:
-    """
-    updatedAt: String
-  }
-  type Cancer {
-    id: String!
-    name: String!
-  }
-  type PrimarySite {
-    id: String!
-    name: String!
-  }
   type ProgramUser {
-    id: String
     email: String
     firstName: String
     lastName: String
@@ -67,24 +56,26 @@ const typeDefs = gql`
 
     membershipType: MembershipType!
 
-    cancerTypes: [CancerInput]
-    primarySites: [PrimarySiteInput]
+    cancerTypes: [String]
+    primarySites: [String]
+
+    adminEmails: [String!]!
   }
 
-  input CancerInput {
-    id: String!
-    name: String!
-  }
-  input PrimarySiteInput {
-    id: String!
-    name: String!
+  input InviteUserInput {
+    programShortName: String!
+    userFirstName: String!
+    userLastName: String!
+    userEmail: String!
+
+    userRole: UserRole!
   }
 
   type Query {
     """
     retrieve Program data by id
     """
-    program(id: String!): Program
+    program(shortName: String!): Program
 
     """
     retrieve all Programs
@@ -93,69 +84,49 @@ const typeDefs = gql`
   }
   type Mutation {
     """
-    create new program
+    Create new program
+    Returns the shortName of the program if successfully created
     """
-    createProgram(program: ProgramInput): String!
+    createProgram(program: ProgramInput!): Program
+
+    """
+    Invite a user to join a program
+    Returns the email of the user if the invite is successfully sent
+    """
+    inviteUser(invite: InviteUserInput!): String
   }
 `;
 
 const getISODate = time => (time ? new Date(parseInt(time)).toISOString() : null);
 
-const convertGrpcProgramToGql = program => ({
-  id: get(program, 'id.value'),
-  name: get(program, 'name.value'),
-  shortName: get(program, 'short_name.value'),
-  description: get(program, 'description.value'),
-  membershipType: get(program, 'membership_type.value'),
-  commitmentDonors: get(program, 'commitment_donors.value'),
-  submittedDonors: get(program, 'submitted_donors.value'),
-  genomicDonors: get(program, 'genomic_donors.value'),
-  website: get(program, 'website.value'),
-  institutions: get(program, 'institutions.value'),
-  countries: get(program, 'countries.value'),
-  regions: get(program, 'regions.value'),
-  membershipType: get(program, 'membership_type.value'),
-  cancerTypes: get(program, 'cancer_types', []).map(x => convertCancerType(x)),
-  primarySites: get(program, 'primary_sites', []).map(x => convertPrimarySite(x)),
-
-  createdAt: getISODate(get(program, 'created_at.seconds')),
-  updatedAt: getISODate(get(program, 'updated_at.seconds')),
-});
-
-const convertCreateProgramInputToGrpc = program => ({
-  name: wrapValue(get(program, 'name')),
-  short_name: wrapValue(get(program, 'shortName')),
-  description: wrapValue(get(program, 'description')),
-  commitment_donors: wrapValue(get(program, 'commitmentDonors')),
-  submitted_donors: wrapValue(get(program, 'submittedDonors')),
-  genomic_donors: wrapValue(get(program, 'genomicDonors')),
-  website: wrapValue(get(program, 'website')),
-  institutions: wrapValue(get(program, 'institutions')),
-  countries: wrapValue(get(program, 'countries')),
-  regions: wrapValue(get(program, 'regions')),
-
-  membership_type: wrapValue(get(program, 'membershipType')),
-
-  cancer_types: get(program, 'cancerTypes', []),
-  primary_sites: get(program, 'primarySites', []),
-});
-
-const convertCancerType = cancerType => ({
-  id: get(cancerType, 'id.value'),
-  name: get(cancerType, 'name.value'),
-});
-
-const convertPrimarySite = primarySite => ({
-  id: get(primarySite, 'id.value'),
-  name: get(primarySite, 'name.value'),
-});
+/* =========
+    Convert GRPC Response to GQL output
+ * ========= */
+const convertGrpcProgramToGql = programDetails => {
+  return {
+    name: get(programDetails, 'program.name.value'),
+    shortName: get(programDetails, 'program.short_name.value'),
+    description: get(programDetails, 'program.description.value'),
+    commitmentDonors: get(programDetails, 'program.commitment_donors.value'),
+    submittedDonors: get(programDetails, 'program.submitted_donors.value'),
+    genomicDonors: get(programDetails, 'program.genomic_donors.value'),
+    website: get(programDetails, 'program.website.value'),
+    institutions: get(programDetails, 'program.institutions.value'),
+    countries: get(programDetails, 'program.countries.value'),
+    regions: get(programDetails, 'program.regions.value'),
+    membershipType: get(programDetails, 'program.membership_type.value'),
+    cancerTypes: get(programDetails, 'program.cancer_types', []),
+    primarySites: get(programDetails, 'program.primary_sites', []),
+  };
+};
 
 const resolvers = {
   Query: {
     program: async (obj, args, context, info) => {
       const { egoToken } = context;
-      const program = await programService.getProgram(args.id, egoToken);
-      return program === null ? null : convertGrpcProgramToGql(program);
+      const response = await programService.getProgram(args.shortName, egoToken);
+      const programDetails = get(response, 'program');
+      return response === null ? null : convertGrpcProgramToGql(programDetails);
     },
     programs: async (obj, args, context, info) => {
       const { egoToken } = context;
@@ -167,9 +138,20 @@ const resolvers = {
   Mutation: {
     createProgram: async (obj, args, context, info) => {
       const { egoToken } = context;
-      const program = convertCreateProgramInputToGrpc(get(args, 'program', {}));
-      const response = await programService.createProgram(program, egoToken);
-      return get(response, 'id.value');
+      const program = get(args, 'program', {});
+      const createResponse = await programService.createProgram(program, egoToken);
+      const programResponse = await programService.getProgram(
+        get(args, 'program.shortName'),
+        egoToken,
+      );
+      const programDetails = get(programResponse, 'program');
+      return programResponse === null ? null : convertGrpcProgramToGql(programDetails);
+    },
+    inviteUser: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const invite = get(args, 'invite', {});
+      const response = await programService.inviteUser(invite, egoToken);
+      return get(args, 'invite.userEmail');
     },
   },
 };

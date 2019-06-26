@@ -2,13 +2,15 @@
  * This file dynamically generates a gRPC client from Ego.proto.
  * The content of Ego.proto is copied directly from: https://github.com/icgc-argo/argo-proto/blob/4e2aeda59eb48b7af20b462aef2f04ef5d0d6e7c/ProgramService.proto
  */
+import { get } from 'lodash';
 import grpc from 'grpc';
 import * as loader from '@grpc/proto-loader';
+import protoPath from '@icgc-argo/program-service-proto';
 
 import { PROGRAM_SERVICE_ROOT } from '../../config';
+import { getAuthMeta, wrapValue } from '../../utils/grpcUtils';
 
-const PROTO_PATH = __dirname + '/ProgramService.proto';
-const packageDefinition = loader.loadSync(PROTO_PATH, {
+const packageDefinition = loader.loadSync(protoPath, {
   keepCase: true,
   longs: String,
   enums: String,
@@ -23,51 +25,110 @@ const programService = new proto.ProgramService(
   grpc.credentials.createInsecure(),
 );
 
+const defaultPromiseCallback = (resolve, reject) => (err, response) =>
+  err ? reject(err) : resolve(response);
+
 /*
- * Read Methods
+ * Read-only Methods
  */
-const getProgram = async (id, jwt = null) => {
+const getProgram = async (shortName, jwt = null) => {
   return await new Promise((resolve, reject) => {
-    const meta = new grpc.Metadata();
-
-    if (jwt) {
-      meta.add('jwt', jwt);
-    }
-
-    programService.getProgram({ id }, meta, (err, response) =>
-      err ? reject(err) : resolve(response),
+    programService.getProgram(
+      { short_name: wrapValue(shortName) },
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
     );
   });
 };
 
 const listPrograms = async (jwt = null) => {
   return await new Promise((resolve, reject) => {
-    const meta = new grpc.Metadata();
+    programService.listPrograms({}, getAuthMeta(jwt), defaultPromiseCallback(resolve, reject));
+  });
+};
 
-    if (jwt) {
-      meta.add('jwt', jwt);
-    }
-
-    programService.listPrograms({}, meta, (err, response) =>
-      err ? reject(err) : resolve(response),
+const listUsers = async (shortName, jwt = null) => {
+  return await new Promise((resolve, reject) => {
+    programService.listUsers(
+      { program_short_name: wrapValue(shortName) },
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
     );
   });
 };
 
 /*
- * Write Methods
+ * Mutating Methods
  */
-const createProgram = async (program, jwt = null) => {
+const createProgram = async (
+  {
+    name,
+    shortName,
+    description,
+    commitmentDonors,
+    submittedDonors,
+    genomicDonors,
+    website,
+    institutions,
+    countries,
+    regions,
+    membershipType,
+    cancerTypes = [],
+    primarySites = [],
+    adminEmails,
+  },
+  jwt = null,
+) => {
+  const createProgramRequest = {
+    program: {
+      name: wrapValue(name),
+      short_name: wrapValue(shortName),
+      description: wrapValue(description),
+      commitment_donors: wrapValue(commitmentDonors),
+      submitted_donors: wrapValue(submittedDonors),
+      genomic_donors: wrapValue(genomicDonors),
+      website: wrapValue(website),
+      institutions: wrapValue(institutions),
+      countries: wrapValue(countries),
+      regions: wrapValue(regions),
+
+      membership_type: wrapValue(membershipType),
+
+      cancer_types: cancerTypes,
+      primary_sites: primarySites,
+    },
+    admin_emails: adminEmails,
+  };
+
   return await new Promise((resolve, reject) => {
-    const meta = new grpc.Metadata();
-
-    if (jwt) {
-      meta.add('jwt', jwt);
-    }
-
-    programService.createProgram({ program }, meta, (err, response) =>
-      err ? reject(err) : resolve(response),
+    programService.createProgram(
+      createProgramRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
     );
   });
 };
-export default { getProgram, listPrograms, createProgram };
+
+const inviteUser = async (
+  { programShortName, userFirstName, userLastName, userEmail, userRole },
+  jwt = null,
+) => {
+  const inviteUserRequest = {
+    program_short_name: wrapValue(programShortName),
+    first_name: wrapValue(userFirstName),
+    last_name: wrapValue(userLastName),
+    email: wrapValue(userEmail),
+    role: wrapValue(userRole),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.inviteUser(
+      inviteUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
+// const inviteUser = async ({programShortName, }, jwt=null)
+export default { getProgram, listPrograms, listUsers, createProgram, inviteUser };
