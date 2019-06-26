@@ -6,4 +6,6 @@ export default {
   },
   listBorderColor: colors.grey_1,
   placeHolderColor: colors.grey,
+  disabledTextColor: '#d0d1d8',
+  disabledBackgroundColor: '#f6f6f7',
 };

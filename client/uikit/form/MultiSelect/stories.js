@@ -21,7 +21,6 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
     <MultiSelect
       value="[parent state]"
       onChange={() => '[parent func]'}
-      placeholder="Add one or more..."
       disabled={boolean('disabled', false)}
       error={boolean('error', false)}
       single={boolean('single', false)}

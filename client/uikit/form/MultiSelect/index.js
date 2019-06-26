@@ -83,8 +83,9 @@ const InputBox = styled('div')`
   }
 
   &.disabled {
-    background-color: ${({ theme }) => theme.colors.grey_2};
     pointer-events: none;
+    background-color: ${({ theme }) => theme.multiSelect.disabledBackgroundColor};
+    border-color: ${({ theme }) => theme.colors.grey_2};
   }
 
   &.error {
@@ -93,6 +94,7 @@ const InputBox = styled('div')`
 `;
 
 const Input = styled('input')`
+  ${({ theme }) => css(theme.typography.paragraph)};
   border: none;
   display: block;
   flex-grow: 1;
@@ -109,6 +111,10 @@ const PlaceHolder = styled('span')`
   color: ${({ theme }) => theme.multiSelect.placeHolderColor};
   position: absolute;
   pointer-events: none;
+
+  &.disabled {
+    color: ${({ theme }) => theme.multiSelect.disabledTextColor};
+  }
 `;
 
 const SelectedItem = styled(Tag)`
@@ -118,6 +124,11 @@ const SelectedItem = styled(Tag)`
   margin-top: 0;
   margin-right: 5px;
   cursor: pointer;
+  line-height: 17px;
+
+  &.disabled {
+    background-color: ${({ theme }) => theme.colors.grey_2};
+  }
 `;
 
 const SectionTitle = styled('li')`
@@ -128,6 +139,15 @@ const SectionTitle = styled('li')`
   padding-left: 7px;
   font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
   color: ${({ theme }) => theme.colors.grey};
+`;
+
+const SingleValue = styled('span')`
+  ${({ theme }) => css(theme.typography.paragraph)};
+  margin-right: 0.3em;
+
+  &.disabled {
+    color: ${({ theme }) => theme.multiSelect.disabledTextColor};
+  }
 `;
 
 function Highlight({ string, searchText }) {
@@ -169,12 +189,12 @@ function MultiSelect({
   value,
   children,
   onChange,
-  placeholder,
+  single,
+  placeholder = single ? '' : 'Add one or more...',
   inputProps,
   allowNew,
   disabled,
   error,
-  single,
 }) {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
@@ -307,18 +327,20 @@ function MultiSelect({
     <Container>
       <InputBox className={clsx({ disabled, error, focused: focusState })}>
         {showPlaceHolder ? (
-          <PlaceHolder>{placeholder}</PlaceHolder>
+          <PlaceHolder className={clsx({ disabled, error, focused: focusState })}>
+            {placeholder}
+          </PlaceHolder>
         ) : single ? (
-          <span
-            css={css`
-              margin-right: 0.3em;
-            `}
-          >
+          <SingleValue className={clsx({ disabled, error, focused: focusState })}>
             {_.get(_.head(selectedItems), 'displayName')}
-          </span>
+          </SingleValue>
         ) : (
           selectedItems.map(item => (
-            <SelectedItem key={item.value} onClick={handleSelectedItemClick(item)}>
+            <SelectedItem
+              key={item.value}
+              onClick={handleSelectedItemClick(item)}
+              className={clsx({ disabled, error, focused: focusState })}
+            >
               {item.displayName}&nbsp;&nbsp;
               <Icon width="8px" height="8px" name="times" fill="#fff" />
             </SelectedItem>
@@ -354,6 +376,7 @@ function MultiSelect({
                 {searchString}
                 <span
                   css={css`
+                    font-size: 11px;
                     color: ${theme.colors.grey};
                     margin-left: 0.5em;
                   `}
