@@ -87,13 +87,13 @@ const typeDefs = gql`
     Create new program
     Returns the shortName of the program if successfully created
     """
-    createProgram(program: ProgramInput): String
+    createProgram(program: ProgramInput!): String
 
     """
     Invite a user to join a program
     Returns the email of the user if the invite is successfully sent
     """
-    inviteUser(invite: InviteUserInput): String
+    inviteUser(invite: InviteUserInput!): String
   }
 `;
 
@@ -146,7 +146,6 @@ const resolvers = {
       const { egoToken } = context;
       const invite = get(args, 'invite', {});
       const response = await programService.inviteUser(invite, egoToken);
-      console.log(response);
       return get(args, 'invite.userEmail');
     },
   },
