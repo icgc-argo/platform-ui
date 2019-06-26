@@ -9,6 +9,7 @@ const TabsContext = React.createContext();
 
 export const Button = styled('button')`
   ${({ theme }) => css(theme.typography.label)};
+  color: ${({ theme }) => theme.colors.grey};
   display: flex;
   border: 0;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey_2};
