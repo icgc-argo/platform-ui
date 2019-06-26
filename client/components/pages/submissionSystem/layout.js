@@ -14,6 +14,7 @@ import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
 import NavBar from './NavBar';
 import SideMenu from './SideMenu';
+import Footer from 'uikit/Footer';
 
 /**
  * TODO: `pathname` and `logOut` should just be available through context
@@ -35,7 +36,9 @@ const SubmissionLayout = ({
         <ContentBody>{children}</ContentBody>
       </PageContent>
     </PageBody>
-    <PageFooter />
+    <PageFooter>
+      <Footer />
+    </PageFooter>
   </PageContainer>
 );
 
