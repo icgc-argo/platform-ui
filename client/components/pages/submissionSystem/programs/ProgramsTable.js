@@ -76,7 +76,8 @@ export default (tableProps: {
         <div>
           {cancerTypes.map((cancerType, i) => (
             <div key={cancerType}>
-              {cancerType} {i < cancerTypes.length - 1 && ','}
+              {cancerType}
+              {i < cancerTypes.length - 1 && ','}
             </div>
           ))}
         </div>
@@ -91,7 +92,8 @@ export default (tableProps: {
           <div>
             {list.map((country, i) => (
               <div key={country}>
-                {country} {i < list.length - 1 && ','}
+                {country}
+                {i < list.length - 1 && ','}
               </div>
             ))}
           </div>
