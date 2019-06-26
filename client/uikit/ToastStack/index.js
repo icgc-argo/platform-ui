@@ -13,7 +13,7 @@ const usePrevious = value => {
   return ref.current;
 };
 
-const ANIMATION_DURATION = 350;
+const ANIMATION_DURATION = 500;
 
 const StackContainer = styled('div')`
   max-width: 400px;
@@ -48,7 +48,13 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
   const convertToLocalStack = toastConfigs => toastConfigs.map(i => ({ ...i, unMounting: false }));
   const [stack, setStack] = React.useState(convertToLocalStack(toastConfigs));
   const previousToastConfigs = usePrevious(toastConfigs);
-  const currentlyUnmountingItems = React.createRef();
+
+  // this ensures previously registered timeouts are canceled on new render
+  const [currentTimeout, setCurrentTimeout] = React.useState(null);
+  const lastTimeOut = usePrevious(currentTimeout);
+  if (lastTimeOut) {
+    clearTimeout(lastTimeOut);
+  }
 
   // observes toastConfigs from props to sync up with local state, with some delay for animation
   React.useEffect(
@@ -61,9 +67,11 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
             unMounting: item.id === itemToRemove.id,
           })),
         );
-        setTimeout(() => {
-          setStack(convertToLocalStack(toastConfigs));
-        }, ANIMATION_DURATION);
+        setCurrentTimeout(
+          setTimeout(() => {
+            setStack(convertToLocalStack(toastConfigs));
+          }, ANIMATION_DURATION),
+        );
       } else {
         setStack(convertToLocalStack(toastConfigs));
       }
