@@ -10,10 +10,15 @@ import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { ThemeContext } from '@emotion/core';
 import Icon from 'uikit/Icon';
+import UsersTable from './UsersTable';
+import Button from 'uikit/Button';
+import { TableActionBar } from 'uikit/Table';
+import users from 'uikit/Icon/icons/collection/users';
+import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(TABS.PROFILE);
+  const [activeTab, setActiveTab] = React.useState(TABS.USERS);
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
@@ -43,17 +48,75 @@ export default ({ logOut, pathname, router }) => {
           padding-top: 0px;
         `}
       >
-        <Tabs value={activeTab} onChange={handleChange}>
+        <Tabs
+          value={activeTab}
+          onChange={handleChange}
+          css={css`
+            width: 100%;
+          `}
+        >
           <Tab value="USERS" label="Users" />
           <Tab value="PROFILE" label="Profile" />
-          <Tab empty />
+          <Tab
+            empty
+            css={css`
+              padding: 0;
+              justify-content: flex-end;
+            `}
+          >
+            <Button
+              css={css`
+                margin: 9px 0;
+              `}
+            >
+              Add Users
+            </Button>
+          </Tab>
         </Tabs>
-        {activeTab === TABS.USERS && <div>users</div>}
+        {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
         {activeTab === TABS.PROFILE && <Profile />}
       </ContentBox>
     </SubmissionLayout>
   );
 };
+
+// TODO: Remove dummy data
+const FAKE_USERS = [
+  {
+    id: '1',
+    name: 'Homer Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '2',
+    name: 'Bart Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '3',
+    name: 'Lisa Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+];
+
+const Users = ({ users }) => (
+  <div>
+    <TableActionBar>{users.length} results</TableActionBar>
+    <UsersTable users={users} />
+  </div>
+);
 
 function Profile() {
   const theme = React.useContext(ThemeContext);

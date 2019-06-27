@@ -10,6 +10,8 @@ import DnaLoader from '../DnaLoader';
 
 export { TableActionBar } from './TablePagination';
 
+import Checkbox from '../form/Checkbox';
+
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
   const selected = selectedIds.some(id => id === thisRowId);
@@ -93,11 +95,24 @@ export default Table;
  * SelectTable provides the row selection capability with the
  * selectTable HOC.
  */
+const SelectTableCheckbox = ({ checked, onClick, id }) => (
+  <Checkbox checked={checked} onChange={() => onClick(id)} />
+);
+
 export const SelectTable = props => {
   const { isSelected, data, keyField } = props;
   const selectedIds = data.map(data => data[keyField]).filter(isSelected);
   const Component = selectTable(Table);
-  return <Component {...props} isSelectTable primaryKey={keyField} selectedIds={selectedIds} />;
+  return (
+    <Component
+      {...props}
+      isSelectTable
+      primaryKey={keyField}
+      selectedIds={selectedIds}
+      SelectInputComponent={SelectTableCheckbox}
+      SelectAllInputComponent={SelectTableCheckbox}
+    />
+  );
 };
 SelectTable.propTypes = {
   ...ReactTable.propTypes,
