@@ -129,7 +129,15 @@ function Profile() {
       {...props}
     />
   );
-  const Right = props => <Col md={9} {...props} />;
+  const Right = props => (
+    <Col
+      md={9}
+      css={css`
+        padding: 7px 0;
+      `}
+      {...props}
+    />
+  );
   const SectionTitle = props => (
     <Typography
       component="h3"
