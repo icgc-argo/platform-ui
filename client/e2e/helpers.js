@@ -6,6 +6,7 @@
 
 require('dotenv').config();
 const fetch = require('isomorphic-fetch');
+const urlJoin = require('url-join');
 
 const BS_USER = process.env.BROWSERSTACK_USER;
 const BS_KEY = process.env.BROWSERSTACK_ACCESS_KEY;
@@ -35,6 +36,19 @@ const updateStatus = (browser, status, reason) => {
     .catch(err => console.log('err', err));
 };
 
+const runGqlQuery = ({ query, variables }) =>
+  fetch(urlJoin(process.env.GATEWAY_API_ROOT, 'graphql'), {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  }).then(res => res.json());
+
 module.exports = {
+  runGqlQuery,
   updateStatus,
 };

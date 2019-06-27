@@ -9,9 +9,8 @@ module.exports = {
     browser
       .url('http://localhost:8080')
       .waitForElementVisible('body')
-      .click('.card:nth-of-type(2)')
       .pause(5000)
-      .assert.containsText('h1', 'Minh')
+      .assert.containsText('h1', 'Welcome to Argo!')
       .end();
   },
 
