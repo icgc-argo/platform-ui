@@ -6,7 +6,7 @@ import Container from '../Container';
 const FooterStories = storiesOf(`${__dirname}`, module).add(
   'Basic',
   () => (
-    <Container style={{ padding: '15px' }}>
+    <Container style={{ padding: '0 15px' }}>
       <Footer
         version="1.0.0"
         apiVersion="v1"
