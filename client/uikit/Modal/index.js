@@ -96,6 +96,7 @@ const Modal = ({
         </Button>
         <Button
           css={css`
+            margin-left: 10px;
             border: none;
           `}
           variant="secondary"
