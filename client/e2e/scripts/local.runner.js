@@ -12,11 +12,9 @@ try {
   // Code to start browserstack local before start of test
   console.log('Connecting local');
   Nightwatch.bs_local = bs_local = new browserstack.Local();
-  bs_local.stop(function(error) {
-    if (error) {
-      throw error;
-    }
-    bs_local.start({ key: process.env.BROWSERSTACK_ACCESS_KEY }, function(error) {
+  bs_local.start(
+    { key: process.env.BROWSERSTACK_ACCESS_KEY, localIdentifier: String(Math.random()) },
+    function(error) {
       if (error) {
         throw error;
       }
@@ -33,15 +31,10 @@ try {
             bs_local.stop(function() {});
           });
       });
-    });
-  });
+    },
+  );
 } catch (ex) {
-  bs_local.stop(function(error) {
-    if (error) {
-      console.log(`error stopping bs_local: ${error}\n`);
-    }
-    console.log('There was an error while starting the test runner:\n\n');
-    process.stderr.write(ex.stack + '\n');
-    process.exit(2);
-  });
+  console.log('There was an error while starting the test runner:\n\n');
+  process.stderr.write(ex.stack + '\n');
+  process.exit(2);
 }
