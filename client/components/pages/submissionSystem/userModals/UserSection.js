@@ -18,20 +18,28 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-const UserSection = ({ index, user, onChange }) => {
-  //  console.log('index', index, 'user', user, 'onchagnge', onChange);
-  const updateUser = (value, key) => onChange({ index, value, key });
+/**
+ * formData
+ */
+const UserSection = ({ formData: user, updateForm }) => {
+  console.log('form data', user, 'updateForm', updateForm);
+  //const updateUser = (value, key) => onChange({ index, value, key });
 
   return (
     <Section>
       <FormControl required>
         <InputLabel>First Name</InputLabel>
         <Input
-          value={user[userKeys.firstName]}
-          onChange={e => updateUser(e.target.value, userKeys.firstName)}
+          value={user.firstName}
+          onChange={
+            e => {
+              console.log(e.target.value);
+              updateForm(e.target.value);
+            } /*updateUser(e.target.value, userKeys.firstName*/
+          }
         />
       </FormControl>
-      <FormControl required>
+      {/*  <FormControl required>
         <InputLabel>Email Address</InputLabel>
         <Input
           value={user[userKeys.email]}
@@ -49,7 +57,7 @@ const UserSection = ({ index, user, onChange }) => {
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-      <div>Delete</div>
+    <div>Delete</div>*/}
     </Section>
   );
 };

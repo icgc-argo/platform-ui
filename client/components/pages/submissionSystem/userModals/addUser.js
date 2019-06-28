@@ -56,17 +56,25 @@ const AddUserModal = ({}) => {
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      <FormProvider fields={[{ key: uniqueId(), value: 'test', component: Inp }]}>
+      <FormProvider
+        fields={[
+          {
+            key: uniqueId(),
+            value: [{ firstName: '', lastName: '', email: '', role: '' }],
+            component: UserSection,
+          },
+        ]}
+      >
         <Form update={setPendingUsers} setValidated={setValidated} />
       </FormProvider>
     </Modal>
   );
 };
 
-const Inp = ({ value }) => <input value="value" />;
+const Inp = ({ formData, onChange }) => <input value={value} onChange={onChange} />;
 
 const User = {
-  value: '',
+  value: '', // should be default value
   validator: x => x,
   component: UserSection,
   customUpdater: 1, // ???

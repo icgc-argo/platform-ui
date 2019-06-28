@@ -15,7 +15,7 @@ export const FormContext = React.createContext();
 const FormProvider = ({ children, fields }) => {
   // dirty form state
   // get values from fields, unique keys
-  const [fieldValues, setFieldValue] = React.useState(
+  const [fieldValues, setFieldValues] = React.useState(
     fields.map(f => ({ value: f.value, key: f.key })),
   );
 
@@ -23,7 +23,7 @@ const FormProvider = ({ children, fields }) => {
 
   console.log('form providor', fieldValues, fieldTypes);
   return (
-    <FormContext.Provider value={{ fieldValues: fieldValues, fieldTypes }}>
+    <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes }}>
       {children}
     </FormContext.Provider>
   );
