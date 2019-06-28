@@ -1,14 +1,15 @@
 //@flow
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { orderBy } from 'lodash';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
 import Icon from 'uikit/Icon';
 import { css } from 'uikit';
+import DnaLoader from 'uikit/DnaLoader';
 
 import { mockPrograms } from './mockData';
-import { useQuery } from 'react-apollo-hooks';
-import DnaLoader from 'uikit/DnaLoader';
 
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './programs/queries.gql';
@@ -25,7 +26,8 @@ const ProgramsSection = ({ initialProgram }) => {
   const { programs = [] } = data;
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
-  const filteredPrograms = programs.filter(
+  const orderedPrograms = orderBy(programs, 'shortName');
+  const filteredPrograms = orderedPrograms.filter(
     ({ shortName }) =>
       !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
   );
