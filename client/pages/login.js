@@ -132,10 +132,10 @@ export default createPage({
                 Get started with Data Submission
               </Typography>
               <Typography component="div">
-                • Register for DACO access in order to submit data.
+                • <a href="">Register for DACO access</a> in order to submit data.
               </Typography>
               <Typography component="div">
-                • Our documentation outlines the submission process.
+                • Our <a href="">documentation</a> outlines the submission process.
               </Typography>
             </div>
           </Container>
