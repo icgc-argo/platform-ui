@@ -6,9 +6,10 @@ import icgcLogo from '../assets/icgc_logo.svg';
 import css from '@emotion/css';
 import { Row, Col } from 'react-grid-system';
 
-const Container = styled('div')`
+const Container = styled('footer')`
   ${({ theme }) => css(theme.typography.paragraph)};
   font-size: 11px;
+  min-height: 58px;
 
   & a + svg {
     margin: 0px 8px;
@@ -22,7 +23,11 @@ const Footer = ({
   links = [],
 }) => (
   <Container>
-    <Row>
+    <Row
+      css={css`
+        min-height: 58px;
+      `}
+    >
       <Col
         md={3}
         css={css`
@@ -66,10 +71,11 @@ const Footer = ({
           display: flex;
           align-items: center;
           flex-direction: row-reverse;
+          line-height: 0;
         `}
       >
         <a href="https://www.oicr.on.ca/" target="_blank">
-          <img alt="" src={icgcLogo} />
+          <img alt="" src={icgcLogo} style={{ height: '42px' }} />
         </a>
       </Col>
     </Row>

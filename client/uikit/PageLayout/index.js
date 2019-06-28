@@ -24,6 +24,7 @@ export const PageBody = styled('div')`
 
 export const PageContent = styled('div')`
   flex: 1;
+  max-width: calc(100vw - 304px);
 `;
 
 export const ContentHeader = styled('div')`
