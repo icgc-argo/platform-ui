@@ -16,6 +16,8 @@ import { TableActionBar } from 'uikit/Table';
 import users from 'uikit/Icon/icons/collection/users';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 
+import AddUserModal from '../userModals/addUser';
+
 export default ({ logOut, pathname, router }) => {
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
   const [activeTab, setActiveTab] = React.useState(TABS.USERS);
@@ -113,6 +115,7 @@ const FAKE_USERS = [
 
 const Users = ({ users }) => (
   <div>
+    <AddUserModal />
     <TableActionBar>{users.length} results</TableActionBar>
     <UsersTable users={users} />
   </div>

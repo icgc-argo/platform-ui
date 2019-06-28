@@ -53,12 +53,17 @@ const Form = ({ setCleanFormData, setValidated }) => {
         // get form component
         const Component = fieldTypes[key].component;
 
+        // isValid?
+        const isValid = fieldTypes[currentKey].validator(value);
+
         // update form el
-        const updateForm = (currentKey, value) =>
+        const updateForm = (currentKey, value) => {
+          // TODO: validate for parent
+          // TODO: pass error down to inputs to deal with err msg + styling
           setFieldValues(
             fieldValues.map(field => (currentKey === field.key ? { ...field, value } : field)),
           );
-
+        };
         // updateForm expects the type of value mutataed given back to it
         return <Component formData={value} updateForm={value => updateForm(key, value)} />;
       })}

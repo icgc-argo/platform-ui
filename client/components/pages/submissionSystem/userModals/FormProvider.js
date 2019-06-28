@@ -3,7 +3,6 @@ import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect from 'uikit/form/MultiSelect';
 import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
-import styled from '@emotion/styled';
 import { keyBy, uniqueId } from 'lodash';
 
 export const FormContext = React.createContext();
@@ -15,6 +14,7 @@ export const FormContext = React.createContext();
 const FormProvider = ({ children, fields }) => {
   // create field values array
   const keyedFields = fields.map(f => ({ ...f, key: uniqueId() }));
+  console.log('keyed fields', keyedFields);
   const [fieldValues, setFieldValues] = React.useState(
     keyedFields.map(({ key, value }) => ({ value, key })),
   );
@@ -22,6 +22,7 @@ const FormProvider = ({ children, fields }) => {
   // create field types map
   const fieldTypes = keyBy(keyedFields.map(({ component, key }) => ({ component, key })), 'key');
 
+  console.log('FormProvider', 'fieldValues', fieldValues, 'fieldTypes', fieldTypes);
   return (
     <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes }}>
       {children}

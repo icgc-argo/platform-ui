@@ -36,15 +36,6 @@ const AddUserModal = ({}) => {
 
   const addUsers = users => console.log('users', users);
 
-  const updatePendingUser = ({ index, key, value }) => {
-    console.log('updatePendingUser', 'index', index, 'key', key, 'value', value);
-    const updatedPendingUsers = pendingUsers.map((user, i) =>
-      i === index ? { ...user, [key]: value } : user,
-    );
-    setPendingUsers(updatedPendingUsers);
-    console.log('pendingUsersBefore', updatedPendingUsers);
-  };
-
   return (
     <Modal
       title="Add Users"
@@ -58,17 +49,12 @@ const AddUserModal = ({}) => {
       <FormProvider
         fields={[
           {
-            key: uniqueId(),
+            // need keys here, cant do it in form provider
             value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },
+
           {
-            key: uniqueId(),
-            value: '',
-            component: Inp,
-          },
-          {
-            key: uniqueId(),
             value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },
