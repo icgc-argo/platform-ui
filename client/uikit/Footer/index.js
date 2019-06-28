@@ -77,7 +77,11 @@ const Footer = ({
         `}
       >
         <a href="https://www.oicr.on.ca/" target="_blank">
-          <img alt="" src={icgcLogo} style={{ height: '42px' }} />
+          <img
+            alt="Ontario Institute for Cancer Research"
+            src={icgcLogo}
+            style={{ height: '42px' }}
+          />
         </a>
       </Col>
     </Row>
