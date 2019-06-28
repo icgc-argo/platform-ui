@@ -23,7 +23,7 @@ const Section = styled('div')`
  */
 const UserSection = ({ formData: user, updateForm }) => {
   console.log('form data', user, 'updateForm', updateForm);
-  //const updateUser = (value, key) => onChange({ index, value, key });
+  const updateUser = updatedField => updateForm({ ...user, ...updatedField });
 
   return (
     <Section>
@@ -31,33 +31,25 @@ const UserSection = ({ formData: user, updateForm }) => {
         <InputLabel>First Name</InputLabel>
         <Input
           value={user.firstName}
-          onChange={
-            e => {
-              console.log(e.target.value);
-              updateForm(e.target.value);
-            } /*updateUser(e.target.value, userKeys.firstName*/
-          }
-        />
-      </FormControl>
-      {/*  <FormControl required>
-        <InputLabel>Email Address</InputLabel>
-        <Input
-          value={user[userKeys.email]}
-          onChange={e => updateUser(e.target.value, userKeys.email)}
+          onChange={e => {
+            console.log(e.target.value);
+            updateUser({ firstName: e.target.value });
+          }}
         />
       </FormControl>
       <FormControl required>
+        <InputLabel>Email Address</InputLabel>
+        <Input value={user.email} onChange={e => updateUser({ email: e.target.value })} />
+      </FormControl>
+      <FormControl required>
         <InputLabel required>Last Name</InputLabel>
-        <Input
-          value={user[userKeys.lastName]}
-          onChange={e => updateUser(e.target.value, userKeys.lastName)}
-        />
+        <Input value={user.lastName} onChange={e => updateUser({ lastName: e.target.value })} />
       </FormControl>
       <FormControl required>
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-    <div>Delete</div>*/}
+      <div>Delete</div>
     </Section>
   );
 };

@@ -60,7 +60,7 @@ const AddUserModal = ({}) => {
         fields={[
           {
             key: uniqueId(),
-            value: [{ firstName: '', lastName: '', email: '', role: '' }],
+            value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },
           {
@@ -70,12 +70,12 @@ const AddUserModal = ({}) => {
           },
           {
             key: uniqueId(),
-            value: [{ firstName: '', lastName: '', email: '', role: '' }],
+            value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },
         ]}
       >
-        <Form update={setPendingUsers} setValidated={setValidated} />
+        <Form setCleanFormData={setPendingUsers} setValidated={setValidated} />
       </FormProvider>
     </Modal>
   );

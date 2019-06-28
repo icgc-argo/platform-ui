@@ -43,7 +43,7 @@ import UserSection from './UserSection';
  * write some tests
  * new PR
  */
-const Form = ({ update, setValidated }) => {
+const Form = ({ setCleanFormData, setValidated }) => {
   const { fieldValues, setFieldValues, fieldTypes } = React.useContext(FormContext);
   console.log('fv', fieldValues, 'ft', fieldTypes);
 
@@ -59,6 +59,7 @@ const Form = ({ update, setValidated }) => {
             fieldValues.map(field => (currentKey === field.key ? { ...field, value } : field)),
           );
 
+        // updateForm expects the type of value mutataed given back to it
         return <Component formData={value} updateForm={value => updateForm(key, value)} />;
       })}
     </div>
@@ -80,5 +81,9 @@ const fieldValues = {
   key: '',
   value: '',
 };
+
+/**
+ * Once a component takes a formData and updateForm prop do what you will
+ */
 
 export default Form;
