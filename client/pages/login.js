@@ -149,7 +149,7 @@ export default createPage({
               column-gap: 6px;
               row-gap: 6px;
               grid-template-columns: 1fr 1fr;
-              grid-template-rows: 2fr 1fr;
+              grid-template-rows: 2.3318fr 1fr;
               & > div {
                 background-color: blue;
               }
@@ -162,9 +162,18 @@ export default createPage({
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                background-image: url('/static/icgc-argo-galaxy.jpg');
+                background-position: center;
+                background-size: cover;
               `}
             >
-              <Typography variant="title" color="white">
+              <Typography
+                variant="title"
+                color="white"
+                css={css`
+                  margin: 0 50px;
+                `}
+              >
                 ICGC ARGO aims to analyze specimens from cancer patients with{' '}
                 <span
                   css={css`
@@ -176,8 +185,20 @@ export default createPage({
                 to address outstanding questions that are vital to our quest to defeat cancer.
               </Typography>
             </div>
-            <div>2</div>
-            <div>3</div>
+            <div
+              css={css`
+                background-image: url('/static/icgc-argo-researcher.jpg');
+                background-position: center;
+                background-size: cover;
+              `}
+            />
+            <div
+              css={css`
+                background-image: url('/static/icgc-argo-clinician-and-patient.jpg');
+                background-position: center;
+                background-size: cover;
+              `}
+            />
           </div>
         </div>
       </div>
