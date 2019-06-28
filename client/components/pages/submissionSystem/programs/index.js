@@ -1,5 +1,7 @@
 //@flow
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { orderBy } from 'lodash';
 
 import Typography from 'uikit/Typography';
 import { Input } from 'uikit/form';
@@ -8,11 +10,9 @@ import { TableActionBar } from 'uikit/Table';
 import Button from 'uikit/Button';
 import { INPUT_PRESETS } from 'uikit/form/Input';
 import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
+import { ContentBox } from 'uikit/PageLayout';
 import ProgramsTable from './ProgramsTable';
 import SubmissionLayout from '../layout';
-import { useQuery } from 'react-apollo-hooks';
-
-import { ContentBox } from 'uikit/PageLayout';
 
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './queries.gql';
@@ -41,6 +41,7 @@ export default ({
   pathname,
 }: any) => {
   const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
+  const sortedPrograms = orderBy(programs, 'name');
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -78,7 +79,7 @@ export default ({
         </TableActionBar>
         <ProgramsTable
           loading={loading}
-          programs={programs}
+          programs={sortedPrograms}
           onProgramUsersClick={console.log}
           onProgramEditClick={console.log}
         />
