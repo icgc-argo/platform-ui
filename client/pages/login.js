@@ -1,20 +1,17 @@
 //@flow
-import React from 'react';
-import urlJoin from 'url-join';
-import Router from 'next/router';
-
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
-import { getRedirectPathForUser } from 'global/utils/pages';
-import { createPage } from 'global/utils/pages';
-import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
-import Button from 'uikit/Button';
+import { createPage, getRedirectPathForUser } from 'global/utils/pages';
+import Router from 'next/router';
+import React from 'react';
 import { css } from 'uikit';
-
-import Typography from 'uikit/Typography';
-import Footer from 'uikit/Footer';
+import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
+import Button from 'uikit/Button';
+import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Container from 'uikit/Container';
+import Footer from 'uikit/Footer';
+import Typography from 'uikit/Typography';
+import urlJoin from 'url-join';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
