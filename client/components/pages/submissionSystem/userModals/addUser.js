@@ -63,6 +63,16 @@ const AddUserModal = ({}) => {
             value: [{ firstName: '', lastName: '', email: '', role: '' }],
             component: UserSection,
           },
+          {
+            key: uniqueId(),
+            value: '',
+            component: Inp,
+          },
+          {
+            key: uniqueId(),
+            value: [{ firstName: '', lastName: '', email: '', role: '' }],
+            component: UserSection,
+          },
         ]}
       >
         <Form update={setPendingUsers} setValidated={setValidated} />
@@ -71,7 +81,9 @@ const AddUserModal = ({}) => {
   );
 };
 
-const Inp = ({ formData, onChange }) => <input value={value} onChange={onChange} />;
+const Inp = ({ formData, updateForm }) => (
+  <input value={formData} onChange={e => updateForm(e.target.value)} />
+);
 
 const User = {
   value: '', // should be default value
