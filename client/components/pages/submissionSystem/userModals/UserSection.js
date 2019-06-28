@@ -18,9 +18,6 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-/**
- * formData
- */
 const UserSection = ({ formData: user, updateForm }) => {
   console.log('form data', user, 'updateForm', updateForm);
   const updateUser = updatedField => updateForm({ ...user, ...updatedField });

@@ -4,7 +4,7 @@ import MultiSelect from 'uikit/form/MultiSelect';
 import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
 import styled from '@emotion/styled';
-import { keyBy } from 'lodash';
+import { keyBy, uniqueId } from 'lodash';
 
 export const FormContext = React.createContext();
 
@@ -13,15 +13,15 @@ export const FormContext = React.createContext();
  * - using context because inputs might be deeply nested
  */
 const FormProvider = ({ children, fields }) => {
-  // dirty form state
-  // get values from fields, unique keys
+  // create field values array
+  const keyedFields = fields.map(f => ({ ...f, key: uniqueId() }));
   const [fieldValues, setFieldValues] = React.useState(
-    fields.map(f => ({ value: f.value, key: f.key })),
+    keyedFields.map(({ key, value }) => ({ value, key })),
   );
 
-  const fieldTypes = keyBy(fields.map(f => ({ component: f.component, key: f.key })), 'key');
+  // create field types map
+  const fieldTypes = keyBy(keyedFields.map(({ component, key }) => ({ component, key })), 'key');
 
-  console.log('form providor', fieldValues, fieldTypes);
   return (
     <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes }}>
       {children}

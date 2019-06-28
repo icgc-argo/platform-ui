@@ -10,7 +10,6 @@ import PendingUsers from './UserSection';
 import FormProvider, { FormContext } from './FormProvider';
 import Form from './Form';
 import UserSection from './UserSection';
-import { uniqueId } from 'lodash';
 
 const AddSection = styled('button')``;
 
