@@ -15,7 +15,7 @@ const defaultTags = {
   paragraph: 'p',
 };
 
-const createTypographyComponentsFromTheme = memoize(themeObj =>
+const createTypographyComponentMapFromTheme = memoize(themeObj =>
   Object.entries(themeObj.typography).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -25,20 +25,30 @@ const createTypographyComponentsFromTheme = memoize(themeObj =>
   ),
 );
 
+const createDomComponent = memoize((domComponentName, components, variant) =>
+  components[variant].withComponent(domComponentName),
+);
+
+const createStyledDomComponent = memoize(
+  (Component, { color, bold }) => styled(Component)`
+    font-weight: ${bold ? `bold` : `normal`};
+    color: ${({ theme }) => (color ? theme.colors[color] || color : 'inherit')};
+  `,
+);
+
 const Typography = ({
   variant = 'paragraph',
-  component = null,
+  component: domComponentName = null,
   bold = false,
   color = null,
   ...rest
 }) => {
   const theme = useTheme();
-  const components = createTypographyComponentsFromTheme(theme);
-  const Component = component ? components[variant].withComponent(component) : components[variant];
-  const StyledText = styled(Component)`
-    font-weight: ${bold ? `bold` : `normal`};
-    color: ${({ theme }) => (color ? theme.colors[color] || color : 'inherit')};
-  `;
+  const componentMap = createTypographyComponentMapFromTheme(theme);
+  const Component = domComponentName
+    ? createDomComponent(domComponentName, componentMap, variant)
+    : componentMap[variant];
+  const StyledText = createStyledDomComponent(Component, { color, bold });
   return <StyledText {...rest} />;
 };
 
