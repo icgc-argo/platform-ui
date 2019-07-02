@@ -157,8 +157,7 @@ export default createPage({
               </Col>
             </Row>
           </FormControl>
-        </Col>
-        <Col>
+
           <Row>
             <Col>
               <SectionTitle>Affiliated Institutions</SectionTitle>
