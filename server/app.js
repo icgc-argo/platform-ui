@@ -4,7 +4,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { mergeSchemas } from 'graphql-tools';
 
 import userSchema from './schemas/User';
-import programSchema from './schemas/Program';
+import programSchema, { withProgramServiceDataLoaders } from './schemas/Program';
 import { PORT, NODE_ENV } from './config';
 import config from './package.json';
 
@@ -20,7 +20,7 @@ const init = async () => {
     context: ({ req }) => ({
       isUserRequest: true,
       egoToken: req.headers.authorization,
-      dataLoaders: {},
+      dataLoaders: withProgramServiceDataLoaders({}),
     }),
     introspection: true,
     tracing: NODE_ENV !== 'production',

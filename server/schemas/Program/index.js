@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { get } from 'lodash';
+import DataLoader from 'dataloader';
 
 import programService from '../../services/programService';
 import { wrapValue } from '../../utils/grpcUtils';
@@ -120,6 +121,15 @@ const convertGrpcProgramToGql = programDetails => {
   };
 };
 
+export const withProgramServiceDataLoaders = (loaders = {}) => {
+  return {
+    ...loaders,
+    programListLoader: new DataLoader(egoTokens =>
+      Promise.all(egoTokens.map(token => programService.listPrograms(token))),
+    ),
+  };
+};
+
 const resolvers = {
   Query: {
     program: async (obj, args, context, info) => {
@@ -129,8 +139,11 @@ const resolvers = {
       return response === null ? null : convertGrpcProgramToGql(programDetails);
     },
     programs: async (obj, args, context, info) => {
-      const { egoToken } = context;
-      const response = await programService.listPrograms(egoToken);
+      const {
+        egoToken,
+        dataLoaders: { programListLoader },
+      } = context;
+      const response = await programListLoader.load(egoToken);
       const programs = get(response, 'programs', []);
       return programs.map(program => convertGrpcProgramToGql(program));
     },
