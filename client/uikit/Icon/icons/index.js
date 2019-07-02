@@ -17,6 +17,7 @@ import success from './collection/success';
 import warning from './collection/warning';
 import mail from './collection/mail';
 import trash from './collection/trash';
+import google from './collection/google';
 
 /**
  * Icon path and property lookup object
@@ -42,6 +43,7 @@ const Icons = {
   warning,
   mail,
   trash,
+  google,
 };
 
 export default Icons;

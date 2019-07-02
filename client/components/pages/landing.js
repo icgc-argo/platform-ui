@@ -140,8 +140,8 @@ const Root = () => (
           >
             <Typography
               variant="title"
-              color="white"
               css={css`
+                color: #fff;
                 margin: 0 50px;
               `}
             >
