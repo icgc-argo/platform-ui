@@ -7,6 +7,7 @@ import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import Checkbox from 'uikit/form/Checkbox';
 import MailTo from 'uikit/MailTo';
+import { displayDate } from 'global/utils/common';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
@@ -77,6 +78,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Joined On',
       accessor: 'joinDate',
+      Cell: ({ original }) => (original.joinDate ? displayDate(original.joinDate) : ''),
     },
     {
       Header: 'Actions',
