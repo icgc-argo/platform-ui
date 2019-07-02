@@ -10,12 +10,7 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
-import Typography from 'uikit/Typography';
-import Button from 'uikit/Button';
-import NavBar from './NavBar';
-import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
-import { css } from 'uikit';
 
 /**
  * TODO: `pathname` and `logOut` should just be available through context
@@ -36,8 +31,10 @@ const SubmissionLayout = ({
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
+  subtitle,
 }) => (
   <PageContainer>
+    <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
     {navBar}
     <PageBody>
       {!noSidebar && <Panel>{sideMenu}</Panel>}
