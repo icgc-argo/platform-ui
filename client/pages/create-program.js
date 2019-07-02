@@ -248,13 +248,7 @@ export default createPage({
             display: flex;
           `}
         >
-          <Button
-            variant="secondary"
-            css={css`
-              border: none;
-            `}
-            onClick={() => {}}
-          >
+          <Button variant="text" onClick={() => {}}>
             Cancel
           </Button>
 
