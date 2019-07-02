@@ -115,20 +115,21 @@ export default (tableProps: {
             display: flex;
             justify-content: space-around;
             align-items: center;
+            flex: 1;
           `}
         >
           <Tooltip interactive position="bottom" html={<span>Manage users</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="users"
               onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
             />
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Edit program</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="edit"
               onClick={() => tableProps.onProgramEditClick({ program: props.original })}
             />

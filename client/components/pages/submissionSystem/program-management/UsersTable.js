@@ -2,10 +2,12 @@
 import React from 'react';
 
 import { css } from 'uikit';
-import { SelectTable } from 'uikit/Table';
+import Table from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import Checkbox from 'uikit/form/Checkbox';
+import MailTo from 'uikit/MailTo';
+import { displayDate } from 'global/utils/common';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
@@ -40,9 +42,6 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void,
   onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
-  const [selectedUsers, setSelectedUsers] = React.useState(['2']);
-  const [selectAll, setSelectAll] = React.useState(false);
-
   const columns: Array<{
     Header: string,
     accessor?: $Keys<UsersTableUser>,
@@ -58,6 +57,8 @@ const UsersTable = (tableProps: {
     {
       Header: 'Email',
       accessor: 'email',
+      Cell: ({ original }) =>
+        original.email ? <MailTo link={original.email}>{original.email}</MailTo> : '',
     },
     {
       Header: 'Role',
@@ -78,6 +79,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Joined On',
       accessor: 'joinDate',
+      Cell: ({ original }) => (original.joinDate ? displayDate(original.joinDate) : ''),
     },
     {
       Header: 'Actions',
@@ -87,14 +89,15 @@ const UsersTable = (tableProps: {
       Cell: (props: CellProps) => (
         <div
           css={css`
+            flex: 1;
             display: flex;
             justify-content: space-around;
           `}
         >
           <Tooltip interactive position="bottom" html={<span>Resend invitation</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="mail"
               disabled
               onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
@@ -102,16 +105,16 @@ const UsersTable = (tableProps: {
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Edit user</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="edit"
               onClick={() => tableProps.onUserEditClick({ user: props.original })}
             />
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Remove user</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="trash"
               onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
             />
@@ -121,35 +124,7 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  const keyFieldProp = 'id';
-
-  return (
-    <SelectTable
-      keyField={keyFieldProp}
-      isSelected={keyField => selectedUsers.includes(keyField)}
-      selectAll={selectAll}
-      toggleAll={() => {
-        setSelectedUsers(selectAll ? [] : tableProps.users.map(data => data[keyFieldProp]));
-        setSelectAll(!selectAll);
-      }}
-      toggleSelection={prefixedKeyField => {
-        /**
-         * keyField comes in prefixed with 'select-'
-         * solution on github by author is to use the new alpha as he's not supporting v6 anymore
-         * */
-        const normalisedKeyField = prefixedKeyField.substring(7);
-
-        const newSelection = selectedUsers.includes(normalisedKeyField)
-          ? selectedUsers.filter(keyField => keyField !== normalisedKeyField)
-          : selectedUsers.concat(normalisedKeyField);
-        setSelectedUsers(newSelection);
-      }}
-      selectType="checkbox"
-      data={tableProps.users}
-      columns={columns}
-      showPagination={false}
-    />
-  );
+  return <Table data={tableProps.users} columns={columns} />;
 };
 
 export default UsersTable;

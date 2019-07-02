@@ -49,6 +49,8 @@ export const StyledTable = styled(ReactTable)`
     ${({ theme }) => css(theme.typography.data)}
     padding: 10px 16px;
     border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
+    display: flex;
+    align-items: center;
   }
   &.ReactTable .rt-tr {
     &.selected {

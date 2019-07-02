@@ -1,3 +1,5 @@
+import { format as formatDate } from 'date-fns';
+
 export const asEnum = (obj, { name = 'enum' } = {}) =>
   new Proxy(obj, {
     get: (obj, prop) => {
@@ -13,3 +15,6 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
       throw new Error('enums are immutable');
     },
   });
+
+const standardDate = 'YYYY-MM-DD';
+export const displayDate = date => formatDate(date, standardDate);
