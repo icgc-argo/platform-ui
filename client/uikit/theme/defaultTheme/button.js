@@ -21,6 +21,10 @@ export default {
       default: '#523785',
       disabled: colors.white,
     },
+    text: {
+      default: '#523785',
+      disabled: colors.white,
+    },
   },
   borderColors: {
     primary: {
@@ -37,6 +41,13 @@ export default {
       focus: '#8a8d9f',
       disabled: '#cecfd3',
     },
+    text: {
+      default: colors.white,
+      hover: '#f2ecfd',
+      active: '#e6def6',
+      focus: colors.white,
+      disabled: '#cecfd3',
+    },
   },
   colors: {
     primary: {
@@ -47,6 +58,13 @@ export default {
       disabled: '#cecfd3',
     },
     secondary: {
+      default: colors.white,
+      hover: '#f2ecfd',
+      active: '#e6def6',
+      focus: colors.white,
+      disabled: '#cecfd3',
+    },
+    text: {
       default: colors.white,
       hover: '#f2ecfd',
       active: '#e6def6',

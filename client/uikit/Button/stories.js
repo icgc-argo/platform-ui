@@ -3,22 +3,14 @@ import { renderToString } from 'react-dom/server';
 import { action } from '@storybook/addon-actions';
 import { radios, boolean, text } from '@storybook/addon-knobs';
 import React from 'react';
-import Button from '.';
+import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from '.';
 import { asyncDummyFunc, placeholderImageURLRoot } from '../testUtil';
 
 const dummyClick = action('Clicked!');
 
 const createKnobs = () => {
-  const variant = radios('variant', {
-    primary: 'primary',
-    secondary: 'secondary',
-  });
-
-  const size = radios('size', {
-    sm: 'sm',
-    md: 'md',
-  });
-
+  const variant = radios('variant', BUTTON_VARIANTS);
+  const size = radios('size', BUTTON_SIZES);
   const disabled = boolean('disabled', false);
   const isAsync = boolean('isAsync', false);
   const children = text('children', 'some button');

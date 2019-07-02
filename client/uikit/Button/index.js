@@ -6,6 +6,17 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 import FocusWrapper from '../FocusWrapper';
 
+export const BUTTON_VARIANTS = Object.freeze({
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  TEXT: 'text',
+});
+
+export const BUTTON_SIZES = Object.freeze({
+  SM: 'sm',
+  MD: 'md',
+});
+
 const StyledButton = styled(FocusWrapper)`
   display: flex;
   align-items: center;
@@ -51,8 +62,8 @@ const Button = ({
   children,
   onClick,
   disabled,
-  variant = 'primary',
-  size = variant === 'secondary' ? 'sm' : 'md',
+  variant = BUTTON_VARIANTS.PRIMARY,
+  size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
   isAsync = false,
   className,
   id,
@@ -97,11 +108,15 @@ Button.propTypes = {
   /**
    * Button variant type eg. primary
    */
-  variant: PropTypes.oneOf(['primary', 'secondary']),
+  variant: PropTypes.oneOf([
+    BUTTON_VARIANTS.PRIMARY,
+    BUTTON_VARIANTS.SECONDARY,
+    BUTTON_VARIANTS.TEXT,
+  ]),
   /**
    * Button size
    */
-  size: PropTypes.oneOf(['sm', 'md']),
+  size: PropTypes.oneOf([BUTTON_SIZES.SM, BUTTON_SIZES.MD]),
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
