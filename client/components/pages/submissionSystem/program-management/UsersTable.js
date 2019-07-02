@@ -6,6 +6,7 @@ import Table from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import Checkbox from 'uikit/form/Checkbox';
+import MailTo from 'uikit/MailTo';
 
 type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
 
@@ -55,6 +56,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Email',
       accessor: 'email',
+      Cell: ({ original }) => (original.email ? <MailTo>{original.email}</MailTo> : ''),
     },
     {
       Header: 'Role',
