@@ -57,7 +57,8 @@ const UsersTable = (tableProps: {
     {
       Header: 'Email',
       accessor: 'email',
-      Cell: ({ original }) => (original.email ? <MailTo>{original.email}</MailTo> : ''),
+      Cell: ({ original }) =>
+        original.email ? <MailTo link={original.email}>{original.email}</MailTo> : '',
     },
     {
       Header: 'Role',
