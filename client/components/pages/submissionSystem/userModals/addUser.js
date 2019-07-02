@@ -10,6 +10,7 @@ import PendingUsers from './UserSection';
 import FormProvider, { FormContext } from './FormProvider';
 import Form from './Form';
 import UserSection from './UserSection';
+import { uniqueId } from 'lodash';
 
 const AddSection = styled('button')``;
 
@@ -49,12 +50,14 @@ const AddUserModal = ({}) => {
       <FormProvider
         fields={[
           {
-            // need keys here, cant do it in form provider
+            // need keys here, cant do it in form provider, need some object factory?
+            key: uniqueId(),
             value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },
 
           {
+            key: uniqueId(),
             value: { firstName: '', lastName: '', email: '', role: '' },
             component: UserSection,
           },

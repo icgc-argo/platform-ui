@@ -22,7 +22,7 @@ import UserSection from './UserSection';
 
 /**
  * -validate dirty form state
- * -update dirty form state ( really children should do this, context)
+ * -update dirty form state ( really  children should do this, context)
  * -make sure onChange is debounced
  * -update parent only when clean and validated
  */
@@ -39,9 +39,8 @@ import UserSection from './UserSection';
  * work for basic as well as composite, lot of detail in updater func
  * memoize!!!!!!!!!!!!!
  *
+ * any form input once it uses changeForm and form data
  *
- * write some tests
- * new PR
  */
 const Form = ({ setCleanFormData, setValidated }) => {
   const { fieldValues, setFieldValues, fieldTypes } = React.useContext(FormContext);
@@ -54,7 +53,7 @@ const Form = ({ setCleanFormData, setValidated }) => {
         const Component = fieldTypes[key].component;
 
         // isValid?
-        const isValid = fieldTypes[currentKey].validator(value);
+        // const isValid = fieldTypes[key].validator(value);
 
         // update form el
         const updateForm = (currentKey, value) => {
@@ -70,15 +69,11 @@ const Form = ({ setCleanFormData, setValidated }) => {
     </div>
   );
 };
-/**
- * return Component looks a lot like context.
- * can we just use FormProvider and not need Form?
- */
 
 // hook or until  to generate
 const field = {
   key: '',
-  validator: '',
+  validator: '', // YUP do it here or someplace else?
   component: '',
 };
 

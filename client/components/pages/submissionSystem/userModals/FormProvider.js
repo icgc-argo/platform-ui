@@ -10,17 +10,19 @@ export const FormContext = React.createContext();
 /**
  * - hold dirty form state
  * - using context because inputs might be deeply nested
+ *
+ * fieldValues = {key, value}
+ * fieldTypes = {key, component}
  */
 const FormProvider = ({ children, fields }) => {
   // create field values array
-  const keyedFields = fields.map(f => ({ ...f, key: uniqueId() }));
-  console.log('keyed fields', keyedFields);
+  console.log('fields', fields);
   const [fieldValues, setFieldValues] = React.useState(
-    keyedFields.map(({ key, value }) => ({ value, key })),
+    fields.map(({ key, value }) => ({ value, key })),
   );
 
   // create field types map
-  const fieldTypes = keyBy(keyedFields.map(({ component, key }) => ({ component, key })), 'key');
+  const fieldTypes = keyBy(fields.map(({ component, key }) => ({ component, key })), 'key');
 
   console.log('FormProvider', 'fieldValues', fieldValues, 'fieldTypes', fieldTypes);
   return (
