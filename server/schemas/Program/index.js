@@ -4,8 +4,11 @@ import { get } from 'lodash';
 
 import programService from '../../services/programService';
 import { wrapValue } from '../../utils/grpcUtils';
+import costDirectiveTypeDef from '../costDirectiveTypeDef';
 
 const typeDefs = gql`
+  ${costDirectiveTypeDef}
+
   enum MembershipType {
     FULL
     ASSOCIATE
@@ -19,7 +22,7 @@ const typeDefs = gql`
     BANNED
   }
 
-  type Program {
+  type Program @cost(complexity: 10) {
     shortName: String!
     description: String
     name: String
@@ -36,7 +39,7 @@ const typeDefs = gql`
     primarySites: [String]
   }
 
-  type ProgramUser {
+  type ProgramUser @cost(complexity: 10) {
     email: String
     firstName: String
     lastName: String
@@ -87,13 +90,13 @@ const typeDefs = gql`
     Create new program
     Returns the shortName of the program if successfully created
     """
-    createProgram(program: ProgramInput!): Program
+    createProgram(program: ProgramInput!): Program @cost(complexity: 10)
 
     """
     Invite a user to join a program
     Returns the email of the user if the invite is successfully sent
     """
-    inviteUser(invite: InviteUserInput!): String
+    inviteUser(invite: InviteUserInput!): String @cost(complexity: 10)
   }
 `;
 

@@ -28,6 +28,7 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "graphql": "^14.2.1",
+    "graphql-cost-analysis": "^1.0.3",
     "graphql-tools": "^4.0.4",
     "grpc": "^1.20.3",
     "lodash": "^4.17.11",
