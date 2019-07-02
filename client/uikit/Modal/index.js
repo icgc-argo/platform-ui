@@ -4,7 +4,7 @@ import Color from 'color';
 
 import { styled, css } from '..';
 import Typography from '../Typography';
-import Button from '../Button';
+import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from '../Button';
 import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 
@@ -97,10 +97,8 @@ const Modal = ({
         <Button
           css={css`
             margin-left: 10px;
-            border: none;
           `}
-          variant="secondary"
-          size="sm"
+          variant={BUTTON_VARIANTS.TEXT}
           onClick={onCancelClick}
         >
           {cancelText}
