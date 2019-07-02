@@ -1,3 +1,4 @@
+import React from 'react';
 import { createPage } from 'global/utils/pages';
 import Container from 'uikit/Container';
 import css from '@emotion/css';
@@ -22,7 +23,7 @@ const SectionTitle = styled('h3')`
   color: ${({ theme }) => theme.colors.secondary};
 `;
 
-export default ({ logOut, pathname, router }) => {
+export default ({ logOut, pathname }) => {
   const [countries, setCountries] = React.useState([]);
   const [cancerTypes, setCancerTypes] = React.useState([]);
 
@@ -32,6 +33,7 @@ export default ({ logOut, pathname, router }) => {
 
   return (
     <SubmissionLayout
+      subtitle="ICGC ARGO - Create a Program"
       pathname={pathname}
       logOut={logOut}
       contentHeader={
