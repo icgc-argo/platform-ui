@@ -94,8 +94,8 @@ const UsersTable = (tableProps: {
         >
           <Tooltip interactive position="bottom" html={<span>Resend invitation</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="mail"
               disabled
               onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
@@ -103,16 +103,16 @@ const UsersTable = (tableProps: {
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Edit user</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="edit"
               onClick={() => tableProps.onUserEditClick({ user: props.original })}
             />
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Remove user</span>}>
             <InteractiveIcon
-              height="15px"
-              width="15px"
+              height="20px"
+              width="20px"
               name="trash"
               onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
             />
