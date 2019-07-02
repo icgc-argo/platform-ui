@@ -45,6 +45,7 @@ const AddUserModal = ({}) => {
     },
   ];
 
+  // form already validates itself, so just check if our local isFormValidated state is set to true
   const addUsers = users => console.log('users', users);
 
   return (
@@ -61,7 +62,6 @@ const AddUserModal = ({}) => {
         <Form setCleanFormData={setPendingUsers} setValidated={setValidated} />
         <AddField
           field={{
-            key: uniqueId(),
             value: { firstName: 'Oh damn i just got added', lastName: '', email: '', role: '' },
             component: UserSection,
           }}

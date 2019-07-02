@@ -13,7 +13,7 @@ import UserSection from './UserSection';
  * Form to add and edit users
  * setValidated => allow other components to know when validate
  * update => to set our validated state outside component (most forms post) // TODO FormSender?
- *  essentially our external api plus checking
+ *  essentially our external api plus validation
  *
  *
  * type to make Form resuable
@@ -22,7 +22,7 @@ import UserSection from './UserSection';
 
 /**
  * -validate dirty form state
- * -update dirty form state ( really  children should do this, context)
+ * -update dirty form state ( really  children  do this via context)
  * -make sure onChange is debounced
  * -update parent only when clean and validated
  */
@@ -44,27 +44,28 @@ import UserSection from './UserSection';
  */
 const Form = ({ setCleanFormData, setValidated }) => {
   const { fieldValues, setFieldValues, fieldTypes } = React.useContext(FormContext);
-  console.log('fv', fieldValues, 'ft', fieldTypes);
+  console.log('Form', 'fv', fieldValues, 'ft', fieldTypes);
+
+  // update form el
+  const updateForm = (currentKey, value) => {
+    console.log('update form', currentKey, value);
+    // TODO: validate for parent
+    // TODO: pass error down to inputs to deal with err msg + styling
+    setFieldValues(
+      fieldValues.map(field => (currentKey === field.key ? { ...field, value } : field)),
+    );
+  };
 
   return (
     <div>
       {fieldValues.map(({ value, key }) => {
-        // get form component
-        const Component = fieldTypes[key].component;
+        // get form component and validator
+        const { component: Component, validator } = fieldTypes[key];
 
-        // isValid?
-        // const isValid = fieldTypes[key].validator(value);
-
-        // update form el
-        const updateForm = (currentKey, value) => {
-          // TODO: validate for parent
-          // TODO: pass error down to inputs to deal with err msg + styling
-          setFieldValues(
-            fieldValues.map(field => (currentKey === field.key ? { ...field, value } : field)),
-          );
-        };
         // updateForm expects the type of value mutataed given back to it
-        return <Component formData={value} updateForm={value => updateForm(key, value)} />;
+        return (
+          <Component formData={value} updateForm={value => updateForm(key, value, validator)} />
+        );
       })}
     </div>
   );
@@ -80,6 +81,7 @@ const field = {
 const fieldValues = {
   key: '',
   value: '',
+  isValid: false,
 };
 
 /**
@@ -87,3 +89,8 @@ const fieldValues = {
  */
 
 export default Form;
+
+/**
+ * So a form element will receive key, value and if the value is valid based on its valdiator - oof wordy
+ *default validate on submit
+ **/

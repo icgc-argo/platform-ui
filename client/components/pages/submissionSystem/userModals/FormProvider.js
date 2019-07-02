@@ -23,13 +23,13 @@ const FormProvider = ({ children, fields }) => {
 
   // create field types map to map components
   const [fieldTypes, setFieldTypes] = React.useState(
-    keyBy(fields.map(({ component, key }) => ({ component, key })), 'key'),
+    keyBy(fields.map(({ key, component }) => ({ key, component })), 'key'),
   );
 
   // AddField - adds dynamic el to form
   const addField = field => {
-    console.log('add field', field);
-    const { key, value, component } = field;
+    const key = uniqueId();
+    const { value, component } = field;
     const fieldType = { key, component };
     const fieldValue = { key, value };
     setFieldValues([...fieldValues, fieldValue]);

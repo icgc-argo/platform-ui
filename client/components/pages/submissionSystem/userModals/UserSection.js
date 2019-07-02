@@ -19,7 +19,7 @@ const Section = styled('div')`
 `;
 
 const UserSection = ({ formData: user, updateForm }) => {
-  console.log('form data', user, 'updateForm', updateForm);
+  // console.log('form data', user, 'updateForm', updateForm);
   const updateUser = updatedField => updateForm({ ...user, ...updatedField });
 
   return (
