@@ -115,6 +115,7 @@ export default (tableProps: {
             display: flex;
             justify-content: space-around;
             align-items: center;
+            flex: 1;
           `}
         >
           <Tooltip interactive position="bottom" html={<span>Manage users</span>}>

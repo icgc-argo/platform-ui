@@ -89,6 +89,7 @@ const UsersTable = (tableProps: {
       Cell: (props: CellProps) => (
         <div
           css={css`
+            flex: 1;
             display: flex;
             justify-content: space-around;
           `}
