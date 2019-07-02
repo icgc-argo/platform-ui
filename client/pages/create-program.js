@@ -11,6 +11,7 @@ import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import { Row, Col } from 'react-grid-system';
 import Button from 'uikit/Button';
 import Typography from 'uikit/Typography';
+import { Select } from 'uikit/form';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -141,7 +142,15 @@ export default createPage({
                 <InputLabel htmlFor="membership-type">Membership Type</InputLabel>
               </Col>
               <Col sm={9}>
-                <Input aria-label="Membership Type" id="membership-type" type="number" />
+                <Select
+                  aria-label="Membership Type"
+                  id="membership-type"
+                  options={[
+                    { content: 'Full', value: 'full' },
+                    { content: 'Associate', value: 'associate' },
+                  ]}
+                  onChange={x => x}
+                />
                 {/*               <FormHelperText>Some helper text</FormHelperText> */}
               </Col>
             </Row>
