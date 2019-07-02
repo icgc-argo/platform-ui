@@ -104,7 +104,7 @@ Button.propTypes = {
   size: PropTypes.oneOf(['sm', 'md']),
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   /**
    * Use with async onClick handlers to set loading indicator
    */

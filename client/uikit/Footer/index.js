@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import Icon from '../Icon';
 import icgcLogo from '../assets/icgc_logo.svg';
 import css from '@emotion/css';
-import { Row, Col } from 'react-grid-system';
+import { Row, Col, Container as GridContainer } from 'react-grid-system';
 
 const Container = styled('footer')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -21,12 +21,14 @@ const Footer = ({
   apiVersion = '[api-version]',
   commitHash = '[commit-hash]',
   links = [],
+  ...otherProps
 }) => (
-  <Container>
+  <Container {...otherProps}>
     <Row
       css={css`
         min-height: 58px;
       `}
+      nogutter
     >
       <Col
         md={3}
@@ -75,7 +77,11 @@ const Footer = ({
         `}
       >
         <a href="https://www.oicr.on.ca/" target="_blank">
-          <img alt="" src={icgcLogo} style={{ height: '42px' }} />
+          <img
+            alt="Ontario Institute for Cancer Research"
+            src={icgcLogo}
+            style={{ height: '42px' }}
+          />
         </a>
       </Col>
     </Row>
