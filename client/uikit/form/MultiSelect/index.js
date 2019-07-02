@@ -76,7 +76,6 @@ const InputBox = styled('div')`
   padding: 7px 7px 0 7px;
   position: relative;
   width: 100%;
-  z-index: 2;
 
   border-color: ${({ theme }) => theme.colors.grey_1};
 
@@ -86,6 +85,7 @@ const InputBox = styled('div')`
 
   &.focused {
     border-color: ${({ theme }) => theme.colors.grey};
+    z-index: 2;
   }
 
   &.disabled {
@@ -196,7 +196,7 @@ const MultiSelect = ({
   children,
   onChange,
   single,
-  placeholder = single ? '' : 'Add one or more...',
+  placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
   allowNew,
   disabled,
