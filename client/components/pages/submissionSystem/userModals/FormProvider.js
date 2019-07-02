@@ -15,21 +15,43 @@ export const FormContext = React.createContext();
  * fieldTypes = {key, component}
  */
 const FormProvider = ({ children, fields }) => {
-  // create field values array
+  // create field values array to map values (will update more than fieldTypes)
   console.log('fields', fields);
   const [fieldValues, setFieldValues] = React.useState(
-    fields.map(({ key, value }) => ({ value, key })),
+    fields.map(({ key, value }) => ({ key, value })),
   );
 
-  // create field types map
-  const fieldTypes = keyBy(fields.map(({ component, key }) => ({ component, key })), 'key');
+  // create field types map to map components
+  const [fieldTypes, setFieldTypes] = React.useState(
+    keyBy(fields.map(({ component, key }) => ({ component, key })), 'key'),
+  );
+
+  // AddField - adds dynamic el to form
+  const addField = field => {
+    console.log('add field', field);
+    const { key, value, component } = field;
+    const fieldType = { key, component };
+    const fieldValue = { key, value };
+    setFieldValues([...fieldValues, fieldValue]);
+    setFieldTypes({ ...fieldTypes, [key]: fieldType });
+  };
 
   console.log('FormProvider', 'fieldValues', fieldValues, 'fieldTypes', fieldTypes);
   return (
-    <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes }}>
+    <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes, addField }}>
       {children}
     </FormContext.Provider>
   );
 };
 
 export default FormProvider;
+
+/**
+ * Add field allows dynamically adding fields to form
+ */
+export const AddField = ({ field, children }) => {
+  // validate field?
+  const context = React.useContext(FormContext);
+
+  return <div onClick={() => context.addField(field)}>{children}</div>;
+};

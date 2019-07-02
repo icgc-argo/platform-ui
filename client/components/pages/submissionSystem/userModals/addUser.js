@@ -7,7 +7,8 @@ import Input from 'uikit/form/Input';
 import styled from '@emotion/styled';
 import FormControl from 'uikit/form/FormControl';
 import PendingUsers from './UserSection';
-import FormProvider, { FormContext } from './FormProvider';
+// TODO: completely wrong place for AddField move to own section with Form
+import FormProvider, { FormContext, AddField } from './FormProvider';
 import Form from './Form';
 import UserSection from './UserSection';
 import { uniqueId } from 'lodash';
@@ -35,6 +36,15 @@ const AddUserModal = ({}) => {
   const [pendingUsers, setPendingUsers] = React.useState(null);
   const [isValidated, setValidated] = React.useState(false);
 
+  const fields = [
+    {
+      // need keys here, cant do it in form provider, need some object factory?
+      key: uniqueId(),
+      value: { firstName: '', lastName: '', email: '', role: '' },
+      component: UserSection,
+    },
+  ];
+
   const addUsers = users => console.log('users', users);
 
   return (
@@ -47,23 +57,17 @@ const AddUserModal = ({}) => {
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      <FormProvider
-        fields={[
-          {
-            // need keys here, cant do it in form provider, need some object factory?
-            key: uniqueId(),
-            value: { firstName: '', lastName: '', email: '', role: '' },
-            component: UserSection,
-          },
-
-          {
-            key: uniqueId(),
-            value: { firstName: '', lastName: '', email: '', role: '' },
-            component: UserSection,
-          },
-        ]}
-      >
+      <FormProvider fields={fields}>
         <Form setCleanFormData={setPendingUsers} setValidated={setValidated} />
+        <AddField
+          field={{
+            key: uniqueId(),
+            value: { firstName: 'Oh damn i just got added', lastName: '', email: '', role: '' },
+            component: UserSection,
+          }}
+        >
+          Add another
+        </AddField>
       </FormProvider>
     </Modal>
   );
