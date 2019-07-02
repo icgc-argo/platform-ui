@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { css } from 'uikit';
-import { SelectTable } from 'uikit/Table';
+import Table from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import Checkbox from 'uikit/form/Checkbox';
@@ -40,9 +40,6 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void,
   onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
-  const [selectedUsers, setSelectedUsers] = React.useState(['2']);
-  const [selectAll, setSelectAll] = React.useState(false);
-
   const columns: Array<{
     Header: string,
     accessor?: $Keys<UsersTableUser>,
@@ -121,35 +118,7 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  const keyFieldProp = 'id';
-
-  return (
-    <SelectTable
-      keyField={keyFieldProp}
-      isSelected={keyField => selectedUsers.includes(keyField)}
-      selectAll={selectAll}
-      toggleAll={() => {
-        setSelectedUsers(selectAll ? [] : tableProps.users.map(data => data[keyFieldProp]));
-        setSelectAll(!selectAll);
-      }}
-      toggleSelection={prefixedKeyField => {
-        /**
-         * keyField comes in prefixed with 'select-'
-         * solution on github by author is to use the new alpha as he's not supporting v6 anymore
-         * */
-        const normalisedKeyField = prefixedKeyField.substring(7);
-
-        const newSelection = selectedUsers.includes(normalisedKeyField)
-          ? selectedUsers.filter(keyField => keyField !== normalisedKeyField)
-          : selectedUsers.concat(normalisedKeyField);
-        setSelectedUsers(newSelection);
-      }}
-      selectType="checkbox"
-      data={tableProps.users}
-      columns={columns}
-      showPagination={false}
-    />
-  );
+  return <Table data={tableProps.users} columns={columns} />;
 };
 
 export default UsersTable;
