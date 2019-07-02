@@ -239,12 +239,27 @@ export default createPage({
           </FormControl>
         </Col>
       </Row>
-      <Row
-        css={css`
-          flex-direction: row-reverse;
-        `}
-      >
-        <Button onClick={() => {}}>Create</Button>
+      <Row>
+        <div
+          css={css`
+            flex-direction: row;
+            justify-content: space-between;
+            flex: 1;
+            display: flex;
+          `}
+        >
+          <Button
+            variant="secondary"
+            css={css`
+              border: none;
+            `}
+            onClick={() => {}}
+          >
+            Cancel
+          </Button>
+
+          <Button onClick={() => {}}>Create</Button>
+        </div>
       </Row>
     </Container>
   );
