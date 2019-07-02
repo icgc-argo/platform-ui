@@ -28,7 +28,7 @@ const FormProvider = ({ children, fields }) => {
 
   // AddField - adds dynamic el to form
   const addField = field => {
-    const key = uniqueId();
+    const key = uniqueId('field_'); // TODO: everywhere
     const { value, component } = field;
     const fieldType = { key, component };
     const fieldValue = { key, value };
@@ -36,9 +36,25 @@ const FormProvider = ({ children, fields }) => {
     setFieldTypes({ ...fieldTypes, [key]: fieldType });
   };
 
+  // deleteField
+  const deleteField = key => {
+    setFieldValues(fieldValues.filter(fieldValue => fieldValue.key !== key));
+
+    /**
+     * _.omit is considerably slower than _.pick
+     * form field arrays will mostly be small
+     * faster to map keys and do a _.pick than use _.omit?
+     */
+    const keysToKeep = Object.keys(fieldTypes).filter(ft => ft !== key);
+    const newFieldTypes = _.pick(fieldTypes, keysToKeep);
+    setFieldTypes(newFieldTypes);
+  };
+
   console.log('FormProvider', 'fieldValues', fieldValues, 'fieldTypes', fieldTypes);
   return (
-    <FormContext.Provider value={{ fieldValues, setFieldValues, fieldTypes, addField }}>
+    <FormContext.Provider
+      value={{ fieldValues, setFieldValues, fieldTypes, addField, deleteField }}
+    >
       {children}
     </FormContext.Provider>
   );

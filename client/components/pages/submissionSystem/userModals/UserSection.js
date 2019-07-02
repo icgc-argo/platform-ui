@@ -18,7 +18,7 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-const UserSection = ({ formData: user, updateForm }) => {
+const UserSection = ({ fieldData: user, updateForm, deleteField }) => {
   // console.log('form data', user, 'updateForm', updateForm);
   const updateUser = updatedField => updateForm({ ...user, ...updatedField });
 
@@ -46,7 +46,7 @@ const UserSection = ({ formData: user, updateForm }) => {
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-      <div>Delete</div>
+      <div onClick={() => deleteField(user)}>Delete</div>
     </Section>
   );
 };

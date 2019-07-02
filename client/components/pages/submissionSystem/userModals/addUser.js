@@ -36,14 +36,14 @@ const AddUserModal = ({}) => {
   const [pendingUsers, setPendingUsers] = React.useState(null);
   const [isValidated, setValidated] = React.useState(false);
 
-  const fields = [
+  const fields = []; /*
     {
       // need keys here, cant do it in form provider, need some object factory?
       key: uniqueId(),
       value: { firstName: '', lastName: '', email: '', role: '' },
       component: UserSection,
     },
-  ];
+  ];*/
 
   // form already validates itself, so just check if our local isFormValidated state is set to true
   const addUsers = users => console.log('users', users);

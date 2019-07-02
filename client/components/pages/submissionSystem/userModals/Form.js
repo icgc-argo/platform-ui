@@ -43,7 +43,7 @@ import UserSection from './UserSection';
  *
  */
 const Form = ({ setCleanFormData, setValidated }) => {
-  const { fieldValues, setFieldValues, fieldTypes } = React.useContext(FormContext);
+  const { fieldValues, setFieldValues, fieldTypes, deleteField } = React.useContext(FormContext);
   console.log('Form', 'fv', fieldValues, 'ft', fieldTypes);
 
   // update form el
@@ -64,7 +64,11 @@ const Form = ({ setCleanFormData, setValidated }) => {
 
         // updateForm expects the type of value mutataed given back to it
         return (
-          <Component formData={value} updateForm={value => updateForm(key, value, validator)} />
+          <Component
+            fieldData={value}
+            updateForm={value => updateForm(key, value, validator)}
+            deleteField={() => deleteField(key)}
+          />
         );
       })}
     </div>
