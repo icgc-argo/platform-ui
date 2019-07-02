@@ -11,11 +11,15 @@ import {
 import { isDccMember } from './egoJwt';
 
 export const getRedirectPathForUser = (egoJwt: string) => {
-  if (isDccMember(egoJwt)) {
-    return DCC_OVERVIEW_PATH;
-  } else {
-    return USER_PAGE_PATH;
-  }
+  /**
+   * TODO: actually implement this function
+   */
+  return PROGRAMS_LIST_PATH;
+  // if (isDccMember(egoJwt)) {
+  //   return DCC_OVERVIEW_PATH;
+  // } else {
+  //   return USER_PAGE_PATH;
+  // }
 };
 
 export type GetInitialPropsContext = {
