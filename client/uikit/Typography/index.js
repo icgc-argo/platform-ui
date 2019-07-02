@@ -30,9 +30,9 @@ const createDomComponent = memoize((domComponentName, components, variant) =>
 );
 
 const createStyledDomComponent = memoize(
-  (Component, { color, bold }) => styled(Component)`
-    font-weight: ${bold ? `bold` : `normal`};
-    color: ${({ theme }) => (color ? theme.colors[color] || color : 'inherit')};
+  Component => styled(Component)`
+    font-weight: ${({ bold }) => (bold ? `bold` : `normal`)};
+    color: ${({ theme, color }) => (color ? theme.colors[color] || color : 'inherit')};
   `,
 );
 
@@ -48,8 +48,8 @@ const Typography = ({
   const Component = domComponentName
     ? createDomComponent(domComponentName, componentMap, variant)
     : componentMap[variant];
-  const StyledText = createStyledDomComponent(Component, { color, bold });
-  return <StyledText {...rest} />;
+  const StyledText = createStyledDomComponent(Component);
+  return <StyledText {...rest} bold={bold} color={color} />;
 };
 
 Typography.propTypes = {
