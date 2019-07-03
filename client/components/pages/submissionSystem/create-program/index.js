@@ -14,6 +14,8 @@ import Typography from 'uikit/Typography';
 import { Select } from 'uikit/form';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
+import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
+import FormCheckbox from 'uikit/form/FormCheckbox';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -48,8 +50,8 @@ export default ({ logOut, pathname, router }) => {
     >
       <Container
         css={css`
-          margin: 10px;
-          padding: 20px;
+          margin: 24px 160px;
+          padding: 26px 51px 42px 47px;
         `}
       >
         <Row>
@@ -123,7 +125,10 @@ export default ({ logOut, pathname, router }) => {
                   <InputLabel htmlFor="primary-site">Primary Site</InputLabel>
                 </Col>
                 <Col sm={9}>
-                  <Input aria-label="Primary site" id="primary-site" />
+                  <MultiSelect aria-label="Primary site" id="primary-site">
+                    <Option value="ps1">Primary Site 1</Option>
+                    <Option value="ps2">Primary site 2</Option>
+                  </MultiSelect>
                   {/*               <FormHelperText>Some helper text</FormHelperText> */}
                 </Col>
               </Row>
@@ -181,7 +186,11 @@ export default ({ logOut, pathname, router }) => {
                   <InputLabel htmlFor="institution-name">Institution Name</InputLabel>
                 </Col>
                 <Col sm={9}>
-                  <Input aria-label="Institution Name" id="institution-name" />
+                  <MultiSelect aria-label="Institution Name" id="institution-name">
+                    <Option value="numero_uno">Institution Numero Uno (ES)</Option>
+                    <Option value="awesomeness">Center for Awesomeness</Option>
+                    <Option value="free_radicals_man">University of Free Radicals Man</Option>
+                  </MultiSelect>
                   {/*               <FormHelperText>Some helper text</FormHelperText> */}
                 </Col>
               </Row>
@@ -189,6 +198,40 @@ export default ({ logOut, pathname, router }) => {
             <Row>
               <Col>
                 <SectionTitle>Processing Regions</SectionTitle>
+                <FormControl error={false} required={true}>
+                  <Row>
+                    <Col sm={12}>
+                      <InputLabel htmlFor="processing-regions">
+                        Please indicate the region(s) where data can be processed
+                      </InputLabel>
+                    </Col>
+                    <Col sm={12}>
+                      <RadioCheckboxGroup
+                        aria-label="Processing Regions"
+                        id="processing-regions"
+                        onChange={x => x}
+                        css={css`
+                          margin-top: 5px;
+                        `}
+                      >
+                        <Row>
+                          <Col sm={6}>
+                            <FormCheckbox value="all">All</FormCheckbox>
+                            <FormCheckbox value="africa">Africa</FormCheckbox>
+                            <FormCheckbox value="asia">Asia</FormCheckbox>
+                            <FormCheckbox value="europe">Europe</FormCheckbox>
+                          </Col>
+                          <Col sm={6}>
+                            <FormCheckbox value="Oceania">Oceania</FormCheckbox>
+                            <FormCheckbox value="north-america">North America</FormCheckbox>
+                            <FormCheckbox value="south-america">South America</FormCheckbox>
+                          </Col>
+                        </Row>
+                      </RadioCheckboxGroup>
+                      {/*               <FormHelperText>Some helper text</FormHelperText> */}
+                    </Col>
+                  </Row>
+                </FormControl>
               </Col>
             </Row>
             <Row>
@@ -196,7 +239,8 @@ export default ({ logOut, pathname, router }) => {
                 <SectionTitle>Program Administrator</SectionTitle>
                 <Typography variant="paragraph">
                   Please assign a program administrator who will add and manage program members and
-                  collaborators. Note: the provided email address must be Gmail for login purposes.
+                  collaborators. Note: the provided email address must be a Gmail or G Suite email
+                  address for login purposes.
                 </Typography>
                 <p />
               </Col>
