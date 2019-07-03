@@ -159,7 +159,7 @@ Root.getInitialProps = async ({
     let apolloCache;
     try {
       graphqlQueriesToChache = await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt });
-      apolloCache = await getApolloCacheForQueries(graphqlQueriesToChache);
+      apolloCache = await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt);
     } catch (e) {
       console.log(e);
     }
