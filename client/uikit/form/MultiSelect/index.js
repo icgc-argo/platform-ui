@@ -12,6 +12,12 @@ import FormControlContext from '../FormControl/FormControlContext';
 
 const Container = styled('div')`
   position: relative;
+  transform: scale(1); /* this creates a stacking context so z-index is local */
+  ${({ focus }) =>
+    focus &&
+    css`
+      z-index: 1;
+    `};
 `;
 
 const OptionsWrapper = styled('div')`
@@ -324,7 +330,7 @@ function MultiSelect({
   const theme = useTheme();
 
   return (
-    <Container>
+    <Container focus={focusState}>
       <InputBox className={clsx({ disabled, error, focused: focusState })}>
         {showPlaceHolder ? (
           <PlaceHolder className={clsx({ disabled, error, focused: focusState })}>
