@@ -121,9 +121,6 @@ const Root = () => (
             row-gap: 6px;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 2.3318fr 1fr;
-            & > div {
-              background-color: blue;
-            }
           `}
         >
           <div
