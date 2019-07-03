@@ -123,7 +123,10 @@ export default ({ logOut, pathname, router }) => {
                   <InputLabel htmlFor="primary-site">Primary Site</InputLabel>
                 </Col>
                 <Col sm={9}>
-                  <Input aria-label="Primary site" id="primary-site" />
+                  <MultiSelect aria-label="Primary site" id="primary-site">
+                    <Option value="ps1">Primary Site 1</Option>
+                    <Option value="ps2">Primary site 2</Option>
+                  </MultiSelect>
                   {/*               <FormHelperText>Some helper text</FormHelperText> */}
                 </Col>
               </Row>
@@ -181,7 +184,11 @@ export default ({ logOut, pathname, router }) => {
                   <InputLabel htmlFor="institution-name">Institution Name</InputLabel>
                 </Col>
                 <Col sm={9}>
-                  <Input aria-label="Institution Name" id="institution-name" />
+                  <MultiSelect aria-label="Institution Name" id="institution-name">
+                    <Option value="numero_uno">Institution Numero Uno (ES)</Option>
+                    <Option value="awesomeness">Center for Awesomeness</Option>
+                    <Option value="free_radicals_man">University of Free Radicals Man</Option>
+                  </MultiSelect>
                   {/*               <FormHelperText>Some helper text</FormHelperText> */}
                 </Col>
               </Row>
