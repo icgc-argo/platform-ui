@@ -41,8 +41,7 @@ export default ({ logOut, pathname, router }) => {
           `}
         >
           <TitleBar>
-            <>Program Name</>
-            <>Manage Program</>
+            <>Create a Program</>
           </TitleBar>
         </div>
       }
