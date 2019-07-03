@@ -2,10 +2,8 @@ import React from 'react';
 import Typography from '../../Typography';
 import PropTypes from 'prop-types';
 import RadioCheckContext from './RadioCheckContext';
-import { css } from '@emotion/core';
 
 const RadioCheckboxGroup = ({ onChange, children, hasError, isChecked, className }) => {
-  console.log('classname', className);
   const ERROR_TEXT = 'Please fill out the required field.';
 
   const context = { isChecked, onChange };
