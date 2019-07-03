@@ -50,8 +50,8 @@ export default ({ logOut, pathname, router }) => {
     >
       <Container
         css={css`
-          margin: 10px;
-          padding: 20px;
+          margin: 24px 160px;
+          padding: 26px 51px 42px 47px;
         `}
       >
         <Row>
