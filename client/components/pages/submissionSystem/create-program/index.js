@@ -196,7 +196,8 @@ export default ({ logOut, pathname, router }) => {
                 <SectionTitle>Program Administrator</SectionTitle>
                 <Typography variant="paragraph">
                   Please assign a program administrator who will add and manage program members and
-                  collaborators. Note: the provided email address must be Gmail for login purposes.
+                  collaborators. Note: the provided email address must be a Gmail or G Suite email
+                  address for login purposes.
                 </Typography>
                 <p />
               </Col>
