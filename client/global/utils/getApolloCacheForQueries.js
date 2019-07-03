@@ -19,7 +19,7 @@ export default (queries: Array<{ query: any, variables?: { [key: string]: any } 
       uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
       headers: {
-        authorization: egoJwt,
+        authorization: `Bearer ${egoJwt}`,
       },
     }),
     cache: createInMemoryCache(),

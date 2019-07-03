@@ -21,7 +21,7 @@ const init = async () => {
     }),
     context: ({ req }) => ({
       isUserRequest: true,
-      egoToken: req.headers.authorization,
+      egoToken: (req.headers.authorization || '').split('Bearer ').join(''),
       dataLoaders: {},
     }),
     introspection: true,
