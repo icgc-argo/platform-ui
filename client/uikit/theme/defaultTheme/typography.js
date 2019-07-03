@@ -1,4 +1,13 @@
 export default {
+  default: {
+    fontFamily: 'Work Sans, sans-serif',
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    fontStyle: 'inherit',
+    fontStretch: 'inherit',
+    lineHeight: 'inherit',
+    letterSpacing: 'inherit',
+  },
   hero: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '44px',
