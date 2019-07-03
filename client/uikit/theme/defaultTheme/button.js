@@ -23,7 +23,7 @@ export default {
     },
     text: {
       default: '#523785',
-      disabled: colors.white,
+      disabled: '#d0d1d8',
     },
   },
   borderColors: {
@@ -46,7 +46,7 @@ export default {
       hover: '#f2ecfd',
       active: '#e6def6',
       focus: colors.white,
-      disabled: '#cecfd3',
+      disabled: 'none',
     },
   },
   colors: {
@@ -69,7 +69,7 @@ export default {
       hover: '#f2ecfd',
       active: '#e6def6',
       focus: colors.white,
-      disabled: '#cecfd3',
+      disabled: 'none',
     },
   },
 };
