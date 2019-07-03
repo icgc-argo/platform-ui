@@ -14,6 +14,8 @@ import Typography from 'uikit/Typography';
 import { Select } from 'uikit/form';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
+import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
+import FormCheckbox from 'uikit/form/FormCheckbox';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -196,6 +198,40 @@ export default ({ logOut, pathname, router }) => {
             <Row>
               <Col>
                 <SectionTitle>Processing Regions</SectionTitle>
+                <FormControl error={false} required={true}>
+                  <Row>
+                    <Col sm={12}>
+                      <InputLabel htmlFor="processing-regions">
+                        Please indicate the region(s) where data can be processed
+                      </InputLabel>
+                    </Col>
+                    <Col sm={12}>
+                      <RadioCheckboxGroup
+                        aria-label="Processing Regions"
+                        id="processing-regions"
+                        onChange={x => x}
+                        style={css`
+                          margin-top: 5px;
+                        `}
+                      >
+                        <Row>
+                          <Col sm={6}>
+                            <FormCheckbox value="all">All</FormCheckbox>
+                            <FormCheckbox value="africa">Africa</FormCheckbox>
+                            <FormCheckbox value="asia">Asia</FormCheckbox>
+                            <FormCheckbox value="europe">Europe</FormCheckbox>
+                          </Col>
+                          <Col sm={6}>
+                            <FormCheckbox value="Oceania">Oceania</FormCheckbox>
+                            <FormCheckbox value="north-america">North America</FormCheckbox>
+                            <FormCheckbox value="south-america">South America</FormCheckbox>
+                          </Col>
+                        </Row>
+                      </RadioCheckboxGroup>
+                      {/*               <FormHelperText>Some helper text</FormHelperText> */}
+                    </Col>
+                  </Row>
+                </FormControl>
               </Col>
             </Row>
             <Row>

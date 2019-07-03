@@ -3,13 +3,14 @@ import Typography from '../../Typography';
 import PropTypes from 'prop-types';
 import RadioCheckContext from './RadioCheckContext';
 
-const RadioCheckboxGroup = ({ onChange, children, hasError, isChecked }) => {
+const RadioCheckboxGroup = ({ onChange, children, hasError, isChecked, style }) => {
+  console.log('css', style, 'childnre', children);
   const ERROR_TEXT = 'Please fill out the required field.';
 
   const context = { isChecked, onChange };
 
   return (
-    <div>
+    <div css={style}>
       <RadioCheckContext.Provider value={context}>
         {children}
         {hasError ? (
