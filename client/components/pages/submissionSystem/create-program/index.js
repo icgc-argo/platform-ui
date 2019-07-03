@@ -210,7 +210,7 @@ export default ({ logOut, pathname, router }) => {
                         aria-label="Processing Regions"
                         id="processing-regions"
                         onChange={x => x}
-                        style={css`
+                        css={css`
                           margin-top: 5px;
                         `}
                       >
