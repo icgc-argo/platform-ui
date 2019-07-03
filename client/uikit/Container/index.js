@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 const Container = styled('div')`
   border-radius: 8px;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 Container.propTypes = {};

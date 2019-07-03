@@ -1,5 +1,6 @@
 import css from '@emotion/css';
 import styled from '@emotion/styled';
+import Container from '../Container';
 
 export const PageContainer = styled('div')`
   min-height: 100%;
@@ -41,11 +42,8 @@ export const ContentBody = styled('div')`
   padding: 25px 30px;
 `;
 
-export const ContentBox = styled('div')`
+export const ContentBox = styled(Container)`
   padding: 8px;
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
-  background: ${({ theme }) => theme.colors.white};
 `;
 
 export const PageFooter = styled('div')`
