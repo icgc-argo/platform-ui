@@ -35,7 +35,7 @@ function GoogleLogin({ link, id }) {
           `}
         >
           <Icon width="20px" height="20px" name="google" fill="none" />
-          &nbsp;Log in with the Google
+          &nbsp;Log in with Google
         </div>
       </Button>
     </StyledLink>
