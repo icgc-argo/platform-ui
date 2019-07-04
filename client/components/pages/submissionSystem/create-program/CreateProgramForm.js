@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useMutation } from 'react-apollo-hooks';
+
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 import Container from 'uikit/Container';
@@ -18,6 +20,12 @@ import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
 
 import Link from 'next/link';
 
+// $FlowFixMe .gql file not supported
+import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
+
+/* ********************************* *
+ * Repeated Component Styles/Layouts
+ * ********************************* */
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
   color: ${({ theme }) => theme.colors.secondary};
@@ -29,25 +37,97 @@ const InputLabelWrapper = ({ sm = 3, children }) => (
   </Col>
 );
 
+/* ****************** *
+ * On Change Handlers
+ * ****************** */
+const handleInputChange = setter => event => {
+  setter(event.target.value);
+};
+const handleCheckboxGroupChange = (selectedItems, setter) => value => {
+  if (selectedItems.has(value)) {
+    selectedItems.delete(value);
+  } else {
+    selectedItems.add(value);
+  }
+  setter(new Set(selectedItems));
+};
+
+/* *************************************** *
+ * Form Handlers / Submission / Validation
+ * *************************************** */
+
+const createProgramInput = formData => ({
+  name: formData.programName,
+  shortName: formData.shortName,
+  description: formData.description,
+  commitmentDonors: parseInt(formData.commitmentLevel),
+  submittedDonors: 0,
+  genomicDonors: 0,
+  website: formData.website,
+  institutions: formData.institutions.join(','),
+  countries: formData.countries.join(','),
+  regions: Array.from(formData.processingRegions).join(','),
+  membershipType: formData.membershipType,
+  adminEmails: [formData.adminEmail],
+  cancerTypes: formData.cancerTypes,
+  primarySites: formData.primarySites,
+});
+
 export default () => {
+  const [programName, setProgramName] = React.useState('');
+  const [shortName, setShortName] = React.useState('');
   const [countries, setCountries] = React.useState([]);
   const [cancerTypes, setCancerTypes] = React.useState([]);
-  const [primaryTypes, setPrimaryTypes] = React.useState([]);
+  const [primarySites, setPrimarySites] = React.useState([]);
+  const [commitmentLevel, setCommitmentLevel] = React.useState();
   const [institutions, setInstitutions] = React.useState([]);
   const [membershipType, setMembershipType] = React.useState('');
+  const [website, setWebsite] = React.useState('');
+  const [description, setDescription] = React.useState('');
   const [processingRegions, setProcessionRegions] = React.useState(new Set([]));
+  const [adminFirstName, setAdminFirstName] = React.useState('');
+  const [adminLastName, setAdminLastName] = React.useState('');
+  const [adminEmail, setAdminEmail] = React.useState('');
 
-  const handleMultiSelectChange = setter => event => {
-    setter(event.target.value);
+  // const [programName, setProgramName] = React.useState('Jon UI Test C');
+  // const [shortName, setShortName] = React.useState('JONC-CA');
+  // const [countries, setCountries] = React.useState(['CA']);
+  // const [cancerTypes, setCancerTypes] = React.useState(['Myeloma']);
+  // const [primarySites, setPrimarySites] = React.useState(['Lungs']);
+  // const [commitmentLevel, setCommitmentLevel] = React.useState(120);
+  // const [institutions, setInstitutions] = React.useState(['Ontario Science Center']);
+  // const [membershipType, setMembershipType] = React.useState('FULL');
+  // const [website, setWebsite] = React.useState('http://google.com');
+  // const [description, setDescription] = React.useState('please delete me i was not meant to be');
+  // const [processingRegions, setProcessionRegions] = React.useState(new Set(['North America']));
+  // const [adminFirstName, setAdminFirstName] = React.useState('Jon');
+  // const [adminLastName, setAdminLastName] = React.useState('Eubank');
+  // const [adminEmail, setAdminEmail] = React.useState('joneubank@gmail.com');
+
+  const formData = {
+    programName,
+    shortName,
+    countries,
+    cancerTypes,
+    primarySites,
+    commitmentLevel,
+    institutions,
+    membershipType,
+    website,
+    description,
+    processingRegions,
+    adminFirstName,
+    adminLastName,
+    adminEmail,
   };
-  const handleCheckboxGroupChange = (selectedItems, setter) => value => {
-    if (selectedItems.has(value)) {
-      selectedItems.delete(value);
-    } else {
-      selectedItems.add(value);
-    }
-    setter(new Set(selectedItems));
+
+  const submitForm = formData => {
+    const result = sendCreateProgram();
   };
+
+  const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
+    variables: { program: createProgramInput(formData) },
+  });
 
   return (
     <Container
@@ -70,7 +150,12 @@ export default () => {
                 <InputLabel htmlFor="program-name">Program Name</InputLabel>
               </InputLabelWrapper>
               <Col sm={9}>
-                <Input aria-label="Program Name" id="program-name" />
+                <Input
+                  aria-label="Program Name"
+                  id="program-name"
+                  value={programName}
+                  onChange={handleInputChange(setProgramName)}
+                />
               </Col>
             </Row>
           </FormControl>
@@ -80,7 +165,12 @@ export default () => {
                 <InputLabel htmlFor="short-name">Short Name</InputLabel>
               </InputLabelWrapper>
               <Col sm={9}>
-                <Input aria-label="Short Name" />
+                <Input
+                  aria-label="Short Name"
+                  id="short-name"
+                  value={shortName}
+                  onChange={handleInputChange(setShortName)}
+                />
               </Col>
             </Row>
           </FormControl>
@@ -93,12 +183,12 @@ export default () => {
                 <MultiSelect
                   inputProps={{ id: 'country' }}
                   value={countries}
-                  onChange={handleMultiSelectChange(setCountries)}
+                  onChange={handleInputChange(setCountries)}
                 >
-                  <Option value="Australia">Australia</Option>
-                  <Option value="Cambodia">Cambodia</Option>
-                  <Option value="Cameroon">Cameroon</Option>
-                  <Option value="Canada">Canada</Option>
+                  <Option value="AU">Australia</Option>
+                  <Option value="KH">Cambodia</Option>
+                  <Option value="CM">Cameroon</Option>
+                  <Option value="CA">Canada</Option>
                 </MultiSelect>
               </Col>
             </Row>
@@ -112,7 +202,7 @@ export default () => {
                 <MultiSelect
                   inputProps={{ id: 'cancer-types' }}
                   value={cancerTypes}
-                  onChange={handleMultiSelectChange(setCancerTypes)}
+                  onChange={handleInputChange(setCancerTypes)}
                 >
                   <Option value="Brain Cancer">Eye Cancer</Option>
                   <Option value="Hairy Cell Leukaemia">Hairy Cell Leukaemia</Option>
@@ -132,8 +222,8 @@ export default () => {
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'primary-types' }}
-                  value={primaryTypes}
-                  onChange={handleMultiSelectChange(setPrimaryTypes)}
+                  value={primarySites}
+                  onChange={handleInputChange(setPrimarySites)}
                 >
                   <Option value="Lungs">Lungs</Option>
                   <Option value="Stomach">Stomach</Option>
@@ -149,7 +239,13 @@ export default () => {
                 <InputLabel htmlFor="commitment-level">Commitment Level</InputLabel>
               </InputLabelWrapper>
               <Col sm={3}>
-                <Input aria-label="Commitment Level" id="commitment-level" type="number" />
+                <Input
+                  aria-label="Commitment Level"
+                  id="commitment-level"
+                  type="number"
+                  value={commitmentLevel}
+                  onChange={handleInputChange(setCommitmentLevel)}
+                />
               </Col>
               <Col sm={6} style={{ paddingTop: 6, paddingLeft: 0 }}>
                 <Typography component="span">Donors</Typography>
@@ -166,12 +262,26 @@ export default () => {
                   aria-label="Membership Type"
                   id="membership-type"
                   options={[
-                    { content: 'Admin', value: 'ADMIN' },
-                    { content: 'Submitter', value: 'SUBMITTER' },
-                    { content: 'Collaborator', value: 'COLLABORATOR' },
+                    { content: 'Full', value: 'FULL' },
+                    { content: 'Associate', value: 'ASSOCIATE' },
                   ]}
                   onChange={setMembershipType}
                   value={membershipType}
+                />
+              </Col>
+            </Row>
+          </FormControl>
+          <FormControl error={false} required={true}>
+            <Row>
+              <InputLabelWrapper>
+                <InputLabel htmlFor="website">Website</InputLabel>
+              </InputLabelWrapper>
+              <Col sm={9}>
+                <Input
+                  aria-label="Website"
+                  id="website"
+                  value={website}
+                  onChange={handleInputChange(setWebsite)}
                 />
               </Col>
             </Row>
@@ -182,7 +292,12 @@ export default () => {
                 <InputLabel htmlFor="description">Description</InputLabel>
               </InputLabelWrapper>
               <Col sm={9}>
-                <Textarea aria-label="Description" id="description" />
+                <Textarea
+                  aria-label="Description"
+                  id="description"
+                  value={description}
+                  onChange={handleInputChange(setDescription)}
+                />
               </Col>
             </Row>
           </FormControl>
@@ -202,7 +317,7 @@ export default () => {
                   id="institutions"
                   inputProps={{ id: 'institutions' }}
                   value={institutions}
-                  onChange={handleMultiSelectChange(setInstitutions)}
+                  onChange={handleInputChange(setInstitutions)}
                   allowNew={true}
                 >
                   <Option value="Ontario Science Center">Ontario Science Center</Option>
@@ -266,7 +381,12 @@ export default () => {
                     <InputLabel htmlFor="first-name">First Name</InputLabel>
                   </InputLabelWrapper>
                   <Col sm={8}>
-                    <Input aria-label="First Name" id="first-name" />
+                    <Input
+                      aria-label="First Name"
+                      id="first-name"
+                      value={adminFirstName}
+                      onChange={handleInputChange(setAdminFirstName)}
+                    />
                   </Col>
                 </Row>
               </FormControl>
@@ -278,7 +398,12 @@ export default () => {
                     <InputLabel htmlFor="last-name">Last Name</InputLabel>
                   </InputLabelWrapper>
                   <Col sm={8}>
-                    <Input aria-label="Last Name" id="last-name" />
+                    <Input
+                      aria-label="Last Name"
+                      id="last-name"
+                      value={adminLastName}
+                      onChange={handleInputChange(setAdminLastName)}
+                    />
                   </Col>
                 </Row>
               </FormControl>
@@ -290,7 +415,12 @@ export default () => {
                 <InputLabel htmlFor="email">Email Adress</InputLabel>
               </InputLabelWrapper>
               <Col sm={10}>
-                <Input aria-label="Email" id="email" />
+                <Input
+                  aria-label="Email"
+                  id="email"
+                  value={adminEmail}
+                  onChange={handleInputChange(setAdminEmail)}
+                />
               </Col>
             </Row>
           </FormControl>
@@ -305,7 +435,7 @@ export default () => {
         <Link href="/programs">
           <Button variant="text">Cancel</Button>
         </Link>
-        <Button onClick={() => {}}>Create</Button>
+        <Button onClick={submitForm}>Create</Button>
       </Row>
     </Container>
   );
