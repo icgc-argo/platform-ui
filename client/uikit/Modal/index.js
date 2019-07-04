@@ -5,7 +5,7 @@ import Color from 'color';
 import { styled, css } from '..';
 import Typography from '../Typography';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from '../Button';
-import Icon from '../Icon';
+import Icon, { ICON_NAMES } from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 
 const ModalContainer = styled('div')`
@@ -15,17 +15,19 @@ const ModalContainer = styled('div')`
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
   max-width: 776px;
+  padding: 24px;
+  padding-bottom: 0px;
 `;
 const ModalTitle = styled('div')`
-  margin: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 const ModalBody = styled('div')`
-  margin: 24px;
-  margin-top: 0px;
+  margin-top: 24px;
 `;
 const ModalFooter = styled('div')`
-  margin: 24px;
-  margin-bottom: 0px;
+  margin-top: 24px;
   padding: 8px 0px;
   border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
   display: flex;
@@ -54,6 +56,11 @@ const ModalOverlay = styled('div')`
  */
 const Modal = ({
   title = 'Add Users',
+  titleIconConfig = {
+    name: null,
+    fill: null,
+  },
+  buttonSize = BUTTON_SIZES.MD,
   actionButtonText = 'Apply',
   cancelText = 'Cancel',
   onActionClick = () => {},
@@ -74,31 +81,60 @@ const Modal = ({
     >
       <Icon name="times" fill="primary_1" width="13px" height="13px" />
     </FocusWrapper>
-    <ModalTitle>
-      <Typography
-        css={css`
-          margin: 0px;
-        `}
-        variant="subtitle"
-      >
-        {title}
-      </Typography>
-    </ModalTitle>
-    <ModalBody>
-      <Typography variant="paragraph" component="div">
-        {children}
-      </Typography>
-    </ModalBody>
+    <div
+      css={css`
+        display: flex;
+      `}
+    >
+      {titleIconConfig.name && (
+        <div
+          css={css`
+            flex: 1;
+            padding-right: 10px;
+            padding-top: 3px;
+          `}
+        >
+          <Icon
+            name={titleIconConfig.name}
+            width="20px"
+            height="20px"
+            fill={titleIconConfig.fill}
+          />
+        </div>
+      )}
+      <div>
+        <ModalTitle>
+          <Typography
+            css={css`
+              margin: 0px;
+            `}
+            variant="subtitle"
+          >
+            {title}
+          </Typography>
+        </ModalTitle>
+        <ModalBody>
+          <Typography variant="paragraph" component="div">
+            {children}
+          </Typography>
+        </ModalBody>
+      </div>
+    </div>
     <ModalFooter>
       <ButtonContainer>
-        <Button disabled={actionDisabled} onClick={onActionClick}>
+        <Button
+          size={buttonSize || BUTTON_SIZES.MD}
+          disabled={actionDisabled}
+          onClick={onActionClick}
+        >
           {actionButtonText}
         </Button>
         <Button
+          variant={BUTTON_VARIANTS.TEXT}
           css={css`
             margin-left: 10px;
           `}
-          variant={BUTTON_VARIANTS.TEXT}
+          size={buttonSize || BUTTON_SIZES.MD}
           onClick={onCancelClick}
         >
           {cancelText}
@@ -114,6 +150,11 @@ Modal.Overlay = function Overlay(props) {
 
 Modal.propTypes = {
   title: PropTypes.node,
+  titleIconConfig: PropTypes.shape({
+    name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
+    fill: PropTypes.string,
+  }),
+  buttonSize: PropTypes.oneOf(Object.values(BUTTON_SIZES)),
   actionButtonText: PropTypes.node,
   actionDisabled: PropTypes.bool,
   cancelText: PropTypes.node,
