@@ -1,18 +1,25 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Link from '.';
+import Link, { LINK_VARIANTS } from '.';
 import { action } from '@storybook/addon-actions';
+import { select, boolean } from '@storybook/addon-knobs';
 
-const LinkStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <>
-    <Link href="http://www.google.com">Link to Google</Link>
-    <Link
-      href="http://www.google.com"
-      Component={props => <div onClick={action('click')} {...props} />}
-    >
-      This just logs
-    </Link>
-  </>
-));
+const LinkStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  const variant = select('variant', Object.values(LINK_VARIANTS));
+  return (
+    <>
+      <Link href="http://www.google.com" variant={variant}>
+        Link to Google
+      </Link>
+      <Link
+        href="http://www.google.com"
+        variant={variant}
+        Component={props => <div onClick={action('click')} {...props} />}
+      >
+        This just logs
+      </Link>
+    </>
+  );
+});
 
 export default LinkStories;
