@@ -190,7 +190,7 @@ function Highlight({ string, searchText }) {
   }
 }
 
-function MultiSelect({
+const MultiSelect = ({
   name,
   value,
   children,
@@ -201,7 +201,7 @@ function MultiSelect({
   allowNew,
   disabled,
   error,
-}) {
+}) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
 
@@ -397,7 +397,7 @@ function MultiSelect({
       <input value={value} name={name} type="hidden" disabled={disabled} {...inputProps} />
     </Container>
   );
-}
+};
 
 MultiSelect.propTypes = {
   /* Name of the input */
