@@ -232,6 +232,7 @@ const MultiSelect = ({
       value: newValue,
       name,
     };
+
     setSearchString('');
     onChange(event, null);
   };
@@ -252,7 +253,7 @@ const MultiSelect = ({
       }
     }
 
-    if (e.key === 'Enter' && allowNew) {
+    if ((e.key === 'Enter' || e.key === 'Tab') && allowNew) {
       if (searchString.length !== 0) {
         e.persist();
 
