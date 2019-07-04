@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icons from './icons';
+import icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
+import defaultTheme from '../theme/defaultTheme';
 
 const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
   const theme = useTheme();
-  const svg = Icons[name];
+  const svg = icons[name];
 
   return (
     <svg
@@ -54,8 +55,19 @@ const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
   );
 };
 
+const toKeyValueMap = (acc, [key]) => ({
+  ...acc,
+  [key]: key,
+});
+
+export const ICON_NAMES = Object.freeze(Object.entries(icons).reduce(toKeyValueMap, {}));
+
+export const BUILT_IN_ICON_COLORS = Object.freeze(
+  Object.entries(defaultTheme.colors).reduce(toKeyValueMap, {}),
+);
+
 Icon.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
   title: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
