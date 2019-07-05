@@ -80,7 +80,7 @@ const Form = ({ availableInstitutions = [] }) => (
               <InputLabel required>Institution</InputLabel>
             </Col>
             <Col>
-              <MultiSelect allowNew>
+              <MultiSelect aria-label="institution-input" allowNew>
                 {availableInstitutions.map(institution => (
                   <Option>{institution}</Option>
                 ))}
@@ -96,7 +96,7 @@ const Form = ({ availableInstitutions = [] }) => (
                   <InputLabel required>PI First Name</InputLabel>
                 </Col>
                 <Col>
-                  <Input />
+                  <Input aria-label="first-name-input" />
                 </Col>
               </Row>
             </FormControl>
@@ -115,10 +115,10 @@ const Form = ({ availableInstitutions = [] }) => (
                 }}
               >
                 <Col sm={6}>
-                  <InputLabel required>PI First Name</InputLabel>
+                  <InputLabel required>PI Last Name</InputLabel>
                 </Col>
                 <Col>
-                  <Input />
+                  <Input aria-label="first-last-input" />
                 </Col>
               </Row>
             </FormControl>
@@ -131,7 +131,7 @@ const Form = ({ availableInstitutions = [] }) => (
               <InputLabel required>Department</InputLabel>
             </Col>
             <Col>
-              <Input />
+              <Input aria-label="department-input" />
             </Col>
           </Row>
         </FormControl>
