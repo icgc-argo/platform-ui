@@ -11,35 +11,39 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-const UserSection = ({ fieldData: user, updateForm, deleteField }) => {
-  // console.log('form data', user, 'updateForm', updateForm);
-  const updateUser = updatedField => updateForm({ ...user, ...updatedField });
-
+const UserSection = ({ user, onChange, validate, errors, removeSelf }) => {
+  console.log('User section', errors);
   return (
     <Section>
-      <FormControl required>
+      <FormControl error={!!errors.firstName} required>
         <InputLabel>First Name</InputLabel>
         <Input
           value={user.firstName}
-          onChange={e => {
-            console.log(e.target.value);
-            updateUser({ firstName: e.target.value });
-          }}
+          onChange={e => onChange('firstName', e.target.value)}
+          onBlur={() => validate('firstName')}
         />
       </FormControl>
-      <FormControl required>
+      <FormControl error={!!errors.email} required>
         <InputLabel>Email Address</InputLabel>
-        <Input value={user.email} onChange={e => updateUser({ email: e.target.value })} />
+        <Input
+          value={user.email}
+          onChange={e => onChange('email', e.target.value)}
+          onBlur={() => validate()}
+        />
       </FormControl>
-      <FormControl required>
+      <FormControl error={!!errors.lastName} required>
         <InputLabel required>Last Name</InputLabel>
-        <Input value={user.lastName} onChange={e => updateUser({ lastName: e.target.value })} />
+        <Input
+          value={user.lastName}
+          onChange={e => onChange('lastName', e.target.value)}
+          onBlur={() => validate()}
+        />
       </FormControl>
       <FormControl required>
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-      <div onClick={() => deleteField(user)}>Delete</div>
+      <div onClick={removeSelf}>Delete</div>
     </Section>
   );
 };

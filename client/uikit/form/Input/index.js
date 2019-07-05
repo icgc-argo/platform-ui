@@ -26,6 +26,7 @@ const Input = ({
   disabled,
   showClear = preset === INPUT_PRESETS.SEARCH || false,
   getOverrideCss,
+  onBlur,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
@@ -43,7 +44,10 @@ const Input = ({
       <StyledInputWrapper
         size={size}
         onFocus={() => setActive('focus')}
-        onBlur={() => setActive('default')}
+        onBlur={() => {
+          setActive('default');
+          onBlur();
+        }}
         error={calcError}
         disabled={calcDisabled}
         size={size}
