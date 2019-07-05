@@ -9,7 +9,7 @@ import ProgramsPage from 'components/pages/submissionSystem/programs';
 import { programsListQuery } from 'components/pages/submissionSystem/programs/queries.gql';
 
 export default createPage({
-  isPublic: true,
+  isPublic: false,
   isAccessible: async ({ egoJwt, ctx }) => !isRdpcMember(egoJwt),
   getGqlQueriesToPrefetch: async () => [{ query: programsListQuery }],
 })(ProgramsPage);
