@@ -13,6 +13,8 @@ import { mockPrograms } from './mockData';
 
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './programs/queries.gql';
+import useEgoToken from 'global/hooks/useEgoToken';
+import { isDccMember, getAuthorizedProgramPolicies } from 'global/utils/egoJwt';
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -21,7 +23,7 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const ProgramsSection = ({ initialProgram }) => {
+const ProgramsSection = () => {
   const { data = {}, loading } = useQuery(programsListQuery);
   const { programs = [] } = data;
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
@@ -82,26 +84,36 @@ const ProgramsSection = ({ initialProgram }) => {
   );
 };
 
-export default ({ initialShownItem = -1 }: { initialShownItem: number }) => {
-  const [activeItem, toggleItem] = useToggledSelectState(initialShownItem);
+export default () => {
+  const [activeItem, toggleItem] = useToggledSelectState(-1);
+
+  const { data: egoTokenData, token } = useEgoToken();
+  const isDcc = token ? isDccMember(token) : false;
+  const accessibleProgramPolicies = token ? getAuthorizedProgramPolicies(token) : [];
+
+  const onlyHasAccessToOneProgram = accessibleProgramPolicies.length === 1;
+  const canSeeRdpcs = isDcc;
+  const canSeeDcc = isDcc;
   return (
     <Submenu>
-      <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
-      <MenuItem
-        icon={<Icon name="rdpc" />}
-        content={'RDPCs'}
-        selected={activeItem === 0}
-        onClick={() => toggleItem(0)}
-      >
-        <MenuItem content="what goes here?" />
-      </MenuItem>
+      {canSeeDcc && <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />}
+      {canSeeRdpcs && (
+        <MenuItem
+          icon={<Icon name="rdpc" />}
+          content={'RDPCs'}
+          selected={activeItem === 0}
+          onClick={() => toggleItem(0)}
+        >
+          <MenuItem content="what goes here?" />
+        </MenuItem>
+      )}
       <MenuItem
         icon={<Icon name="programs" />}
         content={'Programs'}
         selected={activeItem === 1}
         onClick={() => toggleItem(1)}
       >
-        <ProgramsSection initialProgram={''} />
+        <ProgramsSection />
       </MenuItem>
     </Submenu>
   );
