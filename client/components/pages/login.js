@@ -97,8 +97,8 @@ const Root = () => (
               css={css`
                 font-size: 16px;
                 font-weight: 600;
-                color: #0774d3;
               `}
+              color="secondary"
             >
               Get started with Data Submission
             </Typography>
@@ -145,7 +145,7 @@ const Root = () => (
               ICGC ARGO aims to analyze specimens from cancer patients with{' '}
               <span
                 css={css`
-                  font-weight: bold;
+                  font-weight: 600;
                 `}
               >
                 high quality clinical data

@@ -13,7 +13,7 @@ const ThemeProvider = ({ theme = 'default', children }) => {
   return (
     <EmotionThemeProvider theme={themes[theme]}>
       <link
-        href={'https://fonts.googleapis.com/css?family=Work+Sans:300,400,600&display=swap'}
+        href={'https://fonts.googleapis.com/css?family=Work+Sans:300,400,600,700&display=swap'}
         rel="stylesheet"
       />
       {children}
