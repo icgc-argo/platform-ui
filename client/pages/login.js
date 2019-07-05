@@ -3,11 +3,11 @@ import React from 'react';
 import urlJoin from 'url-join';
 import Router from 'next/router';
 
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { getRedirectPathForUser } from 'global/utils/pages';
 import { createPage } from 'global/utils/pages';
+import LoginPage from 'components/pages/login';
 
 export default createPage({
   isPublic: true,
@@ -33,12 +33,5 @@ export default createPage({
       }
     }
   }, []);
-  return (
-    <div>
-      <GoogleLogin
-        id="google-login"
-        link={urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
-      />
-    </div>
-  );
+  return <LoginPage />;
 });
