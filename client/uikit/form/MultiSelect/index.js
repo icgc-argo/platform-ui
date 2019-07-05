@@ -201,6 +201,7 @@ const MultiSelect = ({
   allowNew,
   disabled,
   error,
+  'aria-label': ariaLabel = 'search',
 }) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
@@ -353,7 +354,7 @@ const MultiSelect = ({
           ))
         )}
         <Input
-          aria-label="search"
+          aria-label={ariaLabel}
           value={searchString}
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}
