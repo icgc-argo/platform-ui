@@ -6,4 +6,4 @@ import { createPage } from 'global/utils/pages';
 export default createPage({
   isPublic: true,
   getInitialProps: async () => ({}),
-})(props => <LoginPage {...props} />);
+})(LoginPage);
