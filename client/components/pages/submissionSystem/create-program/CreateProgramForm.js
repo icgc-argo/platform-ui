@@ -26,10 +26,9 @@ import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
 /* ********************************* *
  * Repeated Component Styles/Layouts
  * ********************************* */
-const SectionTitle = styled('h3')`
-  ${({ theme }) => css(theme.typography.subtitle2)};
-  color: ${({ theme }) => theme.colors.secondary};
-`;
+const SectionTitle = props => (
+  <Typography component="h3" variant="sectionHeader" color="secondary" {...props} />
+);
 
 const InputLabelWrapper = ({ sm = 3, children }) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
@@ -155,6 +154,7 @@ export default () => {
                   id="program-name"
                   value={programName}
                   onChange={handleInputChange(setProgramName)}
+                  size="lg"
                 />
               </Col>
             </Row>
@@ -170,6 +170,7 @@ export default () => {
                   id="short-name"
                   value={shortName}
                   onChange={handleInputChange(setShortName)}
+                  size="lg"
                 />
               </Col>
             </Row>
@@ -245,6 +246,7 @@ export default () => {
                   type="number"
                   value={commitmentLevel}
                   onChange={handleInputChange(setCommitmentLevel)}
+                  size="lg"
                 />
               </Col>
               <Col sm={6} style={{ paddingTop: 6, paddingLeft: 0 }}>
@@ -267,6 +269,7 @@ export default () => {
                   ]}
                   onChange={setMembershipType}
                   value={membershipType}
+                  size="lg"
                 />
               </Col>
             </Row>
@@ -282,6 +285,7 @@ export default () => {
                   id="website"
                   value={website}
                   onChange={handleInputChange(setWebsite)}
+                  size="lg"
                 />
               </Col>
             </Row>
@@ -297,6 +301,7 @@ export default () => {
                   id="description"
                   value={description}
                   onChange={handleInputChange(setDescription)}
+                  rows={5}
                 />
               </Col>
             </Row>
@@ -386,6 +391,7 @@ export default () => {
                       id="first-name"
                       value={adminFirstName}
                       onChange={handleInputChange(setAdminFirstName)}
+                      size="lg"
                     />
                   </Col>
                 </Row>
@@ -403,6 +409,7 @@ export default () => {
                       id="last-name"
                       value={adminLastName}
                       onChange={handleInputChange(setAdminLastName)}
+                      size="lg"
                     />
                   </Col>
                 </Row>
@@ -420,6 +427,7 @@ export default () => {
                   id="email"
                   value={adminEmail}
                   onChange={handleInputChange(setAdminEmail)}
+                  size="lg"
                 />
               </Col>
             </Row>
@@ -429,7 +437,7 @@ export default () => {
       <Row
         justify="between"
         css={css`
-          padding: 20px;
+          padding: 15px;
         `}
       >
         <Link href="/programs">
