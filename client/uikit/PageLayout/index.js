@@ -26,6 +26,7 @@ export const PageBody = styled('div')`
 export const PageContent = styled('div')`
   flex: 1;
   position: relative;
+  min-height: 600px;
   ${({ noSidebar }) =>
     !noSidebar &&
     css`
