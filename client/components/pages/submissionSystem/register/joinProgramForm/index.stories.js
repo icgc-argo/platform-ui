@@ -1,3 +1,4 @@
+//@flow
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
@@ -9,6 +10,7 @@ const FooterStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
     programName="Pancreatic Cancer - AU"
     userRole="Program Administrator"
     onJoinClick={action('onJoinClick')}
+    availableInstitutions={[]}
   />
 ));
 

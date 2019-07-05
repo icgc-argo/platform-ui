@@ -1,3 +1,4 @@
+//@flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, ScreenClassRender } from 'react-grid-system';
@@ -5,12 +6,12 @@ import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { styled } from 'uikit';
-import programsImage from 'static/programs.svg';
 import Button from 'uikit/Button';
 import FormControl from 'uikit/form/FormControl';
 import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import { Input } from 'uikit/form';
+import programsImage from 'static/programs.svg';
 
 const FormContainer = styled(Container)`
   padding: 30px;
@@ -139,7 +140,17 @@ const Form = ({ availableInstitutions = [] }) => (
   />
 );
 
-const JoinProgramForm = ({ programName, userRole, availableInstitutions = [], onJoinClick }) => (
+const JoinProgramForm = ({
+  programName,
+  userRole,
+  availableInstitutions,
+  onJoinClick,
+}: {
+  programName: string,
+  userRole: string,
+  availableInstitutions: Array<any>,
+  onJoinClick: any => any,
+}) => (
   <FormContainer>
     <Row nogutter>
       <Typography
@@ -160,22 +171,21 @@ const JoinProgramForm = ({ programName, userRole, availableInstitutions = [], on
     <Row nogutter>
       <ProgramInfoCard programName={programName} userRole={userRole} />
     </Row>
-    <Row nogutter>
-      <Typography variant="subtitle2" color="secondary" bold>
+    <Row
+      nogutter
+      css={css`
+        padding: 10px 0px;
+      `}
+    >
+      <Typography variant="subtitle2" component="h2" color="secondary" bold>
         Primary Affiliation
       </Typography>
     </Row>
-    <Form />
+    <Form availableInstitutions={availableInstitutions} />
     <Row nogutter justify="end">
       <Button onClick={onJoinClick}>Join now</Button>
     </Row>
   </FormContainer>
 );
-
-JoinProgramForm.propTypes = {
-  programName: PropTypes.string.isRequired,
-  userRole: PropTypes.string.isRequired,
-  onJoinClick: PropTypes.func.isRequired,
-};
 
 export default JoinProgramForm;
