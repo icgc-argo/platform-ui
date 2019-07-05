@@ -22,7 +22,7 @@ const SubmissionLayout = ({
   pathname,
   logOut,
   navBar = <NavBar path={pathname} logOut={logOut} />,
-  sideMenu = <SideMenu initialShownItem={1} />,
+  sideMenu = <SideMenu />,
   noSidebar = false,
   contentHeader,
   children,
