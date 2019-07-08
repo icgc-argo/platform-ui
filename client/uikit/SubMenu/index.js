@@ -15,6 +15,7 @@ export const MenuItem = ({
   content,
   onClick = e => {},
   icon,
+  noChevron = false,
 }) => {
   const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
   const isSelected =
@@ -45,7 +46,7 @@ export const MenuItem = ({
             )}
             {content}
           </ContentContainer>
-          {children && (
+          {children && !noChevron && (
             <Icon
               name={isSelected ? 'chevron_down' : 'chevron_right'}
               fill={isSelected ? 'secondary' : 'primary'}
@@ -75,6 +76,7 @@ MenuItem.propTypes = {
    * nodes that will appear when opened
    */
   children: PropTypes.any,
+  noChevron: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
