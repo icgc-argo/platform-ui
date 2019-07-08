@@ -12,6 +12,28 @@ import costDirectiveTypeDef from './schemas/costDirectiveTypeDef';
 
 const { version } = config;
 
+ApolloServer.prototype._createGraphQLServerOptions =
+  ApolloServer.prototype.createGraphQLServerOptions;
+
+ApolloServer.prototype.createGraphQLServerOptions = async function(req, res) {
+  const options = await this._createGraphQLServerOptions(req, res);
+  console.log(options);
+  console.log(JSON.stringify(options));
+
+  return {
+    ...options,
+    validationRules: [
+      ...(options.validationRules || []),
+      costAnalysis({
+        variables: req.body.variables,
+        maximumCost: GQL_MAX_COST,
+        // logs out complexity so we can later on come back and decide on appropriate limit
+        onComplete: cost => console.log(`QUERY_COST: ${cost}`),
+      }),
+    ],
+  };
+};
+
 const init = async () => {
   const schemas = [userSchema, programSchema];
 
@@ -26,13 +48,6 @@ const init = async () => {
     }),
     introspection: true,
     tracing: NODE_ENV !== 'production',
-    validationRules: [
-      costAnalysis({
-        maximumCost: GQL_MAX_COST,
-        // logs out complexity so we can later on come back and decide on appropriate limit
-        onComplete: cost => console.log(`QUERY_COST: ${cost}`),
-      }),
-    ],
   });
 
   const app = express();
