@@ -23,7 +23,7 @@ export const TableActionBar = props => {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: ${({ theme }) => theme.colors.white};
+        background: white;
         padding-top: 8px;
         padding-bottom: 8px;
         padding-left: 8px;
