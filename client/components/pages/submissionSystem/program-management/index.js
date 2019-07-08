@@ -1,4 +1,7 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-apollo-hooks';
 import TitleBar from 'uikit/TitleBar';
 import { css } from 'uikit';
 import SubmissionLayout from '../layout';
@@ -15,8 +18,32 @@ import Button from 'uikit/Button';
 import { TableActionBar } from 'uikit/Table';
 import users from 'uikit/Icon/icons/collection/users';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
+import _ from 'lodash';
 
-export default ({ logOut, pathname, router }) => {
+const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
+export default ({ logOut, pathname }) => {
+  const router = useRouter();
+  const { shortName } = router.query;
+  const GET_PROGRAM = gql`
+    {
+      program(shortName: "${shortName}") {
+        name
+        shortName
+        description
+        commitmentDonors
+        submittedDonors
+        genomicDonors
+        website
+        institutions
+        countries
+        regions
+        membershipType
+        cancerTypes
+        primarySites
+      }
+    }
+  `;
+  const { data: { program } = {}, loading, errors } = useQuery(GET_PROGRAM);
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
   const [activeTab, setActiveTab] = React.useState(TABS.USERS);
 
@@ -74,7 +101,7 @@ export default ({ logOut, pathname, router }) => {
           </Tab>
         </Tabs>
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
-        {activeTab === TABS.PROFILE && <Profile />}
+        {activeTab === TABS.PROFILE && <Profile program={program} />}
       </ContentBox>
     </SubmissionLayout>
   );
@@ -118,7 +145,7 @@ const Users = ({ users }) => (
   </div>
 );
 
-function Profile() {
+function Profile({ program }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col
@@ -164,35 +191,35 @@ function Profile() {
         <Left>
           <InputLabel>Program Name</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.name}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Short Name</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.shortName}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Countries</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.countries}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Cancer Types</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{_.join(program.cancerTypes, ', ')}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Primary Sites</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.primarySites}</Right>
       </Row>
 
       <Row>
@@ -213,14 +240,7 @@ function Profile() {
         <Left>
           <InputLabel>Description</InputLabel>
         </Left>
-        <Right>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-          est laborum.
-        </Right>
+        <Right>{program.description}</Right>
       </Row>
 
       <SectionTitle>Affiliated Institutions</SectionTitle>
@@ -228,7 +248,7 @@ function Profile() {
         <Left>
           <InputLabel>Institutions</InputLabel>
         </Left>
-        <Right>--</Right>
+        <Right>{program.institutions}</Right>
       </Row>
 
       <SectionTitle>Processing Regions</SectionTitle>
@@ -250,7 +270,7 @@ function Profile() {
           `}
         >
           <Icon width="15px" height="15px" name="checkmark" fill="success_dark" />
-          &nbsp;Arica, North America
+          &nbsp;{_.join(program.regions, ', ')}
         </Col>
       </Row>
 
@@ -272,7 +292,7 @@ function Profile() {
           `}
         >
           <Icon width="15px" height="15px" name="times" fill="error_dark" />
-          &nbsp;Asia, Europe, Oceania, South America
+          &nbsp;{_.join(_.without(REGIONS, program.regions), ', ')}
         </Col>
       </Row>
     </div>
