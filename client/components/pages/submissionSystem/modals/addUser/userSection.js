@@ -5,6 +5,7 @@ import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
 import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
+import Select from 'uikit/form/Select';
 
 const Section = styled('div')`
   padding: 12px 11px;
@@ -42,7 +43,12 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
       </FormControl>
       <FormControl required>
         <InputLabel required>Role</InputLabel>
-        <MultiSelect />
+        <Select
+          aria-label="role-select"
+          value={user.role}
+          options={[{ content: 'Value 1', value: 'v1' }, { content: 'Value 2', value: 'v2' }]}
+          onChange={val => onChange('role', val)}
+        />
       </FormControl>
       <Icon
         height="20px"

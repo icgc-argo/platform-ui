@@ -32,7 +32,7 @@ const createUserInput = formData => ({
 const AddUserModal = ({}) => {
   const [disabled, setDisabled] = React.useState(false);
 
-  const user = { firstName: '', lastName: '', email: '' };
+  const user = { firstName: '', lastName: '', email: '', role: '' };
 
   const [isValidated, setIsValidated] = React.useState(false);
   const [formData, setFormData] = React.useState([user]);
@@ -44,10 +44,6 @@ const AddUserModal = ({}) => {
       //const result = sendCreateUser();
     }
   };
-
-  //  const sendCreateUser = useMutation(CREATE_PROGRAM_MUTATION, {
-  //    variables: { program: createProgramInput(formData) },
-  //  });
 
   const validateField = async ({ key, data: formData, currentIndex }) => {
     const schema = yup.reach(AddUserSchema, key);
@@ -74,7 +70,10 @@ const AddUserModal = ({}) => {
     const data = formData[formData.length - 1];
     try {
       const value = await AddUserSchema.validate(data);
+      console.log('add section', validationErrors, validationErrors.concat(user));
+
       setFormData(formData.concat(user));
+      setValidationErrors(validationErrors.concat(user));
     } catch (e) {
       console.log('error: last section is empty');
     }
@@ -97,8 +96,10 @@ const AddUserModal = ({}) => {
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
       {formData.map((data, currentIndex) => {
+        console.log('MAAAPING', data, validationErrors, validationErrors[currentIndex]);
         return (
           <UserSection
+            key={currentIndex}
             user={data}
             onChange={(key, val) =>
               setFormData(
