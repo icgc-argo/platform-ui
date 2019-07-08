@@ -20,30 +20,15 @@ import users from 'uikit/Icon/icons/collection/users';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import _ from 'lodash';
 
+import { programQuery } from './queries.gql';
+
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
   const router = useRouter();
   const { shortName } = router.query;
-  const GET_PROGRAM = gql`
-    {
-      program(shortName: "${shortName}") {
-        name
-        shortName
-        description
-        commitmentDonors
-        submittedDonors
-        genomicDonors
-        website
-        institutions
-        countries
-        regions
-        membershipType
-        cancerTypes
-        primarySites
-      }
-    }
-  `;
-  const { data: { program } = {}, loading, errors } = useQuery(GET_PROGRAM);
+  const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
+    variables: { shortName },
+  });
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
   const [activeTab, setActiveTab] = React.useState(TABS.USERS);
 
@@ -145,7 +130,7 @@ const Users = ({ users }) => (
   </div>
 );
 
-function Profile({ program }) {
+function Profile({ program = {} }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col
@@ -226,14 +211,14 @@ function Profile({ program }) {
         <Left>
           <InputLabel>Commitment Level</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.commitmentDonors}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Membership Type</InputLabel>
         </Left>
-        <Right>test</Right>
+        <Right>{program.membershipType}</Right>
       </Row>
 
       <Row>
@@ -270,7 +255,7 @@ function Profile({ program }) {
           `}
         >
           <Icon width="15px" height="15px" name="checkmark" fill="success_dark" />
-          &nbsp;{_.join(program.regions, ', ')}
+          &nbsp;{program.regions}
         </Col>
       </Row>
 
