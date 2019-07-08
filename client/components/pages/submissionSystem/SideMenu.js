@@ -16,6 +16,20 @@ import { programsListQuery } from './programs/queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { isDccMember, getAuthorizedProgramPolicies } from 'global/utils/egoJwt';
 
+const Loader = () => (
+  <div
+    css={css`
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      padding-top: 32px;
+      padding-bottom: 32px;
+    `}
+  >
+    <DnaLoader />
+  </div>
+);
+
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
   const toggleItem = itemIndex =>
@@ -23,9 +37,17 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const ProgramsSection = () => {
-  const { data = {}, loading } = useQuery(programsListQuery);
-  const { programs = [] } = data;
+const LinksToProgram = ({ program }) => (
+  <>
+    <MenuItem content="Dashboard" />
+    <MenuItem content="ID Registration" />
+    <MenuItem content="Clinical Submission" />
+    <MenuItem content="Genomic Submission" />
+    <MenuItem content="Manage Token" />
+  </>
+);
+
+const MultiProgramsSection = ({ programs }) => {
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const orderedPrograms = orderBy(programs, 'shortName');
@@ -50,42 +72,23 @@ const ProgramsSection = () => {
           />
         }
       />
-      {loading ? (
-        <div
-          css={css`
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            padding-top: 32px;
-            padding-bottom: 32px;
-          `}
+      {filteredPrograms.map((program, programIndex) => (
+        <MenuItem
+          key={program.shortName}
+          content={program.shortName}
+          onClick={() => toggleProgramIndex(programIndex)}
+          selected={programIndex === activeProgramIndex}
         >
-          <DnaLoader />
-        </div>
-      ) : (
-        filteredPrograms.map((program, programIndex) => {
-          return (
-            <MenuItem
-              key={program.shortName}
-              content={program.shortName}
-              onClick={() => toggleProgramIndex(programIndex)}
-              selected={programIndex === activeProgramIndex}
-            >
-              <MenuItem content="Dashboard" />
-              <MenuItem content="ID Registration" />
-              <MenuItem content="Clinical Submission" />
-              <MenuItem content="Genomic Submission" />
-              <MenuItem content="Manage Token" />
-            </MenuItem>
-          );
-        })
-      )}
+          <LinksToProgram program={program} />
+        </MenuItem>
+      ))}
     </>
   );
 };
 
 export default () => {
   const [activeItem, toggleItem] = useToggledSelectState(-1);
+  const { data: { programs = [] } = {}, loading } = useQuery(programsListQuery);
 
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
@@ -94,6 +97,7 @@ export default () => {
   const onlyHasAccessToOneProgram = accessibleProgramPolicies.length === 1;
   const canSeeRdpcs = isDcc;
   const canSeeDcc = isDcc;
+  const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
   return (
     <Submenu>
       {canSeeDcc && <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />}
@@ -107,14 +111,33 @@ export default () => {
           <MenuItem content="what goes here?" />
         </MenuItem>
       )}
-      <MenuItem
-        icon={<Icon name="programs" />}
-        content={'Programs'}
-        selected={activeItem === 1}
-        onClick={() => toggleItem(1)}
-      >
-        <ProgramsSection />
-      </MenuItem>
+      {canOnlyAccessOneProgram ? (
+        loading ? (
+          <Loader />
+        ) : (
+          // if user can only access one program, they only see the links for that program
+          <div
+            css={css`
+              margin-top: 44px;
+            `}
+          >
+            <MenuItem selected={true}>
+              <MenuItem key={programs[0].shortName} content={null} selected={true}>
+                <LinksToProgram program={programs[0]} />
+              </MenuItem>
+            </MenuItem>
+          </div>
+        )
+      ) : (
+        <MenuItem
+          icon={<Icon name="programs" />}
+          content={'Programs'}
+          selected={activeItem === 1}
+          onClick={() => toggleItem(1)}
+        >
+          {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
+        </MenuItem>
+      )}
     </Submenu>
   );
 };
