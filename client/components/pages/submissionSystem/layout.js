@@ -10,6 +10,9 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
+import Head from '../head';
+import NavBar from './NavBar';
+import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 
 /**
@@ -23,6 +26,7 @@ const SubmissionLayout = ({
   noSidebar = false,
   contentHeader,
   children,
+  subtitle,
 }: {
   pathname: string,
   logOut: any => any,
@@ -31,7 +35,7 @@ const SubmissionLayout = ({
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
-  subtitle,
+  subtitle?: string,
 }) => (
   <PageContainer>
     <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
