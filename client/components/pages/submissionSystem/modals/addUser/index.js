@@ -38,10 +38,13 @@ const AddUserModal = ({}) => {
   const [formData, setFormData] = React.useState([user]);
   const [validationErrors, setValidationErrors] = React.useState([user]);
 
-  const submitForm = formData => {
-    if (validateForm) {
-      console.log('Submit form');
+  const submitForm = async () => {
+    const isValidForm = await validateForm();
+    if (isValidForm) {
+      console.log('FormValid::Submit form');
       //const result = sendCreateUser();
+    } else {
+      console.log('form invalid');
     }
   };
 
@@ -61,9 +64,12 @@ const AddUserModal = ({}) => {
     );
   };
 
-  const validateForm = () => {
-    // YP full schema
-  };
+  const validateForm = () =>
+    new Promise(async (resolve, reject) => {
+      const isValid = await AddUserSchema.isValid(formData[0]);
+      console.log('isValid', isValid);
+      resolve(isValid);
+    });
 
   const addSection = async () => {
     // check if last section is blank
@@ -90,13 +96,12 @@ const AddUserModal = ({}) => {
       title="Add Users"
       actionButtonText="Add Users"
       cancelText="Cancel"
-      onActionClick={() => console.log('on action click')}
+      onActionClick={() => submitForm()}
       actionDisabled={isValidated}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
       {formData.map((data, currentIndex) => {
-        console.log('MAAAPING', data, validationErrors, validationErrors[currentIndex]);
         return (
           <UserSection
             key={currentIndex}

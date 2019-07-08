@@ -13,6 +13,7 @@ const AddUserSchema = yup.object().shape({
     .string()
     .required('Please fill in email')
     .test('is-gsuite', 'email is not gsuite', testGsuite),
+  role: yup.string().oneOf(['v1', 'v2']),
 });
 
 export default AddUserSchema;

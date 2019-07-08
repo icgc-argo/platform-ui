@@ -59,6 +59,7 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
           value={user.role}
           options={[{ content: 'Value 1', value: 'v1' }, { content: 'Value 2', value: 'v2' }]}
           onChange={val => onChange('role', val)}
+          onBlur={() => console.log('selcet blur')}
         />
         {!!roleError ? <FormHelperText>{roleError}</FormHelperText> : null}
       </FormControl>
