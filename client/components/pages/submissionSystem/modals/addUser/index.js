@@ -39,15 +39,14 @@ const AddUserModal = ({}) => {
   const [validationErrors, setValidationErrors] = React.useState([user]);
 
   const submitForm = formData => {
-    // TODO: validate
-    const result = sendCreateUser();
+    if (validateForm) {
+      const result = sendCreateUser();
+    }
   };
 
   //  const sendCreateUser = useMutation(CREATE_PROGRAM_MUTATION, {
   //    variables: { program: createProgramInput(formData) },
   //  });
-
-  //const [formData, setformData, validate, errors]
 
   const validateField = async ({ key, data: formData, currentIndex }) => {
     const schema = yup.reach(AddUserSchema, key);
@@ -55,9 +54,7 @@ const AddUserModal = ({}) => {
 
     try {
       const value = await schema.validate(formData[key]);
-      console.log(`validating ${key}`, value);
     } catch (errors) {
-      console.log('validation failed', errors);
       error = errors.message;
     }
     const validation = { ...validationErrors[currentIndex], [key]: error };
@@ -84,8 +81,8 @@ const AddUserModal = ({}) => {
 
   const deleteSection = index => {
     if (formData.length <= 1) return false;
-    const newS = formData.filter((f, i) => i !== index);
-    setFormData(newS);
+    const newSections = formData.filter((f, i) => i !== index);
+    setFormData(newSections);
   };
 
   return (
