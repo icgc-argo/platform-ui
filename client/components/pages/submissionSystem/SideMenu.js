@@ -2,6 +2,7 @@
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
+import Link from 'next/link';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -12,9 +13,13 @@ import DnaLoader from 'uikit/DnaLoader';
 import { mockPrograms } from './mockData';
 
 // $FlowFixMe .gql file not supported
-import { programsListQuery } from './programs/queries.gql';
+import { sideMenuProgramList } from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { isDccMember, getAuthorizedProgramPolicies } from 'global/utils/egoJwt';
+
+type SideMenuProgram = {
+  shortName: string,
+};
 
 const Loader = () => (
   <div
@@ -37,17 +42,21 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const LinksToProgram = ({ program }) => (
+const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) => (
   <>
     <MenuItem content="Dashboard" />
     <MenuItem content="ID Registration" />
     <MenuItem content="Clinical Submission" />
     <MenuItem content="Genomic Submission" />
-    <MenuItem content="Manage Token" />
+    {props.isAdmin && (
+      <Link prefetch href={`/program/manage/${props.program.shortName}`}>
+        <MenuItem content="Manage Program" />
+      </Link>
+    )}
   </>
 );
 
-const MultiProgramsSection = ({ programs }) => {
+const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const orderedPrograms = orderBy(programs, 'shortName');
@@ -79,7 +88,7 @@ const MultiProgramsSection = ({ programs }) => {
           onClick={() => toggleProgramIndex(programIndex)}
           selected={programIndex === activeProgramIndex}
         >
-          <LinksToProgram program={program} />
+          <LinksToProgram program={program} isAdmin={true} />
         </MenuItem>
       ))}
     </>
@@ -88,29 +97,23 @@ const MultiProgramsSection = ({ programs }) => {
 
 export default () => {
   const [activeItem, toggleItem] = useToggledSelectState(-1);
-  const { data: { programs = [] } = {}, loading } = useQuery(programsListQuery);
+  const {
+    data: { programs = [] } = {},
+    loading,
+  }: { data: { programs: Array<SideMenuProgram> }, loading: boolean } = useQuery(
+    sideMenuProgramList,
+  );
 
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
   const accessibleProgramPolicies = token ? getAuthorizedProgramPolicies(token) : [];
 
-  const onlyHasAccessToOneProgram = accessibleProgramPolicies.length === 1;
+  const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;
   const canSeeDcc = isDcc;
-  const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
+
   return (
     <Submenu>
-      {canSeeDcc && <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />}
-      {canSeeRdpcs && (
-        <MenuItem
-          icon={<Icon name="rdpc" />}
-          content={'RDPCs'}
-          selected={activeItem === 0}
-          onClick={() => toggleItem(0)}
-        >
-          <MenuItem content="what goes here?" />
-        </MenuItem>
-      )}
       {canOnlyAccessOneProgram ? (
         loading ? (
           <Loader />
@@ -121,22 +124,40 @@ export default () => {
               margin-top: 44px;
             `}
           >
-            <MenuItem selected={true}>
-              <MenuItem key={programs[0].shortName} content={null} selected={true}>
-                <LinksToProgram program={programs[0]} />
+            <MenuItem selected>
+              <MenuItem
+                key={programs[0].shortName}
+                content={programs[0].shortName}
+                selected
+                noChevron
+              >
+                <LinksToProgram program={programs[0]} isAdmin={true} />
               </MenuItem>
             </MenuItem>
           </div>
         )
       ) : (
-        <MenuItem
-          icon={<Icon name="programs" />}
-          content={'Programs'}
-          selected={activeItem === 1}
-          onClick={() => toggleItem(1)}
-        >
-          {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
-        </MenuItem>
+        <>
+          {canSeeDcc && <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />}
+          {canSeeRdpcs && (
+            <MenuItem
+              icon={<Icon name="rdpc" />}
+              content={'RDPCs'}
+              selected={activeItem === 0}
+              onClick={() => toggleItem(0)}
+            >
+              <MenuItem content="what goes here?" />
+            </MenuItem>
+          )}
+          <MenuItem
+            icon={<Icon name="programs" />}
+            content={'Programs'}
+            selected={activeItem === 1}
+            onClick={() => toggleItem(1)}
+          >
+            {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
+          </MenuItem>
+        </>
       )}
     </Submenu>
   );
