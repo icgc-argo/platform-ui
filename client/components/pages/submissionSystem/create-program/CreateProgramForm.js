@@ -2,12 +2,15 @@ import React from 'react';
 
 import { useMutation } from 'react-apollo-hooks';
 
+import { get, filter } from 'lodash';
+
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 import Container from 'uikit/Container';
 import Input from 'uikit/form/Input';
 import Textarea from 'uikit/form/Textarea';
 import FormControl from 'uikit/form/FormControl';
+import FormHelperText from 'uikit/form/FormHelperText';
 import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import Select from 'uikit/form/Select';
@@ -19,9 +22,20 @@ import FormCheckbox from 'uikit/form/FormCheckbox';
 import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
 
 import Link from 'next/link';
+import Router from 'next/router';
+
+import * as yup from 'yup';
 
 // $FlowFixMe .gql file not supported
 import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
+
+/* 
+VALUES
+*/
+const MEMBERSHIP_TYPES = [
+  { content: 'Full', value: 'FULL' },
+  { content: 'Associate', value: 'ASSOCIATE' },
+];
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -36,6 +50,8 @@ const InputLabelWrapper = ({ sm = 3, children }) => (
   </Col>
 );
 
+const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperText> : null);
+
 /* ****************** *
  * On Change Handlers
  * ****************** */
@@ -43,16 +59,15 @@ const handleInputChange = setter => event => {
   setter(event.target.value);
 };
 const handleCheckboxGroupChange = (selectedItems, setter) => value => {
-  if (selectedItems.has(value)) {
-    selectedItems.delete(value);
+  if (selectedItems.includes(value)) {
+    setter(filter(selectedItems, item => item !== value));
   } else {
-    selectedItems.add(value);
+    setter([...selectedItems, value]);
   }
-  setter(new Set(selectedItems));
 };
 
 /* *************************************** *
- * Form Handlers / Submission / Validation
+ * Reshape form data for gql input
  * *************************************** */
 
 const createProgramInput = formData => ({
@@ -72,6 +87,96 @@ const createProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+/* *************************************** *
+ * Form data validation
+ * *************************************** */
+
+const schema = yup.object().shape({
+  programName: yup
+    .string()
+    .label('Program Name')
+    .trim()
+    .required(),
+  shortName: yup
+    .string()
+    .label('Short Name')
+    .trim()
+    .max(9)
+    .matches(/^[A-Z0-9\-]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
+    .required(),
+  countries: yup
+    //TODO: once we have a known list, add validation: .oneOf(COUNTRY_CODES)
+    .array()
+    .of(
+      yup
+        .string()
+        .length(2)
+        .uppercase(),
+    )
+    .label('Countries')
+    .required(),
+  cancerTypes: yup
+    //TODO: once we have a known list, add validation: .oneOf(CANCER_TYPES)
+    //  might not want to validate against a rigid list if those values can change
+    .array()
+    .of(yup.string())
+    .label('Cancer Types')
+    .required()
+    .min(1),
+  primarySites: yup
+    .array()
+    .of(yup.string())
+    .label('Primary Sites')
+    .required()
+    .min(1),
+  commitmentLevel: yup
+    .number()
+    .label('Commitment Level')
+    .moreThan(0)
+    .required(),
+  institutions: yup
+    .array()
+    .of(yup.string())
+    .label('Institutions')
+    .required(),
+  membershipType: yup
+    .string()
+    .label('Membership Type')
+    .required()
+    .oneOf(MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.'),
+  website: yup
+    .string()
+    .label('Website')
+    .trim()
+    .url(),
+  description: yup
+    .string()
+    .label('Description')
+    .trim(),
+  processingRegions: yup
+    .array()
+    .of(yup.string())
+    .label('Processing Regions')
+    .required()
+    .min(1),
+  adminFirstName: yup
+    .string()
+    .label(`Administrator's First Name`)
+    .required()
+    .trim(),
+  adminLastName: yup
+    .string()
+    .label(`Administrator's Last Name`)
+    .required()
+    .trim(),
+  adminEmail: yup
+    .string()
+    .label(`Administrator's Email`)
+    .email()
+    .required()
+    .trim(),
+});
+
 export default () => {
   const [programName, setProgramName] = React.useState('');
   const [shortName, setShortName] = React.useState('');
@@ -83,13 +188,14 @@ export default () => {
   const [membershipType, setMembershipType] = React.useState('');
   const [website, setWebsite] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [processingRegions, setProcessionRegions] = React.useState(new Set([]));
+  const [processingRegions, setProcessionRegions] = React.useState([]);
   const [adminFirstName, setAdminFirstName] = React.useState('');
   const [adminLastName, setAdminLastName] = React.useState('');
   const [adminEmail, setAdminEmail] = React.useState('');
+  const [validationErrors, setValidationErrors] = React.useState({});
 
-  // const [programName, setProgramName] = React.useState('Jon UI Test C');
-  // const [shortName, setShortName] = React.useState('JONC-CA');
+  // const [programName, setProgramName] = React.useState('Jon UI Test A');
+  // const [shortName, setShortName] = React.useState('JONA-CA');
   // const [countries, setCountries] = React.useState(['CA']);
   // const [cancerTypes, setCancerTypes] = React.useState(['Myeloma']);
   // const [primarySites, setPrimarySites] = React.useState(['Lungs']);
@@ -98,10 +204,11 @@ export default () => {
   // const [membershipType, setMembershipType] = React.useState('FULL');
   // const [website, setWebsite] = React.useState('http://google.com');
   // const [description, setDescription] = React.useState('please delete me i was not meant to be');
-  // const [processingRegions, setProcessionRegions] = React.useState(new Set(['North America']));
+  // const [processingRegions, setProcessionRegions] = React.useState(['North America']);
   // const [adminFirstName, setAdminFirstName] = React.useState('Jon');
   // const [adminLastName, setAdminLastName] = React.useState('Eubank');
   // const [adminEmail, setAdminEmail] = React.useState('joneubank@gmail.com');
+  // const [validationErrors, setValidationErrors] = React.useState({});
 
   const formData = {
     programName,
@@ -120,12 +227,45 @@ export default () => {
     adminEmail,
   };
 
-  const submitForm = formData => {
-    const result = sendCreateProgram();
+  let validData = { ...formData };
+
+  const validateForm = async () => {
+    return await new Promise((resolve, reject) => {
+      schema
+        .validate(formData, { abortEarly: false, stripUnknown: true })
+        .then(data => {
+          console.log(`validation success`);
+          // Validate will perform data manipulations such as trimming strings.
+          //  need to return the updated form data for submission.
+          resolve(data);
+        })
+        .catch(err => {
+          console.log(`validation failure`);
+          const errors = get(err, 'inner', []).reduce((output, error) => {
+            output[error.path] = error.message;
+            return output;
+          }, {});
+          setValidationErrors(errors);
+          reject(errors);
+        });
+    });
+  };
+
+  const submitForm = async formData => {
+    try {
+      validData = await validateForm(formData);
+      console.log(validData);
+
+      const result = await sendCreateProgram();
+      Router.push('/programs');
+    } catch (err) {
+      window.scrollTo(0, 0);
+      console.log(err);
+    }
   };
 
   const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
-    variables: { program: createProgramInput(formData) },
+    variables: { program: createProgramInput(validData) },
   });
 
   return (
@@ -143,7 +283,7 @@ export default () => {
               <SectionTitle>Program Details</SectionTitle>
             </Col>
           </Row>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.programName} required={true}>
             <Row>
               <InputLabelWrapper>
                 <InputLabel htmlFor="program-name">Program Name</InputLabel>
@@ -156,10 +296,11 @@ export default () => {
                   onChange={handleInputChange(setProgramName)}
                   size="lg"
                 />
+                <ErrorText error={validationErrors.programName} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.shortName} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="short-name">Short Name</InputLabel>
@@ -172,10 +313,11 @@ export default () => {
                   onChange={handleInputChange(setShortName)}
                   size="lg"
                 />
+                <ErrorText error={validationErrors.shortName} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.countries} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="country">Countries</InputLabel>
@@ -191,10 +333,11 @@ export default () => {
                   <Option value="CM">Cameroon</Option>
                   <Option value="CA">Canada</Option>
                 </MultiSelect>
+                <ErrorText error={validationErrors.countries} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.cancerTypes} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="cancer-types">Cancer Types</InputLabel>
@@ -212,10 +355,11 @@ export default () => {
                   <Option value="Neuroblastoma">Neuroblastoma</Option>
                   <Option value="Pancreatic cancer">Pancreatic cancer</Option>
                 </MultiSelect>
+                <ErrorText error={validationErrors.cancerTypes} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.primarySites} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="primary-types">Primary Types</InputLabel>
@@ -231,30 +375,40 @@ export default () => {
                   <Option value="Pancreas">Pancreas</Option>
                   <Option value="Brain">Braaaaaaaaaaaaaiiiiiins</Option>
                 </MultiSelect>
+                <ErrorText error={validationErrors.primarySites} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.commitmentLevel} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="commitment-level">Commitment Level</InputLabel>
               </InputLabelWrapper>
-              <Col sm={3}>
-                <Input
-                  aria-label="Commitment Level"
-                  id="commitment-level"
-                  type="number"
-                  value={commitmentLevel}
-                  onChange={handleInputChange(setCommitmentLevel)}
-                  size="lg"
-                />
-              </Col>
-              <Col sm={6} style={{ paddingTop: 6, paddingLeft: 0 }}>
-                <Typography component="span">Donors</Typography>
+              <Col sm={9}>
+                <Row>
+                  <Col sm={4}>
+                    <Input
+                      aria-label="Commitment Level"
+                      id="commitment-level"
+                      type="number"
+                      value={commitmentLevel}
+                      onChange={handleInputChange(setCommitmentLevel)}
+                      size="lg"
+                    />
+                  </Col>
+                  <Col sm={8} style={{ paddingTop: 6, paddingLeft: 0 }}>
+                    <Typography component="span">Donors</Typography>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={12}>
+                    <ErrorText error={validationErrors.commitmentLevel} />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.membershipType} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="membership-type">Membership Type</InputLabel>
@@ -263,18 +417,16 @@ export default () => {
                 <Select
                   aria-label="Membership Type"
                   id="membership-type"
-                  options={[
-                    { content: 'Full', value: 'FULL' },
-                    { content: 'Associate', value: 'ASSOCIATE' },
-                  ]}
+                  options={MEMBERSHIP_TYPES}
                   onChange={setMembershipType}
                   value={membershipType}
                   size="lg"
                 />
+                <ErrorText error={validationErrors.membershipType} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.website} required={false}>
             <Row>
               <InputLabelWrapper>
                 <InputLabel htmlFor="website">Website</InputLabel>
@@ -287,10 +439,11 @@ export default () => {
                   onChange={handleInputChange(setWebsite)}
                   size="lg"
                 />
+                <ErrorText error={validationErrors.website} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={false} required={false}>
+          <FormControl error={validationErrors.description} required={false}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="description">Description</InputLabel>
@@ -303,6 +456,7 @@ export default () => {
                   onChange={handleInputChange(setDescription)}
                   rows={5}
                 />
+                <ErrorText error={validationErrors.description} />
               </Col>
             </Row>
           </FormControl>
@@ -311,7 +465,7 @@ export default () => {
               <SectionTitle>Affiliated Institutions</SectionTitle>
             </Col>
           </Row>
-          <FormControl error={false} required={false}>
+          <FormControl error={validationErrors.institutions} required={false}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="Institutions">Institutions</InputLabel>
@@ -329,6 +483,7 @@ export default () => {
                   <Option value="Royal Ontario Museum">Royal Ontario Museum</Option>
                   <Option value="Toronto Metropolitan Zoo">Toronto Metropolitan Zoo</Option>
                 </MultiSelect>
+                <ErrorText error={validationErrors.institutions} />
               </Col>
             </Row>
           </FormControl>
@@ -337,16 +492,17 @@ export default () => {
               <SectionTitle>Processing Regions</SectionTitle>
             </Col>
           </Row>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
                 <InputLabel htmlFor="Processing Regions">
                   Please indicate the region(s) where data can be processed
                 </InputLabel>
+                <ErrorText error={validationErrors.processingRegions} />
                 <RadioCheckboxGroup
                   hasError={false}
                   onChange={handleCheckboxGroupChange(processingRegions, setProcessionRegions)}
-                  isChecked={item => processingRegions.has(item)}
+                  isChecked={item => processingRegions.includes(item)}
                 >
                   <Row>
                     <Col>
@@ -380,7 +536,7 @@ export default () => {
           </Row>
           <Row>
             <Col sm={6}>
-              <FormControl error={false} required={true}>
+              <FormControl error={validationErrors.adminFirstName} required={true}>
                 <Row>
                   <InputLabelWrapper sm={4}>
                     <InputLabel htmlFor="first-name">First Name</InputLabel>
@@ -393,12 +549,13 @@ export default () => {
                       onChange={handleInputChange(setAdminFirstName)}
                       size="lg"
                     />
+                    <ErrorText error={validationErrors.adminFirstName} />
                   </Col>
                 </Row>
               </FormControl>
             </Col>
             <Col sm={6}>
-              <FormControl error={false} required={true}>
+              <FormControl error={validationErrors.adminLastName} required={true}>
                 <Row>
                   <InputLabelWrapper sm={4}>
                     <InputLabel htmlFor="last-name">Last Name</InputLabel>
@@ -411,12 +568,13 @@ export default () => {
                       onChange={handleInputChange(setAdminLastName)}
                       size="lg"
                     />
+                    <ErrorText error={validationErrors.adminLastName} />
                   </Col>
                 </Row>
               </FormControl>
             </Col>
           </Row>
-          <FormControl error={false} required={true}>
+          <FormControl error={validationErrors.adminEmail} required={true}>
             <Row>
               <InputLabelWrapper sm={2}>
                 <InputLabel htmlFor="email">Email Adress</InputLabel>
@@ -429,6 +587,7 @@ export default () => {
                   onChange={handleInputChange(setAdminEmail)}
                   size="lg"
                 />
+                <ErrorText error={validationErrors.adminEmail} />
               </Col>
             </Row>
           </FormControl>
