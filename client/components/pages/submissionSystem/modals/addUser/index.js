@@ -71,9 +71,15 @@ const AddUserModal = ({}) => {
     // YP full schema
   };
 
-  const addSection = () => {
-    //if(canAdd)
-    setFormData(formData.concat(user));
+  const addSection = async () => {
+    // check if last section is blank
+    const data = formData[formData.length - 1];
+    try {
+      const value = await AddUserSchema.validate(data);
+      setFormData(formData.concat(user));
+    } catch (e) {
+      console.log('error: last section is empty');
+    }
   };
 
   const deleteSection = index => {
