@@ -28,7 +28,7 @@ const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
         <Input
           value={user.email}
           onChange={e => onChange('email', e.target.value)}
-          onBlur={() => validate()}
+          onBlur={() => validateField('email')}
         />
       </FormControl>
       <FormControl error={!!errors.lastName} required>
@@ -36,7 +36,7 @@ const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
         <Input
           value={user.lastName}
           onChange={e => onChange('lastName', e.target.value)}
-          onBlur={() => validate()}
+          onBlur={() => validateField('lastName')}
         />
       </FormControl>
       <FormControl required>

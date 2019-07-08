@@ -50,23 +50,21 @@ const AddUserModal = ({}) => {
   //const [formData, setformData, validate, errors]
 
   const validateField = async ({ key, data: formData, currentIndex }) => {
-    console.log('validate field', key, formData);
-    if (key === 'firstName') {
-      const schema = yup.reach(AddUserSchema, 'firstName');
-      try {
-        const value = await schema.validate(formData['firstName']);
-        console.log('validating firstname', value);
-      } catch (errors) {
-        console.log('validation failed', errors);
-        const validationError = { ...validationErrors[currentIndex], firstName: errors.message };
-        setValidationErrors(
-          validationErrors.map((error, index) =>
-            index === currentIndex ? validationError : error,
-          ),
-        );
-        return false;
-      }
+    const schema = yup.reach(AddUserSchema, key);
+    let error = '';
+
+    try {
+      const value = await schema.validate(formData[key]);
+      console.log('validating firstname', value);
+    } catch (errors) {
+      console.log('validation failed', errors);
+      error = errors.message;
     }
+    const validation = { ...validationErrors[currentIndex], [key]: error };
+
+    setValidationErrors(
+      validationErrors.map((error, index) => (index === currentIndex ? validation : error)),
+    );
   };
 
   const validateForm = () => {
@@ -94,20 +92,17 @@ const AddUserModal = ({}) => {
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {formState.map((data, currentIndex) => {
-        console.log('user', errors);
+      {formData.map((data, currentIndex) => {
         return (
           <UserSection
             user={data}
             onChange={(key, val) =>
-              setFormState(
-                formState.map((field, i) => (i === currentIndex ? { [key]: val } : field)),
-              )
+              setFormData(formData.map((field, i) => (i === currentIndex ? { [key]: val } : field)))
             }
-            validate={validateForm}
-            errors={errors[currentIndex]}
+            validateField={key => validateField({ key, data, currentIndex })}
+            errors={validationErrors[currentIndex]}
             deleteSelf={() => deleteSection(currentIndex)}
-            deleteAllowed={formState.length > 1}
+            deleteAllowed={formData.length > 1}
           />
         );
       })}
