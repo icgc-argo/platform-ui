@@ -27,30 +27,32 @@ export const MenuItem = ({
       selected={isSelected}
       onClick={e => {
         e.stopPropagation();
-        contentContainerRef.current.blur();
+        if (contentContainerRef.current) contentContainerRef.current.blur();
         setLocalSelectedState(!isSelected);
         onClick(e);
       }}
       className={`${className} MenuItemContainer`}
     >
-      <div className="MenuItemContent">
-        <ContentContainer ref={contentContainerRef}>
-          {icon && (
-            <IconContainer>
-              {React.cloneElement(icon, {
-                fill: isSelected ? 'secondary_dark' : 'primary',
-              })}
-            </IconContainer>
+      {content && (
+        <div className="MenuItemContent">
+          <ContentContainer ref={contentContainerRef}>
+            {icon && (
+              <IconContainer>
+                {React.cloneElement(icon, {
+                  fill: isSelected ? 'secondary_dark' : 'primary',
+                })}
+              </IconContainer>
+            )}
+            {content}
+          </ContentContainer>
+          {children && (
+            <Icon
+              name={isSelected ? 'chevron_down' : 'chevron_right'}
+              fill={isSelected ? 'secondary' : 'primary'}
+            />
           )}
-          {content}
-        </ContentContainer>
-        {children && content && (
-          <Icon
-            name={isSelected ? 'chevron_down' : 'chevron_right'}
-            fill={isSelected ? 'secondary' : 'primary'}
-          />
-        )}
-      </div>
+        </div>
+      )}
       {isSelected && children}
     </MenuItemContainer>
   );
