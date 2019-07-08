@@ -74,10 +74,10 @@ export default ({
           padding-bottom: 0px;
         `}
       >
-        <TableActionBar>
-          {programs.length} results
-          <TableFilterInput />
-        </TableActionBar>
+        {/* <TableActionBar>
+            {programs.length} results
+            <TableFilterInput />
+            </TableActionBar> */}
         <ProgramsTable
           loading={loading}
           programs={sortedPrograms}
