@@ -13,12 +13,6 @@ const Next = NextJS({
 });
 const handle = Next.getRequestHandler();
 
-const applyUrlMasks = server => {
-  server.get('/program/:id', (req, res) => {
-    res.redirect(`/program?id=${req.params.id}`);
-  });
-};
-
 const server = express();
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
@@ -28,7 +22,6 @@ server.use('/status', (req, res) => {
 });
 
 Next.prepare().then(async () => {
-  applyUrlMasks(server);
   server.get('*', (req, res) => handle(req, res));
   server.listen(PORT, err => {
     if (err) throw err;
