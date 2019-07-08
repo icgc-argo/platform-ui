@@ -138,5 +138,5 @@ export default (tableProps: {
       ),
     },
   ];
-  return <Table data={data} columns={columns} />;
+  return <Table data={data} columns={columns} showPagination={false} />;
 };
