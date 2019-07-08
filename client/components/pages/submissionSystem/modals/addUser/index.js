@@ -55,7 +55,7 @@ const AddUserModal = ({}) => {
 
     try {
       const value = await schema.validate(formData[key]);
-      console.log('validating firstname', value);
+      console.log(`validating ${key}`, value);
     } catch (errors) {
       console.log('validation failed', errors);
       error = errors.message;
@@ -97,7 +97,9 @@ const AddUserModal = ({}) => {
           <UserSection
             user={data}
             onChange={(key, val) =>
-              setFormData(formData.map((field, i) => (i === currentIndex ? { [key]: val } : field)))
+              setFormData(
+                formData.map((field, i) => (i === currentIndex ? { ...field, [key]: val } : field)),
+              )
             }
             validateField={key => validateField({ key, data, currentIndex })}
             errors={validationErrors[currentIndex]}
