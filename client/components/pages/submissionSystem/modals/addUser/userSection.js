@@ -11,7 +11,7 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-const UserSection = ({ user, onChange, validate, errors, removeSelf }) => {
+const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
   console.log('User section', errors);
   return (
     <Section>
@@ -20,7 +20,7 @@ const UserSection = ({ user, onChange, validate, errors, removeSelf }) => {
         <Input
           value={user.firstName}
           onChange={e => onChange('firstName', e.target.value)}
-          onBlur={() => validate('firstName')}
+          onBlur={() => validateField('firstName')}
         />
       </FormControl>
       <FormControl error={!!errors.email} required>

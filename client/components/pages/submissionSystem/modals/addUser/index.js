@@ -6,7 +6,8 @@ import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import css from '@emotion/css';
 import UserSection from './userSection';
-import { isValid } from 'date-fns';
+import AddUserSchema from './formSchema';
+import * as yup from 'yup';
 
 // TODO: width is spanning all the way acaross? maybe use button?
 // styled(spin) ${theme.typographg.paragray}
@@ -22,75 +23,65 @@ const AddSection = styled('div')`
   }
 `;
 
-/**
- * hooks, local form state
- */
+const createUserInput = formData => ({
+  firstName: formData.firstName,
+  lastName: formData.lastName,
+  email: formData.email,
+});
 
 const AddUserModal = ({}) => {
   const [disabled, setDisabled] = React.useState(false);
 
-  const user = { fistName: '', lastName: '', email: '' };
+  const user = { firstName: '', lastName: '', email: '' };
 
   const [isValidated, setIsValidated] = React.useState(false);
-  const [formState, setFormState] = React.useState([user]);
-  const [errors, setErrors] = React.useState([user]);
+  const [formData, setFormData] = React.useState([user]);
+  const [validationErrors, setValidationErrors] = React.useState([user]);
 
-  //const [formData, setFormState, validate, errors]
+  const submitForm = formData => {
+    // TODO: validate
+    const result = sendCreateUser();
+  };
 
-  /*
-  const validate = (key, formData) => {
-    const value = formData[key];
-    if(val is blank)
-    errors.firstName = value is blank
-    else (invalid email) 
-    errors.firstname = 'ivalid email'
-  }*/
+  //  const sendCreateUser = useMutation(CREATE_PROGRAM_MUTATION, {
+  //    variables: { program: createProgramInput(formData) },
+  //  });
 
-  const validateField = (key, formData) => {};
+  //const [formData, setformData, validate, errors]
+
+  const validateField = async ({ key, data: formData, currentIndex }) => {
+    console.log('validate field', key, formData);
+    if (key === 'firstName') {
+      const schema = yup.reach(AddUserSchema, 'firstName');
+      try {
+        const value = await schema.validate(formData['firstName']);
+        console.log('validating firstname', value);
+      } catch (errors) {
+        console.log('validation failed', errors);
+        const validationError = { ...validationErrors[currentIndex], firstName: errors.message };
+        setValidationErrors(
+          validationErrors.map((error, index) =>
+            index === currentIndex ? validationError : error,
+          ),
+        );
+        return false;
+      }
+    }
+  };
 
   const validateForm = () => {
-    let errors = [];
-    const reducer = (acc, currentVal) => acc && currentVal;
-    const isValid = formState
-      .map((field, index) => {
-        errors = errors.concat({});
-        console.log('field', field);
-        const { firstName, lastName, email } = field;
-        let isValid = true;
-        if (firstName === '') {
-          errors[index].firstName = 'String cant be blank';
-          isValid = false;
-        }
-
-        if (lastName === '') {
-          errors[index].lastName = 'Last name needs to be filled in';
-          isValid = false;
-        }
-
-        if (email === '') {
-          errors[index].email = 'email required';
-          isValid = false;
-        }
-
-        return isValid;
-      })
-      .reduce(reducer);
-    console.log('validate', isValid, errors);
-    setErrors(errors);
-    return isValid;
+    // YP full schema
   };
 
   const addSection = () => {
-    console.log('add section');
     //if(canAdd)
-    setFormState(formState.concat(user));
+    setFormData(formData.concat(user));
   };
 
   const deleteSection = index => {
-    if (formState.length <= 1) return false;
-    const newS = formState.filter((f, i) => i !== index);
-    console.log('remove section', index, newS);
-    setFormState(newS);
+    if (formData.length <= 1) return false;
+    const newS = formData.filter((f, i) => i !== index);
+    setFormData(newS);
   };
 
   return (
