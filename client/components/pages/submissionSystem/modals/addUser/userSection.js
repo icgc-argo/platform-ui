@@ -12,7 +12,7 @@ const Section = styled('div')`
   margin-top: 15px;
 `;
 
-const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
+const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
   console.log('User section', errors);
   return (
     <Section>
@@ -44,7 +44,13 @@ const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-      <Icon height="20px" width="18px" name="trash" onClick={removeSelf} />
+      <Icon
+        height="20px"
+        width="18px"
+        name="trash"
+        fill={deleteSelf ? 'accent2' : '#cecfd3'}
+        onClick={deleteSelf}
+      />
     </Section>
   );
 };

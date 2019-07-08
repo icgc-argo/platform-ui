@@ -107,8 +107,7 @@ const AddUserModal = ({}) => {
             }
             validateField={key => validateField({ key, data, currentIndex })}
             errors={validationErrors[currentIndex]}
-            deleteSelf={() => deleteSection(currentIndex)}
-            deleteAllowed={formData.length > 1}
+            deleteSelf={formData.length > 1 ? () => deleteSection(currentIndex) : null}
           />
         );
       })}
