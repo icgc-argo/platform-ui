@@ -4,6 +4,7 @@ import MultiSelect from 'uikit/form/MultiSelect';
 import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
 import styled from '@emotion/styled';
+import Icon from 'uikit/Icon';
 
 const Section = styled('div')`
   padding: 12px 11px;
@@ -43,7 +44,7 @@ const UserSection = ({ user, onChange, validateField, errors, removeSelf }) => {
         <InputLabel required>Role</InputLabel>
         <MultiSelect />
       </FormControl>
-      <div onClick={removeSelf}>Delete</div>
+      <Icon height="20px" width="18px" name="trash" onClick={removeSelf} />
     </Section>
   );
 };

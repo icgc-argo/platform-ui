@@ -40,7 +40,8 @@ const AddUserModal = ({}) => {
 
   const submitForm = formData => {
     if (validateForm) {
-      const result = sendCreateUser();
+      console.log('Submit form');
+      //const result = sendCreateUser();
     }
   };
 
