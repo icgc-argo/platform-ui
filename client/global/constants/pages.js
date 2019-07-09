@@ -4,3 +4,4 @@ export const PROGRAMS_LIST_PATH = '/programs';
 export const PROGRAM_ENTITY_PATH = '/program';
 export const DCC_OVERVIEW_PATH = '/submission';
 export const USER_PAGE_PATH = '/user';
+export const PROGRAM_MANAGE_PATH = '/program/manage';
