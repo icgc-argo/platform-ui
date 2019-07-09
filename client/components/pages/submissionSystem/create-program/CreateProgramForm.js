@@ -37,6 +37,7 @@ import {
   PRIMARY_SITES,
   CANCER_TYPES,
 } from 'global/constants';
+import { PROGRAMS_PAGE_PATH } from 'global/constants/pages';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -160,7 +161,7 @@ export default () => {
       console.log(validData);
 
       const result = await sendCreateProgram();
-      Router.push('/programs');
+      Router.push(PROGRAMS_PAGE_PATH);
     } catch (err) {
       window.scrollTo(0, 0);
       console.log(err);
@@ -546,7 +547,7 @@ export default () => {
           padding: 15px;
         `}
       >
-        <Link href="/programs">
+        <Link href={PROGRAMS_PAGE_PATH}>
           <Button variant="text">Cancel</Button>
         </Link>
         <Button onClick={submitForm}>Create</Button>

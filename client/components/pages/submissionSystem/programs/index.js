@@ -18,6 +18,8 @@ import Link from 'next/link';
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './queries.gql';
 
+import { CREATE_PROGRAM_PAGE_PATH } from 'global/constants/pages';
+
 const TableFilterInput = props => (
   <Input
     aria-label="tableFilter"
@@ -65,7 +67,7 @@ export default ({
           >
             All Programs
           </Typography>
-          <Link href="/create-program">
+          <Link href={CREATE_PROGRAM_PAGE_PATH}>
             <Button>Create a program</Button>
           </Link>
         </div>
