@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Modal from 'uikit/Modal';
 import Button from 'uikit/Button';
@@ -8,6 +8,31 @@ import css from '@emotion/css';
 import UserSection from './userSection';
 import AddUserSchema from './formSchema';
 import * as yup from 'yup';
+
+// TODO: can i pass any data to this hook?
+const useFormHook = initData => {
+  const [form, setForm] = useState({ errors: [initData], data: [initData] });
+  const { errors, data } = form;
+
+  const addField = () => {
+    console.log('add field');
+    // setForm();
+  };
+
+  const deleteSection = index => console.log('delete section', index);
+
+  const setData = ({ key, val, index }) =>
+    setForm({
+      ...form,
+      data: form.data.map((field, i) => (i === index ? { ...field, [key]: val } : field)),
+    });
+
+  return {
+    errors,
+    data,
+    setData,
+  };
+};
 
 // TODO: width is spanning all the way acaross? maybe use button?
 // styled(spin) ${theme.typographg.paragray}
@@ -32,22 +57,28 @@ const createUserInput = formData => ({
 const AddUserModal = ({}) => {
   const [disabled, setDisabled] = React.useState(false);
 
-  const user = { firstName: '', lastName: '', email: '', role: '' };
+  const user = { firstName: 'a', lastName: 'b', email: 'c', role: 'x' };
 
   const [isValidated, setIsValidated] = React.useState(false);
-  const [formData, setFormData] = React.useState([user]);
-  const [validationErrors, setValidationErrors] = React.useState([user]);
+  //  const [formData, setFormData] = React.useState([user]);
+  //  const [validationErrors, setValidationErrors] = React.useState([user]);
+
+  const { errors: validationErrors, data: form, setData, setErrors } = useFormHook(user);
+  console.log('hook data', validationErrors, form);
 
   const submitForm = async () => {
-    const isValidForm = await validateForm();
-    if (isValidForm) {
-      console.log('FormValid::Submit form');
+    const isFormValid = await validateForm();
+    console.log('validate form', isFormValid);
+
+    if (isFormValid) {
+      console.log('form is valid');
       //const result = sendCreateUser();
     } else {
-      console.log('form invalid');
+      console.log('form invalid', validationErrors);
     }
   };
 
+  /*
   const validateField = async ({ key, data: formData, currentIndex }) => {
     const schema = yup.reach(AddUserSchema, key);
     let error = '';
@@ -62,13 +93,21 @@ const AddUserModal = ({}) => {
     setValidationErrors(
       validationErrors.map((error, index) => (index === currentIndex ? validation : error)),
     );
+
+    // is valid?
+    console.log('validate field', key, currentIndex, error, validationErrors);
   };
 
   const validateForm = () =>
     new Promise(async (resolve, reject) => {
-      const isValid = await AddUserSchema.isValid(formData[0]);
-      console.log('isValid', isValid);
-      resolve(isValid);
+      let isFormValid = true;
+      formData.forEach((section, index) =>
+        Object.keys(section).forEach(key => {
+          const isFieldValid = validateField({ key, data: section, currentIndex: index });
+          isFormValid = isFormValid && isFieldValid;
+        }),
+      );
+      resolve(isFormValid);
     });
 
   const addSection = async () => {
@@ -76,19 +115,16 @@ const AddUserModal = ({}) => {
     const data = formData[formData.length - 1];
     try {
       const value = await AddUserSchema.validate(data);
-      console.log('add section', validationErrors, validationErrors.concat(user));
-
       setFormData(formData.concat(user));
       setValidationErrors(validationErrors.concat(user));
     } catch (e) {
       console.log('error: last section is empty');
     }
   };
-
+*/
   const deleteSection = index => {
-    if (formData.length <= 1) return false;
-    const newSections = formData.filter((f, i) => i !== index);
-    setFormData(newSections);
+    if (form.length <= 1) return false;
+    formDeleteSection(index);
   };
 
   return (
@@ -101,19 +137,15 @@ const AddUserModal = ({}) => {
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {formData.map((data, currentIndex) => {
+      {form.map((data, currentIndex) => {
         return (
           <UserSection
             key={currentIndex}
             user={data}
-            onChange={(key, val) =>
-              setFormData(
-                formData.map((field, i) => (i === currentIndex ? { ...field, [key]: val } : field)),
-              )
-            }
-            validateField={key => validateField({ key, data, currentIndex })}
+            onChange={(key, val) => setData({ key, val, index: currentIndex })}
+            //   validateField={key => validateField({ key, data, currentIndex })}
             errors={validationErrors[currentIndex]}
-            deleteSelf={formData.length > 1 ? () => deleteSection(currentIndex) : null}
+            deleteSelf={form.length > 1 ? () => deleteSection(currentIndex) : null}
           />
         );
       })}
