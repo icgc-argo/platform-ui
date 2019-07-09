@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorLayout from 'components/pages/submissionSystem/error';
+import ErrorLayout from 'components/pages/error';
 import { createPage } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';

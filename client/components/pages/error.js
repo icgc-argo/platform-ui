@@ -1,13 +1,10 @@
 import * as React from 'react';
-import NavBar from './NavBar';
+import NavBar from './submissionSystem/NavBar';
 import { MenuItem } from 'uikit/AppBar';
 import Footer from 'uikit/Footer';
 import { css } from 'uikit';
 import Container from 'uikit/Container';
 
-/**
- * TODO: `pathname` and `logOut` should just be available through context
- */
 export default function ErrorLayout({ children }) {
   return (
     <div
