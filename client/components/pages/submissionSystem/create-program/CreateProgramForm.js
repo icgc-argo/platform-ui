@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useMutation } from 'react-apollo-hooks';
 
-import { get, filter } from 'lodash';
+import { get, filter, isArray } from 'lodash';
 
 import css from '@emotion/css';
 import Container from 'uikit/Container';
@@ -188,7 +188,10 @@ export default () => {
       })
       .catch(err => {
         console.log(err);
-        const message = err.inner ? err.inner[err.inner.length - 1].message : err.message;
+        const message =
+          isArray(err.inner) && err.inner.length > 1
+            ? err.inner[err.inner.length - 1].message
+            : err.message;
         updateValidationErrorsForField(path, message);
       });
   };
