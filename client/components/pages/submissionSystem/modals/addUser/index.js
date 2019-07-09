@@ -8,23 +8,22 @@ import css from '@emotion/css';
 import UserSection from './userSection';
 import AddUserSchema from './formSchema';
 import * as yup from 'yup';
+import { get } from 'lodash';
 
-// TODO: can i pass any data to this hook?
-const useFormHook = initialFields => {
+const useFormHook = ({ initialFields, schema: formSchema }) => {
   const [form, setForm] = useState({ errors: [initialFields], data: [initialFields] });
   const { errors, data } = form;
 
-  const addField = () => {
-    console.log('add field');
-    // setForm();
-  };
-
+  // set form data
   const setData = ({ key, val, index }) =>
     setForm({
       ...form,
       data: form.data.map((field, i) => (i === index ? { ...field, [key]: val } : field)),
     });
 
+  const setErrors = () => console.log('seterrors');
+
+  // delete a block of values
   const deleteSection = deletedIndex => {
     const filterDeleted = (item, index) => index !== deletedIndex;
     setForm({
@@ -33,6 +32,7 @@ const useFormHook = initialFields => {
     });
   };
 
+  // create a block of values
   const createSection = sectionFields => {
     setForm({
       errors: form.errors.concat(sectionFields),
@@ -40,12 +40,33 @@ const useFormHook = initialFields => {
     });
   };
 
+  // validate a single field
+  const validateField = async ({ key, sectionIndex }) => {
+    try {
+      const value = await yup.reach(formSchema, key).validate(form[key]);
+    } catch (fieldError) {
+      console.log('field error', fieldError);
+      if (fieldError.inner) {
+        console.log('eh');
+      }
+      const message = fieldError.inner
+        ? fieldError.inner[fieldError.inner.length - 1].message
+        : fieldError.message;
+      console.log('mes', message);
+      setErrors(errors.map((error, index) => (index === sectionIndex ? validationErrors : error)));
+    }
+  };
+
+  const validateForm = () => console.log('validate form');
+
   return {
     errors,
     data,
     setData,
     deleteSection,
     createSection,
+    validateField,
+    validateForm,
   };
 };
 
@@ -69,14 +90,12 @@ const createUserInput = formData => ({
   email: formData.email,
 });
 
+const user = { firstName: '', lastName: '', email: '', role: '' };
+
 const AddUserModal = ({}) => {
   const [disabled, setDisabled] = React.useState(false);
 
-  const user = { firstName: 'a', lastName: 'b', email: 'c', role: 'x' };
-
   const [isValidated, setIsValidated] = React.useState(false);
-  //  const [formData, setFormData] = React.useState([user]);
-  //  const [validationErrors, setValidationErrors] = React.useState([user]);
 
   const {
     errors: validationErrors,
@@ -85,7 +104,9 @@ const AddUserModal = ({}) => {
     setErrors,
     deleteSection,
     createSection,
-  } = useFormHook(user);
+    validateField,
+    validateForm,
+  } = useFormHook({ initialFields: user, schema: AddUserSchema });
 
   console.log('hook data', validationErrors, form);
 
@@ -102,15 +123,6 @@ const AddUserModal = ({}) => {
   };
 
   /*
-  const validateField = async ({ key, data: formData, currentIndex }) => {
-    const schema = yup.reach(AddUserSchema, key);
-    let error = '';
-
-    try {
-      const value = await schema.validate(formData[key]);
-    } catch (errors) {
-      error = errors.message;
-    }
     const validation = { ...validationErrors[currentIndex], [key]: error };
 
     setValidationErrors(
@@ -120,6 +132,8 @@ const AddUserModal = ({}) => {
     // is valid?
     console.log('validate field', key, currentIndex, error, validationErrors);
   };
+
+  /*
 
   const validateForm = () =>
     new Promise(async (resolve, reject) => {
@@ -138,7 +152,7 @@ const AddUserModal = ({}) => {
     // check if last section is blank
     const data = form[form.length - 1];
     try {
-      //    const value = await AddUserSchema.validate(data);
+      const value = await AddUserSchema.validate(data);
       createSection(user);
     } catch (e) {
       console.log('error: last section is empty');
@@ -165,7 +179,7 @@ const AddUserModal = ({}) => {
             key={currentIndex}
             user={data}
             onChange={(key, val) => setData({ key, val, index: currentIndex })}
-            //   validateField={key => validateField({ key, data, currentIndex })}
+            validateField={key => validateField({ key, currentIndex })}
             errors={validationErrors[currentIndex]}
             deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
           />
