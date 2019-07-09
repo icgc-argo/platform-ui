@@ -37,7 +37,7 @@ import {
   PRIMARY_SITES,
   CANCER_TYPES,
 } from 'global/constants';
-import { PROGRAMS_PAGE_PATH } from 'global/constants/pages';
+import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -158,7 +158,7 @@ export default () => {
       validData = await validateForm(formData);
 
       const result = await sendCreateProgram();
-      Router.push(PROGRAMS_PAGE_PATH);
+      Router.push(PROGRAMS_LIST_PATH);
     } catch (err) {
       window.scrollTo(0, 0);
     }
@@ -542,7 +542,7 @@ export default () => {
           padding: 15px;
         `}
       >
-        <Link href={PROGRAMS_PAGE_PATH}>
+        <Link href={PROGRAMS_LIST_PATH}>
           <Button variant="text">Cancel</Button>
         </Link>
         <Button onClick={submitForm}>Create</Button>
