@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'lodash';
 
 import { decodeToken } from 'global/utils/egoJwt';
-import { isRdpcMember, hasAccessToProgram } from 'global/utils/egoJwt';
+import { isRdpcMember, isProgramAdmin } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 import ProgramManagement from 'components/pages/submissionSystem/program-management';
 
@@ -14,7 +14,7 @@ export default createPage({
       query: { id },
     } = ctx;
     if (id) {
-      return !isRdpcMember(egoJwt) && hasAccessToProgram({ egoJwt, programId: id });
+      return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: id });
     } else {
       return true;
     }

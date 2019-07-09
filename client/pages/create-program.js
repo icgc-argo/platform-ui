@@ -1,9 +1,8 @@
 import { createPage } from 'global/utils/pages';
-
 import CreateProgramPage from 'components/pages/submissionSystem/create-program';
 
 export default createPage({
-  isPublic: true,
+  isPublic: false,
   isAccessible: async ({ egoJwt, ctx }) => {
     return true;
   },
