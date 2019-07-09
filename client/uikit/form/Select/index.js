@@ -62,10 +62,10 @@ const Select = ({
           setActive('focus');
           setExpanded(true);
         }}
-        onBlur={() => {
+        onBlur={event => {
           setActive('default');
           setExpanded(false);
-          onBlur();
+          onBlur(event);
         }}
         disabled={disabled}
       >
@@ -128,6 +128,8 @@ Select.propTypes = {
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
   disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
 };
 
 export default Select;

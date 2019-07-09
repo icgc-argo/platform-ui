@@ -416,6 +416,9 @@ MultiSelect.propTypes = {
   /* Handler of onChange event */
   onChange: PropTypes.func.isRequired,
 
+  /* Handler of onBlur event */
+  onBlur: PropTypes.func,
+
   /* Whether to allow user to add new value */
   allowNew: PropTypes.bool,
 

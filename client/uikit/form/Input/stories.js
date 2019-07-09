@@ -48,6 +48,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
             aria-label="demo-input"
             value="[parent state]"
             onChange={() => '[parent func]'}
+            onBlur={() => '[parent func]'}
             {...props}
           />
         </State>
@@ -63,6 +64,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
             aria-label="demo-input"
             value="[parent state]"
             onChange={() => '[parent func]'}
+            onBlur={() => '[parent func]'}
             preset={preset}
           />
         </State>
@@ -78,6 +80,7 @@ const InputStories = storiesOf(`${__dirname}`, module)
             aria-label="demo-input"
             value="[parent state]"
             onChange={() => '[parent func]'}
+            onBlur={() => '[parent func]'}
             {...props}
             icon={<Icon name="search" />}
           />

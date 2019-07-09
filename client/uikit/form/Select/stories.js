@@ -41,6 +41,7 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           { content: 'Value 4', value: 'v4' },
         ]}
         onChange={action('onChange')}
+        onBlur={() => '[parent func]'}
         {...knobs}
       />
       <Select
@@ -53,6 +54,7 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           { content: 'Value 4', value: 'v4' },
         ]}
         onChange={action('onChange')}
+        onBlur={() => '[parent func]'}
         {...knobs}
       />
     </div>
