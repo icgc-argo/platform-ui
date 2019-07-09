@@ -5,7 +5,6 @@ import { useMutation } from 'react-apollo-hooks';
 import { get, filter } from 'lodash';
 
 import css from '@emotion/css';
-import styled from '@emotion/styled';
 import Container from 'uikit/Container';
 import Input from 'uikit/form/Input';
 import Textarea from 'uikit/form/Textarea';
@@ -24,7 +23,7 @@ import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
 import Link from 'next/link';
 import Router from 'next/router';
 
-import * as yup from 'yup';
+import createProgramSchema from './validation';
 
 // $FlowFixMe .gql file not supported
 import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
@@ -32,10 +31,13 @@ import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
 /* 
 VALUES
 */
-const MEMBERSHIP_TYPES = [
-  { content: 'Full', value: 'FULL' },
-  { content: 'Associate', value: 'ASSOCIATE' },
-];
+import {
+  PROGRAM_MEMBERSHIP_TYPES,
+  COUNTRIES,
+  RDC_NAMES,
+  PRIMARY_SITES,
+  CANCER_TYPES,
+} from 'global/constants';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -91,92 +93,6 @@ const createProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-const schema = yup.object().shape({
-  programName: yup
-    .string()
-    .label('Program Name')
-    .trim()
-    .required(),
-  shortName: yup
-    .string()
-    .label('Short Name')
-    .trim()
-    .max(9)
-    .matches(/^[A-Z0-9\-]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
-    .required(),
-  countries: yup
-    //TODO: once we have a known list, add validation: .oneOf(COUNTRY_CODES)
-    .array()
-    .of(
-      yup
-        .string()
-        .length(2)
-        .uppercase(),
-    )
-    .label('Countries')
-    .required(),
-  cancerTypes: yup
-    //TODO: once we have a known list, add validation: .oneOf(CANCER_TYPES)
-    //  might not want to validate against a rigid list if those values can change
-    .array()
-    .of(yup.string())
-    .label('Cancer Types')
-    .required()
-    .min(1),
-  primarySites: yup
-    .array()
-    .of(yup.string())
-    .label('Primary Sites')
-    .required()
-    .min(1),
-  commitmentLevel: yup
-    .number()
-    .label('Commitment Level')
-    .moreThan(0)
-    .required(),
-  institutions: yup
-    .array()
-    .of(yup.string())
-    .label('Institutions')
-    .required(),
-  membershipType: yup
-    .string()
-    .label('Membership Type')
-    .required()
-    .oneOf(MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.'),
-  website: yup
-    .string()
-    .label('Website')
-    .trim()
-    .url(),
-  description: yup
-    .string()
-    .label('Description')
-    .trim(),
-  processingRegions: yup
-    .array()
-    .of(yup.string())
-    .label('Processing Regions')
-    .required()
-    .min(1),
-  adminFirstName: yup
-    .string()
-    .label(`Administrator's First Name`)
-    .required()
-    .trim(),
-  adminLastName: yup
-    .string()
-    .label(`Administrator's Last Name`)
-    .required()
-    .trim(),
-  adminEmail: yup
-    .string()
-    .label(`Administrator's Email`)
-    .email()
-    .required()
-    .trim(),
-});
-
 export default () => {
   const [programName, setProgramName] = React.useState('');
   const [shortName, setShortName] = React.useState('');
@@ -193,22 +109,6 @@ export default () => {
   const [adminLastName, setAdminLastName] = React.useState('');
   const [adminEmail, setAdminEmail] = React.useState('');
   const [validationErrors, setValidationErrors] = React.useState({});
-
-  // const [programName, setProgramName] = React.useState('Jon UI Test A');
-  // const [shortName, setShortName] = React.useState('JONA-CA');
-  // const [countries, setCountries] = React.useState(['CA']);
-  // const [cancerTypes, setCancerTypes] = React.useState(['Myeloma']);
-  // const [primarySites, setPrimarySites] = React.useState(['Lungs']);
-  // const [commitmentLevel, setCommitmentLevel] = React.useState(120);
-  // const [institutions, setInstitutions] = React.useState(['Ontario Science Center']);
-  // const [membershipType, setMembershipType] = React.useState('FULL');
-  // const [website, setWebsite] = React.useState('http://google.com');
-  // const [description, setDescription] = React.useState('please delete me i was not meant to be');
-  // const [processingRegions, setProcessionRegions] = React.useState(['North America']);
-  // const [adminFirstName, setAdminFirstName] = React.useState('Jon');
-  // const [adminLastName, setAdminLastName] = React.useState('Eubank');
-  // const [adminEmail, setAdminEmail] = React.useState('joneubank@gmail.com');
-  // const [validationErrors, setValidationErrors] = React.useState({});
 
   const formData = {
     programName,
@@ -231,7 +131,7 @@ export default () => {
 
   const validateForm = async () => {
     return await new Promise((resolve, reject) => {
-      schema
+      createProgramSchema
         .validate(formData, { abortEarly: false, stripUnknown: true })
         .then(data => {
           console.log(`validation success`);
@@ -328,10 +228,11 @@ export default () => {
                   value={countries}
                   onChange={handleInputChange(setCountries)}
                 >
-                  <Option value="AU">Australia</Option>
-                  <Option value="KH">Cambodia</Option>
-                  <Option value="CM">Cameroon</Option>
-                  <Option value="CA">Canada</Option>
+                  {COUNTRIES.map(country => (
+                    <Option value={country.name} key={country.code}>
+                      {country.name}
+                    </Option>
+                  ))}
                 </MultiSelect>
                 <ErrorText error={validationErrors.countries} />
               </Col>
@@ -348,12 +249,11 @@ export default () => {
                   value={cancerTypes}
                   onChange={handleInputChange(setCancerTypes)}
                 >
-                  <Option value="Brain Cancer">Eye Cancer</Option>
-                  <Option value="Hairy Cell Leukaemia">Hairy Cell Leukaemia</Option>
-                  <Option value="Hodgkin Lymphoma">Hodgkin Lymphoma</Option>
-                  <Option value="Myeloma">Myeloma</Option>
-                  <Option value="Neuroblastoma">Neuroblastoma</Option>
-                  <Option value="Pancreatic cancer">Pancreatic cancer</Option>
+                  {CANCER_TYPES.map(cancerType => (
+                    <Option value={cancerType} key={cancerType.replace(/\s/, '')}>
+                      {cancerType}
+                    </Option>
+                  ))}
                 </MultiSelect>
                 <ErrorText error={validationErrors.cancerTypes} />
               </Col>
@@ -370,10 +270,11 @@ export default () => {
                   value={primarySites}
                   onChange={handleInputChange(setPrimarySites)}
                 >
-                  <Option value="Lungs">Lungs</Option>
-                  <Option value="Stomach">Stomach</Option>
-                  <Option value="Pancreas">Pancreas</Option>
-                  <Option value="Brain">Braaaaaaaaaaaaaiiiiiins</Option>
+                  {PRIMARY_SITES.map(site => (
+                    <Option value={site} key={site.replace(/\s/, '')}>
+                      {site}
+                    </Option>
+                  ))}
                 </MultiSelect>
                 <ErrorText error={validationErrors.primarySites} />
               </Col>
@@ -417,7 +318,7 @@ export default () => {
                 <Select
                   aria-label="Membership Type"
                   id="membership-type"
-                  options={MEMBERSHIP_TYPES}
+                  options={PROGRAM_MEMBERSHIP_TYPES}
                   onChange={setMembershipType}
                   value={membershipType}
                   size="lg"
@@ -506,15 +407,16 @@ export default () => {
                 >
                   <Row>
                     <Col>
-                      <FormCheckbox value="All">All</FormCheckbox>
-                      <FormCheckbox value="Africa">Africa</FormCheckbox>
-                      <FormCheckbox value="Asia">Asia</FormCheckbox>
-                      <FormCheckbox value="Europe">Europe</FormCheckbox>
+                      {RDC_NAMES.slice(0, Math.ceil(RDC_NAMES.length / 2)).map(name => (
+                        <FormCheckbox value={name}>{name}</FormCheckbox>
+                      ))}
                     </Col>
                     <Col>
-                      <FormCheckbox value="Oceania">Oceania</FormCheckbox>
-                      <FormCheckbox value="North America">North America</FormCheckbox>
-                      <FormCheckbox value="South America">South America</FormCheckbox>
+                      {RDC_NAMES.slice(Math.ceil(RDC_NAMES.length / 2), RDC_NAMES.length).map(
+                        name => (
+                          <FormCheckbox value={name}>{name}</FormCheckbox>
+                        ),
+                      )}
                     </Col>
                   </Row>
                 </RadioCheckboxGroup>

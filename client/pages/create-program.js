@@ -1,7 +1,4 @@
-import React from 'react';
 import { createPage } from 'global/utils/pages';
-
-import css from '@emotion/css';
 
 import CreateProgramPage from '../components/pages/submissionSystem/create-program';
 

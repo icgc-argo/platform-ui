@@ -7,7 +7,7 @@ import {
   PROGRAM_ENTITY_PATH,
   DCC_OVERVIEW_PATH,
   USER_PAGE_PATH,
-} from '../constants';
+} from 'global/constants/pages';
 import { isDccMember } from './egoJwt';
 
 export const getRedirectPathForUser = (egoJwt: string) => {

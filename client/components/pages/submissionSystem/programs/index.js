@@ -66,7 +66,7 @@ export default ({
             All Programs
           </Typography>
           <Link href="/create-program">
-            <Button onClick={() => {}}>Create a program</Button>
+            <Button>Create a program</Button>
           </Link>
         </div>
       }

@@ -13,7 +13,8 @@ import fetch from 'isomorphic-fetch';
 
 import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
-import { EGO_JWT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
+import { EGO_JWT_KEY } from 'global/constants';
+import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
