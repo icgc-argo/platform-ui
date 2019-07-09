@@ -19,6 +19,7 @@ type ProgramsTableProgram = {
   genomicDonors: number | null,
   submittedDonors: number | null,
   commitmentDonors: number | null,
+  administrators: string | null,
 };
 type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
 type CellProps = { original: TableProgramInternal };
@@ -92,6 +93,7 @@ export default (tableProps: {
     },
     {
       Header: 'Administrators',
+      accessor: 'administrators',
     },
     {
       Header: 'Donor Status',
@@ -105,10 +107,6 @@ export default (tableProps: {
       Header: 'Actions',
       sortable: false,
       width: 100,
-      headerStyle: css`
-        display: flex;
-        justify-content: center;
-      `,
       Cell: (props: CellProps) => (
         <div
           css={css`
