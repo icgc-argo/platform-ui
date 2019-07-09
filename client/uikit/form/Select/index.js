@@ -13,6 +13,7 @@ const Select = ({
   placeholder = '- Select an option -',
   value,
   onChange,
+  onBlur = () => {},
   disabled = false,
   size = INPUT_SIZES.SM,
   options = [],
@@ -64,6 +65,7 @@ const Select = ({
         onBlur={() => {
           setActive('default');
           setExpanded(false);
+          onBlur();
         }}
         disabled={disabled}
       >

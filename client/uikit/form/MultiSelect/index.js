@@ -195,6 +195,7 @@ const MultiSelect = ({
   value,
   children,
   onChange,
+  onBlur = () => {},
   single,
   placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
@@ -274,8 +275,9 @@ const MultiSelect = ({
     setFocusState(true);
   };
 
-  const handleInputBlur = () => {
+  const handleInputBlur = event => {
     setFocusState(false);
+    onBlur(event);
   };
 
   const handleSelectedItemClick = item => event => {

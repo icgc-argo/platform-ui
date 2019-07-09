@@ -23,14 +23,13 @@ import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
 import Link from 'next/link';
 import Router from 'next/router';
 
+import * as yup from 'yup';
+
 import createProgramSchema from './validation';
 
 // $FlowFixMe .gql file not supported
 import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
 
-/* 
-VALUES
-*/
 import {
   PROGRAM_MEMBERSHIP_TYPES,
   COUNTRIES,
@@ -110,6 +109,10 @@ export default () => {
   const [adminEmail, setAdminEmail] = React.useState('');
   const [validationErrors, setValidationErrors] = React.useState({});
 
+  /* **************** *
+   * Form Submission
+   * **************** */
+
   const formData = {
     programName,
     shortName,
@@ -168,6 +171,32 @@ export default () => {
     variables: { program: createProgramInput(validData) },
   });
 
+  /* ********************* *
+   * Field Level Validator
+   * ********************* */
+
+  const updateValidationErrorsForField = (path, value) => {
+    setValidationErrors({ ...validationErrors, [path]: value });
+  };
+
+  const validateField = (path, value) => {
+    yup
+      .reach(createProgramSchema, path)
+      .validate(value, { abortEarly: false })
+      .then(success => {
+        updateValidationErrorsForField(path, '');
+      })
+      .catch(err => {
+        console.log(err);
+        const message = err.inner ? err.inner[err.inner.length - 1].message : err.message;
+        updateValidationErrorsForField(path, message);
+      });
+  };
+
+  const handleInputBlur = path => event => {
+    validateField(path, formData[path]);
+  };
+
   return (
     <Container
       css={css`
@@ -176,7 +205,7 @@ export default () => {
         max-width: 875px;
       `}
     >
-      <form name="createProgram" onSubmit={() => {}}>
+      <form name="createProgram">
         <Col>
           <Row>
             <Col>
@@ -194,6 +223,7 @@ export default () => {
                   id="program-name"
                   value={programName}
                   onChange={handleInputChange(setProgramName)}
+                  onBlur={handleInputBlur('programName')}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.programName} />
@@ -211,6 +241,7 @@ export default () => {
                   id="short-name"
                   value={shortName}
                   onChange={handleInputChange(setShortName)}
+                  onBlur={handleInputBlur('shortName')}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.shortName} />
@@ -227,6 +258,7 @@ export default () => {
                   inputProps={{ id: 'country' }}
                   value={countries}
                   onChange={handleInputChange(setCountries)}
+                  onBlur={handleInputBlur('countries')}
                 >
                   {COUNTRIES.map(country => (
                     <Option value={country.name} key={country.code}>
@@ -248,6 +280,7 @@ export default () => {
                   inputProps={{ id: 'cancer-types' }}
                   value={cancerTypes}
                   onChange={handleInputChange(setCancerTypes)}
+                  onBlur={handleInputBlur('cancerTypes')}
                 >
                   {CANCER_TYPES.map(cancerType => (
                     <Option value={cancerType} key={cancerType.replace(/\s/, '')}>
@@ -262,13 +295,14 @@ export default () => {
           <FormControl error={validationErrors.primarySites} required={true}>
             <Row>
               <InputLabelWrapper sm={3}>
-                <InputLabel htmlFor="primary-types">Primary Types</InputLabel>
+                <InputLabel htmlFor="primary-types">Primary Sites</InputLabel>
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'primary-types' }}
                   value={primarySites}
                   onChange={handleInputChange(setPrimarySites)}
+                  onBlur={handleInputBlur('primarySites')}
                 >
                   {PRIMARY_SITES.map(site => (
                     <Option value={site} key={site.replace(/\s/, '')}>
@@ -294,6 +328,7 @@ export default () => {
                       type="number"
                       value={commitmentLevel}
                       onChange={handleInputChange(setCommitmentLevel)}
+                      onBlur={handleInputBlur('commitmentLevel')}
                       size="lg"
                     />
                   </Col>
@@ -320,6 +355,7 @@ export default () => {
                   id="membership-type"
                   options={PROGRAM_MEMBERSHIP_TYPES}
                   onChange={setMembershipType}
+                  onBlur={handleInputBlur('membershipType')}
                   value={membershipType}
                   size="lg"
                 />
@@ -338,6 +374,7 @@ export default () => {
                   id="website"
                   value={website}
                   onChange={handleInputChange(setWebsite)}
+                  onBlur={handleInputBlur('website')}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.website} />
@@ -355,6 +392,7 @@ export default () => {
                   id="description"
                   value={description}
                   onChange={handleInputChange(setDescription)}
+                  onBlur={handleInputBlur('description')}
                   rows={5}
                 />
                 <ErrorText error={validationErrors.description} />
@@ -378,6 +416,7 @@ export default () => {
                   inputProps={{ id: 'institutions' }}
                   value={institutions}
                   onChange={handleInputChange(setInstitutions)}
+                  onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
                   <Option value="Ontario Science Center">Ontario Science Center</Option>
@@ -449,6 +488,7 @@ export default () => {
                       id="first-name"
                       value={adminFirstName}
                       onChange={handleInputChange(setAdminFirstName)}
+                      onBlur={handleInputBlur('adminFirstName')}
                       size="lg"
                     />
                     <ErrorText error={validationErrors.adminFirstName} />
@@ -468,6 +508,7 @@ export default () => {
                       id="last-name"
                       value={adminLastName}
                       onChange={handleInputChange(setAdminLastName)}
+                      onBlur={handleInputBlur('adminLastName')}
                       size="lg"
                     />
                     <ErrorText error={validationErrors.adminLastName} />
@@ -487,6 +528,7 @@ export default () => {
                   id="email"
                   value={adminEmail}
                   onChange={handleInputChange(setAdminEmail)}
+                  onBlur={handleInputBlur('adminEmail')}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.adminEmail} />
