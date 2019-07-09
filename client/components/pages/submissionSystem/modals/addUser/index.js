@@ -10,8 +10,8 @@ import AddUserSchema from './formSchema';
 import * as yup from 'yup';
 
 // TODO: can i pass any data to this hook?
-const useFormHook = initData => {
-  const [form, setForm] = useState({ errors: [initData], data: [initData] });
+const useFormHook = initialFields => {
+  const [form, setForm] = useState({ errors: [initialFields], data: [initialFields] });
   const { errors, data } = form;
 
   const addField = () => {
@@ -33,11 +33,19 @@ const useFormHook = initData => {
     });
   };
 
+  const createSection = sectionFields => {
+    setForm({
+      errors: form.errors.concat(sectionFields),
+      data: form.data.concat(sectionFields),
+    });
+  };
+
   return {
     errors,
     data,
     setData,
     deleteSection,
+    createSection,
   };
 };
 
@@ -76,7 +84,7 @@ const AddUserModal = ({}) => {
     setData,
     setErrors,
     deleteSection,
-    addSection,
+    createSection,
   } = useFormHook(user);
 
   console.log('hook data', validationErrors, form);
@@ -124,19 +132,19 @@ const AddUserModal = ({}) => {
       );
       resolve(isFormValid);
     });
+*/
 
   const addSection = async () => {
     // check if last section is blank
-    const data = formData[formData.length - 1];
+    const data = form[form.length - 1];
     try {
-      const value = await AddUserSchema.validate(data);
-      setFormData(formData.concat(user));
-      setValidationErrors(validationErrors.concat(user));
+      //    const value = await AddUserSchema.validate(data);
+      createSection(user);
     } catch (e) {
       console.log('error: last section is empty');
     }
   };
-*/
+
   const removeSection = index => {
     deleteSection(index);
   };
@@ -159,7 +167,7 @@ const AddUserModal = ({}) => {
             onChange={(key, val) => setData({ key, val, index: currentIndex })}
             //   validateField={key => validateField({ key, data, currentIndex })}
             errors={validationErrors[currentIndex]}
-            deleteSelf={form.data.length > 1 ? () => removeSection(currentIndex) : null}
+            deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
           />
         );
       })}
