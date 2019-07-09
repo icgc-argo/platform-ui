@@ -1,5 +1,17 @@
-{
-  programs {
+query programQuery($shortName: String!) {
+  program(shortName: $shortName) {
     name
+    shortName
+    description
+    commitmentDonors
+    submittedDonors
+    genomicDonors
+    website
+    institutions
+    countries
+    regions
+    membershipType
+    cancerTypes
+    primarySites
   }
 }
