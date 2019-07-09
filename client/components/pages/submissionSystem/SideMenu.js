@@ -15,7 +15,7 @@ import { mockPrograms } from './mockData';
 // $FlowFixMe .gql file not supported
 import { sideMenuProgramList } from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { isDccMember, getAuthorizedProgramPolicies } from 'global/utils/egoJwt';
+import { isDccMember, getAuthorizedProgramScopes } from 'global/utils/egoJwt';
 
 type SideMenuProgram = {
   shortName: string,
@@ -106,7 +106,7 @@ export default () => {
 
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
-  const accessibleProgramPolicies = token ? getAuthorizedProgramPolicies(token) : [];
+  const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
   const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;
