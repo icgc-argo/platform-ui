@@ -15,7 +15,6 @@ const Section = styled('div')`
 `;
 
 const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
-  console.log('User section', errors);
   const {
     firstName: firstNameError,
     lastName: lastNameError,
