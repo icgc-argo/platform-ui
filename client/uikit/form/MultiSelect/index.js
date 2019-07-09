@@ -9,6 +9,7 @@ import Tag from '../../Tag';
 import useTheme from '../../utils/useTheme';
 import clsx from 'clsx';
 import FormControlContext from '../FormControl/FormControlContext';
+import { StyledInputWrapper, INPUT_SIZES, INPUT_STATES } from '../common';
 
 const Container = styled('div')`
   position: relative;
@@ -21,13 +22,12 @@ const Container = styled('div')`
 `;
 
 const OptionsWrapper = styled('div')`
-  position: absolute;
   box-sizing: border-box;
+  position: absolute;
   width: 100%;
   z-index: 1;
   background-color: white;
   border: solid 1px;
-  border-top: 0;
   border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
   border-radius: 0 0 4px 4px;
 
@@ -62,41 +62,14 @@ const Gap = styled('div')`
   background-color: white;
 `;
 
-const InputBox = styled('div')`
-  ${({ theme }) => css(theme.typography.paragraph)};
-  background-color: white;
-  border-radius: 8px;
-  border: solid 1px;
-  box-sizing: border-box;
-  display: flex;
+const InputBox = styled(StyledInputWrapper)`
+  ${({ theme }) => css(theme.typography.default)};
   flex-wrap: wrap;
-  font-size: 14px;
-  line-height: 22px;
-  min-height: 36px;
-  padding: 7px 7px 0 7px;
+  align-items: center;
   position: relative;
   width: 100%;
-
-  border-color: ${({ theme }) => theme.colors.grey_1};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.grey};
-  }
-
-  &.focused {
-    border-color: ${({ theme }) => theme.colors.grey};
-    z-index: 2;
-  }
-
-  &.disabled {
-    pointer-events: none;
-    background-color: ${({ theme }) => theme.multiSelect.disabledBackgroundColor};
-    border-color: ${({ theme }) => theme.colors.grey_2};
-  }
-
-  &.error {
-    border-color: ${({ theme }) => theme.colors.error};
-  }
+  z-index: 2;
+  padding: 2px;
 `;
 
 const Input = styled('input')`
@@ -104,20 +77,19 @@ const Input = styled('input')`
   border: none;
   display: block;
   flex-grow: 1;
-  min-width: 50px;
-  margin-bottom: 7px;
   background-color: transparent;
+  padding-left: 5px;
   &:focus {
     outline: none;
   }
 `;
 
 const PlaceHolder = styled('span')`
-  ${({ theme }) => css(theme.typography.paragraph)};
+  ${({ theme }) => css(theme.typography.data)};
   color: ${({ theme }) => theme.multiSelect.placeHolderColor};
   position: absolute;
   pointer-events: none;
-
+  padding: 8px 10px;
   &.disabled {
     color: ${({ theme }) => theme.multiSelect.disabledTextColor};
   }
@@ -126,11 +98,10 @@ const PlaceHolder = styled('span')`
 const SelectedItem = styled(Tag)`
   box-sizing: border-box;
   font-size: 11px;
-  margin-bottom: 7px;
-  margin-top: 0;
-  margin-right: 5px;
   cursor: pointer;
-  line-height: 17px;
+  margin-left: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 
   &.disabled {
     background-color: ${({ theme }) => theme.colors.grey_2};
@@ -203,6 +174,7 @@ const MultiSelect = ({
   disabled,
   error,
   'aria-label': ariaLabel = 'search',
+  size = INPUT_SIZES.SM,
 }) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
@@ -335,7 +307,12 @@ const MultiSelect = ({
 
   return (
     <Container focus={focusState}>
-      <InputBox className={clsx({ disabled, error, focused: focusState })}>
+      <InputBox
+        inputState={focusState ? INPUT_STATES.focus : INPUT_STATES.default}
+        size={size}
+        disabled={disabled}
+        error={error}
+      >
         {showPlaceHolder ? (
           <PlaceHolder className={clsx({ disabled, error, focused: focusState })}>
             {placeholder}
@@ -423,6 +400,8 @@ MultiSelect.propTypes = {
   allowNew: PropTypes.bool,
 
   disabled: PropTypes.bool,
+
+  size: PropTypes.oneOf([INPUT_SIZES.SM, INPUT_SIZES.LG]),
 };
 
 export default MultiSelect;

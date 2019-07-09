@@ -12,6 +12,8 @@ export const StyledInput = styled('input')`
   background-color: inherit;
   color: inherit;
   font-size: inherit;
+  max-height: 100%;
+  padding: 0px 10px;
 `;
 
 export const IconWrapper = styled('div')`
