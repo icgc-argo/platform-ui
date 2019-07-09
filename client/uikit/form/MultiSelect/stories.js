@@ -2,30 +2,26 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import MultiSelect, { Option } from '.';
 import { action } from '@storybook/addon-actions';
-import { boolean } from '@storybook/addon-knobs';
+import { boolean, select } from '@storybook/addon-knobs';
+import { INPUT_SIZES } from '../common';
 
-function WithState({ children }) {
+const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const [value, setValue] = React.useState([]);
-
-  return React.cloneElement(children, {
-    value,
-    onChange: event => {
-      action('value change')(event);
-      setValue(event.target.value);
-    },
-  });
-}
-
-const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <WithState>
+  return (
     <MultiSelect
-      value="[parent state]"
-      onChange={() => '[parent func]'}
-      onBlur={() => '[parent func]'}
+      value={value}
+      onChange={event => {
+        action('value change')(event);
+        setValue(event.target.value);
+      }}
+      onBlur={event => {
+        action('onBlur')(event);
+      }}
       disabled={boolean('disabled', false)}
       error={boolean('error', false)}
       single={boolean('single', false)}
       allowNew={boolean('allowNew', false)}
+      size={select('size', INPUT_SIZES, INPUT_SIZES.SM)}
     >
       <Option value="Afghanistan">Afghanistan</Option>
       <Option value="Albania">Albania</Option>
@@ -47,6 +43,6 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
       <Option value="Cameroon">Cameroon</Option>
       <Option value="Canada">Canada</Option>
     </MultiSelect>
-  </WithState>
-));
+  );
+});
 export default MultiSelectStories;
