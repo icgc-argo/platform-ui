@@ -15,7 +15,7 @@ import programsImage from 'static/programs.svg';
 
 const FormContainer = styled(Container)`
   padding: 30px;
-  max-width: 600px;
+  max-width: 500px;
 `;
 
 const InfoCard = styled(Container)`
