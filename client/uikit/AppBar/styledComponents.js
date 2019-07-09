@@ -14,10 +14,19 @@ export const MenuItemContent = styled(MenuItemTypography)`
   margin: 0px 24px;
   text-align: center;
   text-decoration: none;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent1};
+
+    .title {
+      color: ${({ theme }) => theme.colors.accent1};
+    }
+  }
 `;
 export const MenuItemContainer = styled('div', {
   shouldForwardProp: propName => propName !== 'active',
 })`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,10 +40,6 @@ export const MenuItemContainer = styled('div', {
   border-bottom: solid 3px ${({ active, theme }) => (active ? theme.colors.accent1 : 'none')};
   background-color: ${({ active, theme }) =>
     active ? theme.appBar.menuItem.background.active : 'none'};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.accent1};
-  }
 `;
 export const MenuGroupDisplay = styled('div')`
   display: flex;
@@ -70,6 +75,9 @@ export const UserBadgeContainer = styled('div')`
   text-align: left;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   min-width: 200px;
+  margin: 0 -24px;
+  padding: 0 16px;
+  box-sizing: border-box;
 `;

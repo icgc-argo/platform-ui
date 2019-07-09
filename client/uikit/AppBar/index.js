@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-
-import useTheme from '../utils/useTheme';
+import PropTypes from 'prop-types';
+import React from 'react';
 import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
+import useTheme from '../utils/useTheme';
 import {
-  MenuItemContent,
-  MenuItemContainer,
-  MenuGroupDisplay,
   AppBarContainer,
-  SectionDisplay,
-  LogoImage,
   LogoContainer,
+  LogoImage,
+  MenuGroupDisplay,
+  MenuItemContainer,
+  MenuItemContent,
+  SectionDisplay,
   UserBadgeContainer,
 } from './styledComponents';
 
-export const UserBadge = ({ firstName = '', lastName = '', title }) => {
+export const UserBadge = ({ firstName = '', lastName = '', title, ...otherProps }) => {
   const theme = useTheme();
   return (
-    <UserBadgeContainer>
+    <UserBadgeContainer {...otherProps}>
       <div>
         <Typography variant="navigation" component="div" bold>
           Hello, {firstName}
         </Typography>
-        <Typography variant="navigation" component="div" color="grey_1">
+        <Typography variant="navigation" component="div" color="grey_1" className="title">
           {title}
         </Typography>
       </div>
@@ -50,6 +48,7 @@ export const UserBadge = ({ firstName = '', lastName = '', title }) => {
     </UserBadgeContainer>
   );
 };
+
 UserBadge.propTypes = {
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
@@ -64,6 +63,7 @@ export const Logo = ({ DomComponent = props => <span {...props} /> }) => {
     </ContainerComponent>
   );
 };
+
 Logo.propTypes = {
   DomComponent: PropTypes.func,
 };
@@ -79,14 +79,17 @@ export const MenuItem = ({
   ref,
   active = false,
   DomComponent = ({ active, ...others }) => <a {...others} />,
+  dropdownMenu,
 }) => {
   const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
   return (
     <ComposedContainer className={className} id={id} ref={ref} active={active}>
       <MenuItemContent bold>{children}</MenuItemContent>
+      {dropdownMenu}
     </ComposedContainer>
   );
 };
+
 MenuItem.propTypes = {
   active: PropTypes.bool,
   id: PropTypes.string,
@@ -95,5 +98,9 @@ MenuItem.propTypes = {
 };
 
 const AppBar = AppBarContainer;
+
 AppBar.propTypes = {};
+
 export default AppBar;
+
+export { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
