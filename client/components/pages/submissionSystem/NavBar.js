@@ -8,7 +8,7 @@ import {
   PROGRAM_ENTITY_PATH,
   DCC_OVERVIEW_PATH,
   USER_PAGE_PATH,
-} from 'global/constants';
+} from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';

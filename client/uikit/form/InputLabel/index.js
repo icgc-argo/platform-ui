@@ -12,7 +12,7 @@ const InputLabel = React.forwardRef(function InputLabel(props, ref) {
 
   const Label = styled('label')`
     ${({ theme }) => css(theme.typography.label)};
-
+    margin-top: 7px;
     &.disabled {
     }
   `;

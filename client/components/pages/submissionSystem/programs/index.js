@@ -13,9 +13,12 @@ import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
 import { ContentBox } from 'uikit/PageLayout';
 import ProgramsTable from './ProgramsTable';
 import SubmissionLayout from '../layout';
+import Link from 'next/link';
 
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './queries.gql';
+
+import { CREATE_PROGRAM_PAGE_PATH } from 'global/constants/pages';
 
 const TableFilterInput = props => (
   <Input
@@ -44,6 +47,7 @@ export default ({
   const sortedPrograms = orderBy(programs, 'name');
   return (
     <SubmissionLayout
+      subtitle="All Programs"
       pathname={pathname}
       logOut={logOut}
       contentHeader={
@@ -63,7 +67,9 @@ export default ({
           >
             All Programs
           </Typography>
-          <Button onClick={console.log}>Create a program</Button>
+          <Link href={CREATE_PROGRAM_PAGE_PATH}>
+            <Button>Create a program</Button>
+          </Link>
         </div>
       }
     >

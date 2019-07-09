@@ -48,7 +48,7 @@ const typeDefs = gql`
   input ProgramInput {
     name: String!
     shortName: String!
-    description: String!
+    description: String
     commitmentDonors: Int!
     submittedDonors: Int!
     genomicDonors: Int!

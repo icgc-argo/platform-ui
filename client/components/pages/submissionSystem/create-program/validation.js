@@ -1,0 +1,88 @@
+import * as yup from 'yup';
+import {
+  PROGRAM_MEMBERSHIP_TYPES,
+  COUNTRIES,
+  RDC_NAMES,
+  PRIMARY_SITES,
+  CANCER_TYPES,
+} from 'global/constants';
+
+/* Validation Schema for Create Program Form */
+
+export default yup.object().shape({
+  programName: yup
+    .string()
+    .label('Program Name')
+    .trim()
+    .required(),
+  shortName: yup
+    .string()
+    .label('Short Name')
+    .trim()
+    .max(9)
+    .matches(/^[A-Z0-9\-]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
+    .required(),
+  countries: yup
+    .array()
+    .of(yup.string().oneOf(COUNTRIES.map(country => country.name)))
+    .label('Countries')
+    .required(),
+  cancerTypes: yup
+    .array()
+    .of(yup.string().oneOf(CANCER_TYPES))
+    .label('Cancer Types')
+    .required()
+    .min(1),
+  primarySites: yup
+    .array()
+    .of(yup.string().oneOf(PRIMARY_SITES))
+    .label('Primary Sites')
+    .required()
+    .min(1),
+  commitmentLevel: yup
+    .number()
+    .label('Commitment Level')
+    .moreThan(0)
+    .required(),
+  institutions: yup
+    .array()
+    .of(yup.string())
+    .label('Institutions')
+    .required(),
+  membershipType: yup
+    .string()
+    .label('Membership Type')
+    .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.')
+    .required(),
+  website: yup
+    .string()
+    .label('Website')
+    .trim()
+    .url(),
+  description: yup
+    .string()
+    .label('Description')
+    .trim(),
+  processingRegions: yup
+    .array()
+    .of(yup.string())
+    .label('Processing Regions')
+    .required()
+    .min(1),
+  adminFirstName: yup
+    .string()
+    .label(`Administrator's First Name`)
+    .trim()
+    .required(),
+  adminLastName: yup
+    .string()
+    .label(`Administrator's Last Name`)
+    .trim()
+    .required(),
+  adminEmail: yup
+    .string()
+    .label(`Administrator's Email`)
+    .trim()
+    .email()
+    .required(),
+});

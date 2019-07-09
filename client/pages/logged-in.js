@@ -3,7 +3,8 @@ import React from 'react';
 import Router from 'next/router';
 
 import useEgoToken from 'global/hooks/useEgoToken';
-import { LOCAL_STORAGE_REDIRECT_KEY, LOGIN_PAGE_PATH } from 'global/constants';
+import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
+import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { getRedirectPathForUser } from 'global/utils/pages';
 import { createPage } from 'global/utils/pages';
 

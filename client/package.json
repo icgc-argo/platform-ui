@@ -67,7 +67,8 @@
     "react-table": "^6.10.0",
     "react-tippy": "^1.2.3",
     "recompose": "^0.30.0",
-    "url-join": "^4.0.0"
+    "url-join": "^4.0.0",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

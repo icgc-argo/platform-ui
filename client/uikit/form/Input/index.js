@@ -16,6 +16,7 @@ const Input = ({
   preset = INPUT_PRESETS.DEFAULT,
   value,
   onChange,
+  onBlur = () => {},
   type,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
@@ -56,6 +57,7 @@ const Input = ({
           value={value}
           type={type}
           onChange={onChange}
+          onBlur={onBlur}
           size={size}
           disabled={calcDisabled}
           id={props.id}
@@ -119,6 +121,9 @@ Input.propTypes = {
    * Whether to show the clear button
    */
   showClear: PropTypes.bool,
+
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
 };
 
 export default Input;

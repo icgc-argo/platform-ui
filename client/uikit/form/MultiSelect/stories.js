@@ -21,15 +21,12 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
     <MultiSelect
       value="[parent state]"
       onChange={() => '[parent func]'}
+      onBlur={() => '[parent func]'}
       disabled={boolean('disabled', false)}
       error={boolean('error', false)}
       single={boolean('single', false)}
       allowNew={boolean('allowNew', false)}
     >
-      <Option value="Australia">Australia</Option>
-      <Option value="Cambodia">Cambodia</Option>
-      <Option value="Cameroon">Cameroon</Option>
-      <Option value="Canada">Canada</Option>
       <Option value="Afghanistan">Afghanistan</Option>
       <Option value="Albania">Albania</Option>
       <Option value="Algeria">Algeria</Option>
@@ -39,12 +36,16 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
       <Option value="Argentina">Argentina</Option>
       <Option value="Armenia">Armenia</Option>
       <Option value="Austria">Austria</Option>
+      <Option value="Australia">Australia</Option>
       <Option value="Azerbaijan">Azerbaijan</Option>
       <Option value="Bahamas">Bahamas</Option>
       <Option value="Bahrain">Bahrain</Option>
       <Option value="Bangladesh">Bangladesh</Option>
       <Option value="Barbados">Barbados</Option>
       <Option value="Belarus">Belarus</Option>
+      <Option value="Cambodia">Cambodia</Option>
+      <Option value="Cameroon">Cameroon</Option>
+      <Option value="Canada">Canada</Option>
     </MultiSelect>
   </WithState>
 ));

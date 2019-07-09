@@ -76,7 +76,6 @@ const InputBox = styled('div')`
   padding: 7px 7px 0 7px;
   position: relative;
   width: 100%;
-  z-index: 2;
 
   border-color: ${({ theme }) => theme.colors.grey_1};
 
@@ -86,6 +85,7 @@ const InputBox = styled('div')`
 
   &.focused {
     border-color: ${({ theme }) => theme.colors.grey};
+    z-index: 2;
   }
 
   &.disabled {
@@ -195,8 +195,9 @@ const MultiSelect = ({
   value,
   children,
   onChange,
+  onBlur = () => {},
   single,
-  placeholder = single ? '' : 'Add one or more...',
+  placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
   allowNew,
   disabled,
@@ -232,6 +233,7 @@ const MultiSelect = ({
       value: newValue,
       name,
     };
+
     setSearchString('');
     onChange(event, null);
   };
@@ -252,7 +254,7 @@ const MultiSelect = ({
       }
     }
 
-    if (e.key === 'Enter' && allowNew) {
+    if ((e.key === 'Enter' || e.key === 'Tab') && allowNew) {
       if (searchString.length !== 0) {
         e.persist();
 
@@ -273,8 +275,9 @@ const MultiSelect = ({
     setFocusState(true);
   };
 
-  const handleInputBlur = () => {
+  const handleInputBlur = event => {
     setFocusState(false);
+    onBlur(event);
   };
 
   const handleSelectedItemClick = item => event => {
@@ -412,6 +415,9 @@ MultiSelect.propTypes = {
 
   /* Handler of onChange event */
   onChange: PropTypes.func.isRequired,
+
+  /* Handler of onBlur event */
+  onBlur: PropTypes.func,
 
   /* Whether to allow user to add new value */
   allowNew: PropTypes.bool,

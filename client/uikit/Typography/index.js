@@ -13,6 +13,7 @@ const defaultTags = {
   subtitle: 'h3',
   subtitle2: 'h4',
   paragraph: 'p',
+  span: 'span',
 };
 
 const createTypographyComponentMapFromTheme = memoize(themeObj =>

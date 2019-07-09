@@ -153,13 +153,12 @@ function Profile({ program = {} }) {
   const SectionTitle = props => (
     <Typography
       component="h3"
-      variant="subtitle2"
+      variant="sectionHeader"
       css={css`
         margin: 17px 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: ${theme.colors.secondary};
       `}
+      color="secondary"
+      bold
       {...props}
     />
   );

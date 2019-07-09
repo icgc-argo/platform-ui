@@ -44,6 +44,15 @@ export default {
     lineHeight: 'normal',
     letterSpacing: 'normal',
   },
+  sectionHeader: {
+    fontFamily: 'Work Sans, sans-serif',
+    fontSize: '16px',
+    fontWeight: '600',
+    fontStyle: 'normal',
+    fontStretch: 'normal',
+    lineHeight: 'normal',
+    letterSpacing: 'normal',
+  },
   navigation: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '15px',
