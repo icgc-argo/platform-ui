@@ -42,7 +42,7 @@ import {
  * Repeated Component Styles/Layouts
  * ********************************* */
 const SectionTitle = props => (
-  <Typography component="h3" variant="sectionHeader" color="secondary" {...props} />
+  <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
 const InputLabelWrapper = ({ sm = 3, children }) => (
