@@ -19,18 +19,25 @@ const useFormHook = initData => {
     // setForm();
   };
 
-  const deleteSection = index => console.log('delete section', index);
-
   const setData = ({ key, val, index }) =>
     setForm({
       ...form,
       data: form.data.map((field, i) => (i === index ? { ...field, [key]: val } : field)),
     });
 
+  const deleteSection = deletedIndex => {
+    const filterDeleted = (item, index) => index !== deletedIndex;
+    setForm({
+      errors: form.errors.filter(filterDeleted),
+      data: form.data.filter(filterDeleted),
+    });
+  };
+
   return {
     errors,
     data,
     setData,
+    deleteSection,
   };
 };
 
@@ -63,7 +70,15 @@ const AddUserModal = ({}) => {
   //  const [formData, setFormData] = React.useState([user]);
   //  const [validationErrors, setValidationErrors] = React.useState([user]);
 
-  const { errors: validationErrors, data: form, setData, setErrors } = useFormHook(user);
+  const {
+    errors: validationErrors,
+    data: form,
+    setData,
+    setErrors,
+    deleteSection,
+    addSection,
+  } = useFormHook(user);
+
   console.log('hook data', validationErrors, form);
 
   const submitForm = async () => {
@@ -122,9 +137,8 @@ const AddUserModal = ({}) => {
     }
   };
 */
-  const deleteSection = index => {
-    if (form.length <= 1) return false;
-    formDeleteSection(index);
+  const removeSection = index => {
+    deleteSection(index);
   };
 
   return (
@@ -145,7 +159,7 @@ const AddUserModal = ({}) => {
             onChange={(key, val) => setData({ key, val, index: currentIndex })}
             //   validateField={key => validateField({ key, data, currentIndex })}
             errors={validationErrors[currentIndex]}
-            deleteSelf={form.length > 1 ? () => deleteSection(currentIndex) : null}
+            deleteSelf={form.data.length > 1 ? () => removeSection(currentIndex) : null}
           />
         );
       })}
