@@ -4,19 +4,21 @@ import { get, memoize } from 'lodash';
 
 import { asEnum } from '../common';
 
-const PERMISSIONS = asEnum(
-  {
-    READ: 'READ',
-    WRITE: 'WRITE',
-    ADMIN: 'ADMIN',
-    DENY: 'DENY',
-  },
-  { name: 'Ego permission' },
-);
-const DCC_PREFIX = 'DCC_';
-const RDPC_PREFIX = 'RDPC_PREFIX_';
-const PROGRAM_PREFIX = 'PROGRAM_';
-const PROGRAM_DATA_PREFIX = 'PROGRAM_DATA_';
+const PERMISSIONS: {
+  READ: string,
+  WRITE: string,
+  ADMIN: string,
+  DENY: string,
+} = {
+  READ: 'READ',
+  WRITE: 'WRITE',
+  ADMIN: 'ADMIN',
+  DENY: 'DENY',
+};
+const DCC_PREFIX = 'program-service.WRITE';
+const RDPC_PREFIX = 'RDPC-';
+const PROGRAM_PREFIX = 'PROGRAM-';
+const PROGRAM_DATA_PREFIX = 'PROGRAMDATA-';
 
 type EgoJwtData = {
   iat: number,
@@ -43,6 +45,11 @@ type EgoJwtData = {
   scope: string[],
 };
 
+type PermissionScopeObj = {
+  policy: string,
+  permission: $Values<typeof PERMISSIONS>,
+};
+
 export const decodeToken = memoize<[string], EgoJwtData>(egoJwt => {
   return jwtDecode(egoJwt);
 });
@@ -60,15 +67,7 @@ export const isDccMember = (egoJwt: string) => {
   try {
     const data = decodeToken(egoJwt);
     const permissions = data.context.user.permissions;
-    const dccPermissions = permissions.filter(p => {
-      const policy = p.split('.')[0];
-      return policy.indexOf(DCC_PREFIX) === 0;
-    });
-    const isMember =
-      dccPermissions.some(p =>
-        [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.ADMIN].includes(p.split('.')[1]),
-      ) && !dccPermissions.some(p => [PERMISSIONS.DENY].includes(p.split('.')[1]));
-    return isMember;
+    return permissions.some(p => p.includes(DCC_PREFIX));
   } catch (err) {
     return false;
   }
@@ -92,7 +91,22 @@ export const isRdpcMember = (egoJwt: string) => {
   }
 };
 
-export const getAuthorizedProgramPolicies = (egoJwt: string) => {
+export const parseScope = (scope: string): PermissionScopeObj => {
+  const permission = scope.split('.')[1];
+  if (Object.values(PERMISSIONS).includes(permission)) {
+    return {
+      policy: scope.split('.')[0],
+      permission,
+    };
+  } else {
+    throw new Error(`invalid scope: ${scope}`);
+  }
+};
+
+export const serializeScope = (scopeObj: PermissionScopeObj): string =>
+  `${scopeObj.policy}.${scopeObj.permission}`;
+
+export const getAuthorizedProgramScopes = (egoJwt: string): Array<PermissionScopeObj> => {
   const data = decodeToken(egoJwt);
   const permissions = data.context.user.permissions;
   const programPermissions = permissions.filter(p => {
@@ -101,31 +115,39 @@ export const getAuthorizedProgramPolicies = (egoJwt: string) => {
       policy.indexOf(PROGRAM_PREFIX) === 0 && policy.indexOf(PROGRAM_DATA_PREFIX) !== 0;
     return output;
   });
-  return programPermissions.reduce((acc: string[], p) => {
-    const permission = p.split('.')[1];
-    const policy = p.split('.')[0];
+  return programPermissions.reduce((acc, p) => {
+    const scopeObj = parseScope(p);
     if (
-      [(PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.ADMIN)].includes(permission) &&
-      ![PERMISSIONS.DENY].includes(permission)
+      [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.ADMIN].includes(scopeObj.permission) &&
+      ![PERMISSIONS.DENY].includes(scopeObj.permission)
     ) {
-      acc.push(policy);
+      acc.push(scopeObj);
     }
     return acc;
   }, []);
 };
 
-export const hasAccessToProgram = ({
-  egoJwt,
-  programId,
-}: {
-  egoJwt: string,
-  programId: string,
-}) => {
-  const authorizedProgramPolicies = getAuthorizedProgramPolicies(egoJwt);
-  return authorizedProgramPolicies.some(policy => policy.includes(programId));
+export const canReadProgram = (args: { egoJwt: string, programId: string }): boolean => {
+  const authorizedProgramScopes = getAuthorizedProgramScopes(args.egoJwt);
+  return authorizedProgramScopes.some(({ policy }) => policy.includes(args.programId));
 };
 
-export const isProgramAdmin = (args: { egoJwt: string, programId: string }) => {
-  const authorizedProgramPolicies = getAuthorizedProgramPolicies(args.egoJwt);
-  return true;
+export const canWriteProgram = (args: { egoJwt: string, programId: string }): boolean => {
+  const authorizedProgramScopes = getAuthorizedProgramScopes(args.egoJwt);
+  return authorizedProgramScopes.some(
+    ({ policy, permission }) =>
+      policy.includes(args.programId) &&
+      [PERMISSIONS.WRITE, PERMISSIONS.ADMIN].includes(permission),
+  );
+};
+
+export const isProgramAdmin = (args: { egoJwt: string, programId: string }): boolean => {
+  return canWriteProgram(args);
+
+  /** TODO: switch to below logic when .ADMIN scope is available */
+
+  // const authorizedProgramScopes = getAuthorizedProgramScopes(args.egoJwt);
+  // return authorizedProgramScopes.some(
+  //   ({ policy, permission }) => policy.includes(args.programId) && permission === PERMISSIONS.ADMIN,
+  // );
 };
