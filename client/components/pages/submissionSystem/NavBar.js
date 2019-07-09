@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Link from 'next/link';
 
 import {
@@ -37,7 +37,7 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
-export default (props: { path: string, logOut: void => void }) => {
+export default (props: { path: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
   const userModel = (() => {
     try {
@@ -63,11 +63,15 @@ export default (props: { path: string, logOut: void => void }) => {
           )}
         />
         <MenuGroup>
-          <NavbarLink path={PROGRAMS_LIST_PATH} active={props.path === PROGRAMS_LIST_PATH} />
           {/* <NavbarLink path={PROGRAM_ENTITY_PATH} active={props.path === PROGRAM_ENTITY_PATH} />
           <NavbarLink path={DCC_OVERVIEW_PATH} active={props.path === DCC_OVERVIEW_PATH} />
           <NavbarLink path={USER_PAGE_PATH} active={props.path === USER_PAGE_PATH} /> */}
           {/* <MenuItem>File Repository</MenuItem> */}
+          {props.children ? (
+            props.children
+          ) : (
+            <NavbarLink path={PROGRAMS_LIST_PATH} active={props.path === PROGRAMS_LIST_PATH} />
+          )}
         </MenuGroup>
       </Section>
       <Section />
