@@ -18,6 +18,7 @@ const Ul = styled('ul')`
   text-align: left;
   padding: 0;
   display: none;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.08), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
 
   &.open {
     display: block;
