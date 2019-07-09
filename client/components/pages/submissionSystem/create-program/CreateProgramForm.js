@@ -138,13 +138,11 @@ export default () => {
       createProgramSchema
         .validate(formData, { abortEarly: false, stripUnknown: true })
         .then(data => {
-          console.log(`validation success`);
           // Validate will perform data manipulations such as trimming strings.
           //  need to return the updated form data for submission.
           resolve(data);
         })
         .catch(err => {
-          console.log(`validation failure`);
           const errors = get(err, 'inner', []).reduce((output, error) => {
             output[error.path] = error.message;
             return output;
@@ -158,13 +156,11 @@ export default () => {
   const submitForm = async formData => {
     try {
       validData = await validateForm(formData);
-      console.log(validData);
 
       const result = await sendCreateProgram();
       Router.push(PROGRAMS_PAGE_PATH);
     } catch (err) {
       window.scrollTo(0, 0);
-      console.log(err);
     }
   };
 
@@ -188,7 +184,6 @@ export default () => {
         updateValidationErrorsForField(path, '');
       })
       .catch(err => {
-        console.log(err);
         const message =
           isArray(err.inner) && err.inner.length > 1
             ? err.inner[err.inner.length - 1].message
