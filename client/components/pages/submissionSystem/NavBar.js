@@ -13,7 +13,15 @@ import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
 import { css } from 'uikit';
-import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
+import AppBar, {
+  Logo,
+  MenuGroup,
+  MenuItem,
+  Section,
+  UserBadge,
+  DropdownMenu,
+  DropdownMenuItem,
+} from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import urlJoin from 'url-join';
 
@@ -48,6 +56,7 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
 
 export default (props: { path: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
+
   const userModel = (() => {
     try {
       return decodeToken(egoJwt || '');
@@ -55,6 +64,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
       return null;
     }
   })();
+
   return (
     <AppBar
       css={css`
@@ -77,12 +87,19 @@ export default (props: { path: string, logOut: void => void, children?: React.No
       <Section>
         <MenuGroup>
           <MenuItem active={_.includes(submissionPaths, props.path)}>Submission</MenuItem>
-          <MenuItem>
-            <Button onClick={props.logOut}> logout </Button>
-          </MenuItem>
-          <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
+          {!userModel && (
+            <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
+          )}
           {userModel && (
-            <MenuItem>
+            <MenuItem
+              dropdownMenu={
+                <DropdownMenu>
+                  <DropdownMenuItem active>My Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Tokens</DropdownMenuItem>
+                  <DropdownMenuItem onClick={props.logOut}>Logout</DropdownMenuItem>
+                </DropdownMenu>
+              }
+            >
               <UserBadge
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
