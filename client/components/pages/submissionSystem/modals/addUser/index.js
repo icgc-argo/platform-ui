@@ -25,6 +25,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     });
   };
 
+  // set single error
   const setError = ({ key, val, index }) => {
     setForm({
       ...form,
@@ -32,6 +33,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     });
   };
 
+  // set all errors
   const setErrors = ({ validationErrors, index }) =>
     setForm({
       ...form,
@@ -121,11 +123,11 @@ const AddSection = styled('div')`
   display: flex;
   align-items: center;
   text-transform: uppercase;
-  color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
+  color: ${({ enabled, theme }) => (enabled ? theme.colors.accent2_dark : '#d0d1d8')};
   margin-top: 14px;
 
   &:hover {
-    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+    cursor: ${({ enabled }) => (enabled ? 'pointer' : 'not-allowed')};
   }
 `;
 
@@ -146,7 +148,12 @@ const AddUserModal = ({}) => {
   const isValid = validationErrors
     .map(section => Object.values(section))
     .reduce((acc, val) => acc && !val, false);
-  console.log('is valid', isValid, validationErrors);
+  //console.log('is valid', isValid, validationErrors);
+
+  const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
+    (acc, val) => acc || !!val,
+    false,
+  );
 
   const submitForm = async () => {
     try {
@@ -195,16 +202,16 @@ const AddUserModal = ({}) => {
           />
         );
       })}
-      <AddSection variant="text" disabled={!touched || !isValid}>
+      <AddSection variant="text" enabled={islastSectionTouched}>
         <Icon
           name="plus_circle"
-          fill={touched ? 'accent2' : '#cecfd3'}
+          fill={islastSectionTouched ? 'accent2' : '#cecfd3'}
           css={css`
             margin-right: 3px;
           `}
         />
         <Typography
-          onClick={() => (touched ? addSection() : null)}
+          onClick={() => (islastSectionTouched ? addSection() : null)}
           variant="paragraph"
           component="span"
         >
