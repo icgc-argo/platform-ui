@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
+import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 
 const Section = styled('div')`
   padding: 12px 11px;
@@ -56,9 +57,9 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
         <Select
           aria-label="role-select"
           value={user.role}
-          options={[{ content: 'Value 1', value: 'v1' }, { content: 'Value 2', value: 'v2' }]}
+          options={PROGRAM_MEMBERSHIP_TYPES}
           onChange={val => onChange('role', val)}
-          onBlur={() => console.log('selcet blur')}
+          onBlur={() => validateField('role')}
         />
         {!!roleError ? <FormHelperText>{roleError}</FormHelperText> : null}
       </FormControl>

@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { PROGRAM_MEMBERSHIP_TYPES } from '../../../../../global/constants/index';
 
 const testGsuite = async email => {
   // await fetch......
@@ -26,7 +27,7 @@ const addUserSchema = yup.object().shape({
   role: yup
     .string()
     .label('Role')
-    .oneOf(['v1', 'v2'])
+    .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.')
     .required(),
 });
 
