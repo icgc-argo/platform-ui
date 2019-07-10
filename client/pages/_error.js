@@ -1,6 +1,6 @@
 import React from 'react';
-import Page404 from './404';
-import Page500 from './404';
+import Page404 from 'components/pages/404';
+import Page500 from 'components/pages/500';
 
 class Error extends React.Component {
   static getInitialProps({ res, err }) {
