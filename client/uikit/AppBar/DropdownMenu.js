@@ -17,20 +17,11 @@ const Ul = styled('ul')`
   font-size: 15px;
   text-align: left;
   padding: 0;
-  display: none;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.08), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-
-  &.open {
-    display: block;
-  }
 `;
 
-export function DropdownMenu({ children, open, ...otherProps }) {
-  return (
-    <Ul {...otherProps} className={clsx({ open })}>
-      {children}
-    </Ul>
-  );
+export function DropdownMenu({ children, ...otherProps }) {
+  return <Ul {...otherProps}>{children}</Ul>;
 }
 
 const Li = styled('li')`

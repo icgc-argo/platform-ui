@@ -35,11 +35,6 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
 
   const UserBadgeDom = props => <a {...props} onClick={action('user badge clicked')} />;
 
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const handleUserBadgeClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
   return (
     <AppBar>
       <Section>
@@ -61,18 +56,13 @@ const AppBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           <MenuItem
             DomComponent={UserBadgeDom}
             dropdownMenu={
-              <DropdownMenu open={dropdownOpen}>
+              <DropdownMenu>
                 <DropdownMenuItem active>Profile & Tokens</DropdownMenuItem>
                 <DropdownMenuItem>Logout</DropdownMenuItem>
               </DropdownMenu>
             }
           >
-            <UserBadge
-              firstName="Harvey"
-              lastName="Specter"
-              title="DCC Member"
-              onClick={handleUserBadgeClick}
-            />
+            <UserBadge firstName="Harvey" lastName="Specter" title="DCC Member" />
           </MenuItem>
         </MenuGroup>
       </Section>

@@ -57,12 +57,6 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
 export default (props: { path: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
 
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
-
-  const handleUserBadgeClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
   const userModel = (() => {
     try {
       return decodeToken(egoJwt || '');
@@ -99,7 +93,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
           {userModel && (
             <MenuItem
               dropdownMenu={
-                <DropdownMenu open={dropdownOpen}>
+                <DropdownMenu>
                   <DropdownMenuItem active>My Profile</DropdownMenuItem>
                   <DropdownMenuItem>Tokens</DropdownMenuItem>
                   <DropdownMenuItem onClick={props.logOut}>Logout</DropdownMenuItem>
@@ -107,7 +101,6 @@ export default (props: { path: string, logOut: void => void, children?: React.No
               }
             >
               <UserBadge
-                onClick={handleUserBadgeClick}
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
                 title={'Some Role'}

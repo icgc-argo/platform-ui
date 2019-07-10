@@ -82,10 +82,18 @@ export const MenuItem = ({
   dropdownMenu,
 }) => {
   const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
+
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const handleClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   return (
     <ComposedContainer className={className} id={id} ref={ref} active={active}>
-      <MenuItemContent bold>{children}</MenuItemContent>
-      {dropdownMenu}
+      <MenuItemContent bold onClick={handleClick}>
+        {children}
+      </MenuItemContent>
+      {dropdownOpen && dropdownMenu}
     </ComposedContainer>
   );
 };
