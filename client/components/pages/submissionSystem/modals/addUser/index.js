@@ -12,17 +12,20 @@ import addUserSchema from './validations';
 
 const useFormHook = ({ initialFields, schema: formSchema }) => {
   const [form, setForm] = useState({ errors: [initialFields], data: [initialFields] });
+  const [touched, setTouched] = useState(false);
   const { errors, data } = form;
 
   // set form data
-  const setData = ({ key, val, index }) =>
+  const setData = ({ key, val, index }) => {
+    if (!touched) setTouched(true);
+
     setForm({
       ...form,
       data: data.map((field, i) => (i === index ? { ...field, [key]: val } : field)),
     });
+  };
 
   const setError = ({ key, val, index }) => {
-    console.log('set error', key, val, index);
     setForm({
       ...form,
       errors: errors.map((field, i) => (i === index ? { ...field, [key]: val } : field)),
@@ -67,26 +70,33 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     }
   };
 
+  // validate a section
+  const validateSection = async ({ index }) =>
+    new Promise(async (resolve, reject) => {
+      const section = data[index];
+      try {
+        const validData = await addUserSchema.validate(section, {
+          abortEarly: false,
+          stripUnknown: true,
+        });
+        resolve(validData);
+      } catch (formErrors) {
+        const validationErrors = get(formErrors, 'inner', []).reduce((output, error) => {
+          output[error.path] = error.message;
+          return output;
+        }, {});
+
+        setErrors({ validationErrors, index });
+        reject(validationErrors);
+      }
+    });
+
+  // validates entire form
   const validateForm = () =>
     Promise.all(
       data.map(
         (section, index) =>
-          new Promise(async (resolve, reject) => {
-            try {
-              const validData = await addUserSchema.validate(section, {
-                abortEarly: false,
-                stripUnknown: true,
-              });
-              resolve(validData);
-            } catch (formErrors) {
-              const validationErrors = get(formErrors, 'inner', []).reduce((output, error) => {
-                output[error.path] = error.message;
-                return output;
-              }, {});
-
-              setErrors({ validationErrors, index });
-            }
-          }),
+          new Promise(async (resolve, reject) => await validateSection({ index })),
       ),
     );
 
@@ -97,9 +107,13 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     deleteSection,
     createSection,
     validateField,
+    validateSection,
     validateForm,
+    touched,
   };
 };
+
+const user = { firstName: '', lastName: '', email: '', role: '' };
 
 // TODO: width is spanning all the way acaross? maybe use button?
 // styled(spin) ${theme.typographg.paragray}
@@ -111,17 +125,11 @@ const AddSection = styled('div')`
   margin-top: 14px;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   }
 `;
 
-const user = { firstName: '', lastName: '', email: '', role: '' };
-
 const AddUserModal = ({}) => {
-  const [disabled, setDisabled] = React.useState(false);
-
-  const [isValidated, setIsValidated] = React.useState(false);
-
   const {
     errors: validationErrors,
     data: form,
@@ -130,8 +138,15 @@ const AddUserModal = ({}) => {
     deleteSection,
     createSection,
     validateField,
+    validateSection,
     validateForm,
+    touched,
   } = useFormHook({ initialFields: user, schema: addUserSchema });
+
+  const isValid = validationErrors
+    .map(section => Object.values(section))
+    .reduce((acc, val) => acc && !val, false);
+  console.log('is valid', isValid, validationErrors);
 
   const submitForm = async () => {
     try {
@@ -145,12 +160,12 @@ const AddUserModal = ({}) => {
 
   const addSection = async () => {
     // check if last section is blank
-    const data = form[form.length - 1];
+    const index = form.length - 1;
     try {
-      const value = await addUserSchema.validate(data);
+      await validateSection({ index });
       createSection(user);
     } catch (e) {
-      console.log('error: last section is empty');
+      console.log('error: last section is empty', e);
     }
   };
 
@@ -164,7 +179,7 @@ const AddUserModal = ({}) => {
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      actionDisabled={isValidated}
+      actionDisabled={!touched || !isValid}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
@@ -180,15 +195,19 @@ const AddUserModal = ({}) => {
           />
         );
       })}
-      <AddSection variant="text" disabled={disabled}>
+      <AddSection variant="text" disabled={!touched || !isValid}>
         <Icon
           name="plus_circle"
-          fill={disabled ? '#cecfd3' : 'accent2'}
+          fill={touched ? 'accent2' : '#cecfd3'}
           css={css`
             margin-right: 3px;
           `}
         />
-        <Typography onClick={() => addSection()} variant="paragraph" component="span">
+        <Typography
+          onClick={() => (touched ? addSection() : null)}
+          variant="paragraph"
+          component="span"
+        >
           Add another
         </Typography>
       </AddSection>
