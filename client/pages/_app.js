@@ -20,6 +20,7 @@ import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 
+import Error401Page from 'components/pages/401';
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
@@ -112,7 +113,7 @@ const Root = (props: {
                   <pre>{error.stack || error.message}</pre>
                 )
               ) : unauthorized ? (
-                'You are not authorized'
+                <Error401Page />
               ) : (
                 <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
               )}
