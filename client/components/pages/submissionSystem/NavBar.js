@@ -1,19 +1,28 @@
 // @flow
-import * as React from 'react';
-import Link from 'next/link';
-
 import {
+  DCC_OVERVIEW_PATH,
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   PROGRAM_ENTITY_PATH,
-  DCC_OVERVIEW_PATH,
+  PROGRAM_MANAGE_PATH,
   USER_PAGE_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
+import _ from 'lodash';
+import Link from 'next/link';
+import * as React from 'react';
+import { css } from 'uikit';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
 import Button from 'uikit/Button';
-import { css } from 'uikit';
+import urlJoin from 'url-join';
+
+const submissionPaths = [
+  PROGRAMS_LIST_PATH,
+  PROGRAM_ENTITY_PATH,
+  DCC_OVERVIEW_PATH,
+  PROGRAM_MANAGE_PATH,
+];
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -63,10 +72,6 @@ export default (props: { path: string, logOut: void => void, children?: React.No
           )}
         />
         <MenuGroup>
-          {/* <NavbarLink path={PROGRAM_ENTITY_PATH} active={props.path === PROGRAM_ENTITY_PATH} />
-          <NavbarLink path={DCC_OVERVIEW_PATH} active={props.path === DCC_OVERVIEW_PATH} />
-          <NavbarLink path={USER_PAGE_PATH} active={props.path === USER_PAGE_PATH} /> */}
-          {/* <MenuItem>File Repository</MenuItem> */}
           {props.children ? (
             props.children
           ) : (
@@ -77,7 +82,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
       <Section />
       <Section>
         <MenuGroup>
-          <MenuItem>Submission System</MenuItem>
+          <MenuItem active={_.includes(submissionPaths, props.path)}>Submission</MenuItem>
           <MenuItem>
             <Button onClick={props.logOut}> logout </Button>
           </MenuItem>
