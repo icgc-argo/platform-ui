@@ -10,30 +10,26 @@ import fs from 'fs';
 
 export default createPage({
   isPublic: true,
-  getInitialProps: async () => {
-    console.log('ls: ', fs.readdirSync(module.id.split('index.js').join('')));
-    return {
-      pages: fs
-        .readdirSync(module.id.split('index.js').join(''))
-        .map(path => path.split('.js').join('')),
-    };
-  },
-})(({ pages }) => {
-  return (
-    <div
-      style={{
-        padding: '10px',
-      }}
-    >
-      {pages.map(page => (
-        <div
-          style={{
-            padding: '5px',
-          }}
-        >
-          <a href={urlJoin('previews', page)}>{page}</a>
-        </div>
-      ))}
-    </div>
-  );
-});
+  getInitialProps: async () => ({
+    pages: fs
+      .readdirSync(module.id.split('index.js').join(''))
+      .filter(fileName => !fileName.includes('index.js'))
+      .map(path => path.split('.js').join('')),
+  }),
+})(({ pages }) => (
+  <div
+    style={{
+      padding: '10px',
+    }}
+  >
+    {pages.map(page => (
+      <div
+        style={{
+          padding: '5px',
+        }}
+      >
+        <a href={urlJoin('previews', page)}>{page}</a>
+      </div>
+    ))}
+  </div>
+));
