@@ -33,7 +33,7 @@ export default createPage({
             Be back soon
           </Typography>
           <Typography as="div" variant="subtitle" color="secondary">
-            Done for Maintenance
+            Down for Maintenance
           </Typography>
           <Typography variant="subtitle2">
             Sorry for the inconvenience. We'll be back up and running as fast as possible.
