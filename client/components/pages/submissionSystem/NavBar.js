@@ -15,12 +15,13 @@ import * as React from 'react';
 import { css } from 'uikit';
 import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
 import Button from 'uikit/Button';
+import urlJoin from 'url-join';
 
 const submissionPaths = [
   PROGRAMS_LIST_PATH,
   PROGRAM_ENTITY_PATH,
   DCC_OVERVIEW_PATH,
-  PROGRAM_MANAGE_PATH + '/[shortName]',
+  PROGRAM_MANAGE_PATH,
 ];
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
