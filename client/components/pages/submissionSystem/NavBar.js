@@ -1,19 +1,26 @@
 // @flow
-import * as React from 'react';
-import Link from 'next/link';
-
 import {
+  DCC_OVERVIEW_PATH,
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   PROGRAM_ENTITY_PATH,
-  DCC_OVERVIEW_PATH,
   USER_PAGE_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
-import AppBar, { Logo, MenuGroup, MenuItem, Section, UserBadge } from 'uikit/AppBar';
-import Button from 'uikit/Button';
+import Link from 'next/link';
+import * as React from 'react';
 import { css } from 'uikit';
+import AppBar, {
+  DropdownMenu,
+  DropdownMenuItem,
+  Logo,
+  MenuGroup,
+  MenuItem,
+  Section,
+  UserBadge,
+} from 'uikit/AppBar';
+import Button from 'uikit/Button';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -39,6 +46,13 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
 
 export default (props: { path: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
+
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+
+  const handleUserBadgeClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   const userModel = (() => {
     try {
       return decodeToken(egoJwt || '');
@@ -46,6 +60,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
       return null;
     }
   })();
+
   return (
     <AppBar
       css={css`
@@ -67,24 +82,28 @@ export default (props: { path: string, logOut: void => void, children?: React.No
           <NavbarLink path={DCC_OVERVIEW_PATH} active={props.path === DCC_OVERVIEW_PATH} />
           <NavbarLink path={USER_PAGE_PATH} active={props.path === USER_PAGE_PATH} /> */}
           {/* <MenuItem>File Repository</MenuItem> */}
-          {props.children ? (
-            props.children
-          ) : (
-            <NavbarLink path={PROGRAMS_LIST_PATH} active={props.path === PROGRAMS_LIST_PATH} />
-          )}
+          {props.children}
         </MenuGroup>
       </Section>
       <Section />
       <Section>
         <MenuGroup>
-          <MenuItem>Submission System</MenuItem>
-          <MenuItem>
-            <Button onClick={props.logOut}> logout </Button>
-          </MenuItem>
-          <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
+          <MenuItem>Submission</MenuItem>
+          {!userModel && (
+            <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
+          )}
           {userModel && (
-            <MenuItem>
+            <MenuItem
+              dropdownMenu={
+                <DropdownMenu open={dropdownOpen}>
+                  <DropdownMenuItem active>My Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Tokens</DropdownMenuItem>
+                  <DropdownMenuItem onClick={props.logOut}>Logout</DropdownMenuItem>
+                </DropdownMenu>
+              }
+            >
               <UserBadge
+                onClick={handleUserBadgeClick}
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
                 title={'Some Role'}
