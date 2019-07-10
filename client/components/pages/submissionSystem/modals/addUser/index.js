@@ -15,6 +15,11 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
   const [touched, setTouched] = useState(false);
   const { errors, data } = form;
 
+  const hasErrors = errors
+    .map(section => Object.values(section))
+    .flat()
+    .reduce((acc, val) => acc || !!val, false);
+
   // set form data
   const setData = ({ key, val, index }) => {
     if (!touched) setTouched(true);
@@ -112,6 +117,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     validateSection,
     validateForm,
     touched,
+    hasErrors,
   };
 };
 
@@ -143,12 +149,8 @@ const AddUserModal = ({}) => {
     validateSection,
     validateForm,
     touched,
+    hasErrors,
   } = useFormHook({ initialFields: user, schema: addUserSchema });
-
-  const isValid = validationErrors
-    .map(section => Object.values(section))
-    .reduce((acc, val) => acc && !val, false);
-  //console.log('is valid', isValid, validationErrors);
 
   const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,
@@ -186,7 +188,7 @@ const AddUserModal = ({}) => {
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      actionDisabled={!touched || !isValid}
+      actionDisabled={!touched || hasErrors}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
