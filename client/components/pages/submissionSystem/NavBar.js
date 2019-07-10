@@ -71,13 +71,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
             </Link>
           )}
         />
-        <MenuGroup>
-          {props.children ? (
-            props.children
-          ) : (
-            <NavbarLink path={PROGRAMS_LIST_PATH} active={props.path === PROGRAMS_LIST_PATH} />
-          )}
-        </MenuGroup>
+        <MenuGroup>{props.children}</MenuGroup>
       </Section>
       <Section />
       <Section>
