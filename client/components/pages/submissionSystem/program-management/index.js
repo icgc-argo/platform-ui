@@ -136,7 +136,8 @@ function Profile({ program = {} }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col
-      md={2}
+      lg={2}
+      md={4}
       css={css`
         padding: 7px 0;
       `}
@@ -145,7 +146,8 @@ function Profile({ program = {} }) {
   );
   const Right = ({ children, ...props }) => (
     <Col
-      md={10}
+      lg={10}
+      md={8}
       css={css`
         padding: 7px 0;
       `}
