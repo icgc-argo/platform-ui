@@ -40,7 +40,7 @@ export default function Error500Page() {
           <Typography as="div" variant="subtitle" color="secondary">
             Internal Server Error
           </Typography>
-          <Typography variant="subtitle2">Oops! We cann ot handle this request.</Typography>
+          <Typography variant="subtitle2">Oops! We cannot handle this request.</Typography>
           <Typography variant="subtitle2">
             Check out our <Link href="/">Documentation</Link> or head back{' '}
             <Link href="/">Home</Link>.
