@@ -24,9 +24,9 @@ import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages'
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
-  if (ctx.res) {
+  if (ctx.res && ctx.res.redirect) {
     ctx.res.redirect(loginRedirect);
-  } else {
+  } else if (Router.router) {
     Router.replace(loginRedirect);
   }
 };
@@ -153,14 +153,20 @@ Root.getInitialProps = async ({
 
   try {
     const isProduction = NODE_ENV === ENVIRONMENTS.production;
-    const unauthorized = !(await Component.isAccessible({ egoJwt, ctx }));
+    const unauthorized = Component.isAccessible
+      ? !(await Component.isAccessible({ egoJwt, ctx }))
+      : false;
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
     let graphqlQueriesToChache;
     let apolloCache;
     try {
-      graphqlQueriesToChache = await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt });
-      apolloCache = await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt);
+      graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
+        ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
+        : null;
+      apolloCache = graphqlQueriesToChache
+        ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
+        : null;
     } catch (e) {
       console.log(e);
     }

@@ -5,14 +5,17 @@ import { Row, Col } from 'react-grid-system';
 import Typography from '../Typography';
 import React from 'react';
 
-import { INPUT_STATES } from '../theme/defaultTheme/input';
+import { INPUT_STATES as INPUT_THEME_STATES } from '../theme/defaultTheme/input';
 
 export const INPUT_SIZES = {
   SM: 'sm',
   LG: 'lg',
 };
 
+export const INPUT_STATES = INPUT_THEME_STATES;
+
 export const StyledInputWrapper = styled('div')`
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -21,12 +24,12 @@ export const StyledInputWrapper = styled('div')`
   overflow: hidden;
   border-style: solid;
   border-width: 1px;
-  height: ${({ size = INPUT_SIZES.SM }) => {
+  min-height: ${({ size = INPUT_SIZES.SM }) => {
     switch (size) {
       case INPUT_SIZES.SM:
-        return '30px';
+        return '32px';
       case INPUT_SIZES.LG:
-        return '36px';
+        return '38px';
       default:
         return '30px';
     }
