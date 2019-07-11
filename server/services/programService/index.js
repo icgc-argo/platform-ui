@@ -73,9 +73,9 @@ const createProgram = async (
     countries,
     regions,
     membershipType,
-    cancerTypes = [],
-    primarySites = [],
-    adminEmails,
+    cancerTypes,
+    primarySites,
+    admins,
   },
   jwt = null,
 ) => {
@@ -97,7 +97,12 @@ const createProgram = async (
       cancer_types: cancerTypes,
       primary_sites: primarySites,
     },
-    admin_emails: adminEmails,
+    admins: (admins || []).map(admin => ({
+      email: wrapValue(get(admin, 'email')),
+      first_name: wrapValue(get(admin, 'firstName')),
+      last_name: wrapValue(get(admin, 'lastName')),
+      role: wrapValue(get(admin, 'role')),
+    })),
   };
 
   return await new Promise((resolve, reject) => {

@@ -45,6 +45,13 @@ const typeDefs = gql`
     lastName: String
   }
 
+  input ProgramUserInput {
+    email: String!
+    firstName: String!
+    lastName: String!
+    role: UserRole!
+  }
+
   input ProgramInput {
     name: String!
     shortName: String!
@@ -62,7 +69,7 @@ const typeDefs = gql`
     cancerTypes: [String]
     primarySites: [String]
 
-    adminEmails: [String!]!
+    admins: [ProgramUserInput!]!
   }
 
   input InviteUserInput {
@@ -85,6 +92,7 @@ const typeDefs = gql`
     """
     programs: [Program]
   }
+
   type Mutation {
     """
     Create new program
