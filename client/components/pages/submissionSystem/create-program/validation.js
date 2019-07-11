@@ -19,8 +19,14 @@ export default yup.object().shape({
     .string()
     .label('Short Name')
     .trim()
-    .max(9)
-    .matches(/^[A-Z0-9\-]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
+    .test('ends-in-country-code', 'Short Name must end with a valid country code.', value => {
+      const providedCode = value.slice ? value.slice(-2) : null;
+      return !!COUNTRIES.find(country => country.code === providedCode);
+    })
+    .matches(/-([A-Z][A-Z])$/, 'Short Name must end with a 2 character country code: "-XX"')
+    .matches(/^[A-Z1-9]/, 'Short Name must begin with an uppercase letter or a number')
+    .matches(/^[-A-Z1-9]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
+    .max(11)
     .required(),
   countries: yup
     .array()
