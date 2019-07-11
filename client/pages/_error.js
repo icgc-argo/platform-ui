@@ -8,27 +8,28 @@ export const ERROR_STATUS_KEY = 'statusCode';
 
 class Error extends React.Component {
   static getInitialProps({ res, err }) {
-    if (err[ERROR_STATUS_KEY] === 401) {
+    if (get(err, ERROR_STATUS_KEY) === 401) {
       res.status(401);
     }
-    return { [ERROR_STATUS_KEY]: get(res, ERROR_STATUS_KEY) || get(err, ERROR_STATUS_KEY) || null };
+    return {
+      [ERROR_STATUS_KEY]: get(res, ERROR_STATUS_KEY) || get(err, ERROR_STATUS_KEY) || null,
+    };
   }
 
   render() {
-    if (this.props.statusCode === 404) {
+    const errorCode = this.props[ERROR_STATUS_KEY];
+    if (errorCode === 404) {
       return <Page404 />;
     }
-    if (this.props.statusCode === 500) {
+    if (errorCode === 500) {
       return <Page500 />;
     }
-    if (this.props.statusCode === 401) {
+    if (errorCode === 401) {
       return <Page401 />;
     }
     return (
       <p>
-        {this.props.statusCode
-          ? `An error ${this.props.statusCode} occurred on server`
-          : 'An error occurred on client'}
+        {errorCode ? `An error ${errorCode} occurred on server` : 'An error occurred on client'}
       </p>
     );
   }
