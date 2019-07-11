@@ -55,7 +55,7 @@ export default (tableProps: {
       Header: 'Short Name',
       accessor: 'shortName',
       Cell: ({ original }) => (
-        <Link href={PROGRAM_DASHBOARD_PATH.replace('[shortName]', original.shortName)}>
+        <Link href={urljoin(PROGRAM_DASHBOARD_PATH, original.shortName)}>
           <A>{original.shortName}</A>
         </Link>
       ),

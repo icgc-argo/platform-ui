@@ -3,6 +3,7 @@ import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
+import urljoin from 'url-join';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -55,29 +56,23 @@ const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) =
       }
     `}
   >
-    <Link prefetch href={PROGRAM_DASHBOARD_PATH.replace('[shortName]', props.program.shortName)}>
+    <Link prefetch href={urljoin(PROGRAM_DASHBOARD_PATH, props.program.shortName)}>
       <a>
         <MenuItem level={3} content="Dashboard" />
       </a>
     </Link>
-    <Link
-      prefetch
-      href={PROGRAM_ID_REGISTRATION_PATH.replace('[shortName]', props.program.shortName)}
-    >
+    <Link prefetch href={urljoin(PROGRAM_ID_REGISTRATION_PATH, props.program.shortName)}>
       <a>
         <MenuItem level={3} content="ID Registration" />
       </a>
     </Link>
-    <Link
-      prefetch
-      href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace('[shortName]', props.program.shortName)}
-    >
+    <Link prefetch href={urljoin(PROGRAM_CLINICAL_SUBMISSION_PATH, props.program.shortName)}>
       <a>
         <MenuItem level={3} content="Clinical Submission" />
       </a>
     </Link>
     {props.isAdmin && (
-      <Link prefetch href={PROGRAM_MANAGE_PATH.replace('[shortName]', props.program.shortName)}>
+      <Link prefetch href={urljoin(PROGRAM_MANAGE_PATH, props.program.shortName)}>
         <a>
           <MenuItem level={3} content="Manage Program" />
         </a>

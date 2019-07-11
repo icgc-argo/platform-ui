@@ -2,6 +2,7 @@
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
+import urljoin from 'url-join';
 
 import Typography from 'uikit/Typography';
 import { Input } from 'uikit/form';
@@ -50,13 +51,13 @@ export default ({
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
     router.push({
-      pathname: PROGRAM_MANAGE_PATH.replace('[shortName]', program.shortName),
+      pathname: urljoin(PROGRAM_MANAGE_PATH, program.shortName),
       query: { tab: 'users' },
     });
   };
   const handleProgramProfileClick = ({ program }) => {
     router.push({
-      pathname: PROGRAM_MANAGE_PATH.replace('[shortName]', program.shortName),
+      pathname: urljoin(PROGRAM_MANAGE_PATH, program.shortName),
       query: { tab: 'profile' },
     });
   };

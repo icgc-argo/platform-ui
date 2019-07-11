@@ -6,6 +6,7 @@ import {
   PROGRAM_ENTITY_PATH,
   PROGRAM_MANAGE_PATH,
   USER_PAGE_PATH,
+  SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
@@ -24,13 +25,6 @@ import AppBar, {
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import urlJoin from 'url-join';
-
-const submissionPaths = [
-  PROGRAMS_LIST_PATH,
-  PROGRAM_ENTITY_PATH,
-  DCC_OVERVIEW_PATH,
-  PROGRAM_MANAGE_PATH,
-];
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -54,9 +48,9 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
-export default (props: { path: string, logOut: void => void, children?: React.Node }) => {
+export default (props: { path?: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
-
+  const { path = '' } = props;
   const userModel = (() => {
     try {
       return decodeToken(egoJwt || '');
@@ -86,10 +80,8 @@ export default (props: { path: string, logOut: void => void, children?: React.No
       <Section />
       <Section>
         <MenuGroup>
-          <MenuItem active={_.includes(submissionPaths, props.path)}>Submission</MenuItem>
-          {!userModel && (
-            <NavbarLink path={LOGIN_PAGE_PATH} active={props.path === LOGIN_PAGE_PATH} />
-          )}
+          <MenuItem active={path.search(SUBMISSION_PATH) === 0}>Submission</MenuItem>
+          {!userModel && <NavbarLink path={LOGIN_PAGE_PATH} active={path === LOGIN_PAGE_PATH} />}
           {userModel && (
             <MenuItem
               dropdownMenu={
