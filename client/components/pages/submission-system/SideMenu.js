@@ -17,6 +17,11 @@ import { sideMenuProgramList } from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { isDccMember, getAuthorizedProgramScopes } from 'global/utils/egoJwt';
 
+import { PROGRAM_MANAGE_PATH } from 'global/constants/pages';
+import { PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+import { PROGRAM_ID_REGISTRATION_PATH } from 'global/constants/pages';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+
 type SideMenuProgram = {
   shortName: string,
 };
@@ -50,23 +55,29 @@ const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) =
       }
     `}
   >
-    <Link prefetch href={`/program/dashboard/${props.program.shortName}`}>
+    <Link prefetch href={PROGRAM_DASHBOARD_PATH.replace('[shortName]', props.program.shortName)}>
       <a>
         <MenuItem level={3} content="Dashboard" />
       </a>
     </Link>
-    <Link prefetch href={`/program/id-registration/${props.program.shortName}`}>
+    <Link
+      prefetch
+      href={PROGRAM_ID_REGISTRATION_PATH.replace('[shortName]', props.program.shortName)}
+    >
       <a>
         <MenuItem level={3} content="ID Registration" />
       </a>
     </Link>
-    <Link prefetch href={`/program/clinical-submission/${props.program.shortName}`}>
+    <Link
+      prefetch
+      href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace('[shortName]', props.program.shortName)}
+    >
       <a>
         <MenuItem level={3} content="Clinical Submission" />
       </a>
     </Link>
     {props.isAdmin && (
-      <Link prefetch href={`/program/manage/${props.program.shortName}`}>
+      <Link prefetch href={PROGRAM_MANAGE_PATH.replace('[shortName]', props.program.shortName)}>
         <a>
           <MenuItem level={3} content="Manage Program" />
         </a>

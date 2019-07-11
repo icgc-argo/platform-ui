@@ -5,3 +5,6 @@ export const PROGRAM_ENTITY_PATH = '/program';
 export const DCC_OVERVIEW_PATH = '/submission';
 export const USER_PAGE_PATH = '/user';
 export const PROGRAM_MANAGE_PATH = '/program/manage/[shortName]';
+export const PROGRAM_DASHBOARD_PATH = '/program/dashboard/[shortName]';
+export const PROGRAM_ID_REGISTRATION_PATH = '/program/id-registration/[shortName]';
+export const PROGRAM_CLINICAL_SUBMISSION_PATH = '/program/clinical-submission/[shortName]';
