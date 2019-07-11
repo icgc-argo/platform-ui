@@ -23,6 +23,8 @@ import createInMemoryCache from 'global/utils/createInMemoryCache';
 import Error401Page from 'components/pages/401';
 import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
 
+import { ERROR_STATUS_KEY } from './_error';
+
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
   if (ctx.res && ctx.res.redirect) {
@@ -144,7 +146,7 @@ Root.getInitialProps = async ({
 
   if (unauthorized) {
     const err = (new Error('Unauthorized'): Error & { statusCode?: number });
-    err.statusCode = 401;
+    err[ERROR_STATUS_KEY] = 401;
     throw err;
   }
 
