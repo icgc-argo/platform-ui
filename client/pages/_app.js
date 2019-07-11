@@ -103,11 +103,7 @@ const Root = (props: {
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
           <ThemeProvider>
-            {unauthorized ? (
-              <Error401Page />
-            ) : (
-              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-            )}
+            <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
           </ThemeProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
@@ -146,8 +142,10 @@ Root.getInitialProps = async ({
     ? !(await Component.isAccessible({ egoJwt, ctx }))
     : false;
 
-  if (unauthorized && res) {
-    res.status(401);
+  if (unauthorized) {
+    const err = (new Error('Unauthorized'): Error & { statusCode?: number });
+    err.statusCode = 401;
+    throw err;
   }
 
   const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
