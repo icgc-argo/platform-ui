@@ -18,7 +18,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
   const hasErrors = errors
     .map(section => Object.values(section))
     .flat()
-    .reduce((acc, val) => acc || !!val, false);
+    .some(x => x);
 
   // set form data
   const setData = ({ key, val, index }) => {
