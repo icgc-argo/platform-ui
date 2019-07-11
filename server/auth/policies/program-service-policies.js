@@ -1,4 +1,4 @@
-import { createPolicy, Check, RequestType } from '../authUtils';
+import { createPolicy, Check, RequestType, Masks } from '../authUtils';
 
 const SERVICE = 'program_service.ProgramService';
 const RPCS = {
