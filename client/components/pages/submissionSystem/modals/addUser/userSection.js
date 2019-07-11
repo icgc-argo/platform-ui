@@ -8,11 +8,15 @@ import Icon from 'uikit/Icon';
 import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import css from '@emotion/css';
+
+import { Row, Col } from 'react-grid-system';
 
 const Section = styled('div')`
   padding: 12px 11px;
   border: solid 1px ${({ theme }) => theme.colors.grey_2};
   margin-top: 15px;
+  display: flex;
 `;
 
 const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
@@ -25,51 +29,96 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
 
   return (
     <Section>
-      <FormControl error={!!firstNameError} required>
-        <InputLabel>First Name</InputLabel>
-        <Input
-          value={user.firstName}
-          onChange={e => onChange('firstName', e.target.value)}
-          onBlur={() => validateField('firstName')}
-        />
-        {!!firstNameError ? <FormHelperText>{firstNameError}</FormHelperText> : null}
-      </FormControl>
-      <FormControl error={!!emailError} required>
-        <InputLabel>Email Address</InputLabel>
-        <Input
-          value={user.email}
-          onChange={e => onChange('email', e.target.value)}
-          onBlur={() => validateField('email')}
-        />
-        {!!emailError ? <FormHelperText>{emailError}</FormHelperText> : null}
-      </FormControl>
-      <FormControl error={!!lastNameError} required>
-        <InputLabel required>Last Name</InputLabel>
-        <Input
-          value={user.lastName}
-          onChange={e => onChange('lastName', e.target.value)}
-          onBlur={() => validateField('lastName')}
-        />
-        {!!lastNameError ? <FormHelperText>{lastNameError}</FormHelperText> : null}
-      </FormControl>
-      <FormControl error={!!roleError} required>
-        <InputLabel required>Role</InputLabel>
-        <Select
-          aria-label="role-select"
-          value={user.role}
-          options={PROGRAM_MEMBERSHIP_TYPES}
-          onChange={val => onChange('role', val)}
-          onBlur={() => validateField('role')}
-        />
-        {!!roleError ? <FormHelperText>{roleError}</FormHelperText> : null}
-      </FormControl>
+      <div
+        css={css`
+          flex: 1;
+        `}
+      >
+        <Row nogutter>
+          <Col sm={6} style={{ paddingRight: '5px' }}>
+            <FormControl error={!!firstNameError} required>
+              <Row nogutter>
+                <Col sm={4}>
+                  <InputLabel>First Name</InputLabel>
+                </Col>
+                <Col>
+                  <Input
+                    value={user.firstName}
+                    onChange={e => onChange('firstName', e.target.value)}
+                    onBlur={() => validateField('firstName')}
+                  />
+                  {!!firstNameError ? <FormHelperText>{firstNameError}</FormHelperText> : null}{' '}
+                </Col>
+              </Row>
+            </FormControl>
+          </Col>
+          <Col sm={6} style={{ paddingLeft: '5px' }}>
+            <FormControl error={!!lastNameError} required>
+              <Row nogutter>
+                <Col sm={4}>
+                  <InputLabel required>Last Name</InputLabel>
+                </Col>
+                <Col>
+                  <Input
+                    value={user.lastName}
+                    onChange={e => onChange('lastName', e.target.value)}
+                    onBlur={() => validateField('lastName')}
+                  />
+                  {!!lastNameError ? <FormHelperText>{lastNameError}</FormHelperText> : null}
+                </Col>
+              </Row>
+            </FormControl>
+          </Col>
+        </Row>
+        <Row nogutter>
+          <Col sm={6} style={{ paddingRight: '5px' }}>
+            <FormControl error={!!emailError} required>
+              <Row nogutter>
+                <Col sm={4}>
+                  <InputLabel>Email Address</InputLabel>
+                </Col>
+                <Col>
+                  <Input
+                    value={user.email}
+                    onChange={e => onChange('email', e.target.value)}
+                    onBlur={() => validateField('email')}
+                  />
+                  {!!emailError ? <FormHelperText>{emailError}</FormHelperText> : null}
+                </Col>{' '}
+              </Row>
+            </FormControl>
+          </Col>
+          <Col sm={6} style={{ paddingLeft: '5px' }}>
+            <FormControl error={!!roleError} required>
+              <Row nogutter>
+                <Col sm={4}>
+                  <InputLabel required>Role</InputLabel>
+                </Col>
+                <Col>
+                  <Select
+                    aria-label="role-select"
+                    value={user.role}
+                    options={PROGRAM_MEMBERSHIP_TYPES}
+                    onChange={val => onChange('role', val)}
+                    onBlur={() => validateField('role')}
+                  />
+                  {!!roleError ? <FormHelperText>{roleError}</FormHelperText> : null}
+                </Col>
+              </Row>
+            </FormControl>
+          </Col>
+        </Row>{' '}
+      </div>
       <Icon
         height="20px"
         width="18px"
         name="trash"
         fill={deleteSelf ? 'accent2' : '#cecfd3'}
         onClick={deleteSelf}
-      />
+        css={css`
+          margin-left: 16px;
+        `}
+      />{' '}
     </Section>
   );
 };
