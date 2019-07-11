@@ -1,13 +1,12 @@
 //@flow
+import Link from 'next/link';
 import React from 'react';
-import get from 'lodash/get';
-
-import Table from 'uikit/Table';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
+import Table from 'uikit/Table';
+import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
-import { Query } from 'react-apollo';
+import A from 'uikit/Link';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -53,6 +52,11 @@ export default (tableProps: {
     {
       Header: 'Short Name',
       accessor: 'shortName',
+      Cell: ({ original }) => (
+        <Link href={`/program/dashboard/${original.shortName}`}>
+          <A>{original.shortName}</A>
+        </Link>
+      ),
     },
     {
       Header: 'Cancer Types',

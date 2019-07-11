@@ -43,17 +43,36 @@ const useToggledSelectState = (initialIndex = -1) => {
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) => (
-  <>
-    <MenuItem content="Dashboard" />
-    <MenuItem content="ID Registration" />
-    <MenuItem content="Clinical Submission" />
-    <MenuItem content="Genomic Submission" />
+  <div
+    css={css`
+      & a {
+        text-decoration: none;
+      }
+    `}
+  >
+    <Link prefetch href={`/program/dashboard/${props.program.shortName}`}>
+      <a>
+        <MenuItem level={3} content="Dashboard" />
+      </a>
+    </Link>
+    <Link prefetch href={`/program/id-registration/${props.program.shortName}`}>
+      <a>
+        <MenuItem level={3} content="ID Registration" />
+      </a>
+    </Link>
+    <Link prefetch href={`/program/clinical-submission/${props.program.shortName}`}>
+      <a>
+        <MenuItem level={3} content="Clinical Submission" />
+      </a>
+    </Link>
     {props.isAdmin && (
       <Link prefetch href={`/program/manage/${props.program.shortName}`}>
-        <MenuItem content="Manage Program" />
+        <a>
+          <MenuItem level={3} content="Manage Program" />
+        </a>
       </Link>
     )}
-  </>
+  </div>
 );
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {

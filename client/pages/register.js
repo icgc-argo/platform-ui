@@ -1,5 +1,5 @@
 import { createPage } from 'global/utils/pages';
-import RegisterProgramPage from 'components/pages/submissionSystem/register';
+import RegisterProgramPage from 'components/pages/submission-system/register';
 
 export default createPage({
   isPublic: true,

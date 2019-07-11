@@ -58,51 +58,57 @@ const StyledButton = styled(FocusWrapper)`
   }
 `;
 
-const Button = ({
-  children,
-  onClick,
-  disabled,
-  variant = BUTTON_VARIANTS.PRIMARY,
-  size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
-  isAsync = false,
-  className,
-  id,
-}) => {
-  const [isLoading, setLoading] = useState(false);
-  const theme = useTheme();
-  const shouldShowLoading = isLoading && isAsync;
-  const onClickFn = async event => {
-    setLoading(true);
-    await onClick(event);
-    setLoading(false);
-  };
-  return (
-    <StyledButton
-      onClick={isAsync ? onClickFn : onClick}
-      disabled={disabled || shouldShowLoading}
-      size={size}
-      variant={variant}
-      className={className}
-      id={id}
-      isLoading={shouldShowLoading}
-    >
-      <span style={{ visibility: shouldShowLoading ? 'hidden' : 'visible' }}>{children}</span>
-      <span
-        style={{
-          position: 'absolute',
-          visibility: shouldShowLoading ? 'visible' : 'hidden',
-        }}
+const Button = React.forwardRef(
+  (
+    {
+      children,
+      onClick,
+      disabled,
+      variant = BUTTON_VARIANTS.PRIMARY,
+      size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
+      isAsync = false,
+      className,
+      id,
+    },
+    ref,
+  ) => {
+    const [isLoading, setLoading] = useState(false);
+    const theme = useTheme();
+    const shouldShowLoading = isLoading && isAsync;
+    const onClickFn = async event => {
+      setLoading(true);
+      await onClick(event);
+      setLoading(false);
+    };
+    return (
+      <StyledButton
+        ref={ref}
+        onClick={isAsync ? onClickFn : onClick}
+        disabled={disabled || shouldShowLoading}
+        size={size}
+        variant={variant}
+        className={className}
+        id={id}
+        isLoading={shouldShowLoading}
       >
-        <Icon
-          name="spinner"
-          width={'20px'}
-          height={'20px'}
-          fill={theme.button.textColors[variant].default}
-        />
-      </span>
-    </StyledButton>
-  );
-};
+        <span style={{ visibility: shouldShowLoading ? 'hidden' : 'visible' }}>{children}</span>
+        <span
+          style={{
+            position: 'absolute',
+            visibility: shouldShowLoading ? 'visible' : 'hidden',
+          }}
+        >
+          <Icon
+            name="spinner"
+            width={'20px'}
+            height={'20px'}
+            fill={theme.button.textColors[variant].default}
+          />
+        </span>
+      </StyledButton>
+    );
+  },
+);
 
 Button.propTypes = {
   /**

@@ -45,8 +45,15 @@ export default function Error404Page() {
             Oops! We can’t find the page that you’re looking for.
           </Typography>
           <Typography variant="subtitle2">
-            Check out our <Link href="/">Documentation</Link> or head back{' '}
-            <Link href="/">Home</Link>.
+            Check out our{' '}
+            <Link href="/">
+              <a>Documentation</a>
+            </Link>{' '}
+            or head back{' '}
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+            .
           </Typography>
         </div>
         <div>
