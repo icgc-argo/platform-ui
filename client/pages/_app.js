@@ -41,12 +41,10 @@ const Root = (props: {
   pageProps: {},
   egoJwt: string,
   unauthorized: boolean,
-  isProduction: boolean,
-  error: Error,
   pathname: string,
   apolloCache: {},
 }) => {
-  const { Component, pageProps, egoJwt, unauthorized, isProduction, error, pathname } = props;
+  const { Component, pageProps, egoJwt, unauthorized, pathname } = props;
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
     Router.push('/');
@@ -105,19 +103,11 @@ const Root = (props: {
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
           <ThemeProvider>
-            <>
-              {error ? (
-                isProduction ? (
-                  <div>Something went wrong, please refresh the page or try again later</div>
-                ) : (
-                  <pre>{error.stack || error.message}</pre>
-                )
-              ) : unauthorized ? (
-                <Error401Page />
-              ) : (
-                <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-              )}
-            </>
+            {unauthorized ? (
+              <Error401Page />
+            ) : (
+              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+            )}
           </ThemeProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
@@ -152,36 +142,35 @@ Root.getInitialProps = async ({
     }
   }
 
-  try {
-    const isProduction = NODE_ENV === ENVIRONMENTS.production;
-    const unauthorized = Component.isAccessible
-      ? !(await Component.isAccessible({ egoJwt, ctx }))
-      : false;
-    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
+  const unauthorized = Component.isAccessible
+    ? !(await Component.isAccessible({ egoJwt, ctx }))
+    : false;
 
-    let graphqlQueriesToChache;
-    let apolloCache;
-    try {
-      graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
-        ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-        : null;
-      apolloCache = graphqlQueriesToChache
-        ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
-        : null;
-    } catch (e) {
-      console.log(e);
-    }
-    return {
-      egoJwt,
-      pageProps,
-      unauthorized,
-      isProduction,
-      pathname: ctx.pathname,
-      apolloCache,
-    };
-  } catch (error) {
-    return { egoJwt, error };
+  if (unauthorized && res) {
+    res.status(401);
   }
+
+  const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
+
+  let graphqlQueriesToChache;
+  let apolloCache;
+  try {
+    graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
+      ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
+      : null;
+    apolloCache = graphqlQueriesToChache
+      ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
+      : null;
+  } catch (e) {
+    console.log(e);
+  }
+  return {
+    egoJwt,
+    pageProps,
+    unauthorized,
+    pathname: ctx.pathname,
+    apolloCache,
+  };
 };
 
 export default Root;
