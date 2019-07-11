@@ -1,36 +1,34 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-apollo-hooks';
-import TitleBar from 'uikit/TitleBar';
-import { css } from 'uikit';
-import SubmissionLayout from '../layout';
-import { ContentBox } from 'uikit/PageLayout';
-import Tabs, { Tab } from 'uikit/Tabs';
-import InputLabel from 'uikit/form/InputLabel';
-
-import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
 import { ThemeContext } from '@emotion/core';
-import Icon from 'uikit/Icon';
-import UsersTable from './UsersTable';
-import Button from 'uikit/Button';
-import { TableActionBar } from 'uikit/Table';
-import users from 'uikit/Icon/icons/collection/users';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import _ from 'lodash';
-
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { Col, Row } from 'react-grid-system';
+import { css } from 'uikit';
+import Button from 'uikit/Button';
+import InputLabel from 'uikit/form/InputLabel';
+import Icon from 'uikit/Icon';
+import { ContentBox } from 'uikit/PageLayout';
+import { TableActionBar } from 'uikit/Table';
+import Tabs, { Tab } from 'uikit/Tabs';
+import TitleBar from 'uikit/TitleBar';
+import Typography from 'uikit/Typography';
+import SubmissionLayout from '../layout';
 import { programQuery } from './queries.gql';
+import UsersTable from './UsersTable';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
   const router = useRouter();
   const { shortName } = router.query;
+  const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
     variables: { shortName },
   });
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(TABS.USERS);
+  const [activeTab, setActiveTab] = React.useState(
+    defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
+  );
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
@@ -292,12 +290,13 @@ function Profile({ program = {} }) {
         >
           <Icon width="15px" height="15px" name="times" fill="error_dark" />
           &nbsp;
-          {_.join(
-            _.filter(REGIONS, region => {
-              return !program.regions.includes(region);
-            }),
-            ', ',
-          )}
+          {program.regions &&
+            _.join(
+              _.filter(REGIONS, region => {
+                return !program.regions.includes(region);
+              }),
+              ', ',
+            )}
         </Col>
       </Row>
     </div>
