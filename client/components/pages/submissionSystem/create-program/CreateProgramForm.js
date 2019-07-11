@@ -101,38 +101,21 @@ const createProgramInput = formData => ({
  * *************************************** */
 
 export default () => {
-  // const [programName, setProgramName] = React.useState('');
-  // const [shortName, setShortName] = React.useState('');
-  // const [countries, setCountries] = React.useState([]);
-  // const [cancerTypes, setCancerTypes] = React.useState([]);
-  // const [primarySites, setPrimarySites] = React.useState([]);
-  // const [commitmentLevel, setCommitmentLevel] = React.useState();
-  // const [institutions, setInstitutions] = React.useState([]);
-  // const [membershipType, setMembershipType] = React.useState('');
-  // const [website, setWebsite] = React.useState('');
-  // const [description, setDescription] = React.useState('');
-  // const [processingRegions, setProcessionRegions] = React.useState([]);
-  // const [adminFirstName, setAdminFirstName] = React.useState('');
-  // const [adminLastName, setAdminLastName] = React.useState('');
-  // const [adminEmail, setAdminEmail] = React.useState('');
+  const [programName, setProgramName] = React.useState('');
+  const [shortName, setShortName] = React.useState('');
+  const [countries, setCountries] = React.useState([]);
+  const [cancerTypes, setCancerTypes] = React.useState([]);
+  const [primarySites, setPrimarySites] = React.useState([]);
+  const [commitmentLevel, setCommitmentLevel] = React.useState();
+  const [institutions, setInstitutions] = React.useState([]);
+  const [membershipType, setMembershipType] = React.useState('');
+  const [website, setWebsite] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [processingRegions, setProcessionRegions] = React.useState([]);
+  const [adminFirstName, setAdminFirstName] = React.useState('');
+  const [adminLastName, setAdminLastName] = React.useState('');
+  const [adminEmail, setAdminEmail] = React.useState('');
   const [validationErrors, setValidationErrors] = React.useState({});
-
-  const [programName, setProgramName] = React.useState('Un-Belieze-able Program');
-  const [shortName, setShortName] = React.useState('PUNS-1-BZ');
-  const [countries, setCountries] = React.useState(['Norway']);
-  const [cancerTypes, setCancerTypes] = React.useState(['Blood cancer']);
-  const [primarySites, setPrimarySites] = React.useState(['Brain']);
-  const [commitmentLevel, setCommitmentLevel] = React.useState(9001);
-  const [institutions, setInstitutions] = React.useState(['Department of Redundancy Department']);
-  const [membershipType, setMembershipType] = React.useState('FULL');
-  const [website, setWebsite] = React.useState('http://old.reddit.com/r/dadjokes');
-  const [description, setDescription] = React.useState(
-    `There's Norway you'll Belieze how good this program is.`,
-  );
-  const [processingRegions, setProcessionRegions] = React.useState(['North America', 'Europe']);
-  const [adminFirstName, setAdminFirstName] = React.useState('Jon');
-  const [adminLastName, setAdminLastName] = React.useState('Eubank');
-  const [adminEmail, setAdminEmail] = React.useState('joneubank@gmail.com');
 
   /* **************** *
    * Form Submission
