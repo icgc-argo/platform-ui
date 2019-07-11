@@ -123,18 +123,10 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
 
 const user = { firstName: '', lastName: '', email: '', role: '' };
 
-// TODO: width is spanning all the way acaross? maybe use button?
-// styled(spin) ${theme.typographg.paragray}
-const AddSection = styled('div')`
-  display: flex;
-  align-items: center;
+const AddSection = styled(Button)`
   text-transform: uppercase;
-  color: ${({ enabled, theme }) => (enabled ? theme.colors.accent2_dark : '#d0d1d8')};
+  color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
   margin-top: 14px;
-
-  &:hover {
-    cursor: ${({ enabled }) => (enabled ? 'pointer' : 'not-allowed')};
-  }
 `;
 
 const AddUserModal = ({}) => {
@@ -204,21 +196,29 @@ const AddUserModal = ({}) => {
           />
         );
       })}
-      <AddSection variant="text" enabled={islastSectionTouched}>
-        <Icon
-          name="plus_circle"
-          fill={islastSectionTouched ? 'accent2' : '#cecfd3'}
+      <AddSection variant="text" disabled={!islastSectionTouched}>
+        <div
           css={css`
-            margin-right: 3px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
           `}
-        />
-        <Typography
-          onClick={() => (islastSectionTouched ? addSection() : null)}
-          variant="paragraph"
-          component="span"
         >
-          Add another
-        </Typography>
+          <Icon
+            name="plus_circle"
+            fill={islastSectionTouched ? 'accent2' : '#cecfd3'}
+            css={css`
+              margin-right: 3px;
+            `}
+          />
+          <Typography
+            onClick={() => (islastSectionTouched ? addSection() : null)}
+            variant="paragraph"
+            component="span"
+          >
+            Add another
+          </Typography>
+        </div>
       </AddSection>
     </Modal>
   );
