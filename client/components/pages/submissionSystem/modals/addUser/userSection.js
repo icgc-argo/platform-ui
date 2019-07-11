@@ -35,10 +35,10 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
         `}
       >
         <Row nogutter>
-          <Col sm={6} style={{ paddingRight: '5px' }}>
+          <Col sm={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!firstNameError} required>
               <Row nogutter>
-                <Col sm={4}>
+                <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>First Name</InputLabel>
                 </Col>
                 <Col>
@@ -52,10 +52,10 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
               </Row>
             </FormControl>
           </Col>
-          <Col sm={6} style={{ paddingLeft: '5px' }}>
+          <Col sm={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!lastNameError} required>
               <Row nogutter>
-                <Col sm={4}>
+                <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Last Name</InputLabel>
                 </Col>
                 <Col>
@@ -71,10 +71,10 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
           </Col>
         </Row>
         <Row nogutter>
-          <Col sm={6} style={{ paddingRight: '5px' }}>
+          <Col sm={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!emailError} required>
               <Row nogutter>
-                <Col sm={4}>
+                <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>Email Address</InputLabel>
                 </Col>
                 <Col>
@@ -88,10 +88,10 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
               </Row>
             </FormControl>
           </Col>
-          <Col sm={6} style={{ paddingLeft: '5px' }}>
+          <Col sm={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!roleError} required>
               <Row nogutter>
-                <Col sm={4}>
+                <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Role</InputLabel>
                 </Col>
                 <Col>
@@ -116,7 +116,7 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
         fill={deleteSelf ? 'accent2' : '#cecfd3'}
         onClick={deleteSelf}
         css={css`
-          margin-left: 16px;
+          margin-left: 6px;
         `}
       />{' '}
     </Section>
