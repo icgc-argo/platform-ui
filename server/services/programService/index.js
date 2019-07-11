@@ -10,6 +10,8 @@ import protoPath from '@icgc-argo/program-service-proto';
 import { PROGRAM_SERVICE_ROOT } from '../../config';
 import { getAuthMeta, wrapValue } from '../../utils/grpcUtils';
 
+import { grpcAuthWrapper } from '../../auth';
+
 const packageDefinition = loader.loadSync(protoPath, {
   keepCase: true,
   longs: String,
@@ -18,11 +20,11 @@ const packageDefinition = loader.loadSync(protoPath, {
   oneofs: true,
 });
 
+const x = grpc;
 const proto = grpc.loadPackageDefinition(packageDefinition).program_service;
 
-const programService = new proto.ProgramService(
-  PROGRAM_SERVICE_ROOT,
-  grpc.credentials.createInsecure(),
+const programService = grpcAuthWrapper(
+  new proto.ProgramService(PROGRAM_SERVICE_ROOT, grpc.credentials.createInsecure()),
 );
 
 const defaultPromiseCallback = (resolve, reject) => (err, response) =>
