@@ -32,7 +32,8 @@ export default yup.object().shape({
     .array()
     .of(yup.string().oneOf(COUNTRIES.map(country => country.name)))
     .label('Countries')
-    .required(),
+    .required()
+    .min(1),
   cancerTypes: yup
     .array()
     .of(yup.string().oneOf(CANCER_TYPES))
@@ -54,7 +55,8 @@ export default yup.object().shape({
     .array()
     .of(yup.string())
     .label('Institutions')
-    .required(),
+    .required()
+    .min(1),
   membershipType: yup
     .string()
     .label('Membership Type')
