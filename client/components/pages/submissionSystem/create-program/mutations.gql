@@ -10,5 +10,6 @@ mutation CREATE_PROGRAM_MUTATION($program: ProgramInput!) {
     countries
     regions
     membershipType
+    admins
   }
 }
