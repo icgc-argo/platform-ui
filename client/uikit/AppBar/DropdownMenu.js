@@ -33,6 +33,7 @@ const Li = styled('li')`
     color: ${({ theme }) => theme.colors.secondary};
     border-left: 3px solid ${({ theme }) => theme.colors.secondary};
     padding-left: 13px;
+    background-color: ${({ theme }) => theme.colors.secondary_4};
   }
 
   &:hover {
