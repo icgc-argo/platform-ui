@@ -19,7 +19,7 @@ const Section = styled('div')`
   display: flex;
 `;
 
-const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
+const UserSection = ({ user, onChange, validateField, errors, deleteSelf, showDelete = false }) => {
   const {
     firstName: firstNameError,
     lastName: lastNameError,
@@ -109,16 +109,18 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
           </Col>
         </Row>{' '}
       </div>
-      <Icon
-        height="20px"
-        width="18px"
-        name="trash"
-        fill={deleteSelf ? 'accent2' : '#cecfd3'}
-        onClick={deleteSelf}
-        css={css`
-          margin-left: 6px;
-        `}
-      />{' '}
+      {showDelete && (
+        <Icon
+          height="20px"
+          width="18px"
+          name="trash"
+          fill={deleteSelf ? 'accent2' : '#cecfd3'}
+          onClick={deleteSelf}
+          css={css`
+            margin-left: 6px;
+          `}
+        />
+      )}
     </Section>
   );
 };

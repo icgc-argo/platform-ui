@@ -195,6 +195,7 @@ const AddUserModal = ({ dismissModal }) => {
             validateField={key => validateField({ key, index: currentIndex })}
             errors={validationErrors[currentIndex]}
             deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
+            showDelete
           />
         );
       })}
