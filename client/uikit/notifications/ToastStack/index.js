@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { differenceBy } from 'lodash';
 
-import { styled } from '../';
+import { styled } from '../..';
 import Toast from '../Toast';
 
 const usePrevious = value => {

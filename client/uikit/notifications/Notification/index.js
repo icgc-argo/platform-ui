@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { styled, css } from '../';
-import Typography from '../Typography';
-import Icon from '../Icon';
-import FocusWrapper from '../FocusWrapper';
-import useTheme from '../utils/useTheme';
+import { styled, css } from '../../';
+import Typography from '../../Typography';
+import Icon from '../../Icon';
+import FocusWrapper from '../../FocusWrapper';
+import useTheme from '../../utils/useTheme';
 import {
   NotificationBodyContainer,
   IconContainer,

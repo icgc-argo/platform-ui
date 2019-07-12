@@ -1,10 +1,15 @@
 import React from 'react';
 
-import { isRdpcMember } from 'global/utils/egoJwt';
+import { isRdpcMember, isProgramAdmin } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
-import ProgramManagement from 'components/pages/submissionSystem/program-management';
+import ProgramManagement from 'components/pages/submission-system/program-management';
 
 export default createPage({
   isPublic: true,
-  isAccessible: async ({ egoJwt, ctx }) => !isRdpcMember(egoJwt),
+  isAccessible: async ({ egoJwt, ctx }) => {
+    const {
+      query: { shortName },
+    } = ctx;
+    return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: shortName });
+  },
 })(ProgramManagement);

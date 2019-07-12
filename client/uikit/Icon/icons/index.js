@@ -18,6 +18,7 @@ import warning from './collection/warning';
 import mail from './collection/mail';
 import trash from './collection/trash';
 import google from './collection/google';
+import plus_circle from './collection/plus_circle';
 
 /**
  * Icon path and property lookup object
@@ -44,6 +45,7 @@ const Icons = {
   mail,
   trash,
   google,
+  plus_circle,
 };
 
 export default Icons;

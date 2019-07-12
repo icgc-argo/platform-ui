@@ -1,14 +1,11 @@
+// @flow
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
-import { createPage } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import Link from 'next/link';
 
-export default createPage({
-  isPublic: true,
-  getInitialProps: async () => ({}),
-})(function() {
+export default function Error404Page() {
   return (
     <ErrorLayout>
       <div
@@ -25,28 +22,44 @@ export default createPage({
         >
           <Typography
             css={css`
-              font-size: 44px;
-              margin: 10px 0;
+              font-size: 100px;
+              margin: 0;
+              font-weight: 600;
               line-height: normal;
             `}
           >
-            Be back soon
+            4
+            <img
+              css={css`
+                margin: 0 8px;
+              `}
+              alt="Logo mark"
+              src="/static/logomark.svg"
+            />
+            4
           </Typography>
           <Typography as="div" variant="subtitle" color="secondary">
-            Down for Maintenance
+            Page not Found
           </Typography>
           <Typography variant="subtitle2">
-            Sorry for the inconvenience. We'll be back up and running as fast as possible.
+            Oops! We can’t find the page that you’re looking for.
           </Typography>
           <Typography variant="subtitle2">
-            If you have any questions, <Link href="/">Contact Us</Link> or head back{' '}
-            <Link href="/">Home</Link>.
+            Check out our{' '}
+            <Link href="/">
+              <a>Documentation</a>
+            </Link>{' '}
+            or head back{' '}
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+            .
           </Typography>
         </div>
         <div>
-          <img alt="Broken dna" src="/static/dna-maintenance.svg" />
+          <img alt="Broken dna" src="/static/dna-broken.svg" />
         </div>
       </div>
     </ErrorLayout>
   );
-});
+}

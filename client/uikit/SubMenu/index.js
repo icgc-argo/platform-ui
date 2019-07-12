@@ -7,54 +7,66 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 import { MenuItemContainer, IconContainer, ContentContainer } from './styledComponents';
 
-export const MenuItem = ({
-  className = '',
-  selected: controlledSelectedState,
-  level,
-  children,
-  content,
-  onClick = e => {},
-  icon,
-}) => {
-  const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
-  const isSelected =
-    typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
-  const theme = useTheme();
-  const contentContainerRef = React.createRef();
-  return (
-    <MenuItemContainer
-      level={level}
-      selected={isSelected}
-      onClick={e => {
-        e.stopPropagation();
-        contentContainerRef.current.blur();
-        setLocalSelectedState(!isSelected);
-        onClick(e);
-      }}
-      className={`${className} MenuItemContainer`}
-    >
-      <div className="MenuItemContent">
-        <ContentContainer ref={contentContainerRef}>
-          {icon && (
-            <IconContainer>
-              {React.cloneElement(icon, {
-                fill: isSelected ? 'secondary_dark' : 'primary',
-              })}
-            </IconContainer>
-          )}
-          {content}
-        </ContentContainer>
-        {children && content && (
-          <Icon
-            name={isSelected ? 'chevron_down' : 'chevron_right'}
-            fill={isSelected ? 'secondary' : 'primary'}
-          />
+export const MenuItem = React.forwardRef(
+  (
+    {
+      className = '',
+      selected: controlledSelectedState,
+      level,
+      children,
+      content,
+      onClick = e => {},
+      icon,
+      noChevron = false,
+      ...otherProps
+    },
+    ref,
+  ) => {
+    const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
+    const isSelected =
+      typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
+    const theme = useTheme();
+    const contentContainerRef = React.createRef();
+    return (
+      <MenuItemContainer
+        ref={ref}
+        level={level}
+        selected={isSelected}
+        onClick={e => {
+          e.stopPropagation();
+          if (contentContainerRef.current) contentContainerRef.current.blur();
+          setLocalSelectedState(!isSelected);
+          onClick(e);
+        }}
+        className={`${className} MenuItemContainer`}
+        {...otherProps}
+      >
+        {content && (
+          <div className="MenuItemContent">
+            <ContentContainer ref={contentContainerRef}>
+              {icon && (
+                <IconContainer>
+                  {React.cloneElement(icon, {
+                    fill: isSelected ? 'secondary_dark' : 'primary',
+                  })}
+                </IconContainer>
+              )}
+              {content}
+            </ContentContainer>
+            {children && !noChevron && (
+              <Icon
+                name={isSelected ? 'chevron_down' : 'chevron_right'}
+                fill={isSelected ? 'secondary' : 'primary'}
+              />
+            )}
+          </div>
         )}
-      </div>
-      {isSelected && children}
-    </MenuItemContainer>
-  );
-};
+        {isSelected && children}
+      </MenuItemContainer>
+    );
+  },
+);
+
 MenuItem.propTypes = {
   className: PropTypes.string,
   /**
@@ -73,6 +85,7 @@ MenuItem.propTypes = {
    * nodes that will appear when opened
    */
   children: PropTypes.any,
+  noChevron: PropTypes.bool,
   onClick: PropTypes.func,
 };
 

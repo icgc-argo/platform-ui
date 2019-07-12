@@ -1,36 +1,34 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-apollo-hooks';
-import TitleBar from 'uikit/TitleBar';
-import { css } from 'uikit';
-import SubmissionLayout from '../layout';
-import { ContentBox } from 'uikit/PageLayout';
-import Tabs, { Tab } from 'uikit/Tabs';
-import InputLabel from 'uikit/form/InputLabel';
-
-import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
 import { ThemeContext } from '@emotion/core';
-import Icon from 'uikit/Icon';
-import UsersTable from './UsersTable';
-import Button from 'uikit/Button';
-import { TableActionBar } from 'uikit/Table';
-import users from 'uikit/Icon/icons/collection/users';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import _ from 'lodash';
-
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { Col, Row } from 'react-grid-system';
+import { css } from 'uikit';
+import Button from 'uikit/Button';
+import InputLabel from 'uikit/form/InputLabel';
+import Icon from 'uikit/Icon';
+import { ContentBox } from 'uikit/PageLayout';
+import { TableActionBar } from 'uikit/Table';
+import Tabs, { Tab } from 'uikit/Tabs';
+import TitleBar from 'uikit/TitleBar';
+import Typography from 'uikit/Typography';
+import SubmissionLayout from '../layout';
 import { programQuery } from './queries.gql';
+import UsersTable from './UsersTable';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
   const router = useRouter();
   const { shortName } = router.query;
+  const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
     variables: { shortName },
   });
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(TABS.USERS);
+  const [activeTab, setActiveTab] = React.useState(
+    defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
+  );
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
@@ -76,13 +74,15 @@ export default ({ logOut, pathname }) => {
               justify-content: flex-end;
             `}
           >
-            <Button
-              css={css`
-                margin: 9px 0;
-              `}
-            >
-              Add Users
-            </Button>
+            {activeTab === TABS.USERS && (
+              <Button
+                css={css`
+                  margin: 9px 0;
+                `}
+              >
+                Add Users
+              </Button>
+            )}
           </Tab>
         </Tabs>
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
@@ -134,21 +134,31 @@ function Profile({ program = {} }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col
-      md={3}
+      lg={2}
+      md={4}
       css={css`
         padding: 7px 0;
       `}
       {...props}
     />
   );
-  const Right = props => (
+  const Right = ({ children, ...props }) => (
     <Col
-      md={9}
+      lg={10}
+      md={8}
       css={css`
         padding: 7px 0;
       `}
       {...props}
-    />
+    >
+      <div
+        css={css`
+          max-width: 45em;
+        `}
+      >
+        {children}
+      </div>
+    </Col>
   );
   const SectionTitle = props => (
     <Typography
@@ -162,6 +172,7 @@ function Profile({ program = {} }) {
       {...props}
     />
   );
+
   return (
     <div
       css={css`
@@ -175,56 +186,58 @@ function Profile({ program = {} }) {
         <Left>
           <InputLabel>Program Name</InputLabel>
         </Left>
-        <Right>{program.name}</Right>
+        <Right>{program.name || '--'}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Short Name</InputLabel>
         </Left>
-        <Right>{program.shortName}</Right>
+        <Right>{program.shortName || '--'}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Countries</InputLabel>
         </Left>
-        <Right>{program.countries}</Right>
+        <Right>{program.countries || '--'}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Cancer Types</InputLabel>
         </Left>
-        <Right>{_.join(program.cancerTypes, ', ')}</Right>
+        <Right>{_.join(program.cancerTypes, ', ') || '--'}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Primary Sites</InputLabel>
         </Left>
-        <Right>{program.primarySites}</Right>
+        <Right>{_.isEmpty(program.primarySites) ? '--' : program.primarySites}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Commitment Level</InputLabel>
         </Left>
-        <Right>{program.commitmentDonors}</Right>
+        <Right>
+          {(program.commitmentDonors && program.commitmentDonors.toLocaleString()) || '--'}
+        </Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Membership Type</InputLabel>
         </Left>
-        <Right>{program.membershipType}</Right>
+        <Right>{program.membershipType || '--'}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Description</InputLabel>
         </Left>
-        <Right>{program.description}</Right>
+        <Right>{program.description || '--'}</Right>
       </Row>
 
       <SectionTitle>Affiliated Institutions</SectionTitle>
@@ -232,7 +245,7 @@ function Profile({ program = {} }) {
         <Left>
           <InputLabel>Institutions</InputLabel>
         </Left>
-        <Right>{program.institutions}</Right>
+        <Right>{program.institutions || '--'}</Right>
       </Row>
 
       <SectionTitle>Processing Regions</SectionTitle>
@@ -254,7 +267,7 @@ function Profile({ program = {} }) {
           `}
         >
           <Icon width="15px" height="15px" name="checkmark" fill="success_dark" />
-          &nbsp;{program.regions}
+          &nbsp;{_.replace(program.regions, ',(?! )', ', ')}
         </Col>
       </Row>
 
@@ -276,7 +289,14 @@ function Profile({ program = {} }) {
           `}
         >
           <Icon width="15px" height="15px" name="times" fill="error_dark" />
-          &nbsp;{_.join(_.without(REGIONS, program.regions), ', ')}
+          &nbsp;
+          {program.regions &&
+            _.join(
+              _.filter(REGIONS, region => {
+                return !program.regions.includes(region);
+              }),
+              ', ',
+            )}
         </Col>
       </Row>
     </div>

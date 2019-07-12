@@ -1,6 +1,6 @@
-import { styled, css } from '../';
+import { styled, css } from '../..';
 import { NOTIFICATION_VARIANTS } from '.';
-import FocusWrapper from '../FocusWrapper';
+import FocusWrapper from '../../FocusWrapper';
 
 const getBackgroundColor = ({ theme, variant }) =>
   ({

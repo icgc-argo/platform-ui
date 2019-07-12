@@ -37,7 +37,7 @@ spec:
                 container('node') {
                     git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
                     sh "cd ./client && npm ci"
-                    sh "cd ./client && npm run test"
+                    sh "cd ./client && npm run build && npm run test"
                 }
             }
         }
@@ -68,7 +68,7 @@ spec:
             steps {
                 build(job: "/ARGO/provision/platform-ui", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set image.tag=${commit}" ]
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
                 ])
             }
         }
