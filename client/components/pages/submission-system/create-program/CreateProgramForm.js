@@ -84,7 +84,14 @@ const createProgramInput = formData => ({
   countries: formData.countries.join(','),
   regions: Array.from(formData.processingRegions).join(','),
   membershipType: formData.membershipType,
-  adminEmails: [formData.adminEmail],
+  admins: [
+    {
+      email: formData.adminEmail,
+      firstName: formData.adminFirstName,
+      lastName: formData.adminLastName,
+      role: 'ADMIN',
+    },
+  ],
   cancerTypes: formData.cancerTypes,
   primarySites: formData.primarySites,
 });

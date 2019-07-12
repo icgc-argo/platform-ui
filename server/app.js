@@ -17,8 +17,6 @@ ApolloServer.prototype._createGraphQLServerOptions =
 
 ApolloServer.prototype.createGraphQLServerOptions = async function(req, res) {
   const options = await this._createGraphQLServerOptions(req, res);
-  console.log(options);
-  console.log(JSON.stringify(options));
 
   return {
     ...options,
