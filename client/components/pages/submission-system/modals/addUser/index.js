@@ -171,7 +171,7 @@ const AddUserModal = ({}) => {
 
   const sendAddUser = validData =>
     useMutation(INVITE_USER_MUTATION, {
-      variables: { program: createUserInput(validData) },
+      variables: { user: createUserInput(validData) },
     });
 
   const addSection = async () => {
