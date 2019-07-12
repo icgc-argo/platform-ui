@@ -3,7 +3,6 @@ import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
-import urljoin from 'url-join';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -18,10 +17,13 @@ import { sideMenuProgramList } from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { isDccMember, getAuthorizedProgramScopes } from 'global/utils/egoJwt';
 
-import { PROGRAM_MANAGE_PATH } from 'global/constants/pages';
-import { PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
-import { PROGRAM_ID_REGISTRATION_PATH } from 'global/constants/pages';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+import {
+  PROGRAM_SHORT_NAME_PATH,
+  PROGRAM_MANAGE_PATH,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_ID_REGISTRATION_PATH,
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
+} from 'global/constants/pages';
 
 type SideMenuProgram = {
   shortName: string,
@@ -56,23 +58,38 @@ const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) =
       }
     `}
   >
-    <Link prefetch href={urljoin(PROGRAM_DASHBOARD_PATH, props.program.shortName)}>
+    <Link
+      prefetch
+      href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+    >
       <a>
         <MenuItem level={3} content="Dashboard" />
       </a>
     </Link>
-    <Link prefetch href={urljoin(PROGRAM_ID_REGISTRATION_PATH, props.program.shortName)}>
+    <Link
+      prefetch
+      href={PROGRAM_ID_REGISTRATION_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+    >
       <a>
         <MenuItem level={3} content="ID Registration" />
       </a>
     </Link>
-    <Link prefetch href={urljoin(PROGRAM_CLINICAL_SUBMISSION_PATH, props.program.shortName)}>
+    <Link
+      prefetch
+      href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+        PROGRAM_SHORT_NAME_PATH,
+        props.program.shortName,
+      )}
+    >
       <a>
         <MenuItem level={3} content="Clinical Submission" />
       </a>
     </Link>
     {props.isAdmin && (
-      <Link prefetch href={urljoin(PROGRAM_MANAGE_PATH, props.program.shortName)}>
+      <Link
+        prefetch
+        href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+      >
         <a>
           <MenuItem level={3} content="Manage Program" />
         </a>

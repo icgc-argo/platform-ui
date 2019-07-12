@@ -2,7 +2,6 @@
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
-import urljoin from 'url-join';
 
 import Typography from 'uikit/Typography';
 import { Input } from 'uikit/form';
@@ -20,8 +19,11 @@ import { useRouter } from 'next/router';
 // $FlowFixMe .gql file not supported
 import { programsListQuery } from './queries.gql';
 
-import { CREATE_PROGRAM_PAGE_PATH } from 'global/constants/pages';
-import { PROGRAM_MANAGE_PATH } from 'global/constants/pages';
+import {
+  CREATE_PROGRAM_PAGE_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+  PROGRAM_MANAGE_PATH,
+} from 'global/constants/pages';
 
 const TableFilterInput = props => (
   <Input
@@ -51,13 +53,13 @@ export default ({
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
     router.push({
-      pathname: urljoin(PROGRAM_MANAGE_PATH, program.shortName),
+      pathname: PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, program.shortName),
       query: { tab: 'users' },
     });
   };
   const handleProgramProfileClick = ({ program }) => {
     router.push({
-      pathname: urljoin(PROGRAM_MANAGE_PATH, program.shortName),
+      pathname: PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, program.shortName),
       query: { tab: 'profile' },
     });
   };

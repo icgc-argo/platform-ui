@@ -1,12 +1,11 @@
 // @flow
 import {
-  DCC_OVERVIEW_PATH,
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
-  PROGRAM_ENTITY_PATH,
   PROGRAM_MANAGE_PATH,
   USER_PAGE_PATH,
   SUBMISSION_PATH,
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { decodeToken } from 'global/utils/egoJwt';
@@ -30,8 +29,7 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
     [LOGIN_PAGE_PATH]: 'Login',
     [PROGRAMS_LIST_PATH]: 'Programs',
-    [PROGRAM_ENTITY_PATH]: 'Program',
-    [DCC_OVERVIEW_PATH]: 'Dcc Admin',
+    [PROGRAM_CLINICAL_SUBMISSION_PATH]: 'Dcc Admin',
     [USER_PAGE_PATH]: 'User',
   };
   return (
