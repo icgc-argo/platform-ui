@@ -161,7 +161,13 @@ const AddUserModal = ({}) => {
     }
   };
 
-  const createUserInput = data => ({});
+  const createUserInput = data => ({
+    programShortName: null,
+    userFirstName: data.firstName,
+    userLastName: data.lastName,
+    userEmail: data.email,
+    userRole: data.role,
+  });
 
   const sendAddUser = validData =>
     useMutation(INVITE_USER_MUTATION, {
