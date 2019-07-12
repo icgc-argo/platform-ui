@@ -9,6 +9,7 @@ import UserSection from './userSection';
 import * as yup from 'yup';
 import { get, isArray } from 'lodash';
 import addUserSchema from './validations';
+import { UserModel } from '../common';
 
 const useFormHook = ({ initialFields, schema: formSchema }) => {
   const [form, setForm] = useState({ errors: [initialFields], data: [initialFields] });
@@ -120,8 +121,6 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     hasErrors,
   };
 };
-
-const user = { firstName: '', lastName: '', email: '', role: '' };
 
 const AddSection = styled(Button)`
   text-transform: uppercase;

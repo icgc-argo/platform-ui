@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
 import UserSection from '../addUser/userSection';
+import { UserModel } from '../common';
 
 const EditUserModal = ({}) => {
   return (
@@ -11,10 +12,7 @@ const EditUserModal = ({}) => {
       onActionClick={x => x}
       actionDisabled={false}
     >
-      <UserSection
-        user={{ firstName: '', lastName: '', email: '', role: '' }}
-        errors={{ firstName: '', lastName: '', email: '', role: '' }}
-      />
+      <UserSection user={UserModel} errors={UserModel} />
     </Modal>
   );
 };
