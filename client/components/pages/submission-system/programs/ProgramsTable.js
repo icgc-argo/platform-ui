@@ -1,14 +1,13 @@
 //@flow
 import Link from 'next/link';
 import React from 'react';
-import urljoin from 'url-join';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Table from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import A from 'uikit/Link';
-import { PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -55,7 +54,7 @@ export default (tableProps: {
       Header: 'Short Name',
       accessor: 'shortName',
       Cell: ({ original }) => (
-        <Link href={urljoin(PROGRAM_DASHBOARD_PATH, original.shortName)}>
+        <Link href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}>
           <A>{original.shortName}</A>
         </Link>
       ),
