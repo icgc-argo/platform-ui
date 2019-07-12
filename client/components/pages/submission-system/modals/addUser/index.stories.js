@@ -1,7 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import UserSection from './userSection';
 import AddUserModal from '.';
 
-const AddUserStory = storiesOf(`${__dirname}`, module).add('Basic', () => <AddUserModal />);
+const UserSectionStory = storiesOf(`${__dirname}`, module).add('Basic', () => <AddUserModal />);
 
-export default AddUserStory;
+export default UserSectionStory;
