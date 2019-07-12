@@ -94,8 +94,7 @@ export default (props: { path: string, logOut: void => void, children?: React.No
             <MenuItem
               dropdownMenu={
                 <DropdownMenu>
-                  <DropdownMenuItem>My Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Tokens</DropdownMenuItem>
+                  <DropdownMenuItem>Profile & Token</DropdownMenuItem>
                   <DropdownMenuItem onClick={props.logOut}>Logout</DropdownMenuItem>
                 </DropdownMenu>
               }
