@@ -1,6 +1,3 @@
-//@flow
-import React from 'react';
-
 import { createPage } from 'global/utils/pages';
 import ProgramManagement from 'components/pages/submission-system/program-management';
 import { isRdpcMember, isProgramAdmin } from 'global/utils/egoJwt';

@@ -1,6 +1,7 @@
 {
   "name": "create-next-example-app",
   "scripts": {
+    "next": "next",
     "dev": "nodemon index.js",
     "dev:fast": "next",
     "dev-ui": "node index.js",

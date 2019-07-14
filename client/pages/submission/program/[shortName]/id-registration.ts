@@ -1,8 +1,5 @@
-// @flow
-import React from 'react';
-
 import { createPage } from 'global/utils/pages';
-import ProgramDashboard from 'components/pages/submission-system/program-dashboard';
+import programIDRegistration from 'components/pages/submission-system/program-id-registration';
 import { isRdpcMember, canReadProgram } from 'global/utils/egoJwt';
 
 export default createPage({
@@ -13,4 +10,4 @@ export default createPage({
     } = ctx;
     return !isRdpcMember(egoJwt) && canReadProgram({ egoJwt, programId: shortName });
   },
-})(ProgramDashboard);
+})(programIDRegistration);
