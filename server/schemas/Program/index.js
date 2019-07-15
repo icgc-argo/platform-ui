@@ -37,12 +37,15 @@ const typeDefs = gql`
 
     cancerTypes: [String]
     primarySites: [String]
+
+    users: [ProgramUser]
   }
 
   type ProgramUser @cost(complexity: 10) {
     email: String
     firstName: String
     lastName: String
+    role: UserRole
   }
 
   input ProgramUserInput {
@@ -113,25 +116,39 @@ const getISODate = time => (time ? new Date(parseInt(time)).toISOString() : null
 /* =========
     Convert GRPC Response to GQL output
  * ========= */
-const convertGrpcProgramToGql = programDetails => {
-  return {
-    name: get(programDetails, 'program.name.value'),
-    shortName: get(programDetails, 'program.short_name.value'),
-    description: get(programDetails, 'program.description.value'),
-    commitmentDonors: get(programDetails, 'program.commitment_donors.value'),
-    submittedDonors: get(programDetails, 'program.submitted_donors.value'),
-    genomicDonors: get(programDetails, 'program.genomic_donors.value'),
-    website: get(programDetails, 'program.website.value'),
-    institutions: get(programDetails, 'program.institutions.value'),
-    countries: get(programDetails, 'program.countries.value'),
-    regions: get(programDetails, 'program.regions.value'),
-    membershipType: get(programDetails, 'program.membership_type.value'),
-    cancerTypes: get(programDetails, 'program.cancer_types', []),
-    primarySites: get(programDetails, 'program.primary_sites', []),
-  };
-};
+const convertGrpcProgramToGql = programDetails => ({
+  name: get(programDetails, 'program.name.value'),
+  shortName: get(programDetails, 'program.short_name.value'),
+  description: get(programDetails, 'program.description.value'),
+  commitmentDonors: get(programDetails, 'program.commitment_donors.value'),
+  submittedDonors: get(programDetails, 'program.submitted_donors.value'),
+  genomicDonors: get(programDetails, 'program.genomic_donors.value'),
+  website: get(programDetails, 'program.website.value'),
+  institutions: get(programDetails, 'program.institutions.value'),
+  countries: get(programDetails, 'program.countries.value'),
+  regions: get(programDetails, 'program.regions.value'),
+  membershipType: get(programDetails, 'program.membership_type.value'),
+  cancerTypes: get(programDetails, 'program.cancer_types', []),
+  primarySites: get(programDetails, 'program.primary_sites', []),
+});
+
+const convertGrpcUserToGql = user => ({
+  email: get(user, 'email.value'),
+  firstName: get(user, 'first_name.value'),
+  lastName: get(user, 'last_name.value'),
+  role: get(user, 'role.value'),
+});
 
 const resolvers = {
+  Program: {
+    users: async (program, args, context, info) => {
+      const { egoToken } = context;
+      console.log(egoToken);
+      const response = await programService.listUsers(program.shortName, egoToken);
+      const users = get(response, 'users', []);
+      return users.map(convertGrpcUserToGql);
+    },
+  },
   Query: {
     program: async (obj, args, context, info) => {
       const { egoToken } = context;
