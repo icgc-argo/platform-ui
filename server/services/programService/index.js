@@ -49,7 +49,7 @@ const listPrograms = async (jwt = null) => {
 
 const listUsers = async (shortName, jwt = null) => {
   return await new Promise((resolve, reject) => {
-    programService.listUsers(
+    programService.listUser(
       { program_short_name: wrapValue(shortName) },
       getAuthMeta(jwt),
       defaultPromiseCallback(resolve, reject),
