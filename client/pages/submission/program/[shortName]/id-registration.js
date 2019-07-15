@@ -10,6 +10,6 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: shortName });
+    return !isRdpcMember(egoJwt);
   },
 })(programIDRegistration);
