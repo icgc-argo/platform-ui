@@ -8,7 +8,7 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { decodeToken } from 'global/utils/egoJwt';
+import { decodeToken, canReadProgram, isRdpcMember } from 'global/utils/egoJwt';
 import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
@@ -57,6 +57,9 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
     }
   })();
 
+  const canAccessSubmission =
+    !!egoJwt && (canReadProgram({ egoJwt, programId: '' }) || isRdpcMember(egoJwt));
+
   return (
     <AppBar
       css={css`
@@ -78,7 +81,9 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
       <Section />
       <Section>
         <MenuGroup>
-          <MenuItem active={path.search(SUBMISSION_PATH) === 0}>Submission</MenuItem>
+          {canAccessSubmission && (
+            <MenuItem active={path.search(SUBMISSION_PATH) === 0}>Submission</MenuItem>
+          )}
           {!userModel && <NavbarLink path={LOGIN_PAGE_PATH} active={path === LOGIN_PAGE_PATH} />}
           {userModel && (
             <MenuItem
