@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import PropTypes from 'prop-types';
 import Color from 'color';
 
@@ -39,8 +41,12 @@ const ButtonContainer = styled('div')`
   flex-direction: row;
 `;
 const ModalOverlay = styled('div')`
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,8 +150,17 @@ const Modal = ({
   </ModalContainer>
 );
 
-Modal.Overlay = function Overlay(props) {
-  return <ModalOverlay {...props} />;
+Modal.Overlay = class Overlay extends React.Component {
+  componentDidMount() {
+    this.element = document.body;
+    this.forceUpdate();
+  }
+  render() {
+    if (this.element === undefined) {
+      return null;
+    }
+    return ReactDOM.createPortal(<ModalOverlay {...this.props} />, this.element);
+  }
 };
 
 Modal.propTypes = {

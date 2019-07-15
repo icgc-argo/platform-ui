@@ -8,6 +8,7 @@ import { css } from 'uikit';
 import Button from 'uikit/Button';
 import InputLabel from 'uikit/form/InputLabel';
 import Icon from 'uikit/Icon';
+import Modal from 'uikit/Modal';
 import { ContentBox } from 'uikit/PageLayout';
 import { TableActionBar } from 'uikit/Table';
 import Tabs, { Tab } from 'uikit/Tabs';
@@ -123,12 +124,50 @@ const FAKE_USERS = [
   },
 ];
 
-const Users = ({ users }) => (
-  <div>
-    <TableActionBar>{users.length} results</TableActionBar>
-    <UsersTable users={users} />
-  </div>
-);
+function ResendEmailModal({ user, ...otherProps }) {
+  return (
+    <Modal.Overlay>
+      <Modal
+        title="Resend Invitation?"
+        actionButtonText="RESEND INVITATION"
+        cancelText="CANCEL"
+        {...otherProps}
+      >
+        <div style={{ width: '322px' }}>
+          Are you sure you want to resend the email invitation to{' '}
+          <strong>{user && user.name}</strong>?
+        </div>
+      </Modal>
+    </Modal.Overlay>
+  );
+}
+
+function Users({ users }) {
+  const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
+  const [user, setUser] = React.useState(null);
+
+  const handleModalCancelClick = () => {
+    setIsResendEmailModalOpen(false);
+  };
+  const handleResendEmailClick = ({ user }) => {
+    setUser(user);
+    setIsResendEmailModalOpen(true);
+  };
+
+  return (
+    <div>
+      <TableActionBar>{users.length} results</TableActionBar>
+      <UsersTable users={users} onUserResendInviteClick={handleResendEmailClick} />
+      {isResendEmailModalOpen && (
+        <ResendEmailModal
+          user={user}
+          onCancelClick={handleModalCancelClick}
+          onCloseClick={handleModalCancelClick}
+        />
+      )}
+    </div>
+  );
+}
 
 function Profile({ program = {} }) {
   const theme = React.useContext(ThemeContext);
