@@ -74,7 +74,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     new Promise(async (resolve, reject) => {
       const section = data[index];
       try {
-        const validData = await addUserSchema.validate(section, {
+        const validData = await formSchema.validate(section, {
           abortEarly: false,
           stripUnknown: true,
         });
@@ -95,7 +95,14 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
     Promise.all(
       data.map(
         (section, index) =>
-          new Promise(async (resolve, reject) => await validateSection({ index })),
+          new Promise(async (resolve, reject) => {
+            try {
+              const validData = await validateSection({ index });
+              resolve(validData);
+            } catch (e) {
+              reject();
+            }
+          }),
       ),
     );
 

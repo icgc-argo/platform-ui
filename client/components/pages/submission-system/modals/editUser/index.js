@@ -18,7 +18,7 @@ const EditUserModal = ({}) => {
 
   const submitForm = async () => {
     try {
-      validData = await validateForm();
+      const validData = await validateForm();
       console.log(validData);
       // Send data
     } catch (err) {
