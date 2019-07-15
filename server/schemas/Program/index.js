@@ -84,6 +84,14 @@ const typeDefs = gql`
     userRole: UserRole!
   }
 
+  input JoinProgramInput {
+    invitationId: String!
+    institute: String!
+    piFirstName: String!
+    piLastName: String!
+    department: String!
+  }
+
   type Query {
     """
     retrieve Program data by id
@@ -108,6 +116,12 @@ const typeDefs = gql`
     Returns the email of the user if the invite is successfully sent
     """
     inviteUser(invite: InviteUserInput!): String @cost(complexity: 10)
+
+    """
+    Join a program by accepting an invitation
+    Returns the user data
+    """
+    joinProgram(join: JoinProgramInput!): ProgramUser @cost(complexity: 10)
   }
 `;
 
@@ -143,7 +157,6 @@ const resolvers = {
   Program: {
     users: async (program, args, context, info) => {
       const { egoToken } = context;
-      console.log(egoToken);
       const response = await programService.listUsers(program.shortName, egoToken);
       const users = get(response, 'users', []);
       return users.map(convertGrpcUserToGql);
@@ -180,6 +193,12 @@ const resolvers = {
       const invite = get(args, 'invite', {});
       const response = await programService.inviteUser(invite, egoToken);
       return get(args, 'invite.userEmail');
+    },
+    joinProgram: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const joinProgramInput = get(args, 'join', {});
+      const response = await programService.joinProgram(joinProgramInput, egoToken);
+      return convertGrpcUserToGql(get(response, 'user'));
     },
   },
 };

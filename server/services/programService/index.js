@@ -135,5 +135,26 @@ const inviteUser = async (
   });
 };
 
+const joinProgram = async (
+  { invitationId, institute, piFirstName, piLastName, department },
+  jwt = null,
+) => {
+  const inviteUserRequest = {
+    join_program_invitation_id: wrapValue(invitationId),
+    institute: wrapValue(institute),
+    affiliate_pi_first_name: wrapValue(piFirstName),
+    affiliate_pi_last_name: wrapValue(piLastName),
+    department: wrapValue(department),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.joinProgram(
+      inviteUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
 // const inviteUser = async ({programShortName, }, jwt=null)
-export default { getProgram, listPrograms, listUsers, createProgram, inviteUser };
+export default { getProgram, listPrograms, listUsers, createProgram, inviteUser, joinProgram };
