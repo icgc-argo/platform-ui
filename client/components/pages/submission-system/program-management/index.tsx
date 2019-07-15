@@ -19,23 +19,35 @@ import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import CreateProgramForm from '../create-program/CreateProgramForm';
 import SubmissionLayout, { ModalPortal } from '../layout';
-import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
+import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
+import programQuery from './queries.gql';
+import UsersTable, { UsersTableUser } from './UsersTable';
+
+
+type Program = {
+  name: string;
+  shortName: string;
+  description: string;
+  commitmentDonors: string;
+  submittedDonors: number;
+  genomicDonors: number;
+  website: string;
+  institutions: string[];
+  countries: string[];
+  regions: string[];
+  membershipType: string;
+  cancerTypes: string[];
+  primarySites: string[];
+};
 
 const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
 
   return [triggerMutation];
 };
-
-/**
- * @todo: actually fix this Minh!
- */
-// $FlowFixMe .gql file not supported
-import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
-// $FlowFixMe .gql file not supported
-import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
@@ -45,9 +57,10 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
 
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
-  const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
+  const queryResult = useQuery<{ program: Program }>(PROGRAM_QUERY, {
     variables: { shortName },
   });
+  const program = queryResult.data.program || {};
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
   const [activeTab, setActiveTab] = React.useState(
     defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
@@ -154,38 +167,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   );
 };
 
-// TODO: Remove dummy data
-const FAKE_USERS = [
-  {
-    id: '1',
-    name: 'Homer Simpson',
-    email: 'test@email.com',
-    role: 'ADMINISTRATOR',
-    isDacoApproved: true,
-    status: 'PENDING_INVITATION',
-    joinDate: '03-02-2018',
-  },
-  {
-    id: '2',
-    name: 'Bart Simpson',
-    email: 'test@email.com',
-    role: 'ADMINISTRATOR',
-    isDacoApproved: true,
-    status: 'PENDING_INVITATION',
-    joinDate: '03-02-2018',
-  },
-  {
-    id: '3',
-    name: 'Lisa Simpson',
-    email: 'test@email.com',
-    role: 'ADMINISTRATOR',
-    isDacoApproved: true,
-    status: 'PENDING_INVITATION',
-    joinDate: '03-02-2018',
-  },
-];
-
-const Users = ({ users }) => (
+const Users = ({ users }: { users: UsersTableUser[] }) => (
   <div>
     <TableActionBar>{users.length} results</TableActionBar>
     <UsersTable
@@ -200,7 +182,8 @@ const Users = ({ users }) => (
   </div>
 );
 
-function ProfileView({ program = {} }) {
+function ProfileView({ program: receivedProgram = {} }: { program: Program | {} }) {
+  const program = receivedProgram as Program;
   const theme = useTheme();
   const Left = props => (
     <Col

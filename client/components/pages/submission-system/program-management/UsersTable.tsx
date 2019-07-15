@@ -1,54 +1,59 @@
-//@flow
-import React from 'react';
+import * as React from 'react';
 
 import { css } from 'uikit';
 import Table from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
-import Checkbox from 'uikit/form/Checkbox';
 import MailTo from 'uikit/MailTo';
 import { displayDate } from 'global/utils/common';
 
-type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
+enum RoleKey {
+  ADMINISTRATOR = 'ADMINISTRATOR',
+  DATA_SUBMITTER = 'DATA_SUBMITTER',
+  COLLABORATOR = 'COLLABORATOR',
+}
 
-type StatusKey = 'APPROVED' | 'PENDING_INVITATION';
+enum StatusKey {
+  APPROVED = 'APPROVED',
+  PENDING_INVITATION = 'PENDING_INVITATION',
+}
 
-type UsersTableUser = {
-  id: string,
-  name: string,
-  email: string,
-  role: RoleKey,
-  isDacoApproved: boolean,
-  status: StatusKey,
-  joinDate: string | null,
+export type UsersTableUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: RoleKey;
+  isDacoApproved: boolean;
+  status: StatusKey;
+  joinDate: string | null;
 };
 
 type CellProps = { original: UsersTableUser };
 
-const RoleDisplayName: { [key: RoleKey]: string } = {
-  ADMINISTRATOR: 'Administrator',
-  DATA_SUBMITTER: 'Data Submitter',
-  COLLABORATOR: 'Collaborator',
-};
+const RoleDisplayName: Map<RoleKey, string> = new Map([
+  [RoleKey.ADMINISTRATOR, 'Administrator'][(RoleKey.DATA_SUBMITTER, 'Data Submitter')][
+    (RoleKey.COLLABORATOR, 'Collaborator')
+  ],
+]);
 
-const StatusDisplayName: { [key: StatusKey]: string } = {
-  APPROVED: 'Approved',
-  PENDING_INVITATION: 'Pending Invitation',
-};
+const StatusDisplayName: Map<StatusKey, string> = new Map([
+  [StatusKey.APPROVED, 'Approved'],
+  [StatusKey.PENDING_INVITATION, 'Pending Invitation'],
+]);
 
 const UsersTable = (tableProps: {
-  users: Array<UsersTableUser>,
-  onUserEditClick: ({ user: UsersTableUser }) => void,
-  onUserDeleteClick: ({ user: UsersTableUser }) => void,
-  onUserResendInviteClick: ({ user: UsersTableUser }) => void,
+  users: Array<UsersTableUser>;
+  onUserEditClick: ({ user: UsersTableUser }) => void;
+  onUserDeleteClick: ({ user: UsersTableUser }) => void;
+  onUserResendInviteClick: ({ user: UsersTableUser }) => void;
 }) => {
   const columns: Array<{
-    Header: string,
-    accessor?: $Keys<UsersTableUser>,
-    Cell?: CellProps => any,
-    sortable?: boolean,
-    width?: number,
-    headerStyle?: {},
+    Header: string;
+    accessor?: keyof UsersTableUser;
+    Cell?: (c: CellProps) => any;
+    sortable?: boolean;
+    width?: number;
+    headerStyle?: {};
   }> = [
     {
       Header: 'Name',
