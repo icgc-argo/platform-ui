@@ -5,7 +5,7 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import css from '@emotion/css';
-import UserSection from './userSection';
+import { UserSection } from '../styledComponents';
 import * as yup from 'yup';
 import { get, isArray } from 'lodash';
 import addUserSchema from './validations';
@@ -141,7 +141,7 @@ const AddUserModal = ({ dismissModal }) => {
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: user, schema: addUserSchema });
+  } = useFormHook({ initialFields: UserModel, schema: addUserSchema });
 
   const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,
@@ -163,7 +163,7 @@ const AddUserModal = ({ dismissModal }) => {
     const index = form.length - 1;
     try {
       await validateSection({ index });
-      createSection(user);
+      createSection(UserModel);
     } catch (e) {
       console.log('error: last section is empty', e);
     }
