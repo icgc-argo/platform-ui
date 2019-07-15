@@ -75,6 +75,19 @@ const typeDefs = gql`
     admins: [ProgramUserInput!]!
   }
 
+  input UpdateProgramInput {
+    name: String
+    description: String
+    commitmentDonors: Int
+    website: String
+    institutions: String
+    countries: String
+    regions: String
+    membershipType: MembershipType
+    cancerTypes: [String]
+    primarySites: [String]
+  }
+
   input InviteUserInput {
     programShortName: String!
     userFirstName: String!
@@ -107,9 +120,16 @@ const typeDefs = gql`
   type Mutation {
     """
     Create new program
-    Returns the shortName of the program if successfully created
+    For lists (Cancer Type, Primary Site, Institution, Regions, Countries) the entire new value must be provided, not just values being added.
+    Returns Program object details of created program
     """
     createProgram(program: ProgramInput!): Program @cost(complexity: 10)
+
+    """
+    Update Program
+    Returns shortName of the program if succesfully updated
+    """
+    updateProgram(shortName: String!, updates: UpdateProgramInput!): String @cost(complexity: 10)
 
     """
     Invite a user to join a program
@@ -167,7 +187,7 @@ const resolvers = {
       const { egoToken } = context;
       const response = await programService.getProgram(args.shortName, egoToken);
       const programDetails = get(response, 'program');
-      return response === null ? null : convertGrpcProgramToGql(programDetails);
+      return response ? null : convertGrpcProgramToGql(programDetails);
     },
     programs: async (obj, args, context, info) => {
       const { egoToken } = context;
@@ -187,6 +207,13 @@ const resolvers = {
       );
       const programDetails = get(programResponse, 'program');
       return programResponse === null ? null : convertGrpcProgramToGql(programDetails);
+    },
+    updateProgram: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const updates = get(args, 'updates', {});
+      const shortName = get(args, 'shortName', {});
+      const response = await programService.updateProgram(shortName, updates, egoToken);
+      return response === null ? null : get(args, 'shortName');
     },
     inviteUser: async (obj, args, context, info) => {
       const { egoToken } = context;
