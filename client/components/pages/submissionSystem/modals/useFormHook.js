@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { get, isArray } from 'lodash';
 import * as yup from 'yup';
 
-const useFormHook = ({ initialFields, schema: formSchema }) => {
+const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
   const [form, setForm] = useState({ errors: [initialFields], data: [initialFields] });
   const [touched, setTouched] = useState(false);
   const { errors, data } = form;
@@ -73,6 +73,7 @@ const useFormHook = ({ initialFields, schema: formSchema }) => {
   const validateSection = async ({ index }) =>
     new Promise(async (resolve, reject) => {
       const section = data[index];
+
       try {
         const validData = await formSchema.validate(section, {
           abortEarly: false,

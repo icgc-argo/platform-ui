@@ -7,7 +7,7 @@ import Typography from 'uikit/Typography';
 import css from '@emotion/css';
 
 import { UserSection } from '../styledComponents';
-import userSchema from '../validations';
+import { addUserSchema } from '../validations';
 import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 
@@ -30,7 +30,7 @@ const AddUserModal = ({ dismissModal }) => {
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: UserModel, schema: userSchema });
+  } = useFormHook({ initialFields: UserModel, schema: addUserSchema });
 
   const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,

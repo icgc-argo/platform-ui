@@ -3,7 +3,9 @@ import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
 import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
-import userSchema from '../validations';
+import { editUserSchema } from '../validations';
+
+const DUMMY_USER = { ...UserModel, email: 'test@test.com' };
 
 const EditUserModal = ({}) => {
   const {
@@ -14,7 +16,7 @@ const EditUserModal = ({}) => {
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: UserModel, schema: userSchema });
+  } = useFormHook({ initialFields: DUMMY_USER, schema: editUserSchema });
 
   const submitForm = async () => {
     try {
