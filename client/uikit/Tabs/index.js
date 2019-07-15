@@ -29,7 +29,14 @@ export const Button = styled('button')`
   }
 `;
 
-export function Tab({ label, value, empty, children, className, ...otherProps }) {
+export function Tab({
+  label = undefined,
+  value = undefined,
+  empty = false,
+  children = undefined,
+  className = undefined,
+  ...otherProps
+}) {
   const theme = useTheme();
 
   const { onChange, value: currentValue } = React.useContext(TabsContext);

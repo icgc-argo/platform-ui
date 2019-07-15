@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css } from 'uikit';
@@ -31,7 +30,7 @@ const useMounted = () => {
   return mounted;
 };
 
-export const ModalPortal = ({ children }: { children: React.Node }) => {
+export const ModalPortal = ({ children }: { children: React.ReactNode }) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
   return ref
@@ -61,38 +60,36 @@ const SubmissionLayout = ({
   children,
   subtitle,
 }: {
-  pathname: string,
-  logOut: any => any,
-  noSidebar?: boolean,
-  navBar?: React.Element<any>,
-  sideMenu?: React.Element<any>,
-  contentHeader?: React.Element<any>,
-  children?: React.Element<any>,
-  subtitle?: string,
-}) => {
-  return (
-    <PageContainer>
-      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-      {navBar}
-      <PageBody>
-        {!noSidebar && <Panel>{sideMenu}</Panel>}
-        <PageContent noSidebar={noSidebar}>
-          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-          <ContentBody>{children}</ContentBody>
-        </PageContent>
-      </PageBody>
-      <PageFooter>
-        <Footer />
-      </PageFooter>
-      <div
-        css={css`
-          position: fixed;
-          z-index: 9999;
-        `}
-        ref={modalPortalRef}
-      />
-    </PageContainer>
-  );
-};
+  pathname: string;
+  logOut: (arg: any) => any;
+  noSidebar?: boolean;
+  navBar?: React.ReactElement<any>;
+  sideMenu?: React.ReactElement<any>;
+  contentHeader?: React.ReactElement<any>;
+  children?: React.ReactElement<any>;
+  subtitle?: string;
+}) => (
+  <PageContainer>
+    <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+    {navBar}
+    <PageBody>
+      {!noSidebar && <Panel>{sideMenu}</Panel>}
+      <PageContent noSidebar={noSidebar}>
+        {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+        <ContentBody>{children}</ContentBody>
+      </PageContent>
+    </PageBody>
+    <PageFooter>
+      <Footer />
+    </PageFooter>
+    <div
+      css={css`
+        position: fixed;
+        z-index: 9999;
+      `}
+      ref={modalPortalRef}
+    />
+  </PageContainer>
+)
 
 export default SubmissionLayout;

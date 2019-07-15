@@ -1,6 +1,4 @@
-//@flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col, ScreenClassRender } from 'react-grid-system';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
@@ -147,10 +145,10 @@ const JoinProgramForm = ({
   availableInstitutions,
   onJoinClick,
 }: {
-  programName: string,
-  userRole: string,
-  availableInstitutions: Array<any>,
-  onJoinClick: any => any,
+  programName: string;
+  userRole: string;
+  availableInstitutions: Array<any>;
+  onJoinClick: (e: any) => any;
 }) => (
   <FormContainer>
     <Row nogutter>

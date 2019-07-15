@@ -16,8 +16,7 @@ import SubmissionLayout from '../layout';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-// $FlowFixMe .gql file not supported
-import { programsListQuery } from './queries.gql';
+import * as programsListQuery from './queries.gql';
 
 import {
   CREATE_PROGRAM_PAGE_PATH,

@@ -1,4 +1,3 @@
-//@flow
 import Link from 'next/link';
 import React from 'react';
 import { css } from 'uikit';
@@ -9,42 +8,45 @@ import Tooltip from 'uikit/Tooltip';
 import A from 'uikit/Link';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
-type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
+enum ArgoMembershipKey {
+  FULL = 'FULL',
+  ASSOCIATE = 'ASSOCIATE',
+}
 type ProgramsTableProgram = {
-  shortName: string,
-  name: string | null,
-  cancerTypes: Array<string>,
-  countries: string | null,
-  membershipType: ArgoMembershipKey | null,
-  genomicDonors: number | null,
-  submittedDonors: number | null,
-  commitmentDonors: number | null,
-  administrators: string | null,
+  shortName: string;
+  name: string | null;
+  cancerTypes: Array<string>;
+  countries: string | null;
+  membershipType: ArgoMembershipKey | null;
+  genomicDonors: number | null;
+  submittedDonors: number | null;
+  commitmentDonors: number | null;
+  administrators: string | null;
 };
 type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
 type CellProps = { original: TableProgramInternal };
 
-const MembershipDisplayName: { [key: ArgoMembershipKey]: string } = {
-  FULL: 'FULL',
-  ASSOCIATE: 'ASSOCIATE',
-};
+const MembershipDisplayName: Map<ArgoMembershipKey, string> = new Map([
+  [ArgoMembershipKey.FULL, 'FULL'][(ArgoMembershipKey.ASSOCIATE, 'ASSOCIATE')],
+]);
 
 export default (tableProps: {
-  programs: Array<ProgramsTableProgram>,
-  onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
-  onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
+  programs: Array<ProgramsTableProgram>;
+  onProgramUsersClick: ({ program: ProgramsTableProgram }) => void;
+  onProgramEditClick: ({ program: ProgramsTableProgram }) => void;
+  loading: boolean;
 }) => {
   const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
   const columns: Array<{
-    Header: string,
-    accessor?: $Keys<TableProgramInternal>,
-    Cell?: CellProps => any,
-    sortable?: boolean,
-    width?: number,
-    headerStyle?: {},
+    Header: string;
+    accessor?: keyof TableProgramInternal;
+    Cell?: (c: CellProps) => any;
+    sortable?: boolean;
+    width?: number;
+    headerStyle?: {};
   }> = [
     {
       Header: 'Program Name',
@@ -141,5 +143,7 @@ export default (tableProps: {
       ),
     },
   ];
-  return <Table data={data} columns={columns} showPagination={false} />;
+  return (
+    <Table data={data} columns={columns} showPagination={false} loading={tableProps.loading} />
+  );
 };

@@ -22,7 +22,7 @@ const StyledLink = styled('a')`
 `;
 
 const Link = ({
-  href,
+  href = undefined,
   variant = LINK_VARIANTS.INLINE,
   uppercase = variant === LINK_VARIANTS.BLOCK,
   withChevron = variant === LINK_VARIANTS.BLOCK,

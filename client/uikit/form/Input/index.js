@@ -14,18 +14,18 @@ export const INPUT_PRESETS = {
 
 const Input = ({
   preset = INPUT_PRESETS.DEFAULT,
-  value,
-  onChange,
-  onBlur = () => {},
-  type,
+  value = undefined,
+  onChange = e => {},
+  onBlur = e => {},
+  type = undefined,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
   icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
   size = INPUT_SIZES.SM,
-  className,
-  error,
-  disabled,
+  className = undefined,
+  error = false,
+  disabled = false,
   showClear = preset === INPUT_PRESETS.SEARCH || false,
-  getOverrideCss,
+  getOverrideCss = () => {},
   ...props
 }) => {
   const [activeState, setActive] = useState('default');

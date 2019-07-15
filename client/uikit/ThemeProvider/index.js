@@ -25,4 +25,10 @@ ThemeProvider.propTypes = {
 };
 
 export default ThemeProvider;
-export const useTheme = () => React.useContext(ThemeContext);
+
+/**
+ * @type {() => any}
+ */
+export const useTheme = () => {
+  return React.useContext(ThemeContext);
+};

@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
 
-const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
+const Icon = ({ name, width, height, fill, className = undefined, title = undefined, ...rest }) => {
   const theme = useTheme();
   const svg = icons[name];
 

@@ -1,5 +1,7 @@
 {
   "presets": [
+    "@babel/preset-flow",
+    "@babel/preset-typescript",
     [
       "next/babel",
       {
@@ -11,8 +13,8 @@
     ["@emotion/babel-preset-css-prop", { "autoLabel": true }]
   ],
   "plugins": [
+    "transform-flow-strip-types",
     "@babel/plugin-proposal-optional-chaining",
-    "@babel/plugin-proposal-object-rest-spread",
-    "transform-flow-strip-types"
+    "@babel/plugin-proposal-object-rest-spread"
   ]
 }

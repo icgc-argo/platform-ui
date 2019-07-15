@@ -1,8 +1,6 @@
-// @flow
 import {
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
-  PROGRAM_MANAGE_PATH,
   USER_PAGE_PATH,
   SUBMISSION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
@@ -10,7 +8,6 @@ import {
 import useEgoToken from 'global/hooks/useEgoToken';
 import {
   decodeToken,
-  canReadProgram,
   isRdpcMember,
   canReadSomeProgram,
   isDccMember,
@@ -28,12 +25,10 @@ import AppBar, {
   DropdownMenu,
   DropdownMenuItem,
 } from 'uikit/AppBar';
-import Button from 'uikit/Button';
-import urlJoin from 'url-join';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 
-const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
+const NavbarLink = ({ path, active }: { path: string; active: boolean }) => {
   const titles = {
     [LOGIN_PAGE_PATH]: 'Login',
     [PROGRAMS_LIST_PATH]: 'Programs',
@@ -53,7 +48,6 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
     </MenuItem>
   );
 };
-
 const getUserRole = egoJwt => {
   if (!egoJwt) {
     return null;
@@ -67,8 +61,11 @@ const getUserRole = egoJwt => {
     return null;
   }
 };
-
-export default (props: { path?: string, logOut: void => void, children?: React.Node }) => {
+export default (props: {
+  path?: string;
+  logOut: (arg: any) => any;
+  children?: React.ReactNode;
+}) => {
   const { token: egoJwt } = useEgoToken();
   const { path = '' } = props;
   const userModel = (() => {

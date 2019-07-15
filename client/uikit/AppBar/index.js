@@ -77,9 +77,9 @@ export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
 export const MenuItem = ({
   children,
-  className,
-  id,
-  ref,
+  className = undefined,
+  id = undefined,
+  ref = React.createRef(),
   active = false,
   DomComponent = ({ active, ...others }) => <a {...others} />,
   dropdownMenu,

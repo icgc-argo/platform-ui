@@ -58,6 +58,18 @@ const StyledButton = styled(FocusWrapper)`
   }
 `;
 
+/**
+ * @type {React.ComponentType<{
+    children?: React.ReactChild,
+    onClick?: (e: React.SyntheticEvent) => any,
+    disabled?: boolean,
+    variant?: string,
+    size?: string,
+    isAsync?: boolean,
+    className?: string,
+    id?: string,
+ * }>}
+ */
 const Button = React.forwardRef(
   (
     {

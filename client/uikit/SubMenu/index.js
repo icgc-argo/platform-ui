@@ -7,6 +7,17 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 import { MenuItemContainer, IconContainer, ContentContainer } from './styledComponents';
 
+/**
+ * @type {React.ComponentType<{
+    selected?: boolean,
+    level?: number,
+    children?: React.ReactChildren,
+    content?: React.ReactNode,
+    onClick?: = e => {},
+    icon?: React.ReactNode,
+    noChevron?: boolean,
+ * }>}
+ */
 export const MenuItem = React.forwardRef(
   (
     {

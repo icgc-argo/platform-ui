@@ -3,7 +3,8 @@ import React from 'react';
 
 import { ThemeProvider } from '../uikit';
 
-const req = require.context('../components', true, /.stories\.js$/);
+// const req = require.context('../components', true, /.stories\.(js|ts|tsx)$/);
+const req = require.context('../components', true, /.stories\.(js)$/);
 
 function loadStories() {
   req.keys().forEach(filename => req(filename));

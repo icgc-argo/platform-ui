@@ -1,4 +1,3 @@
-//@flow
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
@@ -11,10 +10,7 @@ import Icon from 'uikit/Icon';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 
-import { mockPrograms } from './mockData';
-
-// $FlowFixMe .gql file not supported
-import { sideMenuProgramList } from './queries.gql';
+import sideMenuProgramList from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
@@ -29,7 +25,7 @@ import {
 import { styled } from 'uikit';
 
 type SideMenuProgram = {
-  shortName: string,
+  shortName: string;
 };
 
 const Loader = () => (
@@ -158,7 +154,7 @@ export default () => {
   const {
     data: { programs = [] } = {},
     loading,
-  }: { data: { programs: Array<SideMenuProgram> }, loading: boolean } = useQuery(
+  }: { data: { programs: Array<SideMenuProgram> }; loading: boolean } = useQuery(
     sideMenuProgramList,
   );
 

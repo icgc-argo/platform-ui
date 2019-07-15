@@ -5,6 +5,10 @@ declare module '*.gql' {
   export default value;
 }
 
+declare module '*.svg' {
+  const value: string;
+  export default value;
+}
+
 /// <reference types="next" />
 /// <reference types="next/types/global" />
-/// <reference path="./graphql.d.ts" />
