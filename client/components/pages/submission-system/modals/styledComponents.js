@@ -45,17 +45,21 @@ export const UserSection = ({
       >
         <Row nogutter>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!firstNameError} required>
+            <FormControl
+              error={!!firstNameError}
+              disabled={disabledFields.includes('firstName')}
+              required
+            >
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>First Name</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="First name"
                     value={user.firstName}
                     onChange={e => onChange('firstName', e.target.value)}
                     onBlur={() => validateField('firstName')}
-                    disabled={disabledFields.includes('firstName')}
                   />
                   {!!firstNameError ? <FormHelperText>{firstNameError}</FormHelperText> : null}{' '}
                 </Col>
@@ -63,17 +67,21 @@ export const UserSection = ({
             </FormControl>
           </Col>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!lastNameError} required>
+            <FormControl
+              error={!!lastNameError}
+              disabled={disabledFields.includes('lastName')}
+              required
+            >
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Last Name</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="Last name"
                     value={user.lastName}
                     onChange={e => onChange('lastName', e.target.value)}
                     onBlur={() => validateField('lastName')}
-                    disabled={disabledFields.includes('lastName')}
                   />
                   {!!lastNameError ? <FormHelperText>{lastNameError}</FormHelperText> : null}
                 </Col>
@@ -83,17 +91,17 @@ export const UserSection = ({
         </Row>
         <Row nogutter>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!emailError} required>
+            <FormControl error={!!emailError} disabled={disabledFields.includes('email')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>Email Address</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="Email"
                     value={user.email}
                     onChange={e => onChange('email', e.target.value)}
                     onBlur={() => validateField('email')}
-                    disabled={disabledFields.includes('email')}
                   />
                   {!!emailError ? <FormHelperText>{emailError}</FormHelperText> : null}
                 </Col>{' '}
@@ -101,19 +109,18 @@ export const UserSection = ({
             </FormControl>
           </Col>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!roleError} required>
+            <FormControl error={!!roleError} disabled={disabledFields.includes('role')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Role</InputLabel>
                 </Col>
                 <Col>
                   <Select
-                    aria-label="role-select"
+                    aria-label="Select role"
                     value={user.role}
                     options={PROGRAM_MEMBERSHIP_TYPES}
                     onChange={val => onChange('role', val)}
                     onBlur={() => validateField('role')}
-                    disabled={disabledFields.includes('role')}
                   />
                   {!!roleError ? <FormHelperText>{roleError}</FormHelperText> : null}
                 </Col>
@@ -139,11 +146,11 @@ export const UserSection = ({
 };
 
 UserSection.propTypes = {
-  user: PropTypes.object.required,
+  user: PropTypes.object.isRequired,
   onChange: PropTypes.func,
   validateField: PropTypes.func,
-  errors: PropTypes.object,
-  deleteSelf: PropTypes.oneOf(PropTypes.func),
+  errors: PropTypes.object.isRequired,
+  deleteSelf: PropTypes.oneOf([PropTypes.func]),
   showDelete: PropTypes.bool,
   disabledFields: PropTypes.array,
 };
