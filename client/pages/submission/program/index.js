@@ -1,7 +1,7 @@
 //@flow
 import React from 'react';
 
-import { isRdpcMember, isDccMember, canReadProgram } from 'global/utils/egoJwt';
+import { isRdpcMember, isDccMember, canReadSomeProgram } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 import ProgramsPage from 'components/pages/submission-system/programs';
 
@@ -10,7 +10,6 @@ import { programsListQuery } from 'components/pages/submission-system/programs/q
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx }) =>
-    !isRdpcMember(egoJwt) && canReadProgram({ egoJwt, programId: '' }),
+  isAccessible: async ({ egoJwt, ctx }) => !isRdpcMember(egoJwt) && canReadSomeProgram(egoJwt),
   getGqlQueriesToPrefetch: async () => [{ query: programsListQuery }],
 })(ProgramsPage);

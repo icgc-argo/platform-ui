@@ -8,7 +8,7 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { decodeToken, canReadProgram, isRdpcMember } from 'global/utils/egoJwt';
+import { decodeToken, canReadProgram, isRdpcMember, canReadSomeProgram } from 'global/utils/egoJwt';
 import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
@@ -57,8 +57,7 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
     }
   })();
 
-  const canAccessSubmission =
-    !!egoJwt && (canReadProgram({ egoJwt, programId: '' }) || isRdpcMember(egoJwt));
+  const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
 
   return (
     <AppBar
