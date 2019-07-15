@@ -5,6 +5,7 @@ import Icon from '../Icon';
 import icgcLogo from '../assets/icgc_logo.svg';
 import css from '@emotion/css';
 import { Row, Col, Container as GridContainer } from 'react-grid-system';
+import A from '../Link';
 
 const Container = styled('footer')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -54,15 +55,15 @@ const Footer = ({
           if (idx !== links.length - 1) {
             return (
               <React.Fragment key={displayName}>
-                <a href={href}>{displayName}</a>
+                <A href={href}>{displayName}</A>
                 <Icon width="12px" height="12px" name="slash" fill="grey_1" />
               </React.Fragment>
             );
           } else {
             return (
-              <a key={displayName} href={href}>
+              <A key={displayName} href={href}>
                 {displayName}
-              </a>
+              </A>
             );
           }
         })}
