@@ -12,10 +12,11 @@ import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import { Input } from 'uikit/form';
 import programsImage from 'static/programs.svg';
+import { INPUT_SIZES } from 'uikit/form/common';
 
 const FormContainer = styled(Container)`
   padding: 30px;
-  max-width: 500px;
+  max-width: 600px;
 `;
 
 const InfoCard = styled(Container)`
@@ -80,7 +81,7 @@ const Form = ({ availableInstitutions = [] }) => (
               <InputLabel required>Institution</InputLabel>
             </Col>
             <Col>
-              <MultiSelect aria-label="institution-input" allowNew>
+              <MultiSelect size={INPUT_SIZES.LG} aria-label="institution-input" allowNew>
                 {availableInstitutions.map(institution => (
                   <Option>{institution}</Option>
                 ))}
@@ -96,7 +97,7 @@ const Form = ({ availableInstitutions = [] }) => (
                   <InputLabel required>PI First Name</InputLabel>
                 </Col>
                 <Col>
-                  <Input aria-label="first-name-input" />
+                  <Input size={INPUT_SIZES.LG} aria-label="first-name-input" />
                 </Col>
               </Row>
             </FormControl>
@@ -118,7 +119,7 @@ const Form = ({ availableInstitutions = [] }) => (
                   <InputLabel required>PI Last Name</InputLabel>
                 </Col>
                 <Col>
-                  <Input aria-label="first-last-input" />
+                  <Input size={INPUT_SIZES.LG} aria-label="first-last-input" />
                 </Col>
               </Row>
             </FormControl>
@@ -131,7 +132,7 @@ const Form = ({ availableInstitutions = [] }) => (
               <InputLabel required>Department</InputLabel>
             </Col>
             <Col>
-              <Input aria-label="department-input" />
+              <Input size={INPUT_SIZES.LG} aria-label="department-input" />
             </Col>
           </Row>
         </FormControl>
