@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+import { css } from 'uikit';
 import {
   PageContainer,
   Panel,
@@ -59,7 +60,12 @@ const SubmissionLayout = ({
       <PageFooter>
         <Footer />
       </PageFooter>
-      <div ref={modalPortalRef} />
+      <div
+        css={css`
+          position: absolute;
+        `}
+        ref={modalPortalRef}
+      />
     </PageContainer>
   );
 };

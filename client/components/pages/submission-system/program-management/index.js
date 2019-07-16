@@ -97,7 +97,7 @@ export default ({ logOut, pathname }) => {
       {showModal && (
         <AppModal>
           <Modal.Overlay>
-            <AddUserModal />
+            <AddUserModal dismissModal={() => setShowModal(false)} />
           </Modal.Overlay>
         </AppModal>
       )}
