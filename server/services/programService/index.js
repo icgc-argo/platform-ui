@@ -114,6 +114,53 @@ const createProgram = async (
   });
 };
 
+const updateProgram = async (
+  shortName,
+  {
+    name,
+    description,
+    commitmentDonors,
+    submittedDonors,
+    genomicDonors,
+    website,
+    institutions,
+    countries,
+    regions,
+    membershipType,
+    cancerTypes,
+    primarySites,
+  },
+  jwt = null,
+) => {
+  const updateProgramRequest = {
+    program: {
+      short_name: wrapValue(shortName),
+      name: wrapValue(name),
+      description: wrapValue(description),
+      commitment_donors: wrapValue(commitmentDonors),
+      website: wrapValue(website),
+      institutions: wrapValue(institutions),
+      countries: wrapValue(countries),
+      regions: wrapValue(regions),
+      submitted_donors: wrapValue(submittedDonors),
+      genomic_donors: wrapValue(genomicDonors),
+
+      membership_type: wrapValue(membershipType),
+
+      cancer_types: cancerTypes,
+      primary_sites: primarySites,
+    },
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.updateProgram(
+      updateProgramRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
 const inviteUser = async (
   { programShortName, userFirstName, userLastName, userEmail, userRole },
   jwt = null,
@@ -157,4 +204,12 @@ const joinProgram = async (
 };
 
 // const inviteUser = async ({programShortName, }, jwt=null)
-export default { getProgram, listPrograms, listUsers, createProgram, inviteUser, joinProgram };
+export default {
+  getProgram,
+  listPrograms,
+  listUsers,
+  createProgram,
+  updateProgram,
+  inviteUser,
+  joinProgram,
+};
