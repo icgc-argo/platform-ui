@@ -8,7 +8,8 @@ import * as loader from '@grpc/proto-loader';
 import protoPath from '@icgc-argo/program-service-proto';
 
 import { PROGRAM_SERVICE_ROOT } from '../../config';
-import { getAuthMeta, wrapValue } from '../../utils/grpcUtils';
+import { getAuthMeta, wrapValue, withRetries } from '../../utils/grpcUtils';
+import retry from 'retry';
 
 const packageDefinition = loader.loadSync(protoPath, {
   keepCase: true,
@@ -20,9 +21,8 @@ const packageDefinition = loader.loadSync(protoPath, {
 
 const proto = grpc.loadPackageDefinition(packageDefinition).program_service;
 
-const programService = new proto.ProgramService(
-  PROGRAM_SERVICE_ROOT,
-  grpc.credentials.createInsecure(),
+const programService = withRetries(
+  new proto.ProgramService(PROGRAM_SERVICE_ROOT, grpc.credentials.createInsecure()),
 );
 
 const defaultPromiseCallback = (resolve, reject) => (err, response) =>

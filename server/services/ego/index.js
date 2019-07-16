@@ -5,6 +5,7 @@
 import grpc from 'grpc';
 import * as loader from '@grpc/proto-loader';
 import { EGO_ROOT_GRPC } from '../../config';
+import { withRetries } from '../../utils/grpcUtils';
 
 const PROTO_PATH = __dirname + '/Ego.proto';
 const packageDefinition = loader.loadSync(PROTO_PATH, {
@@ -17,7 +18,9 @@ const packageDefinition = loader.loadSync(PROTO_PATH, {
 
 const proto = grpc.loadPackageDefinition(packageDefinition).bio.overture.ego.grpc;
 
-const userService = new proto.UserService(EGO_ROOT_GRPC, grpc.credentials.createInsecure());
+const userService = withRetries(
+  new proto.UserService(EGO_ROOT_GRPC, grpc.credentials.createInsecure()),
+);
 
 const getUser = async (id, jwt = null) => {
   return await new Promise((resolve, reject) => {
