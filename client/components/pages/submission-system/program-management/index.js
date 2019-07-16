@@ -17,6 +17,8 @@ import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
+import Toast from 'uikit/notifications/Toast';
+import Portal from 'uikit/Portal';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
@@ -144,14 +146,27 @@ function ResendEmailModal({ user, ...otherProps }) {
 
 function Users({ users }) {
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
+  const [isToastOpen, setIsToastOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
 
   const handleModalCancelClick = () => {
     setIsResendEmailModalOpen(false);
   };
+
   const handleResendEmailClick = ({ user }) => {
     setUser(user);
     setIsResendEmailModalOpen(true);
+  };
+
+  const handleActionClick = () => {
+    setIsResendEmailModalOpen(false);
+    setIsToastOpen(true);
+  };
+
+  const handleToastInteraction = ({ type, event }) => {
+    if (type === 'CLOSE') {
+      setIsToastOpen(false);
+    }
   };
 
   return (
@@ -163,7 +178,26 @@ function Users({ users }) {
           user={user}
           onCancelClick={handleModalCancelClick}
           onCloseClick={handleModalCancelClick}
+          onActionClick={handleActionClick}
         />
+      )}
+      {isToastOpen && (
+        <Portal selector="body">
+          <Toast
+            variant="SUCCESS"
+            title=""
+            setOpen={setIsToastOpen}
+            content={`The email invitation has been resent to ${user && user.name}`}
+            onInteraction={handleToastInteraction}
+            css={css`
+              position: fixed;
+              right: 30px;
+              top: 70px;
+              z-index: 9999;
+              width: '400px';
+            `}
+          />
+        </Portal>
       )}
     </div>
   );

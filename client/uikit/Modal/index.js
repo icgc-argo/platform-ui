@@ -9,6 +9,7 @@ import Typography from '../Typography';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from '../Button';
 import Icon, { ICON_NAMES } from '../Icon';
 import FocusWrapper from '../FocusWrapper';
+import Portal from '../Portal';
 
 const ModalContainer = styled('div')`
   position: relative;
@@ -150,17 +151,12 @@ const Modal = ({
   </ModalContainer>
 );
 
-Modal.Overlay = class Overlay extends React.Component {
-  componentDidMount() {
-    this.element = document.body;
-    this.forceUpdate();
-  }
-  render() {
-    if (this.element === undefined) {
-      return null;
-    }
-    return ReactDOM.createPortal(<ModalOverlay {...this.props} />, this.element);
-  }
+Modal.Overlay = props => {
+  return (
+    <Portal selector="body">
+      <ModalOverlay {...props} />
+    </Portal>
+  );
 };
 
 Modal.propTypes = {
