@@ -119,6 +119,9 @@ const updateProgram = async (
   {
     name,
     description,
+    commitmentDonors,
+    submittedDonors,
+    genomicDonors,
     website,
     institutions,
     countries,
@@ -131,7 +134,7 @@ const updateProgram = async (
 ) => {
   const updateProgramRequest = {
     program: {
-      short_name: shortName,
+      short_name: wrapValue(shortName),
       name: wrapValue(name),
       description: wrapValue(description),
       commitment_donors: wrapValue(commitmentDonors),
@@ -139,6 +142,8 @@ const updateProgram = async (
       institutions: wrapValue(institutions),
       countries: wrapValue(countries),
       regions: wrapValue(regions),
+      submitted_donors: wrapValue(submittedDonors),
+      genomic_donors: wrapValue(genomicDonors),
 
       membership_type: wrapValue(membershipType),
 
@@ -199,4 +204,12 @@ const joinProgram = async (
 };
 
 // const inviteUser = async ({programShortName, }, jwt=null)
-export default { getProgram, listPrograms, listUsers, createProgram, inviteUser, joinProgram };
+export default {
+  getProgram,
+  listPrograms,
+  listUsers,
+  createProgram,
+  updateProgram,
+  inviteUser,
+  joinProgram,
+};

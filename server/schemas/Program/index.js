@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import { get } from 'lodash';
+import { get, pickBy } from 'lodash';
 
 import programService from '../../services/programService';
 import { wrapValue } from '../../utils/grpcUtils';
@@ -187,7 +187,7 @@ const resolvers = {
       const { egoToken } = context;
       const response = await programService.getProgram(args.shortName, egoToken);
       const programDetails = get(response, 'program');
-      return response ? null : convertGrpcProgramToGql(programDetails);
+      return response ? convertGrpcProgramToGql(programDetails) : null;
     },
     programs: async (obj, args, context, info) => {
       const { egoToken } = context;
@@ -210,9 +210,18 @@ const resolvers = {
     },
     updateProgram: async (obj, args, context, info) => {
       const { egoToken } = context;
-      const updates = get(args, 'updates', {});
+      const updates = pickBy(get(args, 'updates', {}), v => v !== undefined);
       const shortName = get(args, 'shortName', {});
-      const response = await programService.updateProgram(shortName, updates, egoToken);
+
+      // // Update program takes the complete program object future state
+      const currentPorgramResponse = await programService.getProgram(shortName, egoToken);
+      const currentProgramDetails = convertGrpcProgramToGql(
+        get(currentPorgramResponse, 'program', {}),
+      );
+
+      const combinedUpdates = { ...currentProgramDetails, ...updates };
+
+      const response = await programService.updateProgram(shortName, combinedUpdates, egoToken);
       return response === null ? null : get(args, 'shortName');
     },
     inviteUser: async (obj, args, context, info) => {
