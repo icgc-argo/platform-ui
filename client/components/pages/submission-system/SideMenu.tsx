@@ -154,16 +154,12 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
 
 export default () => {
   const { activeItem, toggleItem } = useToggledSelectState(-1);
-  const {
-    data: { programs = [] } = {},
-    loading,
-  }: { data: { programs: Array<SideMenuProgram> }; loading: boolean } = useQuery(
+  const { data: { programs = [] } = {}, loading } = useQuery<{ programs: Array<SideMenuProgram> }>(
     sideMenuProgramList,
   );
 
-  const { data: egoTokenData, token } = useEgoToken();
+  const { token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
-  const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
   const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;
