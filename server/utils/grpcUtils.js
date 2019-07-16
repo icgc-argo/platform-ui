@@ -34,9 +34,9 @@ export const withRetries = (
   },
   errorCodes = [],
 ) => {
-  //converts to a hasmap for run-time performance
   const STREAM_REMOVED_ERROR = 2;
   const methodNames = getGrpcMethodsNames(grpcClient).reduce(
+    //converts to a hasmap for run-time performance
     (acc, methodName) => ({
       ...acc,
       [methodName]: methodName,
