@@ -23,7 +23,7 @@ import Modal from 'uikit/Modal';
  */
 const modalPortalRef = React.createRef();
 
-export const AppModal = ({ children }: { children: React.Node }) => {
+export const ModalPortal = ({ children }: { children: React.Node }) => {
   const ref = modalPortalRef.current;
   return ref ? ReactDOM.createPortal(<Modal.Overlay>{children}</Modal.Overlay>, ref) : null;
 };
@@ -63,7 +63,7 @@ const SubmissionLayout = ({
       </PageFooter>
       <div
         css={css`
-          position: fixed;
+          position: absolute;
         `}
         ref={modalPortalRef}
       />

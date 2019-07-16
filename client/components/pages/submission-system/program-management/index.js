@@ -18,7 +18,7 @@ import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
 import AddUserModal from 'components/pages/submissionSystem/modals/addUser';
 import Modal from 'uikit/Modal';
-import { AppModal } from '../layout';
+import { ModalPortal } from '../layout';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
@@ -95,9 +95,9 @@ export default ({ logOut, pathname }) => {
         {activeTab === TABS.PROFILE && <Profile program={program} />}
       </ContentBox>
       {showModal && (
-        <AppModal>
+        <ModalPortal>
           <AddUserModal dismissModal={() => setShowModal(false)} />
-        </AppModal>
+        </ModalPortal>
       )}
     </SubmissionLayout>
   );
