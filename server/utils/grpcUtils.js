@@ -35,7 +35,7 @@ export const withRetries = (
   errorCodes = [],
 ) => {
   //converts to a hasmap for run-time performance
-  const STREAM_REMOVED_ERROR = 14;
+  const STREAM_REMOVED_ERROR = 2;
   const methodNames = getGrpcMethodsNames(grpcClient).reduce(
     (acc, methodName) => ({
       ...acc,
@@ -60,12 +60,17 @@ export const withRetries = (
     });
   };
   return new Proxy(grpcClient, {
-    get: (obj, key) => {
-      const originalMethod = obj[key].bind(obj);
-      if (methodNames[key]) {
-        return methodWithRetry(key, originalMethod);
+    get: (client, methodName) => {
+      const originalValue = client[methodName];
+      if (typeof originalValue === 'function') {
+        const originalMethod = originalValue.bind(client);
+        if (methodNames[methodName]) {
+          return methodWithRetry(methodName, originalMethod);
+        } else {
+          return originalMethod;
+        }
       } else {
-        return originalMethod;
+        return originalValue;
       }
     },
   });
