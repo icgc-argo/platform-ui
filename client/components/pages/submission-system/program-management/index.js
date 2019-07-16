@@ -16,6 +16,9 @@ import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
+import AddUserModal from 'components/pages/submissionSystem/modals/addUser';
+import Modal from 'uikit/Modal';
+import { ModalPortal } from '../layout';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
@@ -33,6 +36,8 @@ export default ({ logOut, pathname }) => {
   function handleChange(event, newValue) {
     setActiveTab(newValue);
   }
+
+  const [showModal, setShowModal] = React.useState(false);
 
   return (
     <SubmissionLayout
@@ -79,6 +84,7 @@ export default ({ logOut, pathname }) => {
                 css={css`
                   margin: 9px 0;
                 `}
+                onClick={() => setShowModal(true)}
               >
                 Add Users
               </Button>
@@ -88,6 +94,11 @@ export default ({ logOut, pathname }) => {
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
         {activeTab === TABS.PROFILE && <Profile program={program} />}
       </ContentBox>
+      {showModal && (
+        <ModalPortal>
+          <AddUserModal dismissModal={() => setShowModal(false)} />
+        </ModalPortal>
+      )}
     </SubmissionLayout>
   );
 };
