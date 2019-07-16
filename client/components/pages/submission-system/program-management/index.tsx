@@ -1,5 +1,3 @@
-// @flow
-
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
@@ -229,7 +227,7 @@ function ProfileView({ program: receivedProgram = {} }: { program: Program | {} 
   return (
     <div
       css={css`
-        ${css(theme.typography.paragraph)}
+        ${css(theme.typography.paragraph as any)}
         padding: 17px 41px 41px 41px;
       `}
     >

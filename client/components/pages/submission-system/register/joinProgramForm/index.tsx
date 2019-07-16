@@ -79,7 +79,13 @@ const Form = ({ availableInstitutions = [] }) => (
               <InputLabel required>Institution</InputLabel>
             </Col>
             <Col>
-              <MultiSelect size={INPUT_SIZES.LG} aria-label="institution-input" allowNew>
+              <MultiSelect
+                size={INPUT_SIZES.LG}
+                aria-label="institution-input"
+                allowNew
+                value=""
+                onChange={console.log}
+              >
                 {availableInstitutions.map(institution => (
                   <Option>{institution}</Option>
                 ))}

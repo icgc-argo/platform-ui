@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import Router from 'next/router';
 
@@ -9,7 +8,7 @@ import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import { createPage } from 'global/utils/pages';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
-import useTheme from 'uikit/utils/useTheme';
+import { useTheme } from 'uikit/ThemeProvider';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();

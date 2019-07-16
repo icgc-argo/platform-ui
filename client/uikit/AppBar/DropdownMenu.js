@@ -52,7 +52,7 @@ const Li = styled('li')`
   }
 `;
 
-export function DropdownMenuItem({ children, active, ...otherProps }) {
+export function DropdownMenuItem({ children, active = false, ...otherProps }) {
   return (
     <Li {...otherProps} className={clsx({ active })}>
       {children}

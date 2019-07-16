@@ -7,6 +7,11 @@ import css from '@emotion/css';
 import Icon from '../../Icon';
 import _ from 'lodash';
 
+/**
+ * @type React.ComponentType<{
+    required?: boolean
+ * }>
+ */
 const InputLabel = React.forwardRef(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;
 
@@ -53,6 +58,8 @@ InputLabel.propTypes = {
    * The CSS class name of the wrapper element.
    */
   className: PropTypes.string,
+
+  required: PropTypes.bool,
 };
 
 export default InputLabel;

@@ -44,9 +44,9 @@ const Loader = () => (
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
-  const toggleItem = itemIndex =>
+  const toggleItem = (itemIndex: number) =>
     itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
-  return [activeItem, toggleItem];
+  return { activeItem, toggleItem };
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram }) => {
@@ -99,9 +99,12 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
 };
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
-  const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
+  const {
+    activeItem: activeProgramIndex,
+    toggleItem: toggleProgramIndex,
+  } = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
-  const orderedPrograms = orderBy(programs, 'shortName');
+  const orderedPrograms: typeof programs = orderBy(programs, 'shortName');
   const filteredPrograms = orderedPrograms.filter(
     ({ shortName }) =>
       !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
@@ -150,7 +153,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
 };
 
 export default () => {
-  const [activeItem, toggleItem] = useToggledSelectState(-1);
+  const { activeItem, toggleItem } = useToggledSelectState(-1);
   const {
     data: { programs = [] } = {},
     loading,

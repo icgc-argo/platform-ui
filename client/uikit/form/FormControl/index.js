@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
 import css from '@emotion/css';
 
+/**
+ * @type {React.ComponentType<{
+    component?: React.ElementType
+    error?:boolean,
+    disabled?:boolean,
+    required?:boolean,
+ * }>}
+ */
 const FormControl = React.forwardRef(function FormControl(
   {
     component: Component = 'div',

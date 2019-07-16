@@ -23,6 +23,9 @@ export const PageBody = styled('div')`
   flex-direction: row;
 `;
 
+/**
+ * @type {React.ComponentType<{noSidebar?: boolean}>}
+ */
 export const PageContent = styled('div')`
   flex: 1;
   position: relative;

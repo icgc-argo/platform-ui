@@ -161,10 +161,22 @@ function Highlight({ string, searchText }) {
   }
 }
 
+/**
+ * @type {React.ComponentType<{
+    name?: string,
+    value: any,
+    onChange: (e: any) => any,
+    placeholder?: string,
+    onBlur?: (e: any) => any,
+    allowNew?: boolean,
+    disabled?: boolean,
+    size?: INPUT_SIZES.SM | INPUT_SIZES.LG
+  }>}
+ */
 const MultiSelect = ({
-  name,
-  value,
-  children,
+  name = undefined,
+  value = undefined,
+  children = undefined,
   onChange,
   onBlur = () => {},
   single,

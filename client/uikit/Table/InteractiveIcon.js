@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from '..';
 import Icon from 'uikit/Icon';
 
-const InteractiveIcon = ({ disabled, onClick, ...props }) => {
+const InteractiveIcon = ({ disabled = false, onClick, ...props }) => {
   const [hovered, setHovered] = React.useState(false);
   return (
     <Icon

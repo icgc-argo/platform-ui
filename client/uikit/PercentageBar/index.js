@@ -17,7 +17,7 @@ const VAlignedText = props => (
   />
 );
 
-const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
+const PercentageBar = ({ nom, denom, color = 'secondary_2', className = undefined }) => {
   const theme = useTheme();
   return (
     <div
