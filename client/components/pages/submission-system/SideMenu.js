@@ -63,7 +63,8 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
     >
       <Link
         prefetch
-        href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+        as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+        href={PROGRAM_DASHBOARD_PATH}
       >
         <a>
           <MenuItem level={3} content="Dashboard" />
@@ -71,10 +72,8 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
       </Link>
       <Link
         prefetch
-        href={PROGRAM_ID_REGISTRATION_PATH.replace(
-          PROGRAM_SHORT_NAME_PATH,
-          props.program.shortName,
-        )}
+        as={PROGRAM_ID_REGISTRATION_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+        href={PROGRAM_ID_REGISTRATION_PATH}
       >
         <a>
           <MenuItem level={3} content="ID Registration" />
@@ -82,10 +81,11 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
       </Link>
       <Link
         prefetch
-        href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+        as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
           PROGRAM_SHORT_NAME_PATH,
           props.program.shortName,
         )}
+        href={PROGRAM_CLINICAL_SUBMISSION_PATH}
       >
         <a>
           <MenuItem level={3} content="Clinical Submission" />
@@ -94,7 +94,8 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
       {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
         <Link
           prefetch
-          href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+          as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+          href={PROGRAM_MANAGE_PATH}
         >
           <a>
             <MenuItem level={3} content="Manage Program" />
