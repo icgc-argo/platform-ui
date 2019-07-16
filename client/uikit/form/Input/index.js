@@ -30,7 +30,7 @@ const Input = ({
 }) => {
   const [activeState, setActive] = useState('default');
 
-  const { disabled: calcDisabled = disabled, error: calcError = error } =
+  const { disabled: calcDisabled = disabled, error: calcError = !!error } =
     useContext(FormControlContext) || {};
 
   const onClearClick = e => {

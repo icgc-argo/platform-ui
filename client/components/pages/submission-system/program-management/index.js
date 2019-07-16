@@ -16,10 +16,18 @@ import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
+import CreateProgramForm from '../create-program/CreateProgramForm';
+import isEmpty from 'lodash/isEmpty';
+import useEgoToken from 'global/hooks/useEgoToken';
+import { isDccMember } from 'global/utils/egoJwt';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
   const router = useRouter();
+  const { data: egoTokenData, token } = useEgoToken();
+  /*   const isDcc = token ? isDccMember(token) : false; */
+  const isDcc = true;
+
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
@@ -86,7 +94,20 @@ export default ({ logOut, pathname }) => {
           </Tab>
         </Tabs>
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
-        {activeTab === TABS.PROFILE && <Profile program={program} />}
+        {activeTab === TABS.PROFILE &&
+          (isDcc ? (
+            <div
+              css={css`
+                 {
+                  padding: 17px 41px 41px 41px;
+                }
+              `}
+            >
+              {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+            </div>
+          ) : (
+            <ProfileView program={program} />
+          ))}
       </ContentBox>
     </SubmissionLayout>
   );
@@ -130,7 +151,7 @@ const Users = ({ users }) => (
   </div>
 );
 
-function Profile({ program = {} }) {
+function ProfileView({ program = {} }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col

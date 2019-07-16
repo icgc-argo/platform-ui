@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
 import CreateProgramForm from './CreateProgramForm';
+import Container from 'uikit/Container';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -30,7 +31,15 @@ export default ({ logOut, pathname }) => {
         </div>
       }
     >
-      <CreateProgramForm />
+      <Container
+        css={css`
+          margin: 10px auto;
+          padding: 10px 40px;
+          max-width: 875px;
+        `}
+      >
+        <CreateProgramForm />
+      </Container>
     </SubmissionLayout>
   );
 };
