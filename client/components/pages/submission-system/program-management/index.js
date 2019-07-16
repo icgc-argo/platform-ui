@@ -96,9 +96,7 @@ export default ({ logOut, pathname }) => {
       </ContentBox>
       {showModal && (
         <AppModal>
-          <Modal.Overlay>
-            <AddUserModal dismissModal={() => setShowModal(false)} />
-          </Modal.Overlay>
+          <AddUserModal dismissModal={() => setShowModal(false)} />
         </AppModal>
       )}
     </SubmissionLayout>

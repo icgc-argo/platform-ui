@@ -16,6 +16,7 @@ import Head from '../head';
 import NavBar from './NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
+import Modal from 'uikit/Modal';
 
 /**
  * TODO: `pathname` and `logOut` should just be available through context
@@ -24,7 +25,7 @@ const modalPortalRef = React.createRef();
 
 export const AppModal = ({ children }: { children: React.Node }) => {
   const ref = modalPortalRef.current;
-  return ref ? ReactDOM.createPortal(<div>{children}</div>, ref) : null;
+  return ref ? ReactDOM.createPortal(<Modal.Overlay>{children}</Modal.Overlay>, ref) : null;
 };
 
 const SubmissionLayout = ({
@@ -62,7 +63,7 @@ const SubmissionLayout = ({
       </PageFooter>
       <div
         css={css`
-          position: absolute;
+          position: fixed;
         `}
         ref={modalPortalRef}
       />
