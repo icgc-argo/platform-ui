@@ -203,6 +203,37 @@ const joinProgram = async (
   });
 };
 
+const updateUser = async (id, shortName, role, jwt = null) => {
+  const updateUserRequest = {
+    user_id: wrapValue(id),
+    short_name: wrapValue(shortName),
+    role: wrapValue(role),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.updateUser(
+      updateUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
+const removeUser = async (email, shortName, jwt = null) => {
+  const removeUserRequest = {
+    user_email: wrapValue(email),
+    program_short_name: wrapValue(shortName),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.removeUser(
+      removeUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
 // const inviteUser = async ({programShortName, }, jwt=null)
 export default {
   getProgram,
@@ -210,6 +241,9 @@ export default {
   listUsers,
   createProgram,
   updateProgram,
+
   inviteUser,
   joinProgram,
+  updateUser,
+  removeUser,
 };

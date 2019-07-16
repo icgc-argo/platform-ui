@@ -1,5 +1,8 @@
 import { ThemeContext } from '@emotion/core';
+import AddUserModal from 'components/pages/submission-system/modals/addUser';
+import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
@@ -13,13 +16,10 @@ import { TableActionBar } from 'uikit/Table';
 import Tabs, { Tab } from 'uikit/Tabs';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
-import SubmissionLayout from '../layout';
+import CreateProgramForm from '../create-program/CreateProgramForm';
+import SubmissionLayout, { ModalPortal } from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
-import CreateProgramForm from '../create-program/CreateProgramForm';
-import isEmpty from 'lodash/isEmpty';
-import useEgoToken from 'global/hooks/useEgoToken';
-import { isDccMember } from 'global/utils/egoJwt';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
@@ -41,6 +41,8 @@ export default ({ logOut, pathname }) => {
   function handleChange(event, newValue) {
     setActiveTab(newValue);
   }
+
+  const [showModal, setShowModal] = React.useState(false);
 
   return (
     <SubmissionLayout
@@ -87,6 +89,7 @@ export default ({ logOut, pathname }) => {
                 css={css`
                   margin: 9px 0;
                 `}
+                onClick={() => setShowModal(true)}
               >
                 Add Users
               </Button>
@@ -109,6 +112,11 @@ export default ({ logOut, pathname }) => {
             <ProfileView program={program} />
           ))}
       </ContentBox>
+      {showModal && (
+        <ModalPortal>
+          <AddUserModal dismissModal={() => setShowModal(false)} />
+        </ModalPortal>
+      )}
     </SubmissionLayout>
   );
 };
