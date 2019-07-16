@@ -76,6 +76,8 @@ const typeDefs = gql`
   }
 
   input UpdateProgramInput {
+    # This intentionally does not provide access to submittedDonors or genomicDonors
+    # Those are maintained by an internal service and should not be updated by any client through the gateway
     name: String
     description: String
     commitmentDonors: Int
