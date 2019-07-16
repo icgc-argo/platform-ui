@@ -15,7 +15,7 @@ import { mockPrograms } from './mockData';
 // $FlowFixMe .gql file not supported
 import { sideMenuProgramList } from './queries.gql';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { isDccMember, getAuthorizedProgramScopes } from 'global/utils/egoJwt';
+import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
 import {
   PROGRAM_SHORT_NAME_PATH,
@@ -50,53 +50,60 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const LinksToProgram = (props: { program: SideMenuProgram, isAdmin: boolean }) => (
-  <div
-    css={css`
-      & a {
-        text-decoration: none;
-      }
-    `}
-  >
-    <Link
-      prefetch
-      href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+const LinksToProgram = (props: { program: SideMenuProgram }) => {
+  const { token } = useEgoToken();
+
+  return (
+    <div
+      css={css`
+        & a {
+          text-decoration: none;
+        }
+      `}
     >
-      <a>
-        <MenuItem level={3} content="Dashboard" />
-      </a>
-    </Link>
-    <Link
-      prefetch
-      href={PROGRAM_ID_REGISTRATION_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
-    >
-      <a>
-        <MenuItem level={3} content="ID Registration" />
-      </a>
-    </Link>
-    <Link
-      prefetch
-      href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-        PROGRAM_SHORT_NAME_PATH,
-        props.program.shortName,
-      )}
-    >
-      <a>
-        <MenuItem level={3} content="Clinical Submission" />
-      </a>
-    </Link>
-    {props.isAdmin && (
       <Link
         prefetch
-        href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+        href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
       >
         <a>
-          <MenuItem level={3} content="Manage Program" />
+          <MenuItem level={3} content="Dashboard" />
         </a>
       </Link>
-    )}
-  </div>
-);
+      <Link
+        prefetch
+        href={PROGRAM_ID_REGISTRATION_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          props.program.shortName,
+        )}
+      >
+        <a>
+          <MenuItem level={3} content="ID Registration" />
+        </a>
+      </Link>
+      <Link
+        prefetch
+        href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          props.program.shortName,
+        )}
+      >
+        <a>
+          <MenuItem level={3} content="Clinical Submission" />
+        </a>
+      </Link>
+      {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
+        <Link
+          prefetch
+          href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+        >
+          <a>
+            <MenuItem level={3} content="Manage Program" />
+          </a>
+        </Link>
+      )}
+    </div>
+  );
+};
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
@@ -130,7 +137,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           onClick={() => toggleProgramIndex(programIndex)}
           selected={programIndex === activeProgramIndex}
         >
-          <LinksToProgram program={program} isAdmin={true} />
+          <LinksToProgram program={program} />
         </MenuItem>
       ))}
     </>
@@ -173,7 +180,7 @@ export default () => {
                 selected
                 noChevron
               >
-                <LinksToProgram program={programs[0]} isAdmin={true} />
+                <LinksToProgram program={programs[0]} />
               </MenuItem>
             </MenuItem>
           </div>
