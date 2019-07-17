@@ -1,4 +1,5 @@
-import { ThemeContext } from '@emotion/core';
+// @flow
+
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
@@ -18,12 +19,18 @@ import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import CreateProgramForm from '../create-program/CreateProgramForm';
 import SubmissionLayout, { ModalPortal } from '../layout';
-import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
+import useTheme from 'uikit/utils/useTheme';
+
+/**
+ * @todo: actually fix this Minh!
+ */
+// $FlowFixMe .gql file not supported
+import { programQuery } from './queries.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
-export default ({ logOut, pathname }) => {
+export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
   const router = useRouter();
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
@@ -63,60 +70,62 @@ export default ({ logOut, pathname }) => {
         </div>
       }
     >
-      <ContentBox
-        css={css`
-          padding-top: 0px;
-        `}
-      >
-        <Tabs
-          value={activeTab}
-          onChange={handleChange}
+      <>
+        <ContentBox
           css={css`
-            width: 100%;
+            padding-top: 0px;
           `}
         >
-          <Tab value="USERS" label="Users" />
-          <Tab value="PROFILE" label="Profile" />
-          <Tab
-            empty
+          <Tabs
+            value={activeTab}
+            onChange={handleChange}
             css={css`
-              padding: 0;
-              justify-content: flex-end;
+              width: 100%;
             `}
           >
-            {activeTab === TABS.USERS && (
-              <Button
-                css={css`
-                  margin: 9px 0;
-                `}
-                onClick={() => setShowModal(true)}
-              >
-                Add Users
-              </Button>
-            )}
-          </Tab>
-        </Tabs>
-        {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
-        {activeTab === TABS.PROFILE &&
-          (isDcc ? (
-            <div
+            <Tab value="USERS" label="Users" />
+            <Tab value="PROFILE" label="Profile" />
+            <Tab
+              empty
               css={css`
-                 {
-                  padding: 17px 41px 41px 41px;
-                }
+                padding: 0;
+                justify-content: flex-end;
               `}
             >
-              {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
-            </div>
-          ) : (
-            <ProfileView program={program} />
-          ))}
-      </ContentBox>
-      {showModal && (
-        <ModalPortal>
-          <AddUserModal dismissModal={() => setShowModal(false)} />
-        </ModalPortal>
-      )}
+              {activeTab === TABS.USERS && (
+                <Button
+                  css={css`
+                    margin: 9px 0;
+                  `}
+                  onClick={() => setShowModal(true)}
+                >
+                  Add Users
+                </Button>
+              )}
+            </Tab>
+          </Tabs>
+          {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
+          {activeTab === TABS.PROFILE &&
+            (isDcc ? (
+              <div
+                css={css`
+                   {
+                    padding: 17px 41px 41px 41px;
+                  }
+                `}
+              >
+                {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+              </div>
+            ) : (
+              <ProfileView program={program} />
+            ))}
+        </ContentBox>
+        {showModal && (
+          <ModalPortal>
+            <AddUserModal dismissModal={() => setShowModal(false)} />
+          </ModalPortal>
+        )}
+      </>
     </SubmissionLayout>
   );
 };
@@ -155,12 +164,20 @@ const FAKE_USERS = [
 const Users = ({ users }) => (
   <div>
     <TableActionBar>{users.length} results</TableActionBar>
-    <UsersTable users={users} />
+    <UsersTable
+      users={users}
+      /**
+       * @todo: actually implement these functions
+       */
+      onUserDeleteClick={console.log}
+      onUserEditClick={console.log}
+      onUserResendInviteClick={console.log}
+    />
   </div>
 );
 
 function ProfileView({ program = {} }) {
-  const theme = React.useContext(ThemeContext);
+  const theme = useTheme();
   const Left = props => (
     <Col
       lg={2}
