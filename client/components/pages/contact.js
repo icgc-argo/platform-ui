@@ -81,6 +81,7 @@ export default function ContactPage() {
               Contact
             </Typography>
             <Typography
+              variant="subtitle2"
               css={css`
                 margin: 0;
                 margin-bottom: 42px;
@@ -95,17 +96,18 @@ export default function ContactPage() {
               css={css`
                 display: flex;
                 justify-content: space-between;
+                margin-top: 10px;
               `}
             >
               <Typography
-                variant="subtitle"
                 css={css`
-                  margin-top: 10px;
+                  margin: 0;
                 `}
+                variant="subtitle"
               >
                 Data Submissions
               </Typography>
-              <img alt="" src="/static/testtube.svg" />
+              <img alt="test tube" src="/static/testtube.svg" height="50" />
             </div>
             <Ul>
               <li>
@@ -118,14 +120,7 @@ export default function ContactPage() {
                 <A>Program management</A> and <A>member roles</A>
               </li>
             </Ul>
-            <Button
-              size="sm"
-              css={css`
-                height: 24px;
-              `}
-            >
-              Learn more
-            </Button>
+            <Button size="sm">Learn more</Button>
           </div>
           <div>
             <Hr color="accent3" />
@@ -133,17 +128,18 @@ export default function ContactPage() {
               css={css`
                 display: flex;
                 justify-content: space-between;
+                margin-top: 10px;
               `}
             >
               <Typography
                 variant="subtitle"
                 css={css`
-                  margin-top: 10px;
+                  margin: 0;
                 `}
               >
                 Applying for DACO Access
               </Typography>
-              <img alt="" src="/static/testtube.svg" />
+              <img alt="controlled data" src="/static/controlled-data.svg" height="50" />
             </div>
             <Ul>
               <li>
@@ -156,14 +152,7 @@ export default function ContactPage() {
                 What is it mean to have <A>controlled data access</A>?
               </li>
             </Ul>
-            <Button
-              size="sm"
-              css={css`
-                height: 24px;
-              `}
-            >
-              Learn more
-            </Button>
+            <Button size="sm">Learn more</Button>
           </div>
           <div>
             <Hr color="accent4" />
@@ -171,17 +160,18 @@ export default function ContactPage() {
               css={css`
                 display: flex;
                 justify-content: space-between;
+                margin-top: 10px;
               `}
             >
               <Typography
                 variant="subtitle"
                 css={css`
-                  margin-top: 10px;
+                  margin: 0;
                 `}
               >
                 FAQs
               </Typography>
-              <img alt="" src="/static/testtube.svg" />
+              <img alt="faq" src="/static/faq.svg" height="50" />
             </div>
             <Ul>
               <li>
@@ -194,14 +184,7 @@ export default function ContactPage() {
                 Restrictions for using <A>ARGO data in publications</A>
               </li>
             </Ul>
-            <Button
-              size="sm"
-              css={css`
-                height: 24px;
-              `}
-            >
-              Learn more
-            </Button>
+            <Button size="sm">Learn more</Button>
           </div>
         </div>
         <ContentBox
@@ -309,6 +292,7 @@ export default function ContactPage() {
                     What do you need assistance with?
                   </InputLabel>
                   <Select
+                    size="lg"
                     aria-label="What do you need assistance with"
                     id="assistance-type"
                     css={css`
@@ -321,7 +305,7 @@ export default function ContactPage() {
                         value: 'v1',
                       },
                       { content: 'Data Submissions', value: 'v2' },
-                      { content: 'technical Support', value: 'v3' },
+                      { content: 'Technical Support', value: 'v3' },
                       { content: 'Other (please specify below)', value: 'v4' },
                     ]}
                   />
