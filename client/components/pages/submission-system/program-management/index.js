@@ -1,5 +1,8 @@
 import { ThemeContext } from '@emotion/core';
+import AddUserModal from 'components/pages/submission-system/modals/addUser';
+import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
@@ -13,16 +16,18 @@ import { TableActionBar } from 'uikit/Table';
 import Tabs, { Tab } from 'uikit/Tabs';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
-import SubmissionLayout from '../layout';
+import CreateProgramForm from '../create-program/CreateProgramForm';
+import SubmissionLayout, { ModalPortal } from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
-import AddUserModal from 'components/pages/submissionSystem/modals/addUser';
-import Modal from 'uikit/Modal';
-import { ModalPortal } from '../layout';
+import { isDccMember } from 'global/utils/egoJwt';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
   const router = useRouter();
+  const { data: egoTokenData, token } = useEgoToken();
+  const isDcc = token ? isDccMember(token) : false;
+
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
@@ -92,7 +97,20 @@ export default ({ logOut, pathname }) => {
           </Tab>
         </Tabs>
         {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
-        {activeTab === TABS.PROFILE && <Profile program={program} />}
+        {activeTab === TABS.PROFILE &&
+          (isDcc ? (
+            <div
+              css={css`
+                 {
+                  padding: 17px 41px 41px 41px;
+                }
+              `}
+            >
+              {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+            </div>
+          ) : (
+            <ProfileView program={program} />
+          ))}
       </ContentBox>
       {showModal && (
         <ModalPortal>
@@ -141,7 +159,7 @@ const Users = ({ users }) => (
   </div>
 );
 
-function Profile({ program = {} }) {
+function ProfileView({ program = {} }) {
   const theme = React.useContext(ThemeContext);
   const Left = props => (
     <Col

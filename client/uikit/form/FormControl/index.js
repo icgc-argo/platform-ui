@@ -58,7 +58,7 @@ FormControl.propTypes = {
   /**
    * If `true`, the label should be displayed in an error state.
    */
-  error: PropTypes.bool,
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   /**
    * If `true`, the label will indicate that the input is required.
    */

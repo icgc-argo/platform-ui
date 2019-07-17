@@ -26,8 +26,8 @@ export default RadioCheckboxGroup;
 
 RadioCheckboxGroup.propTypes = {
   onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  children: PropTypes.arrayOf(PropTypes.node),
+  children: PropTypes.node,
   hasError: PropTypes.bool,
-  isChecked: PropTypes.bool,
+  isChecked: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   className: PropTypes.string,
 };
