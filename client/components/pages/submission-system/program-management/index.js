@@ -25,8 +25,7 @@ const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South 
 export default ({ logOut, pathname }) => {
   const router = useRouter();
   const { data: egoTokenData, token } = useEgoToken();
-  /*   const isDcc = token ? isDccMember(token) : false; */
-  const isDcc = true;
+  const isDcc = token ? isDccMember(token) : false;
 
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
