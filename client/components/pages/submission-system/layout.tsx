@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import { css } from 'uikit';
 import {
   PageContainer,
@@ -20,7 +20,7 @@ import Modal from 'uikit/Modal';
 /**
  * TODO: `pathname` and `logOut` should just be available through context
  */
-const modalPortalRef = React.createRef();
+const modalPortalRef = React.createRef<ReactDOM.HTMLDivElement>();
 
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
