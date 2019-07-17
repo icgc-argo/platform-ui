@@ -90,6 +90,6 @@ const SubmissionLayout = ({
       ref={modalPortalRef}
     />
   </PageContainer>
-)
+);
 
 export default SubmissionLayout;
