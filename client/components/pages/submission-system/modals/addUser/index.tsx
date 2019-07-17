@@ -21,7 +21,6 @@ const AddUserModal = ({ onSubmit, dismissModal }) => {
     errors: validationErrors,
     data: form,
     setData,
-    setError,
     deleteSection,
     createSection,
     validateField,
@@ -39,7 +38,7 @@ const AddUserModal = ({ onSubmit, dismissModal }) => {
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      const result = onSubmit(validData);
+      const result = onSubmit(validData);      
     } catch (err) {
       console.log(err);
     }
