@@ -25,8 +25,12 @@ export default yup.object().shape({
     })
     .matches(/-([A-Z][A-Z])$/, 'Short Name must end with a 2 character country code: "-XX"')
     .matches(/^[A-Z1-9]/, 'Short Name must begin with an uppercase letter or a number')
-    .matches(/^[-A-Z1-9]+$/, 'Short Name can only contain uppercase letters, numbers, and hyphens')
+    .matches(
+      /^[-_A-Z1-9]+$/,
+      'Short Name can only contain uppercase letters, numbers, hyphens, and underscores',
+    )
     .max(11)
+    .min(6, 'Short Name must be at least 6 characters long, of the form XXX-XX')
     .required(),
   countries: yup
     .array()
