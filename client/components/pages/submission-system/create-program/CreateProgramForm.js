@@ -167,9 +167,8 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
           resolve(data);
         })
         .catch(err => {
-          console.log(err);
           const errors = get(err, 'inner', []).reduce((output, error) => {
-            output[error.path] = error.message;
+            output[error.path.replace(/\[.*\]/, '')] = error.message;
             return output;
           }, {});
           setValidationErrors(errors);
@@ -211,7 +210,6 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
   };
 
   const validateField = (path, value) => {
-    console.log(path, value);
     yup
       .reach(programSchema, path)
       .validate(value, { abortEarly: false })
