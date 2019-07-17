@@ -11,3 +11,4 @@ export const getAuthorizedProgramScopes = TokenUtils.getReadableProgramScopes;
 export const canReadProgram = TokenUtils.canReadProgram;
 export const canWriteProgram = TokenUtils.canWriteProgram;
 export const isProgramAdmin = TokenUtils.isProgramAdmin;
+export const canReadSomeProgram = TokenUtils.canReadSomeProgram;
