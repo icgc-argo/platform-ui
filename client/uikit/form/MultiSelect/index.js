@@ -286,7 +286,7 @@ const MultiSelect = ({
   const selectedItems = _.map(value, v => {
     const c = _.find(React.Children.toArray(children), { props: { value: v } });
 
-    if (allowNew && typeof c === 'undefined' && _.isString(v)) {
+    if (typeof c === 'undefined') {
       return {
         value: v,
         displayName: v,
