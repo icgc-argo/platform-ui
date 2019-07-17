@@ -20,6 +20,7 @@ import CreateProgramForm from '../create-program/CreateProgramForm';
 import SubmissionLayout, { ModalPortal } from '../layout';
 import { programQuery } from './queries.gql';
 import UsersTable from './UsersTable';
+import { isDccMember } from 'global/utils/egoJwt';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }) => {
