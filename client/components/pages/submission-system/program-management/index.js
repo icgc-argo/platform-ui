@@ -22,12 +22,13 @@ import SubmissionLayout, { ModalPortal } from '../layout';
 import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
+import { useMutation } from 'react-apollo-hooks';
 
 /**
  * @todo: actually fix this Minh!
  */
 // $FlowFixMe .gql file not supported
-import { programQuery } from './queries.gql';
+import { PROGRAM_QUERY, INVITE_USER_MUTATION } from './queries.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
@@ -37,7 +38,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
 
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
-  const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
+  const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
     variables: { shortName },
   });
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -48,6 +49,14 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
   }
+
+  const createUserInput = data => ({
+    programShortName: shortName,
+    userFirstName: data.firstName,
+    userLastName: data.lastName,
+    userEmail: data.email,
+    userRole: data.role,
+  });
 
   const [showModal, setShowModal] = React.useState(false);
 
@@ -122,7 +131,14 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
         </ContentBox>
         {showModal && (
           <ModalPortal>
-            <AddUserModal dismissModal={() => setShowModal(false)} />
+            <AddUserModal
+              onSubmit={validData =>
+                useMutation(INVITE_USER_MUTATION, {
+                  variables: { user: createUserInput(validData) },
+                })
+              }
+              dismissModal={() => setShowModal(false)}
+            />
           </ModalPortal>
         )}
       </>

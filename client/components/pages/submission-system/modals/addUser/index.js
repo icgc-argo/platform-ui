@@ -9,10 +9,7 @@ import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
 import useFormHook from '../useFormHook';
 
-// $FlowFixMe .gql file not supported
-import { INVITE_USER_MUTATION } from './mutations.gql';
-
-const AddUserModal = ({}) => {
+const AddUserModal = ({ onSubmit }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -41,22 +38,7 @@ const AddUserModal = ({}) => {
     }
   };
 
-  const createUserInput = data => {
-    const router = useRouter();
-    const { shortName } = router.query;
-    return {
-      programShortName: shortName,
-      userFirstName: data.firstName,
-      userLastName: data.lastName,
-      userEmail: data.email,
-      userRole: data.role,
-    };
-  };
-
-  const sendAddUser = validData =>
-    useMutation(INVITE_USER_MUTATION, {
-      variables: { user: createUserInput(validData) },
-    });
+  const sendAddUser = validData => onSubmit(validData);
 
   const addSection = async () => {
     // check if last section is blank

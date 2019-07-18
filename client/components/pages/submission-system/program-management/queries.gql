@@ -1,4 +1,4 @@
-query programQuery($shortName: String!) {
+query PROGRAM_QUERY($shortName: String!) {
   program(shortName: $shortName) {
     name
     shortName
@@ -13,5 +13,15 @@ query programQuery($shortName: String!) {
     membershipType
     cancerTypes
     primarySites
+  }
+}
+
+mutation INVITE_USER_MUTATION($user: InviteUserInput!) {
+  inviteUser(user: $user) {
+    programShortName
+    userFirstName
+    userLastName
+    userEmail
+    userRole
   }
 }

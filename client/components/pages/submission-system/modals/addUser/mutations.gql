@@ -1,9 +1,0 @@
-mutation INVITE_USER_MUTATION($user: InviteUserInput!) {
-  inviteUser(user: $user) {
-    programShortName
-    userFirstName
-    userLastName
-    userEmail
-    userRole
-  }
-}
