@@ -38,8 +38,8 @@ const AddUserModal = ({ onSubmit, dismissModal }) => {
 
   const submitForm = async () => {
     try {
-      validData = await validateForm();
-      const result = await sendAddUser(validData);
+      const validData = await validateForm();
+      const result = sendAddUser(validData);
     } catch (err) {
       console.log(err);
     }
