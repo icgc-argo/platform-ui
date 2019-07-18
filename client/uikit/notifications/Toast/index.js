@@ -1,13 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit } from 'lodash';
+import css from '@emotion/css';
 
 import Notification, { NOTIFICATION_VARIANTS } from '../Notification';
 
 /*
  * Please edit me!
  */
-function Toast({ variant, title, content, onInteraction, setOpen, ...otherProps }) {
+function Toast({
+  variant,
+  title,
+  content,
+  onInteraction,
+  setOpen,
+  right = '70px',
+  top = '30px',
+  width = '400px',
+}) {
   // hide after 8 seconds
   React.useEffect(() => {
     let timeoutID;
@@ -28,7 +38,13 @@ function Toast({ variant, title, content, onInteraction, setOpen, ...otherProps 
       content={content}
       onInteraction={onInteraction}
       interactionType="CLOSE"
-      {...otherProps}
+      css={css`
+        position: fixed;
+        z-index: 9999;
+        right: ${right};
+        top: ${top};
+        width: ${width};
+      `}
     />
   );
 }

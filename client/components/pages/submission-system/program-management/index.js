@@ -175,7 +175,7 @@ function ResendEmailModal({ user, ...otherProps }) {
       >
         <div style={{ width: '322px' }}>
           Are you sure you want to resend the email invitation to{' '}
-          <strong>{user && user.name}</strong>?
+          <strong>{user ? user.name : ''}</strong>?
         </div>
       </Modal>
     </Modal.Overlay>
@@ -210,7 +210,12 @@ function Users({ users }) {
   return (
     <div>
       <TableActionBar>{users.length} results</TableActionBar>
-      <UsersTable users={users} onUserResendInviteClick={handleResendEmailClick} />
+      <UsersTable
+        users={users}
+        onUserResendInviteClick={handleResendEmailClick}
+        onUserDeleteClick={() => {}}
+        onUserEditClick={() => {}}
+      />
       {isResendEmailModalOpen && (
         <ResendEmailModal
           user={user}
@@ -225,15 +230,8 @@ function Users({ users }) {
             variant="SUCCESS"
             title=""
             setOpen={setIsToastOpen}
-            content={`The email invitation has been resent to ${user && user.name}`}
+            content={`The email invitation has been resent to ${user ? user.name : ''}`}
             onInteraction={handleToastInteraction}
-            css={css`
-              position: fixed;
-              right: 30px;
-              top: 70px;
-              z-index: 9999;
-              width: '400px';
-            `}
           />
         </Portal>
       )}
