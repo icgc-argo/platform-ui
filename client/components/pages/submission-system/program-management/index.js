@@ -28,7 +28,9 @@ import { useMutation } from 'react-apollo-hooks';
  * @todo: actually fix this Minh!
  */
 // $FlowFixMe .gql file not supported
-import { PROGRAM_QUERY, INVITE_USER_MUTATION } from './queries.gql';
+import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
+// $FlowFixMe .gql file not supported
+import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
