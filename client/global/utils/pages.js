@@ -16,7 +16,7 @@ import {
   isDccMember,
   isRdpcMember,
   canReadSomeProgram,
-  getAuthorizedProgramScopes,
+  getReadableProgramShortNames,
 } from './egoJwt';
 
 export const getDefaultRedirectPathForUser = (egoJwt: string): string => {
@@ -25,11 +25,9 @@ export const getDefaultRedirectPathForUser = (egoJwt: string): string => {
   } else if (isRdpcMember(egoJwt)) {
     return RDPC_PATH;
   } else if (canReadSomeProgram(egoJwt)) {
-    const authorizedProgramScopes = getAuthorizedProgramScopes(egoJwt);
-    const orderedPrograms = orderBy(authorizedProgramScopes, 'policy');
-    const firstScope = orderedPrograms[0];
-    const programShortName = firstScope.policy.replace('PROGRAM-', '');
-    return PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName);
+    const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
+    const orderedProgramShortNames = orderBy(readableProgramShortNames);
+    return PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, orderedProgramShortNames[0]);
   } else {
     return USER_PAGE_PATH;
   }
