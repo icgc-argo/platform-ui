@@ -8,6 +8,13 @@ import css from '@emotion/css';
 import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
 import useFormHook from '../useFormHook';
+import { UserModel } from '../common';
+
+const AddSection = styled(Button)`
+  text-transform: uppercase;
+  color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
+  margin-top: 14px;
+`;
 
 const AddUserModal = ({ onSubmit }) => {
   const {
@@ -22,7 +29,7 @@ const AddUserModal = ({ onSubmit }) => {
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: user, schema: addUserSchema });
+  } = useFormHook({ initialFields: UserModel, schema: addUserSchema });
 
   const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,
@@ -45,7 +52,7 @@ const AddUserModal = ({ onSubmit }) => {
     const index = form.length - 1;
     try {
       await validateSection({ index });
-      createSection(user);
+      createSection(UserModel);
     } catch (e) {
       console.log('error: last section is empty', e);
     }
