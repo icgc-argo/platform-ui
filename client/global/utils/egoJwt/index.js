@@ -46,6 +46,9 @@ export const isRdpcMember = (egoJwt: string): boolean => TokenUtils.isRdpcMember
 export const canReadSomeProgram = (egoJwt: string): boolean =>
   TokenUtils.canReadSomeProgram(egoJwt);
 
+export const canWriteSomeProgram = (egoJwt: string): boolean =>
+  TokenUtils.canWriteSomeProgram(egoJwt);
+
 export const parseScope = (scope: string): PermissionScopeObj => TokenUtils.parseScope(scope);
 
 export const serializeScope = (scopeObj: PermissionScopeObj): string =>
