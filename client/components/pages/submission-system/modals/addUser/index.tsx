@@ -10,7 +10,7 @@ import { addUserSchema } from '../validations';
 import useFormHook from '../useFormHook';
 import { UserModel } from '../common';
 
-const AddSection = styled(Button)`
+const AddSection: React.ComponentType<{ disabled: boolean; variant: string }> = styled(Button)`
   text-transform: uppercase;
   color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
   margin-top: 14px;

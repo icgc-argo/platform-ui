@@ -5,6 +5,16 @@ import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
 
+/**
+ * @type {React.ComponentType<{
+    name?: string, 
+    width?: string, 
+    height?: string, 
+    fill?: string, 
+    className?: string, 
+    title?: string
+ * }>}
+ */
 const Icon = ({ name, width, height, fill, className = undefined, title = undefined, ...rest }) => {
   const theme = useTheme();
   const svg = icons[name];
