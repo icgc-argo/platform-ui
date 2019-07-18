@@ -3,9 +3,9 @@ import styled from '@emotion/styled';
 import Container from '../Container';
 
 export const PageContainer = styled('div')`
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 58px 1fr 58px;
+  min-height: 100vh;
   background: ${({ theme }) => theme.colors.grey_4};
 `;
 
@@ -18,13 +18,12 @@ export const Panel = styled('div')`
 `;
 
 export const PageBody = styled('div')`
+  display: grid;
+  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
   flex: 1;
-  display: flex;
-  flex-direction: row;
 `;
 
 export const PageContent = styled('div')`
-  flex: 1;
   position: relative;
   min-height: 600px;
   ${({ noSidebar }) =>
