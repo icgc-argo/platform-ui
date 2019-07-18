@@ -30,7 +30,13 @@ import useTheme from 'uikit/utils/useTheme';
 import { programQuery } from './queries.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
-export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
+export default function ProgramManagementPage({
+  logOut,
+  pathname,
+}: {
+  logOut: any => any,
+  pathname: string,
+}) {
   const router = useRouter();
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
@@ -50,6 +56,14 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   }
 
   const [showModal, setShowModal] = React.useState(false);
+
+  function handleCancelClick() {
+    // reset the form
+    setActiveTab('');
+    setTimeout(() => {
+      setActiveTab(TABS.PROFILE);
+    });
+  }
 
   return (
     <SubmissionLayout
@@ -114,7 +128,16 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
                   }
                 `}
               >
-                {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+                {!isEmpty(program) && (
+                  <CreateProgramForm
+                    program={program}
+                    leftFooterComponent={
+                      <Button variant="text" onClick={handleCancelClick}>
+                        Cancel
+                      </Button>
+                    }
+                  />
+                )}
               </div>
             ) : (
               <ProfileView program={program} />
@@ -128,7 +151,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
       </>
     </SubmissionLayout>
   );
-};
+}
 
 // TODO: Remove dummy data
 const FAKE_USERS = [
