@@ -8,7 +8,13 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { decodeToken, canReadProgram, isRdpcMember, canReadSomeProgram } from 'global/utils/egoJwt';
+import {
+  decodeToken,
+  canReadProgram,
+  isRdpcMember,
+  canReadSomeProgram,
+  isDccMember,
+} from 'global/utils/egoJwt';
 import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
@@ -44,6 +50,20 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
       {titles[path]}
     </MenuItem>
   );
+};
+
+const getUserRole = egoJwt => {
+  if (!egoJwt) {
+    return null;
+  } else if (isDccMember(egoJwt)) {
+    return 'DCC Member';
+  } else if (isRdpcMember(egoJwt)) {
+    return 'RDPC user';
+  } else if (canReadSomeProgram(egoJwt)) {
+    return 'Program member';
+  } else {
+    return null;
+  }
 };
 
 export default (props: { path?: string, logOut: void => void, children?: React.Node }) => {
@@ -96,7 +116,7 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
               <UserBadge
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
-                title={'Some Role'}
+                title={getUserRole(egoJwt)}
               />
             </MenuItem>
           )}
