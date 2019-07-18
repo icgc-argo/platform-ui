@@ -16,7 +16,7 @@ const AddSection = styled(Button)`
   margin-top: 14px;
 `;
 
-const AddUserModal = ({ onSubmit }) => {
+const AddUserModal = ({ onSubmit, dismissModal }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -69,6 +69,8 @@ const AddUserModal = ({ onSubmit }) => {
       cancelText="Cancel"
       onActionClick={() => submitForm()}
       actionDisabled={!touched || hasErrors}
+      onCancelClick={dismissModal}
+      onCloseClick={dismissModal}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
