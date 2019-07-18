@@ -5,6 +5,9 @@ import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
 import CreateProgramForm from './CreateProgramForm';
 import Container from 'uikit/Container';
+import Link from 'next/link';
+import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
+import Button from 'uikit/Button';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -38,7 +41,13 @@ export default ({ logOut, pathname }) => {
           max-width: 875px;
         `}
       >
-        <CreateProgramForm />
+        <CreateProgramForm
+          leftFooterComponent={
+            <Link href={PROGRAMS_LIST_PATH}>
+              <Button variant="text">Cancel</Button>
+            </Link>
+          }
+        />
       </Container>
     </SubmissionLayout>
   );

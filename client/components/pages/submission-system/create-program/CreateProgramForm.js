@@ -6,7 +6,6 @@ import {
   PROGRAM_MEMBERSHIP_TYPES,
   RDC_NAMES,
 } from 'global/constants';
-import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 import { filter, get, isArray } from 'lodash';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -105,7 +104,7 @@ const createUpdateProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-export default function CreateProgramForm({ noCancel, program = {} }) {
+export default function CreateProgramForm({ leftFooterComponent, program = {} }) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
@@ -579,11 +578,7 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
         ) : (
           <Button onClick={submitForm}>Create</Button>
         )}
-        {!noCancel && (
-          <Link href={PROGRAMS_LIST_PATH}>
-            <Button variant="text">Cancel</Button>
-          </Link>
-        )}
+        {leftFooterComponent}
       </Row>
     </>
   );
