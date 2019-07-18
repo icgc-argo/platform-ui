@@ -5,9 +5,7 @@ import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
-const DUMMY_USER = { ...UserModel, email: 'test@test.com' };
-
-const EditUserModal = ({}) => {
+const EditUserModal = ({ user }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -16,7 +14,7 @@ const EditUserModal = ({}) => {
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: DUMMY_USER, schema: editUserSchema });
+  } = useFormHook({ initialFields: user, schema: editUserSchema });
 
   const submitForm = async () => {
     try {
