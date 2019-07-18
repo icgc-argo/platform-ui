@@ -52,6 +52,20 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
+const getUserRole = egoJwt => {
+  if (!egoJwt) {
+    return null;
+  } else if (isDccMember(egoJwt)) {
+    return 'DCC Member';
+  } else if (isRdpcMember(egoJwt)) {
+    return 'RDPC user';
+  } else if (canReadSomeProgram(egoJwt)) {
+    return 'Program member';
+  } else {
+    return null;
+  }
+};
+
 export default (props: { path?: string, logOut: void => void, children?: React.Node }) => {
   const { token: egoJwt } = useEgoToken();
   const { path = '' } = props;
@@ -64,15 +78,6 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
   })();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
-  const userRole = !egoJwt
-    ? null
-    : isDccMember(egoJwt)
-    ? 'DCC Member'
-    : isRdpcMember(egoJwt)
-    ? 'RDPC user'
-    : canReadSomeProgram(egoJwt)
-    ? 'Program member'
-    : null;
 
   return (
     <AppBar
@@ -111,7 +116,7 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
               <UserBadge
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
-                title={userRole}
+                title={getUserRole(egoJwt)}
               />
             </MenuItem>
           )}
