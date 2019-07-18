@@ -41,14 +41,45 @@ type Program = {
   primarySites: string[];
 };
 
+
 const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
-
   return [triggerMutation];
 };
 
+// TODO: Remove dummy data
+const FAKE_USERS = [
+  {
+    id: '1',
+    name: 'Homer Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '2',
+    name: 'Bart Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+  {
+    id: '3',
+    name: 'Lisa Simpson',
+    email: 'test@email.com',
+    role: 'ADMINISTRATOR',
+    isDacoApproved: true,
+    status: 'PENDING_INVITATION',
+    joinDate: '03-02-2018',
+  },
+] as UsersTableUser[];
+
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
-export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
+export default ({ logOut, pathname }: { logOut: (arg: any) => any; pathname: string }) => {
   const router = useRouter();
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
@@ -137,9 +168,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             (isDcc ? (
               <div
                 css={css`
-                   {
-                    padding: 17px 41px 41px 41px;
-                  }
+                  padding: 17px 41px 41px 41px;
                 `}
               >
                 {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}

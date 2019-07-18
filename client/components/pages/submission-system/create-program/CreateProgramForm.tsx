@@ -107,7 +107,7 @@ const createUpdateProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-export default function CreateProgramForm({ noCancel, program = {} }) {
+export default function CreateProgramForm({ noCancel = false, program = {} }) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
