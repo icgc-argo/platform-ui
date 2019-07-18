@@ -10,3 +10,6 @@ export const PROGRAM_MANAGE_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_N
 export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
 export const PROGRAM_ID_REGISTRATION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/id-registration`;
 export const PROGRAM_CLINICAL_SUBMISSION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-submission`;
+
+// rdpc path
+export const RDPC_PATH = '/rdpc';

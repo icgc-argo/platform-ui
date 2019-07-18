@@ -24,6 +24,8 @@ import AppBar, {
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import urlJoin from 'url-join';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import Typography from 'uikit/Typography';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -80,8 +82,20 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
       <Section />
       <Section>
         <MenuGroup>
-          {canAccessSubmission && (
-            <MenuItem active={path.search(SUBMISSION_PATH) === 0}>Submission</MenuItem>
+          {egoJwt && canAccessSubmission && (
+            <MenuItem
+              active={path.search(SUBMISSION_PATH) === 0}
+              DomComponent={props => (
+                <Link
+                  href={getDefaultRedirectPathForUser(egoJwt)}
+                  as={getDefaultRedirectPathForUser(egoJwt)}
+                >
+                  <a {...props}>
+                    <Typography variant={'default'}>Submission</Typography>
+                  </a>
+                </Link>
+              )}
+            />
           )}
           {!userModel && <NavbarLink path={LOGIN_PAGE_PATH} active={path === LOGIN_PAGE_PATH} />}
           {userModel && (

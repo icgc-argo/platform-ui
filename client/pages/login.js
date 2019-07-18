@@ -5,7 +5,7 @@ import Router from 'next/router';
 
 import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
-import { getRedirectPathForUser } from 'global/utils/pages';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import { createPage } from 'global/utils/pages';
 import LoginPage from 'components/pages/login';
 
@@ -14,7 +14,7 @@ export default createPage({
   getInitialProps: async ({ query, egoJwt, res }) => {
     const { redirect } = query;
     if (egoJwt && res) {
-      res.redirect(redirect || getRedirectPathForUser(egoJwt));
+      res.redirect(redirect || getDefaultRedirectPathForUser(egoJwt));
     }
     return {
       redirect,
@@ -24,7 +24,7 @@ export default createPage({
 })(({ redirect, egoJwt }) => {
   React.useEffect(() => {
     if (egoJwt) {
-      Router.replace(redirect || getRedirectPathForUser(egoJwt));
+      Router.replace(redirect || getDefaultRedirectPathForUser(egoJwt));
     } else {
       if (redirect) {
         localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirect);
