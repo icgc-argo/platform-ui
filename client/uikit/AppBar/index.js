@@ -54,7 +54,8 @@ export const UserBadge = ({ firstName = '', lastName = '', title = null, ...othe
 UserBadge.propTypes = {
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null]).isRequired])
+    .isRequired,
 };
 
 export const Logo = ({ DomComponent = props => <span {...props} /> }) => {
