@@ -9,6 +9,7 @@ import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import css from '@emotion/css';
+import PropTypes from 'prop-types';
 
 import { Row, Col } from 'react-grid-system';
 
@@ -19,7 +20,15 @@ const Section = styled('div')`
   display: flex;
 `;
 
-const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
+export const UserSection = ({
+  user,
+  onChange,
+  validateField,
+  errors,
+  deleteSelf,
+  showDelete = false,
+  disabledFields = [],
+}) => {
   const {
     firstName: firstNameError,
     lastName: lastNameError,
@@ -36,13 +45,18 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
       >
         <Row nogutter>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!firstNameError} required>
+            <FormControl
+              error={!!firstNameError}
+              disabled={disabledFields.includes('firstName')}
+              required
+            >
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>First Name</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="First name"
                     value={user.firstName}
                     onChange={e => onChange('firstName', e.target.value)}
                     onBlur={() => validateField('firstName')}
@@ -53,13 +67,18 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
             </FormControl>
           </Col>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!lastNameError} required>
+            <FormControl
+              error={!!lastNameError}
+              disabled={disabledFields.includes('lastName')}
+              required
+            >
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Last Name</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="Last name"
                     value={user.lastName}
                     onChange={e => onChange('lastName', e.target.value)}
                     onBlur={() => validateField('lastName')}
@@ -72,13 +91,14 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
         </Row>
         <Row nogutter>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!emailError} required>
+            <FormControl error={!!emailError} disabled={disabledFields.includes('email')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel>Email Address</InputLabel>
                 </Col>
                 <Col>
                   <Input
+                    aria-label="Email"
                     value={user.email}
                     onChange={e => onChange('email', e.target.value)}
                     onBlur={() => validateField('email')}
@@ -89,14 +109,14 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
             </FormControl>
           </Col>
           <Col sm={6} style={{ paddingRight: '10px' }}>
-            <FormControl error={!!roleError} required>
+            <FormControl error={!!roleError} disabled={disabledFields.includes('role')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
                   <InputLabel required>Role</InputLabel>
                 </Col>
                 <Col>
                   <Select
-                    aria-label="role-select"
+                    aria-label="Select role"
                     value={user.role}
                     options={PROGRAM_MEMBERSHIP_TYPES}
                     onChange={val => onChange('role', val)}
@@ -109,18 +129,30 @@ const UserSection = ({ user, onChange, validateField, errors, deleteSelf }) => {
           </Col>
         </Row>{' '}
       </div>
-      <Icon
-        height="20px"
-        width="18px"
-        name="trash"
-        fill={deleteSelf ? 'accent2' : '#cecfd3'}
-        onClick={deleteSelf}
-        css={css`
-          margin-left: 6px;
-        `}
-      />{' '}
+      {showDelete && (
+        <Icon
+          height="20px"
+          width="18px"
+          name="trash"
+          fill={deleteSelf ? 'accent2' : '#cecfd3'}
+          onClick={deleteSelf}
+          css={css`
+            margin-left: 6px;
+          `}
+        />
+      )}
     </Section>
   );
+};
+
+UserSection.propTypes = {
+  user: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
+  validateField: PropTypes.func,
+  errors: PropTypes.object.isRequired,
+  deleteSelf: PropTypes.oneOf([PropTypes.func]),
+  showDelete: PropTypes.bool,
+  disabledFields: PropTypes.array,
 };
 
 export default UserSection;

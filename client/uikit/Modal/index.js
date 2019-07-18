@@ -109,7 +109,11 @@ const Modal = ({
           />
         </div>
       )}
-      <div>
+      <div
+        css={css`
+          width: 100%;
+        `}
+      >
         <ModalTitle>
           <Typography
             css={css`

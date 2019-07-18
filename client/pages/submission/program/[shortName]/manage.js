@@ -1,3 +1,4 @@
+//@flow
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';
@@ -6,7 +7,7 @@ import { isRdpcMember, isProgramAdmin } from 'global/utils/egoJwt';
 
 export default createPage({
   isPublic: false,
-  isAccessible: ({ egoJwt, ctx }) => {
+  isAccessible: async ({ egoJwt, ctx }) => {
     const {
       query: { shortName },
     } = ctx;

@@ -15,7 +15,7 @@ const Textarea = ({ error, disabled, className, ...props }) => {
 
   return (
     <textarea
-      className={clsx({ error: calcError, disabled: calcDisabled })}
+      className={clsx({ error: calcError, disabled: calcDisabled }, className)}
       css={css`
         ${css(theme.typography.paragraph)};
         resize: vertical;

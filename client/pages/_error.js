@@ -9,7 +9,7 @@ export const ERROR_STATUS_KEY = 'statusCode';
 class Error extends React.Component {
   static getInitialProps({ res, err }) {
     if (get(err, ERROR_STATUS_KEY) === 401) {
-      res.status(401);
+      if (res) res.status(401);
     }
     return {
       [ERROR_STATUS_KEY]: get(res, ERROR_STATUS_KEY) || get(err, ERROR_STATUS_KEY) || null,

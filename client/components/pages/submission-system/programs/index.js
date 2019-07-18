@@ -24,6 +24,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_MANAGE_PATH,
 } from 'global/constants/pages';
+import { isDccMember } from 'global/utils/egoJwt';
 
 const TableFilterInput = props => (
   <Input
@@ -85,9 +86,11 @@ export default ({
           >
             All Programs
           </Typography>
-          <Link href={CREATE_PROGRAM_PAGE_PATH}>
-            <Button>Create a program</Button>
-          </Link>
+          {isDccMember(egoJwt) && (
+            <Link href={CREATE_PROGRAM_PAGE_PATH}>
+              <Button>Create a program</Button>
+            </Link>
+          )}
         </div>
       }
     >

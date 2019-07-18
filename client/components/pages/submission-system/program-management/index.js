@@ -1,5 +1,9 @@
-import { ThemeContext } from '@emotion/core';
+// @flow
+
+import AddUserModal from 'components/pages/submission-system/modals/addUser';
+import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
@@ -14,15 +18,26 @@ import { TableActionBar } from 'uikit/Table';
 import Tabs, { Tab } from 'uikit/Tabs';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
-import SubmissionLayout from '../layout';
-import { programQuery } from './queries.gql';
+import CreateProgramForm from '../create-program/CreateProgramForm';
+import SubmissionLayout, { ModalPortal } from '../layout';
 import UsersTable from './UsersTable';
 import Toast from 'uikit/notifications/Toast';
 import Portal from 'uikit/Portal';
+import { isDccMember } from 'global/utils/egoJwt';
+import useTheme from 'uikit/utils/useTheme';
+
+/**
+ * @todo: actually fix this Minh!
+ */
+// $FlowFixMe .gql file not supported
+import { programQuery } from './queries.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
-export default ({ logOut, pathname }) => {
+export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
   const router = useRouter();
+  const { data: egoTokenData, token } = useEgoToken();
+  const isDcc = token ? isDccMember(token) : false;
+
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
@@ -36,6 +51,8 @@ export default ({ logOut, pathname }) => {
   function handleChange(event, newValue) {
     setActiveTab(newValue);
   }
+
+  const [showModal, setShowModal] = React.useState(false);
 
   return (
     <SubmissionLayout
@@ -56,41 +73,62 @@ export default ({ logOut, pathname }) => {
         </div>
       }
     >
-      <ContentBox
-        css={css`
-          padding-top: 0px;
-        `}
-      >
-        <Tabs
-          value={activeTab}
-          onChange={handleChange}
+      <>
+        <ContentBox
           css={css`
-            width: 100%;
+            padding-top: 0px;
           `}
         >
-          <Tab value="USERS" label="Users" />
-          <Tab value="PROFILE" label="Profile" />
-          <Tab
-            empty
+          <Tabs
+            value={activeTab}
+            onChange={handleChange}
             css={css`
-              padding: 0;
-              justify-content: flex-end;
+              width: 100%;
             `}
           >
-            {activeTab === TABS.USERS && (
-              <Button
+            <Tab value="USERS" label="Users" />
+            <Tab value="PROFILE" label="Profile" />
+            <Tab
+              empty
+              css={css`
+                padding: 0;
+                justify-content: flex-end;
+              `}
+            >
+              {activeTab === TABS.USERS && (
+                <Button
+                  css={css`
+                    margin: 9px 0;
+                  `}
+                  onClick={() => setShowModal(true)}
+                >
+                  Add Users
+                </Button>
+              )}
+            </Tab>
+          </Tabs>
+          {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
+          {activeTab === TABS.PROFILE &&
+            (isDcc ? (
+              <div
                 css={css`
-                  margin: 9px 0;
+                   {
+                    padding: 17px 41px 41px 41px;
+                  }
                 `}
               >
-                Add Users
-              </Button>
-            )}
-          </Tab>
-        </Tabs>
-        {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
-        {activeTab === TABS.PROFILE && <Profile program={program} />}
-      </ContentBox>
+                {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+              </div>
+            ) : (
+              <ProfileView program={program} />
+            ))}
+        </ContentBox>
+        {showModal && (
+          <ModalPortal>
+            <AddUserModal dismissModal={() => setShowModal(false)} />
+          </ModalPortal>
+        )}
+      </>
     </SubmissionLayout>
   );
 };
@@ -203,8 +241,8 @@ function Users({ users }) {
   );
 }
 
-function Profile({ program = {} }) {
-  const theme = React.useContext(ThemeContext);
+function ProfileView({ program = {} }) {
+  const theme = useTheme();
   const Left = props => (
     <Col
       lg={2}

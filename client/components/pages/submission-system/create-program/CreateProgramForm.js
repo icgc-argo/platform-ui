@@ -1,43 +1,37 @@
-import React from 'react';
-
-import { useMutation } from 'react-apollo-hooks';
-
-import { get, filter, isArray } from 'lodash';
-
 import css from '@emotion/css';
-import Container from 'uikit/Container';
-import Input from 'uikit/form/Input';
-import Textarea from 'uikit/form/Textarea';
-import FormControl from 'uikit/form/FormControl';
-import FormHelperText from 'uikit/form/FormHelperText';
-import InputLabel from 'uikit/form/InputLabel';
-import MultiSelect, { Option } from 'uikit/form/MultiSelect';
-import Select from 'uikit/form/Select';
-import { Row, Col } from 'react-grid-system';
-import Button from 'uikit/Button';
-import Typography from 'uikit/Typography';
-
-import FormCheckbox from 'uikit/form/FormCheckbox';
-import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
-
-import Link from 'next/link';
-import Router from 'next/router';
-
-import * as yup from 'yup';
-
-import createProgramSchema from './validation';
-
-// $FlowFixMe .gql file not supported
-import { CREATE_PROGRAM_MUTATION } from './mutations.gql';
-
 import {
-  PROGRAM_MEMBERSHIP_TYPES,
-  COUNTRIES,
-  RDC_NAMES,
-  PRIMARY_SITES,
   CANCER_TYPES,
+  COUNTRIES,
+  PRIMARY_SITES,
+  PROGRAM_MEMBERSHIP_TYPES,
+  RDC_NAMES,
 } from 'global/constants';
 import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
+import { filter, get, isArray } from 'lodash';
+import Link from 'next/link';
+import Router from 'next/router';
+import React from 'react';
+import { useMutation } from 'react-apollo-hooks';
+import { Col, Row } from 'react-grid-system';
+import Button from 'uikit/Button';
+import Container from 'uikit/Container';
+import FormCheckbox from 'uikit/form/FormCheckbox';
+import FormControl from 'uikit/form/FormControl';
+import FormHelperText from 'uikit/form/FormHelperText';
+import Input from 'uikit/form/Input';
+import InputLabel from 'uikit/form/InputLabel';
+import MultiSelect, { Option } from 'uikit/form/MultiSelect';
+import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
+import Select from 'uikit/form/Select';
+import Textarea from 'uikit/form/Textarea';
+import Typography from 'uikit/Typography';
+import * as yup from 'yup';
+// $FlowFixMe .gql file not supported
+import { CREATE_PROGRAM_MUTATION, UPDATE_PROGRAM_MUTATION } from './mutations.gql';
+import createProgramSchema, { updateProgramSchema } from './validation';
+import isEmpty from 'lodash/isEmpty';
+import merge from 'lodash/merge';
+import isEqual from 'lodash/isEqual';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -96,26 +90,49 @@ const createProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+const createUpdateProgramInput = formData => ({
+  name: formData.programName,
+  description: formData.description,
+  commitmentDonors: parseInt(formData.commitmentLevel),
+  website: formData.website,
+  institutions: formData.institutions.join(','),
+  countries: formData.countries.join(','),
+  regions: Array.from(formData.processingRegions).join(','),
+  membershipType: formData.membershipType,
+  cancerTypes: formData.cancerTypes,
+  primarySites: formData.primarySites,
+});
+
 /* *************************************** *
  * Form data validation
  * *************************************** */
 
-export default () => {
-  const [programName, setProgramName] = React.useState('');
-  const [shortName, setShortName] = React.useState('');
-  const [countries, setCountries] = React.useState([]);
-  const [cancerTypes, setCancerTypes] = React.useState([]);
-  const [primarySites, setPrimarySites] = React.useState([]);
-  const [commitmentLevel, setCommitmentLevel] = React.useState();
-  const [institutions, setInstitutions] = React.useState([]);
-  const [membershipType, setMembershipType] = React.useState('');
-  const [website, setWebsite] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [processingRegions, setProcessionRegions] = React.useState([]);
+export default function CreateProgramForm({ noCancel, program = {} }) {
+  const isEditing = !isEmpty(program);
+  const [programName, setProgramName] = React.useState(program.name || '');
+  const [shortName, setShortName] = React.useState(program.shortName || '');
+  const [countries, setCountries] = React.useState(
+    program.countries ? program.countries.split(',') : [],
+  );
+  const [cancerTypes, setCancerTypes] = React.useState(program.cancerTypes || []);
+  const [primarySites, setPrimarySites] = React.useState(program.primarySites || []);
+  const [commitmentLevel, setCommitmentLevel] = React.useState(program.commitmentDonors);
+  const [institutions, setInstitutions] = React.useState(
+    program.institutions ? program.institutions.split(',') : [],
+  );
+  const [membershipType, setMembershipType] = React.useState(program.membershipType || '');
+  const [website, setWebsite] = React.useState(program.website || '');
+  const [description, setDescription] = React.useState(program.description || '');
+  const [processingRegions, setProcessionRegions] = React.useState(
+    program.regions ? program.regions.split(',') : [],
+  );
   const [adminFirstName, setAdminFirstName] = React.useState('');
   const [adminLastName, setAdminLastName] = React.useState('');
   const [adminEmail, setAdminEmail] = React.useState('');
+
   const [validationErrors, setValidationErrors] = React.useState({});
+
+  const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
   /* **************** *
    * Form Submission
@@ -142,7 +159,7 @@ export default () => {
 
   const validateForm = async () => {
     return await new Promise((resolve, reject) => {
-      createProgramSchema
+      programSchema
         .validate(formData, { abortEarly: false, stripUnknown: true })
         .then(data => {
           // Validate will perform data manipulations such as trimming strings.
@@ -151,7 +168,7 @@ export default () => {
         })
         .catch(err => {
           const errors = get(err, 'inner', []).reduce((output, error) => {
-            output[error.path] = error.message;
+            output[error.path.replace(/\[.*\]/, '')] = error.message;
             return output;
           }, {});
           setValidationErrors(errors);
@@ -164,8 +181,13 @@ export default () => {
     try {
       validData = await validateForm(formData);
 
-      const result = await sendCreateProgram();
-      Router.push(PROGRAMS_LIST_PATH);
+      let result;
+      if (!isEditing) {
+        result = await sendCreateProgram();
+        Router.push(PROGRAMS_LIST_PATH);
+      } else {
+        result = await sendUpdateProgram();
+      }
     } catch (err) {
       window.scrollTo(0, 0);
     }
@@ -173,6 +195,10 @@ export default () => {
 
   const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
     variables: { program: createProgramInput(validData) },
+  });
+
+  const sendUpdateProgram = useMutation(UPDATE_PROGRAM_MUTATION, {
+    variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
   });
 
   /* ********************* *
@@ -185,7 +211,7 @@ export default () => {
 
   const validateField = (path, value) => {
     yup
-      .reach(createProgramSchema, path)
+      .reach(programSchema, path)
       .validate(value, { abortEarly: false })
       .then(success => {
         updateValidationErrorsForField(path, '');
@@ -204,13 +230,7 @@ export default () => {
   };
 
   return (
-    <Container
-      css={css`
-        margin: 10px auto;
-        padding: 10px 40px;
-        max-width: 875px;
-      `}
-    >
+    <>
       <form name="createProgram">
         <Col>
           <Row>
@@ -232,11 +252,11 @@ export default () => {
                   onBlur={handleInputBlur('programName')}
                   size="lg"
                 />
-                <ErrorText error={validationErrors.programName} />
+                <ErrorText error={validationErrors.progranName} />
               </Col>
             </Row>
           </FormControl>
-          <FormControl error={validationErrors.shortName} required={true}>
+          <FormControl error={validationErrors.shortName} required={true} disabled={isEditing}>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="short-name">Short Name</InputLabel>
@@ -453,13 +473,17 @@ export default () => {
                   <Row>
                     <Col>
                       {RDC_NAMES.slice(0, Math.ceil(RDC_NAMES.length / 2)).map(name => (
-                        <FormCheckbox value={name}>{name}</FormCheckbox>
+                        <FormCheckbox value={name} key={name}>
+                          {name}
+                        </FormCheckbox>
                       ))}
                     </Col>
                     <Col>
                       {RDC_NAMES.slice(Math.ceil(RDC_NAMES.length / 2), RDC_NAMES.length).map(
                         name => (
-                          <FormCheckbox value={name}>{name}</FormCheckbox>
+                          <FormCheckbox value={name} key={name}>
+                            {name}
+                          </FormCheckbox>
                         ),
                       )}
                     </Col>
@@ -471,89 +495,105 @@ export default () => {
               <Col />
             </Row>
           </FormControl>
-          <Row>
-            <Col>
-              <SectionTitle>Program Administrator</SectionTitle>
-              <Typography variant="paragraph">
-                Please assign a program administrator who will add and manage program members and
-                collaborators. Note: the provided email address must be a Gmail or G Suite email
-                address for login purposes.
-              </Typography>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <FormControl error={validationErrors.adminFirstName} required={true}>
+          {!isEditing && (
+            <>
+              <Row>
+                <Col>
+                  <SectionTitle>Program Administrator</SectionTitle>
+                  <Typography variant="paragraph">
+                    Please assign a program administrator who will add and manage program members
+                    and collaborators. Note: the provided email address must be a Gmail or G Suite
+                    email address for login purposes.
+                  </Typography>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={6}>
+                  <FormControl error={validationErrors.adminFirstName} required={true}>
+                    <Row>
+                      <InputLabelWrapper sm={4}>
+                        <InputLabel htmlFor="first-name">First Name</InputLabel>
+                      </InputLabelWrapper>
+                      <Col sm={8}>
+                        <Input
+                          aria-label="First Name"
+                          id="first-name"
+                          value={adminFirstName}
+                          onChange={handleInputChange(setAdminFirstName)}
+                          onBlur={handleInputBlur('adminFirstName')}
+                          size="lg"
+                        />
+                        <ErrorText error={validationErrors.adminFirstName} />
+                      </Col>
+                    </Row>
+                  </FormControl>
+                </Col>
+                <Col sm={6}>
+                  <FormControl error={validationErrors.adminLastName} required={true}>
+                    <Row>
+                      <InputLabelWrapper sm={4}>
+                        <InputLabel htmlFor="last-name">Last Name</InputLabel>
+                      </InputLabelWrapper>
+                      <Col sm={8}>
+                        <Input
+                          aria-label="Last Name"
+                          id="last-name"
+                          value={adminLastName}
+                          onChange={handleInputChange(setAdminLastName)}
+                          onBlur={handleInputBlur('adminLastName')}
+                          size="lg"
+                        />
+                        <ErrorText error={validationErrors.adminLastName} />
+                      </Col>
+                    </Row>
+                  </FormControl>
+                </Col>
+              </Row>
+              <FormControl error={validationErrors.adminEmail} required={true}>
                 <Row>
-                  <InputLabelWrapper sm={4}>
-                    <InputLabel htmlFor="first-name">First Name</InputLabel>
+                  <InputLabelWrapper sm={2}>
+                    <InputLabel htmlFor="email">Email Adress</InputLabel>
                   </InputLabelWrapper>
-                  <Col sm={8}>
+                  <Col sm={10}>
                     <Input
-                      aria-label="First Name"
-                      id="first-name"
-                      value={adminFirstName}
-                      onChange={handleInputChange(setAdminFirstName)}
-                      onBlur={handleInputBlur('adminFirstName')}
+                      aria-label="Email"
+                      id="email"
+                      value={adminEmail}
+                      onChange={handleInputChange(setAdminEmail)}
+                      onBlur={handleInputBlur('adminEmail')}
                       size="lg"
                     />
-                    <ErrorText error={validationErrors.adminFirstName} />
+                    <ErrorText error={validationErrors.adminEmail} />
                   </Col>
                 </Row>
               </FormControl>
-            </Col>
-            <Col sm={6}>
-              <FormControl error={validationErrors.adminLastName} required={true}>
-                <Row>
-                  <InputLabelWrapper sm={4}>
-                    <InputLabel htmlFor="last-name">Last Name</InputLabel>
-                  </InputLabelWrapper>
-                  <Col sm={8}>
-                    <Input
-                      aria-label="Last Name"
-                      id="last-name"
-                      value={adminLastName}
-                      onChange={handleInputChange(setAdminLastName)}
-                      onBlur={handleInputBlur('adminLastName')}
-                      size="lg"
-                    />
-                    <ErrorText error={validationErrors.adminLastName} />
-                  </Col>
-                </Row>
-              </FormControl>
-            </Col>
-          </Row>
-          <FormControl error={validationErrors.adminEmail} required={true}>
-            <Row>
-              <InputLabelWrapper sm={2}>
-                <InputLabel htmlFor="email">Email Adress</InputLabel>
-              </InputLabelWrapper>
-              <Col sm={10}>
-                <Input
-                  aria-label="Email"
-                  id="email"
-                  value={adminEmail}
-                  onChange={handleInputChange(setAdminEmail)}
-                  onBlur={handleInputBlur('adminEmail')}
-                  size="lg"
-                />
-                <ErrorText error={validationErrors.adminEmail} />
-              </Col>
-            </Row>
-          </FormControl>
+            </>
+          )}
         </Col>
       </form>
       <Row
         justify="between"
         css={css`
           padding: 15px;
+          flex-direction: row-reverse;
         `}
       >
-        <Link href={PROGRAMS_LIST_PATH}>
-          <Button variant="text">Cancel</Button>
-        </Link>
-        <Button onClick={submitForm}>Create</Button>
+        {isEditing ? (
+          <Button
+            onClick={submitForm}
+            disabled={isEqual(program, merge({ ...program }, createUpdateProgramInput(formData)))}
+          >
+            Save
+          </Button>
+        ) : (
+          <Button onClick={submitForm}>Create</Button>
+        )}
+        {!noCancel && (
+          <Link href={PROGRAMS_LIST_PATH}>
+            <Button variant="text">Cancel</Button>
+          </Link>
+        )}
       </Row>
-    </Container>
+    </>
   );
-};
+}

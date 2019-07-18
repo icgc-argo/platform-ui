@@ -8,7 +8,8 @@ import * as loader from '@grpc/proto-loader';
 import protoPath from '@icgc-argo/program-service-proto';
 
 import { PROGRAM_SERVICE_ROOT } from '../../config';
-import { getAuthMeta, wrapValue } from '../../utils/grpcUtils';
+import { getAuthMeta, wrapValue, withRetries } from '../../utils/grpcUtils';
+import retry from 'retry';
 
 const packageDefinition = loader.loadSync(protoPath, {
   keepCase: true,
@@ -20,9 +21,8 @@ const packageDefinition = loader.loadSync(protoPath, {
 
 const proto = grpc.loadPackageDefinition(packageDefinition).program_service;
 
-const programService = new proto.ProgramService(
-  PROGRAM_SERVICE_ROOT,
-  grpc.credentials.createInsecure(),
+const programService = withRetries(
+  new proto.ProgramService(PROGRAM_SERVICE_ROOT, grpc.credentials.createInsecure()),
 );
 
 const defaultPromiseCallback = (resolve, reject) => (err, response) =>
@@ -49,7 +49,7 @@ const listPrograms = async (jwt = null) => {
 
 const listUsers = async (shortName, jwt = null) => {
   return await new Promise((resolve, reject) => {
-    programService.listUsers(
+    programService.listUser(
       { program_short_name: wrapValue(shortName) },
       getAuthMeta(jwt),
       defaultPromiseCallback(resolve, reject),
@@ -114,6 +114,53 @@ const createProgram = async (
   });
 };
 
+const updateProgram = async (
+  shortName,
+  {
+    name,
+    description,
+    commitmentDonors,
+    submittedDonors,
+    genomicDonors,
+    website,
+    institutions,
+    countries,
+    regions,
+    membershipType,
+    cancerTypes,
+    primarySites,
+  },
+  jwt = null,
+) => {
+  const updateProgramRequest = {
+    program: {
+      short_name: wrapValue(shortName),
+      name: wrapValue(name),
+      description: wrapValue(description),
+      commitment_donors: wrapValue(commitmentDonors),
+      website: wrapValue(website),
+      institutions: wrapValue(institutions),
+      countries: wrapValue(countries),
+      regions: wrapValue(regions),
+      submitted_donors: wrapValue(submittedDonors),
+      genomic_donors: wrapValue(genomicDonors),
+
+      membership_type: wrapValue(membershipType),
+
+      cancer_types: cancerTypes,
+      primary_sites: primarySites,
+    },
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.updateProgram(
+      updateProgramRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
 const inviteUser = async (
   { programShortName, userFirstName, userLastName, userEmail, userRole },
   jwt = null,
@@ -135,5 +182,68 @@ const inviteUser = async (
   });
 };
 
+const joinProgram = async (
+  { invitationId, institute, piFirstName, piLastName, department },
+  jwt = null,
+) => {
+  const inviteUserRequest = {
+    join_program_invitation_id: wrapValue(invitationId),
+    institute: wrapValue(institute),
+    affiliate_pi_first_name: wrapValue(piFirstName),
+    affiliate_pi_last_name: wrapValue(piLastName),
+    department: wrapValue(department),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.joinProgram(
+      inviteUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
+const updateUser = async (id, shortName, role, jwt = null) => {
+  const updateUserRequest = {
+    user_id: wrapValue(id),
+    short_name: wrapValue(shortName),
+    role: wrapValue(role),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.updateUser(
+      updateUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
+const removeUser = async (email, shortName, jwt = null) => {
+  const removeUserRequest = {
+    user_email: wrapValue(email),
+    program_short_name: wrapValue(shortName),
+  };
+
+  return await new Promise((resolve, reject) => {
+    programService.removeUser(
+      removeUserRequest,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject),
+    );
+  });
+};
+
 // const inviteUser = async ({programShortName, }, jwt=null)
-export default { getProgram, listPrograms, listUsers, createProgram, inviteUser };
+export default {
+  getProgram,
+  listPrograms,
+  listUsers,
+  createProgram,
+  updateProgram,
+
+  inviteUser,
+  joinProgram,
+  updateUser,
+  removeUser,
+};

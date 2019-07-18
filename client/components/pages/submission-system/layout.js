@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import ReactDOM from 'react-dom';
+import { css } from 'uikit';
 import {
   PageContainer,
   Panel,
@@ -14,10 +16,18 @@ import Head from '../head';
 import NavBar from './NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
+import Modal from 'uikit/Modal';
 
 /**
  * TODO: `pathname` and `logOut` should just be available through context
  */
+const modalPortalRef = React.createRef();
+
+export const ModalPortal = ({ children }: { children: React.Node }) => {
+  const ref = modalPortalRef.current;
+  return ref ? ReactDOM.createPortal(<Modal.Overlay>{children}</Modal.Overlay>, ref) : null;
+};
+
 const SubmissionLayout = ({
   pathname,
   logOut,
@@ -36,21 +46,29 @@ const SubmissionLayout = ({
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
   subtitle?: string,
-}) => (
-  <PageContainer>
-    <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-    {navBar}
-    <PageBody>
-      {!noSidebar && <Panel>{sideMenu}</Panel>}
-      <PageContent noSidebar={noSidebar}>
-        {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-        <ContentBody>{children}</ContentBody>
-      </PageContent>
-    </PageBody>
-    <PageFooter>
-      <Footer />
-    </PageFooter>
-  </PageContainer>
-);
+}) => {
+  return (
+    <PageContainer>
+      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+      {navBar}
+      <PageBody>
+        {!noSidebar && <Panel>{sideMenu}</Panel>}
+        <PageContent noSidebar={noSidebar}>
+          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+          <ContentBody>{children}</ContentBody>
+        </PageContent>
+      </PageBody>
+      <PageFooter>
+        <Footer />
+      </PageFooter>
+      <div
+        css={css`
+          position: absolute;
+        `}
+        ref={modalPortalRef}
+      />
+    </PageContainer>
+  );
+};
 
 export default SubmissionLayout;
