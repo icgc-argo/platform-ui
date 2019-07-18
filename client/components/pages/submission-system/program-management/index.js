@@ -24,6 +24,26 @@ import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
 import { useMutation } from 'react-apollo-hooks';
 
+/*
+const useSubmitFormHook = ({ gql }) => {
+  const [triggerMutation, { loading }] = useMutation(gql);
+  const triggerSubmit = data => triggerMutation({ variables: data });
+
+  return [triggerSubmit];
+};
+*/
+
+//const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
+/*
+<AddUserModal
+  onSubmit={validData => {
+    triggerInvite({
+      variables: { user: createUserInput(validData) },
+    });
+  }}
+/>;
+*/
+
 /**
  * @todo: actually fix this Minh!
  */
@@ -60,7 +80,9 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
     userRole: data.role,
   });
 
+  //const [triggerSubmit] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
   const [showModal, setShowModal] = React.useState(false);
+  const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
 
   return (
     <SubmissionLayout
@@ -134,11 +156,11 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
         {showModal && (
           <ModalPortal>
             <AddUserModal
-              onSubmit={validData =>
-                useMutation(INVITE_USER_MUTATION, {
+              onSubmit={validData => {
+                triggerInvite({
                   variables: { user: createUserInput(validData) },
-                })
-              }
+                });
+              }}
               dismissModal={() => setShowModal(false)}
             />
           </ModalPortal>
