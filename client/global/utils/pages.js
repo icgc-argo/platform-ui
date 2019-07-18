@@ -10,6 +10,7 @@ import {
   PROGRAM_MANAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,
   RDPC_PATH,
+  PROGRAM_DASHBOARD_PATH,
 } from 'global/constants/pages';
 import {
   isDccMember,
@@ -24,12 +25,11 @@ export const getDefaultRedirectPathForUser = (egoJwt: string): string => {
   } else if (isRdpcMember(egoJwt)) {
     return RDPC_PATH;
   } else if (canReadSomeProgram(egoJwt)) {
-    // const readablePrograms = get
     const authorizedProgramScopes = getAuthorizedProgramScopes(egoJwt);
     const orderedPrograms = orderBy(authorizedProgramScopes, 'policy');
     const firstScope = orderedPrograms[0];
     const programShortName = firstScope.policy.replace('PROGRAM-', '');
-    return PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName);
+    return PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName);
   } else {
     return USER_PAGE_PATH;
   }
