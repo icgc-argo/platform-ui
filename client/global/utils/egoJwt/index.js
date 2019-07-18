@@ -62,3 +62,6 @@ export const canWriteProgram = (args: { egoJwt: string, programId: string }): bo
 
 export const isProgramAdmin = (args: { egoJwt: string, programId: string }): boolean =>
   TokenUtils.isProgramAdmin(args);
+
+export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
+  TokenUtils.getReadableProgramShortNames(egoJwt);
