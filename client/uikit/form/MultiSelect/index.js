@@ -174,7 +174,7 @@ const MultiSelect = ({
   disabled,
   error,
   'aria-label': ariaLabel = 'search',
-  size = INPUT_SIZES.SM,
+  size = INPUT_SIZES.LG,
 }) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
