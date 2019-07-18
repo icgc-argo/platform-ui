@@ -15,7 +15,7 @@ import {
   UserBadgeContainer,
 } from './styledComponents';
 
-export const UserBadge = ({ firstName = '', lastName = '', title, ...otherProps }) => {
+export const UserBadge = ({ firstName = '', lastName = '', title = null, ...otherProps }) => {
   const theme = useTheme();
   return (
     <UserBadgeContainer {...otherProps}>
@@ -23,9 +23,11 @@ export const UserBadge = ({ firstName = '', lastName = '', title, ...otherProps 
         <Typography variant="navigation" component="div" bold>
           Hello, {firstName}
         </Typography>
-        <Typography variant="navigation" component="div" color="grey_1" className="title">
-          {title}
-        </Typography>
+        {title && (
+          <Typography variant="navigation" component="div" color="grey_1" className="title">
+            {title}
+          </Typography>
+        )}
       </div>
       <Typography
         variant="subtitle2"

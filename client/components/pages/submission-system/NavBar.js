@@ -8,7 +8,13 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import useEgoToken from 'global/hooks/useEgoToken';
-import { decodeToken, canReadProgram, isRdpcMember, canReadSomeProgram } from 'global/utils/egoJwt';
+import {
+  decodeToken,
+  canReadProgram,
+  isRdpcMember,
+  canReadSomeProgram,
+  isDccMember,
+} from 'global/utils/egoJwt';
 import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
@@ -58,6 +64,15 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
   })();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
+  const userRole = !egoJwt
+    ? null
+    : isDccMember(egoJwt)
+    ? 'DCC Member'
+    : isRdpcMember(egoJwt)
+    ? 'RDPC user'
+    : canReadSomeProgram(egoJwt)
+    ? 'Program member'
+    : null;
 
   return (
     <AppBar
@@ -96,7 +111,7 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
               <UserBadge
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
-                title={'Some Role'}
+                title={userRole}
               />
             </MenuItem>
           )}
