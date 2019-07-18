@@ -1,5 +1,4 @@
 // @flow
-
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
@@ -25,6 +24,7 @@ import Toast from 'uikit/notifications/Toast';
 import Portal from 'uikit/Portal';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
+import Fade from 'uikit/transitions/Fade';
 
 /**
  * @todo: actually fix this Minh!
@@ -224,8 +224,8 @@ function Users({ users }) {
           onActionClick={handleActionClick}
         />
       )}
-      {isToastOpen && (
-        <Portal selector="body">
+      <Portal selector="body">
+        <Fade in={isToastOpen}>
           <Toast
             variant="SUCCESS"
             title=""
@@ -233,8 +233,8 @@ function Users({ users }) {
             content={`The email invitation has been resent to ${user ? user.name : ''}`}
             onInteraction={handleToastInteraction}
           />
-        </Portal>
-      )}
+        </Fade>
+      </Portal>
     </div>
   );
 }

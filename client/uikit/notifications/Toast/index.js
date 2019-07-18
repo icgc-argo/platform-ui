@@ -14,8 +14,8 @@ function Toast({
   content,
   onInteraction,
   setOpen,
-  right = '70px',
-  top = '30px',
+  top = '70px',
+  right = '30px',
   width = '400px',
 }) {
   // hide after 8 seconds
