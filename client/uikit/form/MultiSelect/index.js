@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from 'uikit';
+import { styled, css } from '../..';
 import Icon from '../../Icon';
 import Option from './Option';
 import _ from 'lodash';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled, css } from 'uikit';
+import { styled, css } from '..';
 
 const defaultLabelStyle = ({ selected, theme }) => css`
   & > .MenuItemContent {

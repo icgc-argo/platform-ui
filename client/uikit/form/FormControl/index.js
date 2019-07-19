@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
-import { css } from 'uikit';
+import { css } from '../..';
 
 const FormControl = React.forwardRef(function FormControl(
   {

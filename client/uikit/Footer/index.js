@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from 'uikit';
+import { styled, css } from '..';
 import Icon from '../Icon';
 import icgcLogo from '../assets/icgc_logo.svg';
 import { Row, Col, Container as GridContainer } from 'react-grid-system';

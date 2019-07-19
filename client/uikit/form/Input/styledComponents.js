@@ -1,4 +1,4 @@
-import { styled } from 'uikit';
+import { styled } from '../..';
 import { css } from '@emotion/core';
 
 export { StyledInputWrapper } from '../common';

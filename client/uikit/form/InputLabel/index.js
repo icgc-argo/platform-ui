@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControlContext from '../FormControl/FormControlContext';
-import { styled, css } from 'uikit';
+import { styled, css } from '../..';
 import clsx from 'clsx';
 import Icon from '../../Icon';
 import _ from 'lodash';

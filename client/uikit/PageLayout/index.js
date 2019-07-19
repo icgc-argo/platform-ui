@@ -1,4 +1,4 @@
-import { styled, css } from 'uikit';
+import { styled, css } from '..';
 import Container from '../Container';
 
 export const PageContainer = styled('div')`

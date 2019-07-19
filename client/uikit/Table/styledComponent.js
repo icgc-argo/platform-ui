@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled, css } from 'uikit';
+import { styled, css } from '..';
 import ReactTable from 'react-table';
 
 import reactTableDefaultStyle from './reactTableDefaultStyle';

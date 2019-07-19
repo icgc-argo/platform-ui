@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from 'uikit';
+import { styled } from '../..';
 import { withProps } from 'recompose';
 
 import Icon from '../../Icon';

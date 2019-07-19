@@ -1,4 +1,4 @@
-import { styled } from 'uikit';
+import { styled } from '..';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';

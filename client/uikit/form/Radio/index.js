@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from 'uikit';
+import { styled, css } from '../..';
 
 /*
  * :before
