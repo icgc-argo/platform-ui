@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import css from '@emotion/css';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 
 import Typography from '../../Typography';
 import useTheme from '../../utils/useTheme';

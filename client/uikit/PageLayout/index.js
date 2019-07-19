@@ -1,5 +1,5 @@
 import css from '@emotion/css';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 import Container from '../Container';
 
 export const PageContainer = styled('div')`

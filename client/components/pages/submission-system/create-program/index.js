@@ -1,6 +1,6 @@
 import React from 'react';
 import css from '@emotion/css';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
 import CreateProgramForm from './CreateProgramForm';

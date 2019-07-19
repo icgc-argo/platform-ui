@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 import Button from '../index';
 import Icon from '../../Icon';
 import css from '@emotion/css';

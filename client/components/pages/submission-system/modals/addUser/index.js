@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 import Modal from 'uikit/Modal';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';

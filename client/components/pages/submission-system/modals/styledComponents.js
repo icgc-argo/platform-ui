@@ -3,7 +3,7 @@ import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect from 'uikit/form/MultiSelect';
 import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
-import styled from '@emotion/styled';
+import { styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
