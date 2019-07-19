@@ -23,9 +23,32 @@ import Modal from 'uikit/Modal';
  */
 const modalPortalRef = React.createRef();
 
+const useMounted = () => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  return mounted;
+};
+
 export const ModalPortal = ({ children }: { children: React.Node }) => {
   const ref = modalPortalRef.current;
-  return ref ? ReactDOM.createPortal(<Modal.Overlay>{children}</Modal.Overlay>, ref) : null;
+  const mounted = useMounted();
+  return ref
+    ? ReactDOM.createPortal(
+        <div
+          css={css`
+            transition: all 0.2s;
+            height: 100vh;
+            width: 100vw;
+            opacity: ${mounted ? 1 : 0};
+          `}
+        >
+          <Modal.Overlay>{children}</Modal.Overlay>
+        </div>,
+        ref,
+      )
+    : null;
 };
 
 const SubmissionLayout = ({
@@ -63,7 +86,8 @@ const SubmissionLayout = ({
       </PageFooter>
       <div
         css={css`
-          position: absolute;
+          position: fixed;
+          z-index: 9999;
         `}
         ref={modalPortalRef}
       />
