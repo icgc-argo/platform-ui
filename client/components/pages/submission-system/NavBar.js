@@ -87,7 +87,7 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
               active={path.search(SUBMISSION_PATH) === 0}
               DomComponent={props => (
                 <Link
-                  href={getDefaultRedirectPathForUser(egoJwt)}
+                  href={getDefaultRedirectPathForUser(egoJwt, true)}
                   as={getDefaultRedirectPathForUser(egoJwt)}
                 >
                   <a {...props}>

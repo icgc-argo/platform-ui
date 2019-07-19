@@ -19,7 +19,10 @@ import {
   getReadableProgramShortNames,
 } from './egoJwt';
 
-export const getDefaultRedirectPathForUser = (egoJwt: string): string => {
+export const getDefaultRedirectPathForUser = (
+  egoJwt: string,
+  useStatic: boolean = false,
+): string => {
   if (isDccMember(egoJwt)) {
     return PROGRAMS_LIST_PATH;
   } else if (isRdpcMember(egoJwt)) {
@@ -27,7 +30,9 @@ export const getDefaultRedirectPathForUser = (egoJwt: string): string => {
   } else if (canReadSomeProgram(egoJwt)) {
     const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
     const orderedProgramShortNames = orderBy(readableProgramShortNames);
-    return PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, orderedProgramShortNames[0]);
+    return egoJwt
+      ? PROGRAM_DASHBOARD_PATH
+      : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, orderedProgramShortNames[0]);
   } else {
     return USER_PAGE_PATH;
   }
