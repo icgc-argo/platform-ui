@@ -35,16 +35,22 @@ export default function LoginPage() {
           <div>
             <img width="380px" alt="" src="/static/argo.svg" />
           </div>
-          <div>
+          <div
+            css={css`
+              margin: 0 10px;
+            `}
+          >
             <Typography
               variant="hero"
               bold
+              color="primary"
               css={css`
                 width: 100%;
                 margin: 28px 0 25px 0;
+                font-weight: normal;
               `}
             >
-              Now open for Data Submission!
+              Now Open for Data Submission!
             </Typography>
           </div>
           <div>
@@ -79,12 +85,22 @@ export default function LoginPage() {
               >
                 Get started with Data Submission
               </Typography>
-              <Typography component="div">
-                • <a href="">Register for DACO access</a> in order to submit data.
-              </Typography>
-              <Typography component="div">
-                • Our <a href="">documentation</a> outlines the submission process.
-              </Typography>
+              <ul
+                css={css`
+                  padding-left: 18px;
+                `}
+              >
+                <li>
+                  <Typography component="div">
+                    <a href="">Register for DACO access</a> in order to submit data.
+                  </Typography>
+                </li>
+                <li>
+                  <Typography component="div">
+                    Our <a href="">documentation</a> outlines the submission process.
+                  </Typography>
+                </li>
+              </ul>
             </div>
           </Container>
         </div>
@@ -117,6 +133,7 @@ export default function LoginPage() {
                 color="white"
                 css={css`
                   margin: 0 50px;
+                  line-height: 42px;
                 `}
               >
                 ICGC ARGO aims to analyze specimens from cancer patients with{' '}
