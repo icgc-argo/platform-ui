@@ -1,4 +1,4 @@
-import css from '@emotion/css';
+import { css } from 'uikit';
 import {
   CANCER_TYPES,
   COUNTRIES,

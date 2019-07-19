@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { RadioCheckboxWrapper, StyledGroup } from '../common';
 import Checkbox from '../Checkbox';
-import css from '@emotion/css';
+import { css } from 'uikit';
 import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
 /**

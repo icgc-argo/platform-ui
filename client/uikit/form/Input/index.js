@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper } from '../common';
 import { StyledInput, IconWrapper } from './styledComponents';
 import FormControlContext from '../FormControl/FormControlContext';
-import css from '@emotion/css';
+import { css } from 'uikit';
 
 export const INPUT_PRESETS = {
   DEFAULT: 'default',

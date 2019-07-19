@@ -1,6 +1,5 @@
 import React from 'react';
-import { styled } from 'uikit';
-import css from '@emotion/css';
+import { styled, css } from 'uikit';
 /* import PropTypes from 'prop-types'; */
 
 const Tag = styled('div')`
