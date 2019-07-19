@@ -39,13 +39,11 @@ const AddUserModal = ({ onSubmit, dismissModal }) => {
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      const result = sendAddUser(validData);
+      const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
   };
-
-  const sendAddUser = validData => onSubmit(validData);
 
   const addSection = async () => {
     // check if last section is blank
