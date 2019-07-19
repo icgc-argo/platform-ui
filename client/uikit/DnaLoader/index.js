@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled-base';
-import { css } from 'uikit';
-
+import { styled, css } from 'uikit';
 import { range } from 'lodash';
 
 const LoaderContainer = styled('div')`
