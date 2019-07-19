@@ -71,6 +71,9 @@ const defaultStyle = props => css`
 `;
 
 export const MenuItemContainer = styled('div')`
+  & a {
+    text-decoration: none;
+  }
   ${({ level, ...rest }) =>
     level === 1
       ? level1Style(rest)
