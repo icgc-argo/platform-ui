@@ -8,12 +8,6 @@ module.exports = async ({ config }) => {
 
   config.resolve.modules.push(path.resolve(__dirname, '../'));
 
-  config.module.rules.push({
-    test: /\.(graphql|gql)$/,
-    exclude: /node_modules/,
-    loader: 'graphql-tag/loader',
-  });
-
   // Return the altered config
   return config;
 };

@@ -89,7 +89,6 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.0.1",
-    "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
     "husky": "^2.2.0",
     "inquirer": "^6.3.1",
