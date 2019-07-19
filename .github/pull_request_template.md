@@ -14,7 +14,6 @@ Please add a brief description of the changes here.
 * font size, weight, colour
 * spelling has been double checked
 - [ ] New uikit components have Storybook stories
-- [ ] Verified feature is minimally responsive (smaller browser size, respondes when page is being resized).
+- [ ] Feature is minimally responsive.
 - [ ] Manual testing of UI feature.
 - [ ] Selenium test is completed and passing.
-
