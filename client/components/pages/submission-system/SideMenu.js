@@ -171,13 +171,7 @@ export default () => {
   const canSeeDcc = isDcc;
 
   return (
-    <Submenu
-      css={css`
-        & a {
-          text-decoration: none;
-        }
-      `}
-    >
+    <Submenu>
       {canOnlyAccessOneProgram ? (
         loading ? (
           <Loader />
