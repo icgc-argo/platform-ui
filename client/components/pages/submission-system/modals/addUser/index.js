@@ -5,11 +5,10 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import css from '@emotion/css';
-
 import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
-import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
+import { UserModel } from '../common';
 
 const AddSection = styled(Button)`
   text-transform: uppercase;
@@ -17,7 +16,7 @@ const AddSection = styled(Button)`
   margin-top: 14px;
 `;
 
-const AddUserModal = ({ dismissModal }) => {
+const AddUserModal = ({ onSubmit, dismissModal }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -40,8 +39,7 @@ const AddUserModal = ({ dismissModal }) => {
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      console.log(validData);
-      // Send data
+      const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
@@ -83,7 +81,6 @@ const AddUserModal = ({ dismissModal }) => {
             validateField={key => validateField({ key, index: currentIndex })}
             errors={validationErrors[currentIndex]}
             deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
-            showDelete
           />
         );
       })}

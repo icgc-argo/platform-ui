@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { PROGRAM_MEMBERSHIP_TYPES } from '../../../../global/constants/index';
+import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
 
 const testGsuite = async email => {
   // await fetch......
