@@ -26,12 +26,13 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import * as yup from 'yup';
-// $FlowFixMe .gql file not supported
-import { CREATE_PROGRAM_MUTATION, UPDATE_PROGRAM_MUTATION } from './mutations.gql';
 import createProgramSchema, { updateProgramSchema } from './validation';
 import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
+
+import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
+import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -65,8 +66,23 @@ const handleCheckboxGroupChange = (selectedItems, setter) => value => {
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-
-const createProgramInput = formData => ({
+type CreateProgramFormData = {
+  programName: string;
+  shortName: string;
+  description: string;
+  commitmentLevel: string;
+  website: string;
+  institutions: string[];
+  countries: string[];
+  processingRegions: string[];
+  membershipType: string;
+  adminEmail: string;
+  adminFirstName: string;
+  adminLastName: string;
+  cancerTypes: string;
+  primarySites: string;
+};
+const createProgramInput = (formData: CreateProgramFormData) => ({
   name: formData.programName,
   shortName: formData.shortName,
   description: formData.description,
@@ -107,7 +123,13 @@ const createUpdateProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-export default function CreateProgramForm({ noCancel = false, program = {} }) {
+export default function CreateProgramForm({
+  noCancel = false,
+  program = {},
+}: {
+  noCancel?: boolean;
+  program: any;
+}) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
@@ -130,7 +152,7 @@ export default function CreateProgramForm({ noCancel = false, program = {} }) {
   const [adminLastName, setAdminLastName] = React.useState('');
   const [adminEmail, setAdminEmail] = React.useState('');
 
-  const [validationErrors, setValidationErrors] = React.useState({});
+  const [validationErrors, setValidationErrors] = React.useState<{ [k: string]: any }>({});
 
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
@@ -138,7 +160,7 @@ export default function CreateProgramForm({ noCancel = false, program = {} }) {
    * Form Submission
    * **************** */
 
-  const formData = {
+  const formData: CreateProgramFormData = {
     programName,
     shortName,
     countries,
@@ -155,10 +177,10 @@ export default function CreateProgramForm({ noCancel = false, program = {} }) {
     adminEmail,
   };
 
-  let validData = { ...formData };
+  let validData: typeof formData = { ...formData };
 
-  const validateForm = async () => {
-    return await new Promise((resolve, reject) => {
+  const validateForm = (formData: CreateProgramFormData): Promise<CreateProgramFormData> => {
+    return new Promise((resolve, reject) => {
       programSchema
         .validate(formData, { abortEarly: false, stripUnknown: true })
         .then(data => {
@@ -177,7 +199,7 @@ export default function CreateProgramForm({ noCancel = false, program = {} }) {
     });
   };
 
-  const submitForm = async formData => {
+  const submitForm = async (formData: CreateProgramFormData) => {
     try {
       validData = await validateForm(formData);
 
