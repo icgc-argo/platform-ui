@@ -6,7 +6,7 @@ import _ from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import { Col, Row } from 'react-grid-system';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
@@ -22,27 +22,12 @@ import SubmissionLayout, { ModalPortal } from '../layout';
 import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
-import { useMutation } from 'react-apollo-hooks';
 
-/*
 const useSubmitFormHook = ({ gql }) => {
-  const [triggerMutation, { loading }] = useMutation(gql);
-  const triggerSubmit = data => triggerMutation({ variables: data });
+  const [triggerMutation, rest] = useMutation(gql);
 
-  return [triggerSubmit];
+  return [triggerMutation];
 };
-*/
-
-//const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
-/*
-<AddUserModal
-  onSubmit={validData => {
-    triggerInvite({
-      variables: { user: createUserInput(validData) },
-    });
-  }}
-/>;
-*/
 
 /**
  * @todo: actually fix this Minh!
@@ -80,9 +65,8 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
     userRole: data.role,
   });
 
-  //const [triggerSubmit] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
   const [showModal, setShowModal] = React.useState(false);
-  const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
+  const [triggerInvite] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
 
   return (
     <SubmissionLayout
@@ -156,11 +140,11 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
         {showModal && (
           <ModalPortal>
             <AddUserModal
-              onSubmit={validData => {
+              onSubmit={validData =>
                 triggerInvite({
                   variables: { user: createUserInput(validData) },
-                });
-              }}
+                })
+              }
               dismissModal={() => setShowModal(false)}
             />
           </ModalPortal>
