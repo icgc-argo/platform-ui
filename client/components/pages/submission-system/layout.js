@@ -38,11 +38,9 @@ export const ModalPortal = ({ children }: { children: React.Node }) => {
     ? ReactDOM.createPortal(
         <div
           css={css`
-            position: absolute;
+            transition: all 0.2s;
             height: 100vh;
             width: 100vw;
-            z-index: 9999;
-            transition: all 0.2s;
             opacity: ${mounted ? 1 : 0};
           `}
         >
@@ -88,7 +86,8 @@ const SubmissionLayout = ({
       </PageFooter>
       <div
         css={css`
-          position: absolute;
+          position: fixed;
+          z-index: 9999;
         `}
         ref={modalPortalRef}
       />
