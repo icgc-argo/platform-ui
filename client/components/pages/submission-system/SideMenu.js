@@ -3,6 +3,7 @@ import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
+import Router from 'next/router';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -130,7 +131,11 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
       {token && isDccMember(token) && (
         <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <a>
-            <MenuItem level={2} content={'All Programs'} />
+            <MenuItem
+              level={2}
+              content={'All Programs'}
+              selected={Router.route === PROGRAMS_LIST_PATH}
+            />
           </a>
         </Link>
       )}
