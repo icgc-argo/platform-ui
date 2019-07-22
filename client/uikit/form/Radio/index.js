@@ -72,7 +72,7 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const Radio = ({ value, disabled, checked, onChange }) => {
+const Radio = ({ value, disabled, checked, onChange, ...props }) => {
   const HiddenRadioRef = React.createRef();
 
   return (
@@ -83,6 +83,7 @@ const Radio = ({ value, disabled, checked, onChange }) => {
         checked={checked}
         disabled={disabled}
         aria-checked={checked}
+        aria-label={props['aria-label']}
         onChange={onChange}
       />
       <div

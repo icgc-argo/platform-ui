@@ -81,7 +81,7 @@ export const StyledCheckbox = styled('div')`
 /*
  * Basic checkbox input
  */
-const Checkbox = ({ checked, disabled, onChange }) => {
+const Checkbox = ({ checked, disabled, onChange, ...props }) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
@@ -92,6 +92,7 @@ const Checkbox = ({ checked, disabled, onChange }) => {
         checked={checked}
         disabled={disabled}
         onChange={onChange}
+        aria-label={props['aria-label']}
       />
       <div
         className="checkbox"
