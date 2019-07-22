@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
-import { css } from '../..';
+import css from '@emotion/css';
 
 const FormControl = React.forwardRef(function FormControl(
   {

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControlContext from '../FormControl/FormControlContext';
-import { styled, css } from '../..';
+import styled from '@emotion/styled';
 import clsx from 'clsx';
+import css from '@emotion/css';
 import _ from 'lodash';
 
 const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {

@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { css } from '..';
+import css from '@emotion/css';
 
 import AppBar, { MenuItem } from '../AppBar';
 import Typography from '../Typography';

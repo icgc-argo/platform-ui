@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from '../../';
+import styled from '@emotion/styled';
 import Button from '../index';
 import Icon from '../../Icon';
+import css from '@emotion/css';
 import useTheme from '../../utils/useTheme';
 
 /**

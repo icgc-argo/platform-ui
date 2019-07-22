@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from '..';
+import styled from '@emotion/styled';
 import Icon from '../Icon';
 import icgcLogo from '../assets/icgc_logo.svg';
+import css from '@emotion/css';
 import { Row, Col, Container as GridContainer } from 'react-grid-system';
 import A from '../Link';
 

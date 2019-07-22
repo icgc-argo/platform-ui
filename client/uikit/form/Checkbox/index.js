@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '../..';
+import styled from '@emotion/styled';
 
 /**
  * Checkbox styles
