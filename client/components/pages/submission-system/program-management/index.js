@@ -17,8 +17,8 @@ import SubmissionLayout, { ModalPortal } from '../layout';
 import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
-import Users from './';
-import ProfileView from './';
+import Users from './Users';
+import Profile from './Profile';
 
 const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
@@ -44,6 +44,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
     variables: { shortName },
   });
+
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
   const [activeTab, setActiveTab] = React.useState(
     defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
@@ -130,7 +131,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
                 {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
               </div>
             ) : (
-              <ProfileView program={program} />
+              <Profile program={program} />
             ))}
         </ContentBox>
         {showModal && (
