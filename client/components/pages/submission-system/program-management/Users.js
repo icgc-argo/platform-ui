@@ -6,6 +6,8 @@ import Toast from 'uikit/notifications/Toast';
 import Portal from 'uikit/Portal';
 import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
+import EditUserModal from '../modals/editUser';
+import { ModalPortal } from '../layout';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
@@ -48,6 +50,15 @@ const Users = ({ users }) => {
       setIsToastOpen(false);
     }
   };
+  const initialState = { selectedUser: null, showModal: false };
+  const reducer = (state, action) => {
+    console.log('reducer', state, action);
+    return action.showModal
+      ? { selectedUser: action.user, showModal: true }
+      : { selectedUser: null, showModal: false };
+  };
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const { showModal, selectedUser } = state;
 
   return (
     <div>
@@ -80,6 +91,16 @@ const Users = ({ users }) => {
           />
         </Fade>
       </Portal>
+
+      {showModal && (
+        <ModalPortal>
+          <EditUserModal
+            user={selectedUser}
+            onSubmit={validData => console.log('validate data', validData)}
+            dismissModal={() => dispatch({ showModal: false })}
+          />
+        </ModalPortal>
+      )}
     </div>
   );
 };

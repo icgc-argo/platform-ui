@@ -5,7 +5,7 @@ import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
-const EditUserModal = ({ user }) => {
+const EditUserModal = ({ user, dismissModal }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -33,6 +33,8 @@ const EditUserModal = ({ user }) => {
       cancelText="Cancel"
       onActionClick={() => submitForm()}
       actionDisabled={!touched || hasErrors}
+      onCancelClick={dismissModal}
+      onCloseClick={dismissModal}
     >
       <UserSection
         user={form[0]}
