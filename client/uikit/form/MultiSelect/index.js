@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
+import { styled, css } from '../..';
 import Icon from '../../Icon';
 import Option from './Option';
-import css from '@emotion/css';
 import _ from 'lodash';
 import Tag from '../../Tag';
 import useTheme from '../../utils/useTheme';

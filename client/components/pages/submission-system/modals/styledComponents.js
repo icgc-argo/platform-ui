@@ -3,12 +3,11 @@ import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect from 'uikit/form/MultiSelect';
 import Input from 'uikit/form/Input';
 import FormControl from 'uikit/form/FormControl';
-import styled from '@emotion/styled';
+import { styled, css } from 'uikit';
 import Icon from 'uikit/Icon';
 import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
-import css from '@emotion/css';
 import PropTypes from 'prop-types';
 
 import { Row, Col } from 'react-grid-system';

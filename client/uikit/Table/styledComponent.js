@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import css from '@emotion/css';
+import { styled, css } from '..';
 import ReactTable from 'react-table';
 
 import reactTableDefaultStyle from './reactTableDefaultStyle';
