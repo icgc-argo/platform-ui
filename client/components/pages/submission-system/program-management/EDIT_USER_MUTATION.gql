@@ -1,4 +1,4 @@
-mutation INVITE_USER_MUTATION($user: InviteUserInput!) {
+mutation EDIT_USER_MUTATION($user: InviteUserInput!) {
   updateUser(user: $user) {
     programShortName
     userFirstName
