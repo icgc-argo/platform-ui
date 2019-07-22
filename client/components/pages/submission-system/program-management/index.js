@@ -5,7 +5,7 @@ import _ from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import { Col, Row } from 'react-grid-system';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
@@ -26,11 +26,19 @@ import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
 import Fade from 'uikit/transitions/Fade';
 
+const useSubmitFormHook = ({ gql }) => {
+  const [triggerMutation, rest] = useMutation(gql);
+
+  return [triggerMutation];
+};
+
 /**
  * @todo: actually fix this Minh!
  */
 // $FlowFixMe .gql file not supported
-import { programQuery } from './queries.gql';
+import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
+// $FlowFixMe .gql file not supported
+import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
@@ -40,7 +48,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
 
   const { shortName } = router.query;
   const { tab: defaultTab } = router.query;
-  const { data: { program } = {}, loading, errors } = useQuery(programQuery, {
+  const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
     variables: { shortName },
   });
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -52,7 +60,16 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
     setActiveTab(newValue);
   }
 
+  const createUserInput = data => ({
+    programShortName: shortName,
+    userFirstName: data.firstName,
+    userLastName: data.lastName,
+    userEmail: data.email,
+    userRole: data.role,
+  });
+
   const [showModal, setShowModal] = React.useState(false);
+  const [triggerInvite] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
 
   return (
     <SubmissionLayout
@@ -125,7 +142,14 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
         </ContentBox>
         {showModal && (
           <ModalPortal>
-            <AddUserModal dismissModal={() => setShowModal(false)} />
+            <AddUserModal
+              onSubmit={validData =>
+                triggerInvite({
+                  variables: { user: createUserInput(validData) },
+                })
+              }
+              dismissModal={() => setShowModal(false)}
+            />
           </ModalPortal>
         )}
       </>

@@ -5,7 +5,7 @@ import Router from 'next/router';
 import useEgoToken from 'global/hooks/useEgoToken';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { getRedirectPathForUser } from 'global/utils/pages';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import { createPage } from 'global/utils/pages';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
@@ -25,7 +25,7 @@ export default createPage({ isPublic: true })(() => {
         localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
         Router.replace(currentRedirect);
       } else {
-        Router.replace(getRedirectPathForUser(token));
+        Router.replace(getDefaultRedirectPathForUser(token));
       }
     }
   });

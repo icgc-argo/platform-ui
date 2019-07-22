@@ -1,4 +1,4 @@
-query programQuery($shortName: String!) {
+query PROGRAM_QUERY($shortName: String!) {
   program(shortName: $shortName) {
     name
     shortName
