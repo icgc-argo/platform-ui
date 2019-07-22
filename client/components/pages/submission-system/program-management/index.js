@@ -155,6 +155,8 @@ const FAKE_USERS = [
   {
     id: '1',
     name: 'Homer Simpson',
+    firstName: 'Homer',
+    lastName: 'Simpson',
     email: 'test@email.com',
     role: 'ADMINISTRATOR',
     isDacoApproved: true,
@@ -164,6 +166,8 @@ const FAKE_USERS = [
   {
     id: '2',
     name: 'Bart Simpson',
+    firstName: 'Bart',
+    lastName: 'Simpson',
     email: 'test@email.com',
     role: 'ADMINISTRATOR',
     isDacoApproved: true,
@@ -173,6 +177,8 @@ const FAKE_USERS = [
   {
     id: '3',
     name: 'Lisa Simpson',
+    firstName: 'Lisa',
+    lastName: 'Simpson',
     email: 'test@email.com',
     role: 'ADMINISTRATOR',
     isDacoApproved: true,

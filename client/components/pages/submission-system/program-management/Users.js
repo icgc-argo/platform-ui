@@ -75,6 +75,10 @@ const Users = ({ users, shortName }) => {
         onUserDeleteClick={console.log}
         onUserEditClick={console.log}
         onUserResendInviteClick={handleResendEmailClick}
+        onUserEditClick={({ user }) => {
+          dispatch({ showModal: true, user });
+        }}
+        onUserResendInviteClick={console.log}
       />
       {isResendEmailModalOpen && (
         <ResendEmailModal

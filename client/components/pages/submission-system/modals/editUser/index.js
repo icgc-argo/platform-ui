@@ -5,7 +5,7 @@ import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
-const EditUserModal = ({ user, dismissModal }) => {
+const EditUserModal = ({ user, dismissModal, onSubmit }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -19,8 +19,7 @@ const EditUserModal = ({ user, dismissModal }) => {
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      console.log(validData);
-      // Send data
+      const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
