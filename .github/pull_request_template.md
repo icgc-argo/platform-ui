@@ -3,6 +3,7 @@
 Please add a brief description of the changes here.
 
 **Type of Change**
+
 - [ ] Bug
 - [ ] Styling
 - [ ] New Feature
@@ -10,9 +11,11 @@ Please add a brief description of the changes here.
 **Checklist before requesting review:**
 
 - [ ] Matches deisgn:
+
 * component sizes, spacing, and styless
 * font size, weight, colour
 * spelling has been double checked
+
 - [ ] New uikit components have Storybook stories
 - [ ] Feature is minimally responsive.
 - [ ] Manual testing of UI feature.

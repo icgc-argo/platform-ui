@@ -55,6 +55,7 @@ const Notification = ({
   icon = <DefaultIcon variant={variant} size={size} />,
   onInteraction = ({ type, event }) => {},
   noShadow = false,
+  ...otherProps
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
@@ -71,7 +72,7 @@ const Notification = ({
     [NOTIFICATION_SIZES.SM]: '0px',
   }[size];
   return (
-    <NotificationContainer variant={variant} noShadow={noShadow}>
+    <NotificationContainer variant={variant} noShadow={noShadow} {...otherProps}>
       {icon && <IconContainer>{icon}</IconContainer>}
       <NotificationBodyContainer>
         {title && (

@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import PropTypes from 'prop-types';
 import Color from 'color';
 
@@ -7,6 +9,7 @@ import Typography from '../Typography';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from '../Button';
 import Icon, { ICON_NAMES } from '../Icon';
 import FocusWrapper from '../FocusWrapper';
+import Portal from '../Portal';
 
 const ModalContainer = styled('div')`
   position: relative;
@@ -39,8 +42,12 @@ const ButtonContainer = styled('div')`
   flex-direction: row;
 `;
 const ModalOverlay = styled('div')`
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,8 +155,12 @@ const Modal = ({
   </ModalContainer>
 );
 
-Modal.Overlay = function Overlay(props) {
-  return <ModalOverlay {...props} />;
+Modal.Overlay = props => {
+  return (
+    <Portal selector="body">
+      <ModalOverlay {...props} />
+    </Portal>
+  );
 };
 
 Modal.propTypes = {

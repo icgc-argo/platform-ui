@@ -1,5 +1,4 @@
 // @flow
-
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import _ from 'lodash';
@@ -12,6 +11,7 @@ import { css } from 'uikit';
 import Button from 'uikit/Button';
 import InputLabel from 'uikit/form/InputLabel';
 import Icon from 'uikit/Icon';
+import Modal from 'uikit/Modal';
 import { ContentBox } from 'uikit/PageLayout';
 import { TableActionBar } from 'uikit/Table';
 import Tabs, { Tab } from 'uikit/Tabs';
@@ -20,8 +20,11 @@ import Typography from 'uikit/Typography';
 import CreateProgramForm from '../create-program/CreateProgramForm';
 import SubmissionLayout, { ModalPortal } from '../layout';
 import UsersTable from './UsersTable';
+import Toast from 'uikit/notifications/Toast';
+import Portal from 'uikit/Portal';
 import { isDccMember } from 'global/utils/egoJwt';
 import useTheme from 'uikit/utils/useTheme';
+import Fade from 'uikit/transitions/Fade';
 
 const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
@@ -185,20 +188,80 @@ const FAKE_USERS = [
   },
 ];
 
-const Users = ({ users }) => (
-  <div>
-    <TableActionBar>{users.length} results</TableActionBar>
-    <UsersTable
-      users={users}
-      /**
-       * @todo: actually implement these functions
-       */
-      onUserDeleteClick={console.log}
-      onUserEditClick={console.log}
-      onUserResendInviteClick={console.log}
-    />
-  </div>
-);
+function ResendEmailModal({ user, ...otherProps }) {
+  return (
+    <Modal.Overlay>
+      <Modal
+        title="Resend Invitation?"
+        actionButtonText="RESEND INVITATION"
+        cancelText="CANCEL"
+        {...otherProps}
+      >
+        <div style={{ width: '322px' }}>
+          Are you sure you want to resend the email invitation to{' '}
+          <strong>{user ? user.name : ''}</strong>?
+        </div>
+      </Modal>
+    </Modal.Overlay>
+  );
+}
+
+function Users({ users }) {
+  const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
+  const [isToastOpen, setIsToastOpen] = React.useState(false);
+  const [user, setUser] = React.useState(null);
+
+  const handleModalCancelClick = () => {
+    setIsResendEmailModalOpen(false);
+  };
+
+  const handleResendEmailClick = ({ user }) => {
+    setUser(user);
+    setIsResendEmailModalOpen(true);
+  };
+
+  const handleActionClick = () => {
+    setIsResendEmailModalOpen(false);
+    setIsToastOpen(true);
+  };
+
+  const handleToastInteraction = ({ type, event }) => {
+    if (type === 'CLOSE') {
+      setIsToastOpen(false);
+    }
+  };
+
+  return (
+    <div>
+      <TableActionBar>{users.length} results</TableActionBar>
+      <UsersTable
+        users={users}
+        onUserResendInviteClick={handleResendEmailClick}
+        onUserDeleteClick={() => {}}
+        onUserEditClick={() => {}}
+      />
+      {isResendEmailModalOpen && (
+        <ResendEmailModal
+          user={user}
+          onCancelClick={handleModalCancelClick}
+          onCloseClick={handleModalCancelClick}
+          onActionClick={handleActionClick}
+        />
+      )}
+      <Portal selector="body">
+        <Fade in={isToastOpen}>
+          <Toast
+            variant="SUCCESS"
+            title=""
+            setOpen={setIsToastOpen}
+            content={`The email invitation has been resent to ${user ? user.name : ''}`}
+            onInteraction={handleToastInteraction}
+          />
+        </Fade>
+      </Portal>
+    </div>
+  );
+}
 
 function ProfileView({ program = {} }) {
   const theme = useTheme();
