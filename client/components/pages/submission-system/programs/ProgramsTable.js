@@ -47,10 +47,6 @@ export default (tableProps: {
     headerStyle?: {},
   }> = [
     {
-      Header: 'Program Name',
-      accessor: 'name',
-    },
-    {
       Header: 'Short Name',
       accessor: 'shortName',
       Cell: ({ original }) => (
@@ -58,6 +54,10 @@ export default (tableProps: {
           <A>{original.shortName}</A>
         </Link>
       ),
+    },
+    {
+      Header: 'Program Name',
+      accessor: 'name',
     },
     {
       Header: 'Cancer Types',
