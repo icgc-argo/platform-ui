@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { css } from '..';
+import css from '@emotion/css';
 import { number, select } from '@storybook/addon-knobs';
 
 import defaultTheme from '../theme/defaultTheme';

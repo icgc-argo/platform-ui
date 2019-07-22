@@ -1,4 +1,4 @@
-import { styled } from '../..';
+import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
 export { StyledInputWrapper } from '../common';

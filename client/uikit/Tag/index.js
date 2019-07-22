@@ -1,5 +1,6 @@
 import React from 'react';
-import { styled, css } from '..';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 /* import PropTypes from 'prop-types'; */
 
 const Tag = styled('div')`

@@ -1,4 +1,5 @@
-import { styled, css } from '..';
+import css from '@emotion/css';
+import styled from '@emotion/styled';
 import Container from '../Container';
 
 export const PageContainer = styled('div')`

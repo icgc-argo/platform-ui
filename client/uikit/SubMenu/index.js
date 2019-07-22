@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styled, css } from '..';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';

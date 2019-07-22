@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '../..';
+import styled from '@emotion/styled';
 import { withProps } from 'recompose';
 
 import Icon from '../../Icon';

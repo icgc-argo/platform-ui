@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { styled, css } from 'uikit';
+import styled from '@emotion/styled';
 import Modal from 'uikit/Modal';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
+import css from '@emotion/css';
 import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
 import useFormHook from '../useFormHook';

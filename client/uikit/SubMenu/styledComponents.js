@@ -1,5 +1,6 @@
 import React from 'react';
-import { styled, css } from '..';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 const defaultLabelStyle = ({ selected, theme }) => css`
   & > .MenuItemContent {

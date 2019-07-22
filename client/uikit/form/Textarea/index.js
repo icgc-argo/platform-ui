@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import useTheme from '../../utils/useTheme';
 
-import { css } from '../..';
+import css from '@emotion/css';
 import FormControlContext from '../FormControl/FormControlContext';
 
 const Textarea = ({ error, disabled, className, ...props }) => {

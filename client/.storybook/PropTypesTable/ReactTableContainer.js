@@ -1,4 +1,4 @@
-import { styled } from 'uikit';
+import styled from '@emotion/styled';
 
 export default styled('div')`
   .ReactTable {
