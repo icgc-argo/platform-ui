@@ -1,4 +1,3 @@
-// @flow
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import isEmpty from 'lodash/isEmpty';
@@ -20,11 +19,19 @@ import useTheme from 'uikit/utils/useTheme';
 import Users from './Users';
 import Profile from './Profile';
 
-const useSubmitFormHook = ({ gql }) => {
+export const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
 
   return [triggerMutation];
 };
+
+export const createUserInput = ({ data, shortName }) => ({
+  programShortName: shortName,
+  userFirstName: data.firstName,
+  userLastName: data.lastName,
+  userEmail: data.email,
+  userRole: data.role,
+});
 
 /**
  * @todo: actually fix this Minh!
@@ -53,14 +60,6 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
   }
-
-  const createUserInput = data => ({
-    programShortName: shortName,
-    userFirstName: data.firstName,
-    userLastName: data.lastName,
-    userEmail: data.email,
-    userRole: data.role,
-  });
 
   const [showModal, setShowModal] = React.useState(false);
   const [triggerInvite] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
@@ -118,7 +117,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
               )}
             </Tab>
           </Tabs>
-          {activeTab === TABS.USERS && <Users users={FAKE_USERS} />}
+          {activeTab === TABS.USERS && <Users shortName={shortName} users={FAKE_USERS} />}
           {activeTab === TABS.PROFILE &&
             (isDcc ? (
               <div
@@ -139,7 +138,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             <AddUserModal
               onSubmit={validData =>
                 triggerInvite({
-                  variables: { user: createUserInput(validData) },
+                  variables: { user: createUserInput({ data: validData, shortName }) },
                 })
               }
               dismissModal={() => setShowModal(false)}

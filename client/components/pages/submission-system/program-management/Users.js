@@ -8,6 +8,8 @@ import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
 import EditUserModal from '../modals/editUser';
 import { ModalPortal } from '../layout';
+import { useSubmitFormHook, createUserInput } from './';
+import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
@@ -26,6 +28,7 @@ function ResendEmailModal({ user, ...otherProps }) {
     </Modal.Overlay>
   );
 }
+
 const Users = ({ users }) => {
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
   const [isToastOpen, setIsToastOpen] = React.useState(false);
@@ -50,15 +53,16 @@ const Users = ({ users }) => {
       setIsToastOpen(false);
     }
   };
+const Users = ({ users, shortName }) => {
   const initialState = { selectedUser: null, showModal: false };
-  const reducer = (state, action) => {
-    console.log('reducer', state, action);
-    return action.showModal
+  const reducer = (state, action) =>
+    action.showModal
       ? { selectedUser: action.user, showModal: true }
       : { selectedUser: null, showModal: false };
-  };
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const { showModal, selectedUser } = state;
+  const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
 
   return (
     <div>
@@ -96,7 +100,11 @@ const Users = ({ users }) => {
         <ModalPortal>
           <EditUserModal
             user={selectedUser}
-            onSubmit={validData => console.log('validate data', validData)}
+            onSubmit={validData =>
+              triggerEdit({
+                variables: { user: createUserInput({ data: validData, shortName }) },
+              })
+            }
             dismissModal={() => dispatch({ showModal: false })}
           />
         </ModalPortal>
