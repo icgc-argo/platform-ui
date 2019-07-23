@@ -6,6 +6,7 @@ import Portal from 'uikit/Portal';
 import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
 import EditUserModal from '../modals/editUser';
+import DeleteUserModal from '../modals/deleteUser';
 import { ModalPortal } from '../layout';
 import { useSubmitFormHook, createUserInput } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
@@ -30,7 +31,9 @@ function ResendEmailModal({ user, ...otherProps }) {
 
 const Users = ({ users, programShortName }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
+  const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
+  // const [triggerDelete] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
 
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
   const [isToastOpen, setIsToastOpen] = React.useState(false);
@@ -64,7 +67,7 @@ const Users = ({ users, programShortName }) => {
         /**
          * @todo: actually implement these functions
          */
-        onUserDeleteClick={console.log}
+        onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
         onUserResendInviteClick={handleResendEmailClick}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
@@ -89,7 +92,17 @@ const Users = ({ users, programShortName }) => {
           />
         </Fade>
       </Portal>
-
+      {!!currentDeletingUser && (
+        <ModalPortal>
+          <DeleteUserModal
+            user={currentDeletingUser}
+            onSubmit={validData => {
+              // triggerDelete
+            }}
+            dismissModal={() => setCurrentDeletingUser(null)}
+          />
+        </ModalPortal>
+      )}
       {!!currentEditingUser && (
         <ModalPortal>
           <EditUserModal
