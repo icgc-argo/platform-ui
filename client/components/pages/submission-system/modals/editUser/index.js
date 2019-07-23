@@ -5,7 +5,7 @@ import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
-const EditUserModal = ({ user }) => {
+const EditUserModal = ({ user, dismissModal, onSubmit }) => {
   const {
     errors: validationErrors,
     data: form,
@@ -19,8 +19,7 @@ const EditUserModal = ({ user }) => {
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      console.log(validData);
-      // Send data
+      const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
@@ -33,6 +32,8 @@ const EditUserModal = ({ user }) => {
       cancelText="Cancel"
       onActionClick={() => submitForm()}
       actionDisabled={!touched || hasErrors}
+      onCancelClick={dismissModal}
+      onCloseClick={dismissModal}
     >
       <UserSection
         user={form[0]}
