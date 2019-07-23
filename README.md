@@ -1,6 +1,6 @@
 # argo-platform
 
-This repo contains the ICGC-Argo server-rendered front-end and its [GraphQl](https://graphql.org/learn/) BFF (Backend For Frontend) API gateway.
+This repo contains the ICGC-Argo server-rendered front-end and its [GraphQl](https://graphql.org/learn/) API aggregation gateway.
 
 ## Repo structure
 
