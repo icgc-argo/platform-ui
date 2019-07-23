@@ -1,0 +1,3 @@
+mutation UPDATE_PROGRAM_MUTATION($updates: UpdateProgramInput!, $shortName: String!) {
+  updateProgram(shortName: $shortName, updates: $updates)
+}
