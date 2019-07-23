@@ -55,6 +55,7 @@ const Users = ({ users }) => {
   };
 const Users = ({ users, shortName }) => {
   const initialState = { selectedUser: null, showModal: false };
+const Users = ({ users, programShortName }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
 
@@ -104,7 +105,7 @@ const Users = ({ users, shortName }) => {
             user={currentEditingUser}
             onSubmit={validData =>
               triggerEdit({
-                variables: { user: createUserInput({ data: validData, shortName }) },
+                variables: { user: createUserInput({ data: validData, programShortName }) },
               })
             }
             dismissModal={() => setCurrentEditingUser(null)}

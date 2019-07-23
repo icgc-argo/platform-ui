@@ -25,8 +25,8 @@ export const useSubmitFormHook = ({ gql }) => {
   return [triggerMutation];
 };
 
-export const createUserInput = ({ data, shortName }) => ({
-  programShortName: shortName,
+export const createUserInput = ({ data, programShortName }) => ({
+  programShortName,
   userFirstName: data.firstName,
   userLastName: data.lastName,
   userEmail: data.email,
@@ -46,10 +46,10 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   const { data: egoTokenData, token } = useEgoToken();
   const isDcc = token ? isDccMember(token) : false;
 
-  const { shortName } = router.query;
+  const { shortName: programShortName } = router.query;
   const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
-    variables: { shortName },
+    variables: { programShortName },
   });
 
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
@@ -117,7 +117,9 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
               )}
             </Tab>
           </Tabs>
-          {activeTab === TABS.USERS && <Users shortName={shortName} users={FAKE_USERS} />}
+          {activeTab === TABS.USERS && (
+            <Users programShortName={programShortName} users={FAKE_USERS} />
+          )}
           {activeTab === TABS.PROFILE &&
             (isDcc ? (
               <div
@@ -138,7 +140,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             <AddUserModal
               onSubmit={validData =>
                 triggerInvite({
-                  variables: { user: createUserInput({ data: validData, shortName }) },
+                  variables: { user: createUserInput({ data: validData, programShortName }) },
                 })
               }
               dismissModal={() => setShowModal(false)}
