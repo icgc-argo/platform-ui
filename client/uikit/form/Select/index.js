@@ -13,7 +13,7 @@ const Select = ({
   placeholder = '- Select an option -',
   value,
   onChange,
-  onBlur = () => {},
+  onBlur = e => {},
   disabled = false,
   size = INPUT_SIZES.SM,
   options = [],

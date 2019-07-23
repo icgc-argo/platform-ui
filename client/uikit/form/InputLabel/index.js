@@ -8,9 +8,9 @@ import Icon from '../../Icon';
 import _ from 'lodash';
 
 /**
- * @type React.ComponentType<{
-    required?: boolean
- * }>
+ * @type {React.ComponentType<{
+ *  htmlFor?: string,
+ * }>}
  */
 const InputLabel = React.forwardRef(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;

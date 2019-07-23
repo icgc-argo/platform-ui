@@ -6,6 +6,9 @@ import clsx from 'clsx';
 import css from '@emotion/css';
 import _ from 'lodash';
 
+/**
+ * @type {React.ComponentType}
+ */
 const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
   const { component: Component = 'p', className: classNameProp, ...other } = props;
 

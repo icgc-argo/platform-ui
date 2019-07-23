@@ -163,17 +163,20 @@ function Highlight({ string, searchText }) {
 
 /**
  * @type {React.ComponentType<{
-    name?: string,
-    value: any,
-    onChange: (e: any) => any,
-    placeholder?: string,
-    onBlur?: (e: any) => any,
-    allowNew?: boolean,
-    disabled?: boolean,
-    size?: INPUT_SIZES.SM | INPUT_SIZES.LG
+    name?: string;
+    id?: string;
+    value: any;
+    onChange: (e: any) => any;
+    placeholder?: string;
+    onBlur?: (e: any) => any;
+    allowNew?: boolean;
+    disabled?: boolean;
+    size?: INPUT_SIZES.SM | INPUT_SIZES.LG;
+    inputProps?: {[k: string]: any}
   }>}
  */
 const MultiSelect = ({
+  id = undefined,
   name = undefined,
   value = undefined,
   children = undefined,
@@ -181,7 +184,7 @@ const MultiSelect = ({
   onBlur = () => {},
   single,
   placeholder = single ? 'Select one' : 'Add one or more...',
-  inputProps,
+  inputProps = {},
   allowNew,
   disabled,
   error,
@@ -318,7 +321,7 @@ const MultiSelect = ({
   const theme = useTheme();
 
   return (
-    <Container focus={focusState}>
+    <Container focus={focusState} id={id}>
       <InputBox
         inputState={focusState ? INPUT_STATES.focus : INPUT_STATES.default}
         size={size}

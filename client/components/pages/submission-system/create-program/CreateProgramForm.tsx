@@ -215,11 +215,11 @@ export default function CreateProgramForm({
     }
   };
 
-  const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
+  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION, {
     variables: { program: createProgramInput(validData) },
   });
 
-  const sendUpdateProgram = useMutation(UPDATE_PROGRAM_MUTATION, {
+  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION, {
     variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
   });
 
@@ -602,13 +602,21 @@ export default function CreateProgramForm({
       >
         {isEditing ? (
           <Button
-            onClick={submitForm}
+            onClick={() => {
+              submitForm(formData);
+            }}
             disabled={isEqual(program, merge({ ...program }, createUpdateProgramInput(formData)))}
           >
             Save
           </Button>
         ) : (
-          <Button onClick={submitForm}>Create</Button>
+          <Button
+            onClick={() => {
+              submitForm(formData);
+            }}
+          >
+            Create
+          </Button>
         )}
         {!noCancel && (
           <Link href={PROGRAMS_LIST_PATH}>

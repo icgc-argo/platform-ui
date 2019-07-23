@@ -7,7 +7,7 @@ import useTheme from '../../utils/useTheme';
 import css from '@emotion/css';
 import FormControlContext from '../FormControl/FormControlContext';
 
-const Textarea = ({ error, disabled, className, ...props }) => {
+const Textarea = ({ error = false, disabled = false, className = undefined, ...props }) => {
   const theme = useTheme();
 
   const { disabled: calcDisabled = disabled, error: calcError = error } =
