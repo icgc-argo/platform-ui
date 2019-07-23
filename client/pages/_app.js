@@ -15,7 +15,7 @@ import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT } from 'global/config';
+import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT, AUTH_DISABLED } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
@@ -144,10 +144,10 @@ Root.getInitialProps = async ({
     ? !(await Component.isAccessible({ egoJwt, ctx }))
     : false;
 
-  if (unauthorized) {
-    /* const err = (new Error('Unauthorized'): Error & { statusCode?: number });
-     * err[ERROR_STATUS_KEY] = 401;
-     * throw err; */
+  if (unauthorized && !AUTH_DISABLED) {
+    const err = (new Error('Unauthorized'): Error & { statusCode?: number });
+    err[ERROR_STATUS_KEY] = 401;
+    throw err;
   }
 
   const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
