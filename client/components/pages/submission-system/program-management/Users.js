@@ -55,13 +55,7 @@ const Users = ({ users }) => {
   };
 const Users = ({ users, shortName }) => {
   const initialState = { selectedUser: null, showModal: false };
-  const reducer = (state, action) =>
-    action.showModal
-      ? { selectedUser: action.user, showModal: true }
-      : { selectedUser: null, showModal: false };
-
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-  const { showModal, selectedUser } = state;
+  const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
 
   return (
@@ -101,15 +95,19 @@ const Users = ({ users, shortName }) => {
       </Portal>
 
       {showModal && (
+        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
+        onUserResendInviteClick={console.log}
+      />
+      {!!currentEditingUser && (
         <ModalPortal>
           <EditUserModal
-            user={selectedUser}
+            user={currentEditingUser}
             onSubmit={validData =>
               triggerEdit({
                 variables: { user: createUserInput({ data: validData, shortName }) },
               })
             }
-            dismissModal={() => dispatch({ showModal: false })}
+            dismissModal={() => setCurrentEditingUser(null)}
           />
         </ModalPortal>
       )}
