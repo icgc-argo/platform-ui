@@ -13,9 +13,7 @@ import Tabs, { Tab } from 'uikit/Tabs';
 import TitleBar from 'uikit/TitleBar';
 import CreateProgramForm from '../create-program/CreateProgramForm';
 import SubmissionLayout, { ModalPortal } from '../layout';
-import UsersTable from './UsersTable';
 import { isDccMember } from 'global/utils/egoJwt';
-import useTheme from 'uikit/utils/useTheme';
 import Users from './Users';
 import Profile from './Profile';
 

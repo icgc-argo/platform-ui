@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
@@ -29,7 +28,10 @@ function ResendEmailModal({ user, ...otherProps }) {
   );
 }
 
-const Users = ({ users }) => {
+const Users = ({ users, programShortName }) => {
+  const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
+  const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
+
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
   const [isToastOpen, setIsToastOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
@@ -53,11 +55,6 @@ const Users = ({ users }) => {
       setIsToastOpen(false);
     }
   };
-const Users = ({ users, shortName }) => {
-  const initialState = { selectedUser: null, showModal: false };
-const Users = ({ users, programShortName }) => {
-  const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
-  const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
 
   return (
     <div>
@@ -68,12 +65,8 @@ const Users = ({ users, programShortName }) => {
          * @todo: actually implement these functions
          */
         onUserDeleteClick={console.log}
-        onUserEditClick={console.log}
         onUserResendInviteClick={handleResendEmailClick}
-        onUserEditClick={({ user }) => {
-          dispatch({ showModal: true, user });
-        }}
-        onUserResendInviteClick={console.log}
+        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {isResendEmailModalOpen && (
         <ResendEmailModal
@@ -89,16 +82,14 @@ const Users = ({ users, programShortName }) => {
             variant="SUCCESS"
             title=""
             setOpen={setIsToastOpen}
-            content={`The email invitation has been resent to ${user ? user.name : ''}`}
+            content={`The email invitation has been resent to ${
+              currentEditingUser ? currentEditingUser.name : ''
+            }`}
             onInteraction={handleToastInteraction}
           />
         </Fade>
       </Portal>
 
-      {showModal && (
-        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
-        onUserResendInviteClick={console.log}
-      />
       {!!currentEditingUser && (
         <ModalPortal>
           <EditUserModal
