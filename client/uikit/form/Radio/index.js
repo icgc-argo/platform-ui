@@ -76,13 +76,17 @@ const Radio = ({ value, disabled, checked, onChange, ...props }) => {
   const HiddenRadioRef = React.createRef();
 
   return (
-    <StyledRadio role="radio" disabled={disabled} checked={checked}>
+    <StyledRadio
+      role="radio"
+      disabled={disabled}
+      checked={checked}
+      aria-checked={props['aria-checked']}
+    >
       <input
         type="radio"
         ref={HiddenRadioRef}
         checked={checked}
         disabled={disabled}
-        aria-checked={checked}
         aria-label={props['aria-label']}
         onChange={onChange}
       />
