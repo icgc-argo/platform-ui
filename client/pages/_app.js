@@ -145,9 +145,9 @@ Root.getInitialProps = async ({
     : false;
 
   if (unauthorized) {
-    /* const err = (new Error('Unauthorized'): Error & { statusCode?: number });
-     * err[ERROR_STATUS_KEY] = 401;
-     * throw err; */
+    const err = (new Error('Unauthorized'): Error & { statusCode?: number });
+    err[ERROR_STATUS_KEY] = 401;
+    throw err;
   }
 
   const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
