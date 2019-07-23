@@ -128,7 +128,7 @@ export default function CreateProgramForm({
   program = {},
 }: {
   noCancel?: boolean;
-  program: any;
+  program?: any;
 }) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
