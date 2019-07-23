@@ -10,7 +10,7 @@ const createKnobs = () => {
 
   return {
     checked,
-    'aria-checked': ariaChecked,
+    'aria-checked': ariaChecked.toString(),
     disabled,
   };
 };
