@@ -186,7 +186,7 @@ export default function CreateProgramForm({
         .then(data => {
           // Validate will perform data manipulations such as trimming strings.
           //  need to return the updated form data for submission.
-          resolve(data);
+          resolve(data as CreateProgramFormData);
         })
         .catch(err => {
           const errors = get(err, 'inner', []).reduce((output, error) => {
