@@ -60,9 +60,9 @@ const getUserRole = egoJwt => {
   } else if (isDccMember(egoJwt)) {
     return 'DCC Member';
   } else if (isRdpcMember(egoJwt)) {
-    return 'RDPC user';
+    return 'RDPC User';
   } else if (canReadSomeProgram(egoJwt)) {
-    return 'Program member';
+    return 'Program Member';
   } else {
     return null;
   }
