@@ -1,10 +1,10 @@
+// @flow
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
+import { styled, css } from 'uikit';
 import Modal from 'uikit/Modal';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import css from '@emotion/css';
 import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
 import useFormHook from '../useFormHook';
@@ -16,7 +16,13 @@ const AddSection = styled(Button)`
   margin-top: 14px;
 `;
 
-const AddUserModal = ({ onSubmit, dismissModal }) => {
+const AddUserModal = ({
+  onSubmit,
+  dismissModal,
+}: {
+  onSubmit: (data: typeof UserModel) => any | void,
+  dismissModal: (e: any | void) => any | void,
+}) => {
   const {
     errors: validationErrors,
     data: form,

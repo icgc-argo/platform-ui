@@ -1,3 +1,4 @@
+// @flow
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import useEgoToken from 'global/hooks/useEgoToken';
 import isEmpty from 'lodash/isEmpty';
@@ -16,22 +17,23 @@ import SubmissionLayout, { ModalPortal } from '../layout';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
-
-/**
- * @todo: actually fix this Minh!
- */
-// $FlowFixMe .gql file not supported
 import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
-// $FlowFixMe .gql file not supported
 import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+import { UserModel as ModalUserModel } from '../modals/common';
 
-export const useSubmitFormHook = ({ gql }) => {
+export const useSubmitFormHook = ({ gql }: { gql: typeof INVITE_USER_MUTATION }) => {
   const [triggerMutation, rest] = useMutation(gql);
 
   return [triggerMutation];
 };
 
-export const createUserInput = ({ data, programShortName }) => ({
+export const createUserInput = ({
+  data,
+  programShortName,
+}: {
+  data: typeof ModalUserModel,
+  programShortName: string,
+}) => ({
   programShortName,
   userFirstName: data.firstName,
   userLastName: data.lastName,
