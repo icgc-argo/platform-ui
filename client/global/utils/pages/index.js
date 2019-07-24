@@ -17,7 +17,7 @@ import {
   isRdpcMember,
   canReadSomeProgram,
   getReadableProgramShortNames,
-} from './egoJwt';
+} from '../egoJwt';
 
 export const getDefaultRedirectPathForUser = (
   egoJwt: string,
@@ -30,7 +30,7 @@ export const getDefaultRedirectPathForUser = (
   } else if (canReadSomeProgram(egoJwt)) {
     const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
     const orderedProgramShortNames = orderBy(readableProgramShortNames);
-    return egoJwt
+    return useStatic
       ? PROGRAM_DASHBOARD_PATH
       : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, orderedProgramShortNames[0]);
   } else {
