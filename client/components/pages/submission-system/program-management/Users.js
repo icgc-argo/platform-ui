@@ -13,19 +13,17 @@ import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
-    <Modal.Overlay>
-      <Modal
-        title="Resend Invitation?"
-        actionButtonText="RESEND INVITATION"
-        cancelText="CANCEL"
-        {...otherProps}
-      >
-        <div style={{ width: '322px' }}>
-          Are you sure you want to resend the email invitation to{' '}
-          <strong>{user ? user.name : ''}</strong>?
-        </div>
-      </Modal>
-    </Modal.Overlay>
+    <Modal
+      title="Resend Invitation?"
+      actionButtonText="RESEND INVITATION"
+      cancelText="CANCEL"
+      {...otherProps}
+    >
+      <div style={{ width: '322px' }}>
+        Are you sure you want to resend the email invitation to{' '}
+        <strong>{user ? user.name : ''}</strong>?
+      </div>
+    </Modal>
   );
 }
 
@@ -72,12 +70,14 @@ const Users = ({ users, programShortName }) => {
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {isResendEmailModalOpen && (
-        <ResendEmailModal
-          user={user}
-          onCancelClick={handleModalCancelClick}
-          onCloseClick={handleModalCancelClick}
-          onActionClick={handleActionClick}
-        />
+        <ModalPortal>
+          <ResendEmailModal
+            user={user}
+            onCancelClick={handleModalCancelClick}
+            onCloseClick={handleModalCancelClick}
+            onActionClick={handleActionClick}
+          />
+        </ModalPortal>
       )}
       <Portal selector="body">
         <Fade in={isToastOpen}>
