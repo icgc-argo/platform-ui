@@ -38,13 +38,17 @@ const Input = ({
     onChange(e);
   };
 
+  const inputRef = React.createRef();
+
   return (
     <div className={className}>
       <StyledInputWrapper
         size={size}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
-        onClick={() => document.getElementById(props.id).focus()}
+        onClick={() => {
+          if (inputRef.current) inputRef.current.focus();
+        }}
         style={{ cursor: 'text' }}
         error={calcError}
         disabled={calcDisabled}
@@ -63,6 +67,7 @@ const Input = ({
           size={size}
           disabled={calcDisabled}
           id={props.id}
+          ref={inputRef}
         />
         {showClear && value && value.length && (
           <div
