@@ -17,6 +17,14 @@ import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
 
+/**
+ * @todo: actually fix this Minh!
+ */
+// $FlowFixMe .gql file not supported
+import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
+// $FlowFixMe .gql file not supported
+import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+
 export const useSubmitFormHook = ({ gql }) => {
   const [triggerMutation, rest] = useMutation(gql);
 
@@ -30,14 +38,6 @@ export const createUserInput = ({ data, programShortName }) => ({
   userEmail: data.email,
   userRole: data.role,
 });
-
-/**
- * @todo: actually fix this Minh!
- */
-// $FlowFixMe .gql file not supported
-import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
-// $FlowFixMe .gql file not supported
-import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
   const router = useRouter();
