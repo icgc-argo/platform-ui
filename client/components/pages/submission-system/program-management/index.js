@@ -49,7 +49,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   const { shortName: programShortName } = router.query;
   const { tab: defaultTab } = router.query;
   const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
-    variables: { programShortName },
+    variables: { shortName: programShortName },
   });
 
   const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
