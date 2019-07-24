@@ -102,6 +102,11 @@ const Radio = ({ value, disabled, checked, onChange, ...props }) => {
   );
 };
 
-Radio.propTypes = {};
+Radio.propTypes = {
+  ['aria-label']: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default Radio;
