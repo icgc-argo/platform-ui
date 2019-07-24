@@ -44,6 +44,8 @@ const Input = ({
         size={size}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
+        onClick={() => document.getElementById(props.id).focus()}
+        style={{ cursor: 'text' }}
         error={calcError}
         disabled={calcDisabled}
         size={size}
