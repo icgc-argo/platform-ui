@@ -2,21 +2,13 @@ import React from 'react';
 import Modal from 'uikit/Modal';
 
 const DeleteUserModal = ({ user, dismissModal, onSubmit }) => {
-  const submitForm = async () => {
-    try {
-      const result = onSubmit();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <Modal
       title="Remove User?"
       titleIconConfig={{ name: 'warning', fill: 'warning' }}
       actionButtonText="Save"
       cancelText="Cancel"
-      onActionClick={() => submitForm()}
+      onActionClick={() => onSubmit()}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
