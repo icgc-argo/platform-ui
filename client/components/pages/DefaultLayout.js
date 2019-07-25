@@ -2,6 +2,7 @@ import { css } from 'uikit';
 import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import Footer from 'uikit/Footer';
+import NavBar from './NavBar';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -16,25 +17,7 @@ export default function DefaultLayout({ children }) {
         grid-template-rows: auto 1fr auto;
       `}
     >
-      <AppBar>
-        <Section>
-          <Logo DomComponent={LinkToHome} />
-          <MenuGroup>
-            <MenuItem DomComponent={LinkToDataRepo}>Data Repository</MenuItem>
-          </MenuGroup>
-        </Section>
-        <Section>
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-              margin-right: 17px;
-            `}
-          >
-            <Button>Login</Button>
-          </div>
-        </Section>
-      </AppBar>
+      <NavBar />
       {children}
       <Footer
         css={css`
