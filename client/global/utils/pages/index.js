@@ -18,6 +18,7 @@ import {
   canReadSomeProgram,
   getReadableProgramShortNames,
 } from '../egoJwt';
+import type { PageConfigProps, PageWithConfig } from './types';
 
 export const getDefaultRedirectPathForUser = (
   egoJwt: string,
@@ -37,32 +38,6 @@ export const getDefaultRedirectPathForUser = (
     return USER_PAGE_PATH;
   }
 };
-
-export type GetInitialPropsContext = {
-  pathname: string,
-  query: {
-    [key: string]: any,
-  },
-  asPath: string,
-  req?: any,
-  res?: any,
-  err?: Error,
-};
-export type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
-  egoJwt: string,
-};
-type PageConfigProps = {
-  isPublic: boolean,
-  isAccessible: ({
-    egoJwt: string,
-    ctx: GetInitialPropsContext,
-  }) => Promise<boolean>,
-  getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,
-  getGqlQueriesToPrefetch: GetInitialPropsContextWithEgo => Promise<
-    Array<{ query: any, variables?: { [key: string]: any } }>,
-  >,
-};
-export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
 export const createPage = ({
   isPublic = false,
   isAccessible = async () => true,
