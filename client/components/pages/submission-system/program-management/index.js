@@ -1,6 +1,6 @@
 // @flow
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -43,7 +43,7 @@ export const createUserInput = ({
 
 export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
   const router = useRouter();
-  const { data: egoTokenData, token } = useEgoToken();
+  const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
 
   const { shortName: programShortName } = router.query;

@@ -2,7 +2,7 @@
 import React from 'react';
 import Router from 'next/router';
 
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
@@ -14,7 +14,7 @@ import useTheme from 'uikit/utils/useTheme';
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
 
-  const { data, token, resolving } = useEgoToken({
+  const { data, token, resolving } = useAuthContext({
     onError: err => Router.replace(LOGIN_PAGE_PATH),
   });
 
