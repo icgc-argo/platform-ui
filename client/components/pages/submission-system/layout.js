@@ -13,7 +13,7 @@ import {
   PageFooter,
 } from 'uikit/PageLayout';
 import Head from '../head';
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 import Modal from 'uikit/Modal';
@@ -54,7 +54,6 @@ export const ModalPortal = ({ children }: { children: React.Node }) => {
 const SubmissionLayout = ({
   pathname,
   logOut,
-  navBar = <NavBar path={pathname} logOut={logOut} />,
   sideMenu = <SideMenu />,
   noSidebar = false,
   contentHeader,
@@ -64,7 +63,6 @@ const SubmissionLayout = ({
   pathname: string,
   logOut: any => any,
   noSidebar?: boolean,
-  navBar?: React.Element<any>,
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
@@ -73,7 +71,7 @@ const SubmissionLayout = ({
   return (
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-      {navBar}
+      <NavBar path={pathname} logOut={logOut} />
       <PageBody>
         {!noSidebar && <Panel>{sideMenu}</Panel>}
         <PageContent noSidebar={noSidebar}>

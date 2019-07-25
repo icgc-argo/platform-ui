@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NavBar from './submission-system/NavBar';
+import NavBar from './NavBar';
 import { MenuItem } from 'uikit/AppBar';
 import Footer from 'uikit/Footer';
 import { css } from 'uikit';
