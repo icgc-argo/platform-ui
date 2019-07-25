@@ -6,7 +6,7 @@ import {
   PRIMARY_SITES,
   CANCER_TYPES,
 } from 'global/constants';
-import { requiredError, multiSelectError } from 'global/utils/form';
+import { requiredError, mustHaveMoreThanZeroError } from 'global/utils/form';
 
 /* Validation Schema for Create Program Form */
 
@@ -36,21 +36,19 @@ export default yup.object().shape({
   countries: yup
     .array()
     .of(yup.string().oneOf(COUNTRIES.map(country => country.name)))
-    .label('Countries')
-    .required(multiSelectError('Countries'))
-    .min(1),
+    .required()
+    .min(1, mustHaveMoreThanZeroError('Countries')),
   cancerTypes: yup
     .array()
     .of(yup.string().oneOf(CANCER_TYPES))
-    .label('Cancer Types')
-    .required(multiSelectError('Cancer Types'))
-    .min(1),
+    .required()
+    .min(1, mustHaveMoreThanZeroError('Cancer Types')),
   primarySites: yup
     .array()
     .of(yup.string().oneOf(PRIMARY_SITES))
     .label('Primary Sites')
-    .required(multiSelectError('Primary Sites'))
-    .min(1),
+    .required()
+    .min(1, mustHaveMoreThanZeroError('Primary Sites')),
   commitmentLevel: yup
     .number()
     .label('Commitment Level')
@@ -60,8 +58,8 @@ export default yup.object().shape({
     .array()
     .of(yup.string())
     .label('Institutions')
-    .required(multiSelectError('Institutions'))
-    .min(1),
+    .required()
+    .min(1, mustHaveMoreThanZeroError('Institutions')),
   membershipType: yup
     .string()
     .label('Membership Type')
@@ -80,8 +78,8 @@ export default yup.object().shape({
     .array()
     .of(yup.string())
     .label('Processing Regions')
-    .required(multiSelectError('Processing Regions'))
-    .min(1),
+    .required()
+    .min(1, mustHaveMoreThanZeroError('Processing Regions')),
   adminFirstName: yup
     .string()
     .label(`Administrator's First Name`)

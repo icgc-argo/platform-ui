@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
-import { requiredError, multiSelectError } from 'global/utils/form';
+import { requiredError } from 'global/utils/form';
 
 const testGsuite = async email => {
   // await fetch......
