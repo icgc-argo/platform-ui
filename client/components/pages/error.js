@@ -14,10 +14,7 @@ export default function ErrorLayout({ children }) {
         min-height: 100vh;
       `}
     >
-      <NavBar pathname="123">
-        <MenuItem>File Repository</MenuItem>
-      </NavBar>
-
+      <NavBar />
       <div
         css={css`
           display: flex;

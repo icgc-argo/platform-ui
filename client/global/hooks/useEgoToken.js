@@ -3,6 +3,7 @@ import * as React from 'react';
 import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import Cookies from 'js-cookie';
+import Router from 'next/router';
 
 import { decodeToken } from 'global/utils/egoJwt';
 import { EGO_JWT_KEY } from 'global/constants';
@@ -16,6 +17,11 @@ type UseEgoTokenInput = {
 export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
   const [token, setToken] = React.useState(null);
   const [resolving, setResolving] = React.useState(false);
+  const logOut = () => {
+    Cookies.remove(EGO_JWT_KEY);
+    Router.push('/');
+    setToken(null);
+  };
   React.useEffect(() => {
     setResolving(true);
     const existingToken = Cookies.get(EGO_JWT_KEY);
@@ -44,5 +50,5 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
         });
     }
   }, []);
-  return { token, resolving, data: token ? decodeToken(token) : null };
+  return { token, resolving, data: token ? decodeToken(token) : null, logOut };
 };

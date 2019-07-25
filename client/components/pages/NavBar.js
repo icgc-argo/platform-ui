@@ -33,7 +33,6 @@ import urlJoin from 'url-join';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import usePageContext from 'global/hooks/usePageContext';
-import logOut from 'global/utils/logout';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -71,7 +70,7 @@ const getUserRole = egoJwt => {
 };
 
 export default (props: { children?: React.Node }) => {
-  const { token: egoJwt } = useEgoToken();
+  const { token: egoJwt, logOut } = useEgoToken();
   const userModel = (() => {
     try {
       return decodeToken(egoJwt || '');
