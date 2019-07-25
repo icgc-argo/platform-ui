@@ -7,7 +7,7 @@ import {
   SUBMISSION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 import {
   decodeToken,
   canReadProgram,
@@ -70,7 +70,7 @@ const getUserRole = egoJwt => {
 };
 
 export default (props: { children?: React.Node }) => {
-  const { token: egoJwt, logOut, data: userModel } = useEgoToken();
+  const { token: egoJwt, logOut, data: userModel } = useAuthContext();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
 

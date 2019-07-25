@@ -15,7 +15,7 @@ import { mockPrograms } from './mockData';
 
 // $FlowFixMe .gql file not supported
 import { sideMenuProgramList } from './queries.gql';
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
 import {
@@ -54,7 +54,7 @@ const useToggledSelectState = (initialIndex = -1) => {
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram }) => {
-  const { token } = useEgoToken();
+  const { token } = useAuthContext();
   return (
     <div>
       <Link
@@ -110,7 +110,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     ({ shortName }) =>
       !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
   );
-  const { token } = useEgoToken();
+  const { token } = useAuthContext();
   return (
     <>
       <MenuItem
@@ -162,7 +162,7 @@ export default () => {
     sideMenuProgramList,
   );
 
-  const { data: egoTokenData, token } = useEgoToken();
+  const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 

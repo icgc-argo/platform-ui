@@ -29,7 +29,7 @@ import type {
 
 import { ERROR_STATUS_KEY } from './_error';
 import { PageContext } from 'global/hooks/usePageContext';
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -54,7 +54,7 @@ const Root = (
 ) => {
   const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
 
-  const { token, resolving, logOut } = useEgoToken();
+  const { token, resolving, logOut } = useAuthContext();
   const egoJwt = resolving ? '' : token || '';
 
   React.useEffect(() => {
