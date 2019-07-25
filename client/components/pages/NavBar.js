@@ -69,7 +69,7 @@ const getUserRole = egoJwt => {
   }
 };
 
-export default (props: { children?: React.Node }) => {
+export default () => {
   const { token: egoJwt, logOut, data: userModel } = useAuthContext();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
@@ -92,7 +92,6 @@ export default (props: { children?: React.Node }) => {
             </Link>
           )}
         />
-        <MenuGroup>{props.children}</MenuGroup>
       </Section>
       <Section />
       <Section>
