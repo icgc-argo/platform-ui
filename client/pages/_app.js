@@ -21,9 +21,15 @@ import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 
 import Error401Page from 'components/pages/401';
-import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
+import type {
+  PageWithConfig,
+  GetInitialPropsContext,
+  ClientSideGetInitialPropsContext,
+} from 'global/utils/pages/types';
 
 import { ERROR_STATUS_KEY } from './_error';
+import { PageContext } from 'global/hooks/usePageContext';
+import logOut from 'global/utils/logout';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -34,23 +40,20 @@ const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   }
 };
 
-/**
- * Root level component that wraps every page
- */
-// this makes egoJwt available to every page client-side
-const Root = (props: {
-  Component: PageWithConfig,
-  pageProps: {},
+type RootGetInitialPropsData = {
+  pageProps: { [k: string]: any },
   egoJwt: string,
   unauthorized: boolean,
   pathname: string,
+  ctx: ClientSideGetInitialPropsContext,
   apolloCache: {},
-}) => {
-  const { Component, pageProps, egoJwt, unauthorized, pathname } = props;
-  const logOut = () => {
-    Cookies.remove(EGO_JWT_KEY);
-    Router.push('/');
-  };
+};
+const Root = (
+  props: {
+    Component: PageWithConfig,
+  } & RootGetInitialPropsData,
+) => {
+  const { Component, pageProps, egoJwt, unauthorized, pathname, ctx, apolloCache } = props;
   React.useEffect(() => {
     if (egoJwt && !isValidJwt(egoJwt)) {
       logOut();
@@ -78,7 +81,7 @@ const Root = (props: {
         authorization: `Bearer ${props.egoJwt}`,
       },
     }),
-    cache: createInMemoryCache().restore(props.apolloCache),
+    cache: createInMemoryCache().restore(apolloCache),
   });
 
   return (
@@ -102,13 +105,15 @@ const Root = (props: {
             }
         `}
       </style>
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <ThemeProvider>
-            <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-          </ThemeProvider>
-        </ApolloHooksProvider>
-      </ApolloProvider>
+      <PageContext.Provider value={ctx}>
+        <ApolloProvider client={client}>
+          <ApolloHooksProvider client={client}>
+            <ThemeProvider>
+              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+            </ThemeProvider>
+          </ApolloHooksProvider>
+        </ApolloProvider>
+      </PageContext.Provider>
     </>
   );
 };
@@ -122,7 +127,7 @@ Root.getInitialProps = async ({
   Component: PageWithConfig,
   ctx: GetInitialPropsContext,
   router?: any,
-}) => {
+}): Promise<RootGetInitialPropsData> => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
@@ -153,14 +158,14 @@ Root.getInitialProps = async ({
   const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
   let graphqlQueriesToChache;
-  let apolloCache;
+  let apolloCache = {};
   try {
     graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
       ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-      : null;
+      : [];
     apolloCache = graphqlQueriesToChache
       ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
-      : null;
+      : {};
   } catch (e) {
     console.log(e);
   }
@@ -169,6 +174,11 @@ Root.getInitialProps = async ({
     pageProps,
     unauthorized,
     pathname: ctx.pathname,
+    ctx: {
+      pathname: ctx.pathname,
+      query: ctx.query,
+      asPath: ctx.asPath,
+    },
     apolloCache,
   };
 };
