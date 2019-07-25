@@ -15,8 +15,8 @@ type UseEgoTokenInput = {
   onError?: (error: Error) => void,
 };
 export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
-  const [token, setToken] = React.useState(null);
-  const [resolving, setResolving] = React.useState(false);
+  const [token, setToken] = React.useState<string | null>(null);
+  const [resolving, setResolving] = React.useState<boolean>(false);
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
     Router.push('/');
@@ -50,5 +50,22 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
         });
     }
   }, []);
-  return { token, resolving, data: token ? decodeToken(token) : null, logOut };
+  return new Proxy<{
+    token: typeof token,
+    resolving: typeof resolving,
+    logOut: typeof logOut,
+    data: $Call<typeof decodeToken, string> | null,
+  }>(
+    { token, resolving, logOut, data: null },
+    {
+      get: (obj, key) => {
+        switch (key) {
+          case 'data':
+            return token ? decodeToken(token || '') : null;
+          default:
+            return obj[key];
+        }
+      },
+    },
+  );
 };
