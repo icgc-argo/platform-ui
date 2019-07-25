@@ -70,14 +70,7 @@ const getUserRole = egoJwt => {
 };
 
 export default (props: { children?: React.Node }) => {
-  const { token: egoJwt, logOut } = useEgoToken();
-  const userModel = (() => {
-    try {
-      return decodeToken(egoJwt || '');
-    } catch (err) {
-      return null;
-    }
-  })();
+  const { token: egoJwt, logOut, data: userModel } = useEgoToken();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
 
