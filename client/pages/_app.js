@@ -29,7 +29,7 @@ import type {
 
 import { ERROR_STATUS_KEY } from './_error';
 import { PageContext } from 'global/hooks/usePageContext';
-import logOut from 'global/utils/logout';
+import useEgoToken from 'global/hooks/useEgoToken';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -42,7 +42,6 @@ const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
 
 type RootGetInitialPropsData = {
   pageProps: { [k: string]: any },
-  egoJwt: string,
   unauthorized: boolean,
   pathname: string,
   ctx: ClientSideGetInitialPropsContext,
@@ -53,24 +52,16 @@ const Root = (
     Component: PageWithConfig,
   } & RootGetInitialPropsData,
 ) => {
-  const { Component, pageProps, egoJwt, unauthorized, pathname, ctx, apolloCache } = props;
+  const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
+
+  const { token, resolving, logOut } = useEgoToken();
+  const egoJwt = resolving ? '' : token || '';
+
   React.useEffect(() => {
     if (egoJwt && !isValidJwt(egoJwt)) {
       logOut();
     }
   });
-
-  React.useEffect(() => {
-    /**
-     * Enables convenience debugging back-door
-     */
-    try {
-      const userData = decodeToken(props.egoJwt);
-      if (userData.context.user.type === 'ADMIN' && localStorage.getItem('DEBUGGING')) {
-        window.env = process.env;
-      }
-    } catch (err) {}
-  }, []);
 
   const client = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
@@ -78,7 +69,7 @@ const Root = (
       uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
       headers: {
-        authorization: `Bearer ${props.egoJwt}`,
+        authorization: `Bearer ${egoJwt}`,
       },
     }),
     cache: createInMemoryCache().restore(apolloCache),
@@ -170,7 +161,6 @@ Root.getInitialProps = async ({
     console.log(e);
   }
   return {
-    egoJwt,
     pageProps,
     unauthorized,
     pathname: ctx.pathname,
