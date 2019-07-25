@@ -71,7 +71,7 @@ const SubmissionLayout = ({
   return (
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-      <NavBar path={pathname} logOut={logOut} />
+      <NavBar />
       <PageBody>
         {!noSidebar && <Panel>{sideMenu}</Panel>}
         <PageContent noSidebar={noSidebar}>
