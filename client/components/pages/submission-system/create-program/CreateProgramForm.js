@@ -172,10 +172,12 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
   const submitForm = async formData => {
     try {
       validData = await validateForm(formData);
-
+      console.log('validData', validData);
       let result;
       if (!isEditing) {
+        console.log('sending');
         result = await sendCreateProgram();
+        console.log('result', result);
         Router.push(PROGRAMS_LIST_PATH);
       } else {
         result = await sendUpdateProgram();
@@ -185,11 +187,11 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
     }
   };
 
-  const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
+  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION, {
     variables: { program: createProgramInput(validData) },
   });
 
-  const sendUpdateProgram = useMutation(UPDATE_PROGRAM_MUTATION, {
+  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION, {
     variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
   });
 
