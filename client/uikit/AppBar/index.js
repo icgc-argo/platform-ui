@@ -1,6 +1,7 @@
 import { css } from '@emotion/core';
 import PropTypes from 'prop-types';
 import React from 'react';
+import memoize from 'lodash/memoize';
 import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
@@ -80,35 +81,64 @@ export const Section = props => <SectionDisplay {...props} />;
 
 export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
-export const MenuItem = ({
-  children,
-  className,
-  id,
-  ref,
-  active = false,
-  DomComponent = ({ active, ...others }) => <a {...others} />,
-  dropdownMenu,
-}) => {
-  const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
+const getComponent = memoize(MenuItemContainer.withComponent);
 
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const handleClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  return (
-    <ComposedContainer
-      className={className}
-      id={id}
-      ref={ref}
-      active={active}
-      onClick={handleClick}
-    >
-      <MenuItemContent bold>{children}</MenuItemContent>
-      {dropdownOpen && dropdownMenu}
-    </ComposedContainer>
-  );
+const useClickAway = ({ domElement, onClickAway }) => {
+  React.useEffect(e => {
+    const onGlobalClick = event => {
+      onClickAway({ domElement, event });
+    };
+    document.addEventListener('click', onGlobalClick);
+    return () => {
+      document.removeEventListener('click', onGlobalClick);
+    };
+  });
 };
+
+export const MenuItem = React.forwardRef(
+  (
+    {
+      children,
+      className,
+      id,
+      active = false,
+      DomComponent = ({ active, ...others }) => <a {...others} />,
+      dropdownMenu,
+    },
+    ref,
+  ) => {
+    const [isDropdownOpen, setDropdownOpen] = React.useState(false);
+
+    React.useEffect(e => {
+      const onGlobalClick = event => {
+        const isClickaway = !event.path.includes(ref.current);
+        if (isClickaway) {
+          setDropdownOpen(false);
+        } else {
+          setDropdownOpen(!isDropdownOpen);
+        }
+      };
+      document.addEventListener('click', onGlobalClick);
+      return () => {
+        document.removeEventListener('click', onGlobalClick);
+      };
+    });
+
+    return (
+      <MenuItemContainer
+        className={className}
+        id={id}
+        ref={el => {
+          ref.current = el;
+        }}
+        active={active}
+      >
+        <MenuItemContent bold>{children}</MenuItemContent>
+        {isDropdownOpen && dropdownMenu}
+      </MenuItemContainer>
+    );
+  },
+);
 
 MenuItem.propTypes = {
   active: PropTypes.bool,
@@ -116,6 +146,9 @@ MenuItem.propTypes = {
   className: PropTypes.string,
   DomComponent: PropTypes.func,
   dropdownMenu: PropTypes.node,
+  ref: PropTypes.shape({
+    current: PropTypes.any.isRequired,
+  }).isRequired,
 };
 
 const AppBar = AppBarContainer;

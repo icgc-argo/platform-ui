@@ -97,19 +97,20 @@ export default () => {
       <Section>
         <MenuGroup>
           {egoJwt && canAccessSubmission && (
-            <MenuItem
-              active={path.search(SUBMISSION_PATH) === 0}
-              DomComponent={props => (
-                <Link
-                  href={getDefaultRedirectPathForUser(egoJwt, true)}
-                  as={getDefaultRedirectPathForUser(egoJwt)}
-                >
-                  <a {...props}>
-                    <Typography variant={'default'}>Submission</Typography>
-                  </a>
-                </Link>
-              )}
-            />
+            <Link
+              href={getDefaultRedirectPathForUser(egoJwt, true)}
+              as={getDefaultRedirectPathForUser(egoJwt)}
+            >
+              <a
+                css={css`
+                  height: 100%;
+                `}
+              >
+                <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0}>
+                  <Typography variant={'default'}>Submission</Typography>
+                </MenuItem>
+              </a>
+            </Link>
           )}
           {!userModel && (
             <Link href={LOGIN_PAGE_PATH}>
@@ -126,6 +127,7 @@ export default () => {
           )}
           {userModel && (
             <MenuItem
+              ref={React.createRef()}
               dropdownMenu={
                 <DropdownMenu>
                   <DropdownMenuItem>Profile & Token</DropdownMenuItem>
