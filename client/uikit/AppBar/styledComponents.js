@@ -14,14 +14,6 @@ export const MenuItemContent = styled(MenuItemTypography)`
   margin: 0px 24px;
   text-align: center;
   text-decoration: none;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.accent1};
-
-    .title {
-      color: ${({ theme }) => theme.colors.accent1};
-    }
-  }
 `;
 export const MenuItemContainer = styled('div', {
   shouldForwardProp: propName => propName !== 'active',
@@ -33,6 +25,14 @@ export const MenuItemContainer = styled('div', {
   min-width: 148px;
   cursor: pointer;
   text-decoration: none;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent1};
+
+    .title {
+      color: ${({ theme }) => theme.colors.accent1};
+    }
+  }
 
   color: ${({ active, theme }) => (active ? theme.colors.accent1 : theme.colors.white)};
   border-left: solid 0.5px ${({ theme }) => theme.colors.grey};

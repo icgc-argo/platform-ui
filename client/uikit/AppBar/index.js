@@ -92,10 +92,14 @@ export const MenuItem = ({
   };
 
   return (
-    <ComposedContainer className={className} id={id} ref={ref} active={active}>
-      <MenuItemContent bold onClick={handleClick}>
-        {children}
-      </MenuItemContent>
+    <ComposedContainer
+      className={className}
+      id={id}
+      ref={ref}
+      active={active}
+      onClick={handleClick}
+    >
+      <MenuItemContent bold>{children}</MenuItemContent>
       {dropdownOpen && dropdownMenu}
     </ComposedContainer>
   );
