@@ -22,12 +22,17 @@ export const UserBadge = ({ firstName = '', lastName = '', title = null, ...othe
       <div>
         <Typography variant="navigation" component="div" bold>
           Hello, {firstName}
+          {title && (
+            <div
+              css={css`
+                font-size: 12px;
+                font-weight: normal;
+              `}
+            >
+              {title}
+            </div>
+          )}
         </Typography>
-        {title && (
-          <Typography variant="navigation" component="div" color="grey_1" className="title">
-            {title}
-          </Typography>
-        )}
       </div>
       <Typography
         variant="subtitle2"
