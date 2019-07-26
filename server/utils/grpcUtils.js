@@ -23,6 +23,7 @@ export const defaultPromiseCallback = (resolve, reject, serviceName) => (err, re
     console.log(`GRPC error - ${serviceName}: ${err}`);
     reject(err);
   }
+  resolve(response);
 };
 
 export const getGrpcMethodsNames = grpcService =>
