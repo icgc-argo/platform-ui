@@ -19,8 +19,8 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
   const [resolving, setResolving] = React.useState<boolean>(false);
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
-    Router.push('/');
     setToken(null);
+    Router.push('/');
   };
   React.useEffect(() => {
     setResolving(true);
