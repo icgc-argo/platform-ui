@@ -9,6 +9,10 @@ import { join, filter, isEmpty, replace } from 'lodash';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 
+const MISSING_ENTRY_TEXT = '--';
+
+const arrayToText = array => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
+
 function ProfileView({ program = {} }) {
   const theme = useTheme();
   const Left = props => (
@@ -65,35 +69,35 @@ function ProfileView({ program = {} }) {
         <Left>
           <InputLabel>Program Name</InputLabel>
         </Left>
-        <Right>{program.name || '--'}</Right>
+        <Right>{program.name || MISSING_ENTRY_TEXT}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Short Name</InputLabel>
         </Left>
-        <Right>{program.shortName || '--'}</Right>
+        <Right>{program.shortName || MISSING_ENTRY_TEXT}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Countries</InputLabel>
         </Left>
-        <Right>{program.countries || '--'}</Right>
+        <Right>{arrayToText(program.countries)}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Cancer Types</InputLabel>
         </Left>
-        <Right>{join(program.cancerTypes, ', ') || '--'}</Right>
+        <Right>{arrayToText(program.cancerTypes)}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Primary Sites</InputLabel>
         </Left>
-        <Right>{isEmpty(program.primarySites) ? '--' : program.primarySites}</Right>
+        <Right>{arrayToText(program.primarySites)}</Right>
       </Row>
 
       <Row>
@@ -101,7 +105,8 @@ function ProfileView({ program = {} }) {
           <InputLabel>Commitment Level</InputLabel>
         </Left>
         <Right>
-          {(program.commitmentDonors && program.commitmentDonors.toLocaleString()) || '--'}
+          {(program.commitmentDonors && program.commitmentDonors.toLocaleString()) ||
+            MISSING_ENTRY_TEXT}
         </Right>
       </Row>
 
@@ -109,14 +114,14 @@ function ProfileView({ program = {} }) {
         <Left>
           <InputLabel>Membership Type</InputLabel>
         </Left>
-        <Right>{program.membershipType || '--'}</Right>
+        <Right>{program.membershipType || MISSING_ENTRY_TEXT}</Right>
       </Row>
 
       <Row>
         <Left>
           <InputLabel>Description</InputLabel>
         </Left>
-        <Right>{program.description || '--'}</Right>
+        <Right>{program.description || MISSING_ENTRY_TEXT}</Right>
       </Row>
 
       <SectionTitle>Affiliated Institutions</SectionTitle>
@@ -124,7 +129,7 @@ function ProfileView({ program = {} }) {
         <Left>
           <InputLabel>Institutions</InputLabel>
         </Left>
-        <Right>{program.institutions || '--'}</Right>
+        <Right>{arrayToText(program.institutions)}</Right>
       </Row>
 
       <SectionTitle>Processing Regions</SectionTitle>
