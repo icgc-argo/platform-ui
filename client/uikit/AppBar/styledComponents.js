@@ -25,6 +25,8 @@ export const MenuItemContainer = styled('div', {
   min-width: 148px;
   cursor: pointer;
   text-decoration: none;
+  height: 100%;
+  box-sizing: border-box;
 
   &:hover {
     color: ${({ theme }) => theme.colors.accent1};
