@@ -28,10 +28,6 @@ export const MenuItemContainer = styled('div', {
 
   &:hover {
     color: ${({ theme }) => theme.colors.accent1};
-
-    .title {
-      color: ${({ theme }) => theme.colors.accent1};
-    }
   }
 
   color: ${({ active, theme }) => (active ? theme.colors.accent1 : theme.colors.white)};
