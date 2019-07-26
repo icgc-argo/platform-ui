@@ -36,7 +36,7 @@ export const UserBadge = ({ firstName = '', lastName = '', title = null, ...othe
       </div>
       <Typography
         variant="subtitle2"
-        color="accent1_dark"
+        color="primary"
         component="div"
         css={css`
           width: 40px;
