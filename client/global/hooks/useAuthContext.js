@@ -51,6 +51,7 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
     }
   }, []);
   return new Proxy<{
+    /* proxy to handle computed properties */
     token: typeof token,
     resolving: typeof resolving,
     logOut: typeof logOut,
