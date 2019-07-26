@@ -5,7 +5,7 @@
 import grpc from 'grpc';
 import * as loader from '@grpc/proto-loader';
 import { EGO_ROOT_GRPC } from '../../config';
-import { withRetries } from '../../utils/grpcUtils';
+import { getAuthMeta, withRetries, defaultPromiseCallback } from '../../utils/grpcUtils';
 
 const PROTO_PATH = __dirname + '/Ego.proto';
 const packageDefinition = loader.loadSync(PROTO_PATH, {
@@ -24,13 +24,11 @@ const userService = withRetries(
 
 const getUser = async (id, jwt = null) => {
   return await new Promise((resolve, reject) => {
-    const meta = new grpc.Metadata();
-
-    if (jwt) {
-      meta.add('jwt', jwt);
-    }
-
-    userService.getUser({ id }, meta, (err, response) => (err ? reject(err) : resolve(response)));
+    userService.getUser(
+      { id },
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject, 'Ego.getUser'),
+    );
   });
 };
 
@@ -41,16 +39,13 @@ const listUsers = async ({ pageNum, limit, sort, groups, query } = {}, jwt = nul
     query: { value: query },
   };
 
-  const meta = new grpc.Metadata();
-  if (jwt) {
-    meta.add('jwt', jwt);
-  }
-
-  return await new Promise((resolve, reject) =>
-    userService.listUsers(payload, meta, (err, response) =>
-      err ? reject(err) : resolve(response),
-    ),
-  );
+  return await new Promise((resolve, reject) => {
+    userService.listUsers(
+      payload,
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject, 'Ego.listUsers'),
+    );
+  });
 };
 
 export default { getUser, listUsers };
