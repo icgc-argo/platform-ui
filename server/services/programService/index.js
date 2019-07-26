@@ -8,7 +8,7 @@ import * as loader from '@grpc/proto-loader';
 import protoPath from '@icgc-argo/program-service-proto';
 
 import { PROGRAM_SERVICE_ROOT } from '../../config';
-import { getAuthMeta, wrapValue, withRetries } from '../../utils/grpcUtils';
+import { getAuthMeta, wrapValue, withRetries, defaultPromiseCallback } from '../../utils/grpcUtils';
 import retry from 'retry';
 
 const packageDefinition = loader.loadSync(protoPath, {
@@ -25,9 +25,6 @@ const programService = withRetries(
   new proto.ProgramService(PROGRAM_SERVICE_ROOT, grpc.credentials.createInsecure()),
 );
 
-const defaultPromiseCallback = (resolve, reject) => (err, response) =>
-  err ? reject(err) : resolve(response);
-
 /*
  * Read-only Methods
  */
@@ -36,23 +33,27 @@ const getProgram = async (shortName, jwt = null) => {
     programService.getProgram(
       { short_name: wrapValue(shortName) },
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.getProgram'),
     );
   });
 };
 
 const listPrograms = async (jwt = null) => {
   return await new Promise((resolve, reject) => {
-    programService.listPrograms({}, getAuthMeta(jwt), defaultPromiseCallback(resolve, reject));
+    programService.listPrograms(
+      {},
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.listPrograms'),
+    );
   });
 };
 
 const listUsers = async (shortName, jwt = null) => {
   return await new Promise((resolve, reject) => {
-    programService.listUser(
+    programService.listUsers(
       { program_short_name: wrapValue(shortName) },
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.listUsers'),
     );
   });
 };
@@ -88,14 +89,14 @@ const createProgram = async (
       submitted_donors: wrapValue(submittedDonors),
       genomic_donors: wrapValue(genomicDonors),
       website: wrapValue(website),
-      institutions: wrapValue(institutions),
-      countries: wrapValue(countries),
-      regions: wrapValue(regions),
 
-      membership_type: wrapValue(membershipType),
-
+      institutions: institutions,
+      countries: countries,
+      regions: regions,
       cancer_types: cancerTypes,
       primary_sites: primarySites,
+
+      membership_type: wrapValue(membershipType),
     },
     admins: (admins || []).map(admin => ({
       email: wrapValue(get(admin, 'email')),
@@ -109,7 +110,7 @@ const createProgram = async (
     programService.createProgram(
       createProgramRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.createProgram'),
     );
   });
 };
@@ -145,10 +146,10 @@ const updateProgram = async (
       submitted_donors: wrapValue(submittedDonors),
       genomic_donors: wrapValue(genomicDonors),
 
-      membership_type: wrapValue(membershipType),
-
       cancer_types: cancerTypes,
       primary_sites: primarySites,
+
+      membership_type: wrapValue(membershipType),
     },
   };
 
@@ -156,7 +157,7 @@ const updateProgram = async (
     programService.updateProgram(
       updateProgramRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.updateProgram'),
     );
   });
 };
@@ -177,7 +178,7 @@ const inviteUser = async (
     programService.inviteUser(
       inviteUserRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.inviteUser'),
     );
   });
 };
@@ -198,7 +199,7 @@ const joinProgram = async (
     programService.joinProgram(
       inviteUserRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.joinProgram'),
     );
   });
 };
@@ -214,7 +215,7 @@ const updateUser = async (id, shortName, role, jwt = null) => {
     programService.updateUser(
       updateUserRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.updateUser'),
     );
   });
 };
@@ -229,7 +230,7 @@ const removeUser = async (email, shortName, jwt = null) => {
     programService.removeUser(
       removeUserRequest,
       getAuthMeta(jwt),
-      defaultPromiseCallback(resolve, reject),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.removeUser'),
     );
   });
 };
