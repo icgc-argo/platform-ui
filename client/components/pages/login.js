@@ -36,7 +36,7 @@ export default function LoginPage() {
           `}
         >
           <div>
-            <img width="380px" alt="" src="/static/argo.svg" />
+            <img width="350px" alt="" src="/static/argo.svg" />
           </div>
           <div
             css={css`
