@@ -140,12 +140,12 @@ const updateProgram = async (
       description: wrapValue(description),
       commitment_donors: wrapValue(commitmentDonors),
       website: wrapValue(website),
-      institutions: wrapValue(institutions),
-      countries: wrapValue(countries),
-      regions: wrapValue(regions),
       submitted_donors: wrapValue(submittedDonors),
       genomic_donors: wrapValue(genomicDonors),
 
+      institutions: institutions,
+      countries: countries,
+      regions: regions,
       cancer_types: cancerTypes,
       primary_sites: primarySites,
 
