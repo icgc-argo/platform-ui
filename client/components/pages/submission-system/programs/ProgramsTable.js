@@ -14,7 +14,7 @@ type ProgramsTableProgram = {
   shortName: string,
   name: string | null,
   cancerTypes: Array<string>,
-  countries: string | null,
+  countries: Array<string> | null,
   membershipType: ArgoMembershipKey | null,
   genomicDonors: number | null,
   submittedDonors: number | null,
@@ -77,7 +77,7 @@ export default (tableProps: {
       Header: 'Countries',
       accessor: 'countries',
       Cell: ({ original: { countries } }) => {
-        const list = (countries || '').split(',');
+        const list = countries || [];
         return (
           <div>
             {list.map((country, i) => (

@@ -71,12 +71,10 @@ const createProgramInput = formData => ({
   shortName: formData.shortName,
   description: formData.description,
   commitmentDonors: parseInt(formData.commitmentLevel),
-  submittedDonors: 0,
-  genomicDonors: 0,
   website: formData.website,
-  institutions: formData.institutions.join(','),
-  countries: formData.countries.join(','),
-  regions: Array.from(formData.processingRegions).join(','),
+  institutions: formData.institutions,
+  countries: formData.countries,
+  regions: Array.from(formData.processingRegions),
   membershipType: formData.membershipType,
   admins: [
     {
@@ -95,9 +93,9 @@ const createUpdateProgramInput = formData => ({
   description: formData.description,
   commitmentDonors: parseInt(formData.commitmentLevel),
   website: formData.website,
-  institutions: formData.institutions.join(','),
-  countries: formData.countries.join(','),
-  regions: Array.from(formData.processingRegions).join(','),
+  institutions: formData.institutions,
+  countries: formData.countries,
+  regions: Array.from(formData.processingRegions),
   membershipType: formData.membershipType,
   cancerTypes: formData.cancerTypes,
   primarySites: formData.primarySites,
@@ -111,21 +109,15 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
-  const [countries, setCountries] = React.useState(
-    program.countries ? program.countries.split(',') : [],
-  );
+  const [countries, setCountries] = React.useState(program.countries || []);
   const [cancerTypes, setCancerTypes] = React.useState(program.cancerTypes || []);
   const [primarySites, setPrimarySites] = React.useState(program.primarySites || []);
   const [commitmentLevel, setCommitmentLevel] = React.useState(program.commitmentDonors);
-  const [institutions, setInstitutions] = React.useState(
-    program.institutions ? program.institutions.split(',') : [],
-  );
+  const [institutions, setInstitutions] = React.useState(program.institutions || []);
   const [membershipType, setMembershipType] = React.useState(program.membershipType || '');
   const [website, setWebsite] = React.useState(program.website || '');
   const [description, setDescription] = React.useState(program.description || '');
-  const [processingRegions, setProcessionRegions] = React.useState(
-    program.regions ? program.regions.split(',') : [],
-  );
+  const [processingRegions, setProcessionRegions] = React.useState(program.regions || []);
   const [adminFirstName, setAdminFirstName] = React.useState('');
   const [adminLastName, setAdminLastName] = React.useState('');
   const [adminEmail, setAdminEmail] = React.useState('');
@@ -180,7 +172,6 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
   const submitForm = async formData => {
     try {
       validData = await validateForm(formData);
-
       let result;
       if (!isEditing) {
         result = await sendCreateProgram();
@@ -193,11 +184,11 @@ export default function CreateProgramForm({ noCancel, program = {} }) {
     }
   };
 
-  const sendCreateProgram = useMutation(CREATE_PROGRAM_MUTATION, {
+  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION, {
     variables: { program: createProgramInput(validData) },
   });
 
-  const sendUpdateProgram = useMutation(UPDATE_PROGRAM_MUTATION, {
+  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION, {
     variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
   });
 
