@@ -6,6 +6,7 @@ import {
   PRIMARY_SITES,
   CANCER_TYPES,
 } from 'global/constants';
+import { requiredError, mustHaveMoreThanZeroError } from 'global/utils/form';
 
 /* Validation Schema for Create Program Form */
 
@@ -14,7 +15,7 @@ export default yup.object().shape({
     .string()
     .label('Program Name')
     .trim()
-    .required(),
+    .required(requiredError('Program Name')),
   shortName: yup
     .string()
     .label('Short Name')
@@ -31,40 +32,38 @@ export default yup.object().shape({
     )
     .max(11)
     .min(6, 'Short Name must be at least 6 characters long, of the form XXX-XX')
-    .required(),
+    .required(requiredError('Short Name')),
   countries: yup
     .array()
     .of(yup.string().oneOf(COUNTRIES.map(country => country.name)))
-    .label('Countries')
     .required()
-    .min(1),
+    .min(1, mustHaveMoreThanZeroError('Countries')),
   cancerTypes: yup
     .array()
     .of(yup.string().oneOf(CANCER_TYPES))
-    .label('Cancer Types')
     .required()
-    .min(1),
+    .min(1, mustHaveMoreThanZeroError('Cancer Types')),
   primarySites: yup
     .array()
     .of(yup.string().oneOf(PRIMARY_SITES))
     .label('Primary Sites')
     .required()
-    .min(1),
+    .min(1, mustHaveMoreThanZeroError('Primary Sites')),
   commitmentLevel: yup
     .number()
     .label('Commitment Level')
     .moreThan(0)
-    .required(),
+    .required(requiredError('Commitment Level')),
   institutions: yup
     .array()
     .of(yup.string())
     .label('Institutions')
     .required()
-    .min(1),
+    .min(1, mustHaveMoreThanZeroError('Institutions')),
   membershipType: yup
     .string()
     .label('Membership Type')
-    .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.')
+    .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), requiredError('Membership Type'))
     .required(),
   website: yup
     .string()
@@ -80,23 +79,23 @@ export default yup.object().shape({
     .of(yup.string())
     .label('Processing Regions')
     .required()
-    .min(1),
+    .min(1, mustHaveMoreThanZeroError('Processing Regions')),
   adminFirstName: yup
     .string()
     .label(`Administrator's First Name`)
     .trim()
-    .required(),
+    .required(requiredError(`Administrator's First Name`)),
   adminLastName: yup
     .string()
     .label(`Administrator's Last Name`)
     .trim()
-    .required(),
+    .required(requiredError(`Administrator's Last Name`)),
   adminEmail: yup
     .string()
     .label(`Administrator's Email`)
     .trim()
     .email()
-    .required(),
+    .required(requiredError(`Administrator's Email`)),
 });
 
 export const updateProgramSchema = yup.object().shape({

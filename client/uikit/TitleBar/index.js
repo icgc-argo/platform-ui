@@ -6,7 +6,7 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 
 const Nav = styled('nav')`
-  padding: 18px 29px;
+  padding: 18px 29px 18px 0;
   ${({ theme }) => css(theme.typography.title)};
   & a {
     color: ${({ theme }) => theme.titleBar.linkColor};
@@ -30,7 +30,7 @@ const Li = styled('li')`
 const Sep = styled('li')`
   list-style: none;
   display: flex;
-  userselect: none;
+  user-select: none;
   margin-left: 8px;
   margin-right: 8px;
   font-size: 30px;

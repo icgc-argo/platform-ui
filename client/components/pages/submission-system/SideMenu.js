@@ -3,6 +3,7 @@ import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
+import Router from 'next/router';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -14,7 +15,7 @@ import { mockPrograms } from './mockData';
 
 // $FlowFixMe .gql file not supported
 import { sideMenuProgramList } from './queries.gql';
-import useEgoToken from 'global/hooks/useEgoToken';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
 import {
@@ -23,7 +24,9 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_ID_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
+import { styled } from 'uikit';
 
 type SideMenuProgram = {
   shortName: string,
@@ -51,16 +54,9 @@ const useToggledSelectState = (initialIndex = -1) => {
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram }) => {
-  const { token } = useEgoToken();
-
+  const { token } = useAuthContext();
   return (
-    <div
-      css={css`
-        & a {
-          text-decoration: none;
-        }
-      `}
-    >
+    <div>
       <Link
         prefetch
         as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
@@ -114,6 +110,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     ({ shortName }) =>
       !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
   );
+  const { token } = useAuthContext();
   return (
     <>
       <MenuItem
@@ -131,6 +128,17 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         }
       />
+      {token && isDccMember(token) && (
+        <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
+          <a>
+            <MenuItem
+              level={2}
+              content={'All Programs'}
+              selected={Router.route === PROGRAMS_LIST_PATH}
+            />
+          </a>
+        </Link>
+      )}
       {filteredPrograms.map((program, programIndex) => (
         <MenuItem
           key={program.shortName}
@@ -154,7 +162,7 @@ export default () => {
     sideMenuProgramList,
   );
 
-  const { data: egoTokenData, token } = useEgoToken();
+  const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
@@ -201,7 +209,7 @@ export default () => {
           )}
           <MenuItem
             icon={<Icon name="programs" />}
-            content={'Programs'}
+            content={'My Programs'}
             selected={activeItem === 1}
             onClick={() => toggleItem(1)}
           >

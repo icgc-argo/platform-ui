@@ -7,8 +7,14 @@ import {
   SUBMISSION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
-import useEgoToken from 'global/hooks/useEgoToken';
-import { decodeToken, canReadProgram, isRdpcMember, canReadSomeProgram } from 'global/utils/egoJwt';
+import useAuthContext from 'global/hooks/useAuthContext';
+import {
+  decodeToken,
+  canReadProgram,
+  isRdpcMember,
+  canReadSomeProgram,
+  isDccMember,
+} from 'global/utils/egoJwt';
 import _ from 'lodash';
 import Link from 'next/link';
 import * as React from 'react';
@@ -24,6 +30,9 @@ import AppBar, {
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import urlJoin from 'url-join';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import Typography from 'uikit/Typography';
+import usePageContext from 'global/hooks/usePageContext';
 
 const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   const titles = {
@@ -46,18 +55,26 @@ const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
   );
 };
 
-export default (props: { path?: string, logOut: void => void, children?: React.Node }) => {
-  const { token: egoJwt } = useEgoToken();
-  const { path = '' } = props;
-  const userModel = (() => {
-    try {
-      return decodeToken(egoJwt || '');
-    } catch (err) {
-      return null;
-    }
-  })();
+const getUserRole = egoJwt => {
+  if (!egoJwt) {
+    return null;
+  } else if (isDccMember(egoJwt)) {
+    return 'DCC Member';
+  } else if (isRdpcMember(egoJwt)) {
+    return 'RDPC User';
+  } else if (canReadSomeProgram(egoJwt)) {
+    return 'Program Member';
+  } else {
+    return null;
+  }
+};
+
+export default () => {
+  const { token: egoJwt, logOut, data: userModel } = useAuthContext();
 
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
+
+  const { asPath: path } = usePageContext();
 
   return (
     <AppBar
@@ -75,13 +92,24 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
             </Link>
           )}
         />
-        <MenuGroup>{props.children}</MenuGroup>
       </Section>
       <Section />
       <Section>
         <MenuGroup>
-          {canAccessSubmission && (
-            <MenuItem active={path.search(SUBMISSION_PATH) === 0}>Submission</MenuItem>
+          {egoJwt && canAccessSubmission && (
+            <MenuItem
+              active={path.search(SUBMISSION_PATH) === 0}
+              DomComponent={props => (
+                <Link
+                  href={getDefaultRedirectPathForUser(egoJwt, true)}
+                  as={getDefaultRedirectPathForUser(egoJwt)}
+                >
+                  <a {...props}>
+                    <Typography variant={'default'}>Submission</Typography>
+                  </a>
+                </Link>
+              )}
+            />
           )}
           {!userModel && <NavbarLink path={LOGIN_PAGE_PATH} active={path === LOGIN_PAGE_PATH} />}
           {userModel && (
@@ -89,14 +117,14 @@ export default (props: { path?: string, logOut: void => void, children?: React.N
               dropdownMenu={
                 <DropdownMenu>
                   <DropdownMenuItem>Profile & Token</DropdownMenuItem>
-                  <DropdownMenuItem onClick={props.logOut}>Logout</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
                 </DropdownMenu>
               }
             >
               <UserBadge
                 firstName={userModel.context.user.firstName}
                 lastName={userModel.context.user.lastName}
-                title={'Some Role'}
+                title={getUserRole(egoJwt)}
               />
             </MenuItem>
           )}

@@ -13,7 +13,7 @@ import {
   PageFooter,
 } from 'uikit/PageLayout';
 import Head from '../head';
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 import Modal from 'uikit/Modal';
@@ -23,15 +23,37 @@ import Modal from 'uikit/Modal';
  */
 const modalPortalRef = React.createRef();
 
+const useMounted = () => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  return mounted;
+};
+
 export const ModalPortal = ({ children }: { children: React.Node }) => {
   const ref = modalPortalRef.current;
-  return ref ? ReactDOM.createPortal(<Modal.Overlay>{children}</Modal.Overlay>, ref) : null;
+  const mounted = useMounted();
+  return ref
+    ? ReactDOM.createPortal(
+        <div
+          css={css`
+            transition: all 0.2s;
+            height: 100vh;
+            width: 100vw;
+            opacity: ${mounted ? 1 : 0};
+          `}
+        >
+          <Modal.Overlay>{children}</Modal.Overlay>
+        </div>,
+        ref,
+      )
+    : null;
 };
 
 const SubmissionLayout = ({
   pathname,
   logOut,
-  navBar = <NavBar path={pathname} logOut={logOut} />,
   sideMenu = <SideMenu />,
   noSidebar = false,
   contentHeader,
@@ -41,7 +63,6 @@ const SubmissionLayout = ({
   pathname: string,
   logOut: any => any,
   noSidebar?: boolean,
-  navBar?: React.Element<any>,
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
@@ -63,7 +84,8 @@ const SubmissionLayout = ({
       </PageFooter>
       <div
         css={css`
-          position: absolute;
+          position: fixed;
+          z-index: 9999;
         `}
         ref={modalPortalRef}
       />

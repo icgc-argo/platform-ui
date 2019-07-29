@@ -3,6 +3,7 @@ import * as React from 'react';
 import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import Cookies from 'js-cookie';
+import Router from 'next/router';
 
 import { decodeToken } from 'global/utils/egoJwt';
 import { EGO_JWT_KEY } from 'global/constants';
@@ -14,8 +15,13 @@ type UseEgoTokenInput = {
   onError?: (error: Error) => void,
 };
 export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
-  const [token, setToken] = React.useState(null);
-  const [resolving, setResolving] = React.useState(false);
+  const [token, setToken] = React.useState<string | null>(null);
+  const [resolving, setResolving] = React.useState<boolean>(false);
+  const logOut = () => {
+    Cookies.remove(EGO_JWT_KEY);
+    setToken(null);
+    Router.push('/');
+  };
   React.useEffect(() => {
     setResolving(true);
     const existingToken = Cookies.get(EGO_JWT_KEY);
@@ -44,5 +50,23 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
         });
     }
   }, []);
-  return { token, resolving, data: token ? decodeToken(token) : null };
+  return new Proxy<{
+    /* proxy to handle computed properties */
+    token: typeof token,
+    resolving: typeof resolving,
+    logOut: typeof logOut,
+    data: $Call<typeof decodeToken, string> | null,
+  }>(
+    { token, resolving, logOut, data: null },
+    {
+      get: (obj, key) => {
+        switch (key) {
+          case 'data':
+            return token ? decodeToken(token || '') : null;
+          default:
+            return obj[key];
+        }
+      },
+    },
+  );
 };

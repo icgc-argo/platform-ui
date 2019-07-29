@@ -29,5 +29,6 @@ module.exports = withImages({
     GATEWAY_API_ROOT: process.env.GATEWAY_API_ROOT,
     EGO_API_ROOT: process.env.EGO_API_ROOT,
     EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
+    AUTH_DISABLED: process.env.AUTH_DISABLED,
   },
 });

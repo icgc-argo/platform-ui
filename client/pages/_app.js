@@ -15,15 +15,21 @@ import Button from 'uikit/Button';
 import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT } from 'global/config';
+import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT, AUTH_DISABLED } from 'global/config';
 import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 
 import Error401Page from 'components/pages/401';
-import type { PageWithConfig, GetInitialPropsContext } from 'global/utils/pages';
+import type {
+  PageWithConfig,
+  GetInitialPropsContext,
+  ClientSideGetInitialPropsContext,
+} from 'global/utils/pages/types';
 
 import { ERROR_STATUS_KEY } from './_error';
+import { PageContext } from 'global/hooks/usePageContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -34,40 +40,28 @@ const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   }
 };
 
-/**
- * Root level component that wraps every page
- */
-// this makes egoJwt available to every page client-side
-const Root = (props: {
-  Component: PageWithConfig,
-  pageProps: {},
-  egoJwt: string,
+type RootGetInitialPropsData = {
+  pageProps: { [k: string]: any },
   unauthorized: boolean,
   pathname: string,
+  ctx: ClientSideGetInitialPropsContext,
   apolloCache: {},
-}) => {
-  const { Component, pageProps, egoJwt, unauthorized, pathname } = props;
-  const logOut = () => {
-    Cookies.remove(EGO_JWT_KEY);
-    Router.push('/');
-  };
+};
+const Root = (
+  props: {
+    Component: PageWithConfig,
+  } & RootGetInitialPropsData,
+) => {
+  const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
+
+  const { token, resolving, logOut } = useAuthContext();
+  const egoJwt = resolving ? '' : token || '';
+
   React.useEffect(() => {
     if (egoJwt && !isValidJwt(egoJwt)) {
       logOut();
     }
   });
-
-  React.useEffect(() => {
-    /**
-     * Enables convenience debugging back-door
-     */
-    try {
-      const userData = decodeToken(props.egoJwt);
-      if (userData.context.user.type === 'ADMIN' && localStorage.getItem('DEBUGGING')) {
-        window.env = process.env;
-      }
-    } catch (err) {}
-  }, []);
 
   const client = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
@@ -75,10 +69,10 @@ const Root = (props: {
       uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
       headers: {
-        authorization: `Bearer ${props.egoJwt}`,
+        authorization: `Bearer ${egoJwt}`,
       },
     }),
-    cache: createInMemoryCache().restore(props.apolloCache),
+    cache: createInMemoryCache().restore(apolloCache),
   });
 
   return (
@@ -102,13 +96,15 @@ const Root = (props: {
             }
         `}
       </style>
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <ThemeProvider>
-            <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-          </ThemeProvider>
-        </ApolloHooksProvider>
-      </ApolloProvider>
+      <PageContext.Provider value={ctx}>
+        <ApolloProvider client={client}>
+          <ApolloHooksProvider client={client}>
+            <ThemeProvider>
+              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+            </ThemeProvider>
+          </ApolloHooksProvider>
+        </ApolloProvider>
+      </PageContext.Provider>
     </>
   );
 };
@@ -122,7 +118,7 @@ Root.getInitialProps = async ({
   Component: PageWithConfig,
   ctx: GetInitialPropsContext,
   router?: any,
-}) => {
+}): Promise<RootGetInitialPropsData> => {
   const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
@@ -144,7 +140,7 @@ Root.getInitialProps = async ({
     ? !(await Component.isAccessible({ egoJwt, ctx }))
     : false;
 
-  if (unauthorized) {
+  if (unauthorized && !AUTH_DISABLED) {
     const err = (new Error('Unauthorized'): Error & { statusCode?: number });
     err[ERROR_STATUS_KEY] = 401;
     throw err;
@@ -153,22 +149,26 @@ Root.getInitialProps = async ({
   const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
   let graphqlQueriesToChache;
-  let apolloCache;
+  let apolloCache = {};
   try {
     graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
       ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-      : null;
+      : [];
     apolloCache = graphqlQueriesToChache
       ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
-      : null;
+      : {};
   } catch (e) {
     console.log(e);
   }
   return {
-    egoJwt,
     pageProps,
     unauthorized,
     pathname: ctx.pathname,
+    ctx: {
+      pathname: ctx.pathname,
+      query: ctx.query,
+      asPath: ctx.asPath,
+    },
     apolloCache,
   };
 };

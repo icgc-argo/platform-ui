@@ -1,5 +1,6 @@
 import * as yup from 'yup';
-import { PROGRAM_MEMBERSHIP_TYPES } from '../../../../global/constants/index';
+import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
+import { requiredError } from 'global/utils/form';
 
 const testGsuite = async email => {
   // await fetch......
@@ -11,26 +12,25 @@ const firstName = yup
   .string()
   .label('First name')
   .trim()
-  .required('Please fill in first name');
+  .required(requiredError('First Name'));
 
 const lastName = yup
   .string()
   .label('Last name')
   .trim()
-  .required('Please fill in last name');
+  .required(requiredError('Last Name'));
 
 const email = yup
   .string()
   .label('Email')
   .trim()
   .test('is-gsuite', 'email is not gsuite', testGsuite)
-  .required('Please fill in email');
+  .required(requiredError('Email Address'));
 
 const role = yup
   .string()
   .label('Role')
-  .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), 'Invalid Membership Type provided.')
-  .required();
+  .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), requiredError('Role'));
 
 export const addUserSchema = yup.object().shape({
   firstName,

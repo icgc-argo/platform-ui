@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NavBar from './submission-system/NavBar';
+import NavBar from './NavBar';
 import { MenuItem } from 'uikit/AppBar';
 import Footer from 'uikit/Footer';
 import { css } from 'uikit';
@@ -14,10 +14,7 @@ export default function ErrorLayout({ children }) {
         min-height: 100vh;
       `}
     >
-      <NavBar pathname="123">
-        <MenuItem>File Repository</MenuItem>
-      </NavBar>
-
+      <NavBar />
       <div
         css={css`
           display: flex;
