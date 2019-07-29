@@ -28,7 +28,10 @@ export default function LoginPage() {
       >
         <div
           css={css`
-            padding: 150px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
           `}
         >
