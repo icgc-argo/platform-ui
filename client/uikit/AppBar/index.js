@@ -83,18 +83,6 @@ export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
 const getComponent = memoize(MenuItemContainer.withComponent);
 
-const useClickAway = ({ domElement, onClickAway }) => {
-  React.useEffect(e => {
-    const onGlobalClick = event => {
-      onClickAway({ domElement, event });
-    };
-    document.addEventListener('click', onGlobalClick);
-    return () => {
-      document.removeEventListener('click', onGlobalClick);
-    };
-  });
-};
-
 export const MenuItem = React.forwardRef(
   (
     {
