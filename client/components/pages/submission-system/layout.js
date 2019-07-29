@@ -74,7 +74,7 @@ const SubmissionLayout = ({
       <NavBar />
       <PageBody noSidebar={noSidebar}>
         {!noSidebar && <Panel>{sideMenu}</Panel>}
-        <PageContent>
+        <PageContent noSidebar={noSidebar}>
           {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
           <ContentBody>{children}</ContentBody>
         </PageContent>
