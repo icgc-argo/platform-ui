@@ -1,7 +1,6 @@
 import { css } from '@emotion/core';
 import PropTypes from 'prop-types';
 import React from 'react';
-import memoize from 'lodash/memoize';
 import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
@@ -80,8 +79,6 @@ Logo.propTypes = {
 export const Section = props => <SectionDisplay {...props} />;
 
 export const MenuGroup = props => <MenuGroupDisplay {...props} />;
-
-const getComponent = memoize(MenuItemContainer.withComponent);
 
 export const MenuItem = React.forwardRef(
   (
