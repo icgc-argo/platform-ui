@@ -4,6 +4,7 @@ import React from 'react';
 import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
+import useClickAway from '../utils/useClickAway';
 import {
   AppBarContainer,
   LogoContainer,
@@ -94,19 +95,10 @@ export const MenuItem = React.forwardRef(
   ) => {
     const [isDropdownOpen, setDropdownOpen] = React.useState(false);
 
-    React.useEffect(e => {
-      const onGlobalClick = event => {
-        const isClickaway = !event.path.includes(ref.current);
-        if (isClickaway) {
-          setDropdownOpen(false);
-        } else {
-          setDropdownOpen(!isDropdownOpen);
-        }
-      };
-      document.addEventListener('click', onGlobalClick);
-      return () => {
-        document.removeEventListener('click', onGlobalClick);
-      };
+    useClickAway({
+      domElementRef: ref,
+      onClickAway: () => setDropdownOpen(false),
+      onElementClick: () => setDropdownOpen(!isDropdownOpen),
     });
 
     return (
