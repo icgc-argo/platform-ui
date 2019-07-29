@@ -64,6 +64,14 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
   const [showModal, setShowModal] = React.useState(false);
   const [triggerInvite] = useSubmitFormHook({ gql: INVITE_USER_MUTATION });
 
+  function handleCancelClick() {
+    // reset the form
+    setActiveTab('');
+    setTimeout(() => {
+      setActiveTab(TABS.PROFILE);
+    });
+  }
+
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -129,7 +137,16 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
                   }
                 `}
               >
-                {!isEmpty(program) && <CreateProgramForm program={program} noCancel />}
+                {!isEmpty(program) && (
+                  <CreateProgramForm
+                    program={program}
+                    leftFooterComponent={
+                      <Button variant="text" onClick={handleCancelClick}>
+                        Cancel
+                      </Button>
+                    }
+                  />
+                )}
               </div>
             ) : (
               <Profile program={program} />
