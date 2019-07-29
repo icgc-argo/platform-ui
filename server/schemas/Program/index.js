@@ -22,6 +22,13 @@ const typeDefs = gql`
     BANNED
   }
 
+  enum InviteStatus {
+    REVOKED
+    PENDING
+    ACCEPTED
+    EXPIRED
+  }
+
   type Program @cost(complexity: 10) {
     shortName: String!
     description: String
@@ -30,22 +37,24 @@ const typeDefs = gql`
     submittedDonors: Int
     genomicDonors: Int
     website: String
-    institutions: String
-    countries: String
-    regions: String
-    membershipType: MembershipType
-
+    institutions: [String]
+    countries: [String]
+    regions: [String]
     cancerTypes: [String]
     primarySites: [String]
+
+    membershipType: MembershipType
 
     users: [ProgramUser]
   }
 
   type ProgramUser @cost(complexity: 10) {
-    email: String
-    firstName: String
-    lastName: String
-    role: UserRole
+    email: String!
+    firstName: String!
+    lastName: String!
+    role: UserRole!
+    inviteStatus: InviteStatus
+    inviteAcceptedAt: String
   }
 
   input ProgramUserInput {
@@ -60,17 +69,14 @@ const typeDefs = gql`
     shortName: String!
     description: String
     commitmentDonors: Int!
-    submittedDonors: Int!
-    genomicDonors: Int!
     website: String!
-    institutions: String!
-    countries: String!
-    regions: String!
+    institutions: [String!]!
+    countries: [String!]!
+    regions: [String!]!
+    cancerTypes: [String]!
+    primarySites: [String]!
 
     membershipType: MembershipType!
-
-    cancerTypes: [String]
-    primarySites: [String]
 
     admins: [ProgramUserInput!]!
   }
@@ -82,12 +88,12 @@ const typeDefs = gql`
     description: String
     commitmentDonors: Int
     website: String
-    institutions: String
-    countries: String
-    regions: String
-    membershipType: MembershipType
+    institutions: [String]
+    countries: [String]
+    regions: [String]
     cancerTypes: [String]
     primarySites: [String]
+    membershipType: MembershipType
   }
 
   input InviteUserInput {
@@ -163,6 +169,8 @@ const typeDefs = gql`
 /* =========
     Convert GRPC Response to GQL output
  * ========= */
+const getIsoDate = time => (time ? new Date(parseInt(time)).toISOString() : null);
+
 const convertGrpcProgramToGql = programDetails => ({
   name: get(programDetails, 'program.name.value'),
   shortName: get(programDetails, 'program.short_name.value'),
@@ -171,19 +179,21 @@ const convertGrpcProgramToGql = programDetails => ({
   submittedDonors: get(programDetails, 'program.submitted_donors.value'),
   genomicDonors: get(programDetails, 'program.genomic_donors.value'),
   website: get(programDetails, 'program.website.value'),
-  institutions: get(programDetails, 'program.institutions.value'),
-  countries: get(programDetails, 'program.countries.value'),
-  regions: get(programDetails, 'program.regions.value'),
-  membershipType: get(programDetails, 'program.membership_type.value'),
+  institutions: get(programDetails, 'program.institutions', []),
+  countries: get(programDetails, 'program.countries', []),
+  regions: get(programDetails, 'program.regions', []),
   cancerTypes: get(programDetails, 'program.cancer_types', []),
   primarySites: get(programDetails, 'program.primary_sites', []),
+  membershipType: get(programDetails, 'program.membership_type.value'),
 });
 
-const convertGrpcUserToGql = user => ({
-  email: get(user, 'email.value'),
-  firstName: get(user, 'first_name.value'),
-  lastName: get(user, 'last_name.value'),
-  role: get(user, 'role.value'),
+const convertGrpcUserToGql = userDetails => ({
+  email: get(userDetails, 'user.email.value'),
+  firstName: get(userDetails, 'user.first_name.value'),
+  lastName: get(userDetails, 'user.last_name.value'),
+  role: get(userDetails, 'user.role.value'),
+  inviteStatus: get(userDetails, 'status.value'),
+  inviteAcceptedAt: getIsoDate(get(userDetails, 'accepted_at.seconds')),
 });
 
 const resolvers = {
@@ -191,8 +201,8 @@ const resolvers = {
     users: async (program, args, context, info) => {
       const { egoToken } = context;
       const response = await programService.listUsers(program.shortName, egoToken);
-      const users = get(response, 'users', []);
-      return users.map(convertGrpcUserToGql);
+      const users = response ? get(response, 'userDetails', []).map(convertGrpcUserToGql) : null;
+      return users;
     },
   },
   Query: {
@@ -212,7 +222,9 @@ const resolvers = {
   Mutation: {
     createProgram: async (obj, args, context, info) => {
       const { egoToken } = context;
-      const program = get(args, 'program', {});
+
+      // Submitted and Genomic donors are not part of input, need to be set to 0 to start.
+      const program = { ...get(args, 'program', {}), submittedDonors: 0, genomicDonors: 0 };
       const createResponse = await programService.createProgram(program, egoToken);
       const programResponse = await programService.getProgram(
         get(args, 'program.shortName'),

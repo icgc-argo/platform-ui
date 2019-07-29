@@ -18,6 +18,14 @@ export const getAuthMeta = jwt => {
   return meta;
 };
 
+export const defaultPromiseCallback = (resolve, reject, serviceName) => (err, response) => {
+  if (err) {
+    console.log(`GRPC error - ${serviceName}: ${err}`);
+    reject(err);
+  }
+  resolve(response);
+};
+
 export const getGrpcMethodsNames = grpcService =>
   Object.getOwnPropertyNames(grpcService.__proto__).filter(
     name => !(name.search(/^\$/) > -1 || name === 'constructor'),
@@ -34,7 +42,8 @@ export const withRetries = (
   },
   errorCodes = [],
 ) => {
-  const STREAM_REMOVED_ERROR = 2;
+  const STREAM_REMOVED_CODE = 2;
+  const STREAM_REMOVED_DETAILS = 'Stream removed';
   const methodNames = getGrpcMethodsNames(grpcClient).reduce(
     //converts to a hasmap for run-time performance
     (acc, methodName) => ({
@@ -47,7 +56,12 @@ export const withRetries = (
     const operation = retry.operation(retryConfig);
     operation.attempt(currentAttempt => {
       originalMethod(payload, metadata, (err, response) => {
-        if (operation.retry(err) && [...errorCodes, STREAM_REMOVED_ERROR].includes(err.code)) {
+        if (
+          err &&
+          err.code === STREAM_REMOVED_CODE &&
+          err.details === STREAM_REMOVED_DETAILS &&
+          operation.retry(err)
+        ) {
           console.warn(
             `grpc method ${methodName} failed with errorCode ${
               err.code

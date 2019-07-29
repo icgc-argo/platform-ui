@@ -33,27 +33,27 @@ import urlJoin from 'url-join';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import usePageContext from 'global/hooks/usePageContext';
+import Icon from 'uikit/Icon';
 
-const NavbarLink = ({ path, active }: { path: string, active: boolean }) => {
-  const titles = {
-    [LOGIN_PAGE_PATH]: 'Login',
-    [PROGRAMS_LIST_PATH]: 'Programs',
-    [PROGRAM_CLINICAL_SUBMISSION_PATH]: 'Dcc Admin',
-    [USER_PAGE_PATH]: 'User',
-  };
-  return (
-    <MenuItem
-      DomComponent={({ active, ...props }) => (
-        <Link prefetch href={path}>
-          <a {...props} id="link-login" />
-        </Link>
-      )}
-      active={active}
+const NavBarLoginButton = () => (
+  <Button>
+    <span
+      css={css`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `}
     >
-      {titles[path]}
-    </MenuItem>
-  );
-};
+      <Icon
+        name="google"
+        css={css`
+          margin-right: 5px;
+        `}
+      />
+      Login
+    </span>
+  </Button>
+);
 
 const getUserRole = egoJwt => {
   if (!egoJwt) {
@@ -97,23 +97,37 @@ export default () => {
       <Section>
         <MenuGroup>
           {egoJwt && canAccessSubmission && (
-            <MenuItem
-              active={path.search(SUBMISSION_PATH) === 0}
-              DomComponent={props => (
-                <Link
-                  href={getDefaultRedirectPathForUser(egoJwt, true)}
-                  as={getDefaultRedirectPathForUser(egoJwt)}
-                >
-                  <a {...props}>
-                    <Typography variant={'default'}>Submission</Typography>
-                  </a>
-                </Link>
-              )}
-            />
+            <Link
+              href={getDefaultRedirectPathForUser(egoJwt, true)}
+              as={getDefaultRedirectPathForUser(egoJwt)}
+            >
+              <a
+                css={css`
+                  height: 100%;
+                `}
+              >
+                <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0}>
+                  <Typography variant={'default'}>Submission</Typography>
+                </MenuItem>
+              </a>
+            </Link>
           )}
-          {!userModel && <NavbarLink path={LOGIN_PAGE_PATH} active={path === LOGIN_PAGE_PATH} />}
+          {!userModel && (
+            <Link href={LOGIN_PAGE_PATH}>
+              <a
+                id="link-login"
+                css={css`
+                  align-self: center;
+                  margin-right: 16px;
+                `}
+              >
+                <NavBarLoginButton />
+              </a>
+            </Link>
+          )}
           {userModel && (
             <MenuItem
+              ref={React.createRef()}
               dropdownMenu={
                 <DropdownMenu>
                   <DropdownMenuItem>Profile & Token</DropdownMenuItem>

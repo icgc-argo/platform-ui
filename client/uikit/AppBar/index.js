@@ -22,16 +22,21 @@ export const UserBadge = ({ firstName = '', lastName = '', title = null, ...othe
       <div>
         <Typography variant="navigation" component="div" bold>
           Hello, {firstName}
+          {title && (
+            <div
+              css={css`
+                font-size: 12px;
+                font-weight: normal;
+              `}
+            >
+              {title}
+            </div>
+          )}
         </Typography>
-        {title && (
-          <Typography variant="navigation" component="div" color="grey_1" className="title">
-            {title}
-          </Typography>
-        )}
       </div>
       <Typography
         variant="subtitle2"
-        color="accent1_dark"
+        color="primary"
         component="div"
         css={css`
           width: 40px;
@@ -75,31 +80,50 @@ export const Section = props => <SectionDisplay {...props} />;
 
 export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
-export const MenuItem = ({
-  children,
-  className,
-  id,
-  ref,
-  active = false,
-  DomComponent = ({ active, ...others }) => <a {...others} />,
-  dropdownMenu,
-}) => {
-  const ComposedContainer = MenuItemContainer.withComponent(DomComponent);
+export const MenuItem = React.forwardRef(
+  (
+    {
+      children,
+      className,
+      id,
+      active = false,
+      DomComponent = ({ active, ...others }) => <a {...others} />,
+      dropdownMenu,
+    },
+    ref,
+  ) => {
+    const [isDropdownOpen, setDropdownOpen] = React.useState(false);
 
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const handleClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+    React.useEffect(e => {
+      const onGlobalClick = event => {
+        const isClickaway = !event.path.includes(ref.current);
+        if (isClickaway) {
+          setDropdownOpen(false);
+        } else {
+          setDropdownOpen(!isDropdownOpen);
+        }
+      };
+      document.addEventListener('click', onGlobalClick);
+      return () => {
+        document.removeEventListener('click', onGlobalClick);
+      };
+    });
 
-  return (
-    <ComposedContainer className={className} id={id} ref={ref} active={active}>
-      <MenuItemContent bold onClick={handleClick}>
-        {children}
-      </MenuItemContent>
-      {dropdownOpen && dropdownMenu}
-    </ComposedContainer>
-  );
-};
+    return (
+      <MenuItemContainer
+        className={className}
+        id={id}
+        ref={el => {
+          ref.current = el;
+        }}
+        active={active}
+      >
+        <MenuItemContent bold>{children}</MenuItemContent>
+        {isDropdownOpen && dropdownMenu}
+      </MenuItemContainer>
+    );
+  },
+);
 
 MenuItem.propTypes = {
   active: PropTypes.bool,
@@ -107,6 +131,9 @@ MenuItem.propTypes = {
   className: PropTypes.string,
   DomComponent: PropTypes.func,
   dropdownMenu: PropTypes.node,
+  ref: PropTypes.shape({
+    current: PropTypes.any.isRequired,
+  }).isRequired,
 };
 
 const AppBar = AppBarContainer;
