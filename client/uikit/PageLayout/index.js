@@ -20,7 +20,6 @@ export const Panel = styled('div')`
 export const PageBody = styled('div')`
   display: grid;
   grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
-  flex: 1;
 `;
 
 export const PageContent = styled('div')`
