@@ -52,5 +52,6 @@ export const useToastState = () => {
 };
 type Toaster = $Call<typeof useToastState, void>;
 
-export const ToasterContext = React.createContext<Toaster | void>();
-export const useToaster = () => React.useContext<Toaster | void>(ToasterContext);
+// $FlowFixMe It's ok flow, we will make sure there's always a context
+export const ToasterContext = React.createContext<Toaster>();
+export const useToaster = () => React.useContext<Toaster>(ToasterContext);

@@ -51,14 +51,13 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
 
   const handleActionClick = () => {
     setIsResendEmailModalOpen(false);
-    toaster &&
-      toaster.addToast({
-        variant: TOAST_VARIANTS.SUCCESS,
-        title: '',
-        content: `The email invitation has been resent to ${
-          currentEditingUser ? currentEditingUser.name : ''
-        }`,
-      });
+    toaster.addToast({
+      variant: TOAST_VARIANTS.SUCCESS,
+      title: '',
+      content: `The email invitation has been resent to ${
+        currentEditingUser ? currentEditingUser.name : ''
+      }`,
+    });
   };
 
   return (
