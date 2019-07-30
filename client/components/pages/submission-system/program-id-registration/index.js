@@ -4,10 +4,12 @@ import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
 import { useRouter } from 'next/router';
+import usePageContext from 'global/hooks/usePageContext';
 
 export default function ProgramIDRegistration({ logOut, pathname }) {
-  const router = useRouter();
-  const { shortName: programShortName } = router.query;
+  const {
+    query: { shortName: programShortName },
+  } = usePageContext();
 
   return (
     <SubmissionLayout
