@@ -31,6 +31,7 @@ import createProgramSchema, { updateProgramSchema } from './validation';
 import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
+import useFormHook from 'global/hooks/useFormHook';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -110,49 +111,44 @@ export default function CreateProgramForm({
   onSubmitted = submissionData => {},
   onSubmissionError = err => {},
 }) {
-  const isEditing = !isEmpty(program);
-  const [programName, setProgramName] = React.useState(program.name || '');
-  const [shortName, setShortName] = React.useState(program.shortName || '');
-  const [countries, setCountries] = React.useState(program.countries || []);
-  const [cancerTypes, setCancerTypes] = React.useState(program.cancerTypes || []);
-  const [primarySites, setPrimarySites] = React.useState(program.primarySites || []);
-  const [commitmentLevel, setCommitmentLevel] = React.useState(program.commitmentDonors);
-  const [institutions, setInstitutions] = React.useState(program.institutions || []);
-  const [membershipType, setMembershipType] = React.useState(program.membershipType || '');
-  const [website, setWebsite] = React.useState(program.website || '');
-  const [description, setDescription] = React.useState(program.description || '');
-  const [processingRegions, setProcessionRegions] = React.useState(program.regions || []);
-  const [adminFirstName, setAdminFirstName] = React.useState('');
-  const [adminLastName, setAdminLastName] = React.useState('');
-  const [adminEmail, setAdminEmail] = React.useState('');
-
-  const [validationErrors, setValidationErrors] = React.useState({});
-
+  const formData = {
+    programName: program.name || '',
+    shortName: program.shortName || '',
+    countries: program.countries || [],
+    cancerTypes: program.cancerTypes || [],
+    primarySites: program.primarySites || [],
+    commitmentLevel: program.commitmentDonors,
+    institutions: program.institutions || [],
+    membershipType: program.membershipType || [],
+    website: program.website || '',
+    description: program.description || '',
+    processingRegions: program.regions || '',
+    adminFirstName: '',
+    adminLastName: '',
+    adminEmail: '',
+  };
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
+
+  const {
+    errors: validationErrors,
+    data: form,
+    setData,
+    validateField,
+    validateForm,
+    touched,
+    hasErrors,
+  } = useFormHook({ initialFields: formData, schema: programSchema });
+
+  const isEditing = !isEmpty(program);
+
+  //const [validationErrors, setValidationErrors] = React.useState({});
 
   /* **************** *
    * Form Submission
    * **************** */
 
-  const formData = {
-    programName,
-    shortName,
-    countries,
-    cancerTypes,
-    primarySites,
-    commitmentLevel,
-    institutions,
-    membershipType,
-    website,
-    description,
-    processingRegions,
-    adminFirstName,
-    adminLastName,
-    adminEmail,
-  };
-
   let validData = { ...formData };
-
+  /*
   const validateForm = async () => {
     return await new Promise((resolve, reject) => {
       programSchema
@@ -172,7 +168,7 @@ export default function CreateProgramForm({
         });
     });
   };
-
+*/
   const submitForm = async formData => {
     try {
       validData = await validateForm(formData);
@@ -200,7 +196,7 @@ export default function CreateProgramForm({
 
   /* ********************* *
    * Field Level Validator
-   * ********************* */
+   * ********************* 
 
   const updateValidationErrorsForField = (path, value) => {
     setValidationErrors({ ...validationErrors, [path]: value });
@@ -224,7 +220,9 @@ export default function CreateProgramForm({
 
   const handleInputBlur = path => event => {
     validateField(path, formData[path]);
-  };
+  };*/
+
+  console.log('form', form, 'errors', errors);
 
   return (
     <>

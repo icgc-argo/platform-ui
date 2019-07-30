@@ -7,7 +7,7 @@ import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { UserSection } from '../styledComponents';
 import { addUserSchema } from '../validations';
-import useFormHook from '../useFormHook';
+import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
 
 const AddSection = styled(Button)`

@@ -4,6 +4,10 @@ import * as yup from 'yup';
 
 // assumes passing single init values and not array
 const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
+  const [form, setForm] = useState({ errors: initErrors, data: [initialFields] });
+  const [touched, setTouched] = useState(false);
+  const { errors, data } = form;
+  console.log('init fields', initialFields);
   const initErrors = [initialFields].map(section => {
     const field = {};
     for (let [key, value] of Object.entries(section)) {
@@ -11,10 +15,7 @@ const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
     }
     return field;
   });
-
-  const [form, setForm] = useState({ errors: initErrors, data: [initialFields] });
-  const [touched, setTouched] = useState(false);
-  const { errors, data } = form;
+  console.log('init errors', initErrors);
 
   const hasErrors = errors
     .map(section => Object.values(section))

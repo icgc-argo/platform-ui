@@ -3,7 +3,7 @@ import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
 import { UserModel } from '../common';
-import useFormHook from '../useFormHook';
+import useFormHook from 'global/hooks/useFormHook';
 import { editUserSchema } from '../validations';
 
 const EditUserModal = ({
