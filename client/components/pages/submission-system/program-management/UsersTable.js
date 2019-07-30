@@ -66,13 +66,13 @@ const UsersTable = (tableProps: {
       Cell: ({ original }) => (original.role ? RoleDisplayName[original.role] : ''),
     },
     {
-      Header: 'Daco Approved',
+      Header: 'DACO Approved',
       accessor: 'isDacoApproved',
       Cell: ({ original }) => (original.isDacoApproved ? 'Yes' : 'No'),
       headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
     },
     {
-      Header: 'Status',
+      Header: 'Invitation Status',
       accessor: 'status',
       Cell: ({ original }) => (original.status ? StatusDisplayName[original.status] : ''),
     },
