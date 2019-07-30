@@ -91,8 +91,9 @@ export const MenuItem = React.forwardRef(
       DomComponent = ({ active, ...others }) => <a {...others} />,
       dropdownMenu,
     },
-    ref,
+    forwardedRef,
   ) => {
+    const ref = forwardedRef || React.createRef();
     const [isDropdownOpen, setDropdownOpen] = React.useState(false);
 
     useClickAway({
@@ -124,8 +125,8 @@ MenuItem.propTypes = {
   DomComponent: PropTypes.func,
   dropdownMenu: PropTypes.node,
   ref: PropTypes.shape({
-    current: PropTypes.any.isRequired,
-  }).isRequired,
+    current: PropTypes.any,
+  }),
 };
 
 const AppBar = AppBarContainer;
