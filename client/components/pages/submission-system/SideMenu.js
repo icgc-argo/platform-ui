@@ -27,6 +27,7 @@ import {
   PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
 import { styled } from 'uikit';
+import usePageContext from 'global/hooks/usePageContext';
 
 type SideMenuProgram = {
   shortName: string,
@@ -53,7 +54,8 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const LinksToProgram = (props: { program: SideMenuProgram }) => {
+const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: boolean }) => {
+  const pageContext = usePageContext();
   const { token } = useAuthContext();
   return (
     <div>
@@ -63,7 +65,11 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
         href={PROGRAM_DASHBOARD_PATH}
       >
         <a>
-          <MenuItem level={3} content="Dashboard" />
+          <MenuItem
+            level={3}
+            content="Dashboard"
+            selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
+          />
         </a>
       </Link>
       <Link
@@ -72,7 +78,13 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
         href={PROGRAM_ID_REGISTRATION_PATH}
       >
         <a>
-          <MenuItem level={3} content="ID Registration" />
+          <MenuItem
+            level={3}
+            content="ID Registration"
+            selected={
+              PROGRAM_ID_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+            }
+          />
         </a>
       </Link>
       <Link
@@ -84,7 +96,13 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
         href={PROGRAM_CLINICAL_SUBMISSION_PATH}
       >
         <a>
-          <MenuItem level={3} content="Clinical Submission" />
+          <MenuItem
+            level={3}
+            content="Clinical Submission"
+            selected={
+              PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+            }
+          />
         </a>
       </Link>
       {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
@@ -94,7 +112,11 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
           href={PROGRAM_MANAGE_PATH}
         >
           <a>
-            <MenuItem level={3} content="Manage Program" />
+            <MenuItem
+              level={3}
+              content="Manage Program"
+              selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
+            />
           </a>
         </Link>
       )}
@@ -103,12 +125,18 @@ const LinksToProgram = (props: { program: SideMenuProgram }) => {
 };
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
-  const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState();
   const [programNameSearch, setProgramNameSearch] = React.useState('');
   const orderedPrograms = orderBy(programs, 'shortName');
   const filteredPrograms = orderedPrograms.filter(
     ({ shortName }) =>
       !programNameSearch.length || shortName.search(new RegExp(programNameSearch, 'i')) > -1,
+  );
+  const pageContext = usePageContext();
+  const currentViewingProgramIndex = filteredPrograms
+    .map(({ shortName }) => shortName)
+    .indexOf(pageContext.query.shortName);
+  const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState(
+    currentViewingProgramIndex,
   );
   const { token } = useAuthContext();
   return (
@@ -134,7 +162,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
             <MenuItem
               level={2}
               content={'All Programs'}
-              selected={Router.route === PROGRAMS_LIST_PATH}
+              selected={pageContext.pathname === PROGRAMS_LIST_PATH}
             />
           </a>
         </Link>
@@ -146,7 +174,10 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           onClick={() => toggleProgramIndex(programIndex)}
           selected={programIndex === activeProgramIndex}
         >
-          <LinksToProgram program={program} />
+          <LinksToProgram
+            program={program}
+            isCurrentlyViewed={programIndex === currentViewingProgramIndex}
+          />
         </MenuItem>
       ))}
     </>
@@ -154,7 +185,9 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
 };
 
 export default () => {
-  const [activeItem, toggleItem] = useToggledSelectState(-1);
+  const pageContext = usePageContext();
+  const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
+  const [activeItem, toggleItem] = useToggledSelectState(isInProgramSection ? 1 : 0);
   const {
     data: { programs = [] } = {},
     loading,
@@ -189,7 +222,7 @@ export default () => {
                 selected
                 noChevron
               >
-                <LinksToProgram program={programs[0]} />
+                <LinksToProgram program={programs[0]} isCurrentlyViewed={true} />
               </MenuItem>
             </MenuItem>
           </div>
