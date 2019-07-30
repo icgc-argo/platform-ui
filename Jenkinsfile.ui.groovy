@@ -44,7 +44,7 @@ spec:
         stage('Build image') {
             steps {
                 container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'8d0aaceb-2a19-4f92-ae37-5b61e4c0feb8', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
                     git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
