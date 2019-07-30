@@ -36,11 +36,8 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
-
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
-  const [isToastOpen, setIsToastOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
-
   const toaster = useToaster();
 
   const handleModalCancelClick = () => {
@@ -62,12 +59,6 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
           currentEditingUser ? currentEditingUser.name : ''
         }`,
       });
-  };
-
-  const handleToastInteraction = ({ type, event }) => {
-    if (type === 'CLOSE') {
-      setIsToastOpen(false);
-    }
   };
 
   return (
