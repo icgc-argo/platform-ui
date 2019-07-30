@@ -3,8 +3,9 @@ import jwtDecode from 'jwt-decode';
 import { get, memoize } from 'lodash';
 
 // $FlowFixMe
-import TokenUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
+import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
 
+const TokenUtils = createEgoUtils();
 type EgoJwtData = {
   iat: number,
   exp: number,
