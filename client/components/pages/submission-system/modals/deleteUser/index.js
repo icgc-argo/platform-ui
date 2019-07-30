@@ -7,13 +7,16 @@ const DeleteUserModal = ({ user, dismissModal, onSubmit }) => {
     <Modal
       title="Remove User?"
       titleIconConfig={{ name: 'warning', fill: 'warning' }}
-      actionButtonText="Save"
+      actionButtonText="Remove User"
+      buttonSize="sm"
       cancelText="Cancel"
       onActionClick={() => onSubmit()}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
-      Are you sure you want to remove <strong>{user ? user.name : ''}</strong> from the program?
+      <div style={{ width: '300px' }}>
+        Are you sure you want to remove <strong>{user ? user.name : ''}</strong> from the program?
+      </div>
     </Modal>
   );
 };
