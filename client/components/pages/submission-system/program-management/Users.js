@@ -10,6 +10,8 @@ import DeleteUserModal from '../modals/deleteUser';
 import { ModalPortal } from '../layout';
 import { useSubmitFormHook, createUserInput } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
+import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
+import { useMutation } from 'react-apollo-hooks';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
@@ -31,7 +33,7 @@ const Users = ({ users, programShortName }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
-  // const [triggerDelete] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
+  const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
 
   const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
   const [isToastOpen, setIsToastOpen] = React.useState(false);
@@ -97,7 +99,9 @@ const Users = ({ users, programShortName }) => {
           <DeleteUserModal
             user={currentDeletingUser}
             onSubmit={validData => {
-              // triggerDelete
+              triggerDelete({
+                variables: { userEmail: currentDeletingUser.email, programShortName },
+              });
             }}
             dismissModal={() => setCurrentDeletingUser(null)}
           />
