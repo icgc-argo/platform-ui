@@ -20,6 +20,7 @@ import Profile from './Profile';
 import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
 import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 import { UserModel as ModalUserModel } from '../modals/common';
+import DnaLoader from 'uikit/DnaLoader';
 
 export const useSubmitFormHook = ({ gql }: { gql: typeof INVITE_USER_MUTATION }) => {
   const [triggerMutation, rest] = useMutation(gql);
@@ -126,7 +127,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             </Tab>
           </Tabs>
           {activeTab === TABS.USERS && (
-            <Users programShortName={programShortName} users={FAKE_USERS} />
+            <Users programShortName={programShortName} users={loading ? [] : program.users} />
           )}
           {activeTab === TABS.PROFILE &&
             (isDcc ? (
