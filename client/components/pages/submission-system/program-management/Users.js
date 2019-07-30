@@ -34,30 +34,29 @@ function ResendEmailModal({ user, ...otherProps }) {
 const Users = ({ users, programShortName }: { users: Array<any>, programShortName: string }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
+  const [emailResendUser, setEmailResendUser] = React.useState(null);
+
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
-  const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
-  const [user, setUser] = React.useState(null);
   const toaster = useToaster();
 
-  const handleModalCancelClick = () => {
-    setIsResendEmailModalOpen(false);
+  const cancelEmailResend = () => {
+    setEmailResendUser(null);
   };
 
   const handleResendEmailClick = ({ user }) => {
-    setUser(user);
-    setIsResendEmailModalOpen(true);
+    setEmailResendUser(user);
   };
 
   const handleActionClick = () => {
-    setIsResendEmailModalOpen(false);
     toaster.addToast({
       variant: TOAST_VARIANTS.SUCCESS,
       title: '',
       content: `The email invitation has been resent to ${
-        currentEditingUser ? currentEditingUser.name : ''
+        emailResendUser ? emailResendUser.name : ''
       }`,
     });
+    setEmailResendUser(null);
   };
 
   return (
@@ -72,12 +71,12 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
         onUserResendInviteClick={handleResendEmailClick}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
-      {isResendEmailModalOpen && (
+      {!!emailResendUser && (
         <ModalPortal>
           <ResendEmailModal
-            user={user}
-            onCancelClick={handleModalCancelClick}
-            onCloseClick={handleModalCancelClick}
+            user={emailResendUser}
+            onCancelClick={cancelEmailResend}
+            onCloseClick={cancelEmailResend}
             onActionClick={handleActionClick}
           />
         </ModalPortal>
