@@ -17,6 +17,8 @@ import NavBar from '../NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 import Modal from 'uikit/Modal';
+import ToastStack from 'uikit/notifications/ToastStack';
+import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 
 /**
  * TODO: `pathname` and `logOut` should just be available through context
@@ -51,6 +53,32 @@ export const ModalPortal = ({ children }: { children: React.Node }) => {
     : null;
 };
 
+type ToastConfig = { variant: string, title: React.Node, content: React.Node };
+const useToastState = () => {
+  const [toastStack, setToastStack] = React.useState<Array<ToastConfig & { id: string }>>([]);
+  const addToast = (toast: ToastConfig) => {
+    const id = String(Math.random());
+    setToastStack(toastStack => [...toastStack, { ...toast, id }]);
+    setTimeout(() => {
+      removeToast(id);
+    }, 8000);
+    return id;
+  };
+  const removeToast = (_id: string) => {
+    setToastStack(toastStack => toastStack.filter(({ id }) => id !== _id));
+    return _id;
+  };
+
+  return {
+    toastStack,
+    addToast,
+    removeToast,
+  };
+};
+const ToasterContext = React.createContext<$Call<typeof useToastState, any> | null>();
+
+export const useToaster = () => React.useContext<any>(ToasterContext);
+
 const SubmissionLayout = ({
   pathname,
   logOut,
@@ -68,28 +96,58 @@ const SubmissionLayout = ({
   children?: React.Element<any>,
   subtitle?: string,
 }) => {
+  const toaster = useToastState();
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.SUCCESS,
+        title: 'TOAST',
+        content: `Lorem ipsum dolor amet jean shorts PBR&B la croix live-edge kitsch vice fanny pack. 90's shoreditch pickled photo booth four loko skateboard. Hashtag taiyaki tousled keytar activated charcoal affogato pork belly chia shaman biodiesel unicorn gentrify`,
+      });
+    }, 3000);
+  }, []);
   return (
-    <PageContainer>
-      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-      <NavBar />
-      <PageBody noSidebar={noSidebar}>
-        {!noSidebar && <Panel>{sideMenu}</Panel>}
-        <PageContent>
-          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-          <ContentBody>{children}</ContentBody>
-        </PageContent>
-      </PageBody>
-      <PageFooter>
-        <Footer />
-      </PageFooter>
+    <ToasterContext.Provider value={toaster}>
+      <PageContainer>
+        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+        <NavBar />
+        <PageBody noSidebar={noSidebar}>
+          {!noSidebar && <Panel>{sideMenu}</Panel>}
+          <PageContent>
+            {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+            <ContentBody>{children}</ContentBody>
+          </PageContent>
+        </PageBody>
+        <PageFooter>
+          <Footer />
+        </PageFooter>
+        <div
+          css={css`
+            position: fixed;
+            z-index: 9999;
+          `}
+          ref={modalPortalRef}
+        />
+      </PageContainer>
       <div
         css={css`
           position: fixed;
           z-index: 9999;
+          right: 0px;
+          top: 80px;
         `}
         ref={modalPortalRef}
-      />
-    </PageContainer>
+      >
+        <div
+          css={css`
+            margin-right: 20px;
+            margin-left: 20px;
+          `}
+        >
+          <ToastStack toastConfigs={toaster.toastStack} onInteraction={console.log} />
+        </div>
+      </div>
+    </ToasterContext.Provider>
   );
 };
 
