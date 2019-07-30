@@ -91,8 +91,9 @@ export const MenuItem = React.forwardRef(
       DomComponent = ({ active, ...others }) => <a {...others} />,
       dropdownMenu,
     },
-    ref,
+    forwardedRef,
   ) => {
+    const ref = forwardedRef || React.createRef();
     const [isDropdownOpen, setDropdownOpen] = React.useState(false);
 
     useClickAway({
