@@ -28,12 +28,15 @@ export default function LoginPage() {
       >
         <div
           css={css`
-            padding: 150px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
           `}
         >
           <div>
-            <img width="380px" alt="" src="/static/argo.svg" />
+            <img width="350px" alt="" src="/static/argo.svg" />
           </div>
           <div
             css={css`
