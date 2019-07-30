@@ -3,8 +3,12 @@ import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
+import { useRouter } from 'next/router';
 
 export default function ProgramIDRegistration({ logOut, pathname }) {
+  const router = useRouter();
+  const { shortName: programShortName } = router.query;
+
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -18,6 +22,7 @@ export default function ProgramIDRegistration({ logOut, pathname }) {
           `}
         >
           <TitleBar>
+            <>{programShortName}</>
             <>ID Registration</>
           </TitleBar>
         </div>
