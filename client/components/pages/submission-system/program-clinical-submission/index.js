@@ -3,8 +3,13 @@ import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
+import usePageContext from 'global/hooks/usePageContext';
 
 export default function ProgramClinicalSubmission({ logOut, pathname }) {
+  const {
+    query: { shortName: programShortName },
+  } = usePageContext();
+
   return (
     <SubmissionLayout
       pathname={pathname}
@@ -18,6 +23,7 @@ export default function ProgramClinicalSubmission({ logOut, pathname }) {
           `}
         >
           <TitleBar>
+            <>{programShortName}</>
             <>Clinical Submission</>
           </TitleBar>
         </div>

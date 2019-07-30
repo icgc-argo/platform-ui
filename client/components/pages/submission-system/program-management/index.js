@@ -85,7 +85,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
           `}
         >
           <TitleBar>
-            <>Program Name</>
+            <>{programShortName}</>
             <>Manage Program</>
           </TitleBar>
         </div>
