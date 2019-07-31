@@ -1,7 +1,8 @@
+// @flow
 import React from 'react';
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
-import Toast from 'uikit/notifications/Toast';
+import Toast, { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Portal from 'uikit/Portal';
 import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
@@ -12,6 +13,7 @@ import { useSubmitFormHook, createUserInput } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
 import { useMutation } from 'react-apollo-hooks';
+import { useToaster } from '../toaster';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
@@ -29,34 +31,32 @@ function ResendEmailModal({ user, ...otherProps }) {
   );
 }
 
-const Users = ({ users, programShortName }) => {
+const Users = ({ users, programShortName }: { users: Array<any>, programShortName: string }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
+  const [emailResendUser, setEmailResendUser] = React.useState(null);
+
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
+  const toaster = useToaster();
 
-  const [isResendEmailModalOpen, setIsResendEmailModalOpen] = React.useState(false);
-  const [isToastOpen, setIsToastOpen] = React.useState(false);
-  const [user, setUser] = React.useState(null);
-
-  const handleModalCancelClick = () => {
-    setIsResendEmailModalOpen(false);
+  const cancelEmailResend = () => {
+    setEmailResendUser(null);
   };
 
   const handleResendEmailClick = ({ user }) => {
-    setUser(user);
-    setIsResendEmailModalOpen(true);
+    setEmailResendUser(user);
   };
 
   const handleActionClick = () => {
-    setIsResendEmailModalOpen(false);
-    setIsToastOpen(true);
-  };
-
-  const handleToastInteraction = ({ type, event }) => {
-    if (type === 'CLOSE') {
-      setIsToastOpen(false);
-    }
+    toaster.addToast({
+      variant: TOAST_VARIANTS.SUCCESS,
+      title: '',
+      content: `The email invitation has been resent to ${
+        emailResendUser ? emailResendUser.name : ''
+      }`,
+    });
+    setEmailResendUser(null);
   };
 
   return (
@@ -71,29 +71,16 @@ const Users = ({ users, programShortName }) => {
         onUserResendInviteClick={handleResendEmailClick}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
-      {isResendEmailModalOpen && (
+      {!!emailResendUser && (
         <ModalPortal>
           <ResendEmailModal
-            user={user}
-            onCancelClick={handleModalCancelClick}
-            onCloseClick={handleModalCancelClick}
+            user={emailResendUser}
+            onCancelClick={cancelEmailResend}
+            onCloseClick={cancelEmailResend}
             onActionClick={handleActionClick}
           />
         </ModalPortal>
       )}
-      <Portal selector="body">
-        <Fade in={isToastOpen}>
-          <Toast
-            variant="SUCCESS"
-            title=""
-            setOpen={setIsToastOpen}
-            content={`The email invitation has been resent to ${
-              currentEditingUser ? currentEditingUser.name : ''
-            }`}
-            onInteraction={handleToastInteraction}
-          />
-        </Fade>
-      </Portal>
       {!!currentDeletingUser && (
         <ModalPortal>
           <DeleteUserModal
