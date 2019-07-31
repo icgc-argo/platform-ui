@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
+import { PROGRAM_USER_ROLES } from 'global/constants/index';
 import { requiredError } from 'global/utils/form';
 
 const testGsuite = async email => {
@@ -30,7 +30,7 @@ const email = yup
 const role = yup
   .string()
   .label('Role')
-  .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), requiredError('Role'));
+  .oneOf(PROGRAM_USER_ROLES.map(type => type.value), requiredError('Role'));
 
 export const addUserSchema = yup.object().shape({
   firstName,
@@ -40,7 +40,5 @@ export const addUserSchema = yup.object().shape({
 });
 
 export const editUserSchema = yup.object().shape({
-  firstName,
-  lastName,
   role,
 });

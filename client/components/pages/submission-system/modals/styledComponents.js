@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Select from 'uikit/form/Select';
 import FormHelperText from 'uikit/form/FormHelperText';
-import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import { PROGRAM_USER_ROLES } from 'global/constants';
 import css from '@emotion/css';
 import PropTypes from 'prop-types';
 
@@ -41,6 +41,8 @@ export const UserSection = ({
       <div
         css={css`
           flex: 1;
+          padding-bottom: 40px;
+          min-width: 700px;
         `}
       >
         <Row nogutter>
@@ -118,7 +120,7 @@ export const UserSection = ({
                   <Select
                     aria-label="Select role"
                     value={user.role}
-                    options={PROGRAM_MEMBERSHIP_TYPES}
+                    options={PROGRAM_USER_ROLES}
                     onChange={val => onChange('role', val)}
                     onBlur={() => validateField('role')}
                   />
