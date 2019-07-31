@@ -6,7 +6,7 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { UserSection } from '../styledComponents';
-import { addUserSchema } from '../validations';
+import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
 
