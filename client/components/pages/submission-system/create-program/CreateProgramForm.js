@@ -452,7 +452,7 @@ export default function CreateProgramForm({
               <SectionTitle>Processing Regions</SectionTitle>
             </Col>
           </Row>
-          {/*
+
           <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
@@ -489,7 +489,7 @@ export default function CreateProgramForm({
             <Row>
               <Col />
             </Row>
-                        </FormControl>
+          </FormControl>
           {!isEditing && (
             <>
               <Row>
@@ -533,7 +533,7 @@ export default function CreateProgramForm({
                         <Input
                           aria-label="Last Name"
                           id="last-name"
-                          value={adminLastName}
+                          value={form.adminLastName}
                           onChange={handleInputChange('adminLastName')}
                           onBlur={handleInputBlur('adminLastName')}
                           size="lg"
@@ -553,7 +553,7 @@ export default function CreateProgramForm({
                     <Input
                       aria-label="Email"
                       id="email"
-                      value={adminEmail}
+                      value={form.adminEmail}
                       onChange={handleInputChange('adminEmail')}
                       onBlur={handleInputBlur('adminEmail')}
                       size="lg"
@@ -564,7 +564,6 @@ export default function CreateProgramForm({
               </FormControl>
             </>
           )}
-          */}
         </Col>
       </form>
       <Row
