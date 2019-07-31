@@ -51,16 +51,12 @@ export const ModalPortal = ({ children }: { children: React.Node }) => {
 };
 
 const SubmissionLayout = ({
-  pathname,
-  logOut,
   sideMenu = <SideMenu />,
   noSidebar = false,
   contentHeader,
   children,
   subtitle,
 }: {
-  pathname: string,
-  logOut: any => any,
   noSidebar?: boolean,
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
