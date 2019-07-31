@@ -195,33 +195,6 @@ export default function CreateProgramForm({
     variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
   });
 
-  /* ********************* *
-   * Field Level Validator
-   * ********************* 
-
-  const updateValidationErrorsForField = (path, value) => {
-    setValidationErrors({ ...validationErrors, [path]: value });
-  };
-
-  const validateField = (path, value) => {
-    yup
-      .reach(programSchema, path)
-      .validate(value, { abortEarly: false })
-      .then(success => {
-        updateValidationErrorsForField(path, '');
-      })
-      .catch(err => {
-        const message =
-          isArray(err.inner) && err.inner.length > 1
-            ? err.inner[err.inner.length - 1].message
-            : err.message;
-        updateValidationErrorsForField(path, message);
-      });
-  };
-*/
-
-  //  console.log('form', form, 'validationErrors', validationErrors);
-  console.log('form countruies', form.countries, form);
   return (
     <>
       <form name="createProgram">
