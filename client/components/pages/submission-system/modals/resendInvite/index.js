@@ -1,9 +1,6 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { UserSection } from '../styledComponents';
-import { UserModel } from '../common';
-import useFormHook from '../useFormHook';
-import { editUserSchema } from '../validations';
+import PropTypes from 'prop-types';
 
 const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
   return (
@@ -24,7 +21,7 @@ const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
   );
 };
 
-EditUserModal.propTypes = {
+ResendInviteModal.propTypes = {
   user: PropTypes.object.isRequired,
   dismissModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
