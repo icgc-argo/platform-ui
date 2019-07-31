@@ -18,10 +18,8 @@ export const useToastState = () => {
     console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
     console.log(`🔥🔥🔥🔥🔥🔥🔥🔥`);
     const id = String(Math.random());
-    setToastStack(toastStack => [
-      ...toastStack,
-      { variant: TOAST_VARIANTS.INFO, onInteraction: e => e, id, ...toast },
-    ]);
+    const DEFAULT_TOAST_CONFIGS = { variant: TOAST_VARIANTS.INFO, onInteraction: e => e };
+    setToastStack(toastStack => [...toastStack, { ...DEFAULT_TOAST_CONFIGS, ...toast, id }]);
     setTimeout(() => {
       removeToast(id);
     }, DISMISS_TIMEOUT);
