@@ -1,4 +1,4 @@
-query sideMenuProgramList {
+query SIDE_MENU_PROGRAM_LIST {
   programs {
     shortName
   }
