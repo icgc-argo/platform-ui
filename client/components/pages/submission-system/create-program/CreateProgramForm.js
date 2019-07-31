@@ -51,9 +51,7 @@ const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperTex
 /* ****************** *
  * On Change Handlers
  * ****************** */
-const handleInputChange = setter => event => {
-  setter(event.target.value);
-};
+
 const handleCheckboxGroupChange = (selectedItems, setter) => value => {
   if (selectedItems.includes(value)) {
     setter(filter(selectedItems, item => item !== value));
@@ -129,19 +127,26 @@ export default function CreateProgramForm({
   };
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
-  const {
-    errors: validationErrors,
-    data: form,
-    setData,
-    validateField,
-    validateForm,
-    touched,
-    hasErrors,
-  } = useFormHook({ initialFields: formData, schema: programSchema });
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
+    initialFields: formData,
+    schema: programSchema,
+  });
+
+  // TODO: ugly as sin
+  const validationErrors = errors[0];
+  const form = data[0];
+
+  /* ****************** *
+   * On Change Handlers
+   * ****************** */
+  const handleInputChange = fieldName => event => {
+    console.log('handle input change', event);
+
+    setData({ key: fieldName, val: event.target.value });
+  };
+  const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
 
   const isEditing = !isEmpty(program);
-
-  //const [validationErrors, setValidationErrors] = React.useState({});
 
   /* **************** *
    * Form Submission
@@ -217,13 +222,10 @@ export default function CreateProgramForm({
         updateValidationErrorsForField(path, message);
       });
   };
+*/
 
-  const handleInputBlur = path => event => {
-    validateField(path, formData[path]);
-  };*/
-
-  console.log('form', form, 'errors', errors);
-
+  //  console.log('form', form, 'validationErrors', validationErrors);
+  console.log('form countruies', form.countries, form);
   return (
     <>
       <form name="createProgram">
@@ -242,12 +244,12 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Program Name"
                   id="program-name"
-                  value={programName}
-                  onChange={handleInputChange(setProgramName)}
+                  value={form.programName}
+                  onChange={handleInputChange('programName')}
                   onBlur={handleInputBlur('programName')}
                   size="lg"
                 />
-                <ErrorText error={validationErrors.progranName} />
+                <ErrorText error={validationErrors.programName} />
               </Col>
             </Row>
           </FormControl>
@@ -260,8 +262,8 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Short Name"
                   id="short-name"
-                  value={shortName}
-                  onChange={handleInputChange(setShortName)}
+                  value={form.shortName}
+                  onChange={handleInputChange('shortName')}
                   onBlur={handleInputBlur('shortName')}
                   size="lg"
                 />
@@ -276,9 +278,10 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  single={false}
                   inputProps={{ id: 'country' }}
-                  value={countries}
-                  onChange={handleInputChange(setCountries)}
+                  value={form.countries}
+                  onChange={handleInputChange('countries')}
                   onBlur={handleInputBlur('countries')}
                 >
                   {COUNTRIES.map(country => (
@@ -299,8 +302,8 @@ export default function CreateProgramForm({
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'cancer-types' }}
-                  value={cancerTypes}
-                  onChange={handleInputChange(setCancerTypes)}
+                  value={form.cancerTypes}
+                  onChange={handleInputChange('cancerTypes')}
                   onBlur={handleInputBlur('cancerTypes')}
                 >
                   {CANCER_TYPES.map(cancerType => (
@@ -321,8 +324,8 @@ export default function CreateProgramForm({
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'primary-types' }}
-                  value={primarySites}
-                  onChange={handleInputChange(setPrimarySites)}
+                  value={form.primarySites}
+                  onChange={handleInputChange('primarySites')}
                   onBlur={handleInputBlur('primarySites')}
                 >
                   {PRIMARY_SITES.map(site => (
@@ -347,8 +350,8 @@ export default function CreateProgramForm({
                       aria-label="Commitment Level"
                       id="commitment-level"
                       type="number"
-                      value={commitmentLevel}
-                      onChange={handleInputChange(setCommitmentLevel)}
+                      value={form.commitmentLevel}
+                      onChange={handleInputChange('commitmentLevel')}
                       onBlur={handleInputBlur('commitmentLevel')}
                       size="lg"
                     />
@@ -375,9 +378,9 @@ export default function CreateProgramForm({
                   aria-label="Membership Type"
                   id="membership-type"
                   options={PROGRAM_MEMBERSHIP_TYPES}
-                  onChange={setMembershipType}
+                  onChange={val => setData({ key: 'membershipType', val })}
                   onBlur={handleInputBlur('membershipType')}
-                  value={membershipType}
+                  value={form.membershipType}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.membershipType} />
@@ -393,8 +396,8 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Website"
                   id="website"
-                  value={website}
-                  onChange={handleInputChange(setWebsite)}
+                  value={form.website}
+                  onChange={handleInputChange('website')}
                   onBlur={handleInputBlur('website')}
                   size="lg"
                 />
@@ -411,8 +414,8 @@ export default function CreateProgramForm({
                 <Textarea
                   aria-label="Description"
                   id="description"
-                  value={description}
-                  onChange={handleInputChange(setDescription)}
+                  value={form.description}
+                  onChange={handleInputChange('description')}
                   onBlur={handleInputBlur('description')}
                   rows={5}
                 />
@@ -435,8 +438,8 @@ export default function CreateProgramForm({
                   aria-label="Institutions"
                   id="institutions"
                   inputProps={{ id: 'institutions' }}
-                  value={institutions}
-                  onChange={handleInputChange(setInstitutions)}
+                  value={form.institutions}
+                  onChange={handleInputChange('institutions')}
                   onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
@@ -453,6 +456,7 @@ export default function CreateProgramForm({
               <SectionTitle>Processing Regions</SectionTitle>
             </Col>
           </Row>
+          {/*
           <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
@@ -489,7 +493,7 @@ export default function CreateProgramForm({
             <Row>
               <Col />
             </Row>
-          </FormControl>
+                        </FormControl>
           {!isEditing && (
             <>
               <Row>
@@ -513,8 +517,8 @@ export default function CreateProgramForm({
                         <Input
                           aria-label="First Name"
                           id="first-name"
-                          value={adminFirstName}
-                          onChange={handleInputChange(setAdminFirstName)}
+                          value={form.adminFirstName}
+                          onChange={handleInputChange('adminFirstName')}
                           onBlur={handleInputBlur('adminFirstName')}
                           size="lg"
                         />
@@ -534,7 +538,7 @@ export default function CreateProgramForm({
                           aria-label="Last Name"
                           id="last-name"
                           value={adminLastName}
-                          onChange={handleInputChange(setAdminLastName)}
+                          onChange={handleInputChange('adminLastName')}
                           onBlur={handleInputBlur('adminLastName')}
                           size="lg"
                         />
@@ -554,7 +558,7 @@ export default function CreateProgramForm({
                       aria-label="Email"
                       id="email"
                       value={adminEmail}
-                      onChange={handleInputChange(setAdminEmail)}
+                      onChange={handleInputChange('adminEmail')}
                       onBlur={handleInputBlur('adminEmail')}
                       size="lg"
                     />
@@ -564,6 +568,7 @@ export default function CreateProgramForm({
               </FormControl>
             </>
           )}
+          */}
         </Col>
       </form>
       <Row
