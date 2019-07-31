@@ -17,12 +17,12 @@ import NavBar from '../NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 import Modal from 'uikit/Modal';
+import ToastStack from 'uikit/notifications/ToastStack';
+import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
+import { ToasterContext, useToaster, useToastState } from './toaster';
 
-/**
- * TODO: `pathname` and `logOut` should just be available through context
- */
 const modalPortalRef = React.createRef();
-
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
@@ -30,7 +30,6 @@ const useMounted = () => {
   }, []);
   return mounted;
 };
-
 export const ModalPortal = ({ children }: { children: React.Node }) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
@@ -68,28 +67,49 @@ const SubmissionLayout = ({
   children?: React.Element<any>,
   subtitle?: string,
 }) => {
+  const toaster = useToastState();
   return (
-    <PageContainer>
-      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-      <NavBar />
-      <PageBody noSidebar={noSidebar}>
-        {!noSidebar && <Panel>{sideMenu}</Panel>}
-        <PageContent>
-          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-          <ContentBody>{children}</ContentBody>
-        </PageContent>
-      </PageBody>
-      <PageFooter>
-        <Footer />
-      </PageFooter>
-      <div
-        css={css`
-          position: fixed;
-          z-index: 9999;
-        `}
-        ref={modalPortalRef}
-      />
-    </PageContainer>
+    <ToasterContext.Provider value={toaster}>
+      <PageContainer>
+        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+        <NavBar />
+        <PageBody noSidebar={noSidebar}>
+          {!noSidebar && <Panel>{sideMenu}</Panel>}
+          <PageContent>
+            {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+            <ContentBody>{children}</ContentBody>
+          </PageContent>
+        </PageBody>
+        <PageFooter>
+          <Footer />
+        </PageFooter>
+        <div
+          className="toastStackContainer"
+          css={css`
+            position: fixed;
+            z-index: 9999;
+            right: 0px;
+            top: 80px;
+          `}
+        >
+          <div
+            css={css`
+              margin-right: 20px;
+              margin-left: 20px;
+            `}
+          >
+            <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
+          </div>
+        </div>
+        <div
+          css={css`
+            position: fixed;
+            z-index: 9999;
+          `}
+          ref={modalPortalRef}
+        />
+      </PageContainer>
+    </ToasterContext.Provider>
   );
 };
 
