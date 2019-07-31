@@ -1,8 +1,16 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import PropTypes from 'prop-types';
+import { UserModel } from '../common';
 
-const DeleteUserModal = ({ user, dismissModal, onSubmit }) => {
+const DeleteUserModal = ({
+  user,
+  dismissModal,
+  onSubmit,
+}: {
+  user: UserModel,
+  onSubmit: (data: typeof UserModel) => any | void,
+  dismissModal: (e: any | void) => any | void,
+}) => {
   return (
     <Modal
       title="Remove User?"
@@ -20,12 +28,6 @@ const DeleteUserModal = ({ user, dismissModal, onSubmit }) => {
       </div>
     </Modal>
   );
-};
-
-DeleteUserModal.propTypes = {
-  user: PropTypes.object.isRequired,
-  dismissModal: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default DeleteUserModal;

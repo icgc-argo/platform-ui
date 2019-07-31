@@ -1,12 +1,19 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import PropTypes from 'prop-types';
 import { UserSection } from '../styledComponents';
 import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
-const EditUserModal = ({ user, dismissModal, onSubmit }) => {
+const EditUserModal = ({
+  user,
+  dismissModal,
+  onSubmit,
+}: {
+  user: UserModel,
+  onSubmit: (data: typeof UserModel) => any | void,
+  dismissModal: (e: any | void) => any | void,
+}) => {
   const {
     errors: validationErrors,
     data: form,
@@ -45,12 +52,6 @@ const EditUserModal = ({ user, dismissModal, onSubmit }) => {
       />
     </Modal>
   );
-};
-
-EditUserModal.propTypes = {
-  user: PropTypes.object.isRequired,
-  dismissModal: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default EditUserModal;

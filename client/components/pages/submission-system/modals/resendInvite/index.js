@@ -1,8 +1,16 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import PropTypes from 'prop-types';
+import { UserModel } from '../common';
 
-const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
+const ResendInviteModal = ({
+  user,
+  dismissModal,
+  onSubmit,
+}: {
+  user: UserModel,
+  onSubmit: (data: typeof UserModel) => any | void,
+  dismissModal: (e: any | void) => any | void,
+}) => {
   return (
     <Modal
       title="Resend Invitation?"
@@ -19,12 +27,6 @@ const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
       </div>
     </Modal>
   );
-};
-
-ResendInviteModal.propTypes = {
-  user: PropTypes.object.isRequired,
-  dismissModal: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ResendInviteModal;
