@@ -48,18 +48,6 @@ const InputLabelWrapper = ({ sm = 3, children }) => (
 
 const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperText> : null);
 
-/* ****************** *
- * On Change Handlers
- * ****************** */
-
-const handleCheckboxGroupChange = (selectedItems, setter) => value => {
-  if (selectedItems.includes(value)) {
-    setter(filter(selectedItems, item => item !== value));
-  } else {
-    setter([...selectedItems, value]);
-  }
-};
-
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
@@ -145,6 +133,14 @@ export default function CreateProgramForm({
     setData({ key: fieldName, val: event.target.value });
   };
   const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
+
+  const handleCheckboxGroupChange = (selectedItems, fieldName) => value => {
+    if (selectedItems.includes(value)) {
+      setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
+    } else {
+      setData({ key: fieldName, val: [...selectedItems, value] });
+    }
+  };
 
   const isEditing = !isEmpty(program);
 
@@ -466,8 +462,8 @@ export default function CreateProgramForm({
                 <ErrorText error={validationErrors.processingRegions} />
                 <RadioCheckboxGroup
                   hasError={false}
-                  onChange={handleCheckboxGroupChange(processingRegions, setProcessionRegions)}
-                  isChecked={item => processingRegions.includes(item)}
+                  onChange={handleCheckboxGroupChange(form.processingRegions, 'processingRegions')}
+                  isChecked={item => form.processingRegions.includes(item)}
                 >
                   <Row>
                     <Col>
