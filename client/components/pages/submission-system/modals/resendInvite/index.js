@@ -6,25 +6,6 @@ import useFormHook from '../useFormHook';
 import { editUserSchema } from '../validations';
 
 const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
-  const {
-    errors: validationErrors,
-    data: form,
-    setData,
-    validateField,
-    validateForm,
-    touched,
-    hasErrors,
-  } = useFormHook({ initialFields: user, schema: editUserSchema });
-
-  const submitForm = async () => {
-    try {
-      const validData = await validateForm();
-      const result = onSubmit(validData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <Modal
       title="Resend Invitation?"
@@ -41,6 +22,12 @@ const ResendInviteModal = ({ user, dismissModal, onSubmit }) => {
       </div>
     </Modal>
   );
+};
+
+EditUserModal.propTypes = {
+  user: PropTypes.object.isRequired,
+  dismissModal: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ResendInviteModal;

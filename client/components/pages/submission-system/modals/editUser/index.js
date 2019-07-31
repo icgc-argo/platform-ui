@@ -40,7 +40,7 @@ const EditUserModal = ({ user, dismissModal, onSubmit }) => {
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
         errors={validationErrors[0]}
-        disabledFields={['email']}
+        disabledFields={['email', 'firstName', 'lastName']}
       />
     </Modal>
   );

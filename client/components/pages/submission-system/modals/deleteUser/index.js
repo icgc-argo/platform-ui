@@ -14,8 +14,9 @@ const DeleteUserModal = ({ user, dismissModal, onSubmit }) => {
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
-      <div style={{ width: '300px' }}>
-        Are you sure you want to remove <strong>{user ? user.name : ''}</strong> from the program?
+      <div style={{ width: '245px' }}>
+        Are you sure you want to remove{' '}
+        <strong>{user ? `${user.firstName} ${user.lastName}` : ''}</strong> from the program?
       </div>
     </Modal>
   );
