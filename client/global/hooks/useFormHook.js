@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { get, isArray } from 'lodash';
+import { get, isArray, flattenDeep } from 'lodash';
 import * as yup from 'yup';
 
 // assumes passing single init values and not array
 const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
-  const [form, setForm] = useState({ errors: initErrors, data: [initialFields] });
-  const [touched, setTouched] = useState(false);
-  const { errors, data } = form;
-  console.log('init fields', initialFields);
   const initErrors = [initialFields].map(section => {
     const field = {};
     for (let [key, value] of Object.entries(section)) {
@@ -15,15 +11,16 @@ const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
     }
     return field;
   });
-  console.log('init errors', initErrors);
 
-  const hasErrors = errors
-    .map(section => Object.values(section))
-    .flat()
-    .some(x => x);
+  const [form, setForm] = useState({ errors: initErrors, data: [initialFields] });
+  const [touched, setTouched] = useState(false);
+  const { errors, data } = form;
+
+  const hasErrors = flattenDeep(errors.map(section => Object.values(section))).some(x => x);
 
   // set form data
   const setData = ({ key, val, index = 0 }) => {
+    console.log('set data', key, val, index, data);
     if (!touched) setTouched(true);
 
     setForm({
@@ -66,6 +63,7 @@ const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
 
   // validate a single field
   const validateField = async ({ key, index = 0 }) => {
+    console.log('validate field', key, index);
     try {
       const value = await yup.reach(formSchema, key).validate(data[index][key]);
       setError({ key, val: '', index });
