@@ -1,28 +1,39 @@
 // @flow
 import * as React from 'react';
+import omit from 'lodash/omit';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 
-type ToastEventPayload = { type: string, event: any };
+type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS', event: any };
 type ToastConfig = {
-  variant?: string,
+  variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR',
+  interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS',
   title: React.Node,
   content: React.Node,
   onInteraction?: (e: ToastEventPayload) => any,
 };
 export const useToastState = () => {
-  const DISMISS_TIMEOUT = 8000;
+  const DEFAULT_TIMEOUT = 8000;
   const [toastStack, setToastStack] = React.useState<(ToastConfig & { id: string })[]>([]);
 
-  const addToast = (toast: ToastConfig) => {
+  const addToast = (toast: ToastConfig & { timeout?: number }) => {
     console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
     console.log(`🔥🔥🔥🔥🔥🔥🔥🔥`);
     const id = String(Math.random());
-    const DEFAULT_TOAST_CONFIGS = { variant: TOAST_VARIANTS.INFO, onInteraction: e => e };
-    setToastStack(toastStack => [...toastStack, { ...DEFAULT_TOAST_CONFIGS, ...toast, id }]);
-    setTimeout(() => {
-      removeToast(id);
-    }, DISMISS_TIMEOUT);
+    const DEFAULT_TOAST_CONFIGS: $Shape<ToastConfig> = {
+      variant: TOAST_VARIANTS.INFO,
+      onInteraction: e => e,
+      interactionType: undefined, // the Toast component internally has its default, no need to cover this
+    };
+    setToastStack(toastStack => [
+      ...toastStack,
+      { ...DEFAULT_TOAST_CONFIGS, ...omit(toast, 'timeout'), id },
+    ]);
+    if (toast.timeout !== Infinity) {
+      setTimeout(() => {
+        removeToast(id);
+      }, toast.timeout || DEFAULT_TIMEOUT);
+    }
     return id;
   };
 
