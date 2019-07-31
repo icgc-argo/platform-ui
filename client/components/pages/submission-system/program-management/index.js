@@ -49,7 +49,8 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
 
   const { shortName: programShortName } = router.query;
   const { tab: defaultTab } = router.query;
-  const { data: { program } = {}, loading, errors } = useQuery(PROGRAM_QUERY, {
+
+  const { data: { program } = {}, loading, errors, refetch } = useQuery(PROGRAM_QUERY, {
     variables: { shortName: programShortName },
   });
 
@@ -127,7 +128,11 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             </Tab>
           </Tabs>
           {activeTab === TABS.USERS && (
-            <Users programShortName={programShortName} users={loading ? [] : program.users} />
+            <Users
+              programShortName={programShortName}
+              users={loading ? [] : program.users}
+              refetch={refetch}
+            />
           )}
           {activeTab === TABS.PROFILE &&
             (isDcc ? (
@@ -158,7 +163,7 @@ export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) 
             <AddUserModal
               onSubmit={validData =>
                 triggerInvite({
-                  variables: { user: createUserInput({ data: validData, programShortName }) },
+                  variables: { invite: createUserInput({ data: validData, programShortName }) },
                 })
               }
               dismissModal={() => setShowModal(false)}

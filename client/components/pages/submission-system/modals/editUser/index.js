@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
+import PropTypes from 'prop-types';
 import { UserSection } from '../styledComponents';
 import { UserModel } from '../common';
 import useFormHook from '../useFormHook';
@@ -44,6 +45,12 @@ const EditUserModal = ({ user, dismissModal, onSubmit }) => {
       />
     </Modal>
   );
+};
+
+EditUserModal.propTypes = {
+  user: PropTypes.object.isRequired,
+  dismissModal: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default EditUserModal;

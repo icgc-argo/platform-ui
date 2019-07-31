@@ -2,62 +2,25 @@
 import React from 'react';
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
-import Toast, { TOAST_VARIANTS } from 'uikit/notifications/Toast';
-import Portal from 'uikit/Portal';
 import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
 import EditUserModal from '../modals/editUser';
 import DeleteUserModal from '../modals/deleteUser';
+import ResendInviteModal from '../modals/resendInvite';
 import { ModalPortal } from '../layout';
-import { useSubmitFormHook, createUserInput } from './';
+import { useSubmitFormHook } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
+import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 import { useMutation } from 'react-apollo-hooks';
-import { useToaster } from '../toaster';
 
-function ResendEmailModal({ user, ...otherProps }) {
-  return (
-    <Modal
-      title="Resend Invitation?"
-      actionButtonText="RESEND INVITATION"
-      cancelText="CANCEL"
-      {...otherProps}
-    >
-      <div style={{ width: '322px' }}>
-        Are you sure you want to resend the email invitation to{' '}
-        <strong>{user ? user.name : ''}</strong>?
-      </div>
-    </Modal>
-  );
-}
-
-const Users = ({ users, programShortName }: { users: Array<any>, programShortName: string }) => {
+const Users = ({ users, programShortName, refetch }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
-  const [emailResendUser, setEmailResendUser] = React.useState(null);
-
+  const [currentResendEmailUser, setCurrentResendEmailUser] = React.useState(null);
   const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
-  const toaster = useToaster();
-
-  const cancelEmailResend = () => {
-    setEmailResendUser(null);
-  };
-
-  const handleResendEmailClick = ({ user }) => {
-    setEmailResendUser(user);
-  };
-
-  const handleActionClick = () => {
-    toaster.addToast({
-      variant: TOAST_VARIANTS.SUCCESS,
-      title: '',
-      content: `The email invitation has been resent to ${
-        emailResendUser ? emailResendUser.name : ''
-      }`,
-    });
-    setEmailResendUser(null);
-  };
+  const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
 
   return (
     <div>
@@ -68,16 +31,33 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
          * @todo: actually implement these functions
          */
         onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
-        onUserResendInviteClick={handleResendEmailClick}
+        onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
-      {!!emailResendUser && (
+      {!!currentResendEmailUser && (
         <ModalPortal>
-          <ResendEmailModal
-            user={emailResendUser}
-            onCancelClick={cancelEmailResend}
-            onCloseClick={cancelEmailResend}
-            onActionClick={handleActionClick}
+          <ResendInviteModal
+            user={currentResendEmailUser}
+            dismissModal={() => setCurrentResendEmailUser(null)}
+            onSubmit={async () => {
+              try {
+                const result = await triggerResendInvite({
+                  variables: {
+                    invite: {
+                      programShortName,
+                      userFirstName: currentResendEmailUser.firstName,
+                      userLastName: currentResendEmailUser.lastName,
+                      userEmail: currentResendEmailUser.email,
+                      userRole: currentResendEmailUser.role,
+                    },
+                  },
+                });
+                //toaster for success
+                setCurrentResendEmailUser(null);
+              } catch (err) {
+                // toaster for error
+              }
+            }}
           />
         </ModalPortal>
       )}
@@ -85,10 +65,18 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
         <ModalPortal>
           <DeleteUserModal
             user={currentDeletingUser}
-            onSubmit={validData => {
-              triggerDelete({
-                variables: { userEmail: currentDeletingUser.email, programShortName },
-              });
+            onSubmit={async () => {
+              try {
+                const result = await triggerDelete({
+                  variables: { userEmail: currentDeletingUser.email, programShortName },
+                });
+                //toaster for success
+                setCurrentDeletingUser(null);
+                console.log('refetching', refetch);
+                refetch();
+              } catch (err) {
+                // toaster for error
+              }
             }}
             dismissModal={() => setCurrentDeletingUser(null)}
           />
@@ -98,11 +86,22 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
         <ModalPortal>
           <EditUserModal
             user={currentEditingUser}
-            onSubmit={validData =>
-              triggerEdit({
-                variables: { user: createUserInput({ data: validData, programShortName }) },
-              })
-            }
+            onSubmit={async validData => {
+              try {
+                await triggerEdit({
+                  variables: {
+                    userEmail: validData.email,
+                    programShortName,
+                    userRole: validData.role,
+                  },
+                });
+                // toaster for success
+                setCurrentEditingUser(null);
+                refetch();
+              } catch (err) {
+                //toaster for error
+              }
+            }}
             dismissModal={() => setCurrentEditingUser(null)}
           />
         </ModalPortal>
