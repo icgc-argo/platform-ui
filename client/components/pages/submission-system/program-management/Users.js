@@ -21,11 +21,11 @@ import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 const Users = ({
   users,
   programShortName,
-  refetch,
+  onUserUpdate: refetch,
 }: {
   users: Array<any>,
   programShortName: string,
-  refetch: any => void,
+  onUserUpdate: any => void,
 }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);

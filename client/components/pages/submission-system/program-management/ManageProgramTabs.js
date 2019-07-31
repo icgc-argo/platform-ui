@@ -106,7 +106,7 @@ export default () => {
         <Users
           programShortName={programShortName}
           users={loading ? [] : program.users}
-          refetch={refetch}
+          onUserUpdate={() => refetch()}
         />
       )}
       {activeTab === TABS.PROFILE &&
