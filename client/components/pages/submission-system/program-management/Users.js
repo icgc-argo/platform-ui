@@ -44,10 +44,6 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
     setEmailResendUser(null);
   };
 
-  const handleResendEmailClick = ({ user }) => {
-    setEmailResendUser(user);
-  };
-
   const handleActionClick = () => {
     toaster.addToast({
       variant: TOAST_VARIANTS.SUCCESS,
@@ -68,7 +64,7 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
          * @todo: actually implement these functions
          */
         onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
-        onUserResendInviteClick={handleResendEmailClick}
+        onUserResendInviteClick={({ user }) => setEmailResendUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {!!emailResendUser && (
