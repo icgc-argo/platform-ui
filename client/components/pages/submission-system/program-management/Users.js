@@ -112,11 +112,12 @@ const Users = ({
                   title: '',
                   content: (
                     <span>
-                      Successfully updated user:
+                      The information for{' '}
                       <strong>
                         {currentDeletingUser && currentDeletingUser.firstName}{' '}
                         {currentDeletingUser && currentDeletingUser.lastName}
-                      </strong>
+                      </strong>{' '}
+                      has been updated.
                     </span>
                   ),
                 });
@@ -149,11 +150,12 @@ const Users = ({
                   title: '',
                   content: (
                     <span>
-                      Successfully removed user:
+                      The user{' '}
                       <strong>
                         {currentDeletingUser && currentDeletingUser.firstName}{' '}
                         {currentDeletingUser && currentDeletingUser.lastName}
-                      </strong>
+                      </strong>{' '}
+                      has been removed.
                     </span>
                   ),
                 });
