@@ -104,7 +104,11 @@ const createUpdateProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-export default function CreateProgramForm({ leftFooterComponent, program = {} }) {
+export default function CreateProgramForm({
+  leftFooterComponent,
+  program = {},
+  onSubmitted = () => {},
+}) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
@@ -178,6 +182,7 @@ export default function CreateProgramForm({ leftFooterComponent, program = {} })
       } else {
         result = await sendUpdateProgram();
       }
+      onSubmitted(validData);
     } catch (err) {
       window.scrollTo(0, 0);
     }
