@@ -6,7 +6,7 @@ import {
   PRIMARY_SITES,
   CANCER_TYPES,
 } from 'global/constants';
-import { requiredError, mustHaveMoreThanZeroError } from 'global/utils/form';
+import { requiredError, mustHaveMoreThanZeroError } from 'global/utils/form/error';
 
 /* Validation Schema for Create Program Form */
 
