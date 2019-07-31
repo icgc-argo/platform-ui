@@ -3,9 +3,10 @@ import * as React from 'react';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 
-type ToastEventPayload = { type: string, event: any };
+type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS', event: any };
 type ToastConfig = {
-  variant?: string,
+  variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR',
+  interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS',
   title: React.Node,
   content: React.Node,
   onInteraction?: (e: ToastEventPayload) => any,
@@ -18,7 +19,11 @@ export const useToastState = () => {
     console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
     console.log(`🔥🔥🔥🔥🔥🔥🔥🔥`);
     const id = String(Math.random());
-    const DEFAULT_TOAST_CONFIGS = { variant: TOAST_VARIANTS.INFO, onInteraction: e => e };
+    const DEFAULT_TOAST_CONFIGS: $Shape<ToastConfig> = {
+      variant: TOAST_VARIANTS.INFO,
+      onInteraction: e => e,
+      interactionType: undefined, // the Toast component internally has its default, no need to cover this
+    };
     setToastStack(toastStack => [...toastStack, { ...DEFAULT_TOAST_CONFIGS, ...toast, id }]);
     setTimeout(() => {
       removeToast(id);

@@ -2,7 +2,7 @@
 import React from 'react';
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
-import Toast, { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 import Portal from 'uikit/Portal';
 import Fade from 'uikit/transitions/Fade';
 import Modal from 'uikit/Modal';
