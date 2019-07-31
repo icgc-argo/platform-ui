@@ -45,7 +45,7 @@ const AddUserModal = ({
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      const result = onSubmit(validData);
+      const result = onSubmit(validData[0]);
     } catch (err) {
       console.log(err);
     }

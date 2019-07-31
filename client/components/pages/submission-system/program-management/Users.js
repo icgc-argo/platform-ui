@@ -5,14 +5,13 @@ import { useMutation } from 'react-apollo-hooks';
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
 import Fade from 'uikit/transitions/Fade';
-import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 
 import EditUserModal from '../modals/editUser';
 import DeleteUserModal from '../modals/deleteUser';
 import ResendInviteModal from '../modals/resendInvite';
 import { ModalPortal } from '../layout';
 
-import { useSubmitFormHook } from './';
 import { useToaster } from '../toaster';
 
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
@@ -31,7 +30,7 @@ const Users = ({
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
   const [currentResendEmailUser, setCurrentResendEmailUser] = React.useState(null);
-  const [triggerEdit] = useSubmitFormHook({ gql: EDIT_USER_MUTATION });
+  const [triggerEdit] = useMutation(EDIT_USER_MUTATION);
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
   const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
 
@@ -163,7 +162,7 @@ const Users = ({
                 toaster.addToast({
                   variant: TOAST_VARIANTS.ERROR,
                   title: '',
-                  content: 'An error occurred while removing the user.s',
+                  content: 'An error occurred while removing the user.',
                 });
               }
               setCurrentDeletingUser(null);
