@@ -33,8 +33,9 @@ const RoleDisplayName: { [key: RoleKey]: string } = {
   SUBMITTER: 'Submitter',
 };
 
+const APPROVED_DISAPLY_STATUS = 'Approved';
 const StatusDisplayName: { [key: StatusKey]: string } = {
-  ACCEPTED: 'Approved',
+  ACCEPTED: APPROVED_DISAPLY_STATUS,
   PENDING: 'Pending Invitation',
   EXPIRED: 'Invitation Expired',
 };
@@ -47,7 +48,7 @@ const UsersTable = (tableProps: {
 }) => {
   const { data: egoTokenData } = useAuthContext();
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
-  console.log(tableProps.users);
+
   const columns: Array<{
     Header: string,
     accessor?: $Keys<UsersTableUser>,
@@ -77,7 +78,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Status',
       Cell: ({ original }) =>
-        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : '',
+        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISAPLY_STATUS,
     },
     {
       Header: 'Joined On',
@@ -107,7 +108,7 @@ const UsersTable = (tableProps: {
                 // Disable if:
                 // already accepted
                 props.original.inviteStatus === 'ACCEPTED' ||
-                // OR added without invitation originally
+                // OR added without invitation (shows as Accepted)
                 props.original.inviteStatus === null ||
                 // OR the site user is the user in this row
                 userEmail === props.original.email
