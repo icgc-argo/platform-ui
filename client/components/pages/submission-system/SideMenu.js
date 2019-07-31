@@ -13,8 +13,7 @@ import DnaLoader from 'uikit/DnaLoader';
 
 import { mockPrograms } from './mockData';
 
-// $FlowFixMe .gql file not supported
-import { sideMenuProgramList } from './queries.gql';
+import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
@@ -192,7 +191,7 @@ export default () => {
     data: { programs = [] } = {},
     loading,
   }: { data: { programs: Array<SideMenuProgram> }, loading: boolean } = useQuery(
-    sideMenuProgramList,
+    SIDE_MENU_PROGRAM_LIST,
   );
 
   const { data: egoTokenData, token } = useAuthContext();
