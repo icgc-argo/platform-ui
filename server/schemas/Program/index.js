@@ -45,6 +45,7 @@ const typeDefs = gql`
     id: String!
     createdAt: Timestamp!
     expiresAt: Timestamp!
+    acceptedAt: Timestamp
     program: Program!
     user: ProgramUser!
     emailSent: Boolean!
