@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { get, isArray, flattenDeep } from 'lodash';
 import * as yup from 'yup';
 
+/**
+ * Each form is broken down into sections and fields
+ * eg. [{name: 'John', age: 45}, {name: 'Pat', age: 54}]
+ */
+
 // assumes passing single init values and not array
 const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
   const initErrors = [initialFields].map(section => {
@@ -20,7 +25,6 @@ const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
 
   // set form data
   const setData = ({ key, val, index = 0 }) => {
-    console.log('set data', key, val, index, data);
     if (!touched) setTouched(true);
 
     setForm({
@@ -63,7 +67,6 @@ const useFormHook = ({ initialFields, schema: formSchema, disabledFields }) => {
 
   // validate a single field
   const validateField = async ({ key, index = 0 }) => {
-    console.log('validate field', key, index);
     try {
       const value = await yup.reach(formSchema, key).validate(data[index][key]);
       setError({ key, val: '', index });

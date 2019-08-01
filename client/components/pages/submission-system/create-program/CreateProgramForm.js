@@ -127,11 +127,9 @@ export default function CreateProgramForm({
   /* ****************** *
    * On Change Handlers
    * ****************** */
-  const handleInputChange = fieldName => event => {
-    console.log('handle input change', event);
-
+  const handleInputChange = fieldName => event =>
     setData({ key: fieldName, val: event.target.value });
-  };
+
   const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
 
   const handleCheckboxGroupChange = (selectedItems, fieldName) => value => {
@@ -149,27 +147,7 @@ export default function CreateProgramForm({
    * **************** */
 
   let validData = { ...formData };
-  /*
-  const validateForm = async () => {
-    return await new Promise((resolve, reject) => {
-      programSchema
-        .validate(formData, { abortEarly: false, stripUnknown: true })
-        .then(data => {
-          // Validate will perform data manipulations such as trimming strings.
-          //  need to return the updated form data for submission.
-          resolve(data);
-        })
-        .catch(err => {
-          const errors = get(err, 'inner', []).reduce((output, error) => {
-            output[error.path.replace(/\[.*\]/, '')] = error.message;
-            return output;
-          }, {});
-          setValidationErrors(errors);
-          reject(errors);
-        });
-    });
-  };
-*/
+
   const submitForm = async formData => {
     try {
       validData = await validateForm(formData);
