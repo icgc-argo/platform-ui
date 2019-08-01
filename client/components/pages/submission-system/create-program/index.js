@@ -12,7 +12,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import Button from 'uikit/Button';
-import { useToaster } from '../../../toaster';
+import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { useRouter } from 'next/router';
