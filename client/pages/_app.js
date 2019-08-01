@@ -37,52 +37,8 @@ type RootGetInitialPropsData = {
   ctx: ClientSideGetInitialPropsContext,
   apolloCache: {},
 };
-const Root = (
-  props: {
-    Component: PageWithConfig,
-  } & RootGetInitialPropsData,
-) => {
-  const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
 
-  const { token, resolving, logOut } = useAuthContext();
-  const egoJwt = resolving ? '' : token || '';
-
-  React.useEffect(() => {
-    if (egoJwt && !isValidJwt(egoJwt)) {
-      logOut();
-    }
-  });
-
-  return (
-    <>
-      <style>
-        {`
-            body {
-              margin: 0;
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            } /* custom! */
-            #__next {
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            }
-        `}
-      </style>
-      <GlobalContextProviders egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
-        <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-      </GlobalContextProviders>
-    </>
-  );
-};
-
-// this makes egoJwt available to every page server-side
-Root.getInitialProps = async ({
+const getInitialProps = async ({
   Component,
   ctx,
   router,
@@ -144,5 +100,53 @@ Root.getInitialProps = async ({
     apolloCache,
   };
 };
+
+const Root = (() => {
+  const component = (
+    props: {
+      Component: PageWithConfig,
+    } & RootGetInitialPropsData,
+  ) => {
+    const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
+
+    const { token, resolving, logOut } = useAuthContext();
+    const egoJwt = resolving ? '' : token || '';
+
+    React.useEffect(() => {
+      if (egoJwt && !isValidJwt(egoJwt)) {
+        logOut();
+      }
+    });
+
+    return (
+      <>
+        <style>
+          {`
+            body {
+              margin: 0;
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            } /* custom! */
+            #__next {
+              position: absolute;
+              top: 0px;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            }
+        `}
+        </style>
+        <GlobalContextProviders egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
+          <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+        </GlobalContextProviders>
+      </>
+    );
+  };
+  component.getInitialProps = getInitialProps;
+  return component;
+})();
 
 export default Root;
