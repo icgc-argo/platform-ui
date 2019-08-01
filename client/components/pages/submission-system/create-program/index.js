@@ -22,7 +22,7 @@ const SectionTitle = styled('h3')`
   color: ${({ theme }) => theme.colors.secondary};
 `;
 
-const CreateProgramPageContent = () => {
+export default () => {
   const toaster = useToaster();
   const router = useRouter();
   const onProgramCreated = ({ programName, shortName: programShortName }) => {
@@ -37,20 +37,6 @@ const CreateProgramPageContent = () => {
       },
     });
   };
-  return (
-    /** @todo: refactor the CreateProgramForm so the whole submission logic is dependency injected, then onSubmitted whould be onSubmit **/
-    <CreateProgramForm
-      onSubmitted={onProgramCreated}
-      leftFooterComponent={
-        <Link href={PROGRAMS_LIST_PATH}>
-          <Button variant="text">Cancel</Button>
-        </Link>
-      }
-    />
-  );
-};
-
-export default () => {
   return (
     <SubmissionLayout
       subtitle="Create a Program"
@@ -75,7 +61,14 @@ export default () => {
           max-width: 875px;
         `}
       >
-        <CreateProgramPageContent />
+        <CreateProgramForm
+          onSubmitted={onProgramCreated}
+          leftFooterComponent={
+            <Link href={PROGRAMS_LIST_PATH}>
+              <Button variant="text">Cancel</Button>
+            </Link>
+          }
+        />
       </Container>
     </SubmissionLayout>
   );
