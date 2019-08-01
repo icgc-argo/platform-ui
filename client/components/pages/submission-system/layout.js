@@ -20,7 +20,7 @@ import Modal from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
-import { ToasterContext, useToaster, useToastState } from '../../toaster';
+import { ToasterContext, useToaster, useToastState } from 'global/hooks/toaster';
 
 const modalPortalRef = React.createRef();
 const useMounted = () => {

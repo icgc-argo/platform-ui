@@ -11,7 +11,7 @@ import { PageContext } from 'global/hooks/usePageContext';
 import { GATEWAY_API_ROOT } from 'global/config';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ThemeProvider } from 'uikit';
-import { useToastState, ToasterContext } from './toaster';
+import { useToastState, ToasterContext } from 'global/hooks/toaster';
 import { css } from 'uikit';
 import ToastStack from 'uikit/notifications/ToastStack';
 
