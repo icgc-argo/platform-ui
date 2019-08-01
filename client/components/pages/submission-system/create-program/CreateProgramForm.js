@@ -146,17 +146,22 @@ export default function CreateProgramForm({
    * Form Submission
    * **************** */
 
-  let validData = { ...formData };
-
   const submitForm = async formData => {
     try {
-      validData = await validateForm(formData);
+      const validData = await validateForm(formData);
       let result;
       if (!isEditing) {
-        result = await sendCreateProgram();
+        result = await sendCreateProgram({
+          variables: { program: createProgramInput(validData) },
+        });
         Router.push(PROGRAMS_LIST_PATH);
       } else {
-        result = await sendUpdateProgram();
+        result = await sendUpdateProgram({
+          variables: {
+            shortName: validData.shortName,
+            updates: createUpdateProgramInput(validData),
+          },
+        });
       }
       onSubmitted(validData);
     } catch (err) {
@@ -165,13 +170,9 @@ export default function CreateProgramForm({
     }
   };
 
-  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION, {
-    variables: { program: createProgramInput(validData) },
-  });
+  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
 
-  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION, {
-    variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
-  });
+  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
 
   return (
     <>
