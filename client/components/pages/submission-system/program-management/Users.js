@@ -13,7 +13,7 @@ import { useSubmitFormHook, createUserInput } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
 import { useMutation } from 'react-apollo-hooks';
-import { useToaster } from '../toaster';
+import { useToaster } from '../../../toaster';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
