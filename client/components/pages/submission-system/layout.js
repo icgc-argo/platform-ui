@@ -63,49 +63,28 @@ const SubmissionLayout = ({
   children?: React.Element<any>,
   subtitle?: string,
 }) => {
-  const toaster = useToaster();
   return (
-    <ToasterContext.Provider value={toaster}>
-      <PageContainer>
-        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-        <NavBar />
-        <PageBody noSidebar={noSidebar}>
-          {!noSidebar && <Panel>{sideMenu}</Panel>}
-          <PageContent>
-            {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-            <ContentBody>{children}</ContentBody>
-          </PageContent>
-        </PageBody>
-        <PageFooter>
-          <Footer />
-        </PageFooter>
-        <div
-          className="toastStackContainer"
-          css={css`
-            position: fixed;
-            z-index: 9999;
-            right: 0px;
-            top: 80px;
-          `}
-        >
-          <div
-            css={css`
-              margin-right: 20px;
-              margin-left: 20px;
-            `}
-          >
-            <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
-          </div>
-        </div>
-        <div
-          css={css`
-            position: fixed;
-            z-index: 9999;
-          `}
-          ref={modalPortalRef}
-        />
-      </PageContainer>
-    </ToasterContext.Provider>
+    <PageContainer>
+      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+      <NavBar />
+      <PageBody noSidebar={noSidebar}>
+        {!noSidebar && <Panel>{sideMenu}</Panel>}
+        <PageContent>
+          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+          <ContentBody>{children}</ContentBody>
+        </PageContent>
+      </PageBody>
+      <PageFooter>
+        <Footer />
+      </PageFooter>
+      <div
+        css={css`
+          position: fixed;
+          z-index: 9999;
+        `}
+        ref={modalPortalRef}
+      />
+    </PageContainer>
   );
 };
 
