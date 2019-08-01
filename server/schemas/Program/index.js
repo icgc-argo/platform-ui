@@ -5,9 +5,21 @@ import { get, pickBy } from 'lodash';
 import programService from '../../services/programService';
 import { wrapValue } from '../../utils/grpcUtils';
 import costDirectiveTypeDef from '../costDirectiveTypeDef';
+import mapKeys from 'lodash/mapKeys';
+import camelCase from 'lodash/camelCase';
+import transform from 'lodash/transform';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
+import keys from 'lodash/keys';
+import has from 'lodash/has';
 
 const typeDefs = gql`
   ${costDirectiveTypeDef}
+
+  type Timestamp {
+    seconds: String!
+    nanos: String!
+  }
 
   enum MembershipType {
     FULL
@@ -27,6 +39,16 @@ const typeDefs = gql`
     PENDING
     ACCEPTED
     EXPIRED
+  }
+
+  type JoinProgramInvite {
+    id: String!
+    createdAt: Timestamp!
+    expiresAt: Timestamp!
+    program: Program!
+    user: ProgramUser!
+    emailSent: Boolean!
+    status: InviteStatus!
   }
 
   type Program @cost(complexity: 10) {
@@ -123,6 +145,11 @@ const typeDefs = gql`
     retrieve all Programs
     """
     programs: [Program]
+
+    """
+    retrieve join program invitation by id
+    """
+    joinProgramInvite(id: String!): JoinProgramInvite
   }
 
   type Mutation {
@@ -187,6 +214,21 @@ const convertGrpcProgramToGql = programDetails => ({
   membershipType: get(programDetails, 'program.membership_type.value'),
 });
 
+// Convert grpc object to gql object. Make sure your gql definitions matches proto definitions
+function grpcToGql(obj) {
+  return transform(
+    obj,
+    (result, value, key) => {
+      let v = value;
+      if (keys(value).length === 1 && has(value, 'value')) {
+        v = value.value;
+      }
+      result[camelCase(key)] = isObject(v) && !isArray(v) ? grpcToGql(v) : v;
+    },
+    {},
+  );
+}
+
 const convertGrpcUserToGql = userDetails => ({
   email: get(userDetails, 'user.email.value'),
   firstName: get(userDetails, 'user.first_name.value'),
@@ -217,6 +259,12 @@ const resolvers = {
       const response = await programService.listPrograms(egoToken);
       const programs = get(response, 'programs', []);
       return programs.map(program => convertGrpcProgramToGql(program));
+    },
+    joinProgramInvite: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const response = await programService.getJoinProgramInvite(args.id, egoToken);
+      const joinProgramDetails = get(response, 'invitation');
+      return response ? grpcToGql(joinProgramDetails) : null;
     },
   },
   Mutation: {
