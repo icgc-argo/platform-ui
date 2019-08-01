@@ -19,7 +19,7 @@ import type {
 
 import { ERROR_STATUS_KEY } from './_error';
 import useAuthContext from 'global/hooks/useAuthContext';
-import GlobalContextProviders from 'components/GlobalContextProviders';
+import ApplicationRoot from 'components/ApplicationRoot';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -119,30 +119,9 @@ const Root = (() => {
     });
 
     return (
-      <>
-        <style>
-          {`
-            body {
-              margin: 0;
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            } /* custom! */
-            #__next {
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            }
-        `}
-        </style>
-        <GlobalContextProviders egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
-          <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-        </GlobalContextProviders>
-      </>
+      <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
+        <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+      </ApplicationRoot>
     );
   };
   component.getInitialProps = getInitialProps;
