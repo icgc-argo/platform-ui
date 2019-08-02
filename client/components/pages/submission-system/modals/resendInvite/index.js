@@ -1,3 +1,4 @@
+//@ flow
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserModel } from '../common';
@@ -7,7 +8,7 @@ const ResendInviteModal = ({
   dismissModal,
   onSubmit,
 }: {
-  user: UserModel,
+  user: typeof UserModel,
   onSubmit: (data: typeof UserModel) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
