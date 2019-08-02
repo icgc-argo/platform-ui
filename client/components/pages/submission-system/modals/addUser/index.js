@@ -20,7 +20,7 @@ const AddUserModal = ({
   onSubmit,
   dismissModal,
 }: {
-  onSubmit: (data: typeof UserModel) => any | void,
+  onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
   const {
@@ -45,7 +45,7 @@ const AddUserModal = ({
   const submitForm = async () => {
     try {
       const validData = await validateForm();
-      const result = onSubmit(validData[0]);
+      const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }

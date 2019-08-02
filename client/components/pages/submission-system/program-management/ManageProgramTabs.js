@@ -136,32 +136,55 @@ export default () => {
         <ModalPortal>
           <AddUserModal
             onSubmit={async validData => {
-              try {
-                await triggerInvite({
-                  variables: { invite: createUserInput({ data: validData, programShortName }) },
-                });
+              // Close modal on submit. Toasts after completion and refetch will indicate completion.
+              // TODO: Some sort of indicator that data is being sent
+              setShowModal(false);
+
+              // validData will be an array of users to add
+              // we need to store the list of names that are added successfully or failed to show in toasts after
+              const successNames = [];
+              const failNames = [];
+              for (let i = 0; i < validData.length; i++) {
+                try {
+                  if (i > 0) throw new Error('ah!');
+                  await triggerInvite({
+                    variables: {
+                      invite: createUserInput({ data: validData[i], programShortName }),
+                    },
+                  });
+                  successNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+                } catch (err) {
+                  failNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+                }
+              }
+              refetch();
+              if (successNames.length > 0) {
                 toaster.addToast({
                   variant: TOAST_VARIANTS.SUCCESS,
                   interactionType: TOAST_INTERACTION.CLOSE,
                   title: '',
                   content: (
                     <span>
-                      Successfully invited user:{' '}
-                      <strong>
-                        {validData.firstName} {validData.lastName}
-                      </strong>
+                      {successNames.length} user{successNames.length === 1 ? ' was' : 's were'}{' '}
+                      added to the program: <br />
+                      <strong>{successNames.join(', ')}</strong>
                     </span>
                   ),
                 });
-                refetch();
-              } catch (err) {
+              }
+              if (failNames.length > 0) {
                 toaster.addToast({
                   variant: TOAST_VARIANTS.ERROR,
                   title: '',
-                  content: 'An error occurred while adding the user. No invite will be sent.',
+                  content: (
+                    <span>
+                      {failNames.length} user{failNames.length > 1 && 's'} could not be added to the
+                      program: <br />
+                      <strong>{failNames.join(', ')}</strong>
+                    </span>
+                  ),
                 });
               }
-              setShowModal(false);
             }}
             dismissModal={() => setShowModal(false)}
           />

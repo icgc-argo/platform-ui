@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
@@ -10,7 +11,7 @@ const EditUserModal = ({
   dismissModal,
   onSubmit,
 }: {
-  user: UserModel,
+  user: typeof UserModel,
   onSubmit: (data: typeof UserModel) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
