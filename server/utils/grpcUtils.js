@@ -103,10 +103,13 @@ export function grpcToGql(obj) {
     obj,
     (result, value, key) => {
       let v = value;
+      // Unwrap value
       if (keys(value).length === 1 && has(value, 'value')) {
         v = value.value;
       }
+      // Flatten timestamp
       v = timestampToDateTime(v);
+      // Convert key name to camelCase and recursively convert value
       result[camelCase(key)] = isObject(v) && !isArray(v) ? grpcToGql(v) : v;
     },
     {},
