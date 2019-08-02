@@ -34,6 +34,7 @@ import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import usePageContext from 'global/hooks/usePageContext';
 import Icon from 'uikit/Icon';
+import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 
 const NavBarLoginButton = () => (
   <Button>
@@ -113,17 +114,17 @@ export default () => {
             </Link>
           )}
           {!userModel && (
-            <Link href={LOGIN_PAGE_PATH}>
-              <a
-                id="link-login"
-                css={css`
-                  align-self: center;
-                  margin-right: 16px;
-                `}
-              >
-                <NavBarLoginButton />
-              </a>
-            </Link>
+            <a
+              id="link-login"
+              href={urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
+              css={css`
+                align-self: center;
+                margin-right: 16px;
+                text-decoration: none;
+              `}
+            >
+              <NavBarLoginButton />
+            </a>
           )}
           {userModel && (
             <MenuItem
