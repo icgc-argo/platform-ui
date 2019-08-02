@@ -6,7 +6,7 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 
 const Nav = styled('nav')`
-  padding: 10px 29px 10px 0;
+  padding: 18px 29px 18px 0;
   ${({ theme }) => css(theme.typography.title)};
   & a {
     color: ${({ theme }) => theme.titleBar.linkColor};
