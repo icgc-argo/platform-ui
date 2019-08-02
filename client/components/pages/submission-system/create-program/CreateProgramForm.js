@@ -420,7 +420,7 @@ export default function CreateProgramForm({ leftFooterComponent, program = {} })
               <SectionTitle>Affiliated Institutions</SectionTitle>
             </Col>
           </Row>
-          <FormControl error={validationErrors.institutions} required={false}>
+          <FormControl error={validationErrors.institutions} required>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="Institutions">Institutions</InputLabel>
