@@ -1,5 +1,7 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
+// $FlowFixMe no flow-typed definition
 import styled from '@emotion/styled';
 
 /**
@@ -81,7 +83,18 @@ export const StyledCheckbox = styled('div')`
 /*
  * Basic checkbox input
  */
-const Checkbox = ({ checked, disabled = false, onChange, ...props }) => {
+const Checkbox = ({
+  checked,
+  disabled = false,
+  onChange,
+  'aria-label': ariaLabel,
+  ...props
+}: {
+  checked: boolean,
+  disabled: boolean,
+  onChange: (e: any | void) => any | void,
+  'aria-label': string,
+}) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
@@ -92,12 +105,12 @@ const Checkbox = ({ checked, disabled = false, onChange, ...props }) => {
         checked={checked}
         disabled={disabled}
         onChange={onChange}
-        aria-label={props['aria-label']}
+        aria-label={ariaLabel}
       />
       <div
         className="checkbox"
         onClick={e => {
-          if (document.activeElement !== HiddenCheckboxRef.current) {
+          if (document.activeElement !== HiddenCheckboxRef.current && HiddenCheckboxRef.current) {
             HiddenCheckboxRef.current.focus();
           }
         }}

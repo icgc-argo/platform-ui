@@ -1,6 +1,10 @@
+// @flow
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+// $FlowFixMe no flow-typed definition
 import styled from '@emotion/styled';
+// $FlowFixMe no flow-typed definition
 import css from '@emotion/css';
 
 /*
@@ -72,28 +76,35 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const Radio = ({ value, disabled = false, checked, onChange, ...props }) => {
+const Radio = ({
+  value,
+  disabled = false,
+  checked,
+  onChange,
+  'aria-label': ariaLabel,
+  ...props
+}: {
+  checked: boolean,
+  disabled: boolean,
+  onChange: (e: any | void) => any | void,
+  'aria-label': string,
+}) => {
   const HiddenRadioRef = React.createRef();
 
   return (
-    <StyledRadio
-      role="radio"
-      disabled={disabled}
-      checked={checked}
-      aria-checked={props['aria-checked']}
-    >
+    <StyledRadio role="radio" disabled={disabled} checked={checked} aria-checked={checked}>
       <input
         type="radio"
         ref={HiddenRadioRef}
         checked={checked}
         disabled={disabled}
-        aria-label={props['aria-label']}
+        aria-label={ariaLabel}
         onChange={onChange}
       />
       <div
         className="radio"
-        onClick={e => {
-          if (document.activeElement !== HiddenRadioRef.current) {
+        onClick={(e): void => {
+          if (document.activeElement !== HiddenRadioRef.current && HiddenRadioRef.current) {
             HiddenRadioRef.current.focus();
           }
         }}
