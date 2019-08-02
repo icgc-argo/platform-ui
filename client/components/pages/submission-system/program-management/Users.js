@@ -13,6 +13,7 @@ import ResendInviteModal from '../modals/resendInvite';
 import { ModalPortal } from '../layout';
 
 import { useToaster } from '../toaster';
+import { UserModel, RoleDisplayName } from '../modals/common';
 
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
@@ -44,9 +45,15 @@ const Users = ({
         /**
          * @todo: actually implement these functions
          */
-        onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
-        onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
-        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
+        onUserDeleteClick={({ user }) =>
+          setCurrentDeletingUser({ ...user, role: RoleDisplayName[user.role] })
+        }
+        onUserResendInviteClick={({ user }) =>
+          setCurrentResendEmailUser({ ...user, role: RoleDisplayName[user.role] })
+        }
+        onUserEditClick={({ user }) =>
+          setCurrentEditingUser({ ...user, role: RoleDisplayName[user.role] })
+        }
       />
       {!!currentResendEmailUser && (
         <ModalPortal>
@@ -97,7 +104,7 @@ const Users = ({
         <ModalPortal>
           <EditUserModal
             user={currentEditingUser}
-            onSubmit={async validData => {
+            onSubmit={async (validData: typeof UserModel) => {
               try {
                 await triggerEdit({
                   variables: {

@@ -9,8 +9,9 @@ import Checkbox from 'uikit/form/Checkbox';
 import MailTo from 'uikit/MailTo';
 import { displayDate } from 'global/utils/common';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { RoleDisplayName } from '../modals/common';
 
-type RoleKey = 'ADMIN' | 'CURATOR' | 'COLLABORATOR' | 'SUBMITTER';
+import type { RoleKey } from '../modals/common';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
@@ -26,16 +27,9 @@ type UsersTableUser = {
 
 type CellProps = { original: UsersTableUser };
 
-const RoleDisplayName: { [key: RoleKey]: string } = {
-  ADMIN: 'Administrator',
-  CURATOR: 'Curator',
-  COLLABORATOR: 'Collaborator',
-  SUBMITTER: 'Submitter',
-};
-
-const APPROVED_DISAPLY_STATUS = 'Approved';
+const APPROVED_DISPLAY_STATUS = 'Approved';
 const StatusDisplayName: { [key: StatusKey]: string } = {
-  ACCEPTED: APPROVED_DISAPLY_STATUS,
+  ACCEPTED: APPROVED_DISPLAY_STATUS,
   PENDING: 'Pending Invitation',
   EXPIRED: 'Invitation Expired',
 };
@@ -78,7 +72,7 @@ const UsersTable = (tableProps: {
     {
       Header: 'Status',
       Cell: ({ original }) =>
-        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISAPLY_STATUS,
+        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISPLAY_STATUS,
     },
     {
       Header: 'Joined On',
