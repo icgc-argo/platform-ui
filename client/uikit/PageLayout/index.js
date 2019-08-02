@@ -35,7 +35,7 @@ export const PageContent = styled('div')`
 export const ContentHeader = styled('div')`
   display: flex;
   align-items: center;
-  height: 72px;
+  height: 56px;
   padding-left: 30px;
   padding-right: 30px;
   background: ${({ theme }) => theme.colors.white};
