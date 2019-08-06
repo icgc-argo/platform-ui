@@ -37,6 +37,13 @@ export default () => {
       },
     });
   };
+  const onProgramCreationError = (err: Error) => {
+    toaster.addToast({
+      title: '',
+      variant: TOAST_VARIANTS.ERROR,
+      content: 'Something went wrong, please try again later or contact us for assistance',
+    });
+  };
   return (
     <SubmissionLayout
       subtitle="Create a Program"
@@ -63,6 +70,7 @@ export default () => {
       >
         <CreateProgramForm
           onSubmitted={onProgramCreated}
+          onSubmissionError={onProgramCreationError}
           leftFooterComponent={
             <Link href={PROGRAMS_LIST_PATH}>
               <Button variant="text">Cancel</Button>
