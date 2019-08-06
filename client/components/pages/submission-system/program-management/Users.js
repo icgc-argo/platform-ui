@@ -13,7 +13,7 @@ import { useSubmitFormHook, createUserInput } from './';
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
 import { useMutation } from 'react-apollo-hooks';
-import { useToaster } from '../toaster';
+import { useToaster } from 'global/hooks/toaster';
 
 function ResendEmailModal({ user, ...otherProps }) {
   return (
@@ -44,10 +44,6 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
     setEmailResendUser(null);
   };
 
-  const handleResendEmailClick = ({ user }) => {
-    setEmailResendUser(user);
-  };
-
   const handleActionClick = () => {
     toaster.addToast({
       variant: TOAST_VARIANTS.SUCCESS,
@@ -68,7 +64,7 @@ const Users = ({ users, programShortName }: { users: Array<any>, programShortNam
          * @todo: actually implement these functions
          */
         onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
-        onUserResendInviteClick={handleResendEmailClick}
+        onUserResendInviteClick={({ user }) => setEmailResendUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {!!emailResendUser && (

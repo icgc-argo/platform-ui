@@ -3,24 +3,14 @@ import * as React from 'react';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
-import Link from 'next/link';
-import { ApolloProvider } from 'react-apollo';
-import { createHttpLink } from 'apollo-link-http';
-import ApolloClient from 'apollo-client';
-import urlJoin from 'url-join';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import fetch from 'isomorphic-fetch';
 
-import Button from 'uikit/Button';
-import { ThemeProvider } from 'uikit';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { NODE_ENV, ENVIRONMENTS, GATEWAY_API_ROOT, AUTH_DISABLED } from 'global/config';
-import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
+import { AUTH_DISABLED } from 'global/config';
+import { isValidJwt } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
-import createInMemoryCache from 'global/utils/createInMemoryCache';
 
-import Error401Page from 'components/pages/401';
 import type {
   PageWithConfig,
   GetInitialPropsContext,
@@ -28,8 +18,8 @@ import type {
 } from 'global/utils/pages/types';
 
 import { ERROR_STATUS_KEY } from './_error';
-import { PageContext } from 'global/hooks/usePageContext';
 import useAuthContext from 'global/hooks/useAuthContext';
+import ApplicationRoot from 'components/ApplicationRoot';
 
 const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
@@ -47,70 +37,8 @@ type RootGetInitialPropsData = {
   ctx: ClientSideGetInitialPropsContext,
   apolloCache: {},
 };
-const Root = (
-  props: {
-    Component: PageWithConfig,
-  } & RootGetInitialPropsData,
-) => {
-  const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
 
-  const { token, resolving, logOut } = useAuthContext();
-  const egoJwt = resolving ? '' : token || '';
-
-  React.useEffect(() => {
-    if (egoJwt && !isValidJwt(egoJwt)) {
-      logOut();
-    }
-  });
-
-  const client = new ApolloClient({
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createHttpLink({
-      uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
-      fetch: fetch,
-      headers: {
-        authorization: `Bearer ${egoJwt}`,
-      },
-    }),
-    cache: createInMemoryCache().restore(apolloCache),
-  });
-
-  return (
-    <>
-      <style>
-        {`
-            body {
-              margin: 0;
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            } /* custom! */
-            #__next {
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            }
-        `}
-      </style>
-      <PageContext.Provider value={ctx}>
-        <ApolloProvider client={client}>
-          <ApolloHooksProvider client={client}>
-            <ThemeProvider>
-              <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
-            </ThemeProvider>
-          </ApolloHooksProvider>
-        </ApolloProvider>
-      </PageContext.Provider>
-    </>
-  );
-};
-
-// this makes egoJwt available to every page server-side
-Root.getInitialProps = async ({
+const getInitialProps = async ({
   Component,
   ctx,
   router,
@@ -172,5 +100,32 @@ Root.getInitialProps = async ({
     apolloCache,
   };
 };
+
+const Root = (() => {
+  const component = (
+    props: {
+      Component: PageWithConfig,
+    } & RootGetInitialPropsData,
+  ) => {
+    const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
+
+    const { token, resolving, logOut } = useAuthContext();
+    const egoJwt = resolving ? '' : token || '';
+
+    React.useEffect(() => {
+      if (egoJwt && !isValidJwt(egoJwt)) {
+        logOut();
+      }
+    });
+
+    return (
+      <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
+        <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+      </ApplicationRoot>
+    );
+  };
+  component.getInitialProps = getInitialProps;
+  return component;
+})();
 
 export default Root;

@@ -20,7 +20,7 @@ import Modal from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
-import { ToasterContext, useToaster, useToastState } from './toaster';
+import { ToasterContext, useToaster, useToastState } from 'global/hooks/toaster';
 
 const modalPortalRef = React.createRef();
 const useMounted = () => {
@@ -51,65 +51,40 @@ export const ModalPortal = ({ children }: { children: React.Node }) => {
 };
 
 const SubmissionLayout = ({
-  pathname,
-  logOut,
   sideMenu = <SideMenu />,
   noSidebar = false,
   contentHeader,
   children,
   subtitle,
 }: {
-  pathname: string,
-  logOut: any => any,
   noSidebar?: boolean,
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
   children?: React.Element<any>,
   subtitle?: string,
 }) => {
-  const toaster = useToastState();
   return (
-    <ToasterContext.Provider value={toaster}>
-      <PageContainer>
-        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
-        <NavBar />
-        <PageBody noSidebar={noSidebar}>
-          {!noSidebar && <Panel>{sideMenu}</Panel>}
-          <PageContent>
-            {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
-            <ContentBody>{children}</ContentBody>
-          </PageContent>
-        </PageBody>
-        <PageFooter>
-          <Footer />
-        </PageFooter>
-        <div
-          className="toastStackContainer"
-          css={css`
-            position: fixed;
-            z-index: 9999;
-            right: 0px;
-            top: 80px;
-          `}
-        >
-          <div
-            css={css`
-              margin-right: 20px;
-              margin-left: 20px;
-            `}
-          >
-            <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
-          </div>
-        </div>
-        <div
-          css={css`
-            position: fixed;
-            z-index: 9999;
-          `}
-          ref={modalPortalRef}
-        />
-      </PageContainer>
-    </ToasterContext.Provider>
+    <PageContainer>
+      <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+      <NavBar />
+      <PageBody noSidebar={noSidebar}>
+        {!noSidebar && <Panel>{sideMenu}</Panel>}
+        <PageContent>
+          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+          <ContentBody>{children}</ContentBody>
+        </PageContent>
+      </PageBody>
+      <PageFooter>
+        <Footer />
+      </PageFooter>
+      <div
+        css={css`
+          position: fixed;
+          z-index: 9999;
+        `}
+        ref={modalPortalRef}
+      />
+    </PageContainer>
   );
 };
 

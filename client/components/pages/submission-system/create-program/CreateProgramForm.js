@@ -104,7 +104,12 @@ const createUpdateProgramInput = formData => ({
  * Form data validation
  * *************************************** */
 
-export default function CreateProgramForm({ leftFooterComponent, program = {} }) {
+export default function CreateProgramForm({
+  leftFooterComponent,
+  program = {},
+  onSubmitted = submissionData => {},
+  onSubmissionError = err => {},
+}) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
   const [shortName, setShortName] = React.useState(program.shortName || '');
@@ -178,8 +183,10 @@ export default function CreateProgramForm({ leftFooterComponent, program = {} })
       } else {
         result = await sendUpdateProgram();
       }
+      onSubmitted(validData);
     } catch (err) {
       window.scrollTo(0, 0);
+      onSubmissionError(err);
     }
   };
 
@@ -420,7 +427,7 @@ export default function CreateProgramForm({ leftFooterComponent, program = {} })
               <SectionTitle>Affiliated Institutions</SectionTitle>
             </Col>
           </Row>
-          <FormControl error={validationErrors.institutions} required={false}>
+          <FormControl error={validationErrors.institutions} required>
             <Row>
               <InputLabelWrapper sm={3}>
                 <InputLabel htmlFor="Institutions">Institutions</InputLabel>
