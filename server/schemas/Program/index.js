@@ -34,7 +34,7 @@ const typeDefs = gql`
   }
 
   type JoinProgramInvite {
-    id: String!
+    id: ID!
     createdAt: DateTime!
     expiresAt: DateTime!
     acceptedAt: DateTime
@@ -121,7 +121,7 @@ const typeDefs = gql`
   }
 
   input JoinProgramInput {
-    invitationId: String!
+    invitationId: ID!
     institute: String!
     piFirstName: String!
     piLastName: String!
@@ -142,7 +142,7 @@ const typeDefs = gql`
     """
     retrieve join program invitation by id
     """
-    joinProgramInvite(id: String!): JoinProgramInvite
+    joinProgramInvite(id: ID!): JoinProgramInvite
   }
 
   type Mutation {
