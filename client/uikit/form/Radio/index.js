@@ -2,9 +2,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-// $FlowFixMe no flow-typed definition
 import styled from '@emotion/styled';
-// $FlowFixMe no flow-typed definition
 import css from '@emotion/css';
 
 /*
