@@ -52,11 +52,7 @@ const getInitialProps = async ({
   const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
-    try {
-      if (!isValidJwt(egoJwt)) {
-        throw new Error('invalid token');
-      }
-    } catch (err) {
+    if (!isValidJwt(egoJwt)) {
       res ? res.clearCookie(EGO_JWT_KEY) : null;
       router ? router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`) : null;
     }
