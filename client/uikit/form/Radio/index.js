@@ -96,7 +96,7 @@ const Radio = ({
         ref={HiddenRadioRef}
         checked={checked}
         disabled={disabled}
-        aria-label={ariaLabel}
+        ariaLabel={ariaLabel}
         onChange={onChange}
       />
       <div
@@ -109,13 +109,6 @@ const Radio = ({
       />
     </StyledRadio>
   );
-};
-
-Radio.propTypes = {
-  ['aria-label']: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default Radio;
