@@ -29,11 +29,11 @@ import AppBar, {
   DropdownMenuItem,
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
-import urlJoin from 'url-join';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import usePageContext from 'global/hooks/usePageContext';
 import Icon from 'uikit/Icon';
+import { EGO_URL } from 'global/config';
 
 const NavBarLoginButton = () => (
   <Button>
@@ -113,17 +113,17 @@ export default () => {
             </Link>
           )}
           {!userModel && (
-            <Link href={LOGIN_PAGE_PATH}>
-              <a
-                id="link-login"
-                css={css`
-                  align-self: center;
-                  margin-right: 16px;
-                `}
-              >
-                <NavBarLoginButton />
-              </a>
-            </Link>
+            <a
+              id="link-login"
+              href={EGO_URL}
+              css={css`
+                align-self: center;
+                margin-right: 16px;
+                text-decoration: none;
+              `}
+            >
+              <NavBarLoginButton />
+            </a>
           )}
           {userModel && (
             <MenuItem
