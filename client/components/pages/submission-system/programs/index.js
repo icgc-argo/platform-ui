@@ -42,7 +42,7 @@ const TableFilterInput = props => (
   />
 );
 
-export default ({ egoJwt, authorizedPrograms = [] }: any) => {
+export default ({ authorizedPrograms = [] }: any) => {
   const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
   const authContext = useAuthContext() || {};
   const sortedPrograms = orderBy(programs, 'name');

@@ -6,15 +6,13 @@ import { ContentBox } from 'uikit/PageLayout';
 import { useRouter } from 'next/router';
 import usePageContext from 'global/hooks/usePageContext';
 
-export default function ProgramIDRegistration({ logOut, pathname }) {
+export default function ProgramIDRegistration() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
 
   return (
     <SubmissionLayout
-      pathname={pathname}
-      logOut={logOut}
       contentHeader={
         <div
           css={css`

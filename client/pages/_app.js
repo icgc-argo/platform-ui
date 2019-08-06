@@ -122,7 +122,7 @@ const Root = (() => {
 
     return (
       <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
-        <Component egoJwt={egoJwt} pathname={pathname} {...pageProps} />
+        <Component {...pageProps} />
       </ApplicationRoot>
     );
   };

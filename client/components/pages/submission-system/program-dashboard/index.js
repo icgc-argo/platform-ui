@@ -5,15 +5,13 @@ import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 
-export default function ProgramDashboard({ logOut, pathname }) {
+export default function ProgramDashboard() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
 
   return (
     <SubmissionLayout
-      pathname={pathname}
-      logOut={logOut}
       contentHeader={
         <div
           css={css`

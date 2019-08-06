@@ -9,14 +9,12 @@ import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
 
-export default ({ logOut, pathname }: { logOut: any => any, pathname: string }) => {
+export default () => {
   const router = useRouter();
   const { shortName: programShortName } = router.query;
 
   return (
     <SubmissionLayout
-      pathname={pathname}
-      logOut={logOut}
       contentHeader={
         <div
           css={css`
