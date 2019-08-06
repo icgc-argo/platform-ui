@@ -109,6 +109,10 @@ export function grpcToGql(obj) {
       }
       // Flatten timestamp
       v = timestampToDateTime(v);
+      if (v instanceof Date) {
+        result[camelCase(key)] = v;
+        return;
+      }
       // Convert key name to camelCase and recursively convert value
       result[camelCase(key)] = isObject(v) && !isArray(v) ? grpcToGql(v) : v;
     },
@@ -124,7 +128,7 @@ function timestampToDateTime(maybeTimestamp) {
     has(maybeTimestamp, 'nanos');
   if (isTimestamp) {
     const { seconds, nanos } = maybeTimestamp;
-    return new Date(seconds * 1000 + nanos / 1000000).toISOString();
+    return new Date(seconds * 1000 + nanos / 1000000);
   }
   return maybeTimestamp;
 }

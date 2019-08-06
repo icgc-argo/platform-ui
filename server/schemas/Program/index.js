@@ -1,12 +1,10 @@
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import { get, pickBy } from 'lodash';
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
-
+import { get, merge, pickBy } from 'lodash';
 import programService from '../../services/programService';
-import { wrapValue, grpcToGql } from '../../utils/grpcUtils';
+import { grpcToGql } from '../../utils/grpcUtils';
 import costDirectiveTypeDef from '../costDirectiveTypeDef';
+import customScalars from '../customScalars';
 
 const typeDefs = gql`
   ${costDirectiveTypeDef}
@@ -225,13 +223,6 @@ const resolvers = {
       return users;
     },
   },
-  DateTime: new GraphQLScalarType({
-    name: 'DateTime',
-    description: 'A string in simplified extended ISO format',
-    serialize(value) {
-      return value;
-    },
-  }),
   Query: {
     program: async (obj, args, context, info) => {
       const { egoToken } = context;
@@ -316,6 +307,8 @@ const resolvers = {
     },
   },
 };
+
+merge(resolvers, customScalars);
 
 export default makeExecutableSchema({
   typeDefs,
