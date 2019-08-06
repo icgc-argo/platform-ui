@@ -1,13 +1,15 @@
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import { get, pickBy } from 'lodash';
-
+import { get, merge, pickBy } from 'lodash';
 import programService from '../../services/programService';
-import { wrapValue } from '../../utils/grpcUtils';
+import { grpcToGql } from '../../utils/grpcUtils';
 import costDirectiveTypeDef from '../costDirectiveTypeDef';
+import customScalars from '../customScalars';
 
 const typeDefs = gql`
   ${costDirectiveTypeDef}
+
+  scalar DateTime
 
   enum MembershipType {
     FULL
@@ -27,6 +29,17 @@ const typeDefs = gql`
     PENDING
     ACCEPTED
     EXPIRED
+  }
+
+  type JoinProgramInvite {
+    id: ID!
+    createdAt: DateTime!
+    expiresAt: DateTime!
+    acceptedAt: DateTime
+    program: Program!
+    user: ProgramUser!
+    emailSent: Boolean!
+    status: InviteStatus!
   }
 
   type Program @cost(complexity: 10) {
@@ -106,7 +119,7 @@ const typeDefs = gql`
   }
 
   input JoinProgramInput {
-    invitationId: String!
+    invitationId: ID!
     institute: String!
     piFirstName: String!
     piLastName: String!
@@ -123,6 +136,11 @@ const typeDefs = gql`
     retrieve all Programs
     """
     programs: [Program]
+
+    """
+    retrieve join program invitation by id
+    """
+    joinProgramInvite(id: ID!): JoinProgramInvite
   }
 
   type Mutation {
@@ -218,6 +236,12 @@ const resolvers = {
       const programs = get(response, 'programs', []);
       return programs.map(program => convertGrpcProgramToGql(program));
     },
+    joinProgramInvite: async (obj, args, context, info) => {
+      const { egoToken } = context;
+      const response = await programService.getJoinProgramInvite(args.id, egoToken);
+      const joinProgramDetails = get(response, 'invitation');
+      return response ? grpcToGql(joinProgramDetails) : null;
+    },
   },
   Mutation: {
     createProgram: async (obj, args, context, info) => {
@@ -283,6 +307,8 @@ const resolvers = {
     },
   },
 };
+
+merge(resolvers, customScalars);
 
 export default makeExecutableSchema({
   typeDefs,
