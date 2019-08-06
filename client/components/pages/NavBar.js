@@ -29,12 +29,11 @@ import AppBar, {
   DropdownMenuItem,
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
-import urlJoin from 'url-join';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import usePageContext from 'global/hooks/usePageContext';
 import Icon from 'uikit/Icon';
-import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
+import { EGO_URL } from 'global/config';
 
 const NavBarLoginButton = () => (
   <Button>
@@ -116,7 +115,7 @@ export default () => {
           {!userModel && (
             <a
               id="link-login"
-              href={urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
+              href={EGO_URL}
               css={css`
                 align-self: center;
                 margin-right: 16px;
