@@ -38,6 +38,16 @@ const getProgram = async (shortName, jwt = null) => {
   });
 };
 
+const getJoinProgramInvite = async (id, jwt = null) => {
+  return await new Promise((resolve, reject) => {
+    programService.getJoinProgramInvite(
+      { invite_id: wrapValue(id) },
+      getAuthMeta(jwt),
+      defaultPromiseCallback(resolve, reject, 'ProgramService.getJoinProgramInvite'),
+    );
+  });
+};
+
 const listPrograms = async (jwt = null) => {
   return await new Promise((resolve, reject) => {
     programService.listPrograms(
@@ -239,6 +249,7 @@ const removeUser = async (email, shortName, jwt = null) => {
 export default {
   getProgram,
   listPrograms,
+  getJoinProgramInvite,
   listUsers,
   createProgram,
   updateProgram,
