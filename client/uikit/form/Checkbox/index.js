@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import PropTypes from 'prop-types';
-// $FlowFixMe no flow-typed definition
 import styled from '@emotion/styled';
 
 /**
@@ -117,13 +116,6 @@ const Checkbox = ({
       />
     </StyledCheckbox>
   );
-};
-
-Checkbox.propTypes = {
-  ['aria-label']: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default Checkbox;
