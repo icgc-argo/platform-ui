@@ -55,7 +55,7 @@ const useToggledSelectState = (initialIndex = -1) => {
 
 const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
-  const { token } = useAuthContext();
+  const { token } = useAuthContext() || {};
   return (
     <div>
       <Link
@@ -137,7 +137,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState(
     currentViewingProgramIndex,
   );
-  const { token } = useAuthContext();
+  const { token } = useAuthContext() || {};
   return (
     <>
       <MenuItem
@@ -194,7 +194,7 @@ export default () => {
     SIDE_MENU_PROGRAM_LIST,
   );
 
-  const { data: egoTokenData, token } = useAuthContext();
+  const { data: egoTokenData, token } = useAuthContext() || {};
   const isDcc = token ? isDccMember(token) : false;
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 

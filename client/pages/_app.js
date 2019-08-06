@@ -9,7 +9,7 @@ import ReactGA from 'react-ga';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { AUTH_DISABLED, GA_TRACKING_ID } from 'global/config';
-import { isValidJwt } from 'global/utils/egoJwt';
+import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 
 import type {
@@ -36,6 +36,7 @@ type RootGetInitialPropsData = {
   unauthorized: boolean,
   pathname: string,
   ctx: ClientSideGetInitialPropsContext,
+  egoJwt: ?string,
   apolloCache: {},
 };
 
@@ -48,7 +49,7 @@ const getInitialProps = async ({
   ctx: GetInitialPropsContext,
   router?: any,
 }): Promise<RootGetInitialPropsData> => {
-  const egoJwt = nextCookies(ctx)[EGO_JWT_KEY];
+  const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
   if (egoJwt) {
     try {
@@ -93,6 +94,7 @@ const getInitialProps = async ({
     pageProps,
     unauthorized,
     pathname: ctx.pathname,
+    egoJwt,
     ctx: {
       pathname: ctx.pathname,
       query: ctx.query,
@@ -109,20 +111,14 @@ const Root = (() => {
     } & RootGetInitialPropsData,
   ) => {
     const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
+    const egoJwt = props.egoJwt;
 
-    const { token, data, resolving, logOut } = useAuthContext();
-    const egoJwt = resolving ? '' : token || '';
-
-    React.useEffect(() => {
-      if (egoJwt && !isValidJwt(egoJwt)) {
-        logOut();
-      }
-    });
+    const userModel = decodeToken(egoJwt);
 
     React.useEffect(() => {
       ReactGA.initialize(GA_TRACKING_ID, {
         gaOptions: {
-          userId: data ? data.context.user.email : 'NA',
+          userId: userModel ? userModel.context.user.email : 'NA',
         },
       });
       ReactGA.pageview(ctx.asPath);
@@ -130,7 +126,7 @@ const Root = (() => {
 
     return (
       <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
-        <Component egoJwt={egoJwt} logOut={logOut} pathname={pathname} {...pageProps} />
+        <Component egoJwt={egoJwt} pathname={pathname} {...pageProps} />
       </ApplicationRoot>
     );
   };

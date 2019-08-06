@@ -14,6 +14,7 @@ import { ThemeProvider } from 'uikit';
 import { useToastState, ToasterContext } from 'global/hooks/toaster';
 import { css } from 'uikit';
 import ToastStack from 'uikit/notifications/ToastStack';
+import { AuthProvider } from 'global/hooks/useAuthContext';
 
 export default function ApplicationRoot({
   egoJwt,
@@ -21,7 +22,7 @@ export default function ApplicationRoot({
   pageContext,
   children,
 }: {
-  egoJwt: string,
+  egoJwt: ?string,
   apolloCache: {},
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
@@ -33,9 +34,11 @@ export default function ApplicationRoot({
     link: createHttpLink({
       uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
-      headers: {
-        authorization: `Bearer ${egoJwt}`,
-      },
+      headers: egoJwt
+        ? {
+            authorization: `Bearer ${egoJwt}`,
+          }
+        : {},
     }),
     cache: createInMemoryCache().restore(apolloCache),
   });
@@ -60,40 +63,42 @@ export default function ApplicationRoot({
             }
         `}
       </style>
-      <ToasterContext.Provider value={toaster}>
-        <PageContext.Provider value={pageContext}>
-          <ApolloProvider client={apolloClient}>
-            <ApolloHooksProvider client={apolloClient}>
-              <ThemeProvider>
-                <>
-                  {children}
-                  <div
-                    className="toastStackContainer"
-                    css={css`
-                      position: fixed;
-                      z-index: 9999;
-                      right: 0px;
-                      top: 80px;
-                    `}
-                  >
+      <AuthProvider egoJwt={egoJwt}>
+        <ToasterContext.Provider value={toaster}>
+          <PageContext.Provider value={pageContext}>
+            <ApolloProvider client={apolloClient}>
+              <ApolloHooksProvider client={apolloClient}>
+                <ThemeProvider>
+                  <>
+                    {children}
                     <div
+                      className="toastStackContainer"
                       css={css`
-                        margin-right: 20px;
-                        margin-left: 20px;
+                        position: fixed;
+                        z-index: 9999;
+                        right: 0px;
+                        top: 80px;
                       `}
                     >
-                      <ToastStack
-                        toastConfigs={toaster.toastStack}
-                        onInteraction={toaster.onInteraction}
-                      />
+                      <div
+                        css={css`
+                          margin-right: 20px;
+                          margin-left: 20px;
+                        `}
+                      >
+                        <ToastStack
+                          toastConfigs={toaster.toastStack}
+                          onInteraction={toaster.onInteraction}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </>
-              </ThemeProvider>
-            </ApolloHooksProvider>
-          </ApolloProvider>
-        </PageContext.Provider>
-      </ToasterContext.Provider>
+                  </>
+                </ThemeProvider>
+              </ApolloHooksProvider>
+            </ApolloProvider>
+          </PageContext.Provider>
+        </ToasterContext.Provider>
+      </AuthProvider>
     </>
   );
 }

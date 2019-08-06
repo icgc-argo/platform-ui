@@ -5,29 +5,37 @@ import urlJoin from 'url-join';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
 
-import { decodeToken } from 'global/utils/egoJwt';
+import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
 import { EGO_JWT_KEY } from 'global/constants';
 import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
+import { useRouter } from 'next/router';
 
 const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 
 type UseEgoTokenInput = {
   onError?: (error: Error) => void,
 };
-export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
-  const [token, setToken] = React.useState<string | null>(null);
-  const [resolving, setResolving] = React.useState<boolean>(false);
+
+type T_AuthContext = {
+  token: ?string,
+  logOut: void => void,
+  data: $Call<typeof decodeToken, ?string> | null,
+};
+
+const AuthContext = React.createContext<T_AuthContext | null>(null);
+
+export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: React.Node }) {
+  const [token, setToken] = React.useState<?string>(egoJwt);
+  const router = useRouter();
   const logOut = () => {
     Cookies.remove(EGO_JWT_KEY);
     setToken(null);
-    Router.push('/');
+    router.push('/');
   };
   React.useEffect(() => {
-    setResolving(true);
     const existingToken = Cookies.get(EGO_JWT_KEY);
     if (existingToken) {
       setToken(existingToken);
-      setResolving(false);
     } else {
       fetch(egoLoginUrl, {
         credentials: 'include',
@@ -41,23 +49,20 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
           decodeToken(egoToken);
           Cookies.set(EGO_JWT_KEY, egoToken);
           setToken(egoToken);
-          setResolving(false);
         })
         .catch(err => {
           console.warn('err: ', err);
-          setResolving(false);
-          onError(err);
         });
     }
   }, []);
-  return new Proxy<{
-    /* proxy to handle computed properties */
-    token: typeof token,
-    resolving: typeof resolving,
-    logOut: typeof logOut,
-    data: $Call<typeof decodeToken, string> | null,
-  }>(
-    { token, resolving, logOut, data: null },
+  React.useEffect(() => {
+    if (token && !isValidJwt(token)) {
+      logOut();
+    }
+  });
+
+  const authData = new Proxy<T_AuthContext>(
+    { token, logOut, data: null },
     {
       get: (obj, key) => {
         switch (key) {
@@ -69,4 +74,9 @@ export default ({ onError = () => {} }: UseEgoTokenInput = {}) => {
       },
     },
   );
-};
+  return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+}
+
+export default function useAuthContext() {
+  return React.useContext(AuthContext);
+}
