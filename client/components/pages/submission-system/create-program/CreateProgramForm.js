@@ -107,7 +107,8 @@ const createUpdateProgramInput = formData => ({
 export default function CreateProgramForm({
   leftFooterComponent,
   program = {},
-  onSubmitted = () => {},
+  onSubmitted = submissionData => {},
+  onSubmissionError = err => {},
 }) {
   const isEditing = !isEmpty(program);
   const [programName, setProgramName] = React.useState(program.name || '');
@@ -185,6 +186,7 @@ export default function CreateProgramForm({
       onSubmitted(validData);
     } catch (err) {
       window.scrollTo(0, 0);
+      onSubmissionError(err);
     }
   };
 
