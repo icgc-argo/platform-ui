@@ -8,32 +8,30 @@ import Tooltip from 'uikit/Tooltip';
 import Checkbox from 'uikit/form/Checkbox';
 import MailTo from 'uikit/MailTo';
 import { displayDate } from 'global/utils/common';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { RoleDisplayName } from '../modals/common';
 
-type RoleKey = 'ADMINISTRATOR' | 'DATA_SUBMITTER' | 'COLLABORATOR';
+import type { RoleKey } from '../modals/common';
 
-type StatusKey = 'APPROVED' | 'PENDING_INVITATION';
+type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
 type UsersTableUser = {
-  id: string,
-  name: string,
+  firstName: string,
+  lastName: string,
   email: string,
   role: RoleKey,
-  isDacoApproved: boolean,
-  status: StatusKey,
-  joinDate: string | null,
+  isDacoApproved: boolean | null,
+  inviteStatus: StatusKey | null,
+  inviteAcceptedAt: Date | null,
 };
 
 type CellProps = { original: UsersTableUser };
 
-const RoleDisplayName: { [key: RoleKey]: string } = {
-  ADMINISTRATOR: 'Administrator',
-  DATA_SUBMITTER: 'Data Submitter',
-  COLLABORATOR: 'Collaborator',
-};
-
+const APPROVED_DISPLAY_STATUS = 'Approved';
 const StatusDisplayName: { [key: StatusKey]: string } = {
-  APPROVED: 'Approved',
-  PENDING_INVITATION: 'Pending Invitation',
+  ACCEPTED: APPROVED_DISPLAY_STATUS,
+  PENDING: 'Pending Invitation',
+  EXPIRED: 'Invitation Expired',
 };
 
 const UsersTable = (tableProps: {
@@ -42,6 +40,9 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void,
   onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
+  const { data: egoTokenData } = useAuthContext();
+  const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
+
   const columns: Array<{
     Header: string,
     accessor?: $Keys<UsersTableUser>,
@@ -52,34 +53,31 @@ const UsersTable = (tableProps: {
   }> = [
     {
       Header: 'Name',
-      accessor: 'name',
+      Cell: ({ original: { firstName, lastName } }) => `${firstName} ${lastName}`,
     },
     {
       Header: 'Email',
-      accessor: 'email',
       Cell: ({ original }) =>
         original.email ? <MailTo link={original.email}>{original.email}</MailTo> : '',
     },
     {
       Header: 'Role',
-      accessor: 'role',
       Cell: ({ original }) => (original.role ? RoleDisplayName[original.role] : ''),
     },
     {
-      Header: 'DACO Approved',
-      accessor: 'isDacoApproved',
+      Header: 'Daco Approved',
       Cell: ({ original }) => (original.isDacoApproved ? 'Yes' : 'No'),
       headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
     },
     {
-      Header: 'Invitation Status',
-      accessor: 'status',
-      Cell: ({ original }) => (original.status ? StatusDisplayName[original.status] : ''),
+      Header: 'Status',
+      Cell: ({ original }) =>
+        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISPLAY_STATUS,
     },
     {
       Header: 'Joined On',
-      accessor: 'joinDate',
-      Cell: ({ original }) => (original.joinDate ? displayDate(original.joinDate) : ''),
+      Cell: ({ original }) =>
+        original.inviteAcceptedAt ? displayDate(original.inviteAcceptedAt) : '',
     },
     {
       Header: 'Actions',
@@ -100,6 +98,15 @@ const UsersTable = (tableProps: {
               width="20px"
               name="mail"
               onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
+              disabled={
+                // Disable if:
+                // already accepted
+                props.original.inviteStatus === 'ACCEPTED' ||
+                // OR added without invitation (shows as Accepted)
+                props.original.inviteStatus === null ||
+                // OR the site user is the user in this row
+                userEmail === props.original.email
+              }
             />
           </Tooltip>
           <Tooltip interactive position="bottom" html={<span>Edit user</span>}>

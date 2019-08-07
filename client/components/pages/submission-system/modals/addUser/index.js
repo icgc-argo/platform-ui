@@ -20,7 +20,7 @@ const AddUserModal = ({
   onSubmit,
   dismissModal,
 }: {
-  onSubmit: (data: typeof UserModel) => any | void,
+  onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
   const {

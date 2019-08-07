@@ -187,7 +187,7 @@ const typeDefs = gql`
 /* =========
     Convert GRPC Response to GQL output
  * ========= */
-const getIsoDate = time => (time ? new Date(parseInt(time)).toISOString() : null);
+const getIsoDate = time => (time ? new Date(parseInt(time) * 1000).toISOString() : null);
 
 const convertGrpcProgramToGql = programDetails => ({
   name: get(programDetails, 'program.name.value'),

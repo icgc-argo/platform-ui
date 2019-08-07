@@ -8,6 +8,13 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
   { content: 'Associate', value: 'ASSOCIATE' },
 ];
 
+export const PROGRAM_USER_ROLES = [
+  { content: 'Admin', value: 'ADMIN' },
+  { content: 'Collaborator', value: 'COLLABORATOR' },
+  { content: 'Curator', value: 'CURATOR' },
+  { content: 'Submitter', value: 'SUBMITTER' },
+];
+
 export const CANCER_TYPES = [
   `Biliary Tract cancer`,
   `Bladder cancer`,
