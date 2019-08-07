@@ -23,25 +23,26 @@ const AddUserModal = ({
   onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
+  const [formIds, setFormIds] = React.useState([1]);
+  const formSubscriptions = {};
+
   const {
     errors: validationErrors,
     data: form,
     setData,
     setError,
-    deleteSection,
-    createSection,
     validateField,
-    validateSection,
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+  } = useFormHook({ initialFields: UserModel, schema: addUserSchema, disabledFields: [] });
 
-  const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
+  const islastSectionTouched = false;
+  /*Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,
     false,
   );
-
+*/
   const submitForm = async () => {
     try {
       const validData = await validateForm();
@@ -52,18 +53,20 @@ const AddUserModal = ({
   };
 
   const addSection = async () => {
-    // check if last section is blank
+    /* check if last section is blank
     const index = form.length - 1;
     try {
       await validateSection({ index });
       createSection(UserModel);
     } catch (e) {
       console.log('error: last section is empty', e);
-    }
+    }*/
+    console.log('add section');
   };
 
   const removeSection = index => {
-    deleteSection(index);
+    //  deleteSection(index);
+    console.log('remove section');
   };
 
   return (
@@ -78,15 +81,17 @@ const AddUserModal = ({
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {form.map((data, currentIndex) => {
+      {formIds.map((data, currentIndex) => {
         return (
           <UserSection
             key={currentIndex}
-            user={data}
-            onChange={(key, val) => setData({ key, val, index: currentIndex })}
-            validateField={key => validateField({ key, index: currentIndex })}
+            user={UserModel}
+            onChange={(key, val) => setData({ key, val })}
+            validateField={key => validateField({ key })}
             errors={validationErrors[currentIndex]}
-            deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
+            deleteSelf={() => (formIds.length > 1 ? removeSection(currentIndex) : null)}
+            disabledFields={[]}
+            showDelete={true}
           />
         );
       })}

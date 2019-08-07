@@ -13,13 +13,11 @@ type FormData = {
 const useFormHook = ({
   initialFields,
   schema: formSchema,
-  disabledFields = [],
 }: {
   initialFields: {},
   schema: {
     validate: typeof yup.object,
   },
-  disabledFields: [],
 }) => {
   let initErrors = {};
 
@@ -97,6 +95,7 @@ const useFormHook = ({
 
   return {
     errors,
+    setError,
     data,
     setData,
     validateField,

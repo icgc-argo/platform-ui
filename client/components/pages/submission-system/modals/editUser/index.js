@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
@@ -23,7 +22,7 @@ const EditUserModal = ({
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: user, schema: editUserSchema, disabledFields: [] });
+  } = useFormHook({ initialFields: user, schema: editUserSchema });
 
   const submitForm = async () => {
     try {
@@ -33,7 +32,7 @@ const EditUserModal = ({
       console.log(err);
     }
   };
-
+  console.log('edit modal', form);
   return (
     <Modal
       title="Edit Users"
@@ -50,6 +49,7 @@ const EditUserModal = ({
         validateField={key => validateField({ key })}
         errors={validationErrors}
         disabledFields={['email', 'firstName', 'lastName']}
+        onClickDelete={null}
       />
     </Modal>
   );

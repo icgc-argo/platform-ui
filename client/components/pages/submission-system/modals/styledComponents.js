@@ -12,6 +12,7 @@ import css from '@emotion/css';
 import PropTypes from 'prop-types';
 
 import { Row, Col } from 'react-grid-system';
+import { UserModel } from './common';
 
 const Section = styled('div')`
   padding: 12px 11px;
@@ -25,9 +26,15 @@ export const UserSection = ({
   onChange,
   validateField,
   errors,
-  deleteSelf,
-  showDelete = false,
+  onClickDelete,
   disabledFields = [],
+}: {
+  user: typeof UserModel,
+  onChange: (fieldName: string, value: mixed) => mixed | void,
+  validateField: (fieldName: string) => mixed | void,
+  errors: typeof UserModel,
+  onClickDelete: ((e: mixed | void) => mixed | void) | null,
+  disabledFields: Array<string | void>,
 }) => {
   const {
     firstName: firstNameError,
@@ -131,13 +138,13 @@ export const UserSection = ({
           </Col>
         </Row>{' '}
       </div>
-      {showDelete && (
+      {onClickDelete && (
         <Icon
           height="20px"
           width="18px"
           name="trash"
-          fill={deleteSelf ? 'accent2' : '#cecfd3'}
-          onClick={deleteSelf}
+          fill={onClickDelete ? 'accent2' : '#cecfd3'}
+          onClick={onClickDelete}
           css={css`
             margin-left: 6px;
           `}
@@ -145,16 +152,6 @@ export const UserSection = ({
       )}
     </Section>
   );
-};
-
-UserSection.propTypes = {
-  user: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
-  validateField: PropTypes.func,
-  errors: PropTypes.object.isRequired,
-  deleteSelf: PropTypes.oneOf([PropTypes.func]),
-  showDelete: PropTypes.bool,
-  disabledFields: PropTypes.array,
 };
 
 export default UserSection;
