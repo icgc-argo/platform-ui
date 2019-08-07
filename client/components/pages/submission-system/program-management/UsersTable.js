@@ -40,7 +40,7 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void,
   onUserResendInviteClick: ({ user: UsersTableUser }) => void,
 }) => {
-  const { data: egoTokenData } = useAuthContext();
+  const { data: egoTokenData } = useAuthContext() || {};
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
 
   const columns: Array<{
