@@ -10,6 +10,37 @@ import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
 
+const AddUser = ({ id, formSubscriptions }) => {
+  const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+  React.useEffect(() => {
+    formSubscriptions[id] = form;
+  });
+
+  const {
+    errors: validationErrors,
+    data,
+    setData,
+    setError,
+    validateField,
+    validateForm,
+    touched,
+    hasErrors,
+  } = form;
+
+  return (
+    <UserSection
+      key={id}
+      user={UserModel}
+      onChange={(key, val) => setData({ key, val })}
+      validateField={key => validateField({ key })}
+      errors={validationErrors}
+      //   deleteSelf={() => (formIds.length > 1 ? removeSection(currentIndex) : null)}
+      disabledFields={[]}
+      showDelete={true}
+    />
+  );
+};
+
 const AddSection = styled(Button)`
   text-transform: uppercase;
   color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
@@ -23,27 +54,19 @@ const AddUserModal = ({
   onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
-  const [formIds, setFormIds] = React.useState([1]);
+  const [formIds, setFormIds] = React.useState([0]);
   const formSubscriptions = {};
 
-  const {
-    errors: validationErrors,
-    data: form,
-    setData,
-    setError,
-    validateField,
-    validateForm,
-    touched,
-    hasErrors,
-  } = useFormHook({ initialFields: UserModel, schema: addUserSchema, disabledFields: [] });
-
-  const islastSectionTouched = false;
+  const islastSectionTouched = true;
   /*Object.values(form[form.length - 1]).reduce(
     (acc, val) => acc || !!val,
     false,
   );
 */
   const submitForm = async () => {
+    Object.entries(formSubscriptions).forEach(([key, form]) => {
+      form.validateForm(form.data);
+    });
     try {
       const validData = await validateForm();
       const result = onSubmit(validData);
@@ -53,14 +76,14 @@ const AddUserModal = ({
   };
 
   const addSection = async () => {
-    /* check if last section is blank
-    const index = form.length - 1;
+    // check if last section is blank
     try {
-      await validateSection({ index });
-      createSection(UserModel);
+      // await validateSection({ index });
+      // createSection(UserModel);
+      setFormIds(formIds.concat(formIds.length));
     } catch (e) {
       console.log('error: last section is empty', e);
-    }*/
+    }
     console.log('add section');
   };
 
@@ -75,26 +98,15 @@ const AddUserModal = ({
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      actionDisabled={!touched || hasErrors}
+      // actionDisabled={!touched || hasErrors}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {formIds.map((data, currentIndex) => {
-        return (
-          <UserSection
-            key={currentIndex}
-            user={UserModel}
-            onChange={(key, val) => setData({ key, val })}
-            validateField={key => validateField({ key })}
-            errors={validationErrors[currentIndex]}
-            deleteSelf={() => (formIds.length > 1 ? removeSection(currentIndex) : null)}
-            disabledFields={[]}
-            showDelete={true}
-          />
-        );
-      })}
+      {formIds.map(id => (
+        <AddUser key={id} id={id} formSubscriptions={formSubscriptions} />
+      ))}
       <AddSection variant="text" disabled={!islastSectionTouched}>
         <div
           css={css`
