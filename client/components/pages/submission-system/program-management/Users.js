@@ -12,7 +12,7 @@ import DeleteUserModal from '../modals/deleteUser';
 import ResendInviteModal from '../modals/resendInvite';
 import { ModalPortal } from '../layout';
 
-import { useToaster } from '../toaster';
+import { useToaster } from 'global/hooks/toaster';
 import { UserModel, RoleDisplayName } from '../modals/common';
 
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';

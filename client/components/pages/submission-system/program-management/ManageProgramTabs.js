@@ -18,7 +18,7 @@ import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
 import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 import { UserModel as ModalUserModel } from '../modals/common';
 
-import { useToaster } from '../toaster';
+import { useToaster } from 'global/hooks/toaster';
 import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 
 const createUserInput = ({
@@ -146,7 +146,6 @@ export default () => {
               const failNames = [];
               for (let i = 0; i < validData.length; i++) {
                 try {
-                  if (i > 0) throw new Error('ah!');
                   await triggerInvite({
                     variables: {
                       invite: createUserInput({ data: validData[i], programShortName }),
