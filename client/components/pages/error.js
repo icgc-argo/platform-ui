@@ -4,16 +4,11 @@ import { MenuItem } from 'uikit/AppBar';
 import Footer from 'uikit/Footer';
 import { css } from 'uikit';
 import Container from 'uikit/Container';
+import { PageContainer } from 'uikit/PageLayout';
 
 export default function ErrorLayout({ children }) {
   return (
-    <div
-      css={css`
-        display: grid;
-        grid-template-rows: auto 1fr auto;
-        min-height: 100vh;
-      `}
-    >
+    <PageContainer>
       <NavBar />
       <div
         css={css`
@@ -43,6 +38,6 @@ export default function ErrorLayout({ children }) {
           { displayName: 'Privacy Policy', href: '#' },
         ]}
       />
-    </div>
+    </PageContainer>
   );
 }
