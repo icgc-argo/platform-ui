@@ -23,7 +23,7 @@ const EditUserModal = ({
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: user, schema: editUserSchema });
+  } = useFormHook({ initialFields: user, schema: editUserSchema, disabledFields: [] });
 
   const submitForm = async () => {
     try {
@@ -45,10 +45,10 @@ const EditUserModal = ({
       onCloseClick={dismissModal}
     >
       <UserSection
-        user={form[0]}
+        user={form}
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
-        errors={validationErrors[0]}
+        errors={validationErrors}
         disabledFields={['email', 'firstName', 'lastName']}
       />
     </Modal>
