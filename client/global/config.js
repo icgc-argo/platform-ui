@@ -22,10 +22,16 @@ export const EGO_URL = String(
   urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`),
 );
 
+export const GA_TRACKING_ID = String(process.env.GA_TRACKING_ID);
+
 export const NODE_ENV = String(process.env.ENV || ENVIRONMENTS.development);
 
-/* checks for EGO_API_ROOT */
+if (!GA_TRACKING_ID) {
+  console.warn(`no GA_TRACKING_ID was provided`);
+}
+
 if (!EGO_API_ROOT) {
+  /* checks for EGO_API_ROOT */
   console.warn('EGO_API must be specified');
 }
 

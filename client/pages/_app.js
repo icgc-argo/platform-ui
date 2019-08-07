@@ -4,10 +4,11 @@ import nextCookies from 'next-cookies';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
 import fetch from 'isomorphic-fetch';
+import ReactGA from 'react-ga';
 
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { AUTH_DISABLED } from 'global/config';
+import { AUTH_DISABLED, GA_TRACKING_ID } from 'global/config';
 import { isValidJwt } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 
@@ -109,13 +110,22 @@ const Root = (() => {
   ) => {
     const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
 
-    const { token, resolving, logOut } = useAuthContext();
+    const { token, data, resolving, logOut } = useAuthContext();
     const egoJwt = resolving ? '' : token || '';
 
     React.useEffect(() => {
       if (egoJwt && !isValidJwt(egoJwt)) {
         logOut();
       }
+    });
+
+    React.useEffect(() => {
+      ReactGA.initialize(GA_TRACKING_ID, {
+        gaOptions: {
+          userId: data ? data.context.user.email : 'NA',
+        },
+      });
+      ReactGA.pageview(ctx.asPath);
     });
 
     return (
