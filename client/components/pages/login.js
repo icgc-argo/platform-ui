@@ -11,18 +11,21 @@ import Container from 'uikit/Container';
 import Footer from 'uikit/Footer';
 import Typography from 'uikit/Typography';
 import DefaultLayout from './DefaultLayout';
+import useTheme from 'uikit/utils/useTheme';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
 const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage() {
+  const theme = useTheme();
   return (
     <DefaultLayout>
       <div
         css={css`
           display: grid;
           grid-template-columns: 1fr 1fr;
+          background: ${theme.colors.white};
         `}
       >
         <div
