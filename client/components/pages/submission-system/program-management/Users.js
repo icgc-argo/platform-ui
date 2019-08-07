@@ -14,6 +14,7 @@ import { ModalPortal } from '../layout';
 
 import { useToaster } from 'global/hooks/toaster';
 import { UserModel, RoleDisplayName } from '../modals/common';
+import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 
 import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
@@ -36,6 +37,11 @@ const Users = ({
   const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
 
   const toaster = useToaster();
+
+  /** @GOOGLE_ANALYTICS **/
+  useModalViewAnalyticsEffect(`USER_EDIT_MODAL`, !!currentEditingUser);
+  useModalViewAnalyticsEffect(`USER_REMOVE_MODAL`, !!currentDeletingUser);
+  useModalViewAnalyticsEffect(`USER_EMAIL_RESEND_MODAL`, !!currentResendEmailUser);
 
   return (
     <div>
