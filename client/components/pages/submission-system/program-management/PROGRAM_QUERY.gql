@@ -13,5 +13,13 @@ query PROGRAM_QUERY($shortName: String!) {
     membershipType
     cancerTypes
     primarySites
+    users {
+      email
+      firstName
+      lastName
+      role
+      inviteAcceptedAt
+      inviteStatus
+    }
   }
 }

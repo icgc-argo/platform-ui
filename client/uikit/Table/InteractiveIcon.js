@@ -7,7 +7,7 @@ const InteractiveIcon = ({ disabled, onClick, ...props }) => {
   return (
     <Icon
       css={css`
-        cursor: pointer;
+        ${disabled ? '' : 'cursor: pointer'};
       `}
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
