@@ -2,7 +2,7 @@ import { css } from 'uikit';
 import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import Footer from 'uikit/Footer';
-import NavBar from './NavBar';
+import NavBar from 'components/NavBar';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
