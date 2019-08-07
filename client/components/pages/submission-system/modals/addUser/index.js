@@ -9,6 +9,7 @@ import { UserSection } from '../styledComponents';
 import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
+import uniqueId from 'lodash/uniqueId';
 
 const AddUser = ({ id, formSubscriptions, removeSection }) => {
   const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
@@ -54,7 +55,7 @@ const AddUserModal = ({
   onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
-  const [formIds, setFormIds] = React.useState([0]);
+  const [formIds, setFormIds] = React.useState([uniqueId()]);
   const formSubscriptions = {};
 
   const islastSectionTouched = true;
@@ -80,7 +81,7 @@ const AddUserModal = ({
     try {
       // await validateSection({ index });
       // createSection(UserModel);
-      setFormIds(formIds.concat(formIds.length));
+      setFormIds(formIds.concat(uniqueId()));
     } catch (e) {
       console.log('error: last section is empty', e);
     }
