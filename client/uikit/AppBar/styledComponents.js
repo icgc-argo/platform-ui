@@ -57,13 +57,12 @@ export const SectionDisplay = styled('div')`
   display: flex;
 `;
 export const LogoContainer = styled('span')`
-  margin: 0px 24px;
+  margin: 0px 18px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 export const LogoImage = styled('img')`
-  margin: 0px 24px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,5 +1,12 @@
 import grpc from 'grpc';
 import retry from 'retry';
+import mapKeys from 'lodash/mapKeys';
+import camelCase from 'lodash/camelCase';
+import transform from 'lodash/transform';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
+import keys from 'lodash/keys';
+import has from 'lodash/has';
 
 /* When building gRPC requests we frequently need to provide a value as:
  * { value: "asdf" }
@@ -89,3 +96,39 @@ export const withRetries = (
     },
   });
 };
+
+// Convert nested grpc object to gql object. Make sure your gql definitions matches proto definitions
+export function grpcToGql(obj) {
+  return transform(
+    obj,
+    (result, value, key) => {
+      let v = value;
+      // Unwrap value
+      if (keys(value).length === 1 && has(value, 'value')) {
+        v = value.value;
+      }
+      // Flatten timestamp
+      v = timestampToDateTime(v);
+      if (v instanceof Date) {
+        result[camelCase(key)] = v;
+        return;
+      }
+      // Convert key name to camelCase and recursively convert value
+      result[camelCase(key)] = isObject(v) && !isArray(v) ? grpcToGql(v) : v;
+    },
+    {},
+  );
+}
+
+// Convert a Timestamp object to ISO datetime string, or return the same one if it's not a Timestamp
+function timestampToDateTime(maybeTimestamp) {
+  const isTimestamp =
+    keys(maybeTimestamp).length === 2 &&
+    has(maybeTimestamp, 'seconds') &&
+    has(maybeTimestamp, 'nanos');
+  if (isTimestamp) {
+    const { seconds, nanos } = maybeTimestamp;
+    return new Date(seconds * 1000 + nanos / 1000000);
+  }
+  return maybeTimestamp;
+}

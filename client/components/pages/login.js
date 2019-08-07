@@ -1,4 +1,4 @@
-import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
+import { EGO_URL } from 'global/config';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { createPage, getRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
@@ -10,7 +10,6 @@ import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Container from 'uikit/Container';
 import Footer from 'uikit/Footer';
 import Typography from 'uikit/Typography';
-import urlJoin from 'url-join';
 import DefaultLayout from './DefaultLayout';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
@@ -57,10 +56,7 @@ export default function LoginPage() {
             </Typography>
           </div>
           <div>
-            <GoogleLogin
-              id="google-login"
-              link={urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`)}
-            />
+            <GoogleLogin id="google-login" link={EGO_URL} />
           </div>
           <Container
             css={css`

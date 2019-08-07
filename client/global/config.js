@@ -1,6 +1,7 @@
 // @flow
 
 import { asEnum } from './utils/common';
+import urlJoin from 'url-join';
 
 export const ENVIRONMENTS = asEnum(
   {
@@ -17,6 +18,9 @@ export const AUTH_DISABLED = String(process.env.AUTH_DISABLED).toLowerCase() ===
 
 export const EGO_API_ROOT = String(process.env.EGO_API_ROOT);
 export const EGO_CLIENT_ID = String(process.env.EGO_CLIENT_ID);
+export const EGO_URL = String(
+  urlJoin(EGO_API_ROOT, `api/oauth/login/google?client_id=${EGO_CLIENT_ID}`),
+);
 
 export const NODE_ENV = String(process.env.ENV || ENVIRONMENTS.development);
 
