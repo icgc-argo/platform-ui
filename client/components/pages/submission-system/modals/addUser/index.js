@@ -10,7 +10,7 @@ import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
 
-const AddUser = ({ id, formSubscriptions }) => {
+const AddUser = ({ id, formSubscriptions, removeSection }) => {
   const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
   React.useEffect(() => {
     formSubscriptions[id] = form;
@@ -34,7 +34,7 @@ const AddUser = ({ id, formSubscriptions }) => {
       onChange={(key, val) => setData({ key, val })}
       validateField={key => validateField({ key })}
       errors={validationErrors}
-      //   deleteSelf={() => (formIds.length > 1 ? removeSection(currentIndex) : null)}
+      onClickDelete={() => removeSection(id)}
       disabledFields={[]}
       showDelete={true}
     />
@@ -65,11 +65,11 @@ const AddUserModal = ({
 */
   const submitForm = async () => {
     Object.entries(formSubscriptions).forEach(([key, form]) => {
-      form.validateForm(form.data);
+      //  form.validateForm(form.data);
     });
     try {
-      const validData = await validateForm();
-      const result = onSubmit(validData);
+      //const validData = await validateForm();
+      // const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
@@ -87,9 +87,8 @@ const AddUserModal = ({
     console.log('add section');
   };
 
-  const removeSection = index => {
-    //  deleteSection(index);
-    console.log('remove section');
+  const removeSection = removeId => {
+    setFormIds(formIds.filter(id => id !== removeId));
   };
 
   return (
@@ -105,7 +104,12 @@ const AddUserModal = ({
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
       {formIds.map(id => (
-        <AddUser key={id} id={id} formSubscriptions={formSubscriptions} />
+        <AddUser
+          key={id}
+          id={id}
+          formSubscriptions={formSubscriptions}
+          removeSection={id => removeSection(id)}
+        />
       ))}
       <AddSection variant="text" disabled={!islastSectionTouched}>
         <div
