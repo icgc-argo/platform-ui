@@ -31,7 +31,7 @@ const AddUser = ({ id, formSubscriptions, removeSection }) => {
   return (
     <UserSection
       key={id}
-      user={UserModel}
+      user={data}
       onChange={(key, val) => setData({ key, val })}
       validateField={key => validateField({ key })}
       errors={validationErrors}
@@ -57,30 +57,29 @@ const AddUserModal = ({
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const formSubscriptions = {};
+  const formSubKeys = Object.keys(formSubscriptions);
 
-  const islastSectionTouched = true;
-  /*Object.values(form[form.length - 1]).reduce(
-    (acc, val) => acc || !!val,
-    false,
-  );
-*/
+  const islastSectionTouched = () => false;
+  //(): ({ vboolean =>
+  //  formSubscriptions(Object.keys(formSubscriptions).length - 1).touched;
+
   const submitForm = async () => {
-    Object.entries(formSubscriptions).forEach(([key, form]) => {
-      //  form.validateForm(form.data);
+    const allForms = Object.keys(formSubscriptions).map(async key => {
+      const form = formSubscriptions[key];
+      const validData = await form.validateForm(form.data);
+      const result = onSubmit(validData);
+      return result;
     });
-    try {
-      //const validData = await validateForm();
-      // const result = onSubmit(validData);
-    } catch (err) {
-      console.log(err);
-    }
+    Promise.all(allForms)
+      .then(d => console.log('all forms sent'))
+      .catch(err => console.log('form sending failed', err));
   };
 
   const addSection = async () => {
-    // check if last section is blank
     try {
+      // check if last section is blank
+
       // await validateSection({ index });
-      // createSection(UserModel);
       setFormIds(formIds.concat(uniqueId()));
     } catch (e) {
       console.log('error: last section is empty', e);
@@ -112,7 +111,7 @@ const AddUserModal = ({
           removeSection={id => removeSection(id)}
         />
       ))}
-      <AddSection variant="text" disabled={!islastSectionTouched}>
+      <AddSection variant="text" disabled={!islastSectionTouched()}>
         <div
           css={css`
             display: flex;
@@ -122,13 +121,13 @@ const AddUserModal = ({
         >
           <Icon
             name="plus_circle"
-            fill={islastSectionTouched ? 'accent2' : '#cecfd3'}
+            fill={islastSectionTouched() ? 'accent2' : '#cecfd3'}
             css={css`
               margin-right: 3px;
             `}
           />
           <Typography
-            onClick={() => (islastSectionTouched ? addSection() : null)}
+            onClick={() => (islastSectionTouched() ? addSection() : null)}
             variant="paragraph"
             component="span"
           >

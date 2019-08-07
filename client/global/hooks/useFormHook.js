@@ -45,7 +45,7 @@ const useFormHook = ({
   const setErrors = ({ validationErrors }) =>
     setForm({
       ...form,
-      errors: { ...errors },
+      errors: { ...errors, ...validationErrors },
     });
 
   // set single error
@@ -77,17 +77,17 @@ const useFormHook = ({
       console.log('VALIDATE FORM', formSchema, data);
       try {
         const validData = await formSchema.validate(data, {
-          //abortEarly: false,
+          abortEarly: false,
           stripUnknown: true,
         });
-        console.log('valid data', validData);
+        console.log('VALID', validData);
         resolve(validData);
       } catch (formErrors) {
         const validationErrors = get(formErrors, 'inner', []).reduce((output, error) => {
           output[error.path] = error.message;
           return output;
         }, {});
-        console.log('errors', formErrors, validationErrors);
+        console.log('REJECTING', formErrors, validationErrors);
         setErrors({ validationErrors });
         reject(validationErrors);
       }
