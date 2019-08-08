@@ -1,18 +1,23 @@
 //@flow
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Row, Col, ScreenClassRender } from 'react-grid-system';
-import Container from 'uikit/Container';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import { styled } from 'uikit';
+import { Col, Row, ScreenClassRender } from 'react-grid-system';
+import programsImage from 'static/programs.svg';
+import { css, styled } from 'uikit';
 import Button from 'uikit/Button';
+import Container from 'uikit/Container';
+import { Input } from 'uikit/form';
+import { INPUT_SIZES } from 'uikit/form/common';
 import FormControl from 'uikit/form/FormControl';
+import FormHelperText from 'uikit/form/FormHelperText';
 import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
-import { Input } from 'uikit/form';
-import programsImage from 'static/programs.svg';
-import { INPUT_SIZES } from 'uikit/form/common';
+import Typography from 'uikit/Typography';
+import { set } from 'lodash';
+// $FlowFixMe
+import * as yup from 'yup';
+import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-apollo-hooks';
 
 const FormContainer = styled(Container)`
   padding: 30px;
@@ -71,122 +76,209 @@ const ProgramInfoCard = ({ programName, userRole }) => (
   </InfoCard>
 );
 
-const Form = ({ availableInstitutions = [] }) => (
-  <ScreenClassRender
-    render={screenSize => (
-      <div>
-        <FormControl required>
-          <Row nogutter align="center">
-            <Col sm={3}>
-              <InputLabel required>Institution</InputLabel>
-            </Col>
-            <Col>
-              <MultiSelect size={INPUT_SIZES.LG} aria-label="institution-input" allowNew>
-                {availableInstitutions.map(institution => (
-                  <Option>{institution}</Option>
-                ))}
-              </MultiSelect>
-            </Col>
-          </Row>
-        </FormControl>
-        <Row nogutter>
-          <Col sm={6}>
-            <FormControl required>
-              <Row nogutter align="center">
-                <Col sm={6}>
-                  <InputLabel required>PI First Name</InputLabel>
-                </Col>
-                <Col>
-                  <Input size={INPUT_SIZES.LG} aria-label="first-name-input" />
-                </Col>
-              </Row>
-            </FormControl>
-          </Col>
-          <Col sm={6}>
-            <FormControl required>
-              <Row
-                nogutter
-                align="center"
-                style={{
-                  ...(screenSize === 'xs'
-                    ? {}
-                    : {
-                        paddingLeft: 10,
-                      }),
-                }}
-              >
-                <Col sm={6}>
-                  <InputLabel required>PI Last Name</InputLabel>
-                </Col>
-                <Col>
-                  <Input size={INPUT_SIZES.LG} aria-label="first-last-input" />
-                </Col>
-              </Row>
-            </FormControl>
-          </Col>
-        </Row>
+const schema = yup.object().shape({
+  institutions: yup
+    .array()
+    .default([])
+    .required(),
+  piFirstName: yup
+    .string()
+    .default('')
+    .required(),
+  piLastName: yup
+    .string()
+    .default('')
+    .required(),
+  department: yup
+    .string()
+    .default('')
+    .required(),
+});
 
-        <FormControl>
-          <Row nogutter align="center">
-            <Col sm={3}>
-              <InputLabel required>Department</InputLabel>
-            </Col>
-            <Col>
-              <Input size={INPUT_SIZES.LG} aria-label="department-input" />
-            </Col>
-          </Row>
-        </FormControl>
-      </div>
-    )}
-  />
-);
+const Form = () => {};
 
 const JoinProgramForm = ({
   programName,
   userRole,
-  availableInstitutions,
-  onJoinClick,
+  inviteId,
 }: {
+  inviteId: string,
   programName: string,
   userRole: string,
-  availableInstitutions: Array<any>,
-  onJoinClick: any => any,
-}) => (
-  <FormContainer>
-    <Row nogutter>
-      <Typography
-        variant="title"
-        color="primary"
+}) => {
+  const [errors, setErrors] = React.useState({});
+  const [data, setData] = React.useState(schema.cast({}));
+  const availableInstitutions = [];
+
+  const handleBlur = field => () => {
+    schema
+      .validateAt(field, data)
+      .then(() => {
+        setErrors(v => set({ ...errors }, field, null));
+      })
+      .catch(err => {
+        setErrors(v => set({ ...errors }, field, err.message));
+      });
+  };
+
+  const handleChange = field => ({ target }) => {
+    setData(oldData => set({ ...data }, field, target.value));
+  };
+
+  const [joinProgram] = useMutation(JOIN_PROGRAM, {
+    variables: {
+      joinProgramInput: {
+        invitationId: inviteId,
+        ...data,
+      },
+    },
+  });
+
+  const submitForm = async () => {
+    console.log(schema.cast(data));
+  };
+
+  return (
+    <FormContainer>
+      <Row nogutter>
+        <Typography
+          variant="title"
+          color="primary"
+          css={css`
+            margin: 0px;
+          `}
+        >
+          Join a Program
+        </Typography>
+      </Row>
+      <Row nogutter>
+        <Typography variant="paragraph">
+          You have been invited to join the following program, but first we need a few details.
+        </Typography>
+      </Row>
+      <Row nogutter>
+        <ProgramInfoCard programName={programName} userRole={userRole} />
+      </Row>
+      <Row
+        nogutter
         css={css`
-          margin: 0px;
+          padding: 10px 0px;
         `}
       >
-        Join a Program
-      </Typography>
-    </Row>
-    <Row nogutter>
-      <Typography variant="paragraph">
-        You have been invited to join the following program, but first we need a few details.
-      </Typography>
-    </Row>
-    <Row nogutter>
-      <ProgramInfoCard programName={programName} userRole={userRole} />
-    </Row>
-    <Row
-      nogutter
-      css={css`
-        padding: 10px 0px;
-      `}
-    >
-      <Typography variant="subtitle2" component="h2" color="secondary" bold>
-        Primary Affiliation
-      </Typography>
-    </Row>
-    <Form availableInstitutions={availableInstitutions} />
-    <Row nogutter justify="end">
-      <Button onClick={onJoinClick}>Join now</Button>
-    </Row>
-  </FormContainer>
-);
+        <Typography variant="subtitle2" component="h2" color="secondary" bold>
+          Primary Affiliation
+        </Typography>
+      </Row>
+      <ScreenClassRender
+        render={screenSize => (
+          <div
+            css={css`
+              & .pt {
+                padding-top: 8px;
+              }
+            `}
+          >
+            <FormControl required error={errors.institutions != null}>
+              <Row nogutter>
+                <Col sm={3} className="pt">
+                  <InputLabel>Institution</InputLabel>
+                </Col>
+                <Col>
+                  <MultiSelect
+                    size={INPUT_SIZES.LG}
+                    aria-label="institution-input"
+                    allowNew
+                    onBlur={handleBlur('institutions')}
+                    value={data.institutions}
+                    onChange={handleChange('institutions')}
+                  >
+                    {availableInstitutions.map(institution => (
+                      <Option>{institution}</Option>
+                    ))}
+                  </MultiSelect>
+                  {errors.institutions != null && (
+                    <FormHelperText>{errors.institutions}</FormHelperText>
+                  )}
+                </Col>
+              </Row>
+            </FormControl>
+            <Row nogutter>
+              <Col sm={6}>
+                <FormControl required error={errors.piFirstName != null}>
+                  <Row nogutter>
+                    <Col sm={6} className="pt">
+                      <InputLabel required>PI First Name</InputLabel>
+                    </Col>
+                    <Col>
+                      <Input
+                        size={INPUT_SIZES.LG}
+                        aria-label="first-name-input"
+                        value={data.piFirstName}
+                        onBlur={handleBlur('piFirstName')}
+                        onChange={handleChange('piFirstName')}
+                      />
+                      {errors.piFirstName != null && (
+                        <FormHelperText>{errors.piFirstName}</FormHelperText>
+                      )}
+                    </Col>
+                  </Row>
+                </FormControl>
+              </Col>
+              <Col sm={6}>
+                <FormControl required error={!!errors.piLastName}>
+                  <Row
+                    nogutter
+                    style={{
+                      ...(screenSize === 'xs'
+                        ? {}
+                        : {
+                            paddingLeft: 10,
+                          }),
+                    }}
+                  >
+                    <Col sm={6} className="pt">
+                      <InputLabel>PI Last Name</InputLabel>
+                    </Col>
+                    <Col>
+                      <Input
+                        size={INPUT_SIZES.LG}
+                        aria-label="first-last-input"
+                        value={data.piLastName}
+                        onBlur={handleBlur('piLastName')}
+                        onChange={handleChange('piLastName')}
+                      />
+                      {!!errors.piLastName && <FormHelperText>{errors.piLastName}</FormHelperText>}
+                    </Col>
+                  </Row>
+                </FormControl>
+              </Col>
+            </Row>
+
+            <FormControl required error={!!errors.department}>
+              <Row nogutter>
+                <Col sm={3} className="pt">
+                  <InputLabel>Department</InputLabel>
+                </Col>
+                <Col>
+                  <Input
+                    size={INPUT_SIZES.LG}
+                    aria-label="department-input"
+                    value={data.department}
+                    onBlur={handleBlur('department')}
+                    onChange={handleChange('department')}
+                  />
+                  {!!errors.department && <FormHelperText>{errors.department}</FormHelperText>}
+                </Col>
+              </Row>
+            </FormControl>
+          </div>
+        )}
+      />
+      <Row nogutter justify="end">
+        <Button onClick={submitForm}>Join now</Button>
+      </Row>
+    </FormContainer>
+  );
+};
 
 export default JoinProgramForm;

@@ -163,7 +163,7 @@ function Highlight({ string, searchText }) {
 
 const MultiSelect = ({
   name,
-  value,
+  value = [],
   children,
   onChange,
   onBlur = () => {},
