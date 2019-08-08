@@ -25,6 +25,7 @@ const FormCheckbox = props => {
         checked={calcChecked}
         disabled={disabled}
         onChange={onChange}
+        aria-label={props['aria-label']}
       />
       <label
         css={css`

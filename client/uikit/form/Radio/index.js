@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
@@ -72,23 +74,35 @@ export const StyledRadio = styled('div')`
  * ::before - checked dot
  * ::after - circle outline
  */
-const Radio = ({ value, disabled, checked, onChange }) => {
+const Radio = ({
+  value,
+  disabled = false,
+  checked,
+  onChange,
+  'aria-label': ariaLabel,
+  ...props
+}: {
+  checked: boolean,
+  disabled: boolean,
+  onChange: (e: any | void) => any | void,
+  'aria-label': string,
+}) => {
   const HiddenRadioRef = React.createRef();
 
   return (
-    <StyledRadio role="radio" disabled={disabled} checked={checked}>
+    <StyledRadio role="radio" disabled={disabled} checked={checked} aria-checked={checked}>
       <input
         type="radio"
         ref={HiddenRadioRef}
         checked={checked}
         disabled={disabled}
-        aria-checked={checked}
+        ariaLabel={ariaLabel}
         onChange={onChange}
       />
       <div
         className="radio"
-        onClick={e => {
-          if (document.activeElement !== HiddenRadioRef.current) {
+        onClick={(e): void => {
+          if (document.activeElement !== HiddenRadioRef.current && HiddenRadioRef.current) {
             HiddenRadioRef.current.focus();
           }
         }}
@@ -96,7 +110,5 @@ const Radio = ({ value, disabled, checked, onChange }) => {
     </StyledRadio>
   );
 };
-
-Radio.propTypes = {};
 
 export default Radio;
