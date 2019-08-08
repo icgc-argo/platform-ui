@@ -7,13 +7,20 @@ import SubmissionLayout from '../layout';
 import JoinProgramForm from './joinProgramForm';
 import GET_INVITE from './GET_INVITE.gql';
 import { get } from 'lodash';
+// $FlowFixMe
+import { ERROR_STATUS_KEY } from 'pages/_error';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { inviteId } = useRouter().query;
 
-  const { data: { joinProgramInvite } = {}, loading, errors } = useQuery(GET_INVITE, {
+  const { data: { joinProgramInvite } = {}, loading, error } = useQuery(GET_INVITE, {
     variables: { inviteId },
   });
+
+  if (!!error) {
+    error[ERROR_STATUS_KEY] = 500;
+    throw new Error(error);
+  }
 
   return (
     <SubmissionLayout pathname={pathname} logOut={logOut} noSidebar>
