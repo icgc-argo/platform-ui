@@ -12,15 +12,8 @@ import SubmissionLayout from '../layout';
 
 import JoinProgramForm from './joinProgramForm';
 
-export default ({
-  egoJwt,
-  firstName,
-  lastName,
-  authorizedPrograms = [],
-  logOut,
-  pathname,
-}: any) => (
-  <SubmissionLayout pathname={pathname} logOut={logOut} noSidebar>
+export default ({ firstName, lastName, authorizedPrograms = [] }: any) => (
+  <SubmissionLayout noSidebar>
     <div
       css={css`
         display: flex;

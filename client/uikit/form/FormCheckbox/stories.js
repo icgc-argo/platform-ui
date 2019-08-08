@@ -35,7 +35,11 @@ const WithState = ({ children }) => {
 };
 
 const CheckboxStories = storiesOf(`${__dirname}`, module)
-  .add('Default', () => <FormCheckbox {...createKnobs()}>Item</FormCheckbox>)
+  .add('Default', () => (
+    <FormCheckbox {...createKnobs()} aria-label="Item">
+      Item
+    </FormCheckbox>
+  ))
   .add('Checkbox Group', () => (
     <WithState>
       <RadioCheckboxGroup
@@ -43,13 +47,25 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
         onChange="[parent func]"
         isChecked="[parent func]"
       >
-        <FormCheckbox value="sausage">Sausage</FormCheckbox>
-        <FormCheckbox value="rashers">Rashers</FormCheckbox>
-        <FormCheckbox value="black_pudding">Black Pudding</FormCheckbox>
+        <FormCheckbox aria-label="Sausage" value="sausage">
+          Sausage
+        </FormCheckbox>
+        <FormCheckbox aria-label="Rashers" value="rashers">
+          Rashers
+        </FormCheckbox>
+        <FormCheckbox aria-label="Black Pudding" value="black_pudding">
+          Black Pudding
+        </FormCheckbox>
         <div>
-          <FormCheckbox value="grilled_tomato">Grilled Tomato</FormCheckbox>
-          <FormCheckbox value="tayto_crisps">Tayto Crisps</FormCheckbox>
-          <FormCheckbox value="three_in_one">3-in-1</FormCheckbox>
+          <FormCheckbox aria-label="Grilled Tomato" value="grilled_tomato">
+            Grilled Tomato
+          </FormCheckbox>
+          <FormCheckbox aria-label="Tayto Crisps" value="tayto_crisps">
+            Tayto Crisps
+          </FormCheckbox>
+          <FormCheckbox aria-label="3-in-1" value="three_in_one">
+            3-in-1
+          </FormCheckbox>
         </div>
       </RadioCheckboxGroup>
     </WithState>

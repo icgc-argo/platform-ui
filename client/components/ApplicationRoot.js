@@ -1,5 +1,6 @@
 //@flow
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import urljoin from 'url-join';
 import ApolloClient from 'apollo-client';
@@ -14,6 +15,58 @@ import { ThemeProvider } from 'uikit';
 import { useToastState, ToasterContext } from 'global/hooks/toaster';
 import { css } from 'uikit';
 import ToastStack from 'uikit/notifications/ToastStack';
+import { AuthProvider } from 'global/hooks/useAuthContext';
+import Modal from 'uikit/Modal';
+
+const modalPortalRef = React.createRef();
+const useMounted = () => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  return mounted;
+};
+export const ModalPortal = ({ children }: { children: React.Node }) => {
+  const ref = modalPortalRef.current;
+  const mounted = useMounted();
+  return ref
+    ? ReactDOM.createPortal(
+        <div
+          id="modalContainer"
+          css={css`
+            transition: all 0.2s;
+            height: 100vh;
+            width: 100vw;
+            opacity: ${mounted ? 1 : 0};
+          `}
+        >
+          <Modal.Overlay>{children}</Modal.Overlay>
+        </div>,
+        ref,
+      )
+    : null;
+};
+
+const ToastDisplayArea = ({ toaster }: { toaster: $Call<typeof useToastState, void> }) => (
+  <div
+    className="toastStackContainer"
+    css={css`
+      position: fixed;
+      z-index: 9999;
+      right: 0px;
+      top: 80px;
+    `}
+  >
+    <div
+      css={css`
+        margin-right: 20px;
+        margin-left: 20px;
+      `}
+    >
+      <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
+    </div>
+  </div>
+);
 
 export default function ApplicationRoot({
   egoJwt,
@@ -21,7 +74,7 @@ export default function ApplicationRoot({
   pageContext,
   children,
 }: {
-  egoJwt: string,
+  egoJwt: ?string,
   apolloCache: {},
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
@@ -33,9 +86,11 @@ export default function ApplicationRoot({
     link: createHttpLink({
       uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
-      headers: {
-        authorization: `Bearer ${egoJwt}`,
-      },
+      headers: egoJwt
+        ? {
+            authorization: `Bearer ${egoJwt}`,
+          }
+        : {},
     }),
     cache: createInMemoryCache().restore(apolloCache),
   });
@@ -60,40 +115,31 @@ export default function ApplicationRoot({
             }
         `}
       </style>
-      <ToasterContext.Provider value={toaster}>
-        <PageContext.Provider value={pageContext}>
-          <ApolloProvider client={apolloClient}>
-            <ApolloHooksProvider client={apolloClient}>
-              <ThemeProvider>
-                <>
-                  {children}
-                  <div
-                    className="toastStackContainer"
-                    css={css`
-                      position: fixed;
-                      z-index: 9999;
-                      right: 0px;
-                      top: 80px;
-                    `}
-                  >
+      <AuthProvider egoJwt={egoJwt}>
+        <ToasterContext.Provider value={toaster}>
+          <PageContext.Provider value={pageContext}>
+            <ApolloProvider client={apolloClient}>
+              <ApolloHooksProvider client={apolloClient}>
+                <ThemeProvider>
+                  <>
+                    {children}
+                    <ToastDisplayArea toaster={toaster} />
                     <div
                       css={css`
-                        margin-right: 20px;
-                        margin-left: 20px;
+                        position: fixed;
+                        left: 0px;
+                        top: 0px;
+                        z-index: 9999;
                       `}
-                    >
-                      <ToastStack
-                        toastConfigs={toaster.toastStack}
-                        onInteraction={toaster.onInteraction}
-                      />
-                    </div>
-                  </div>
-                </>
-              </ThemeProvider>
-            </ApolloHooksProvider>
-          </ApolloProvider>
-        </PageContext.Provider>
-      </ToasterContext.Provider>
+                      ref={modalPortalRef}
+                    />
+                  </>
+                </ThemeProvider>
+              </ApolloHooksProvider>
+            </ApolloProvider>
+          </PageContext.Provider>
+        </ToasterContext.Provider>
+      </AuthProvider>
     </>
   );
 }
