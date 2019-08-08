@@ -10,12 +10,10 @@ import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
 import uniqueId from 'lodash/uniqueId';
+import isEmpty from 'lodash/isEmpty';
 
-const AddUser = ({ id, formSubscriptions, removeSection }) => {
+const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
-  React.useEffect(() => {
-    formSubscriptions[id] = form;
-  });
 
   const {
     errors: validationErrors,
@@ -28,16 +26,25 @@ const AddUser = ({ id, formSubscriptions, removeSection }) => {
     hasErrors,
   } = form;
 
+  React.useEffect(() => {
+    console.log('add user update');
+    formSubscriptions[id] = form;
+    onUpdate();
+  });
+
   return (
     <UserSection
       key={id}
       user={data}
-      onChange={(key, val) => setData({ key, val })}
+      onChange={(key, val) => {
+        setData({ key, val });
+        console.log('touched', touched);
+      }}
       validateField={key => validateField({ key })}
       errors={validationErrors}
       onClickDelete={() => removeSection(id)}
       disabledFields={[]}
-      showDelete={true}
+      showDelete={showDelete}
     />
   );
 };
@@ -56,12 +63,19 @@ const AddUserModal = ({
   dismissModal: (e: any | void) => any | void,
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
+  const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
   const formSubscriptions = {};
-  const formSubKeys = Object.keys(formSubscriptions);
 
-  const islastSectionTouched = () => false;
-  //(): ({ vboolean =>
-  //  formSubscriptions(Object.keys(formSubscriptions).length - 1).touched;
+  const checkLastSectionTouched = () => {
+    console.log('checkLastSectionTouched', formSubscriptions);
+    if (!isEmpty(formSubscriptions)) {
+      const formSubKeys = Object.keys(formSubscriptions);
+      const lastSection = formSubscriptions[formSubKeys[formSubKeys.length - 1]];
+      setIsLastSectionTouched(lastSection.touched);
+    } else return false;
+  };
+
+  const isFormTouched = (): boolean => false;
 
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
@@ -78,7 +92,6 @@ const AddUserModal = ({
   const addSection = async () => {
     try {
       // check if last section is blank
-
       // await validateSection({ index });
       setFormIds(formIds.concat(uniqueId()));
     } catch (e) {
@@ -88,7 +101,10 @@ const AddUserModal = ({
   };
 
   const removeSection = removeId => {
-    setFormIds(formIds.filter(id => id !== removeId));
+    if (formIds.length > 1) {
+      setFormIds(formIds.filter(id => id !== removeId));
+      delete formSubscriptions[removeId];
+    }
   };
 
   return (
@@ -97,21 +113,28 @@ const AddUserModal = ({
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      // actionDisabled={!touched || hasErrors}
+      //     actionDisabled={!touched || hasErrors}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {formIds.map(id => (
+      {formIds.map((id, index) => (
         <AddUser
           key={id}
           id={id}
           formSubscriptions={formSubscriptions}
-          removeSection={id => removeSection(id)}
+          removeSection={id => {
+            removeSection(id);
+            checkLastSectionTouched();
+          }}
+          onUpdate={() => {
+            checkLastSectionTouched();
+          }}
+          showDelete={formIds.length > 1}
         />
       ))}
-      <AddSection variant="text" disabled={!islastSectionTouched()}>
+      <AddSection variant="text" disabled={!isLastSectionTouched}>
         <div
           css={css`
             display: flex;
@@ -121,13 +144,13 @@ const AddUserModal = ({
         >
           <Icon
             name="plus_circle"
-            fill={islastSectionTouched() ? 'accent2' : '#cecfd3'}
+            fill={isLastSectionTouched ? 'accent2' : '#cecfd3'}
             css={css`
               margin-right: 3px;
             `}
           />
           <Typography
-            onClick={() => (islastSectionTouched() ? addSection() : null)}
+            onClick={() => (isLastSectionTouched ? addSection() : null)}
             variant="paragraph"
             component="span"
           >
