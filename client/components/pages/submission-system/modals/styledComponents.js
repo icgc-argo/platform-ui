@@ -28,6 +28,7 @@ export const UserSection = ({
   errors,
   onClickDelete,
   disabledFields = [],
+  showDelete,
 }: {
   user: typeof UserModel,
   onChange: (fieldName: string, value: mixed) => mixed | void,
@@ -35,6 +36,7 @@ export const UserSection = ({
   errors: typeof UserModel,
   onClickDelete: ((e: mixed | void) => mixed | void) | null,
   disabledFields: Array<string | void>,
+  showDelete: boolean,
 }) => {
   const {
     firstName: firstNameError,
@@ -138,18 +140,16 @@ export const UserSection = ({
           </Col>
         </Row>{' '}
       </div>
-      {onClickDelete && (
-        <Icon
-          height="20px"
-          width="18px"
-          name="trash"
-          fill={onClickDelete ? 'accent2' : '#cecfd3'}
-          onClick={onClickDelete}
-          css={css`
-            margin-left: 6px;
-          `}
-        />
-      )}
+      <Icon
+        height="20px"
+        width="18px"
+        name="trash"
+        fill={showDelete ? 'accent2' : '#cecfd3'}
+        onClick={() => (showDelete ? onClickDelete() : null)}
+        css={css`
+          margin-left: 6px;
+        `}
+      />
     </Section>
   );
 };
