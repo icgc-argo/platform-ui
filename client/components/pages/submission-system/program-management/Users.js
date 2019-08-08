@@ -10,7 +10,7 @@ import { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 import EditUserModal from '../modals/editUser';
 import DeleteUserModal from '../modals/deleteUser';
 import ResendInviteModal from '../modals/resendInvite';
-import { ModalPortal } from '../layout';
+import { ModalPortal } from 'components/ApplicationRoot';
 
 import { useToaster } from 'global/hooks/toaster';
 import { UserModel, RoleDisplayName } from '../modals/common';

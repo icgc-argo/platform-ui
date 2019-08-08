@@ -10,7 +10,7 @@ import { ContentBox } from 'uikit/PageLayout';
 import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import CreateProgramForm from '../create-program/CreateProgramForm';
-import { ModalPortal } from '../layout';
+import { ModalPortal } from 'components/ApplicationRoot';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
