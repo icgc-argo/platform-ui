@@ -1,14 +1,10 @@
 query($inviteId: ID!) {
   joinProgramInvite(id: $inviteId) {
-    createdAt
-    acceptedAt
     program {
       name
-      shortName
     }
     user {
       role
     }
-    emailSent
   }
 }
