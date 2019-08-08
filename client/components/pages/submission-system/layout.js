@@ -16,39 +16,6 @@ import Head from '../head';
 import NavBar from '../NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
-import Modal from 'uikit/Modal';
-import ToastStack from 'uikit/notifications/ToastStack';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
-import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
-import { ToasterContext, useToaster, useToastState } from 'global/hooks/toaster';
-
-const modalPortalRef = React.createRef();
-const useMounted = () => {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted;
-};
-export const ModalPortal = ({ children }: { children: React.Node }) => {
-  const ref = modalPortalRef.current;
-  const mounted = useMounted();
-  return ref
-    ? ReactDOM.createPortal(
-        <div
-          css={css`
-            transition: all 0.2s;
-            height: 100vh;
-            width: 100vw;
-            opacity: ${mounted ? 1 : 0};
-          `}
-        >
-          <Modal.Overlay>{children}</Modal.Overlay>
-        </div>,
-        ref,
-      )
-    : null;
-};
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -77,13 +44,6 @@ const SubmissionLayout = ({
       <PageFooter>
         <Footer />
       </PageFooter>
-      <div
-        css={css`
-          position: fixed;
-          z-index: 9999;
-        `}
-        ref={modalPortalRef}
-      />
     </PageContainer>
   );
 };
