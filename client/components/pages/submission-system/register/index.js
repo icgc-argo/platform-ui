@@ -9,6 +9,7 @@ import GET_INVITE from './GET_INVITE.gql';
 import { get } from 'lodash';
 // $FlowFixMe
 import { ERROR_STATUS_KEY } from 'pages/_error';
+import DnaLoader from 'uikit/DnaLoader';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { inviteId } = useRouter().query;
@@ -36,19 +37,15 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           position: absolute;
         `}
       >
-        <JoinProgramForm
-          inviteId={inviteId}
-          programName={get(
-            joinProgramInvite,
-            'program.name',
-            loading ? '[loading...]' : '[error to fetch data]',
-          )}
-          userRole={get(
-            joinProgramInvite,
-            'user.role',
-            loading ? '[loading...]' : '[error to fetch data]',
-          )}
-        />
+        {loading ? (
+          <DnaLoader />
+        ) : (
+          <JoinProgramForm
+            inviteId={inviteId}
+            programName={get(joinProgramInvite, 'program.name')}
+            userRole={get(joinProgramInvite, 'user.role')}
+          />
+        )}
       </div>
     </SubmissionLayout>
   );
