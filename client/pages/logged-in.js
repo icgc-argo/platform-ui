@@ -14,21 +14,23 @@ import useTheme from 'uikit/utils/useTheme';
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
 
-  const { data, token, resolving } = useAuthContext({
-    onError: err => Router.replace(LOGIN_PAGE_PATH),
-  });
+  const authContext = useAuthContext();
 
   React.useEffect(() => {
-    const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
-    if (!resolving && token) {
-      if (currentRedirect) {
-        localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
-        Router.replace(currentRedirect);
-      } else {
-        Router.replace(getDefaultRedirectPathForUser(token));
+    if (authContext) {
+      const { data, token } = authContext;
+      const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
+      if (token) {
+        if (currentRedirect) {
+          localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
+          Router.replace(currentRedirect);
+        } else {
+          Router.replace(getDefaultRedirectPathForUser(token));
+        }
       }
     }
   });
+
   return (
     <div
       css={css`

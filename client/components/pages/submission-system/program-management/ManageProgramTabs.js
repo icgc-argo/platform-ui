@@ -37,7 +37,7 @@ const createUserInput = ({
 
 export default () => {
   const router = useRouter();
-  const { data: egoTokenData, token } = useAuthContext();
+  const { data: egoTokenData, token } = useAuthContext() || {};
   const isDcc = token ? isDccMember(token) : false;
 
   const { shortName: programShortName } = router.query;

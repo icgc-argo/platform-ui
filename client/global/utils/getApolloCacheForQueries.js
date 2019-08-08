@@ -10,7 +10,7 @@ import { GATEWAY_API_ROOT } from 'global/config';
 import createInMemoryCache from './createInMemoryCache';
 
 export default (queries: Array<{ query: any, variables?: { [key: string]: any } }>) => async (
-  egoJwt: string,
+  egoJwt: ?string,
 ) => {
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
@@ -18,9 +18,11 @@ export default (queries: Array<{ query: any, variables?: { [key: string]: any } 
     link: createHttpLink({
       uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
-      headers: {
-        authorization: `Bearer ${egoJwt}`,
-      },
+      headers: egoJwt
+        ? {
+            authorization: `Bearer ${egoJwt}`,
+          }
+        : {},
     }),
     cache: createInMemoryCache(),
   });

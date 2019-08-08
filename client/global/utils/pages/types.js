@@ -17,12 +17,12 @@ export type ClientSideGetInitialPropsContext = {
   asPath: $PropertyType<GetInitialPropsContext, 'asPath'>,
 };
 type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
-  egoJwt: string,
+  egoJwt: ?string,
 };
 export type PageConfigProps = {
   isPublic: boolean,
   isAccessible: ({
-    egoJwt: string,
+    egoJwt: ?string,
     ctx: GetInitialPropsContext,
   }) => Promise<boolean>,
   getInitialProps: GetInitialPropsContextWithEgo => Promise<any>,

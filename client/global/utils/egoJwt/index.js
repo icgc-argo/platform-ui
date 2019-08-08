@@ -36,19 +36,22 @@ type PermissionScopeObj = {
   permission: 'READ' | 'WRITE' | 'ADMIN' | 'DENY',
 };
 
-export const decodeToken = memoize<[string], EgoJwtData>(egoJwt => TokenUtils.decodeToken(egoJwt));
+export const decodeToken = memoize<[?string], EgoJwtData | null>(egoJwt =>
+  egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
+);
 
-export const isValidJwt = (egoJwt: string): boolean => TokenUtils.isValidJwt(egoJwt);
+export const isValidJwt = (egoJwt: ?string): boolean => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
-export const isDccMember = (egoJwt: string): boolean => TokenUtils.isDccMember(egoJwt);
+export const isDccMember = (egoJwt: ?string): boolean => !!egoJwt && TokenUtils.isDccMember(egoJwt);
 
-export const isRdpcMember = (egoJwt: string): boolean => TokenUtils.isRdpcMember(egoJwt);
+export const isRdpcMember = (egoJwt: ?string): boolean =>
+  !!egoJwt && TokenUtils.isRdpcMember(egoJwt);
 
-export const canReadSomeProgram = (egoJwt: string): boolean =>
-  TokenUtils.canReadSomeProgram(egoJwt);
+export const canReadSomeProgram = (egoJwt: ?string): boolean =>
+  !!egoJwt && TokenUtils.canReadSomeProgram(egoJwt);
 
-export const canWriteSomeProgram = (egoJwt: string): boolean =>
-  TokenUtils.canWriteSomeProgram(egoJwt);
+export const canWriteSomeProgram = (egoJwt: ?string): boolean =>
+  !!egoJwt && TokenUtils.canWriteSomeProgram(egoJwt);
 
 export const parseScope = (scope: string): PermissionScopeObj => TokenUtils.parseScope(scope);
 
@@ -58,14 +61,14 @@ export const serializeScope = (scopeObj: PermissionScopeObj): string =>
 export const getAuthorizedProgramScopes = (egoJwt: string): Array<PermissionScopeObj> =>
   TokenUtils.getReadableProgramScopes(egoJwt);
 
-export const canReadProgram = (args: { egoJwt: string, programId: string }): boolean =>
-  TokenUtils.canReadProgram(args);
+export const canReadProgram = (args: { egoJwt: ?string, programId: string }): boolean =>
+  !!args.egoJwt && TokenUtils.canReadProgram(args);
 
-export const canWriteProgram = (args: { egoJwt: string, programId: string }): boolean =>
-  TokenUtils.canWriteProgram(args);
+export const canWriteProgram = (args: { egoJwt: ?string, programId: string }): boolean =>
+  !!args.egoJwt && TokenUtils.canWriteProgram(args);
 
-export const isProgramAdmin = (args: { egoJwt: string, programId: string }): boolean =>
-  TokenUtils.isProgramAdmin(args);
+export const isProgramAdmin = (args: { egoJwt: ?string, programId: string }): boolean =>
+  !!args.egoJwt && TokenUtils.isProgramAdmin(args);
 
 export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
   TokenUtils.getReadableProgramShortNames(egoJwt);

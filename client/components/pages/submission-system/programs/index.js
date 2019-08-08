@@ -25,6 +25,7 @@ import {
   PROGRAM_MANAGE_PATH,
 } from 'global/constants/pages';
 import { isDccMember } from 'global/utils/egoJwt';
+import useAuthContext from 'global/hooks/useAuthContext';
 
 const TableFilterInput = props => (
   <Input
@@ -41,15 +42,9 @@ const TableFilterInput = props => (
   />
 );
 
-export default ({
-  egoJwt,
-  firstName,
-  lastName,
-  authorizedPrograms = [],
-  logOut,
-  pathname,
-}: any) => {
+export default ({ authorizedPrograms = [] }: any) => {
   const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
+  const authContext = useAuthContext() || {};
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
@@ -67,8 +62,6 @@ export default ({
   return (
     <SubmissionLayout
       subtitle="All Programs"
-      pathname={pathname}
-      logOut={logOut}
       contentHeader={
         <div
           css={css`
@@ -86,7 +79,7 @@ export default ({
           >
             All Programs
           </Typography>
-          {isDccMember(egoJwt) && (
+          {authContext.token && isDccMember(authContext.token) && (
             <Link href={CREATE_PROGRAM_PAGE_PATH}>
               <Button>Create a program</Button>
             </Link>
