@@ -15,31 +15,13 @@ import ProgramsTable from './ProgramsTable';
 import SubmissionLayout from '../layout';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-// $FlowFixMe .gql file not supported
-import { programsListQuery } from './queries.gql';
-
 import {
   CREATE_PROGRAM_PAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_MANAGE_PATH,
 } from 'global/constants/pages';
 import { isDccMember } from 'global/utils/egoJwt';
-
-const TableFilterInput = props => (
-  <Input
-    aria-label="tableFilter"
-    preset={INPUT_PRESETS.SEARCH}
-    getOverrideCss={({ theme, inputState }) =>
-      inputState === INPUT_STATES.default
-        ? css`
-            border-color: ${theme.colors.grey_2};
-          `
-        : ''
-    }
-    {...props}
-  />
-);
+import PROGRAM_LIST_QUERY from './queries.gql';
 
 export default ({
   egoJwt,
@@ -49,7 +31,7 @@ export default ({
   logOut,
   pathname,
 }: any) => {
-  const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
+  const { data: { programs = [] } = {}, loading, errors } = useQuery(PROGRAM_LIST_QUERY);
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
@@ -100,10 +82,7 @@ export default ({
           padding-top: 0px;
         `}
       >
-        <TableActionBar>
-          {programs.length} results
-          {/*   <TableFilterInput /> */}
-        </TableActionBar>
+        <TableActionBar>{programs.length} results</TableActionBar>
         <ProgramsTable
           loading={loading}
           programs={sortedPrograms}
