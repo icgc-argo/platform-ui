@@ -10,22 +10,26 @@ type FormData = {
 /**
  * Supports single forms only, {} not [{},{}]
  */
-const useFormHook = ({
-  initialFields,
-  schema: formSchema,
-}: {
-  initialFields: { [k: string]: mixed },
+interface T_FormHookInput<T> {
+  initialFields: T;
   schema: {
     validate: typeof yup.object,
-  },
-}) => {
+  };
+}
+function useFormHook<T: { [k: string]: any }>({
+  initialFields,
+  schema: formSchema,
+}: T_FormHookInput<T>) {
   let initErrors: { [k: string]: string } = {};
 
   for (let [key, value] of Object.entries(initialFields)) {
     initErrors[key] = '';
   }
 
-  const [form, setForm] = useState({ errors: initErrors, data: initialFields });
+  const [form, setForm] = useState<{ errors: typeof initErrors, data: typeof initialFields }>({
+    errors: initErrors,
+    data: initialFields,
+  });
   const [touched, setTouched] = useState(false);
   const { errors, data } = form;
 
@@ -93,16 +97,18 @@ const useFormHook = ({
       }
     });
 
+  const typedData: T = data;
+
   return {
     errors,
     setError,
-    data,
+    data: typedData,
     setData,
     validateField,
     validateForm,
     touched,
     hasErrors,
   };
-};
+}
 
 export default useFormHook;
