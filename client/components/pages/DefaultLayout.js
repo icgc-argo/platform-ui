@@ -2,7 +2,8 @@ import { css } from 'uikit';
 import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import Footer from 'uikit/Footer';
-import NavBar from './NavBar';
+import NavBar from 'components/NavBar';
+import { PageContainer } from 'uikit/PageLayout';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -10,13 +11,7 @@ const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
 export default function DefaultLayout({ children }) {
   return (
-    <div
-      css={css`
-        min-height: 100vh;
-        display: grid;
-        grid-template-rows: auto 1fr auto;
-      `}
-    >
+    <PageContainer>
       <NavBar />
       {children}
       <Footer
@@ -33,6 +28,6 @@ export default function DefaultLayout({ children }) {
           { displayName: 'Publication Policy', href: '#' },
         ]}
       />
-    </div>
+    </PageContainer>
   );
 }

@@ -4,6 +4,7 @@ import { get } from 'lodash';
 
 import { createPage } from 'global/utils/pages';
 import { decodeToken } from 'global/utils/egoJwt';
+import { UserPage } from 'components/pages/user';
 
 export default createPage({
   getInitialProps: async context => {
@@ -13,10 +14,4 @@ export default createPage({
     const lastName = get(data, 'context.user.lastName', '');
     return { firstName, lastName };
   },
-})(({ firstName, lastName }) => {
-  return (
-    <div>
-      Logged in user: {firstName} {lastName}
-    </div>
-  );
-});
+})(UserPage);

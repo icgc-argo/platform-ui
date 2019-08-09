@@ -29,6 +29,11 @@ const Li = styled('li')`
   padding: 12px 16px;
   position: relative;
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   &.active {
     color: ${({ theme }) => theme.colors.secondary};
     border-left: 3px solid ${({ theme }) => theme.colors.secondary};

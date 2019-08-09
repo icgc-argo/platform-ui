@@ -1,3 +1,4 @@
+// @flow
 import css from '@emotion/css';
 import {
   CANCER_TYPES,
@@ -9,7 +10,7 @@ import {
 import { filter, get, isArray } from 'lodash';
 import Link from 'next/link';
 import Router from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
@@ -25,12 +26,13 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import * as yup from 'yup';
-// $FlowFixMe .gql file not supported
-import { CREATE_PROGRAM_MUTATION, UPDATE_PROGRAM_MUTATION } from './mutations.gql';
-import createProgramSchema, { updateProgramSchema } from './validation';
 import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
+import useFormHook from 'global/hooks/useFormHook';
+import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
+import createProgramSchema from './create-program/validation';
+import updateProgramSchema from './program-management/updateProgramValidator';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -39,7 +41,7 @@ const SectionTitle = props => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }) => (
+const InputLabelWrapper = ({ sm = 3, children }: { sm?: number, children: React.Node }) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -47,46 +49,9 @@ const InputLabelWrapper = ({ sm = 3, children }) => (
 
 const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperText> : null);
 
-/* ****************** *
- * On Change Handlers
- * ****************** */
-const handleInputChange = setter => event => {
-  setter(event.target.value);
-};
-const handleCheckboxGroupChange = (selectedItems, setter) => value => {
-  if (selectedItems.includes(value)) {
-    setter(filter(selectedItems, item => item !== value));
-  } else {
-    setter([...selectedItems, value]);
-  }
-};
-
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-
-const createProgramInput = formData => ({
-  name: formData.programName,
-  shortName: formData.shortName,
-  description: formData.description,
-  commitmentDonors: parseInt(formData.commitmentLevel),
-  website: formData.website,
-  institutions: formData.institutions,
-  countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
-  membershipType: formData.membershipType,
-  admins: [
-    {
-      email: formData.adminEmail,
-      firstName: formData.adminFirstName,
-      lastName: formData.adminLastName,
-      role: 'ADMIN',
-    },
-  ],
-  cancerTypes: formData.cancerTypes,
-  primarySites: formData.primarySites,
-});
-
 const createUpdateProgramInput = formData => ({
   name: formData.programName,
   description: formData.description,
@@ -103,127 +68,80 @@ const createUpdateProgramInput = formData => ({
 /* *************************************** *
  * Form data validation
  * *************************************** */
-
 export default function CreateProgramForm({
   leftFooterComponent,
   program = {},
-  onSubmitted = submissionData => {},
-  onSubmissionError = err => {},
+  onSubmit,
+}: {
+  leftFooterComponent: React.Node,
+  program?: {
+    name?: string,
+    shortName?: string,
+    countries?: string[],
+    cancerTypes?: string[],
+    primarySites?: string[],
+    commitmentDonors?: string[],
+    institutions?: string[],
+    membershipType?: string[],
+    website?: string,
+    description?: string,
+    regions?: string,
+  },
+  onSubmit: (data: any) => any,
 }) {
+  const formData = {
+    programName: program.name || '',
+    shortName: program.shortName || '',
+    countries: program.countries || [],
+    cancerTypes: program.cancerTypes || [],
+    primarySites: program.primarySites || [],
+    commitmentLevel: program.commitmentDonors,
+    institutions: program.institutions || [],
+    membershipType: program.membershipType || [],
+    website: program.website || '',
+    description: program.description || '',
+    processingRegions: program.regions || '',
+    adminFirstName: '',
+    adminLastName: '',
+    adminEmail: '',
+  };
   const isEditing = !isEmpty(program);
-  const [programName, setProgramName] = React.useState(program.name || '');
-  const [shortName, setShortName] = React.useState(program.shortName || '');
-  const [countries, setCountries] = React.useState(program.countries || []);
-  const [cancerTypes, setCancerTypes] = React.useState(program.cancerTypes || []);
-  const [primarySites, setPrimarySites] = React.useState(program.primarySites || []);
-  const [commitmentLevel, setCommitmentLevel] = React.useState(program.commitmentDonors);
-  const [institutions, setInstitutions] = React.useState(program.institutions || []);
-  const [membershipType, setMembershipType] = React.useState(program.membershipType || '');
-  const [website, setWebsite] = React.useState(program.website || '');
-  const [description, setDescription] = React.useState(program.description || '');
-  const [processingRegions, setProcessionRegions] = React.useState(program.regions || []);
-  const [adminFirstName, setAdminFirstName] = React.useState('');
-  const [adminLastName, setAdminLastName] = React.useState('');
-  const [adminEmail, setAdminEmail] = React.useState('');
-
-  const [validationErrors, setValidationErrors] = React.useState({});
-
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
-  /* **************** *
-   * Form Submission
-   * **************** */
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook<
+    typeof formData,
+  >({
+    initialFields: formData,
+    schema: programSchema,
+  });
 
-  const formData = {
-    programName,
-    shortName,
-    countries,
-    cancerTypes,
-    primarySites,
-    commitmentLevel,
-    institutions,
-    membershipType,
-    website,
-    description,
-    processingRegions,
-    adminFirstName,
-    adminLastName,
-    adminEmail,
-  };
+  // TODO: ugly as sin
+  const validationErrors = errors;
+  const form = data;
 
-  let validData = { ...formData };
+  /* ****************** *
+   * On Change Handlers
+   * ****************** */
+  const handleInputChange = (fieldName: string) => event =>
+    setData({ key: fieldName, val: event.target.value });
 
-  const validateForm = async () => {
-    return await new Promise((resolve, reject) => {
-      programSchema
-        .validate(formData, { abortEarly: false, stripUnknown: true })
-        .then(data => {
-          // Validate will perform data manipulations such as trimming strings.
-          //  need to return the updated form data for submission.
-          resolve(data);
-        })
-        .catch(err => {
-          const errors = get(err, 'inner', []).reduce((output, error) => {
-            output[error.path.replace(/\[.*\]/, '')] = error.message;
-            return output;
-          }, {});
-          setValidationErrors(errors);
-          reject(errors);
-        });
-    });
+  const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
+
+  const handleCheckboxGroupChange = (selectedItems: any[], fieldName: string) => value => {
+    if (selectedItems.includes(value)) {
+      setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
+    } else {
+      setData({ key: fieldName, val: [...selectedItems, value] });
+    }
   };
 
   const submitForm = async formData => {
     try {
-      validData = await validateForm(formData);
-      let result;
-      if (!isEditing) {
-        result = await sendCreateProgram();
-        Router.push(PROGRAMS_LIST_PATH);
-      } else {
-        result = await sendUpdateProgram();
-      }
-      onSubmitted(validData);
+      const validData = await validateForm();
+      onSubmit(validData);
     } catch (err) {
       window.scrollTo(0, 0);
-      onSubmissionError(err);
     }
-  };
-
-  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION, {
-    variables: { program: createProgramInput(validData) },
-  });
-
-  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION, {
-    variables: { shortName: validData.shortName, updates: createUpdateProgramInput(validData) },
-  });
-
-  /* ********************* *
-   * Field Level Validator
-   * ********************* */
-
-  const updateValidationErrorsForField = (path, value) => {
-    setValidationErrors({ ...validationErrors, [path]: value });
-  };
-
-  const validateField = (path, value) => {
-    yup
-      .reach(programSchema, path)
-      .validate(value, { abortEarly: false })
-      .then(success => {
-        updateValidationErrorsForField(path, '');
-      })
-      .catch(err => {
-        const message =
-          isArray(err.inner) && err.inner.length > 1
-            ? err.inner[err.inner.length - 1].message
-            : err.message;
-        updateValidationErrorsForField(path, message);
-      });
-  };
-
-  const handleInputBlur = path => event => {
-    validateField(path, formData[path]);
   };
 
   return (
@@ -244,12 +162,12 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Program Name"
                   id="program-name"
-                  value={programName}
-                  onChange={handleInputChange(setProgramName)}
+                  value={form.programName}
+                  onChange={handleInputChange('programName')}
                   onBlur={handleInputBlur('programName')}
                   size="lg"
                 />
-                <ErrorText error={validationErrors.progranName} />
+                <ErrorText error={validationErrors.programName} />
               </Col>
             </Row>
           </FormControl>
@@ -262,8 +180,8 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Short Name"
                   id="short-name"
-                  value={shortName}
-                  onChange={handleInputChange(setShortName)}
+                  value={form.shortName}
+                  onChange={handleInputChange('shortName')}
                   onBlur={handleInputBlur('shortName')}
                   size="lg"
                 />
@@ -278,9 +196,10 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  single={false}
                   inputProps={{ id: 'country' }}
-                  value={countries}
-                  onChange={handleInputChange(setCountries)}
+                  value={form.countries}
+                  onChange={handleInputChange('countries')}
                   onBlur={handleInputBlur('countries')}
                 >
                   {COUNTRIES.map(country => (
@@ -301,8 +220,8 @@ export default function CreateProgramForm({
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'cancer-types' }}
-                  value={cancerTypes}
-                  onChange={handleInputChange(setCancerTypes)}
+                  value={form.cancerTypes}
+                  onChange={handleInputChange('cancerTypes')}
                   onBlur={handleInputBlur('cancerTypes')}
                 >
                   {CANCER_TYPES.map(cancerType => (
@@ -323,8 +242,8 @@ export default function CreateProgramForm({
               <Col sm={9}>
                 <MultiSelect
                   inputProps={{ id: 'primary-types' }}
-                  value={primarySites}
-                  onChange={handleInputChange(setPrimarySites)}
+                  value={form.primarySites}
+                  onChange={handleInputChange('primarySites')}
                   onBlur={handleInputBlur('primarySites')}
                 >
                   {PRIMARY_SITES.map(site => (
@@ -349,8 +268,8 @@ export default function CreateProgramForm({
                       aria-label="Commitment Level"
                       id="commitment-level"
                       type="number"
-                      value={commitmentLevel}
-                      onChange={handleInputChange(setCommitmentLevel)}
+                      value={form.commitmentLevel}
+                      onChange={handleInputChange('commitmentLevel')}
                       onBlur={handleInputBlur('commitmentLevel')}
                       size="lg"
                     />
@@ -377,9 +296,9 @@ export default function CreateProgramForm({
                   aria-label="Membership Type"
                   id="membership-type"
                   options={PROGRAM_MEMBERSHIP_TYPES}
-                  onChange={setMembershipType}
+                  onChange={val => setData({ key: 'membershipType', val })}
                   onBlur={handleInputBlur('membershipType')}
-                  value={membershipType}
+                  value={form.membershipType}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.membershipType} />
@@ -395,8 +314,8 @@ export default function CreateProgramForm({
                 <Input
                   aria-label="Website"
                   id="website"
-                  value={website}
-                  onChange={handleInputChange(setWebsite)}
+                  value={form.website}
+                  onChange={handleInputChange('website')}
                   onBlur={handleInputBlur('website')}
                   size="lg"
                 />
@@ -413,8 +332,8 @@ export default function CreateProgramForm({
                 <Textarea
                   aria-label="Description"
                   id="description"
-                  value={description}
-                  onChange={handleInputChange(setDescription)}
+                  value={form.description}
+                  onChange={handleInputChange('description')}
                   onBlur={handleInputBlur('description')}
                   rows={5}
                 />
@@ -437,8 +356,8 @@ export default function CreateProgramForm({
                   aria-label="Institutions"
                   id="institutions"
                   inputProps={{ id: 'institutions' }}
-                  value={institutions}
-                  onChange={handleInputChange(setInstitutions)}
+                  value={form.institutions}
+                  onChange={handleInputChange('institutions')}
                   onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
@@ -455,6 +374,7 @@ export default function CreateProgramForm({
               <SectionTitle>Processing Regions</SectionTitle>
             </Col>
           </Row>
+
           <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
@@ -464,8 +384,11 @@ export default function CreateProgramForm({
                 <ErrorText error={validationErrors.processingRegions} />
                 <RadioCheckboxGroup
                   hasError={false}
-                  onChange={handleCheckboxGroupChange(processingRegions, setProcessionRegions)}
-                  isChecked={item => processingRegions.includes(item)}
+                  onChange={handleCheckboxGroupChange(
+                    (form.processingRegions: any[]),
+                    'processingRegions',
+                  )}
+                  isChecked={item => form.processingRegions.includes(item)}
                 >
                   <Row>
                     <Col>
@@ -515,8 +438,8 @@ export default function CreateProgramForm({
                         <Input
                           aria-label="First Name"
                           id="first-name"
-                          value={adminFirstName}
-                          onChange={handleInputChange(setAdminFirstName)}
+                          value={form.adminFirstName}
+                          onChange={handleInputChange('adminFirstName')}
                           onBlur={handleInputBlur('adminFirstName')}
                           size="lg"
                         />
@@ -535,8 +458,8 @@ export default function CreateProgramForm({
                         <Input
                           aria-label="Last Name"
                           id="last-name"
-                          value={adminLastName}
-                          onChange={handleInputChange(setAdminLastName)}
+                          value={form.adminLastName}
+                          onChange={handleInputChange('adminLastName')}
                           onBlur={handleInputBlur('adminLastName')}
                           size="lg"
                         />
@@ -555,8 +478,8 @@ export default function CreateProgramForm({
                     <Input
                       aria-label="Email"
                       id="email"
-                      value={adminEmail}
-                      onChange={handleInputChange(setAdminEmail)}
+                      value={form.adminEmail}
+                      onChange={handleInputChange('adminEmail')}
                       onBlur={handleInputBlur('adminEmail')}
                       size="lg"
                     />

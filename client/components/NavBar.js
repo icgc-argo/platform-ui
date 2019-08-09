@@ -130,7 +130,11 @@ export default () => {
               ref={React.createRef()}
               dropdownMenu={
                 <DropdownMenu>
-                  <DropdownMenuItem>Profile & Token</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={USER_PAGE_PATH}>
+                      <a>Profile & Token</a>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
                 </DropdownMenu>
               }

@@ -1,4 +1,4 @@
-query programsListQuery {
+query PROGRAMS_LIST_QUERY {
   programs {
     shortName
     name

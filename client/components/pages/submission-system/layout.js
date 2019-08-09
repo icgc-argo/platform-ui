@@ -13,7 +13,7 @@ import {
   PageFooter,
 } from 'uikit/PageLayout';
 import Head from '../head';
-import NavBar from '../NavBar';
+import NavBar from 'components/NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 
