@@ -9,7 +9,7 @@ import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';
 import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import CreateProgramForm from '../create-program/CreateProgramForm';
+import ProgramForm from '../ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
@@ -20,6 +20,8 @@ import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
 import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
+import UPDATE_PROGRAM_MUTATION from './program-management/UPDATE_PROGRAM_MUTATION.gql';
+import useCommonToasters from 'components/useCommonToasters';
 
 const createUserInput = ({
   data,
@@ -33,6 +35,22 @@ const createUserInput = ({
   userLastName: data.lastName,
   userEmail: data.email,
   userRole: data.role,
+});
+
+/* *************************************** *
+ * Reshape form data for gql input
+ * *************************************** */
+const createUpdateProgramInput = formData => ({
+  name: formData.programName,
+  description: formData.description,
+  commitmentDonors: parseInt(formData.commitmentLevel),
+  website: formData.website,
+  institutions: formData.institutions,
+  countries: formData.countries,
+  regions: Array.from(formData.processingRegions),
+  membershipType: formData.membershipType,
+  cancerTypes: formData.cancerTypes,
+  primarySites: formData.primarySites,
 });
 
 export default () => {
@@ -53,6 +71,7 @@ export default () => {
   );
 
   const toaster = useToaster();
+  const commonToasters = useCommonToasters();
 
   function handleChange(event, newValue) {
     setActiveTab(newValue);
@@ -68,6 +87,21 @@ export default () => {
       setActiveTab(TABS.PROFILE);
     });
   }
+
+  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
+  const onSubmit = async data => {
+    try {
+      await sendUpdateProgram({
+        variables: {
+          shortName: data.shortName,
+          updates: createUpdateProgramInput(data),
+        },
+      });
+    } catch (err) {
+      commonToasters.unknownError();
+    }
+  };
+
   return (
     <ContentBox
       css={css`
@@ -119,8 +153,9 @@ export default () => {
             `}
           >
             {!isEmpty(program) && (
-              <CreateProgramForm
+              <ProgramForm
                 program={program}
+                onSubmit={onSubmit}
                 leftFooterComponent={
                   <Button variant="text" onClick={handleCancelClick}>
                     Cancel

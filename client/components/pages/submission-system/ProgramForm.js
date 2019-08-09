@@ -1,3 +1,4 @@
+// @flow
 import css from '@emotion/css';
 import {
   CANCER_TYPES,
@@ -9,7 +10,7 @@ import {
 import { filter, get, isArray } from 'lodash';
 import Link from 'next/link';
 import Router from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
@@ -25,13 +26,13 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import * as yup from 'yup';
-// $FlowFixMe .gql file not supported
-import { CREATE_PROGRAM_MUTATION, UPDATE_PROGRAM_MUTATION } from './mutations.gql';
-import createProgramSchema, { updateProgramSchema } from './validation';
 import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
 import useFormHook from 'global/hooks/useFormHook';
+import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
+import createProgramSchema from './create-program/validation';
+import updateProgramSchema from './program-management/updateProgramValidator';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -40,7 +41,7 @@ const SectionTitle = props => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }) => (
+const InputLabelWrapper = ({ sm = 3, children }: { sm?: number, children: React.Node }) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -51,29 +52,6 @@ const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperTex
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-
-const createProgramInput = formData => ({
-  name: formData.programName,
-  shortName: formData.shortName,
-  description: formData.description,
-  commitmentDonors: parseInt(formData.commitmentLevel),
-  website: formData.website,
-  institutions: formData.institutions,
-  countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
-  membershipType: formData.membershipType,
-  admins: [
-    {
-      email: formData.adminEmail,
-      firstName: formData.adminFirstName,
-      lastName: formData.adminLastName,
-      role: 'ADMIN',
-    },
-  ],
-  cancerTypes: formData.cancerTypes,
-  primarySites: formData.primarySites,
-});
-
 const createUpdateProgramInput = formData => ({
   name: formData.programName,
   description: formData.description,
@@ -90,12 +68,26 @@ const createUpdateProgramInput = formData => ({
 /* *************************************** *
  * Form data validation
  * *************************************** */
-
 export default function CreateProgramForm({
   leftFooterComponent,
   program = {},
-  onSubmitted = submissionData => {},
-  onSubmissionError = err => {},
+  onSubmit,
+}: {
+  leftFooterComponent: React.Node,
+  program?: {
+    name?: string,
+    shortName?: string,
+    countries?: string[],
+    cancerTypes?: string[],
+    primarySites?: string[],
+    commitmentDonors?: string[],
+    institutions?: string[],
+    membershipType?: string[],
+    website?: string,
+    description?: string,
+    regions?: string,
+  },
+  onSubmit: (data: any) => any,
 }) {
   const formData = {
     programName: program.name || '',
@@ -113,9 +105,12 @@ export default function CreateProgramForm({
     adminLastName: '',
     adminEmail: '',
   };
+  const isEditing = !isEmpty(program);
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
-  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook<
+    typeof formData,
+  >({
     initialFields: formData,
     schema: programSchema,
   });
@@ -127,12 +122,12 @@ export default function CreateProgramForm({
   /* ****************** *
    * On Change Handlers
    * ****************** */
-  const handleInputChange = fieldName => event =>
+  const handleInputChange = (fieldName: string) => event =>
     setData({ key: fieldName, val: event.target.value });
 
   const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
 
-  const handleCheckboxGroupChange = (selectedItems, fieldName) => value => {
+  const handleCheckboxGroupChange = (selectedItems: any[], fieldName: string) => value => {
     if (selectedItems.includes(value)) {
       setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
     } else {
@@ -140,39 +135,14 @@ export default function CreateProgramForm({
     }
   };
 
-  const isEditing = !isEmpty(program);
-
-  /* **************** *
-   * Form Submission
-   * **************** */
-
   const submitForm = async formData => {
     try {
-      const validData = await validateForm(formData);
-      let result;
-      if (!isEditing) {
-        result = await sendCreateProgram({
-          variables: { program: createProgramInput(validData) },
-        });
-        Router.push(PROGRAMS_LIST_PATH);
-      } else {
-        result = await sendUpdateProgram({
-          variables: {
-            shortName: validData.shortName,
-            updates: createUpdateProgramInput(validData),
-          },
-        });
-      }
-      onSubmitted(validData);
+      const validData = await validateForm();
+      onSubmit(validData);
     } catch (err) {
       window.scrollTo(0, 0);
-      onSubmissionError(err);
     }
   };
-
-  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
-
-  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
 
   return (
     <>
@@ -414,7 +384,10 @@ export default function CreateProgramForm({
                 <ErrorText error={validationErrors.processingRegions} />
                 <RadioCheckboxGroup
                   hasError={false}
-                  onChange={handleCheckboxGroupChange(form.processingRegions, 'processingRegions')}
+                  onChange={handleCheckboxGroupChange(
+                    (form.processingRegions: any[]),
+                    'processingRegions',
+                  )}
                   isChecked={item => form.processingRegions.includes(item)}
                 >
                   <Row>
