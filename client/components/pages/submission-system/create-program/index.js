@@ -3,7 +3,7 @@ import React from 'react';
 import { css, styled } from 'uikit';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
-import CreateProgramForm from './CreateProgramForm';
+import ProgramForm from '../ProgramForm';
 import Container from 'uikit/Container';
 import Link from 'next/link';
 import {
@@ -68,7 +68,7 @@ export default () => {
           max-width: 875px;
         `}
       >
-        <CreateProgramForm
+        <ProgramForm
           onSubmitted={onProgramCreated}
           onSubmissionError={onProgramCreationError}
           leftFooterComponent={

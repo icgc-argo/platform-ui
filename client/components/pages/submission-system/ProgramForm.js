@@ -25,13 +25,15 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import * as yup from 'yup';
-// $FlowFixMe .gql file not supported
-import { CREATE_PROGRAM_MUTATION, UPDATE_PROGRAM_MUTATION } from './mutations.gql';
-import createProgramSchema, { updateProgramSchema } from './validation';
 import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
 import useFormHook from 'global/hooks/useFormHook';
+
+import CREATE_PROGRAM_MUTATION from './create-program/CREATE_PROGRAM_MUTATION.gql';
+import UPDATE_PROGRAM_MUTATION from './program-management/UPDATE_PROGRAM_MUTATION.gql';
+import createProgramSchema from './create-program/validation';
+import updateProgramSchema from './program-management/updateProgramValidator';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts

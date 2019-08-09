@@ -9,7 +9,7 @@ import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';
 import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import CreateProgramForm from '../create-program/CreateProgramForm';
+import ProgramForm from '../ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
@@ -119,7 +119,7 @@ export default () => {
             `}
           >
             {!isEmpty(program) && (
-              <CreateProgramForm
+              <ProgramForm
                 program={program}
                 leftFooterComponent={
                   <Button variant="text" onClick={handleCancelClick}>
