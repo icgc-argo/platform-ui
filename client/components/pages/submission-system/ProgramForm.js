@@ -30,12 +30,9 @@ import isEmpty from 'lodash/isEmpty';
 import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
 import useFormHook from 'global/hooks/useFormHook';
-
-import CREATE_PROGRAM_MUTATION from './create-program/CREATE_PROGRAM_MUTATION.gql';
-import UPDATE_PROGRAM_MUTATION from './program-management/UPDATE_PROGRAM_MUTATION.gql';
+import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 import createProgramSchema from './create-program/validation';
 import updateProgramSchema from './program-management/updateProgramValidator';
-import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -55,29 +52,6 @@ const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperTex
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-
-const createProgramInput = formData => ({
-  name: formData.programName,
-  shortName: formData.shortName,
-  description: formData.description,
-  commitmentDonors: parseInt(formData.commitmentLevel),
-  website: formData.website,
-  institutions: formData.institutions,
-  countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
-  membershipType: formData.membershipType,
-  admins: [
-    {
-      email: formData.adminEmail,
-      firstName: formData.adminFirstName,
-      lastName: formData.adminLastName,
-      role: 'ADMIN',
-    },
-  ],
-  cancerTypes: formData.cancerTypes,
-  primarySites: formData.primarySites,
-});
-
 const createUpdateProgramInput = formData => ({
   name: formData.programName,
   description: formData.description,
@@ -97,8 +71,7 @@ const createUpdateProgramInput = formData => ({
 export default function CreateProgramForm({
   leftFooterComponent,
   program = {},
-  onSubmitted = submissionData => {},
-  onSubmissionError = err => {},
+  onSubmit,
 }: {
   leftFooterComponent: React.Node,
   program?: {
@@ -114,8 +87,7 @@ export default function CreateProgramForm({
     description?: string,
     regions?: string,
   },
-  onSubmitted?: (submissionData: any) => void,
-  onSubmissionError?: (err: Error) => void,
+  onSubmit: (data: any) => any,
 }) {
   const formData = {
     programName: program.name || '',
@@ -163,37 +135,14 @@ export default function CreateProgramForm({
     }
   };
 
-  /* **************** *
-   * Form Submission
-   * **************** */
-
   const submitForm = async formData => {
     try {
       const validData = await validateForm();
-      let result;
-      if (!isEditing) {
-        result = await sendCreateProgram({
-          variables: { program: createProgramInput(validData) },
-        });
-        Router.push(PROGRAMS_LIST_PATH);
-      } else {
-        result = await sendUpdateProgram({
-          variables: {
-            shortName: validData.shortName,
-            updates: createUpdateProgramInput(validData),
-          },
-        });
-      }
-      onSubmitted(validData);
+      onSubmit(validData);
     } catch (err) {
       window.scrollTo(0, 0);
-      onSubmissionError(err);
     }
   };
-
-  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
-
-  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
 
   return (
     <>

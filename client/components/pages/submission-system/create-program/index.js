@@ -16,34 +16,67 @@ import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { useRouter } from 'next/router';
+import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
+import createProgramSchema from './validation';
+import { useMutation } from 'react-apollo-hooks';
+import useCommonToasters from 'components/useCommonToasters';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
   color: ${({ theme }) => theme.colors.secondary};
 `;
 
+/* *************************************** *
+ * Reshape form data for gql input
+ * *************************************** */
+const createProgramInput = formData => ({
+  name: formData.programName,
+  shortName: formData.shortName,
+  description: formData.description,
+  commitmentDonors: parseInt(formData.commitmentLevel),
+  website: formData.website,
+  institutions: formData.institutions,
+  countries: formData.countries,
+  regions: Array.from(formData.processingRegions),
+  membershipType: formData.membershipType,
+  admins: [
+    {
+      email: formData.adminEmail,
+      firstName: formData.adminFirstName,
+      lastName: formData.adminLastName,
+      role: 'ADMIN',
+    },
+  ],
+  cancerTypes: formData.cancerTypes,
+  primarySites: formData.primarySites,
+});
+
 export default () => {
   const toaster = useToaster();
   const router = useRouter();
-  const onProgramCreated = ({ programName, shortName: programShortName }) => {
-    toaster.addToast({
-      title: '',
-      variant: TOAST_VARIANTS.SUCCESS,
-      content: <>The program: {<strong>{programName}</strong>} has been created</>,
-      onInteraction: event => {
-        if (event.type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
-          router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
-        }
-      },
-    });
+  const commonToasters = useCommonToasters();
+  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
+
+  const onSubmit = async data => {
+    try {
+      await sendCreateProgram({
+        variables: { program: createProgramInput(data) },
+      });
+      toaster.addToast({
+        title: '',
+        variant: TOAST_VARIANTS.SUCCESS,
+        content: <>The program: {<strong>{data.programName}</strong>} has been created</>,
+        onInteraction: event => {
+          if (event.type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
+            router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, data.shortName));
+          }
+        },
+      });
+    } catch (err) {
+      commonToasters.unknownError();
+    }
   };
-  const onProgramCreationError = (err: Error) => {
-    toaster.addToast({
-      title: '',
-      variant: TOAST_VARIANTS.ERROR,
-      content: 'Something went wrong, please try again later or contact us for assistance',
-    });
-  };
+
   return (
     <SubmissionLayout
       subtitle="Create a Program"
@@ -69,8 +102,7 @@ export default () => {
         `}
       >
         <ProgramForm
-          onSubmitted={onProgramCreated}
-          onSubmissionError={onProgramCreationError}
+          onSubmit={onSubmit}
           leftFooterComponent={
             <Link href={PROGRAMS_LIST_PATH}>
               <Button variant="text">Cancel</Button>
