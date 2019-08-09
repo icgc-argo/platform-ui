@@ -1,10 +1,9 @@
-// @flow
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
 import { UserModel } from '../common';
-import useFormHook from '../useFormHook';
-import { editUserSchema } from '../validations';
+import useFormHook from 'global/hooks/useFormHook';
+import editUserSchema from './validation';
 
 const EditUserModal = ({
   user,
@@ -33,7 +32,7 @@ const EditUserModal = ({
       console.log(err);
     }
   };
-
+  console.log('edit modal', form);
   return (
     <Modal
       title="Edit Users"
@@ -45,11 +44,12 @@ const EditUserModal = ({
       onCloseClick={dismissModal}
     >
       <UserSection
-        user={form[0]}
+        user={form}
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
-        errors={validationErrors[0]}
+        errors={validationErrors}
         disabledFields={['email', 'firstName', 'lastName']}
+        onClickDelete={null}
       />
     </Modal>
   );
