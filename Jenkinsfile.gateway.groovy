@@ -57,7 +57,15 @@ spec:
                 }
             }
         }
-
+        stage('Deploy to argo-dev') {
+            when { branch 'develop' }
+            steps {
+                build(job: "/ARGO/provision/gateway", parameters: [
+                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                ])
+            }
+        }
         stage('Deploy to argo-qa') {
             when {
                 expression {
