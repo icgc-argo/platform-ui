@@ -75,4 +75,20 @@ services:
       - 9082:8082
       - 50051:50051
 
-  
+  #####################################################
+  # ARGO Platform - GraphQL API Gateway
+  #####################################################
+  gateway:
+    image: "icgcargo/argo-gateway:73646a1"
+    depends_on:
+      - ego-api
+      - program-service
+    environment:
+      EGO_APPLICATION_ID: platform
+      EGO_APPLICATION_SECRET: platformsecret
+      EGO_ROOT_GRPC: ego-api:50052
+      PROGRAM_SERVICE_ROOT: program-service:50051
+    ports:
+      - 9000:9000
+
+      
