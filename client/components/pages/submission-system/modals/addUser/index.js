@@ -6,9 +6,37 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { UserSection } from '../styledComponents';
-import { addUserSchema } from '../validations';
-import useFormHook from '../useFormHook';
+import addUserSchema from './validation';
+import useFormHook from 'global/hooks/useFormHook';
 import { UserModel } from '../common';
+import uniqueId from 'lodash/uniqueId';
+import isEmpty from 'lodash/isEmpty';
+
+const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
+  const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+
+  const { errors: validationErrors, data, setData, validateField, touched } = form;
+
+  React.useEffect(() => {
+    formSubscriptions[id] = form;
+    onUpdate();
+  });
+
+  return (
+    <UserSection
+      key={id}
+      user={data}
+      onChange={(key, val) => {
+        setData({ key, val });
+      }}
+      validateField={key => validateField({ key })}
+      errors={validationErrors}
+      onClickDelete={() => removeSection(id)}
+      disabledFields={[]}
+      showDelete={showDelete}
+    />
+  );
+};
 
 const AddSection = styled(Button)`
   text-transform: uppercase;
@@ -23,47 +51,72 @@ const AddUserModal = ({
   onSubmit: (data: typeof UserModel[]) => any | void,
   dismissModal: (e: any | void) => any | void,
 }) => {
-  const {
-    errors: validationErrors,
-    data: form,
-    setData,
-    setError,
-    deleteSection,
-    createSection,
-    validateField,
-    validateSection,
-    validateForm,
-    touched,
-    hasErrors,
-  } = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+  const [formIds, setFormIds] = React.useState([uniqueId()]);
+  const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
+  const [isFormTouched, setIsFormTouched] = React.useState(false);
+  const [hasErrors, setHasErrors] = React.useState(false);
+  const formSubscriptions = {};
 
-  const islastSectionTouched = Object.values(form[form.length - 1]).reduce(
-    (acc, val) => acc || !!val,
-    false,
-  );
+  // check if form has been touched
+  const touchCheck = () => {
+    const formSubKeys = Object.keys(formSubscriptions);
+    const isTouched = formSubKeys
+      .map(key => formSubscriptions[key].touched)
+      .reduce((acc, val) => acc || val, false);
+    setIsFormTouched(isTouched);
+  };
 
+  // check for errors
+  const errorCheck = () => {
+    const formSubKeys = Object.keys(formSubscriptions);
+    const validity = formSubKeys
+      .map(key => formSubscriptions[key].hasErrors)
+      .reduce((acc, val) => acc || val, false);
+    setHasErrors(validity);
+  };
+
+  // check if last form section is touched
+  const lastSectionTouchCheck = async () => {
+    const formSubKeys = Object.keys(formSubscriptions);
+    const lastSection = formSubscriptions[formSubKeys[formSubKeys.length - 1]];
+    setIsLastSectionTouched(lastSection.touched);
+  };
+
+  // validate each individual form and fire onSubmit for each
   const submitForm = async () => {
-    try {
-      const validData = await validateForm();
+    const allForms = Object.keys(formSubscriptions).map(async key => {
+      const form = formSubscriptions[key];
+      const validData = await form.validateForm(form.data);
       const result = onSubmit(validData);
-    } catch (err) {
-      console.log(err);
-    }
+      return result;
+    });
+    Promise.all(allForms)
+      .then(d => console.log('all forms sent'))
+      .catch(err => console.log('form sending failed', err));
   };
 
+  // add user form
   const addSection = async () => {
-    // check if last section is blank
-    const index = form.length - 1;
-    try {
-      await validateSection({ index });
-      createSection(UserModel);
-    } catch (e) {
-      console.log('error: last section is empty', e);
+    if (isLastSectionTouched) {
+      const formSubKeys = Object.keys(formSubscriptions);
+      const lastSection = formSubscriptions[formSubKeys[formSubKeys.length - 1]];
+      try {
+        await lastSection.validateForm();
+        setFormIds(formIds.concat(uniqueId()));
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log('error: last section cannot be added');
     }
   };
 
-  const removeSection = index => {
-    deleteSection(index);
+  // remove user form
+  const removeSection = removeId => {
+    if (formIds.length > 1) {
+      setFormIds(formIds.filter(id => id !== removeId));
+      delete formSubscriptions[removeId];
+    }
   };
 
   return (
@@ -72,25 +125,29 @@ const AddUserModal = ({
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      actionDisabled={!touched || hasErrors}
+      actionDisabled={!isFormTouched || hasErrors}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {form.map((data, currentIndex) => {
-        return (
-          <UserSection
-            key={currentIndex}
-            user={data}
-            onChange={(key, val) => setData({ key, val, index: currentIndex })}
-            validateField={key => validateField({ key, index: currentIndex })}
-            errors={validationErrors[currentIndex]}
-            deleteSelf={form.length > 1 ? () => removeSection(currentIndex) : null}
-          />
-        );
-      })}
-      <AddSection variant="text" disabled={!islastSectionTouched}>
+      {formIds.map((id, index) => (
+        <AddUser
+          key={id}
+          id={id}
+          formSubscriptions={formSubscriptions}
+          removeSection={id => {
+            removeSection(id);
+          }}
+          onUpdate={() => {
+            touchCheck();
+            errorCheck();
+            lastSectionTouchCheck();
+          }}
+          showDelete={formIds.length > 1}
+        />
+      ))}
+      <AddSection variant="text" disabled={!isLastSectionTouched || hasErrors}>
         <div
           css={css`
             display: flex;
@@ -100,13 +157,13 @@ const AddUserModal = ({
         >
           <Icon
             name="plus_circle"
-            fill={islastSectionTouched ? 'accent2' : '#cecfd3'}
+            fill={isLastSectionTouched && !hasErrors ? 'accent2' : '#cecfd3'}
             css={css`
               margin-right: 3px;
             `}
           />
           <Typography
-            onClick={() => (islastSectionTouched ? addSection() : null)}
+            onClick={() => (isLastSectionTouched && !hasErrors ? addSection() : null)}
             variant="paragraph"
             component="span"
           >

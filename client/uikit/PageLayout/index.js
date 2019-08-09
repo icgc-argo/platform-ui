@@ -11,7 +11,7 @@ export const PageContainer = styled('div')`
 
 export const Panel = styled('div')`
   min-width: 304px;
-  padding-top: 28px;
+  padding-top: 12px;
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};

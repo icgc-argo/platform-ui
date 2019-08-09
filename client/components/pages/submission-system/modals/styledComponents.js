@@ -10,8 +10,8 @@ import FormHelperText from 'uikit/form/FormHelperText';
 import { PROGRAM_USER_ROLES } from 'global/constants';
 import css from '@emotion/css';
 import PropTypes from 'prop-types';
-
 import { Row, Col } from 'react-grid-system';
+import { UserModel } from './common';
 
 const Section = styled('div')`
   padding: 12px 11px;
@@ -25,9 +25,17 @@ export const UserSection = ({
   onChange,
   validateField,
   errors,
-  deleteSelf,
-  showDelete = false,
+  onClickDelete,
   disabledFields = [],
+  showDelete,
+}: {
+  user: typeof UserModel,
+  onChange: (fieldName: string, value: mixed) => mixed | void,
+  validateField: (fieldName: string) => mixed | void,
+  errors: typeof UserModel,
+  onClickDelete: ((e: mixed | void) => mixed | void) | null,
+  disabledFields: Array<string | void>,
+  showDelete: boolean,
 }) => {
   const {
     firstName: firstNameError,
@@ -131,30 +139,18 @@ export const UserSection = ({
           </Col>
         </Row>{' '}
       </div>
-      {showDelete && (
-        <Icon
-          height="20px"
-          width="18px"
-          name="trash"
-          fill={deleteSelf ? 'accent2' : '#cecfd3'}
-          onClick={deleteSelf}
-          css={css`
-            margin-left: 6px;
-          `}
-        />
-      )}
+      <Icon
+        height="20px"
+        width="18px"
+        name="trash"
+        fill={showDelete ? 'accent2' : '#cecfd3'}
+        onClick={() => (showDelete ? onClickDelete() : null)}
+        css={css`
+          margin-left: 6px;
+        `}
+      />
     </Section>
   );
-};
-
-UserSection.propTypes = {
-  user: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
-  validateField: PropTypes.func,
-  errors: PropTypes.object.isRequired,
-  deleteSelf: PropTypes.oneOf([PropTypes.func]),
-  showDelete: PropTypes.bool,
-  disabledFields: PropTypes.array,
 };
 
 export default UserSection;
