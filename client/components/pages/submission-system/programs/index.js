@@ -15,9 +15,7 @@ import ProgramsTable from './ProgramsTable';
 import SubmissionLayout from '../layout';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-// $FlowFixMe .gql file not supported
-import { programsListQuery } from './queries.gql';
+import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
 
 import {
   CREATE_PROGRAM_PAGE_PATH,
@@ -43,7 +41,7 @@ const TableFilterInput = props => (
 );
 
 export default ({ authorizedPrograms = [] }: any) => {
-  const { data: { programs = [] } = {}, loading, errors } = useQuery(programsListQuery);
+  const { data: { programs = [] } = {}, loading, errors } = useQuery(PROGRAMS_LIST_QUERY);
   const authContext = useAuthContext() || {};
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
