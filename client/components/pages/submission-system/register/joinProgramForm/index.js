@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-apollo-hooks';
+import useFormHook from 'global/hooks/useFormHook';
 
 const FormContainer = styled(Container)`
   padding: 30px;
@@ -106,24 +107,16 @@ const JoinProgramForm = ({
   programName: string,
   userRole: string,
 }) => {
-  const [errors, setErrors] = React.useState({});
-  const [data, setData] = React.useState(schema.cast({}));
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
+    initialFields: schema.cast({}),
+    schema: schema,
+  });
+
   const availableInstitutions = [];
 
-  const handleBlur = field => () => {
-    schema
-      .validateAt(field, data)
-      .then(() => {
-        setErrors(v => set({ ...errors }, field, null));
-      })
-      .catch(err => {
-        setErrors(v => set({ ...errors }, field, err.message));
-      });
-  };
+  const handleBlur = fieldKey => _ => validateField({ key: fieldKey });
 
-  const handleChange = field => ({ target }) => {
-    setData(oldData => set({ ...data }, field, target.value));
-  };
+  const handleChange = fieldName => ({ target }) => setData({ key: fieldName, val: target.value });
 
   const [joinProgram] = useMutation(JOIN_PROGRAM, {
     variables: {
@@ -135,7 +128,9 @@ const JoinProgramForm = ({
   });
 
   const submitForm = async () => {
-    console.log(schema.cast(data));
+    const validData = await validateForm();
+    // TODO
+    console.log(validData);
   };
 
   return (
@@ -178,7 +173,7 @@ const JoinProgramForm = ({
               }
             `}
           >
-            <FormControl required error={errors.institutions != null}>
+            <FormControl required error={!!errors.institutions}>
               <Row nogutter>
                 <Col sm={3} className="pt">
                   <InputLabel>Institution</InputLabel>
@@ -204,7 +199,7 @@ const JoinProgramForm = ({
             </FormControl>
             <Row nogutter>
               <Col sm={6}>
-                <FormControl required error={errors.piFirstName != null}>
+                <FormControl required error={!!errors.piFirstName}>
                   <Row nogutter>
                     <Col sm={6} className="pt">
                       <InputLabel required>PI First Name</InputLabel>

@@ -80,14 +80,14 @@ const useFormHook = ({
           abortEarly: false,
           stripUnknown: true,
         });
-        console.log('VALID', validData);
+        // console.log('VALID', validData);
         resolve(validData);
       } catch (formErrors) {
         const validationErrors = get(formErrors, 'inner', []).reduce((output, error) => {
           output[error.path] = error.message;
           return output;
         }, {});
-        console.log('REJECTING', formErrors, validationErrors);
+        // console.log('REJECTING', formErrors, validationErrors);
         setErrors({ validationErrors });
         reject(validationErrors);
       }

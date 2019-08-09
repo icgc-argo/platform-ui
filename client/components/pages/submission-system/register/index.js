@@ -24,7 +24,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   }
 
   return (
-    <SubmissionLayout pathname={pathname} logOut={logOut} noSidebar>
+    <SubmissionLayout noSidebar>
       <div
         css={css`
           display: flex;
