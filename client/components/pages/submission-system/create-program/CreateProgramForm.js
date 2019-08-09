@@ -121,8 +121,8 @@ export default function CreateProgramForm({
   });
 
   // TODO: ugly as sin
-  const validationErrors = errors[0];
-  const form = data[0];
+  const validationErrors = errors;
+  const form = data;
 
   /* ****************** *
    * On Change Handlers
