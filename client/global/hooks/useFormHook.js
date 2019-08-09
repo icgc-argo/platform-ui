@@ -14,12 +14,12 @@ const useFormHook = ({
   initialFields,
   schema: formSchema,
 }: {
-  initialFields: {},
+  initialFields: { [k: string]: mixed },
   schema: {
     validate: typeof yup.object,
   },
 }) => {
-  let initErrors = {};
+  let initErrors: { [k: string]: string } = {};
 
   for (let [key, value] of Object.entries(initialFields)) {
     initErrors[key] = '';
