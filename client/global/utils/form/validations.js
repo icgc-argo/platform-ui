@@ -31,4 +31,4 @@ export const email = yup
 export const role = yup
   .string()
   .label('Role')
-  .oneOf(PROGRAM_MEMBERSHIP_TYPES.map(type => type.value), requiredError('Role'));
+  .oneOf(PROGRAM_USER_ROLES.map(type => type.value), requiredError('Role'));

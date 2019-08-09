@@ -10,7 +10,6 @@ import FormHelperText from 'uikit/form/FormHelperText';
 import { PROGRAM_USER_ROLES } from 'global/constants';
 import css from '@emotion/css';
 import PropTypes from 'prop-types';
-
 import { Row, Col } from 'react-grid-system';
 import { UserModel } from './common';
 
