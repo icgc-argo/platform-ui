@@ -27,6 +27,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_FLYWAY_ENABLED: "true"
+      SERVER_SERVLET_CONTEXT_PATH: "/api"
       SPRING_FLYWAY_LOCATIONS: "classpath:flyway/sql,classpath:db/migration,filesystem:/ego_boostrap"
       GOOGLE_CLIENT_CLIENTID: "${GOOGLE_CLIENT_CLIENTID}"
       GOOGLE_CLIENT_CLIENTSECRET: "${GOOGLE_CLIENT_CLIENTSECRET}"
@@ -38,7 +39,7 @@ services:
     depends_on:
       - ego-api
     environment:
-      REACT_APP_API: "http://localhost:8088"
+      REACT_APP_API: "http://localhost:8088/api"
     ports:
       - 3501:80
 
@@ -58,6 +59,7 @@ services:
     image: "icgcargo/program-service:8043985"
     restart: always
     depends_on:
+      - ego-api
       - ego-ui
       - program-db
     environment:
@@ -66,7 +68,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_FLYWAY_ENABLED: "true"
-      APP_EGO_URL: "http://ego-api:8088"
+      APP_EGO_URL: "http://ego-api:8088/api"
       APP_EGO_CLIENT_ID: "program"
       APP_EGO_CLIENT_SECRET: "programsecret"
       APP_MAIL_ENABLED: "false"
@@ -91,4 +93,18 @@ services:
     ports:
       - 9000:9000
 
+  #####################################################
+  # ARGO Platform - Platform UI
+  #####################################################
+  platform:
+    image: "icgcargo/platform-ui:dcfffb0"
+    depends_on:
+      - gateway
+    environment:
+      GATEWAY_API_ROOT: http://localhost:9000
+      EGO_API_ROOT: http://localhost:8088
+      EGO_CLIENT_ID: platform
+    ports:
+      - 8080:8080
+      
       

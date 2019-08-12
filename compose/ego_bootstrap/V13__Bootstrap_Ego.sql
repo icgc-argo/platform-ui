@@ -4,7 +4,7 @@ INSERT INTO egouser
 VALUES
     ('57b8f58e-cf8d-4a7f-ac49-51129e156f33',
     '',
-    ',
+    '',
     'ADMIN',
     'Foo',
     'Bar',
