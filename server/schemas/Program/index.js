@@ -173,7 +173,7 @@ const typeDefs = gql`
     Update a user's role in a prgoram
     Returns the user data
     """
-    updateUser(userId: String!, programShortName: String!, userRole: UserRole!): Boolean
+    updateUser(userEmail: String!, programShortName: String!, userRole: UserRole!): Boolean
       @cost(complexity: 10)
 
     """
@@ -293,8 +293,8 @@ const resolvers = {
       const { egoToken } = context;
       const shortName = get(args, 'programShortName');
       const role = get(args, 'userRole');
-      const userId = get(args, 'userId');
-      const response = await programService.updateUser(userId, shortName, role, egoToken);
+      const userEmail = get(args, 'userEmail');
+      const response = await programService.updateUser(userEmail, shortName, role, egoToken);
       return true;
     },
 
