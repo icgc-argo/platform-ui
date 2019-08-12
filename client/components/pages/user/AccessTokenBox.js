@@ -7,6 +7,7 @@ import Link from 'uikit/Link';
 import { Input } from 'uikit/form';
 import Button from 'uikit/Button';
 import { Box } from './common';
+import ClipboardCopyField from 'uikit/ClipboardCopyField';
 
 export default function AccessTokenBox() {
   return (
@@ -43,7 +44,7 @@ export default function AccessTokenBox() {
               flex: 1;
             `}
           >
-            <Input />
+            <ClipboardCopyField tagText="Expires in: 5 days" value="SOME_TOKEN" />
           </div>
           <div
             css={css`
