@@ -20,7 +20,7 @@ import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
 import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
-import UPDATE_PROGRAM_MUTATION from './program-management/UPDATE_PROGRAM_MUTATION.gql';
+import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 import useCommonToasters from 'components/useCommonToasters';
 
 const createUserInput = ({
