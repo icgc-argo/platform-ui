@@ -214,11 +214,11 @@ const joinProgram = async (
   });
 };
 
-const updateUser = async (id, shortName, role, jwt = null) => {
+const updateUser = async (email, shortName, role, jwt = null) => {
   const updateUserRequest = {
-    user_id: wrapValue(id),
-    short_name: wrapValue(shortName),
+    user_email: wrapValue(email),
     role: wrapValue(role),
+    short_name: wrapValue(shortName),
   };
 
   return await new Promise((resolve, reject) => {
