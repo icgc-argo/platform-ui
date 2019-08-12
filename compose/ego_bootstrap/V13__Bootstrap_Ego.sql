@@ -1,30 +1,7 @@
-
-INSERT INTO egouser
-    (id, name, email, type, firstname, lastname, createdat, lastlogin, status, preferredlanguage)
-VALUES
-    ('57b8f58e-cf8d-4a7f-ac49-51129e156f33',
-    '',
-    '',
-    'ADMIN',
-    'Foo',
-    'Bar',
-    NOW(),
-    NOW(),
-    'APPROVED',
-    'ENGLISH');
-
 INSERT INTO policy
     (id, owner, name)
 VALUES
     ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c3', NULL, 'PROGRAMSERVICE');
-
-INSERT INTO userpermission
-    (id, policy_id, user_id, access_level)
-VALUES
-    ('b69740f2-c9c9-413e-a682-d62b002b54a7',
-    '27b08a5b-5328-4223-8ddc-c9e6dcaa48c3',
-    '57b8f58e-cf8d-4a7f-ac49-51129e156f33',
-    'WRITE');
 
 INSERT INTO egoapplication 
     (id, name, clientid, clientsecret, redirecturi, description, status, type) 
@@ -49,7 +26,7 @@ VALUES
     'platform',
     'platform',
     'platformsecret',
-    'http://localhost:3000',
+    'http://localhost:8080/logged-in',
     'argo platform',
     'APPROVED',
     'CLIENT'),
