@@ -5,7 +5,7 @@ services:
   # Ego
   #####################################################
   ego-db:
-    image: "postgres:9.6"
+    image: "${POSTGRES_IMAGE}"
     environment:
       PGPORT: 5432
       POSTGRES_DB: ego
@@ -14,7 +14,7 @@ services:
     ports:
       - 18888:5432
   ego-api:
-    image: "overture/ego:5b1ebd8-alpine"
+    image: "${EGO_IMAGE}"
     depends_on:
       - ego-db
     volumes:
@@ -35,7 +35,7 @@ services:
       - 8088:8088
       - 50052:50051
   ego-ui:
-    image: "overture/ego-ui:release-2.0.6"
+    image: "${EGO_UI_IMAGE}"
     depends_on:
       - ego-api
     environment:
@@ -47,7 +47,7 @@ services:
   # Program Service
   #####################################################
   program-db:
-    image: "postgres:9.6"
+    image: "${POSTGRES_IMAGE}"
     environment:
       PGPORT: 5432
       POSTGRES_DB: program-db
@@ -56,7 +56,7 @@ services:
     ports:
       - 18889:5432
   program-service:
-    image: "icgcargo/program-service:8043985"
+    image: "${PROGRAM_SERVICE_IMAGE}"
     restart: always
     depends_on:
       - ego-api
@@ -81,7 +81,7 @@ services:
   # ARGO Platform - GraphQL API Gateway
   #####################################################
   gateway:
-    image: "icgcargo/argo-gateway:73646a1"
+    image: "${GATEWAY_IMAGE}"
     depends_on:
       - ego-api
       - program-service
@@ -97,7 +97,7 @@ services:
   # ARGO Platform - Platform UI
   #####################################################
   platform:
-    image: "icgcargo/platform-ui:dcfffb0"
+    image: "${PLATFORM_UI_IMAGE}"
     depends_on:
       - gateway
     environment:
