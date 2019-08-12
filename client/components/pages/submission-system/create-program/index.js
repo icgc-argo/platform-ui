@@ -20,6 +20,9 @@ import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
 import createProgramSchema from './validation';
 import { useMutation } from 'react-apollo-hooks';
 import useCommonToasters from 'components/useCommonToasters';
+import DnaLoader from 'uikit/DnaLoader';
+import useTheme from 'uikit/utils/useTheme';
+import color from 'color';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -51,14 +54,40 @@ const createProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+const LoadingOverlay = () => {
+  const theme = useTheme();
+  return (
+    <div
+      css={css`
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        background: ${color(theme.colors.white)
+          .alpha(0.7)
+          .hsl()
+          .string()};
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `}
+    >
+      <DnaLoader />
+    </div>
+  );
+};
+
 export default () => {
   const toaster = useToaster();
   const router = useRouter();
   const commonToasters = useCommonToasters();
   const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
+  const [formDisabled, setFormDisabled] = React.useState(false);
 
   const onSubmit = async data => {
     try {
+      setFormDisabled(true);
       await sendCreateProgram({
         variables: { program: createProgramInput(data) },
       });
@@ -75,6 +104,7 @@ export default () => {
       });
     } catch (err) {
       commonToasters.unknownError();
+      setFormDisabled(false);
     }
   };
 
@@ -100,6 +130,8 @@ export default () => {
           margin: 10px auto;
           padding: 10px 40px;
           max-width: 875px;
+          position: relative;
+          overflow: hidden;
         `}
       >
         <ProgramForm
@@ -110,6 +142,7 @@ export default () => {
             </Link>
           }
         />
+        {formDisabled && <LoadingOverlay />}
       </Container>
     </SubmissionLayout>
   );
