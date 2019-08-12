@@ -62,6 +62,7 @@ export default () => {
       await sendCreateProgram({
         variables: { program: createProgramInput(data) },
       });
+      router.push(PROGRAMS_LIST_PATH);
       toaster.addToast({
         title: '',
         variant: TOAST_VARIANTS.SUCCESS,
