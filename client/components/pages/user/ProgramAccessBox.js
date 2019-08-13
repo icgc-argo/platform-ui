@@ -129,7 +129,7 @@ export default function ProgramAccessBox() {
   const { token } = useAuthContext() || {};
   const programs = getProgramTableProgramFromEgoJwt(token || '');
   return (
-    <Box title="Program Access">
+    <Box title="Program Access" iconName="programs">
       <div
         css={css`
           margin-top: 14px;

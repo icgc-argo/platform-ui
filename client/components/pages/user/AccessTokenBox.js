@@ -11,7 +11,7 @@ import ClipboardCopyField from 'uikit/ClipboardCopyField';
 
 export default function AccessTokenBox() {
   return (
-    <Box title="Access Token">
+    <Box title="Access Token" iconName="key">
       <Typography variant="paragraph">
         Your access token can be used instead of a password to access ICGC ARGO resources.
         <br />
