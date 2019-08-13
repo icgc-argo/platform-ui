@@ -1,4 +1,5 @@
-import React from 'react';
+//@flow
+import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming';
 import { ThemeContext } from '@emotion/core';
 import PropTypes from 'prop-types';
@@ -9,7 +10,10 @@ const themes = {
   default: defaultTheme,
 };
 
-const ThemeProvider = ({ theme = 'default', children }) => {
+const ThemeProvider: React.ComponentType<{ theme?: $Keys<typeof themes> }> = ({
+  theme = 'default',
+  children,
+}) => {
   return (
     <EmotionThemeProvider theme={themes[theme]}>
       <link
@@ -20,9 +24,6 @@ const ThemeProvider = ({ theme = 'default', children }) => {
     </EmotionThemeProvider>
   );
 };
-ThemeProvider.propTypes = {
-  theme: PropTypes.oneOf(Object.keys(themes)),
-};
 
 export default ThemeProvider;
-export const useTheme = () => React.useContext(ThemeContext);
+export const useTheme = () => React.useContext<typeof defaultTheme>(ThemeContext);

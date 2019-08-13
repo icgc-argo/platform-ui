@@ -1,3 +1,4 @@
+//@flow
 import colors from './colors';
 import shadows from './shadows';
 import button from './button';
