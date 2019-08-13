@@ -13,11 +13,11 @@ import { isDccMember, getReadableProgramShortNames, canWriteProgram } from 'glob
 import Icon from 'uikit/Icon';
 import USER_PROGRAM_LIST_QUERY from './USER_PROGRAM_LIST_QUERY.gql';
 
-type T_ProgramTableProgram = {
+type T_ProgramTableProgram = $Exact<{
   shortName: string,
   role: string,
-  permissions: Array<string>,
-};
+  permissions: string,
+}>;
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram>, loading: boolean }) => (
   <Table
     sortable={false}
@@ -57,7 +57,7 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
     return {
       shortName,
       role,
-      permissions: ['Submit Data, Download Data, Manage Users'],
+      permissions: 'Submit Data, Download Data, Manage Users',
     };
   });
   return output;
@@ -138,16 +138,19 @@ const DacoAccessStatusDisplay = ({ approved }: { approved: boolean }) => {
 export default function ProgramAccessBox() {
   const { token } = useAuthContext() || {};
   const { data, loading: loadingPrograms, error } = useQuery(USER_PROGRAM_LIST_QUERY);
-  let programs;
+  let programs: T_ProgramTableProgram[];
   const isDcc = isDccMember(token);
   if (isDcc) {
     programs = loadingPrograms
       ? []
-      : data.programs.map(({ shortName }) => ({
-          shortName,
-          role: PROGRAM_USER_ROLES_DISPLAY.DCC,
-          permissions: PROGRAM_USER_PERMISSIONS_DISPLAY.DCC,
-        }));
+      : data.programs.map(
+          ({ shortName }) =>
+            ({
+              shortName,
+              role: PROGRAM_USER_ROLES_DISPLAY.DCC,
+              permissions: PROGRAM_USER_PERMISSIONS_DISPLAY.DCC,
+            }: T_ProgramTableProgram),
+        );
   } else {
     programs = getProgramTableProgramFromEgoJwt(token || '');
   }
