@@ -4,8 +4,13 @@ import { css, styled } from 'uikit';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
+import type { UikitIconNames } from 'uikit/Icon/icons';
 
-export const Box = (props: { children: React.Node, title: React.Node }) => {
+export const Box = (props: {
+  children: React.Node,
+  title: React.Node,
+  iconName: UikitIconNames,
+}) => {
   return (
     <ContentBox
       css={css`
@@ -25,7 +30,7 @@ export const Box = (props: { children: React.Node, title: React.Node }) => {
             `}
           >
             <Icon
-              name="programs"
+              name={props.iconName}
               color="primary"
               height="20px"
               width="20px"

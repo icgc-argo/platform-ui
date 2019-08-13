@@ -49,7 +49,7 @@ export default function ProfileBox() {
   const { data: userModel } = useAuthContext() || {};
 
   return (
-    <Box title="Profile">
+    <Box title="Profile" iconName="user">
       <Row nogutter>
         <Col sm={12} md={2}>
           <div

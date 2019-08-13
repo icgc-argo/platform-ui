@@ -1,3 +1,4 @@
+//@flow
 import spinner from './collection/spinner';
 import chevron_down from './collection/chevron_down';
 import chevron_right from './collection/chevron_right';
@@ -19,6 +20,8 @@ import mail from './collection/mail';
 import trash from './collection/trash';
 import google from './collection/google';
 import plus_circle from './collection/plus_circle';
+import key from './collection/key';
+import user from './collection/user';
 
 /**
  * Icon path and property lookup object
@@ -46,6 +49,10 @@ const Icons = {
   trash,
   google,
   plus_circle,
+  key,
+  user,
 };
+
+export type UikitIconNames = $Keys<typeof Icons>;
 
 export default Icons;

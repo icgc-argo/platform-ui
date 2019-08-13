@@ -1,11 +1,28 @@
+//@flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
+import type { UikitIconNames } from './icons';
 
-const Icon = ({ name, width, height, fill, className, title, ...rest }) => {
+const Icon = ({
+  name,
+  width,
+  height,
+  fill,
+  className,
+  title,
+  ...rest
+}: {
+  name: UikitIconNames,
+  className?: string,
+  title?: string,
+  width?: string,
+  height?: string,
+  fill?: string,
+}) => {
   const theme = useTheme();
   const svg = icons[name];
 
@@ -65,13 +82,5 @@ export const ICON_NAMES = Object.freeze(Object.entries(icons).reduce(toKeyValueM
 export const BUILT_IN_ICON_COLORS = Object.freeze(
   Object.entries(defaultTheme.colors).reduce(toKeyValueMap, {}),
 );
-
-Icon.propTypes = {
-  name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
-  title: PropTypes.string,
-  width: PropTypes.string,
-  height: PropTypes.string,
-  fill: PropTypes.string,
-};
 
 export default Icon;

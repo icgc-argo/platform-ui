@@ -56,12 +56,15 @@ export default () => {
   const router = useRouter();
   const commonToasters = useCommonToasters();
   const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
+  const [formDisabled, setFormDisabled] = React.useState(false);
 
   const onSubmit = async data => {
     try {
+      setFormDisabled(true);
       await sendCreateProgram({
         variables: { program: createProgramInput(data) },
       });
+      router.push(PROGRAMS_LIST_PATH);
       toaster.addToast({
         title: '',
         variant: TOAST_VARIANTS.SUCCESS,
@@ -74,6 +77,7 @@ export default () => {
       });
     } catch (err) {
       commonToasters.unknownError();
+      setFormDisabled(false);
     }
   };
 
@@ -95,6 +99,7 @@ export default () => {
       }
     >
       <Container
+        loading={formDisabled}
         css={css`
           margin: 10px auto;
           padding: 10px 40px;
