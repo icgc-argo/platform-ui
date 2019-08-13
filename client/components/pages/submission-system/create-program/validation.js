@@ -25,9 +25,9 @@ export default yup.object().shape({
       return !!COUNTRIES.find(country => country.code === providedCode);
     })
     .matches(/-([A-Z][A-Z])$/, 'Short Name must end with a 2 character country code: "-XX"')
-    .matches(/^[A-Z1-9]/, 'Short Name must begin with an uppercase letter or a number')
+    .matches(/^[A-Z0-9]/, 'Short Name must begin with an uppercase letter or a number')
     .matches(
-      /^[-_A-Z1-9]+$/,
+      /^[A-Z0-9_-]+$/,
       'Short Name can only contain uppercase letters, numbers, hyphens, and underscores',
     )
     .max(11)
