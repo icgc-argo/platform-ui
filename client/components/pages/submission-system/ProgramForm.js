@@ -196,6 +196,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  name="countries"
                   single={false}
                   inputProps={{ id: 'country' }}
                   value={form.countries}
@@ -219,6 +220,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  name="cancer-types"
                   inputProps={{ id: 'cancer-types' }}
                   value={form.cancerTypes}
                   onChange={handleInputChange('cancerTypes')}
@@ -241,6 +243,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  name="primary-sites"
                   inputProps={{ id: 'primary-types' }}
                   value={form.primarySites}
                   onChange={handleInputChange('primarySites')}
@@ -353,6 +356,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  name="institutions"
                   aria-label="Institutions"
                   id="institutions"
                   inputProps={{ id: 'institutions' }}
@@ -383,6 +387,7 @@ export default function CreateProgramForm({
                 </InputLabel>
                 <ErrorText error={validationErrors.processingRegions} />
                 <RadioCheckboxGroup
+                  id="checkbox-group-processing-regions"
                   hasError={false}
                   onChange={handleCheckboxGroupChange(
                     (form.processingRegions: any[]),
@@ -500,13 +505,16 @@ export default function CreateProgramForm({
       >
         {isEditing ? (
           <Button
+            id="button-submit-edit-program-form"
             onClick={submitForm}
             disabled={isEqual(program, merge({ ...program }, createUpdateProgramInput(formData)))}
           >
             Save
           </Button>
         ) : (
-          <Button onClick={submitForm}>Create</Button>
+          <Button id="button-submit-create-program-form" onClick={submitForm}>
+            Create
+          </Button>
         )}
         {leftFooterComponent}
       </Row>

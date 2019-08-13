@@ -175,9 +175,12 @@ const MultiSelect = ({
   error,
   'aria-label': ariaLabel = 'search',
   size = INPUT_SIZES.LG,
+  values = [],
 }) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
+
+  // const options = children.map(child => child.props.value);
 
   const contextValue = React.useContext(FormControlContext);
   if (!_.isEmpty(contextValue)) {
@@ -226,19 +229,34 @@ const MultiSelect = ({
       }
     }
 
-    if ((e.key === 'Enter' || e.key === 'Tab') && allowNew) {
-      if (searchString.length !== 0) {
-        e.persist();
+    if (e.key === 'Enter' || e.key === 'Tab') {
+      if (allowNew) {
+        if (searchString.length !== 0) {
+          e.persist();
 
-        const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+          const newValue = single ? [searchString] : _.uniq([...value, searchString]);
 
-        e.target = {
-          value: newValue,
-          name,
-        };
+          e.target = {
+            value: newValue,
+            name,
+          };
 
-        setSearchString('');
-        onChange(e);
+          setSearchString('');
+          onChange(e);
+        }
+      } else {
+        if (searchString.length !== 0) {
+          e.persist();
+
+          const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+
+          e.target = {
+            value: newValue,
+            name,
+          };
+          setSearchString('');
+          onChange(e);
+        }
       }
     }
   };
@@ -334,7 +352,9 @@ const MultiSelect = ({
           ))
         )}
         <Input
+          autocomplete="off"
           aria-label={ariaLabel}
+          id={`${name}-multiselect`}
           value={searchString}
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}
@@ -355,6 +375,7 @@ const MultiSelect = ({
             </OptionsContainer>
             {allowNew && !_.isEmpty(searchString) && (
               <Option
+                data-value={searchString}
                 css={css`
                   border-top: ${_.isEmpty(items) ? 'none' : '1px solid ' + theme.colors.grey_2};
                 `}

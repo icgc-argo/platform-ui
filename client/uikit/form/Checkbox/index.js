@@ -87,17 +87,19 @@ const Checkbox = ({
   disabled = false,
   onChange,
   'aria-label': ariaLabel,
+  value,
   ...props
 }: {
   checked: boolean,
   disabled: boolean,
   onChange: (e: any | void) => any | void,
   'aria-label': string,
+  value: string | number,
 }) => {
   const HiddenCheckboxRef = React.createRef();
 
   return (
-    <StyledCheckbox checked={checked} disabled={disabled} onClick={onChange}>
+    <StyledCheckbox data-value={value} checked={checked} disabled={disabled} onClick={onChange}>
       <input
         type="checkbox"
         ref={HiddenCheckboxRef}

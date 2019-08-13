@@ -79,7 +79,7 @@ export default ({ authorizedPrograms = [] }: any) => {
           </Typography>
           {authContext.token && isDccMember(authContext.token) && (
             <Link href={CREATE_PROGRAM_PAGE_PATH}>
-              <Button>Create a program</Button>
+              <Button id="primary-action-create-program">Create a program</Button>
             </Link>
           )}
         </div>
