@@ -5,13 +5,14 @@ import { Row, Col } from 'react-grid-system';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
-import AccessTokenBox from './AccessTokenBox';
-import { Box } from './common';
+import AccessTokenBox from '../AccessTokenBox';
+import { Box } from '../common';
 import Table, { DefaultLoadingComponent } from 'uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getReadableProgramShortNames, canWriteProgram } from 'global/utils/egoJwt';
 import Icon from 'uikit/Icon';
 import USER_PROGRAM_LIST_QUERY from './USER_PROGRAM_LIST_QUERY.gql';
+import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
 
 type T_ProgramTableProgram = $Exact<{
   shortName: string,
@@ -61,78 +62,6 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
     };
   });
   return output;
-};
-
-const DacoAccessStatusDisplay = ({ approved }: { approved: boolean }) => {
-  /** @description: making these components so it's easier to extract out later if needs arises */
-  const Container = styled('div')`
-    display: flex;
-    border: solid 1px ${({ theme }) => theme.colors.grey_2};
-    padding: 8px;
-    border-radius: 8px;
-    & > :not(:last-child) {
-      border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
-    }
-  `;
-  Container.Section = styled('div')`
-    display: flex;
-    align-items: center;
-    &:not(:first-child) {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    &:first-child {
-      padding-right: 8px;
-    }
-    &:last-child {
-      padding-left: 8px;
-    }
-  `;
-  return (
-    <Container>
-      <Container.Section>
-        <div
-          css={css`
-            margin-right: 8px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-          `}
-        >
-          {approved ? (
-            <Icon name="success" fill="success" height="30px" />
-          ) : (
-            <Icon name="times_circle" fill="error" height="30px" />
-          )}
-        </div>
-        {approved ? (
-          <Typography variant="data" color="success_dark">
-            DACO <br />
-            Approved
-          </Typography>
-        ) : (
-          <Typography variant="data" color="error_dark">
-            Not DACO <br />
-            Approved
-          </Typography>
-        )}
-      </Container.Section>
-      <Container.Section>
-        {approved ? (
-          <Typography variant="label" component="div">
-            You have access to download controlled data.{' '}
-            <Link withChevron underline={false}>
-              VIEW FILES
-            </Link>
-          </Typography>
-        ) : (
-          <Typography variant="label" component="div">
-            To download controlled data, <Link>apply for DACO access.</Link>
-          </Typography>
-        )}
-      </Container.Section>
-    </Container>
-  );
 };
 
 export default function ProgramAccessBox() {
