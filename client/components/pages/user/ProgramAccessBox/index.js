@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
+import uniq from 'lodash/uniq';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
@@ -12,6 +13,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import {
   isDccMember,
   getReadableProgramShortNames,
+  getReadableProgramDataNames,
   canWriteProgram,
   canWriteProgramData,
   canReadProgramData,
@@ -56,26 +58,29 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
 };
 
 const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
-  const readableProgramScopes = getReadableProgramShortNames(egoJwt || '');
-  const output = readableProgramScopes.map(shortName => {
-    let role: string = '';
-    let permission: string = '';
-    if (canWriteProgram({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-    } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-    } else if (canReadProgramData({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
-    }
-    return {
-      shortName,
-      role,
-      permissions: 'Submit Data, Download Data, Manage Users',
-    };
-  });
+  const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
+  const readableProgramDataShortNames = getReadableProgramDataNames(egoJwt);
+  const output = uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(
+    shortName => {
+      let role: string = '';
+      let permission: string = '';
+      if (canWriteProgram({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+      } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+      } else if (canReadProgramData({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+      }
+      return {
+        shortName,
+        role,
+        permissions: 'Submit Data, Download Data, Manage Users',
+      };
+    },
+  );
   return output;
 };
 
