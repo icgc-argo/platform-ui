@@ -71,9 +71,7 @@ const getUserRole = egoJwt => {
 
 export default () => {
   const { token: egoJwt, logOut, data: userModel } = useAuthContext() || {};
-
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
-
   const { asPath: path } = usePageContext();
 
   return (
