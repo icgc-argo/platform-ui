@@ -3,7 +3,6 @@ import * as React from 'react';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import uniq from 'lodash/uniq';
-import { useQuery, useMutation } from 'react-apollo-hooks';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
 import AccessTokenBox from '../AccessTokenBox';
@@ -19,7 +18,6 @@ import {
   canReadProgramData,
 } from 'global/utils/egoJwt';
 import Icon from 'uikit/Icon';
-import USER_PROGRAM_LIST_QUERY from './USER_PROGRAM_LIST_QUERY.gql';
 import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
 
 type T_ProgramTableProgram = $Exact<{
@@ -27,17 +25,18 @@ type T_ProgramTableProgram = $Exact<{
   role: string,
   permissions: string,
 }>;
-const ProgramTable = (props: { programs: Array<T_ProgramTableProgram>, loading: boolean }) => (
+const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => (
   <Table
     sortable={false}
     showPagination={false}
     data={props.programs}
-    loading={props.loading}
-    columns={[
-      { Header: 'Program Name', accessor: 'shortName', maxWidth: 150 },
-      { Header: 'Role', accessor: 'role', maxWidth: 170 },
-      { Header: 'Permissions', accessor: 'permissions' },
-    ]}
+    columns={
+      ([
+        { Header: 'Program Name', accessor: 'shortName', maxWidth: 150 },
+        { Header: 'Role', accessor: 'role', maxWidth: 170 },
+        { Header: 'Permissions', accessor: 'permissions' },
+      ]: Array<{ accessor: $Keys<T_ProgramTableProgram> }>)
+    }
   />
 );
 
@@ -56,48 +55,42 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
 };
 
 const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
-  const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
-  const readableProgramDataShortNames = getReadableProgramDataNames(egoJwt);
-  return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(shortName => {
-    let role: string = '';
-    let permissions: string = '';
-    if (canWriteProgram({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-    } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-    } else if (canReadProgramData({ egoJwt, programId: shortName })) {
-      role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
-    }
-    return {
-      shortName,
-      role,
-      permissions,
-    };
-  });
+  if (isDccMember(egoJwt)) {
+    return [
+      {
+        shortName: 'All Programs',
+        role: PROGRAM_USER_ROLES_DISPLAY.DCC,
+        permissions: PROGRAM_USER_PERMISSIONS_DISPLAY.DCC,
+      },
+    ];
+  } else {
+    const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
+    const readableProgramDataShortNames = getReadableProgramDataNames(egoJwt);
+    return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(shortName => {
+      let role: string = '';
+      let permissions: string = '';
+      if (canWriteProgram({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+      } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+      } else if (canReadProgramData({ egoJwt, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+      }
+      return {
+        shortName,
+        role,
+        permissions,
+      };
+    });
+  }
 };
 
 export default function ProgramAccessBox() {
   const { token } = useAuthContext() || {};
-  const { data, loading: loadingPrograms, error } = useQuery(USER_PROGRAM_LIST_QUERY);
-  let programs: T_ProgramTableProgram[];
-  const isDcc = isDccMember(token);
-  if (isDcc) {
-    programs = loadingPrograms
-      ? []
-      : data.programs.map(
-          ({ shortName }) =>
-            ({
-              shortName,
-              role: PROGRAM_USER_ROLES_DISPLAY.DCC,
-              permissions: PROGRAM_USER_PERMISSIONS_DISPLAY.DCC,
-            }: T_ProgramTableProgram),
-        );
-  } else {
-    programs = getProgramTableProgramFromEgoJwt(token || '');
-  }
+  let programs = getProgramTableProgramFromEgoJwt(token || '');
 
   return (
     <Box title="Program Access" iconName="programs">
@@ -114,7 +107,7 @@ export default function ProgramAccessBox() {
         </Typography>
       </div>
       <div>
-        <ProgramTable programs={programs} loading={loadingPrograms && isDcc} />
+        <ProgramTable programs={programs} />
       </div>
     </Box>
   );
