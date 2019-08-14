@@ -114,7 +114,7 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
 
 export default function ProgramAccessBox() {
   const { token } = useAuthContext() || {};
-  let programs = getProgramTableProgramFromEgoJwt(token || '');
+  const programs = getProgramTableProgramFromEgoJwt(token || '');
 
   return (
     <Box title="Program Access" iconName="programs">
