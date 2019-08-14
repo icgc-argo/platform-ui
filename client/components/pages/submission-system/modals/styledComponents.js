@@ -127,7 +127,7 @@ export const UserSection = ({
                 <Col>
                   <Select
                     aria-label="Select role"
-                    value={user.role}
+                    value={user.role.toUpperCase()}
                     options={PROGRAM_USER_ROLES}
                     onChange={val => onChange('role', val)}
                     onBlur={() => validateField('role')}
