@@ -86,13 +86,14 @@ const AddUserModal = ({
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
       const form = formSubscriptions[key];
-      const validData = await form.validateForm(form.data);
-      const result = onSubmit(validData);
-      return result;
+      return form.validateForm(form.data);
     });
     Promise.all(allForms)
-      .then(d => console.log('all forms sent'))
-      .catch(err => console.log('form sending failed', err));
+      .then(validData => {
+        console.log('Validation succeeded, submitting all forms');
+        onSubmit(validData);
+      })
+      .catch(err => console.log('Validation Failed', err));
   };
 
   // add user form
