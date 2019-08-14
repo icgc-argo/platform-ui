@@ -9,7 +9,13 @@ import AccessTokenBox from '../AccessTokenBox';
 import { Box } from '../common';
 import Table, { DefaultLoadingComponent } from 'uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, getReadableProgramShortNames, canWriteProgram } from 'global/utils/egoJwt';
+import {
+  isDccMember,
+  getReadableProgramShortNames,
+  canWriteProgram,
+  canWriteProgramData,
+  canReadProgramData,
+} from 'global/utils/egoJwt';
 import Icon from 'uikit/Icon';
 import USER_PROGRAM_LIST_QUERY from './USER_PROGRAM_LIST_QUERY.gql';
 import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
@@ -52,9 +58,18 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
 const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
   const readableProgramScopes = getReadableProgramShortNames(egoJwt || '');
   const output = readableProgramScopes.map(shortName => {
-    const role = canWriteProgram({ egoJwt, programId: shortName })
-      ? PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN
-      : '';
+    let role: string = '';
+    let permission: string = '';
+    if (canWriteProgram({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+    } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+    } else if (canReadProgramData({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+      permission = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+    }
     return {
       shortName,
       role,

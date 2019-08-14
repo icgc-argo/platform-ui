@@ -2,7 +2,6 @@
 import jwtDecode from 'jwt-decode';
 import { get, memoize } from 'lodash';
 
-// $FlowFixMe
 import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
 
 const TokenUtils = createEgoUtils();
@@ -72,3 +71,12 @@ export const isProgramAdmin = (args: { egoJwt: ?string, programId: string }): bo
 
 export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
   TokenUtils.getReadableProgramShortNames(egoJwt);
+
+export const canReadProgramData = TokenUtils.canReadProgramData;
+export const canWriteProgramData = TokenUtils.canWriteProgramData;
+export const canReadSomeProgramData = TokenUtils.canReadSomeProgramData;
+export const canWriteSomeProgramData = TokenUtils.canWriteSomeProgramData;
+export const getReadableProgramDataScopes = TokenUtils.getReadableProgramDataScopes;
+export const getWritableProgramDataScopes = TokenUtils.getWritableProgramDataScopes;
+export const getReadableProgramDataNames = TokenUtils.getReadableProgramDataNames;
+export const getWritableProgramDataNames = TokenUtils.getWritableProgramDataNames;
