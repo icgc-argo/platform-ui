@@ -58,6 +58,21 @@ spec:
             }
         }
 
+        stage('Deploy to argo-dev') {
+            when {
+                expression {
+                    GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                    return GIT_BRANCH == 'origin/develop' || params.FORCE_FULL_BUILD
+                }
+            }
+            steps {
+                build(job: "/ARGO/provision/gateway", parameters: [
+                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                ])
+            }
+        }
+
         stage('Deploy to argo-qa') {
             when {
                 expression {
