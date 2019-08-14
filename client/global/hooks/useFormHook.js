@@ -78,20 +78,19 @@ function useFormHook<T: { [k: string]: any }>({
   // validates entire form
   const validateForm = (): Promise<any> =>
     new Promise(async (resolve, reject) => {
-      console.log('VALIDATE FORM', formSchema, data);
       try {
         const validData = await formSchema.validate(data, {
           abortEarly: false,
           stripUnknown: true,
         });
-        console.log('VALID', validData);
+
         resolve(validData);
       } catch (formErrors) {
         const validationErrors = get(formErrors, 'inner', []).reduce((output, error) => {
           output[error.path] = error.message;
           return output;
         }, {});
-        console.log('REJECTING', formErrors, validationErrors);
+
         setErrors({ validationErrors });
         reject(validationErrors);
       }
