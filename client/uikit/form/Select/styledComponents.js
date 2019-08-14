@@ -46,7 +46,7 @@ const OptionContent = withProps(() => ({
 }))(Typography);
 
 export const Option = ({ value, children, ...props }) => (
-  <OptionContainer role="option" {...props}>
+  <OptionContainer data-value={value} role="option" {...props}>
     <OptionContent>{children}</OptionContent>
   </OptionContainer>
 );

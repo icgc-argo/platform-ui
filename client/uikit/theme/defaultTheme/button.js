@@ -1,3 +1,4 @@
+//@flow
 import colors from './colors';
 export default {
   fontSizes: {

@@ -11,6 +11,7 @@ import useTheme from '../../utils/useTheme';
 
 const Select = ({
   placeholder = '- Select an option -',
+  id,
   value,
   onChange,
   onBlur = () => {},
@@ -76,6 +77,7 @@ const Select = ({
         ))}
       </HiddenSelect>
       <StyledInputWrapper
+        id={id}
         size={size}
         style={{ zIndex: 1 }}
         disabled={disabled}
@@ -104,7 +106,7 @@ const Select = ({
         <DropdownIcon disabled={disabled} theme={theme} />
       </StyledInputWrapper>
       {isExpanded && (
-        <OptionsList role="listbox">
+        <OptionsList role="listbox" id={`${id}-options`}>
           {options.map(({ content, value: optionValue }) => (
             <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
               {content}
