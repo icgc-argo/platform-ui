@@ -26,6 +26,8 @@ const Icon = ({
   const theme = useTheme();
   const svg = icons[name];
 
+  const resolveFill = (fill: ?string): ?string => (fill && theme.colors[fill]) || fill;
+
   return (
     <svg
       css={css`
@@ -51,13 +53,7 @@ const Icon = ({
           svg.pathDefinitions.map((pathDef, i) => (
             <path
               key={i}
-              fill={
-                pathDef.fill ||
-                (fill && theme.colors[fill]) ||
-                fill ||
-                pathDef.defaultFill ||
-                svg.defaultFill
-              }
+              fill={pathDef.fill || resolveFill(fill) || pathDef.defaultFill || svg.defaultFill}
               fillRule={pathDef.fillRule || svg.fillRule || 'nonezero'}
               d={pathDef.d}
               mask={pathDef.mask || svg.mask ? 'url(#mask)' : ''}
@@ -65,7 +61,7 @@ const Icon = ({
           ))
         ) : (
           <path
-            fill={(fill && theme.colors[fill]) || fill || svg.defaultFill}
+            fill={resolveFill(fill) || svg.defaultFill}
             fillRule={svg.fillRule || 'nonezero'}
             d={svg.path}
             mask={svg.mask ? 'url(#mask)' : ''}
