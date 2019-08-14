@@ -39,7 +39,8 @@ export const decodeToken = memoize<[?string], EgoJwtData | null>(egoJwt =>
   egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
 );
 
-export const isValidJwt = (egoJwt: ?string): boolean => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+export const isValidJwt: (egoJwt: ?string) => boolean = egoJwt =>
+  !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
 export const isDccMember = (egoJwt: ?string): boolean => !!egoJwt && TokenUtils.isDccMember(egoJwt);
 
@@ -66,17 +67,34 @@ export const canReadProgram = (args: { egoJwt: ?string, programId: string }): bo
 export const canWriteProgram = (args: { egoJwt: ?string, programId: string }): boolean =>
   !!args.egoJwt && TokenUtils.canWriteProgram(args);
 
-export const isProgramAdmin = (args: { egoJwt: ?string, programId: string }): boolean =>
+export const isProgramAdmin: (args: { egoJwt: ?string, programId: string }) => boolean = args =>
   !!args.egoJwt && TokenUtils.isProgramAdmin(args);
 
 export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
   TokenUtils.getReadableProgramShortNames(egoJwt);
 
-export const canReadProgramData = TokenUtils.canReadProgramData;
-export const canWriteProgramData = TokenUtils.canWriteProgramData;
-export const canReadSomeProgramData = TokenUtils.canReadSomeProgramData;
-export const canWriteSomeProgramData = TokenUtils.canWriteSomeProgramData;
-export const getReadableProgramDataScopes = TokenUtils.getReadableProgramDataScopes;
-export const getWritableProgramDataScopes = TokenUtils.getWritableProgramDataScopes;
-export const getReadableProgramDataNames = TokenUtils.getReadableProgramDataNames;
-export const getWritableProgramDataNames = TokenUtils.getWritableProgramDataNames;
+export const canReadProgramData: (args: { egoJwt: ?string, programId: string }) => boolean = args =>
+  !!args.egoJwt && TokenUtils.canReadProgramData(args);
+
+export const canWriteProgramData: (args: {
+  egoJwt: ?string,
+  programId: string,
+}) => boolean = args => !!args.egoJwt && TokenUtils.canWriteProgramData(args);
+
+export const canReadSomeProgramData: (egoJwt: ?string) => boolean = egoJwt =>
+  !!egoJwt && TokenUtils.canReadSomeProgramData(egoJwt);
+
+export const canWriteSomeProgramData: (egoJwt: ?string) => boolean = egoJwt =>
+  !!egoJwt && TokenUtils.canWriteSomeProgramData(egoJwt);
+
+export const getReadableProgramDataScopes: (egoJwt: ?string) => PermissionScopeObj[] = egoJwt =>
+  !egoJwt ? [] : TokenUtils.getReadableProgramDataScopes(egoJwt);
+
+export const getWritableProgramDataScopes: (egoJwt: ?string) => PermissionScopeObj[] = egoJwt =>
+  !egoJwt ? [] : TokenUtils.getWritableProgramDataScopes(egoJwt);
+
+export const getReadableProgramDataNames: (egoJwt: ?string) => string[] = egoJwt =>
+  !egoJwt ? [] : TokenUtils.getReadableProgramDataNames;
+
+export const getWritableProgramDataNames: (egoJwt: ?string) => string[] = egoJwt =>
+  !egoJwt ? [] : TokenUtils.getWritableProgramDataNames;
