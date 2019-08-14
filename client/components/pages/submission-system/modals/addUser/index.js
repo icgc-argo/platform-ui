@@ -6,14 +6,13 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { UserSection } from '../styledComponents';
-import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
-import { UserModel } from '../common';
+import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
-  const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+  const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
   const { errors: validationErrors, data, setData, validateField, touched } = form;
 
@@ -86,13 +85,14 @@ const AddUserModal = ({
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
       const form = formSubscriptions[key];
-      const validData = await form.validateForm(form.data);
-      const result = onSubmit(validData);
-      return result;
+      return form.validateForm(form.data);
     });
     Promise.all(allForms)
-      .then(d => console.log('all forms sent'))
-      .catch(err => console.log('form sending failed', err));
+      .then(validData => {
+        console.log('Validation succeeded, submitting all forms');
+        onSubmit(validData);
+      })
+      .catch(err => console.log('Validation Failed', err));
   };
 
   // add user form
