@@ -63,21 +63,21 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
   const output = uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(
     shortName => {
       let role: string = '';
-      let permission: string = '';
+      let permissions: string = '';
       if (canWriteProgram({ egoJwt, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
       } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
       } else if (canReadProgramData({ egoJwt, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-        permission = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
       }
       return {
         shortName,
         role,
-        permissions: 'Submit Data, Download Data, Manage Users',
+        permissions,
       };
     },
   );
