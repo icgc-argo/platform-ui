@@ -6,14 +6,13 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { UserSection } from '../styledComponents';
-import addUserSchema from './validation';
 import useFormHook from 'global/hooks/useFormHook';
-import { UserModel } from '../common';
+import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
-  const form = useFormHook({ initialFields: UserModel, schema: addUserSchema });
+  const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
   const { errors: validationErrors, data, setData, validateField, touched } = form;
 

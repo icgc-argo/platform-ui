@@ -1,9 +1,8 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserSection } from '../styledComponents';
-import { UserModel } from '../common';
+import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
-import editUserSchema from './validation';
 
 const EditUserModal = ({
   user,
@@ -22,17 +21,18 @@ const EditUserModal = ({
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook({ initialFields: user, schema: editUserSchema });
+  } = useFormHook({ initialFields: user, schema: userSchema });
 
   const submitForm = async () => {
     try {
       const validData = await validateForm();
+      console.log('valid data edit user', validData);
       const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
     }
   };
-  console.log('edit modal', form);
+
   return (
     <Modal
       title="Edit Users"

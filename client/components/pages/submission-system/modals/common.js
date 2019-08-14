@@ -1,4 +1,8 @@
 // @flow
+
+import * as yup from 'yup';
+import { firstName, lastName, email, role } from 'global/utils/form/validations';
+
 export type RoleKey = 'ADMIN' | 'CURATOR' | 'COLLABORATOR' | 'SUBMITTER';
 
 export const RoleDisplayName: { [key: RoleKey]: string } = {
@@ -14,3 +18,10 @@ export const UserModel = {
   email: '',
   role: RoleDisplayName.COLLABORATOR,
 };
+
+export const userSchema = yup.object().shape({
+  firstName,
+  lastName,
+  email,
+  role,
+});
