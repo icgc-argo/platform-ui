@@ -94,7 +94,7 @@ export const getWritableProgramDataScopes: (egoJwt: ?string) => PermissionScopeO
   !egoJwt ? [] : TokenUtils.getWritableProgramDataScopes(egoJwt);
 
 export const getReadableProgramDataNames: (egoJwt: ?string) => string[] = egoJwt =>
-  !egoJwt ? [] : TokenUtils.getReadableProgramDataNames;
+  !egoJwt ? [] : TokenUtils.getReadableProgramDataNames(egoJwt);
 
 export const getWritableProgramDataNames: (egoJwt: ?string) => string[] = egoJwt =>
-  !egoJwt ? [] : TokenUtils.getWritableProgramDataNames;
+  !egoJwt ? [] : TokenUtils.getWritableProgramDataNames(egoJwt);
