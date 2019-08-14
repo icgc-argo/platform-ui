@@ -52,7 +52,11 @@ const Icon = ({
             <path
               key={i}
               fill={
-                pathDef.fill || theme.colors[fill] || fill || pathDef.defaultFill || svg.defaultFill
+                pathDef.fill ||
+                (fill && theme.colors[fill]) ||
+                fill ||
+                pathDef.defaultFill ||
+                svg.defaultFill
               }
               fillRule={pathDef.fillRule || svg.fillRule || 'nonezero'}
               d={pathDef.d}
@@ -61,7 +65,7 @@ const Icon = ({
           ))
         ) : (
           <path
-            fill={theme.colors[fill] || fill || svg.defaultFill}
+            fill={(fill && theme.colors[fill]) || fill || svg.defaultFill}
             fillRule={svg.fillRule || 'nonezero'}
             d={svg.path}
             mask={svg.mask ? 'url(#mask)' : ''}
