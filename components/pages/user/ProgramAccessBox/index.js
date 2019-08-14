@@ -4,7 +4,7 @@ import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import uniq from 'lodash/uniq';
 import { css, styled } from 'uikit';
-import Link from 'uikit/Link';
+import UikitLink from 'uikit/Link';
 import AccessTokenBox from '../AccessTokenBox';
 import { Box } from '../common';
 import Table, { DefaultLoadingComponent } from 'uikit/Table';
@@ -19,26 +19,50 @@ import {
 } from 'global/utils/egoJwt';
 import Icon from 'uikit/Icon';
 import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
+import Link from 'next/link';
+import {
+  PROGRAMS_LIST_PATH,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from 'global/constants/pages';
 
 type T_ProgramTableProgram = $Exact<{
   shortName: string,
   role: string,
   permissions: string,
 }>;
-const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => (
-  <Table
-    sortable={false}
-    showPagination={false}
-    data={props.programs}
-    columns={
-      ([
-        { Header: 'Program Name', accessor: 'shortName', maxWidth: 150 },
-        { Header: 'Role', accessor: 'role', maxWidth: 170 },
-        { Header: 'Permissions', accessor: 'permissions' },
-      ]: Array<{ accessor: $Keys<T_ProgramTableProgram> }>)
-    }
-  />
-);
+const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
+  const { token } = useAuthContext() || {};
+  return (
+    <Table
+      sortable={false}
+      showPagination={false}
+      data={props.programs}
+      columns={
+        ([
+          {
+            Header: 'Program Name',
+            accessor: 'shortName',
+            maxWidth: 150,
+            Cell: ({ original }: { original: T_ProgramTableProgram }) => (
+              <Link
+                href={
+                  isDccMember(token)
+                    ? PROGRAMS_LIST_PATH
+                    : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
+                }
+              >
+                <UikitLink>{original.shortName}</UikitLink>
+              </Link>
+            ),
+          },
+          { Header: 'Role', accessor: 'role', maxWidth: 170 },
+          { Header: 'Permissions', accessor: 'permissions' },
+        ]: Array<{ accessor: $Keys<T_ProgramTableProgram> }>)
+      }
+    />
+  );
+};
 
 const PROGRAM_USER_ROLES_DISPLAY = {
   DCC: 'DCC Admin',
