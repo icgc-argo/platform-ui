@@ -60,28 +60,25 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
 const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
   const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
   const readableProgramDataShortNames = getReadableProgramDataNames(egoJwt);
-  const output = uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(
-    shortName => {
-      let role: string = '';
-      let permissions: string = '';
-      if (canWriteProgram({ egoJwt, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-      } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-      } else if (canReadProgramData({ egoJwt, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
-      }
-      return {
-        shortName,
-        role,
-        permissions,
-      };
-    },
-  );
-  return output;
+  return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(shortName => {
+    let role: string = '';
+    let permissions: string = '';
+    if (canWriteProgram({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+    } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+    } else if (canReadProgramData({ egoJwt, programId: shortName })) {
+      role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+      permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+    }
+    return {
+      shortName,
+      role,
+      permissions,
+    };
+  });
 };
 
 export default function ProgramAccessBox() {
