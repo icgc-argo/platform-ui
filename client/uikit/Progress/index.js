@@ -19,6 +19,11 @@ const ProgressMarker = styled('div')`
   background-color: ${({ theme, state }) => theme.progress.color[state]};
 `;
 
+const ProgressSection = styled('div')`
+  display: flex;
+  align-items: row;
+`;
+
 const getIcon = (state: ProgressStatus) => {
   switch (state) {
     case PROGRESS_STATUS.SUCCESS:
@@ -35,11 +40,15 @@ const getIcon = (state: ProgressStatus) => {
   }
 };
 
-const ProgressItem = ({ state, text }: { state: ProgressStatus, text: string }) => (
+export const ProgressItem = ({ state, text }: { state: ProgressStatus, text: string }) => (
   <div>
     <div>{text}</div>
     <ProgressMarker state={state}>{getIcon(state)}</ProgressMarker>
   </div>
 );
 
-export default ProgressItem;
+const Progress = ({ children }: { children: React.Node }) => (
+  <ProgressSection>{children}</ProgressSection>
+);
+
+export default Progress;
