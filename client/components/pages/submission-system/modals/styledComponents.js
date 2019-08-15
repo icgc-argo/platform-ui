@@ -137,7 +137,7 @@ export const UserSection = ({
               </Row>
             </FormControl>
           </Col>
-        </Row>{' '}
+        </Row>
       </div>
       <Icon
         height="20px"

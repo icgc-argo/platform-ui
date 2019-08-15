@@ -16,7 +16,7 @@ export const UserModel = {
   firstName: '',
   lastName: '',
   email: '',
-  role: RoleDisplayName.COLLABORATOR,
+  role: ('COLLABORATOR': RoleKey),
 };
 
 export const userSchema = yup.object().shape({
