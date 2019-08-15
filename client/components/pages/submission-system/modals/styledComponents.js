@@ -127,7 +127,7 @@ export const UserSection = ({
                 <Col>
                   <Select
                     aria-label="Select role"
-                    value={user.role.toUpperCase()}
+                    value={user.role}
                     options={PROGRAM_USER_ROLES}
                     onChange={val => onChange('role', val)}
                     onBlur={() => validateField('role')}
@@ -137,7 +137,7 @@ export const UserSection = ({
               </Row>
             </FormControl>
           </Col>
-        </Row>{' '}
+        </Row>
       </div>
       <Icon
         height="20px"

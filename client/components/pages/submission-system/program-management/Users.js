@@ -35,7 +35,7 @@ const Users = ({
   const [triggerEdit] = useMutation(EDIT_USER_MUTATION);
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
   const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
-
+  console.log(currentDeletingUser, currentDeletingUser ? currentDeletingUser.role : null);
   const toaster = useToaster();
 
   /** @GOOGLE_ANALYTICS **/
@@ -51,15 +51,12 @@ const Users = ({
         /**
          * @todo: actually implement these functions
          */
-        onUserDeleteClick={({ user }) =>
-          setCurrentDeletingUser({ ...user, role: RoleDisplayName[user.role] })
-        }
-        onUserResendInviteClick={({ user }) =>
-          setCurrentResendEmailUser({ ...user, role: RoleDisplayName[user.role] })
-        }
-        onUserEditClick={({ user }) =>
-          setCurrentEditingUser({ ...user, role: RoleDisplayName[user.role] })
-        }
+        onUserDeleteClick={({ user }) => {
+          console.log('user', user);
+          setCurrentDeletingUser(user);
+        }}
+        onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
+        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {!!currentResendEmailUser && (
         <ModalPortal>

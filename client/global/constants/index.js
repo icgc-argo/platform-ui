@@ -9,7 +9,7 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
 ];
 
 export const PROGRAM_USER_ROLES = [
-  { content: 'Admin', value: 'ADMIN' },
+  { content: 'Administrator', value: 'ADMIN' },
   { content: 'Collaborator', value: 'COLLABORATOR' },
   { content: 'Curator', value: 'CURATOR' },
   { content: 'Submitter', value: 'SUBMITTER' },
