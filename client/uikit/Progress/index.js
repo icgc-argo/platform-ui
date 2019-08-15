@@ -25,13 +25,13 @@ const getIcon = (state: ProgressStatus) => {
       return <Icon name="checkmark" />;
 
     case PROGRESS_STATUS.ERROR:
-      return <Icon name="google" />;
+      return <Icon name="exclamation" />;
 
     case PROGRESS_STATUS.PENDING:
-      return <Icon name="google" />;
+      return <Icon name="ellipses" />;
 
     case PROGRESS_STATUS.DISABLED:
-      return <Icon name="google" />;
+      return null;
   }
 };
 
