@@ -1,3 +1,5 @@
+def dockerHubRepo = "icgcargo/argo-gateway"
+def githubRepo = "icgc-argo/argo-platform"
 def commit = "UNKNOWN"
 
 pipeline {
@@ -60,8 +62,8 @@ spec:
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
                     // DNS error if --network is default
-                    sh "cd ./server && docker build --network=host -f Dockerfile . -t icgcargo/argo-gateway:${version}-${commit}"
-                    sh "docker push icgcargo/argo-gateway:${version}-${commit}"
+                    sh "cd ./server && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
+                    sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
                 build(job: "/ARGO/provision/gateway", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
@@ -78,14 +80,14 @@ spec:
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git tag ${version}"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/icgc-argo/argo-platform --tags"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
                     }
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker  build --network=host -f Dockerfile . -t icgcargo/argo-gateway:latest -t icgcargo/argo-gateway:${version}"
-                    sh "docker push icgcargo/argo-gateway:${version}"
-                    sh "docker push icgcargo/argo-gateway:latest"
+                    sh "docker  build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
+                    sh "docker push ${dockerHubRepo}:${version}"
+                    sh "docker push ${dockerHubRepo}:latest"
                 }
                 build(job: "/ARGO/provision/gateway", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
