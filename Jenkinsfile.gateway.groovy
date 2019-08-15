@@ -65,10 +65,10 @@ spec:
                     sh "cd ./server && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
                     sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
-                build(job: "/ARGO/provision/gateway", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
-                ])
+                // build(job: "/ARGO/provision/gateway", parameters: [
+                //      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
+                //      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
+                // ])
             }
         }
 
@@ -89,10 +89,10 @@ spec:
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
-                build(job: "/ARGO/provision/gateway", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
-                ])
+                // build(job: "/ARGO/provision/gateway", parameters: [
+                //      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
+                //      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                // ])
             }
         }
     }
