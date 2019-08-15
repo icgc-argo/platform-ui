@@ -1,5 +1,4 @@
 def dockerHubRepo = "icgcargo/argo-gateway"
-def githubRepo = "icgc-argo/argo-platform"
 def commit = "UNKNOWN"
 
 pipeline {
