@@ -35,7 +35,7 @@ const Users = ({
   const [triggerEdit] = useMutation(EDIT_USER_MUTATION);
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
   const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
-  console.log(currentDeletingUser, currentDeletingUser ? currentDeletingUser.role : null);
+
   const toaster = useToaster();
 
   /** @GOOGLE_ANALYTICS **/
