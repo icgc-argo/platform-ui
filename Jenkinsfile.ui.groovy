@@ -1,3 +1,4 @@
+def dockerHubRepo = "icgcargo/platform-ui"
 def commit = "UNKNOWN"
 
 pipeline {
@@ -32,58 +33,61 @@ spec:
         }
     }
     stages {
-        stage('Test') {
+        stage('Prepare') {
             steps {
-                container('node') {
-                    git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
-                    sh "cd ./client && npm ci"
-                    sh "cd ./client && npm run build && npm run test"
+                script {
+                    commit = sh(returnStdout: true, script: 'git describe --always').trim()
+                }
+                script {
+                    version = sh(returnStdout: true, script: 'cat ./client/package.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
                 }
             }
         }
-        stage('Build image') {
+        stage('Test') {
             steps {
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
-                    }
-                    git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
-                    // DNS error if --network is default
-                    script {
-                        commit = sh(returnStdout: true, script: 'git describe --always').trim()
-                    }
-                    sh "cd ./client && docker build --network=host -f Dockerfile . -t icgcargo/platform-ui:${commit}"
-                    sh "docker push icgcargo/platform-ui:${commit}"
+                container('node') {
+                    sh "cd ./client && npm ci"
+                    sh "cd ./client && npm run build && npm run test"
                 }
             }
         }
 
         stage('Deploy to argo-dev') {
             when {
-                expression {
-                    GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                    return GIT_BRANCH == 'origin/develop' || params.FORCE_FULL_BUILD
-                }
+                branch "develop"
             }
             steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    }
+                    // DNS error if --network is default
+                    sh "cd ./client && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
+                    sh "docker push ${dockerHubRepo}:${version}-${commit}"
+                }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
                 ])
             }
         }
 
         stage('Deploy to argo-qa') {
             when {
-                expression {
-                    GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                    return GIT_BRANCH == 'origin/master' || params.FORCE_FULL_BUILD
-                }
+                branch "master"
             }
             steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    }
+                    sh "cd ./client && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
+                    sh "docker push ${dockerHubRepo}:${version}"
+                    sh "docker push ${dockerHubRepo}:latest"
+                }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}" ]
                 ])
             }
         }

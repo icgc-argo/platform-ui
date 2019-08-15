@@ -51,15 +51,9 @@ const Users = ({
         /**
          * @todo: actually implement these functions
          */
-        onUserDeleteClick={({ user }) =>
-          setCurrentDeletingUser({ ...user, role: RoleDisplayName[user.role] })
-        }
-        onUserResendInviteClick={({ user }) =>
-          setCurrentResendEmailUser({ ...user, role: RoleDisplayName[user.role] })
-        }
-        onUserEditClick={({ user }) =>
-          setCurrentEditingUser({ ...user, role: RoleDisplayName[user.role] })
-        }
+        onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
+        onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
+        onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
       {!!currentResendEmailUser && (
         <ModalPortal>
