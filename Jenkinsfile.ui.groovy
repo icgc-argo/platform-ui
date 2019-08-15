@@ -46,7 +46,6 @@ spec:
         stage('Test') {
             steps {
                 container('node') {
-                    git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
                     sh "cd ./client && npm ci"
                     sh "cd ./client && npm run build && npm run test"
                 }
@@ -62,11 +61,7 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    git url: 'https://github.com/icgc-argo/argo-platform', branch: 'master'
                     // DNS error if --network is default
-                    script {
-                        commit = sh(returnStdout: true, script: 'git describe --always').trim()
-                    }
                     sh "cd ./client && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
                     sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
