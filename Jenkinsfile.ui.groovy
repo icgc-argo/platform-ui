@@ -1,4 +1,4 @@
-def dockerHubRepo = "${dockerHubRepo}"
+def dockerHubRepo = "icgcargo/platform-ui"
 def commit = "UNKNOWN"
 
 pipeline {
