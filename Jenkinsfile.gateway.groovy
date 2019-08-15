@@ -85,7 +85,7 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker  build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
+                    sh "cd ./server && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
