@@ -53,9 +53,9 @@ spec:
             }
         }
         stage('Deploy to argo-dev') {
-            when {
-                branch "develop"
-            }
+            // when {
+            //     branch "develop"
+            // }
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -65,10 +65,10 @@ spec:
                     sh "cd ./server && docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
                     sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
-                // build(job: "/ARGO/provision/gateway", parameters: [
-                //      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
-                //      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
-                // ])
+                build(job: "/ARGO/provision/gateway", parameters: [
+                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
+                ])
             }
         }
 
