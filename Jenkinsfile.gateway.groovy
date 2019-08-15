@@ -53,9 +53,9 @@ spec:
             }
         }
         stage('Deploy to argo-dev') {
-            // when {
-            //     branch "develop"
-            // }
+            when {
+                branch "develop"
+            }
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -73,9 +73,9 @@ spec:
         }
 
         stage('Deploy to argo-qa') {
-            when {
-                branch "master"
-            }
+            // when {
+            //     branch "master"
+            // }
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
@@ -89,10 +89,10 @@ spec:
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
-                // build(job: "/ARGO/provision/gateway", parameters: [
-                //      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                //      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
-                // ])
+                build(job: "/ARGO/provision/gateway", parameters: [
+                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
+                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${commit}" ]
+                ])
             }
         }
     }
