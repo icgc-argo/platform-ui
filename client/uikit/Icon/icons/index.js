@@ -22,6 +22,8 @@ import google from './collection/google';
 import plus_circle from './collection/plus_circle';
 import key from './collection/key';
 import user from './collection/user';
+import ellipses from './collection/ellipses';
+import exclamation from './collection/exclamation';
 
 /**
  * Icon path and property lookup object
@@ -51,6 +53,8 @@ const Icons = {
   plus_circle,
   key,
   user,
+  ellipses,
+  exclamation,
 };
 
 export type UikitIconNames = $Keys<typeof Icons>;
