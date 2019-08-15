@@ -51,10 +51,7 @@ const Users = ({
         /**
          * @todo: actually implement these functions
          */
-        onUserDeleteClick={({ user }) => {
-          console.log('user', user);
-          setCurrentDeletingUser(user);
-        }}
+        onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
         onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
       />
