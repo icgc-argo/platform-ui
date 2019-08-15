@@ -53,9 +53,9 @@ spec:
         }
 
         stage('Deploy to argo-dev') {
-            // when {
-            //     branch "develop"
-            // }
+            when {
+                branch "develop"
+            }
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
