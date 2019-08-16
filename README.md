@@ -1,4 +1,5 @@
 # Argo Platform client
+[![Build Status](https://jenkins.qa.cancercollaboratory.org/job/ARGO/job/ui/job/develop/badge/icon)](https://jenkins.qa.cancercollaboratory.org/job/ARGO/job/ui/job/develop/)
 
 This project was bootstrapped with [Create Next App](https://github.com/segmentio/create-next-app).
 
