@@ -21,7 +21,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_MANAGE_PATH,
   PROGRAM_DASHBOARD_PATH,
-  PROGRAM_ID_REGISTRATION_PATH,
+  PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
@@ -73,15 +73,18 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
       </Link>
       <Link
         prefetch
-        as={PROGRAM_ID_REGISTRATION_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
-        href={PROGRAM_ID_REGISTRATION_PATH}
+        as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          props.program.shortName,
+        )}
+        href={PROGRAM_SAMPLE_REGISTRATION_PATH}
       >
         <a>
           <MenuItem
             level={3}
-            content="ID Registration"
+            content="Sample Registration"
             selected={
-              PROGRAM_ID_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
             }
           />
         </a>
