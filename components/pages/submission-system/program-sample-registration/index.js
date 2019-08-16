@@ -23,7 +23,7 @@ export default function ProgramIDRegistration() {
         >
           <TitleBar>
             <>{programShortName}</>
-            <>Sample Registration</>
+            <>Register Samples</>
           </TitleBar>
         </div>
       }

@@ -82,7 +82,7 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
         <a>
           <MenuItem
             level={3}
-            content="Sample Registration"
+            content="Register Samples"
             selected={
               PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
             }
