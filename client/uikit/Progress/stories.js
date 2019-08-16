@@ -15,8 +15,12 @@ const ProgressItemStories = storiesOf(`${__dirname}`, module)
   ))
   .add('Progress Bar', () => (
     <Progress>
-      <ProgressItem text="Upload" state={PROGRESS_STATUS.SUCCESS} />
-      <ProgressItem text="Register" state={PROGRESS_STATUS.PENDING} />
+      <ProgressItem text="Success" state={PROGRESS_STATUS.SUCCESS} completed />
+      <ProgressItem text="Pending" state={PROGRESS_STATUS.PENDING} />
+
+      {/*  <ProgressItem text="Error" state={PROGRESS_STATUS.ERROR} />
+      <ProgressItem text="Disabled" state={PROGRESS_STATUS.DISABLED} />
+  */}
     </Progress>
   ));
 
