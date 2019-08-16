@@ -11,7 +11,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: mhart/alpine-node:latest
+    image: node:12.6.0
     tty: true
   - name: helm
     image: alpine/helm:2.12.3
