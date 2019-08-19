@@ -2,10 +2,8 @@
 import * as React from 'react';
 import orderBy from 'lodash/orderBy';
 import {
-  LOCAL_STORAGE_REDIRECT_KEY,
   LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
-  DCC_OVERVIEW_PATH,
   USER_PAGE_PATH,
   PROGRAM_MANAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,

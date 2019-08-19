@@ -23,7 +23,7 @@ export default function ProgramIDRegistration() {
         >
           <TitleBar>
             <>{programShortName}</>
-            <>ID Registration</>
+            <>Register Samples</>
           </TitleBar>
         </div>
       }
@@ -33,7 +33,7 @@ export default function ProgramIDRegistration() {
           padding-top: 0px;
         `}
       >
-        ID Registration
+        Sample Registration
       </ContentBox>
     </SubmissionLayout>
   );

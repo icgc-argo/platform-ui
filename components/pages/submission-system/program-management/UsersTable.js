@@ -12,6 +12,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { RoleDisplayName } from '../modals/common';
 
 import type { RoleKey } from '../modals/common';
+import type { TableColumnConfig } from 'uikit/Table';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
@@ -43,14 +44,7 @@ const UsersTable = (tableProps: {
   const { data: egoTokenData } = useAuthContext() || {};
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
 
-  const columns: Array<{
-    Header: string,
-    accessor?: $Keys<UsersTableUser>,
-    Cell?: CellProps => any,
-    sortable?: boolean,
-    width?: number,
-    headerStyle?: {},
-  }> = [
+  const columns: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
       Cell: ({ original: { firstName, lastName } }) => `${firstName} ${lastName}`,
