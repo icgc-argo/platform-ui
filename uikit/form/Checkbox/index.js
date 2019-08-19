@@ -91,7 +91,7 @@ const Checkbox = ({
   ...props
 }: {
   checked: boolean,
-  disabled: boolean,
+  disabled?: boolean,
   onChange: (e: any | void) => any | void,
   'aria-label': string,
   value: string | number,
