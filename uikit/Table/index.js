@@ -126,7 +126,7 @@ const SelectTableCheckbox = ({
   <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-lable="table-select" />
 );
 
-type T_SelectTableProps = {
+type SelectTableProps = {
   /**
    * returns true if the key passed is selected otherwise it should return false
    */
@@ -149,7 +149,7 @@ type T_SelectTableProps = {
   selectType: 'checkbox' | 'radio',
 };
 export const SelectTable = <Data: { [k: string]: any }>(
-  props: TableProps<Data> & T_SelectTableProps,
+  props: TableProps<Data> & SelectTableProps,
 ) => {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
