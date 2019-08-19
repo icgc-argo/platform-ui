@@ -8,7 +8,7 @@ import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import A from 'uikit/Link';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import type { T_TableColumn } from 'uikit/table';
+import type { TableColumnConfig } from 'uikit/Table';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -39,7 +39,7 @@ export default (tableProps: {
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
-  const columns: Array<T_TableColumn<TableProgramInternal>> = [
+  const columns: Array<TableColumnConfig<TableProgramInternal>> = [
     {
       Header: 'Short Name',
       accessor: 'shortName',

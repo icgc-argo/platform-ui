@@ -52,7 +52,7 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
-export type T_TableColumn<Data: { [k: string]: any }> = {
+export type TableColumnConfig<Data: { [k: string]: any }> = {
   Header?: React.Node,
   id?: string,
   accessor?: $Keys<Data>,
@@ -62,11 +62,11 @@ export type T_TableColumn<Data: { [k: string]: any }> = {
   width?: number,
   headerStyle?: {},
 };
-export type T_TableProps<Data: { [k: string]: any }> = {
+export type TableProps<Data: { [k: string]: any }> = {
   className?: string,
   stripped?: boolean,
   highlight?: boolean,
-  columns: Array<T_TableColumn<Data>>,
+  columns: Array<TableColumnConfig<Data>>,
   data?: Array<Data>,
   PaginationComponent?: typeof TablePagination,
   LoadingComponent?: typeof DefaultLoadingComponent,
@@ -80,7 +80,7 @@ const Table = <Data: { [k: string]: any }>({
   columns,
   data,
   ...rest
-}: T_TableProps<Data>) => {
+}: TableProps<Data>) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
   const TrComponent: React.ComponentType<any> = rest['TrComponent'] || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -149,7 +149,7 @@ type T_SelectTableProps = {
   selectType: 'checkbox' | 'radio',
 };
 export const SelectTable = <Data: { [k: string]: any }>(
-  props: T_TableProps<Data> & T_SelectTableProps,
+  props: TableProps<Data> & T_SelectTableProps,
 ) => {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
