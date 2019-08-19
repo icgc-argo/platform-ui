@@ -101,7 +101,7 @@ export const ProgressItem = ({
 }: {
   state: ProgressStatus,
   text: string,
-  completed: boolean,
+  completed?: boolean,
 }) => (
   <div>
     <Text completed={completed}>{text}</Text>
