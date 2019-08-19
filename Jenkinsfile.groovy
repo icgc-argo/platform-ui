@@ -47,7 +47,9 @@ spec:
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh "npm run build && npm run test"
+                    sh "npm run flow"
+                    sh "npm run build"
+                    sh "npm run test"
                 }
             }
         }
