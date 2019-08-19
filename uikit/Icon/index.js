@@ -5,6 +5,7 @@ import icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
+import type { ThemeColorNames } from '../theme/types';
 import type { UikitIconNames } from './icons';
 
 const Icon = ({
@@ -21,7 +22,7 @@ const Icon = ({
   title?: string,
   width?: string,
   height?: string,
-  fill?: string,
+  fill?: ThemeColorNames | string,
 }) => {
   const theme = useTheme();
   const svg = icons[name];
@@ -79,7 +80,7 @@ const toKeyValueMap = (acc, [key]) => ({
 
 export const ICON_NAMES = Object.freeze(Object.entries(icons).reduce(toKeyValueMap, {}));
 
-export const BUILT_IN_ICON_COLORS = Object.freeze(
+export const BUILT_IN_ICON_COLORS: { [k: UikitIconNames]: UikitIconNames } = Object.freeze(
   Object.entries(defaultTheme.colors).reduce(toKeyValueMap, {}),
 );
 
