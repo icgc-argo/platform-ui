@@ -1,20 +1,28 @@
-# argo-platform
+# Argo Platform client
 
-This repo contains the ICGC-Argo server-rendered front-end and its [GraphQl](https://graphql.org/learn/) API aggregation gateway.
+[![Build Status](https://jenkins.qa.cancercollaboratory.org/buildStatus/icon?job=ARGO%2Fui%2Fdevelop)](https://jenkins.qa.cancercollaboratory.org/job/ARGO/job/ui/job/develop/)
 
-## Repo structure
+This project was bootstrapped with [Create Next App](https://github.com/segmentio/create-next-app).
 
-```
-argo-platform
-|__ client (server-rendered React app)
-|   |__ pages (Next.js routing wrappers)
-|   |__ components (layout & stateful components)
-|   |__ uikits (pure presentational components)
-|   |__ global (utility functions, configs and constants)
-|   |__ stories (Storybook stories, pulling from uikits)
-|__ server (GraphQl API)
-    |__ schemas (individual domain schemas,
-        remote and locally defined)
-```
+Find the most recent version of this guide at [here](https://github.com/segmentio/create-next-app/blob/master/lib/templates/default/README.md). And check out [Next.js repo](https://github.com/zeit/next.js) for the most up-to-date info.
 
-Refer to [./client/README.md](./client/README.md) and [./server/README.md](./server/README.md) for each module's documentations.
+## Development
+
+- Install dependencies: `npm i`
+- Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
+- Dev commands:
+  - `npm run dev-ui` for working on ui only
+  - `npm run dev` for work that involves the custom server
+
+## Uikit
+
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://argo-ui-storybook.netlify.com)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c7a6c178-9394-4213-a420-585466232d77/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
+
+`/uikit` contains the reusable UI components for Argo.
+
+- ### Development:
+  - `npm run storybook` to run start a local storybook.
+  - creating a new component: `npm run create-component`
+- ### Restriction:
+  - `uikit` components should not reference (`import`) anything outside of the `uikit` directory
