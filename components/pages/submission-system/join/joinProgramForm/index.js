@@ -103,7 +103,7 @@ const JoinProgramForm = ({
   userRole,
   onSubmit,
 }: {
-  onSubmit: (data: any) => void,
+  onSubmit: (data: any) => any,
   programName: string,
   userRole: string,
 }) => {
@@ -129,8 +129,6 @@ const JoinProgramForm = ({
 
   const submitForm = async () => {
     const validData = await validateForm();
-    // TODO
-    console.log(validData);
     onSubmit(validData);
   };
 
