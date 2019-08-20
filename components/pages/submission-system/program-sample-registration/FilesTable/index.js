@@ -23,10 +23,10 @@ type FilesStats = {
   existingCount: number,
 };
 
-const StartIcon = (props: { active: boolean, classNames?: string }) => (
+const StartIcon = (props: { active: boolean, className?: string }) => (
   <Icon
-    classNames={props.classNames || ''}
-    name="checkmark"
+    className={props.className || ''}
+    name="star"
     fill={props.active ? 'success' : 'grey_1'}
     width="16px"
     height="16px"
@@ -61,13 +61,25 @@ const StatsArea = (props: { stats: FilesStats }) => {
           >
             <Section>{props.stats.totalCount} Total</Section>
             <Section>
-              <Icon name="chevron_right" fill="grey_1" />
+              <Icon name="chevron_right" fill="grey_1" width="8px" />
             </Section>
             <Section>
-              <StartIcon active /> {props.stats.newCount} New
+              <StartIcon
+                active
+                css={css`
+                  margin-right: 5px;
+                `}
+              />{' '}
+              {props.stats.newCount} New
             </Section>
             <Section>
-              <StartIcon active={false} /> {props.stats.existingCount} Already Registered
+              <StartIcon
+                active={false}
+                css={css`
+                  margin-right: 5px;
+                `}
+              />{' '}
+              {props.stats.existingCount} Already Registered
             </Section>
           </Typography>
         </Col>
@@ -104,7 +116,17 @@ const FilesTable = (
           },
           {
             id: 'isNew',
-            Cell: ({ original }) => <StartIcon active={original.isNew} />, // we don't know what should be here
+            Cell: ({ original }) => (
+              <div
+                css={css`
+                  display: flex;
+                  justify-content: center;
+                  width: 100%;
+                `}
+              >
+                <StartIcon active={original.isNew} />
+              </div>
+            ),
             width: 60,
             Header: <StartIcon active={false} />,
           },
