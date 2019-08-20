@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// @flow
+import React, { type Node } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
@@ -6,13 +7,23 @@ import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 import FocusWrapper from '../FocusWrapper';
 
-export const BUTTON_VARIANTS = Object.freeze({
+type ButtonVariant = 'primary' | 'secondary' | 'text';
+type ButtonSize = 'sm' | 'md';
+
+export const BUTTON_VARIANTS: {
+  PRIMARY: ButtonVariant,
+  SECONDARY: ButtonVariant,
+  TEXT: ButtonVariant,
+} = Object.freeze({
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
   TEXT: 'text',
 });
 
-export const BUTTON_SIZES = Object.freeze({
+export const BUTTON_SIZES: {
+  SM: ButtonSize,
+  MD: ButtonSize,
+} = Object.freeze({
   SM: 'sm',
   MD: 'md',
 });
@@ -58,12 +69,42 @@ const StyledButton = styled(FocusWrapper)`
   }
 `;
 
-const Button = React.forwardRef(
+const Button = React.forwardRef<
+  {
+    /**
+     * Button variant type eg. primary
+     */
+    variant?: ButtonVariant,
+    /**
+     * Button size
+     */
+    size?: ButtonSize,
+    children?: Node,
+    disabled?: boolean,
+    onClick?: (
+      e: SyntheticEvent<HTMLButtonElement>,
+    ) => any | ((e: SyntheticEvent<HTMLButtonElement>) => Promise<any>),
+    /**
+     * Use with async onClick handlers to set loading indicator
+     */
+    isAsync?: boolean,
+
+    /**
+     * DOM pass through
+     */
+    className?: string,
+    /**
+     * DOM pass through
+     */
+    id?: string,
+  },
+  any,
+>(
   (
     {
       children,
-      onClick,
-      disabled,
+      onClick = e => {},
+      disabled = false,
       variant = BUTTON_VARIANTS.PRIMARY,
       size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
       isAsync = false,
@@ -72,7 +113,7 @@ const Button = React.forwardRef(
     },
     ref,
   ) => {
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = React.useState(false);
     const theme = useTheme();
     const shouldShowLoading = isLoading && isAsync;
     const onClickFn = async event => {
@@ -109,36 +150,5 @@ const Button = React.forwardRef(
     );
   },
 );
-
-Button.propTypes = {
-  /**
-   * Button variant type eg. primary
-   */
-  variant: PropTypes.oneOf([
-    BUTTON_VARIANTS.PRIMARY,
-    BUTTON_VARIANTS.SECONDARY,
-    BUTTON_VARIANTS.TEXT,
-  ]),
-  /**
-   * Button size
-   */
-  size: PropTypes.oneOf([BUTTON_SIZES.SM, BUTTON_SIZES.MD]),
-  children: PropTypes.node.isRequired,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  /**
-   * Use with async onClick handlers to set loading indicator
-   */
-  async: PropTypes.bool,
-
-  /**
-   * DOM pass through
-   */
-  className: PropTypes.string,
-  /**
-   * DOM pass through
-   */
-  id: PropTypes.string,
-};
 
 export default Button;
