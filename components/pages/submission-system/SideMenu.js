@@ -11,8 +11,6 @@ import Icon from 'uikit/Icon';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 
-import { mockPrograms } from './mockData';
-
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
