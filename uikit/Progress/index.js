@@ -6,7 +6,12 @@ import { css } from '..';
 
 export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled';
 
-export const PROGRESS_STATUS = {
+export const PROGRESS_STATUS: {
+  SUCCESS: ProgressStatus,
+  ERROR: ProgressStatus,
+  PENDING: ProgressStatus,
+  DISABLED: ProgressStatus,
+} = {
   SUCCESS: 'success',
   ERROR: 'error',
   PENDING: 'pending',
