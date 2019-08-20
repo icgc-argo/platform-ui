@@ -27,7 +27,7 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
   `;
   const smallScreenRowStyle = css``;
   const rowStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
-    ['xs'].includes(size)
+    !['xs'].includes(size)
       ? css`
           & > :not(:first-child) {
             border-left: solid 1px ${theme.colors.grey_2};
@@ -41,7 +41,7 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
     <ScreenClassRender
       render={size => (
         <Col>
-          <Row nogutter css={rowStyle}>
+          <Row nogutter css={rowStyle(size)}>
             {steps.map(step => (
               <Col xs={12} sm={12 / steps.length}>
                 <InstructionStep>{step}</InstructionStep>
