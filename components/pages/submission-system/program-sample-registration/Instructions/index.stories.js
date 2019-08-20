@@ -5,7 +5,11 @@ import Instructions from '.';
 import { text, boolean } from '@storybook/addon-knobs';
 
 const InstructionsStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <Instructions registrationEnabled={boolean('registrationEnabled', false)}>Skeleton</Instructions>
+  <div style={{ background: 'white' }}>
+    <Instructions registrationEnabled={boolean('registrationEnabled', false)}>
+      Skeleton
+    </Instructions>
+  </div>
 ));
 
 export default InstructionsStories;
