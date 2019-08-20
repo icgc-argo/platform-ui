@@ -8,6 +8,7 @@ import titleBar from './titleBar';
 import input from './input';
 import multiSelect from './multiSelect';
 import radiocheckbox from './radiocheckbox';
+import progress from './progress';
 
 export default {
   colors,
@@ -19,4 +20,5 @@ export default {
   input,
   multiSelect,
   radiocheckbox,
+  progress,
 };
