@@ -38,28 +38,26 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       sortable={false}
       showPagination={false}
       data={props.programs}
-      columns={
-        ([
-          {
-            Header: 'Program Name',
-            accessor: 'shortName',
-            maxWidth: 150,
-            Cell: ({ original }: { original: T_ProgramTableProgram }) => (
-              <Link
-                href={
-                  isDccMember(token)
-                    ? PROGRAMS_LIST_PATH
-                    : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
-                }
-              >
-                <UikitLink>{original.shortName}</UikitLink>
-              </Link>
-            ),
-          },
-          { Header: 'Role', accessor: 'role', maxWidth: 170 },
-          { Header: 'Permissions', accessor: 'permissions' },
-        ]: Array<{ accessor: $Keys<T_ProgramTableProgram> }>)
-      }
+      columns={[
+        {
+          Header: 'Program Name',
+          accessor: 'shortName',
+          maxWidth: 150,
+          Cell: ({ original }: { original: T_ProgramTableProgram }) => (
+            <Link
+              href={
+                isDccMember(token)
+                  ? PROGRAMS_LIST_PATH
+                  : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
+              }
+            >
+              <UikitLink>{original.shortName}</UikitLink>
+            </Link>
+          ),
+        },
+        { Header: 'Role', accessor: 'role', maxWidth: 170 },
+        { Header: 'Permissions', accessor: 'permissions' },
+      ]}
     />
   );
 };
