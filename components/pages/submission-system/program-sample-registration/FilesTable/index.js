@@ -127,8 +127,8 @@ const FilesTable = (props: {
   const getColumnWidth = (keyString: string): number => {
     const minWidth = 90;
     const maxWidth = 230;
-    const magicSpacing = 12;
-    return Math.max(Math.min(maxWidth, keyString.length * magicSpacing), minWidth);
+    const spacePerChar = 12;
+    return Math.max(Math.min(maxWidth, keyString.length * spacePerChar), minWidth);
   };
   const filteredFirstRecord = omit(
     props.records[0],
