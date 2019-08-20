@@ -17,10 +17,8 @@ const ProgressItemStories = storiesOf(`${__dirname}`, module)
     <Progress>
       <ProgressItem text="Success" state={PROGRESS_STATUS.SUCCESS} completed />
       <ProgressItem text="Pending" state={PROGRESS_STATUS.PENDING} />
-
-      {/*  <ProgressItem text="Error" state={PROGRESS_STATUS.ERROR} />
+      <ProgressItem text="Error" state={PROGRESS_STATUS.ERROR} />
       <ProgressItem text="Disabled" state={PROGRESS_STATUS.DISABLED} />
-  */}
     </Progress>
   ));
 

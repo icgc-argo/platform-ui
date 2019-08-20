@@ -14,35 +14,16 @@ export const PROGRESS_STATUS = {
   DISABLED: 'disabled',
 };
 
-// no access to state prop when in  ProgressSection
 const Triangle = props => css`
   content: ' ';
   display: block;
-
   position: relative;
-  //top: 50%;
-  //margin-top: -50px;
-  //left: 100%;
-  background-color: pink;
-
-  border-top: 7px solid transparent; /* Go big on the size, and let overflow hide */
+  border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
-  border-left: 7px solid ${props.theme.progress.color[props.state]};
+  border-left-style: solid;
+  border-left-width: 7px;
 `;
-/*
-  &::after {
-    ${Triangle};
-    z-index: 2;
-  }
 
-  &::before {
-    ${Triangle};
-    z-index: 1;
-    margin-left: 1px;
-    border-left-color: blue;
-  }
-  */
-// TODO: check green color
 const ProgressMarker = styled('div')`
   width: 70px;
   height: 14px;
@@ -64,18 +45,27 @@ const ProgressSection = styled('div')`
     border-radius: 0 10px 10px 0;
   }
 
-  /* arrow each section except last */
+  /* Separator positions */
   div:not(:last-child) .row::after {
     ${Triangle};
     z-index: 2;
+  }
+
+  div:not(:first-child) .row::before {
+    ${Triangle};
+    z-index: 1;
+  }
+
+  /* offset each step for seperator spacing */
+  .step {
+    text-align: center;
+    margin-left: -4px;
   }
 `;
 
 const Text = styled('div')`
   ${({ theme }) => theme.typography.caption};
   font-weight: ${({ completed }) => (completed ? 600 : 'normal')};
-  width: 70px;
-  text-align: center;
 `;
 
 const getIcon = (state: ProgressStatus) => {
@@ -94,6 +84,19 @@ const getIcon = (state: ProgressStatus) => {
   }
 };
 
+/* Separator colors - based on state*/
+const Separator = styled('div')`
+  &:before {
+    background-color: ${({ theme, state }) => theme.progress.color[state]};
+    border-left-color: #fff;
+  }
+
+  &:after {
+    background-color: transparent;
+    border-left-color: ${({ theme, state }) => theme.progress.color[state]};
+  }
+`;
+
 export const ProgressItem = ({
   state,
   text,
@@ -103,9 +106,10 @@ export const ProgressItem = ({
   text: string,
   completed?: boolean,
 }) => (
-  <div>
+  <div className="step">
     <Text completed={completed}>{text}</Text>
-    <div
+    <Separator
+      state={state}
       className="row"
       css={css`
         display: flex;
@@ -114,7 +118,7 @@ export const ProgressItem = ({
       <ProgressMarker className="progress-marker" state={state}>
         {getIcon(state)}
       </ProgressMarker>
-    </div>
+    </Separator>
   </div>
 );
 
