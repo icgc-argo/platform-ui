@@ -119,7 +119,7 @@ const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) 
   );
 };
 
-const FilesTable = (props: {
+const FileTable = (props: {
   records: Array<FileEntry>,
   stats: FileStats,
   submissionInfo: SubmissionInfo,
@@ -176,4 +176,4 @@ const FilesTable = (props: {
   );
 };
 
-export default FilesTable;
+export default FileTable;

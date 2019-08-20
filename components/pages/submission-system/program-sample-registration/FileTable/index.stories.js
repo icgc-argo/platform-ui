@@ -1,9 +1,9 @@
 // @flow
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import FilesTable from '.';
+import FileTable from '.';
 
-const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+const FileTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const records = [
     {
       program_id: 'PROGRAM_ID_1',
@@ -27,7 +27,7 @@ const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     },
   ];
   return (
-    <FilesTable
+    <FileTable
       submissionInfo={{
         fileName: 'registration_schrodinger.tsv',
         creator: 'Schrodinger Submitter',
@@ -45,8 +45,8 @@ const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       }))}
     >
       Skeleton
-    </FilesTable>
+    </FileTable>
   );
 });
 
-export default FilesTableStories;
+export default FileTableStories;
