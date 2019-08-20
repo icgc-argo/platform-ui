@@ -22,7 +22,7 @@ type FileEntry = {
   isNew: boolean,
   [k: string]: string | number | boolean,
 };
-type FilesStats = {
+type FileStats = {
   totalCount: number,
   newCount: number,
   existingCount: number,
@@ -43,7 +43,7 @@ const StartIcon = (props: { active: boolean, className?: string }) => (
   />
 );
 
-const StatsArea = (props: { stats: FilesStats, submissionInfo: SubmissionInfo }) => {
+const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) => {
   const theme = useTheme();
   const Section = styled('div')`
     display: flex;
@@ -121,7 +121,7 @@ const StatsArea = (props: { stats: FilesStats, submissionInfo: SubmissionInfo })
 
 const FilesTable = (props: {
   records: Array<FileEntry>,
-  stats: FilesStats,
+  stats: FileStats,
   submissionInfo: SubmissionInfo,
 }) => {
   const getColumnWidth = (keyString: string): number => {
