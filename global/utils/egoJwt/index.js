@@ -3,7 +3,6 @@ import jwtDecode from 'jwt-decode';
 import { get, memoize } from 'lodash';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
-import { memoize, isEmpty } from 'lodash';
 
 const TokenUtils = createEgoUtils();
 type EgoJwtData = {

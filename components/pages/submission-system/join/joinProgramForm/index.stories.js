@@ -9,7 +9,7 @@ const FooterStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
   <JoinProgramForm
     programName="Pancreatic Cancer - AU"
     userRole="Program Administrator"
-    onJoinClick={action('onJoinClick')}
+    onSubmit={action('onSubmit')}
     availableInstitutions={[]}
   />
 ));

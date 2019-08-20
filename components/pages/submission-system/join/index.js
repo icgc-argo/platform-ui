@@ -1,15 +1,17 @@
 //@flow
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { css } from 'uikit';
-import SubmissionLayout from '../layout';
-import JoinProgramForm from './joinProgramForm';
-import GET_INVITE from './GET_INVITE.gql';
 import { get } from 'lodash';
+import { useRouter } from 'next/router';
 // $FlowFixMe
 import { ERROR_STATUS_KEY } from 'pages/_error';
+import React from 'react';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
+import SubmissionLayout from '../layout';
+import GET_INVITE from './GET_INVITE.gql';
+import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
+import JoinProgramForm from './joinProgramForm';
+import omit from 'lodash/omit';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { inviteId } = useRouter().query;
@@ -18,10 +20,25 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     variables: { inviteId },
   });
 
+  const [joinProgram] = useMutation(JOIN_PROGRAM);
+
   if (!!error) {
     error[ERROR_STATUS_KEY] = 500;
     throw new Error(error);
   }
+
+  const handleSubmit = async validData => {
+    await joinProgram({
+      variables: {
+        joinProgramInput: {
+          ...omit(validData, 'institutions'),
+          invitationId: inviteId,
+          // TODO: fix the misalignment of ui and api
+          institute: validData.institutions[0],
+        },
+      },
+    });
+  };
 
   return (
     <SubmissionLayout noSidebar>
@@ -41,7 +58,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           <DnaLoader />
         ) : (
           <JoinProgramForm
-            inviteId={inviteId}
+            onSubmit={handleSubmit}
             programName={get(joinProgramInvite, 'program.name')}
             userRole={get(joinProgramInvite, 'user.role')}
           />

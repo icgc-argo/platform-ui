@@ -15,7 +15,7 @@ import Typography from 'uikit/Typography';
 import { set } from 'lodash';
 // $FlowFixMe
 import * as yup from 'yup';
-import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
+/* import JOIN_PROGRAM from './JOIN_PROGRAM.gql'; */
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-apollo-hooks';
 import useFormHook from 'global/hooks/useFormHook';
@@ -101,9 +101,9 @@ const Form = () => {};
 const JoinProgramForm = ({
   programName,
   userRole,
-  inviteId,
+  onSubmit,
 }: {
-  inviteId: string,
+  onSubmit: (data: any) => void,
   programName: string,
   userRole: string,
 }) => {
@@ -118,19 +118,20 @@ const JoinProgramForm = ({
 
   const handleChange = fieldName => ({ target }) => setData({ key: fieldName, val: target.value });
 
-  const [joinProgram] = useMutation(JOIN_PROGRAM, {
-    variables: {
-      joinProgramInput: {
-        invitationId: inviteId,
-        ...data,
-      },
-    },
-  });
+  /* const [joinProgram] = useMutation(JOIN_PROGRAM, {
+   *   variables: {
+   *     joinProgramInput: {
+   *       invitationId: inviteId,
+   *       ...data,
+   *     },
+   *   },
+   * }); */
 
   const submitForm = async () => {
     const validData = await validateForm();
     // TODO
     console.log(validData);
+    onSubmit(validData);
   };
 
   return (
