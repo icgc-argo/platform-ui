@@ -15,10 +15,10 @@ import Typography from 'uikit/Typography';
 import { set } from 'lodash';
 // $FlowFixMe
 import * as yup from 'yup';
-/* import JOIN_PROGRAM from './JOIN_PROGRAM.gql'; */
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-apollo-hooks';
 import useFormHook from 'global/hooks/useFormHook';
+import schema from './validation';
 
 const FormContainer = styled(Container)`
   padding: 30px;
@@ -77,25 +77,6 @@ const ProgramInfoCard = ({ programName, userRole }) => (
   </InfoCard>
 );
 
-const schema = yup.object().shape({
-  institutions: yup
-    .array()
-    .default([])
-    .required(),
-  piFirstName: yup
-    .string()
-    .default('')
-    .required(),
-  piLastName: yup
-    .string()
-    .default('')
-    .required(),
-  department: yup
-    .string()
-    .default('')
-    .required(),
-});
-
 const Form = () => {};
 
 const JoinProgramForm = ({
@@ -117,15 +98,6 @@ const JoinProgramForm = ({
   const handleBlur = fieldKey => _ => validateField({ key: fieldKey });
 
   const handleChange = fieldName => ({ target }) => setData({ key: fieldName, val: target.value });
-
-  /* const [joinProgram] = useMutation(JOIN_PROGRAM, {
-   *   variables: {
-   *     joinProgramInput: {
-   *       invitationId: inviteId,
-   *       ...data,
-   *     },
-   *   },
-   * }); */
 
   const submitForm = async () => {
     const validData = await validateForm();
