@@ -89,7 +89,7 @@ export default function CreateProgramForm({
   },
   onSubmit: (data: any) => any,
 }) {
-  const formData = {
+  const seedFormData = {
     programName: program.name || '',
     shortName: program.shortName || '',
     countries: program.countries || [],
@@ -105,19 +105,22 @@ export default function CreateProgramForm({
     adminLastName: '',
     adminEmail: '',
   };
+
   const isEditing = !isEmpty(program);
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
-  const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook<
-    typeof formData,
-  >({
-    initialFields: formData,
+  const {
+    errors: validationErrors,
+    data: form,
+    setData,
+    validateField,
+    validateForm,
+    touched,
+    hasErrors,
+  } = useFormHook<typeof seedFormData>({
+    initialFields: seedFormData,
     schema: programSchema,
   });
-
-  // TODO: ugly as sin
-  const validationErrors = errors;
-  const form = data;
 
   /* ****************** *
    * On Change Handlers
@@ -507,7 +510,7 @@ export default function CreateProgramForm({
           <Button
             id="button-submit-edit-program-form"
             onClick={submitForm}
-            disabled={isEqual(program, merge({ ...program }, createUpdateProgramInput(formData)))}
+            disabled={isEqual(seedFormData, form)}
           >
             Save
           </Button>
