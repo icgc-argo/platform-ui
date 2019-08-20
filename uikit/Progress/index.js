@@ -25,7 +25,7 @@ const Triangle = props => css`
 `;
 
 const ProgressMarker = styled('div')`
-  width: 70px;
+  width: 100%;
   height: 14px;
   background-color: ${({ theme, state }) => theme.progress.color[state]};
   display: flex;
@@ -58,8 +58,22 @@ const ProgressSection = styled('div')`
 
   /* offset each step for seperator spacing */
   .step {
+    width: 64px;
     text-align: center;
     margin-left: -4px;
+  }
+`;
+
+/* Separator colors - based on state*/
+const Separator = styled('div')`
+  &:before {
+    background-color: ${({ theme, state }) => theme.progress.color[state]};
+    border-left-color: #fff;
+  }
+
+  &:after {
+    background-color: transparent;
+    border-left-color: ${({ theme, state }) => theme.progress.color[state]};
   }
 `;
 
@@ -77,25 +91,12 @@ const getIcon = (state: ProgressStatus) => {
       return <Icon width="10px" height="10px" fill="#fff" name="exclamation" />;
 
     case PROGRESS_STATUS.PENDING:
-      return <Icon fill="#fff" name="ellipses" />;
+      return <Icon width="14px" height="14px" fill="#fff" name="ellipses" />;
 
     case PROGRESS_STATUS.DISABLED:
       return null;
   }
 };
-
-/* Separator colors - based on state*/
-const Separator = styled('div')`
-  &:before {
-    background-color: ${({ theme, state }) => theme.progress.color[state]};
-    border-left-color: #fff;
-  }
-
-  &:after {
-    background-color: transparent;
-    border-left-color: ${({ theme, state }) => theme.progress.color[state]};
-  }
-`;
 
 export const ProgressItem = ({
   state,
