@@ -44,9 +44,10 @@ const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         row: `${i}`,
         isNew: true,
       }))}
-      columns={Object.entries(records[0]).map(([key, value]) => ({
+      tableColumns={Object.entries(records[0]).map(([key, value]) => ({
         accessor: key,
         Header: key,
+        keyString: key,
       }))}
     >
       Skeleton

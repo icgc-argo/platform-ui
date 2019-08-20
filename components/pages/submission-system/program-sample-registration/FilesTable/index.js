@@ -1,5 +1,5 @@
 // @flow
-import type { TableProps } from 'uikit/Table';
+import type { TableProps, TableColumnConfig } from 'uikit/Table';
 
 import React from 'react';
 import sum from 'lodash/sum';
@@ -93,16 +93,26 @@ const StatsArea = (props: { stats: FilesStats }) => {
   );
 };
 
-const FilesTable = (
-  props: TableProps<FileEntry> & {
-    stats: FilesStats,
-    registrationId: string,
-    programId: string,
-    creator: string,
-    createdAt: string,
-    updatedAt: string,
-  },
-) => {
+const FilesTable = (props: {
+  data: Array<FileEntry>,
+  stats: FilesStats,
+  registrationId: string,
+  programId: string,
+  creator: string,
+  createdAt: string,
+  updatedAt: string,
+  tableColumns: Array<
+    TableColumnConfig<FileEntry> & {
+      keyString: string,
+    },
+  >,
+}) => {
+  const getColumnWidth = (c: { keyString: string }): number => {
+    const minWidth = 90;
+    const maxWidth = 230;
+    const magicSpacing = 12;
+    return Math.max(Math.min(maxWidth, c.keyString.length * magicSpacing), minWidth);
+  };
   return (
     <div>
       <StatsArea stats={props.stats} />
@@ -130,7 +140,10 @@ const FilesTable = (
             width: 60,
             Header: <StartIcon active={false} />,
           },
-          ...props.columns,
+          ...props.tableColumns.map(c => ({
+            ...c,
+            width: getColumnWidth(c),
+          })),
         ]}
         data={props.data}
       />
