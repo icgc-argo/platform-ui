@@ -4,7 +4,6 @@ import { styled } from '../';
 import Icon from '../Icon';
 import { css } from '..';
 
-// TODO: flow type from CONST
 export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled';
 
 export const PROGRESS_STATUS = {
@@ -38,10 +37,10 @@ const ProgressSection = styled('div')`
   align-items: flex-end;
 
   /* first and last rounded corners */
-  > div:first-of-type .progress-marker {
+  > div:first-of-type:not(:last-of-type) .progress-marker {
     border-radius: 10px 0 0 10px;
   }
-  > div:last-of-type .progress-marker {
+  > div:last-of-type:not(:first-of-type) .progress-marker {
     border-radius: 0 10px 10px 0;
   }
 
