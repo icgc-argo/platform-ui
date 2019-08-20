@@ -6,48 +6,42 @@ import FilesTable from '.';
 const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const records = [
     {
-      program_id: 'WP-CPMP-US',
-      donor_submitter_id: 'ICGC_0346',
+      program_id: 'PROGRAM_ID_1',
+      donor_submitter_id: 'ICGC_1234',
       gender: 'Female',
-      specimen_submitter_id: '8068578',
+      specimen_submitter_id: '12345',
       specimen_type: 'Solid tissue',
       tumour_normal_designation: 'Normal - tissue adjacent to primary tumour',
-      sample_submitter_id: '8068578',
+      sample_submitter_id: '1234567',
       sample_type: 'Total DNA',
     },
     {
-      program_id: 'WP-CPMP-US',
-      donor_submitter_id: 'ICGC_0346',
+      program_id: 'PROGRAM_ID_2',
+      donor_submitter_id: 'ICGC_1234',
       gender: 'Female',
-      specimen_submitter_id: '8065643',
+      specimen_submitter_id: '67891',
       specimen_type: 'Solid tissue',
       tumour_normal_designation: 'Metastatic tumour - metastasis to distant location',
-      sample_submitter_id: '8065643',
+      sample_submitter_id: '1234567',
       sample_type: 'Total DNA',
     },
   ];
-  const stats = {
-    totalCount: 2,
-    newCount: 2,
-    existingCount: 2,
-  };
   return (
     <FilesTable
-      registrationId="string"
-      programId="string"
-      creator="string"
-      createdAt="string"
-      updatedAt="string"
-      stats={stats}
-      data={records.map((record, i) => ({
+      submissionInfo={{
+        fileName: 'registration_schrodinger.tsv',
+        creator: 'Schrodinger Submitter',
+        createdAt: 'May 20, 2020',
+      }}
+      stats={{
+        totalCount: 2,
+        newCount: 2,
+        existingCount: 2,
+      }}
+      records={records.map((record, i) => ({
         ...record,
         row: `${i}`,
         isNew: true,
-      }))}
-      tableColumns={Object.entries(records[0]).map(([key, value]) => ({
-        accessor: key,
-        Header: key,
-        keyString: key,
       }))}
     >
       Skeleton

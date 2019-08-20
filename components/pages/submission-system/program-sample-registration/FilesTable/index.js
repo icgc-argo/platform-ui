@@ -3,6 +3,7 @@ import type { TableProps, TableColumnConfig } from 'uikit/Table';
 
 import React from 'react';
 import sum from 'lodash/sum';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import Table from 'uikit/Table';
 import Icon from 'uikit/Icon';
@@ -12,6 +13,10 @@ import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { styled } from 'uikit';
 
+const REQUIRED_FILE_ENTRY_FIELDS = {
+  ROW: 'row',
+  IS_NEW: 'isNew',
+};
 type FileEntry = {
   row: string,
   isNew: boolean,
@@ -21,6 +26,11 @@ type FilesStats = {
   totalCount: number,
   newCount: number,
   existingCount: number,
+};
+type SubmissionInfo = {
+  fileName: string,
+  creator: string,
+  createdAt: string,
 };
 
 const StartIcon = (props: { active: boolean, className?: string }) => (
@@ -33,7 +43,7 @@ const StartIcon = (props: { active: boolean, className?: string }) => (
   />
 );
 
-const StatsArea = (props: { stats: FilesStats }) => {
+const StatsArea = (props: { stats: FilesStats, submissionInfo: SubmissionInfo }) => {
   const theme = useTheme();
   const Section = styled('div')`
     display: flex;
@@ -49,7 +59,7 @@ const StatsArea = (props: { stats: FilesStats }) => {
       `}
     >
       <Row>
-        <Col>
+        <Col sm={5}>
           <Typography
             variant="paragraph"
             component="div"
@@ -64,28 +74,44 @@ const StatsArea = (props: { stats: FilesStats }) => {
               <Icon name="chevron_right" fill="grey_1" width="8px" />
             </Section>
             <Section>
-              <StartIcon
-                active
+              <div
                 css={css`
                   margin-right: 5px;
+                  display: flex;
+                  align-items: center;
                 `}
-              />{' '}
+              >
+                <StartIcon active />
+              </div>
               {props.stats.newCount} New
             </Section>
             <Section>
-              <StartIcon
-                active={false}
+              <div
                 css={css`
                   margin-right: 5px;
+                  display: flex;
+                  align-items: center;
                 `}
-              />{' '}
+              >
+                <StartIcon active={false} />
+              </div>
               {props.stats.existingCount} Already Registered
             </Section>
           </Typography>
         </Col>
-        <Col align="end" sm={3}>
-          <Typography variant="default" color="grey">
-            stuff
+        <Col align="end">
+          <Typography variant="paragraph" component="div" color="grey">
+            <Typography variant="default" color="secondary_dark">
+              {props.submissionInfo.fileName}
+            </Typography>{' '}
+            uploaded on{' '}
+            <Typography variant="default" color="secondary_dark">
+              {props.submissionInfo.createdAt}
+            </Typography>{' '}
+            by{' '}
+            <Typography variant="default" color="secondary_dark">
+              {props.submissionInfo.creator}
+            </Typography>
           </Typography>
         </Col>
       </Row>
@@ -94,38 +120,35 @@ const StatsArea = (props: { stats: FilesStats }) => {
 };
 
 const FilesTable = (props: {
-  data: Array<FileEntry>,
+  records: Array<FileEntry>,
   stats: FilesStats,
-  registrationId: string,
-  programId: string,
-  creator: string,
-  createdAt: string,
-  updatedAt: string,
-  tableColumns: Array<
-    TableColumnConfig<FileEntry> & {
-      keyString: string,
-    },
-  >,
+  submissionInfo: SubmissionInfo,
 }) => {
-  const getColumnWidth = (c: { keyString: string }): number => {
+  const getColumnWidth = (keyString: string): number => {
     const minWidth = 90;
     const maxWidth = 230;
     const magicSpacing = 12;
-    return Math.max(Math.min(maxWidth, c.keyString.length * magicSpacing), minWidth);
+    return Math.max(Math.min(maxWidth, keyString.length * magicSpacing), minWidth);
   };
+  const filteredFirstRecord = omit(
+    props.records[0],
+    ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
+      return typeof value === 'string' ? value : '';
+    }),
+  );
   return (
     <div>
-      <StatsArea stats={props.stats} />
+      <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
       <Table
         columns={[
           {
-            id: 'file_number',
+            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
             Cell: ({ original }) => original.row, // we don't know what should be here
             Header: '#',
             width: 60,
           },
           {
-            id: 'isNew',
+            id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
             Cell: ({ original }) => (
               <div
                 css={css`
@@ -140,12 +163,14 @@ const FilesTable = (props: {
             width: 60,
             Header: <StartIcon active={false} />,
           },
-          ...props.tableColumns.map(c => ({
-            ...c,
-            width: getColumnWidth(c),
+          ...Object.entries(filteredFirstRecord).map(([key]) => ({
+            id: key,
+            accessor: key,
+            Header: key,
+            width: getColumnWidth(key),
           })),
         ]}
-        data={props.data}
+        data={props.records}
       />
     </div>
   );
