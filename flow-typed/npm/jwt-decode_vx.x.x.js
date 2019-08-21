@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "jwt-decode" {
+declare module 'jwt-decode' {
   declare module.exports: any;
 }
 
@@ -22,60 +22,60 @@ declare module "jwt-decode" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "jwt-decode/build/jwt-decode" {
+declare module 'jwt-decode/build/jwt-decode' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/build/jwt-decode.min" {
+declare module 'jwt-decode/build/jwt-decode.min' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/Gruntfile" {
+declare module 'jwt-decode/Gruntfile' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/lib/atob" {
+declare module 'jwt-decode/lib/atob' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/lib/base64_url_decode" {
+declare module 'jwt-decode/lib/base64_url_decode' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/lib/index" {
+declare module 'jwt-decode/lib/index' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/standalone" {
+declare module 'jwt-decode/standalone' {
   declare module.exports: any;
 }
 
-declare module "jwt-decode/test/tests" {
+declare module 'jwt-decode/test/tests' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "jwt-decode/build/jwt-decode.js" {
-  declare module.exports: $Exports<"jwt-decode/build/jwt-decode">;
+declare module 'jwt-decode/build/jwt-decode.js' {
+  declare module.exports: $Exports<'jwt-decode/build/jwt-decode'>;
 }
-declare module "jwt-decode/build/jwt-decode.min.js" {
-  declare module.exports: $Exports<"jwt-decode/build/jwt-decode.min">;
+declare module 'jwt-decode/build/jwt-decode.min.js' {
+  declare module.exports: $Exports<'jwt-decode/build/jwt-decode.min'>;
 }
-declare module "jwt-decode/Gruntfile.js" {
-  declare module.exports: $Exports<"jwt-decode/Gruntfile">;
+declare module 'jwt-decode/Gruntfile.js' {
+  declare module.exports: $Exports<'jwt-decode/Gruntfile'>;
 }
-declare module "jwt-decode/lib/atob.js" {
-  declare module.exports: $Exports<"jwt-decode/lib/atob">;
+declare module 'jwt-decode/lib/atob.js' {
+  declare module.exports: $Exports<'jwt-decode/lib/atob'>;
 }
-declare module "jwt-decode/lib/base64_url_decode.js" {
-  declare module.exports: $Exports<"jwt-decode/lib/base64_url_decode">;
+declare module 'jwt-decode/lib/base64_url_decode.js' {
+  declare module.exports: $Exports<'jwt-decode/lib/base64_url_decode'>;
 }
-declare module "jwt-decode/lib/index.js" {
-  declare module.exports: $Exports<"jwt-decode/lib/index">;
+declare module 'jwt-decode/lib/index.js' {
+  declare module.exports: $Exports<'jwt-decode/lib/index'>;
 }
-declare module "jwt-decode/standalone.js" {
-  declare module.exports: $Exports<"jwt-decode/standalone">;
+declare module 'jwt-decode/standalone.js' {
+  declare module.exports: $Exports<'jwt-decode/standalone'>;
 }
-declare module "jwt-decode/test/tests.js" {
-  declare module.exports: $Exports<"jwt-decode/test/tests">;
+declare module 'jwt-decode/test/tests.js' {
+  declare module.exports: $Exports<'jwt-decode/test/tests'>;
 }

@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "next-cookies" {
+declare module 'next-cookies' {
   declare module.exports: any;
 }
 
@@ -22,18 +22,18 @@ declare module "next-cookies" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "next-cookies/dist/next-cookies.browser" {
+declare module 'next-cookies/dist/next-cookies.browser' {
   declare module.exports: any;
 }
 
-declare module "next-cookies/next-cookies.node" {
+declare module 'next-cookies/next-cookies.node' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "next-cookies/dist/next-cookies.browser.js" {
-  declare module.exports: $Exports<"next-cookies/dist/next-cookies.browser">;
+declare module 'next-cookies/dist/next-cookies.browser.js' {
+  declare module.exports: $Exports<'next-cookies/dist/next-cookies.browser'>;
 }
-declare module "next-cookies/next-cookies.node.js" {
-  declare module.exports: $Exports<"next-cookies/next-cookies.node">;
+declare module 'next-cookies/next-cookies.node.js' {
+  declare module.exports: $Exports<'next-cookies/next-cookies.node'>;
 }

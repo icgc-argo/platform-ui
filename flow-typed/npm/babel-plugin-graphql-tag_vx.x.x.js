@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "babel-plugin-graphql-tag" {
+declare module 'babel-plugin-graphql-tag' {
   declare module.exports: any;
 }
 
@@ -22,25 +22,25 @@ declare module "babel-plugin-graphql-tag" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "babel-plugin-graphql-tag/babel.config" {
+declare module 'babel-plugin-graphql-tag/babel.config' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-graphql-tag/dist/index" {
+declare module 'babel-plugin-graphql-tag/dist/index' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-graphql-tag/jest.config" {
+declare module 'babel-plugin-graphql-tag/jest.config' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "babel-plugin-graphql-tag/babel.config.js" {
-  declare module.exports: $Exports<"babel-plugin-graphql-tag/babel.config">;
+declare module 'babel-plugin-graphql-tag/babel.config.js' {
+  declare module.exports: $Exports<'babel-plugin-graphql-tag/babel.config'>;
 }
-declare module "babel-plugin-graphql-tag/dist/index.js" {
-  declare module.exports: $Exports<"babel-plugin-graphql-tag/dist/index">;
+declare module 'babel-plugin-graphql-tag/dist/index.js' {
+  declare module.exports: $Exports<'babel-plugin-graphql-tag/dist/index'>;
 }
-declare module "babel-plugin-graphql-tag/jest.config.js" {
-  declare module.exports: $Exports<"babel-plugin-graphql-tag/jest.config">;
+declare module 'babel-plugin-graphql-tag/jest.config.js' {
+  declare module.exports: $Exports<'babel-plugin-graphql-tag/jest.config'>;
 }

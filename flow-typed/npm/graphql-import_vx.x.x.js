@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "graphql-import" {
+declare module 'graphql-import' {
   declare module.exports: any;
 }
 
@@ -22,25 +22,25 @@ declare module "graphql-import" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "graphql-import/dist/definition" {
+declare module 'graphql-import/dist/definition' {
   declare module.exports: any;
 }
 
-declare module "graphql-import/dist/index" {
+declare module 'graphql-import/dist/index' {
   declare module.exports: any;
 }
 
-declare module "graphql-import/dist/index.test" {
+declare module 'graphql-import/dist/index.test' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "graphql-import/dist/definition.js" {
-  declare module.exports: $Exports<"graphql-import/dist/definition">;
+declare module 'graphql-import/dist/definition.js' {
+  declare module.exports: $Exports<'graphql-import/dist/definition'>;
 }
-declare module "graphql-import/dist/index.js" {
-  declare module.exports: $Exports<"graphql-import/dist/index">;
+declare module 'graphql-import/dist/index.js' {
+  declare module.exports: $Exports<'graphql-import/dist/index'>;
 }
-declare module "graphql-import/dist/index.test.js" {
-  declare module.exports: $Exports<"graphql-import/dist/index.test">;
+declare module 'graphql-import/dist/index.test.js' {
+  declare module.exports: $Exports<'graphql-import/dist/index.test'>;
 }

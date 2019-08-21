@@ -1,0 +1,5 @@
+mutation($joinProgramInput: JoinProgramInput!) {
+  joinProgram(join: $joinProgramInput) {
+    inviteAcceptedAt
+  }
+}
