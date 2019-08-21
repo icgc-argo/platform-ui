@@ -1,5 +1,5 @@
 import { createPage } from 'global/utils/pages';
-import RegisterProgramPage from 'components/pages/submission-system/register';
+import JoinProgramPage from 'components/pages/submission-system/join';
 
 export default createPage({
   isPublic: true,
@@ -9,4 +9,4 @@ export default createPage({
   getInitialProps: async ({ egoJwt, asPath, query }) => {
     return {};
   },
-})(RegisterProgramPage);
+})(JoinProgramPage);
