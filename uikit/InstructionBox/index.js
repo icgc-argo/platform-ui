@@ -30,7 +30,7 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
     !['xs'].includes(size)
       ? css`
           border-bottom: solid 1px ${theme.colors.grey_2};
-          &:not(:first-child) {
+          &:not(:first-of-type) {
             border-left: solid 1px ${theme.colors.grey_2};
           }
         `
