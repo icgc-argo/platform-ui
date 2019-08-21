@@ -22,6 +22,7 @@ import { useToaster } from 'global/hooks/toaster';
 import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 import useCommonToasters from 'components/useCommonToasters';
+import { PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 const createUserInput = ({
   data,
@@ -53,22 +54,55 @@ const createUpdateProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+type TabValue = 'profile' | 'users' | '';
+type PageQueryObject = {
+  shortName: string,
+  tab?: TabValue,
+};
+
+const usePageQuery = (): PageQueryObject => {
+  const router = useRouter();
+  const { tab, shortName } = router.query;
+  return { tab, shortName };
+};
+
+const useTabState = () => {
+  const router = useRouter();
+  const { tab: defaultTab, shortName: programShortName } = usePageQuery();
+  const TABS = {
+    PROFILE: ('profile': TabValue),
+    USERS: ('users': TabValue),
+    NONE: ('': TabValue),
+  };
+  const [activeTab, setActiveTab] = React.useState<TabValue>(
+    defaultTab === TABS.PROFILE ? TABS.PROFILE : TABS.USERS,
+  );
+  React.useEffect(() => {
+    if (router.pathname) {
+      window.history.replaceState(
+        '',
+        '',
+        `${router.pathname.replace(PROGRAM_SHORT_NAME_PATH, programShortName)}?tab=${
+          TABS[activeTab.toUpperCase()]
+        }`,
+      );
+    }
+  }, [activeTab]);
+  return { activeTab, setActiveTab, TABS };
+};
+
 export default () => {
   const router = useRouter();
   const { data: egoTokenData, token } = useAuthContext() || {};
   const isDcc = token ? isDccMember(token) : false;
 
-  const { shortName: programShortName } = router.query;
-  const { tab: defaultTab } = router.query;
+  const { shortName: programShortName } = usePageQuery();
 
   const { data: { program } = {}, loading, errors, refetch } = useQuery(PROGRAM_QUERY, {
     variables: { shortName: programShortName },
   });
 
-  const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(
-    defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
-  );
+  const { activeTab, setActiveTab, TABS } = useTabState();
 
   const toaster = useToaster();
   const commonToasters = useCommonToasters();
@@ -82,7 +116,7 @@ export default () => {
 
   function handleCancelClick() {
     // reset the form
-    setActiveTab('');
+    setActiveTab(TABS.NONE);
     setTimeout(() => {
       setActiveTab(TABS.PROFILE);
     });
@@ -115,8 +149,8 @@ export default () => {
           width: 100%;
         `}
       >
-        <Tab value="USERS" label="Users" />
-        <Tab value="PROFILE" label="Profile" />
+        <Tab value={TABS.USERS} label="Users" />
+        <Tab value={TABS.PROFILE} label="Profile" />
         <Tab
           empty
           css={css`
