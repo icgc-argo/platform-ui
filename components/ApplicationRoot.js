@@ -68,6 +68,25 @@ const ToastDisplayArea = ({ toaster }: { toaster: $Call<typeof useToastState, vo
   </div>
 );
 
+const ToastProvider = ({ children }) => {
+  const toaster = useToastState();
+  return (
+    <ToasterContext.Provider value={toaster}>
+      {children}
+      <ToastDisplayArea toaster={toaster} />
+      <div
+        css={css`
+          position: fixed;
+          left: 0px;
+          top: 0px;
+          z-index: 9999;
+        `}
+        ref={modalPortalRef}
+      />
+    </ToasterContext.Provider>
+  );
+};
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -79,8 +98,6 @@ export default function ApplicationRoot({
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
 }) {
-  const toaster = useToastState();
-
   const apolloClient = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
@@ -116,29 +133,15 @@ export default function ApplicationRoot({
         `}
       </style>
       <AuthProvider egoJwt={egoJwt}>
-        <ToasterContext.Provider value={toaster}>
-          <PageContext.Provider value={pageContext}>
-            <ApolloProvider client={apolloClient}>
-              <ApolloHooksProvider client={apolloClient}>
-                <ThemeProvider>
-                  <>
-                    {children}
-                    <ToastDisplayArea toaster={toaster} />
-                    <div
-                      css={css`
-                        position: fixed;
-                        left: 0px;
-                        top: 0px;
-                        z-index: 9999;
-                      `}
-                      ref={modalPortalRef}
-                    />
-                  </>
-                </ThemeProvider>
-              </ApolloHooksProvider>
-            </ApolloProvider>
-          </PageContext.Provider>
-        </ToasterContext.Provider>
+        <ApolloProvider client={apolloClient}>
+          <ApolloHooksProvider client={apolloClient}>
+            <PageContext.Provider value={pageContext}>
+              <ThemeProvider>
+                <ToastProvider>{children}</ToastProvider>
+              </ThemeProvider>
+            </PageContext.Provider>
+          </ApolloHooksProvider>
+        </ApolloProvider>
       </AuthProvider>
     </>
   );
