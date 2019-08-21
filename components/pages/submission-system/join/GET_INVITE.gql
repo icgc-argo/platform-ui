@@ -2,6 +2,7 @@ query($inviteId: ID!) {
   joinProgramInvite(id: $inviteId) {
     program {
       name
+      shortName
     }
     user {
       role
