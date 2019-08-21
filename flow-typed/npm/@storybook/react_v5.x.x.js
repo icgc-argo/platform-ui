@@ -3,32 +3,21 @@
 
 type NodeModule = typeof module;
 
-declare module "@storybook/react" {
+declare module '@storybook/react' {
   declare type Context = { kind: string, story: string };
-  declare type Renderable =
-    | string
-    | number
-    | React$Element<any>
-    | Iterable<?Renderable>;
+  declare type Renderable = string | number | React$Element<any> | Iterable<?Renderable>;
   declare type RenderCallback = (context: Context) => Renderable;
   declare type RenderFunction = () => Renderable;
 
-  declare type StoryDecorator = (
-    story: RenderFunction,
-    context: Context
-  ) => Renderable;
+  declare type StoryDecorator = (story: RenderFunction, context: Context) => Renderable;
 
   declare type DecoratorParameters = {
-    [key: string]: any
+    [key: string]: any,
   };
 
   declare interface Story {
     +kind: string;
-    add(
-      storyName: string,
-      callback: RenderCallback,
-      parameters?: DecoratorParameters
-    ): Story;
+    add(storyName: string, callback: RenderCallback, parameters?: DecoratorParameters): Story;
     addDecorator(decorator: StoryDecorator): Story;
     addParameters(parameters: DecoratorParameters): Story;
   }

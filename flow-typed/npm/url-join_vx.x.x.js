@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "url-join" {
+declare module 'url-join' {
   declare module.exports: any;
 }
 
@@ -22,18 +22,18 @@ declare module "url-join" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "url-join/lib/url-join" {
+declare module 'url-join/lib/url-join' {
   declare module.exports: any;
 }
 
-declare module "url-join/test/tests" {
+declare module 'url-join/test/tests' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "url-join/lib/url-join.js" {
-  declare module.exports: $Exports<"url-join/lib/url-join">;
+declare module 'url-join/lib/url-join.js' {
+  declare module.exports: $Exports<'url-join/lib/url-join'>;
 }
-declare module "url-join/test/tests.js" {
-  declare module.exports: $Exports<"url-join/test/tests">;
+declare module 'url-join/test/tests.js' {
+  declare module.exports: $Exports<'url-join/test/tests'>;
 }

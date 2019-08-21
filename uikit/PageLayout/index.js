@@ -17,19 +17,21 @@ export const Panel = styled('div')`
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
 `;
 
-export const PageBody = styled('div')`
-  display: grid;
-  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
-`;
-
 export const PageContent = styled('div')`
   position: relative;
   min-height: 600px;
-  ${({ noSidebar }) =>
-    !noSidebar &&
-    css`
-      max-width: calc(100vw - 304px);
-    `}
+`;
+
+export const PageBody = styled('div')`
+  display: grid;
+  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
+  & ${PageContent} {
+    ${({ noSidebar }) =>
+      !noSidebar &&
+      css`
+        max-width: calc(100vw - 304px);
+      `}
+  }
 `;
 
 export const ContentHeader = styled('div')`

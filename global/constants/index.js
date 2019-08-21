@@ -11,8 +11,7 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
 export const PROGRAM_USER_ROLES = [
   { content: 'Administrator', value: 'ADMIN' },
   { content: 'Collaborator', value: 'COLLABORATOR' },
-  { content: 'Curator', value: 'CURATOR' },
-  { content: 'Submitter', value: 'SUBMITTER' },
+  { content: 'Data Submitter', value: 'SUBMITTER' },
 ];
 
 export const CANCER_TYPES = [

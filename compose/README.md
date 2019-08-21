@@ -34,11 +34,13 @@ $ make add-admin EMAIL=<your_gmail_here>
 ### Stopping and Cleanup
 
 To stop the running containers without deleting data:
+
 ```bash
 $ make stop
 ```
 
 To delete all volumes as well:
+
 ```bash
 $ make nuke
 ```

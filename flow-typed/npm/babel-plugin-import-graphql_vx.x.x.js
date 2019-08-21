@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "babel-plugin-import-graphql" {
+declare module 'babel-plugin-import-graphql' {
   declare module.exports: any;
 }
 
@@ -22,54 +22,46 @@ declare module "babel-plugin-import-graphql" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "babel-plugin-import-graphql/build/constants" {
+declare module 'babel-plugin-import-graphql/build/constants' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-import-graphql/build/customImport" {
+declare module 'babel-plugin-import-graphql/build/customImport' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-import-graphql/build/errorMessages" {
+declare module 'babel-plugin-import-graphql/build/errorMessages' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-import-graphql/build/index" {
+declare module 'babel-plugin-import-graphql/build/index' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-import-graphql/build/multiOp" {
+declare module 'babel-plugin-import-graphql/build/multiOp' {
   declare module.exports: any;
 }
 
-declare module "babel-plugin-import-graphql/build/requireGql" {
+declare module 'babel-plugin-import-graphql/build/requireGql' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "babel-plugin-import-graphql/build/constants.js" {
-  declare module.exports: $Exports<
-    "babel-plugin-import-graphql/build/constants"
-  >;
+declare module 'babel-plugin-import-graphql/build/constants.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/constants'>;
 }
-declare module "babel-plugin-import-graphql/build/customImport.js" {
-  declare module.exports: $Exports<
-    "babel-plugin-import-graphql/build/customImport"
-  >;
+declare module 'babel-plugin-import-graphql/build/customImport.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/customImport'>;
 }
-declare module "babel-plugin-import-graphql/build/errorMessages.js" {
-  declare module.exports: $Exports<
-    "babel-plugin-import-graphql/build/errorMessages"
-  >;
+declare module 'babel-plugin-import-graphql/build/errorMessages.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/errorMessages'>;
 }
-declare module "babel-plugin-import-graphql/build/index.js" {
-  declare module.exports: $Exports<"babel-plugin-import-graphql/build/index">;
+declare module 'babel-plugin-import-graphql/build/index.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/index'>;
 }
-declare module "babel-plugin-import-graphql/build/multiOp.js" {
-  declare module.exports: $Exports<"babel-plugin-import-graphql/build/multiOp">;
+declare module 'babel-plugin-import-graphql/build/multiOp.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/multiOp'>;
 }
-declare module "babel-plugin-import-graphql/build/requireGql.js" {
-  declare module.exports: $Exports<
-    "babel-plugin-import-graphql/build/requireGql"
-  >;
+declare module 'babel-plugin-import-graphql/build/requireGql.js' {
+  declare module.exports: $Exports<'babel-plugin-import-graphql/build/requireGql'>;
 }

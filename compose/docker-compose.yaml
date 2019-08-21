@@ -5,7 +5,7 @@ services:
   # Ego
   #####################################################
   ego-db:
-    image: "${POSTGRES_IMAGE}"
+    image: '${POSTGRES_IMAGE}'
     environment:
       PGPORT: 5432
       POSTGRES_DB: ego
@@ -14,7 +14,7 @@ services:
     ports:
       - 18888:5432
   ego-api:
-    image: "${EGO_IMAGE}"
+    image: '${EGO_IMAGE}'
     depends_on:
       - ego-db
     volumes:
@@ -22,24 +22,24 @@ services:
     environment:
       SERVER_PORT: 8088
       SERVER_MANAGEMENT_PORT: 8089
-      SPRING_PROFILES_ACTIVE: "auth"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://ego-db:5432/ego?stringtype=unspecified"
+      SPRING_PROFILES_ACTIVE: 'auth'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://ego-db:5432/ego?stringtype=unspecified'
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_FLYWAY_ENABLED: "true"
-      SERVER_SERVLET_CONTEXT_PATH: "/api"
-      SPRING_FLYWAY_LOCATIONS: "classpath:flyway/sql,classpath:db/migration,filesystem:/ego_boostrap"
-      GOOGLE_CLIENT_CLIENTID: "${GOOGLE_CLIENT_CLIENTID}"
-      GOOGLE_CLIENT_CLIENTSECRET: "${GOOGLE_CLIENT_CLIENTSECRET}"
+      SPRING_FLYWAY_ENABLED: 'true'
+      SERVER_SERVLET_CONTEXT_PATH: '/api'
+      SPRING_FLYWAY_LOCATIONS: 'classpath:flyway/sql,classpath:db/migration,filesystem:/ego_boostrap'
+      GOOGLE_CLIENT_CLIENTID: '${GOOGLE_CLIENT_CLIENTID}'
+      GOOGLE_CLIENT_CLIENTSECRET: '${GOOGLE_CLIENT_CLIENTSECRET}'
     ports:
       - 8088:8088
       - 50052:50051
   ego-ui:
-    image: "${EGO_UI_IMAGE}"
+    image: '${EGO_UI_IMAGE}'
     depends_on:
       - ego-api
     environment:
-      REACT_APP_API: "http://localhost:8088/api"
+      REACT_APP_API: 'http://localhost:8088/api'
     ports:
       - 3501:80
 
@@ -47,7 +47,7 @@ services:
   # Program Service
   #####################################################
   program-db:
-    image: "${POSTGRES_IMAGE}"
+    image: '${POSTGRES_IMAGE}'
     environment:
       PGPORT: 5432
       POSTGRES_DB: program-db
@@ -56,23 +56,23 @@ services:
     ports:
       - 18889:5432
   program-service:
-    image: "${PROGRAM_SERVICE_IMAGE}"
+    image: '${PROGRAM_SERVICE_IMAGE}'
     restart: always
     depends_on:
       - ego-api
       - ego-ui
       - program-db
     environment:
-      SPRING_PROFILES_ACTIVE: "auth"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://program-db:5432/program-db?stringtype=unspecified"
+      SPRING_PROFILES_ACTIVE: 'auth'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://program-db:5432/program-db?stringtype=unspecified'
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_FLYWAY_ENABLED: "true"
-      APP_EGO_URL: "http://ego-api:8088/api"
-      APP_EGO_CLIENT_ID: "program"
-      APP_EGO_CLIENT_SECRET: "programsecret"
-      APP_MAIL_ENABLED: "false"
-      APP_DCC_ADMIN_PERMISSION: "PROGRAMSERVICE.WRITE"
+      SPRING_FLYWAY_ENABLED: 'true'
+      APP_EGO_URL: 'http://ego-api:8088/api'
+      APP_EGO_CLIENT_ID: 'program'
+      APP_EGO_CLIENT_SECRET: 'programsecret'
+      APP_MAIL_ENABLED: 'false'
+      APP_DCC_ADMIN_PERMISSION: 'PROGRAMSERVICE.WRITE'
     ports:
       - 9082:8082
       - 50051:50051
@@ -81,7 +81,7 @@ services:
   # ARGO Platform - GraphQL API Gateway
   #####################################################
   gateway:
-    image: "${GATEWAY_IMAGE}"
+    image: '${GATEWAY_IMAGE}'
     depends_on:
       - ego-api
       - program-service
@@ -97,7 +97,7 @@ services:
   # ARGO Platform - Platform UI
   #####################################################
   platform:
-    image: "${PLATFORM_UI_IMAGE}"
+    image: '${PLATFORM_UI_IMAGE}'
     depends_on:
       - gateway
     environment:
@@ -106,5 +106,3 @@ services:
       EGO_CLIENT_ID: platform
     ports:
       - 8080:8080
-      
-      

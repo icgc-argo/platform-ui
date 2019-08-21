@@ -13,7 +13,7 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "@babel/plugin-proposal-optional-chaining" {
+declare module '@babel/plugin-proposal-optional-chaining' {
   declare module.exports: any;
 }
 
@@ -22,13 +22,11 @@ declare module "@babel/plugin-proposal-optional-chaining" {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module "@babel/plugin-proposal-optional-chaining/lib/index" {
+declare module '@babel/plugin-proposal-optional-chaining/lib/index' {
   declare module.exports: any;
 }
 
 // Filename aliases
-declare module "@babel/plugin-proposal-optional-chaining/lib/index.js" {
-  declare module.exports: $Exports<
-    "@babel/plugin-proposal-optional-chaining/lib/index"
-  >;
+declare module '@babel/plugin-proposal-optional-chaining/lib/index.js' {
+  declare module.exports: $Exports<'@babel/plugin-proposal-optional-chaining/lib/index'>;
 }

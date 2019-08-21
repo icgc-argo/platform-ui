@@ -3,13 +3,12 @@
 import * as yup from 'yup';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';
 
-export type RoleKey = 'ADMIN' | 'CURATOR' | 'COLLABORATOR' | 'SUBMITTER';
+export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
 
 export const RoleDisplayName: { [key: RoleKey]: string } = {
   ADMIN: 'Administrator',
-  CURATOR: 'Curator',
   COLLABORATOR: 'Collaborator',
-  SUBMITTER: 'Submitter',
+  SUBMITTER: 'Data Submitter',
 };
 
 export const UserModel = {

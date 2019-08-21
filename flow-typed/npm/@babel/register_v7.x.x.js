@@ -1,12 +1,8 @@
 // flow-typed signature: 5934458d8287c23337a0363563a548f9
 // flow-typed version: b77688cf5d/@babel/register_v7.x.x/flow_>=v0.30.x
 
-declare module "@babel/register" {
-  declare type Ignore =
-    | boolean
-    | string
-    | RegExp
-    | ((filename: string) => boolean);
+declare module '@babel/register' {
+  declare type Ignore = boolean | string | RegExp | ((filename: string) => boolean);
   declare type Options = {|
     ast?: boolean,
     auxiliaryCommentAfter?: ?string,
@@ -14,7 +10,7 @@ declare module "@babel/register" {
     babelrc?: boolean,
     code?: boolean,
     comments?: boolean,
-    compact?: "auto" | boolean,
+    compact?: 'auto' | boolean,
     configFile?: string | boolean,
     env?: Object,
     extends?: ?string,
@@ -35,24 +31,18 @@ declare module "@babel/register" {
     plugins?: Array<[string, Object] | string>,
     presets?: Array<string>,
     retainLines?: boolean,
-    resolveModuleSource?:
-      | null
-      | ((source: string, filename: string) => boolean),
+    resolveModuleSource?: null | ((source: string, filename: string) => boolean),
     shouldPrintComment?: null | ((commentContents: string) => string),
     sourceFileName?: string,
-    sourceMaps?: boolean | "inline" | "both",
+    sourceMaps?: boolean | 'inline' | 'both',
     sourceMapTarget?: string,
     sourceRoot?: string,
-    sourceType?: "script" | "module",
+    sourceType?: 'script' | 'module',
     wrapPluginVisitorMethod?:
       | null
-      | ((
-          pluginAlias: string,
-          visitorType: string,
-          callback: Function
-        ) => boolean),
+      | ((pluginAlias: string, visitorType: string, callback: Function) => boolean),
     extensions?: Array<string>,
-    cache?: boolean
+    cache?: boolean,
   |};
 
   declare module.exports: (options?: Options) => void;
