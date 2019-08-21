@@ -1,4 +1,5 @@
 //@flow
+import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
 import programsImage from 'static/programs.svg';
@@ -12,12 +13,6 @@ import FormHelperText from 'uikit/form/FormHelperText';
 import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import Typography from 'uikit/Typography';
-import { set } from 'lodash';
-// $FlowFixMe
-import * as yup from 'yup';
-import { useRouter } from 'next/router';
-import { useMutation } from 'react-apollo-hooks';
-import useFormHook from 'global/hooks/useFormHook';
 import schema from './validation';
 
 const FormContainer = styled(Container)`
