@@ -54,7 +54,7 @@ const createUpdateProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
-type TabValue = 'profile' | 'users' | '';
+type TabValue = 'profile' | 'users';
 type PageQueryObject = {
   shortName: string,
   tab?: TabValue,
@@ -72,7 +72,6 @@ const useTabState = () => {
   const TABS = {
     PROFILE: ('profile': TabValue),
     USERS: ('users': TabValue),
-    NONE: ('': TabValue),
   };
   const [activeTab, setActiveTab] = React.useState<TabValue>(
     defaultTab === TABS.PROFILE ? TABS.PROFILE : TABS.USERS,
@@ -113,14 +112,6 @@ export default () => {
 
   const [showModal, setShowModal] = React.useState(false);
   const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
-
-  function handleCancelClick() {
-    // reset the form
-    setActiveTab(TABS.NONE);
-    setTimeout(() => {
-      setActiveTab(TABS.PROFILE);
-    });
-  }
 
   const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
   const onSubmit = async data => {
@@ -190,11 +181,11 @@ export default () => {
               <ProgramForm
                 program={program}
                 onSubmit={onSubmit}
-                leftFooterComponent={
-                  <Button variant="text" onClick={handleCancelClick}>
+                LeftFooterComponent={({ formModel }) => (
+                  <Button variant="text" onClick={() => formModel.reset()}>
                     Cancel
                   </Button>
-                }
+                )}
               />
             )}
           </div>
