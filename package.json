@@ -7,7 +7,7 @@
     "dev-ui": "node index.js",
     "build": "next build",
     "start-prod": "npm run build && node index.js",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "flow": "flow",
     "flow-typed": "flow-typed",
