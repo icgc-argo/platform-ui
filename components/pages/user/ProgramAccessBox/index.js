@@ -33,6 +33,18 @@ type T_ProgramTableProgram = $Exact<{
 }>;
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { token } = useAuthContext() || {};
+  const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
+    <Link
+      href={
+        isDccMember(token)
+          ? PROGRAMS_LIST_PATH
+          : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
+      }
+    >
+      <UikitLink>{original.shortName}</UikitLink>
+    </Link>
+  );
+
   return (
     <Table
       sortable={false}
@@ -43,17 +55,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           Header: 'Program Name',
           accessor: 'shortName',
           maxWidth: 150,
-          Cell: ({ original }: { original: T_ProgramTableProgram }) => (
-            <Link
-              href={
-                isDccMember(token)
-                  ? PROGRAMS_LIST_PATH
-                  : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
-              }
-            >
-              <UikitLink>{original.shortName}</UikitLink>
-            </Link>
-          ),
+          Cell: ProgramNameCell,
         },
         { Header: 'Role', accessor: 'role', maxWidth: 170 },
         { Header: 'Permissions', accessor: 'permissions' },
