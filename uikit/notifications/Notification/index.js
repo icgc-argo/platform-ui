@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -56,7 +57,8 @@ const Notification = ({
   onInteraction = ({ type, event }) => {},
   noShadow = false,
   ...otherProps
-}) => {
+}: /** @todo: actually type this */
+any) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
   const titleTypographyVariant = {
@@ -161,8 +163,8 @@ export const NOTIFICATION_INTERACTION = Object.freeze({
 });
 
 export const NOTIFICATION_SIZES = Object.freeze({
-  MD: 'md',
-  SM: 'sm',
+  MD: 'MD',
+  SM: 'SM',
 });
 
 Notification.propTypes = {

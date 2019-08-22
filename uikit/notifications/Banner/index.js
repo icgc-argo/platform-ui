@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import Notification, {
   NOTIFICATION_INTERACTION,
@@ -6,10 +7,19 @@ import Notification, {
   NOTIFICATION_SIZES,
 } from '../Notification';
 
-/*
- * Please edit me!
- */
-const Banner = ({ title, content, variant, size }) => (
+export const BANNER_VARIANTS = NOTIFICATION_VARIANTS;
+export const BANNER_SIZE = NOTIFICATION_SIZES;
+const Banner = ({
+  title,
+  content,
+  variant,
+  size,
+}: {
+  title?: React.Node,
+  content?: React.Node,
+  variant?: $Keys<typeof BANNER_VARIANTS>,
+  size?: $Keys<typeof BANNER_SIZE>,
+}) => (
   <Notification
     noShadow
     interactionType={NOTIFICATION_INTERACTION.NONE}
@@ -19,20 +29,5 @@ const Banner = ({ title, content, variant, size }) => (
     size={size}
   />
 );
-export const BANNER_VARIANTS = NOTIFICATION_VARIANTS;
-export const BANNER_SIZE = NOTIFICATION_SIZES;
-
-Banner.propTypes = {
-  title: PropTypes.node,
-  content: PropTypes.node,
-  variant: PropTypes.oneOf([
-    BANNER_VARIANTS.INFO,
-    BANNER_VARIANTS.SUCCESS,
-    BANNER_VARIANTS.WARNING,
-    BANNER_VARIANTS.ERROR,
-    ,
-  ]),
-  size: PropTypes.oneOf([BANNER_SIZE.MD, BANNER_SIZE.SM]),
-};
 
 export default Banner;
