@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
@@ -11,7 +12,7 @@ import Instructions from './Instructions';
 import Container from 'uikit/Container';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
-import FilesTable from './FilesTable';
+import FileTable from './FileTable';
 import Button, { BUTTON_VARIANTS } from 'uikit/Button';
 
 export default function ProgramIDRegistration() {
