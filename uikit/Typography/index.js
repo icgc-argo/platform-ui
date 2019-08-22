@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
@@ -39,34 +40,34 @@ const createStyledDomComponent = memoize(
 
 const Typography = ({
   variant = 'paragraph',
-  component: domComponentName = null,
+  component: domComponentName,
   bold = false,
-  color = null,
+  color,
   ...rest
+}: {
+  /**
+   * a typography as defined in theme.typography
+   */
+  variant?: $Keys<typeof defaultTheme.typography>,
+  /**
+   * could be either an html tag name, or a react component
+   */
+  component?: string,
+  bold?: boolean,
+  /**
+   * could be a theme colorname, or css color
+   */
+  color?: string,
 }) => {
   const theme = useTheme();
-  const componentMap = createTypographyComponentMapFromTheme(theme);
+  const componentMap: {
+    [k: string]: any,
+  } = createTypographyComponentMapFromTheme(theme);
   const Component = domComponentName
     ? createDomComponent(domComponentName, componentMap, variant)
     : componentMap[variant];
   const StyledText = createStyledDomComponent(Component);
   return <StyledText {...rest} bold={bold} color={color} />;
-};
-
-Typography.propTypes = {
-  /**
-   * a typography as defined in theme.typography
-   */
-  variant: PropTypes.oneOf(Object.keys(defaultTheme.typography)),
-  /**
-   * could be either an html tag name, or a react component
-   */
-  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  bold: PropTypes.bool,
-  /**
-   * could be a theme colorname, or css color
-   */
-  color: PropTypes.oneOf(Object.keys(defaultTheme.colors)),
 };
 
 export default Typography;
