@@ -18,7 +18,9 @@
     "test-uikit": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
     "test": "NODE_PATH=./ mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
     "test:watch": "NODE_PATH=./ mocha --watch --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
-    "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js"
+    "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js",
+    "gitmoji-config": "gitmoji -g",
+    "commit": "gitmoji -c"
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
@@ -92,6 +94,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.0.1",
+    "gitmoji-cli": "^1.9.4",
     "graphql-tools": "^4.0.4",
     "husky": "^2.2.0",
     "inquirer": "^6.3.1",
