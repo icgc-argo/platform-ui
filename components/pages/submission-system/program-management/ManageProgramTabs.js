@@ -181,7 +181,7 @@ export default () => {
               <ProgramForm
                 program={program}
                 onSubmit={onSubmit}
-                LeftFooterComponent={({ formModel }) => (
+                leftFooterComponent={({ formModel }) => (
                   <Button variant="text" onClick={() => formModel.reset()}>
                     Cancel
                   </Button>

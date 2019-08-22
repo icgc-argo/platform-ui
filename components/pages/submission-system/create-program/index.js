@@ -108,7 +108,7 @@ export default () => {
       >
         <ProgramForm
           onSubmit={onSubmit}
-          LeftFooterComponent={() => (
+          leftFooterComponent={() => (
             <Link href={PROGRAMS_LIST_PATH}>
               <Button variant="text">Cancel</Button>
             </Link>
