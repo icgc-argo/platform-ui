@@ -25,7 +25,6 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
     padding-bottom: 10px;
     height: 100%;
   `;
-  const smallScreenRowStyle = css``;
   const stepStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
     !['xs', 'sm', 'md'].includes(size)
       ? css`
