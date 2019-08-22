@@ -44,7 +44,7 @@ const ErrorTable = ({ errors, count, onClear, onDownload }) => (
           display: flex;
         `}
       >
-        <Button variant={BUTTON_VARIANTS.PRIMARY} size={BUTTON_SIZES.SM}>
+        <Button variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
           <Icon name="edit" fill="accent2_dark" height="10px" /> ERROR REPORT
         </Button>
         <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
