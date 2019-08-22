@@ -102,6 +102,57 @@ export default () => {
     }
   };
 
+  const onAddUserSubmit = async validData => {
+    // Close modal on submit. Toasts after completion and refetch will indicate completion.
+    // TODO: Some sort of indicator that data is being sent
+    setShowModal(false);
+
+    // validData will be an array of users to add
+    // we need to store the list of names that are added successfully or failed to show in toasts after
+    const successNames = [];
+    const failNames = [];
+    for (let i = 0; i < validData.length; i++) {
+      try {
+        await triggerInvite({
+          variables: {
+            invite: createUserInput({ data: validData[i], programShortName }),
+          },
+        });
+        successNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+      } catch (err) {
+        failNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+      }
+    }
+    refetch();
+    if (successNames.length > 0) {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.SUCCESS,
+        interactionType: TOAST_INTERACTION.CLOSE,
+        title: '',
+        content: (
+          <span>
+            {successNames.length} user{successNames.length === 1 ? ' was' : 's were'} added to the
+            program: <br />
+            <strong>{successNames.join(', ')}</strong>
+          </span>
+        ),
+      });
+    }
+    if (failNames.length > 0) {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.ERROR,
+        title: '',
+        content: (
+          <span>
+            {failNames.length} user{failNames.length > 1 && 's'} could not be added to the program:{' '}
+            <br />
+            <strong>{failNames.join(', ')}</strong>
+          </span>
+        ),
+      });
+    }
+  };
+
   return (
     <ContentBox
       css={css`
@@ -169,59 +220,7 @@ export default () => {
         ))}
       {showModal && (
         <ModalPortal>
-          <AddUserModal
-            onSubmit={async validData => {
-              // Close modal on submit. Toasts after completion and refetch will indicate completion.
-              // TODO: Some sort of indicator that data is being sent
-              setShowModal(false);
-
-              // validData will be an array of users to add
-              // we need to store the list of names that are added successfully or failed to show in toasts after
-              const successNames = [];
-              const failNames = [];
-              for (let i = 0; i < validData.length; i++) {
-                try {
-                  await triggerInvite({
-                    variables: {
-                      invite: createUserInput({ data: validData[i], programShortName }),
-                    },
-                  });
-                  successNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
-                } catch (err) {
-                  failNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
-                }
-              }
-              refetch();
-              if (successNames.length > 0) {
-                toaster.addToast({
-                  variant: TOAST_VARIANTS.SUCCESS,
-                  interactionType: TOAST_INTERACTION.CLOSE,
-                  title: '',
-                  content: (
-                    <span>
-                      {successNames.length} user{successNames.length === 1 ? ' was' : 's were'}{' '}
-                      added to the program: <br />
-                      <strong>{successNames.join(', ')}</strong>
-                    </span>
-                  ),
-                });
-              }
-              if (failNames.length > 0) {
-                toaster.addToast({
-                  variant: TOAST_VARIANTS.ERROR,
-                  title: '',
-                  content: (
-                    <span>
-                      {failNames.length} user{failNames.length > 1 && 's'} could not be added to the
-                      program: <br />
-                      <strong>{failNames.join(', ')}</strong>
-                    </span>
-                  ),
-                });
-              }
-            }}
-            dismissModal={() => setShowModal(false)}
-          />
+          <AddUserModal onSubmit={onAddUserSubmit} dismissModal={() => setShowModal(false)} />
         </ModalPortal>
       )}
     </ContentBox>
