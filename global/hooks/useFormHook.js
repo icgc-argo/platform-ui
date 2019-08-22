@@ -25,11 +25,14 @@ function useFormHook<T: { [k: string]: any }>({
   for (let [key, value] of Object.entries(initialFields)) {
     initErrors[key] = '';
   }
-
-  const [form, setForm] = useState<{ errors: typeof initErrors, data: typeof initialFields }>({
+  const initialState = {
     errors: initErrors,
     data: initialFields,
-  });
+  };
+
+  const [form, setForm] = useState<{ errors: typeof initErrors, data: typeof initialFields }>(
+    initialState,
+  );
   const [touched, setTouched] = useState(false);
   const { errors, data } = form;
 
@@ -96,6 +99,10 @@ function useFormHook<T: { [k: string]: any }>({
       }
     });
 
+  const reset = () => {
+    setForm(initialState);
+  };
+
   const typedData: T = data;
 
   return {
@@ -107,6 +114,7 @@ function useFormHook<T: { [k: string]: any }>({
     validateForm,
     touched,
     hasErrors,
+    reset,
   };
 }
 

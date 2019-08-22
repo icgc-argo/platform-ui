@@ -68,12 +68,15 @@ const createUpdateProgramInput = formData => ({
 /* *************************************** *
  * Form data validation
  * *************************************** */
+type FormModel = $Call<typeof useFormHook, { initialFields: {}, schema: { validate: () => {} } }>;
 export default function CreateProgramForm({
-  leftFooterComponent,
+  leftFooterComponent: LeftFooterComponent,
   program = {},
   onSubmit,
 }: {
-  leftFooterComponent: React.Node,
+  leftFooterComponent: React.ComponentType<{
+    formModel: FormModel,
+  }>,
   program?: {
     name?: string,
     shortName?: string,
@@ -109,6 +112,10 @@ export default function CreateProgramForm({
   const isEditing = !isEmpty(program);
   const programSchema = isEditing ? updateProgramSchema : createProgramSchema;
 
+  const formModel = useFormHook<typeof seedFormData>({
+    initialFields: seedFormData,
+    schema: programSchema,
+  });
   const {
     errors: validationErrors,
     data: form,
@@ -117,10 +124,7 @@ export default function CreateProgramForm({
     validateForm,
     touched,
     hasErrors,
-  } = useFormHook<typeof seedFormData>({
-    initialFields: seedFormData,
-    schema: programSchema,
-  });
+  } = formModel;
 
   /* ****************** *
    * On Change Handlers
@@ -519,7 +523,7 @@ export default function CreateProgramForm({
             Create
           </Button>
         )}
-        {leftFooterComponent}
+        {LeftFooterComponent && <LeftFooterComponent formModel={formModel} />}
       </Row>
     </>
   );
