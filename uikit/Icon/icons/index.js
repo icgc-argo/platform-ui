@@ -24,7 +24,9 @@ import key from './collection/key';
 import user from './collection/user';
 import ellipses from './collection/ellipses';
 import exclamation from './collection/exclamation';
-
+import star from './collection/star';
+import download from './collection/download';
+import upload from './collection/upload';
 /**
  * Icon path and property lookup object
  * css - sensible defaults - can be overridden from component
@@ -55,6 +57,9 @@ const Icons = {
   user,
   ellipses,
   exclamation,
+  star,
+  download,
+  upload,
 };
 
 export type UikitIconNames = $Keys<typeof Icons>;

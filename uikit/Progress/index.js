@@ -105,7 +105,7 @@ const getIcon = (state: ProgressStatus) => {
 export const ProgressItem = ({
   state,
   text,
-  completed = false,
+  completed = state === PROGRESS_STATUS.SUCCESS,
 }: {
   state: ProgressStatus,
   text: string,
@@ -130,5 +130,7 @@ export const ProgressItem = ({
 const Progress = ({ children }: { children: React.Node }) => (
   <ProgressSection>{children}</ProgressSection>
 );
+
+Progress.Item = ProgressItem;
 
 export default Progress;

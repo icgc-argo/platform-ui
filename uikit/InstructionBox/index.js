@@ -25,34 +25,29 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
     padding-bottom: 10px;
     height: 100%;
   `;
-  const smallScreenRowStyle = css``;
-  const rowStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
-    !['xs'].includes(size)
+  const stepStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
+    !['xs', 'sm', 'md'].includes(size)
       ? css`
-          & > :not(:first-child) {
+          border-bottom: solid 1px ${theme.colors.grey_2};
+          &:not(:first-of-type) {
             border-left: solid 1px ${theme.colors.grey_2};
           }
         `
-      : css``;
-  const footerStyle = css`
-    border-top: solid 1px ${theme.colors.grey_2};
-  `;
+      : css`
+          border-bottom: solid 1px ${theme.colors.grey_2};
+        `;
   return (
     <ScreenClassRender
       render={size => (
         <Col>
-          <Row nogutter css={rowStyle(size)}>
+          <Row nogutter>
             {steps.map(step => (
-              <Col xs={12} sm={12 / steps.length}>
+              <Col md={12} lg={12 / steps.length} css={stepStyle(size)}>
                 <InstructionStep>{step}</InstructionStep>
               </Col>
             ))}
           </Row>
-          {footer && (
-            <Row nogutter css={footerStyle}>
-              {footer}
-            </Row>
-          )}
+          {footer && <Row nogutter>{footer}</Row>}
         </Col>
       )}
     />

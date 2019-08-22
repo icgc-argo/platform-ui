@@ -27,7 +27,7 @@ const SubmissionLayout = ({
   noSidebar?: boolean,
   sideMenu?: React.Element<any>,
   contentHeader?: React.Element<any>,
-  children?: React.Element<any>,
+  children: React.Node,
   subtitle?: string,
 }) => {
   return (

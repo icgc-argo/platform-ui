@@ -18,6 +18,17 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
     margin-top: 10px;
     width: 150px;
   `;
+  const buttonContentStyle = css`
+    display: flex;
+    align-items: center;
+  `;
+  const buttonIconStyle = css`
+    margin-right: 5px;
+  `;
+  const footerContentStyle = css`
+    text-align: center;
+    width: 100%;
+  `;
   return (
     <InstructionBox
       steps={[
@@ -31,7 +42,10 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             </Link>
           </Typography>
           <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
-            <Icon name="edit" fill="accent2_dark" height="10px" /> File Template
+            <span css={buttonContentStyle}>
+              <Icon name="download" fill="accent2_dark" height="12px" css={buttonIconStyle} /> File
+              Template
+            </span>
           </Button>
         </>,
         <>
@@ -39,7 +53,10 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             2. Upload your formatted registration TSV file.
           </Typography>
           <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
-            <Icon name="edit" fill="accent2_dark" height="10px" /> Upload File
+            <span css={buttonContentStyle}>
+              <Icon name="upload" fill="accent2_dark" height="12px" css={buttonIconStyle} /> Upload
+              File
+            </span>
           </Button>
         </>,
         <>
@@ -57,12 +74,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
         </>,
       ]}
       footer={
-        <div
-          css={css`
-            text-align: center;
-            width: 100%;
-          `}
-        >
+        <div css={footerContentStyle}>
           <Typography variant={'paragraph'}>
             If you have any changes to previously registered data, please {` `}
             <Link href={CONTACT_PAGE_PATH}>

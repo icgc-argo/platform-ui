@@ -22,6 +22,7 @@ import { useToaster } from 'global/hooks/toaster';
 import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 import useCommonToasters from 'components/useCommonToasters';
+import { PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 const createUserInput = ({
   data,
@@ -53,22 +54,54 @@ const createUpdateProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+type TabValue = 'profile' | 'users';
+type PageQueryObject = {
+  shortName: string,
+  tab?: TabValue,
+};
+
+const usePageQuery = (): PageQueryObject => {
+  const router = useRouter();
+  const { tab, shortName } = router.query;
+  return { tab, shortName };
+};
+
+const useTabState = () => {
+  const router = useRouter();
+  const { tab: defaultTab, shortName: programShortName } = usePageQuery();
+  const TABS = {
+    PROFILE: ('profile': TabValue),
+    USERS: ('users': TabValue),
+  };
+  const [activeTab, setActiveTab] = React.useState<TabValue>(
+    defaultTab === TABS.PROFILE ? TABS.PROFILE : TABS.USERS,
+  );
+  React.useEffect(() => {
+    if (router.pathname) {
+      window.history.replaceState(
+        '',
+        '',
+        `${router.pathname.replace(PROGRAM_SHORT_NAME_PATH, programShortName)}?tab=${
+          TABS[activeTab.toUpperCase()]
+        }`,
+      );
+    }
+  }, [activeTab]);
+  return { activeTab, setActiveTab, TABS };
+};
+
 export default () => {
   const router = useRouter();
   const { data: egoTokenData, token } = useAuthContext() || {};
   const isDcc = token ? isDccMember(token) : false;
 
-  const { shortName: programShortName } = router.query;
-  const { tab: defaultTab } = router.query;
+  const { shortName: programShortName } = usePageQuery();
 
   const { data: { program } = {}, loading, errors, refetch } = useQuery(PROGRAM_QUERY, {
     variables: { shortName: programShortName },
   });
 
-  const TABS = { PROFILE: 'PROFILE', USERS: 'USERS' };
-  const [activeTab, setActiveTab] = React.useState(
-    defaultTab === 'profile' ? TABS.PROFILE : TABS.USERS,
-  );
+  const { activeTab, setActiveTab, TABS } = useTabState();
 
   const toaster = useToaster();
   const commonToasters = useCommonToasters();
@@ -79,14 +112,6 @@ export default () => {
 
   const [showModal, setShowModal] = React.useState(false);
   const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
-
-  function handleCancelClick() {
-    // reset the form
-    setActiveTab('');
-    setTimeout(() => {
-      setActiveTab(TABS.PROFILE);
-    });
-  }
 
   const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
   const onSubmit = async data => {
@@ -99,6 +124,57 @@ export default () => {
       });
     } catch (err) {
       commonToasters.unknownError();
+    }
+  };
+
+  const onAddUserSubmit = async validData => {
+    // Close modal on submit. Toasts after completion and refetch will indicate completion.
+    // TODO: Some sort of indicator that data is being sent
+    setShowModal(false);
+
+    // validData will be an array of users to add
+    // we need to store the list of names that are added successfully or failed to show in toasts after
+    const successNames = [];
+    const failNames = [];
+    for (let i = 0; i < validData.length; i++) {
+      try {
+        await triggerInvite({
+          variables: {
+            invite: createUserInput({ data: validData[i], programShortName }),
+          },
+        });
+        successNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+      } catch (err) {
+        failNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
+      }
+    }
+    refetch();
+    if (successNames.length > 0) {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.SUCCESS,
+        interactionType: TOAST_INTERACTION.CLOSE,
+        title: '',
+        content: (
+          <span>
+            {successNames.length} user{successNames.length === 1 ? ' was' : 's were'} added to the
+            program: <br />
+            <strong>{successNames.join(', ')}</strong>
+          </span>
+        ),
+      });
+    }
+    if (failNames.length > 0) {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.ERROR,
+        title: '',
+        content: (
+          <span>
+            {failNames.length} user{failNames.length > 1 && 's'} could not be added to the program:{' '}
+            <br />
+            <strong>{failNames.join(', ')}</strong>
+          </span>
+        ),
+      });
     }
   };
 
@@ -115,8 +191,8 @@ export default () => {
           width: 100%;
         `}
       >
-        <Tab value="USERS" label="Users" />
-        <Tab value="PROFILE" label="Profile" />
+        <Tab value={TABS.USERS} label="Users" />
+        <Tab value={TABS.PROFILE} label="Profile" />
         <Tab
           empty
           css={css`
@@ -156,11 +232,11 @@ export default () => {
               <ProgramForm
                 program={program}
                 onSubmit={onSubmit}
-                leftFooterComponent={
-                  <Button variant="text" onClick={handleCancelClick}>
+                leftFooterComponent={({ formModel }) => (
+                  <Button variant="text" onClick={() => formModel.reset()}>
                     Cancel
                   </Button>
-                }
+                )}
               />
             )}
           </div>
@@ -169,59 +245,7 @@ export default () => {
         ))}
       {showModal && (
         <ModalPortal>
-          <AddUserModal
-            onSubmit={async validData => {
-              // Close modal on submit. Toasts after completion and refetch will indicate completion.
-              // TODO: Some sort of indicator that data is being sent
-              setShowModal(false);
-
-              // validData will be an array of users to add
-              // we need to store the list of names that are added successfully or failed to show in toasts after
-              const successNames = [];
-              const failNames = [];
-              for (let i = 0; i < validData.length; i++) {
-                try {
-                  await triggerInvite({
-                    variables: {
-                      invite: createUserInput({ data: validData[i], programShortName }),
-                    },
-                  });
-                  successNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
-                } catch (err) {
-                  failNames.push(`${validData[i].firstName} ${validData[i].lastName}`);
-                }
-              }
-              refetch();
-              if (successNames.length > 0) {
-                toaster.addToast({
-                  variant: TOAST_VARIANTS.SUCCESS,
-                  interactionType: TOAST_INTERACTION.CLOSE,
-                  title: '',
-                  content: (
-                    <span>
-                      {successNames.length} user{successNames.length === 1 ? ' was' : 's were'}{' '}
-                      added to the program: <br />
-                      <strong>{successNames.join(', ')}</strong>
-                    </span>
-                  ),
-                });
-              }
-              if (failNames.length > 0) {
-                toaster.addToast({
-                  variant: TOAST_VARIANTS.ERROR,
-                  title: '',
-                  content: (
-                    <span>
-                      {failNames.length} user{failNames.length > 1 && 's'} could not be added to the
-                      program: <br />
-                      <strong>{failNames.join(', ')}</strong>
-                    </span>
-                  ),
-                });
-              }
-            }}
-            dismissModal={() => setShowModal(false)}
-          />
+          <AddUserModal onSubmit={onAddUserSubmit} dismissModal={() => setShowModal(false)} />
         </ModalPortal>
       )}
     </ContentBox>
