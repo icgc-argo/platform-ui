@@ -24,6 +24,8 @@ import key from './collection/key';
 import user from './collection/user';
 import ellipses from './collection/ellipses';
 import exclamation from './collection/exclamation';
+import download from './collection/download';
+import upload from './collection/upload';
 
 /**
  * Icon path and property lookup object
@@ -55,6 +57,8 @@ const Icons = {
   user,
   ellipses,
   exclamation,
+  download,
+  upload,
 };
 
 export type UikitIconNames = $Keys<typeof Icons>;
