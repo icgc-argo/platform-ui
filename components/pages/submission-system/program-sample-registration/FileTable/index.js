@@ -48,6 +48,7 @@ const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) 
     display: flex;
     align-items: center;
     margin-right: 16px;
+    text-align: center;
   `;
   return (
     <div
@@ -57,8 +58,8 @@ const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) 
         padding: 8px;
       `}
     >
-      <Row>
-        <Col sm={5}>
+      <Row nogutter>
+        <Col lg={6}>
           <Typography
             variant="paragraph"
             component="div"
