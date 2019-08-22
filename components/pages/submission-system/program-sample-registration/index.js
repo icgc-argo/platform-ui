@@ -53,6 +53,7 @@ export default function ProgramIDRegistration() {
 
   const containerStyle = css`
     padding: 8px;
+    padding-bottom: 0px;
     &:not(:first-of-type) {
       margin-top: 20px;
     }
@@ -69,6 +70,7 @@ export default function ProgramIDRegistration() {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8px;
   `;
 
   return (
