@@ -12,9 +12,13 @@ import GET_INVITE from './GET_INVITE.gql';
 import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
 import JoinProgramForm from './joinProgramForm';
 import omit from 'lodash/omit';
+import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { useToaster } from 'global/hooks/toaster';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
-  const { inviteId } = useRouter().query;
+  const router = useRouter();
+  const { inviteId } = router.query;
 
   const { data: { joinProgramInvite } = {}, loading, error } = useQuery(GET_INVITE, {
     variables: { inviteId },
@@ -27,17 +31,34 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     throw new Error(error);
   }
 
+  const toaster = useToaster();
+
   const handleSubmit = async validData => {
-    await joinProgram({
-      variables: {
-        joinProgramInput: {
-          ...omit(validData, 'institutions'),
-          invitationId: inviteId,
-          // TODO: fix the misalignment of ui and api
-          institute: validData.institutions[0],
+    try {
+      await joinProgram({
+        variables: {
+          joinProgramInput: {
+            ...omit(validData, 'institutions'),
+            invitationId: inviteId,
+            // TODO: fix the misalignment of ui and api
+            institute: validData.institutions[0],
+          },
         },
-      },
-    });
+      });
+      router.push(
+        PROGRAM_DASHBOARD_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          joinProgramInvite.program.shortName,
+        ),
+      );
+    } catch (err) {
+      // handle error
+      toaster.addToast({
+        variant: TOAST_VARIANTS.ERROR,
+        title: '',
+        content: err.message,
+      });
+    }
   };
 
   return (
