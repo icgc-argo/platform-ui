@@ -34,7 +34,6 @@ const FileTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         createdAt: 'May 20, 2020',
       }}
       stats={{
-        totalCount: 2,
         newCount: 2,
         existingCount: 2,
       }}

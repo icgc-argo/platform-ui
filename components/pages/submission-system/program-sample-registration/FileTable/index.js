@@ -23,7 +23,6 @@ type FileEntry = {
   [k: string]: string | number | boolean,
 };
 type FileStats = {
-  totalCount: number,
   newCount: number,
   existingCount: number,
 };
@@ -69,7 +68,7 @@ const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) 
               align-items: center;
             `}
           >
-            <Section>{props.stats.totalCount} Total</Section>
+            <Section>{props.stats.existingCount + props.stats.newCount} Total</Section>
             <Section>
               <Icon name="chevron_right" fill="grey_1" width="8px" />
             </Section>
