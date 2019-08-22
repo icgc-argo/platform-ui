@@ -15,10 +15,41 @@ import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
 import Button, { BUTTON_VARIANTS } from 'uikit/Button';
 
+const mockEntries = [
+  {
+    row: '1',
+    isNew: true,
+    some_key_1: 'key1',
+    some_key_2: 'key2',
+    some_key_3: 'key3',
+    some_key_4: 'key4',
+    some_key_5: 'key5',
+    some_key_6: 'key6',
+    some_key_7: 'key7',
+    some_key_8: 'key8',
+    some_key_9: 'key9',
+  },
+  {
+    row: '2',
+    isNew: true,
+    some_key_1: 'key1',
+    some_key_2: 'key2',
+    some_key_3: 'key3',
+    some_key_4: 'key4',
+    some_key_5: 'key5',
+    some_key_6: 'key6',
+    some_key_7: 'key7',
+    some_key_8: 'key8',
+    some_key_9: 'key9',
+  },
+];
+
 export default function ProgramIDRegistration() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+
+  const fileRecords = mockEntries;
 
   const containerStyle = css`
     padding: 8px;
@@ -86,6 +117,11 @@ export default function ProgramIDRegistration() {
           </Typography>
           <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
         </div>
+        <FileTable
+          records={fileRecords}
+          stats={{ existingCount: 2, newCount: 3 }}
+          submissionInfo={{ createdAt: 'May 20, 2020', creator: 'Minh', fileName: 'Minh.tsv' }}
+        />
       </Container>
     </SubmissionLayout>
   );
