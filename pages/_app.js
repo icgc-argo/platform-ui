@@ -40,6 +40,21 @@ type RootGetInitialPropsData = {
   apolloCache: {},
 };
 
+const redirect = (res, url: string) => {
+  if (res) {
+    res.writeHead(302, {
+      Location: url,
+    });
+    res.end();
+  } else {
+    Router.push(url);
+  }
+};
+
+const removeCookie = (res, cookieName) => {
+  res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
+};
+
 const getInitialProps = async ({
   Component,
   ctx,
@@ -51,10 +66,11 @@ const getInitialProps = async ({
 }): Promise<RootGetInitialPropsData> => {
   const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
   const { res } = ctx;
+
   if (egoJwt) {
     if (!isValidJwt(egoJwt)) {
-      res ? res.clearCookie(EGO_JWT_KEY) : null;
-      router ? router.replace(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`) : null;
+      removeCookie(res, EGO_JWT_KEY);
+      redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
     }
   } else {
     if (!Component.isPublic) {
