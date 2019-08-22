@@ -5,6 +5,8 @@ import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
 import { useRouter } from 'next/router';
 import usePageContext from 'global/hooks/usePageContext';
+import Progress from 'uikit/Progress';
+import { Row, Col } from 'react-grid-system';
 
 export default function ProgramIDRegistration() {
   const {
@@ -23,7 +25,19 @@ export default function ProgramIDRegistration() {
         >
           <TitleBar>
             <>{programShortName}</>
-            <>Register Samples</>
+            <Row nogutter align="center">
+              <div
+                css={css`
+                  margin-right: 20px;
+                `}
+              >
+                Register Samples
+              </div>
+              <Progress>
+                <Progress.Item state="success" text="Updated" />
+                <Progress.Item state="pending" text="Register" />
+              </Progress>
+            </Row>
           </TitleBar>
         </div>
       }
