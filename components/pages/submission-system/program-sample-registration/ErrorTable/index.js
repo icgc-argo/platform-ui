@@ -22,34 +22,24 @@ const Container = styled('div')`
 
 const ErrorTable = ({ errors, count, onClear, onDownload }) => (
   <Container>
-    <div
+    <Icon name="warning" fill="error" width="30px" height="30px" />
+
+    <Typography
       css={css`
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        margin-bottom: 8px;
       `}
+      variant="sectionHeader"
+      component="div"
+      bold
     >
-      <Icon name="warning" fill="error" width="30px" height="30px" />
-      <Typography
-        css={css`
-          margin-bottom: 8px;
-        `}
-        variant="sectionHeader"
-        component="div"
-      >
-        {`Your file has ${count} errors`}
-      </Typography>
-      <div
-        css={css`
-          display: flex;
-        `}
-      >
-        <Button variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
-          <Icon name="edit" fill="accent2_dark" height="10px" /> ERROR REPORT
-        </Button>
-        <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
-      </div>
-    </div>
+      {`Your file has ${count} errors`}
+    </Typography>
+
+    <Button variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
+      <Icon name="edit" fill="accent2_dark" height="10px" /> ERROR REPORT
+    </Button>
+    <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
+
     <Typography
       css={css`
         margin-bottom: 5px;
