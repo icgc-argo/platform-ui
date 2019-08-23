@@ -41,8 +41,8 @@ const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: 
       render={size => (
         <Col>
           <Row nogutter>
-            {steps.map(step => (
-              <Col md={12} lg={12 / steps.length} css={stepStyle(size)}>
+            {steps.map((step, i) => (
+              <Col md={12} lg={12 / steps.length} css={stepStyle(size)} key={i}>
                 <InstructionStep>{step}</InstructionStep>
               </Col>
             ))}
