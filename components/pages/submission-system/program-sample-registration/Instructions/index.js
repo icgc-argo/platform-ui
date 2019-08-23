@@ -37,7 +37,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             1. Download the registration template and format it using the latest{` `}
             <Link href={CONTACT_PAGE_PATH}>
               <a>
-                <HyperLink>Data Dictionary.</HyperLink>
+                <HyperLink>Data Dictionary</HyperLink>.
               </a>
             </Link>
           </Typography>
