@@ -125,13 +125,13 @@ const FileTable = (props: {
   stats: FileStats,
   submissionInfo: SubmissionInfo,
 }) => {
-  const getColumnWidth = memoize<[string, boolean], number | void>((keyString, isLast) => {
+  const getColumnWidth = memoize<[string], number | void>(keyString => {
     const minWidth = 90;
     const maxWidth = 230;
     const spacePerChar = 9;
     const margin = 25;
     const targetWidth = keyString.length * spacePerChar + margin;
-    return isLast ? undefined : Math.max(Math.min(maxWidth, targetWidth), minWidth);
+    return Math.max(Math.min(maxWidth, targetWidth), minWidth);
   });
   const filteredFirstRecord = omit(
     props.records[0],
@@ -170,8 +170,7 @@ const FileTable = (props: {
             id: key,
             accessor: key,
             Header: key,
-            width: getColumnWidth(key, i === arr.length - 1),
-            // width: undefined,
+            minWidth: getColumnWidth(key),
           })),
         ]}
         data={props.records}
