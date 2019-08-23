@@ -37,9 +37,10 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             1. Download the registration template and format it using the latest{` `}
             <Link href={CONTACT_PAGE_PATH}>
               <a>
-                <HyperLink>Data Dictionary.</HyperLink>
+                <HyperLink>Data Dictionary</HyperLink>
               </a>
             </Link>
+            .
           </Typography>
           <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
             <span css={buttonContentStyle}>
@@ -79,9 +80,10 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             If you have any changes to previously registered data, please {` `}
             <Link href={CONTACT_PAGE_PATH}>
               <a>
-                <HyperLink>contact DCC.</HyperLink>
+                <HyperLink>contact DCC</HyperLink>
               </a>
             </Link>
+            .
           </Typography>
         </div>
       }
