@@ -118,7 +118,7 @@ export default function ProgramIDRegistration() {
       </Container>
       <Container css={containerStyle}>
         <div css={cardHeaderContainerStyle}>
-          <Typography color="primary" variant="title" component="div">
+          <Typography color="primary" variant="subtitle2" component="span">
             File Preview
           </Typography>
           <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
