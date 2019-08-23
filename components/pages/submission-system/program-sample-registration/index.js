@@ -13,7 +13,7 @@ import Container from 'uikit/Container';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
-import Button, { BUTTON_VARIANTS } from 'uikit/Button';
+import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 
 const mockEntries = [
   {
@@ -121,7 +121,9 @@ export default function ProgramIDRegistration() {
           <Typography color="primary" variant="subtitle2" component="span">
             File Preview
           </Typography>
-          <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
+          <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+            Clear
+          </Button>
         </div>
         <FileTable
           records={fileRecords}
