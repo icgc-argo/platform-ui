@@ -90,7 +90,14 @@ export default function ProgramIDRegistration() {
               </Progress>
             </Row>
           </TitleBar>
-          <Link withChevron underline={false} bold>
+          <Link
+            css={css`
+              font-size: 12px;
+            `}
+            withChevron
+            underline={false}
+            bold
+          >
             HELP
           </Link>
         </div>
