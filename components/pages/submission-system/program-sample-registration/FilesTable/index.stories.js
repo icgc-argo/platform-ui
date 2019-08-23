@@ -2,6 +2,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import FilesTable from '.';
+import NoDataOverlay from './NoData';
 
 const DUMMY_COLS = [
   { Header: 'Program ID' },
@@ -14,10 +15,12 @@ const DUMMY_COLS = [
   { Header: 'Sample Type' },
 ];
 
-const FilesTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <FilesTable data={[]} columns={DUMMY_COLS}>
-    Skeleton
-  </FilesTable>
-));
+const FilesTableStories = storiesOf(`${__dirname}`, module)
+  .add('Basic', () => (
+    <FilesTable data={[]} columns={DUMMY_COLS}>
+      Skeleton
+    </FilesTable>
+  ))
+  .add('No Data', () => <NoDataOverlay />);
 
 export default FilesTableStories;
