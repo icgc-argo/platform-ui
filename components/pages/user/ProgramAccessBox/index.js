@@ -132,6 +132,17 @@ export default function ProgramAccessBox() {
       </div>
       <div>
         <ProgramTable programs={programs} />
+        {!programs.length && (
+          <div
+            css={css`
+              margin-top: 10px;
+            `}
+          >
+            <Typography variant="label" component="div">
+              No program memberships. You are not submitting data to any programs.
+            </Typography>
+          </div>
+        )}
       </div>
     </Box>
   );
