@@ -85,7 +85,7 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item state="success" text="Updated" />
+                <Progress.Item state="success" text="Upload" />
                 <Progress.Item state="pending" text="Register" />
               </Progress>
             </Row>
