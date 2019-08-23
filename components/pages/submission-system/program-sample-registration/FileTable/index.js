@@ -143,6 +143,7 @@ const FileTable = (props: {
     <div>
       <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
       <Table
+        showPagination={false}
         columns={[
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
