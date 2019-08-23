@@ -141,7 +141,13 @@ const FileTable = (props: {
   );
   return (
     <div>
-      <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
+      <div
+        css={css`
+          margin-bottom: 3px;
+        `}
+      >
+        <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
+      </div>
       <Table
         showPagination={false}
         columns={[
