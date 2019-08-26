@@ -2,6 +2,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ErrorTable from '.';
+import { action } from '@storybook/addon-actions';
 
 const SAMPLE_ERRORS = [
   {
@@ -15,7 +16,12 @@ const SAMPLE_ERRORS = [
 ];
 
 const ErrorTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <ErrorTable count={8} errors={SAMPLE_ERRORS} />
+  <ErrorTable
+    count={8}
+    errors={SAMPLE_ERRORS}
+    onClear={action('clear')}
+    onDownload={action('download')}
+  />
 ));
 
 export default ErrorTableStories;

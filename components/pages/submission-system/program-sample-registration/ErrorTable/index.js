@@ -64,7 +64,7 @@ const ErrorTable = ({ errors, count, onClear, onDownload }) => (
       <div
         css={css`
           margin-left: auto;
-          min-width: 210px;
+          min-width: 240px;
         `}
       >
         <Button
@@ -73,6 +73,7 @@ const ErrorTable = ({ errors, count, onClear, onDownload }) => (
           `}
           variant={BUTTON_VARIANTS.SECONDARY}
           size={BUTTON_SIZES.SM}
+          onClick={() => onDownload()}
         >
           <span
             css={css`
@@ -96,6 +97,7 @@ const ErrorTable = ({ errors, count, onClear, onDownload }) => (
             display: inline-block;
           `}
           variant={BUTTON_VARIANTS.TEXT}
+          onClick={() => onClear()}
         >
           Clear
         </Button>
