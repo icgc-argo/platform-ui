@@ -47,29 +47,35 @@ const UsersTable = (tableProps: {
   const columns: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
+      accessor: 'firstName',
       Cell: ({ original: { firstName, lastName } }) => `${firstName} ${lastName}`,
     },
     {
       Header: 'Email',
+      accessor: 'email',
       Cell: ({ original }) =>
         original.email ? <MailTo link={original.email}>{original.email}</MailTo> : '',
     },
     {
       Header: 'Role',
+      accessor: 'role',
       Cell: ({ original }) => (original.role ? RoleDisplayName[original.role] : ''),
     },
     {
       Header: 'Daco Approved',
+      accessor: 'isDacoApproved',
       Cell: ({ original }) => (original.isDacoApproved ? 'Yes' : 'No'),
       headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
     },
     {
       Header: 'Status',
+      accessor: 'inviteStatus',
       Cell: ({ original }) =>
         original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISPLAY_STATUS,
     },
     {
       Header: 'Joined On',
+      accessor: 'inviteAcceptedAt',
       Cell: ({ original }) =>
         original.inviteAcceptedAt ? displayDate(original.inviteAcceptedAt) : '',
     },
