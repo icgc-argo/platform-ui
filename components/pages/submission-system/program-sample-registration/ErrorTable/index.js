@@ -1,3 +1,4 @@
+//@flow
 import * as React from 'react';
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
@@ -22,12 +23,19 @@ const Container = styled('div')`
   min-width: 400px;
 `;
 
-const ErrorTable: {
-  errors: TableProps<Data>,
+type Data = { [k: string]: any };
+
+const ErrorTable = ({
+  errors,
+  count,
+  onClear,
+  onDownload,
+}: {
+  errors: Array<Data>,
   count: number,
   onClear: (x: any) => any,
   onDownload: (x: any) => any,
-} = ({ errors, count, onClear, onDownload }) => (
+}) => (
   <Container>
     <div
       css={css`
