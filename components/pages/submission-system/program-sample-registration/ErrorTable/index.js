@@ -17,38 +17,91 @@ const Container = styled('div')`
   border-radius: 8px;
   border: solid 1px ${({ theme }) => theme.colors.error_1};
   background-color: ${({ theme }) => theme.colors.error_4};
-  padding: 0 7px 13px 10px;
+  padding: 12px 7px 13px 10px;
+  min-width: 400px;
 `;
 
 const ErrorTable = ({ errors, count, onClear, onDownload }) => (
   <Container>
-    <Icon name="warning" fill="error" width="30px" height="30px" />
-
-    <Typography
+    <div
       css={css`
-        margin-bottom: 8px;
+        display: flex;
       `}
-      variant="sectionHeader"
-      component="div"
-      bold
     >
-      {`Your file has ${count} errors`}
-    </Typography>
+      <Icon
+        css={css`
+          margin-right: 14px;
+          min-width: 30px;
+        `}
+        name="warning"
+        fill="error"
+        width="30px"
+        height="30px"
+      />
 
-    <Button variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
-      <Icon name="edit" fill="accent2_dark" height="10px" /> ERROR REPORT
-    </Button>
-    <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
+      <div>
+        <Typography
+          css={css`
+            margin-bottom: 8px;
+          `}
+          variant="sectionHeader"
+          component="div"
+          bold
+        >
+          {`Your file has ${count} errors`}
+        </Typography>
 
-    <Typography
-      css={css`
-        margin-bottom: 5px;
-      `}
-      variant="paragraph"
-      component="div"
-    >
-      Your file cannot be processed. Please correct the following errors and reupload your file.
-    </Typography>
+        <Typography
+          css={css`
+            margin-bottom: 5px;
+          `}
+          variant="paragraph"
+        >
+          Your file cannot be processed. Please correct the following errors and reupload your file.
+        </Typography>
+      </div>
+
+      <div
+        css={css`
+          margin-left: auto;
+          min-width: 210px;
+        `}
+      >
+        <Button
+          css={css`
+            display: inline-block;
+          `}
+          variant={BUTTON_VARIANTS.SECONDARY}
+          size={BUTTON_SIZES.SM}
+        >
+          <span
+            css={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            <Icon
+              name="download"
+              fill="accent2_dark"
+              height="12px"
+              css={css`
+                margin-right: 5px;
+              `}
+            />
+            ERROR REPORT
+          </span>
+        </Button>
+        <Button
+          css={css`
+            display: inline-block;
+          `}
+          variant={BUTTON_VARIANTS.TEXT}
+        >
+          Clear
+        </Button>
+      </div>
+    </div>
+
     <Table data={errors} columns={TABLE_COLS} />
   </Container>
 );
