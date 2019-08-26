@@ -3,6 +3,7 @@ import { css, styled } from 'uikit';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import Link from 'next/link';
+import Typography from 'uikit/Typography';
 
 const Hr = styled('hr')`
   border: 0;
@@ -13,22 +14,17 @@ const Hr = styled('hr')`
   margin: 0;
 `;
 
-const Title = styled('h1')`
-  ${({ theme }) => css(theme.typography.title)};
-  font-size: 40px;
-  margin-top: 0;
-  text-align: center;
-`;
-
-const SectionTitle = styled('h2')`
-  ${({ theme }) => css(theme.typography.subtitle)};
-  font-size: 20px;
-  margin-top: 30px;
-`;
-
-const P = styled('p')`
-  ${({ theme }) => css(theme.typography.paragraph)};
-`;
+const SectionTitle = props => (
+  <Typography
+    css={css`
+      font-size: 20px;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    `}
+    variant="subtitle"
+    {...props}
+  />
+);
 
 export default function ContactPage() {
   const theme = useTheme();
@@ -52,10 +48,19 @@ export default function ContactPage() {
             }
           `}
         >
-          <Title>Privacy Policy</Title>
+          <Typography
+            as="h1"
+            css={css`
+              font-size: 40px;
+              margin-top: 0;
+              text-align: center;
+            `}
+          >
+            Privacy Policy
+          </Typography>
           <SectionTitle>The Platform</SectionTitle>
           <Hr color="accent1" />
-          <P>
+          <Typography>
             Any of your personal information which OICR collects via this Platform is subject to the
             OICR Privacy Policies, which is incorporated into these Terms and Conditions by
             reference.
@@ -66,10 +71,10 @@ export default function ContactPage() {
             OICR and the participants of the ICGC research projects is to respect, and protect your
             privacy rights. Our privacy policy outlines our Site information practices including our
             utilization of personal information we may learn about you when visiting our Site.
-          </P>
+          </Typography>
           <SectionTitle>What is Personal Information?</SectionTitle>
           <Hr color="accent3" />
-          <P>
+          <Typography>
             Personal information is any information about an identifiable person.
             <br />
             <br />
@@ -81,10 +86,10 @@ export default function ContactPage() {
             choose to provide us with additional information about yourself through an email
             message, we will only maintain the identifying information as long as needed to respond
             to your question.
-          </P>
+          </Typography>
           <SectionTitle>Disclosure</SectionTitle>
           <Hr color="accent4" />
-          <P>
+          <Typography>
             <b>To whom does OICR disclose Personal Information?</b>
             <br />
             OICR will not disclose such information to other persons, other than as follows:
@@ -106,10 +111,10 @@ export default function ContactPage() {
             privacy practices of other websites to which the Platform has links. We encourage you to
             read the privacy statements of each and every website that requests personal information
             from you.
-          </P>
+          </Typography>
           <SectionTitle>Collection and Use</SectionTitle>
           <Hr color="secondary" />
-          <P>
+          <Typography>
             <b>What is Aggregate Information?</b> <br />
             "Aggregate information" is standard web server/visitor traffic information, commonly
             referred to as 'aggregate information', regarding overall website traffic patterns. We
@@ -144,10 +149,10 @@ export default function ContactPage() {
             administrative safeguards to secure your personal information we collect from the
             Platform with a level of security that is appropriate to the sensitivity of the personal
             information collected.
-          </P>
+          </Typography>
           <SectionTitle>Additional Information</SectionTitle>
           <Hr color="accent2" />
-          <P>
+          <Typography>
             <b>Who do I contact with questions or concerns about the Platform's privacy policy?</b>
             <br />
             For all inquires about your personal information, including requests to access or
@@ -157,14 +162,14 @@ export default function ContactPage() {
                 <b>Contact Form</b>
               </a>
             </Link>
-          </P>
-          <P
+          </Typography>
+          <Typography
             css={css`
               color: ${theme.colors.grey};
             `}
           >
             Last updated: March 2020
-          </P>
+          </Typography>
         </div>
       </div>
     </DefaultLayout>
