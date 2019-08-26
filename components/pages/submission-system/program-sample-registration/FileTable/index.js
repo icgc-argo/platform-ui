@@ -13,6 +13,7 @@ import { css } from 'uikit';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { styled } from 'uikit';
+import NoDataMessage from './NoDataMessage';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -33,7 +34,7 @@ type SubmissionInfo = {
   createdAt: string,
 };
 
-const StartIcon = (props: { active: boolean, className?: string }) => (
+const StarIcon = (props: { active: boolean, className?: string }) => (
   <Icon
     className={props.className || ''}
     name="star"
@@ -43,88 +44,80 @@ const StartIcon = (props: { active: boolean, className?: string }) => (
   />
 );
 
-const StatsArea = (props: { stats: FileStats, submissionInfo: SubmissionInfo }) => {
-  const theme = useTheme();
+const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInfo }) => (
+  <Typography variant="paragraph" component="div" color="grey">
+    <Typography variant="default" color="secondary_dark">
+      {submissionInfo && submissionInfo.fileName}
+    </Typography>{' '}
+    uploaded on{' '}
+    <Typography variant="default" color="secondary_dark">
+      {submissionInfo && submissionInfo.createdAt}
+    </Typography>{' '}
+    by{' '}
+    <Typography variant="default" color="secondary_dark">
+      {submissionInfo && submissionInfo.creator}
+    </Typography>
+  </Typography>
+);
+
+const StatsArea = (props: { stats: ?FileStats }) => {
+  const { stats } = props;
   const Section = styled('div')`
     display: flex;
     align-items: center;
     margin-right: 16px;
     text-align: center;
   `;
+
   return (
-    <div
+    <Typography
+      variant="paragraph"
+      component="div"
+      color="grey"
       css={css`
-        border-radius: 2px;
-        background-color: ${theme.colors.grey_3};
-        padding: 8px;
+        display: flex;
+        align-items: center;
       `}
     >
-      <Row nogutter>
-        <Col lg={6}>
-          <Typography
-            variant="paragraph"
-            component="div"
-            color="grey"
-            css={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <Section>{props.stats.existingCount + props.stats.newCount} Total</Section>
-            <Section>
-              <Icon name="chevron_right" fill="grey_1" width="8px" />
-            </Section>
-            <Section>
-              <div
-                css={css`
-                  margin-right: 5px;
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <StartIcon active />
-              </div>
-              {props.stats.newCount} New
-            </Section>
-            <Section>
-              <div
-                css={css`
-                  margin-right: 5px;
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <StartIcon active={false} />
-              </div>
-              {props.stats.existingCount} Already Registered
-            </Section>
-          </Typography>
-        </Col>
-        <Col align="end">
-          <Typography variant="paragraph" component="div" color="grey">
-            <Typography variant="default" color="secondary_dark">
-              {props.submissionInfo.fileName}
-            </Typography>{' '}
-            uploaded on{' '}
-            <Typography variant="default" color="secondary_dark">
-              {props.submissionInfo.createdAt}
-            </Typography>{' '}
-            by{' '}
-            <Typography variant="default" color="secondary_dark">
-              {props.submissionInfo.creator}
-            </Typography>
-          </Typography>
-        </Col>
-      </Row>
-    </div>
+      <Section>{stats ? stats.existingCount + stats.newCount : 0} Total</Section>
+      <Section>
+        <Icon name="chevron_right" fill="grey_1" width="8px" />
+      </Section>
+      <Section>
+        <div
+          css={css`
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <StarIcon active />
+        </div>
+        {stats && stats.newCount} New
+      </Section>
+      <Section>
+        <div
+          css={css`
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <StarIcon active={false} />
+        </div>
+        {stats && stats.existingCount} Already Registered
+      </Section>
+    </Typography>
   );
 };
 
 const FileTable = (props: {
   records: Array<FileEntry>,
-  stats: FileStats,
-  submissionInfo: SubmissionInfo,
+  stats: ?FileStats,
+  submissionInfo: ?SubmissionInfo,
 }) => {
+  const theme = useTheme();
+
   const getColumnWidth = memoize<[string], number | void>(keyString => {
     const minWidth = 90;
     const maxWidth = 230;
@@ -139,49 +132,115 @@ const FileTable = (props: {
       return typeof value === 'string' ? value : '';
     }),
   );
+
   return (
-    <div>
+    <div
+      css={css`
+        position: relative;
+      `}
+    >
       <div
         css={css`
           margin-bottom: 3px;
+          border-radius: 2px;
+          background-color: ${theme.colors.grey_3};
+          padding: 8px;
         `}
       >
-        <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
+        <Row nogutter>
+          <Col lg={6}>{props.stats && <StatsArea stats={props.stats} />}</Col>
+          <Col align="end">
+            {props.submissionInfo && <SubmissionInfoArea submissionInfo={props.submissionInfo} />}
+          </Col>
+        </Row>
       </div>
-      <Table
-        showPagination={false}
-        columns={[
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => original.row, // we don't know what should be here
-            Header: '#',
-            width: 60,
-          },
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
-            Cell: ({ original }) => (
-              <div
-                css={css`
-                  display: flex;
-                  justify-content: center;
-                  width: 100%;
-                `}
-              >
-                <StartIcon active={original.isNew} />
-              </div>
-            ),
-            width: 60,
-            Header: <StartIcon active={false} />,
-          },
-          ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
-            id: key,
-            accessor: key,
-            Header: key,
-            minWidth: getColumnWidth(key),
-          })),
-        ]}
-        data={props.records}
-      />
+
+      {props.records.length > 0 ? (
+        <Table
+          showPagination={false}
+          columns={[
+            {
+              id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+              Cell: ({ original }) => original.row, // we don't know what should be here
+              Header: '#',
+              width: 60,
+            },
+            {
+              id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+              Cell: ({ original }) => (
+                <div
+                  css={css`
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                  `}
+                >
+                  <StarIcon active={original.isNew} />
+                </div>
+              ),
+              width: 60,
+              Header: <StarIcon active={false} />,
+            },
+            ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
+              id: key,
+              accessor: key,
+              Header: key,
+              minWidth: getColumnWidth(key),
+            })),
+          ]}
+          data={props.records}
+        />
+      ) : (
+        <>
+          <StatsArea stats={null} />
+          <div
+            css={css`
+              position: relative;
+            `}
+          >
+            {/* NB: Ghost background table has hardcoded values */}
+            <Table
+              NoDataComponent={() => null}
+              showPagination={false}
+              columns={[
+                {
+                  Header: '#',
+                  width: 60,
+                },
+                {
+                  width: 60,
+                  Header: <StarIcon active={true} />,
+                },
+                { Header: 'Program ID' },
+                { Header: 'Submitter Donor ID' },
+                { Header: 'Submitter Specimen ID' },
+                { Header: 'Specimen Type' },
+                { Header: 'Tumour or Normal Designation' },
+                { Header: 'Submitter Sample ID' },
+                { Header: 'Sample Type' },
+              ]}
+            />
+          </div>
+          <div
+            css={css`
+              position: absolute;
+              left: 0;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              background-color: rgba(255, 255, 255, 0.8);
+            `}
+          />
+          <div
+            css={css`
+              position: relative;
+              margin-top: 26px;
+            `}
+          >
+            <NoDataMessage />
+          </div>
+        </>
+      )}
     </div>
   );
 };
