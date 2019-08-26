@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'uikit';
 import Typography from 'uikit/Typography';
 
-const NoDataOverlay = () => (
+const NoDataMessage = () => (
   <div
     css={css`
       display: flex;
@@ -12,7 +12,7 @@ const NoDataOverlay = () => (
     `}
   >
     <img alt="Chemistry beakers" src="/static/beakers.svg" />
-    <Typography variant="navigation" component="div">
+    <Typography variant="navigation" component="div" bold>
       You do not have any registration data uploaded.
     </Typography>
     <Typography variant="data" component="div">
@@ -21,4 +21,4 @@ const NoDataOverlay = () => (
   </div>
 );
 
-export default NoDataOverlay;
+export default NoDataMessage;
