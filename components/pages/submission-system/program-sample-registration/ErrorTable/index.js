@@ -8,11 +8,11 @@ import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 import type { TableProps } from 'uikit/Table';
 
 const TABLE_COLS = [
-  { Header: 'Row #', accessor: 'row' },
-  { Header: 'Submitter Sample ID', accessor: 'sampleID' },
-  { Header: 'Field with Error', accessor: 'field' },
-  { Header: 'Error Value', accessor: 'errorValue' },
-  { Header: 'Error Description', accessor: 'errorDescription' },
+  { Header: 'Row #', accessor: 'row', width: 90 },
+  { Header: 'Submitter Sample ID', accessor: 'sampleID', width: 175 },
+  { Header: 'Field with Error', accessor: 'field', width: 175 },
+  { Header: 'Error Value', accessor: 'errorValue', width: 120 },
+  { Header: 'Error Description', accessor: 'errorDescription', style: { 'white-space': 'unset' } },
 ];
 
 const Container = styled('div')`
