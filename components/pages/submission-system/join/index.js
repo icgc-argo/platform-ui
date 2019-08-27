@@ -1,5 +1,9 @@
 //@flow
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { useToaster } from 'global/hooks/toaster';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { get } from 'lodash';
+import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 // $FlowFixMe
 import { ERROR_STATUS_KEY } from 'pages/_error';
@@ -7,14 +11,11 @@ import React from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
+import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import SubmissionLayout from '../layout';
 import GET_INVITE from './GET_INVITE.gql';
-import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
 import JoinProgramForm from './joinProgramForm';
-import omit from 'lodash/omit';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
-import { useToaster } from 'global/hooks/toaster';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const router = useRouter();
@@ -33,6 +34,8 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const toaster = useToaster();
 
+  const { refreshToken } = useAuthContext();
+
   const handleSubmit = async validData => {
     try {
       await joinProgram({
@@ -45,12 +48,15 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           },
         },
       });
-      router.push(
-        PROGRAM_DASHBOARD_PATH.replace(
-          PROGRAM_SHORT_NAME_PATH,
-          joinProgramInvite.program.shortName,
-        ),
-      );
+
+      refreshToken().then(egoToken => {
+        router.push(
+          PROGRAM_DASHBOARD_PATH.replace(
+            PROGRAM_SHORT_NAME_PATH,
+            joinProgramInvite.program.shortName,
+          ),
+        );
+      });
     } catch (err) {
       // handle error
       toaster.addToast({

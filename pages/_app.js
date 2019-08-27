@@ -22,24 +22,6 @@ import { ERROR_STATUS_KEY } from './_error';
 import useAuthContext from 'global/hooks/useAuthContext';
 import ApplicationRoot from 'components/ApplicationRoot';
 
-const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
-  const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
-  if (ctx.res && ctx.res.redirect) {
-    ctx.res.redirect(loginRedirect);
-  } else if (Router.router) {
-    Router.replace(loginRedirect);
-  }
-};
-
-type RootGetInitialPropsData = {
-  pageProps: { [k: string]: any },
-  unauthorized: boolean,
-  pathname: string,
-  ctx: ClientSideGetInitialPropsContext,
-  egoJwt: ?string,
-  apolloCache: {},
-};
-
 const redirect = (res, url: string) => {
   if (res) {
     res.writeHead(302, {
@@ -49,6 +31,20 @@ const redirect = (res, url: string) => {
   } else {
     Router.push(url);
   }
+};
+
+const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
+  const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
+  redirect(ctx.res, loginRedirect);
+};
+
+type RootGetInitialPropsData = {
+  pageProps: { [k: string]: any },
+  unauthorized: boolean,
+  pathname: string,
+  ctx: ClientSideGetInitialPropsContext,
+  egoJwt: ?string,
+  apolloCache: {},
 };
 
 const removeCookie = (res, cookieName) => {
