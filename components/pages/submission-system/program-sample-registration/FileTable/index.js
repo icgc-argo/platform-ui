@@ -111,13 +111,7 @@ const StatsArea = (props: { stats: ?FileStats }) => {
   );
 };
 
-const FileTable = (props: {
-  records: Array<FileEntry>,
-  stats: ?FileStats,
-  submissionInfo: ?SubmissionInfo,
-}) => {
-  const theme = useTheme();
-
+const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => {
   const getColumnWidth = memoize<[string], number | void>(keyString => {
     const minWidth = 90;
     const maxWidth = 230;
@@ -126,12 +120,111 @@ const FileTable = (props: {
     const targetWidth = keyString.length * spacePerChar + margin;
     return Math.max(Math.min(maxWidth, targetWidth), minWidth);
   });
+
   const filteredFirstRecord = omit(
-    props.records[0],
+    records[0],
     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
       return typeof value === 'string' ? value : '';
     }),
   );
+
+  return (
+    <Table
+      showPagination={false}
+      columns={[
+        {
+          id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+          Cell: ({ original }) => original.row, // we don't know what should be here
+          Header: '#',
+          width: 60,
+        },
+        {
+          id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+          Cell: ({ original }) => (
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+                width: 100%;
+              `}
+            >
+              <StarIcon active={original.isNew} />
+            </div>
+          ),
+          width: 60,
+          Header: <StarIcon active={false} />,
+        },
+        ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
+          id: key,
+          accessor: key,
+          Header: key,
+          minWidth: getColumnWidth(key),
+        })),
+      ]}
+      data={records}
+    />
+  );
+};
+
+const renderNoDataTable = () => (
+  <>
+    <StatsArea stats={null} />
+    <div
+      css={css`
+        position: relative;
+      `}
+    >
+      {/* NB: Ghost background table has hardcoded values */}
+      <Table
+        NoDataComponent={() => null}
+        showPagination={false}
+        columns={[
+          {
+            Header: '#',
+            width: 60,
+          },
+          {
+            width: 60,
+            Header: <StarIcon active={true} />,
+          },
+          { Header: 'Program ID' },
+          { Header: 'Submitter Donor ID' },
+          { Header: 'Submitter Specimen ID' },
+          { Header: 'Specimen Type' },
+          { Header: 'Tumour or Normal Designation' },
+          { Header: 'Submitter Sample ID' },
+          { Header: 'Sample Type' },
+        ]}
+      />
+    </div>
+    <div
+      css={css`
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+      `}
+    />
+    <div
+      css={css`
+        position: relative;
+        margin-top: 26px;
+      `}
+    >
+      <NoDataMessage />
+    </div>
+  </>
+);
+
+const FileTable = (props: {
+  records: Array<FileEntry>,
+  stats: ?FileStats,
+  submissionInfo: ?SubmissionInfo,
+}) => {
+  const theme = useTheme();
+  const { records, stats, submissionInfo } = props;
 
   return (
     <div
@@ -148,99 +241,14 @@ const FileTable = (props: {
         `}
       >
         <Row nogutter>
-          <Col lg={6}>{props.stats && <StatsArea stats={props.stats} />}</Col>
+          <Col lg={6}>{stats && <StatsArea stats={stats} />}</Col>
           <Col align="end">
-            {props.submissionInfo && <SubmissionInfoArea submissionInfo={props.submissionInfo} />}
+            {submissionInfo && <SubmissionInfoArea submissionInfo={submissionInfo} />}
           </Col>
         </Row>
       </div>
 
-      {props.records.length > 0 ? (
-        <Table
-          showPagination={false}
-          columns={[
-            {
-              id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-              Cell: ({ original }) => original.row, // we don't know what should be here
-              Header: '#',
-              width: 60,
-            },
-            {
-              id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
-              Cell: ({ original }) => (
-                <div
-                  css={css`
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-                  `}
-                >
-                  <StarIcon active={original.isNew} />
-                </div>
-              ),
-              width: 60,
-              Header: <StarIcon active={false} />,
-            },
-            ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
-              id: key,
-              accessor: key,
-              Header: key,
-              minWidth: getColumnWidth(key),
-            })),
-          ]}
-          data={props.records}
-        />
-      ) : (
-        <>
-          <StatsArea stats={null} />
-          <div
-            css={css`
-              position: relative;
-            `}
-          >
-            {/* NB: Ghost background table has hardcoded values */}
-            <Table
-              NoDataComponent={() => null}
-              showPagination={false}
-              columns={[
-                {
-                  Header: '#',
-                  width: 60,
-                },
-                {
-                  width: 60,
-                  Header: <StarIcon active={true} />,
-                },
-                { Header: 'Program ID' },
-                { Header: 'Submitter Donor ID' },
-                { Header: 'Submitter Specimen ID' },
-                { Header: 'Specimen Type' },
-                { Header: 'Tumour or Normal Designation' },
-                { Header: 'Submitter Sample ID' },
-                { Header: 'Sample Type' },
-              ]}
-            />
-          </div>
-          <div
-            css={css`
-              position: absolute;
-              left: 0;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              background-color: rgba(255, 255, 255, 0.8);
-            `}
-          />
-          <div
-            css={css`
-              position: relative;
-              margin-top: 26px;
-            `}
-          >
-            <NoDataMessage />
-          </div>
-        </>
-      )}
+      {records.length > 0 ? renderRegistrationTable({ records }) : renderNoDataTable()}
     </div>
   );
 };
