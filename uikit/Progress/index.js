@@ -41,6 +41,9 @@ const ProgressSection = styled('div')`
   display: flex;
   align-items: flex-end;
 
+  /* this ensures stacking context is local for z-index */
+  transform: scale(1);
+
   /* first and last rounded corners */
   > div:first-of-type:not(:last-of-type) .progress-marker {
     border-radius: 10px 0 0 10px;

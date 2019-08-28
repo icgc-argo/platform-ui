@@ -2,6 +2,7 @@
 import type { TableProps, TableColumnConfig } from 'uikit/Table';
 
 import React from 'react';
+import memoize from 'lodash/memoize';
 import sum from 'lodash/sum';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
@@ -124,12 +125,14 @@ const FileTable = (props: {
   stats: FileStats,
   submissionInfo: SubmissionInfo,
 }) => {
-  const getColumnWidth = (keyString: string): number => {
+  const getColumnWidth = memoize<[string], number | void>(keyString => {
     const minWidth = 90;
     const maxWidth = 230;
-    const spacePerChar = 12;
-    return Math.max(Math.min(maxWidth, keyString.length * spacePerChar), minWidth);
-  };
+    const spacePerChar = 9;
+    const margin = 25;
+    const targetWidth = keyString.length * spacePerChar + margin;
+    return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+  });
   const filteredFirstRecord = omit(
     props.records[0],
     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
@@ -138,8 +141,15 @@ const FileTable = (props: {
   );
   return (
     <div>
-      <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
+      <div
+        css={css`
+          margin-bottom: 3px;
+        `}
+      >
+        <StatsArea stats={props.stats} submissionInfo={props.submissionInfo} />
+      </div>
       <Table
+        showPagination={false}
         columns={[
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
@@ -163,11 +173,11 @@ const FileTable = (props: {
             width: 60,
             Header: <StartIcon active={false} />,
           },
-          ...Object.entries(filteredFirstRecord).map(([key]) => ({
+          ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
             id: key,
             accessor: key,
             Header: key,
-            width: getColumnWidth(key),
+            minWidth: getColumnWidth(key),
           })),
         ]}
         data={props.records}

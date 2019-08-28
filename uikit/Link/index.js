@@ -32,7 +32,8 @@ const Link = ({
   ...rest
 }) => (
   <StyledLink uppercase={uppercase} underline={underline} bold={bold} href={href} {...rest}>
-    {children} {withChevron && '›'}
+    {children}
+    {withChevron && ' ›'}
   </StyledLink>
 );
 

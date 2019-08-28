@@ -13,34 +13,32 @@ import Container from 'uikit/Container';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
-import Button, { BUTTON_VARIANTS } from 'uikit/Button';
+import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 
 const mockEntries = [
   {
     row: '1',
     isNew: true,
-    some_key_1: 'key1',
-    some_key_2: 'key2',
-    some_key_3: 'key3',
-    some_key_4: 'key4',
-    some_key_5: 'key5',
-    some_key_6: 'key6',
-    some_key_7: 'key7',
-    some_key_8: 'key8',
-    some_key_9: 'key9',
+    program_id: 'program_id',
+    submitter_donor_id: 'submitter_donor_id',
+    gender: 'gender',
+    submitter_specimen_id: 'submitter_specimen_id',
+    specimen_type: 'specimen_type',
+    tumour_normal_designation: 'tumour_normal_designation',
+    submitter_sample_id: 'submitter_sample_id',
+    sample_type: 'sample_type',
   },
   {
     row: '2',
     isNew: true,
-    some_key_1: 'key1',
-    some_key_2: 'key2',
-    some_key_3: 'key3',
-    some_key_4: 'key4',
-    some_key_5: 'key5',
-    some_key_6: 'key6',
-    some_key_7: 'key7',
-    some_key_8: 'key8',
-    some_key_9: 'key9',
+    program_id: 'program_id',
+    submitter_donor_id: 'submitter_donor_id',
+    gender: 'gender',
+    submitter_specimen_id: 'submitter_specimen_id',
+    specimen_type: 'specimen_type',
+    tumour_normal_designation: 'tumour_normal_designation',
+    submitter_sample_id: 'submitter_sample_id',
+    sample_type: 'sample_type',
   },
 ];
 
@@ -69,6 +67,7 @@ export default function ProgramIDRegistration() {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8px;
   `;
 
   return (
@@ -86,12 +85,19 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item state="success" text="Updated" />
+                <Progress.Item state="success" text="Upload" />
                 <Progress.Item state="pending" text="Register" />
               </Progress>
             </Row>
           </TitleBar>
-          <Link withChevron underline={false} bold>
+          <Link
+            css={css`
+              font-size: 12px;
+            `}
+            withChevron
+            underline={false}
+            bold
+          >
             HELP
           </Link>
         </div>
@@ -112,10 +118,12 @@ export default function ProgramIDRegistration() {
       </Container>
       <Container css={containerStyle}>
         <div css={cardHeaderContainerStyle}>
-          <Typography color="primary" variant="title" component="div">
+          <Typography color="primary" variant="subtitle2" component="span">
             File Preview
           </Typography>
-          <Button variant={BUTTON_VARIANTS.TEXT}>Clear</Button>
+          <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+            Clear
+          </Button>
         </div>
         <FileTable
           records={fileRecords}

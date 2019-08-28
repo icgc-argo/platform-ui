@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
@@ -27,8 +27,11 @@ const createTypographyComponentMapFromTheme = memoize(themeObj =>
   ),
 );
 
-const createDomComponent = memoize((domComponentName, components, variant) =>
-  components[variant].withComponent(domComponentName),
+const createDomComponent = memoize(
+  (domComponentName: string, components: { [k: string]: any }, variant: string) =>
+    components[variant].withComponent(domComponentName),
+  /** @todo: this cache-key resolution doesn't take into account components, so theme change won't properly change typography atm. Need to fix this!  */
+  (domComponentName, components, variant) => `${domComponentName}.${variant}`,
 );
 
 const createStyledDomComponent = memoize(
