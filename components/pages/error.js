@@ -35,7 +35,7 @@ export default function ErrorLayout({ children }) {
         links={[
           { displayName: 'Contact', href: '#' },
           { displayName: 'Documentation', href: '#' },
-          { displayName: 'Privacy Policy', href: '#' },
+          { displayName: 'Privacy Policy', href: '/privacy' },
         ]}
       />
     </PageContainer>
