@@ -1,59 +1,63 @@
 // @flow
-import type { TableProps, TableColumnConfig } from 'uikit/Table';
+import type { TableProps, TableColumnConfig } from "uikit/Table";
 
-import React from 'react';
-import memoize from 'lodash/memoize';
-import sum from 'lodash/sum';
-import omit from 'lodash/omit';
-import PropTypes from 'prop-types';
-import Table from 'uikit/Table';
-import Icon from 'uikit/Icon';
-import { useTheme } from 'uikit/ThemeProvider';
-import { css } from 'uikit';
-import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
-import { styled } from 'uikit';
-import NoDataMessage from './NoDataMessage';
+import React from "react";
+import memoize from "lodash/memoize";
+import sum from "lodash/sum";
+import omit from "lodash/omit";
+import PropTypes from "prop-types";
+import Table from "uikit/Table";
+import Icon from "uikit/Icon";
+import { useTheme } from "uikit/ThemeProvider";
+import { css } from "uikit";
+import Typography from "uikit/Typography";
+import { Row, Col } from "react-grid-system";
+import { styled } from "uikit";
+import NoDataMessage from "./NoDataMessage";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
-  ROW: 'row',
-  IS_NEW: 'isNew',
+  ROW: "row",
+  IS_NEW: "isNew"
 };
 type FileEntry = {
   row: string,
   isNew: boolean,
-  [k: string]: string | number | boolean,
+  [k: string]: string | number | boolean
 };
 type FileStats = {
   newCount: number,
-  existingCount: number,
+  existingCount: number
 };
 type SubmissionInfo = {
   fileName: string,
   creator: string,
-  createdAt: string,
+  createdAt: string
 };
 
 const StarIcon = (props: { active: boolean, className?: string }) => (
   <Icon
-    className={props.className || ''}
+    className={props.className || ""}
     name="star"
-    fill={props.active ? 'success' : 'grey_1'}
+    fill={props.active ? "success" : "grey_1"}
     width="16px"
     height="16px"
   />
 );
 
-const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInfo }) => (
+const SubmissionInfoArea = ({
+  submissionInfo
+}: {
+  submissionInfo: ?SubmissionInfo
+}) => (
   <Typography variant="paragraph" component="div" color="grey">
     <Typography variant="default" color="secondary_dark">
       {submissionInfo && submissionInfo.fileName}
-    </Typography>{' '}
-    uploaded on{' '}
+    </Typography>{" "}
+    uploaded on{" "}
     <Typography variant="default" color="secondary_dark">
       {submissionInfo && submissionInfo.createdAt}
-    </Typography>{' '}
-    by{' '}
+    </Typography>{" "}
+    by{" "}
     <Typography variant="default" color="secondary_dark">
       {submissionInfo && submissionInfo.creator}
     </Typography>
@@ -62,7 +66,7 @@ const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInf
 
 const StatsArea = (props: { stats: ?FileStats }) => {
   const { stats } = props;
-  const Section = styled('div')`
+  const Section = styled("div")`
     display: flex;
     align-items: center;
     margin-right: 16px;
@@ -79,7 +83,9 @@ const StatsArea = (props: { stats: ?FileStats }) => {
         align-items: center;
       `}
     >
-      <Section>{stats ? stats.existingCount + stats.newCount : 0} Total</Section>
+      <Section>
+        {stats ? stats.existingCount + stats.newCount : 0} Total
+      </Section>
       <Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
       </Section>
@@ -111,7 +117,11 @@ const StatsArea = (props: { stats: ?FileStats }) => {
   );
 };
 
-const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => {
+const renderRegistrationTable = ({
+  records
+}: {
+  records: Array<FileEntry>
+}) => {
   const getColumnWidth = memoize<[string], number | void>(keyString => {
     const minWidth = 90;
     const maxWidth = 230;
@@ -123,8 +133,8 @@ const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => 
   const filteredFirstRecord = omit(
     records[0],
     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
-      return typeof value === 'string' ? value : '';
-    }),
+      return typeof value === "string" ? value : "";
+    })
   );
 
   return (
@@ -134,8 +144,8 @@ const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => 
         {
           id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
           Cell: ({ original }) => original.row, // we don't know what should be here
-          Header: '#',
-          width: 60,
+          Header: "#",
+          width: 60
         },
         {
           id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
@@ -151,14 +161,14 @@ const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => 
             </div>
           ),
           width: 60,
-          Header: <StarIcon active={false} />,
+          Header: <StarIcon active={false} />
         },
         ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
           id: key,
           accessor: key,
           Header: key,
-          minWidth: getColumnWidth(key),
-        })),
+          minWidth: getColumnWidth(key)
+        }))
       ]}
       data={records}
     />
@@ -179,20 +189,20 @@ const renderNoDataTable = () => (
         showPagination={false}
         columns={[
           {
-            Header: '#',
-            width: 60,
+            Header: "#",
+            width: 60
           },
           {
             width: 60,
-            Header: <StarIcon active={true} />,
+            Header: <StarIcon active={true} />
           },
-          { Header: 'Program ID' },
-          { Header: 'Submitter Donor ID' },
-          { Header: 'Submitter Specimen ID' },
-          { Header: 'Specimen Type' },
-          { Header: 'Tumour or Normal Designation' },
-          { Header: 'Submitter Sample ID' },
-          { Header: 'Sample Type' },
+          { Header: "Program ID" },
+          { Header: "Submitter Donor ID" },
+          { Header: "Submitter Specimen ID" },
+          { Header: "Specimen Type" },
+          { Header: "Tumour or Normal Designation" },
+          { Header: "Submitter Sample ID" },
+          { Header: "Sample Type" }
         ]}
       />
     </div>
@@ -220,7 +230,7 @@ const renderNoDataTable = () => (
 const FileTable = (props: {
   records: Array<FileEntry>,
   stats: ?FileStats,
-  submissionInfo: ?SubmissionInfo,
+  submissionInfo: ?SubmissionInfo
 }) => {
   const theme = useTheme();
   const { records, stats, submissionInfo } = props;
@@ -242,12 +252,16 @@ const FileTable = (props: {
         <Row nogutter>
           <Col lg={6}>{stats && <StatsArea stats={stats} />}</Col>
           <Col align="end">
-            {submissionInfo && <SubmissionInfoArea submissionInfo={submissionInfo} />}
+            {submissionInfo && (
+              <SubmissionInfoArea submissionInfo={submissionInfo} />
+            )}
           </Col>
         </Row>
       </div>
 
-      {records.length > 0 ? renderRegistrationTable({ records }) : renderNoDataTable()}
+      {records.length > 0
+        ? renderRegistrationTable({ records })
+        : renderNoDataTable()}
     </div>
   );
 };
