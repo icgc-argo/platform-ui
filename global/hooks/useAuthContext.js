@@ -11,6 +11,10 @@ import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import { useRouter } from 'next/router';
 
 const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+const tokenRefreshUrl = urlJoin(
+  EGO_API_ROOT,
+  `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
+);
 
 type UseEgoTokenInput = {
   onError?: (error: Error) => void,
@@ -19,10 +23,11 @@ type UseEgoTokenInput = {
 type T_AuthContext = {
   token: ?string,
   logOut: void => void,
+  updateToken: void => Promise<void>,
   data: $Call<typeof decodeToken, ?string> | null,
 };
 
-const AuthContext = React.createContext<T_AuthContext | null>(null);
+const AuthContext = React.createContext<T_AuthContext>({});
 
 export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: React.Node }) {
   const [token, setToken] = React.useState<?string>(egoJwt);
@@ -61,8 +66,26 @@ export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: 
     }
   });
 
+  const updateToken = () => {
+    return fetch(tokenRefreshUrl, {
+      credentials: 'include',
+      headers: { Authorization: `Bearer ${token || ''}` },
+      body: null,
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(res => res.text())
+      .then(egoToken => {
+        Cookies.set(EGO_JWT_KEY, egoToken);
+        setToken(egoToken);
+      })
+      .catch(err => {
+        console.warn('err: ', err);
+      });
+  };
+
   const authData = new Proxy<T_AuthContext>(
-    { token, logOut, data: null },
+    { token, logOut, data: null, updateToken },
     {
       get: (obj, key) => {
         switch (key) {

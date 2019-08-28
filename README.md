@@ -8,11 +8,20 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 
 ## Development
 
+### Setup
+
 - Install dependencies: `npm i`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
 - Dev commands:
   - `npm run dev-ui` for working on ui only
   - `npm run dev` for work that involves the custom server
+
+### Writing commits
+
+To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/package/gitmoji-cli), available as a dev dependency
+
+- `npm run commit` will start interactive commit tool
+- configuring gitmoji-cli: `npm run gitmoji-config`
 
 ## Uikit
 

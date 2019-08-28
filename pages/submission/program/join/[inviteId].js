@@ -2,7 +2,7 @@ import { createPage } from 'global/utils/pages';
 import JoinProgramPage from 'components/pages/submission-system/join';
 
 export default createPage({
-  isPublic: true,
+  isPublic: false,
   isAccessible: async ({ egoJwt, ctx }) => {
     return true;
   },

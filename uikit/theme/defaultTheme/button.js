@@ -43,7 +43,7 @@ export default {
       disabled: '#cecfd3',
     },
     text: {
-      default: colors.white,
+      default: 'transparent',
       hover: '#f2ecfd',
       active: '#e6def6',
       focus: colors.white,
@@ -66,7 +66,7 @@ export default {
       disabled: '#cecfd3',
     },
     text: {
-      default: colors.white,
+      default: 'transparent',
       hover: '#f2ecfd',
       active: '#e6def6',
       focus: colors.white,
