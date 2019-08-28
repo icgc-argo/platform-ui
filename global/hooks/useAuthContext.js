@@ -23,7 +23,7 @@ type UseEgoTokenInput = {
 type T_AuthContext = {
   token: ?string,
   logOut: void => void,
-  refreshToken: void => Promise<void>,
+  updateToken: void => Promise<void>,
   data: $Call<typeof decodeToken, ?string> | null,
 };
 
@@ -66,7 +66,7 @@ export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: 
     }
   });
 
-  const refreshToken = () => {
+  const updateToken = () => {
     return fetch(tokenRefreshUrl, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${token || ''}` },
@@ -85,7 +85,7 @@ export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: 
   };
 
   const authData = new Proxy<T_AuthContext>(
-    { token, logOut, data: null, refreshToken },
+    { token, logOut, data: null, updateToken },
     {
       get: (obj, key) => {
         switch (key) {

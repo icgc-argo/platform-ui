@@ -34,7 +34,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const toaster = useToaster();
 
-  const { refreshToken } = useAuthContext();
+  const { updateToken } = useAuthContext();
 
   const handleSubmit = async validData => {
     try {
@@ -49,7 +49,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
         },
       });
 
-      refreshToken().then(egoToken => {
+      updateToken().then(egoToken => {
         router.push(
           PROGRAM_DASHBOARD_PATH.replace(
             PROGRAM_SHORT_NAME_PATH,
