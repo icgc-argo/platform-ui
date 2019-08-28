@@ -23,7 +23,7 @@ export default function DefaultLayout({ children }) {
         links={[
           { displayName: 'Contact', href: '#' },
           { displayName: 'Documentation', href: '#' },
-          { displayName: 'Privacy Policy', href: '#' },
+          { displayName: 'Privacy Policy', href: '/privacy' },
           { displayName: 'Terms & Conditions', href: '#' },
           { displayName: 'Publication Policy', href: '#' },
         ]}
