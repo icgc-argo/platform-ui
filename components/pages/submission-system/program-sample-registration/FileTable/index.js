@@ -120,7 +120,6 @@ const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => 
     const targetWidth = keyString.length * spacePerChar + margin;
     return Math.max(Math.min(maxWidth, targetWidth), minWidth);
   });
-
   const filteredFirstRecord = omit(
     records[0],
     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
