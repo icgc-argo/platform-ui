@@ -79,6 +79,9 @@ const ErrorTable = ({
         css={css`
           margin-left: auto;
           min-width: 240px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-end;
         `}
       >
         <Button
@@ -111,6 +114,7 @@ const ErrorTable = ({
             display: inline-block;
           `}
           variant={BUTTON_VARIANTS.TEXT}
+          size={BUTTON_SIZES.SM}
           onClick={() => onClear()}
         >
           Clear
