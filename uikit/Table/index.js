@@ -87,6 +87,7 @@ const Table = <Data: { [k: string]: any }>({
   const selectedIds = rest.selectedIds || [];
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
+
   return (
     <StyledTable
       columns={columns}
@@ -103,6 +104,7 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
+      NoDataComponent={() => null}
       {...rest}
     />
   );
