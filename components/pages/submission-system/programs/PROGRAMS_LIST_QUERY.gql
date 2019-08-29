@@ -8,5 +8,11 @@ query PROGRAMS_LIST_QUERY {
     genomicDonors
     submittedDonors
     commitmentDonors
+    users {
+      email
+      firstName
+      lastName
+      role
+    }
   }
 }
