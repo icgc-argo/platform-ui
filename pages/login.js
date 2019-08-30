@@ -1,13 +1,9 @@
 //@flow
-import React from 'react';
-import urlJoin from 'url-join';
-import Router from 'next/router';
-
-import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
-import { getDefaultRedirectPathForUser } from 'global/utils/pages';
-import { createPage } from 'global/utils/pages';
 import LoginPage from 'components/pages/login';
+import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
+import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
+import Router from 'next/router';
+import React from 'react';
 
 export default createPage({
   isPublic: true,

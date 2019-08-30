@@ -1,11 +1,9 @@
-FROM mhart/alpine-node:latest
+FROM node:alpine
+WORKDIR /usr/src/app
 
-WORKDIR /usr/src
-
+COPY ./package.json ./package-lock.json ./
+RUN npm ci
 COPY . .
 
-RUN npm ci
-
-EXPOSE 8080
-
-CMD ["npm", "run", "start-prod"]
+RUN npx next build
+CMD ["npx", "next", "start"]

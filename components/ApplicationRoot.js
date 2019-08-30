@@ -1,22 +1,21 @@
 //@flow
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
-import urljoin from 'url-join';
 import ApolloClient from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
+import { ToasterContext, useToastState } from 'global/hooks/toaster';
+import { AuthProvider } from 'global/hooks/useAuthContext';
+import { PageContext } from 'global/hooks/usePageContext';
+import createInMemoryCache from 'global/utils/createInMemoryCache';
+import getConfig from 'next/config';
+import * as React from 'react';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import ReactDOM from 'react-dom';
+import { css, ThemeProvider } from 'uikit';
+import Modal from 'uikit/Modal';
+import ToastStack from 'uikit/notifications/ToastStack';
+import urljoin from 'url-join';
 
 import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
-import { PageContext } from 'global/hooks/usePageContext';
-import { GATEWAY_API_ROOT } from 'global/config';
-import createInMemoryCache from 'global/utils/createInMemoryCache';
-import { ThemeProvider } from 'uikit';
-import { useToastState, ToasterContext } from 'global/hooks/toaster';
-import { css } from 'uikit';
-import ToastStack from 'uikit/notifications/ToastStack';
-import { AuthProvider } from 'global/hooks/useAuthContext';
-import Modal from 'uikit/Modal';
 
 const modalPortalRef = React.createRef();
 const useMounted = () => {
@@ -98,6 +97,8 @@ export default function ApplicationRoot({
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
 }) {
+  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+
   const apolloClient = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({

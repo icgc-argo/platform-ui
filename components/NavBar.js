@@ -1,59 +1,47 @@
 // @flow
-import {
-  LOGIN_PAGE_PATH,
-  PROGRAMS_LIST_PATH,
-  PROGRAM_MANAGE_PATH,
-  USER_PAGE_PATH,
-  SUBMISSION_PATH,
-  PROGRAM_CLINICAL_SUBMISSION_PATH,
-} from 'global/constants/pages';
+import { SUBMISSION_PATH, USER_PAGE_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
-import {
-  decodeToken,
-  canReadProgram,
-  isRdpcMember,
-  canReadSomeProgram,
-  isDccMember,
-} from 'global/utils/egoJwt';
-import _ from 'lodash';
+import usePageContext from 'global/hooks/usePageContext';
+import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Link from 'next/link';
 import * as React from 'react';
 import { css } from 'uikit';
 import AppBar, {
+  DropdownMenu,
+  DropdownMenuItem,
   Logo,
   MenuGroup,
   MenuItem,
   Section,
   UserBadge,
-  DropdownMenu,
-  DropdownMenuItem,
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
-import { getDefaultRedirectPathForUser } from 'global/utils/pages';
-import Typography from 'uikit/Typography';
-import usePageContext from 'global/hooks/usePageContext';
 import Icon from 'uikit/Icon';
-import { EGO_URL } from 'global/config';
+import Typography from 'uikit/Typography';
+import getConfig from 'next/config';
 
-const NavBarLoginButton = () => (
-  <Button>
-    <span
-      css={css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      `}
-    >
-      <Icon
-        name="google"
+const NavBarLoginButton = () => {
+  return (
+    <Button>
+      <span
         css={css`
-          margin-right: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         `}
-      />
-      Login
-    </span>
-  </Button>
-);
+      >
+        <Icon
+          name="google"
+          css={css`
+            margin-right: 5px;
+          `}
+        />
+        Login
+      </span>
+    </Button>
+  );
+};
 
 const getUserRole = egoJwt => {
   if (!egoJwt) {
@@ -73,6 +61,7 @@ export default () => {
   const { token: egoJwt, logOut, data: userModel } = useAuthContext() || {};
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
   const { asPath: path } = usePageContext();
+  const { EGO_URL } = getConfig().publicRuntimeConfig;
 
   return (
     <AppBar

@@ -11,7 +11,6 @@ module.exports = withImages({
       fs: 'empty',
     };
     config.resolve.modules.push(path.resolve('./'));
-    config.plugins = [...config.plugins, new Dotenv({ path: path.join(__dirname, '/.env') })];
     config.module.rules = [
       ...config.module.rules,
       {
@@ -23,13 +22,13 @@ module.exports = withImages({
 
     return config;
   },
-  env: {
-    ENV: process.env.NODE_ENV,
-    PORT: process.env.PORT,
-    GATEWAY_API_ROOT: process.env.GATEWAY_API_ROOT,
-    EGO_API_ROOT: process.env.EGO_API_ROOT,
-    EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
-    AUTH_DISABLED: process.env.AUTH_DISABLED,
-    GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+  publicRuntimeConfig: {
+    GATEWAY_API_ROOT: process.env.GATEWAY_API_ROOT || 'http://localhost:9000',
+    EGO_API_ROOT: process.env.EGO_API_ROOT || '',
+    EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || '',
+    AUTH_DISABLED: process.env.AUTH_DISABLED || false,
+    GA_TRACKING_ID: process.env.GA_TRACKING_ID || '',
+    EGO_URL:
+      process.env.EGO_API_ROOT + `/api/oauth/login/google?client_id=${process.env.EGO_CLIENT_ID}`,
   },
 });
