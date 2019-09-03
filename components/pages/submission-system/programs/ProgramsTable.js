@@ -97,6 +97,7 @@ export default (tableProps: {
       Cell: ({ original }) => {
         return get(original, 'administrators', []).map((admin, idx) => (
           <A
+            key={admin.email}
             href={`mailto: ${admin.email}`}
             css={css`
               margin-right: 0.5em;

@@ -21,20 +21,32 @@ const StyledLink = styled('a')`
   }
 `;
 
-const Link = ({
-  href,
-  variant = LINK_VARIANTS.INLINE,
-  uppercase = variant === LINK_VARIANTS.BLOCK,
-  withChevron = variant === LINK_VARIANTS.BLOCK,
-  underline = variant === LINK_VARIANTS.INLINE,
-  bold = variant === LINK_VARIANTS.BLOCK,
-  children,
-  ...rest
-}) => (
-  <StyledLink uppercase={uppercase} underline={underline} bold={bold} href={href} {...rest}>
-    {children}
-    {withChevron && ' ›'}
-  </StyledLink>
+const Link = React.forwardRef(
+  (
+    {
+      href,
+      variant = LINK_VARIANTS.INLINE,
+      uppercase = variant === LINK_VARIANTS.BLOCK,
+      withChevron = variant === LINK_VARIANTS.BLOCK,
+      underline = variant === LINK_VARIANTS.INLINE,
+      bold = variant === LINK_VARIANTS.BLOCK,
+      children,
+      ...rest
+    },
+    ref,
+  ) => (
+    <StyledLink
+      ref={ref}
+      uppercase={uppercase}
+      underline={underline}
+      bold={bold}
+      href={href}
+      {...rest}
+    >
+      {children}
+      {withChevron && ' ›'}
+    </StyledLink>
+  ),
 );
 
 export const LINK_VARIANTS = Object.freeze({
