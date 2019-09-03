@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 COPY ./package.json ./package-lock.json ./
 RUN npm ci
 COPY . .
-
 RUN npx next build
-CMD ["npx", "next", "start"]
+
+EXPOSE 8080
+CMD ["npx", "next", "start", "--", "-p", "8080"]
