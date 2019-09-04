@@ -55,7 +55,7 @@ export default function Error404Page() {
           </Typography>
         </div>
         <div>
-          <img alt="Bug eats wire" src="/static/client-error.svg" />
+          <img alt="Bug in the code" src="/static/client-error.svg" />
         </div>
       </div>
     </ErrorLayout>
