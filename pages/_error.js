@@ -29,7 +29,7 @@ class Error extends React.Component {
       return <Page401 />;
     }
     if (errorCode) {
-      return <p>An error {errorCode} occurred on server</p>;
+      return <Page500 />;
     }
     return <ClientError />;
   }
