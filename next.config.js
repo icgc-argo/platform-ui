@@ -31,7 +31,7 @@ module.exports = withImages({
     AUTH_DISABLED: process.env.AUTH_DISABLED || false,
     GA_TRACKING_ID: process.env.GA_TRACKING_ID || '',
     EGO_URL: urlJoin(
-      process.env.EGO_API_ROOT,
+      process.env.EGO_API_ROOT || '',
       `/api/oauth/login/google?client_id=${process.env.EGO_CLIENT_ID}`,
     ),
   },
