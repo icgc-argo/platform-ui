@@ -20,6 +20,7 @@ const Select = ({
   options = [],
   error = false,
   errorMessage = '',
+  popupPosition = 'DOWN',
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
@@ -106,7 +107,7 @@ const Select = ({
         <DropdownIcon disabled={disabled} theme={theme} />
       </StyledInputWrapper>
       {isExpanded && (
-        <OptionsList role="listbox" id={`${id}-options`}>
+        <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
           {options.map(({ content, value: optionValue }) => (
             <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
               {content}
@@ -132,6 +133,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
+  popupPosition: PropTypes.oneOf(['TOP', 'DOWN']),
 };
 
 export default Select;

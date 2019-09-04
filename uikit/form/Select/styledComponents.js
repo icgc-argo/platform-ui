@@ -26,8 +26,15 @@ export const OptionsList = styled('ol')`
   min-width: 100%;
   box-sizing: border-box;
   position: absolute;
-  top: 100%;
   z-index: 100;
+
+  &.TOP {
+    top: 0;
+    transform: translateY(-100%);
+  }
+  &.DOWN {
+    top: 100%;
+  }
 `;
 
 const OptionContainer = styled('li')`

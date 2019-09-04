@@ -128,6 +128,7 @@ function TablePagination(props) {
             `}
           >
             <Select
+              popupPosition="TOP"
               css={css`
                 & [role='button'] {
                   min-width: 70px;
