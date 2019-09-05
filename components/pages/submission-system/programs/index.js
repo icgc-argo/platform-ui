@@ -75,6 +75,7 @@ export default ({ authorizedPrograms = [] }: any) => {
           `}
         >
           <Typography
+            as="h1"
             variant="title"
             color="primary"
             css={css`
