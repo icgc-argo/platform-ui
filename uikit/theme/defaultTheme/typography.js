@@ -11,7 +11,7 @@ export default {
   },
   hero: {
     fontFamily: 'Work Sans, sans-serif',
-    fontSize: '44px',
+    fontSize: '40px',
     fontWeight: 'normal',
     fontStyle: 'normal',
     fontStretch: 'normal',
@@ -20,7 +20,7 @@ export default {
   },
   title: {
     fontFamily: 'Work Sans, sans-serif',
-    fontSize: '30px',
+    fontSize: '26px',
     fontWeight: 'normal',
     fontStyle: 'normal',
     fontStretch: 'normal',
@@ -29,7 +29,7 @@ export default {
   },
   subtitle: {
     fontFamily: 'Work Sans, sans-serif',
-    fontSize: '22px',
+    fontSize: '20px',
     fontWeight: 'normal',
     fontStyle: 'normal',
     fontStretch: 'normal',
@@ -38,8 +38,8 @@ export default {
   },
   subtitle2: {
     fontFamily: 'Work Sans, sans-serif',
-    fontSize: '18px',
-    fontWeight: 'normal',
+    fontSize: '16px',
+    fontWeight: 'bold',
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
