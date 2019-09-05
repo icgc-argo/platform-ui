@@ -1,11 +1,11 @@
 import * as yup from 'yup';
 import { PROGRAM_USER_ROLES } from 'global/constants/index';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
-import { requiredError } from 'global/utils/form/error';
+import { requiredError, validEmail } from 'global/utils/form/error';
 
 export const testGsuite = async email => {
   // await fetch......
-  console.log('gsuite test', email);
+  // console.log('gsuite test', email);
   return true;
 };
 
@@ -23,6 +23,7 @@ export const lastName = yup
 
 export const email = yup
   .string()
+  .email(validEmail)
   .label('Email')
   .trim()
   .test('is-gsuite', 'email is not gsuite', testGsuite)
