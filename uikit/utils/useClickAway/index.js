@@ -1,4 +1,5 @@
 import React from 'react';
+import get from 'lodash/get';
 
 export default function useClickAway({
   domElementRef,
@@ -7,7 +8,11 @@ export default function useClickAway({
 }) {
   React.useEffect(e => {
     const onGlobalClick = event => {
-      const isClickaway = !event.path.includes(domElementRef.current);
+      if (!domElementRef) {
+        return;
+      }
+      const isClickaway = !domElementRef.current.contains(event.target);
+
       if (isClickaway) {
         onClickAway(e);
       } else {
