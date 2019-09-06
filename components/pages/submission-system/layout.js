@@ -12,6 +12,7 @@ import {
   ContentBox,
   PageFooter,
 } from 'uikit/PageLayout';
+import clsx from 'clsx';
 import Head from '../head';
 import NavBar from 'components/NavBar';
 import SideMenu from './SideMenu';
@@ -34,7 +35,7 @@ const SubmissionLayout = ({
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
-      <PageBody noSidebar={noSidebar}>
+      <PageBody className={clsx({ noSidebar })}>
         {!noSidebar && <Panel>{sideMenu}</Panel>}
         <PageContent>
           {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}

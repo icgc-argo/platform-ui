@@ -25,18 +25,24 @@ export const Panel = styled('div')`
 export const PageContent = styled('div')`
   position: relative;
   min-height: 600px;
-  grid-column: 2;
 `;
 
 export const PageBody = styled('div')`
   display: grid;
-  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '230px 1fr')};
+  grid-template-columns: 230px 1fr;
+
+  &.noSidebar {
+    grid-template-columns: 1fr;
+  }
+
   & ${PageContent} {
-    ${({ noSidebar }) =>
-      !noSidebar &&
-      css`
-        max-width: calc(100vw - 230px);
-      `}
+    grid-column: 2;
+    max-width: calc(100vw - 230px);
+  }
+
+  &.noSidebar ${PageContent} {
+    grid-column: 1;
+    max-width: none;
   }
 `;
 
