@@ -160,6 +160,7 @@ const renderRegistrationTable = ({ records }: { records: Array<FileEntry> }) => 
           minWidth: getColumnWidth(key),
         })),
       ]}
+      style={{ maxHeight: '500px' }}
       data={records}
     />
   );

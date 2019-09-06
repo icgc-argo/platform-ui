@@ -39,7 +39,11 @@ export const StyledTable = styled(ReactTable)`
 
   &.ReactTable .rt-thead.-header .rt-tr .rt-th {
     ${({ theme }) => css(theme.typography.data)};
+    height: 28px;
+    line-height: 1.33;
+    padding: 4px 8px;
     font-weight: bold;
+    align-items: center;
     background: ${({ theme }) => theme.colors.white};
     &:not(:last-of-type) {
       border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
@@ -47,7 +51,9 @@ export const StyledTable = styled(ReactTable)`
   }
   &.ReactTable .rt-tbody .rt-td {
     ${({ theme }) => css(theme.typography.data)}
-    padding: 10px 16px;
+    height: 28px;
+    line-height: 1.33;
+    padding: 4px 8px;
     border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
     display: flex;
     align-items: center;
