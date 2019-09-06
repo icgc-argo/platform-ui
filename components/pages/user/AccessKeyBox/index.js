@@ -8,8 +8,31 @@ import { Input } from 'uikit/form';
 import Button from 'uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
+import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
+import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 
 export default function AccessTokenBox() {
+  const { data, loading } = useQuery(EGO_ACCESS_KEY);
+  const [accessKey, setAccessKey] = React.useState(null);
+  const [exp, setExp] = React.useState(null);
+  const now = Date.now() / 1000;
+  console.log('now', now);
+
+  const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
+  const onGenerate = async data => {
+    try {
+      const {
+        data: { accessKey, exp },
+      } = await generateKey();
+      console.log('generate key', accessKey, exp);
+      setAccessKey(accessKey);
+      setExp(exp);
+    } catch (err) {
+      console.error('err', err);
+    }
+  };
+
   return (
     <Box title="Access Token" iconName="key">
       <Typography variant="paragraph">
@@ -44,7 +67,7 @@ export default function AccessTokenBox() {
               flex: 1;
             `}
           >
-            <ClipboardCopyField tagText="Expires in: 5 days" value="SOME_TOKEN" />
+            <ClipboardCopyField tagText="" value="Generate a token.." disabled={false} />
           </div>
           <div
             css={css`
@@ -55,7 +78,9 @@ export default function AccessTokenBox() {
               justify-content: center;
             `}
           >
-            <Button variant="secondary">Generate</Button>
+            <Button onClick={() => onGenerate()} variant="secondary">
+              Generate
+            </Button>
           </div>
         </div>
       </div>

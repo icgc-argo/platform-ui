@@ -5,7 +5,6 @@ import { Row, Col } from 'react-grid-system';
 import uniq from 'lodash/uniq';
 import { css, styled } from 'uikit';
 import UikitLink from 'uikit/Link';
-import AccessTokenBox from '../AccessTokenBox';
 import { Box } from '../common';
 import Table, { DefaultLoadingComponent } from 'uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
