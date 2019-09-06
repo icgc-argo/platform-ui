@@ -10,8 +10,13 @@ export const PageContainer = styled('div')`
 `;
 
 export const Panel = styled('div')`
-  min-width: 304px;
+  position: fixed;
+  bottom: 0px;
+  top: 58px;
+  overflow-y: auto;
+  min-width: 230px;
   padding-top: 12px;
+  padding-bottom: 58px;
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
@@ -20,6 +25,7 @@ export const Panel = styled('div')`
 export const PageContent = styled('div')`
   position: relative;
   min-height: 600px;
+  grid-column: 2;
 `;
 
 export const PageBody = styled('div')`
