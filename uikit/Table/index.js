@@ -1,17 +1,14 @@
 // @flow
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import ReactTable from 'react-table';
-import selectTable from 'react-table/lib/hoc/selectTable';
 import { get } from 'lodash';
-
-import TablePagination from './TablePagination';
-import { StyledTable } from './styledComponent';
+import isEmpty from 'lodash/isEmpty';
+import * as React from 'react';
+import selectTable from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
-
-export { TableActionBar } from './TablePagination';
-
 import Checkbox from '../form/Checkbox';
+import { StyledTable } from './styledComponent';
+import TablePagination from './TablePagination';
+
+export { default as TablePagination, TableActionBar } from './TablePagination';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }: any) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -79,6 +76,7 @@ const Table = <Data: { [k: string]: any }>({
   LoadingComponent = DefaultLoadingComponent,
   columns,
   data,
+  showPagination,
   ...rest
 }: TableProps<Data>) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
@@ -87,6 +85,7 @@ const Table = <Data: { [k: string]: any }>({
   const selectedIds = rest.selectedIds || [];
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
+
   return (
     <StyledTable
       columns={columns}
@@ -103,6 +102,8 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
+      NoDataComponent={() => null}
+      showPagination={isEmpty(data) ? false : showPagination}
       {...rest}
     />
   );
@@ -165,5 +166,3 @@ export const SelectTable = <Data: { [k: string]: any }>(
     />
   );
 };
-
-export { default as TablePagination } from './TablePagination';

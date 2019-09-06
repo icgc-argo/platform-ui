@@ -170,6 +170,7 @@ const renderRegistrationTable = ({
           minWidth: getColumnWidth(key)
         }))
       ]}
+      style={{ maxHeight: '500px' }}
       data={records}
     />
   );
@@ -185,7 +186,6 @@ const renderNoDataTable = () => (
     >
       {/* NB: Ghost background table has hardcoded values */}
       <Table
-        NoDataComponent={() => null}
         showPagination={false}
         columns={[
           {

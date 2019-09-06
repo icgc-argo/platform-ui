@@ -1,7 +1,8 @@
 //@flow
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { orderBy } from 'lodash';
+import orderBy from 'lodash/orderBy';
+import filter from 'lodash/filter';
 
 import Typography from 'uikit/Typography';
 import { Input } from 'uikit/form';
@@ -42,6 +43,11 @@ const TableFilterInput = props => (
 
 export default ({ authorizedPrograms = [] }: any) => {
   const { data: { programs = [] } = {}, loading, errors } = useQuery(PROGRAMS_LIST_QUERY);
+
+  programs.forEach(p => {
+    p.administrators = filter(p.users, { role: 'ADMIN' });
+  });
+
   const authContext = useAuthContext() || {};
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
@@ -69,6 +75,7 @@ export default ({ authorizedPrograms = [] }: any) => {
           `}
         >
           <Typography
+            as="h1"
             variant="title"
             color="primary"
             css={css`

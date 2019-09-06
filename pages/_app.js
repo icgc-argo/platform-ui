@@ -1,26 +1,24 @@
 // @flow
-import * as React from 'react';
-import nextCookies from 'next-cookies';
-import Router from 'next/router';
-import Cookies from 'js-cookie';
-import fetch from 'isomorphic-fetch';
-import ReactGA from 'react-ga';
-
+import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { AUTH_DISABLED, GA_TRACKING_ID } from 'global/config';
-import { isValidJwt, decodeToken } from 'global/utils/egoJwt';
+import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
+import nextCookies from 'next-cookies';
+import Router from 'next/router';
+import * as React from 'react';
+import ReactGA from 'react-ga';
+import { ERROR_STATUS_KEY } from './_error';
+import getConfig from 'next/config';
+import App from 'next/app';
+
+const { AUTH_DISABLED, GA_TRACKING_ID } = getConfig().publicRuntimeConfig;
 
 import type {
   PageWithConfig,
   GetInitialPropsContext,
   ClientSideGetInitialPropsContext,
 } from 'global/utils/pages/types';
-
-import { ERROR_STATUS_KEY } from './_error';
-import useAuthContext from 'global/hooks/useAuthContext';
-import ApplicationRoot from 'components/ApplicationRoot';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -51,95 +49,89 @@ const removeCookie = (res, cookieName) => {
   res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
 };
 
-const getInitialProps = async ({
-  Component,
-  ctx,
-  router,
-}: {
-  Component: PageWithConfig,
-  ctx: GetInitialPropsContext,
-  router?: any,
-}): Promise<RootGetInitialPropsData> => {
-  const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
-  const { res } = ctx;
+class Root extends App {
+  static async getInitialProps({
+    Component,
+    ctx,
+    router,
+  }: {
+    Component: PageWithConfig,
+    ctx: GetInitialPropsContext,
+    router?: any,
+  }) {
+    const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
+    const { res } = ctx;
 
-  if (egoJwt) {
-    if (!isValidJwt(egoJwt)) {
-      removeCookie(res, EGO_JWT_KEY);
-      redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+    if (egoJwt) {
+      if (!isValidJwt(egoJwt)) {
+        removeCookie(res, EGO_JWT_KEY);
+        redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+      }
+    } else {
+      if (!Component.isPublic) {
+        enforceLogin({ ctx });
+      }
     }
-  } else {
-    if (!Component.isPublic) {
-      enforceLogin({ ctx });
+
+    const unauthorized = Component.isAccessible
+      ? !(await Component.isAccessible({ egoJwt, ctx }))
+      : false;
+
+    if (unauthorized && !AUTH_DISABLED) {
+      const err = (new Error('Unauthorized'): Error & { statusCode?: number });
+      err[ERROR_STATUS_KEY] = 401;
+      throw err;
     }
-  }
 
-  const unauthorized = Component.isAccessible
-    ? !(await Component.isAccessible({ egoJwt, ctx }))
-    : false;
+    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
-  if (unauthorized && !AUTH_DISABLED) {
-    const err = (new Error('Unauthorized'): Error & { statusCode?: number });
-    err[ERROR_STATUS_KEY] = 401;
-    throw err;
-  }
-
-  const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
-
-  let graphqlQueriesToChache;
-  let apolloCache = {};
-  try {
-    graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
-      ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-      : [];
-    apolloCache = graphqlQueriesToChache
-      ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
-      : {};
-  } catch (e) {
-    console.log(e);
-  }
-  return {
-    pageProps,
-    unauthorized,
-    pathname: ctx.pathname,
-    egoJwt,
-    ctx: {
+    let graphqlQueriesToChache;
+    let apolloCache = {};
+    try {
+      graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
+        ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
+        : [];
+      apolloCache = graphqlQueriesToChache
+        ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
+        : {};
+    } catch (e) {
+      console.log(e);
+    }
+    return {
+      pageProps,
+      unauthorized,
       pathname: ctx.pathname,
-      query: ctx.query,
-      asPath: ctx.asPath,
-    },
-    apolloCache,
-  };
-};
+      egoJwt,
+      ctx: {
+        pathname: ctx.pathname,
+        query: ctx.query,
+        asPath: ctx.asPath,
+      },
+      apolloCache,
+    };
+  }
 
-const Root = (() => {
-  const component = (
-    props: {
-      Component: PageWithConfig,
-    } & RootGetInitialPropsData,
-  ) => {
-    const { Component, pageProps, unauthorized, pathname, ctx, apolloCache } = props;
-    const egoJwt = props.egoJwt;
-
+  componentDidMount() {
+    const { ctx, egoJwt } = this.props;
     const userModel = decodeToken(egoJwt);
 
-    React.useEffect(() => {
-      ReactGA.initialize(GA_TRACKING_ID, {
-        gaOptions: {
-          userId: userModel ? userModel.context.user.email : 'NA',
-        },
-      });
-      ReactGA.pageview(ctx.asPath);
+    ReactGA.initialize(GA_TRACKING_ID, {
+      gaOptions: {
+        userId: userModel ? userModel.context.user.email : 'NA',
+      },
     });
+    ReactGA.pageview(ctx.asPath);
+  }
+
+  render() {
+    const { Component, pageProps, unauthorized, pathname, ctx, apolloCache, egoJwt } = this.props;
 
     return (
       <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
         <Component {...pageProps} />
       </ApplicationRoot>
     );
-  };
-  component.getInitialProps = getInitialProps;
-  return component;
-})();
+  }
+}
 
 export default Root;

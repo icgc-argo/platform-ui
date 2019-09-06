@@ -1,23 +1,19 @@
-import { EGO_URL } from 'global/config';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
-import { createPage, getRedirectPathForUser } from 'global/utils/pages';
-import Router from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
-import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
-import Button from 'uikit/Button';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Container from 'uikit/Container';
-import Footer from 'uikit/Footer';
 import Typography from 'uikit/Typography';
-import DefaultLayout from './DefaultLayout';
 import useTheme from 'uikit/utils/useTheme';
+import DefaultLayout from './DefaultLayout';
+import getConfig from 'next/config';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
 const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage() {
+  const { EGO_URL } = getConfig().publicRuntimeConfig;
+
   const theme = useTheme();
   return (
     <DefaultLayout>

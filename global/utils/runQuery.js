@@ -1,8 +1,9 @@
-import urlJoin from 'url-join';
-import fetch from 'isomorphic-fetch';
 import { print } from 'graphql/language/printer';
+import fetch from 'isomorphic-fetch';
+import urlJoin from 'url-join';
+import getConfig from 'next/config';
 
-import { GATEWAY_API_ROOT } from 'global/config';
+const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
 export default ({ query, variables }) =>
   fetch(urlJoin(GATEWAY_API_ROOT, 'graphql'), {

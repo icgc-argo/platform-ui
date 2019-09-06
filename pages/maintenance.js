@@ -15,7 +15,7 @@ export default createPage({
         css={css`
           display: flex;
           justify-content: space-between;
-          padding: 48px 80px 42px 48px;
+          padding: 32px 47px 27px 47px;
         `}
       >
         <div
@@ -36,7 +36,7 @@ export default createPage({
             Down for Maintenance
           </Typography>
           <Typography variant="subtitle2">
-            Sorry for the inconvenience. We'll be back up and running as fast as possible.
+            We'll be back up and running as quickly as possible. We appreciate your patience.
           </Typography>
           <Typography variant="subtitle2">
             If you have any questions, <Link href="/">Contact Us</Link> or head back{' '}

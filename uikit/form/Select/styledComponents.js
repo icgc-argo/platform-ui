@@ -5,6 +5,8 @@ import { withProps } from 'recompose';
 import Icon from '../../Icon';
 import Typography from '../../Typography';
 
+export const POPUP_POSITIONS = { UP: 'UP', DOWN: 'DOWN' };
+
 export const DropdownIcon = withProps(({ disabled, theme }) => ({
   name: 'chevron_down',
   fill: disabled ? theme.input.textColors.disabled : 'black',
@@ -26,8 +28,15 @@ export const OptionsList = styled('ol')`
   min-width: 100%;
   box-sizing: border-box;
   position: absolute;
-  top: 100%;
   z-index: 100;
+
+  &.${POPUP_POSITIONS.UP} {
+    top: 0;
+    transform: translateY(-100%);
+  }
+  &.${POPUP_POSITIONS.DOWN} {
+    top: 100%;
+  }
 `;
 
 const OptionContainer = styled('li')`

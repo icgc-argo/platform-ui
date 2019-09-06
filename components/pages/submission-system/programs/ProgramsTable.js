@@ -9,6 +9,7 @@ import Tooltip from 'uikit/Tooltip';
 import A from 'uikit/Link';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import type { TableColumnConfig } from 'uikit/Table';
+import get from 'lodash/get';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -20,7 +21,7 @@ type ProgramsTableProgram = {
   genomicDonors: number | null,
   submittedDonors: number | null,
   commitmentDonors: number | null,
-  administrators: string | null,
+  administrators: Array<any>,
 };
 type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
 type CellProps = { original: TableProgramInternal };
@@ -93,6 +94,20 @@ export default (tableProps: {
     {
       Header: 'Administrators',
       accessor: 'administrators',
+      Cell: ({ original }) => {
+        return get(original, 'administrators', []).map((admin, idx) => (
+          <A
+            key={admin.email}
+            href={`mailto: ${admin.email}`}
+            css={css`
+              margin-right: 0.5em;
+            `}
+          >
+            {admin.firstName + ' ' + admin.lastName}
+            {idx != original.administrators.length - 1 && ','}
+          </A>
+        ));
+      },
     },
     {
       Header: 'Donor Status',

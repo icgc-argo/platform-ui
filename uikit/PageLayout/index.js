@@ -10,8 +10,13 @@ export const PageContainer = styled('div')`
 `;
 
 export const Panel = styled('div')`
-  min-width: 304px;
+  position: fixed;
+  bottom: 0px;
+  top: 58px;
+  overflow-y: auto;
+  width: 230px;
   padding-top: 12px;
+  padding-bottom: 58px;
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
@@ -24,13 +29,20 @@ export const PageContent = styled('div')`
 
 export const PageBody = styled('div')`
   display: grid;
-  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
+  grid-template-columns: 230px 1fr;
+
+  &.noSidebar {
+    grid-template-columns: 1fr;
+  }
+
   & ${PageContent} {
-    ${({ noSidebar }) =>
-      !noSidebar &&
-      css`
-        max-width: calc(100vw - 304px);
-      `}
+    grid-column: 2;
+    max-width: calc(100vw - 230px);
+  }
+
+  &.noSidebar ${PageContent} {
+    grid-column: 1;
+    max-width: none;
   }
 `;
 

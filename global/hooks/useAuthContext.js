@@ -1,20 +1,12 @@
 // @flow
-import * as React from 'react';
-import fetch from 'isomorphic-fetch';
-import urlJoin from 'url-join';
-import Cookies from 'js-cookie';
-import Router from 'next/router';
-
-import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
 import { EGO_JWT_KEY } from 'global/constants';
-import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
+import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
+import fetch from 'isomorphic-fetch';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-
-const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-const tokenRefreshUrl = urlJoin(
-  EGO_API_ROOT,
-  `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
-);
+import * as React from 'react';
+import urlJoin from 'url-join';
+import getConfig from 'next/config';
 
 type UseEgoTokenInput = {
   onError?: (error: Error) => void,
@@ -30,6 +22,14 @@ type T_AuthContext = {
 const AuthContext = React.createContext<T_AuthContext>({});
 
 export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: React.Node }) {
+  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig().publicRuntimeConfig;
+
+  const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+  const tokenRefreshUrl = urlJoin(
+    EGO_API_ROOT,
+    `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
+  );
+
   const [token, setToken] = React.useState<?string>(egoJwt);
   const router = useRouter();
   const logOut = () => {

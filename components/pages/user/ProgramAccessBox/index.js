@@ -131,8 +131,9 @@ export default function ProgramAccessBox() {
         </Typography>
       </div>
       <div>
-        <ProgramTable programs={programs} />
-        {!programs.length && (
+        {programs.length > 0 ? (
+          <ProgramTable programs={programs} />
+        ) : (
           <div
             css={css`
               margin-top: 10px;
