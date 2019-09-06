@@ -1,25 +1,17 @@
-import { EGO_API_ROOT, EGO_CLIENT_ID } from 'global/config';
 import React from 'react';
-import { css } from 'uikit';
-import AppBar, { Logo, MenuGroup, MenuItem, Section } from 'uikit/AppBar';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
-import Container from 'uikit/Container';
-import Footer from 'uikit/Footer';
-import urlJoin from 'url-join';
-import DefaultLayout from './DefaultLayout';
-import Typography from 'uikit/Typography';
+import { Col, Row } from 'react-grid-system';
+import { css, styled } from 'uikit';
 import Button from 'uikit/Button';
-import A from 'uikit/Link';
-import useTheme from 'uikit/utils/useTheme';
-import { ContentBox } from 'uikit/PageLayout';
-import { Container as GridContainer, Row, Col } from 'react-grid-system';
+import { Input } from 'uikit/form';
 import FormControl from 'uikit/form/FormControl';
 import InputLabel from 'uikit/form/InputLabel';
-import { Input } from 'uikit/form';
 import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
-
-import { styled } from 'uikit';
+import A from 'uikit/Link';
+import { ContentBox } from 'uikit/PageLayout';
+import Typography from 'uikit/Typography';
+import useTheme from 'uikit/utils/useTheme';
+import DefaultLayout from './DefaultLayout';
 
 const Hr = styled('hr')`
   border-radius: 1.5px;
