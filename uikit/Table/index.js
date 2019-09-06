@@ -1,5 +1,6 @@
 // @flow
 import { get } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';
 import selectTable from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
@@ -75,6 +76,7 @@ const Table = <Data: { [k: string]: any }>({
   LoadingComponent = DefaultLoadingComponent,
   columns,
   data,
+  showPagination,
   ...rest
 }: TableProps<Data>) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
@@ -83,6 +85,7 @@ const Table = <Data: { [k: string]: any }>({
   const selectedIds = rest.selectedIds || [];
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
+
   return (
     <StyledTable
       columns={columns}
@@ -99,6 +102,8 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
+      NoDataComponent={() => null}
+      showPagination={isEmpty(data) ? false : showPagination}
       {...rest}
     />
   );

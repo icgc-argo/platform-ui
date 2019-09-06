@@ -176,7 +176,6 @@ const renderNoDataTable = () => (
     >
       {/* NB: Ghost background table has hardcoded values */}
       <Table
-        NoDataComponent={() => null}
         showPagination={false}
         columns={[
           {
