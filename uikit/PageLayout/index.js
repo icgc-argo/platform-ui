@@ -14,7 +14,7 @@ export const Panel = styled('div')`
   bottom: 0px;
   top: 58px;
   overflow-y: auto;
-  min-width: 230px;
+  width: 230px;
   padding-top: 12px;
   padding-bottom: 58px;
   z-index: 1;
@@ -30,12 +30,12 @@ export const PageContent = styled('div')`
 
 export const PageBody = styled('div')`
   display: grid;
-  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '304px 1fr')};
+  grid-template-columns: ${({ noSidebar }) => (noSidebar ? '1fr' : '230px 1fr')};
   & ${PageContent} {
     ${({ noSidebar }) =>
       !noSidebar &&
       css`
-        max-width: calc(100vw - 304px);
+        max-width: calc(100vw - 230px);
       `}
   }
 `;
