@@ -1,18 +1,14 @@
 // @flow
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import ReactTable from 'react-table';
-import selectTable from 'react-table/lib/hoc/selectTable';
 import { get } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
-
-import TablePagination from './TablePagination';
-import { StyledTable } from './styledComponent';
+import * as React from 'react';
+import selectTable from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
-
-export { TableActionBar } from './TablePagination';
-
 import Checkbox from '../form/Checkbox';
+import { StyledTable } from './styledComponent';
+import TablePagination from './TablePagination';
+
+export { default as TablePagination, TableActionBar } from './TablePagination';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }: any) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -170,5 +166,3 @@ export const SelectTable = <Data: { [k: string]: any }>(
     />
   );
 };
-
-export { default as TablePagination } from './TablePagination';
