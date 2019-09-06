@@ -6,7 +6,13 @@ import { withProps } from 'recompose';
 
 import { StyledInputWrapper, INPUT_SIZES } from '../common';
 import Typography from '../../Typography';
-import { DropdownIcon, OptionsList, Option, HiddenSelect } from './styledComponents';
+import {
+  DropdownIcon,
+  OptionsList,
+  Option,
+  HiddenSelect,
+  POPUP_POSITIONS,
+} from './styledComponents';
 import useTheme from '../../utils/useTheme';
 
 const Select = ({
@@ -20,7 +26,7 @@ const Select = ({
   options = [],
   error = false,
   errorMessage = '',
-  popupPosition = 'DOWN',
+  popupPosition = POPUP_POSITIONS.DOWN,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
@@ -133,7 +139,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
-  popupPosition: PropTypes.oneOf(['TOP', 'DOWN']),
+  popupPosition: PropTypes.oneOf(Object.values(POPUP_POSITIONS)),
 };
 
 export default Select;

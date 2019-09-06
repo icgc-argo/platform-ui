@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import Typography from '../../Typography';
 import useTheme from '../../utils/useTheme';
 import Select from '../../form/Select';
+import { POPUP_POSITIONS } from '../../form/Select/styledComponents';
 import Icon from '../../Icon';
 
 export const TableActionBar = props => {
@@ -128,7 +129,7 @@ function TablePagination(props) {
             `}
           >
             <Select
-              popupPosition="TOP"
+              popupPosition={POPUP_POSITIONS.UP}
               css={css`
                 & [role='button'] {
                   min-width: 70px;
