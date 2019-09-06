@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import Page404 from 'components/pages/404';
 import Page401 from 'components/pages/401';
 import Page500 from 'components/pages/500';
+import ClientError from 'components/pages/ClientError';
 
 export const ERROR_STATUS_KEY = 'statusCode';
 
@@ -27,11 +28,10 @@ class Error extends React.Component {
     if (errorCode === 401) {
       return <Page401 />;
     }
-    return (
-      <p>
-        {errorCode ? `An error ${errorCode} occurred on server` : 'An error occurred on client'}
-      </p>
-    );
+    if (errorCode) {
+      return <Page500 />;
+    }
+    return <ClientError />;
   }
 }
 

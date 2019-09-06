@@ -124,9 +124,6 @@ MenuItem.propTypes = {
   className: PropTypes.string,
   DomComponent: PropTypes.func,
   dropdownMenu: PropTypes.node,
-  ref: PropTypes.shape({
-    current: PropTypes.any,
-  }),
 };
 
 const AppBar = AppBarContainer;

@@ -36,6 +36,8 @@ export default function ErrorLayout({ children }) {
           { displayName: 'Contact', href: '#' },
           { displayName: 'Documentation', href: '#' },
           { displayName: 'Privacy Policy', href: '/privacy' },
+          { displayName: 'Terms & Conditions', href: '#' },
+          { displayName: 'Publication Policy', href: '#' },
         ]}
       />
     </PageContainer>
