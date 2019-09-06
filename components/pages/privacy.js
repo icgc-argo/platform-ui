@@ -5,15 +5,6 @@ import DefaultLayout from './DefaultLayout';
 import Link from 'next/link';
 import Typography from 'uikit/Typography';
 
-const Hr = styled('hr')`
-  border: 0;
-  width: 86px;
-  height: 3px;
-  border-radius: 1.5px;
-  background-color: ${({ theme, color }) => theme.colors[color]};
-  margin: 0;
-`;
-
 const SectionTitle = props => (
   <Typography
     css={css`
