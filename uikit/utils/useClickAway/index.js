@@ -8,7 +8,7 @@ export default function useClickAway({
 }) {
   React.useEffect(e => {
     const onGlobalClick = event => {
-      if (!domElementRef) {
+      if (!domElementRef.current) {
         return;
       }
       const isClickaway = !domElementRef.current.contains(event.target);
