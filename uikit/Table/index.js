@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import selectTable from 'react-table/lib/hoc/selectTable';
 import { get } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 import TablePagination from './TablePagination';
 import { StyledTable } from './styledComponent';
@@ -79,6 +80,7 @@ const Table = <Data: { [k: string]: any }>({
   LoadingComponent = DefaultLoadingComponent,
   columns,
   data,
+  showPagination,
   ...rest
 }: TableProps<Data>) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
@@ -87,6 +89,7 @@ const Table = <Data: { [k: string]: any }>({
   const selectedIds = rest.selectedIds || [];
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
+
   return (
     <StyledTable
       columns={columns}
@@ -103,6 +106,8 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
+      NoDataComponent={() => null}
+      showPagination={isEmpty(data) ? false : showPagination}
       {...rest}
     />
   );
