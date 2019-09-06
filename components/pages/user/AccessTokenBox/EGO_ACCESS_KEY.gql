@@ -1,0 +1,5 @@
+query EGO_ACCESS_KEY {
+  accessKey {
+    exp
+  }
+}

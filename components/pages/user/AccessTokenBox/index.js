@@ -6,7 +6,7 @@ import Banner, { BANNER_SIZE, BANNER_VARIANTS } from 'uikit/notifications/Banner
 import Link from 'uikit/Link';
 import { Input } from 'uikit/form';
 import Button from 'uikit/Button';
-import { Box } from './common';
+import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
 
 export default function AccessTokenBox() {
