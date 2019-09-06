@@ -20,8 +20,8 @@ export function UserPage({ firstName, lastName }: { firstName: string, lastName:
   );
   return (
     <DefaultLayout>
-      <PageBody noSidebar>
-        <PageContent noSidebar>
+      <PageBody className="noSidebar">
+        <PageContent>
           <ContentHeader>
             <Typography variant="title" color="primary">
               Profile & Tokens
