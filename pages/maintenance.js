@@ -29,6 +29,7 @@ export default createPage({
               margin: 10px 0;
               line-height: normal;
             `}
+            as="h1"
           >
             Be back soon
           </Typography>

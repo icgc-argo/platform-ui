@@ -23,7 +23,7 @@ export function UserPage({ firstName, lastName }: { firstName: string, lastName:
       <PageBody className="noSidebar">
         <PageContent>
           <ContentHeader>
-            <Typography variant="title" color="primary">
+            <Typography variant="title" color="primary" as="h1">
               Profile & Tokens
             </Typography>
           </ContentHeader>
