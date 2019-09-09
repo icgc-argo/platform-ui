@@ -12,14 +12,7 @@ import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
-
-const Hr = styled('hr')`
-  border-radius: 1.5px;
-  border: none;
-  height: 3px;
-  margin: 0;
-  background-color: ${({ theme, color }) => theme.colors[color]};
-`;
+import TitleBorder from 'uikit/TitleBorder';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -83,7 +76,7 @@ export default function ContactPage() {
             </Typography>
           </div>
           <div>
-            <Hr color="accent1" />
+            <TitleBorder color="accent1" />
             <div
               css={css`
                 display: flex;
@@ -115,7 +108,7 @@ export default function ContactPage() {
             <Button size="sm">Learn more</Button>
           </div>
           <div>
-            <Hr color="accent3" />
+            <TitleBorder color="accent3" />
             <div
               css={css`
                 display: flex;
@@ -147,7 +140,7 @@ export default function ContactPage() {
             <Button size="sm">Learn more</Button>
           </div>
           <div>
-            <Hr color="accent4" />
+            <TitleBorder color="accent4" />
             <div
               css={css`
                 display: flex;
