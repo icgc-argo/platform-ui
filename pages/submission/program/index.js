@@ -10,8 +10,4 @@ import PROGRAMS_LIST_QUERY from 'components/pages/submission-system/programs/PRO
 export default createPage({
   isPublic: false,
   isAccessible: async ({ egoJwt, ctx }) => isDccMember(egoJwt),
-  getGqlQueriesToPrefetch: async () => [
-    { query: SIDE_MENU_PROGRAM_LIST },
-    { query: PROGRAMS_LIST_QUERY },
-  ],
 })(ProgramsPage);
