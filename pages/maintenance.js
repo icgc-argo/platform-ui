@@ -29,13 +29,21 @@ export default createPage({
               margin: 10px 0;
               line-height: normal;
             `}
+            as="h1"
           >
             Be back soon
           </Typography>
-          <Typography as="div" variant="subtitle" color="secondary">
+          <Typography
+            as="h2"
+            variant="subtitle"
+            color="secondary"
+            css={css`
+              margin: 0;
+            `}
+          >
             Down for Maintenance
           </Typography>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle2" as="p">
             We'll be back up and running as quickly as possible. We appreciate your patience.
           </Typography>
           <Typography variant="subtitle2">
