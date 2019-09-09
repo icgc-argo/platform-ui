@@ -1,13 +1,12 @@
 // @flow
 import css from '@emotion/css';
-import {
-  CANCER_TYPES,
-  COUNTRIES,
-  PRIMARY_SITES,
-  PROGRAM_MEMBERSHIP_TYPES,
-  RDC_NAMES,
-} from 'global/constants';
-import { filter, get, isArray } from 'lodash';
+import { PROGRAM_MEMBERSHIP_TYPES, RDC_NAMES } from 'global/constants';
+import filter from 'lodash/filter';
+import get from 'lodash/get';
+import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import merge from 'lodash/merge';
 import Link from 'next/link';
 import Router from 'next/router';
 import * as React from 'react';
@@ -26,13 +25,12 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import * as yup from 'yup';
-import isEmpty from 'lodash/isEmpty';
-import merge from 'lodash/merge';
-import isEqual from 'lodash/isEqual';
 import useFormHook from 'global/hooks/useFormHook';
 import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 import createProgramSchema from './create-program/validation';
 import updateProgramSchema from './program-management/updateProgramValidator';
+
+import QUERY_PROGRAM_VALUES from './QUERY_PROGRAM_VALUES.gql';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -126,6 +124,37 @@ export default function CreateProgramForm({
     hasErrors,
   } = formModel;
 
+  /* *************************** *
+   * Load Program Service Values
+   * *************************** */
+  const [programValues, setProgramValues]: [
+    {
+      cancerTypes: [string],
+      primarySites: [string],
+      institutions: [string],
+      regions: [string],
+      countries: [string],
+      fetched: boolean,
+    },
+    any,
+  ] = React.useState({});
+  const [sendGetProgramValues, { loading }] = useMutation(QUERY_PROGRAM_VALUES);
+
+  const fetchValues = async () => {
+    if (!loading && isEmpty(programValues)) {
+      const values = await sendGetProgramValues();
+
+      // Make sure even if the response is empty that we put something in the list to prevent infinite fetch loop
+      setProgramValues({ fetched: true, ...values.data.programOptions });
+    }
+  };
+
+  React.useEffect(() => {
+    fetchValues();
+  });
+
+  const regionOptions = get(programValues, 'regions', []);
+
   /* ****************** *
    * On Change Handlers
    * ****************** */
@@ -210,9 +239,9 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('countries')}
                   onBlur={handleInputBlur('countries')}
                 >
-                  {COUNTRIES.map(country => (
-                    <Option value={country.name} key={country.code}>
-                      {country.name}
+                  {get(programValues, 'countries', []).map(country => (
+                    <Option value={country} key={country.replace(/\s/g, '')}>
+                      {country}
                     </Option>
                   ))}
                 </MultiSelect>
@@ -233,8 +262,8 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('cancerTypes')}
                   onBlur={handleInputBlur('cancerTypes')}
                 >
-                  {CANCER_TYPES.map(cancerType => (
-                    <Option value={cancerType} key={cancerType.replace(/\s/, '')}>
+                  {get(programValues, 'cancerTypes', []).map(cancerType => (
+                    <Option value={cancerType} key={cancerType.replace(/\s/g, '')}>
                       {cancerType}
                     </Option>
                   ))}
@@ -256,8 +285,8 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('primarySites')}
                   onBlur={handleInputBlur('primarySites')}
                 >
-                  {PRIMARY_SITES.map(site => (
-                    <Option value={site} key={site.replace(/\s/, '')}>
+                  {get(programValues, 'primarySites', []).map(site => (
+                    <Option value={site} key={site.replace(/\s/g, '')}>
                       {site}
                     </Option>
                   ))}
@@ -372,9 +401,11 @@ export default function CreateProgramForm({
                   onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
-                  <Option value="Ontario Science Center">Ontario Science Center</Option>
-                  <Option value="Royal Ontario Museum">Royal Ontario Museum</Option>
-                  <Option value="Toronto Metropolitan Zoo">Toronto Metropolitan Zoo</Option>
+                  {get(programValues, 'institutions', []).map(institution => (
+                    <Option value={institution} key={institution.replace(/\s/g, '')}>
+                      {institution}
+                    </Option>
+                  ))}
                 </MultiSelect>
                 <ErrorText error={validationErrors.institutions} />
               </Col>
@@ -404,20 +435,20 @@ export default function CreateProgramForm({
                 >
                   <Row>
                     <Col>
-                      {RDC_NAMES.slice(0, Math.ceil(RDC_NAMES.length / 2)).map(name => (
-                        <FormCheckbox value={name} key={name}>
+                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
+                        <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
                           {name}
                         </FormCheckbox>
                       ))}
                     </Col>
                     <Col>
-                      {RDC_NAMES.slice(Math.ceil(RDC_NAMES.length / 2), RDC_NAMES.length).map(
-                        name => (
+                      {regionOptions
+                        .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
+                        .map(name => (
                           <FormCheckbox value={name} key={name}>
                             {name}
                           </FormCheckbox>
-                        ),
-                      )}
+                        ))}
                     </Col>
                   </Row>
                 </RadioCheckboxGroup>
