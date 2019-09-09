@@ -23,6 +23,7 @@ export default function Error404Page() {
           `}
         >
           <Typography
+            as="h1"
             css={css`
               font-size: 40px;
               margin: 0;
@@ -33,11 +34,13 @@ export default function Error404Page() {
           </Typography>
           <Typography
             css={css`
+              margin-top: 0;
               margin-bottom: 34px;
             `}
             as="div"
             variant="subtitle"
             color="secondary"
+            as="h2"
           >
             Something went wrong
           </Typography>
@@ -46,6 +49,7 @@ export default function Error404Page() {
             css={css`
               margin: 0;
             `}
+            as="p"
           >
             We are working on fixing the problem and appreciate your patience.{' '}
             <A href="#" onClick={handleReloadClick}>
