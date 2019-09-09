@@ -14,8 +14,6 @@ import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import TitleBorder from 'uikit/TitleBorder';
 
-import { styled } from 'uikit';
-
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
   padding-left: 18px;
