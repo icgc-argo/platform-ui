@@ -4,6 +4,7 @@ import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import Link from 'next/link';
 import Typography from 'uikit/Typography';
+import TitleBorder from 'uikit/TitleBorder';
 
 const SectionTitle = props => (
   <Typography
@@ -50,7 +51,7 @@ export default function ContactPage() {
             Privacy Policy
           </Typography>
           <SectionTitle>The Platform</SectionTitle>
-          <Hr color="accent1" />
+          <TitleBorder color="accent1" />
           <Typography>
             Any of your personal information which OICR collects via this Platform is subject to the
             OICR Privacy Policies, which is incorporated into these Terms and Conditions by
@@ -64,7 +65,7 @@ export default function ContactPage() {
             utilization of personal information we may learn about you when visiting our Site.
           </Typography>
           <SectionTitle>What is Personal Information?</SectionTitle>
-          <Hr color="accent3" />
+          <TitleBorder color="accent3" />
           <Typography>
             Personal information is any information about an identifiable person.
             <br />
@@ -79,7 +80,7 @@ export default function ContactPage() {
             to your question.
           </Typography>
           <SectionTitle>Disclosure</SectionTitle>
-          <Hr color="accent4" />
+          <TitleBorder color="accent4" />
           <Typography>
             <b>To whom does OICR disclose Personal Information?</b>
             <br />
@@ -104,7 +105,7 @@ export default function ContactPage() {
             from you.
           </Typography>
           <SectionTitle>Collection and Use</SectionTitle>
-          <Hr color="secondary" />
+          <TitleBorder color="secondary" />
           <Typography>
             <b>What is Aggregate Information?</b> <br />
             "Aggregate information" is standard web server/visitor traffic information, commonly
@@ -142,7 +143,7 @@ export default function ContactPage() {
             information collected.
           </Typography>
           <SectionTitle>Additional Information</SectionTitle>
-          <Hr color="accent2" />
+          <TitleBorder color="accent2" />
           <Typography>
             <b>Who do I contact with questions or concerns about the Platform's privacy policy?</b>
             <br />
