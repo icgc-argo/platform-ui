@@ -83,7 +83,7 @@ const JoinProgramForm = ({
   onSubmit: (data: any) => any,
   programName: string,
   userRole: string,
-  institutions: [string],
+  institutions: Array<string>,
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
     initialFields: schema.cast({}),
