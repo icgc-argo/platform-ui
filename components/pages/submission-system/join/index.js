@@ -29,11 +29,6 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     variables: { inviteId },
   });
 
-  // console.log(programOptions);
-  console.log(institutions);
-
-  // const institutions = [];
-
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
 
   if (!!error) {
