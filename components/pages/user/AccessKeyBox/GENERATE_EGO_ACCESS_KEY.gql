@@ -1,6 +1,7 @@
 mutation GENERATE_EGO_ACCESS_KEY {
   generateAccessKey {
-    accessKey
+    key
     exp
+    error
   }
 }

@@ -15,27 +15,19 @@ import { useQuery, useMutation } from 'react-apollo-hooks';
 export default function AccessTokenBox() {
   const { data: { accessKey } = {}, loading } = useQuery(EGO_ACCESS_KEY);
 
-  //const [isLoading, setIsLoading] = React.useState(true);
-  //const loading = isLoading || accessKeyLoading;
-  console.log('data', accessKey);
-
-  const [generatedKey, setGeneratedKey] = React.useState('');
-
+  const [generatedKey, setGeneratedKey] = React.useState(null);
+  const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
   const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
+
   const onGenerate = async data => {
-    //    setIsLoading(true);
+    setIsGeneratingKey(true);
     try {
       const {
-        data: { accessKey },
+        data: { generateAccessKey },
       } = await generateKey();
-      console.log('generate key', accessKey);
-      //  setIsLoading(false);
-      setGeneratedKey(accessKey);
-    } catch (err) {
-      console.error('err', err);
-    }
-
-    console.log('on gereatte');
+      setIsGeneratingKey(false);
+      setGeneratedKey(generateAccessKey);
+    } catch (err) {}
   };
 
   const getKeyTextValue = () => {
@@ -44,11 +36,29 @@ export default function AccessTokenBox() {
     } else if (!!accessKey.error) {
       return 'Generate a token...';
     } else if (generatedKey) {
-      return generateKey;
+      return generatedKey.key;
     } else {
       return accessKey.key;
     }
   };
+
+  const getDayValue = exp => {
+    if (exp <= 0) return '';
+    const days = Math.floor(exp / 60 / 60 / 24);
+    return `Expires in: ${days} days`;
+  };
+
+  const getTagValue = () => {
+    if (loading || accessKey.error) {
+      return '';
+    } else if (generatedKey) {
+      return getDayValue(generatedKey.exp);
+    } else {
+      return getDayValue(accessKey.exp);
+    }
+  };
+
+  const isExpired = generatedKey ? generatedKey.exp <= 0 : accessKey ? accessKey.exp <= 0 : true;
 
   return (
     <Box title="Access Token" iconName="key">
@@ -85,9 +95,10 @@ export default function AccessTokenBox() {
             `}
           >
             <ClipboardCopyField
-              tagText=""
+              tagText={getTagValue()}
+              errorText={isExpired ? 'Expired!' : ''}
               value={getKeyTextValue()}
-              disabled={loading || !!accessKey.error}
+              disabled={loading || !!accessKey.error || isGeneratingKey || isExpired}
               loading={loading}
             />
           </div>
@@ -100,8 +111,12 @@ export default function AccessTokenBox() {
               justify-content: center;
             `}
           >
-            <Button onClick={() => onGenerate()} variant="secondary" disabled={loading}>
-              Generate
+            <Button
+              onClick={() => onGenerate()}
+              variant="secondary"
+              disabled={loading || isGeneratingKey}
+            >
+              {isExpired ? 'Regenerate' : 'Generate'}
             </Button>
           </div>
         </div>
