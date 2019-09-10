@@ -10,7 +10,7 @@ const FooterStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
     programName="Pancreatic Cancer - AU"
     userRole="Program Administrator"
     onSubmit={action('onSubmit')}
-    availableInstitutions={[]}
+    institutions={['Famous University', 'Some Science Lab']}
   />
 ));
 
