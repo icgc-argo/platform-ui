@@ -14,6 +14,7 @@ import { css, ThemeProvider } from 'uikit';
 import Modal from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
+import Head from 'components/Head';
 
 import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
@@ -133,6 +134,7 @@ export default function ApplicationRoot({
             }
         `}
       </style>
+      <Head />
       <AuthProvider egoJwt={egoJwt}>
         <ApolloProvider client={apolloClient}>
           <ApolloHooksProvider client={apolloClient}>
