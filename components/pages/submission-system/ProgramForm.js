@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 import Link from 'next/link';
 import Router from 'next/router';
 import * as React from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
 import Container from 'uikit/Container';
@@ -124,36 +124,9 @@ export default function CreateProgramForm({
     hasErrors,
   } = formModel;
 
-  /* *************************** *
-   * Load Program Service Values
-   * *************************** */
-  const [programValues, setProgramValues]: [
-    {
-      cancerTypes: [string],
-      primarySites: [string],
-      institutions: [string],
-      regions: [string],
-      countries: [string],
-      fetched: boolean,
-    },
-    any,
-  ] = React.useState({});
-  const [sendGetProgramValues, { loading }] = useMutation(QUERY_PROGRAM_VALUES);
+  const { data: { programOptions } = {}, loading } = useQuery(QUERY_PROGRAM_VALUES);
 
-  const fetchValues = async () => {
-    if (!loading && isEmpty(programValues)) {
-      const values = await sendGetProgramValues();
-
-      // Make sure even if the response is empty that we put something in the list to prevent infinite fetch loop
-      setProgramValues({ fetched: true, ...values.data.programOptions });
-    }
-  };
-
-  React.useEffect(() => {
-    fetchValues();
-  });
-
-  const regionOptions = get(programValues, 'regions', []);
+  const regionOptions = get(programOptions, 'regions', []);
 
   /* ****************** *
    * On Change Handlers
@@ -239,7 +212,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('countries')}
                   onBlur={handleInputBlur('countries')}
                 >
-                  {get(programValues, 'countries', []).map(country => (
+                  {get(programOptions, 'countries', []).map(country => (
                     <Option value={country} key={country.replace(/\s/g, '')}>
                       {country}
                     </Option>
@@ -262,7 +235,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('cancerTypes')}
                   onBlur={handleInputBlur('cancerTypes')}
                 >
-                  {get(programValues, 'cancerTypes', []).map(cancerType => (
+                  {get(programOptions, 'cancerTypes', []).map(cancerType => (
                     <Option value={cancerType} key={cancerType.replace(/\s/g, '')}>
                       {cancerType}
                     </Option>
@@ -285,7 +258,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('primarySites')}
                   onBlur={handleInputBlur('primarySites')}
                 >
-                  {get(programValues, 'primarySites', []).map(site => (
+                  {get(programOptions, 'primarySites', []).map(site => (
                     <Option value={site} key={site.replace(/\s/g, '')}>
                       {site}
                     </Option>
@@ -401,7 +374,7 @@ export default function CreateProgramForm({
                   onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
-                  {get(programValues, 'institutions', []).map(institution => (
+                  {get(programOptions, 'institutions', []).map(institution => (
                     <Option value={institution} key={institution.replace(/\s/g, '')}>
                       {institution}
                     </Option>
