@@ -1,30 +1,29 @@
 //@flow
-import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import orderBy from 'lodash/orderBy';
-import filter from 'lodash/filter';
-
-import Typography from 'uikit/Typography';
-import { Input } from 'uikit/form';
-import { css } from 'uikit';
-import { TableActionBar } from 'uikit/Table';
-import Button from 'uikit/Button';
-import { INPUT_PRESETS } from 'uikit/form/Input';
-import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
-import { ContentBox } from 'uikit/PageLayout';
-import ProgramsTable from './ProgramsTable';
-import SubmissionLayout from '../layout';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
-
 import {
   CREATE_PROGRAM_PAGE_PATH,
-  PROGRAM_SHORT_NAME_PATH,
   PROGRAM_MANAGE_PATH,
+  PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import { isDccMember } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { isDccMember } from 'global/utils/egoJwt';
+import filter from 'lodash/filter';
+import orderBy from 'lodash/orderBy';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { css } from 'uikit';
+import Button from 'uikit/Button';
+import { Input } from 'uikit/form';
+import { INPUT_PRESETS } from 'uikit/form/Input';
+import { ContentBox } from 'uikit/PageLayout';
+import { TableActionBar } from 'uikit/Table';
+import { INPUT_STATES } from 'uikit/theme/defaultTheme/input';
+import Typography from 'uikit/Typography';
+import SubmissionLayout from '../layout';
+import ProgramsTable from './ProgramsTable';
+import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
+import DnaLoader from 'uikit/DnaLoader';
 
 const TableFilterInput = props => (
   <Input
