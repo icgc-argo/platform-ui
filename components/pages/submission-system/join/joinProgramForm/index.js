@@ -78,17 +78,19 @@ const JoinProgramForm = ({
   programName,
   userRole,
   onSubmit,
+  institutions,
 }: {
   onSubmit: (data: any) => any,
   programName: string,
   userRole: string,
+  institutions: [string],
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
     initialFields: schema.cast({}),
     schema: schema,
   });
 
-  const availableInstitutions = [];
+  const availableInstitutions = institutions || [];
 
   const handleBlur = fieldKey => _ => validateField({ key: fieldKey });
 
@@ -154,7 +156,9 @@ const JoinProgramForm = ({
                     onChange={handleChange('institutions')}
                   >
                     {availableInstitutions.map(institution => (
-                      <Option>{institution}</Option>
+                      <Option value={institution} key={institution.replace(/\s/g, '')}>
+                        {institution}
+                      </Option>
                     ))}
                   </MultiSelect>
                   {errors.institutions != null && (
