@@ -13,23 +13,40 @@ import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 
 export default function AccessTokenBox() {
-  const { data, loading } = useQuery(EGO_ACCESS_KEY);
-  const [accessKey, setAccessKey] = React.useState(null);
-  const [exp, setExp] = React.useState(null);
-  const now = Date.now() / 1000;
-  console.log('now', now);
+  const { data: { accessKey } = {}, loading } = useQuery(EGO_ACCESS_KEY);
+
+  //const [isLoading, setIsLoading] = React.useState(true);
+  //const loading = isLoading || accessKeyLoading;
+  console.log('data', accessKey);
+
+  const [generatedKey, setGeneratedKey] = React.useState('');
 
   const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
   const onGenerate = async data => {
+    //    setIsLoading(true);
     try {
       const {
-        data: { accessKey, exp },
+        data: { accessKey },
       } = await generateKey();
-      console.log('generate key', accessKey, exp);
-      setAccessKey(accessKey);
-      setExp(exp);
+      console.log('generate key', accessKey);
+      //  setIsLoading(false);
+      setGeneratedKey(accessKey);
     } catch (err) {
       console.error('err', err);
+    }
+
+    console.log('on gereatte');
+  };
+
+  const getKeyTextValue = () => {
+    if (loading) {
+      return '';
+    } else if (!!accessKey.error) {
+      return 'Generate a token...';
+    } else if (generatedKey) {
+      return generateKey;
+    } else {
+      return accessKey.key;
     }
   };
 
@@ -67,7 +84,12 @@ export default function AccessTokenBox() {
               flex: 1;
             `}
           >
-            <ClipboardCopyField tagText="" value="Generate a token.." disabled={false} />
+            <ClipboardCopyField
+              tagText=""
+              value={getKeyTextValue()}
+              disabled={loading || !!accessKey.error}
+              loading={loading}
+            />
           </div>
           <div
             css={css`
@@ -78,7 +100,7 @@ export default function AccessTokenBox() {
               justify-content: center;
             `}
           >
-            <Button onClick={() => onGenerate()} variant="secondary">
+            <Button onClick={() => onGenerate()} variant="secondary" disabled={loading}>
               Generate
             </Button>
           </div>
