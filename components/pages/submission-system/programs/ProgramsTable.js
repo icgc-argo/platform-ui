@@ -35,6 +35,7 @@ export default (tableProps: {
   programs: Array<ProgramsTableProgram>,
   onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
   onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
+  loading: boolean,
 }) => {
   const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
@@ -150,5 +151,7 @@ export default (tableProps: {
       ),
     },
   ];
-  return <Table data={data} columns={columns} showPagination={false} />;
+  return (
+    <Table data={data} columns={columns} showPagination={false} loading={tableProps.loading} />
+  );
 };

@@ -97,31 +97,16 @@ export default ({ authorizedPrograms = [] }: any) => {
           padding-top: 0px;
         `}
       >
-        {loading ? (
-          <div
-            css={css`
-              padding: 40px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            `}
-          >
-            <DnaLoader />
-          </div>
-        ) : (
-          <>
-            <TableActionBar>
-              {programs.length} results
-              {/*   <TableFilterInput /> */}
-            </TableActionBar>
-            <ProgramsTable
-              loading={loading}
-              programs={sortedPrograms}
-              onProgramUsersClick={handleProgramUsersClick}
-              onProgramEditClick={handleProgramProfileClick}
-            />
-          </>
-        )}
+        <TableActionBar>
+          {programs.length} results
+          {/*   <TableFilterInput /> */}
+        </TableActionBar>
+        <ProgramsTable
+          loading={loading}
+          programs={sortedPrograms}
+          onProgramUsersClick={handleProgramUsersClick}
+          onProgramEditClick={handleProgramProfileClick}
+        />
       </ContentBox>
     </SubmissionLayout>
   );
