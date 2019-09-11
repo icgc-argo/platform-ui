@@ -17,6 +17,7 @@ import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 import { useQuery } from 'react-apollo-hooks';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
+import NoDataMessage from './FileTable/NoDataMessage';
 
 const mockEntries = [
   {
@@ -129,19 +130,29 @@ export default function ProgramIDRegistration() {
         <div>Loading</div>
       ) : (
         <Container css={containerStyle}>
-          <div css={cardHeaderContainerStyle}>
-            <Typography color="primary" variant="subtitle2" component="span">
-              File Preview
-            </Typography>
-            <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
-              Clear
-            </Button>
-          </div>
-          <FileTable
-            records={fileRecords}
-            stats={{ existingCount: 2, newCount: 3 }}
-            submissionInfo={{ createdAt: 'May 20, 2020', creator: 'Minh', fileName: 'Minh.tsv' }}
-          />
+          {fileRecords.length > 0 ? (
+            <>
+              <div css={cardHeaderContainerStyle}>
+                <Typography color="primary" variant="subtitle2" component="span">
+                  File Preview
+                </Typography>
+                <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+                  Clear
+                </Button>
+              </div>
+              <FileTable
+                records={fileRecords}
+                stats={{ existingCount: 2, newCount: 3 }}
+                submissionInfo={{
+                  createdAt: 'May 20, 2020',
+                  creator: 'Minh',
+                  fileName: 'Minh.tsv',
+                }}
+              />
+            </>
+          ) : (
+            <NoDataMessage />
+          )}
         </Container>
       )}
     </SubmissionLayout>
