@@ -1,0 +1,24 @@
+query($shortName: String!) {
+  clinicalRegistration(shortName: $shortName) {
+    id
+    creator
+    records {
+      row
+    }
+    errors {
+      message
+    }
+    newDonors {
+      rows
+    }
+    newSpecimens {
+      rows
+    }
+    newSamples {
+      rows
+    }
+    alreadyRegistered {
+      rows
+    }
+  }
+}

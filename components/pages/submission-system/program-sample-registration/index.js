@@ -5,7 +5,7 @@ import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { useRouter } from 'next/router';
 import usePageContext from 'global/hooks/usePageContext';
-import Progress from 'uikit/Progress';
+import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import { Row, Col } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Instructions from './Instructions';
@@ -14,6 +14,9 @@ import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
 import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
+import { useQuery } from 'react-apollo-hooks';
+import GET_REGISTRATION from './GET_REGISTRATION.gql';
+import get from 'lodash/get';
 
 const mockEntries = [
   {
@@ -47,7 +50,11 @@ export default function ProgramIDRegistration() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const fileRecords = mockEntries;
+  const { data: { clinicalRegistration } = {}, loading } = useQuery(GET_REGISTRATION, {
+    variables: { shortName: programShortName },
+  });
+  console.log('data', clinicalRegistration, 'loading', loading);
+  const fileRecords = get(clinicalRegistration, 'records', []);
 
   const containerStyle = css`
     padding: 8px;
@@ -85,8 +92,8 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item state="success" text="Upload" />
-                <Progress.Item state="pending" text="Register" />
+                <Progress.Item state={PROGRESS_STATUS.DISABLED} text="Upload" />
+                <Progress.Item state={PROGRESS_STATUS.DISABLED} text="Register" />
               </Progress>
             </Row>
           </TitleBar>
@@ -103,11 +110,13 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      <Banner
-        title={`1 unrecognized file has been uploaded: schrod-reg.tsv`}
-        variant={BANNER_VARIANTS.ERROR}
-        content={`Please retain the template file name and only append characters to the end. For example, registration<_optional_extension>.tsv`}
-      />
+      {false ? (
+        <Banner
+          title={`1 unrecognized file has been uploaded: schrod-reg.tsv`}
+          variant={BANNER_VARIANTS.ERROR}
+          content={`Please retain the template file name and only append characters to the end. For example, registration<_optional_extension>.tsv`}
+        />
+      ) : null}
       <Container
         css={css`
           ${containerStyle}
@@ -116,21 +125,25 @@ export default function ProgramIDRegistration() {
       >
         <Instructions registrationEnabled={false} />
       </Container>
-      <Container css={containerStyle}>
-        <div css={cardHeaderContainerStyle}>
-          <Typography color="primary" variant="subtitle2" component="span">
-            File Preview
-          </Typography>
-          <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
-            Clear
-          </Button>
-        </div>
-        <FileTable
-          records={fileRecords}
-          stats={{ existingCount: 2, newCount: 3 }}
-          submissionInfo={{ createdAt: 'May 20, 2020', creator: 'Minh', fileName: 'Minh.tsv' }}
-        />
-      </Container>
+      {loading ? (
+        <div>Loading</div>
+      ) : (
+        <Container css={containerStyle}>
+          <div css={cardHeaderContainerStyle}>
+            <Typography color="primary" variant="subtitle2" component="span">
+              File Preview
+            </Typography>
+            <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+              Clear
+            </Button>
+          </div>
+          <FileTable
+            records={fileRecords}
+            stats={{ existingCount: 2, newCount: 3 }}
+            submissionInfo={{ createdAt: 'May 20, 2020', creator: 'Minh', fileName: 'Minh.tsv' }}
+          />
+        </Container>
+      )}
     </SubmissionLayout>
   );
 }
