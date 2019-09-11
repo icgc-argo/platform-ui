@@ -17,7 +17,6 @@ import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
-import createProgramSchema from './validation';
 import { useMutation } from 'react-apollo-hooks';
 import useCommonToasters from 'components/useCommonToasters';
 

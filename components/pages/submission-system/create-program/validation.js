@@ -35,17 +35,14 @@ export default yup.object().shape({
     .required(requiredError('Short Name')),
   countries: yup
     .array()
-    .of(yup.string().oneOf(COUNTRIES.map(country => country.name)))
     .min(1, mustHaveMoreThanZeroError('Countries'))
     .required(),
   cancerTypes: yup
     .array()
-    .of(yup.string().oneOf(CANCER_TYPES))
     .min(1, mustHaveMoreThanZeroError('Cancer Types'))
     .required(),
   primarySites: yup
     .array()
-    .of(yup.string().oneOf(PRIMARY_SITES))
     .label('Primary Sites')
     .min(1, mustHaveMoreThanZeroError('Primary Sites'))
     .required(),
