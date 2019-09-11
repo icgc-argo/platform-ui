@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';

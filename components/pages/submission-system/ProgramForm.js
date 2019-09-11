@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 import Link from 'next/link';
 import Router from 'next/router';
 import * as React from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
 import Container from 'uikit/Container';

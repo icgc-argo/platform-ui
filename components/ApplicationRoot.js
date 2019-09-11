@@ -7,14 +7,13 @@ import { PageContext } from 'global/hooks/usePageContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import getConfig from 'next/config';
 import * as React from 'react';
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import ReactDOM from 'react-dom';
 import { css, ThemeProvider } from 'uikit';
 import Modal from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
+import { ApolloProvider } from '@apollo/react-hooks';
 
 import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
@@ -137,13 +136,11 @@ export default function ApplicationRoot({
       <Head />
       <AuthProvider egoJwt={egoJwt}>
         <ApolloProvider client={apolloClient}>
-          <ApolloHooksProvider client={apolloClient}>
-            <PageContext.Provider value={pageContext}>
-              <ThemeProvider>
-                <ToastProvider>{children}</ToastProvider>
-              </ThemeProvider>
-            </PageContext.Provider>
-          </ApolloHooksProvider>
+          <PageContext.Provider value={pageContext}>
+            <ThemeProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </ThemeProvider>
+          </PageContext.Provider>
         </ApolloProvider>
       </AuthProvider>
     </>
