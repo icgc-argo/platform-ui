@@ -11,6 +11,7 @@ const ClipboardCopyFieldStories = storiesOf(`${__dirname}`, module).add('Basic',
     tagText: text('tagText', 'Expires in: 5 days'),
     disabled: boolean('disabled', false),
     errorText: text('errorText', undefined),
+    loading: boolean('loading', false),
   };
   return <ClipboardCopyField {...knobs} />;
 });

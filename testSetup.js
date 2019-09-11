@@ -1,6 +1,10 @@
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { JSDOM } from 'jsdom';
+import { setConfig } from 'next/config';
+import config from './next.config';
+
+setConfig(config);
 
 Enzyme.configure({ adapter: new Adapter() });
 

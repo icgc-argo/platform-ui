@@ -13,19 +13,23 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import SubmissionLayout from '../layout';
-import GET_INVITE from './GET_INVITE.gql';
+import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
-import JOIN_PROGRAM from './JOIN_PROGRAM.gql';
+import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const router = useRouter();
   const { inviteId } = router.query;
 
-  const { data: { joinProgramInvite } = {}, loading, error } = useQuery(GET_INVITE, {
+  const {
+    data: { joinProgramInvite, programOptions: { institutions } = {} } = {},
+    loading,
+    error,
+  } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
   });
 
-  const [joinProgram] = useMutation(JOIN_PROGRAM);
+  const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
 
   if (!!error) {
     error[ERROR_STATUS_KEY] = 500;
@@ -88,6 +92,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
             onSubmit={handleSubmit}
             programName={get(joinProgramInvite, 'program.name')}
             userRole={get(joinProgramInvite, 'user.role')}
+            institutions={institutions}
           />
         )}
       </div>

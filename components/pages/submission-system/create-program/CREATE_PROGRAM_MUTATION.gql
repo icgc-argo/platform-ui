@@ -1,14 +1,3 @@
 mutation CREATE_PROGRAM_MUTATION($program: ProgramInput!) {
-  createProgram(program: $program) {
-    description
-    name
-    commitmentDonors
-    submittedDonors
-    genomicDonors
-    website
-    institutions
-    countries
-    regions
-    membershipType
-  }
+  createProgram(program: $program)
 }
