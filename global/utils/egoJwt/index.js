@@ -8,7 +8,7 @@ import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils'
 let initializedTokenUtils = null;
 const TokenUtils = () => {
   if (!initializedTokenUtils) {
-    const EGO_PUBLIC_KEY = (getConfig().publicRuntimeConfig.EGO_PUBLIC_KEY || '').replace(
+    const EGO_PUBLIC_KEY = get(getConfig(), 'publicRuntimeConfig.EGO_PUBLIC_KEY', '').replace(
       /\\n/g,
       '\n',
     );
