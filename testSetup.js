@@ -1,6 +1,7 @@
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { JSDOM } from 'jsdom';
+require('dotenv').config();
 
 Enzyme.configure({ adapter: new Adapter() });
 
