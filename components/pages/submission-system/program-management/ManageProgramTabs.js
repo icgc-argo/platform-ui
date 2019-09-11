@@ -181,6 +181,7 @@ export default () => {
   return (
     <ContentBox
       css={css`
+        overflow: visible;
         padding-top: 0px;
       `}
     >
