@@ -28,6 +28,7 @@ const ClipboardCopyField = ({
   tagText,
   errorText,
   timeout = 2000,
+  loading,
 }: {
   buttonText?: string,
   value?: string,
@@ -35,6 +36,7 @@ const ClipboardCopyField = ({
   disabled?: boolean,
   errorText?: string,
   timeout?: number,
+  loading: boolean,
 }) => {
   const [promptMsgShown, setPromptMsgShown] = React.useState(false);
   let currentTimeout: ?TimeoutID = undefined;
@@ -70,7 +72,7 @@ const ClipboardCopyField = ({
           cursor: unset;
         `}
       >
-        {(errorText || tagText) && (
+        {(errorText || tagText) && !loading && (
           <TagWrapper>
             <Tag variant={errorText ? TAG_VARIANTS.ERROR : TAG_VARIANTS.INFO}>
               {errorText || tagText}
@@ -95,7 +97,13 @@ const ClipboardCopyField = ({
             position: relative;
           `}
         >
-          {promptMsgShown ? <Icon name="checkmark" fill="white" height="13px" /> : buttonText}
+          {promptMsgShown ? (
+            <Icon name="checkmark" fill="white" height="13px" />
+          ) : loading ? (
+            <Icon name="spinner" height="13px" />
+          ) : (
+            buttonText
+          )}
         </Button>
       </StyledInputWrapper>
       {promptMsgShown && (

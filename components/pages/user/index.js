@@ -5,7 +5,7 @@ import { ContentHeader, PageContent, ContentBody, PageBody } from 'uikit/PageLay
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { css } from 'uikit';
-import AccessTokenBox from './AccessTokenBox';
+import AccessKeyBox from './AccessKeyBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
 
@@ -39,7 +39,7 @@ export function UserPage({ firstName, lastName }: { firstName: string, lastName:
             </Row>
             <Row nogutter>
               <Column sm={12} md={6}>
-                <AccessTokenBox />
+                <AccessKeyBox />
               </Column>
               <Column sm={12} md={6}>
                 <ProgramAccessBox />
