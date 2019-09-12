@@ -152,6 +152,12 @@ export default (tableProps: {
     },
   ];
   return (
-    <Table data={data} columns={columns} showPagination={false} loading={tableProps.loading} />
+    <Table
+      data={data}
+      columns={columns}
+      showPagination={false}
+      loading={tableProps.loading}
+      pageSize={100}
+    />
   );
 };
