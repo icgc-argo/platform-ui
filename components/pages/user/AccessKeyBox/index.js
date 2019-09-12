@@ -11,6 +11,7 @@ import ClipboardCopyField from 'uikit/ClipboardCopyField';
 import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
 import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
 import { useQuery, useMutation } from 'react-apollo-hooks';
+import get from 'lodash/get';
 
 export default function AccessTokenBox() {
   const { data: { accessKey } = {}, loading } = useQuery(EGO_ACCESS_KEY);
@@ -18,6 +19,11 @@ export default function AccessTokenBox() {
   const [generatedKey, setGeneratedKey] = React.useState(null);
   const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
   const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
+
+  // pick either the retrieved key or generated key values
+  const exp = generatedKey ? generatedKey.exp : accessKey ? accessKey.exp : 0;
+  const key = generatedKey ? generatedKey.key : accessKey ? accessKey.key : '';
+  const keyError = get(accessKey, 'error', '');
 
   const onGenerate = async data => {
     setIsGeneratingKey(true);
@@ -33,12 +39,10 @@ export default function AccessTokenBox() {
   const getKeyTextValue = () => {
     if (loading) {
       return '';
-    } else if (!!accessKey.error) {
+    } else if (!accessKey && !generatedKey) {
       return 'Generate a token...';
-    } else if (generatedKey) {
-      return generatedKey.key;
     } else {
-      return accessKey.key;
+      return key;
     }
   };
 
@@ -48,17 +52,11 @@ export default function AccessTokenBox() {
     return `Expires in: ${days} days`;
   };
 
-  const getTagValue = () => {
-    if (loading || accessKey.error) {
-      return '';
-    } else if (generatedKey) {
-      return getDayValue(generatedKey.exp);
-    } else {
-      return getDayValue(accessKey.exp);
-    }
-  };
+  const getTagValue = () => (accessKey || generatedKey ? getDayValue(exp) : '');
 
-  const isExpired = generatedKey ? generatedKey.exp <= 0 : accessKey ? accessKey.exp <= 0 : true;
+  const isExpired = exp <= 0 && (accessKey || generatedKey);
+  const disableCopy = loading || isExpired || isGeneratingKey || !key;
+  const disableGenerate = loading || isGeneratingKey;
 
   return (
     <Box title="Access Token" iconName="key">
@@ -98,8 +96,8 @@ export default function AccessTokenBox() {
               tagText={getTagValue()}
               errorText={isExpired ? 'Expired!' : ''}
               value={getKeyTextValue()}
-              disabled={loading || !!accessKey.error || isGeneratingKey || isExpired}
-              loading={loading}
+              disabled={disableCopy}
+              loading={loading || isGeneratingKey}
             />
           </div>
           <div
@@ -111,12 +109,8 @@ export default function AccessTokenBox() {
               justify-content: center;
             `}
           >
-            <Button
-              onClick={() => onGenerate()}
-              variant="secondary"
-              disabled={loading || isGeneratingKey}
-            >
-              {isExpired ? 'Regenerate' : 'Generate'}
+            <Button onClick={() => onGenerate()} variant="secondary" disabled={disableGenerate}>
+              {!key ? 'Generate' : 'Regenerate'}
             </Button>
           </div>
         </div>
