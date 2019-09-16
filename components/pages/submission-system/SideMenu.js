@@ -1,6 +1,6 @@
 //@flow
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
 import Router from 'next/router';
