@@ -17,7 +17,7 @@ import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import useCommonToasters from 'components/useCommonToasters';
 
 const SectionTitle = styled('h3')`

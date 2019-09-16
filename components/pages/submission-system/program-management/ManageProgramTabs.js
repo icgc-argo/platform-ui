@@ -3,7 +3,7 @@ import React from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';

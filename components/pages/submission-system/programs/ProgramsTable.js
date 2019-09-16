@@ -87,7 +87,7 @@ export default (tableProps: {
       },
     },
     {
-      Header: 'Memebership',
+      Header: 'Membership',
       accessor: 'membershipType',
       Cell: ({ original }) =>
         original.membershipType ? MembershipDisplayName[original.membershipType] : '',

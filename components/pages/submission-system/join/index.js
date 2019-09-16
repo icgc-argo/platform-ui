@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 // $FlowFixMe
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';

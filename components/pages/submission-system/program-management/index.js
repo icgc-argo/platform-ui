@@ -2,7 +2,6 @@
 import React from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-apollo-hooks';
 import { css } from 'uikit';
 import { ContentBox } from 'uikit/PageLayout';
 import TitleBar from 'uikit/TitleBar';
