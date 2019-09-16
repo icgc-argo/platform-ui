@@ -1,0 +1,6 @@
+/* 
+  We need this file applied globally for react-tippy to work, hence the css file
+ */
+.tippy-popper .leave {
+  opacity: 0;
+}
