@@ -14,7 +14,7 @@ import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
 import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import NoDataMessage from './FileTable/NoDataMessage';
@@ -54,8 +54,25 @@ export default function ProgramIDRegistration() {
   const { data: { clinicalRegistration } = {}, loading } = useQuery(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
-  console.log('data', clinicalRegistration, 'loading', loading);
+
   const fileRecords = get(clinicalRegistration, 'records', []);
+  const submissionInfo = clinicalRegistration
+    ? {
+        createdAt: clinicalRegistration.createdAt,
+        creator: clinicalRegistration.creator,
+        fileName: clinicalRegistration.fileName,
+      }
+    : null;
+
+  const stats = clinicalRegistration
+    ? {
+        existingCount: clinicalRegistration.alreadyRegistered.count,
+        newCount:
+          clinicalRegistration.newDonors.count +
+          clinicalRegistration.newSpecimens.count +
+          clinicalRegistration.newSamples.count,
+      }
+    : null;
 
   const containerStyle = css`
     padding: 8px;
@@ -93,8 +110,22 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item state={PROGRESS_STATUS.DISABLED} text="Upload" />
-                <Progress.Item state={PROGRESS_STATUS.DISABLED} text="Register" />
+                <Progress.Item
+                  state={
+                    loading || !clinicalRegistration.id
+                      ? PROGRESS_STATUS.DISABLED
+                      : PROGRESS_STATUS.SUCCESS
+                  }
+                  text="Upload"
+                />
+                <Progress.Item
+                  state={
+                    loading || !clinicalRegistration.id
+                      ? PROGRESS_STATUS.DISABLED
+                      : PROGRESS_STATUS.PENDING
+                  }
+                  text="Register"
+                />
               </Progress>
             </Row>
           </TitleBar>
@@ -111,13 +142,6 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      {false ? (
-        <Banner
-          title={`1 unrecognized file has been uploaded: schrod-reg.tsv`}
-          variant={BANNER_VARIANTS.ERROR}
-          content={`Please retain the template file name and only append characters to the end. For example, registration<_optional_extension>.tsv`}
-        />
-      ) : null}
       <Container
         css={css`
           ${containerStyle}
@@ -126,35 +150,28 @@ export default function ProgramIDRegistration() {
       >
         <Instructions registrationEnabled={false} />
       </Container>
-      {loading ? (
-        <div>Loading</div>
-      ) : (
-        <Container css={containerStyle}>
-          {fileRecords.length > 0 ? (
-            <>
-              <div css={cardHeaderContainerStyle}>
-                <Typography color="primary" variant="subtitle2" component="span">
-                  File Preview
-                </Typography>
-                <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
-                  Clear
-                </Button>
-              </div>
-              <FileTable
-                records={fileRecords}
-                stats={{ existingCount: 2, newCount: 3 }}
-                submissionInfo={{
-                  createdAt: 'May 20, 2020',
-                  creator: 'Minh',
-                  fileName: 'Minh.tsv',
-                }}
-              />
-            </>
-          ) : (
-            <NoDataMessage />
-          )}
-        </Container>
-      )}
+
+      <Container css={containerStyle}>
+        {fileRecords.length > 0 ? (
+          <>
+            <div css={cardHeaderContainerStyle}>
+              <Typography color="primary" variant="subtitle2" component="span">
+                File Preview
+              </Typography>
+              <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+                Clear
+              </Button>
+            </div>
+            <FileTable
+              records={fileRecords}
+              stats={{ existingCount: 2, newCount: 3 }}
+              submissionInfo={submissionInfo}
+            />
+          </>
+        ) : (
+          <NoDataMessage />
+        )}
+      </Container>
     </SubmissionLayout>
   );
 }
