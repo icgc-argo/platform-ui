@@ -15,7 +15,7 @@ type UseEgoTokenInput = {
 type T_AuthContext = {
   token: ?string,
   logOut: void => void,
-  updateToken: void => Promise<void>,
+  updateToken: void => Promise<?string>,
   data: $Call<typeof decodeToken, ?string> | null,
 };
 
@@ -81,6 +81,7 @@ export function AuthProvider({ egoJwt, children }: { egoJwt: ?string, children: 
       })
       .catch(err => {
         console.warn('err: ', err);
+        throw err;
       });
   };
 

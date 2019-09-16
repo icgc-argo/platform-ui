@@ -53,14 +53,18 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
         },
       });
 
-      updateToken().then(egoToken => {
+      const egoToken = await updateToken(); // Side effect
+      if (egoToken) {
         router.push(
           PROGRAM_DASHBOARD_PATH.replace(
             PROGRAM_SHORT_NAME_PATH,
             joinProgramInvite.program.shortName,
           ),
         );
-      });
+      } else {
+        // Guard against bad impl
+        throw new Error('Could not update authorization.');
+      }
     } catch (err) {
       // handle error
       toaster.addToast({
