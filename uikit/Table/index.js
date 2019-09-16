@@ -7,6 +7,7 @@ import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
 import { StyledTable } from './styledComponent';
 import TablePagination from './TablePagination';
+import NoDataComponent from './NoDataComponent';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -88,6 +89,17 @@ const Table = <Data: { [k: string]: any }>({
 
   return (
     <StyledTable
+      getTableProps={({ data }) => {
+        if (isEmpty(data)) {
+          return {
+            style: {
+              opacity: 0.3,
+            },
+          };
+        } else {
+          return {};
+        }
+      }}
       columns={columns}
       data={data}
       isSelectTable={isSelectTable}
@@ -102,7 +114,7 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
-      NoDataComponent={() => null}
+      NoDataComponent={NoDataComponent}
       showPagination={isEmpty(data) ? false : showPagination}
       {...rest}
     />
