@@ -31,6 +31,7 @@
     "@emotion/styled": "^10.0.11",
     "@icgc-argo/ego-token-utils": "^5.2.1",
     "@storybook/addon-a11y": "^5.1.9",
+    "@zeit/next-css": "^1.0.1",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
