@@ -10,7 +10,7 @@ import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
 import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
 import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 
 export default function AccessTokenBox() {
