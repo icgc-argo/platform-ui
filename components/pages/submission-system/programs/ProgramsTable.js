@@ -31,12 +31,13 @@ const MembershipDisplayName: { [key: ArgoMembershipKey]: string } = {
   ASSOCIATE: 'ASSOCIATE',
 };
 
-export default (tableProps: {
+export default function ProgramsTable(tableProps: {
   programs: Array<ProgramsTableProgram>,
   onProgramUsersClick: ({ program: ProgramsTableProgram }) => void,
   onProgramEditClick: ({ program: ProgramsTableProgram }) => void,
   loading: boolean,
-}) => {
+  loadingUser: boolean,
+}) {
   const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
@@ -46,7 +47,10 @@ export default (tableProps: {
       Header: 'Short Name',
       accessor: 'shortName',
       Cell: ({ original }) => (
-        <Link href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}>
+        <Link
+          href={PROGRAM_DASHBOARD_PATH}
+          as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
+        >
           <A>{original.shortName}</A>
         </Link>
       ),
@@ -96,6 +100,9 @@ export default (tableProps: {
       Header: 'Administrators',
       accessor: 'administrators',
       Cell: ({ original }) => {
+        if (tableProps.loadingUser) {
+          return <>Loading</>;
+        }
         return get(original, 'administrators', []).map((admin, idx) => (
           <A
             key={admin.email}
@@ -160,4 +167,4 @@ export default (tableProps: {
       pageSize={100}
     />
   );
-};
+}

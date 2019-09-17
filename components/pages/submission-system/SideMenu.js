@@ -61,13 +61,11 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
         as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
         href={PROGRAM_DASHBOARD_PATH}
       >
-        <a>
-          <MenuItem
-            level={3}
-            content="Dashboard"
-            selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
-          />
-        </a>
+        <MenuItem
+          level={3}
+          content="Dashboard"
+          selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
+        />
       </Link>
       <Link
         prefetch
@@ -77,15 +75,13 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
         )}
         href={PROGRAM_SAMPLE_REGISTRATION_PATH}
       >
-        <a>
-          <MenuItem
-            level={3}
-            content="Register Samples"
-            selected={
-              PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
-            }
-          />
-        </a>
+        <MenuItem
+          level={3}
+          content="Register Samples"
+          selected={
+            PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+          }
+        />
       </Link>
       <Link
         prefetch
@@ -95,15 +91,13 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
         )}
         href={PROGRAM_CLINICAL_SUBMISSION_PATH}
       >
-        <a>
-          <MenuItem
-            level={3}
-            content="Clinical Submission"
-            selected={
-              PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
-            }
-          />
-        </a>
+        <MenuItem
+          level={3}
+          content="Clinical Submission"
+          selected={
+            PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+          }
+        />
       </Link>
       {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
         <Link
@@ -111,13 +105,11 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
           href={PROGRAM_MANAGE_PATH}
         >
-          <a>
-            <MenuItem
-              level={3}
-              content="Manage Program"
-              selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
-            />
-          </a>
+          <MenuItem
+            level={3}
+            content="Manage Program"
+            selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
+          />
         </Link>
       )}
     </div>
@@ -158,13 +150,11 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
       />
       {token && isDccMember(token) && (
         <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
-          <a>
-            <MenuItem
-              level={2}
-              content={'All Programs'}
-              selected={pageContext.pathname === PROGRAMS_LIST_PATH}
-            />
-          </a>
+          <MenuItem
+            level={2}
+            content={'All Programs'}
+            selected={pageContext.pathname === PROGRAMS_LIST_PATH}
+          />
         </Link>
       )}
       {filteredPrograms.map((program, programIndex) => (
