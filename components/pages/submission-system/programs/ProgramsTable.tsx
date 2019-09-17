@@ -25,7 +25,7 @@ type ProgramsTableProgram = {
 type TableProgramInternal = ProgramsTableProgram & { donorPercentage: number };
 type CellProps = { original: TableProgramInternal };
 
-const MembershipDisplayName: { [key: ArgoMembershipKey]: string } = {
+const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
   FULL: 'FULL',
   ASSOCIATE: 'ASSOCIATE',
 };

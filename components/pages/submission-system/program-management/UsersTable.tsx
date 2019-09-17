@@ -28,7 +28,7 @@ type UsersTableUser = {
 type CellProps = { original: UsersTableUser };
 
 const APPROVED_DISPLAY_STATUS = 'Approved';
-const StatusDisplayName: { [key: StatusKey]: string } = {
+const StatusDisplayName: { [key in StatusKey]: string } = {
   ACCEPTED: APPROVED_DISPLAY_STATUS,
   PENDING: 'Pending Invitation',
   EXPIRED: 'Invitation Expired',

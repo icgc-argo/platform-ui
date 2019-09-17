@@ -3,7 +3,7 @@ import { firstName, lastName, email, role } from 'global/utils/form/validations'
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
 
-export const RoleDisplayName: { [key: RoleKey]: string } = {
+export const RoleDisplayName: { [key in RoleKey]: string } = {
   ADMIN: 'Administrator',
   COLLABORATOR: 'Collaborator',
   SUBMITTER: 'Data Submitter',

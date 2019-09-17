@@ -1,7 +1,7 @@
 import colors from './colors';
 import { ProgressStatus } from '../../Progress';
 
-const color: { [key: ProgressStatus]: string } = {
+const color: { [key in ProgressStatus]: string } = {
   success: colors.success,
   error: colors.error,
   pending: colors.warning,
