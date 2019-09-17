@@ -95,6 +95,8 @@ export default function ProgramIDRegistration() {
     margin-bottom: 8px;
   `;
 
+  const noData = loading || !clinicalRegistration.id;
+
   return (
     <SubmissionLayout
       contentHeader={
@@ -111,19 +113,11 @@ export default function ProgramIDRegistration() {
               </div>
               <Progress>
                 <Progress.Item
-                  state={
-                    loading || !clinicalRegistration.id
-                      ? PROGRESS_STATUS.DISABLED
-                      : PROGRESS_STATUS.SUCCESS
-                  }
+                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.SUCCESS}
                   text="Upload"
                 />
                 <Progress.Item
-                  state={
-                    loading || !clinicalRegistration.id
-                      ? PROGRESS_STATUS.DISABLED
-                      : PROGRESS_STATUS.PENDING
-                  }
+                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.PENDING}
                   text="Register"
                 />
               </Progress>
@@ -162,11 +156,7 @@ export default function ProgramIDRegistration() {
                 Clear
               </Button>
             </div>
-            <FileTable
-              records={fileRecords}
-              stats={{ existingCount: 2, newCount: 3 }}
-              submissionInfo={submissionInfo}
-            />
+            <FileTable records={fileRecords} stats={stats} submissionInfo={submissionInfo} />
           </>
         ) : (
           <NoDataMessage />
