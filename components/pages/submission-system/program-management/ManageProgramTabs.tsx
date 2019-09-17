@@ -1,4 +1,3 @@
-
 import React from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
@@ -28,8 +27,8 @@ const createUserInput = ({
   data,
   programShortName,
 }: {
-  data: typeof ModalUserModel,
-  programShortName: string,
+  data: typeof ModalUserModel;
+  programShortName: string;
 }) => ({
   programShortName,
   userFirstName: data.firstName,
@@ -56,8 +55,8 @@ const createUpdateProgramInput = formData => ({
 
 type TabValue = 'profile' | 'users';
 type PageQueryObject = {
-  shortName: string,
-  tab?: TabValue,
+  shortName: string;
+  tab?: TabValue;
 };
 
 const usePageQuery = (): PageQueryObject => {
@@ -70,8 +69,8 @@ const useTabState = () => {
   const router = useRouter();
   const { tab: defaultTab, shortName: programShortName } = usePageQuery();
   const TABS = {
-    PROFILE: ('profile': TabValue),
-    USERS: ('users': TabValue),
+    PROFILE: 'profile' as TabValue,
+    USERS: 'users' as TabValue,
   };
   const [activeTab, setActiveTab] = React.useState<TabValue>(
     defaultTab === TABS.PROFILE ? TABS.PROFILE : TABS.USERS,
