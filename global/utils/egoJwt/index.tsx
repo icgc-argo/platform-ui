@@ -1,6 +1,6 @@
 
 import jwtDecode from 'jwt-decode';
-import { get, memoize } from 'lodash';
+import memoize from 'lodash/memoize';
 import getConfig from 'next/config';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';

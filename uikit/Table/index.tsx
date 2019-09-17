@@ -1,5 +1,5 @@
 
-import { get } from 'lodash';
+import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';
 import selectTable from 'react-table/lib/hoc/selectTable';

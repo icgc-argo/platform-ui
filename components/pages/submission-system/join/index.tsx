@@ -1,8 +1,7 @@
-
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 // $FlowFixMe

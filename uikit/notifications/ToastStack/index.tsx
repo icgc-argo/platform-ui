@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { differenceBy } from 'lodash';
+import differenceBy from 'lodash/differenceBy';
 
 import { styled } from '../..';
 import Toast from '../Toast';

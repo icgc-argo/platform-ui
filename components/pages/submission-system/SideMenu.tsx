@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { orderBy } from 'lodash';
+import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import Router from 'next/router';
 
@@ -29,7 +28,7 @@ import { styled } from 'uikit';
 import usePageContext from 'global/hooks/usePageContext';
 
 type SideMenuProgram = {
-  shortName: string,
+  shortName: string;
 };
 
 const Loader = () => (
@@ -53,7 +52,7 @@ const useToggledSelectState = (initialIndex = -1) => {
   return [activeItem, toggleItem];
 };
 
-const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: boolean }) => {
+const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { token } = useAuthContext() || {};
   return (

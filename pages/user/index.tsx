@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import { createPage } from 'global/utils/pages';
 import { decodeToken } from 'global/utils/egoJwt';

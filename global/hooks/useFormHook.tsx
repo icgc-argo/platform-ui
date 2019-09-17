@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { get, isArray, flattenDeep } from 'lodash';
+import get from 'lodash/get'
+import isArray from 'lodash/isArray'
 import * as yup from 'yup';
 type FormData = {
   key: string,

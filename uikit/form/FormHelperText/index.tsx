@@ -4,7 +4,7 @@ import FormControlContext from '../FormControl/FormControlContext';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import css from '@emotion/css';
-import _ from 'lodash';
+import pick from 'lodash/pick';
 
 const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
   const { component: Component = 'p', className: classNameProp, ...other } = props;
@@ -28,7 +28,7 @@ const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
   return (
     <StyledComponent
       ref={ref}
-      className={clsx(_.pick(contextValue, ['error', 'disabled']), classNameProp)}
+      className={clsx(pick(contextValue, ['error', 'disabled']), classNameProp)}
       {...other}
     />
   );

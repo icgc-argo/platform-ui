@@ -5,7 +5,10 @@ import Typography from 'uikit/Typography';
 import InputLabel from 'uikit/form/InputLabel';
 import Icon from 'uikit/Icon';
 import { css } from 'uikit';
-import { join, filter, isEmpty, replace } from 'lodash';
+import join from 'lodash/join';
+import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
+import replace from 'lodash/replace';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 

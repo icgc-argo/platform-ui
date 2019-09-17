@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import TablePagination from '.';
-import _ from 'lodash';
+import times from 'lodash/times';
 import { boolean } from '@storybook/addon-knobs';
 
 import Table from '..';
@@ -11,7 +11,7 @@ export default storiesOf(`${__dirname}`, module).add(
   () => {
     return (
       <Table
-        data={_.times(104, idx => ({
+        data={times(104, idx => ({
           id: idx,
           prop2: idx,
           prop3: 'some text of ' + idx,

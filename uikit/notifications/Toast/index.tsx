@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import css from '@emotion/css';
 
 import Notification, { NOTIFICATION_VARIANTS, NOTIFICATION_INTERACTION } from '../Notification';

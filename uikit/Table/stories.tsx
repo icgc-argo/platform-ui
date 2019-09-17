@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import { range } from 'lodash';
+import range from 'lodash/range';
 
 import Table, { SelectTable } from '.';
 import readme from './readme.md';

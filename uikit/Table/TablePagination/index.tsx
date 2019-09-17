@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import floor from 'lodash/floor';
+import ceil from 'lodash/ceil';
+import range from 'lodash/range';
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 
@@ -87,16 +89,16 @@ const PageControl = styled('div')`
 
 // given 1 5 5 or 2 5 5, return [0,1,2,3,4]
 function getPagesAround(p, num, pages) {
-  const l = p - _.floor(num / 2);
-  const r = p + _.ceil(num / 2);
+  const l = p - floor(num / 2);
+  const r = p + ceil(num / 2);
   if (r > pages) {
-    return _.range(pages - num, pages);
+    return range(pages - num, pages);
   }
 
   if (l < 0) {
-    return _.range(0, num);
+    return range(0, num);
   }
-  return _.range(l, r);
+  return range(l, r);
 }
 
 function TablePagination(props) {

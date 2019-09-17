@@ -1,10 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+
+import isEmpty from 'lodash/isEmpty';
+import toLower from 'lodash/toLower';
+import uniq from 'lodash/uniq';
+import initial from 'lodash/initial';
+import without from 'lodash/without';
+import includes from 'lodash/includes';
+import map from 'lodash/map';
+import compact from 'lodash/compact';
+import get from 'lodash/get';
+import head from 'lodash/head';
+
 import Icon from '../../Icon';
 import Option from './Option';
 import css from '@emotion/css';
-import _ from 'lodash';
 import Tag from '../../Tag';
 import useTheme from '../../utils/useTheme';
 import clsx from 'clsx';
@@ -128,11 +139,11 @@ const SingleValue = styled('span')`
 `;
 
 function Highlight({ string, searchText }) {
-  if (_.isEmpty(searchText)) {
+  if (isEmpty(searchText)) {
     return <>{string}</>;
   }
 
-  const idx = _.toLower(string).indexOf(_.toLower(searchText));
+  const idx = toLower(string).indexOf(toLower(searchText));
 
   const theme = useTheme();
 
@@ -183,7 +194,7 @@ const MultiSelect = ({
   // const options = children.map(child => child.props.value);
 
   const contextValue = React.useContext(FormControlContext);
-  if (!_.isEmpty(contextValue)) {
+  if (!isEmpty(contextValue)) {
     disabled = contextValue.disabled;
     error = contextValue.error;
   }
@@ -191,7 +202,7 @@ const MultiSelect = ({
   const handleItemClick = child => event => {
     event.persist();
 
-    const newValue = single ? [child.props.value] : _.uniq([...value, child.props.value]);
+    const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
 
     event.target = {
       value: newValue,
@@ -202,7 +213,7 @@ const MultiSelect = ({
   };
 
   const handleNewItemClick = event => {
-    const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+    const newValue = single ? [searchString] : uniq([...value, searchString]);
 
     event.target = {
       value: newValue,
@@ -222,7 +233,7 @@ const MultiSelect = ({
       if (searchString.length === 0) {
         e.persist();
         e.target = {
-          value: _.initial(value),
+          value: initial(value),
           name,
         };
         onChange(e);
@@ -234,7 +245,7 @@ const MultiSelect = ({
         if (searchString.length !== 0) {
           e.persist();
 
-          const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+          const newValue = single ? [searchString] : uniq([...value, searchString]);
 
           e.target = {
             value: newValue,
@@ -248,7 +259,7 @@ const MultiSelect = ({
         if (searchString.length !== 0) {
           e.persist();
 
-          const newValue = single ? [searchString] : _.uniq([...value, searchString]);
+          const newValue = single ? [searchString] : uniq([...value, searchString]);
 
           e.target = {
             value: newValue,
@@ -273,20 +284,20 @@ const MultiSelect = ({
   const handleSelectedItemClick = item => event => {
     event.persist();
     event.target = {
-      value: _.without([...value], item.value),
+      value: without([...value], item.value),
       name,
     };
     onChange(event, item);
   };
 
   const items = React.Children.map(children, child => {
-    const selected = _.includes(value, child.props.value);
+    const selected = includes(value, child.props.value);
     if (selected) {
       return null;
     }
 
     if (searchString !== '') {
-      if (!_.includes(_.toLower(child.props.value), _.toLower(searchString))) {
+      if (!includes(toLower(child.props.value), toLower(searchString))) {
         return null;
       }
     }
@@ -301,8 +312,8 @@ const MultiSelect = ({
     });
   });
 
-  const selectedItems = _.map(value, v => {
-    const c = _.find(React.Children.toArray(children), { props: { value: v } });
+  const selectedItems = map(value, v => {
+    const c = find(React.Children.toArray(children), { props: { value: v } });
 
     if (typeof c === 'undefined') {
       return {
@@ -317,9 +328,9 @@ const MultiSelect = ({
     };
   });
 
-  const showPlaceHolder = _.isEmpty(value) && searchString === '';
+  const showPlaceHolder = isEmpty(value) && searchString === '';
 
-  const showOptions = focusState && (allowNew || !_.isEmpty(_.compact(items)));
+  const showOptions = focusState && (allowNew || !isEmpty(compact(items)));
 
   const theme = useTheme();
 
@@ -337,7 +348,7 @@ const MultiSelect = ({
           </PlaceHolder>
         ) : single ? (
           <SingleValue className={clsx({ disabled, error, focused: focusState })}>
-            {_.get(_.head(selectedItems), 'displayName')}
+            {get(head(selectedItems), 'displayName')}
           </SingleValue>
         ) : (
           selectedItems.map(item => (
@@ -369,15 +380,15 @@ const MultiSelect = ({
             <Gap />
             <OptionsContainer>
               <OptionList>
-                {allowNew && !_.isEmpty(items) && <SectionTitle>SUGGESTIONS</SectionTitle>}
+                {allowNew && !isEmpty(items) && <SectionTitle>SUGGESTIONS</SectionTitle>}
                 {items}
               </OptionList>
             </OptionsContainer>
-            {allowNew && !_.isEmpty(searchString) && (
+            {allowNew && !isEmpty(searchString) && (
               <Option
                 data-value={searchString}
                 css={css`
-                  border-top: ${_.isEmpty(items) ? 'none' : '1px solid ' + theme.colors.grey_2};
+                  border-top: ${isEmpty(items) ? 'none' : '1px solid ' + theme.colors.grey_2};
                 `}
                 onMouseDown={handleNewItemClick}
               >

@@ -1,9 +1,8 @@
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { memoize } from 'lodash';
+import memoize from 'lodash/memoize';
 
 import defaultTheme from '../theme/defaultTheme';
 import { useTheme } from '../ThemeProvider';
@@ -51,20 +50,20 @@ const Typography = ({
   /**
    * a typography as defined in theme.typography
    */
-  variant?: $Keys<typeof defaultTheme.typography>,
+  variant?: $Keys<typeof defaultTheme.typography>;
   /**
    * could be either an html tag name, or a react component
    */
-  component?: string,
-  bold?: boolean,
+  component?: string;
+  bold?: boolean;
   /**
    * could be a theme colorname, or css color
    */
-  color?: string,
+  color?: string;
 }) => {
   const theme = useTheme();
   const componentMap: {
-    [k: string]: any,
+    [k: string]: any;
   } = createTypographyComponentMapFromTheme(theme);
   const Component = domComponentName
     ? createDomComponent(domComponentName, componentMap, variant)

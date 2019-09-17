@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled-base';
 import css from '@emotion/css';
 
-import { range } from 'lodash';
+import range from 'lodash/range';
 
 const LoaderContainer = styled('div')`
   padding-top: 15px;

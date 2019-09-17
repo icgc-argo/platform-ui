@@ -5,7 +5,8 @@ import styled from '@emotion/styled';
 import clsx from 'clsx';
 import css from '@emotion/css';
 import Icon from '../../Icon';
-import _ from 'lodash';
+import pick from 'lodash/pick';
+import get from 'lodash/get';
 
 const InputLabel = React.forwardRef(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;
@@ -24,11 +25,11 @@ const InputLabel = React.forwardRef(function InputLabel(props, ref) {
   return (
     <Label
       ref={ref}
-      className={clsx(_.pick(contextValue, ['error', 'disabled']), classNameProp)}
+      className={clsx(pick(contextValue, ['error', 'disabled']), classNameProp)}
       {...other}
     >
       {children}
-      {_.get(contextValue, 'required') && (
+      {get(contextValue, 'required') && (
         <AsteriskContainer>
           <Icon
             css={css`
