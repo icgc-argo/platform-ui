@@ -19,33 +19,6 @@ import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import NoDataMessage from './FileTable/NoDataMessage';
 
-const mockEntries = [
-  {
-    row: '1',
-    isNew: true,
-    program_id: 'program_id',
-    submitter_donor_id: 'submitter_donor_id',
-    gender: 'gender',
-    submitter_specimen_id: 'submitter_specimen_id',
-    specimen_type: 'specimen_type',
-    tumour_normal_designation: 'tumour_normal_designation',
-    submitter_sample_id: 'submitter_sample_id',
-    sample_type: 'sample_type',
-  },
-  {
-    row: '2',
-    isNew: true,
-    program_id: 'program_id',
-    submitter_donor_id: 'submitter_donor_id',
-    gender: 'gender',
-    submitter_specimen_id: 'submitter_specimen_id',
-    specimen_type: 'specimen_type',
-    tumour_normal_designation: 'tumour_normal_designation',
-    submitter_sample_id: 'submitter_sample_id',
-    sample_type: 'sample_type',
-  },
-];
-
 export default function ProgramIDRegistration() {
   const {
     query: { shortName: programShortName },
