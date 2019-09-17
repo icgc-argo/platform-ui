@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
-import get from 'lodash/get'
-import isArray from 'lodash/isArray'
+import get from 'lodash/get';
+import isArray from 'lodash/isArray';
 import * as yup from 'yup';
 type FormData = {
-  key: string,
-  val: mixed,
+  key: string;
+  val: unknown;
 };
 
 /**
@@ -14,10 +13,10 @@ type FormData = {
 interface T_FormHookInput<T> {
   initialFields: T;
   schema: {
-    validate: typeof yup.object,
+    validate: typeof yup.object;
   };
 }
-function useFormHook<T: { [k: string]: any }>({
+function useFormHook<T = { [k: string]: any }>({
   initialFields,
   schema: formSchema,
 }: T_FormHookInput<T>) {
@@ -31,7 +30,7 @@ function useFormHook<T: { [k: string]: any }>({
     data: initialFields,
   };
 
-  const [form, setForm] = useState<{ errors: typeof initErrors, data: typeof initialFields }>(
+  const [form, setForm] = useState<{ errors: typeof initErrors; data: typeof initialFields }>(
     initialState,
   );
   const [touched, setTouched] = useState(false);
@@ -60,7 +59,7 @@ function useFormHook<T: { [k: string]: any }>({
   const setError = ({ key, val }: FormData) => {
     setForm({
       ...form,
-      errors: { ...errors, [key]: val },
+      errors: { ...errors, [key]: String(val) },
     });
   };
 
