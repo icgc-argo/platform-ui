@@ -14,4 +14,5 @@ export default createPage({
     } = ctx;
     return !isRdpcMember(egoJwt) && canReadProgram({ egoJwt, programId: shortName });
   },
+  getGqlQueriesToPrefetch: async () => [{ query: SIDE_MENU_PROGRAM_LIST }],
 })(programClinicalSubmission);
