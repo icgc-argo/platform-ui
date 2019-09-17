@@ -35,20 +35,23 @@ export const getDefaultRedirectPathForUser = (
     return USER_PAGE_PATH;
   }
 };
-export const createPage = ({
-  isPublic = false,
-  isAccessible = async () => true,
-  getInitialProps = async () => ({}),
-  getGqlQueriesToPrefetch = async () => [],
-}: {
+type CreatePageConfigs = {
   isPublic?: PageConfigProps['isPublic'];
   isAccessible?: PageConfigProps['isAccessible'];
   getInitialProps?: PageConfigProps['getInitialProps'];
   getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
-}) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
-  page.isPublic = isPublic;
-  page.isAccessible = isAccessible;
-  page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch;
-  page.getInitialProps = getInitialProps;
-  return page;
+};
+export const createPage = ({
+  isPublic,
+  isAccessible,
+  getInitialProps,
+  getGqlQueriesToPrefetch,
+}: CreatePageConfigs) => (
+  page: React.ComponentType & CreatePageConfigs = () => <div>Here's a page</div>,
+): PageWithConfig => {
+  page.isPublic = isPublic || false;
+  page.isAccessible = isAccessible || (async () => true);
+  page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
+  page.getInitialProps = getInitialProps || (async () => []);
+  return page as PageWithConfig;
 };
