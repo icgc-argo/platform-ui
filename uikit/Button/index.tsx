@@ -1,6 +1,5 @@
-
-import React, { type Node } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import PropTypes, { any } from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import Icon from '../Icon';
@@ -11,9 +10,9 @@ type ButtonVariant = 'primary' | 'secondary' | 'text';
 type ButtonSize = 'sm' | 'md';
 
 export const BUTTON_VARIANTS: {
-  PRIMARY: ButtonVariant,
-  SECONDARY: ButtonVariant,
-  TEXT: ButtonVariant,
+  PRIMARY: ButtonVariant;
+  SECONDARY: ButtonVariant;
+  TEXT: ButtonVariant;
 } = Object.freeze({
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
@@ -21,14 +20,21 @@ export const BUTTON_VARIANTS: {
 });
 
 export const BUTTON_SIZES: {
-  SM: ButtonSize,
-  MD: ButtonSize,
+  SM: ButtonSize;
+  MD: ButtonSize;
 } = Object.freeze({
   SM: 'sm',
   MD: 'md',
 });
 
-const StyledButton = styled(FocusWrapper)`
+const StyledButton = styled<
+  typeof FocusWrapper,
+  {
+    size: 'sm' | 'md';
+    variant: 'primary' | 'secondary' | 'text';
+    disabled: boolean;
+  }
+>(FocusWrapper)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,31 +80,31 @@ const Button = React.forwardRef<
     /**
      * Button variant type eg. primary
      */
-    variant?: ButtonVariant,
+    variant?: ButtonVariant;
     /**
      * Button size
      */
-    size?: ButtonSize,
-    children?: Node,
-    disabled?: boolean,
+    size?: ButtonSize;
+    children?: Node;
+    disabled?: boolean;
     onClick?: (
-      e: SyntheticEvent<HTMLButtonElement>,
-    ) => any | ((e: SyntheticEvent<HTMLButtonElement>) => Promise<any>),
+      e: React.SyntheticEvent<HTMLButtonElement>,
+    ) => any | ((e: React.SyntheticEvent<HTMLButtonElement>) => Promise<any>);
     /**
      * Use with async onClick handlers to set loading indicator
      */
-    isAsync?: boolean,
+    isAsync?: boolean;
 
     /**
      * DOM pass through
      */
-    className?: string,
+    className?: string;
     /**
      * DOM pass through
      */
-    id?: string,
+    id?: string;
   },
-  any,
+  any
 >(
   (
     {
