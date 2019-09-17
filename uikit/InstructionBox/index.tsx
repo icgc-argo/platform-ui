@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
 import Typography from 'uikit/Typography';
@@ -11,7 +10,7 @@ import Link from 'next/link';
 import Icon from 'uikit/Icon';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
-const InstructionBox = ({ steps, footer }: { steps: Array<React.Node>, footer?: React.Node }) => {
+const InstructionBox = ({ steps, footer }: { steps: Array<Node>; footer?: Node }) => {
   const theme = useTheme();
   const InstructionStep = styled('div')`
     display: flex;

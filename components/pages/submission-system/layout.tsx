@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css } from 'uikit';
@@ -28,11 +27,11 @@ const SubmissionLayout = ({
   children,
   subtitle,
 }: {
-  noSidebar?: boolean,
-  sideMenu?: React.Element<any>,
-  contentHeader?: React.Element<any>,
-  children: React.Node,
-  subtitle?: string,
+  noSidebar?: boolean;
+  sideMenu?: React.Element<any>;
+  contentHeader?: React.Element<any>;
+  children: Node;
+  subtitle?: string;
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
   const debouncedSet = setter => debounce(setter, 100);

@@ -39,7 +39,7 @@ const SectionTitle = props => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }: { sm?: number, children: React.Node }) => (
+const InputLabelWrapper = ({ sm = 3, children }: { sm?: number, children: Node }) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>

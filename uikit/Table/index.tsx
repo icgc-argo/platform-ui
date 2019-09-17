@@ -51,7 +51,7 @@ export const DefaultLoadingComponent = ({
 );
 
 export type TableColumnConfig<Data = { [k: string]: any }> = {
-  Header?: React.Node,
+  Header?: Node,
   id?: string,
   accessor?: keyof Data,
   sortable?: boolean,

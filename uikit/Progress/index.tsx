@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { styled } from '../';
 import Icon from '../Icon';
@@ -7,10 +6,10 @@ import { css } from '..';
 export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled';
 
 export const PROGRESS_STATUS: {
-  SUCCESS: ProgressStatus,
-  ERROR: ProgressStatus,
-  PENDING: ProgressStatus,
-  DISABLED: ProgressStatus,
+  SUCCESS: ProgressStatus;
+  ERROR: ProgressStatus;
+  PENDING: ProgressStatus;
+  DISABLED: ProgressStatus;
 } = {
   SUCCESS: 'success',
   ERROR: 'error',
@@ -110,9 +109,9 @@ export const ProgressItem = ({
   text,
   completed = state === PROGRESS_STATUS.SUCCESS,
 }: {
-  state: ProgressStatus,
-  text: string,
-  completed?: boolean,
+  state: ProgressStatus;
+  text: string;
+  completed?: boolean;
 }) => (
   <div className="step">
     <Text completed={completed}>{text}</Text>
@@ -130,7 +129,7 @@ export const ProgressItem = ({
   </div>
 );
 
-const Progress = ({ children }: { children: React.Node }) => (
+const Progress = ({ children }: { children: Node }) => (
   <ProgressSection>{children}</ProgressSection>
 );
 

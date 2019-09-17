@@ -5,11 +5,7 @@ import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { UikitIconNames } from 'uikit/Icon/icons';
 
-export const Box = (props: {
-  children: React.Node;
-  title: React.Node;
-  iconName: UikitIconNames;
-}) => {
+export const Box = (props: { children: Node; title: Node; iconName: UikitIconNames }) => {
   return (
     <ContentBox
       css={css`

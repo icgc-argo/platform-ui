@@ -27,7 +27,7 @@ const useMounted = () => {
   }, []);
   return mounted;
 };
-export const ModalPortal = ({ children }: { children: React.Node }) => {
+export const ModalPortal = ({ children }: { children: Node }) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
   return ref
@@ -115,7 +115,7 @@ export default function ApplicationRoot({
   egoJwt: ?string,
   apolloCache: {},
   pageContext: ClientSideGetInitialPropsContext,
-  children: React.Node,
+  children: Node,
 }) {
   const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 

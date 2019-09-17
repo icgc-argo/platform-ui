@@ -7,8 +7,8 @@ type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS'; event: any };
 type ToastConfig = {
   variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
   interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS';
-  title: React.Node;
-  content: React.Node;
+  title: Node;
+  content: Node;
   onInteraction?: (e: ToastEventPayload) => any;
 };
 export const useToastState = () => {

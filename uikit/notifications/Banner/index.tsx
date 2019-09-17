@@ -14,8 +14,8 @@ const Banner = ({
   variant,
   size,
 }: {
-  title?: React.Node;
-  content?: React.Node;
+  title?: Node;
+  content?: Node;
   variant?: keyof typeof BANNER_VARIANTS;
   size?: keyof typeof BANNER_SIZE;
 }) => (
