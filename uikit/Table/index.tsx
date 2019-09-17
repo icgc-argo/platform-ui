@@ -1,12 +1,16 @@
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';
-import selectTable from 'react-table/lib/hoc/selectTable';
+import selectTable, {
+  SelectInputComponentProps,
+  SelectAllInputComponentProps,
+} from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
 import { StyledTable } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
+import { TableProps } from 'react-table';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -68,7 +72,7 @@ export type TableProps<Data = { [k: string]: any }> = {
   LoadingComponent?: typeof DefaultLoadingComponent;
   NoDataComponent?: typeof DefaultNoDataComponent;
 } & { [k: string]: any };
-function Table<Data = { [k: string]: any }>({
+function Table({
   className = '',
   stripped = true,
   highlight = true,
@@ -90,10 +94,17 @@ function Table<Data = { [k: string]: any }>({
     }
   },
   ...rest
-}: TableProps<Data>) {
-  // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
-  const TrComponent: React.ComponentType<any> = rest['TrComponent'] || DefaultTrComponent;
+}: TableProps & {
+  highlight: boolean;
+  stripped: boolean;
+  selectedIds?: Array<any>;
+  isSelectTable: boolean;
+  primaryKey: string;
+}) {
+  const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
+
+  // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
   const selectedIds = rest.selectedIds || [];
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
@@ -127,43 +138,23 @@ export default Table;
  * SelectTable provides the row selection capability with the
  * selectTable HOC.
  */
-const SelectTableCheckbox = ({
-  checked,
-  onClick,
-  id,
-}: {
-  checked: boolean;
-  onClick: (a: any) => any;
-  id: string;
-}) => (
-  // $FlowFixMe `aria-lable` not supported by flow
+const SelectTableCheckbox: React.ComponentType<
+  SelectInputComponentProps & SelectAllInputComponentProps
+> = ({ checked, onClick, id }) => (
+  // @ts-ignore area-label not supported by ts
   <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-lable="table-select" />
 );
 
-type SelectTableProps = {
-  /**
-   * returns true if the key passed is selected otherwise it should return false
-   */
-  isSelected: (a: any) => boolean;
-  /**
-   * a property that indicates if the selectAll is set (true|false)
-   */
-  selectAll: boolean;
-  /**
-   * called when the user clicks the selectAll checkbox/radio
-   */
-  toggleAll: (a: any) => any;
-  /**
-   * called when the use clicks a specific checkbox/radio in a row
-   */
-  toggleSelection: (a: any) => any;
-  /**
-   * either checkbox|radio to indicate what type of selection is required
-   */
-  selectType: 'checkbox' | 'radio';
-};
 export function SelectTable<Data = { [k: string]: any }>(
-  props: TableProps<Data> & SelectTableProps,
+  props: TableProps<Data> & {
+    isSelected: (d: any) => boolean;
+    keyField: string;
+    highlight: boolean;
+    stripped: boolean;
+    selectedIds?: any[];
+    isSelectTable: boolean;
+    primaryKey: string;
+  },
 ) {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
