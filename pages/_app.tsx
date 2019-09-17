@@ -40,7 +40,7 @@ type RootGetInitialPropsData = {
   unauthorized: boolean,
   pathname: string,
   ctx: ClientSideGetInitialPropsContext,
-  egoJwt: ?string,
+  egoJwt?: string,
   apolloCache: {},
 };
 
@@ -58,7 +58,7 @@ class Root extends App {
     ctx: GetInitialPropsContext,
     router?: any,
   }) {
-    const egoJwt: ?string = nextCookies(ctx)[EGO_JWT_KEY];
+    const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
 
     if (egoJwt) {

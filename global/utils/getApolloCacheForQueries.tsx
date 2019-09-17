@@ -1,4 +1,3 @@
-
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-fetch';
@@ -8,8 +7,8 @@ import getConfig from 'next/config';
 
 const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
-export default (queries: Array<{ query: any, variables?: { [key: string]: any } }>) => async (
-  egoJwt: ?string,
+export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
+  egoJwt?: string,
 ) => {
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',

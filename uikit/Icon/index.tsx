@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import icons from './icons';
@@ -17,17 +16,17 @@ const Icon = ({
   title,
   ...rest
 }: {
-  name: UikitIconNames,
-  className?: string,
-  title?: string,
-  width?: string,
-  height?: string,
-  fill?: ThemeColorNames | string,
+  name: UikitIconNames;
+  className?: string;
+  title?: string;
+  width?: string;
+  height?: string;
+  fill?: keyof ThemeColorNames | string;
 }) => {
   const theme = useTheme();
   const svg = icons[name];
 
-  const resolveFill = (fill: ?string): ?string => (fill && theme.colors[fill]) || fill;
+  const resolveFill = (fill?: string): string | undefined => (fill && theme.colors[fill]) || fill;
 
   return (
     <svg

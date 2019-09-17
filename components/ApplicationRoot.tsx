@@ -1,4 +1,3 @@
-
 import ApolloClient from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
@@ -112,10 +111,10 @@ export default function ApplicationRoot({
   pageContext,
   children,
 }: {
-  egoJwt: ?string,
-  apolloCache: {},
-  pageContext: ClientSideGetInitialPropsContext,
-  children: Node,
+  egoJwt?: string;
+  apolloCache: {};
+  pageContext: ClientSideGetInitialPropsContext;
+  children: Node;
 }) {
   const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
