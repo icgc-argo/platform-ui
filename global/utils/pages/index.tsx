@@ -41,10 +41,10 @@ export const createPage = ({
   getInitialProps = async () => ({}),
   getGqlQueriesToPrefetch = async () => [],
 }: {
-  isPublic?: $PropertyType<PageConfigProps, 'isPublic'>;
-  isAccessible?: $PropertyType<PageConfigProps, 'isAccessible'>;
-  getInitialProps?: $PropertyType<PageConfigProps, 'getInitialProps'>;
-  getGqlQueriesToPrefetch?: $PropertyType<PageConfigProps, 'getGqlQueriesToPrefetch'>;
+  isPublic?: PageConfigProps['isPublic'];
+  isAccessible?: PageConfigProps['isAccessible'];
+  getInitialProps?: PageConfigProps['getInitialProps'];
+  getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;

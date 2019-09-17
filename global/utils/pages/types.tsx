@@ -12,9 +12,9 @@ export type GetInitialPropsContext = {
   err?: Error,
 };
 export type ClientSideGetInitialPropsContext = {
-  pathname: $PropertyType<GetInitialPropsContext, 'pathname'>,
-  query: $PropertyType<GetInitialPropsContext, 'query'>,
-  asPath: $PropertyType<GetInitialPropsContext, 'asPath'>,
+  pathname: GetInitialPropsContext['pathname'],
+  query: GetInitialPropsContext['query'],
+  asPath: GetInitialPropsContext['asPath'],
 };
 type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
   egoJwt: ?string,
