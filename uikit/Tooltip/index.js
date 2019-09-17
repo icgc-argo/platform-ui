@@ -46,7 +46,6 @@ type TooltipProps = {
 };
 
 const Tooltip = ({ html, ...rest }: TooltipProps) => {
-  console.log('unmountHTMLWhenHide: ', rest.unmountHTMLWhenHide);
   const theme = useTheme();
   const TooltipContainer = styled('div')`
     ${css(theme.typography.caption)}
