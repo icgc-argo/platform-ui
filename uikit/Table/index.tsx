@@ -1,4 +1,3 @@
-
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';
@@ -27,8 +26,8 @@ export const DefaultLoadingComponent = ({
   loading,
   loadingText,
 }: {
-  loading?: boolean,
-  loadingText?: string,
+  loading?: boolean;
+  loadingText?: string;
 }) => (
   <div
     role="alert"
@@ -51,26 +50,25 @@ export const DefaultLoadingComponent = ({
 );
 
 export type TableColumnConfig<Data = { [k: string]: any }> = {
-  Header?: Node,
-  id?: string,
-  accessor?: keyof Data,
-  sortable?: boolean,
-  Cell?: ({ original: Data }) => any,
-  sortable?: boolean,
-  width?: number,
-  headerStyle?: {},
+  Header?: React.ReactNode;
+  id?: string;
+  accessor?: keyof Data;
+  sortable?: boolean;
+  Cell?: ({ original: Data }) => any;
+  width?: number;
+  headerStyle?: {};
 };
-export type TableProps<Data: { [k: string]: any }> = {
-  className?: string,
-  stripped?: boolean,
-  highlight?: boolean,
-  columns: Array<TableColumnConfig<Data>>,
-  data?: Array<Data>,
-  PaginationComponent?: typeof TablePagination,
-  LoadingComponent?: typeof DefaultLoadingComponent,
-  NoDataComponent?: typeof DefaultNoDataComponent,
+export type TableProps<Data = { [k: string]: any }> = {
+  className?: string;
+  stripped?: boolean;
+  highlight?: boolean;
+  columns: Array<TableColumnConfig<Data>>;
+  data?: Array<Data>;
+  PaginationComponent?: typeof TablePagination;
+  LoadingComponent?: typeof DefaultLoadingComponent;
+  NoDataComponent?: typeof DefaultNoDataComponent;
 } & { [k: string]: any };
-const Table = <Data: { [k: string]: any }>({
+function Table<Data = { [k: string]: any }>({
   className = '',
   stripped = true,
   highlight = true,
@@ -92,7 +90,7 @@ const Table = <Data: { [k: string]: any }>({
     }
   },
   ...rest
-}: TableProps<Data>) => {
+}: TableProps<Data>) {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
   const TrComponent: React.ComponentType<any> = rest['TrComponent'] || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -122,7 +120,7 @@ const Table = <Data: { [k: string]: any }>({
       {...rest}
     />
   );
-};
+}
 export default Table;
 
 /**
@@ -134,9 +132,9 @@ const SelectTableCheckbox = ({
   onClick,
   id,
 }: {
-  checked: boolean,
-  onClick: any => any,
-  id: string,
+  checked: boolean;
+  onClick: (a: any) => any;
+  id: string;
 }) => (
   // $FlowFixMe `aria-lable` not supported by flow
   <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-lable="table-select" />
@@ -146,27 +144,27 @@ type SelectTableProps = {
   /**
    * returns true if the key passed is selected otherwise it should return false
    */
-  isSelected: any => boolean,
+  isSelected: (a: any) => boolean;
   /**
    * a property that indicates if the selectAll is set (true|false)
    */
-  selectAll: boolean,
+  selectAll: boolean;
   /**
    * called when the user clicks the selectAll checkbox/radio
    */
-  toggleAll: any => any,
+  toggleAll: (a: any) => any;
   /**
    * called when the use clicks a specific checkbox/radio in a row
    */
-  toggleSelection: any => any,
+  toggleSelection: (a: any) => any;
   /**
    * either checkbox|radio to indicate what type of selection is required
    */
-  selectType: 'checkbox' | 'radio',
+  selectType: 'checkbox' | 'radio';
 };
-export const SelectTable = <Data: { [k: string]: any }>(
+export function SelectTable<Data = { [k: string]: any }>(
   props: TableProps<Data> & SelectTableProps,
-) => {
+) {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
   const Component = selectTable(Table);
@@ -180,4 +178,4 @@ export const SelectTable = <Data: { [k: string]: any }>(
       SelectAllInputComponent={SelectTableCheckbox}
     />
   );
-};
+}
