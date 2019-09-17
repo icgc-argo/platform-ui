@@ -1,5 +1,3 @@
 {
-  "hooks": {
-      "pre-commit": "pretty-quick --staged && npm run flow"
-  }
+  "hooks": {}
 }
