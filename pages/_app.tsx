@@ -1,4 +1,3 @@
-// @flow
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
@@ -14,7 +13,7 @@ import App from 'next/app';
 
 const { AUTH_DISABLED, GA_TRACKING_ID } = getConfig().publicRuntimeConfig;
 
-import type {
+import {
   PageWithConfig,
   GetInitialPropsContext,
   ClientSideGetInitialPropsContext,
