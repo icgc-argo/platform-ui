@@ -129,7 +129,7 @@ export const ProgressItem = ({
   </div>
 );
 
-const Progress = ({ children }: { children: Node }) => (
+const Progress: React.ComponentType<{}> & { Item: typeof ProgressItem } = ({ children }) => (
   <ProgressSection>{children}</ProgressSection>
 );
 
