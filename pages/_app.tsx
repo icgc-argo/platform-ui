@@ -36,12 +36,12 @@ const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
 };
 
 type RootGetInitialPropsData = {
-  pageProps: { [k: string]: any },
-  unauthorized: boolean,
-  pathname: string,
-  ctx: ClientSideGetInitialPropsContext,
-  egoJwt?: string,
-  apolloCache: {},
+  pageProps: { [k: string]: any };
+  unauthorized: boolean;
+  pathname: string;
+  ctx: ClientSideGetInitialPropsContext;
+  egoJwt?: string;
+  apolloCache: {};
 };
 
 const removeCookie = (res, cookieName) => {
@@ -54,9 +54,9 @@ class Root extends App {
     ctx,
     router,
   }: {
-    Component: PageWithConfig,
-    ctx: GetInitialPropsContext,
-    router?: any,
+    Component: PageWithConfig;
+    ctx: GetInitialPropsContext;
+    router?: any;
   }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
@@ -77,7 +77,7 @@ class Root extends App {
       : false;
 
     if (unauthorized && !AUTH_DISABLED) {
-      const err = (new Error('Unauthorized'): Error & { statusCode?: number });
+      const err = new Error('Unauthorized') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 401;
       throw err;
     }
