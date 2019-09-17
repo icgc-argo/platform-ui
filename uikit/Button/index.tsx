@@ -117,7 +117,7 @@ const Button = React.forwardRef<
       className,
       id,
     },
-    ref,
+    ref = React.createRef(),
   ) => {
     const [isLoading, setLoading] = React.useState(false);
     const theme = useTheme();

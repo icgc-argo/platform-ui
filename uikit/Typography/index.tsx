@@ -1,7 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
 import memoize from 'lodash/memoize';
 
 import defaultTheme from '../theme/defaultTheme';
@@ -34,19 +32,13 @@ const createDomComponent = memoize(
 );
 
 const createStyledDomComponent = memoize(
-  Component => styled(Component)`
+  Component => styled<'div', { bold: boolean; color: string }>(Component)`
     font-weight: ${({ bold }) => (bold ? `bold` : `normal`)};
     color: ${({ theme, color }) => (color ? theme.colors[color] || color : 'inherit')};
   `,
 );
 
-const Typography = ({
-  variant = 'paragraph',
-  component: domComponentName,
-  bold = false,
-  color,
-  ...rest
-}: {
+const Typography: React.ComponentType<{
   /**
    * a typography as defined in theme.typography
    */
@@ -60,7 +52,7 @@ const Typography = ({
    * could be a theme colorname, or css color
    */
   color?: string;
-}) => {
+}> = ({ variant = 'paragraph', component: domComponentName, bold = false, color, ...rest }) => {
   const theme = useTheme();
   const componentMap: {
     [k: string]: any;
