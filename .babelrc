@@ -1,6 +1,8 @@
 {
   "presets": [
     [
+      "@babel/preset-flow",
+      "@babel/preset-typescript",
       "next/babel",
       {
         "transform-runtime": {
