@@ -18,7 +18,7 @@ import get from 'lodash/get';
 
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
-const modalPortalRef = React.createRef();
+const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {

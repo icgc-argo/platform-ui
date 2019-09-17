@@ -20,7 +20,13 @@ type T_AuthContext = {
 
 const AuthContext = React.createContext<T_AuthContext>({});
 
-export function AuthProvider({ egoJwt, children }: { egoJwt?: string; children: Node }) {
+export function AuthProvider({
+  egoJwt,
+  children,
+}: {
+  egoJwt?: string;
+  children: React.ReactElement;
+}) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig().publicRuntimeConfig;
 
   const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
