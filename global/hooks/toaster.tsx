@@ -58,7 +58,7 @@ export const useToastState = () => {
     onInteraction,
   };
 };
-type Toaster = $Call<typeof useToastState, void>;
+type Toaster = ReturnType<typeof useToastState>;
 
 // $FlowFixMe It's ok flow, we will make sure there's always a context
 export const ToasterContext = React.createContext<Toaster>();

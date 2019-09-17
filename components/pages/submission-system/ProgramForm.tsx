@@ -66,7 +66,7 @@ const createUpdateProgramInput = formData => ({
 /* *************************************** *
  * Form data validation
  * *************************************** */
-type FormModel = $Call<typeof useFormHook, { initialFields: {}, schema: { validate: () => {} } }>;
+type FormModel = ReturnType<typeof useFormHook>;
 export default function CreateProgramForm({
   leftFooterComponent: LeftFooterComponent,
   program = {},

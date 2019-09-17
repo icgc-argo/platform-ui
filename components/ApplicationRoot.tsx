@@ -48,7 +48,7 @@ export const ModalPortal = ({ children }: { children: Node }) => {
     : null;
 };
 
-const ToastDisplayArea = ({ toaster }: { toaster: $Call<typeof useToastState, void> }) => (
+const ToastDisplayArea = ({ toaster }: { toaster: ReturnType<typeof useToastState> }) => (
   <div
     className="toastStackContainer"
     css={css`

@@ -16,7 +16,7 @@ type T_AuthContext = {
   token: ?string,
   logOut: void => void,
   updateToken: void => Promise<?string>,
-  data: $Call<typeof decodeToken, ?string> | null,
+  data: ReturnType<typeof decodeToken> | null,
 };
 
 const AuthContext = React.createContext<T_AuthContext>({});
