@@ -9,7 +9,7 @@ import * as React from 'react';
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import getConfig from 'next/config';
-import App from 'next/app';
+import App, { AppContext } from 'next/app';
 
 const { AUTH_DISABLED, GA_TRACKING_ID } = getConfig().publicRuntimeConfig;
 
@@ -18,6 +18,7 @@ import {
   GetInitialPropsContext,
   ClientSideGetInitialPropsContext,
 } from 'global/utils/pages/types';
+import { NextPageContext } from 'next-server/dist/lib/utils';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -30,7 +31,7 @@ const redirect = (res, url: string) => {
   }
 };
 
-const enforceLogin = ({ ctx }: { ctx: GetInitialPropsContext }) => {
+const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
   const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
   redirect(ctx.res, loginRedirect);
 };
@@ -48,16 +49,14 @@ const removeCookie = (res, cookieName) => {
   res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
 };
 
-class Root extends App {
-  static async getInitialProps({
-    Component,
-    ctx,
-    router,
-  }: {
-    Component: PageWithConfig;
-    ctx: GetInitialPropsContext;
-    router?: any;
-  }) {
+class Root extends App<{
+  egoJwt?: string;
+  ctx: NextPageContext;
+  apolloCache: any;
+  pathname: string;
+  unauthorized: boolean;
+}> {
+  static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
 
@@ -123,7 +122,7 @@ class Root extends App {
   }
 
   render() {
-    const { Component, pageProps, unauthorized, pathname, ctx, apolloCache, egoJwt } = this.props;
+    const { Component, pageProps, ctx, apolloCache, egoJwt } = this.props;
 
     return (
       <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>

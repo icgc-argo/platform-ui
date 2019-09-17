@@ -1,19 +1,11 @@
 import * as React from 'react';
+import { NextPageContext } from 'next-server/dist/lib/utils';
 
-export type GetInitialPropsContext = {
-  pathname: string;
-  query: {
-    [key: string]: any;
-  };
-  asPath: string;
-  req?: any;
-  res?: any;
-  err?: Error;
-};
+export type GetInitialPropsContext = NextPageContext;
 export type ClientSideGetInitialPropsContext = {
   pathname: GetInitialPropsContext['pathname'];
   query: GetInitialPropsContext['query'];
-  asPath: GetInitialPropsContext['asPath'];
+  asPath?: GetInitialPropsContext['asPath'];
 };
 type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
   egoJwt?: string;

@@ -32,6 +32,7 @@
     "@icgc-argo/ego-token-utils": "^5.2.1",
     "@storybook/addon-a11y": "^5.1.9",
     "@types/lodash": "^4.14.138",
+    "@types/next": "^8.0.6",
     "@types/react-table": "^6.8.5",
     "@types/storybook__react": "^4.0.2",
     "apollo-cache-inmemory": "^1.6.2",

@@ -114,7 +114,7 @@ export default function ApplicationRoot({
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
-  children: Node;
+  children: React.ReactElement;
 }) {
   const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
