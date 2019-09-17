@@ -1,16 +1,15 @@
-
 import * as React from 'react';
 import omit from 'lodash/omit';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 
-type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS', event: any };
+type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS'; event: any };
 type ToastConfig = {
-  variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR',
-  interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS',
-  title: React.Node,
-  content: React.Node,
-  onInteraction?: (e: ToastEventPayload) => any,
+  variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+  interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS';
+  title: React.Node;
+  content: React.Node;
+  onInteraction?: (e: ToastEventPayload) => any;
 };
 export const useToastState = () => {
   const DEFAULT_TIMEOUT = 8000;
@@ -20,8 +19,8 @@ export const useToastState = () => {
     console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
     console.log(`🔥🔥🔥🔥🔥🔥🔥🔥`);
     const id = String(Math.random());
-    const DEFAULT_TOAST_CONFIGS: $Shape<ToastConfig> = {
-      variant: TOAST_VARIANTS.INFO,
+    const DEFAULT_TOAST_CONFIGS: Partial<ToastConfig> = {
+      variant: TOAST_VARIANTS.INFO as ToastConfig['variant'],
       onInteraction: e => e,
       interactionType: undefined, // the Toast component internally has its default, no need to cover this
     };
@@ -42,7 +41,7 @@ export const useToastState = () => {
     return _id;
   };
 
-  const onInteraction = ({ id: _id, payload }: { id: string, payload: ToastEventPayload }) => {
+  const onInteraction = ({ id: _id, payload }: { id: string; payload: ToastEventPayload }) => {
     if (
       [NOTIFICATION_INTERACTION_EVENTS.CLOSE, NOTIFICATION_INTERACTION_EVENTS.DISMISS].includes(
         payload.type,
