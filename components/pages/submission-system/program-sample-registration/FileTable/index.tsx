@@ -1,4 +1,4 @@
-import { TableProps, TableColumnConfig } from "uikit/Table";
+import { TableProps, TableColumnConfig } from 'uikit/Table';
 import React from 'react';
 import memoize from 'lodash/memoize';
 import sum from 'lodash/sum';
@@ -20,21 +20,21 @@ const REQUIRED_FILE_ENTRY_FIELDS = {
   IS_NEW: 'isNew',
 };
 export type FileEntry = {
-  row: string,
-  isNew: boolean,
-  [k: string]: string | number | boolean,
+  row: string;
+  isNew: boolean;
+  [k: string]: string | number | boolean;
 };
 type FileStats = {
-  newCount: number,
-  existingCount: number,
+  newCount: number;
+  existingCount: number;
 };
 type SubmissionInfo = {
-  fileName: string,
-  creator: string,
-  createdAt: string,
+  fileName: string;
+  creator: string;
+  createdAt: string;
 };
 
-const StarIcon = (props: { active: boolean, className?: string }) => (
+const StarIcon = (props: { active: boolean; className?: string }) => (
   <Icon
     className={props.className || ''}
     name="star"
@@ -44,7 +44,7 @@ const StarIcon = (props: { active: boolean, className?: string }) => (
   />
 );
 
-const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInfo }) => (
+const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo?: SubmissionInfo }) => (
   <Typography variant="paragraph" component="div" color="grey">
     <Typography variant="default" color="secondary_dark">
       {submissionInfo && submissionInfo.fileName}
@@ -60,7 +60,7 @@ const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInf
   </Typography>
 );
 
-const StatsArea = (props: { stats: ?FileStats }) => {
+const StatsArea = (props: { stats?: FileStats }) => {
   const { stats } = props;
   const Section = styled('div')`
     display: flex;
@@ -121,9 +121,9 @@ const getColumnWidth = memoize<[string], number | void>(keyString => {
 });
 
 const FileTable = (props: {
-  records: Array<FileEntry>,
-  stats: ?FileStats,
-  submissionInfo: ?SubmissionInfo,
+  records: Array<FileEntry>;
+  stats?: FileStats;
+  submissionInfo?: SubmissionInfo;
 }) => {
   const theme = useTheme();
   const { records, stats, submissionInfo } = props;

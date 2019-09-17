@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { StyledInputWrapper, INPUT_STATES, INPUT_SIZES } from 'uikit/form/common';
 import Button from 'uikit/Button';
@@ -30,16 +29,16 @@ const ClipboardCopyField = ({
   timeout = 2000,
   loading,
 }: {
-  buttonText?: string,
-  value?: string,
-  tagText?: string,
-  disabled?: boolean,
-  errorText?: string,
-  timeout?: number,
-  loading: boolean,
+  buttonText?: string;
+  value?: string;
+  tagText?: string;
+  disabled?: boolean;
+  errorText?: string;
+  timeout?: number;
+  loading: boolean;
 }) => {
   const [promptMsgShown, setPromptMsgShown] = React.useState(false);
-  let currentTimeout: ?TimeoutID = undefined;
+  let currentTimeout: NodeJS.Timeout = undefined;
 
   const showPromptMessage = () => {
     clearTimeout(currentTimeout);
