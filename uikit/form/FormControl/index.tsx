@@ -3,7 +3,32 @@ import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
 import css from '@emotion/css';
 
-const FormControl = React.forwardRef(function FormControl(
+const FormControl = React.forwardRef<
+  HTMLElement,
+  {
+    /**
+     * The contents of the form control.
+     */
+    children?: React.ReactElement;
+    /**
+     * The component used for the root node.
+     * Either a string to use a DOM element or a component.
+     */
+    component?: keyof HTMLElementTagNameMap;
+    /**
+     * If `true`, the label should be displayed in an error state.
+     */
+    error?: boolean | string;
+    /**
+     * If `true`, the label will indicate that the input is required.
+     */
+    required?: boolean;
+    /**
+     * If `true`, the label, input and helper text should be displayed in a disabled state.
+     */
+    disabled?: boolean;
+  }
+>(function FormControl(
   {
     component: Component = 'div',
     children,
@@ -30,43 +55,17 @@ const FormControl = React.forwardRef(function FormControl(
 
   return (
     <FormControlContext.Provider value={childContext}>
-      <Component
-        ref={ref}
-        {...other}
-        css={css`
+      {React.createElement(Component, {
+        ref: ref,
+        ...other,
+        css: css`
           margin-bottom: 10px;
-        `}
-      >
-        {children}
-      </Component>
+        `,
+      })}
     </FormControlContext.Provider>
   );
 });
 
 FormControl.displayName = 'FormControl';
-
-FormControl.propTypes = {
-  /**
-   * The contents of the form control.
-   */
-  children: PropTypes.node,
-  /**
-   * The component used for the root node.
-   * Either a string to use a DOM element or a component.
-   */
-  component: PropTypes.elementType,
-  /**
-   * If `true`, the label should be displayed in an error state.
-   */
-  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  /**
-   * If `true`, the label will indicate that the input is required.
-   */
-  required: PropTypes.bool,
-  /**
-   * If `true`, the label, input and helper text should be displayed in a disabled state.
-   */
-  disabled: PropTypes.bool,
-};
 
 export default FormControl;
