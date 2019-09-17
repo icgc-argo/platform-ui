@@ -1,4 +1,4 @@
-//@flow
+
 
 const base = {
   black: '#000000',

@@ -1,4 +1,4 @@
-// @flow
+
 import React, { useState } from 'react';
 import { get, isArray, flattenDeep } from 'lodash';
 import * as yup from 'yup';

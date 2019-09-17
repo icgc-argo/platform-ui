@@ -1,4 +1,4 @@
-// @flow
+
 
 import * as yup from 'yup';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';

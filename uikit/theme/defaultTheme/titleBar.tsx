@@ -1,4 +1,4 @@
-//@flow
+
 import colors from './colors';
 export default {
   separatorColor: colors.grey_1,

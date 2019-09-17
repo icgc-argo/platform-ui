@@ -1,4 +1,4 @@
-//@flow
+
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
 import { ContentHeader, PageContent, ContentBody, PageBody } from 'uikit/PageLayout';

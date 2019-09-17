@@ -1,4 +1,4 @@
-//@flow
+
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-fetch';

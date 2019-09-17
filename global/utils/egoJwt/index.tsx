@@ -1,4 +1,4 @@
-//@flow
+
 import jwtDecode from 'jwt-decode';
 import { get, memoize } from 'lodash';
 import getConfig from 'next/config';

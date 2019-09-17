@@ -1,4 +1,4 @@
-// @flow
+
 import css from '@emotion/css';
 import { PROGRAM_MEMBERSHIP_TYPES, RDC_NAMES } from 'global/constants';
 import filter from 'lodash/filter';

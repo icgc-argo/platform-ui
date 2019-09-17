@@ -1,4 +1,4 @@
-// @flow
+
 import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
 import fetch from 'isomorphic-fetch';

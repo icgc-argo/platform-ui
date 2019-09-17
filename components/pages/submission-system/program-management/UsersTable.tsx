@@ -1,4 +1,3 @@
-//@flow
 import React from 'react';
 
 import { css } from 'uikit';
@@ -11,19 +10,19 @@ import { displayDate } from 'global/utils/common';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { RoleDisplayName } from '../modals/common';
 
-import type { RoleKey } from '../modals/common';
-import type { TableColumnConfig } from 'uikit/Table';
+import { RoleKey } from '../modals/common';
+import { TableColumnConfig } from 'uikit/Table';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
 type UsersTableUser = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  role: RoleKey,
-  isDacoApproved: boolean | null,
-  inviteStatus: StatusKey | null,
-  inviteAcceptedAt: Date | null,
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: RoleKey;
+  isDacoApproved: boolean | null;
+  inviteStatus: StatusKey | null;
+  inviteAcceptedAt: Date | null;
 };
 
 type CellProps = { original: UsersTableUser };
@@ -36,10 +35,10 @@ const StatusDisplayName: { [key: StatusKey]: string } = {
 };
 
 const UsersTable = (tableProps: {
-  users: Array<UsersTableUser>,
-  onUserEditClick: ({ user: UsersTableUser }) => void,
-  onUserDeleteClick: ({ user: UsersTableUser }) => void,
-  onUserResendInviteClick: ({ user: UsersTableUser }) => void,
+  users: Array<UsersTableUser>;
+  onUserEditClick: ({ user: UsersTableUser }) => void;
+  onUserDeleteClick: ({ user: UsersTableUser }) => void;
+  onUserResendInviteClick: ({ user: UsersTableUser }) => void;
 }) => {
   const { data: egoTokenData } = useAuthContext() || {};
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';

@@ -1,4 +1,4 @@
-// @flow
+
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
 import Typography from 'uikit/Typography';

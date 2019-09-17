@@ -2,7 +2,7 @@
 // flow-typed version: 55d62acaa7/react-apollo_v2.x.x/flow_>=v0.58.x
 
 declare module 'react-apollo' {
-  import type { ComponentType, Element, Node } from 'react';
+  import { ComponentType, Element, Node } from 'react';
 
   declare type MakeOptional = <V>(V) => ?V;
   declare type MakeDataOptional<TData> = $ObjMap<TData, MakeOptional> | void;

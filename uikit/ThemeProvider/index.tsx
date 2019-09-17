@@ -1,4 +1,4 @@
-//@flow
+
 import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming';
 import { ThemeContext } from '@emotion/core';

@@ -1,4 +1,4 @@
-//@flow
+
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
 import { ContentBox } from 'uikit/PageLayout';

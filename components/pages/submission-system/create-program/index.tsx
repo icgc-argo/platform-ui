@@ -1,4 +1,4 @@
-//@flow
+
 import React from 'react';
 import { css, styled } from 'uikit';
 import SubmissionLayout from '../layout';

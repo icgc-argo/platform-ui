@@ -1,15 +1,14 @@
-//@flow
 import * as React from 'react';
 import { css, styled } from 'uikit';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import type { UikitIconNames } from 'uikit/Icon/icons';
+import { UikitIconNames } from 'uikit/Icon/icons';
 
 export const Box = (props: {
-  children: React.Node,
-  title: React.Node,
-  iconName: UikitIconNames,
+  children: React.Node;
+  title: React.Node;
+  iconName: UikitIconNames;
 }) => {
   return (
     <ContentBox

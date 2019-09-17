@@ -1,4 +1,4 @@
-// @flow
+
 import { get } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';

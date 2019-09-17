@@ -1,4 +1,4 @@
-// @flow
+
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';

@@ -1,4 +1,4 @@
-//@flow
+
 import {
   CREATE_PROGRAM_PAGE_PATH,
   PROGRAM_MANAGE_PATH,

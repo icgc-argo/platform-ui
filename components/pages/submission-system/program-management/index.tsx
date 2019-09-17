@@ -1,4 +1,4 @@
-// @flow
+
 import React from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { useRouter } from 'next/router';

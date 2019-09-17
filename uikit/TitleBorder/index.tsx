@@ -1,4 +1,4 @@
-// @flow
+
 import { css, styled } from '..';
 import React from 'react';
 

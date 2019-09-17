@@ -1,6 +1,5 @@
-//@flow
 import * as React from 'react';
-import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
+import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
 export const PageContext = React.createContext<ClientSideGetInitialPropsContext>({
   pathname: '',

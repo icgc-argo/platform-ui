@@ -1,4 +1,4 @@
-//@flow
+
 export default {
   default: {
     fontFamily: 'Work Sans, sans-serif',

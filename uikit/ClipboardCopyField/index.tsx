@@ -1,4 +1,4 @@
-// @flow
+
 import * as React from 'react';
 import { StyledInputWrapper, INPUT_STATES, INPUT_SIZES } from 'uikit/form/common';
 import Button from 'uikit/Button';

@@ -1,7 +1,7 @@
 // flow-typed signature: 4ab386f3c584d85b158908552aadde04
 // flow-typed version: 9b6155aff6/apollo-link-http_v1.2.x/flow_>=v0.56.x
 
-// @flow
+
 
 declare module 'apollo-link-http' {
   declare type $Record<T, U> = { [key: $Enum<T>]: U };

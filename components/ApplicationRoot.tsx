@@ -1,4 +1,4 @@
-//@flow
+
 import ApolloClient from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
@@ -17,7 +17,7 @@ import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 
-import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
+import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
 const modalPortalRef = React.createRef();
 const useMounted = () => {

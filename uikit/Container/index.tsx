@@ -1,4 +1,4 @@
-// @flow
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import color from 'color';

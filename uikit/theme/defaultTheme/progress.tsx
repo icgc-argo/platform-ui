@@ -1,6 +1,5 @@
-//@flow
 import colors from './colors';
-import type { ProgressStatus } from '../../Progress';
+import { ProgressStatus } from '../../Progress';
 
 const color: { [key: ProgressStatus]: string } = {
   success: colors.success,

@@ -1,4 +1,4 @@
-//@flow
+
 import LoginPage from 'components/pages/login';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';

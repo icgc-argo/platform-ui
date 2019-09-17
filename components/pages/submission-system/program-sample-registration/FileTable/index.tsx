@@ -1,6 +1,4 @@
-// @flow
-import type { TableProps, TableColumnConfig } from 'uikit/Table';
-
+import { TableProps, TableColumnConfig } from "uikit/Table";
 import React from 'react';
 import memoize from 'lodash/memoize';
 import sum from 'lodash/sum';

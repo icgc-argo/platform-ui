@@ -1,4 +1,4 @@
-//@flow
+
 import React from 'react';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';

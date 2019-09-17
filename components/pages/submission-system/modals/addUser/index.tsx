@@ -1,4 +1,4 @@
-// @flow
+
 import React, { useState } from 'react';
 import { styled, css } from 'uikit';
 import Modal from 'uikit/Modal';

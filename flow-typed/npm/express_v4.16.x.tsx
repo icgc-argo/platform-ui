@@ -2,7 +2,7 @@
 // flow-typed version: c7f4cf7a4d/express_v4.16.x/flow_>=v0.93.x
 
 import * as http from 'http';
-import type { Socket } from 'net';
+import { Socket } from 'net';
 
 declare type express$RouterOptions = {
   caseSensitive?: boolean,

@@ -1,4 +1,4 @@
-// @flow
+
 import * as React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
 import Typography from 'uikit/Typography';

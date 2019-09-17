@@ -1,4 +1,3 @@
-//@flow
 import * as React from 'react';
 import orderBy from 'lodash/orderBy';
 import {
@@ -16,7 +15,7 @@ import {
   canReadSomeProgram,
   getReadableProgramShortNames,
 } from '../egoJwt';
-import type { PageConfigProps, PageWithConfig } from './types';
+import { PageConfigProps, PageWithConfig } from './types';
 
 export const getDefaultRedirectPathForUser = (
   egoJwt: string,
@@ -42,10 +41,10 @@ export const createPage = ({
   getInitialProps = async () => ({}),
   getGqlQueriesToPrefetch = async () => [],
 }: {
-  isPublic?: $PropertyType<PageConfigProps, 'isPublic'>,
-  isAccessible?: $PropertyType<PageConfigProps, 'isAccessible'>,
-  getInitialProps?: $PropertyType<PageConfigProps, 'getInitialProps'>,
-  getGqlQueriesToPrefetch?: $PropertyType<PageConfigProps, 'getGqlQueriesToPrefetch'>,
+  isPublic?: $PropertyType<PageConfigProps, 'isPublic'>;
+  isAccessible?: $PropertyType<PageConfigProps, 'isAccessible'>;
+  getInitialProps?: $PropertyType<PageConfigProps, 'getInitialProps'>;
+  getGqlQueriesToPrefetch?: $PropertyType<PageConfigProps, 'getGqlQueriesToPrefetch'>;
 }) => (page: Function = () => <div>Here's a page</div>): PageWithConfig => {
   page.isPublic = isPublic;
   page.isAccessible = isAccessible;

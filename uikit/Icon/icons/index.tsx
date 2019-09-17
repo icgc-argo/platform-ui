@@ -1,4 +1,4 @@
-//@flow
+
 import spinner from './collection/spinner';
 import chevron_down from './collection/chevron_down';
 import chevron_right from './collection/chevron_right';

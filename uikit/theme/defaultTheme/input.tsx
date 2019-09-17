@@ -1,4 +1,4 @@
-//@flow
+
 import colors from './colors';
 
 export const INPUT_STATES = {

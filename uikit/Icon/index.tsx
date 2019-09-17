@@ -1,12 +1,12 @@
-//@flow
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
-import type { ThemeColorNames } from '../theme/types';
-import type { UikitIconNames } from './icons';
+import { ThemeColorNames } from '../theme/types';
+import { UikitIconNames } from './icons';
 
 const Icon = ({
   name,

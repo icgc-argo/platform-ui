@@ -1,4 +1,4 @@
-//@flow
+
 import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
