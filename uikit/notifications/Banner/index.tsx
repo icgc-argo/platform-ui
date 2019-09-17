@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Notification, {
@@ -15,10 +14,10 @@ const Banner = ({
   variant,
   size,
 }: {
-  title?: React.Node,
-  content?: React.Node,
-  variant?: $Keys<typeof BANNER_VARIANTS>,
-  size?: $Keys<typeof BANNER_SIZE>,
+  title?: React.Node;
+  content?: React.Node;
+  variant?: keyof typeof BANNER_VARIANTS;
+  size?: keyof typeof BANNER_SIZE;
 }) => (
   <Notification
     noShadow

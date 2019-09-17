@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
@@ -10,7 +9,7 @@ export const TAG_VARIANTS = {
 };
 
 const Tag: React.ComponentType<{
-  variant?: $Keys<typeof TAG_VARIANTS>,
+  variant?: keyof typeof TAG_VARIANTS;
 }> = styled('div')`
   ${({ theme }) => css(theme.typography.paragraph)};
   box-sizing: border-box;

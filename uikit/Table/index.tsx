@@ -50,10 +50,10 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
-export type TableColumnConfig<Data: { [k: string]: any }> = {
+export type TableColumnConfig<Data = { [k: string]: any }> = {
   Header?: React.Node,
   id?: string,
-  accessor?: $Keys<Data>,
+  accessor?: keyof Data,
   sortable?: boolean,
   Cell?: ({ original: Data }) => any,
   sortable?: boolean,

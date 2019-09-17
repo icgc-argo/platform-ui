@@ -50,7 +50,7 @@ const Typography = ({
   /**
    * a typography as defined in theme.typography
    */
-  variant?: $Keys<typeof defaultTheme.typography>;
+  variant?: keyof typeof defaultTheme.typography;
   /**
    * could be either an html tag name, or a react component
    */

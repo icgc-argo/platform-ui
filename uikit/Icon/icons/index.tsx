@@ -1,4 +1,3 @@
-
 import spinner from './collection/spinner';
 import chevron_down from './collection/chevron_down';
 import chevron_right from './collection/chevron_right';
@@ -62,6 +61,6 @@ const Icons = {
   upload,
 };
 
-export type UikitIconNames = $Keys<typeof Icons>;
+export type UikitIconNames = keyof typeof Icons;
 
 export default Icons;

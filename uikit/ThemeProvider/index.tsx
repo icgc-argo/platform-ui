@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming';
 import { ThemeContext } from '@emotion/core';
@@ -10,7 +9,7 @@ const themes = {
   default: defaultTheme,
 };
 
-const ThemeProvider: React.ComponentType<{ theme?: $Keys<typeof themes> }> = ({
+const ThemeProvider: React.ComponentType<{ theme?: keyof typeof themes }> = ({
   theme = 'default',
   children,
 }) => {
