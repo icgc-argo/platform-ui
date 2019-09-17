@@ -27,7 +27,7 @@ const Triangle = props => css`
   border-left-width: 7px;
 `;
 
-const ProgressMarker = styled('div')`
+const ProgressMarker = styled<'div', { state: ProgressStatus }>('div')`
   width: 100%;
   height: 14px;
   background-color: ${({ theme, state }) => theme.progress.color[state]};
@@ -71,7 +71,7 @@ const ProgressSection = styled('div')`
 `;
 
 /* Separator colors - based on state*/
-const Separator = styled('div')`
+const Separator = styled<'div', { state: ProgressStatus }>('div')`
   &:before {
     background-color: ${({ theme, state }) => theme.progress.color[state]};
     border-left-color: #fff;
@@ -83,7 +83,7 @@ const Separator = styled('div')`
   }
 `;
 
-const Text = styled('div')`
+const Text = styled<'div', { completed: boolean }>('div')`
   ${({ theme }) => theme.typography.caption};
   font-weight: ${({ completed }) => (completed ? 600 : 'normal')};
 `;
