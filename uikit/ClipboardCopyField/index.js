@@ -67,6 +67,7 @@ const ClipboardCopyField = ({
         size={INPUT_SIZES.SM}
         inputState={INPUT_STATES.default}
         css={css`
+          height: 15px;
           padding-left: 5px;
           display: flex;
           cursor: unset;
