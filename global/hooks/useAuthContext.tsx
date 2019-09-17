@@ -13,9 +13,9 @@ type UseEgoTokenInput = {
 };
 
 type T_AuthContext = {
-  token: ?string,
-  logOut: void => void,
-  updateToken: void => Promise<?string>,
+  token?: string,
+  logOut: () => void,
+  updateToken: () => Promise<string | void>,
   data: ReturnType<typeof decodeToken> | null,
 };
 
