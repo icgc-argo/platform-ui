@@ -8,7 +8,9 @@ import ascending from '../assets/table/ascending.svg';
 import descending from '../assets/table/descending.svg';
 import unsorted from '../assets/table/unsorted.svg';
 
-export const StyledTable = styled(ReactTable)`
+export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean; sortable: boolean }>(
+  ReactTable,
+)`
   ${reactTableDefaultStyle}
 
   &.ReactTable .-loading.-active .-loading-inner {
