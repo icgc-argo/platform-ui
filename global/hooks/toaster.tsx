@@ -60,6 +60,6 @@ export const useToastState = () => {
 };
 type Toaster = ReturnType<typeof useToastState>;
 
-// $FlowFixMe It's ok flow, we will make sure there's always a context
+// @ts-ignore It's ok ts, we will make sure there's always a context
 export const ToasterContext = React.createContext<Toaster>();
 export const useToaster = () => React.useContext<Toaster>(ToasterContext);
