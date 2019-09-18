@@ -26,7 +26,7 @@ const Select: React.ComponentType<{
   error?: boolean;
   errorMessage?: string;
   disabled?: boolean;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
   popupPosition?: PopupPosition;
   placeholder?: string;
