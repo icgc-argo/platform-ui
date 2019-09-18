@@ -16,7 +16,19 @@ const MISSING_ENTRY_TEXT = '--';
 
 const arrayToText = array => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
 
-function ProfileView({ program = {} }) {
+type Program = {
+  name?: string;
+  shortName?: string;
+  countries?: string;
+  cancerTypes?: string;
+  primarySites?: string;
+  commitmentDonors?: string;
+  membershipType?: string;
+  description?: string;
+  institutions?: string;
+  regions?: string;
+};
+function ProfileView({ program = {} as Program }) {
   const theme = useTheme();
   const Left = props => (
     <Col
