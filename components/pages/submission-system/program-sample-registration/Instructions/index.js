@@ -30,7 +30,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
 
   const downloadTemplate = () => {
     const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
-    window.open(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'), '_blank');
+    window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
   };
 
   return (
