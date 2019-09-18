@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -23,11 +22,11 @@ import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 const Users = ({
   users,
   programShortName,
-  onUserUpdate: refetch,
+  onUserUpdate,
 }: {
-  users: Array<any>,
-  programShortName: string,
-  onUserUpdate: any => void,
+  users: Array<any>;
+  programShortName: string;
+  onUserUpdate: () => void;
 }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
@@ -87,7 +86,7 @@ const Users = ({
                     </span>
                   ),
                 });
-                refetch();
+                onUserUpdate();
               } catch (err) {
                 toaster.addToast({
                   variant: TOAST_VARIANTS.ERROR,
@@ -128,7 +127,7 @@ const Users = ({
                     </span>
                   ),
                 });
-                refetch();
+                onUserUpdate();
               } catch (err) {
                 toaster.addToast({
                   variant: TOAST_VARIANTS.ERROR,
@@ -166,7 +165,7 @@ const Users = ({
                     </span>
                   ),
                 });
-                refetch();
+                onUserUpdate();
               } catch (err) {
                 toaster.addToast({
                   variant: TOAST_VARIANTS.ERROR,
