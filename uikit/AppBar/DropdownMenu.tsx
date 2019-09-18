@@ -57,13 +57,12 @@ const Li = styled('li')`
   }
 `;
 
-export const DropdownMenuItem = React.forwardRef(function DropdownMenuItem(
-  { children, active, ...otherProps },
-  ref,
-) {
-  return (
-    <Li {...otherProps} className={clsx({ active })} ref={ref}>
-      {children}
-    </Li>
-  );
-});
+export const DropdownMenuItem = React.forwardRef<HTMLLIElement, { active?: boolean }>(
+  function DropdownMenuItem({ children, active, ...otherProps }, ref) {
+    return (
+      <Li {...otherProps} className={clsx({ active })} ref={ref}>
+        {children}
+      </Li>
+    );
+  },
+);
