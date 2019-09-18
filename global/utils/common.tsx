@@ -6,7 +6,7 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
       if (obj[prop]) {
         return obj[prop];
       } else {
-        const error = new Error(`${prop} is not a valid ${name}`);
+        const error = new Error(`${String(prop)} is not a valid ${name}`);
         console.error(error);
         throw error;
       }
