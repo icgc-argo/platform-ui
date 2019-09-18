@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { AnchorHTMLAttributes } from 'react';
 import PropTypes from 'prop-types';
 import { styled, css } from '..';
 
@@ -10,7 +10,7 @@ type HyperLinkProps = {
   underline?: boolean;
   bold?: boolean;
   href?: string;
-};
+} & AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const StyledLink = styled<'a', HyperLinkProps>('a')`
   ${({ theme }) => css(theme.typography.default)}
