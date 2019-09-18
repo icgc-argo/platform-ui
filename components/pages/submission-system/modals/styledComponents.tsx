@@ -25,7 +25,7 @@ export type UserSectionProps = {
   onChange: (fieldName: string, value: unknown) => unknown | void;
   validateField: (fieldName: string) => unknown | void;
   errors: typeof UserModel;
-  onClickDelete: ((e: unknown | void) => unknown | void) | null;
+  onClickDelete: (() => unknown | void) | null;
   disabledFields: Array<string | void>;
   showDelete: boolean;
 };
@@ -85,7 +85,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
             >
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
-                  <InputLabel required>Last Name</InputLabel>
+                  <InputLabel>Last Name</InputLabel>
                 </Col>
                 <Col>
                   <Input
@@ -123,7 +123,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
             <FormControl error={!!roleError} disabled={disabledFields.includes('role')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
-                  <InputLabel required>Role</InputLabel>
+                  <InputLabel>Role</InputLabel>
                 </Col>
                 <Col>
                   <Select
