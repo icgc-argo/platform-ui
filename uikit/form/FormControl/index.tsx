@@ -9,7 +9,7 @@ const FormControl = React.forwardRef<
     /**
      * The contents of the form control.
      */
-    children?: React.ReactElement;
+    children?: React.ReactNodeArray | React.ReactNode;
     /**
      * The component used for the root node.
      * Either a string to use a DOM element or a component.
