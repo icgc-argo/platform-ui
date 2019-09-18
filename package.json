@@ -1,6 +1,6 @@
 {
   "name": "create-next-example-app",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",

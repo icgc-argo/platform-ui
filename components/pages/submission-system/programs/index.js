@@ -23,7 +23,9 @@ import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import ProgramsTable from './ProgramsTable';
 import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
+import PROGRAMS_USERS_QUERY from './PROGRAMS_USERS_QUERY.gql';
 import DnaLoader from 'uikit/DnaLoader';
+import get from 'lodash/get';
 
 const TableFilterInput = props => (
   <Input
@@ -40,12 +42,18 @@ const TableFilterInput = props => (
   />
 );
 
-export default ({ authorizedPrograms = [] }: any) => {
+export default function Programs({ authorizedPrograms = [] }: any) {
   const { data: { programs = [] } = {}, loading, errors } = useQuery(PROGRAMS_LIST_QUERY);
+  const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } = useQuery(
+    PROGRAMS_USERS_QUERY,
+  );
 
-  programs.forEach(p => {
-    p.administrators = filter(p.users, { role: 'ADMIN' });
-  });
+  if (programsWithUsers.length > 0) {
+    programs.forEach(p => {
+      const users = get(programsWithUsers.find(pp => p.shortName == pp.shortName), 'users', []);
+      p.administrators = filter(users, { role: 'ADMIN' });
+    });
+  }
 
   const authContext = useAuthContext() || {};
   const sortedPrograms = orderBy(programs, 'name');
@@ -103,6 +111,7 @@ export default ({ authorizedPrograms = [] }: any) => {
         </TableActionBar>
         <ProgramsTable
           loading={loading}
+          loadingUser={loadingUser}
           programs={sortedPrograms}
           onProgramUsersClick={handleProgramUsersClick}
           onProgramEditClick={handleProgramProfileClick}
@@ -110,4 +119,4 @@ export default ({ authorizedPrograms = [] }: any) => {
       </ContentBox>
     </SubmissionLayout>
   );
-};
+}

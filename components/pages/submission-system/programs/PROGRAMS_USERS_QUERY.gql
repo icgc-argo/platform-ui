@@ -1,0 +1,11 @@
+query PROGRAMS_USERS_QUERY {
+  programs {
+    shortName
+    users {
+      email
+      firstName
+      lastName
+      role
+    }
+  }
+}
