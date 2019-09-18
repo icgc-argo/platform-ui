@@ -2,7 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { styled, css } from '..';
 
-const StyledLink = styled('a')`
+type LinkVariant = 'INLINE' | 'BLOCK';
+type HyperLinkProps = {
+  variant?: LinkVariant;
+  uppercase?: boolean;
+  withChevron?: boolean;
+  underline?: boolean;
+  bold?: boolean;
+  href?: string;
+};
+
+const StyledLink = styled<'a', HyperLinkProps>('a')`
   ${({ theme }) => css(theme.typography.default)}
   cursor: pointer;
   color: ${({ theme }) => theme.colors.accent2_dark};
@@ -21,7 +31,7 @@ const StyledLink = styled('a')`
   }
 `;
 
-const Link = React.forwardRef(
+const Link = React.forwardRef<HTMLAnchorElement, HyperLinkProps>(
   (
     {
       href,
@@ -50,19 +60,8 @@ const Link = React.forwardRef(
 );
 
 export const LINK_VARIANTS = Object.freeze({
-  INLINE: 'INLINE',
-  BLOCK: 'BLOCK',
+  INLINE: 'INLINE' as LinkVariant,
+  BLOCK: 'BLOCK' as LinkVariant,
 });
-
-Link.propTypes = {
-  /**
-   * Some frameworks like Next.JS have their own Link component, we want to support that
-   */
-  variant: PropTypes.oneOf([LINK_VARIANTS.INLINE, LINK_VARIANTS.BLOCK]),
-  uppercase: PropTypes.bool,
-  withChevron: PropTypes.bool,
-  underline: PropTypes.bool,
-  href: PropTypes.string,
-};
 
 export default Link;
