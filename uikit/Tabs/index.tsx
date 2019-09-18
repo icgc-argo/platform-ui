@@ -5,9 +5,9 @@ import css from '@emotion/css';
 import clsx from 'clsx';
 import useTheme from '../utils/useTheme';
 
-const TabsContext = React.createContext();
+const TabsContext = React.createContext({ onChange: null, value: null });
 
-export const Button = styled('button')`
+export const Button = styled<'button', { as?: keyof HTMLElementTagNameMap }>('button')`
   ${({ theme }) => css(theme.typography.label)};
   color: ${({ theme }) => theme.colors.grey};
   display: flex;
@@ -29,7 +29,20 @@ export const Button = styled('button')`
   }
 `;
 
-export function Tab({ label, value, empty, children, className, ...otherProps }) {
+export function Tab({
+  label,
+  value,
+  empty,
+  children,
+  className,
+  ...otherProps
+}: {
+  label?: string;
+  value?: string;
+  empty?: boolean;
+  className?: string;
+  children?: React.ReactNode | React.ReactNodeArray;
+}) {
   const theme = useTheme();
 
   const { onChange, value: currentValue } = React.useContext(TabsContext);
