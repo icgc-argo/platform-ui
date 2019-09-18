@@ -26,7 +26,7 @@ const useMounted = () => {
   }, []);
   return mounted;
 };
-export const ModalPortal = ({ children }: { children: Node }) => {
+export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
   return ref
