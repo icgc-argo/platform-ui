@@ -5,7 +5,8 @@ import { withProps } from 'recompose';
 import Icon from '../../Icon';
 import Typography from '../../Typography';
 
-export const POPUP_POSITIONS = { UP: 'UP', DOWN: 'DOWN' };
+export type PopupPosition = 'UP' | 'DOWN';
+export const POPUP_POSITIONS = { UP: 'UP' as PopupPosition, DOWN: 'DOWN' as PopupPosition };
 
 export const DropdownIcon = withProps(({ disabled, theme }) => ({
   name: 'chevron_down',

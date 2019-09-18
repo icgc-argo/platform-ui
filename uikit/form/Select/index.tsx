@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { withProps } from 'recompose';
 
-import { StyledInputWrapper, INPUT_SIZES } from '../common';
+import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
 import Typography from '../../Typography';
 import {
   DropdownIcon,
@@ -12,10 +12,29 @@ import {
   Option,
   HiddenSelect,
   POPUP_POSITIONS,
+  PopupPosition,
 } from './styledComponents';
 import useTheme from '../../utils/useTheme';
 
-const Select = ({
+const Select: React.ComponentType<{
+  ['aria-label']: string;
+  options?: {
+    value: any;
+    content: any;
+  }[];
+  size?: InputSize;
+  error?: boolean;
+  errorMessage?: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
+  popupPosition?: PopupPosition;
+  placeholder?: string;
+  id?: string;
+  value?: string;
+  className?: string;
+  style?: React.CSSProperties;
+}> = ({
   placeholder = '- Select an option -',
   id,
   value,
@@ -32,7 +51,7 @@ const Select = ({
   const [activeState, setActive] = useState('default');
   const [isExpanded, setExpanded] = useState(false);
 
-  const HiddenSelectRef = React.createRef();
+  const HiddenSelectRef = React.createRef<HTMLSelectElement>();
   const ariaLabel = props['aria-label'];
 
   const selectedOption = options.find(
@@ -88,13 +107,11 @@ const Select = ({
         size={size}
         style={{ zIndex: 1 }}
         disabled={disabled}
-        inputState={activeState}
+        inputState={activeState as StyledInputWrapperProps['inputState']}
         role="button"
-        disabled={disabled}
       >
         <Typography
           variant="paragraph"
-          disabled={disabled}
           color={
             disabled
               ? theme.input.textColors.disabled
@@ -123,23 +140,6 @@ const Select = ({
       )}
     </div>
   );
-};
-
-Select.propTypes = {
-  ['aria-label']: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.any.isRequired,
-      content: PropTypes.node.isRequired,
-    }),
-  ),
-  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
-  error: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  disabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func,
-  popupPosition: PropTypes.oneOf(Object.values(POPUP_POSITIONS)),
 };
 
 export default Select;

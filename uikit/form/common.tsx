@@ -7,9 +7,11 @@ import React from 'react';
 
 import { INPUT_STATES as INPUT_THEME_STATES } from '../theme/defaultTheme/input';
 
+export type InputSize = 'sm' | 'lg';
+
 export const INPUT_SIZES = {
-  SM: 'sm',
-  LG: 'lg',
+  SM: 'sm' as InputSize,
+  LG: 'lg' as InputSize,
 };
 
 export const INPUT_STATES = INPUT_THEME_STATES;
