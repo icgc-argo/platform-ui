@@ -16,7 +16,7 @@ const InputLabel = React.forwardRef<
      */
     className?: string;
     children?: React.ReactNode;
-    htmlFor: string;
+    htmlFor?: string;
   }
 >(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;
