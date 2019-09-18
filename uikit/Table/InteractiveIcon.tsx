@@ -2,7 +2,8 @@ import React from 'react';
 import { css } from '..';
 import Icon from 'uikit/Icon';
 
-const InteractiveIcon = ({ disabled, onClick, ...props }) => {
+type IconProps = React.ComponentProps<typeof Icon>;
+const InteractiveIcon = ({ disabled, onClick, ...props }: IconProps & { disabled?: boolean }) => {
   const [hovered, setHovered] = React.useState(false);
   return (
     <Icon
@@ -11,7 +12,7 @@ const InteractiveIcon = ({ disabled, onClick, ...props }) => {
       `}
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => (!disabled ? onClick() : false)}
+      onClick={e => (!disabled ? onClick(e) : false)}
       fill={disabled ? '#cecfd3' : hovered ? 'accent2_1' : 'accent2'}
       {...props}
     />
