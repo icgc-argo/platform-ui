@@ -8,7 +8,17 @@ import Icon from '../../Icon';
 import pick from 'lodash/pick';
 import get from 'lodash/get';
 
-const InputLabel = React.forwardRef(function InputLabel(props, ref) {
+const InputLabel = React.forwardRef<
+  HTMLLabelElement,
+  {
+    /**
+     * The CSS class name of the wrapper element.
+     */
+    className?: string;
+    children?: React.ReactNode;
+    htmlFor: string;
+  }
+>(function InputLabel(props, ref) {
   const { className: classNameProp, children, ...other } = props;
 
   const Label = styled('label')`
@@ -48,12 +58,5 @@ const InputLabel = React.forwardRef(function InputLabel(props, ref) {
 });
 
 InputLabel.displayName = 'InputLabel';
-
-InputLabel.propTypes = {
-  /**
-   * The CSS class name of the wrapper element.
-   */
-  className: PropTypes.string,
-};
 
 export default InputLabel;
