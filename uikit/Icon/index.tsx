@@ -6,23 +6,17 @@ import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
 import { ThemeColorNames } from '../theme/types';
 import { UikitIconNames } from './icons';
+import { SvgProperties } from 'csstype';
 
-const Icon = ({
-  name,
-  width,
-  height,
-  fill,
-  className,
-  title,
-  ...rest
-}: {
+const Icon: React.ComponentType<{
   name: UikitIconNames;
   className?: string;
   title?: string;
   width?: string;
   height?: string;
   fill?: keyof ThemeColorNames | string;
-}) => {
+  onClick?: (e: React.SyntheticEvent) => void;
+}> = ({ name, width, height, fill, className, title, ...rest }) => {
   const theme = useTheme();
   const svg = icons[name];
 

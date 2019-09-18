@@ -14,7 +14,14 @@ export const INPUT_SIZES = {
 
 export const INPUT_STATES = INPUT_THEME_STATES;
 
-export const StyledInputWrapper = styled('div')`
+export type StyledInputWrapperProps = {
+  disabled?: boolean;
+  error?: boolean;
+  inputState?: keyof typeof INPUT_THEME_STATES;
+  size?: 'sm' | 'lg';
+  getOverrideCss?: (a: any) => any;
+};
+export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
@@ -54,14 +61,6 @@ export const StyledInputWrapper = styled('div')`
   }
   ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
-
-StyledInputWrapper.propTypes = {
-  disabled: PropTypes.bool,
-  error: PropTypes.bool,
-  inputState: PropTypes.oneOf(Object.values(INPUT_STATES)),
-  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
-  getOverrideCss: PropTypes.func,
-};
 
 export const RadioCheckboxWrapper = styled('div')`
   display: flex;

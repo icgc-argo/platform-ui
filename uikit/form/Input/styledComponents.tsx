@@ -3,8 +3,8 @@ import { css } from '@emotion/core';
 
 export { StyledInputWrapper } from '../common';
 
-export const StyledInput = styled('input')`
-  padding: ${({ theme, size }) => theme.input.paddings[size]};
+export const StyledInput = styled<'input', { inputSize: string }>('input')`
+  padding: ${({ theme, inputSize }) => theme.input.paddings[inputSize]};
   border: none;
   outline: none;
   flex: 1;

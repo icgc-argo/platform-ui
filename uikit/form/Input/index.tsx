@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '../../Icon';
-import { INPUT_SIZES, StyledInputWrapper } from '../common';
+import { INPUT_SIZES, StyledInputWrapper, StyledInputWrapperProps } from '../common';
 import { StyledInput, IconWrapper } from './styledComponents';
 import FormControlContext from '../FormControl/FormControlContext';
 import css from '@emotion/css';
@@ -12,14 +12,59 @@ export const INPUT_PRESETS = {
   SEARCH: 'search',
 };
 
-const Input = ({
+const Input: React.ComponentType<{
+  ['aria-label']: string;
+  /**
+   * commonly used configuration aliases
+   */
+  preset?: 'default' | 'search';
+  /**
+   * Placeholder
+   */
+  placeholder?: string;
+  /**
+   * Size
+   */
+  size: 'sm' | 'lg';
+  /**
+   * Show an error?
+   */
+  error?: boolean;
+  /**
+   * Whether this input is disabled
+   */
+  disabled?: boolean;
+  /**
+   * Error message to show
+   */
+  errorMessage?: string;
+  /**
+   * Used for providing css override of the container with access to the internal state
+   */
+  getOverrideCss: (a: any) => any;
+  /**
+   * Whether to show the clear button
+   */
+  showClear?: boolean;
+
+  onChange: (e: React.SyntheticEvent) => void;
+  onBlur?: (e: React.SyntheticEvent) => void;
+  value?: string;
+  type?: 'text' | 'number';
+  icon?: React.ReactElement;
+  className: string;
+  id?: string;
+  dataSize?: number;
+}> = ({
   preset = INPUT_PRESETS.DEFAULT,
   value,
   onChange,
   onBlur = () => {},
   type,
+  size: inputSize,
+  dataSize,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
-  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={INPUT_PRESETS.SEARCH} /> : null,
+  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={'search'} /> : null,
   size = INPUT_SIZES.SM,
   className,
   error,
@@ -38,12 +83,12 @@ const Input = ({
     onChange(e);
   };
 
-  const inputRef = React.createRef();
+  const inputRef = React.createRef<HTMLInputElement>();
 
   return (
     <div className={className}>
       <StyledInputWrapper
-        size={size}
+        size={size as StyledInputWrapperProps['size']}
         onFocus={() => setActive('focus')}
         onBlur={() => setActive('default')}
         onClick={() => {
@@ -52,8 +97,7 @@ const Input = ({
         style={{ cursor: 'text' }}
         error={calcError}
         disabled={calcDisabled}
-        size={size}
-        inputState={activeState}
+        inputState={activeState as StyledInputWrapperProps['inputState']}
         getOverrideCss={getOverrideCss}
       >
         {icon && <IconWrapper>{icon}</IconWrapper>}
@@ -64,7 +108,8 @@ const Input = ({
           type={type}
           onChange={onChange}
           onBlur={onBlur}
-          size={size}
+          inputSize={inputSize}
+          size={dataSize}
           disabled={calcDisabled}
           id={props.id}
           ref={inputRef}
@@ -92,45 +137,6 @@ const Input = ({
       </StyledInputWrapper>
     </div>
   );
-};
-
-Input.propTypes = {
-  ['aria-label']: PropTypes.string.isRequired,
-  /**
-   * commonly used configuration aliases
-   */
-  preset: PropTypes.oneOf([INPUT_PRESETS.DEFAULT, INPUT_PRESETS.SEARCH]),
-  /**
-   * Placeholder
-   */
-  placeholder: PropTypes.string,
-  /**
-   * Size
-   */
-  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
-  /**
-   * Show an error?
-   */
-  error: PropTypes.bool,
-  /**
-   * Whether this input is disabled
-   */
-  disabled: PropTypes.bool,
-  /**
-   * Error message to show
-   */
-  errorMessage: PropTypes.string,
-  /**
-   * Used for providing css override of the container with access to the internal state
-   */
-  getOverrideCss: PropTypes.func,
-  /**
-   * Whether to show the clear button
-   */
-  showClear: PropTypes.bool,
-
-  onChange: PropTypes.func,
-  onBlur: PropTypes.func,
 };
 
 export default Input;
