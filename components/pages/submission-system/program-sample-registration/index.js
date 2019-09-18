@@ -69,7 +69,6 @@ export default function ProgramIDRegistration() {
   `;
 
   const noData = loading || !clinicalRegistration.id;
-
   return (
     <SubmissionLayout
       contentHeader={

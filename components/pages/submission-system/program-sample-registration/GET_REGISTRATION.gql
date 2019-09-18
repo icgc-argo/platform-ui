@@ -6,14 +6,10 @@ query($shortName: String!) {
     createdAt
     records {
       row
-      programShortName
-      donorSubmitterId
-      specimenSubmitterId
-      specimentType
-      sampleSubmitterId
-      sampleType
-      gender
-      tumourNormalDesignation
+      fields {
+        name
+        value
+      }
     }
     errors {
       message
