@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, TextareaHTMLAttributes } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,12 @@ import useTheme from '../../utils/useTheme';
 import css from '@emotion/css';
 import FormControlContext from '../FormControl/FormControlContext';
 
-const Textarea = ({ error, disabled, className, ...props }) => {
+const Textarea: React.ComponentType<
+  {
+    ['aria-label']: string;
+    error?: boolean;
+  } & TextareaHTMLAttributes<HTMLTextAreaElement>
+> = ({ error, disabled, className, ...props }) => {
   const theme = useTheme();
 
   const { disabled: calcDisabled = disabled, error: calcError = error } =
@@ -50,10 +55,6 @@ const Textarea = ({ error, disabled, className, ...props }) => {
       {...props}
     />
   );
-};
-
-Textarea.propTypes = {
-  ['aria-label']: PropTypes.string.isRequired,
 };
 
 export default Textarea;
