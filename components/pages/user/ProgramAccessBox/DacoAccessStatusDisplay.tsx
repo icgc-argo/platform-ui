@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Typography from 'uikit/Typography';
 import { css, styled } from 'uikit';
@@ -7,7 +6,7 @@ import Icon from 'uikit/Icon';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
   /** @description: making these components so it's easier to extract out later if needs arises */
-  const Container = styled('div')`
+  const ContainerComponent = styled('div')`
     display: flex;
     border: solid 1px ${({ theme }) => theme.colors.grey_2};
     padding: 8px;
@@ -16,7 +15,7 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
       border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
     }
   `;
-  Container.Section = styled('div')`
+  const SectionComponent = styled('div')`
     display: flex;
     align-items: center;
     &:not(:first-child) {
@@ -30,6 +29,10 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
       padding-left: 8px;
     }
   `;
+  const Container: typeof ContainerComponent & {
+    Section?: typeof SectionComponent;
+  } = ContainerComponent;
+  Container.Section = SectionComponent;
   return (
     <Container>
       <Container.Section>
