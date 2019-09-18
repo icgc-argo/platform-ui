@@ -27,7 +27,7 @@ export type UserSectionProps = {
   errors: typeof UserModel;
   onClickDelete: (() => unknown | void) | null;
   disabledFields: Array<string | void>;
-  showDelete: boolean;
+  showDelete?: boolean;
 };
 export const UserSection: React.ComponentType<UserSectionProps> = ({
   user,

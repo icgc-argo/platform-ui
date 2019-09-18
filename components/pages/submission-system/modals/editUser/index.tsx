@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { UserSection } from '../styledComponents';
+import { UserSection, UserSectionProps } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
 
@@ -9,12 +9,12 @@ const EditUserModal = ({
   dismissModal,
   onSubmit,
 }: {
-  user: typeof UserModel,
-  onSubmit: (data: typeof UserModel) => any | void,
-  dismissModal: (e: any | void) => any | void,
+  user: typeof UserModel;
+  onSubmit: (data: typeof UserModel) => any | void;
+  dismissModal: () => any | void;
 }) => {
   const {
-    errors: validationErrors,
+    errors,
     data: form,
     setData,
     validateField,
@@ -22,6 +22,7 @@ const EditUserModal = ({
     touched,
     hasErrors,
   } = useFormHook({ initialFields: user, schema: userSchema });
+  const validationErrors = errors as UserSectionProps['errors'];
 
   const submitForm = async () => {
     try {
