@@ -15,6 +15,7 @@ import { Row, Col } from 'react-grid-system';
 import { styled } from 'uikit';
 import NoDataMessage from './NoDataMessage';
 import get from 'lodash/get';
+import { format } from 'date-fns';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -44,7 +45,7 @@ const StarIcon = (props: { active: boolean, className?: string }) => (
     height="16px"
   />
 );
-
+//format(new Date(submissionInfo.createdAt), 'MMMM d, y')
 const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInfo }) => (
   <Typography variant="paragraph" component="div" color="grey">
     <Typography variant="default" color="secondary_dark">
@@ -52,7 +53,7 @@ const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInf
     </Typography>{' '}
     uploaded on{' '}
     <Typography variant="default" color="secondary_dark">
-      {submissionInfo && submissionInfo.createdAt}
+      {submissionInfo && format(new Date(submissionInfo.createdAt), 'MMMM D, YYYY ')}
     </Typography>{' '}
     by{' '}
     <Typography variant="default" color="secondary_dark">
