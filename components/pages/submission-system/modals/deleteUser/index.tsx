@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { UserModel } from '../common';
@@ -8,9 +7,9 @@ const DeleteUserModal = ({
   dismissModal,
   onSubmit,
 }: {
-  user: typeof UserModel,
-  onSubmit: () => any | void,
-  dismissModal: (e: any | void) => any | void,
+  user: typeof UserModel;
+  onSubmit: () => any | void;
+  dismissModal: () => any | void;
 }) => {
   return (
     <Modal
