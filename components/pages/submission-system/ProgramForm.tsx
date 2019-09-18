@@ -1,4 +1,3 @@
-
 import css from '@emotion/css';
 import { PROGRAM_MEMBERSHIP_TYPES, RDC_NAMES } from 'global/constants';
 import filter from 'lodash/filter';
@@ -39,7 +38,7 @@ const SectionTitle = props => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }: { sm?: number, children: Node }) => (
+const InputLabelWrapper = ({ sm = 3, children }: { sm?: number; children?: React.ReactNode }) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -73,22 +72,22 @@ export default function CreateProgramForm({
   onSubmit,
 }: {
   leftFooterComponent: React.ComponentType<{
-    formModel: FormModel,
-  }>,
+    formModel: FormModel;
+  }>;
   program?: {
-    name?: string,
-    shortName?: string,
-    countries?: string[],
-    cancerTypes?: string[],
-    primarySites?: string[],
-    commitmentDonors?: string[],
-    institutions?: string[],
-    membershipType?: string[],
-    website?: string,
-    description?: string,
-    regions?: string,
-  },
-  onSubmit: (data: any) => any,
+    name?: string;
+    shortName?: string;
+    countries?: string[];
+    cancerTypes?: string[];
+    primarySites?: string[];
+    commitmentDonors?: number;
+    institutions?: string[];
+    membershipType?: string;
+    website?: string;
+    description?: string;
+    regions?: string;
+  };
+  onSubmit: (data: any) => any;
 }) {
   const seedFormData = {
     programName: program.name || '',
@@ -98,10 +97,10 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
-    membershipType: program.membershipType || [],
+    membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
-    processingRegions: program.regions || '',
+    processingRegions: program.regions || [],
     adminFirstName: '',
     adminLastName: '',
     adminEmail: '',
@@ -124,7 +123,7 @@ export default function CreateProgramForm({
     hasErrors,
   } = formModel;
 
-  const { data: { programOptions } = {}, loading } = useQuery(QUERY_PROGRAM_VALUES);
+  const { data: { programOptions = undefined } = {}, loading } = useQuery(QUERY_PROGRAM_VALUES);
 
   const regionOptions = get(programOptions, 'regions', []);
 
@@ -134,7 +133,9 @@ export default function CreateProgramForm({
   const handleInputChange = (fieldName: string) => event =>
     setData({ key: fieldName, val: event.target.value });
 
-  const handleInputBlur = fieldKey => event => validateField({ key: fieldKey });
+  const handleInputBlur = fieldKey => event => {
+    validateField({ key: fieldKey });
+  };
 
   const handleCheckboxGroupChange = (selectedItems: any[], fieldName: string) => value => {
     if (selectedItems.includes(value)) {
@@ -205,6 +206,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  aria-label="country-input"
                   name="countries"
                   single={false}
                   inputProps={{ id: 'country' }}
@@ -229,6 +231,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  aria-label="cancer-type-input"
                   name="cancer-types"
                   inputProps={{ id: 'cancer-types' }}
                   value={form.cancerTypes}
@@ -252,6 +255,7 @@ export default function CreateProgramForm({
               </InputLabelWrapper>
               <Col sm={9}>
                 <MultiSelect
+                  aria-label="primary-sites-input"
                   name="primary-sites"
                   inputProps={{ id: 'primary-types' }}
                   value={form.primarySites}
@@ -367,7 +371,6 @@ export default function CreateProgramForm({
                 <MultiSelect
                   name="institutions"
                   aria-label="Institutions"
-                  id="institutions"
                   inputProps={{ id: 'institutions' }}
                   value={form.institutions}
                   onChange={handleInputChange('institutions')}
@@ -391,45 +394,47 @@ export default function CreateProgramForm({
           </Row>
 
           <FormControl error={validationErrors.processingRegions} required={true}>
-            <Row>
-              <Col>
-                <InputLabel htmlFor="Processing Regions">
-                  Please indicate the region(s) where data can be processed
-                </InputLabel>
-                <ErrorText error={validationErrors.processingRegions} />
-                <RadioCheckboxGroup
-                  id="checkbox-group-processing-regions"
-                  hasError={false}
-                  onChange={handleCheckboxGroupChange(
-                    (form.processingRegions: any[]),
-                    'processingRegions',
-                  )}
-                  isChecked={item => form.processingRegions.includes(item)}
-                >
-                  <Row>
-                    <Col>
-                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
-                        <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
-                          {name}
-                        </FormCheckbox>
-                      ))}
-                    </Col>
-                    <Col>
-                      {regionOptions
-                        .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
-                        .map(name => (
-                          <FormCheckbox value={name} key={name}>
+            <>
+              <Row>
+                <Col>
+                  <InputLabel htmlFor="Processing Regions">
+                    Please indicate the region(s) where data can be processed
+                  </InputLabel>
+                  <ErrorText error={validationErrors.processingRegions} />
+                  <RadioCheckboxGroup
+                    id="checkbox-group-processing-regions"
+                    hasError={false}
+                    onChange={handleCheckboxGroupChange(
+                      form.processingRegions as any[],
+                      'processingRegions',
+                    )}
+                    isChecked={item => form.processingRegions.includes(item)}
+                  >
+                    <Row>
+                      <Col>
+                        {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
+                          <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
                             {name}
                           </FormCheckbox>
                         ))}
-                    </Col>
-                  </Row>
-                </RadioCheckboxGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col />
-            </Row>
+                      </Col>
+                      <Col>
+                        {regionOptions
+                          .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
+                          .map(name => (
+                            <FormCheckbox value={name} key={name}>
+                              {name}
+                            </FormCheckbox>
+                          ))}
+                      </Col>
+                    </Row>
+                  </RadioCheckboxGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col />
+              </Row>
+            </>
           </FormControl>
           {!isEditing && (
             <>
