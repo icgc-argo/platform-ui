@@ -314,7 +314,7 @@ export default function ContactPage() {
               </Col>
             </Row>
             <Row>
-              <Col align="right">
+              <Col align="start">
                 <Button>SEND MESSAGE</Button>
               </Col>
             </Row>
