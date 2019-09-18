@@ -1,0 +1,30 @@
+query($shortName: String!) {
+  clinicalRegistration(shortName: $shortName) {
+    id
+    creator
+    fileName
+    createdAt
+    records {
+      row
+      fields {
+        name
+        value
+      }
+    }
+    errors {
+      message
+    }
+    newDonors {
+      count
+    }
+    newSpecimens {
+      count
+    }
+    newSamples {
+      count
+    }
+    alreadyRegistered {
+      count
+    }
+  }
+}
