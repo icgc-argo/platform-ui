@@ -67,6 +67,7 @@ const ClipboardCopyField = ({
         size={INPUT_SIZES.SM}
         inputState={INPUT_STATES.default}
         css={css`
+          height: 15px;
           padding-left: 5px;
           display: flex;
           cursor: unset;
@@ -82,8 +83,9 @@ const ClipboardCopyField = ({
         <div
           css={css`
             flex: 1;
-            text-overflow: ellipsis;
             overflow: hidden;
+            word-break: break-all;
+            height: 15px;
           `}
         >
           <Typography variant="default">{value}</Typography>

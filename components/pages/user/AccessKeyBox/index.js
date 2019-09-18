@@ -37,10 +37,8 @@ export default function AccessTokenBox() {
   };
 
   const getKeyTextValue = () => {
-    if (loading) {
+    if (loading || (!accessKey && !generatedKey)) {
       return '';
-    } else if (!accessKey && !generatedKey) {
-      return 'Generate a token...';
     } else {
       return key;
     }
