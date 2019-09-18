@@ -12,50 +12,40 @@ export const INPUT_PRESETS = {
   SEARCH: 'search',
 };
 
-const Input: React.ComponentType<{
-  ['aria-label']: string;
-  /**
-   * commonly used configuration aliases
-   */
-  preset?: 'default' | 'search';
-  /**
-   * Placeholder
-   */
-  placeholder?: string;
-  /**
-   * Size
-   */
-  size?: 'sm' | 'lg';
-  /**
-   * Show an error?
-   */
-  error?: boolean;
-  /**
-   * Whether this input is disabled
-   */
-  disabled?: boolean;
-  /**
-   * Error message to show
-   */
-  errorMessage?: string;
-  /**
-   * Used for providing css override of the container with access to the internal state
-   */
-  getOverrideCss?: (a: any) => any;
-  /**
-   * Whether to show the clear button
-   */
-  showClear?: boolean;
+const Input: React.ComponentType<
+  {
+    ['aria-label']: string;
+    /**
+     * commonly used configuration aliases
+     */
+    preset?: 'default' | 'search';
+    /**
+     * Placeholder
+     */
+    size?: 'sm' | 'lg';
+    /**
+     * Show an error?
+     */
+    error?: boolean;
+    /**
+     * Error message to show
+     */
+    errorMessage?: string;
+    /**
+     * Used for providing css override of the container with access to the internal state
+     */
+    getOverrideCss?: (a: any) => any;
+    /**
+     * Whether to show the clear button
+     */
+    showClear?: boolean;
 
-  onChange: (e: React.SyntheticEvent) => void;
-  onBlur?: (e: React.SyntheticEvent) => void;
-  value?: string;
-  type?: 'text' | 'number';
-  icon?: React.ReactElement;
-  className?: string;
-  id?: string;
-  dataSize?: number;
-}> = ({
+    icon?: React.ReactElement;
+    className?: string;
+    id?: string;
+    dataSize?: number;
+  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
+> = ({
   preset = INPUT_PRESETS.DEFAULT,
   value,
   onChange,
@@ -114,7 +104,7 @@ const Input: React.ComponentType<{
           id={props.id}
           ref={inputRef}
         />
-        {showClear && value && value.length && (
+        {showClear && value && String(value).length && (
           <div
             css={css`
               margin-right: 5px;
