@@ -1,17 +1,15 @@
 // @flow
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import { useTheme } from 'uikit/ThemeProvider';
-import styled from '@emotion/styled-base';
-import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
-import HyperLink from 'uikit/Link';
-import Link from 'next/link';
-import Icon from 'uikit/Icon';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import * as React from 'react';
+import { css } from 'uikit';
+import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
+import Icon from 'uikit/Icon';
 import InstructionBox from 'uikit/InstructionBox';
+import HyperLink from 'uikit/Link';
+import Typography from 'uikit/Typography';
+import urlJoin from 'url-join';
 
 const Instructions = (props: { registrationEnabled: boolean }) => {
   const buttonStyle = css`
@@ -29,6 +27,12 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
     text-align: center;
     width: 100%;
   `;
+
+  const downloadTemplate = () => {
+    const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+    window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
+  };
+
   return (
     <InstructionBox
       steps={[
@@ -40,7 +44,12 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             </Link>
             .
           </Typography>
-          <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
+          <Button
+            css={buttonStyle}
+            variant={BUTTON_VARIANTS.SECONDARY}
+            size={BUTTON_SIZES.SM}
+            onClick={downloadTemplate}
+          >
             <span css={buttonContentStyle}>
               <Icon name="download" fill="accent2_dark" height="12px" css={buttonIconStyle} /> File
               Template
