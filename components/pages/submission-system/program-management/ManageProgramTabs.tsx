@@ -91,12 +91,12 @@ const useTabState = () => {
 
 export default () => {
   const router = useRouter();
-  const { data: egoTokenData, token } = useAuthContext() || {};
+  const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
 
   const { shortName: programShortName } = usePageQuery();
 
-  const { data: { program } = {}, loading, errors, refetch } = useQuery(PROGRAM_QUERY, {
+  const { data: { program = null } = {}, loading, refetch } = useQuery(PROGRAM_QUERY, {
     variables: { shortName: programShortName },
   });
 
@@ -223,9 +223,7 @@ export default () => {
         (isDcc ? (
           <div
             css={css`
-               {
-                padding: 17px 41px 41px 41px;
-              }
+              padding: 17px 41px 41px 41px;
             `}
           >
             {!isEmpty(program) && (
