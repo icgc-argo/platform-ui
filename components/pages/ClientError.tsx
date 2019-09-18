@@ -37,7 +37,6 @@ export default function Error404Page() {
               margin-top: 0;
               margin-bottom: 34px;
             `}
-            as="div"
             variant="subtitle"
             color="secondary"
             as="h2"
