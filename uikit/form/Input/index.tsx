@@ -25,7 +25,7 @@ const Input: React.ComponentType<{
   /**
    * Size
    */
-  size: 'sm' | 'lg';
+  size?: 'sm' | 'lg';
   /**
    * Show an error?
    */
@@ -41,7 +41,7 @@ const Input: React.ComponentType<{
   /**
    * Used for providing css override of the container with access to the internal state
    */
-  getOverrideCss: (a: any) => any;
+  getOverrideCss?: (a: any) => any;
   /**
    * Whether to show the clear button
    */
@@ -52,7 +52,7 @@ const Input: React.ComponentType<{
   value?: string;
   type?: 'text' | 'number';
   icon?: React.ReactElement;
-  className: string;
+  className?: string;
   id?: string;
   dataSize?: number;
 }> = ({
