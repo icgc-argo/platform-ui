@@ -1,13 +1,13 @@
-
 import colors from './colors';
 
+type UikitInputState = 'default' | 'active' | 'focus' | 'disabled' | 'error' | 'hover';
 export const INPUT_STATES = {
-  default: 'default',
-  active: 'active',
-  focus: 'focus',
-  disabled: 'disabled',
-  error: 'error',
-  hover: 'hover',
+  default: 'default' as UikitInputState,
+  active: 'active' as UikitInputState,
+  focus: 'focus' as UikitInputState,
+  disabled: 'disabled' as UikitInputState,
+  error: 'error' as UikitInputState,
+  hover: 'hover' as UikitInputState,
 };
 
 export default {

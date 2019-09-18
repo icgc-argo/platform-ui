@@ -8,9 +8,7 @@ export const TAG_VARIANTS = {
   ERROR: 'ERROR',
 };
 
-const Tag: React.ComponentType<{
-  variant?: keyof typeof TAG_VARIANTS;
-}> = styled('div')`
+const Tag: React.ComponentType = styled<'div'>('div')`
   ${({ theme }) => css(theme.typography.paragraph)};
   box-sizing: border-box;
   display: inline-block;
@@ -20,7 +18,13 @@ const Tag: React.ComponentType<{
   font-weight: bold;
   padding: 3px 8px;
   border-radius: 8px;
-  background-color: ${({ theme, variant = 'INFO' }) =>
+  background-color: ${({
+    theme,
+    variant = 'INFO',
+  }: {
+    variant?: keyof typeof TAG_VARIANTS;
+    theme: any;
+  }) =>
     ({
       [TAG_VARIANTS.ERROR]: theme.colors.error,
       [TAG_VARIANTS.WARNING]: theme.colors.warning,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
@@ -12,6 +12,7 @@ import map from 'lodash/map';
 import compact from 'lodash/compact';
 import get from 'lodash/get';
 import head from 'lodash/head';
+import find from 'lodash/find';
 
 import Icon from '../../Icon';
 import Option from './Option';
@@ -20,19 +21,19 @@ import Tag from '../../Tag';
 import useTheme from '../../utils/useTheme';
 import clsx from 'clsx';
 import FormControlContext from '../FormControl/FormControlContext';
-import { StyledInputWrapper, INPUT_SIZES, INPUT_STATES } from '../common';
+import { StyledInputWrapper, INPUT_SIZES, INPUT_STATES, InputSize } from '../common';
 
-const Container = styled('div')`
+const Container = styled<'div', { focus: boolean }>('div')`
   position: relative;
   transform: scale(1); /* this creates a stacking context so z-index is local */
   ${({ focus }) =>
     focus &&
     css`
       z-index: 1;
-    `};
+    `}
 `;
 
-const OptionsWrapper = styled('div')`
+const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
   box-sizing: border-box;
   position: absolute;
   width: 100%;
@@ -83,7 +84,7 @@ const InputBox = styled(StyledInputWrapper)`
   padding: 2px;
 `;
 
-const Input = styled('input')`
+const Input = styled<'input', { autocomplete: string }>('input')`
   ${({ theme }) => css(theme.typography.paragraph)};
   border: none;
   display: block;
@@ -106,7 +107,7 @@ const PlaceHolder = styled('span')`
   }
 `;
 
-const SelectedItem = styled(Tag)`
+const SelectedItem: any = styled(Tag)`
   box-sizing: border-box;
   font-size: 11px;
   cursor: pointer;
@@ -172,12 +173,38 @@ function Highlight({ string, searchText }) {
   }
 }
 
-const MultiSelect = ({
+const MultiSelect: React.ComponentType<{
+  ['aria-label']: string;
+  /* Name of the Input */
+  name?: string;
+
+  /* Value of the input */
+  value: any;
+
+  /* Placehoder of the input */
+  placeholder?: string;
+
+  /* Handler of onChange event */
+  onChange: (e: React.SyntheticEvent, child?: any) => void;
+
+  /* Handler of onBlur event */
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+
+  /* Whether to allow user to add new value */
+  allowNew?: boolean;
+
+  disabled?: boolean;
+
+  size?: InputSize;
+  single?: boolean;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+  error?: boolean;
+}> = ({
   name,
   value = [],
   children,
   onChange,
-  onBlur = () => {},
+  onBlur = e => {},
   single,
   placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
@@ -186,7 +213,6 @@ const MultiSelect = ({
   error,
   'aria-label': ariaLabel = 'search',
   size = INPUT_SIZES.LG,
-  values = [],
 }) => {
   const [focusState, setFocusState] = React.useState(false);
   const [searchString, setSearchString] = React.useState('');
@@ -290,7 +316,7 @@ const MultiSelect = ({
     onChange(event, item);
   };
 
-  const items = React.Children.map(children, child => {
+  const items = React.Children.map(children, (child: any) => {
     const selected = includes(value, child.props.value);
     if (selected) {
       return null;
@@ -313,7 +339,7 @@ const MultiSelect = ({
   });
 
   const selectedItems = map(value, v => {
-    const c = find(React.Children.toArray(children), { props: { value: v } });
+    const c: any = find(React.Children.toArray(children), { props: { value: v } });
 
     if (typeof c === 'undefined') {
       return {
@@ -410,30 +436,6 @@ const MultiSelect = ({
       <input value={value} name={name} type="hidden" disabled={disabled} {...inputProps} />
     </Container>
   );
-};
-
-MultiSelect.propTypes = {
-  /* Name of the input */
-  name: PropTypes.string,
-
-  /* Value of the input */
-  value: PropTypes.any.isRequired,
-
-  /* Placehoder of the input */
-  placeholder: PropTypes.string,
-
-  /* Handler of onChange event */
-  onChange: PropTypes.func.isRequired,
-
-  /* Handler of onBlur event */
-  onBlur: PropTypes.func,
-
-  /* Whether to allow user to add new value */
-  allowNew: PropTypes.bool,
-
-  disabled: PropTypes.bool,
-
-  size: PropTypes.oneOf([INPUT_SIZES.SM, INPUT_SIZES.LG]),
 };
 
 export default MultiSelect;
