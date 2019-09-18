@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { styled, css } from '../../';
-import Typography from '../../Typography';
+import Typography, { TypographyVariant } from '../../Typography';
 import Icon from '../../Icon';
 import FocusWrapper from '../../FocusWrapper';
 import useTheme from '../../utils/useTheme';
@@ -15,6 +14,12 @@ import {
   ActionButton,
   getBorderColor,
 } from './styledComponents';
+import { UikitIconNames } from 'uikit/Icon/icons';
+
+export type NotificationVariant = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+export type NotificationInteractionEvent = 'CLOSE' | 'ACTION' | 'DISMISS';
+export type NotificationInteraction = 'CLOSE' | 'ACTION_DISMISS' | 'NONE';
+export type NotificationSize = 'MD' | 'SM';
 
 const getDefaultInteractionType = variant =>
   ({
@@ -32,10 +37,10 @@ const DefaultIcon = ({ variant, size }) => {
     [NOTIFICATION_VARIANTS.ERROR]: 'error',
   }[variant];
   const name = {
-    [NOTIFICATION_VARIANTS.INFO]: 'info',
-    [NOTIFICATION_VARIANTS.SUCCESS]: 'success',
-    [NOTIFICATION_VARIANTS.WARNING]: 'warning',
-    [NOTIFICATION_VARIANTS.ERROR]: 'times_circle',
+    [NOTIFICATION_VARIANTS.INFO]: 'info' as UikitIconNames,
+    [NOTIFICATION_VARIANTS.SUCCESS]: 'success' as UikitIconNames,
+    [NOTIFICATION_VARIANTS.WARNING]: 'warning' as UikitIconNames,
+    [NOTIFICATION_VARIANTS.ERROR]: 'times_circle' as UikitIconNames,
   }[variant];
   const width = {
     [NOTIFICATION_SIZES.MD]: '25px',
@@ -62,12 +67,12 @@ any) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
   const titleTypographyVariant = {
-    [NOTIFICATION_SIZES.MD]: 'subtitle2',
-    [NOTIFICATION_SIZES.SM]: 'paragraph',
+    [NOTIFICATION_SIZES.MD]: 'subtitle2' as TypographyVariant,
+    [NOTIFICATION_SIZES.SM]: 'paragraph' as TypographyVariant,
   }[size];
   const bodyTypographyVariant = {
-    [NOTIFICATION_SIZES.MD]: 'paragraph',
-    [NOTIFICATION_SIZES.SM]: 'data',
+    [NOTIFICATION_SIZES.MD]: 'paragraph' as TypographyVariant,
+    [NOTIFICATION_SIZES.SM]: 'data' as TypographyVariant,
   }[size];
   const headerVerticalMargin = {
     [NOTIFICATION_SIZES.MD]: '4px',
@@ -144,27 +149,28 @@ any) => {
   );
 };
 
-export const NOTIFICATION_INTERACTION_EVENTS = Object.freeze({
-  CLOSE: 'CLOSE',
-  ACTION: 'ACTION',
-  DISMISS: 'DISMISS',
+export const NOTIFICATION_VARIANTS = Object.freeze({
+  INFO: 'INFO' as NotificationVariant,
+  SUCCESS: 'SUCCESS' as NotificationVariant,
+  WARNING: 'WARNING' as NotificationVariant,
+  ERROR: 'ERROR' as NotificationVariant,
 });
 
-export const NOTIFICATION_VARIANTS = Object.freeze({
-  INFO: 'INFO',
-  SUCCESS: 'SUCCESS',
-  WARNING: 'WARNING',
-  ERROR: 'ERROR',
+export const NOTIFICATION_INTERACTION_EVENTS = Object.freeze({
+  CLOSE: 'CLOSE' as NotificationInteractionEvent,
+  ACTION: 'ACTION' as NotificationInteractionEvent,
+  DISMISS: 'DISMISS' as NotificationInteractionEvent,
 });
+
 export const NOTIFICATION_INTERACTION = Object.freeze({
-  CLOSE: 'CLOSE',
-  ACTION_DISMISS: 'ACTION_DISMISS',
-  NONE: 'NONE',
+  CLOSE: 'CLOSE' as NotificationInteraction,
+  ACTION_DISMISS: 'ACTION_DISMISS' as NotificationInteraction,
+  NONE: 'NONE' as NotificationInteraction,
 });
 
 export const NOTIFICATION_SIZES = Object.freeze({
-  MD: 'MD',
-  SM: 'SM',
+  MD: 'MD' as NotificationSize,
+  SM: 'SM' as NotificationSize,
 });
 
 Notification.propTypes = {

@@ -1,15 +1,15 @@
 import { styled, css } from '../..';
-import { NOTIFICATION_VARIANTS } from '.';
+import { NOTIFICATION_VARIANTS, NotificationVariant } from '.';
 import FocusWrapper from '../../FocusWrapper';
 
-const getBackgroundColor = ({ theme, variant }) =>
+const getBackgroundColor = ({ theme, variant }: { theme?: any; variant: NotificationVariant }) =>
   ({
     [NOTIFICATION_VARIANTS.INFO]: theme.colors.secondary_4,
     [NOTIFICATION_VARIANTS.SUCCESS]: theme.colors.success_4,
     [NOTIFICATION_VARIANTS.WARNING]: theme.colors.warning_4,
     [NOTIFICATION_VARIANTS.ERROR]: theme.colors.error_4,
   }[variant]);
-export const getBorderColor = ({ theme, variant }) =>
+export const getBorderColor = ({ theme, variant }: { theme?: any; variant: NotificationVariant }) =>
   ({
     [NOTIFICATION_VARIANTS.INFO]: theme.colors.secondary_2,
     [NOTIFICATION_VARIANTS.SUCCESS]: theme.colors.success_2,
@@ -20,7 +20,7 @@ export const getBorderColor = ({ theme, variant }) =>
 export const NotificationContainer = styled('div')`
   display: flex;
   border-radius: 8px;
-  box-shadow: ${({ theme, noShadow }) => !noShadow && `0 2px 4px 0 ${theme.colors.grey_2}`};
+  box-shadow: ${({ theme, noShadow }: any) => !noShadow && `0 2px 4px 0 ${theme.colors.grey_2}`};
   border: solid 1px ${getBorderColor};
   background-color: ${getBackgroundColor};
 `;
@@ -37,14 +37,16 @@ export const IconContainer = styled('div')`
   line-height: 0px;
 `;
 
-export const ActionButtonsContainer = styled('div')`
+export const ActionButtonsContainer = styled<'div', { variant?: NotificationVariant }>('div')`
   min-width: 80px;
   border-left: solid 1px ${getBorderColor};
   display: flex;
   flex-direction: column;
 `;
 
-export const ActionButton = styled(FocusWrapper)`
+export const ActionButton = styled<typeof FocusWrapper, { variant?: NotificationVariant }>(
+  FocusWrapper,
+)`
   display: flex;
   justify-content: center;
   align-items: center;

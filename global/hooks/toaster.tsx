@@ -1,14 +1,19 @@
 import * as React from 'react';
 import omit from 'lodash/omit';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
-import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
+import {
+  NOTIFICATION_INTERACTION_EVENTS,
+  NotificationVariant,
+  NotificationInteractionEvent,
+  NotificationInteraction,
+} from 'uikit/notifications/Notification';
 
-type ToastEventPayload = { type: 'CLOSE' | 'ACTION' | 'DISMISS'; event: any };
+type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {
-  variant?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
-  interactionType?: 'NONE' | 'CLOSE' | 'ACTION_DISMISS';
-  title: Node;
-  content: Node;
+  variant?: NotificationVariant;
+  interactionType?: NotificationInteraction;
+  title: React.ReactNode;
+  content: React.ReactNode;
   onInteraction?: (e: ToastEventPayload) => any;
 };
 export const useToastState = () => {
