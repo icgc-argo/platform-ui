@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import color from 'color';
@@ -39,7 +38,8 @@ const LoadingOverlay = () => {
 };
 
 const Container: React.ComponentType<{
-  loading?: boolean,
+  loading?: boolean;
+  children: React.ReactNodeArray | React.ReactNode;
 }> = ({ children, loading = false, ...props }) => (
   <ContainerBackground {...props}>
     {children}

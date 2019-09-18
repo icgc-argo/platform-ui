@@ -28,9 +28,9 @@ const SubmissionLayout = ({
   subtitle,
 }: {
   noSidebar?: boolean;
-  sideMenu?: React.Element<any>;
-  contentHeader?: React.Element<any>;
-  children: Node;
+  sideMenu?: React.ReactNode | React.ReactNodeArray;
+  contentHeader?: React.ReactNode | React.ReactNodeArray;
+  children: React.ReactNode | React.ReactNodeArray;
   subtitle?: string;
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
