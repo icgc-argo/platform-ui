@@ -38,11 +38,12 @@ const createStyledDomComponent = memoize(
   `,
 );
 
+export type TypographyVariant = keyof typeof defaultTheme.typography;
 const Typography: React.ComponentType<{
   /**
    * a typography as defined in theme.typography
    */
-  variant?: keyof typeof defaultTheme.typography;
+  variant?: TypographyVariant;
   /**
    * could be either an html tag name, or a react component
    */
