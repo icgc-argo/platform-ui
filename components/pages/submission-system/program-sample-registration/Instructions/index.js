@@ -36,9 +36,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
           <Typography variant="paragraph" component="span">
             1. Download the registration template and format it using the latest{` `}
             <Link href={CONTACT_PAGE_PATH}>
-              <a>
-                <HyperLink>Data Dictionary</HyperLink>
-              </a>
+              <HyperLink>Data Dictionary</HyperLink>
             </Link>
             .
           </Typography>
@@ -79,9 +77,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
           <Typography variant={'paragraph'}>
             If you have any changes to previously registered data, please {` `}
             <Link href={CONTACT_PAGE_PATH}>
-              <a>
-                <HyperLink>contact DCC</HyperLink>
-              </a>
+              <HyperLink>contact DCC</HyperLink>
             </Link>
             .
           </Typography>
