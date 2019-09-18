@@ -53,6 +53,8 @@ const Typography: React.ComponentType<{
    * could be a theme colorname, or css color
    */
   color?: string;
+  as?: keyof HTMLElementTagNameMap;
+  children?: React.ReactNode;
 }> = ({ variant = 'paragraph', component: domComponentName, bold = false, color, ...rest }) => {
   const theme = useTheme();
   const componentMap: {
