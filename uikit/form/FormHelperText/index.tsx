@@ -6,10 +6,24 @@ import clsx from 'clsx';
 import css from '@emotion/css';
 import pick from 'lodash/pick';
 
-const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
-  const { component: Component = 'p', className: classNameProp, ...other } = props;
+const FormHelperText = React.forwardRef<
+  any,
+  {
+    /**
+     * The component used for the root node.
+     * Either a string to use a DOM element or a component.
+     */
+    component?: keyof HTMLElementTagNameMap;
+    /**
+     * The CSS class name of the wrapper element.
+     */
+    className?: string;
+    children?: React.ReactElement;
+  }
+>(function FormHelperText(props, ref) {
+  const { component: Component = 'p', className: classNameProp, children } = props;
 
-  const StyledComponent = styled(Component)`
+  const StyledComponent = styled<any, any>(Component)`
     ${({ theme }) => css(theme.typography.caption)};
     margin: 3px 7px;
     line-height: 14px;
@@ -29,23 +43,12 @@ const FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
     <StyledComponent
       ref={ref}
       className={clsx(pick(contextValue, ['error', 'disabled']), classNameProp)}
-      {...other}
-    />
+    >
+      {children}
+    </StyledComponent>
   );
 });
 
 FormHelperText.displayName = 'FormHelperText';
-
-FormHelperText.propTypes = {
-  /**
-   * The component used for the root node.
-   * Either a string to use a DOM element or a component.
-   */
-  component: PropTypes.elementType,
-  /**
-   * The CSS class name of the wrapper element.
-   */
-  className: PropTypes.string,
-};
 
 export default FormHelperText;
