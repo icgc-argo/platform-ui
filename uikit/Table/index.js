@@ -7,6 +7,7 @@ import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
 import { StyledTable } from './styledComponent';
 import TablePagination from './TablePagination';
+import DefaultNoDataComponent from './NoDataComponent';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -67,6 +68,7 @@ export type TableProps<Data: { [k: string]: any }> = {
   data?: Array<Data>,
   PaginationComponent?: typeof TablePagination,
   LoadingComponent?: typeof DefaultLoadingComponent,
+  NoDataComponent?: typeof DefaultNoDataComponent,
 } & { [k: string]: any };
 const Table = <Data: { [k: string]: any }>({
   className = '',
@@ -74,9 +76,21 @@ const Table = <Data: { [k: string]: any }>({
   highlight = true,
   PaginationComponent = TablePagination,
   LoadingComponent = DefaultLoadingComponent,
+  NoDataComponent = DefaultNoDataComponent,
   columns,
   data,
   showPagination,
+  getTableProps = ({ data }) => {
+    if (isEmpty(data)) {
+      return {
+        style: {
+          opacity: 0.3,
+        },
+      };
+    } else {
+      return {};
+    }
+  },
   ...rest
 }: TableProps<Data>) => {
   // these are props passed by SelectTable. Defaults are not exposed in props for encapsulation
@@ -88,6 +102,7 @@ const Table = <Data: { [k: string]: any }>({
 
   return (
     <StyledTable
+      getTableProps={getTableProps}
       columns={columns}
       data={data}
       isSelectTable={isSelectTable}
@@ -102,7 +117,7 @@ const Table = <Data: { [k: string]: any }>({
       })}
       minRows={0}
       PaginationComponent={PaginationComponent}
-      NoDataComponent={() => null}
+      NoDataComponent={NoDataComponent}
       showPagination={isEmpty(data) ? false : showPagination}
       {...rest}
     />
