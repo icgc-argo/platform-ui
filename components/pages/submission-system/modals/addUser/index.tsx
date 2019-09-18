@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { styled, css } from 'uikit';
 import Modal from 'uikit/Modal';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import { UserSection } from '../styledComponents';
+import { UserSection, UserSectionProps } from '../styledComponents';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
@@ -14,7 +13,8 @@ import isEmpty from 'lodash/isEmpty';
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
-  const { errors: validationErrors, data, setData, validateField, touched } = form;
+  const { errors, data, setData, validateField, touched } = form;
+  const validationErrors = errors as UserSectionProps['errors'];
 
   React.useEffect(() => {
     formSubscriptions[id] = form;
@@ -47,8 +47,8 @@ const AddUserModal = ({
   onSubmit,
   dismissModal,
 }: {
-  onSubmit: (data: typeof UserModel[]) => any | void,
-  dismissModal: (e: any | void) => any | void,
+  onSubmit: (data: typeof UserModel[]) => any | void;
+  dismissModal: () => any | void;
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);

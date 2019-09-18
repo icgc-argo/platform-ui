@@ -20,7 +20,16 @@ const Section = styled('div')`
   display: flex;
 `;
 
-export const UserSection = ({
+export type UserSectionProps = {
+  user: typeof UserModel;
+  onChange: (fieldName: string, value: unknown) => unknown | void;
+  validateField: (fieldName: string) => unknown | void;
+  errors: typeof UserModel;
+  onClickDelete: ((e: unknown | void) => unknown | void) | null;
+  disabledFields: Array<string | void>;
+  showDelete: boolean;
+};
+export const UserSection: React.ComponentType<UserSectionProps> = ({
   user,
   onChange,
   validateField,
@@ -28,14 +37,6 @@ export const UserSection = ({
   onClickDelete,
   disabledFields = [],
   showDelete,
-}: {
-  user: typeof UserModel,
-  onChange: (fieldName: string, value: mixed) => mixed | void,
-  validateField: (fieldName: string) => mixed | void,
-  errors: typeof UserModel,
-  onClickDelete: ((e: mixed | void) => mixed | void) | null,
-  disabledFields: Array<string | void>,
-  showDelete: boolean,
 }) => {
   const {
     firstName: firstNameError,
