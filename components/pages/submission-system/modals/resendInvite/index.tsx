@@ -8,9 +8,9 @@ const ResendInviteModal = ({
   dismissModal,
   onSubmit,
 }: {
-  user: typeof UserModel,
-  onSubmit: (data: typeof UserModel) => any | void,
-  dismissModal: (e: any | void) => any | void,
+  user: typeof UserModel;
+  onSubmit: (data: typeof UserModel) => any | void;
+  dismissModal: () => any | void;
 }) => {
   return (
     <Modal
@@ -18,7 +18,7 @@ const ResendInviteModal = ({
       actionButtonText="RESEND INVITATION"
       cancelText="CANCEL"
       buttonSize="sm"
-      onActionClick={() => onSubmit()}
+      onActionClick={() => onSubmit(user)}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
