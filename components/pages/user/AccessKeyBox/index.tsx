@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
@@ -14,7 +13,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 
 export default function AccessTokenBox() {
-  const { data: { accessKey } = {}, loading } = useQuery(EGO_ACCESS_KEY);
+  const { data: { accessKey = null } = {}, loading } = useQuery(EGO_ACCESS_KEY);
 
   const [generatedKey, setGeneratedKey] = React.useState(null);
   const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
@@ -25,7 +24,7 @@ export default function AccessTokenBox() {
   const key = generatedKey ? generatedKey.key : accessKey ? accessKey.key : '';
   const keyError = get(accessKey, 'error', '');
 
-  const onGenerate = async data => {
+  const onGenerate = async () => {
     setIsGeneratingKey(true);
     try {
       const {
