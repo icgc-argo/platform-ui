@@ -45,7 +45,7 @@ const StarIcon = (props: { active: boolean, className?: string }) => (
     height="16px"
   />
 );
-//format(new Date(submissionInfo.createdAt), 'MMMM d, y')
+
 const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo: ?SubmissionInfo }) => (
   <Typography variant="paragraph" component="div" color="grey">
     <Typography variant="default" color="secondary_dark">
