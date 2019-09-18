@@ -18,7 +18,12 @@ type T_AuthContext = {
   data: ReturnType<typeof decodeToken> | null;
 };
 
-const AuthContext = React.createContext<T_AuthContext>({});
+const AuthContext = React.createContext<T_AuthContext>({
+  token: undefined,
+  logOut: () => {},
+  updateToken: async () => {},
+  data: null,
+});
 
 export function AuthProvider({
   egoJwt,

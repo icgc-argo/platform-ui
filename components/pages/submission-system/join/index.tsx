@@ -21,7 +21,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { inviteId } = router.query;
 
   const {
-    data: { joinProgramInvite, programOptions: { institutions } = {} } = {},
+    data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
     error,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
@@ -32,7 +32,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   if (!!error) {
     error[ERROR_STATUS_KEY] = 500;
-    throw new Error(error);
+    throw new Error(error.message);
   }
 
   const toaster = useToaster();
