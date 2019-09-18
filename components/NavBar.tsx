@@ -1,4 +1,3 @@
-
 import { SUBMISSION_PATH, USER_PAGE_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
@@ -58,7 +57,7 @@ const getUserRole = egoJwt => {
 };
 
 export default () => {
-  const { token: egoJwt, logOut, data: userModel } = useAuthContext() || {};
+  const { token: egoJwt, logOut, data: userModel } = useAuthContext();
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
   const { asPath: path } = usePageContext();
   const { EGO_URL } = getConfig().publicRuntimeConfig;

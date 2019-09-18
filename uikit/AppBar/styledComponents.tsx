@@ -6,7 +6,7 @@ import { withProps } from 'recompose';
 
 import Typography from '../Typography';
 
-const MenuItemTypography = withProps(() => ({
+const MenuItemTypography: typeof Typography = withProps(() => ({
   variant: 'navigation',
 }))(Typography);
 
@@ -15,7 +15,12 @@ export const MenuItemContent = styled(MenuItemTypography)`
   text-align: center;
   text-decoration: none;
 `;
-export const MenuItemContainer = styled('div', {
+export const MenuItemContainer = styled<
+  'div',
+  {
+    active: boolean;
+  }
+>('div', {
   shouldForwardProp: propName => propName !== 'active',
 })`
   position: relative;

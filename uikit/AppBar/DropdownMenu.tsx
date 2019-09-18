@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { LiHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 import clsx from 'clsx';
@@ -57,12 +57,13 @@ const Li = styled('li')`
   }
 `;
 
-export const DropdownMenuItem = React.forwardRef<HTMLLIElement, { active?: boolean }>(
-  function DropdownMenuItem({ children, active, ...otherProps }, ref) {
-    return (
-      <Li {...otherProps} className={clsx({ active })} ref={ref}>
-        {children}
-      </Li>
-    );
-  },
-);
+export const DropdownMenuItem = React.forwardRef<
+  HTMLLIElement,
+  { active?: boolean } & LiHTMLAttributes<HTMLLIElement>
+>(function DropdownMenuItem({ children, active, ...otherProps }, ref) {
+  return (
+    <Li {...otherProps} className={clsx({ active })} ref={ref}>
+      {children}
+    </Li>
+  );
+});

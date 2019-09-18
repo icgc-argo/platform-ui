@@ -81,14 +81,24 @@ export const Section = props => <SectionDisplay {...props} />;
 
 export const MenuGroup = props => <MenuGroupDisplay {...props} />;
 
-export const MenuItem = React.forwardRef(
+export const MenuItem = React.forwardRef<
+  HTMLDivElement,
+  {
+    active?: boolean;
+    id?: string;
+    className?: string;
+    DomComponent?: React.ComponentType;
+    dropdownMenu?: React.ReactNode;
+    children?: React.ReactNode;
+  }
+>(
   (
     {
       children,
       className,
       id,
       active = false,
-      DomComponent = ({ active, ...others }) => <a {...others} />,
+      DomComponent = ({ active, ...others }: { active: boolean }) => <a {...others} />,
       dropdownMenu,
     },
     forwardedRef,
@@ -103,28 +113,13 @@ export const MenuItem = React.forwardRef(
     });
 
     return (
-      <MenuItemContainer
-        className={className}
-        id={id}
-        ref={el => {
-          ref.current = el;
-        }}
-        active={active}
-      >
+      <MenuItemContainer className={className} id={id} ref={ref} active={active}>
         <MenuItemContent bold>{children}</MenuItemContent>
         {isDropdownOpen && dropdownMenu}
       </MenuItemContainer>
     );
   },
 );
-
-MenuItem.propTypes = {
-  active: PropTypes.bool,
-  id: PropTypes.string,
-  className: PropTypes.string,
-  DomComponent: PropTypes.func,
-  dropdownMenu: PropTypes.node,
-};
 
 const AppBar = AppBarContainer;
 
