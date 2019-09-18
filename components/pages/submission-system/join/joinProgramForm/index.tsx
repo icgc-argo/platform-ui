@@ -1,4 +1,3 @@
-
 import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
@@ -80,10 +79,10 @@ const JoinProgramForm = ({
   onSubmit,
   institutions,
 }: {
-  onSubmit: (data: any) => any,
-  programName: string,
-  userRole: string,
-  institutions: Array<string>,
+  onSubmit: (data: any) => any;
+  programName: string;
+  userRole: string;
+  institutions: Array<string>;
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
     initialFields: schema.cast({}),
@@ -172,7 +171,7 @@ const JoinProgramForm = ({
                 <FormControl required error={!!errors.piFirstName}>
                   <Row nogutter>
                     <Col sm={6} className="pt">
-                      <InputLabel required>PI First Name</InputLabel>
+                      <InputLabel>PI First Name</InputLabel>
                     </Col>
                     <Col>
                       <Input

@@ -18,7 +18,7 @@ const FormHelperText = React.forwardRef<
      * The CSS class name of the wrapper element.
      */
     className?: string;
-    children?: React.ReactElement;
+    children?: React.ReactNode | React.ReactNodeArray;
   }
 >(function FormHelperText(props, ref) {
   const { component: Component = 'p', className: classNameProp, children } = props;
