@@ -4,7 +4,6 @@ import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
-import { TableProps } from 'uikit/Table';
 
 const TABLE_COLS = [
   { Header: 'Row #', accessor: 'row', width: 90 },
@@ -32,8 +31,8 @@ const ErrorTable = ({
 }: {
   errors: Array<Data>;
   count: number;
-  onClear: (x: any) => any;
-  onDownload: (x: any) => any;
+  onClear: () => any;
+  onDownload: () => any;
 }) => (
   <Container>
     <div
