@@ -92,7 +92,7 @@ const UsersTable = (tableProps: {
             justify-content: space-around;
           `}
         >
-          <Tooltip interactive position="bottom" html={<span>Resend invitation</span>}>
+          <Tooltip unmountHTMLWhenHide position="left" html={<span>Resend invitation</span>}>
             <InteractiveIcon
               height="20px"
               width="20px"
@@ -109,7 +109,7 @@ const UsersTable = (tableProps: {
               }
             />
           </Tooltip>
-          <Tooltip interactive position="bottom" html={<span>Edit user</span>}>
+          <Tooltip unmountHTMLWhenHide position="left" html={<span>Edit user</span>}>
             <InteractiveIcon
               height="20px"
               width="20px"
@@ -117,7 +117,7 @@ const UsersTable = (tableProps: {
               onClick={() => tableProps.onUserEditClick({ user: props.original })}
             />
           </Tooltip>
-          <Tooltip interactive position="bottom" html={<span>Remove user</span>}>
+          <Tooltip unmountHTMLWhenHide position="left" html={<span>Remove user</span>}>
             <InteractiveIcon
               height="20px"
               width="20px"
