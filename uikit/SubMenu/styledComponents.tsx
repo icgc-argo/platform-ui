@@ -1,8 +1,14 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
+import defaultTheme from 'uikit/theme/defaultTheme';
 
-const defaultLabelStyle = ({ selected, theme }) => css`
+type StyleCalculationInput = {
+  selected?: boolean;
+  theme?: typeof defaultTheme;
+};
+
+const defaultLabelStyle = ({ selected, theme }: StyleCalculationInput) => css`
   & > .MenuItemContent {
     cursor: pointer;
     display: flex;
@@ -16,8 +22,8 @@ const defaultLabelStyle = ({ selected, theme }) => css`
   }
 `;
 
-const level1Style = ({ selected, theme }) => css`
-  ${css(theme.typography.navigation)}
+const level1Style = ({ selected, theme }: StyleCalculationInput) => css`
+  ${css(theme.typography.navigation as any)}
   ${defaultLabelStyle({ theme, selected })}
   background: ${theme.colors.white};
   animation: all 1s;
@@ -26,8 +32,8 @@ const level1Style = ({ selected, theme }) => css`
   }
 `;
 
-const level2Style = ({ selected, theme }) => css`
-  ${css(theme.typography.paragraph)}
+const level2Style = ({ selected, theme }: StyleCalculationInput) => css`
+  ${css(theme.typography.paragraph as any)}
   ${defaultLabelStyle({ theme, selected })}
   border: none;
   border-left: solid 2px;
@@ -45,8 +51,8 @@ const level2Style = ({ selected, theme }) => css`
   }
 `;
 
-const level3Style = ({ selected, theme }) => css`
-  ${css(theme.typography.navigation)}
+const level3Style = ({ selected, theme }: StyleCalculationInput) => css`
+  ${css(theme.typography.navigation as any)}
   ${defaultLabelStyle({ theme, selected })}
   border: none;
   font-weight: normal;
@@ -59,7 +65,7 @@ const level3Style = ({ selected, theme }) => css`
   }
 `;
 
-const defaultStyle = props => css`
+const defaultStyle = (props: StyleCalculationInput) => css`
   ${level1Style(props)}
   ${defaultLabelStyle(props)}
   .MenuItemContainer > & {
@@ -70,7 +76,7 @@ const defaultStyle = props => css`
   }
 `;
 
-export const MenuItemContainer = styled('div')`
+export const MenuItemContainer = styled<'div', { level?: 1 | 2 | 3; selected?: boolean }>('div')`
   & a {
     text-decoration: none;
   }
