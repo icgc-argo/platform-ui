@@ -5,7 +5,7 @@ import css from '@emotion/css';
 
 import range from 'lodash/range';
 
-const LoaderContainer = styled('div')`
+const LoaderContainer = styled<'div', { dotsCount: number }>('div')`
   padding-top: 15px;
   padding-bottom: 15px;
   width: ${({ dotsCount }) => dotsCount * 10}px;
