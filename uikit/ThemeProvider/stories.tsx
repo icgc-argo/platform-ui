@@ -49,10 +49,6 @@ const ThemeProviderStories = storiesOf(`${__dirname}`, module)
       <ThemeViewer />
     </ThemeProvider>
   ))
-  .add('Colors', () => (
-    <ThemeProvider {...createThemeKnobs()}>
-      <ColorViewer />
-    </ThemeProvider>
-  ));
+  .add('Colors', () => <ThemeProvider {...createThemeKnobs()}>{ColorViewer()}</ThemeProvider>);
 
 export default ThemeProviderStories;
