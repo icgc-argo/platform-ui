@@ -19,7 +19,7 @@ const TypographyStories = storiesOf(`${__dirname}`, module)
     <>
       {Object.entries(defaultTheme.typography).map(([key]) => (
         <div key={key}>
-          <Typography variant={key}>{key}</Typography>
+          <Typography variant={key as keyof typeof defaultTheme.typography}>{key}</Typography>
         </div>
       ))}
     </>
