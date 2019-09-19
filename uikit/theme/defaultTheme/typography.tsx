@@ -1,4 +1,4 @@
-
+import { CSSProperties } from 'react';
 export default {
   default: {
     fontFamily: 'Work Sans, sans-serif',
@@ -8,7 +8,7 @@ export default {
     fontStretch: 'inherit',
     lineHeight: 'inherit',
     letterSpacing: 'inherit',
-  },
+  } as CSSProperties,
   hero: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '40px',
@@ -17,7 +17,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   title: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '26px',
@@ -26,7 +26,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   subtitle: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '20px',
@@ -35,7 +35,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   subtitle2: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '16px',
@@ -44,25 +44,25 @@ export default {
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   sectionHeader: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '16px',
-    fontWeight: '600',
+    fontWeight: 600,
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   navigation: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '15px',
-    fontWeight: '600',
+    fontWeight: 600,
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   paragraph: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '14px',
@@ -71,7 +71,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: '1.57',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   label: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '14px',
@@ -80,7 +80,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: '1.57',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   data: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '12px',
@@ -89,7 +89,7 @@ export default {
     fontStretch: 'normal',
     lineHeight: '1.17',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
   caption: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '11px',
@@ -98,5 +98,5 @@ export default {
     fontStretch: 'normal',
     lineHeight: '1.27',
     letterSpacing: 'normal',
-  },
+  } as CSSProperties,
 };
