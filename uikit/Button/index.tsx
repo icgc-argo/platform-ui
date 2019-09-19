@@ -76,6 +76,7 @@ const StyledButton = styled<
 `;
 
 const Button = React.forwardRef<
+  HTMLButtonElement,
   {
     /**
      * Button variant type eg. primary
@@ -103,8 +104,7 @@ const Button = React.forwardRef<
      * DOM pass through
      */
     id?: string;
-  },
-  any
+  }
 >(
   (
     {
@@ -136,7 +136,6 @@ const Button = React.forwardRef<
         variant={variant}
         className={className}
         id={id}
-        isLoading={shouldShowLoading}
       >
         <span style={{ visibility: shouldShowLoading ? 'hidden' : 'visible' }}>{children}</span>
         <span
