@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';
@@ -12,7 +11,7 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: shortName });
+    return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: String(shortName) });
   },
   getGqlQueriesToPrefetch: async () => [{ query: SIDE_MENU_PROGRAM_LIST }],
 })(ProgramManagement);
