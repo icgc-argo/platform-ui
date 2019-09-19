@@ -36,11 +36,16 @@ const Sep = styled('li')`
   font-size: 30px;
 `;
 
-const interleave = ([x, ...xs], y) => {
+const interleave = (arr = [], y) => {
+  const [x, ...xs] = arr;
   return xs.length === 0 ? [x] : [x, y, ...interleave(xs, y)];
 };
 
-const TitleBar = ({ children, className, id }) => {
+const TitleBar: React.ComponentType<{
+  className?: string;
+  id?: string;
+  children: React.ReactNode | React.ReactNodeArray;
+}> = ({ children, className, id }) => {
   const theme = useTheme();
 
   const allItems = interleave(
@@ -61,19 +66,6 @@ const TitleBar = ({ children, className, id }) => {
       <Ol>{allItems}</Ol>
     </Nav>
   );
-};
-
-TitleBar.propTypes = {
-  children: PropTypes.node.isRequired,
-
-  /**
-   * DOM pass through
-   */
-  className: PropTypes.string,
-  /**
-   * DOM pass through
-   */
-  id: PropTypes.string,
 };
 
 export default TitleBar;
