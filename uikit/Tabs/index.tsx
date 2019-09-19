@@ -29,20 +29,14 @@ export const Button = styled<'button', { as?: keyof HTMLElementTagNameMap }>('bu
   }
 `;
 
-export function Tab({
-  label,
-  value,
-  empty,
-  children,
-  className,
-  ...otherProps
-}: {
-  label?: string;
-  value?: string;
-  empty?: boolean;
-  className?: string;
-  children?: React.ReactNode | React.ReactNodeArray;
-}) {
+export const Tab: React.ComponentType<
+  {
+    label?: string;
+    value?: string;
+    empty?: boolean;
+    className?: string;
+  } & React.ComponentProps<typeof Button>
+> = ({ label, value, empty, children, className, ...otherProps }) => {
   const theme = useTheme();
 
   const { onChange, value: currentValue } = React.useContext(TabsContext);
@@ -71,7 +65,7 @@ export function Tab({
       {label}
     </Button>
   );
-}
+};
 
 const Container = styled('div')`
   display: flex;

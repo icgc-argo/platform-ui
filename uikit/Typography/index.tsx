@@ -32,31 +32,31 @@ const createDomComponent = memoize(
 );
 
 const createStyledDomComponent = memoize(
-  Component => styled<'div', { bold: boolean; color: string }>(Component)`
+  Component => styled<'div', { bold?: boolean; color?: string }>(Component)`
     font-weight: ${({ bold }) => (bold ? `bold` : `normal`)};
     color: ${({ theme, color }) => (color ? theme.colors[color] || color : 'inherit')};
   `,
 );
 
 export type TypographyVariant = keyof typeof defaultTheme.typography;
-const Typography: React.ComponentType<{
-  /**
-   * a typography as defined in theme.typography
-   */
-  variant?: TypographyVariant;
-  /**
-   * could be either an html tag name, or a react component
-   */
-  component?: string;
-  bold?: boolean;
-  /**
-   * could be a theme colorname, or css color
-   */
-  color?: string;
-  as?: keyof HTMLElementTagNameMap;
-  children?: React.ReactNode;
-  onClick?: (e: React.SyntheticEvent) => void;
-}> = ({ variant = 'paragraph', component: domComponentName, bold = false, color, ...rest }) => {
+const Typography: React.ComponentType<
+  {
+    /**
+     * a typography as defined in theme.typography
+     */
+    variant?: TypographyVariant;
+    /**
+     * could be either an html tag name, or a react component
+     */
+    component?: string;
+    bold?: boolean;
+    /**
+     * could be a theme colorname, or css color
+     */
+    color?: string;
+    as?: keyof HTMLElementTagNameMap;
+  } & React.ComponentProps<ReturnType<typeof createStyledDomComponent>>
+> = ({ variant = 'paragraph', component: domComponentName, bold = false, color, ...rest }) => {
   const theme = useTheme();
   const componentMap: {
     [k: string]: any;
