@@ -53,26 +53,8 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
-export type TableColumnConfig<Data = { [k: string]: any }> = {
-  Header?: React.ReactNode;
-  id?: string;
-  accessor?: keyof Data;
-  sortable?: boolean;
-  Cell?: ({ original: Data }) => any;
-  width?: number;
-  headerStyle?: {};
-};
-export type TableProps<Data = { [k: string]: any }> = {
-  className?: string;
-  stripped?: boolean;
-  highlight?: boolean;
-  columns: Array<TableColumnConfig<Data>>;
-  data?: Array<Data>;
-  PaginationComponent?: typeof TablePagination;
-  LoadingComponent?: typeof DefaultLoadingComponent;
-  NoDataComponent?: typeof DefaultNoDataComponent;
-} & { [k: string]: any };
-function Table({
+export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0];
+function Table<Data = { [k: string]: any }>({
   className = '',
   stripped = true,
   highlight = true,
@@ -94,12 +76,13 @@ function Table({
     }
   },
   ...rest
-}: TableProps & {
-  highlight: boolean;
-  stripped: boolean;
+}: Partial<TableProps<Data>> & {
+  highlight?: boolean;
+  stripped?: boolean;
   selectedIds?: Array<any>;
-  isSelectTable: boolean;
-  primaryKey: string;
+  isSelectTable?: boolean;
+  primaryKey?: string;
+  columns: TableProps<Data>['columns']; //columns is required
 }) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -154,6 +137,7 @@ export function SelectTable<Data = { [k: string]: any }>(
     selectedIds?: any[];
     isSelectTable: boolean;
     primaryKey: string;
+    columns: TableProps<Data>['columns']; //columns is required
   },
 ) {
   const { isSelected, data, keyField } = props;
