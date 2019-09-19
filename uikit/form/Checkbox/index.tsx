@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
@@ -9,7 +8,7 @@ import styled from '@emotion/styled';
  * ::after - box
  */
 
-export const StyledCheckbox = styled('div')`
+export const StyledCheckbox = styled<'div', { disabled?: boolean; checked?: boolean }>('div')`
   position: relative;
   cursor: pointer;
 
@@ -90,13 +89,13 @@ const Checkbox = ({
   value,
   ...props
 }: {
-  checked: boolean,
-  disabled?: boolean,
-  onChange: (e: any | void) => any | void,
-  'aria-label': string,
-  value: string | number,
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (e: any | void) => any | void;
+  'aria-label': string;
+  value: string | number;
 }) => {
-  const HiddenCheckboxRef = React.createRef();
+  const HiddenCheckboxRef = React.createRef<HTMLInputElement>();
 
   return (
     <StyledCheckbox data-value={value} checked={checked} disabled={disabled} onClick={onChange}>
