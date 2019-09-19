@@ -56,15 +56,16 @@ const Tooltip = ({ html, ...rest }: TooltipProps) => {
     font-weight: normal;
   `;
   return (
-    <Global
-      styles={css`
-        .tippy-popper .leave {
-          opacity: 0;
-        }
-      `}
-    >
+    <>
+      <Global
+        styles={css`
+          .tippy-popper .leave {
+            opacity: 0;
+          }
+        `}
+      />
       <ReactTippy html={<TooltipContainer id="tooltip">{html}</TooltipContainer>} {...rest} />
-    </Global>
+    </>
   );
 };
 
