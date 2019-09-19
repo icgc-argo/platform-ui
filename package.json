@@ -34,6 +34,7 @@
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
+    "apollo-upload-client": "^11.0.0",
     "babel-plugin-graphql-tag": "^2.1.0",
     "babel-plugin-import-graphql": "^2.7.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
