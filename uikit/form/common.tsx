@@ -64,7 +64,11 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
   ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
 
-export const RadioCheckboxWrapper = styled('div')`
+type RadioCheckboxWrapperProps = {
+  disabled?: boolean;
+  checked?: boolean;
+};
+export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
