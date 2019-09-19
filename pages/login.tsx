@@ -9,7 +9,7 @@ export default createPage<{ redirect: string; egoJwt: string }>({
   getInitialProps: async ({ query, egoJwt, res }) => {
     const { redirect } = query;
     if (egoJwt && res) {
-      res.redirect(redirect || getDefaultRedirectPathForUser(egoJwt));
+      res.redirect(String(redirect || getDefaultRedirectPathForUser(egoJwt)));
     }
     return {
       redirect,

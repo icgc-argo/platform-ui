@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { NextPageContext } from 'next-server/dist/lib/utils';
 
-export type GetInitialPropsContext = NextPageContext;
+export type GetInitialPropsContext = NextPageContext & {
+  res?: NextPageContext['res'] & {
+    redirect?: (s: string) => void;
+  };
+};
 export type ClientSideGetInitialPropsContext = {
   pathname: GetInitialPropsContext['pathname'];
   query: GetInitialPropsContext['query'];
