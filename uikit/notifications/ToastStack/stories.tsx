@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import ToastStack from '.';
 import { NOTIFICATION_VARIANTS } from '../Notification';
 
-const State = ({ children }) => {
+const ToastStackStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const [stack, setStack] = React.useState([
     {
       id: String(Math.random()),
@@ -34,16 +34,9 @@ const State = ({ children }) => {
     setStack(stack.filter(({ id: _id }) => id !== _id));
     action('onInteraction')(data);
   };
-  return React.cloneElement(children, {
-    onInteraction,
-    toastConfigs: stack,
-  });
-};
-
-const ToastStackStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <State>
+  return (
     <ToastStack
-      onInteraction="[parent func]"
+      onInteraction={onInteraction}
       toastConfigs={[
         {
           id: String(Math.random()),
@@ -67,7 +60,7 @@ const ToastStackStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
         },
       ]}
     />
-  </State>
-));
+  );
+});
 
 export default ToastStackStories;

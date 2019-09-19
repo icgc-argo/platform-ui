@@ -18,7 +18,7 @@ const ANIMATION_DURATION = 500;
 const StackContainer = styled('div')`
   max-width: 400px;
 `;
-const AnimatedContainer = styled('div')`
+const AnimatedContainer = styled<'div', { unMounting?: boolean }>('div')`
   margin-top: 10px;
   @keyframes enter {
     from {
@@ -57,27 +57,24 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
   }
 
   // observes toastConfigs from props to sync up with local state, with some delay for animation
-  React.useEffect(
-    stuff => {
-      const [itemToRemove] = differenceBy(previousToastConfigs, toastConfigs);
-      if (itemToRemove) {
-        setStack(
-          convertToLocalStack(previousToastConfigs).map(item => ({
-            ...item,
-            unMounting: item.id === itemToRemove.id,
-          })),
-        );
-        setCurrentTimeout(
-          setTimeout(() => {
-            setStack(convertToLocalStack(toastConfigs));
-          }, ANIMATION_DURATION),
-        );
-      } else {
-        setStack(convertToLocalStack(toastConfigs));
-      }
-    },
-    [toastConfigs],
-  );
+  React.useEffect(() => {
+    const [itemToRemove] = differenceBy(previousToastConfigs, toastConfigs);
+    if (itemToRemove) {
+      setStack(
+        convertToLocalStack(previousToastConfigs).map(item => ({
+          ...item,
+          unMounting: item.id === itemToRemove.id,
+        })),
+      );
+      setCurrentTimeout(
+        setTimeout(() => {
+          setStack(convertToLocalStack(toastConfigs));
+        }, ANIMATION_DURATION),
+      );
+    } else {
+      setStack(convertToLocalStack(toastConfigs));
+    }
+  }, [toastConfigs]);
 
   return (
     <StackContainer>
