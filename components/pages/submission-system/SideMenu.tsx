@@ -49,7 +49,7 @@ const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
   const toggleItem = itemIndex =>
     itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
-  return [activeItem, toggleItem];
+  return { activeItem, toggleItem };
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
@@ -127,8 +127,8 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   const pageContext = usePageContext();
   const currentViewingProgramIndex = filteredPrograms
     .map(({ shortName }) => shortName)
-    .indexOf(pageContext.query.shortName);
-  const [activeProgramIndex, toggleProgramIndex] = useToggledSelectState(
+    .indexOf(String(pageContext.query.shortName));
+  const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
     currentViewingProgramIndex,
   );
   const { token } = useAuthContext();
@@ -180,7 +180,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
 export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
-  const [activeItem, toggleItem] = useToggledSelectState(isInProgramSection ? 1 : 0);
+  const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
   const [programs, setPrograms] = usePersistentState('sideMenuPrograms');
   const [getPrograms, { data, loading, called }] = useLazyQuery(SIDE_MENU_PROGRAM_LIST, {
     onCompleted(data) {
