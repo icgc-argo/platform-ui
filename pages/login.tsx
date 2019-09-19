@@ -1,11 +1,10 @@
-
 import LoginPage from 'components/pages/login';
 import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
 import React from 'react';
 
-export default createPage({
+export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
   getInitialProps: async ({ query, egoJwt, res }) => {
     const { redirect } = query;

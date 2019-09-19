@@ -41,13 +41,13 @@ type CreatePageConfigs = {
   getInitialProps?: PageConfigProps['getInitialProps'];
   getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
 };
-export const createPage = ({
+export const createPage = <P extends {} = any>({
   isPublic,
   isAccessible,
   getInitialProps,
   getGqlQueriesToPrefetch,
 }: CreatePageConfigs) => (
-  page: React.ComponentType & CreatePageConfigs = () => <div>Here's a page</div>,
+  page: React.ComponentType<P> & CreatePageConfigs = () => <div>Here's a page</div>,
 ): PageWithConfig => {
   page.isPublic = isPublic || false;
   page.isAccessible = isAccessible || (async () => true);
