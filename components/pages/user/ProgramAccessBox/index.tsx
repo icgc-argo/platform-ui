@@ -24,11 +24,11 @@ import {
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 
-type T_ProgramTableProgram = $Exact<{
+type T_ProgramTableProgram = {
   shortName: string;
   role: string;
   permissions: string;
-}>;
+};
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { token } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
