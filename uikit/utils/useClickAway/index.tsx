@@ -6,7 +6,7 @@ export default function useClickAway({
   onClickAway = e => {},
   onElementClick = e => {},
 }) {
-  React.useEffect(e => {
+  React.useEffect(() => {
     const onGlobalClick = event => {
       if (!domElementRef.current) {
         return;
@@ -14,9 +14,9 @@ export default function useClickAway({
       const isClickaway = !domElementRef.current.contains(event.target);
 
       if (isClickaway) {
-        onClickAway(e);
+        onClickAway(event);
       } else {
-        onElementClick(e);
+        onElementClick(event);
       }
     };
     document.addEventListener('click', onGlobalClick);
