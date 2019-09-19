@@ -35,7 +35,10 @@ export const TableActionBar = props => {
   );
 };
 
-const Arrow = ({ transform, className }) => (
+const Arrow: React.ComponentType<{ transform?: string; className?: string }> = ({
+  transform,
+  className,
+}) => (
   <Icon
     className={className}
     width="6px"
@@ -46,7 +49,7 @@ const Arrow = ({ transform, className }) => (
   />
 );
 
-const DoubleArrow = ({ transform }) => (
+const DoubleArrow: React.ComponentType<{ transform?: string }> = ({ transform }) => (
   <>
     <Arrow transform={transform} />
     <Arrow
@@ -155,14 +158,14 @@ function TablePagination(props) {
               props.onPageChange(0);
             }}
           >
-            <DoubleArrow theme={theme} transform="rotate(180)" />
+            <DoubleArrow transform="rotate(180)" />
           </A>
           <A
             onClick={() => {
               props.onPageChange(page - 1);
             }}
           >
-            <Arrow theme={theme} transform="rotate(180)" />
+            <Arrow transform="rotate(180)" />
           </A>
           {getPagesAround(page, 5, pages).map(
             p =>
@@ -184,14 +187,14 @@ function TablePagination(props) {
               props.onPageChange(page + 1);
             }}
           >
-            <Arrow theme={theme} />
+            <Arrow />
           </A>
           <A
             onClick={() => {
               props.onPageChange(pages);
             }}
           >
-            <DoubleArrow theme={theme} />
+            <DoubleArrow />
           </A>
         </div>
       </PageControl>
