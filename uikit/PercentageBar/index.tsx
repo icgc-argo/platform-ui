@@ -17,7 +17,23 @@ const VAlignedText = props => (
   />
 );
 
-const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
+const PercentageBar = ({
+  nom,
+  denom,
+  color = 'secondary_2',
+  className,
+}: {
+  /**
+   * the nominator
+   */
+  nom: number;
+  /**
+   * the denominator
+   */
+  denom: number;
+  color?: string;
+  className?: string;
+}) => {
   const theme = useTheme();
   return (
     <div
@@ -55,18 +71,6 @@ const PercentageBar = ({ nom, denom, color = 'secondary_2', className }) => {
       />
     </div>
   );
-};
-
-PercentageBar.propTypes = {
-  /**
-   * the nominator
-   */
-  nom: PropTypes.number.isRequired,
-  /**
-   * the denominator
-   */
-  denom: PropTypes.number.isRequired,
-  color: PropTypes.string,
 };
 
 export default PercentageBar;
