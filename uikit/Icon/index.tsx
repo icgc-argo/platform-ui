@@ -1,5 +1,5 @@
 import React, { SVGAttributes } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import icons from './icons';
 import { css } from '@emotion/core';
 import useTheme from '../utils/useTheme';
@@ -19,7 +19,13 @@ const Icon: React.ComponentType<
   } & SVGAttributes<SVGElement>
 > = ({ name, width, height, fill, className, title, ...rest }) => {
   const theme = useTheme();
-  const svg = icons[name];
+  const svg: Omit<typeof icons[typeof name], 'fillRule'> & {
+    mask?: string;
+    pathDefinitions?: any[];
+    fillRule?: string;
+    defaultFill?: string;
+    path?: string;
+  } = icons[name];
 
   const resolveFill = (fill?: string): string | undefined => (fill && theme.colors[fill]) || fill;
 
@@ -49,7 +55,7 @@ const Icon: React.ComponentType<
             <path
               key={i}
               fill={pathDef.fill || resolveFill(fill) || pathDef.defaultFill || svg.defaultFill}
-              fillRule={pathDef.fillRule || svg.fillRule || 'nonezero'}
+              fillRule={pathDef.fillRule || svg.fillRule || 'nonzero'}
               d={pathDef.d}
               mask={pathDef.mask || svg.mask ? 'url(#mask)' : ''}
             />
@@ -57,7 +63,7 @@ const Icon: React.ComponentType<
         ) : (
           <path
             fill={resolveFill(fill) || svg.defaultFill}
-            fillRule={svg.fillRule || 'nonezero'}
+            fillRule={(svg.fillRule as SVGAttributes<SVGPathElement>['fillRule']) || 'nonzero'}
             d={svg.path}
             mask={svg.mask ? 'url(#mask)' : ''}
           />
@@ -67,14 +73,15 @@ const Icon: React.ComponentType<
   );
 };
 
-const toKeyValueMap = (acc, [key]) => ({
+const toKeyValueMap = (acc, [key, value]) => ({
   ...acc,
   [key]: key,
+  [value]: value,
 });
 
 export const ICON_NAMES = Object.freeze(Object.entries(icons).reduce(toKeyValueMap, {}));
 
-export const BUILT_IN_ICON_COLORS: { [k: UikitIconNames]: UikitIconNames } = Object.freeze(
+export const BUILT_IN_ICON_COLORS: { [k in UikitIconNames]: UikitIconNames } = Object.freeze(
   Object.entries(defaultTheme.colors).reduce(toKeyValueMap, {}),
 );
 
