@@ -15,7 +15,7 @@ const StyledLink = styled('a')`
   display: inline-block;
 `;
 
-function GoogleLogin({ link, id }) {
+function GoogleLogin({ link, id }: { id?: string; link: string }) {
   const theme = useTheme();
   return (
     <StyledLink id={id} href={link}>
@@ -26,7 +26,7 @@ function GoogleLogin({ link, id }) {
       >
         <div
           css={css`
-            ${css(theme.typography.paragraph)}
+            ${css(theme.typography.paragraph as any)}
             display: flex;
             align-items: center;
             text-transform: none;

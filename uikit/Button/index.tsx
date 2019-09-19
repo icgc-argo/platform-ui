@@ -86,7 +86,7 @@ const Button = React.forwardRef<
      * Button size
      */
     size?: ButtonSize;
-    children?: Node;
+    children?: React.ReactNode | React.ReactNodeArray;
     disabled?: boolean;
     onClick?: (
       e: React.SyntheticEvent<HTMLButtonElement>,
