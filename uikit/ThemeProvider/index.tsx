@@ -25,4 +25,4 @@ const ThemeProvider: React.ComponentType<{ theme?: keyof typeof themes }> = ({
 };
 
 export default ThemeProvider;
-export const useTheme = () => React.useContext<typeof defaultTheme>(ThemeContext);
+export const useTheme = () => React.useContext(ThemeContext as React.Context<typeof defaultTheme>);
