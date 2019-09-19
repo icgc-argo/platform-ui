@@ -17,6 +17,8 @@ import Head from '../head';
 import NavBar from 'components/NavBar';
 import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
+import usePersistentState from 'global/hooks/usePersistentContext';
+import debounce from 'lodash/debounce';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -31,12 +33,30 @@ const SubmissionLayout = ({
   children: React.Node,
   subtitle?: string,
 }) => {
+  const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
+  const debouncedSet = setter => debounce(setter, 50);
+  const panelRef = React.useRef(null);
+
+  const handleSidemenuScroll = e => {
+    debouncedSet(setSidemenuScrollTop)(e.target.scrollTop);
+  };
+
+  React.useLayoutEffect(() => {
+    if (panelRef.current) {
+      panelRef.current.scrollTop = sidemenuScrollTop;
+    }
+  }, []);
+
   return (
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
       <PageBody className={clsx({ noSidebar })}>
-        {!noSidebar && <Panel>{sideMenu}</Panel>}
+        {!noSidebar && (
+          <Panel ref={panelRef} onScroll={handleSidemenuScroll}>
+            {sideMenu}
+          </Panel>
+        )}
         <PageContent>
           {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
           <ContentBody>{children}</ContentBody>
