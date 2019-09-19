@@ -3,13 +3,14 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
 
+type TagVariant = 'INFO' | 'WARNING' | 'ERROR';
 export const TAG_VARIANTS = {
-  INFO: 'INFO',
-  WARNING: 'WARNING',
-  ERROR: 'ERROR',
+  INFO: 'INFO' as TagVariant,
+  WARNING: 'WARNING' as TagVariant,
+  ERROR: 'ERROR' as TagVariant,
 };
 
-const Tag: React.ComponentType = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
+const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
   ${({ theme }) => css(theme.typography.paragraph as any)};
   box-sizing: border-box;
   display: inline-block;
@@ -19,13 +20,7 @@ const Tag: React.ComponentType = styled<'div', { variant?: keyof typeof TAG_VARI
   font-weight: bold;
   padding: 3px 8px;
   border-radius: 8px;
-  background-color: ${({
-    theme,
-    variant = 'INFO',
-  }: {
-    variant: keyof typeof TAG_VARIANTS;
-    theme: typeof defaultTheme;
-  }) =>
+  background-color: ${({ theme, variant = 'INFO' }) =>
     ({
       [TAG_VARIANTS.ERROR]: theme.colors.error,
       [TAG_VARIANTS.WARNING]: theme.colors.warning,
