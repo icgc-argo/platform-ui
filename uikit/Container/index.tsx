@@ -37,10 +37,11 @@ const LoadingOverlay = () => {
   );
 };
 
-const Container: React.ComponentType<{
-  loading?: boolean;
-  children: React.ReactNodeArray | React.ReactNode;
-}> = ({ children, loading = false, ...props }) => (
+const Container: React.ComponentType<
+  {
+    loading?: boolean;
+  } & React.ComponentProps<typeof ContainerBackground>
+> = ({ children, loading = false, ...props }) => (
   <ContainerBackground {...props}>
     {children}
     {loading && <LoadingOverlay />}

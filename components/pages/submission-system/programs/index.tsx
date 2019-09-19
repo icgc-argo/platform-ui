@@ -42,7 +42,7 @@ const TableFilterInput = props => (
 );
 
 export default function Programs({ authorizedPrograms = [] }: any) {
-  const { data: { programs = [] } = {}, loading, errors } = useQuery(PROGRAMS_LIST_QUERY);
+  const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
   const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } = useQuery(
     PROGRAMS_USERS_QUERY,
   );
