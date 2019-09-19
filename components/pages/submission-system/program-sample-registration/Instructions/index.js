@@ -12,6 +12,10 @@ import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 
 const Instructions = (props: { registrationEnabled: boolean }) => {
+  const fileUploadRef = React.createRef();
+
+  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+
   const buttonStyle = css`
     margin-top: 10px;
     width: 150px;
@@ -29,8 +33,14 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
   `;
 
   const downloadTemplate = () => {
-    const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
     window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
+  };
+
+  const uploadTemplate = () => {
+    const fp = fileUploadRef.current;
+    if (fp) {
+      fp.click();
+    }
   };
 
   return (
@@ -60,7 +70,21 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
           <Typography variant="paragraph" component="span">
             2. Upload your formatted registration TSV file.
           </Typography>
-          <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
+          <Button
+            css={buttonStyle}
+            variant={BUTTON_VARIANTS.SECONDARY}
+            size={BUTTON_SIZES.SM}
+            onClick={uploadTemplate}
+          >
+            <input
+              type="file"
+              ref={fileUploadRef}
+              onChange={e => {
+                const file = e.target.files;
+              }}
+              accept=".tsv"
+              style={{ display: 'none' }}
+            />
             <span css={buttonContentStyle}>
               <Icon name="upload" fill="accent2_dark" height="12px" css={buttonIconStyle} /> Upload
               File
