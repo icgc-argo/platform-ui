@@ -22,7 +22,7 @@ const Textarea: React.ComponentType<
     <textarea
       className={clsx({ error: calcError, disabled: calcDisabled }, className)}
       css={css`
-        ${css(theme.typography.paragraph)};
+        ${css(theme.typography.paragraph as any)};
         resize: vertical;
         width: 100%;
         box-sizing: border-box;
