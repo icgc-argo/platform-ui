@@ -1,6 +1,7 @@
 //@flow
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { orderBy } from 'lodash';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -13,6 +14,7 @@ import DnaLoader from 'uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
+import usePersistentState from 'global/hooks/usePersistentContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
 
 import {
@@ -117,7 +119,7 @@ const LinksToProgram = (props: { program: SideMenuProgram, isCurrentlyViewed: bo
 };
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
-  const [programNameSearch, setProgramNameSearch] = React.useState('');
+  const [programNameSearch, setProgramNameSearch] = usePersistentState('programNameSearch', '');
   const orderedPrograms = orderBy(programs, 'shortName');
   const filteredPrograms = orderedPrograms.filter(
     ({ shortName }) =>
@@ -131,6 +133,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     currentViewingProgramIndex,
   );
   const { token } = useAuthContext() || {};
+
   return (
     <>
       <MenuItem
@@ -139,7 +142,9 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         content={
           <Input
             aria-label="programs_search"
-            onChange={e => setProgramNameSearch(e.target.value)}
+            onChange={e => {
+              setProgramNameSearch(e.target.value);
+            }}
             value={programNameSearch}
             css={css`
               flex: 1;
@@ -174,22 +179,26 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   );
 };
 
-export default () => {
+export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
   const [activeItem, toggleItem] = useToggledSelectState(isInProgramSection ? 1 : 0);
-  const {
-    data: { programs = [] } = {},
-    loading,
-  }: { data: { programs: Array<SideMenuProgram> }, loading: boolean } = useQuery(
-    SIDE_MENU_PROGRAM_LIST,
-  );
+  const [programs, setPrograms] = usePersistentState('sideMenuPrograms');
+  const [getPrograms, { data, loading, called }] = useLazyQuery(SIDE_MENU_PROGRAM_LIST, {
+    onCompleted(data) {
+      setPrograms(data.programs);
+    },
+  });
+
+  if (!programs && !called) {
+    getPrograms();
+  }
 
   const { data: egoTokenData, token } = useAuthContext() || {};
   const isDcc = token ? isDccMember(token) : false;
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
-  const canOnlyAccessOneProgram = programs.length === 1 && !isDcc;
+  const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;
   const canSeeDcc = isDcc;
 
@@ -242,4 +251,4 @@ export default () => {
       )}
     </Submenu>
   );
-};
+}

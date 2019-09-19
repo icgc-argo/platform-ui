@@ -4,6 +4,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
 import { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
+import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import getConfig from 'next/config';
 import * as React from 'react';
@@ -14,6 +15,7 @@ import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
+import get from 'lodash/get';
 
 import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
@@ -86,36 +88,47 @@ const ToastProvider = ({ children }) => {
   );
 };
 
-export default function ApplicationRoot({
-  egoJwt,
-  apolloCache,
-  pageContext,
-  children,
-}: {
+export default class ApplicationRoot extends React.Component<{
   egoJwt: ?string,
   apolloCache: {},
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
-}) {
-  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+}> {
+  persistentContext: any;
 
-  const apolloClient = new ApolloClient({
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createHttpLink({
-      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-      fetch: fetch,
-      headers: egoJwt
-        ? {
-            authorization: `Bearer ${egoJwt}`,
-          }
-        : {},
-    }),
-    cache: createInMemoryCache().restore(apolloCache),
-  });
-  return (
-    <>
-      <style>
-        {`
+  componentDidMount() {
+    this.persistentContext = {};
+  }
+
+  render() {
+    const { egoJwt, apolloCache, pageContext, children } = this.props;
+
+    const setItem = (k, v) => {
+      this.persistentContext[k] = v;
+    };
+    const getItem = (k, defaultValue) => {
+      return get(this.persistentContext, k, defaultValue);
+    };
+
+    const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+
+    const apolloClient = new ApolloClient({
+      // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
+      link: createHttpLink({
+        uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+        fetch: fetch,
+        headers: egoJwt
+          ? {
+              authorization: `Bearer ${egoJwt}`,
+            }
+          : {},
+      }),
+      cache: createInMemoryCache().restore(apolloCache),
+    });
+    return (
+      <>
+        <style>
+          {`
             body {
               margin: 0;
               position: absolute;
@@ -131,18 +144,21 @@ export default function ApplicationRoot({
               left: 0px;
               right: 0px;
             }
-        `}
-      </style>
-      <Head />
-      <AuthProvider egoJwt={egoJwt}>
-        <ApolloProvider client={apolloClient}>
-          <PageContext.Provider value={pageContext}>
-            <ThemeProvider>
-              <ToastProvider>{children}</ToastProvider>
-            </ThemeProvider>
-          </PageContext.Provider>
-        </ApolloProvider>
-      </AuthProvider>
-    </>
-  );
+          `}
+        </style>
+        <Head />
+        <AuthProvider egoJwt={egoJwt}>
+          <ApolloProvider client={apolloClient}>
+            <PageContext.Provider value={pageContext}>
+              <ThemeProvider>
+                <PersistentContext.Provider value={{ getItem, setItem }}>
+                  <ToastProvider>{children}</ToastProvider>
+                </PersistentContext.Provider>
+              </ThemeProvider>
+            </PageContext.Provider>
+          </ApolloProvider>
+        </AuthProvider>
+      </>
+    );
+  }
 }
