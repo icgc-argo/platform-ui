@@ -10,7 +10,13 @@ import Link from 'next/link';
 import Icon from 'uikit/Icon';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
-const InstructionBox = ({ steps, footer }: { steps: Array<Node>; footer?: Node }) => {
+const InstructionBox = ({
+  steps,
+  footer,
+}: {
+  steps: Array<React.ReactNode>;
+  footer?: React.ReactNode;
+}) => {
   const theme = useTheme();
   const InstructionStep = styled('div')`
     display: flex;
