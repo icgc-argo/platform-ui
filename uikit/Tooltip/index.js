@@ -2,7 +2,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip as ReactTippy } from 'react-tippy';
-import './index.css';
 
 import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
