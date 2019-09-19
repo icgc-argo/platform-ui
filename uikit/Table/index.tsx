@@ -4,6 +4,7 @@ import * as React from 'react';
 import selectTable, {
   SelectInputComponentProps,
   SelectAllInputComponentProps,
+  SelectTableAdditionalProps,
 } from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
@@ -129,16 +130,10 @@ const SelectTableCheckbox: React.ComponentType<
 );
 
 export function SelectTable<Data = { [k: string]: any }>(
-  props: TableProps<Data> & {
-    isSelected: (d: any) => boolean;
-    keyField: string;
-    highlight: boolean;
-    stripped: boolean;
-    selectedIds?: any[];
-    isSelectTable: boolean;
-    primaryKey: string;
-    columns: TableProps<Data>['columns']; //columns is required
-  },
+  props: Partial<TableProps<Data>> &
+    Partial<SelectTableAdditionalProps> & {
+      columns: TableProps<Data>['columns']; //columns is required
+    },
 ) {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
