@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
@@ -11,7 +9,11 @@ import css from '@emotion/css';
  * half the width & height, minus border
  * can't use transform to place it or it will transition
  */
-export const StyledRadio = styled('div')`
+type StyledRadioProps = {
+  disabled?: boolean;
+  checked?: boolean;
+};
+export const StyledRadio = styled<'div', StyledRadioProps>('div')`
   position: relative;
   cursor: pointer;
   display: flex;
@@ -75,19 +77,18 @@ export const StyledRadio = styled('div')`
  * ::after - circle outline
  */
 const Radio = ({
-  value,
   disabled = false,
   checked,
   onChange,
   'aria-label': ariaLabel,
   ...props
 }: {
-  checked: boolean,
-  disabled: boolean,
-  onChange: (e: any | void) => any | void,
-  'aria-label': string,
+  checked: boolean;
+  disabled: boolean;
+  onChange: (e: any | void) => any | void;
+  'aria-label': string;
 }) => {
-  const HiddenRadioRef = React.createRef();
+  const HiddenRadioRef = React.createRef<HTMLInputElement>();
 
   return (
     <StyledRadio role="radio" disabled={disabled} checked={checked} aria-checked={checked}>
@@ -96,7 +97,7 @@ const Radio = ({
         ref={HiddenRadioRef}
         checked={checked}
         disabled={disabled}
-        ariaLabel={ariaLabel}
+        aria-label={ariaLabel}
         onChange={onChange}
       />
       <div
