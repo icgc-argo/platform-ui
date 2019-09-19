@@ -74,7 +74,7 @@ function ProfileView({ program = {} as Program }) {
   return (
     <div
       css={css`
-        ${css(theme.typography.paragraph)}
+        ${css(theme.typography.paragraph as any)}
         padding: 17px 41px 41px 41px;
       `}
     >
