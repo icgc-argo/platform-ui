@@ -11,14 +11,6 @@ const LinkStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       <Link href="http://www.google.com" variant={variant}>
         Link to Google
       </Link>
-      <br />
-      <Link
-        href="http://www.google.com"
-        variant={variant}
-        Component={props => <div onClick={action('click')} {...props} />}
-      >
-        This just logs
-      </Link>
     </>
   );
 });
