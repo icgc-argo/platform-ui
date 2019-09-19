@@ -7,6 +7,7 @@ import './index.css';
 import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
+import { Global } from '@emotion/core';
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
 type TooltipProps = {
@@ -55,7 +56,17 @@ const Tooltip = ({ html, ...rest }: TooltipProps) => {
     color: white;
     font-weight: normal;
   `;
-  return <ReactTippy html={<TooltipContainer id="tooltip">{html}</TooltipContainer>} {...rest} />;
+  return (
+    <Global
+      styles={css`
+        .tippy-popper .leave {
+          opacity: 0;
+        }
+      `}
+    >
+      <ReactTippy html={<TooltipContainer id="tooltip">{html}</TooltipContainer>} {...rest} />
+    </Global>
+  );
 };
 
 export default Tooltip;
