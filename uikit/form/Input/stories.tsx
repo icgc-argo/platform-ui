@@ -26,65 +26,50 @@ const createKnobs = () => {
   };
 };
 
-function State({ children }) {
-  const [value, setValue] = React.useState('');
-
-  return React.cloneElement(children, {
-    value,
-    onChange: event => {
-      action('onChange')(event);
-      setValue(event.target.value);
-    },
-  });
-}
-
 const InputStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
     const props = createKnobs();
+    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <State>
-          <Input
-            aria-label="demo-input"
-            value="[parent state]"
-            onChange={() => '[parent func]'}
-            onBlur={() => '[parent func]'}
-            {...props}
-          />
-        </State>
+        <Input
+          aria-label="demo-input"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          onBlur={e => setValue(e.target.value)}
+          {...props}
+        />
       </div>
     );
   })
   .add('With preset', () => {
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
+    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <State>
-          <Input
-            aria-label="demo-input"
-            value="[parent state]"
-            onChange={() => '[parent func]'}
-            onBlur={() => '[parent func]'}
-            preset={preset}
-          />
-        </State>
+        <Input
+          aria-label="demo-input"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          onBlur={e => setValue(e.target.value)}
+          preset={preset}
+        />
       </div>
     );
   })
   .add('With icon', () => {
     const props = createKnobs();
+    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <State>
-          <Input
-            aria-label="demo-input"
-            value="[parent state]"
-            onChange={() => '[parent func]'}
-            onBlur={() => '[parent func]'}
-            {...props}
-            icon={<Icon name="search" />}
-          />
-        </State>
+        <Input
+          aria-label="demo-input"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          onBlur={e => setValue(e.target.value)}
+          {...props}
+          icon={<Icon name="search" />}
+        />
       </div>
     );
   });
