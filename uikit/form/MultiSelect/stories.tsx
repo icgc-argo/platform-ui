@@ -9,6 +9,7 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
   const [value, setValue] = React.useState([]);
   return (
     <MultiSelect
+      aria-label="multi-select"
       value={value}
       onChange={event => {
         action('value change')(event);

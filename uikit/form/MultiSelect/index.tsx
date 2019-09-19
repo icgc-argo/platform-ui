@@ -185,7 +185,15 @@ const MultiSelect: React.ComponentType<{
   placeholder?: string;
 
   /* Handler of onChange event */
-  onChange: (e: React.SyntheticEvent, child?: any) => void;
+  onChange: (
+    e: React.SyntheticEvent & {
+      target: {
+        value: any;
+        name: string;
+      };
+    },
+    child?: any,
+  ) => void;
 
   /* Handler of onBlur event */
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
