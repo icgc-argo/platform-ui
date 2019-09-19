@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 export default storiesOf(`${__dirname}`, module).add(
   'Basic',
   () => {
-    const ref = React.createRef();
+    const ref = React.createRef<HTMLButtonElement>();
     useClickAway({
       domElementRef: ref,
       onClickAway: action('onClickAway'),
