@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
@@ -26,12 +25,12 @@ import {
 } from 'global/constants/pages';
 
 type T_ProgramTableProgram = $Exact<{
-  shortName: string,
-  role: string,
-  permissions: string,
+  shortName: string;
+  role: string;
+  permissions: string;
 }>;
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
-  const { token } = useAuthContext() || {};
+  const { token } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <Link
       href={
@@ -112,7 +111,7 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
 };
 
 export default function ProgramAccessBox() {
-  const { token } = useAuthContext() || {};
+  const { token } = useAuthContext();
   const programs = getProgramTableProgramFromEgoJwt(token || '');
 
   return (

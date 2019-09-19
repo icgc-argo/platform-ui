@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
 import { ContentBox } from 'uikit/PageLayout';
@@ -46,7 +45,7 @@ const UserInitialImage = ({ contentText = '' }) => {
 };
 
 export default function ProfileBox() {
-  const { data: userModel } = useAuthContext() || {};
+  const { data: userModel } = useAuthContext();
 
   return (
     <Box title="Profile" iconName="user">

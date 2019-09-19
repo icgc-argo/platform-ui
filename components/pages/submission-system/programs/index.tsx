@@ -1,4 +1,3 @@
-
 import {
   CREATE_PROGRAM_PAGE_PATH,
   PROGRAM_MANAGE_PATH,
@@ -55,7 +54,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
     });
   }
 
-  const authContext = useAuthContext() || {};
+  const authContext = useAuthContext();
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
