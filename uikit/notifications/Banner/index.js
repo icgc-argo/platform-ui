@@ -14,6 +14,7 @@ const Banner = ({
   content,
   variant,
   size,
+  ...props
 }: {
   title?: React.Node,
   content?: React.Node,
@@ -27,6 +28,7 @@ const Banner = ({
     content={content}
     variant={variant}
     size={size}
+    {...props}
   />
 );
 

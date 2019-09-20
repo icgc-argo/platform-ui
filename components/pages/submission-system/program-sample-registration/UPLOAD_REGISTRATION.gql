@@ -6,6 +6,7 @@ mutation UPLOAD_REGISTRATION($shortName: String!, $registrationFile: Upload!) {
 
     ... on ClinicalRegistrationInvalid {
       error
+      code
     }
   }
 }

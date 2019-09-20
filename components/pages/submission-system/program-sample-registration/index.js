@@ -54,8 +54,12 @@ const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {});
     return { ...data, row: record.row };
   });
+import { ERROR_CODES } from './common';
 
 export default function ProgramIDRegistration() {
+  const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
+
+  // data
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -83,6 +87,19 @@ export default function ProgramIDRegistration() {
       }
     : null;
 
+  const noData = loading || !clinicalRegistration.id;
+
+  const showError = ({ errorCode, fileName }) => {
+    const { title, content } = ERROR_CODES[errorCode];
+
+    setErrorBanner({
+      visible: true,
+      title: title(fileName),
+      content: content,
+    });
+  };
+
+  // styles
   const containerStyle = css`
     padding: 8px;
     &:not(:first-of-type) {
@@ -104,7 +121,6 @@ export default function ProgramIDRegistration() {
     margin-bottom: 8px;
   `;
 
-  const noData = loading || !clinicalRegistration.id;
   return (
     <SubmissionLayout
       contentHeader={
@@ -150,8 +166,18 @@ export default function ProgramIDRegistration() {
           padding-bottom: 0px;
         `}
       >
-        <Instructions registrationEnabled={false} />
+        <Instructions registrationEnabled={false} showError={showError} />
       </Container>
+      {errorBanner.visible ? (
+        <Banner
+          css={css`
+            margin-top: 20px;
+          `}
+          title={errorBanner.title}
+          variant={BANNER_VARIANTS.ERROR}
+          content={errorBanner.content}
+        />
+      ) : null}
 
       <Container css={containerStyle}>
         {fileRecords.length > 0 ? (

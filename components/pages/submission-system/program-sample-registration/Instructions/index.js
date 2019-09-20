@@ -12,8 +12,14 @@ import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
+import { ERROR_CODES } from '../common';
 
-const Instructions = (props: { registrationEnabled: boolean }) => {
+const Instructions = (props: {
+  registrationEnabled: boolean,
+  showError: ({ errorCode: string, fileName: string }) => void,
+}) => {
+  const { registrationEnabled, showError } = props;
+
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
   const fileUploadRef = React.createRef();
 
@@ -61,10 +67,9 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
     });
 
     console.log('type', respType, 'resp', resp);
-
+    // resolve if we have an upload error or data
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      // show error banner
-      console.log('invalid', resp);
+      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName: file.name });
     } else if (respType === responseTypes.CLINICAL_REG_DATA) {
       // set data for table
       //setClinicalData(resp);
@@ -129,7 +134,7 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             css={buttonStyle}
             variant={BUTTON_VARIANTS.PRIMARY}
             size={BUTTON_SIZES.SM}
-            disabled={!props.registrationEnabled}
+            disabled={!registrationEnabled}
           >
             Register Samples
           </Button>
