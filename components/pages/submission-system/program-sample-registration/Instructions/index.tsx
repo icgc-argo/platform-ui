@@ -10,7 +10,7 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 
-const Instructions = (props: { registrationEnabled: boolean }) => {
+const Instructions: React.ComponentType<{ registrationEnabled: boolean }> = props => {
   const buttonStyle = css`
     margin-top: 10px;
     width: 150px;
