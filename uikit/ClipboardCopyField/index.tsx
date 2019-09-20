@@ -38,7 +38,7 @@ const ClipboardCopyField = ({
   loading: boolean;
 }) => {
   const [promptMsgShown, setPromptMsgShown] = React.useState(false);
-  let currentTimeout: NodeJS.Timeout = undefined;
+  let currentTimeout: any = undefined;
 
   const showPromptMessage = () => {
     clearTimeout(currentTimeout);
