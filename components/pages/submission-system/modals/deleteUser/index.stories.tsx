@@ -7,7 +7,7 @@ const DeleteUserModalStory = storiesOf(`${__dirname}`, module).add('Basic', () =
   <DeleteUserModal
     dismissModal={action('dismiss modal')}
     onSubmit={action('submit')}
-    user={{ name: 'Niels Bohr' }}
+    user={{ firstName: 'Niels', lastName: 'Bohr', email: 'Niels@Bohr', role: 'ADMIN' }}
   />
 ));
 
