@@ -20,33 +20,23 @@ const createGroupKnobs = () => {
   return { hasError };
 };
 
-const WithState = ({ children }) => {
-  const [selectedItems, setSelected] = React.useState(new Set([]));
-
-  return React.cloneElement(children, {
-    isChecked: item => selectedItems.has(item),
-    onChange: value => {
-      selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
-      const newSelectedItems = new Set(selectedItems);
-      action('checkbox clicked')(value, Array.from(newSelectedItems));
-      setSelected(newSelectedItems);
-    },
-  });
-};
-
 const CheckboxStories = storiesOf(`${__dirname}`, module)
   .add('Default', () => (
     <FormCheckbox {...createKnobs()} aria-label="Item">
       Item
     </FormCheckbox>
   ))
-  .add('Checkbox Group', () => (
-    <WithState>
-      <RadioCheckboxGroup
-        {...createGroupKnobs()}
-        onChange="[parent func]"
-        isChecked="[parent func]"
-      >
+  .add('Checkbox Group', () => {
+    const [selectedItems, setSelected] = React.useState(new Set([]));
+    const isChecked = item => selectedItems.has(item);
+    const onChange = value => {
+      selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
+      const newSelectedItems = new Set(selectedItems);
+      action('checkbox clicked')(value, Array.from(newSelectedItems));
+      setSelected(newSelectedItems);
+    };
+    return (
+      <RadioCheckboxGroup {...createGroupKnobs()} onChange={onChange} isChecked={isChecked}>
         <FormCheckbox aria-label="Sausage" value="sausage">
           Sausage
         </FormCheckbox>
@@ -68,7 +58,7 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
           </FormCheckbox>
         </div>
       </RadioCheckboxGroup>
-    </WithState>
-  ));
+    );
+  });
 
 export default CheckboxStories;

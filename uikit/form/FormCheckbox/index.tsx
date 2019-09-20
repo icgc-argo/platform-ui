@@ -19,8 +19,6 @@ const FormCheckbox = props => {
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
       <Checkbox
-        id={id}
-        name={name}
         value={value}
         checked={calcChecked}
         disabled={disabled}
