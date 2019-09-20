@@ -206,7 +206,7 @@ const MultiSelect: React.ComponentType<{
   size?: InputSize;
   single?: boolean;
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
-  error?: boolean;
+  error?: boolean | string;
 }> = ({
   name,
   value = [],

@@ -18,7 +18,7 @@ export const INPUT_STATES = INPUT_THEME_STATES;
 
 export type StyledInputWrapperProps = {
   disabled?: boolean;
-  error?: boolean;
+  error?: boolean | string;
   inputState?: keyof typeof INPUT_THEME_STATES;
   size?: 'sm' | 'lg';
   getOverrideCss?: (a: any) => any;
