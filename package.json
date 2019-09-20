@@ -17,7 +17,8 @@
     "test:watch": "NODE_PATH=./ mocha --watch --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
     "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js",
     "gitmoji-config": "gitmoji -g",
-    "commit": "gitmoji -c"
+    "commit": "gitmoji -c",
+    "generate-fragment-types": "node ./scripts/generateFragmentTypes.js"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.0",

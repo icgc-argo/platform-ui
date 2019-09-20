@@ -1,0 +1,14 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "ClinicalRegistrationResp",
+        "possibleTypes": [
+          { "name": "ClinicalRegistrationData" },
+          { "name": "ClinicalRegistrationInvalid" }
+        ]
+      }
+    ]
+  }
+}
