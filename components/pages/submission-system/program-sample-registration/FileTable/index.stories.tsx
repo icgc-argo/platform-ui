@@ -1,4 +1,3 @@
-
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import FileTable from '.';
@@ -30,7 +29,6 @@ const FileTableStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
     return (
       <FileTable
-        records={records}
         submissionInfo={{
           fileName: 'registration_schrodinger.tsv',
           creator: 'Schrodinger Submitter',
@@ -45,15 +43,9 @@ const FileTableStories = storiesOf(`${__dirname}`, module)
           row: `${i}`,
           isNew: true,
         }))}
-      >
-        Skeleton
-      </FileTable>
+      />
     );
   })
-  .add('No data', () => (
-    <FileTable submissionInfo={null} stats={null} records={[]}>
-      Skeleton
-    </FileTable>
-  ));
+  .add('No data', () => <FileTable submissionInfo={null} stats={null} records={[]} />);
 
 export default FileTableStories;
