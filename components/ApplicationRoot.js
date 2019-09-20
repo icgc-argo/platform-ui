@@ -88,47 +88,54 @@ const ToastProvider = ({ children }) => {
   );
 };
 
-export default class ApplicationRoot extends React.Component<{
+function PersistentStateProvider({ children }) {
+  const [persistentContext, setPersistentContext] = React.useState({});
+
+  const setItem = (k, v) => {
+    setPersistentContext({
+      ...persistentContext,
+      [k]: v,
+    });
+  };
+  const getItem = (k, defaultValue) => {
+    return get(persistentContext, k, defaultValue);
+  };
+
+  return (
+    <PersistentContext.Provider value={{ getItem, setItem }}>{children}</PersistentContext.Provider>
+  );
+}
+
+export default function ApplicationRoot({
+  egoJwt,
+  apolloCache,
+  pageContext,
+  children,
+}: {
   egoJwt: ?string,
   apolloCache: {},
   pageContext: ClientSideGetInitialPropsContext,
   children: React.Node,
-}> {
-  persistentContext: any;
+}) {
+  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
-  componentDidMount() {
-    this.persistentContext = {};
-  }
-
-  render() {
-    const { egoJwt, apolloCache, pageContext, children } = this.props;
-
-    const setItem = (k, v) => {
-      this.persistentContext[k] = v;
-    };
-    const getItem = (k, defaultValue) => {
-      return get(this.persistentContext, k, defaultValue);
-    };
-
-    const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
-
-    const apolloClient = new ApolloClient({
-      // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-      link: createHttpLink({
-        uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-        fetch: fetch,
-        headers: egoJwt
-          ? {
-              authorization: `Bearer ${egoJwt}`,
-            }
-          : {},
-      }),
-      cache: createInMemoryCache().restore(apolloCache),
-    });
-    return (
-      <>
-        <style>
-          {`
+  const apolloClient = new ApolloClient({
+    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
+    link: createHttpLink({
+      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+      fetch: fetch,
+      headers: egoJwt
+        ? {
+            authorization: `Bearer ${egoJwt}`,
+          }
+        : {},
+    }),
+    cache: createInMemoryCache().restore(apolloCache),
+  });
+  return (
+    <>
+      <style>
+        {`
             body {
               margin: 0;
               position: absolute;
@@ -145,20 +152,19 @@ export default class ApplicationRoot extends React.Component<{
               right: 0px;
             }
           `}
-        </style>
-        <Head />
-        <AuthProvider egoJwt={egoJwt}>
-          <ApolloProvider client={apolloClient}>
-            <PageContext.Provider value={pageContext}>
-              <ThemeProvider>
-                <PersistentContext.Provider value={{ getItem, setItem }}>
-                  <ToastProvider>{children}</ToastProvider>
-                </PersistentContext.Provider>
-              </ThemeProvider>
-            </PageContext.Provider>
-          </ApolloProvider>
-        </AuthProvider>
-      </>
-    );
-  }
+      </style>
+      <Head />
+      <AuthProvider egoJwt={egoJwt}>
+        <ApolloProvider client={apolloClient}>
+          <PageContext.Provider value={pageContext}>
+            <ThemeProvider>
+              <ToastProvider>
+                <PersistentStateProvider>{children}</PersistentStateProvider>
+              </ToastProvider>
+            </ThemeProvider>
+          </PageContext.Provider>
+        </ApolloProvider>
+      </AuthProvider>
+    </>
+  );
 }
