@@ -2,7 +2,7 @@ import React from 'react';
 import Checkbox from '../Checkbox';
 
 const RadioCheckContext = React.createContext<{
-  isChecked?: boolean;
+  isChecked?: boolean | ((e: any) => boolean);
   onChange?: React.ComponentProps<typeof Checkbox>['onChange'];
 }>({});
 

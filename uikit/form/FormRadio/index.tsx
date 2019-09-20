@@ -8,22 +8,31 @@ import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 /**
  * FormRadio to be used with RadioCheckboxGroup
  */
-const FormRadio = props => {
-  const { id, name, value, label, children, disabled, checked = false } = props;
-  const { onChange, isChecked } = useContext(RadioCheckContext) || props;
+const FormRadio: React.ComponentType<{
+  id?: string;
+  name?: string;
+  value?: any;
+  children: React.ReactNode;
+  checked?: boolean;
+  onChange?: (e: any) => void;
+  disabled?: boolean;
+  'aria-label'?: string;
+}> = props => {
+  const { ['aria-label']: ariaLabel, value, children, disabled, checked = false } = props;
+  const { onChange, isChecked } = useContext(RadioCheckContext) || {
+    ...props,
+    isChecked: props.checked,
+  };
   const onClick = () => onChange(value);
-  const calcChecked = isChecked ? isChecked(value) : checked;
+  const calcChecked = isChecked
+    ? isChecked instanceof Function
+      ? isChecked(value)
+      : isChecked
+    : checked;
 
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
-      <Radio
-        id={id}
-        name={name}
-        value={value}
-        checked={calcChecked}
-        disabled={disabled}
-        onChange={onChange}
-      />
+      <Radio aria-label={ariaLabel} checked={calcChecked} disabled={disabled} onChange={onChange} />
       <label
         css={css`
           margin-left: 8px;
@@ -33,16 +42,6 @@ const FormRadio = props => {
       </label>
     </RadioCheckboxWrapper>
   );
-};
-
-FormRadio.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.any,
-  label: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func,
 };
 
 export default FormRadio;

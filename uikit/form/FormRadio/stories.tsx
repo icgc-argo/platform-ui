@@ -22,28 +22,18 @@ const createGroupKnobs = () => {
   return { hasError };
 };
 
-const WithState = ({ children }) => {
-  const [selectedItem, setSelected] = React.useState('one');
-
-  return React.cloneElement(children, {
-    selectedItem,
-    isChecked: item => item === selectedItem,
-    onChange: value => {
-      action('radio button clicked')(value);
-      setSelected(value);
-    },
-  });
-};
-
 const RadioStories = storiesOf(`${__dirname}`, module)
   .add('Radio', () => <FormRadio {...createKnobs()}>Single Radio Button</FormRadio>)
-  .add('Radio Group', () => (
-    <WithState>
-      <RadioCheckboxGroup
-        {...createGroupKnobs()}
-        onChange="[parent func]"
-        selectedItem="[parent func]"
-      >
+  .add('Radio Group', () => {
+    const [selectedItem, setSelected] = React.useState('one');
+    const onChange = value => {
+      action('radio button clicked')(value);
+      setSelected(value);
+    };
+    const isChecked = item => item === selectedItem;
+
+    return (
+      <RadioCheckboxGroup {...createGroupKnobs()} onChange={onChange} isChecked={isChecked}>
         <FormRadio value="one">One</FormRadio>
         <FormRadio value="two">Two</FormRadio>
         <FormRadio value="three">Three</FormRadio>
@@ -55,7 +45,7 @@ const RadioStories = storiesOf(`${__dirname}`, module)
           <FormRadio value="six">Six</FormRadio>
         </div>
       </RadioCheckboxGroup>
-    </WithState>
-  ));
+    );
+  });
 
 export default RadioStories;

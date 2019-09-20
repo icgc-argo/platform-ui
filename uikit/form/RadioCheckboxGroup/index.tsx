@@ -3,7 +3,13 @@ import Typography from '../../Typography';
 import PropTypes from 'prop-types';
 import RadioCheckContext from './RadioCheckContext';
 
-const RadioCheckboxGroup = ({ id, onChange, children, hasError, isChecked, className }) => {
+const RadioCheckboxGroup: React.ComponentType<{
+  onChange?: (e: any) => void;
+  hasError?: boolean;
+  isChecked?: boolean | ((a: any) => boolean);
+  id?: string;
+  className?: string;
+}> = ({ id, className, onChange, children, hasError, isChecked }) => {
   const ERROR_TEXT = 'Please fill out the required field.';
 
   const context = { isChecked, onChange };
@@ -23,11 +29,3 @@ const RadioCheckboxGroup = ({ id, onChange, children, hasError, isChecked, class
 };
 
 export default RadioCheckboxGroup;
-
-RadioCheckboxGroup.propTypes = {
-  onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  children: PropTypes.node,
-  hasError: PropTypes.bool,
-  isChecked: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  className: PropTypes.string,
-};
