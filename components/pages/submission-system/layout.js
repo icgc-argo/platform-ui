@@ -19,6 +19,7 @@ import SideMenu from './SideMenu';
 import Footer from 'uikit/Footer';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
+import hasIn from 'lodash/hasIn';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -34,18 +35,21 @@ const SubmissionLayout = ({
   subtitle?: string,
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
-  const debouncedSet = setter => debounce(setter, 50);
+  const debouncedSet = setter => debounce(setter, 100);
   const panelRef = React.useRef(null);
 
   const handleSidemenuScroll = e => {
     debouncedSet(setSidemenuScrollTop)(e.target.scrollTop);
   };
 
-  React.useLayoutEffect(() => {
-    if (panelRef.current) {
-      panelRef.current.scrollTop = sidemenuScrollTop;
-    }
-  }, []);
+  // Only run on client side, don't run on server side
+  if (hasIn(process, 'browser')) {
+    React.useLayoutEffect(() => {
+      if (panelRef.current) {
+        panelRef.current.scrollTop = sidemenuScrollTop;
+      }
+    }, []);
+  }
 
   return (
     <PageContainer>
