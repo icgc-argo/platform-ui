@@ -90,7 +90,7 @@ const ClipboardCopyField = ({
           <Typography variant="default">{value}</Typography>
         </div>
         <Button
-          async
+          isAsync
           disabled={disabled}
           onClick={onCopyClicked}
           css={css`
