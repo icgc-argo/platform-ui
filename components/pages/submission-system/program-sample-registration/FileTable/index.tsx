@@ -110,7 +110,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
   );
 };
 
-const getColumnWidth = memoize<[string], number | void>(keyString => {
+const getColumnWidth = memoize<(keyString: string) => number>(keyString => {
   const minWidth = 90;
   const maxWidth = 230;
   const spacePerChar = 9;
