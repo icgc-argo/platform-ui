@@ -55,18 +55,28 @@ const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
     return { ...data, row: record.row };
   });
 import { ERROR_CODES } from './common';
+import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 
 export default function ProgramIDRegistration() {
-  const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
-
-  // data
   const {
     query: { shortName: programShortName },
   } = usePageContext();
 
+  const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
+  const [progress, setProgress] = React.useState([
+    PROGRESS_STATUS.DISABLED,
+    PROGRESS_STATUS.DISABLED,
+  ]);
+
   const { data: { clinicalRegistration } = {}, loading } = useQuery(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+
+  React.useEffect(() => {
+    if (clinicalRegistration && clinicalRegistration.id) {
+      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
+    }
+  }, [clinicalRegistration]);
 
   const fileRecords = get(clinicalRegistration, 'records', []);
   const submissionInfo = clinicalRegistration
@@ -91,7 +101,7 @@ export default function ProgramIDRegistration() {
 
   const showError = ({ errorCode, fileName }) => {
     const { title, content } = ERROR_CODES[errorCode];
-
+    setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
     setErrorBanner({
       visible: true,
       title: title(fileName),
@@ -99,7 +109,6 @@ export default function ProgramIDRegistration() {
     });
   };
 
-  // styles
   const containerStyle = css`
     padding: 8px;
     &:not(:first-of-type) {
@@ -135,15 +144,10 @@ export default function ProgramIDRegistration() {
               >
                 Register Samples
               </div>
+
               <Progress>
-                <Progress.Item
-                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.SUCCESS}
-                  text="Upload"
-                />
-                <Progress.Item
-                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.PENDING}
-                  text="Register"
-                />
+                <Progress.Item state={progress[0]} text="Upload" />
+                <Progress.Item state={progress[1]} text="Register" />
               </Progress>
             </Row>
           </TitleBar>
