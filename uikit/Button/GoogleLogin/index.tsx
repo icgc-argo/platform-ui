@@ -15,7 +15,7 @@ const StyledLink = styled('a')`
   display: inline-block;
 `;
 
-function GoogleLogin({ link, id }: { id?: string; link: string }) {
+const GoogleLogin: React.ComponentType<{ id?: string; link: string }> = ({ link, id }) => {
   const theme = useTheme();
   return (
     <StyledLink id={id} href={link}>
@@ -40,8 +40,6 @@ function GoogleLogin({ link, id }: { id?: string; link: string }) {
       </Button>
     </StyledLink>
   );
-}
-
-GoogleLogin.propTypes = { link: PropTypes.string.isRequired };
+};
 
 export default GoogleLogin;

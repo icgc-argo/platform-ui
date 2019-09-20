@@ -3,7 +3,7 @@ import React from 'react';
 import Google from '.';
 
 const GoogleStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <Google>Skeleton</Google>
+  <Google link="/">Skeleton</Google>
 ));
 
 export default GoogleStories;
