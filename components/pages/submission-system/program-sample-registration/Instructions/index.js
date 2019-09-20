@@ -10,8 +10,11 @@ import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
+import { useMutation } from '@apollo/react-hooks';
+import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 
 const Instructions = (props: { registrationEnabled: boolean }) => {
+  const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
   const fileUploadRef = React.createRef();
 
   const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
@@ -36,10 +39,36 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
     window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
   };
 
-  const uploadTemplate = () => {
+  const selectFile = () => {
     const fp = fileUploadRef.current;
     if (fp) {
       fp.click();
+    }
+  };
+
+  const responseTypes = {
+    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
+    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
+  };
+
+  const handleUpload = async file => {
+    const {
+      data: {
+        uploadClinicalRegistration: { __typename: respType, ...resp },
+      },
+    } = await uploadFile({
+      variables: { shortName: 'CIA-IE', registrationFile: file },
+    });
+
+    console.log('type', respType, 'resp', resp);
+
+    if (respType === responseTypes.CLINICAL_REG_INVALID) {
+      // show error banner
+      console.log('invalid', resp);
+    } else if (respType === responseTypes.CLINICAL_REG_DATA) {
+      // set data for table
+      //setClinicalData(resp);
+      console.log('valid', resp);
     }
   };
 
@@ -74,13 +103,14 @@ const Instructions = (props: { registrationEnabled: boolean }) => {
             css={buttonStyle}
             variant={BUTTON_VARIANTS.SECONDARY}
             size={BUTTON_SIZES.SM}
-            onClick={uploadTemplate}
+            onClick={selectFile}
           >
             <input
               type="file"
               ref={fileUploadRef}
-              onChange={e => {
-                const file = e.target.files;
+              onChange={async ({ target }) => {
+                const file = target.files[0];
+                handleUpload(file);
               }}
               accept=".tsv"
               style={{ display: 'none' }}
