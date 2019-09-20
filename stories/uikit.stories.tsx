@@ -8,10 +8,13 @@ function loadStories() {
   req.keys().forEach(filename => req(filename));
 }
 
-addDecorator(Story => (
-  <ThemeProvider>
-    <Story />
-  </ThemeProvider>
-));
+addDecorator(Story => {
+  const StoryComponent = Story as React.ComponentType;
+  return (
+    <ThemeProvider>
+      <StoryComponent />
+    </ThemeProvider>
+  );
+});
 
 configure(loadStories, module);
