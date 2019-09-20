@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
@@ -55,12 +54,33 @@ const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
     return { ...data, row: record.row };
   });
 
+type ClinicalRegistration = {
+  id: string;
+  createdAt: string;
+  creator: string;
+  fileName: string;
+  newDonors: {
+    count: number;
+  };
+  newSpecimens: {
+    count: number;
+  };
+  newSamples: {
+    count: number;
+  };
+  alreadyRegistered: {
+    count: number;
+  };
+};
+
 export default function ProgramIDRegistration() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const { data: { clinicalRegistration } = {}, loading } = useQuery(GET_REGISTRATION, {
+  const { data: { clinicalRegistration = undefined } = {}, loading } = useQuery<{
+    clinicalRegistration: ClinicalRegistration;
+  }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
 
