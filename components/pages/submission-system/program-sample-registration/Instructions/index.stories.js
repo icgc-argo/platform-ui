@@ -9,7 +9,7 @@ const InstructionsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
   <div style={{ background: 'white' }}>
     <Instructions
       registrationEnabled={boolean('registrationEnabled', false)}
-      showError={action('show error')}
+      onUpload={action('upload')}
     >
       Skeleton
     </Instructions>

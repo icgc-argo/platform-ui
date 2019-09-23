@@ -14,11 +14,8 @@ import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 import { ERROR_CODES } from '../common';
 
-const Instructions = (props: {
-  registrationEnabled: boolean,
-  showError: ({ errorCode: string, fileName: string }) => void,
-}) => {
-  const { registrationEnabled, showError } = props;
+const Instructions = (props: { registrationEnabled: boolean, onUpload: ({}) => void }) => {
+  const { registrationEnabled, onUpload } = props;
 
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
   const fileUploadRef = React.createRef();
@@ -52,29 +49,14 @@ const Instructions = (props: {
     }
   };
 
-  const responseTypes = {
-    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
-    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
-  };
-
   const handleUpload = async file => {
     const {
-      data: {
-        uploadClinicalRegistration: { __typename: respType, ...resp },
-      },
+      data: { uploadClinicalRegistration },
     } = await uploadFile({
       variables: { shortName: 'CIA-IE', registrationFile: file },
     });
 
-    console.log('type', respType, 'resp', resp);
-    // resolve if we have an upload error or data
-    if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName: file.name });
-    } else if (respType === responseTypes.CLINICAL_REG_DATA) {
-      // set data for table
-      //setClinicalData(resp);
-      console.log('valid', resp);
-    }
+    onUpload(uploadClinicalRegistration);
   };
 
   return (
