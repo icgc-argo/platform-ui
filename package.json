@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
-    "storybook": "start-storybook -s ./ -p 6006",
+    "storybook": "NODE_PATH=./ start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "flow": "flow",
     "flow-typed": "flow-typed",
@@ -108,6 +108,7 @@
     "plop": "^2.3.0",
     "prettier": "1.17.0",
     "pretty-quick": "^1.10.0",
+    "react-docgen-typescript-loader": "^3.2.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3",
     "typescript": "^3.6.3"

@@ -1,3 +1,14 @@
 {
-  "presets": ["@babel/preset-flow", "@emotion/babel-preset-css-prop"]
+  "presets": [
+    [
+      "@emotion/babel-preset-css-prop",
+      {
+        "autoLabel": true
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
 }
