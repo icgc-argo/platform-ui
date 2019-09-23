@@ -1,3 +1,4 @@
+import React from 'react';
 import TitleBar from '.';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';

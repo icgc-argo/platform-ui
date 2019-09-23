@@ -1,6 +1,7 @@
-import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
+// @ts-ignore there's a ts type missing in next/config package
 import { setConfig } from 'next/config';
 import config from './next.config';
 
@@ -18,15 +19,15 @@ function copyProps(src, target) {
   });
 }
 
-global.window = window;
-global.document = window.document;
-global.navigator = {
+(global as any).window = window;
+(global as any).document = window.document;
+(global as any).navigator = {
   userAgent: 'node.js',
 };
-global.requestAnimationFrame = function(callback) {
+(global as any).requestAnimationFrame = function(callback) {
   return setTimeout(callback, 0);
 };
-global.cancelAnimationFrame = function(id) {
+(global as any).cancelAnimationFrame = function(id) {
   clearTimeout(id);
 };
 copyProps(window, global);

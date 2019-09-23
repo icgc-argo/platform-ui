@@ -10,13 +10,13 @@
     "e2e": "./e2e/scripts/interactive.js",
     "e2e-dev": "nightwatch -c e2e/conf/dev.js; exit 0",
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
-    "test-uikit": "mocha --require @babel/register uikit/testSetup.js uikit/**/*.test.js",
-    "test": "NODE_PATH=./ mocha --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
-    "test:watch": "NODE_PATH=./ mocha --watch --require @babel/register ./testSetup.js components/**/*.test.js global/**/*.test.js",
-    "test-gql-validation": "mocha --require @babel/register ./queryValidations.test.js",
     "gitmoji-config": "gitmoji -g",
     "commit": "gitmoji -c",
-    "type-check": "tsc -p ./tsconfig.json"
+    "type-check": "tsc -p ./tsconfig.json",
+    "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
+    "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
+    "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
+    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./queryValidations.test.tsx"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc"
@@ -33,6 +33,7 @@
     "@emotion/styled": "^10.0.11",
     "@icgc-argo/ego-token-utils": "^5.2.1",
     "@storybook/addon-a11y": "^5.1.9",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
     "@types/next": "^8.0.6",
@@ -110,6 +111,7 @@
     "react-docgen-typescript-loader": "^3.2.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3",
+    "ts-mocha": "^6.0.0",
     "typescript": "^3.6.3"
   },
   "prettier": {
