@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import FormControlContext from './FormControlContext';
-import css from '@emotion/css';
+import { styled } from 'uikit';
 
 const FormControl = React.forwardRef<
   HTMLElement,
@@ -29,14 +28,7 @@ const FormControl = React.forwardRef<
     disabled?: boolean;
   }
 >(function FormControl(
-  {
-    component: Component = 'div',
-    children,
-    error = false,
-    disabled = false,
-    required = false,
-    ...other
-  },
+  { component: Component = 'div', error = false, disabled = false, required = false, ...other },
   ref,
 ) {
   const [focused, setFocused] = React.useState(false);
@@ -53,15 +45,13 @@ const FormControl = React.forwardRef<
     handleBlur: () => setFocused(false),
   };
 
+  const RenderComponent = styled(Component as any)`
+    margin-bottom: 10px;
+  `;
+
   return (
     <FormControlContext.Provider value={childContext}>
-      {React.createElement(Component, {
-        ref: ref,
-        ...other,
-        css: css`
-          margin-bottom: 10px;
-        `,
-      })}
+      <RenderComponent ref={ref} {...other} />
     </FormControlContext.Provider>
   );
 });
