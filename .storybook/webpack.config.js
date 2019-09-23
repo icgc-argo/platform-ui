@@ -13,15 +13,24 @@ module.exports = async ({ config }) => {
     ...(config.module.rules || []),
     {
       test: /\.(ts|tsx)$/,
+      exclude: /(node_modules)/,
       use: [
         {
-          loader: require.resolve('awesome-typescript-loader'),
-          options: {
-            configFileName: path.resolve(__dirname, 'tsconfig.json'),
-          },
+          loader: require.resolve('react-docgen-typescript-loader'),
         },
         {
-          loader: require.resolve('react-docgen-typescript-loader'),
+          loader: require.resolve('babel-loader'),
+          options: {
+            presets: [
+              ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
+              [
+                '@emotion/babel-preset-css-prop',
+                {
+                  autoLabel: true,
+                },
+              ],
+            ],
+          },
         },
       ],
     },
