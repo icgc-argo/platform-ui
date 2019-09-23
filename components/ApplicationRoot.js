@@ -4,6 +4,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
 import { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
+import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import getConfig from 'next/config';
 import * as React from 'react';
@@ -14,6 +15,7 @@ import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
+import get from 'lodash/get';
 
 import type { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
@@ -86,6 +88,24 @@ const ToastProvider = ({ children }) => {
   );
 };
 
+function PersistentStateProvider({ children }) {
+  const [persistentContext, setPersistentContext] = React.useState({});
+
+  const setItem = (k, v) => {
+    setPersistentContext({
+      ...persistentContext,
+      [k]: v,
+    });
+  };
+  const getItem = (k, defaultValue) => {
+    return get(persistentContext, k, defaultValue);
+  };
+
+  return (
+    <PersistentContext.Provider value={{ getItem, setItem }}>{children}</PersistentContext.Provider>
+  );
+}
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -131,14 +151,16 @@ export default function ApplicationRoot({
               left: 0px;
               right: 0px;
             }
-        `}
+          `}
       </style>
       <Head />
       <AuthProvider egoJwt={egoJwt}>
         <ApolloProvider client={apolloClient}>
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
-              <ToastProvider>{children}</ToastProvider>
+              <ToastProvider>
+                <PersistentStateProvider>{children}</PersistentStateProvider>
+              </ToastProvider>
             </ThemeProvider>
           </PageContext.Provider>
         </ApolloProvider>
