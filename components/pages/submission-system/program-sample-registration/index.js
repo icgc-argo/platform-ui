@@ -97,6 +97,29 @@ export default function ProgramIDRegistration() {
 
   const noData = loading || !clinicalRegistration.id;
 
+  const responseTypes = {
+    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
+    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
+  };
+
+  const onUpload = () => {
+    console.log('on upload');
+    //  { __typename: respType, ...resp },
+    /* console.log('type', respType, 'resp', resp);
+    // resolve if upload error or data
+    if (respType === responseTypes.CLINICAL_REG_INVALID) {
+      // TODO: COuld be other errors
+      /**
+       *
+       *
+      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName: file.name });
+    } else if (respType === responseTypes.CLINICAL_REG_DATA) {
+      // set data for table
+      // setClinicalData(resp);
+      console.log('valid', resp);
+    }*/
+  };
+
   const showError = ({ errorCode, fileName }) => {
     const { title, content } = ERROR_CODES[errorCode];
     setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
@@ -168,7 +191,7 @@ export default function ProgramIDRegistration() {
           padding-bottom: 0px;
         `}
       >
-        <Instructions registrationEnabled={false} showError={showError} />
+        <Instructions registrationEnabled={false} onUpload={onUpload} />
       </Container>
       {errorBanner.visible ? (
         <Banner
