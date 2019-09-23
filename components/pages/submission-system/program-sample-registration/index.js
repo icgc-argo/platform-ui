@@ -19,7 +19,8 @@ import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import NoDataMessage from './FileTable/NoDataMessage';
 import type { FileEntry } from './FileTable';
-
+import { ERROR_CODES } from './common';
+import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 type ClinicalRecords = Array<{
   row: number,
   fields: Array<{
@@ -54,8 +55,6 @@ const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {});
     return { ...data, row: record.row };
   });
-import { ERROR_CODES } from './common';
-import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 
 export default function ProgramIDRegistration() {
   const {
@@ -86,7 +85,6 @@ export default function ProgramIDRegistration() {
         fileName: clinicalRegistration.fileName,
       }
     : null;
-
   const stats = clinicalRegistration
     ? {
         existingCount: clinicalRegistration.alreadyRegistered.count,
