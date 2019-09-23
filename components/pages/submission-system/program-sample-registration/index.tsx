@@ -17,42 +17,15 @@ import { useQuery } from '@apollo/react-hooks';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import NoDataMessage from './FileTable/NoDataMessage';
-import type { FileEntry } from './FileTable';
+import { FileEntry } from './FileTable';
 
 type ClinicalRecords = Array<{
-  row: number,
+  row: number;
   fields: Array<{
-    name: string,
-    value: string,
-  }>,
+    name: string;
+    value: string;
+  }>;
 }>;
-
-type ClinicalRegistration = {
-  id: string,
-  createdAt: string,
-  creator: string,
-  fileName: string,
-  newDonors: {
-    count: number,
-  },
-  newSpecimens: {
-    count: number,
-  },
-  newSamples: {
-    count: number,
-  },
-  alreadyRegistered: {
-    count: number,
-  },
-  records: ClinicalRecords,
-};
-
-const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
-  records.map(record => {
-    const fields = get(record, 'fields', []);
-    const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {});
-    return { ...data, row: record.row };
-  });
 
 type ClinicalRegistration = {
   id: string;
@@ -71,7 +44,15 @@ type ClinicalRegistration = {
   alreadyRegistered: {
     count: number;
   };
+  records: ClinicalRecords;
 };
+
+const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
+  records.map(record => {
+    const fields = get(record, 'fields', []);
+    const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
+    return { ...data, row: record.row };
+  });
 
 export default function ProgramIDRegistration() {
   const {
