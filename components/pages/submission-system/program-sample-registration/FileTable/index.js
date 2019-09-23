@@ -21,7 +21,7 @@ const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
   IS_NEW: 'isNew',
 };
-type FileEntry = {
+export type FileEntry = {
   row: string,
   isNew: boolean,
   [k: string]: string | number | boolean,
@@ -130,22 +130,12 @@ const FileTable = (props: {
   const theme = useTheme();
   const { records, stats, submissionInfo } = props;
 
-  // col headings
-  const excludeHeadings = Object.keys(REQUIRED_FILE_ENTRY_FIELDS).map(key => {
-    const value = REQUIRED_FILE_ENTRY_FIELDS[key];
-    return typeof value === 'string' ? value : '';
-  });
-  const fields = get(records[0], 'fields', []);
-  const filteredFirstRecord = fields.filter(field => !excludeHeadings.includes(field.name));
-
-  // table data
-  const tableData = records.map(record => {
-    const fields = get(record, 'fields', []);
-
-    const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {});
-    // add row number
-    return { ...data, row: record.row };
-  });
+  const filteredFirstRecord = omit(
+    records[0],
+    ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
+      return typeof value === 'string' ? value : '';
+    }),
+  );
 
   return (
     <div
@@ -193,15 +183,15 @@ const FileTable = (props: {
             width: 60,
             Header: <StarIcon active={false} />,
           },
-          ...filteredFirstRecord.map(({ name }, i) => ({
-            id: name,
-            accessor: name,
-            Header: name,
-            minWidth: getColumnWidth(name),
+          ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
+            id: key,
+            accessor: key,
+            Header: key,
+            minWidth: getColumnWidth(key),
           })),
         ]}
         style={{ maxHeight: '500px' }}
-        data={tableData}
+        data={records}
       />
     </div>
   );

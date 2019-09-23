@@ -18,6 +18,42 @@ import { useQuery } from '@apollo/react-hooks';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import NoDataMessage from './FileTable/NoDataMessage';
+import type { FileEntry } from './FileTable';
+
+type ClinicalRecords = Array<{
+  row: number,
+  fields: Array<{
+    name: string,
+    value: string,
+  }>,
+}>;
+
+type ClinicalRegistration = {
+  id: string,
+  createdAt: string,
+  creator: string,
+  fileName: string,
+  newDonors: {
+    count: number,
+  },
+  newSpecimens: {
+    count: number,
+  },
+  newSamples: {
+    count: number,
+  },
+  alreadyRegistered: {
+    count: number,
+  },
+  records: ClinicalRecords,
+};
+
+const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
+  records.map(record => {
+    const fields = get(record, 'fields', []);
+    const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {});
+    return { ...data, row: record.row };
+  });
 
 export default function ProgramIDRegistration() {
   const {
@@ -128,7 +164,11 @@ export default function ProgramIDRegistration() {
                 Clear
               </Button>
             </div>
-            <FileTable records={fileRecords} stats={stats} submissionInfo={submissionInfo} />
+            <FileTable
+              records={recordsToFileTable(fileRecords)}
+              stats={stats}
+              submissionInfo={submissionInfo}
+            />
           </>
         ) : (
           <NoDataMessage />
