@@ -1,6 +1,6 @@
 import React from 'react';
 import FormControlContext from './FormControlContext';
-import { styled } from 'uikit';
+import { styled, css } from 'uikit';
 
 const FormControl = React.forwardRef<
   HTMLElement,
@@ -28,7 +28,13 @@ const FormControl = React.forwardRef<
     disabled?: boolean;
   }
 >(function FormControl(
-  { component: Component = 'div', error = false, disabled = false, required = false, ...other },
+  {
+    component: Component = 'div' as any,
+    error = false,
+    disabled = false,
+    required = false,
+    ...other
+  },
   ref,
 ) {
   const [focused, setFocused] = React.useState(false);
@@ -45,13 +51,14 @@ const FormControl = React.forwardRef<
     handleBlur: () => setFocused(false),
   };
 
-  const RenderComponent = styled(Component as any)`
-    margin-bottom: 10px;
-  `;
-
   return (
     <FormControlContext.Provider value={childContext}>
-      <RenderComponent ref={ref} {...other} />
+      <Component
+        css={css`
+          margin-bottom: 10px;
+        `}
+        {...other}
+      />
     </FormControlContext.Provider>
   );
 });
