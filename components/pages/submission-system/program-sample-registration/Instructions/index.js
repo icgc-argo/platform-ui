@@ -14,7 +14,10 @@ import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 import { ERROR_CODES } from '../common';
 
-const Instructions = (props: { registrationEnabled: boolean, onUpload: ({}) => void }) => {
+const Instructions = (props: {
+  registrationEnabled: boolean,
+  onUpload: ({ response: { __typename: string, errors: [] }, fileName: string }) => void,
+}) => {
   const { registrationEnabled, onUpload } = props;
 
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
@@ -56,7 +59,7 @@ const Instructions = (props: { registrationEnabled: boolean, onUpload: ({}) => v
       variables: { shortName: 'CIA-IE', registrationFile: file },
     });
 
-    onUpload(uploadClinicalRegistration);
+    onUpload({ response: uploadClinicalRegistration, fileName: file.name });
   };
 
   return (
