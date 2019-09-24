@@ -21,6 +21,7 @@ import NoDataMessage from './FileTable/NoDataMessage';
 import type { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
+import ErrorTable from './ErrorTable';
 type ClinicalRecords = Array<{
   row: number,
   fields: Array<{
@@ -66,10 +67,13 @@ export default function ProgramIDRegistration() {
     PROGRESS_STATUS.DISABLED,
     PROGRESS_STATUS.DISABLED,
   ]);
+  const [fileErrors, setFileErrors] = React.useState([]);
 
-  const { data: { clinicalRegistration } = {}, loading } = useQuery(GET_REGISTRATION, {
+  const { data: { clinicalRegistration } = {}, loading, refetch } = useQuery(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+
+  console.log('CLINICAL RES DATGA', clinicalRegistration);
 
   React.useEffect(() => {
     if (clinicalRegistration && clinicalRegistration.id) {
@@ -102,22 +106,22 @@ export default function ProgramIDRegistration() {
     CLINICAL_REG_DATA: 'ClinicalRegistrationData',
   };
 
-  const onUpload = () => {
+  const onUpload = ({ response, fileName }) => {
     console.log('on upload');
-    //  { __typename: respType, ...resp },
-    /* console.log('type', respType, 'resp', resp);
+    const { __typename: respType, ...resp } = response;
+    console.log('type', respType, 'resp', resp);
     // resolve if upload error or data
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      // TODO: COuld be other errors
-      /**
-       *
-       *
-      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName: file.name });
+      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
     } else if (respType === responseTypes.CLINICAL_REG_DATA) {
+      console.log('data errors', resp, resp.errors);
       // set data for table
-      // setClinicalData(resp);
-      console.log('valid', resp);
-    }*/
+      //  showErrorTable(resp);
+      setFileErrors(resp.errors);
+    } else {
+      console.log('data all good');
+      // await refetch();
+    }
   };
 
   const showError = ({ errorCode, fileName }) => {
@@ -205,7 +209,14 @@ export default function ProgramIDRegistration() {
       ) : null}
 
       <Container css={containerStyle}>
-        {fileRecords.length > 0 ? (
+        {fileErrors.length > 0 ? (
+          <ErrorTable
+            errors={fileErrors}
+            count={fileErrors.length}
+            onClear={() => console.log('clear')}
+            onDownload={() => console.log('download')}
+          />
+        ) : fileRecords.length > 0 ? (
           <>
             <div css={cardHeaderContainerStyle}>
               <Typography color="primary" variant="subtitle2" component="span">

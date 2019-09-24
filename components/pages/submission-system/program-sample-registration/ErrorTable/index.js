@@ -12,7 +12,7 @@ const TABLE_COLS = [
   { Header: 'Submitter Sample ID', accessor: 'sampleID', width: 175 },
   { Header: 'Field with Error', accessor: 'field', width: 175 },
   { Header: 'Error Value', accessor: 'errorValue', width: 120 },
-  { Header: 'Error Description', accessor: 'errorDescription', style: { 'white-space': 'unset' } },
+  { Header: 'Error Description', accessor: 'errorDescription', style: { whiteSpace: 'unset' } },
 ];
 
 const Container = styled('div')`
