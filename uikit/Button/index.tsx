@@ -7,7 +7,7 @@ import useTheme from '../utils/useTheme';
 import FocusWrapper from '../FocusWrapper';
 
 type ButtonVariant = 'primary' | 'secondary' | 'text';
-type ButtonSize = 'sm' | 'md';
+export type ButtonSize = 'sm' | 'md';
 
 export const BUTTON_VARIANTS: {
   PRIMARY: ButtonVariant;

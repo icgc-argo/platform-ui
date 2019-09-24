@@ -6,10 +6,11 @@ import Color from 'color';
 
 import { styled, css } from '..';
 import Typography from '../Typography';
-import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from '../Button';
+import Button, { BUTTON_SIZES, BUTTON_VARIANTS, ButtonSize } from '../Button';
 import Icon, { ICON_NAMES } from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 import Portal from '../Portal';
+import { UikitIconNames } from 'uikit/Icon/icons';
 
 const ModalContainer = styled('div')`
   position: relative;
@@ -57,7 +58,20 @@ const ModalOverlay = styled('div')`
 /**
  * Can use <Modal.overlay /> for the overlay
  */
-const Modal = ({
+const ModalComponent: React.ComponentType<{
+  title?: React.ReactNode;
+  titleIconConfig?: {
+    name: UikitIconNames;
+    fill?: string;
+  };
+  buttonSize?: ButtonSize;
+  actionButtonText?: React.ReactNode;
+  actionDisabled?: boolean;
+  cancelText?: React.ReactNode;
+  onActionClick?: React.ComponentProps<typeof Button>['onClick'];
+  onCancelClick?: React.ComponentProps<typeof Button>['onClick'];
+  onCloseClick?: React.ComponentProps<typeof FocusWrapper>['onClick'];
+}> = ({
   title = 'Add Users',
   titleIconConfig = {
     name: null,
@@ -151,22 +165,11 @@ const Modal = ({
   </ModalContainer>
 );
 
-Modal.Overlay = props => <ModalOverlay {...props} />;
-
-Modal.propTypes = {
-  title: PropTypes.node,
-  titleIconConfig: PropTypes.shape({
-    name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
-    fill: PropTypes.string,
-  }),
-  buttonSize: PropTypes.oneOf(Object.values(BUTTON_SIZES)),
-  actionButtonText: PropTypes.node,
-  actionDisabled: PropTypes.bool,
-  cancelText: PropTypes.node,
-  onActionClick: PropTypes.func,
-  onCancelClick: PropTypes.func,
-  onCloseClick: PropTypes.func,
-  children: PropTypes.node,
-};
+const Overlay = props => <ModalOverlay {...props} />;
+const Modal: typeof ModalComponent & { Overlay: typeof Overlay } = (() => {
+  const output = ModalComponent as any;
+  output.Overlay = Overlay;
+  return output;
+})();
 
 export default Modal;
