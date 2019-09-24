@@ -394,47 +394,45 @@ export default function CreateProgramForm({
           </Row>
 
           <FormControl error={validationErrors.processingRegions} required={true}>
-            <>
-              <Row>
-                <Col>
-                  <InputLabel htmlFor="Processing Regions">
-                    Please indicate the region(s) where data can be processed
-                  </InputLabel>
-                  <ErrorText error={validationErrors.processingRegions} />
-                  <RadioCheckboxGroup
-                    id="checkbox-group-processing-regions"
-                    hasError={false}
-                    onChange={handleCheckboxGroupChange(
-                      form.processingRegions as any[],
-                      'processingRegions',
-                    )}
-                    isChecked={item => form.processingRegions.includes(item)}
-                  >
-                    <Row>
-                      <Col>
-                        {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
-                          <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
+            <Row>
+              <Col>
+                <InputLabel htmlFor="Processing Regions">
+                  Please indicate the region(s) where data can be processed
+                </InputLabel>
+                <ErrorText error={validationErrors.processingRegions} />
+                <RadioCheckboxGroup
+                  id="checkbox-group-processing-regions"
+                  hasError={false}
+                  onChange={handleCheckboxGroupChange(
+                    form.processingRegions as any[],
+                    'processingRegions',
+                  )}
+                  isChecked={item => form.processingRegions.includes(item)}
+                >
+                  <Row>
+                    <Col>
+                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
+                        <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
+                          {name}
+                        </FormCheckbox>
+                      ))}
+                    </Col>
+                    <Col>
+                      {regionOptions
+                        .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
+                        .map(name => (
+                          <FormCheckbox value={name} key={name}>
                             {name}
                           </FormCheckbox>
                         ))}
-                      </Col>
-                      <Col>
-                        {regionOptions
-                          .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
-                          .map(name => (
-                            <FormCheckbox value={name} key={name}>
-                              {name}
-                            </FormCheckbox>
-                          ))}
-                      </Col>
-                    </Row>
-                  </RadioCheckboxGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col />
-              </Row>
-            </>
+                    </Col>
+                  </Row>
+                </RadioCheckboxGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col />
+            </Row>
           </FormControl>
           {!isEditing && (
             <>
