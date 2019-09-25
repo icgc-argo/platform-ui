@@ -205,8 +205,8 @@ export default function ProgramIDRegistration() {
       )}
       <div
         css={css`
-          opacity: ${registerString ? 0.3 : 1};
-          pointer-events: ${registerString ? 'none' : 'auto'};
+          opacity: ${!!registerString ? 0.3 : 1};
+          pointer-events: ${!!registerString ? 'none' : 'auto'};
         `}
       >
         <Container
