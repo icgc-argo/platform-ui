@@ -10,8 +10,19 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
+import { RegisterState } from '../index';
 
-const Instructions = ({ registrationEnabled, shortName, registrationId, setRegisterString }) => {
+function Instructions({
+  registrationEnabled,
+  shortName,
+  registrationId,
+  setRegisterState,
+}: {
+  registrationEnabled: boolean;
+  shortName: string;
+  registrationId: string;
+  setRegisterState: (state: RegisterState) => void;
+}) {
   const buttonStyle = css`
     margin-top: 10px;
     width: 150px;
@@ -109,11 +120,11 @@ const Instructions = ({ registrationEnabled, shortName, registrationId, setRegis
           onCancelClick={handleRegisterCancelClick}
           shortName={shortName}
           registrationId={registrationId}
-          setRegisterString={setRegisterString}
+          setRegisterState={setRegisterState}
         />
       )}
     </>
   );
-};
+}
 
 export default Instructions;

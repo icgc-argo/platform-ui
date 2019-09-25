@@ -1,4 +1,3 @@
-// @flow
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
@@ -48,6 +47,8 @@ type ClinicalRegistration = {
   records: ClinicalRecords;
 };
 
+export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+
 const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
@@ -72,6 +73,19 @@ export default function ProgramIDRegistration() {
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
   const [registerString, setRegisterString] = React.useState('');
+  const setRegisterState = (state: RegisterState) => {
+    switch (state) {
+      case 'INPROGRESS':
+        setRegisterString('Registering...');
+        break;
+      case 'FINISHED':
+        setRegisterString('Registered!');
+        break;
+      default:
+        setRegisterString('');
+        break;
+    }
+  };
 
   const handleClearClick = () => {
     clearRegistration({
@@ -212,7 +226,7 @@ export default function ProgramIDRegistration() {
             registrationEnabled={get(clinicalRegistration, 'id')}
             shortName={programShortName}
             registrationId={get(clinicalRegistration, 'id')}
-            setRegisterString={setRegisterString}
+            setRegisterState={setRegisterState}
           />
         </Container>
 

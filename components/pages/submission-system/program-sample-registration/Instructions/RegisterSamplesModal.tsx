@@ -8,6 +8,7 @@ import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Router from 'next/router';
+import { RegisterState } from '..';
 
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
@@ -23,7 +24,12 @@ export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
   shortName,
   registrationId,
-  setRegisterString,
+  setRegisterState,
+}: {
+  onCancelClick: () => void;
+  shortName: string;
+  registrationId: string;
+  setRegisterState: (state: RegisterState) => void;
 }) {
   const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
     variables: {
@@ -37,12 +43,12 @@ export default function RegisterSamplesModal({
   const handleActionClick = async () => {
     handleCancelClick();
 
-    setRegisterString('Registering');
+    setRegisterState('INPROGRESS');
     await sleep(2000);
 
     commitRegistration()
       .then(async ({ data, errors }) => {
-        setRegisterString('Registered!');
+        setRegisterState('FINISHED');
         await sleep(2000);
 
         const num = get(data, 'commitClinicalRegistration.length', 0);
@@ -65,7 +71,7 @@ export default function RegisterSamplesModal({
           variant: TOAST_VARIANTS.ERROR,
           content: error.toString(),
         });
-        setRegisterString('');
+        setRegisterState('');
       });
   };
 
