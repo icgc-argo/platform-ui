@@ -76,7 +76,6 @@ export default function RegisterSamplesModal({
         title="Are you sure you want to register samples"
         actionButtonText="YES, REGISTER SAMPLES"
         buttonSize="sm"
-        cancelText="CANCLE"
         onActionClick={handleActionClick}
         onCancelClick={handleCancelClick}
         onCloseClick={handleCancelClick}
