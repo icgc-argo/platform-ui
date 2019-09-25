@@ -21,7 +21,6 @@ function sleep(time) {
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
-  registerSamples,
   shortName,
   registrationId,
   setRegisterString,

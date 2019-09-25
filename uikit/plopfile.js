@@ -11,12 +11,12 @@ module.exports = function(plop) {
     actions: [
       {
         type: 'add',
-        path: './{{properCase name}}/index.js',
+        path: './{{properCase name}}/index.tsx',
         templateFile: './template/index.hbs',
       },
       {
         type: 'add',
-        path: './{{properCase name}}/stories.js',
+        path: './{{properCase name}}/stories.tsx',
         templateFile: './template/stories.hbs',
       },
     ],

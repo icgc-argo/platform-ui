@@ -48,7 +48,7 @@ spec:
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh "NODE_PATH=./ npm run flow"
+                    sh "npm run type-check"
                     sh "npm run build"
                     sh "npm run test"
                 }
