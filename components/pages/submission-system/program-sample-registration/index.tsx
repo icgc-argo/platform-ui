@@ -159,7 +159,7 @@ export default function ProgramIDRegistration() {
                   state={
                     noData
                       ? PROGRESS_STATUS.DISABLED
-                      : registerString.toLowerCase().indexOf('registered') != -1
+                      : registerString == registerStateStringMap['FINISHED']
                       ? PROGRESS_STATUS.SUCCESS
                       : PROGRESS_STATUS.PENDING
                   }
