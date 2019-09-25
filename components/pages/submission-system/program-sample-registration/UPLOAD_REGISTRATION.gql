@@ -2,6 +2,16 @@ mutation UPLOAD_REGISTRATION($shortName: String!, $registrationFile: Upload!) {
   uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile) {
     ... on ClinicalRegistrationData {
       id
+      errors {
+        type
+        message
+        row
+        field
+        value
+        sampleId
+        donorId
+        specimenId
+      }
     }
 
     ... on ClinicalRegistrationInvalid {
