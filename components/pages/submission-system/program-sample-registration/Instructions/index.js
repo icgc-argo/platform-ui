@@ -13,6 +13,8 @@ import urlJoin from 'url-join';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 import { ERROR_CODES } from '../common';
+import upload from 'uikit/Icon/icons/collection/upload';
+import usePageContext from 'global/hooks/usePageContext';
 
 const Instructions = (props: {
   registrationEnabled: boolean,
@@ -21,6 +23,10 @@ const Instructions = (props: {
     fileName: string,
   }) => Promise<any>,
 }) => {
+  const {
+    query: { shortName: programShortName },
+  } = usePageContext();
+
   const { registrationEnabled, onUpload } = props;
 
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
@@ -56,12 +62,12 @@ const Instructions = (props: {
   };
 
   const handleUpload = async file => {
+    console.log('program short name', programShortName);
     const {
       data: { uploadClinicalRegistration },
     } = await uploadFile({
-      variables: { shortName: 'CIA-IE', registrationFile: file },
+      variables: { shortName: programShortName, registrationFile: file },
     });
-
     onUpload({ response: uploadClinicalRegistration, fileName: file.name });
   };
 
