@@ -23,6 +23,15 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 - `npm run commit` will start interactive commit tool
 - configuring gitmoji-cli: `npm run gitmoji-config`
 
+### Type checking
+
+- `npm run type-check`: trigger TypeScript type check for whole repo
+- `npm run type-check -- --watch`: runs the above with watch mode
+  - Any `npm run type-check` triggers `tsc`, so any flag layed out [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html) can be used
+- If using [vscode](https://code.visualstudio.com/), `tsc` can also be run as a task in the editor:
+  - `Cmd+Shift+B`, then select `tsc:build - tsconfig.json`
+  - This will report errors in vscode's `PROBLEMS` tab
+
 ## Uikit
 
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://argo-ui-storybook.netlify.com)
