@@ -1,0 +1,36 @@
+fragment Registration on ClinicalRegistrationData {
+  id
+  shortName
+  creator
+  fileName
+  createdAt
+  records {
+    row
+    fields {
+      name
+      value
+    }
+  }
+  errors {
+    type
+    message
+    row
+    field
+    value
+    sampleId
+    donorId
+    specimenId
+  }
+  newDonors {
+    count
+  }
+  newSpecimens {
+    count
+  }
+  newSamples {
+    count
+  }
+  alreadyRegistered {
+    count
+  }
+}
