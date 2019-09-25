@@ -49,6 +49,12 @@ type ClinicalRegistration = {
 
 export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
 
+const registerStateStringMap: { [key in RegisterState]: string } = {
+  INPROGRESS: 'Registering...',
+  FINISHED: 'Registered!',
+  '': '',
+};
+
 const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
@@ -61,12 +67,9 @@ export default function ProgramIDRegistration() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const {
-    data: { clinicalRegistration = undefined } = {},
-    loading,
-    refetch: refetchClinicalRegistration,
-    updateQuery,
-  } = useQuery<{ clinicalRegistration: ClinicalRegistration }>(GET_REGISTRATION, {
+  const { data: { clinicalRegistration = undefined } = {}, loading, updateQuery } = useQuery<{
+    clinicalRegistration: ClinicalRegistration;
+  }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
 
@@ -74,17 +77,7 @@ export default function ProgramIDRegistration() {
 
   const [registerString, setRegisterString] = React.useState('');
   const setRegisterState = (state: RegisterState) => {
-    switch (state) {
-      case 'INPROGRESS':
-        setRegisterString('Registering...');
-        break;
-      case 'FINISHED':
-        setRegisterString('Registered!');
-        break;
-      default:
-        setRegisterString('');
-        break;
-    }
+    setRegisterString(registerStateStringMap[state]);
   };
 
   const handleClearClick = () => {
@@ -223,8 +216,8 @@ export default function ProgramIDRegistration() {
           `}
         >
           <Instructions
-            registrationEnabled={get(clinicalRegistration, 'id')}
-            shortName={programShortName}
+            registrationEnabled={!!get(clinicalRegistration, 'id')}
+            shortName={programShortName as string}
             registrationId={get(clinicalRegistration, 'id')}
             setRegisterState={setRegisterState}
           />
@@ -237,7 +230,11 @@ export default function ProgramIDRegistration() {
                 <Typography color="primary" variant="subtitle2" component="span">
                   File Preview
                 </Typography>
-                <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
+                <Button
+                  variant={BUTTON_VARIANTS.TEXT}
+                  size={BUTTON_SIZES.SM}
+                  onClick={handleClearClick}
+                >
                   Clear
                 </Button>
               </div>
