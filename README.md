@@ -13,7 +13,6 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 - Install dependencies: `npm i`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
 - Dev commands:
-  - `npm run dev-ui` for working on ui only
   - `npm run dev` for work that involves the custom server
 
 ### Writing commits
