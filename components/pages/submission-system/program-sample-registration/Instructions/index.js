@@ -16,7 +16,10 @@ import { ERROR_CODES } from '../common';
 
 const Instructions = (props: {
   registrationEnabled: boolean,
-  onUpload: ({ response: { __typename: string, errors: [] }, fileName: string }) => void,
+  onUpload: ({
+    response: { __typename: string, errors: Array<{}> },
+    fileName: string,
+  }) => Promise<any>,
 }) => {
   const { registrationEnabled, onUpload } = props;
 
