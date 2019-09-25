@@ -43,5 +43,4 @@ module.exports = withImages({
       `/api/oauth/login/google?client_id=${process.env.EGO_CLIENT_ID}`,
     ),
   },
-  excludeFile: str => /\*.stories.tsx$/.test(str),
 });
