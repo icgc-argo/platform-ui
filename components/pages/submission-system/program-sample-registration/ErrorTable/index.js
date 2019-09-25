@@ -9,7 +9,7 @@ import type { TableProps } from 'uikit/Table';
 
 const TABLE_COLS = [
   { Header: 'Row #', accessor: 'row', width: 90 },
-  { Header: 'Submitter Sample ID', accessor: 'sampleID', width: 175 },
+  { Header: 'Submitter Sample ID', accessor: 'sampleId', width: 175 },
   { Header: 'Field with Error', accessor: 'field', width: 175 },
   { Header: 'Error Value', accessor: 'value', width: 120 },
   { Header: 'Error Description', accessor: 'message', style: { whiteSpace: 'unset' } },
