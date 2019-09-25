@@ -24,7 +24,7 @@ const Ol = styled('ol')`
 
 const Li = styled('li')`
   list-style: none;
-  font-size: 30px;
+  ${({ theme }) => css(theme.typography.title)};
 `;
 
 const Sep = styled('li')`
