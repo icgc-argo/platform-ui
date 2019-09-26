@@ -31,6 +31,7 @@ const ProgressMarker = styled<'div', { state: ProgressStatus }>('div')`
   width: 100%;
   height: 14px;
   background-color: ${({ theme, state }) => theme.progress.color[state]};
+  transition: background-color 500ms linear;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,6 +76,7 @@ const Separator = styled<'div', { state: ProgressStatus }>('div')`
   &:before {
     background-color: ${({ theme, state }) => theme.progress.color[state]};
     border-left-color: #fff;
+    transition: background-color 500ms linear;
   }
 
   &:after {

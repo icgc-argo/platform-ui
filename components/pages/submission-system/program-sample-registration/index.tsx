@@ -1,22 +1,22 @@
-import * as React from 'react';
-import SubmissionLayout from '../layout';
-import { css } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
-import { useRouter } from 'next/router';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
-import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
-import { Row, Col } from 'react-grid-system';
-import Link from 'uikit/Link';
-import Instructions from './Instructions';
-import Container from 'uikit/Container';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
-import Typography from 'uikit/Typography';
-import FileTable from './FileTable';
-import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
-import { useQuery } from '@apollo/react-hooks';
-import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import get from 'lodash/get';
+import * as React from 'react';
+import { Row } from 'react-grid-system';
+import { css } from 'uikit';
+import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
+import Container from 'uikit/Container';
+import DnaLoader from 'uikit/DnaLoader';
+import Link from 'uikit/Link';
+import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
+import TitleBar from 'uikit/TitleBar';
+import Typography from 'uikit/Typography';
+import SubmissionLayout from '../layout';
+import CLEAR_CLINICAL_REGISTRATION_MUTATION from './CLEAR_CLINICAL_REGISTRATION_MUTATION.gql';
+import FileTable from './FileTable';
 import NoDataMessage from './FileTable/NoDataMessage';
+import GET_REGISTRATION from './GET_REGISTRATION.gql';
+import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 
 type ClinicalRecords = Array<{
@@ -47,6 +47,14 @@ type ClinicalRegistration = {
   records: ClinicalRecords;
 };
 
+export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+
+const registerStateStringMap: { [key in RegisterState]: string } = {
+  INPROGRESS: 'Registering...',
+  FINISHED: 'Registered!',
+  '': '',
+};
+
 const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
@@ -59,11 +67,33 @@ export default function ProgramIDRegistration() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const { data: { clinicalRegistration = undefined } = {}, loading } = useQuery<{
+  const { data: { clinicalRegistration = undefined } = {}, loading, updateQuery } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+
+  const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
+
+  const [registerString, setRegisterString] = React.useState('');
+  const setRegisterState = (state: RegisterState) => {
+    setRegisterString(registerStateStringMap[state]);
+  };
+
+  const handleClearClick = () => {
+    clearRegistration({
+      variables: {
+        shortName: programShortName,
+        registrationId: get(clinicalRegistration, 'id'),
+      },
+    })
+      .then(() => {
+        updateQuery(prev => {
+          return { ...prev, clinicalRegistration: null };
+        });
+      })
+      .catch(console.log);
+  };
 
   const fileRecords = get(clinicalRegistration, 'records', []);
   const submissionInfo = clinicalRegistration
@@ -105,7 +135,7 @@ export default function ProgramIDRegistration() {
     margin-bottom: 8px;
   `;
 
-  const noData = loading || !clinicalRegistration.id;
+  const noData = loading || !clinicalRegistration || !clinicalRegistration.id;
   return (
     <SubmissionLayout
       contentHeader={
@@ -126,7 +156,13 @@ export default function ProgramIDRegistration() {
                   text="Upload"
                 />
                 <Progress.Item
-                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.PENDING}
+                  state={
+                    noData
+                      ? PROGRESS_STATUS.DISABLED
+                      : registerString == registerStateStringMap['FINISHED']
+                      ? PROGRESS_STATUS.SUCCESS
+                      : PROGRESS_STATUS.PENDING
+                  }
                   text="Register"
                 />
               </Progress>
@@ -145,36 +181,74 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      <Container
+      {registerString && (
+        <div
+          css={css`
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+          `}
+        >
+          <DnaLoader
+            css={css`
+              margin-bottom: 10px;
+            `}
+          />
+          <Typography color="secondary">{registerString}</Typography>
+        </div>
+      )}
+      <div
         css={css`
-          ${containerStyle}
-          padding-bottom: 0px;
+          opacity: ${!!registerString ? 0.3 : 1};
+          pointer-events: ${!!registerString ? 'none' : 'auto'};
         `}
       >
-        <Instructions registrationEnabled={false} />
-      </Container>
+        <Container
+          css={css`
+            ${containerStyle}
+            padding-bottom: 0px;
+          `}
+        >
+          <Instructions
+            registrationEnabled={!!get(clinicalRegistration, 'id')}
+            shortName={programShortName as string}
+            registrationId={get(clinicalRegistration, 'id')}
+            setRegisterState={setRegisterState}
+          />
+        </Container>
 
-      <Container css={containerStyle}>
-        {fileRecords.length > 0 ? (
-          <>
-            <div css={cardHeaderContainerStyle}>
-              <Typography color="primary" variant="subtitle2" component="span">
-                File Preview
-              </Typography>
-              <Button variant={BUTTON_VARIANTS.TEXT} size={BUTTON_SIZES.SM}>
-                Clear
-              </Button>
-            </div>
-            <FileTable
-              records={recordsToFileTable(fileRecords)}
-              stats={stats}
-              submissionInfo={submissionInfo}
-            />
-          </>
-        ) : (
-          <NoDataMessage />
-        )}
-      </Container>
+        <Container css={containerStyle}>
+          {fileRecords.length > 0 ? (
+            <>
+              <div css={cardHeaderContainerStyle}>
+                <Typography color="primary" variant="subtitle2" component="span">
+                  File Preview
+                </Typography>
+                <Button
+                  variant={BUTTON_VARIANTS.TEXT}
+                  size={BUTTON_SIZES.SM}
+                  onClick={handleClearClick}
+                >
+                  Clear
+                </Button>
+              </div>
+              <FileTable
+                records={recordsToFileTable(fileRecords)}
+                stats={stats}
+                submissionInfo={submissionInfo}
+              />
+            </>
+          ) : (
+            <NoDataMessage />
+          )}
+        </Container>
+      </div>
     </SubmissionLayout>
   );
 }

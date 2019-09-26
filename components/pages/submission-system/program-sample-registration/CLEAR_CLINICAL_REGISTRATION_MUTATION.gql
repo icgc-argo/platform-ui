@@ -1,0 +1,3 @@
+mutation CLEAR_CLINICAL_REGISTRATION_MUTATION($shortName: String!, $registrationId: String!) {
+  clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)
+}
