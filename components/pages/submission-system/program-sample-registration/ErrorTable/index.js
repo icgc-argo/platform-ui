@@ -1,4 +1,3 @@
-//@flow
 import * as React from 'react';
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';

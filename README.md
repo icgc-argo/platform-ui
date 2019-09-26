@@ -13,7 +13,6 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 - Install dependencies: `npm i`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
 - Dev commands:
-  - `npm run dev-ui` for working on ui only
   - `npm run dev` for work that involves the custom server
 
 ### Writing commits
@@ -22,6 +21,15 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 
 - `npm run commit` will start interactive commit tool
 - configuring gitmoji-cli: `npm run gitmoji-config`
+
+### Type checking
+
+- `npm run type-check`: trigger TypeScript type check for whole repo
+- `npm run type-check -- --watch`: runs the above with watch mode
+  - Any `npm run type-check` triggers `tsc`, so any flag layed out [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html) can be used
+- If using [vscode](https://code.visualstudio.com/), `tsc` can also be run as a task in the editor:
+  - `Cmd+Shift+B`, then select `tsc:build - tsconfig.json`
+  - This will report errors in vscode's `PROBLEMS` tab
 
 ## Uikit
 

@@ -1,4 +1,3 @@
-// @flow
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import getConfig from 'next/config';
 import Link from 'next/link';
