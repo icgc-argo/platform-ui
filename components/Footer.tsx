@@ -13,7 +13,7 @@ export default function GlobalFooter() {
           0 1px 5px 0 rgba(0, 0, 0, 0.08);
       `}
       links={[
-        { displayName: 'Contact', href: '#' },
+        { displayName: 'Contact', href: '/contact' },
         { displayName: 'Documentation', href: '#' },
         { displayName: 'Privacy Policy', href: '/privacy' },
         { displayName: 'Terms & Conditions', href: '#' },
