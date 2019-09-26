@@ -10,6 +10,7 @@ const ContainerBackground = styled('div')`
   position: relative;
   overflow: hidden;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
+  min-height: 300px;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
