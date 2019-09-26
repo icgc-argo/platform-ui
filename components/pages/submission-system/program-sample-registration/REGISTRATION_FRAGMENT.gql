@@ -1,6 +1,6 @@
 fragment Registration on ClinicalRegistrationData {
   id
-  shortName
+  programShortName
   creator
   fileName
   createdAt
