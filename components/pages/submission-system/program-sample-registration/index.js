@@ -73,9 +73,11 @@ export default function ProgramIDRegistration() {
     variables: { shortName: programShortName },
   });
   const fileErrors = get(clinicalRegistration, 'errors', []);
+  const fileRecords = get(clinicalRegistration, 'records', []);
 
+  // update progress steps
   React.useEffect(() => {
-    if (clinicalRegistration && clinicalRegistration.id) {
+    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
     } else if (fileErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
@@ -84,25 +86,29 @@ export default function ProgramIDRegistration() {
     return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
   }, [clinicalRegistration, fileErrors]);
 
-  const fileRecords = get(clinicalRegistration, 'records', []);
-  const submissionInfo = clinicalRegistration
-    ? {
-        createdAt: clinicalRegistration.createdAt,
-        creator: clinicalRegistration.creator,
-        fileName: clinicalRegistration.fileName,
-      }
-    : null;
-  const stats = clinicalRegistration
-    ? {
-        existingCount: clinicalRegistration.alreadyRegistered.count,
-        newCount:
-          clinicalRegistration.newDonors.count +
-          clinicalRegistration.newSpecimens.count +
-          clinicalRegistration.newSamples.count,
-      }
-    : null;
+  // Data formatting
+  let submissionInfo = null;
+  let stats = null;
+  if (clinicalRegistration) {
+    const {
+      createdAt,
+      creator,
+      fileName,
+      alreadyRegistered,
+      newDonors,
+      newSamples,
+      newSpecimens,
+    } = clinicalRegistration;
+    submissionInfo = { createdAt, creator, fileName };
+    stats = {
+      newCount: alreadyRegistered.count,
+      existingCount: newDonors.count + newSamples.count + newSpecimens.count,
+    };
+  }
 
   const noData = loading || !clinicalRegistration.id;
+  const hasError = errorBanner.visible || fileErrors;
+  const hasFileErrors = fileErrors.length > 0;
 
   const responseTypes = {
     CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
@@ -114,12 +120,8 @@ export default function ProgramIDRegistration() {
     // resolve if upload error or data
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
       showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
-      console.log('error');
     }
   };
-
-  console.log('FILE_RECORDS', fileRecords, 'FILE_ERRORS', fileErrors);
-  console.log('clinical data', clinicalRegistration);
 
   const showError = ({ errorCode, fileName }) => {
     const { title, content } = ERROR_CODES[errorCode];
@@ -229,7 +231,7 @@ export default function ProgramIDRegistration() {
               submissionInfo={submissionInfo}
             />
           </>
-        ) : fileErrors.length > 0 ? (
+        ) : hasFileErrors ? (
           <ErrorTable
             errors={fileErrors}
             count={fileErrors.length}
