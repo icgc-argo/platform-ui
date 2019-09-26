@@ -62,7 +62,6 @@ const Instructions = (props: {
   };
 
   const handleUpload = async file => {
-    console.log('program short name', programShortName);
     const {
       data: { uploadClinicalRegistration },
     } = await uploadFile({
