@@ -19,6 +19,7 @@ import Footer from 'uikit/Footer';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
+import { APP_VERSION } from 'global/constants';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -66,7 +67,7 @@ const SubmissionLayout = ({
         </PageContent>
       </PageBody>
       <PageFooter>
-        <Footer />
+        <Footer version={APP_VERSION} />
       </PageFooter>
     </PageContainer>
   );

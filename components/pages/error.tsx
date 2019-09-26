@@ -5,6 +5,7 @@ import Footer from 'uikit/Footer';
 import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { PageContainer } from 'uikit/PageLayout';
+import { APP_VERSION } from 'global/constants';
 
 export default function ErrorLayout({ children }) {
   return (
@@ -27,6 +28,7 @@ export default function ErrorLayout({ children }) {
       </div>
 
       <Footer
+        version={APP_VERSION}
         css={css`
           padding: 0 24px;
           box-shadow: 0 6px 0px 0px white, 0 1px 6px 0 rgba(0, 0, 0, 0.1),
