@@ -62,7 +62,7 @@ const ErrorTable = ({
           component="div"
           bold
         >
-          {`Your file has ${count} errors`}
+          {`Your file has ${count} error${count > 1 ? 's' : ''}`}
         </Typography>
 
         <Typography
