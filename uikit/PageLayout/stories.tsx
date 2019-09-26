@@ -13,7 +13,6 @@ import {
   ContentHeader,
   ContentBody,
   ContentBox,
-  PageFooter,
 } from '.';
 
 const PageLayoutStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
@@ -38,9 +37,6 @@ const PageLayoutStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
         </ContentBody>
       </PageContent>
     </PageBody>
-    <PageFooter>
-      <Typography>PageFooter</Typography>
-    </PageFooter>
   </PageContainer>
 ));
 
