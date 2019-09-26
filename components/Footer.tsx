@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Footer from 'uikit/Footer';
 import { css } from 'uikit';
+import { APP_VERSION } from 'global/constants';
 
 export default function GlobalFooter() {
   return (
     <Footer
+      version={APP_VERSION}
       css={css`
         background: #fff;
         z-index: 1;
