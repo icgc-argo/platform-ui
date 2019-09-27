@@ -29,7 +29,6 @@ function Instructions({
 }) {
   const buttonStyle = css`
     margin-top: 10px;
-    width: 150px;
   `;
   const buttonContentStyle = css`
     display: flex;
