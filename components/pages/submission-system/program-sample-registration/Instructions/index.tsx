@@ -10,7 +10,7 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { RegisterState } from '../index';
+import { RegisterState, ClinicalRegistration } from '../index';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 import { ERROR_CODES } from '../common';
@@ -26,10 +26,7 @@ function Instructions({
   shortName: string;
   registrationId: string;
   setRegisterState: (state: RegisterState) => void;
-  onUpload: ({
-    response: {__typename: string, errors: Array<{}>}, 
-    fileName: string
-  }) => Promise<any>;
+  onUpload: (x: any) => any;
 }) {
   const buttonStyle = css`
     margin-top: 10px;
@@ -47,8 +44,7 @@ function Instructions({
     width: 100%;
   `;
 
-const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
-
+  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
 
   const downloadTemplate = () => {
     window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
@@ -64,7 +60,7 @@ const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
   };
 
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
-  const fileUploadRef = React.createRef();
+  const fileUploadRef = React.createRef<HTMLInputElement>();
   const selectFile = () => {
     const fp = fileUploadRef.current;
     if (fp) {
@@ -80,7 +76,6 @@ const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
     });
     onUpload({ response: uploadClinicalRegistration, fileName: file.name });
   };
-
 
   return (
     <>
@@ -110,17 +105,22 @@ const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
             <Typography variant="paragraph" component="span">
               2. Upload your formatted registration TSV file.
             </Typography>
-            <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM} onClick={selectFile}>
-            <input
-              type="file"
-              ref={fileUploadRef}
-              onChange={async ({ target }) => {
-                const file = target.files[0];
-                handleUpload(file);
-              }}
-              accept=".tsv"
-              style={{ display: 'none' }}
-            />
+            <Button
+              css={buttonStyle}
+              variant={BUTTON_VARIANTS.SECONDARY}
+              size={BUTTON_SIZES.SM}
+              onClick={selectFile}
+            >
+              <input
+                type="file"
+                ref={fileUploadRef}
+                onChange={async ({ target }) => {
+                  const file = target.files[0];
+                  handleUpload(file);
+                }}
+                accept=".tsv"
+                style={{ display: 'none' }}
+              />
               <span css={buttonContentStyle}>
                 <Icon name="upload" fill="accent2_dark" height="12px" css={buttonIconStyle} />{' '}
                 Upload File

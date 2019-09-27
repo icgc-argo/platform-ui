@@ -9,9 +9,10 @@ const InstructionsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
     <Instructions
       registrationEnabled={boolean('registrationEnabled', false)}
       onUpload={action('upload')}
-    >
-      Skeleton
-    </Instructions>
+      setRegisterState={() => ''}
+      shortName={'PROGRAM-SHORTNAME'}
+      registrationId={'123456'}
+    />
   </div>
 ));
 

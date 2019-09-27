@@ -18,7 +18,6 @@ import NoDataMessage from './FileTable/NoDataMessage';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
-import type { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import ErrorTable from './ErrorTable';
@@ -31,7 +30,18 @@ type ClinicalRecords = Array<{
   }>;
 }>;
 
-type ClinicalRegistration = {
+export type ClinicalErrors = Array<{
+  type: string;
+  message: string;
+  row: number;
+  field: string;
+  value: string;
+  sampleId: string;
+  donorId: string;
+  specimenId: string;
+}>;
+
+export type ClinicalRegistration = {
   id: string;
   createdAt: string;
   creator: string;
@@ -49,6 +59,7 @@ type ClinicalRegistration = {
     count: number;
   };
   records: ClinicalRecords;
+  errors: ClinicalErrors;
 };
 
 export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
@@ -259,6 +270,7 @@ export default function ProgramIDRegistration() {
             shortName={programShortName as string}
             registrationId={get(clinicalRegistration, 'id')}
             setRegisterState={setRegisterState}
+            onUpload={onUpload}
           />
         </Container>
 
