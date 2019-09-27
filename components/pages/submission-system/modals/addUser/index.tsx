@@ -125,7 +125,6 @@ const AddUserModal = ({
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}
-      actionDisabled={!isFormTouched || hasErrors}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
