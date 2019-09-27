@@ -11,6 +11,11 @@ module.exports = async ({ config }) => {
   config.module.rules = [
     ...(config.module.rules || []),
     {
+      test: /\.(graphql|gql)$/,
+      exclude: /node_modules/,
+      loader: 'graphql-tag/loader',
+    },
+    {
       test: /\.(ts|tsx)$/,
       exclude: /(node_modules)/,
       use: [
