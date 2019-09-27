@@ -1,7 +1,7 @@
 import * as React from 'react';
 import NavBar from 'components/NavBar';
 import { MenuItem } from 'uikit/AppBar';
-import Footer from 'uikit/Footer';
+import Footer from '../Footer';
 import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { PageContainer } from 'uikit/PageLayout';
@@ -26,20 +26,7 @@ export default function ErrorLayout({ children }) {
         </Container>
       </div>
 
-      <Footer
-        css={css`
-          padding: 0 24px;
-          box-shadow: 0 6px 0px 0px white, 0 1px 6px 0 rgba(0, 0, 0, 0.1),
-            0 1px 5px 0 rgba(0, 0, 0, 0.08);
-        `}
-        links={[
-          { displayName: 'Contact', href: '#' },
-          { displayName: 'Documentation', href: '#' },
-          { displayName: 'Privacy Policy', href: '/privacy' },
-          { displayName: 'Terms & Conditions', href: '#' },
-          { displayName: 'Publication Policy', href: '#' },
-        ]}
-      />
+      <Footer />
     </PageContainer>
   );
 }

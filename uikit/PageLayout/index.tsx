@@ -63,10 +63,3 @@ export const ContentBody = styled('div')`
 export const ContentBox = styled(Container)`
   padding: 8px;
 `;
-
-export const PageFooter = styled('div')`
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  z-index: 1;
-  background: ${({ theme }) => theme.colors.white};
-  padding: 0px 24px;
-`;

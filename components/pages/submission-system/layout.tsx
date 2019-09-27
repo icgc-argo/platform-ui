@@ -8,14 +8,12 @@ import {
   PageContent,
   ContentHeader,
   ContentBody,
-  ContentBox,
-  PageFooter,
 } from 'uikit/PageLayout';
 import clsx from 'clsx';
 import Head from '../head';
 import NavBar from 'components/NavBar';
 import SideMenu from './SideMenu';
-import Footer from 'uikit/Footer';
+import Footer from '../../Footer';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
@@ -65,9 +63,7 @@ const SubmissionLayout = ({
           <ContentBody>{children}</ContentBody>
         </PageContent>
       </PageBody>
-      <PageFooter>
-        <Footer />
-      </PageFooter>
+      <Footer />
     </PageContainer>
   );
 };
