@@ -1,18 +1,13 @@
-import React from 'react';
-import memoize from 'lodash/memoize';
-import sum from 'lodash/sum';
-import omit from 'lodash/omit';
-import PropTypes from 'prop-types';
-import Table, { TableActionBar } from 'uikit/Table';
-import Icon from 'uikit/Icon';
-import { useTheme } from 'uikit/ThemeProvider';
-import { css } from 'uikit';
-import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
-import { styled } from 'uikit';
-import NoDataMessage from './NoDataMessage';
-import get from 'lodash/get';
 import { format } from 'date-fns';
+import memoize from 'lodash/memoize';
+import omit from 'lodash/omit';
+import React from 'react';
+import { Col, Row } from 'react-grid-system';
+import { css, styled } from 'uikit';
+import Icon from 'uikit/Icon';
+import Table from 'uikit/Table';
+import { useTheme } from 'uikit/ThemeProvider';
+import Typography from 'uikit/Typography';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',

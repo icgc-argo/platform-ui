@@ -245,7 +245,7 @@ export default function ProgramIDRegistration() {
               />
             </>
           ) : (
-            <NoDataMessage />
+            <NoDataMessage loading={loading} />
           )}
         </Container>
       </div>
