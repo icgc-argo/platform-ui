@@ -32,7 +32,7 @@ const StarIcon = (props: { active: boolean; className?: string }) => (
   <Icon
     className={props.className || ''}
     name="star"
-    fill={props.active ? 'success' : 'grey_1'}
+    fill={props.active ? 'accent2' : 'grey_1'}
     width="16px"
     height="16px"
   />
