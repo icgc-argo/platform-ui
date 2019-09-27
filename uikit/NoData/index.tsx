@@ -25,7 +25,7 @@ const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle })
       `}
       color="grey"
       variant="navigation"
-      component="p"
+      as="p"
       bold
     >
       {title}
@@ -37,7 +37,7 @@ const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle })
       `}
       color="grey"
       variant="data"
-      component="p"
+      as="p"
     >
       {subtitle}
     </Typography>
