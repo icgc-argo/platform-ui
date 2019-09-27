@@ -18,8 +18,8 @@ export default function NoDataMessage(props: { loading: boolean }) {
         <DnaLoader />
       ) : (
         <NoData
-          title="  You do not have any registration data uploaded."
-          subtitle="    Follow the instructions above to get started."
+          title="You do not have any registration data uploaded."
+          subtitle="Follow the instructions above to get started."
         >
           <img alt="Chemistry beakers" src="/static/beakers.svg" />
         </NoData>
