@@ -1,17 +1,12 @@
+import useAuthContext from 'global/hooks/useAuthContext';
+import { displayDate } from 'global/utils/common';
 import React from 'react';
-
 import { css } from 'uikit';
-import Table from 'uikit/Table';
+import MailTo from 'uikit/MailTo';
+import Table, { TableColumnConfig } from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
-import Checkbox from 'uikit/form/Checkbox';
-import MailTo from 'uikit/MailTo';
-import { displayDate } from 'global/utils/common';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { RoleDisplayName } from '../modals/common';
-
-import { RoleKey } from '../modals/common';
-import { TableColumnConfig } from 'uikit/Table';
+import { RoleDisplayName, RoleKey } from '../modals/common';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
@@ -39,6 +34,7 @@ const UsersTable = (tableProps: {
   onUserEditClick: ({ user: UsersTableUser }) => void;
   onUserDeleteClick: ({ user: UsersTableUser }) => void;
   onUserResendInviteClick: ({ user: UsersTableUser }) => void;
+  loading: boolean;
 }) => {
   const { data: egoTokenData } = useAuthContext();
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
@@ -129,7 +125,16 @@ const UsersTable = (tableProps: {
     },
   ];
 
-  return <Table data={tableProps.users} columns={columns} />;
+  return (
+    <Table
+      data={tableProps.users}
+      loading={tableProps.loading}
+      columns={columns}
+      pageSize={Number.MAX_SAFE_INTEGER}
+      showPagination={false}
+      style={{ maxHeight: '500px' }}
+    />
+  );
 };
 
 export default UsersTable;
