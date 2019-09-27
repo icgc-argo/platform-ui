@@ -21,6 +21,7 @@ import { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import ErrorTable from './ErrorTable';
+import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -118,6 +119,19 @@ export default function ProgramIDRegistration() {
       .catch(console.log);
   };
 
+  // update progress steps
+  React.useEffect(() => {
+    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
+      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
+    } else if (fileErrors.length > 0) {
+      setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
+    } else if (registerString === registerStateStringMap['FINISHED']) {
+      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
+    }
+
+    return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
+  }, [clinicalRegistration, fileErrors]);
+
   // Data formatting
   let submissionInfo = null;
   let stats = null;
@@ -139,8 +153,6 @@ export default function ProgramIDRegistration() {
   }
 
   const noData = loading || !clinicalRegistration.id;
-  const hasError = errorBanner.visible || fileErrors;
-  const hasFileErrors = fileErrors.length > 0;
 
   const responseTypes = {
     CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
@@ -148,8 +160,10 @@ export default function ProgramIDRegistration() {
   };
 
   const onUpload = async ({ response, fileName }) => {
+    // reset error banner
+    setErrorBanner({ visible: false, content: '', title: '' });
     const { __typename: respType, ...resp } = response;
-    // resolve if upload error or data
+    // display an error banner or clinical data will update with errors array
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
       showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
     }
@@ -201,20 +215,8 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item
-                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.SUCCESS}
-                  text="Upload"
-                />
-                <Progress.Item
-                  state={
-                    noData
-                      ? PROGRESS_STATUS.DISABLED
-                      : registerString == registerStateStringMap['FINISHED']
-                      ? PROGRESS_STATUS.SUCCESS
-                      : PROGRESS_STATUS.PENDING
-                  }
-                  text="Register"
-                />
+                <Progress.Item state={progress[0]} text="Upload" />
+                <Progress.Item state={progress[1]} text="Register" />
               </Progress>
             </Row>
           </TitleBar>
@@ -274,6 +276,17 @@ export default function ProgramIDRegistration() {
           />
         </Container>
 
+        {errorBanner.visible ? (
+          <Banner
+            css={css`
+              margin-top: 20px;
+            `}
+            title={errorBanner.title}
+            variant={BANNER_VARIANTS.ERROR}
+            content={errorBanner.content}
+          />
+        ) : null}
+
         <Container css={containerStyle}>
           {fileRecords.length > 0 ? (
             <>
@@ -295,6 +308,13 @@ export default function ProgramIDRegistration() {
                 submissionInfo={submissionInfo}
               />
             </>
+          ) : fileErrors.length > 0 ? (
+            <ErrorTable
+              errors={fileErrors}
+              count={fileErrors.length}
+              onClear={handleClearClick}
+              onDownload={() => console.log('download')}
+            />
           ) : (
             <NoDataMessage />
           )}
