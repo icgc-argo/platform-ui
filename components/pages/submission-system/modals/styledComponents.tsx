@@ -50,7 +50,6 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
       <div
         css={css`
           flex: 1;
-          padding-bottom: 40px;
           min-width: 700px;
         `}
       >
