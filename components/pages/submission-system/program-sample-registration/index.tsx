@@ -291,7 +291,7 @@ export default function ProgramIDRegistration() {
           {fileRecords.length > 0 ? (
             <>
               <div css={cardHeaderContainerStyle}>
-                <Typography color="primary" variant="subtitle2" component="span">
+                <Typography color="primary" variant="data" component="span">
                   File Preview
                 </Typography>
                 <Button
@@ -299,7 +299,7 @@ export default function ProgramIDRegistration() {
                   size={BUTTON_SIZES.SM}
                   onClick={handleClearClick}
                 >
-                  Clear
+                  <Typography variant="data">Clear</Typography>
                 </Button>
               </div>
               <FileTable

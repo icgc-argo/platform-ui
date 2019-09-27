@@ -4,8 +4,8 @@ import omit from 'lodash/omit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { css, styled } from 'uikit';
-import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
+import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 
@@ -39,16 +39,16 @@ const StarIcon = (props: { active: boolean; className?: string }) => (
 );
 
 const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo?: SubmissionInfo }) => (
-  <Typography variant="paragraph" component="div" color="grey">
-    <Typography variant="default" color="secondary_dark">
+  <Typography variant="data" component="div" color="grey">
+    <Typography variant="data" color="secondary_dark">
       {submissionInfo && submissionInfo.fileName}
     </Typography>{' '}
     uploaded on{' '}
-    <Typography variant="default" color="secondary_dark">
+    <Typography variant="data" color="secondary_dark">
       {submissionInfo && format(new Date(submissionInfo.createdAt), 'MMMM D, YYYY ')}
     </Typography>{' '}
     by{' '}
-    <Typography variant="default" color="secondary_dark">
+    <Typography variant="data" color="secondary_dark">
       {submissionInfo && submissionInfo.creator}
     </Typography>
   </Typography>
@@ -65,7 +65,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
 
   return (
     <Typography
-      variant="paragraph"
+      variant="data"
       component="div"
       color="grey"
       css={css`

@@ -10,10 +10,9 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { RegisterState, ClinicalRegistration } from '../index';
+import { RegisterState } from '../index';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
-import { ERROR_CODES } from '../common';
 
 function Instructions({
   registrationEnabled,
@@ -42,6 +41,8 @@ function Instructions({
   const footerContentStyle = css`
     text-align: center;
     width: 100%;
+    padding-bottom: 10px;
+    padding-top: 8px;
   `;
 
   const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
@@ -82,7 +83,7 @@ function Instructions({
       <InstructionBox
         steps={[
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               1. Download the registration template and format it using the latest{` `}
               <Link href={CONTACT_PAGE_PATH}>
                 <HyperLink>Data Dictionary</HyperLink>
@@ -102,7 +103,7 @@ function Instructions({
             </Button>
           </>,
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               2. Upload your formatted registration TSV file.
             </Typography>
             <Button
@@ -128,7 +129,7 @@ function Instructions({
             </Button>
           </>,
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               3. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
             <Button
@@ -144,7 +145,7 @@ function Instructions({
         ]}
         footer={
           <div css={footerContentStyle}>
-            <Typography variant={'paragraph'}>
+            <Typography variant="data">
               If you have any changes to previously registered data, please {` `}
               <Link href={CONTACT_PAGE_PATH}>
                 <HyperLink>contact the DCC</HyperLink>

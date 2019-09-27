@@ -104,7 +104,7 @@ const ErrorTable = ({
                 margin-right: 5px;
               `}
             />
-            ERROR REPORT
+            <Typography variant="data">ERROR REPORT</Typography>
           </span>
         </Button>
         <Button
@@ -115,7 +115,7 @@ const ErrorTable = ({
           size={BUTTON_SIZES.SM}
           onClick={() => onClear()}
         >
-          Clear
+          <Typography variant="data">Clear</Typography>
         </Button>
       </div>
     </div>
