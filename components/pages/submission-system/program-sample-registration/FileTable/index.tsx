@@ -78,6 +78,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
       css={css`
         display: flex;
         align-items: center;
+        margin-right: 50px;
       `}
     >
       <Section>{stats ? stats.existingCount + stats.newCount : 0} Total</Section>
@@ -151,7 +152,7 @@ const FileTable = (props: {
         `}
       >
         <Row nogutter>
-          <Col lg={6}>{stats && <StatsArea stats={stats} />}</Col>
+          {stats && <StatsArea stats={stats} />}
           <Col align="end">
             {submissionInfo && <SubmissionInfoArea submissionInfo={submissionInfo} />}
           </Col>
