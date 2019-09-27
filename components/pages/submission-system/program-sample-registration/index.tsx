@@ -22,6 +22,7 @@ import { ERROR_CODES } from './common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
+import { formatFileName } from './util';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -165,7 +166,11 @@ export default function ProgramIDRegistration() {
     const { __typename: respType, ...resp } = response;
     // display an error banner or clinical data will update with errors array
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
+      formatFileName;
+      showError({
+        errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
+        fileName: formatFileName(fileName),
+      });
     }
   };
 

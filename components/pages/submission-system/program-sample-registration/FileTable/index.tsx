@@ -8,6 +8,7 @@ import Table from 'uikit/Table';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
+import { formatFileName } from '../util';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -38,21 +39,27 @@ const StarIcon = (props: { active: boolean; className?: string }) => (
   />
 );
 
-const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo?: SubmissionInfo }) => (
-  <Typography variant="data" component="div" color="grey">
-    <Typography variant="data" color="secondary_dark">
-      {submissionInfo && submissionInfo.fileName}
-    </Typography>{' '}
-    uploaded on{' '}
-    <Typography variant="data" color="secondary_dark">
-      {submissionInfo && format(new Date(submissionInfo.createdAt), 'MMMM D, YYYY ')}
-    </Typography>{' '}
-    by{' '}
-    <Typography variant="data" color="secondary_dark">
-      {submissionInfo && submissionInfo.creator}
+const SubmissionInfoArea = ({
+  submissionInfo: { fileName, createdAt, creator },
+}: {
+  submissionInfo?: SubmissionInfo;
+}) => {
+  return (
+    <Typography variant="data" component="div" color="grey">
+      <Typography variant="data" color="secondary_dark">
+        {formatFileName(fileName)}
+      </Typography>{' '}
+      uploaded on{' '}
+      <Typography variant="data" color="secondary_dark">
+        {format(new Date(createdAt), 'MMMM D, YYYY ')}
+      </Typography>{' '}
+      by{' '}
+      <Typography variant="data" color="secondary_dark">
+        {creator}
+      </Typography>
     </Typography>
-  </Typography>
-);
+  );
+};
 
 const StatsArea = (props: { stats?: FileStats }) => {
   const { stats } = props;
