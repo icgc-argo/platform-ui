@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { css } from 'uikit';
-import Typography from 'uikit/Typography';
 import DnaLoader from 'uikit/DnaLoader';
+import NoData from 'uikit/NoData';
 
 export default function NoDataMessage(props: { loading: boolean }) {
   return (
@@ -17,22 +17,12 @@ export default function NoDataMessage(props: { loading: boolean }) {
       {props.loading ? (
         <DnaLoader />
       ) : (
-        <>
+        <NoData
+          title="  You do not have any registration data uploaded."
+          subtitle="    Follow the instructions above to get started."
+        >
           <img alt="Chemistry beakers" src="/static/beakers.svg" />
-          <Typography
-            css={css`
-              margin-top: 14px;
-            `}
-            variant="navigation"
-            component="div"
-            bold
-          >
-            You do not have any registration data uploaded.
-          </Typography>
-          <Typography variant="data" component="div">
-            Follow the instructions above to get started.
-          </Typography>
-        </>
+        </NoData>
       )}
     </div>
   );
