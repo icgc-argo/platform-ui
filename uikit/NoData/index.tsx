@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Typography from '../Typography';
 import { css } from '../';
 
 type NoDataProps = {
-  children?: string;
+  children?: ReactElement;
   title: string;
   subtitle?: string;
 };
 
 const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle }) => (
-  <div>
+  <div
+    css={css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+    `}
+  >
     {children}
     <Typography
       css={css`
         margin-top: 14px;
+        margin-bottom: 0;
       `}
+      color="grey"
       variant="navigation"
-      component="div"
+      component="p"
       bold
     >
       {title}
     </Typography>
-    <Typography variant="data" component="div">
+    <Typography
+      css={css`
+        margin-top: 10px;
+        margin-bottom: 0;
+      `}
+      color="grey"
+      variant="data"
+      component="p"
+    >
       {subtitle}
     </Typography>
   </div>
