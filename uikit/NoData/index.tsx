@@ -3,7 +3,6 @@ import Typography from '../Typography';
 import { css } from '../';
 
 type NoDataProps = {
-  children?: ReactElement;
   title: string;
   subtitle?: string;
 };
