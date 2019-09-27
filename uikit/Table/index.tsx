@@ -112,6 +112,7 @@ function Table<Data = { [k: string]: any }>({
       PaginationComponent={PaginationComponent}
       NoDataComponent={NoDataComponent}
       showPagination={isEmpty(data) ? false : showPagination}
+      getNoDataProps={x => x}
       {...rest}
     />
   );
