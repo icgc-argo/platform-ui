@@ -1,11 +1,9 @@
 import React from 'react';
 import noDataSvg from './noData.svg';
 import css from '@emotion/css';
-import Typography from '../Typography';
-import useTheme from '../utils/useTheme';
+import NoData from 'uikit/NoData';
 
 export default function NoDataComponent(props) {
-  const theme = useTheme();
   return (
     <div
       css={css`
@@ -17,19 +15,9 @@ export default function NoDataComponent(props) {
       `}
     >
       {props.loading ? null : (
-        <>
+        <NoData title="No data found">
           <img alt="no data found" src={noDataSvg} />
-          <Typography
-            variant="navigation"
-            css={css`
-              font-weight: 600;
-              color: ${theme.colors.grey};
-              margin: 16px 0;
-            `}
-          >
-            No Data Found
-          </Typography>
-        </>
+        </NoData>
       )}
     </div>
   );
