@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import yup from 'global/utils/validations';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
