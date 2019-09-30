@@ -84,7 +84,7 @@ const InputBox = styled(StyledInputWrapper)`
   padding: 2px;
 `;
 
-const Input = styled<'input', { autocomplete: string }>('input')`
+const Input = styled<'input', { autoComplete: string }>('input')`
   ${({ theme }) => css(theme.typography.paragraph)};
   border: none;
   display: block;
@@ -246,6 +246,28 @@ const MultiSelect: React.ComponentType<{
     onChange(event, child);
   };
 
+  const items = React.Children.map(children, (child: any) => {
+    const selected = includes(value, child.props.value);
+    if (selected) {
+      return null;
+    }
+
+    if (searchString !== '') {
+      if (!includes(toLower(child.props.value), toLower(searchString))) {
+        return null;
+      }
+    }
+
+    return React.cloneElement(child, {
+      onMouseDown: handleItemClick(child),
+      role: 'option',
+      selected,
+      value: undefined,
+      children: <Highlight string={child.props.children} searchText={searchString} />,
+      'data-value': child.props.value,
+    });
+  });
+
   const handleNewItemClick = event => {
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
@@ -290,15 +312,18 @@ const MultiSelect: React.ComponentType<{
           onChange(e);
         }
       } else {
-        if (searchString.length !== 0) {
+        if (searchString.length !== 0 && items.length > 0) {
           e.persist();
 
-          const newValue = single ? [searchString] : uniq([...value, searchString]);
+          const newValue = single
+            ? [items[0].props['data-value']]
+            : uniq([...value, items[0].props['data-value']]);
 
           e.target = {
             value: newValue,
             name,
           };
+
           setSearchString('');
           onChange(e);
         }
@@ -323,28 +348,6 @@ const MultiSelect: React.ComponentType<{
     };
     onChange(event, item);
   };
-
-  const items = React.Children.map(children, (child: any) => {
-    const selected = includes(value, child.props.value);
-    if (selected) {
-      return null;
-    }
-
-    if (searchString !== '') {
-      if (!includes(toLower(child.props.value), toLower(searchString))) {
-        return null;
-      }
-    }
-
-    return React.cloneElement(child, {
-      onMouseDown: handleItemClick(child),
-      role: 'option',
-      selected,
-      value: undefined,
-      children: <Highlight string={child.props.children} searchText={searchString} />,
-      'data-value': child.props.value,
-    });
-  });
 
   const selectedItems = map(value, v => {
     const c: any = find(React.Children.toArray(children), { props: { value: v } });
@@ -397,7 +400,7 @@ const MultiSelect: React.ComponentType<{
           ))
         )}
         <Input
-          autocomplete="off"
+          autoComplete="off"
           aria-label={ariaLabel}
           id={`${name}-multiselect`}
           value={searchString}
