@@ -120,7 +120,7 @@ export default () => {
           updates: createUpdateProgramInput(data),
         },
       });
-      commonToasters.changeSaved();
+      commonToasters.onSave();
     } catch (err) {
       commonToasters.unknownError();
     }
