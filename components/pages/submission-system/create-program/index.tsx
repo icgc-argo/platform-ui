@@ -2,7 +2,7 @@ import React from 'react';
 import { css, styled } from 'uikit';
 import SubmissionLayout from '../layout';
 import TitleBar from 'uikit/TitleBar';
-import ProgramForm from '../ProgramForm';
+import ProgramForm from '../program-form/ProgramForm';
 import Container from 'uikit/Container';
 import Link from 'next/link';
 import {
