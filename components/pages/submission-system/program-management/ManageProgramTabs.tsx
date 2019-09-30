@@ -215,6 +215,7 @@ export default () => {
       {activeTab === TABS.USERS && (
         <Users
           programShortName={programShortName}
+          loading={loading}
           users={loading ? [] : program ? program.users : []}
           onUserUpdate={() => refetch()}
         />

@@ -23,10 +23,12 @@ const Users = ({
   users,
   programShortName,
   onUserUpdate,
+  loading,
 }: {
   users: Array<any>;
   programShortName: string;
   onUserUpdate: () => void;
+  loading: boolean;
 }) => {
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
@@ -46,6 +48,7 @@ const Users = ({
     <div>
       <TableActionBar>{users.length} results</TableActionBar>
       <UsersTable
+        loading={loading}
         users={users}
         /**
          * @todo: actually implement these functions
