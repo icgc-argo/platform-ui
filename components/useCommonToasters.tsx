@@ -11,7 +11,7 @@ export default function useCommonToasters() {
         variant: TOAST_VARIANTS.ERROR,
         content: 'Something went wrong, please try again later or contact us for assistance',
       }),
-    changeSaved: () =>
+    onSave: () =>
       toaster.addToast({
         title: 'Success!',
         variant: TOAST_VARIANTS.SUCCESS,
