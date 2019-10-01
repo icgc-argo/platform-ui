@@ -3,6 +3,7 @@ import { useTheme } from '../ThemeProvider';
 import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
+import FocusWrapper from 'uikit/FocusWrapper';
 
 const Triangle = styled('div')`
   transition: all 0.25s;
@@ -34,7 +35,8 @@ const Triangle = styled('div')`
     border-width: calc(23px - 2px);
   }
 `;
-const BaseItemContainer = styled('div')`
+const BaseItemContainer = styled(FocusWrapper)`
+  width: 100%;
   position: relative;
   transition: all 0.25s;
   min-height: 22px;
@@ -42,16 +44,19 @@ const BaseItemContainer = styled('div')`
   padding-right: 10px;
   padding-top: 8px;
   padding-bottom: 8px;
-  border-left: solid 3px rgba(0, 0, 0, 0);
+  border: solid 1px;
+  border-left: solid 3px;
+  border-right: none;
+  border-color: rgba(0, 0, 0, 0);
   cursor: pointer;
   &:hover {
     background: ${({ theme }) => theme.colors.grey_3};
   }
 `;
 const ActiveItemContainer = styled(BaseItemContainer)`
-  border: solid 1px ${({ theme }) => theme.colors.secondary_2};
-  border-left: solid 3px ${({ theme }) => theme.colors.secondary};
-  border-right: none;
+  border-color: ${({ theme }) => theme.colors.secondary};
+  border-top-color: ${({ theme }) => theme.colors.secondary_2};
+  border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
   background: ${({ theme }) => theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary};
   &:hover {
@@ -60,7 +65,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
 `;
 
 const VerticalTabsItem: React.ComponentType<
-  { active?: boolean } & HTMLAttributes<HTMLDivElement>
+  { active?: boolean } & HTMLAttributes<HTMLButtonElement>
 > = ({ active = false, children, ...rest }) => {
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
   return (
