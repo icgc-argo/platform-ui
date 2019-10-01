@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 const Li = styled('li')`
   list-style: none;
   font-size: 14px;
-  height: 27px;
+  min-height: 27px;
   line-height: 27px;
   padding-left: 7px;
   font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
