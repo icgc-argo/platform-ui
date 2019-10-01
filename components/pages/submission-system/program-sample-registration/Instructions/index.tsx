@@ -108,7 +108,7 @@ function Instructions({
             <Typography variant={'paragraph'}>
               If you have any changes to previously registered data, please {` `}
               <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact DCC</HyperLink>
+                <HyperLink>contact the DCC</HyperLink>
               </Link>
               .
             </Typography>
