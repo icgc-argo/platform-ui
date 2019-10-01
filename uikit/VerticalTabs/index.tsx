@@ -58,7 +58,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
     background: ${({ theme }) => theme.colors.secondary_4};
   }
 `;
-const VerticleTabItem: React.ComponentType<
+const VerticalTabsItem: React.ComponentType<
   { active?: boolean } & HTMLAttributes<HTMLDivElement>
 > = ({ active = false, children, ...rest }) => {
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
@@ -77,7 +77,7 @@ const VerticleTabItem: React.ComponentType<
     </ContainerComponent>
   );
 };
-VerticleTabItem.displayName = 'VerticalTabs.Item';
+VerticalTabsItem.displayName = 'VerticalTabs.Item';
 
 const VerticalTabs: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>> = ({
   children,
@@ -104,11 +104,11 @@ const TabsItemTag: typeof Tag = styled(Tag)`
 TabsItemTag.displayName = 'VerticalTabs.Tag';
 
 const output: typeof VerticalTabs & {
-  Item: typeof VerticleTabItem;
+  Item: typeof VerticalTabsItem;
   Tag: typeof Tag;
 } = (() => {
   const output = VerticalTabs as any;
-  output.Item = VerticleTabItem;
+  output.Item = VerticalTabsItem;
   output.Tag = TabsItemTag;
   return output;
 })();
