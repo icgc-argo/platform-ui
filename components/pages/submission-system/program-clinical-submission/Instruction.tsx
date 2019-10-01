@@ -50,6 +50,7 @@ export default () => (
         </Typography>
         <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM} disabled>
           <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
+          Validate Submission
         </Button>
       </>,
       <>

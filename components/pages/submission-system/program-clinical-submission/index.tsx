@@ -6,15 +6,16 @@ import usePageContext from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
+import VerticalTabs from 'uikit/VerticalTabs';
 import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
 import { containerStyle } from '../common';
-import FilesNavigator from './FilesNavigator';
 import { ClinicalSubmissionEntityFile, ClinicalError } from './types';
 import Banner from 'uikit/notifications/Banner';
 import Notification from 'uikit/notifications/Notification';
 import { MOCK_FILE_STATE } from './mock';
+import FilesNavigator, { FileState } from './FilesNavigator';
 
 export default function ProgramClinicalSubmission() {
   const {
@@ -111,7 +112,7 @@ export default function ProgramClinicalSubmission() {
           min-height: calc(100vh - 240px);
         `}
       >
-        <FilesNavigator fileStates={MOCK_FILE_STATE} loading={false} />
+        <FilesNavigator fileStates={MOCK_FILE_STATE} />
       </Container>
     </SubmissionLayout>
   );
