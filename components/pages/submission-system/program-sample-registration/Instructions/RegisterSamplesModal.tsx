@@ -61,7 +61,7 @@ export default function RegisterSamplesModal({
           interactionType: 'CLOSE',
           title: `${num} new sample${num > 1 ? 's' : ''} have been registered`,
           variant: TOAST_VARIANTS.SUCCESS,
-          content: <>if you have any changes to this registered sample data, please contact DCC</>,
+          content: <>If you have any changes to this registered sample data, please contact the DCC.</>,
         });
       })
       .catch(error => {
@@ -78,7 +78,7 @@ export default function RegisterSamplesModal({
   return (
     <ModalPortal>
       <Modal
-        title="Are you sure you want to register samples"
+        title="Are you sure you want to register samples?"
         actionButtonText="YES, REGISTER SAMPLES"
         buttonSize="sm"
         onActionClick={handleActionClick}
