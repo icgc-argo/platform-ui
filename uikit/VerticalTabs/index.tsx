@@ -58,6 +58,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
     background: ${({ theme }) => theme.colors.secondary_4};
   }
 `;
+
 const VerticalTabsItem: React.ComponentType<
   { active?: boolean } & HTMLAttributes<HTMLDivElement>
 > = ({ active = false, children, ...rest }) => {
