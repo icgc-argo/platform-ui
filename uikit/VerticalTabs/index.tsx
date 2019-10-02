@@ -57,6 +57,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
   border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
+  border-right: solid 1px ${({ theme }) => theme.colors.secondary_2};
   background: ${({ theme }) => theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary};
   &:hover {
