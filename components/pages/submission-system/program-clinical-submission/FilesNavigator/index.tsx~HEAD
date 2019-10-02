@@ -6,6 +6,8 @@ import DnaLoader from 'uikit/DnaLoader';
 import { ClinicalSubmissionEntityFile } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
+import Button from 'uikit/Button';
+import { useToaster } from 'global/hooks/toaster';
 
 export default ({
   fileStates,
@@ -14,11 +16,18 @@ export default ({
   fileStates: Array<ClinicalSubmissionEntityFile>;
   loading: boolean;
 }) => {
+  const toaster = useToaster();
   const [selectedFile, setSelectedFile] = React.useState<ClinicalSubmissionEntityFile>(
     fileStates[0],
   );
   const onFileClick = fileState => e => {
     setSelectedFile(fileState);
+  };
+  const onClearClick = () => {
+    toaster.addToast({
+      title: 'DUMMY',
+      content: "I'm just a dummy placeholder behaviour",
+    });
   };
   return loading ? (
     <div
@@ -54,28 +63,15 @@ export default ({
               active={selectedFile.id === fileState.id}
               onClick={onFileClick(fileState)}
             >
-              <div
-                css={css`
-                  display: flex;
-                  justify-content: space-between;
-                `}
-              >
-                <div
-                  css={css`
-                    text-align: left;
-                  `}
-                >
-                  {fileState.displayName}
-                </div>
-                {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
-                  <VerticalTabs.Tag variant={fileState.status}>
-                    {fileState.recordsCount}
-                  </VerticalTabs.Tag>
-                )}
-                {fileState.status === 'ERROR' && (
-                  <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-                )}
-              </div>
+              {fileState.displayName}
+              {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                <VerticalTabs.Tag variant={fileState.status}>
+                  {fileState.recordsCount}
+                </VerticalTabs.Tag>
+              )}
+              {fileState.status === 'ERROR' && (
+                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+              )}
             </VerticalTabs.Item>
           ))}
         </VerticalTabs>
@@ -84,6 +80,8 @@ export default ({
         <div
           css={css`
             padding: 8px;
+            display: flex;
+            justify-content: space-between;
           `}
         >
           <Typography
@@ -96,8 +94,18 @@ export default ({
           >
             {selectedFile.displayName} File Preview
           </Typography>
+          <Button variant="text" size="sm" onClick={onClearClick}>
+            clear
+          </Button>
         </div>
-        <FileRecordTable file={selectedFile} />
+        <FileRecordTable
+          file={selectedFile}
+          submissionData={{
+            fileName: 'some file',
+            creator: 'Someone',
+            createdAt: 'sometime',
+          }}
+        />
       </Col>
     </div>
   );

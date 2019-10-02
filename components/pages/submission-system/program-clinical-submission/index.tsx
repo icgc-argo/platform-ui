@@ -15,7 +15,7 @@ import { ClinicalSubmissionEntityFile, ClinicalError } from './types';
 import Banner from 'uikit/notifications/Banner';
 import Notification from 'uikit/notifications/Notification';
 import { MOCK_FILE_STATE } from './mock';
-import FilesNavigator, { FileState } from './FilesNavigator';
+import FilesNavigator from './FilesNavigator';
 
 export default function ProgramClinicalSubmission() {
   const {
@@ -112,7 +112,7 @@ export default function ProgramClinicalSubmission() {
           min-height: calc(100vh - 240px);
         `}
       >
-        <FilesNavigator fileStates={MOCK_FILE_STATE} />
+        <FilesNavigator fileStates={MOCK_FILE_STATE} loading={false} />
       </Container>
     </SubmissionLayout>
   );

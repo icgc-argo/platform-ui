@@ -33,7 +33,6 @@ export type ClinicalSubmissionEntityFile = {
   dataErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
 };
-
 export type ClinicalError = {
   msg: string;
   fileNames: string[];
