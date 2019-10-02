@@ -4,10 +4,11 @@ import omit from 'lodash/omit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { css, styled } from 'uikit';
-import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
+import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
+import { formatFileName } from '../util';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -32,27 +33,33 @@ const StarIcon = (props: { active: boolean; className?: string }) => (
   <Icon
     className={props.className || ''}
     name="star"
-    fill={props.active ? 'success' : 'grey_1'}
+    fill={props.active ? 'accent2' : 'grey_1'}
     width="16px"
     height="16px"
   />
 );
 
-const SubmissionInfoArea = ({ submissionInfo }: { submissionInfo?: SubmissionInfo }) => (
-  <Typography variant="paragraph" component="div" color="grey">
-    <Typography variant="default" color="secondary_dark">
-      {submissionInfo && submissionInfo.fileName}
-    </Typography>{' '}
-    uploaded on{' '}
-    <Typography variant="default" color="secondary_dark">
-      {submissionInfo && format(new Date(submissionInfo.createdAt), 'MMMM D, YYYY ')}
-    </Typography>{' '}
-    by{' '}
-    <Typography variant="default" color="secondary_dark">
-      {submissionInfo && submissionInfo.creator}
+const SubmissionInfoArea = ({
+  submissionInfo: { fileName, createdAt, creator },
+}: {
+  submissionInfo?: SubmissionInfo;
+}) => {
+  return (
+    <Typography variant="data" component="div" color="grey">
+      <Typography variant="data" color="secondary_dark">
+        {formatFileName(fileName)}
+      </Typography>{' '}
+      uploaded on{' '}
+      <Typography variant="data" color="secondary_dark">
+        {format(new Date(createdAt), 'MMMM D, YYYY ')}
+      </Typography>{' '}
+      by{' '}
+      <Typography variant="data" color="secondary_dark">
+        {creator}
+      </Typography>
     </Typography>
-  </Typography>
-);
+  );
+};
 
 const StatsArea = (props: { stats?: FileStats }) => {
   const { stats } = props;
@@ -65,12 +72,13 @@ const StatsArea = (props: { stats?: FileStats }) => {
 
   return (
     <Typography
-      variant="paragraph"
+      variant="data"
       component="div"
       color="grey"
       css={css`
         display: flex;
         align-items: center;
+        margin-right: 50px;
       `}
     >
       <Section>{stats ? stats.existingCount + stats.newCount : 0} Total</Section>
@@ -144,7 +152,7 @@ const FileTable = (props: {
         `}
       >
         <Row nogutter>
-          <Col lg={6}>{stats && <StatsArea stats={stats} />}</Col>
+          {stats && <StatsArea stats={stats} />}
           <Col align="end">
             {submissionInfo && <SubmissionInfoArea submissionInfo={submissionInfo} />}
           </Col>

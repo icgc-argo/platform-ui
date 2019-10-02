@@ -1,5 +1,4 @@
 import ApolloClient from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
 import { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
@@ -15,6 +14,7 @@ import urljoin from 'url-join';
 import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
+import { createUploadLink } from 'apollo-upload-client';
 
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 
@@ -120,7 +120,7 @@ export default function ApplicationRoot({
 
   const apolloClient = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createHttpLink({
+    link: createUploadLink({
       uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,
       headers: egoJwt

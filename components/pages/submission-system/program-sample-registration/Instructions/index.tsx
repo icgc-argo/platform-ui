@@ -11,21 +11,24 @@ import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { RegisterState } from '../index';
+import { useMutation } from '@apollo/react-hooks';
+import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 
 function Instructions({
   registrationEnabled,
   shortName,
   registrationId,
   setRegisterState,
+  onUpload,
 }: {
   registrationEnabled: boolean;
   shortName: string;
   registrationId: string;
   setRegisterState: (state: RegisterState) => void;
+  onUpload: (x: any) => any;
 }) {
   const buttonStyle = css`
     margin-top: 10px;
-    width: 150px;
   `;
   const buttonContentStyle = css`
     display: flex;
@@ -37,10 +40,13 @@ function Instructions({
   const footerContentStyle = css`
     text-align: center;
     width: 100%;
+    padding-bottom: 10px;
+    padding-top: 8px;
   `;
 
+  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+
   const downloadTemplate = () => {
-    const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
     window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
   };
 
@@ -53,12 +59,30 @@ function Instructions({
     setShowRegisterSamplesModal(false);
   };
 
+  const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
+  const fileUploadRef = React.createRef<HTMLInputElement>();
+  const selectFile = () => {
+    const fp = fileUploadRef.current;
+    if (fp) {
+      fp.click();
+    }
+  };
+
+  const handleUpload = async file => {
+    const {
+      data: { uploadClinicalRegistration },
+    } = await uploadFile({
+      variables: { shortName, registrationFile: file },
+    });
+    onUpload({ response: uploadClinicalRegistration, fileName: file.name });
+  };
+
   return (
     <>
       <InstructionBox
         steps={[
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               1. Download the registration template and format it using the latest{` `}
               <Link href={CONTACT_PAGE_PATH}>
                 <HyperLink>Data Dictionary</HyperLink>
@@ -78,10 +102,25 @@ function Instructions({
             </Button>
           </>,
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               2. Upload your formatted registration TSV file.
             </Typography>
-            <Button css={buttonStyle} variant={BUTTON_VARIANTS.SECONDARY} size={BUTTON_SIZES.SM}>
+            <Button
+              css={buttonStyle}
+              variant={BUTTON_VARIANTS.SECONDARY}
+              size={BUTTON_SIZES.SM}
+              onClick={selectFile}
+            >
+              <input
+                type="file"
+                ref={fileUploadRef}
+                onChange={async ({ target }) => {
+                  const file = target.files[0];
+                  handleUpload(file);
+                }}
+                accept=".tsv"
+                style={{ display: 'none' }}
+              />
               <span css={buttonContentStyle}>
                 <Icon name="upload" fill="accent2_dark" height="12px" css={buttonIconStyle} />{' '}
                 Upload File
@@ -89,7 +128,7 @@ function Instructions({
             </Button>
           </>,
           <>
-            <Typography variant="paragraph" component="span">
+            <Typography variant="data" component="span">
               3. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
             <Button
@@ -105,10 +144,10 @@ function Instructions({
         ]}
         footer={
           <div css={footerContentStyle}>
-            <Typography variant={'paragraph'}>
+            <Typography variant="data">
               If you have any changes to previously registered data, please {` `}
               <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact DCC</HyperLink>
+                <HyperLink>contact the DCC</HyperLink>
               </Link>
               .
             </Typography>

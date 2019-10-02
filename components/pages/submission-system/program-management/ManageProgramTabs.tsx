@@ -8,7 +8,7 @@ import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';
 import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import ProgramForm from '../ProgramForm';
+import ProgramForm from '../program-form/ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
@@ -90,8 +90,7 @@ const useTabState = () => {
 };
 
 export default () => {
-  const router = useRouter();
-  const { data: egoTokenData, token } = useAuthContext();
+  const { token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
 
   const { shortName: programShortName } = usePageQuery();
@@ -105,7 +104,7 @@ export default () => {
   const toaster = useToaster();
   const commonToasters = useCommonToasters();
 
-  function handleChange(event, newValue) {
+  function handleChange(_event, newValue) {
     setActiveTab(newValue);
   }
 
@@ -121,6 +120,7 @@ export default () => {
           updates: createUpdateProgramInput(data),
         },
       });
+      commonToasters.onSave();
     } catch (err) {
       commonToasters.unknownError();
     }
@@ -215,6 +215,7 @@ export default () => {
       {activeTab === TABS.USERS && (
         <Users
           programShortName={programShortName}
+          loading={loading}
           users={loading ? [] : program ? program.users : []}
           onUserUpdate={() => refetch()}
         />

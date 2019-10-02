@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import get from 'lodash/get';
 import isArray from 'lodash/isArray';
-import * as yup from 'yup';
+import yup from 'global/utils/validations';
 type FormData = {
   key: string;
   val: unknown;

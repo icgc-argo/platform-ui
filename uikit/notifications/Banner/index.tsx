@@ -13,6 +13,7 @@ const Banner = ({
   content,
   variant,
   size,
+  ...props
 }: {
   title?: React.ReactNode;
   content?: React.ReactNode;

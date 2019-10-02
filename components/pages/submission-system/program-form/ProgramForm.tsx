@@ -23,13 +23,11 @@ import RadioCheckboxGroup from 'uikit/form/RadioCheckboxGroup';
 import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
-import * as yup from 'yup';
 import useFormHook from 'global/hooks/useFormHook';
 import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
-import createProgramSchema from './create-program/validation';
-import updateProgramSchema from './program-management/updateProgramValidator';
+import { createProgramSchema, updateProgramSchema } from './validations';
 
-import QUERY_PROGRAM_VALUES from './QUERY_PROGRAM_VALUES.gql';
+import QUERY_PROGRAM_VALUES from '../QUERY_PROGRAM_VALUES.gql';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
