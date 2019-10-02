@@ -165,7 +165,7 @@ const FileTable = (props: {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
             Cell: ({ original }) => original.row, // we don't know what should be here
             Header: '#',
-            width: 60,
+            width: 48,
           },
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
@@ -180,8 +180,16 @@ const FileTable = (props: {
                 <StarIcon active={original.isNew} />
               </div>
             ),
-            width: 60,
-            Header: <StarIcon active={false} />,
+            width: 48,
+            Header: (
+              <div
+                css={css`
+                  display: flex;
+                `}
+              >
+                <StarIcon active={false} />
+              </div>
+            ),
           },
           ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
             id: key,
