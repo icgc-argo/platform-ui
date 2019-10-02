@@ -9,6 +9,7 @@ import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { formatFileName } from '../util';
+import { DataTableStarIcon } from '../../common';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -29,14 +30,11 @@ type SubmissionInfo = {
   createdAt: string;
 };
 
-const StarIcon = (props: { active: boolean; className?: string }) => (
-  <Icon
-    className={props.className || ''}
-    name="star"
-    fill={props.active ? 'accent2' : 'grey_1'}
-    width="16px"
-    height="16px"
-  />
+const StarIcon = ({
+  fill,
+  ...rest
+}: React.ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
+  <DataTableStarIcon fill={fill} />
 );
 
 const SubmissionInfoArea = ({
@@ -93,7 +91,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
             align-items: center;
           `}
         >
-          <StarIcon active />
+          <StarIcon fill="accent2" />
         </div>
         {stats && stats.newCount} New
       </Section>
@@ -105,7 +103,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
             align-items: center;
           `}
         >
-          <StarIcon active={false} />
+          <StarIcon fill="grey_1" />
         </div>
         {stats && stats.existingCount} Already Registered
       </Section>
@@ -178,7 +176,7 @@ const FileTable = (props: {
                   width: 100%;
                 `}
               >
-                <StarIcon active={original.isNew} />
+                <StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
               </div>
             ),
             width: 48,
@@ -188,7 +186,7 @@ const FileTable = (props: {
                   display: flex;
                 `}
               >
-                <StarIcon active={false} />
+                <StarIcon fill="grey_1" />
               </div>
             ),
           },

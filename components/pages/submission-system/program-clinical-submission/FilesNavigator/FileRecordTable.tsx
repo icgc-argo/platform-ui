@@ -1,8 +1,96 @@
 import { ClinicalSubmissionEntityFile } from '../types';
+import sum from 'lodash/sum';
 import Table from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
-import { css } from 'uikit';
+import { css, styled } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
+import Icon from 'uikit/Icon';
+import Typography from 'uikit/Typography';
+import { DataTableStarIcon } from '../../common';
+import { ThemeColorNames } from 'uikit/theme/types';
+
+const StarIcon = DataTableStarIcon;
+
+type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR';
+
+type FileStat = {
+  newCount: number;
+  noUpdateCount: number;
+  updateCount: number;
+  errorCount: number;
+};
+
+const FILE_STATE_COLORS: { [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'] } = {
+  ERROR: 'error',
+  NEW: 'accent2',
+  NONE: 'grey_1',
+  UPDATED: 'accent3_dark',
+};
+
+const StatsArea = (props: { fileStat: FileStat }) => {
+  const { fileStat } = props;
+  const Section = styled('div')`
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+    text-align: center;
+  `;
+  const StatEntryContainer = styled('div')`
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  `;
+
+  return (
+    <Typography
+      variant="data"
+      component="div"
+      color="grey"
+      css={css`
+        display: flex;
+        align-items: center;
+        margin-right: 50px;
+      `}
+    >
+      <Section>
+        {sum([
+          fileStat.errorCount,
+          fileStat.newCount,
+          fileStat.noUpdateCount,
+          fileStat.updateCount,
+        ])}{' '}
+        Total
+      </Section>
+      <Section>
+        <Icon name="chevron_right" fill="grey_1" width="8px" />
+      </Section>
+      <Section>
+        <StatEntryContainer>
+          <StarIcon fill={FILE_STATE_COLORS.NEW} />
+          {fileStat.newCount} New
+        </StatEntryContainer>
+      </Section>
+      <Section>
+        <StatEntryContainer>
+          <StarIcon fill={FILE_STATE_COLORS.NONE} />
+          {fileStat.noUpdateCount} No Update
+        </StatEntryContainer>
+      </Section>
+      <Section>
+        <StatEntryContainer>
+          <StarIcon fill={FILE_STATE_COLORS.UPDATED} />
+          {fileStat.updateCount} Updated
+        </StatEntryContainer>
+      </Section>
+      <Section>
+        <StatEntryContainer>
+          <StarIcon fill={FILE_STATE_COLORS.ERROR} />
+          {fileStat.errorCount} Errors
+        </StatEntryContainer>
+      </Section>
+    </Typography>
+  );
+};
 
 export default ({ file }: { file: ClinicalSubmissionEntityFile }) => {
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = file.records.length
@@ -16,18 +104,33 @@ export default ({ file }: { file: ClinicalSubmissionEntityFile }) => {
         margin: 5px 10px;
       `}
     >
-      <div css={css``}>
-        <Table
-          showPagination={false}
-          columns={fields.map(({ name }) => ({
-            accessor: name,
-            Header: name,
-          }))}
-          data={sortedRecords.map(record =>
-            record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {}),
-          )}
+      <div
+        css={css`
+          margin-bottom: 3px;
+          border-radius: 2px;
+          background-color: ${theme.colors.grey_3};
+          padding: 8px;
+        `}
+      >
+        <StatsArea
+          fileStat={{
+            errorCount: 1,
+            newCount: 2,
+            noUpdateCount: 3,
+            updateCount: 5,
+          }}
         />
       </div>
+      <Table
+        showPagination={false}
+        columns={fields.map(({ name }) => ({
+          accessor: name,
+          Header: name,
+        }))}
+        data={sortedRecords.map(record =>
+          record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {}),
+        )}
+      />
     </div>
   );
 };

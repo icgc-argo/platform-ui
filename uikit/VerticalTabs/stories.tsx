@@ -32,7 +32,7 @@ const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(4)} active={activeItem === 4}>
           Lorem ipsum dolor amet palo santo kombucha
-          <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>{' '}
+          <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
         </VerticalTabs.Item>
       </VerticalTabs>
     </div>
