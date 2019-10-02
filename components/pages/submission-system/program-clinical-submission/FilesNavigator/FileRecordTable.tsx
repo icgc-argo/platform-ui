@@ -10,7 +10,6 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
-
 const StarIcon = DataTableStarIcon;
 
 type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR';

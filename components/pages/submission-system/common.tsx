@@ -7,7 +7,6 @@ import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
-import { css } from 'uikit';
 
 export const containerStyle = css`
   padding: 8px;
@@ -29,7 +28,6 @@ export const instructionBoxButtonStyle = css`
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
   <Icon name="star" fill={props.fill} width="16px" height="16px" />
 );
-
 export const StatArea: {
   Container: React.ComponentType;
   Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
