@@ -7,10 +7,10 @@ import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 
 const TABLE_COLS = [
   { Header: 'Row #', accessor: 'row', width: 90 },
-  { Header: 'Submitter Sample ID', accessor: 'sampleID', width: 175 },
+  { Header: 'Submitter Sample ID', accessor: 'sampleId', width: 175 },
   { Header: 'Field with Error', accessor: 'field', width: 175 },
-  { Header: 'Error Value', accessor: 'errorValue', width: 120 },
-  { Header: 'Error Description', accessor: 'errorDescription', style: { 'white-space': 'unset' } },
+  { Header: 'Error Value', accessor: 'value', width: 120 },
+  { Header: 'Error Description', accessor: 'message', style: { whiteSpace: 'unset' } },
 ];
 
 const Container = styled('div')`
@@ -60,7 +60,7 @@ const ErrorTable = ({
           component="div"
           bold
         >
-          {`Your file has ${count} errors`}
+          {`Your file has ${count} error${count > 1 ? 's' : ''}`}
         </Typography>
 
         <Typography

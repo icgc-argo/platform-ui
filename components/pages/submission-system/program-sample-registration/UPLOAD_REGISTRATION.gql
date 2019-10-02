@@ -1,0 +1,14 @@
+#import "./REGISTRATION_FRAGMENT.gql"
+
+mutation UPLOAD_REGISTRATION($shortName: String!, $registrationFile: Upload!) {
+  uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile) {
+    ... on ClinicalRegistrationData {
+      ...Registration
+    }
+
+    ... on ClinicalRegistrationInvalid {
+      error
+      code
+    }
+  }
+}

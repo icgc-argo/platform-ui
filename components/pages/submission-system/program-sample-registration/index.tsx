@@ -18,6 +18,10 @@ import NoDataMessage from './FileTable/NoDataMessage';
 import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
+import { ERROR_CODES } from './common';
+import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
+import ErrorTable from './ErrorTable';
+import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -27,7 +31,18 @@ type ClinicalRecords = Array<{
   }>;
 }>;
 
-type ClinicalRegistration = {
+export type ClinicalErrors = Array<{
+  type: string;
+  message: string;
+  row: number;
+  field: string;
+  value: string;
+  sampleId: string;
+  donorId: string;
+  specimenId: string;
+}>;
+
+export type ClinicalRegistration = {
   id: string;
   createdAt: string;
   creator: string;
@@ -45,6 +60,7 @@ type ClinicalRegistration = {
     count: number;
   };
   records: ClinicalRecords;
+  errors: ClinicalErrors;
 };
 
 export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
@@ -72,6 +88,14 @@ export default function ProgramIDRegistration() {
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+  const fileErrors = get(clinicalRegistration, 'errors', []);
+  const fileRecords = get(clinicalRegistration, 'records', []);
+
+  const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
+  const [progress, setProgress] = React.useState([
+    PROGRESS_STATUS.DISABLED,
+    PROGRESS_STATUS.DISABLED,
+  ]);
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
@@ -95,24 +119,65 @@ export default function ProgramIDRegistration() {
       .catch(console.log);
   };
 
-  const fileRecords = get(clinicalRegistration, 'records', []);
-  const submissionInfo = clinicalRegistration
-    ? {
-        createdAt: clinicalRegistration.createdAt,
-        creator: clinicalRegistration.creator,
-        fileName: clinicalRegistration.fileName,
-      }
-    : null;
+  // update progress steps
+  React.useEffect(() => {
+    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
+      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
+    } else if (fileErrors.length > 0) {
+      setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
+    } else if (registerString === registerStateStringMap['FINISHED']) {
+      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
+    }
 
-  const stats = clinicalRegistration
-    ? {
-        existingCount: clinicalRegistration.alreadyRegistered.count,
-        newCount:
-          clinicalRegistration.newDonors.count +
-          clinicalRegistration.newSpecimens.count +
-          clinicalRegistration.newSamples.count,
-      }
-    : null;
+    return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
+  }, [clinicalRegistration, fileErrors]);
+
+  // Data formatting
+  let submissionInfo = null;
+  let stats = null;
+  if (clinicalRegistration) {
+    const {
+      createdAt,
+      creator,
+      fileName,
+      alreadyRegistered,
+      newDonors,
+      newSamples,
+      newSpecimens,
+    } = clinicalRegistration;
+    submissionInfo = { createdAt, creator, fileName };
+    stats = {
+      newCount: alreadyRegistered.count,
+      existingCount: newDonors.count + newSamples.count + newSpecimens.count,
+    };
+  }
+
+  const noData = loading || !clinicalRegistration.id;
+
+  const responseTypes = {
+    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
+    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
+  };
+
+  const onUpload = async ({ response, fileName }) => {
+    // reset error banner
+    setErrorBanner({ visible: false, content: '', title: '' });
+    const { __typename: respType, ...resp } = response;
+    // display an error banner or clinical data will update with errors array
+    if (respType === responseTypes.CLINICAL_REG_INVALID) {
+      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
+    }
+  };
+
+  const showError = ({ errorCode, fileName }) => {
+    const { title, content } = ERROR_CODES[errorCode];
+    setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
+    setErrorBanner({
+      visible: true,
+      title: title(fileName),
+      content: content,
+    });
+  };
 
   const containerStyle = css`
     padding: 8px;
@@ -135,7 +200,6 @@ export default function ProgramIDRegistration() {
     margin-bottom: 8px;
   `;
 
-  const noData = loading || !clinicalRegistration || !clinicalRegistration.id;
   return (
     <SubmissionLayout
       contentHeader={
@@ -151,20 +215,8 @@ export default function ProgramIDRegistration() {
                 Register Samples
               </div>
               <Progress>
-                <Progress.Item
-                  state={noData ? PROGRESS_STATUS.DISABLED : PROGRESS_STATUS.SUCCESS}
-                  text="Upload"
-                />
-                <Progress.Item
-                  state={
-                    noData
-                      ? PROGRESS_STATUS.DISABLED
-                      : registerString == registerStateStringMap['FINISHED']
-                      ? PROGRESS_STATUS.SUCCESS
-                      : PROGRESS_STATUS.PENDING
-                  }
-                  text="Register"
-                />
+                <Progress.Item state={progress[0]} text="Upload" />
+                <Progress.Item state={progress[1]} text="Register" />
               </Progress>
             </Row>
           </TitleBar>
@@ -220,8 +272,20 @@ export default function ProgramIDRegistration() {
             shortName={programShortName as string}
             registrationId={get(clinicalRegistration, 'id')}
             setRegisterState={setRegisterState}
+            onUpload={onUpload}
           />
         </Container>
+
+        {errorBanner.visible ? (
+          <Banner
+            css={css`
+              margin-top: 20px;
+            `}
+            title={errorBanner.title}
+            variant={BANNER_VARIANTS.ERROR}
+            content={errorBanner.content}
+          />
+        ) : null}
 
         <Container css={containerStyle}>
           {fileRecords.length > 0 ? (
@@ -244,6 +308,13 @@ export default function ProgramIDRegistration() {
                 submissionInfo={submissionInfo}
               />
             </>
+          ) : fileErrors.length > 0 ? (
+            <ErrorTable
+              errors={fileErrors}
+              count={fileErrors.length}
+              onClear={handleClearClick}
+              onDownload={() => console.log('download')}
+            />
           ) : (
             <NoDataMessage loading={loading} />
           )}

@@ -12,6 +12,8 @@
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "gitmoji-config": "gitmoji -g",
     "commit": "gitmoji -c",
+    "generate-fragment-types": "ts-node ./scripts/tsconfig.json ./scripts/generateFragmentTypes.ts",
+    "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
     "type-check": "tsc -p ./tsconfig.json",
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
@@ -42,6 +44,7 @@
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
+    "apollo-upload-client": "^11.0.0",
     "babel-plugin-graphql-tag": "^2.1.0",
     "babel-plugin-import-graphql": "^2.7.0",
     "babel-polyfill": "^6.26.0",
@@ -111,6 +114,7 @@
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3",
     "ts-mocha": "^6.0.0",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "prettier": {
