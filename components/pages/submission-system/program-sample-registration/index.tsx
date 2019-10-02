@@ -138,13 +138,13 @@ export default function ProgramIDRegistration() {
   let stats = null;
   if (clinicalRegistration) {
     const {
-      createdAt,
-      creator,
-      fileName,
-      alreadyRegistered,
-      newDonors,
-      newSamples,
-      newSpecimens,
+      createdAt = '',
+      creator = '',
+      fileName = '',
+      alreadyRegistered = { count: 0 },
+      newDonors = { count: 0 },
+      newSamples = { count: 0 },
+      newSpecimens = { count: 0 },
     } = clinicalRegistration;
     submissionInfo = { createdAt, creator, fileName };
     stats = {
