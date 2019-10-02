@@ -153,8 +153,6 @@ export default function ProgramIDRegistration() {
     };
   }
 
-  const noData = loading || !clinicalRegistration.id;
-
   const responseTypes = {
     CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
     CLINICAL_REG_DATA: 'ClinicalRegistrationData',
