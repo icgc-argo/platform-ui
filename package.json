@@ -12,7 +12,8 @@
     "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "gitmoji-config": "gitmoji -g",
     "commit": "gitmoji -c",
-    "generate-fragment-types": "node ./scripts/generateFragmentTypes.js",
+    "generate-fragment-types": "ts-node ./scripts/generateFragmentTypes.ts",
+    "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
     "type-check": "tsc -p ./tsconfig.json",
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
@@ -113,6 +114,7 @@
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3",
     "ts-mocha": "^6.0.0",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "prettier": {
