@@ -6,6 +6,8 @@ import DnaLoader from 'uikit/DnaLoader';
 import { ClinicalSubmissionEntityFile } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
+import Button from 'uikit/Button';
+import { useToaster } from 'global/hooks/toaster';
 
 export default ({
   fileStates,
@@ -14,11 +16,18 @@ export default ({
   fileStates: Array<ClinicalSubmissionEntityFile>;
   loading: boolean;
 }) => {
+  const toaster = useToaster();
   const [selectedFile, setSelectedFile] = React.useState<ClinicalSubmissionEntityFile>(
     fileStates[0],
   );
   const onFileClick = fileState => e => {
     setSelectedFile(fileState);
+  };
+  const onClearClick = () => {
+    toaster.addToast({
+      title: 'DUMMY',
+      content: "I'm just a dummy placeholder behaviour",
+    });
   };
   return loading ? (
     <div
@@ -84,6 +93,8 @@ export default ({
         <div
           css={css`
             padding: 8px;
+            display: flex;
+            justify-content: space-between;
           `}
         >
           <Typography
@@ -96,6 +107,9 @@ export default ({
           >
             {selectedFile.displayName} File Preview
           </Typography>
+          <Button variant="text" size="sm" onClick={onClearClick}>
+            clear
+          </Button>
         </div>
         <FileRecordTable
           file={selectedFile}
