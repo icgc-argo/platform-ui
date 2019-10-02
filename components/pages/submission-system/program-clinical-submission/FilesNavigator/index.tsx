@@ -97,7 +97,14 @@ export default ({
             {selectedFile.displayName} File Preview
           </Typography>
         </div>
-        <FileRecordTable file={selectedFile} />
+        <FileRecordTable
+          file={selectedFile}
+          submissionData={{
+            fileName: 'some file',
+            creator: 'Someone',
+            createdAt: 'sometime',
+          }}
+        />
       </Col>
     </div>
   );

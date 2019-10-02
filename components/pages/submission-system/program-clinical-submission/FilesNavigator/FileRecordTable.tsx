@@ -10,6 +10,9 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
+import { ThemeColorNames } from 'uikit/theme/types';
+import { Col, Row } from 'react-grid-system';
+
 const StarIcon = DataTableStarIcon;
 
 type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR';
