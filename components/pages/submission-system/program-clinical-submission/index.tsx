@@ -160,7 +160,7 @@ const MOCK_FILE_STATE: Array<ClinicalSubmissionEntityFile> = [
   },
   {
     id: 'primary_diagnosis_9',
-    displayName: 'Primary Diagnosis Primary Diagnosis Primary Diagnosis',
+    displayName: 'Some very long text that will for sure overflow to multiple lines',
     status: 'NONE',
     records: [],
     dataErrors: [],

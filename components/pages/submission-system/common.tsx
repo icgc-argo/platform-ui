@@ -1,7 +1,11 @@
+import { format } from 'date-fns';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import { ThemeColorNames } from 'uikit/theme/types';
 import Typography from 'uikit/Typography';
+import { formatFileName } from './program-sample-registration/util';
+import { Row, Col } from 'react-grid-system';
+import { useTheme } from 'uikit/ThemeProvider';
 
 export const containerStyle = css`
   padding: 8px;
@@ -56,3 +60,52 @@ export const StatArea = (() => {
     StatEntryContainer,
   };
 })();
+
+export const SubmissionInfoArea = ({
+  fileName,
+  createdAt,
+  creator,
+}: {
+  fileName: string;
+  creator: string;
+  createdAt: string;
+}) => (
+  <Typography variant="data" component="div" color="grey">
+    <Typography variant="data" color="secondary_dark">
+      {formatFileName(fileName)}
+    </Typography>{' '}
+    uploaded on{' '}
+    <Typography variant="data" color="secondary_dark">
+      {format(new Date(createdAt), 'MMMM D, YYYY ')}
+    </Typography>{' '}
+    by{' '}
+    <Typography variant="data" color="secondary_dark">
+      {creator}
+    </Typography>
+  </Typography>
+);
+
+export const TableInfoHeaderContainer = ({
+  left,
+  right,
+}: {
+  left?: React.ReactNode;
+  right?: React.ReactNode;
+}) => {
+  const theme = useTheme();
+  return (
+    <div
+      css={css`
+        margin-bottom: 3px;
+        border-radius: 2px;
+        background-color: ${theme.colors.grey_3};
+        padding: 8px;
+      `}
+    >
+      <Row nogutter>
+        {left}
+        <Col align="end">{right}</Col>
+      </Row>
+    </div>
+  );
+};

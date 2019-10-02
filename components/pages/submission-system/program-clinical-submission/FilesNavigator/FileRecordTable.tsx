@@ -6,8 +6,14 @@ import { css, styled } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import { DataTableStarIcon, StatArea as StatAreaDisplay } from '../../common';
+import {
+  DataTableStarIcon,
+  StatArea as StatAreaDisplay,
+  SubmissionInfoArea,
+  TableInfoHeaderContainer,
+} from '../../common';
 import { ThemeColorNames } from 'uikit/theme/types';
+import { Col, Row } from 'react-grid-system';
 
 const StarIcon = DataTableStarIcon;
 
@@ -27,9 +33,7 @@ const FILE_STATE_COLORS: { [k in RecordState]: React.ComponentProps<typeof StarI
   UPDATED: 'accent3_dark',
 };
 
-const StatsArea = (props: { fileStat: FileStat }) => {
-  const { fileStat } = props;
-
+const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
   return (
     <StatAreaDisplay.Container>
       <StatAreaDisplay.Section>
@@ -72,7 +76,13 @@ const StatsArea = (props: { fileStat: FileStat }) => {
   );
 };
 
-export default ({ file }: { file: ClinicalSubmissionEntityFile }) => {
+export default ({
+  file,
+  submissionData,
+}: {
+  file: ClinicalSubmissionEntityFile;
+  submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
+}) => {
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = file.records.length
     ? file.records[0].fields
     : [];
@@ -84,23 +94,19 @@ export default ({ file }: { file: ClinicalSubmissionEntityFile }) => {
         margin: 5px 10px;
       `}
     >
-      <div
-        css={css`
-          margin-bottom: 3px;
-          border-radius: 2px;
-          background-color: ${theme.colors.grey_3};
-          padding: 8px;
-        `}
-      >
-        <StatsArea
-          fileStat={{
-            errorCount: 1,
-            newCount: 2,
-            noUpdateCount: 3,
-            updateCount: 5,
-          }}
-        />
-      </div>
+      <TableInfoHeaderContainer
+        left={
+          <StatsArea
+            fileStat={{
+              errorCount: 1,
+              newCount: 2,
+              noUpdateCount: 3,
+              updateCount: 5,
+            }}
+          />
+        }
+        right={<SubmissionInfoArea {...submissionData} />}
+      />
       <Table
         showPagination={false}
         columns={fields.map(({ name }) => ({
