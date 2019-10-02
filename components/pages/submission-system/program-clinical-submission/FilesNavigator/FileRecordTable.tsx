@@ -6,7 +6,7 @@ import { css, styled } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import { DataTableStarIcon } from '../../common';
+import { DataTableStarIcon, StatArea as StatAreaDisplay } from '../../common';
 import { ThemeColorNames } from 'uikit/theme/types';
 
 const StarIcon = DataTableStarIcon;
@@ -29,30 +29,10 @@ const FILE_STATE_COLORS: { [k in RecordState]: React.ComponentProps<typeof StarI
 
 const StatsArea = (props: { fileStat: FileStat }) => {
   const { fileStat } = props;
-  const Section = styled('div')`
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-    text-align: center;
-  `;
-  const StatEntryContainer = styled('div')`
-    margin-right: 5px;
-    display: flex;
-    align-items: center;
-  `;
 
   return (
-    <Typography
-      variant="data"
-      component="div"
-      color="grey"
-      css={css`
-        display: flex;
-        align-items: center;
-        margin-right: 50px;
-      `}
-    >
-      <Section>
+    <StatAreaDisplay.Container>
+      <StatAreaDisplay.Section>
         {sum([
           fileStat.errorCount,
           fileStat.newCount,
@@ -60,35 +40,35 @@ const StatsArea = (props: { fileStat: FileStat }) => {
           fileStat.updateCount,
         ])}{' '}
         Total
-      </Section>
-      <Section>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
-      </Section>
-      <Section>
-        <StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill={FILE_STATE_COLORS.NEW} />
           {fileStat.newCount} New
-        </StatEntryContainer>
-      </Section>
-      <Section>
-        <StatEntryContainer>
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill={FILE_STATE_COLORS.NONE} />
           {fileStat.noUpdateCount} No Update
-        </StatEntryContainer>
-      </Section>
-      <Section>
-        <StatEntryContainer>
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill={FILE_STATE_COLORS.UPDATED} />
           {fileStat.updateCount} Updated
-        </StatEntryContainer>
-      </Section>
-      <Section>
-        <StatEntryContainer>
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill={FILE_STATE_COLORS.ERROR} />
           {fileStat.errorCount} Errors
-        </StatEntryContainer>
-      </Section>
-    </Typography>
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+    </StatAreaDisplay.Container>
   );
 };
 

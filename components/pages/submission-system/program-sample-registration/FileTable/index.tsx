@@ -9,7 +9,7 @@ import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { formatFileName } from '../util';
-import { DataTableStarIcon } from '../../common';
+import { DataTableStarIcon, StatArea as StatAreaDisplay } from '../../common';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -61,53 +61,27 @@ const SubmissionInfoArea = ({
 
 const StatsArea = (props: { stats?: FileStats }) => {
   const { stats } = props;
-  const Section = styled('div')`
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-    text-align: center;
-  `;
-
   return (
-    <Typography
-      variant="data"
-      component="div"
-      color="grey"
-      css={css`
-        display: flex;
-        align-items: center;
-        margin-right: 50px;
-      `}
-    >
-      <Section>{stats ? stats.existingCount + stats.newCount : 0} Total</Section>
-      <Section>
+    <StatAreaDisplay.Container>
+      <StatAreaDisplay.Section>
+        {stats ? stats.existingCount + stats.newCount : 0} Total
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
-      </Section>
-      <Section>
-        <div
-          css={css`
-            margin-right: 5px;
-            display: flex;
-            align-items: center;
-          `}
-        >
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill="accent2" />
-        </div>
+        </StatAreaDisplay.StatEntryContainer>
         {stats && stats.newCount} New
-      </Section>
-      <Section>
-        <div
-          css={css`
-            margin-right: 5px;
-            display: flex;
-            align-items: center;
-          `}
-        >
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
           <StarIcon fill="grey_1" />
-        </div>
+        </StatAreaDisplay.StatEntryContainer>
         {stats && stats.existingCount} Already Registered
-      </Section>
-    </Typography>
+      </StatAreaDisplay.Section>
+    </StatAreaDisplay.Container>
   );
 };
 
