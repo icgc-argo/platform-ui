@@ -282,14 +282,17 @@ export default function ProgramIDRegistration() {
         </Container>
 
         {errorBanner.visible ? (
-          <Banner
+          <div
             css={css`
               margin-top: 20px;
             `}
-            title={errorBanner.title}
-            variant={BANNER_VARIANTS.ERROR}
-            content={errorBanner.content}
-          />
+          >
+            <Banner
+              title={errorBanner.title}
+              variant={BANNER_VARIANTS.ERROR}
+              content={errorBanner.content}
+            />
+          </div>
         ) : null}
 
         <Container css={containerStyle}>
