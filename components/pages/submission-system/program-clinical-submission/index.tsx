@@ -12,76 +12,159 @@ import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
 import { containerStyle } from '../common';
-import FilesNavigator, { FileState } from './FilesNavigator';
+import FilesNavigator from './FilesNavigator';
+import { ClinicalSubmissionEntityFile } from './types';
 
-const MOCK_FILE_STATE: Array<FileState> = [
+const MOCK_FILE_STATE: Array<ClinicalSubmissionEntityFile> = [
   {
     id: 'donors',
     displayName: 'Donors',
-    fileCount: 2,
+    recordsCount: 2,
     status: 'ERROR',
+    records: [
+      {
+        row: 0,
+        fields: [
+          {
+            name: 'field_1',
+            value: 'sdf',
+          },
+          {
+            name: 'field_2',
+            value: 'sdf',
+          },
+          {
+            name: 'field_3',
+            value: 'sdf',
+          },
+          {
+            name: 'field_4',
+            value: 'sdf',
+          },
+        ],
+      },
+      {
+        row: 0,
+        fields: [
+          {
+            name: 'field_1',
+            value: 'sdf',
+          },
+          {
+            name: 'field_2',
+            value: 'sdf',
+          },
+          {
+            name: 'field_3',
+            value: 'sdf',
+          },
+          {
+            name: 'field_4',
+            value: 'sdf',
+          },
+        ],
+      },
+    ],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'specimen',
     displayName: 'Specimen',
-    fileCount: 24,
+    recordsCount: 24,
     status: 'SUCCESS',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'sample',
     displayName: 'Sample',
-    fileCount: 43,
+    recordsCount: 43,
     status: 'WARNING',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_1',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_2',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_3',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_4',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_5',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_6',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_7',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_8',
     displayName: 'Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
   {
     id: 'primary_diagnosis_9',
     displayName: 'Primary Diagnosis Primary Diagnosis Primary Diagnosis',
     status: 'NONE',
+    records: [],
+    dataErrors: [],
+    dataUpdates: [],
   },
 ];
 
@@ -153,7 +236,7 @@ export default function ProgramClinicalSubmission() {
           min-height: calc(100vh - 240px);
         `}
       >
-        <FilesNavigator fileStates={MOCK_FILE_STATE} />
+        <FilesNavigator fileStates={MOCK_FILE_STATE} loading={false} />
       </Container>
     </SubmissionLayout>
   );

@@ -2,19 +2,38 @@ import React from 'react';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { css } from 'uikit';
 import Typography from 'uikit/Typography';
+import DnaLoader from 'uikit/DnaLoader';
+import { ClinicalSubmissionEntityFile } from '../types';
+import FileRecordTable from './FileRecordTable';
+import { Col } from 'react-grid-system';
 
-export type FileState = {
-  id: string;
-  displayName: string;
-  fileCount?: number;
-  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE';
-};
-export default ({ fileStates }: { fileStates: Array<FileState> }) => {
-  const [selectedFile, setSelectedFile] = React.useState<FileState>(fileStates[0]);
+export default ({
+  fileStates,
+  loading,
+}: {
+  fileStates: Array<ClinicalSubmissionEntityFile>;
+  loading: boolean;
+}) => {
+  const [selectedFile, setSelectedFile] = React.useState<ClinicalSubmissionEntityFile>(
+    fileStates[0],
+  );
   const onFileClick = fileState => e => {
     setSelectedFile(fileState);
   };
-  return (
+  return loading ? (
+    <div
+      css={css`
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `}
+    >
+      <DnaLoader />
+    </div>
+  ) : (
     <div
       css={css`
         display: flex;
@@ -50,7 +69,7 @@ export default ({ fileStates }: { fileStates: Array<FileState> }) => {
                 </div>
                 {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
                   <VerticalTabs.Tag variant={fileState.status}>
-                    {fileState.fileCount}
+                    {fileState.recordsCount}
                   </VerticalTabs.Tag>
                 )}
                 {fileState.status === 'ERROR' && (
@@ -61,22 +80,25 @@ export default ({ fileStates }: { fileStates: Array<FileState> }) => {
           ))}
         </VerticalTabs>
       </div>
-      <div
-        css={css`
-          padding: 10px;
-        `}
-      >
-        <Typography
-          variant="subtitle"
-          color="primary"
-          as="div"
+      <Col>
+        <div
           css={css`
-            margin-left: 10px;
+            padding: 8px;
           `}
         >
-          {selectedFile.displayName} File Preview
-        </Typography>
-      </div>
+          <Typography
+            variant="subtitle"
+            color="primary"
+            as="div"
+            css={css`
+              margin-left: 10px;
+            `}
+          >
+            {selectedFile.displayName} File Preview
+          </Typography>
+        </div>
+        <FileRecordTable file={selectedFile} />
+      </Col>
     </div>
   );
 };
