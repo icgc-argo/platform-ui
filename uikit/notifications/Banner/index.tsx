@@ -27,7 +27,6 @@ const Banner = ({
     content={content}
     variant={variant}
     size={size}
-    {...props}
   />
 );
 

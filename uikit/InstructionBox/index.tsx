@@ -28,6 +28,7 @@ const InstructionBox = ({
     padding-right: 20px;
     box-sizing: border-box;
     padding-bottom: 10px;
+    padding-top: 12px;
     height: 100%;
   `;
   const stepStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>

@@ -22,6 +22,7 @@ import { ERROR_CODES } from './common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
+import { formatFileName } from './util';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -137,13 +138,13 @@ export default function ProgramIDRegistration() {
   let stats = null;
   if (clinicalRegistration) {
     const {
-      createdAt,
-      creator,
-      fileName,
-      alreadyRegistered,
-      newDonors,
-      newSamples,
-      newSpecimens,
+      createdAt = '',
+      creator = '',
+      fileName = '',
+      alreadyRegistered = { count: 0 },
+      newDonors = { count: 0 },
+      newSamples = { count: 0 },
+      newSpecimens = { count: 0 },
     } = clinicalRegistration;
     submissionInfo = { createdAt, creator, fileName };
     stats = {
@@ -165,7 +166,11 @@ export default function ProgramIDRegistration() {
     const { __typename: respType, ...resp } = response;
     // display an error banner or clinical data will update with errors array
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      showError({ errorCode: ERROR_CODES.INVALID_FILE_NAME.code, fileName });
+      formatFileName;
+      showError({
+        errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
+        fileName: formatFileName(fileName),
+      });
     }
   };
 
@@ -277,21 +282,24 @@ export default function ProgramIDRegistration() {
         </Container>
 
         {errorBanner.visible ? (
-          <Banner
+          <div
             css={css`
               margin-top: 20px;
             `}
-            title={errorBanner.title}
-            variant={BANNER_VARIANTS.ERROR}
-            content={errorBanner.content}
-          />
+          >
+            <Banner
+              title={errorBanner.title}
+              variant={BANNER_VARIANTS.ERROR}
+              content={errorBanner.content}
+            />
+          </div>
         ) : null}
 
         <Container css={containerStyle}>
           {fileRecords.length > 0 ? (
             <>
               <div css={cardHeaderContainerStyle}>
-                <Typography color="primary" variant="subtitle2" component="span">
+                <Typography color="primary" variant="data" component="span">
                   File Preview
                 </Typography>
                 <Button
@@ -299,7 +307,7 @@ export default function ProgramIDRegistration() {
                   size={BUTTON_SIZES.SM}
                   onClick={handleClearClick}
                 >
-                  Clear
+                  <Typography variant="data">Clear</Typography>
                 </Button>
               </div>
               <FileTable
