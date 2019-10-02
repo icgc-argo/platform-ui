@@ -39,6 +39,3 @@ fetchReq(`${process.env.GATEWAY_API_ROOT}/graphql`, {
       },
     );
   });
-
-// typescript wants it as a module
-export {};
