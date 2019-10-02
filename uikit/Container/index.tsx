@@ -5,7 +5,7 @@ import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
 import DnaLoader from '../DnaLoader';
 
-const ContainerBackground = styled<'div', { loading: boolean }>('div')`
+const ContainerBackground = styled<'div', { loading?: boolean }>('div')`
   border-radius: 8px;
   position: relative;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
