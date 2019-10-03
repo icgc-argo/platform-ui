@@ -102,7 +102,9 @@ export default function Programs({ authorizedPrograms = [] }: any) {
         id="programs-list-container"
         css={css`
           padding-top: 0px;
+          min-height: 300px;
         `}
+        loading={loading}
       >
         <TableActionBar>
           {programs.length} results
@@ -110,6 +112,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
         </TableActionBar>
         <ProgramsTable
           loading={loading}
+          LoadingComponent={() => null}
           loadingUser={loadingUser}
           programs={sortedPrograms}
           onProgramUsersClick={handleProgramUsersClick}
