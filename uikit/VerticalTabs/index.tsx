@@ -71,7 +71,15 @@ const VerticalTabsItem: React.ComponentType<
           width: 100%;
         `}
       >
-        {children && <div>{children}</div>}
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          `}
+        >
+          {children}
+        </div>
       </Typography>
       {active && <Triangle />}
     </ContainerComponent>

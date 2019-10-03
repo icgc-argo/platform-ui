@@ -15,64 +15,24 @@ const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
     <div style={{ width: '50%' }}>
       <VerticalTabs>
         <VerticalTabs.Item onClick={onClick(0)} active={activeItem === 0}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Donor
-            <VerticalTabs.Tag variant="INFO">12</VerticalTabs.Tag>
-          </div>
+          Donor
+          <VerticalTabs.Tag variant="INFO">12</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(1)} active={activeItem === 1}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Specimen
-            <VerticalTabs.Tag variant="WARNING">23</VerticalTabs.Tag>
-          </div>
+          Specimen
+          <VerticalTabs.Tag variant="WARNING">23</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(2)} active={activeItem === 2}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Donor
-            <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-          </div>
+          Donor
+          <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(3)} active={activeItem === 3}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Donor
-            <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
-          </div>
+          Donor
+          <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(4)} active={activeItem === 4}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Lorem ipsum dolor amet palo santo kombucha
-            <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
-          </div>
+          Lorem ipsum dolor amet palo santo kombucha
+          <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
         </VerticalTabs.Item>
       </VerticalTabs>
     </div>
