@@ -63,28 +63,15 @@ export default ({
               active={selectedFile.id === fileState.id}
               onClick={onFileClick(fileState)}
             >
-              <div
-                css={css`
-                  display: flex;
-                  justify-content: space-between;
-                `}
-              >
-                <div
-                  css={css`
-                    text-align: left;
-                  `}
-                >
-                  {fileState.displayName}
-                </div>
-                {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
-                  <VerticalTabs.Tag variant={fileState.status}>
-                    {fileState.recordsCount}
-                  </VerticalTabs.Tag>
-                )}
-                {fileState.status === 'ERROR' && (
-                  <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-                )}
-              </div>
+              {fileState.displayName}
+              {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                <VerticalTabs.Tag variant={fileState.status}>
+                  {fileState.recordsCount}
+                </VerticalTabs.Tag>
+              )}
+              {fileState.status === 'ERROR' && (
+                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+              )}
             </VerticalTabs.Item>
           ))}
         </VerticalTabs>

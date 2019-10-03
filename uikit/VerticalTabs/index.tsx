@@ -83,6 +83,7 @@ const VerticalTabsItem: React.ComponentType<
             display: flex;
             justify-content: space-between;
             align-items: center;
+            text-align: left;
           `}
         >
           {children}
