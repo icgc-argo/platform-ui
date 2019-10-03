@@ -11,7 +11,9 @@ import Instruction from './Instruction';
 import Container from 'uikit/Container';
 import { containerStyle } from '../common';
 import FilesNavigator from './FilesNavigator';
-import { ClinicalSubmissionEntityFile } from './types';
+import { ClinicalSubmissionEntityFile, ClinicalError } from './types';
+import Banner from 'uikit/notifications/Banner';
+import Notification from 'uikit/notifications/Notification';
 
 const MOCK_FILE_STATE: Array<ClinicalSubmissionEntityFile> = [
   {
@@ -209,6 +211,20 @@ export default function ProgramClinicalSubmission() {
     query: { shortName: programShortName },
   } = usePageContext();
 
+  const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([
+    {
+      code: 'SOME_CODE',
+      fileNames: ['a.tsv', 'b.tsv'],
+      msg:
+        'Improperly named files cannot be uploaded or validated. Please retain the template file names and only append characters to the end. For example, donor<_optional_extension>.tsv. ',
+    },
+  ]);
+  const onErrorClose: React.ComponentProps<typeof Notification>['onInteraction'] = ({ type }) => {
+    if (type === 'CLOSE') {
+      setClinicalErrors([]);
+    }
+  };
+
   return (
     <SubmissionLayout
       contentHeader={
@@ -265,6 +281,19 @@ export default function ProgramClinicalSubmission() {
       <Container css={containerStyle}>
         <Instruction />
       </Container>
+      {clinicalErrors.map(({ code, fileNames, msg }) => (
+        <Notification
+          key={code}
+          css={css`
+            margin-top: 20px;
+          `}
+          variant="ERROR"
+          interactionType="CLOSE"
+          title={`${fileNames.length} of 5 files failed to upload: ${fileNames.join(', ')}`}
+          content={msg}
+          onInteraction={onErrorClose}
+        />
+      ))}
       <Container
         css={css`
           ${containerStyle}
