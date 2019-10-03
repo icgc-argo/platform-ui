@@ -6,6 +6,7 @@ import Typography from 'uikit/Typography';
 import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
+import { HtmlHTMLAttributes } from 'react';
 
 export const containerStyle = css`
   padding: 8px;
@@ -28,7 +29,12 @@ export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
   <Icon name="star" fill={props.fill} width="16px" height="16px" />
 );
 
-export const StatArea = (() => {
+export const StatArea: {
+  Container: React.ComponentType;
+  Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
+  StatEntryContainer: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
+  StarIcon: typeof DataTableStarIcon;
+} = (() => {
   const Container: React.ComponentType = ({ children }) => (
     <Typography
       variant="data"
