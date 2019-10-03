@@ -46,15 +46,15 @@ const StatsArea = (props: { stats?: FileStats }) => {
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill="accent2" />
+          <StatAreaDisplay.StarIcon fill="accent2" />
+          {stats && stats.newCount} New
         </StatAreaDisplay.StatEntryContainer>
-        {stats && stats.newCount} New
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill="grey_1" />
+          <StatAreaDisplay.StarIcon fill="grey_1" />
+          {stats && stats.existingCount} Already Registered
         </StatAreaDisplay.StatEntryContainer>
-        {stats && stats.existingCount} Already Registered
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
   );

@@ -3,17 +3,13 @@ import sum from 'lodash/sum';
 import Table from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
 import { css, styled } from 'uikit';
-import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
-import Typography from 'uikit/Typography';
 import {
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
-import { ThemeColorNames } from 'uikit/theme/types';
-import { Col, Row } from 'react-grid-system';
 
 const StarIcon = DataTableStarIcon;
 
@@ -50,31 +46,44 @@ const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill={FILE_STATE_COLORS.NEW} />
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
           {fileStat.newCount} New
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill={FILE_STATE_COLORS.NONE} />
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
           {fileStat.noUpdateCount} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill={FILE_STATE_COLORS.UPDATED} />
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
           {fileStat.updateCount} Updated
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
-          <StarIcon fill={FILE_STATE_COLORS.ERROR} />
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
           {fileStat.errorCount} Errors
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
   );
 };
+
+const REQUIRED_FILE_ENTRY_FIELDS = {
+  ROW: 'row',
+};
+
+const CellContentCenter = styled('div')`
+  width: 100%;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default ({
   file,
@@ -83,11 +92,36 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
-  const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = file.records.length
-    ? file.records[0].fields
+  const { dataErrors, records, dataUpdates } = file;
+  const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
+    ? records[0].fields
     : [];
-  const sortedRecords = orderBy<typeof file.records[0]>(file.records, 'row');
-  const theme = useTheme();
+  const sortedRecords = orderBy<typeof records[0]>(records, REQUIRED_FILE_ENTRY_FIELDS.ROW);
+
+  const tableData = sortedRecords.map(record =>
+    record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
+      row: record.row,
+    }),
+  );
+
+  const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
+    const hasError = dataErrors.some(error => error.row === original.row);
+    const hasUpdate = dataUpdates.some(update => update.row === original.row);
+    return (
+      <CellContentCenter>
+        <StarIcon
+          fill={
+            hasError
+              ? FILE_STATE_COLORS.ERROR
+              : hasUpdate
+              ? FILE_STATE_COLORS.UPDATED
+              : FILE_STATE_COLORS.NONE
+          }
+        />
+      </CellContentCenter>
+    );
+  };
+
   return (
     <div
       css={css`
@@ -109,13 +143,29 @@ export default ({
       />
       <Table
         showPagination={false}
-        columns={fields.map(({ name }) => ({
-          accessor: name,
-          Header: name,
-        }))}
-        data={sortedRecords.map(record =>
-          record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {}),
-        )}
+        columns={[
+          {
+            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+            Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
+            Header: '#',
+            width: 40,
+          },
+          {
+            id: 'error',
+            Cell: StatusColumCell,
+            Header: (
+              <CellContentCenter>
+                <StarIcon fill={FILE_STATE_COLORS.NONE} />
+              </CellContentCenter>
+            ),
+            width: 50,
+          },
+          ...fields.map(({ name }) => ({
+            accessor: name,
+            Header: name,
+          })),
+        ]}
+        data={tableData}
       />
     </div>
   );

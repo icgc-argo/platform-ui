@@ -54,10 +54,21 @@ export const StatArea = (() => {
     display: flex;
     align-items: center;
   `;
+  const StarIcon: typeof DataTableStarIcon = props => (
+    <div
+      css={css`
+        margin-right: 5px;
+        display: flex;
+      `}
+    >
+      <DataTableStarIcon {...props} />
+    </div>
+  );
   return {
     Container,
     Section,
     StatEntryContainer,
+    StarIcon,
   };
 })();
 

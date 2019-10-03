@@ -2,12 +2,10 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
-import VerticalTabs from 'uikit/VerticalTabs';
 import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
@@ -44,7 +42,28 @@ const MOCK_FILE_STATE: Array<ClinicalSubmissionEntityFile> = [
         ],
       },
       {
-        row: 0,
+        row: 1,
+        fields: [
+          {
+            name: 'field_1',
+            value: 'sdf',
+          },
+          {
+            name: 'field_2',
+            value: 'sdf',
+          },
+          {
+            name: 'field_3',
+            value: 'sdf',
+          },
+          {
+            name: 'field_4',
+            value: 'sdf',
+          },
+        ],
+      },
+      {
+        row: 2,
         fields: [
           {
             name: 'field_1',
@@ -65,8 +84,25 @@ const MOCK_FILE_STATE: Array<ClinicalSubmissionEntityFile> = [
         ],
       },
     ],
-    dataErrors: [],
-    dataUpdates: [],
+    dataErrors: [
+      {
+        row: 1,
+        donorId: 'asdf',
+        field: 'field_2',
+        message: 'Something is wrong here',
+        type: 'some error type',
+        value: '345',
+      },
+    ],
+    dataUpdates: [
+      {
+        row: 2,
+        donorId: 'asdf',
+        field: 'field_2',
+        newValue: 'sdf_new',
+        oldValue: 'sdf',
+      },
+    ],
   },
   {
     id: 'specimen',
