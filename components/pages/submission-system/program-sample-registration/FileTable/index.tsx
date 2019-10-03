@@ -160,6 +160,7 @@ const FileTable = (props: {
       </div>
       <Table
         showPagination={false}
+        pageSize={Number.MAX_SAFE_INTEGER}
         columns={[
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
