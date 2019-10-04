@@ -8,7 +8,9 @@ import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
 } from '../common';
+import FileSelectButton from 'uikit/FileSelectButton';
 
+<<<<<<< HEAD
 export default () => (
   <InstructionBox
     steps={[
@@ -64,3 +66,86 @@ export default () => (
     ]}
   />
 );
+=======
+export default ({
+  onUploadFileSelect,
+}: {
+  onUploadFileSelect: React.ComponentProps<typeof FileSelectButton>['onFilesSelect'];
+}) => {
+  return (
+    <InstructionBox
+      steps={[
+        <>
+          <Typography variant="paragraph" component="span">
+            1. Download the clinical file templates and format them using the latest Data
+            Dictionary.
+          </Typography>
+
+          <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM}>
+            <span css={instructionBoxButtonContentStyle}>
+              <Icon
+                name="upload"
+                fill="accent2_dark"
+                height="12px"
+                css={instructionBoxButtonIconStyle}
+              />
+              File Templates
+            </span>
+          </Button>
+        </>,
+        <>
+          <Typography variant="paragraph" component="span">
+            2. Upload your formatted clinical TSV files.
+          </Typography>
+          <FileSelectButton
+            isAsync
+            css={instructionBoxButtonStyle}
+            variant="secondary"
+            size={BUTTON_SIZES.SM}
+            inputProps={{
+              accept: '.tsv',
+            }}
+            onFilesSelect={onUploadFileSelect}
+          >
+            <span css={instructionBoxButtonContentStyle}>
+              <Icon
+                name="upload"
+                fill="accent2_dark"
+                height="12px"
+                css={instructionBoxButtonIconStyle}
+              />
+              Upload Files
+            </span>
+          </FileSelectButton>
+        </>,
+        <>
+          <Typography variant="paragraph" component="span">
+            3. Validate your entire submission workspace.
+          </Typography>
+          <Button
+            css={instructionBoxButtonStyle}
+            variant="secondary"
+            size={BUTTON_SIZES.SM}
+            disabled
+          >
+            <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
+          </Button>
+        </>,
+        <>
+          <Typography variant="paragraph" component="span">
+            4. When your clinical data is valid and QC is complete, sign off your submission:
+          </Typography>
+          <Button
+            css={instructionBoxButtonStyle}
+            variant="secondary"
+            size={BUTTON_SIZES.SM}
+            disabled
+          >
+            <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
+          </Button>
+        </>,
+      ]}
+    />
+  );
+};
+>>>>>>> hooks up submission entity data query and mutation

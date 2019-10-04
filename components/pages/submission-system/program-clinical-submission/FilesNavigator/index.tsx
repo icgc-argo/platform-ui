@@ -5,38 +5,30 @@ import Typography from 'uikit/Typography';
 import { ClinicalSubmissionEntityFile } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
+import { useToaster } from 'global/hooks/toaster';
 
-export default ({
-  fileStates,
-  loading,
-}: {
-  fileStates: Array<ClinicalSubmissionEntityFile>;
-  loading: boolean;
-}) => {
-  const [selectedFile, setSelectedFile] = React.useState<ClinicalSubmissionEntityFile>(
-    fileStates[0],
-  );
-  const onFileClick = fileState => e => {
-    setSelectedFile(fileState);
+export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile> }) => {
+  const toaster = useToaster();
+  const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
+  const onFileClick = (fileId: string) => e => {
+    setSelectedFileIndex(fileStates.findIndex(file => fileId === file.id));
   };
-  return loading ? (
-    <div
-      css={css`
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      `}
-    >
-      <DnaLoader />
-    </div>
+  const selectedFile = fileStates[selectedFileIndex];
+  const onClearClick = () => {
+    toaster.addToast({
+      title: 'DUMMY',
+      content: "I'm just a dummy placeholder behaviour",
+    });
+  };
+  return !selectedFile ? (
+    <NoData />
   ) : (
     <div
       css={css`
-        display: flex;
+        position: absolute;
+        width: 100%;
         height: 100%;
+        display: flex;
       `}
     >
       <div
@@ -46,12 +38,16 @@ export default ({
           overflow: visible;
         `}
       >
-        <VerticalTabs>
+        <VerticalTabs
+          css={css`
+            height: 100%;
+          `}
+        >
           {fileStates.map(fileState => (
             <VerticalTabs.Item
               key={fileState.id}
               active={selectedFile.id === fileState.id}
-              onClick={onFileClick(fileState)}
+              onClick={onFileClick(fileState.id)}
             >
               <div
                 css={css`

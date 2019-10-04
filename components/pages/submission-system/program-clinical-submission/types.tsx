@@ -47,7 +47,7 @@ export type GqlClinicalSubmissionData = {
   id: string;
   state: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
   clinicalEntities: GqlClinicalEntity[];
-  fileErrors: [ClinicalError];
+  fileErrors: ClinicalError[];
 };
 export type ClinicalError = {
   msg: string;

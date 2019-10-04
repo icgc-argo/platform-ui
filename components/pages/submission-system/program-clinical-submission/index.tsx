@@ -2,7 +2,7 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import usePageContext from 'global/hooks/usePageContext';
+import usePageContext, { usePageQuery } from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
@@ -21,8 +21,11 @@ import {
 import Notification from 'uikit/notifications/Notification';
 import { MOCK_FILE_STATE } from './mock';
 import CLINICAL_SUBMISSION_QUERY from './CLINICAL_SUBMISSION_QUERY.gql';
-import { useQuery } from '@apollo/react-hooks';
+import UPLOAD_CLINICAL_SUBMISSION from './UPLOAD_CLINICAL_SUBMISSION.gql';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
+import get from 'lodash/get';
+import { capitalize } from 'global/utils/stringUtils';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
@@ -30,42 +33,68 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   return {
     dataErrors: data.dataErrors,
     dataUpdates: data.dataUpdates,
-    displayName: data.batchName || '',
+    displayName: capitalize((data.clinicalType || '').split('_').join(' ')),
     id: data.batchName,
     records: data.records,
     recordsCount: data.records.length,
-    status: 'SUCCESS',
+    status: !!data.dataErrors.length ? 'ERROR' : !!data.dataUpdates.length ? 'SUCCESS' : 'WARNING',
   };
 };
 
+type UploadFilesMutationVariables = {
+  programShortName: string;
+  files: FileList;
+};
+
+type ClinicalSubmissionQueryData = {
+  clinicalSubmissions: GqlClinicalSubmissionData;
+};
+
+const useClinicalErrorState = (
+  data: ClinicalSubmissionQueryData = {
+    clinicalSubmissions: { clinicalEntities: [], fileErrors: [], id: '', state: undefined },
+  },
+) => {
+  const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([]);
+  React.useEffect(() => {
+    setClinicalErrors(data.clinicalSubmissions.fileErrors);
+  }, [data.clinicalSubmissions]);
+  return { clinicalErrors, setClinicalErrors };
+};
+
 export default function ProgramClinicalSubmission() {
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
 
-  const { data, loading: loadingClinicalSubmission } = useQuery<{
-    clinicalSubmissions: GqlClinicalSubmissionData;
-  }>(CLINICAL_SUBMISSION_QUERY, {
-    variables: {
-      programShortName,
-    },
-  });
-
-  console.log('data: ', loadingClinicalSubmission, data);
-
-  const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([
+  const { data, loading: loadingClinicalSubmission } = useQuery<ClinicalSubmissionQueryData>(
+    CLINICAL_SUBMISSION_QUERY,
     {
-      code: 'SOME_CODE',
-      fileNames: ['a.tsv', 'b.tsv'],
-      msg:
-        'Improperly named files cannot be uploaded or validated. Please retain the template file names and only append characters to the end. For example, donor<_optional_extension>.tsv. ',
+      variables: {
+        programShortName,
+      },
     },
-  ]);
+  );
+
+  console.log('data: ', data);
+
+  const [uploadClinicalSubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    UploadFilesMutationVariables
+  >(UPLOAD_CLINICAL_SUBMISSION);
+
+  const { clinicalErrors, setClinicalErrors } = useClinicalErrorState(data);
   const onErrorClose: React.ComponentProps<typeof Notification>['onInteraction'] = ({ type }) => {
     if (type === 'CLOSE') {
       setClinicalErrors([]);
     }
   };
+
+  const handleSubmissionFilesUpload = (files: FileList) =>
+    uploadClinicalSubmission({
+      variables: {
+        files,
+        programShortName,
+      },
+    });
 
   return (
     <SubmissionLayout
@@ -139,6 +168,8 @@ export default function ProgramClinicalSubmission() {
       <Container
         css={css`
           ${containerStyle}
+          min-height: 300px;
+          position: relative;
           padding: 0px;
           min-height: calc(100vh - 240px);
         `}
