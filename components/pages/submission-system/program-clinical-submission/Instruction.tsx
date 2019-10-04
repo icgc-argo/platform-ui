@@ -9,6 +9,7 @@ import {
   instructionBoxButtonStyle,
 } from '../common';
 import FileSelectButton from 'uikit/FileSelectButton';
+import { useToaster } from 'global/hooks/toaster';
 
 export default ({
   onUploadFileSelect,
@@ -19,10 +20,21 @@ export default ({
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
+  const toaster = useToaster();
+
   const onFileUploadClicked = async (files: FileList) => {
     setIsUploading(true);
     await onUploadFileSelect(files);
     setIsUploading(false);
+  };
+
+  const onValidateClick = () => {
+    toaster.addToast({
+      variant: 'SUCCESS',
+      title: 'Validate success!!!',
+      content: 'validat success!',
+      interactionType: 'CLOSE',
+    });
   };
 
   return (
@@ -82,6 +94,7 @@ export default ({
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
+            onClick={onValidateClick}
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>
