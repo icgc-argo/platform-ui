@@ -11,3 +11,8 @@ export default function usePageContext(): ClientSideGetInitialPropsContext {
   const pageContext = React.useContext(PageContext);
   return pageContext;
 }
+
+export const usePageQuery = <T extends { [k: string]: string }>() => {
+  const { query } = usePageContext();
+  return query as T;
+};
