@@ -97,7 +97,7 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('button')`
+export const ContentContainer = styled<'button', { as?: string }>('button')`
   /* overrides button styles */
   border: none;
   width: 100%;

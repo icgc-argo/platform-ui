@@ -29,6 +29,7 @@ const MenuItemComponent = React.forwardRef<
     children?: any;
     noChevron?: boolean;
     icon?: React.ReactElement<React.ComponentProps<typeof Icon>>;
+    contentAs?: string;
   } & React.ComponentProps<typeof MenuItemContainer>
 >(
   (
@@ -41,6 +42,7 @@ const MenuItemComponent = React.forwardRef<
       onClick = e => {},
       icon,
       noChevron = false,
+      contentAs = 'button',
       ...otherProps
     },
     ref,
@@ -48,7 +50,6 @@ const MenuItemComponent = React.forwardRef<
     const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
     const isSelected =
       typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
-    const theme = useTheme();
     const contentContainerRef = React.createRef<HTMLButtonElement>();
     return (
       <MenuItemContainer
@@ -66,7 +67,7 @@ const MenuItemComponent = React.forwardRef<
       >
         {content && (
           <div className="MenuItemContent">
-            <ContentContainer ref={contentContainerRef}>
+            <ContentContainer ref={contentContainerRef} as={contentAs}>
               {icon && (
                 <IconContainer>
                   {React.cloneElement(icon, {
