@@ -120,7 +120,12 @@ const ErrorTable = ({
       </div>
     </div>
 
-    <Table data={errors} columns={TABLE_COLS} />
+    <Table
+      data={errors}
+      columns={TABLE_COLS}
+      showPagination={false}
+      pageSize={Number.MAX_SAFE_INTEGER}
+    />
   </Container>
 );
 
