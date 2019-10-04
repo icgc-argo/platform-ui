@@ -1,13 +1,18 @@
 import React, { ReactElement } from 'react';
+import noDataSvg from 'uikit/assets/noData.svg';
 import Typography from '../Typography';
 import { css } from '../';
 
 type NoDataProps = {
-  title: string;
+  title?: string;
   subtitle?: string;
 };
 
-const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle }) => (
+const NoData: React.ComponentType<NoDataProps> = ({
+  children = <img alt="no data found" src={noDataSvg} />,
+  title = 'No Data Found.',
+  subtitle,
+}) => (
   <div
     css={css`
       display: flex;
