@@ -1,0 +1,35 @@
+fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
+  id
+  state
+  clinicalEntities {
+    clinicalType
+    batchName
+    creator
+    records {
+      row
+      fields {
+        name
+        value
+      }
+    }
+    dataUpdates {
+      row
+      field
+      newValue
+      oldValue
+      donorId
+    }
+    dataErrors {
+      message
+      row
+      field
+      value
+      donorId
+    }
+  }
+  fileErrors {
+    msg
+    fileNames
+    code
+  }
+}
