@@ -30,6 +30,7 @@ export default function ProgramClinicalSubmission() {
       <ContentBox
         css={css`
           padding-top: 0px;
+          min-height: calc(100vh - 240px);
         `}
       >
         Clinical Submission
