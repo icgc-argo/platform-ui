@@ -18,6 +18,7 @@ import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
 } from '../../common';
+import FileSelectButton from 'uikit/FileSelectButton';
 
 function Instructions({
   registrationEnabled,
@@ -55,13 +56,6 @@ function Instructions({
   };
 
   const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
-  const fileUploadRef = React.createRef<HTMLInputElement>();
-  const selectFile = () => {
-    const fp = fileUploadRef.current;
-    if (fp) {
-      fp.click();
-    }
-  };
 
   const handleUpload = async file => {
     const {
@@ -105,22 +99,14 @@ function Instructions({
             <Typography variant="data" component="span">
               2. Upload your formatted registration TSV file.
             </Typography>
-            <Button
+            <FileSelectButton
               css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
-              onClick={selectFile}
+              onFilesSelect={files => {
+                if (files[0]) handleUpload(files[0]);
+              }}
             >
-              <input
-                type="file"
-                ref={fileUploadRef}
-                onChange={async ({ target }) => {
-                  const file = target.files[0];
-                  handleUpload(file);
-                }}
-                accept=".tsv"
-                style={{ display: 'none' }}
-              />
               <span css={instructionBoxButtonContentStyle}>
                 <Icon
                   name="upload"
@@ -130,7 +116,7 @@ function Instructions({
                 />{' '}
                 Upload File
               </span>
-            </Button>
+            </FileSelectButton>
           </>,
           <>
             <Typography variant="data" component="span">
