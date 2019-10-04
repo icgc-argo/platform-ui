@@ -35,6 +35,7 @@ const StyledButton = styled<
     disabled: boolean;
   }
 >(FocusWrapper)`
+  transition: all 0.25s;
   display: flex;
   align-items: center;
   justify-content: center;
