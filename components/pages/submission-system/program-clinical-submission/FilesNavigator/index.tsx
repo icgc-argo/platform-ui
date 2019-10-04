@@ -25,7 +25,7 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
   ) : (
     <div
       css={css`
-        position: absolute;
+        position: relative;
         width: 100%;
         height: 100%;
         display: flex;

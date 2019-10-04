@@ -50,51 +50,70 @@ type ClinicalSubmissionQueryData = {
   clinicalSubmissions: GqlClinicalSubmissionData;
 };
 
-const useClinicalErrorState = (
-  data: ClinicalSubmissionQueryData = {
-    clinicalSubmissions: { clinicalEntities: [], fileErrors: [], id: '', state: undefined },
-  },
-) => {
+const useClinicalErrorState = (data: ClinicalSubmissionQueryData) => {
   const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([]);
   React.useEffect(() => {
     setClinicalErrors(data.clinicalSubmissions.fileErrors);
-  }, [data.clinicalSubmissions]);
-  return { clinicalErrors, setClinicalErrors };
+  }, [data.clinicalSubmissions.fileErrors]);
+  return {
+    clinicalErrors,
+    removeClinicalErrorWithCode: (_code: string) =>
+      setClinicalErrors(clinicalErrors.filter(({ code }) => code !== _code)),
+  };
 };
 
 export default function ProgramClinicalSubmission() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
 
-  const { data, loading: loadingClinicalSubmission } = useQuery<ClinicalSubmissionQueryData>(
-    CLINICAL_SUBMISSION_QUERY,
-    {
-      variables: {
-        programShortName,
-      },
+  const placeHolderResponse: ClinicalSubmissionQueryData = {
+    clinicalSubmissions: {
+      clinicalEntities: [],
+      fileErrors: [],
+      id: '',
+      state: null,
     },
-  );
+  };
 
-  console.log('data: ', data);
+  const { data = placeHolderResponse, loading: loadingClinicalSubmission } = useQuery<
+    ClinicalSubmissionQueryData
+  >(CLINICAL_SUBMISSION_QUERY, {
+    variables: {
+      programShortName,
+    },
+  });
 
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
   >(UPLOAD_CLINICAL_SUBMISSION);
 
-  const { clinicalErrors, setClinicalErrors } = useClinicalErrorState(data);
-  const onErrorClose: React.ComponentProps<typeof Notification>['onInteraction'] = ({ type }) => {
+  const { clinicalErrors, removeClinicalErrorWithCode } = useClinicalErrorState(data);
+
+  const onErrorClose: (
+    code: string,
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] = code => ({ type }) => {
     if (type === 'CLOSE') {
-      setClinicalErrors([]);
+      removeClinicalErrorWithCode(code);
     }
   };
 
-  const handleSubmissionFilesUpload = (files: FileList) =>
-    uploadClinicalSubmission({
+  const handleSubmissionFilesUpload = (files: FileList) => {
+    setCurrentFileList(files);
+    return uploadClinicalSubmission({
       variables: {
         files,
         programShortName,
       },
     });
+  };
+
+  const hasDataError = data.clinicalSubmissions.clinicalEntities.reduce((acc, entity) => {
+    return acc + (entity.dataErrors.length ? 1 : 0);
+  }, 0);
+  const hasSomeEntity = !!(data.clinicalSubmissions.clinicalEntities || []).length;
+  const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
+  const isReadyForValidation = hasSomeEntity && !hasDataError;
 
   return (
     <SubmissionLayout
@@ -117,11 +136,19 @@ export default function ProgramClinicalSubmission() {
               >
                 Submit Clinical Data
               </div>
-              <Progress>
-                <Progress.Item text="Upload" state="disabled" />
-                <Progress.Item text="Validate" state="disabled" />
-                <Progress.Item text="Sign Off" state="disabled" />
-              </Progress>
+              {!loadingClinicalSubmission && (
+                <Progress>
+                  <Progress.Item
+                    text="Upload"
+                    state={isReadyForValidation ? 'success' : 'disabled'}
+                  />
+                  <Progress.Item
+                    text="Validate"
+                    state={isReadyForValidation ? 'pending' : 'disabled'}
+                  />
+                  <Progress.Item text="Sign Off" state="disabled" />
+                </Progress>
+              )}
             </Row>
           </TitleBar>
           <Row nogutter align="center">
@@ -150,7 +177,10 @@ export default function ProgramClinicalSubmission() {
       }
     >
       <Container css={containerStyle}>
-        <Instruction />
+        <Instruction
+          onUploadFileSelect={handleSubmissionFilesUpload}
+          validationEnabled={isReadyForValidation}
+        />
       </Container>
       {clinicalErrors.map(({ code, fileNames, msg }) => (
         <Notification
@@ -160,15 +190,17 @@ export default function ProgramClinicalSubmission() {
           `}
           variant="ERROR"
           interactionType="CLOSE"
-          title={`${fileNames.length} of 5 files failed to upload: ${fileNames.join(', ')}`}
+          title={`${fileNames.length} of ${
+            (currentFileList || []).length
+          } files failed to upload: ${fileNames.join(', ')}`}
           content={msg}
-          onInteraction={onErrorClose}
+          onInteraction={onErrorClose(code)}
         />
       ))}
       <Container
         css={css`
           ${containerStyle}
-          min-height: 300px;
+          min-height: 100px;
           position: relative;
           padding: 0px;
           min-height: calc(100vh - 240px);

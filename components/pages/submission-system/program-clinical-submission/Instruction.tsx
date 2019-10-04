@@ -10,68 +10,21 @@ import {
 } from '../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 
-<<<<<<< HEAD
-export default () => (
-  <InstructionBox
-    steps={[
-      <>
-        <Typography variant="paragraph" component="span">
-          1. Download the clinical file templates and format them using the latest Data Dictionary.
-        </Typography>
-        <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM}>
-          <span css={instructionBoxButtonContentStyle}>
-            <Icon
-              name="upload"
-              fill="accent2_dark"
-              height="12px"
-              css={instructionBoxButtonIconStyle}
-            />
-            File Templates
-          </span>
-        </Button>
-      </>,
-      <>
-        <Typography variant="paragraph" component="span">
-          2. Upload your formatted clinical TSV files.
-        </Typography>
-        <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM}>
-          <span css={instructionBoxButtonContentStyle}>
-            <Icon
-              name="upload"
-              fill="accent2_dark"
-              height="12px"
-              css={instructionBoxButtonIconStyle}
-            />
-            Upload Files
-          </span>
-        </Button>
-      </>,
-      <>
-        <Typography variant="paragraph" component="span">
-          3. Validate your entire submission workspace.
-        </Typography>
-        <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM} disabled>
-          <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
-          Validate Submission
-        </Button>
-      </>,
-      <>
-        <Typography variant="paragraph" component="span">
-          4. When your clinical data is valid and QC is complete, sign off your submission:
-        </Typography>
-        <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM} disabled>
-          <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
-        </Button>
-      </>,
-    ]}
-  />
-);
-=======
 export default ({
   onUploadFileSelect,
+  validationEnabled,
 }: {
-  onUploadFileSelect: React.ComponentProps<typeof FileSelectButton>['onFilesSelect'];
+  onUploadFileSelect: (files: FileList) => Promise<any>;
+  validationEnabled: boolean;
 }) => {
+  const [isUploading, setIsUploading] = React.useState<boolean>(false);
+
+  const onFileUploadClicked = async (files: FileList) => {
+    setIsUploading(true);
+    await onUploadFileSelect(files);
+    setIsUploading(false);
+  };
+
   return (
     <InstructionBox
       steps={[
@@ -104,8 +57,10 @@ export default ({
             size={BUTTON_SIZES.SM}
             inputProps={{
               accept: '.tsv',
+              multiple: true,
             }}
-            onFilesSelect={onUploadFileSelect}
+            onFilesSelect={onFileUploadClicked}
+            isLoading={isUploading}
           >
             <span css={instructionBoxButtonContentStyle}>
               <Icon
@@ -124,9 +79,9 @@ export default ({
           </Typography>
           <Button
             css={instructionBoxButtonStyle}
-            variant="secondary"
+            variant="primary"
             size={BUTTON_SIZES.SM}
-            disabled
+            disabled={!validationEnabled}
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>
@@ -135,12 +90,7 @@ export default ({
           <Typography variant="paragraph" component="span">
             4. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
-          <Button
-            css={instructionBoxButtonStyle}
-            variant="secondary"
-            size={BUTTON_SIZES.SM}
-            disabled
-          >
+          <Button css={instructionBoxButtonStyle} variant="primary" size={BUTTON_SIZES.SM} disabled>
             <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
           </Button>
         </>,
@@ -148,4 +98,3 @@ export default ({
     />
   );
 };
->>>>>>> hooks up submission entity data query and mutation
