@@ -104,6 +104,7 @@ const Button = React.forwardRef<
      * DOM pass through
      */
     id?: string;
+    isLoading?: boolean;
   }
 >(
   (
@@ -116,12 +117,13 @@ const Button = React.forwardRef<
       isAsync = false,
       className,
       id,
+      isLoading: controlledLoadingState = false,
     },
     ref = React.createRef(),
   ) => {
     const [isLoading, setLoading] = React.useState(false);
     const theme = useTheme();
-    const shouldShowLoading = isLoading && isAsync;
+    const shouldShowLoading = controlledLoadingState || (isLoading && isAsync);
     const onClickFn = async event => {
       setLoading(true);
       await onClick(event);

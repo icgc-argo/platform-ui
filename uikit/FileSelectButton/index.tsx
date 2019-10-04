@@ -16,20 +16,31 @@ const FileSelectButton: React.ComponentType<FileSelectButtonProps> = ({
   ...rest
 }) => {
   const fileInputRef = React.createRef<HTMLInputElement>();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [files, setFiles] = React.useState<FileList | null>(null);
+  React.useEffect(() => {
+    if (files) {
+      onFilesSelect(files);
+      setFiles(null);
+    }
+  }, [files]);
+
   const selectFile = () => {
+    setIsLoading(true);
     const fp = fileInputRef.current;
     if (fp) {
       fp.click();
     }
   };
+
   return (
-    <Button {...rest} onClick={selectFile}>
+    <Button {...rest} onClick={selectFile} isLoading={isLoading}>
       <input
         type="file"
         ref={fileInputRef}
         accept=".tsv"
         onChange={e => {
-          onFilesSelect(e.target.files);
+          setFiles(e.target.files);
         }}
         css={css`
           display: none;
