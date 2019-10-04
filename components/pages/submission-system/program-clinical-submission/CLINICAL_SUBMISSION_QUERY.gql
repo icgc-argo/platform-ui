@@ -1,0 +1,30 @@
+query CLINICAL_SUBMISSIONS_QUERY($programShortName: String!) {
+  clinicalSubmissions(shortName: $programShortName) {
+    id
+    state
+    clinicalEntities {
+      clinicalType
+      batchName
+      creator
+      records {
+        row
+        fields {
+          name
+          value
+        }
+      }
+      dataErrors {
+        message
+        row
+        field
+        value
+        donorId
+      }
+    }
+    fileErrors {
+      msg
+      fileNames
+      code
+    }
+  }
+}

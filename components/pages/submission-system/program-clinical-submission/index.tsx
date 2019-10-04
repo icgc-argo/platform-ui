@@ -11,16 +11,47 @@ import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
 import { containerStyle } from '../common';
-import { ClinicalSubmissionEntityFile, ClinicalError } from './types';
-import Banner from 'uikit/notifications/Banner';
+import FilesNavigator from './FilesNavigator';
+import {
+  ClinicalError,
+  GqlClinicalSubmissionData,
+  ClinicalSubmissionEntityFile,
+  GqlClinicalEntity,
+} from './types';
 import Notification from 'uikit/notifications/Notification';
 import { MOCK_FILE_STATE } from './mock';
-import FilesNavigator from './FilesNavigator';
+import CLINICAL_SUBMISSION_QUERY from './CLINICAL_SUBMISSION_QUERY.gql';
+import { useQuery } from '@apollo/react-hooks';
+import DnaLoader from 'uikit/DnaLoader';
+
+const gqlClinicalEntityToClinicalSubmissionEntityFile = (
+  data: GqlClinicalEntity,
+): ClinicalSubmissionEntityFile => {
+  return {
+    dataErrors: data.dataErrors,
+    dataUpdates: data.dataUpdates,
+    displayName: data.batchName || '',
+    id: data.batchName,
+    records: data.records,
+    recordsCount: data.records.length,
+    status: 'SUCCESS',
+  };
+};
 
 export default function ProgramClinicalSubmission() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+
+  const { data, loading: loadingClinicalSubmission } = useQuery<{
+    clinicalSubmissions: GqlClinicalSubmissionData;
+  }>(CLINICAL_SUBMISSION_QUERY, {
+    variables: {
+      programShortName,
+    },
+  });
+
+  console.log('data: ', loadingClinicalSubmission, data);
 
   const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([
     {
@@ -112,7 +143,26 @@ export default function ProgramClinicalSubmission() {
           min-height: calc(100vh - 240px);
         `}
       >
-        <FilesNavigator fileStates={MOCK_FILE_STATE} loading={false} />
+        {loadingClinicalSubmission ? (
+          <div
+            css={css`
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            `}
+          >
+            <DnaLoader />
+          </div>
+        ) : (
+          <FilesNavigator
+            fileStates={data.clinicalSubmissions.clinicalEntities.map(
+              gqlClinicalEntityToClinicalSubmissionEntityFile,
+            )}
+          />
+        )}
       </Container>
     </SubmissionLayout>
   );

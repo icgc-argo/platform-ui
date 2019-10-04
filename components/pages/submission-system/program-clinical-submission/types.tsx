@@ -33,6 +33,22 @@ export type ClinicalSubmissionEntityFile = {
   dataErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
 };
+
+export type GqlClinicalEntity = {
+  clinicalType: string;
+  batchName?: string;
+  creator: string;
+  records: ClinicalSubmissionRecord[];
+  dataErrors: ClinicalSubmissionError[];
+  dataUpdates: ClinicalSubmissionUpdate[];
+  createdAt: string;
+};
+export type GqlClinicalSubmissionData = {
+  id: string;
+  state: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
+  clinicalEntities: GqlClinicalEntity[];
+  fileErrors: [ClinicalError];
+};
 export type ClinicalError = {
   msg: string;
   fileNames: string[];

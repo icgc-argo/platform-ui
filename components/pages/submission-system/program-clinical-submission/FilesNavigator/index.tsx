@@ -2,7 +2,6 @@ import React from 'react';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { css } from 'uikit';
 import Typography from 'uikit/Typography';
-import DnaLoader from 'uikit/DnaLoader';
 import { ClinicalSubmissionEntityFile } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
