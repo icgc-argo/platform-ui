@@ -181,6 +181,7 @@ export default () => {
     <ContentBox
       css={css`
         padding-top: 0px;
+        min-height: 300px;
       `}
     >
       <Tabs
