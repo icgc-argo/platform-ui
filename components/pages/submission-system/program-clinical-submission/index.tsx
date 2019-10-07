@@ -17,13 +17,18 @@ import {
   GqlClinicalSubmissionData,
   ClinicalSubmissionEntityFile,
   GqlClinicalEntity,
+  ClinicalSubmissionQueryData,
+  ValidateSubmissionMutationVariables,
+  UploadFilesMutationVariables,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './CLINICAL_SUBMISSION_QUERY.gql';
 import UPLOAD_CLINICAL_SUBMISSION from './UPLOAD_CLINICAL_SUBMISSION.gql';
+import VALIDATE_SUBMISSION_MUTATION from './VALIDATE_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
+import { useToaster } from 'global/hooks/toaster';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
@@ -37,15 +42,6 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     recordsCount: data.records.length,
     status: !!data.dataErrors.length ? 'ERROR' : !!data.dataUpdates.length ? 'SUCCESS' : 'WARNING',
   };
-};
-
-type UploadFilesMutationVariables = {
-  programShortName: string;
-  files: FileList;
-};
-
-type ClinicalSubmissionQueryData = {
-  clinicalSubmissions: GqlClinicalSubmissionData;
 };
 
 const useClinicalErrorState = (data: ClinicalSubmissionQueryData) => {
@@ -63,9 +59,11 @@ const useClinicalErrorState = (data: ClinicalSubmissionQueryData) => {
 export default function ProgramClinicalSubmission() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
+  const toaster = useToaster();
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
     clinicalSubmissions: {
+      version: null,
       clinicalEntities: [],
       fileErrors: [],
       id: '',
@@ -85,6 +83,10 @@ export default function ProgramClinicalSubmission() {
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
   >(UPLOAD_CLINICAL_SUBMISSION);
+  const [validateSubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    ValidateSubmissionMutationVariables
+  >(VALIDATE_SUBMISSION_MUTATION);
 
   const { clinicalErrors, removeClinicalErrorWithCode } = useClinicalErrorState(data);
 
@@ -106,14 +108,40 @@ export default function ProgramClinicalSubmission() {
     });
   };
 
+  const handleSubmissionValidation = async () => {
+    if (data.clinicalSubmissions.version) {
+      try {
+        await validateSubmission({
+          variables: {
+            programShortName,
+            submissionVersion: data.clinicalSubmissions.version,
+          },
+        });
+      } catch (err) {
+        toaster.addToast({
+          title: 'We could not validate your submission',
+          content:
+            'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
+          variant: 'ERROR',
+        });
+      }
+    } else {
+      toaster.addToast({
+        title: 'Something went wrong',
+        content: 'Your submission could not be validated. Please contact us.',
+        variant: 'ERROR',
+      });
+    }
+  };
+
   const hasDataError = data.clinicalSubmissions.clinicalEntities.reduce(
-    (acc, entity) => acc + (entity.dataErrors.length ? 1 : 0),
-    0,
+    (acc, entity) => acc && !!entity.dataErrors.length,
+    true,
   );
   const hasSomeEntity = !!(data.clinicalSubmissions.clinicalEntities || []).some(
     ({ records }) => !!records.length,
   );
-  const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
+  // const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
   const isReadyForValidation = hasSomeEntity && !hasDataError;
 
   return (
@@ -141,11 +169,11 @@ export default function ProgramClinicalSubmission() {
                 <Progress>
                   <Progress.Item
                     text="Upload"
-                    state={isReadyForValidation ? 'success' : 'disabled'}
+                    state={isReadyForValidation || hasDataError ? 'success' : 'disabled'}
                   />
                   <Progress.Item
                     text="Validate"
-                    state={isReadyForValidation ? 'pending' : 'disabled'}
+                    state={isReadyForValidation ? 'pending' : hasDataError ? 'error' : 'disabled'}
                   />
                   <Progress.Item text="Sign Off" state="disabled" />
                 </Progress>
@@ -180,7 +208,11 @@ export default function ProgramClinicalSubmission() {
       <Container css={containerStyle}>
         <Instruction
           onUploadFileSelect={handleSubmissionFilesUpload}
-          validationEnabled={isReadyForValidation}
+          validationEnabled={
+            true
+            // isReadyForValidation
+          }
+          onValidateClick={handleSubmissionValidation}
         />
       </Container>
       {clinicalErrors.map(({ code, fileNames, msg }) => (

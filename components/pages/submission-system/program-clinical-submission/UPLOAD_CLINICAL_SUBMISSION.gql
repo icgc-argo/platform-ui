@@ -1,6 +1,6 @@
 #import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
 
-mutation($programShortName: String!, $files: [Upload!]) {
+mutation UPLOAD_CLINICAL_SUBMISSION($programShortName: String!, $files: [Upload!]) {
   uploadClinicalSubmissions(shortName: $programShortName, clinicalFiles: $files) {
     ...ClinicalSubmissionFragment
   }

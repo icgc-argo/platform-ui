@@ -14,8 +14,10 @@ import { useToaster } from 'global/hooks/toaster';
 export default ({
   onUploadFileSelect,
   validationEnabled,
+  onValidateClick,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
+  onValidateClick: () => Promise<any>;
   validationEnabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
@@ -26,15 +28,6 @@ export default ({
     setIsUploading(true);
     await onUploadFileSelect(files);
     setIsUploading(false);
-  };
-
-  const onValidateClick = () => {
-    toaster.addToast({
-      variant: 'SUCCESS',
-      title: 'Validate success!!!',
-      content: 'validat success!',
-      interactionType: 'CLOSE',
-    });
   };
 
   return (
@@ -95,6 +88,7 @@ export default ({
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
             onClick={onValidateClick}
+            isAsync
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>
