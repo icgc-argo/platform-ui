@@ -24,8 +24,8 @@ export type ClinicalSubmissionUpdate = {
 };
 
 export type ClinicalSubmissionEntityFile = {
-  id: string;
-  displayName: string;
+  clinicalType: string;
+  displayName: string | null;
   recordsCount?: number;
   status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE';
 
@@ -38,6 +38,7 @@ export type GqlClinicalEntity = {
   clinicalType: string;
   batchName?: string;
   creator: string;
+  version: string;
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];

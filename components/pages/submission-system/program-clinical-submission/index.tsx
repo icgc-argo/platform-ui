@@ -19,12 +19,10 @@ import {
   GqlClinicalEntity,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
-import { MOCK_FILE_STATE } from './mock';
 import CLINICAL_SUBMISSION_QUERY from './CLINICAL_SUBMISSION_QUERY.gql';
 import UPLOAD_CLINICAL_SUBMISSION from './UPLOAD_CLINICAL_SUBMISSION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
-import get from 'lodash/get';
 import { capitalize } from 'global/utils/stringUtils';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
@@ -34,7 +32,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     dataErrors: data.dataErrors,
     dataUpdates: data.dataUpdates,
     displayName: capitalize((data.clinicalType || '').split('_').join(' ')),
-    id: data.batchName,
+    clinicalType: data.clinicalType,
     records: data.records,
     recordsCount: data.records.length,
     status: !!data.dataErrors.length ? 'ERROR' : !!data.dataUpdates.length ? 'SUCCESS' : 'WARNING',
@@ -108,10 +106,13 @@ export default function ProgramClinicalSubmission() {
     });
   };
 
-  const hasDataError = data.clinicalSubmissions.clinicalEntities.reduce((acc, entity) => {
-    return acc + (entity.dataErrors.length ? 1 : 0);
-  }, 0);
-  const hasSomeEntity = !!(data.clinicalSubmissions.clinicalEntities || []).length;
+  const hasDataError = data.clinicalSubmissions.clinicalEntities.reduce(
+    (acc, entity) => acc + (entity.dataErrors.length ? 1 : 0),
+    0,
+  );
+  const hasSomeEntity = !!(data.clinicalSubmissions.clinicalEntities || []).some(
+    ({ records }) => !!records.length,
+  );
   const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
   const isReadyForValidation = hasSomeEntity && !hasDataError;
 

@@ -10,8 +10,8 @@ import { useToaster } from 'global/hooks/toaster';
 export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile> }) => {
   const toaster = useToaster();
   const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
-  const onFileClick = (fileId: string) => e => {
-    setSelectedFileIndex(fileStates.findIndex(file => fileId === file.id));
+  const onFileClick = (clinicalType: string) => e => {
+    setSelectedFileIndex(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
   const selectedFile = fileStates[selectedFileIndex];
   const onClearClick = () => {
@@ -45,9 +45,9 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
         >
           {fileStates.map(fileState => (
             <VerticalTabs.Item
-              key={fileState.id}
-              active={selectedFile.id === fileState.id}
-              onClick={onFileClick(fileState.id)}
+              key={fileState.clinicalType}
+              active={selectedFile.clinicalType === fileState.clinicalType}
+              onClick={onFileClick(fileState.clinicalType)}
             >
               <div
                 css={css`
