@@ -148,8 +148,8 @@ export default function ProgramIDRegistration() {
     } = clinicalRegistration;
     submissionInfo = { createdAt, creator, fileName };
     stats = {
-      newCount: alreadyRegistered.count,
-      existingCount: newDonors.count + newSamples.count + newSpecimens.count,
+      newCount: newDonors.count + newSamples.count + newSpecimens.count,
+      existingCount: alreadyRegistered.count,
     };
   }
 

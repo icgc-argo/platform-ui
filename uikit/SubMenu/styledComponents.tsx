@@ -2,6 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
+import {
+  CreateStyledComponentExtrinsic,
+  CreateStyledComponentIntrinsic,
+} from '@emotion/styled/types';
 
 type StyleCalculationInput = {
   selected?: boolean;
@@ -97,8 +101,7 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled<'button', { as?: string }>('button')`
-  /* overrides button styles */
+export const ContentContainer = styled('button')<{ as?: string }>`
   border: none;
   width: 100%;
   padding: 0px;
