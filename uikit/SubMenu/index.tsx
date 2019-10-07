@@ -29,7 +29,7 @@ const MenuItemComponent = React.forwardRef<
     children?: any;
     noChevron?: boolean;
     icon?: React.ReactElement<React.ComponentProps<typeof Icon>>;
-    contentAs?: string;
+    contentAs?: keyof JSX.IntrinsicElements;
   } & React.ComponentProps<typeof MenuItemContainer>
 >(
   (

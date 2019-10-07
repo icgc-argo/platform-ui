@@ -101,7 +101,7 @@ export const IconContainer = styled('span')`
   align-items: center;
 `;
 
-export const ContentContainer = styled('button')<{ as?: string }>`
+export const ContentContainer = styled('button')<{ as?: keyof JSX.IntrinsicElements }>`
   border: none;
   width: 100%;
   padding: 0px;
