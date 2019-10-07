@@ -41,7 +41,6 @@ export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean }>
     ${({ theme }) => css(theme.typography.data)};
     min-height: 28px;
     line-height: 1.33;
-    padding: 2px 8px;
     font-weight: bold;
     align-items: center;
     background: ${({ theme }) => theme.colors.white};
@@ -79,14 +78,16 @@ export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean }>
   &.ReactTable .rt-thead.-header {
     box-shadow: none;
     border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-    & .rt-th {
-      padding: 10px 16px;
+
+    & .rt-tr .rt-th {
+      padding: ${({ sortable }) => (sortable ? '2px 6px 2px 8px' : '2px 8px')};
       border-left: none;
       border-right: none;
       text-align: left;
       display: flex;
       justify-content: space-between;
     }
+
     ${({ sortable }) =>
       sortable
         ? css`

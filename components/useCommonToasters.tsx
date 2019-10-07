@@ -9,13 +9,13 @@ export default function useCommonToasters() {
       toaster.addToast({
         title: '',
         variant: TOAST_VARIANTS.ERROR,
-        content: 'Something went wrong, please try again later or contact us for assistance',
+        content: 'Something went wrong, please try again later or contact us for assistance.',
       }),
     onSave: () =>
       toaster.addToast({
         title: 'Success!',
         variant: TOAST_VARIANTS.SUCCESS,
-        content: 'Your changes have been saved',
+        content: 'Your changes have been saved.',
         interactionType: 'CLOSE',
       }),
   };

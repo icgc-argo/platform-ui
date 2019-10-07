@@ -36,6 +36,7 @@ export default function ProgramsTable(tableProps: {
   onProgramEditClick: ({ program: ProgramsTableProgram }) => void;
   loading: boolean;
   loadingUser: boolean;
+  LoadingComponent: React.ReactType;
 }) {
   const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
     ...p,
@@ -164,6 +165,7 @@ export default function ProgramsTable(tableProps: {
       showPagination={false}
       loading={tableProps.loading}
       pageSize={100}
+      LoadingComponent={tableProps.LoadingComponent}
     />
   );
 }
