@@ -188,6 +188,7 @@ export default function ProgramClinicalSubmission() {
           css={css`
             margin-top: 20px;
           `}
+          size="SM"
           variant="ERROR"
           interactionType="CLOSE"
           title={`${fileNames.length} of ${
