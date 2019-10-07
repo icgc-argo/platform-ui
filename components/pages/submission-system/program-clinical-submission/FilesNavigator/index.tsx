@@ -6,6 +6,9 @@ import { ClinicalSubmissionEntityFile } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
+import NoData from 'uikit/NoData';
+import ErrorNotification from '../ErrorNotification';
+import Button from 'uikit/Button';
 
 export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile> }) => {
   const toaster = useToaster();
@@ -76,30 +79,56 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
         </VerticalTabs>
       </div>
       <Col>
-        <div
-          css={css`
-            padding: 8px;
-          `}
-        >
-          <Typography
-            variant="subtitle"
-            color="primary"
-            as="div"
+        {!!selectedFile.records.length ? (
+          <>
+            <div
+              css={css`
+                padding: 8px;
+                display: flex;
+                justify-content: space-between;
+              `}
+            >
+              <Typography
+                variant="subtitle"
+                color="primary"
+                as="div"
+                css={css`
+                  margin-left: 10px;
+                `}
+              >
+                {selectedFile.displayName} File Preview
+              </Typography>
+              <Button variant="text" size="sm" onClick={onClearClick}>
+                clear
+              </Button>
+            </div>
+            <FileRecordTable
+              file={selectedFile}
+              submissionData={{
+                fileName: 'some file',
+                creator: 'Someone',
+                createdAt: 'sometime',
+              }}
+            />
+          </>
+        ) : (
+          <div
             css={css`
-              margin-left: 10px;
+              padding: 16px;
             `}
           >
-            {selectedFile.displayName} File Preview
-          </Typography>
-        </div>
-        <FileRecordTable
-          file={selectedFile}
-          submissionData={{
-            fileName: 'some file',
-            creator: 'Someone',
-            createdAt: 'sometime',
-          }}
-        />
+            <ErrorNotification
+              onClearClick={console.log}
+              title={`${
+                selectedFile.dataErrors.length
+              } errors found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
+              errors={selectedFile.dataErrors}
+              subtitle={
+                'Your file cannot be processed. Please correct the following errors and reupload your file.'
+              }
+            />
+          </div>
+        )}
       </Col>
     </div>
   );

@@ -143,6 +143,9 @@ export default function ProgramClinicalSubmission() {
   );
   // const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
   const isReadyForValidation = hasSomeEntity && !hasDataError;
+  console.log('isReadyForValidation: ', isReadyForValidation);
+  console.log('hasSomeEntity: ', hasSomeEntity);
+  console.log('hasDataError: ', hasDataError);
 
   return (
     <SubmissionLayout
@@ -169,11 +172,11 @@ export default function ProgramClinicalSubmission() {
                 <Progress>
                   <Progress.Item
                     text="Upload"
-                    state={isReadyForValidation || hasDataError ? 'success' : 'disabled'}
+                    state={isReadyForValidation ? 'success' : 'disabled'}
                   />
                   <Progress.Item
                     text="Validate"
-                    state={isReadyForValidation ? 'pending' : hasDataError ? 'error' : 'disabled'}
+                    state={isReadyForValidation ? 'pending' : 'disabled'}
                   />
                   <Progress.Item text="Sign Off" state="disabled" />
                 </Progress>
