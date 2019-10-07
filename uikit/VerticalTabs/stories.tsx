@@ -2,8 +2,6 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import VerticalTabs from '.';
 import { action } from '@storybook/addon-actions';
-import Tag from 'uikit/Tag';
-import { css } from 'uikit';
 
 const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const [activeItem, setActiveItem] = React.useState(0);
