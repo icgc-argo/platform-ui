@@ -59,11 +59,16 @@ const Notification = ({
   actionText = 'VIEW',
   dismissText = 'DISMISS',
   icon = <DefaultIcon variant={variant} size={size} />,
-  onInteraction = ({ type, event }) => {},
+  onInteraction = ({
+    type,
+    event,
+  }: {
+    type: NotificationInteractionEvent;
+    event: React.SyntheticEvent;
+  }) => {},
   noShadow = false,
   ...otherProps
-}: /** @todo: actually type this */
-any) => {
+}) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
   const titleTypographyVariant = {

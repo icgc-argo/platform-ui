@@ -23,6 +23,7 @@ import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { formatFileName } from './util';
+import { containerStyle } from '../common';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -181,13 +182,6 @@ export default function ProgramIDRegistration() {
       content: content,
     });
   };
-
-  const containerStyle = css`
-    padding: 8px;
-    &:not(:first-of-type) {
-      margin-top: 20px;
-    }
-  `;
 
   const pageHeaderStyle = css`
     display: flex;

@@ -13,6 +13,11 @@ import RegisterSamplesModal from './RegisterSamplesModal';
 import { RegisterState } from '../index';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
+import {
+  instructionBoxButtonIconStyle,
+  instructionBoxButtonContentStyle,
+  instructionBoxButtonStyle,
+} from '../../common';
 
 function Instructions({
   registrationEnabled,
@@ -27,16 +32,6 @@ function Instructions({
   setRegisterState: (state: RegisterState) => void;
   onUpload: (x: any) => any;
 }) {
-  const buttonStyle = css`
-    margin-top: 10px;
-  `;
-  const buttonContentStyle = css`
-    display: flex;
-    align-items: center;
-  `;
-  const buttonIconStyle = css`
-    margin-right: 5px;
-  `;
   const footerContentStyle = css`
     text-align: center;
     width: 100%;
@@ -90,13 +85,18 @@ function Instructions({
               .
             </Typography>
             <Button
-              css={buttonStyle}
+              css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
               onClick={downloadTemplate}
             >
-              <span css={buttonContentStyle}>
-                <Icon name="download" fill="accent2_dark" height="12px" css={buttonIconStyle} />{' '}
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />{' '}
                 File Template
               </span>
             </Button>
@@ -106,7 +106,7 @@ function Instructions({
               2. Upload your formatted registration TSV file.
             </Typography>
             <Button
-              css={buttonStyle}
+              css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
               onClick={selectFile}
@@ -121,8 +121,13 @@ function Instructions({
                 accept=".tsv"
                 style={{ display: 'none' }}
               />
-              <span css={buttonContentStyle}>
-                <Icon name="upload" fill="accent2_dark" height="12px" css={buttonIconStyle} />{' '}
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="upload"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />{' '}
                 Upload File
               </span>
             </Button>
@@ -132,7 +137,7 @@ function Instructions({
               3. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
             <Button
-              css={buttonStyle}
+              css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.PRIMARY}
               size={BUTTON_SIZES.SM}
               disabled={!registrationEnabled}
