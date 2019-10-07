@@ -293,7 +293,12 @@ export default function ProgramIDRegistration() {
           </div>
         ) : null}
 
-        <Container css={containerStyle}>
+        <Container
+          css={css`
+            ${containerStyle}
+            min-height: calc(100vh - 390px);
+          `}
+        >
           {fileRecords.length > 0 ? (
             <>
               <div css={cardHeaderContainerStyle}>
