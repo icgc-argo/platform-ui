@@ -22,9 +22,9 @@ import {
   UploadFilesMutationVariables,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
-import CLINICAL_SUBMISSION_QUERY from './CLINICAL_SUBMISSION_QUERY.gql';
-import UPLOAD_CLINICAL_SUBMISSION from './UPLOAD_CLINICAL_SUBMISSION.gql';
-import VALIDATE_SUBMISSION_MUTATION from './VALIDATE_SUBMISSION_MUTATION.gql';
+import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
+import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
+import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
