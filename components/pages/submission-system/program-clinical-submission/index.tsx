@@ -250,7 +250,7 @@ export default function ProgramClinicalSubmission() {
           onInteraction={onErrorClose(code)}
         />
       ))}
-      {!hasDataError ? null : (
+      {hasDataError && (
         <div
           css={css`
             margin-top: 20px;
