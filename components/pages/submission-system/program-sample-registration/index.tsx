@@ -85,7 +85,7 @@ export default function ProgramIDRegistration() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const { data: { clinicalRegistration = undefined } = {}, loading, updateQuery } = useQuery<{
+  const { data: { clinicalRegistration = undefined } = {}, loading, refetch } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
@@ -102,11 +102,17 @@ export default function ProgramIDRegistration() {
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
   const [registerString, setRegisterString] = React.useState('');
+
   const setRegisterState = (state: RegisterState) => {
     setRegisterString(registerStateStringMap[state]);
   };
 
   const handleClearClick = () => {
+    if (clinicalRegistration.id == null) {
+      refetch();
+      return;
+    }
+
     clearRegistration({
       variables: {
         shortName: programShortName,
@@ -114,9 +120,7 @@ export default function ProgramIDRegistration() {
       },
     })
       .then(() => {
-        updateQuery(prev => {
-          return { ...prev, clinicalRegistration: null };
-        });
+        refetch();
       })
       .catch(console.log);
   };

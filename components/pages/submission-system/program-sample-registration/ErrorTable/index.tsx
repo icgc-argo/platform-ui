@@ -113,7 +113,7 @@ const ErrorTable = ({
           `}
           variant={BUTTON_VARIANTS.TEXT}
           size={BUTTON_SIZES.SM}
-          onClick={() => onClear()}
+          onClick={onClear}
         >
           <Typography variant="data">Clear</Typography>
         </Button>

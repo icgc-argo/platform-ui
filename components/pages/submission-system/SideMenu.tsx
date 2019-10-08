@@ -137,9 +137,10 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
       <MenuItem
         level={1}
         selected
+        contentAs="div"
         content={
           <Input
-            aria-label="programs_search"
+            aria-label="programs search"
             onChange={e => {
               setProgramNameSearch(e.target.value);
             }}
