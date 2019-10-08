@@ -259,6 +259,7 @@ export default function ProgramClinicalSubmission() {
           onUploadFileSelect={handleSubmissionFilesUpload}
           validationEnabled={isReadyForValidation}
           onValidateClick={handleSubmissionValidation}
+          signOffEnabled={isReadyForSignoff}
         />
       </Container>
       {clinicalErrors.map(({ code, fileNames, msg }) => (
