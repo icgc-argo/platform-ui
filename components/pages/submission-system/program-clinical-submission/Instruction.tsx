@@ -10,6 +10,7 @@ import {
 } from '../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 import { useToaster } from 'global/hooks/toaster';
+import { css } from 'uikit';
 
 export default ({
   validationEnabled,
@@ -51,7 +52,7 @@ export default ({
           <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM}>
             <span css={instructionBoxButtonContentStyle}>
               <Icon
-                name="upload"
+                name="download"
                 fill="accent2_dark"
                 height="12px"
                 css={instructionBoxButtonIconStyle}
