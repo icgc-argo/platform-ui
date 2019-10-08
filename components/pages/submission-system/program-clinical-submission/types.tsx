@@ -33,6 +33,7 @@ export type ClinicalSubmissionEntityFile = {
 
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
+  schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
 };
 
@@ -42,6 +43,7 @@ export type GqlClinicalEntity = {
   creator: string;
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
+  schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
   createdAt: string;
 };

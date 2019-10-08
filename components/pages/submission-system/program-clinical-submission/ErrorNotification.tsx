@@ -82,10 +82,10 @@ export default ({
               display: flex;
             `}
           >
-            <Button isAsync variant="secondary" size="sm" onClick={onDownloadClick}>
+            <Button variant="secondary" size="sm" onClick={onDownloadClick}>
               Error Report
             </Button>
-            <Button variant="text" size="sm" onClick={onClearClick}>
+            <Button isAsync variant="text" size="sm" onClick={onClearClick}>
               Clear
             </Button>
           </div>

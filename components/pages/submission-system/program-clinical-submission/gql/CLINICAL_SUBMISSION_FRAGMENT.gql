@@ -21,6 +21,15 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
       donorId
     }
     dataErrors {
+      type
+      message
+      row
+      field
+      value
+      donorId
+    }
+    schemaErrors {
+      type
       message
       row
       field

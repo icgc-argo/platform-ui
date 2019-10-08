@@ -10,7 +10,13 @@ import NoData from 'uikit/NoData';
 import ErrorNotification from '../ErrorNotification';
 import Button from 'uikit/Button';
 
-export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile> }) => {
+export default ({
+  fileStates,
+  clearDataError,
+}: {
+  fileStates: Array<ClinicalSubmissionEntityFile>;
+  clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
+}) => {
   const toaster = useToaster();
   const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
   const onFileClick = (clinicalType: string) => e => {
@@ -23,6 +29,10 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
       content: "I'm just a dummy placeholder behaviour",
     });
   };
+  const onErrorClearClick = () => {
+    clearDataError(selectedFile);
+  };
+  const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
   return !selectedFile ? (
     <NoData />
   ) : (
@@ -79,7 +89,24 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
         </VerticalTabs>
       </div>
       <Col>
-        {!!selectedFile.records.length ? (
+        {shouldShowError ? (
+          <div
+            css={css`
+              padding: 16px;
+            `}
+          >
+            <ErrorNotification
+              onClearClick={onErrorClearClick}
+              title={`${
+                selectedFile.schemaErrors.length
+              } errors found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
+              errors={selectedFile.schemaErrors}
+              subtitle={
+                'Your file cannot be processed. Please correct the following errors and reupload your file.'
+              }
+            />
+          </div>
+        ) : !!selectedFile.records.length ? (
           <>
             <div
               css={css`
@@ -112,22 +139,7 @@ export default ({ fileStates }: { fileStates: Array<ClinicalSubmissionEntityFile
             />
           </>
         ) : (
-          <div
-            css={css`
-              padding: 16px;
-            `}
-          >
-            <ErrorNotification
-              onClearClick={console.log}
-              title={`${
-                selectedFile.dataErrors.length
-              } errors found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              errors={selectedFile.dataErrors}
-              subtitle={
-                'Your file cannot be processed. Please correct the following errors and reupload your file.'
-              }
-            />
-          </div>
+          <NoData />
         )}
       </Col>
     </div>

@@ -34,6 +34,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
+    schemaErrors: data.schemaErrors,
     dataErrors: data.dataErrors,
     dataUpdates: data.dataUpdates,
     displayName: capitalize((data.clinicalType || '').split('_').join(' ')),
@@ -68,10 +69,11 @@ export default function ProgramClinicalSubmission() {
       fileErrors: [],
       id: '',
       state: null,
+      __typename: 'ClinicalSubmissionData',
     },
   };
 
-  const { data = placeHolderResponse, loading: loadingClinicalSubmission } = useQuery<
+  const { data = placeHolderResponse, loading: loadingClinicalSubmission, updateQuery } = useQuery<
     ClinicalSubmissionQueryData
   >(CLINICAL_SUBMISSION_QUERY, {
     variables: {
@@ -258,6 +260,18 @@ export default function ProgramClinicalSubmission() {
           </div>
         ) : (
           <FilesNavigator
+            clearDataError={async file => {
+              await updateQuery(previous => ({
+                ...previous,
+                clinicalSubmissions: {
+                  ...previous.clinicalSubmissions,
+                  clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
+                    ...entity,
+                    dataErrors: file.clinicalType === entity.clinicalType ? [] : entity.dataErrors,
+                  })),
+                },
+              }));
+            }}
             fileStates={data.clinicalSubmissions.clinicalEntities.map(
               gqlClinicalEntityToClinicalSubmissionEntityFile,
             )}
