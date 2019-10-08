@@ -33,26 +33,28 @@ export default ({
     accessor: keyof typeof errors[0];
     Header: React.ReactNode;
     width?: number;
+    maxWidth?: number;
     style?: CSSProperties;
   }[] = [
     {
       accessor: 'row',
       Header: 'Row #',
-      width: 80,
+      maxWidth: 70,
     },
     {
       accessor: 'donorId',
       Header: 'Submitter Donor ID',
-      width: 160,
+      maxWidth: 160,
     },
     {
       accessor: 'field',
       Header: 'Field with Error',
+      maxWidth: 200,
     },
     {
       accessor: 'value',
       Header: 'Error Value',
-      width: 130,
+      maxWidth: 130,
     },
     {
       accessor: 'message',
