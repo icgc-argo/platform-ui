@@ -1,6 +1,6 @@
 import { ClinicalSubmissionEntityFile } from '../types';
 import sum from 'lodash/sum';
-import Table from 'uikit/Table';
+import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
@@ -10,8 +10,8 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
-import { ThemeColorNames } from 'uikit/theme/types';
-import { Col, Row } from 'react-grid-system';
+import { CSSProperties } from 'react';
+import { useTheme } from 'uikit/ThemeProvider';
 
 const StarIcon = DataTableStarIcon;
 
@@ -94,6 +94,7 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
+  const theme = useTheme();
   const { dataErrors, records, dataUpdates } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
@@ -103,7 +104,7 @@ export default ({
   const tableData = sortedRecords.map(record =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       row: record.row,
-    }),
+    } as { row: number; [k: string]: number | string }),
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
@@ -123,6 +124,29 @@ export default ({
       </CellContentCenter>
     );
   };
+
+  const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
+      Header: '#',
+      width: 40,
+    },
+    {
+      id: 'error',
+      Cell: StatusColumCell,
+      Header: (
+        <CellContentCenter>
+          <StarIcon fill={FILE_STATE_COLORS.NONE} />
+        </CellContentCenter>
+      ),
+      width: 50,
+    },
+    ...fields.map(({ name }) => ({
+      accessor: name,
+      Header: name,
+    })),
+  ];
 
   return (
     <div
@@ -144,29 +168,15 @@ export default ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
+        getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
+          style: {
+            background: dataErrors.some(err => err.row === original.row)
+              ? theme.colors.error_4
+              : 'none',
+          } as CSSProperties,
+        })}
         showPagination={false}
-        columns={[
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
-            Header: '#',
-            width: 40,
-          },
-          {
-            id: 'error',
-            Cell: StatusColumCell,
-            Header: (
-              <CellContentCenter>
-                <StarIcon fill={FILE_STATE_COLORS.NONE} />
-              </CellContentCenter>
-            ),
-            width: 50,
-          },
-          ...fields.map(({ name }) => ({
-            accessor: name,
-            Header: name,
-          })),
-        ]}
+        columns={tableColumns}
         data={tableData}
       />
     </div>
