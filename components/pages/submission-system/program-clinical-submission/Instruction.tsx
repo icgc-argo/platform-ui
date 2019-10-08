@@ -12,13 +12,15 @@ import FileSelectButton from 'uikit/FileSelectButton';
 import { useToaster } from 'global/hooks/toaster';
 
 export default ({
-  onUploadFileSelect,
   validationEnabled,
+  signOffEnabled,
+  onUploadFileSelect,
   onValidateClick,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
   onValidateClick: () => Promise<any>;
   validationEnabled: boolean;
+  signOffEnabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
@@ -105,7 +107,12 @@ export default ({
           <Typography variant="paragraph" component="span">
             4. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
-          <Button css={instructionBoxButtonStyle} variant="primary" size={BUTTON_SIZES.SM} disabled>
+          <Button
+            css={instructionBoxButtonStyle}
+            variant="primary"
+            size={BUTTON_SIZES.SM}
+            disabled={!signOffEnabled}
+          >
             <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
           </Button>
         </>,

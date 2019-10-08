@@ -71,7 +71,7 @@ export default function ProgramClinicalSubmission() {
       clinicalEntities: [],
       fileErrors: [],
       id: '',
-      state: null,
+      state: 'OPEN',
       __typename: 'ClinicalSubmissionData',
     },
   };
@@ -120,6 +120,7 @@ export default function ProgramClinicalSubmission() {
   );
   const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
   const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+  const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
 
   const onErrorClose: (
     code: string,
@@ -210,9 +211,20 @@ export default function ProgramClinicalSubmission() {
                   />
                   <Progress.Item
                     text="Validate"
-                    state={isReadyForValidation ? (hasDataError ? 'error' : 'pending') : 'disabled'}
+                    state={
+                      isReadyForSignoff
+                        ? 'success'
+                        : isReadyForValidation
+                        ? hasDataError
+                          ? 'error'
+                          : 'pending'
+                        : 'disabled'
+                    }
                   />
-                  <Progress.Item text="Sign Off" state="disabled" />
+                  <Progress.Item
+                    text="Sign Off"
+                    state={isReadyForSignoff ? 'pending' : 'disabled'}
+                  />
                 </Progress>
               )}
             </Row>
