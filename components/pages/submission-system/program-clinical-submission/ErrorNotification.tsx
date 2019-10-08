@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
-import Table from 'uikit/Table';
+import Table, { TableColumnConfig } from 'uikit/Table';
 import { ClinicalSubmissionError } from './types';
 import styled from '@emotion/styled-base';
 
@@ -29,13 +29,7 @@ export default ({
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
   showClinicalType?: boolean;
 }) => {
-  const defaultColumns: {
-    accessor: keyof typeof errors[0];
-    Header: React.ReactNode;
-    width?: number;
-    maxWidth?: number;
-    style?: CSSProperties;
-  }[] = [
+  const defaultColumns: TableColumnConfig<typeof errors[0]>[] = [
     {
       accessor: 'row',
       Header: 'Row #',
