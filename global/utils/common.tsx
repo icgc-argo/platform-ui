@@ -21,6 +21,13 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 const standardDate = 'YYYY-MM-DD';
 export const displayDate = date => formatDate(date, standardDate);
 
+export const sleep = (time: number) =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+
 export const exportToTsv = <Data extends { [k: string]: string | number }>(
   data: Array<Data>,
   options: {

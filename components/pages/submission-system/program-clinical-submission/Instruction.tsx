@@ -21,6 +21,7 @@ export default ({
   validationEnabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
+  const [isValidating, setIsValidating] = React.useState<boolean>(false);
 
   const toaster = useToaster();
 
@@ -28,6 +29,12 @@ export default ({
     setIsUploading(true);
     await onUploadFileSelect(files);
     setIsUploading(false);
+  };
+
+  const onValidationClick = async () => {
+    setIsValidating(true);
+    await onValidateClick();
+    setIsValidating(false);
   };
 
   return (
@@ -87,7 +94,8 @@ export default ({
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
-            onClick={onValidateClick}
+            onClick={onValidationClick}
+            isLoading={isValidating}
             isAsync
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>

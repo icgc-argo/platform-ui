@@ -31,6 +31,7 @@ import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
+import { sleep } from 'global/utils/common';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
@@ -94,6 +95,32 @@ export default function ProgramClinicalSubmission() {
 
   const { clinicalErrors, removeClinicalErrorWithCode } = useClinicalErrorState(data);
 
+  const allDataErrors = data.clinicalSubmissions.clinicalEntities.reduce<
+    React.ComponentProps<typeof ErrorNotification>['errors']
+  >(
+    (acc, entity) => [
+      ...acc,
+      ...entity.dataErrors.map(err => ({
+        ...err,
+        clinicalType: entity.clinicalType,
+      })),
+    ],
+    [],
+  );
+
+  const hasDataError = !!allDataErrors.length;
+  const hasSchemaError =
+    !!data.clinicalSubmissions.clinicalEntities.length &&
+    data.clinicalSubmissions.clinicalEntities.reduce<boolean>(
+      (acc, entity) => acc && !!entity.schemaErrors.length,
+      true,
+    );
+  const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
+    ({ records }) => !!records.length,
+  );
+  const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+
   const onErrorClose: (
     code: string,
   ) => React.ComponentProps<typeof Notification>['onInteraction'] = code => ({ type }) => {
@@ -115,12 +142,22 @@ export default function ProgramClinicalSubmission() {
   const handleSubmissionValidation = async () => {
     if (data.clinicalSubmissions.version) {
       try {
-        await validateSubmission({
-          variables: {
-            programShortName,
-            submissionVersion: data.clinicalSubmissions.version,
-          },
-        });
+        await Promise.all([
+          sleep(1000), // just for some perception of work being done
+          validateSubmission({
+            variables: {
+              programShortName,
+              submissionVersion: data.clinicalSubmissions.version,
+            },
+          }),
+        ]);
+        if (hasDataError) {
+          toaster.addToast({
+            title: 'Validation failed',
+            content: 'Your submission did not satisfy the requirement. Please see errors below.',
+            variant: 'WARNING',
+          });
+        }
       } catch (err) {
         toaster.addToast({
           title: 'We could not validate your submission',
@@ -144,30 +181,6 @@ export default function ProgramClinicalSubmission() {
       content: "I'm just a dummy placeholder behaviour",
     });
   };
-
-  const allDataErrors = data.clinicalSubmissions.clinicalEntities.reduce(
-    (acc, entity) => [
-      ...acc,
-      ...entity.dataErrors.map(err => ({
-        ...err,
-        clinicalType: entity.clinicalType,
-      })),
-    ],
-    [] as React.ComponentProps<typeof ErrorNotification>['errors'],
-  );
-
-  const hasDataError = !!allDataErrors.length;
-  const hasSchemaError =
-    !!data.clinicalSubmissions.clinicalEntities.length &&
-    data.clinicalSubmissions.clinicalEntities.reduce(
-      (acc, entity) => acc && !!entity.schemaErrors.length,
-      true,
-    );
-  const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
-    ({ records }) => !!records.length,
-  );
-  const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   return (
     <SubmissionLayout
       contentHeader={
