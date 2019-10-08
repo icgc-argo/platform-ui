@@ -13,6 +13,7 @@ export type ClinicalSubmissionError = {
   field: string;
   value: string;
   donorId: string;
+  __typename: 'ClinicalSubmissionError';
 };
 
 export type ClinicalSubmissionUpdate = {
@@ -21,6 +22,7 @@ export type ClinicalSubmissionUpdate = {
   newValue: string;
   oldValue: string;
   donorId: string;
+  __typename: 'ClinicalSubmissionUpdate';
 };
 
 export type ClinicalSubmissionEntityFile = {
@@ -49,11 +51,13 @@ export type GqlClinicalSubmissionData = {
   state: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
   clinicalEntities: GqlClinicalEntity[];
   fileErrors: ClinicalError[];
+  __typename: 'ClinicalSubmissionData';
 };
 export type ClinicalError = {
   msg: string;
   fileNames: string[];
   code: string;
+  __typename: 'ClinicalError';
 };
 
 export type UploadFilesMutationVariables = {

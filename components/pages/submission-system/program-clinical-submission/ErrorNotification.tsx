@@ -1,10 +1,10 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import { ClinicalSubmissionError } from './types';
-import styled from '@emotion/styled-base';
+import { exportToTsv } from 'global/utils/common';
 
 const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
   ...arr.slice(0, i),
@@ -59,6 +59,12 @@ export default ({
     accessor: 'clinicalType',
     Header: 'Clinical type',
   });
+  const onDownloadClick = () => {
+    exportToTsv(errors, {
+      exclude: ['__typename'],
+      order: columnsWithClinicalType.map(entry => entry.accessor),
+    });
+  };
   return (
     <Notification
       variant="ERROR"
@@ -76,7 +82,7 @@ export default ({
               display: flex;
             `}
           >
-            <Button variant="secondary" size="sm">
+            <Button isAsync variant="secondary" size="sm" onClick={onDownloadClick}>
               Error Report
             </Button>
             <Button variant="text" size="sm" onClick={onClearClick}>
