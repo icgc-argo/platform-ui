@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table from 'uikit/Table';
 import { ClinicalSubmissionError } from './types';
+import styled from '@emotion/styled-base';
 
 const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
   ...arr.slice(0, i),
@@ -31,14 +32,18 @@ export default ({
   const defaultColumns: {
     accessor: keyof typeof errors[0];
     Header: React.ReactNode;
+    width?: number;
+    style?: CSSProperties;
   }[] = [
     {
       accessor: 'row',
       Header: 'Row #',
+      width: 80,
     },
     {
       accessor: 'donorId',
       Header: 'Submitter Donor ID',
+      width: 160,
     },
     {
       accessor: 'field',
@@ -47,6 +52,7 @@ export default ({
     {
       accessor: 'value',
       Header: 'Error Value',
+      width: 130,
     },
     {
       accessor: 'message',
