@@ -20,6 +20,7 @@ import {
   ClinicalSubmissionQueryData,
   ValidateSubmissionMutationVariables,
   UploadFilesMutationVariables,
+  ClinicalSubmissionError,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
@@ -29,6 +30,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
+import ErrorNotification from './ErrorNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
@@ -136,19 +138,34 @@ export default function ProgramClinicalSubmission() {
     }
   };
 
-  const hasDataError = data.clinicalSubmissions.clinicalEntities.reduce(
-    (acc, entity) => acc && !!entity.dataErrors.length,
+  const handleDataErrorClearance = () => {
+    toaster.addToast({
+      title: 'Clearing errors!',
+      content: "I'm just a dummy placeholder behaviour",
+    });
+  };
+
+  const allDataErrors = data.clinicalSubmissions.clinicalEntities.reduce(
+    (acc, entity) => [
+      ...acc,
+      ...entity.dataErrors.map(err => ({
+        ...err,
+        clinicalType: entity.clinicalType,
+      })),
+    ],
+    [] as React.ComponentProps<typeof ErrorNotification>['errors'],
+  );
+
+  const hasDataError = !!allDataErrors.length;
+  const hasSchemaError = data.clinicalSubmissions.clinicalEntities.reduce(
+    (acc, entity) => acc && !!entity.schemaErrors.length,
     true,
   );
-  const hasSomeEntity = !!(data.clinicalSubmissions.clinicalEntities || []).some(
+  const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  // const hasFileError = !!(data.clinicalSubmissions.fileErrors || []).length;
-  const isReadyForValidation = hasSomeEntity && !hasDataError;
-  console.log('isReadyForValidation: ', isReadyForValidation);
-  console.log('hasSomeEntity: ', hasSomeEntity);
-  console.log('hasDataError: ', hasDataError);
-
+  const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   return (
     <SubmissionLayout
       contentHeader={
@@ -213,10 +230,7 @@ export default function ProgramClinicalSubmission() {
       <Container css={containerStyle}>
         <Instruction
           onUploadFileSelect={handleSubmissionFilesUpload}
-          validationEnabled={
-            true
-            // isReadyForValidation
-          }
+          validationEnabled={isReadyForValidation}
           onValidateClick={handleSubmissionValidation}
         />
       </Container>
@@ -236,6 +250,21 @@ export default function ProgramClinicalSubmission() {
           onInteraction={onErrorClose(code)}
         />
       ))}
+      {!hasDataError ? null : (
+        <div
+          css={css`
+            margin-top: 20px;
+          `}
+        >
+          <ErrorNotification
+            showClinicalType
+            onClearClick={handleDataErrorClearance}
+            title={`${allDataErrors.length} errors found in submission workspace`}
+            subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
+            errors={allDataErrors}
+          />
+        </div>
+      )}
       <Container
         css={css`
           ${containerStyle}

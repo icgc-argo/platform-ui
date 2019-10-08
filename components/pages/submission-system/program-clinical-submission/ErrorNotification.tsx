@@ -63,6 +63,7 @@ export default ({
     exportToTsv(errors, {
       exclude: ['__typename'],
       order: columnsWithClinicalType.map(entry => entry.accessor),
+      fileName: 'error_report.tsv',
     });
   };
   return (
@@ -92,14 +93,19 @@ export default ({
         </div>
       }
       content={
-        <>
+        <div
+          css={css`
+            margin-top: 10px;
+          `}
+        >
           <div>{subtitle}</div>
           <Table
+            NoDataComponent={() => null}
             showPagination={false}
             columns={showClinicalType ? columnsWithClinicalType : defaultColumns}
             data={errors}
           />
-        </>
+        </div>
       }
     />
   );
