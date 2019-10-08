@@ -157,10 +157,12 @@ export default function ProgramClinicalSubmission() {
   );
 
   const hasDataError = !!allDataErrors.length;
-  const hasSchemaError = data.clinicalSubmissions.clinicalEntities.reduce(
-    (acc, entity) => acc && !!entity.schemaErrors.length,
-    true,
-  );
+  const hasSchemaError =
+    !!data.clinicalSubmissions.clinicalEntities.length &&
+    data.clinicalSubmissions.clinicalEntities.reduce(
+      (acc, entity) => acc && !!entity.schemaErrors.length,
+      true,
+    );
   const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
@@ -191,11 +193,11 @@ export default function ProgramClinicalSubmission() {
                 <Progress>
                   <Progress.Item
                     text="Upload"
-                    state={isReadyForValidation ? 'success' : 'disabled'}
+                    state={isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled'}
                   />
                   <Progress.Item
                     text="Validate"
-                    state={isReadyForValidation ? 'pending' : 'disabled'}
+                    state={isReadyForValidation ? (hasDataError ? 'error' : 'pending') : 'disabled'}
                   />
                   <Progress.Item text="Sign Off" state="disabled" />
                 </Progress>
