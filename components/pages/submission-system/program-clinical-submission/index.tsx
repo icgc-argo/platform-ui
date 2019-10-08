@@ -119,7 +119,7 @@ export default function ProgramClinicalSubmission() {
     ({ records }) => !!records.length,
   );
   const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasDataError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
 
   const onErrorClose: (
@@ -143,22 +143,12 @@ export default function ProgramClinicalSubmission() {
   const handleSubmissionValidation = async () => {
     if (data.clinicalSubmissions.version) {
       try {
-        await Promise.all([
-          sleep(1000), // just for some perception of work being done
-          validateSubmission({
-            variables: {
-              programShortName,
-              submissionVersion: data.clinicalSubmissions.version,
-            },
-          }),
-        ]);
-        if (hasDataError) {
-          toaster.addToast({
-            title: 'Validation failed',
-            content: 'Your submission did not satisfy the requirement. Please see errors below.',
-            variant: 'WARNING',
-          });
-        }
+        await validateSubmission({
+          variables: {
+            programShortName,
+            submissionVersion: data.clinicalSubmissions.version,
+          },
+        });
       } catch (err) {
         toaster.addToast({
           title: 'We could not validate your submission',
