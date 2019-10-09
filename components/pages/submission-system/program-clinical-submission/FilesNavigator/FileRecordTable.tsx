@@ -35,13 +35,7 @@ const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
   return (
     <StatAreaDisplay.Container>
       <StatAreaDisplay.Section>
-        {sum([
-          fileStat.errorCount,
-          fileStat.newCount,
-          fileStat.noUpdateCount,
-          fileStat.updateCount,
-        ])}{' '}
-        Total
+        {sum([fileStat.newCount, fileStat.noUpdateCount, fileStat.updateCount])} Total
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
