@@ -151,6 +151,13 @@ export default function ProgramClinicalSubmission() {
     });
   };
 
+  const handleDataErrorClearance = () => {
+    toaster.addToast({
+      title: 'Clearing errors!',
+      content: "I'm just a dummy placeholder behaviour",
+    });
+  };
+
   const handleSubmissionValidation = async () => {
     if (data.clinicalSubmissions.version) {
       try {
@@ -180,26 +187,40 @@ export default function ProgramClinicalSubmission() {
     }
   };
 
-  const handleDataErrorClearance = () => {
-    toaster.addToast({
-      title: 'Clearing errors!',
-      content: "I'm just a dummy placeholder behaviour",
-    });
-  };
-
-  const handleSignOff = () =>
-    getUserApproval()
-      .then(() => {
-        return approveSubmission({
-          variables: {
-            programShortName,
-            submissionVersion: data.clinicalSubmissions.version,
-          },
+  const handleSignOff = async () => {
+    if (data.clinicalSubmissions.version) {
+      try {
+        await getUserApproval()
+          .then(() =>
+            approveSubmission({
+              variables: {
+                programShortName,
+                submissionVersion: data.clinicalSubmissions.version,
+              },
+            }),
+          )
+          .catch(() => {
+            console.log('sign off canceled');
+          });
+      } catch (err) {
+        toaster.addToast({
+          title: 'Your submission could not be signed off on',
+          content:
+            'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
+          variant: 'ERROR',
+          timeout: Infinity,
         });
-      })
-      .catch(() => {
-        console.log('sign off canceled');
+        setMutationDisabled(true);
+      }
+    } else {
+      toaster.addToast({
+        title: 'Something went wrong',
+        content: 'Your submission could not be signed off on. Please contact us.',
+        variant: 'ERROR',
       });
+      setMutationDisabled(true);
+    }
+  };
 
   return (
     <>
