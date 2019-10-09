@@ -62,26 +62,19 @@ export default ({
             >
               <div
                 css={css`
-                  display: flex;
-                  justify-content: space-between;
+                  text-align: left;
                 `}
               >
-                <div
-                  css={css`
-                    text-align: left;
-                  `}
-                >
-                  {fileState.displayName}
-                </div>
-                {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
-                  <VerticalTabs.Tag variant={fileState.status}>
-                    {fileState.recordsCount}
-                  </VerticalTabs.Tag>
-                )}
-                {fileState.status === 'ERROR' && (
-                  <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-                )}
+                {fileState.displayName}
               </div>
+              {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                <VerticalTabs.Tag variant={fileState.status}>
+                  {fileState.recordsCount}
+                </VerticalTabs.Tag>
+              )}
+              {fileState.status === 'ERROR' && (
+                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+              )}
             </VerticalTabs.Item>
           ))}
         </VerticalTabs>
