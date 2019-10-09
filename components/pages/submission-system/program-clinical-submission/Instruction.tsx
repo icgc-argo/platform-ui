@@ -17,11 +17,13 @@ export default ({
   signOffEnabled,
   onUploadFileSelect,
   onValidateClick,
+  uploadEnabled,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
   onValidateClick: () => Promise<any>;
   validationEnabled: boolean;
   signOffEnabled: boolean;
+  uploadEnabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
@@ -76,6 +78,7 @@ export default ({
             }}
             onFilesSelect={onFileUploadClicked}
             isLoading={isUploading}
+            disabled={!uploadEnabled}
           >
             <span css={instructionBoxButtonContentStyle}>
               <Icon

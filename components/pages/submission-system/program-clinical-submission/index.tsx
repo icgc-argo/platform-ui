@@ -63,6 +63,7 @@ const useClinicalErrorState = (data: ClinicalSubmissionQueryData) => {
 export default function ProgramClinicalSubmission() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
+  const [mutationDisabled, setMutationDisabled] = React.useState(false);
   const toaster = useToaster();
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
@@ -155,7 +156,9 @@ export default function ProgramClinicalSubmission() {
           content:
             'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
           variant: 'ERROR',
+          timeout: Infinity,
         });
+        setMutationDisabled(true);
       }
     } else {
       toaster.addToast({
@@ -163,6 +166,7 @@ export default function ProgramClinicalSubmission() {
         content: 'Your submission could not be validated. Please contact us.',
         variant: 'ERROR',
       });
+      setMutationDisabled(true);
     }
   };
 
@@ -246,10 +250,11 @@ export default function ProgramClinicalSubmission() {
     >
       <Container css={containerStyle}>
         <Instruction
+          signOffEnabled={isReadyForSignoff && !mutationDisabled}
+          validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
+          uploadEnabled={!mutationDisabled}
           onUploadFileSelect={handleSubmissionFilesUpload}
-          validationEnabled={isReadyForValidation && !hasDataError}
           onValidateClick={handleSubmissionValidation}
-          signOffEnabled={isReadyForSignoff}
         />
       </Container>
       {clinicalErrors.map(({ code, fileNames, msg }) => (
