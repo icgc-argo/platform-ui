@@ -50,6 +50,8 @@ export default ({
       <div
         css={css`
           width: 170px;
+          max-width: 170px;
+          min-width: 170px;
           overflow: visible;
         `}
       >
@@ -83,7 +85,7 @@ export default ({
           ))}
         </VerticalTabs>
       </div>
-      <Col>
+      <Col style={{ position: 'relative' }}>
         {shouldShowError ? (
           <div
             css={css`
