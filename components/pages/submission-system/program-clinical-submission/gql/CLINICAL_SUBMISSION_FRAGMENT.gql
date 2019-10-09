@@ -1,5 +1,5 @@
 fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
-  id
+  programShortName # this is the ID
   state
   version
   clinicalEntities {
