@@ -37,6 +37,9 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
+    createdAt: data.createdAt,
+    creator: data.creator,
+    fileName: data.batchName,
     schemaErrors: data.schemaErrors,
     dataErrors: data.dataErrors,
     dataUpdates: data.dataUpdates,

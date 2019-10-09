@@ -129,9 +129,9 @@ export default ({
             <FileRecordTable
               file={selectedFile}
               submissionData={{
-                fileName: 'some file',
-                creator: 'Someone',
-                createdAt: 'sometime',
+                fileName: selectedFile.fileName,
+                creator: selectedFile.creator,
+                createdAt: selectedFile.createdAt,
               }}
             />
           </>

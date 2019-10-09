@@ -6,6 +6,7 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
     clinicalType
     batchName
     creator
+    createdAt
     records {
       row
       fields {

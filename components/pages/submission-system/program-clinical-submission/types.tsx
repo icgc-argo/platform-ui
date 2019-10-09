@@ -31,6 +31,9 @@ export type ClinicalSubmissionEntityFile = {
   recordsCount?: number;
   status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE';
 
+  createdAt: string;
+  creator: string;
+  fileName: string;
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
   schemaErrors: ClinicalSubmissionError[];
