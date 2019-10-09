@@ -191,13 +191,14 @@ export default function ProgramClinicalSubmission() {
     if (data.clinicalSubmissions.version) {
       try {
         await getUserApproval()
-          .then(() =>
-            approveSubmission({
-              variables: {
-                programShortName,
-                submissionVersion: data.clinicalSubmissions.version,
-              },
-            }),
+          .then(
+            (): Promise<any> =>
+              approveSubmission({
+                variables: {
+                  programShortName,
+                  submissionVersion: data.clinicalSubmissions.version,
+                },
+              }),
           )
           .catch(() => {
             console.log('sign off canceled');
