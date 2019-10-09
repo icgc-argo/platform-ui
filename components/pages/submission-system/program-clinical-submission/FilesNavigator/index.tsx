@@ -47,7 +47,6 @@ export default ({
       <div
         css={css`
           width: 170px;
-          height: 100%;
           overflow: visible;
         `}
       >
