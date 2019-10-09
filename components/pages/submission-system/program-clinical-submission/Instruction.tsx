@@ -9,8 +9,6 @@ import {
   instructionBoxButtonStyle,
 } from '../common';
 import FileSelectButton from 'uikit/FileSelectButton';
-import { useToaster } from 'global/hooks/toaster';
-import { css } from 'uikit';
 
 export default ({
   validationEnabled,
@@ -18,28 +16,35 @@ export default ({
   onUploadFileSelect,
   onValidateClick,
   uploadEnabled,
+  onSignOffClick,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
   onValidateClick: () => Promise<any>;
+  onSignOffClick: () => Promise<any>;
   validationEnabled: boolean;
   signOffEnabled: boolean;
   uploadEnabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
+  const [isSigningOff, setIsSigningOff] = React.useState<boolean>(false);
 
-  const toaster = useToaster();
-
-  const onFileUploadClicked = async (files: FileList) => {
+  const handleFileUploadClick = async (files: FileList) => {
     setIsUploading(true);
     await onUploadFileSelect(files);
     setIsUploading(false);
   };
 
-  const onValidationClick = async () => {
+  const handleValidationClick = async () => {
     setIsValidating(true);
     await onValidateClick();
     setIsValidating(false);
+  };
+
+  const handleSignOffClick = async () => {
+    setIsSigningOff(true);
+    await onSignOffClick();
+    setIsSigningOff(false);
   };
 
   return (
@@ -76,7 +81,7 @@ export default ({
               accept: '.tsv',
               multiple: true,
             }}
-            onFilesSelect={onFileUploadClicked}
+            onFilesSelect={handleFileUploadClick}
             isLoading={isUploading}
             disabled={!uploadEnabled}
           >
@@ -100,7 +105,7 @@ export default ({
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
-            onClick={onValidationClick}
+            onClick={handleValidationClick}
             isLoading={isValidating}
             isAsync
           >
@@ -116,6 +121,9 @@ export default ({
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!signOffEnabled}
+            onClick={handleSignOffClick}
+            isLoading={isSigningOff}
+            isAsync
           >
             <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
           </Button>

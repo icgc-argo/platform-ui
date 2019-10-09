@@ -2,11 +2,10 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import usePageContext, { usePageQuery } from 'global/hooks/usePageContext';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
-import VerticalTabs from 'uikit/VerticalTabs';
 import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
@@ -14,24 +13,25 @@ import { containerStyle } from '../common';
 import FilesNavigator from './FilesNavigator';
 import {
   ClinicalError,
-  GqlClinicalSubmissionData,
   ClinicalSubmissionEntityFile,
   GqlClinicalEntity,
   ClinicalSubmissionQueryData,
   ValidateSubmissionMutationVariables,
   UploadFilesMutationVariables,
-  ClinicalSubmissionError,
+  ApproveSubmissionMutationVariables,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
+import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
-import { sleep } from 'global/utils/common';
+import { ModalPortal } from 'components/ApplicationRoot';
+import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   data: GqlClinicalEntity,
@@ -64,6 +64,12 @@ export default function ProgramClinicalSubmission() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const [mutationDisabled, setMutationDisabled] = React.useState(false);
+  const {
+    signOffModalShown,
+    getUserApproval,
+    onApprove: onSignOffApproved,
+    onCancel: onSignOffCanceled,
+  } = useSignOffValidationModalState();
   const toaster = useToaster();
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
@@ -93,6 +99,10 @@ export default function ProgramClinicalSubmission() {
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
   >(VALIDATE_SUBMISSION_MUTATION);
+  const [approveSubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    ApproveSubmissionMutationVariables
+  >(APPROVE_SUBMISSION_MUTATION);
 
   const { clinicalErrors, removeClinicalErrorWithCode } = useClinicalErrorState(data);
 
@@ -176,159 +186,190 @@ export default function ProgramClinicalSubmission() {
       content: "I'm just a dummy placeholder behaviour",
     });
   };
+
+  const handleSignOff = () =>
+    getUserApproval()
+      .then(() => {
+        return approveSubmission({
+          variables: {
+            programShortName,
+            submissionVersion: data.clinicalSubmissions.version,
+          },
+        });
+      })
+      .catch(() => {
+        console.log('sign off canceled');
+      });
+
   return (
-    <SubmissionLayout
-      contentHeader={
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-          `}
-        >
-          <TitleBar>
-            <>{programShortName}</>
-            <Row nogutter align="center">
-              <div
-                css={css`
-                  margin-right: 20px;
-                `}
-              >
-                Submit Clinical Data
-              </div>
-              {!loadingClinicalSubmission && (
-                <Progress>
-                  <Progress.Item
-                    text="Upload"
-                    state={isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled'}
-                  />
-                  <Progress.Item
-                    text="Validate"
-                    state={
-                      isReadyForSignoff
-                        ? 'success'
-                        : isReadyForValidation
-                        ? hasDataError
-                          ? 'error'
-                          : 'pending'
-                        : 'disabled'
-                    }
-                  />
-                  <Progress.Item
-                    text="Sign Off"
-                    state={isReadyForSignoff ? 'pending' : 'disabled'}
-                  />
-                </Progress>
-              )}
-            </Row>
-          </TitleBar>
-          <Row nogutter align="center">
-            <Button
-              variant="text"
-              disabled
-              css={css`
-                margin-right: 10px;
-              `}
-            >
-              Clear submission
-            </Button>
-            <Link
-              bold
-              withChevron
-              uppercase
-              underline={false}
-              css={css`
-                font-size: 14px;
-              `}
-            >
-              HELP
-            </Link>
-          </Row>
-        </div>
-      }
-    >
-      <Container css={containerStyle}>
-        <Instruction
-          signOffEnabled={isReadyForSignoff && !mutationDisabled}
-          validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
-          uploadEnabled={!mutationDisabled}
-          onUploadFileSelect={handleSubmissionFilesUpload}
-          onValidateClick={handleSubmissionValidation}
-        />
-      </Container>
-      {clinicalErrors.map(({ code, fileNames, msg }) => (
-        <Notification
-          key={code}
-          css={css`
-            margin-top: 20px;
-          `}
-          size="SM"
-          variant="ERROR"
-          interactionType="CLOSE"
-          title={`${fileNames.length} of ${
-            (currentFileList || []).length
-          } files failed to upload: ${fileNames.join(', ')}`}
-          content={msg}
-          onInteraction={onErrorClose(code)}
-        />
-      ))}
-      {hasDataError && (
-        <div
-          css={css`
-            margin-top: 20px;
-          `}
-        >
-          <ErrorNotification
-            showClinicalType
-            onClearClick={handleDataErrorClearance}
-            title={`${allDataErrors.length} errors found in submission workspace`}
-            subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
-            errors={allDataErrors}
+    <>
+      {signOffModalShown && (
+        <ModalPortal>
+          <SignOffValidationModal
+            clinicalSubmissions={data.clinicalSubmissions}
+            onActionClick={onSignOffApproved}
+            onCloseClick={onSignOffCanceled}
+            onCancelClick={onSignOffCanceled}
           />
-        </div>
+        </ModalPortal>
       )}
-      <Container
-        css={css`
-          ${containerStyle}
-          min-height: 100px;
-          position: relative;
-          padding: 0px;
-          min-height: calc(100vh - 240px);
-          display: flex;
-        `}
-      >
-        {loadingClinicalSubmission ? (
+      <SubmissionLayout
+        contentHeader={
           <div
             css={css`
               display: flex;
-              justify-content: center;
+              justify-content: space-between;
               align-items: center;
               width: 100%;
             `}
           >
-            <DnaLoader />
+            <TitleBar>
+              <>{programShortName}</>
+              <Row nogutter align="center">
+                <div
+                  css={css`
+                    margin-right: 20px;
+                  `}
+                >
+                  Submit Clinical Data
+                </div>
+                {!loadingClinicalSubmission && (
+                  <Progress>
+                    <Progress.Item
+                      text="Upload"
+                      state={
+                        isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled'
+                      }
+                    />
+                    <Progress.Item
+                      text="Validate"
+                      state={
+                        isReadyForSignoff
+                          ? 'success'
+                          : isReadyForValidation
+                          ? hasDataError
+                            ? 'error'
+                            : 'pending'
+                          : 'disabled'
+                      }
+                    />
+                    <Progress.Item
+                      text="Sign Off"
+                      state={isReadyForSignoff ? 'pending' : 'disabled'}
+                    />
+                  </Progress>
+                )}
+              </Row>
+            </TitleBar>
+            <Row nogutter align="center">
+              <Button
+                variant="text"
+                disabled
+                css={css`
+                  margin-right: 10px;
+                `}
+              >
+                Clear submission
+              </Button>
+              <Link
+                bold
+                withChevron
+                uppercase
+                underline={false}
+                css={css`
+                  font-size: 14px;
+                `}
+              >
+                HELP
+              </Link>
+            </Row>
           </div>
-        ) : (
-          <FilesNavigator
-            clearDataError={async file => {
-              await updateQuery(previous => ({
-                ...previous,
-                clinicalSubmissions: {
-                  ...previous.clinicalSubmissions,
-                  clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
-                    ...entity,
-                    dataErrors: file.clinicalType === entity.clinicalType ? [] : entity.dataErrors,
-                  })),
-                },
-              }));
-            }}
-            fileStates={data.clinicalSubmissions.clinicalEntities.map(
-              gqlClinicalEntityToClinicalSubmissionEntityFile,
-            )}
+        }
+      >
+        <Container css={containerStyle}>
+          <Instruction
+            signOffEnabled={isReadyForSignoff && !mutationDisabled}
+            validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
+            uploadEnabled={!mutationDisabled}
+            onUploadFileSelect={handleSubmissionFilesUpload}
+            onValidateClick={handleSubmissionValidation}
+            onSignOffClick={handleSignOff}
           />
+        </Container>
+        {clinicalErrors.map(({ code, fileNames, msg }) => (
+          <Notification
+            key={code}
+            css={css`
+              margin-top: 20px;
+            `}
+            size="SM"
+            variant="ERROR"
+            interactionType="CLOSE"
+            title={`${fileNames.length} of ${
+              (currentFileList || []).length
+            } files failed to upload: ${fileNames.join(', ')}`}
+            content={msg}
+            onInteraction={onErrorClose(code)}
+          />
+        ))}
+        {hasDataError && (
+          <div
+            css={css`
+              margin-top: 20px;
+            `}
+          >
+            <ErrorNotification
+              showClinicalType
+              onClearClick={handleDataErrorClearance}
+              title={`${allDataErrors.length} errors found in submission workspace`}
+              subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
+              errors={allDataErrors}
+            />
+          </div>
         )}
-      </Container>
-    </SubmissionLayout>
+        <Container
+          css={css`
+            ${containerStyle}
+            min-height: 100px;
+            position: relative;
+            padding: 0px;
+            min-height: calc(100vh - 240px);
+            display: flex;
+          `}
+        >
+          {loadingClinicalSubmission ? (
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+              `}
+            >
+              <DnaLoader />
+            </div>
+          ) : (
+            <FilesNavigator
+              clearDataError={async file => {
+                await updateQuery(previous => ({
+                  ...previous,
+                  clinicalSubmissions: {
+                    ...previous.clinicalSubmissions,
+                    clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
+                      ...entity,
+                      dataErrors:
+                        file.clinicalType === entity.clinicalType ? [] : entity.dataErrors,
+                    })),
+                  },
+                }));
+              }}
+              fileStates={data.clinicalSubmissions.clinicalEntities.map(
+                gqlClinicalEntityToClinicalSubmissionEntityFile,
+              )}
+            />
+          )}
+        </Container>
+      </SubmissionLayout>
+    </>
   );
 }

@@ -72,6 +72,11 @@ export type ValidateSubmissionMutationVariables = {
   submissionVersion: string;
 };
 
+export type ApproveSubmissionMutationVariables = {
+  programShortName: string;
+  submissionVersion: string;
+};
+
 export type ClinicalSubmissionQueryData = {
   clinicalSubmissions: GqlClinicalSubmissionData;
 };
