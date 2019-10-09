@@ -40,7 +40,6 @@ export default ({
       css={css`
         position: relative;
         width: 100%;
-        height: 100%;
         display: flex;
       `}
     >

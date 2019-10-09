@@ -290,17 +290,16 @@ export default function ProgramClinicalSubmission() {
           position: relative;
           padding: 0px;
           min-height: calc(100vh - 240px);
+          display: flex;
         `}
       >
         {loadingClinicalSubmission ? (
           <div
             css={css`
-              position: absolute;
-              height: 100%;
-              width: 100%;
               display: flex;
               justify-content: center;
               align-items: center;
+              width: 100%;
             `}
           >
             <DnaLoader />
