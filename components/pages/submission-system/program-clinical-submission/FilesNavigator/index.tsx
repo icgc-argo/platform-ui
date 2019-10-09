@@ -34,7 +34,11 @@ export default ({
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
   return !selectedFile ? (
-    <NoData />
+    <NoData
+      css={css`
+        width: 100%;
+      `}
+    />
   ) : (
     <div
       css={css`
