@@ -119,7 +119,7 @@ export default function ProgramClinicalSubmission() {
     ({ records }) => !!records.length,
   );
   const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasDataError;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
 
   const onErrorClose: (
@@ -247,7 +247,7 @@ export default function ProgramClinicalSubmission() {
       <Container css={containerStyle}>
         <Instruction
           onUploadFileSelect={handleSubmissionFilesUpload}
-          validationEnabled={isReadyForValidation}
+          validationEnabled={isReadyForValidation && !hasDataError}
           onValidateClick={handleSubmissionValidation}
           signOffEnabled={isReadyForSignoff}
         />
