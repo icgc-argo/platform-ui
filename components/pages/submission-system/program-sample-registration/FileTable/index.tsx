@@ -97,6 +97,7 @@ const FileTable = (props: {
             top={58}
             css={css`
               background: white;
+              overflow: hidden;
             `}
           >
             <TableInfoHeaderContainer
