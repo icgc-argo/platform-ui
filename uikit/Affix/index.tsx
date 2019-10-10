@@ -7,9 +7,11 @@ export default function Affix(props: {
   className?: string;
 }) {
   const element = React.createRef<HTMLDivElement>();
-  let oldPosition: string;
-  let oldTop: string;
-  let oldWidth: string;
+  let oldStyles = {
+    position: '',
+    top: '',
+    width: '',
+  };
   // Offset could make the element fixed ealier or later
   const { offset = 0 } = props;
 
@@ -17,21 +19,19 @@ export default function Affix(props: {
     const scrollTop = window.scrollY;
 
     if (distanceToBody - scrollTop < props.top + offset) {
-      if (element.current.style.top != props.top + 'px') {
-        oldTop = element.current.style.position;
-        element.current.style.top = props.top + 'px';
-      }
       if (element.current.style.position != 'fixed') {
-        oldPosition = element.current.style.position;
-        oldWidth = element.current.style.position;
+        for (let key in oldStyles) {
+          oldStyles[key] = element.current.style[key];
+        }
         element.current.style.position = 'fixed';
         element.current.style.width = width + 'px';
+        element.current.style.top = props.top + 'px';
       }
     } else {
       // reset to default
-      element.current.style.position = oldPosition;
-      element.current.style.top = oldTop;
-      element.current.style.width = oldWidth;
+      for (let key in oldStyles) {
+        element.current.style[key] = oldStyles[key];
+      }
     }
   };
 
