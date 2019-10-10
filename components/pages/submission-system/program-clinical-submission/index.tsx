@@ -86,9 +86,11 @@ export default function ProgramClinicalSubmission() {
     },
   };
 
-  const { data = placeHolderResponse, loading: loadingClinicalSubmission, updateQuery } = useQuery<
-    ClinicalSubmissionQueryData
-  >(CLINICAL_SUBMISSION_QUERY, {
+  const {
+    data = placeHolderResponse,
+    loading: loadingClinicalSubmission,
+    updateQuery: updateClinicalSubmissionQuery,
+  } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
     },
@@ -376,7 +378,7 @@ export default function ProgramClinicalSubmission() {
           ) : (
             <FilesNavigator
               clearDataError={async file => {
-                await updateQuery(previous => ({
+                await updateClinicalSubmissionQuery(previous => ({
                   ...previous,
                   clinicalSubmissions: {
                     ...previous.clinicalSubmissions,
