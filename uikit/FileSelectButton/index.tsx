@@ -2,9 +2,6 @@ import React from 'react';
 import Button from 'uikit/Button';
 import { css } from 'uikit';
 
-/*
- * Please edit me!
- */
 type FileSelectButtonProps = Omit<React.ComponentProps<typeof Button>, 'onClick'> & {
   inputProps?: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
   onFilesSelect: (files: FileList) => void;
