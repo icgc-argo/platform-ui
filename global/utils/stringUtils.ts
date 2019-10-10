@@ -1,3 +1,6 @@
+/**
+ * turns "here is some string" -> "Here Is Some String"
+ */
 export const capitalize = (s: string) =>
   s
     .split(' ')
