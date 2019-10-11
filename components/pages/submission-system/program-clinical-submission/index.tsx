@@ -34,20 +34,25 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
-  data: GqlClinicalEntity,
+  gqlFile: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
-    createdAt: data.createdAt,
-    creator: data.creator,
-    fileName: data.batchName,
-    schemaErrors: data.schemaErrors,
-    dataErrors: data.dataErrors,
-    dataUpdates: data.dataUpdates,
-    displayName: capitalize((data.clinicalType || '').split('_').join(' ')),
-    clinicalType: data.clinicalType,
-    records: data.records,
-    recordsCount: data.records.length,
-    status: !!data.dataErrors.length ? 'ERROR' : !!data.dataUpdates.length ? 'SUCCESS' : 'WARNING',
+    stats: gqlFile.stats,
+    createdAt: gqlFile.createdAt,
+    creator: gqlFile.creator,
+    fileName: gqlFile.batchName,
+    schemaErrors: gqlFile.schemaErrors,
+    dataErrors: gqlFile.dataErrors,
+    dataUpdates: gqlFile.dataUpdates,
+    displayName: capitalize((gqlFile.clinicalType || '').split('_').join(' ')),
+    clinicalType: gqlFile.clinicalType,
+    records: gqlFile.records,
+    recordsCount: gqlFile.records.length,
+    status: !!gqlFile.dataErrors.length
+      ? 'ERROR'
+      : !!gqlFile.dataUpdates.length
+      ? 'SUCCESS'
+      : 'WARNING',
   };
 };
 

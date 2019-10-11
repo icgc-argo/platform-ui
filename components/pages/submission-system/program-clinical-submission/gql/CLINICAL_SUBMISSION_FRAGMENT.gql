@@ -7,6 +7,12 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
     batchName
     creator
     createdAt
+    stats {
+      noUpdate
+      new
+      updated
+      errorsFound
+    }
     records {
       row
       fields {

@@ -158,10 +158,10 @@ export default ({
         left={
           <StatsArea
             fileStat={{
-              errorCount: file.dataErrors.length,
-              newCount: file.records.length,
-              noUpdateCount: 0,
-              updateCount: file.dataUpdates.length,
+              errorCount: file.stats.errorsFound.length,
+              newCount: file.stats.new.length,
+              noUpdateCount: file.stats.noUpdate.length,
+              updateCount: file.stats.updated.length,
             }}
           />
         }
