@@ -164,65 +164,47 @@ export default function ProgramClinicalSubmission() {
   };
 
   const handleSubmissionValidation = async () => {
-    if (data.clinicalSubmissions.version) {
-      try {
-        await validateSubmission({
-          variables: {
-            programShortName,
-            submissionVersion: data.clinicalSubmissions.version,
-          },
-        });
-      } catch (err) {
-        toaster.addToast({
-          title: 'We could not validate your submission',
-          content:
-            'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-          variant: 'ERROR',
-          timeout: Infinity,
-        });
-        setMutationDisabled(true);
-      }
-    } else {
+    try {
+      await validateSubmission({
+        variables: {
+          programShortName,
+          submissionVersion: data.clinicalSubmissions.version,
+        },
+      });
+    } catch (err) {
       toaster.addToast({
-        title: 'Something went wrong',
-        content: 'Your submission could not be validated. Please contact us.',
+        title: 'We could not validate your submission',
+        content:
+          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
         variant: 'ERROR',
+        timeout: Infinity,
       });
       setMutationDisabled(true);
     }
   };
 
   const handleSignOff = async () => {
-    if (data.clinicalSubmissions.version) {
-      try {
-        await getUserApproval()
-          .then(
-            (): Promise<any> =>
-              approveSubmission({
-                variables: {
-                  programShortName,
-                  submissionVersion: data.clinicalSubmissions.version,
-                },
-              }),
-          )
-          .catch(() => {
-            console.log('sign off canceled');
-          });
-      } catch (err) {
-        toaster.addToast({
-          title: 'Your submission could not be signed off on',
-          content:
-            'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-          variant: 'ERROR',
-          timeout: Infinity,
+    try {
+      await getUserApproval()
+        .then(
+          (): Promise<any> =>
+            approveSubmission({
+              variables: {
+                programShortName,
+                submissionVersion: data.clinicalSubmissions.version,
+              },
+            }),
+        )
+        .catch(() => {
+          console.log('sign off canceled');
         });
-        setMutationDisabled(true);
-      }
-    } else {
+    } catch (err) {
       toaster.addToast({
-        title: 'Something went wrong',
-        content: 'Your submission could not be signed off on. Please contact us.',
+        title: 'Your submission could not be signed off on',
+        content:
+          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
         variant: 'ERROR',
+        timeout: Infinity,
       });
       setMutationDisabled(true);
     }
