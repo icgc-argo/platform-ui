@@ -54,7 +54,9 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
-export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0];
+export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0] & {
+  accessor?: keyof Data;
+};
 function Table<Data = { [k: string]: any }>({
   className = '',
   stripped = true,

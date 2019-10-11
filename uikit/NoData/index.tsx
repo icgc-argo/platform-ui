@@ -1,22 +1,28 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
+import noDataSvg from 'uikit/assets/noData.svg';
 import Typography from '../Typography';
-import { css } from '../';
+import { css, styled } from '../';
+
+const Container = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+`;
 
 type NoDataProps = {
-  title: string;
+  title?: string;
   subtitle?: string;
-};
+} & React.ComponentProps<typeof Container>;
 
-const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle }) => (
-  <div
-    css={css`
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 0;
-    `}
-  >
+const NoData: React.ComponentType<NoDataProps> = ({
+  children = <img alt="no data found" src={noDataSvg} />,
+  title = 'No Data Found.',
+  subtitle,
+  ...rest
+}) => (
+  <Container {...rest}>
     {children}
     <Typography
       css={css`
@@ -41,7 +47,7 @@ const NoData: React.ComponentType<NoDataProps> = ({ children, title, subtitle })
     >
       {subtitle}
     </Typography>
-  </div>
+  </Container>
 );
 
 export default NoData;

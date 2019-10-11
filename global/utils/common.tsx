@@ -1,4 +1,6 @@
 import { format as formatDate } from 'date-fns';
+import orderBy from 'lodash/orderBy';
+import uniq from 'lodash/uniq';
 
 export const asEnum = (obj, { name = 'enum' } = {}) =>
   new Proxy(obj, {
@@ -18,3 +20,52 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 
 const standardDate = 'YYYY-MM-DD';
 export const displayDate = date => formatDate(date, standardDate);
+
+export const sleep = (time: number) =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+
+export const exportToTsv = <Data extends { [k: string]: string | number }>(
+  data: Array<Data>,
+  options: {
+    exclude?: Array<keyof Data>;
+    include?: Array<keyof Data>;
+    order?: Array<keyof Data>;
+    fileName?: string;
+  } = {},
+): void => {
+  const allKeys = uniq(
+    data.reduce((acc, entry) => [...acc, ...Object.keys(entry)], [] as string[]),
+  );
+  const {
+    exclude: excludeKeys = [],
+    include: includeKeys = allKeys,
+    order = allKeys,
+    fileName = 'data.tsv',
+  } = options;
+  const orderedKeys = orderBy(allKeys, key => order.indexOf(key));
+
+  /**
+   * construct the tsv data
+   */
+  const filteredKeys = orderedKeys
+    .filter(key => !excludeKeys.includes(key))
+    .filter(key => includeKeys.includes(key));
+  const dataRows: string[][] = data.map(entry => filteredKeys.map(key => String(entry[key])));
+  const tsvString = [filteredKeys, ...dataRows].map(row => row.join('\t')).join('\n');
+
+  /**
+   * export data to tsv
+   */
+  const fileContent = `data:text/tsv;charset=utf-8,${tsvString}`;
+  const encodedUri = encodeURI(fileContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};

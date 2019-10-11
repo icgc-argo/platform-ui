@@ -28,7 +28,6 @@ export const instructionBoxButtonStyle = css`
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
   <Icon name="star" fill={props.fill} width="16px" height="16px" />
 );
-
 export const StatArea: {
   Container: React.ComponentType;
   Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;

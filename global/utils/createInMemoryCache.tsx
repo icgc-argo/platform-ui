@@ -9,12 +9,21 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 export default () =>
   new InMemoryCache({
     dataIdFromObject: obj => {
-      if (obj.__typename === 'Program')
-        return `Program::${(obj as { shortName: string }).shortName}`;
+      switch (obj.__typename) {
+        case 'Program':
+          return `Program::${(obj as { shortName: string }).shortName}`;
 
-      if (obj.__typename === 'ClinicalRegistrationData') {
-        return `ClinicalRegistrationData::${(obj as { shortName: string }).shortName}`;
-      } else return obj.id;
+        case 'ClinicalRegistrationData':
+          return `ClinicalRegistrationData::${(obj as { shortName: string }).shortName}`;
+
+        case 'ClinicalSubmissionData':
+          return `ClinicalSubmissionData::${
+            (obj as { programShortName: string }).programShortName
+          }`;
+
+        default:
+          return obj.id;
+      }
     },
     fragmentMatcher,
   });
