@@ -77,7 +77,7 @@ export default function ProgramClinicalSubmission() {
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
     clinicalSubmissions: {
-      version: null,
+      version: '',
       clinicalEntities: [],
       fileErrors: [],
       id: '',
