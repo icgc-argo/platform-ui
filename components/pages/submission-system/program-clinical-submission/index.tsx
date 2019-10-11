@@ -127,10 +127,7 @@ export default function ProgramClinicalSubmission() {
   const hasDataError = !!allDataErrors.length;
   const hasSchemaError =
     !!data.clinicalSubmissions.clinicalEntities.length &&
-    data.clinicalSubmissions.clinicalEntities.reduce<boolean>(
-      (acc, entity) => acc && !!entity.schemaErrors.length,
-      true,
-    );
+    data.clinicalSubmissions.clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
   const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
