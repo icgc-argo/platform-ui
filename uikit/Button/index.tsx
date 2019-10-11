@@ -35,6 +35,7 @@ const StyledButton = styled<
     disabled: boolean;
   }
 >(FocusWrapper)`
+  transition: all 0.25s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,6 +105,7 @@ const Button = React.forwardRef<
      * DOM pass through
      */
     id?: string;
+    isLoading?: boolean;
   }
 >(
   (
@@ -116,12 +118,19 @@ const Button = React.forwardRef<
       isAsync = false,
       className,
       id,
+      isLoading: controlledLoadingState,
     },
     ref = React.createRef(),
   ) => {
     const [isLoading, setLoading] = React.useState(false);
     const theme = useTheme();
-    const shouldShowLoading = isLoading && isAsync;
+
+    /**
+     * controlledLoadingState will allows consumer to control the loading state.
+     * Else, that is set by the component internally
+     */
+    const shouldShowLoading = controlledLoadingState === true || (isLoading && isAsync);
+
     const onClickFn = async event => {
       setLoading(true);
       await onClick(event);

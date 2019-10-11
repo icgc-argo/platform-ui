@@ -1,5 +1,5 @@
 import React from 'react';
-import noDataSvg from './noData.svg';
+import noDataSvg from 'uikit/assets/noData.svg';
 import css from '@emotion/css';
 import NoData from 'uikit/NoData';
 

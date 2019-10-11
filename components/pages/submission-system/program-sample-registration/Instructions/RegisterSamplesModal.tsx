@@ -11,14 +11,7 @@ import Router from 'next/router';
 import { RegisterState } from '..';
 
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-
-function sleep(time) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, time);
-  });
-}
+import { sleep } from 'global/utils/common';
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -61,7 +54,9 @@ export default function RegisterSamplesModal({
           interactionType: 'CLOSE',
           title: `${num} new sample${num > 1 ? 's' : ''} have been registered`,
           variant: TOAST_VARIANTS.SUCCESS,
-          content: <>If you have any changes to this registered sample data, please contact the DCC.</>,
+          content: (
+            <>If you have any changes to this registered sample data, please contact the DCC.</>
+          ),
         });
       })
       .catch(error => {

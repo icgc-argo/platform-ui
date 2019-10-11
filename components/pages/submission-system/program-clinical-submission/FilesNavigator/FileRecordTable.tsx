@@ -1,6 +1,6 @@
 import { ClinicalSubmissionEntityFile } from '../types';
 import sum from 'lodash/sum';
-import Table from 'uikit/Table';
+import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
@@ -10,6 +10,8 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
+import { CSSProperties } from 'react';
+import { useTheme } from 'uikit/ThemeProvider';
 
 const StarIcon = DataTableStarIcon;
 
@@ -34,10 +36,10 @@ const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
     <StatAreaDisplay.Container>
       <StatAreaDisplay.Section>
         {sum([
-          fileStat.errorCount,
           fileStat.newCount,
           fileStat.noUpdateCount,
           fileStat.updateCount,
+          fileStat.errorCount,
         ])}{' '}
         Total
       </StatAreaDisplay.Section>
@@ -92,6 +94,7 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
+  const theme = useTheme();
   const { dataErrors, records, dataUpdates } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
@@ -101,7 +104,7 @@ export default ({
   const tableData = sortedRecords.map(record =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       row: record.row,
-    }),
+    } as { row: number; [k: string]: number | string }),
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
@@ -122,6 +125,29 @@ export default ({
     );
   };
 
+  const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
+      Header: '#',
+      width: 40,
+    },
+    {
+      id: 'error',
+      Cell: StatusColumCell,
+      Header: (
+        <CellContentCenter>
+          <StarIcon fill={FILE_STATE_COLORS.NONE} />
+        </CellContentCenter>
+      ),
+      width: 50,
+    },
+    ...fields.map(({ name }) => ({
+      accessor: name,
+      Header: name,
+    })),
+  ];
+
   return (
     <div
       css={css`
@@ -132,39 +158,25 @@ export default ({
         left={
           <StatsArea
             fileStat={{
-              errorCount: 1,
-              newCount: 2,
-              noUpdateCount: 3,
-              updateCount: 5,
+              errorCount: file.stats.errorsFound.length,
+              newCount: file.stats.new.length,
+              noUpdateCount: file.stats.noUpdate.length,
+              updateCount: file.stats.updated.length,
             }}
           />
         }
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
+        getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
+          style: {
+            background: dataErrors.some(err => err.row === original.row)
+              ? theme.colors.error_4
+              : 'none',
+          } as CSSProperties,
+        })}
         showPagination={false}
-        columns={[
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
-            Header: '#',
-            width: 40,
-          },
-          {
-            id: 'error',
-            Cell: StatusColumCell,
-            Header: (
-              <CellContentCenter>
-                <StarIcon fill={FILE_STATE_COLORS.NONE} />
-              </CellContentCenter>
-            ),
-            width: 50,
-          },
-          ...fields.map(({ name }) => ({
-            accessor: name,
-            Header: name,
-          })),
-        ]}
+        columns={tableColumns}
         data={tableData}
       />
     </div>
