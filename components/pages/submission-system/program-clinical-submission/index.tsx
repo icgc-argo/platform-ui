@@ -128,7 +128,7 @@ export default function ProgramClinicalSubmission() {
   const hasSchemaError =
     !!data.clinicalSubmissions.clinicalEntities.length &&
     data.clinicalSubmissions.clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
-  const hasSomeEntity = !!data.clinicalSubmissions.clinicalEntities.some(
+  const hasSomeEntity = data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
   const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
