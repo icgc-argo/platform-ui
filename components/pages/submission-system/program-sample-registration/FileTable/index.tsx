@@ -1,10 +1,11 @@
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
 import React from 'react';
-import { Col, Row } from 'react-grid-system';
 import { css } from 'uikit';
-import Table from 'uikit/Table';
+import Affix from 'uikit/Affix';
+import clsx from 'clsx';
 import Icon from 'uikit/Icon';
+import Table from 'uikit/Table';
 import { useTheme } from 'uikit/ThemeProvider';
 import {
   DataTableStarIcon,
@@ -90,11 +91,24 @@ const FileTable = (props: {
         position: relative;
       `}
     >
-      <TableInfoHeaderContainer
-        left={<StatsArea stats={stats} />}
-        right={<SubmissionInfoArea {...submissionInfo} />}
-      />
       <Table
+        TheadComponent={({ children, className, ...rest }) => (
+          <Affix
+            top={58}
+            css={css`
+              background: white;
+              overflow: hidden;
+            `}
+          >
+            <TableInfoHeaderContainer
+              left={<StatsArea stats={stats} />}
+              right={<SubmissionInfoArea {...submissionInfo} />}
+            />
+            <div className={clsx('rt-thead', className)} {...rest}>
+              {children}
+            </div>
+          </Affix>
+        )}
         showPagination={false}
         pageSize={Number.MAX_SAFE_INTEGER}
         columns={[
@@ -135,7 +149,6 @@ const FileTable = (props: {
             minWidth: getColumnWidth(key),
           })),
         ]}
-        style={{ maxHeight: '500px' }}
         data={records}
       />
     </div>
