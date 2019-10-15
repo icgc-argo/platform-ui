@@ -24,7 +24,9 @@ type FileStat = {
   errorCount: number;
 };
 
-const FILE_STATE_COLORS: { [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'] } = {
+export const FILE_STATE_COLORS: {
+  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill']
+} = {
   ERROR: 'error',
   NEW: 'accent2',
   NONE: 'grey_1',
