@@ -95,7 +95,7 @@ export default ({
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
-  const { dataErrors, records, dataUpdates } = file;
+  const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
@@ -108,8 +108,9 @@ export default ({
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
-    const hasError = dataErrors.some(error => error.row === original.row);
-    const hasUpdate = dataUpdates.some(update => update.row === original.row);
+    const hasError = stats.errorsFound.some(row => row === original.row);
+    const hasUpdate = stats.updated.some(row => row === original.row);
+    const isNew = stats.new.some(row => row === original.row);
     return (
       <CellContentCenter>
         <StarIcon
@@ -118,6 +119,8 @@ export default ({
               ? FILE_STATE_COLORS.ERROR
               : hasUpdate
               ? FILE_STATE_COLORS.UPDATED
+              : isNew
+              ? FILE_STATE_COLORS.NEW
               : FILE_STATE_COLORS.NONE
           }
         />
@@ -170,7 +173,7 @@ export default ({
       <Table
         getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
           style: {
-            background: dataErrors.some(err => err.row === original.row)
+            background: stats.errorsFound.some(row => row === original.row)
               ? theme.colors.error_4
               : 'none',
           } as CSSProperties,
