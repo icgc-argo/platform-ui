@@ -12,7 +12,6 @@ import Container from 'uikit/Container';
 import { containerStyle } from '../common';
 import FilesNavigator from './FilesNavigator';
 import {
-  ClinicalError,
   ClinicalSubmissionEntityFile,
   GqlClinicalEntity,
   ClinicalSubmissionQueryData,
@@ -33,7 +32,7 @@ import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile = (
+const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: boolean) => (
   gqlFile: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
@@ -50,21 +49,9 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     recordsCount: gqlFile.records.length,
     status: !!gqlFile.dataErrors.length
       ? 'ERROR'
-      : !!gqlFile.dataUpdates.length
+      : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'
       : 'WARNING',
-  };
-};
-
-const useClinicalErrorState = (data: ClinicalSubmissionQueryData) => {
-  const [clinicalErrors, setClinicalErrors] = React.useState<ClinicalError[]>([]);
-  React.useEffect(() => {
-    setClinicalErrors(data.clinicalSubmissions.fileErrors);
-  }, [data.clinicalSubmissions.fileErrors]);
-  return {
-    clinicalErrors,
-    removeClinicalErrorWithCode: (_code: string) =>
-      setClinicalErrors(clinicalErrors.filter(({ code }) => code !== _code)),
   };
 };
 
@@ -114,8 +101,6 @@ export default function ProgramClinicalSubmission() {
     ApproveSubmissionMutationVariables
   >(APPROVE_SUBMISSION_MUTATION);
 
-  const { clinicalErrors, removeClinicalErrorWithCode } = useClinicalErrorState(data);
-
   const allDataErrors = data.clinicalSubmissions.clinicalEntities.reduce<
     React.ComponentProps<typeof ErrorNotification>['errors']
   >(
@@ -141,10 +126,16 @@ export default function ProgramClinicalSubmission() {
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
 
   const onErrorClose: (
-    code: string,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] = code => ({ type }) => {
+    index: number,
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
     if (type === 'CLOSE') {
-      removeClinicalErrorWithCode(code);
+      updateClinicalSubmissionQuery(previous => ({
+        ...previous,
+        clinicalSubmissions: {
+          ...previous.clinicalSubmissions,
+          fileErrors: previous.clinicalSubmissions.fileErrors.filter((_, i) => i !== index),
+        },
+      }));
     }
   };
 
@@ -307,9 +298,9 @@ export default function ProgramClinicalSubmission() {
             onSignOffClick={handleSignOff}
           />
         </Container>
-        {clinicalErrors.map(({ code, fileNames, msg }) => (
+        {data.clinicalSubmissions.fileErrors.map(({ fileNames, msg }, i) => (
           <Notification
-            key={code}
+            key={i}
             css={css`
               margin-top: 20px;
             `}
@@ -320,7 +311,7 @@ export default function ProgramClinicalSubmission() {
               (currentFileList || []).length
             } files failed to upload: ${fileNames.join(', ')}`}
             content={msg}
-            onInteraction={onErrorClose(code)}
+            onInteraction={onErrorClose(i)}
           />
         ))}
         {hasDataError && (
@@ -375,7 +366,10 @@ export default function ProgramClinicalSubmission() {
                 }));
               }}
               fileStates={data.clinicalSubmissions.clinicalEntities.map(
-                gqlClinicalEntityToClinicalSubmissionEntityFile,
+                gqlClinicalEntityToClinicalSubmissionEntityFile(
+                  data.clinicalSubmissions.state === 'INVALID' ||
+                    data.clinicalSubmissions.state === 'VALID',
+                ),
               )}
             />
           )}

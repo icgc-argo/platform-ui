@@ -94,7 +94,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       >
         <MenuItem
           level={3}
-          content="Clinical Submission"
+          content="Submit Clinical Data"
           selected={
             PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
           }
