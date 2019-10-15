@@ -32,7 +32,7 @@ import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile = (
+const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: boolean) => (
   gqlFile: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
@@ -49,7 +49,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     recordsCount: gqlFile.records.length,
     status: !!gqlFile.dataErrors.length
       ? 'ERROR'
-      : !!gqlFile.dataUpdates.length
+      : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'
       : 'WARNING',
   };
@@ -366,7 +366,10 @@ export default function ProgramClinicalSubmission() {
                 }));
               }}
               fileStates={data.clinicalSubmissions.clinicalEntities.map(
-                gqlClinicalEntityToClinicalSubmissionEntityFile,
+                gqlClinicalEntityToClinicalSubmissionEntityFile(
+                  data.clinicalSubmissions.state === 'INVALID' ||
+                    data.clinicalSubmissions.state === 'VALID',
+                ),
               )}
             />
           )}
