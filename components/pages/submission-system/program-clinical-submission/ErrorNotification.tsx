@@ -66,6 +66,13 @@ export default ({
       exclude: ['__typename'],
       order: columnsWithClinicalType.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
+      headerDisplays: columnsWithClinicalType.reduce<{}>(
+        (acc, { accessor, Header }) => ({
+          ...acc,
+          [accessor]: Header as string,
+        }),
+        {},
+      ),
     });
   };
   return (
