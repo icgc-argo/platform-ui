@@ -15,6 +15,8 @@ import { TableProps } from 'react-table';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
+export type TableVariant = 'DEFAULT' | 'STATIC';
+
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }: any) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
   const selected = selectedIds.some(id => id === thisRowId);
@@ -59,16 +61,19 @@ export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['c
   Cell?: TableProps<Data>['columns'][0]['Cell'] & ((c: { original: Data }) => React.ReactNode);
 };
 function Table<Data = { [k: string]: any }>({
+  variant = 'DEFAULT',
+  withRowBorder = variant === 'STATIC',
+  stripped = variant === 'DEFAULT',
+  highlight = variant === 'DEFAULT',
+  showPagination = variant === 'DEFAULT',
+  sortable = variant === 'DEFAULT',
+  resizable = variant === 'DEFAULT',
   className = '',
-  withRowBorder = false,
-  stripped = true,
-  highlight = true,
   PaginationComponent = TablePagination,
   LoadingComponent = DefaultLoadingComponent,
   NoDataComponent = DefaultNoDataComponent,
   columns,
   data,
-  showPagination,
   getTableProps = ({ data }) => {
     if (isEmpty(data)) {
       return {
@@ -82,6 +87,7 @@ function Table<Data = { [k: string]: any }>({
   },
   ...rest
 }: Partial<TableProps<Data>> & {
+  variant?: TableVariant;
   highlight?: boolean;
   stripped?: boolean;
   selectedIds?: Array<any>;
@@ -117,6 +123,8 @@ function Table<Data = { [k: string]: any }>({
       NoDataComponent={NoDataComponent}
       showPagination={isEmpty(data) ? false : showPagination}
       getNoDataProps={x => x}
+      sortable={sortable}
+      resizable={resizable}
       {...rest}
     />
   );

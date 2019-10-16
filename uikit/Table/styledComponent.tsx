@@ -8,7 +8,10 @@ import ascending from '../assets/table/ascending.svg';
 import descending from '../assets/table/descending.svg';
 import unsorted from '../assets/table/unsorted.svg';
 
-export type StyledTableProps = { withRowBorder?: boolean; isSelectTable?: boolean };
+export type StyledTableProps = {
+  withRowBorder?: boolean;
+  isSelectTable?: boolean;
+};
 
 export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTable)`
   ${reactTableDefaultStyle}

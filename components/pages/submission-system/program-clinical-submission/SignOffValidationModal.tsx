@@ -134,11 +134,7 @@ export default ({
         </Typography>
       </div>
       <Table
-        stripped={false}
-        highlight={false}
-        resizable={false}
-        showPagination={false}
-        sortable={false}
+        variant="STATIC"
         getTdProps={(_, row, column) => {
           const isUpdateRow = row.index === 1;
           const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
