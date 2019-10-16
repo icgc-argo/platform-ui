@@ -37,6 +37,10 @@ export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean }>
     }
   }
 
+  &.ReactTable .rt-tbody .rt-tr-group {
+    border-bottom: none;
+  }
+
   &.ReactTable .rt-thead.-header .rt-tr .rt-th {
     ${({ theme }) => css(theme.typography.data)};
     min-height: 28px;
