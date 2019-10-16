@@ -25,7 +25,7 @@ export default ({
   subtitle: string;
   errors: Array<
     ClinicalSubmissionError & {
-      clinicalType?: string;
+      fileName?: string;
     }
   >;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
@@ -57,9 +57,10 @@ export default ({
       Header: 'Error Description',
     },
   ];
-  const columnsWithClinicalType = insertAt(defaultColumns)(1)({
-    accessor: 'clinicalType',
-    Header: 'Clinical type',
+  const columnsWithClinicalType = insertAt(defaultColumns)(0)({
+    accessor: 'fileName',
+    Header: 'File',
+    maxWidth: 150,
   });
   const onDownloadClick = () => {
     exportToTsv(errors, {
