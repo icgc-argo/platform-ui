@@ -4,7 +4,7 @@ import Container from '../Container';
 
 export const PageContainer = styled('div')`
   display: grid;
-  grid-template-rows: 58px 1fr 58px;
+  grid-template-rows: 58px 1fr;
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.grey_4};
 `;
@@ -30,9 +30,11 @@ export const PageContent = styled('div')`
 export const PageBody = styled('div')`
   display: grid;
   grid-template-columns: 230px 1fr;
+  grid-template-rows: 1fr;
 
   &.noSidebar {
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
   }
 
   & ${PageContent} {
@@ -40,9 +42,20 @@ export const PageBody = styled('div')`
     max-width: calc(100vw - 230px);
   }
 
-  &.noSidebar ${PageContent} {
-    grid-column: 1;
-    max-width: none;
+  & .footer {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  &.noSidebar {
+    ${PageContent} {
+      grid-column: 1;
+      max-width: none;
+    }
+
+    & .footer {
+      grid-column: 1;
+    }
   }
 `;
 

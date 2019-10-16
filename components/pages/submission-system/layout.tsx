@@ -62,8 +62,8 @@ const SubmissionLayout = ({
           {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
           <ContentBody>{children}</ContentBody>
         </PageContent>
+        <Footer />
       </PageBody>
-      <Footer />
     </PageContainer>
   );
 };
