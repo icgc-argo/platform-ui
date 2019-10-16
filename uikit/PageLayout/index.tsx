@@ -38,6 +38,7 @@ export const PageContent = styled('div')`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  z-index: 0;
 `;
 
 export const PageBody = styled('div')`
