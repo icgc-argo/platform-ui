@@ -54,7 +54,7 @@ export default ({
     },
     {
       accessor: 'message',
-      Header: 'Error Dscription',
+      Header: 'Error Description',
     },
   ];
   const columnsWithClinicalType = insertAt(defaultColumns)(1)({
