@@ -15,8 +15,8 @@ export default function NoDataComponent(props) {
       `}
     >
       {props.loading ? null : (
-        <NoData title="No data found">
-          <img alt="no data found" src={noDataSvg} />
+        <NoData>
+          <img alt="no data found." src={noDataSvg} />
         </NoData>
       )}
     </div>
