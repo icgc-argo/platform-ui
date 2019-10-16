@@ -53,22 +53,25 @@ const Footer = ({
           padding-left: 22px;
         `}
       >
-        {links.map(({ displayName, href }, idx) => {
-          if (idx !== links.length - 1) {
-            return (
-              <React.Fragment key={displayName}>
-                <A href={href}>{displayName}</A>
-                <Icon width="12px" height="12px" name="slash" fill="grey_1" />
-              </React.Fragment>
-            );
-          } else {
-            return (
-              <A key={displayName} href={href}>
-                {displayName}
-              </A>
-            );
-          }
-        })}
+        <div>
+          {links.map(({ displayName, href }, idx) => {
+            if (idx !== links.length - 1) {
+              return (
+                <React.Fragment key={displayName}>
+                  <A href={href}>{displayName}</A>
+                  <Icon width="12px" height="12px" name="slash" fill="grey_1" />
+                </React.Fragment>
+              );
+            } else {
+              return (
+                <A key={displayName} href={href}>
+                  {displayName}
+                </A>
+              );
+            }
+          })}
+        </div>
+
         <div
           css={css`
             display: flex;

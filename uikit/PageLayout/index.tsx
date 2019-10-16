@@ -6,6 +6,7 @@ export const PageContainer = styled('div')`
   grid-template-rows: 58px 1fr;
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.grey_4};
+  overflow-y: hidden;
 `;
 
 export const Sidebar = styled('div')`
