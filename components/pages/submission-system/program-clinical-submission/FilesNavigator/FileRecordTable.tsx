@@ -174,11 +174,11 @@ export default ({
       />
       <Table
         getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
-          style: {
-            background: stats.errorsFound.some(row => row === original.row)
-              ? theme.colors.error_4
-              : 'none',
-          } as CSSProperties,
+          style: stats.errorsFound.some(row => row === original.row)
+            ? ({
+                background: theme.colors.error_4,
+              } as CSSProperties)
+            : ({} as CSSProperties),
         })}
         showPagination={false}
         columns={tableColumns}
