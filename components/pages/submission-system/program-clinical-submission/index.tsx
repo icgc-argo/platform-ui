@@ -17,13 +17,13 @@ import {
   ClinicalSubmissionQueryData,
   ValidateSubmissionMutationVariables,
   UploadFilesMutationVariables,
-  ApproveSubmissionMutationVariables,
+  SignOffSubmissionMutationVariables,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
-import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
+import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
 import { capitalize } from 'global/utils/stringUtils';
@@ -35,6 +35,9 @@ import SubmissionSummaryTable from './SubmissionSummaryTable';
 import Typography from 'uikit/Typography';
 import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
+import { sleep } from 'global/utils/common';
+import { useRouter } from 'next/router';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -78,6 +81,8 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 export default function ProgramClinicalSubmission() {
   const theme = useTheme();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const [pageLoaderShown, setPageLoaderShown] = React.useState<boolean>(false);
+  const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const [mutationDisabled, setMutationDisabled] = React.useState(false);
   const {
@@ -117,10 +122,10 @@ export default function ProgramClinicalSubmission() {
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
   >(VALIDATE_SUBMISSION_MUTATION);
-  const [approveSubmission] = useMutation<
+  const [signOffSubmission] = useMutation<
     ClinicalSubmissionQueryData,
-    ApproveSubmissionMutationVariables
-  >(APPROVE_SUBMISSION_MUTATION);
+    SignOffSubmissionMutationVariables
+  >(SIGN_OFF_SUBMISSION_MUTATION);
 
   const allDataErrors = data.clinicalSubmissions.clinicalEntities.reduce<
     React.ComponentProps<typeof ErrorNotification>['errors']
@@ -201,17 +206,21 @@ export default function ProgramClinicalSubmission() {
   const handleSignOff = async () => {
     try {
       await getUserApproval()
-        .then(
-          (): Promise<any> =>
-            approveSubmission({
-              variables: {
-                programShortName,
-                submissionVersion: data.clinicalSubmissions.version,
-              },
-            }),
-        )
         .catch(() => {
           console.log('sign off canceled');
+        })
+        .then(async () => {
+          setPageLoaderShown(true);
+          await sleep(2000);
+          const { data: newData } = await signOffSubmission({
+            variables: {
+              programShortName,
+              submissionVersion: data.clinicalSubmissions.version,
+            },
+          });
+          if (newData.clinicalSubmissions.state === null) {
+            router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+          }
         });
     } catch (err) {
       toaster.addToast({
@@ -223,6 +232,7 @@ export default function ProgramClinicalSubmission() {
       });
       setMutationDisabled(true);
     }
+    setPageLoaderShown(false);
   };
 
   return (
@@ -235,6 +245,11 @@ export default function ProgramClinicalSubmission() {
             onCloseClick={onSignOffCanceled}
             onCancelClick={onSignOffCanceled}
           />
+        </ModalPortal>
+      )}
+      {pageLoaderShown && (
+        <ModalPortal>
+          <DnaLoader />
         </ModalPortal>
       )}
       <SubmissionLayout
