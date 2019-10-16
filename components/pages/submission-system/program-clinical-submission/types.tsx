@@ -7,7 +7,6 @@ export type ClinicalSubmissionRecord = {
 };
 
 export type ClinicalSubmissionError = {
-  type: string;
   message: string;
   row: number;
   field: string;
