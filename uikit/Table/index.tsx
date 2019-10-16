@@ -8,7 +8,7 @@ import selectTable, {
 } from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
-import { StyledTable } from './styledComponent';
+import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
@@ -60,6 +60,7 @@ export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['c
 };
 function Table<Data = { [k: string]: any }>({
   className = '',
+  withRowBorder = false,
   stripped = true,
   highlight = true,
   PaginationComponent = TablePagination,
@@ -84,10 +85,9 @@ function Table<Data = { [k: string]: any }>({
   highlight?: boolean;
   stripped?: boolean;
   selectedIds?: Array<any>;
-  isSelectTable?: boolean;
   primaryKey?: string;
   columns: TableProps<Data>['columns']; //columns is required
-}) {
+} & StyledTableProps) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
 
@@ -98,6 +98,7 @@ function Table<Data = { [k: string]: any }>({
 
   return (
     <StyledTable
+      withRowBorder={withRowBorder}
       getTableProps={getTableProps}
       columns={columns}
       data={data}

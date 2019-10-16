@@ -18,6 +18,8 @@ const TableStories = storiesOf(`${__dirname}`, module)
         showPagination: boolean('showPagination', false),
         showPaginationTop: boolean('showPaginationTop', false),
         showPaginationBottom: boolean('showPaginationBottom', false),
+        stripped: boolean('stripped', true),
+        withRowBorder: boolean('withRowBorder', false),
       };
       return (
         <Table
