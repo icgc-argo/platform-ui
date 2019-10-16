@@ -5,6 +5,8 @@ import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import { ClinicalSubmissionError } from './types';
 import { exportToTsv } from 'global/utils/common';
+import Icon from 'uikit/Icon';
+import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from '../common';
 
 const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
   ...arr.slice(0, i),
@@ -84,7 +86,15 @@ export default ({
             `}
           >
             <Button variant="secondary" size="sm" onClick={onDownloadClick}>
-              Error Report
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />
+                Error Report
+              </span>
             </Button>
             <Button isAsync variant="text" size="sm" onClick={onClearClick}>
               Clear
