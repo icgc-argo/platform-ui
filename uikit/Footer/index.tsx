@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import Icon from '../Icon';
 import icgcLogo from '../assets/icgc_logo.svg';
 import css from '@emotion/css';
-import { Row, Col, Container as GridContainer } from 'react-grid-system';
+import { Row, Col } from 'react-grid-system';
 import A from '../Link';
 
 const Container = styled('footer')`
@@ -29,6 +29,7 @@ const Footer = ({
       css={css`
         min-height: 58px;
       `}
+      justify="between"
       nogutter
     >
       <Col
@@ -43,12 +44,13 @@ const Footer = ({
         ICGC ARGO Submission System {version} - API {apiVersion} - {commitHash}
       </Col>
       <Col
-        md={6}
+        md={9}
         css={css`
           display: flex;
           align-items: center;
-          justify-content: center;
           font-size: 12px;
+          justify-content: flex-end;
+          padding-left: 22px;
         `}
       >
         {links.map(({ displayName, href }, idx) => {
@@ -67,23 +69,23 @@ const Footer = ({
             );
           }
         })}
-      </Col>
-      <Col
-        md={3}
-        css={css`
-          display: flex;
-          align-items: center;
-          flex-direction: row-reverse;
-          line-height: 0;
-        `}
-      >
-        <a href="https://www.oicr.on.ca/" target="_blank">
-          <img
-            alt="Ontario Institute for Cancer Research"
-            src={icgcLogo}
-            style={{ height: '42px' }}
-          />
-        </a>
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+            line-height: 0;
+            margin-left: 16px;
+          `}
+        >
+          <a href="https://www.oicr.on.ca/" target="_blank">
+            <img
+              alt="Ontario Institute for Cancer Research"
+              src={icgcLogo}
+              style={{ height: '42px' }}
+            />
+          </a>
+        </div>
       </Col>
     </Row>
   </Container>
