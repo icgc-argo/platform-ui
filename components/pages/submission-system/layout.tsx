@@ -1,6 +1,8 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css } from 'uikit';
+import styled from '@emotion/styled';
+
 import {
   PageContainer,
   Panel,
@@ -8,6 +10,8 @@ import {
   PageContent,
   ContentHeader,
   ContentBody,
+  Sidebar,
+  Collapsible,
 } from 'uikit/PageLayout';
 import clsx from 'clsx';
 import Head from '../head';
@@ -54,15 +58,16 @@ const SubmissionLayout = ({
       <NavBar />
       <PageBody className={clsx({ noSidebar })}>
         {!noSidebar && (
-          <Panel ref={panelRef} onScroll={handleSidemenuScroll}>
-            {sideMenu}
-          </Panel>
+          <Sidebar>
+            <Panel ref={panelRef}>{sideMenu}</Panel>
+            <Collapsible />
+          </Sidebar>
         )}
         <PageContent>
           {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
           <ContentBody>{children}</ContentBody>
+          <Footer />
         </PageContent>
-        <Footer />
       </PageBody>
     </PageContainer>
   );
