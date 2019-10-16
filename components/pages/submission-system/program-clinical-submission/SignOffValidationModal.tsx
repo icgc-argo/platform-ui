@@ -12,17 +12,17 @@ export const useSignOffValidationModalState = () => {
     onCancel: () => setSignOffModalShown(false),
   });
 
-  const getUserApproval = () =>
-    new Promise((resolve, reject) => {
+  const getUserApproval = (): Promise<boolean> =>
+    new Promise(resolve => {
       setSignOffModalShown(true);
       setSignOffFlow({
         onApprove: () => {
           setSignOffModalShown(false);
-          resolve();
+          resolve(true);
         },
         onCancel: () => {
           setSignOffModalShown(false);
-          reject();
+          resolve(false);
         },
       });
     });

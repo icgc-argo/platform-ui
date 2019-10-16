@@ -205,23 +205,22 @@ export default function ProgramClinicalSubmission() {
 
   const handleSignOff = async () => {
     try {
-      await getUserApproval()
-        .catch(() => {
-          console.log('sign off canceled');
-        })
-        .then(async () => {
-          setPageLoaderShown(true);
-          await sleep(2000);
-          const { data: newData } = await signOffSubmission({
-            variables: {
-              programShortName,
-              submissionVersion: data.clinicalSubmissions.version,
-            },
-          });
-          if (newData.clinicalSubmissions.state === null) {
-            router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
-          }
+      const userDidApprove = await getUserApproval();
+      if (userDidApprove) {
+        setPageLoaderShown(true);
+        await sleep(2000);
+        const { data: newData } = await signOffSubmission({
+          variables: {
+            programShortName,
+            submissionVersion: data.clinicalSubmissions.version,
+          },
         });
+        if (newData.clinicalSubmissions.state === null) {
+          router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+        }
+      } else {
+        console.log('sign off canceled');
+      }
     } catch (err) {
       toaster.addToast({
         title: 'Your submission could not be signed off on',
