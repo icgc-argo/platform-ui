@@ -31,6 +31,7 @@ import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
+import SubmissionSummaryTable from './SubmissionSummaryTable';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: boolean) => (
   gqlFile: GqlClinicalEntity,
@@ -306,16 +307,23 @@ export default function ProgramClinicalSubmission() {
           </div>
         }
       >
-        <Container css={containerStyle}>
-          <Instruction
-            signOffEnabled={isReadyForSignoff && !mutationDisabled}
-            validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
-            uploadEnabled={!mutationDisabled}
-            onUploadFileSelect={handleSubmissionFilesUpload}
-            onValidateClick={handleSubmissionValidation}
-            onSignOffClick={handleSignOff}
-          />
-        </Container>
+        {!isPendingApproval && !loadingClinicalSubmission && (
+          <Container css={containerStyle}>
+            <Instruction
+              signOffEnabled={isReadyForSignoff && !mutationDisabled}
+              validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
+              uploadEnabled={!mutationDisabled}
+              onUploadFileSelect={handleSubmissionFilesUpload}
+              onValidateClick={handleSubmissionValidation}
+              onSignOffClick={handleSignOff}
+            />
+          </Container>
+        )}
+        {isPendingApproval && !loadingClinicalSubmission && (
+          <Container css={containerStyle}>
+            <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
+          </Container>
+        )}
         {data.clinicalSubmissions.fileErrors.map(({ fileNames, msg }, i) => (
           <Notification
             key={i}
