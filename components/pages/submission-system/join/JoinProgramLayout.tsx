@@ -7,6 +7,11 @@ import Typography from 'uikit/Typography';
 import DnaLoader from 'uikit/DnaLoader';
 import get from 'lodash/get';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { useRouter } from 'next/router';
+
+import GoogleLogin from 'uikit/Button/GoogleLogin';
+import getConfig from 'next/config';
 
 export enum InviteState {
   NotFound,
@@ -31,6 +36,8 @@ export default function JoinProgramLayout({
   loading: boolean;
   notFound: boolean;
 }) {
+  const router = useRouter();
+  const { EGO_URL } = getConfig().publicRuntimeConfig;
   let inviteState: InviteState = InviteState.Loading;
 
   const { data: userModel } = useAuthContext();
@@ -156,14 +163,30 @@ export default function JoinProgramLayout({
             />
           )}
           {inviteState == InviteState.Accepted && (
-            <Banner
-              title={'Oops, your invitation has been accepted'}
-              variant={BANNER_VARIANTS.WARNING}
-              content="Please log in to access your program"
-              css={css`
-                margin-bottom: 30px;
-              `}
-            />
+            <>
+              <Banner
+                title={'Oops, your invitation has been accepted'}
+                variant={BANNER_VARIANTS.WARNING}
+                content="Please log in to access your program"
+                css={css`
+                  margin-bottom: 30px;
+                `}
+              />
+              <div
+                css={css`
+                  display: flex;
+                  justify-content: center;
+                `}
+              >
+                <GoogleLogin
+                  link={EGO_URL}
+                  redirectPath={PROGRAM_DASHBOARD_PATH.replace(
+                    PROGRAM_SHORT_NAME_PATH,
+                    joinProgramInvite.program.shortName,
+                  )}
+                />
+              </div>
+            </>
           )}
           {inviteState == InviteState.Pending && children}
           {loading && (
