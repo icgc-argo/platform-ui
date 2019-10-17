@@ -26,6 +26,7 @@ import exclamation from './collection/exclamation';
 import star from './collection/star';
 import download from './collection/download';
 import upload from './collection/upload';
+import lock from './collection/lock';
 /**
  * Icon path and property lookup object
  * css - sensible defaults - can be overridden from component
@@ -59,6 +60,7 @@ const Icons = {
   star,
   download,
   upload,
+  lock,
 };
 
 export type UikitIconNames = keyof typeof Icons;
