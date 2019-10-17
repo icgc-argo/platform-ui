@@ -86,16 +86,31 @@ export const SubmissionInfoArea = ({
   creator: string;
   createdAt: string;
 }) => (
-  <Typography variant="data" component="div" color="grey">
-    <Typography variant="data" color="secondary_dark">
-      {formatFileName(fileName)}
-    </Typography>{' '}
+  <Typography variant="data" component="div">
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
+      {formatFileName(fileName)}{' '}
+    </Typography>
     uploaded on{' '}
-    <Typography variant="data" color="secondary_dark">
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
       {format(new Date(createdAt), 'MMMM D, YYYY ')}
-    </Typography>{' '}
+    </Typography>
     by{' '}
-    <Typography variant="data" color="secondary_dark">
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
       {creator}
     </Typography>
   </Typography>
