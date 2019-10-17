@@ -3,18 +3,20 @@ import { styled } from '../';
 import Icon from '../Icon';
 import { css } from '..';
 
-export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled';
+export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked';
 
 export const PROGRESS_STATUS: {
   SUCCESS: ProgressStatus;
   ERROR: ProgressStatus;
   PENDING: ProgressStatus;
   DISABLED: ProgressStatus;
+  LOCKED: ProgressStatus;
 } = {
   SUCCESS: 'success',
   ERROR: 'error',
   PENDING: 'pending',
   DISABLED: 'disabled',
+  LOCKED: 'locked',
 };
 
 const Triangle = props => css`
@@ -90,21 +92,14 @@ const Text = styled<'div', { completed: boolean }>('div')`
   font-weight: ${({ completed }) => (completed ? 600 : 'normal')};
 `;
 
-const getIcon = (state: ProgressStatus) => {
-  switch (state) {
-    case PROGRESS_STATUS.SUCCESS:
-      return <Icon width="10px" height="10px" fill="#fff" name="checkmark" />;
-
-    case PROGRESS_STATUS.ERROR:
-      return <Icon width="10px" height="10px" fill="#fff" name="exclamation" />;
-
-    case PROGRESS_STATUS.PENDING:
-      return <Icon width="14px" height="14px" fill="#fff" name="ellipses" />;
-
-    case PROGRESS_STATUS.DISABLED:
-      return null;
-  }
-};
+const getIcon = (state: ProgressStatus) =>
+  ({
+    [PROGRESS_STATUS.SUCCESS]: <Icon width="10px" height="10px" fill="white" name="checkmark" />,
+    [PROGRESS_STATUS.ERROR]: <Icon width="10px" height="10px" fill="white" name="exclamation" />,
+    [PROGRESS_STATUS.PENDING]: <Icon width="14px" height="14px" fill="white" name="ellipses" />,
+    [PROGRESS_STATUS.LOCKED]: <Icon width="10px" height="10px" fill="white" name="lock" />,
+    [PROGRESS_STATUS.DISABLED]: null,
+  }[state]);
 
 export const ProgressItem = ({
   state,
