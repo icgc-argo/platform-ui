@@ -5,21 +5,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
-import DnaLoader from 'uikit/DnaLoader';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
-
-enum InviteState {
-  NotFound,
-  IncorrectEmail,
-  Expired,
-  Accepted,
-  Pending,
-  Loading,
-}
 
 export default () => {
   const { EGO_URL } = getConfig().publicRuntimeConfig;
