@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SubmissionLayout from '../layout';
-import { css } from 'uikit';
+import { css, styled } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
@@ -33,6 +33,8 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import Typography from 'uikit/Typography';
+import { ContentHeader } from 'uikit/PageLayout';
+import { useTheme } from 'uikit/ThemeProvider';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -74,6 +76,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 };
 
 export default function ProgramClinicalSubmission() {
+  const theme = useTheme();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const [mutationDisabled, setMutationDisabled] = React.useState(false);
@@ -235,6 +238,9 @@ export default function ProgramClinicalSubmission() {
         </ModalPortal>
       )}
       <SubmissionLayout
+        ContentHeaderComponent={styled(ContentHeader)`
+          background: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+        `}
         contentHeader={
           <div
             css={css`
