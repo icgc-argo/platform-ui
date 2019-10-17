@@ -32,6 +32,7 @@ import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
+import Typography from 'uikit/Typography';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -330,7 +331,32 @@ export default function ProgramClinicalSubmission() {
           </Container>
         )}
         {isPendingApproval && !loadingClinicalSubmission && (
-          <Container css={containerStyle}>
+          <Container
+            css={css`
+              padding: 24px;
+            `}
+          >
+            <div
+              css={css`
+                padding-bottom: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              `}
+            >
+              <Typography
+                variant="subtitle"
+                color="primary"
+                css={css`
+                  margin: 0px;
+                `}
+              >
+                Submission Summary
+              </Typography>
+              <Typography variant="data" color="black" as="div">
+                Signed off on <strong>{'SOME_DATE'}</strong> by <strong>{'SOMEONE'}</strong>
+              </Typography>
+            </div>
             <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
           </Container>
         )}
@@ -388,6 +414,7 @@ export default function ProgramClinicalSubmission() {
             </div>
           ) : (
             <FilesNavigator
+              submissionState={data.clinicalSubmissions.state}
               clearDataError={async file => {
                 await updateClinicalSubmissionQuery(previous => ({
                   ...previous,
