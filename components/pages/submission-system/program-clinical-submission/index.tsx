@@ -294,15 +294,17 @@ export default function ProgramClinicalSubmission() {
               </Row>
             </TitleBar>
             <Row nogutter align="center">
-              <Button
-                variant="text"
-                disabled
-                css={css`
-                  margin-right: 10px;
-                `}
-              >
-                Clear submission
-              </Button>
+              {!isPendingApproval && (
+                <Button
+                  variant="text"
+                  disabled
+                  css={css`
+                    margin-right: 10px;
+                  `}
+                >
+                  Clear submission
+                </Button>
+              )}
               <Link
                 bold
                 withChevron

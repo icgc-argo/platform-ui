@@ -129,12 +129,14 @@ export default ({
               >
                 {selectedFile.displayName} File Preview
               </Typography>
-              <Button variant="text" size="sm" onClick={onClearClick}>
-                clear
-              </Button>
+              {!isPendingApproval && (
+                <Button variant="text" size="sm" onClick={onClearClick}>
+                  clear
+                </Button>
+              )}
             </div>
             <FileRecordTable
-              isPendingApproval={submissionState === 'PENDING_APPROVAL'}
+              isPendingApproval={isPendingApproval}
               file={selectedFile}
               submissionData={{
                 fileName: selectedFile.fileName,
