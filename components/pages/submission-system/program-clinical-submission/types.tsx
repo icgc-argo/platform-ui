@@ -29,7 +29,7 @@ export type ClinicalSubmissionEntityFile = {
   clinicalType: string;
   displayName: string | null;
   recordsCount?: number;
-  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE';
+  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE' | 'UPDATE';
 
   createdAt: string;
   creator: string;

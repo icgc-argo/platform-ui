@@ -33,17 +33,23 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: boolean) => (
-  gqlFile: GqlClinicalEntity,
-): ClinicalSubmissionEntityFile => {
+const gqlClinicalEntityToClinicalSubmissionEntityFile = (
+  submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
+) => (gqlFile: GqlClinicalEntity): ClinicalSubmissionEntityFile => {
+  const isSubmissionValidated =
+    submissionState === 'INVALID' ||
+    submissionState === 'VALID' ||
+    submissionState === 'PENDING_APPROVAL';
+  const isPendingApproval = submissionState === 'PENDING_APPROVAL';
+  const stats = {
+    errorsFound: [],
+    new: [],
+    noUpdate: [],
+    updated: [],
+    ...(gqlFile.stats || {}),
+  };
   return {
-    stats: {
-      errorsFound: [],
-      new: [],
-      noUpdate: [],
-      updated: [],
-      ...(gqlFile.stats || {}),
-    },
+    stats,
     createdAt: gqlFile.createdAt,
     creator: gqlFile.creator,
     fileName: gqlFile.batchName,
@@ -54,7 +60,11 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: 
     clinicalType: gqlFile.clinicalType,
     records: gqlFile.records,
     recordsCount: gqlFile.records.length,
-    status: !!gqlFile.dataErrors.length
+    status: isPendingApproval
+      ? stats.updated.length
+        ? 'UPDATE'
+        : 'SUCCESS'
+      : !!gqlFile.dataErrors.length
       ? 'ERROR'
       : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'
@@ -392,10 +402,7 @@ export default function ProgramClinicalSubmission() {
                 }));
               }}
               fileStates={data.clinicalSubmissions.clinicalEntities.map(
-                gqlClinicalEntityToClinicalSubmissionEntityFile(
-                  data.clinicalSubmissions.state === 'INVALID' ||
-                    data.clinicalSubmissions.state === 'VALID',
-                ),
+                gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
               )}
             />
           )}
