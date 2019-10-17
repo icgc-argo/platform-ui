@@ -88,6 +88,7 @@ export function AuthProvider({
       .then(egoToken => {
         Cookies.set(EGO_JWT_KEY, egoToken);
         setToken(egoToken);
+        return egoToken;
       })
       .catch(err => {
         console.warn('err: ', err);

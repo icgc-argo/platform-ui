@@ -1,43 +1,62 @@
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import {
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_JOIN_DETAILS_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-// $FlowFixMe
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import { css } from 'uikit';
+import GoogleLogin from 'uikit/Button/GoogleLogin';
 import DnaLoader from 'uikit/DnaLoader';
+import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
+import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
+  const { EGO_URL } = getConfig().publicRuntimeConfig;
+
   const router = useRouter();
   const { inviteId } = router.query;
 
-  const {
-    data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
-    loading,
-    error,
-  } = useQuery(GET_JOIN_PROGRAM_INFO, {
-    variables: { inviteId },
-  });
-
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
-
-  if (!!error) {
-    error[ERROR_STATUS_KEY] = 500;
-    throw new Error(error.message);
-  }
 
   const toaster = useToaster();
 
   const { updateToken } = useAuthContext();
+
+  const [notFound, setNotFound] = React.useState(false);
+
+  const {
+    data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
+    loading,
+  } = useQuery(GET_JOIN_PROGRAM_INFO, {
+    variables: { inviteId },
+    onCompleted: data => {
+      if (!joinProgramInvite) {
+        return;
+      }
+    },
+    onError: error => {
+      if (error.message.includes('NOT_FOUND')) {
+        setNotFound(true);
+      } else {
+        error[ERROR_STATUS_KEY] = 500;
+        throw new Error(error.message);
+      }
+    },
+  });
 
   const handleSubmit = async validData => {
     try {
@@ -76,29 +95,26 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   return (
     <SubmissionLayout noSidebar>
-      <div
-        css={css`
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-          left: 0px;
-          top: 0px;
-          position: absolute;
-        `}
+      <JoinProgramLayout
+        tabValue="step2"
+        joinProgramInvite={joinProgramInvite}
+        loading={loading}
+        notFound={notFound}
       >
-        {loading ? (
-          <DnaLoader />
-        ) : (
-          <JoinProgramForm
-            onSubmit={handleSubmit}
-            programName={get(joinProgramInvite, 'program.name')}
-            userRole={get(joinProgramInvite, 'user.role')}
-            institutions={institutions}
-          />
-        )}
-      </div>
+        <Typography
+          css={css`
+            margin-bottom: 27px;
+          `}
+        >
+          Please provide the following basic details
+        </Typography>
+        <JoinProgramForm
+          onSubmit={handleSubmit}
+          programName={get(joinProgramInvite, 'program.name')}
+          userRole={get(joinProgramInvite, 'user.role')}
+          institutions={institutions}
+        />
+      </JoinProgramLayout>
     </SubmissionLayout>
   );
 };

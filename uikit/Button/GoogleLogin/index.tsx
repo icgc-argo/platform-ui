@@ -5,6 +5,7 @@ import Button from '../index';
 import Icon from '../../Icon';
 import css from '@emotion/css';
 import useTheme from '../../utils/useTheme';
+import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 
 /**
  * Social login for Google
@@ -15,10 +16,20 @@ const StyledLink = styled('a')`
   display: inline-block;
 `;
 
-const GoogleLogin: React.ComponentType<{ id?: string; link: string }> = ({ link, id }) => {
+const GoogleLogin: React.ComponentType<{
+  id?: string;
+  link: string;
+  className?: string;
+  redirectPath?: string;
+}> = ({ link, id, className, redirectPath }) => {
+  const handleClick = () => {
+    if (!!redirectPath) {
+      localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, redirectPath);
+    }
+  };
   const theme = useTheme();
   return (
-    <StyledLink id={id} href={link}>
+    <StyledLink id={id} href={link} className={className} onClick={handleClick}>
       <Button
         css={css`
           padding: 10px 13px;
