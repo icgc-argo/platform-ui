@@ -14,6 +14,9 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
 - Dev commands:
   - `npm run dev` for work that involves the custom server
+  - `npm run build` this command is called by `npm link` and `npm install`, generally called during installation
+  - `npm run storybook` starts the storybook, this tool enables developers to create components independently and showcase components interactively in an isolated development environment
+  - `npm run build-storybook`  export the storybook as a static web app
 
 ### Writing commits
 
