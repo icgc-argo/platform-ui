@@ -40,7 +40,7 @@ const Footer = ({
       >
         © 2019 ICGC ARGO. All rights reserved.
         <br />
-        ICGC ARGO Submission System {version} - API {apiVersion} - {commitHash}
+        ICGC ARGO Data Platform {version} - API {apiVersion} - {commitHash}
       </Col>
       <Col
         md={6}
