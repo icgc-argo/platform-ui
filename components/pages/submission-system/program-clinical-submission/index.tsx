@@ -114,7 +114,7 @@ export default function ProgramClinicalSubmission() {
       ...acc,
       ...entity.dataErrors.map(err => ({
         ...err,
-        clinicalType: entity.clinicalType,
+        fileName: entity.batchName,
       })),
     ],
     [],
