@@ -3,14 +3,11 @@ import memoize from 'lodash/memoize';
 import getConfig from 'next/config';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
+import { EGO_PUBLIC_KEY } from 'global/config';
 
 let initializedTokenUtils = null;
 const TokenUtils = () => {
   if (!initializedTokenUtils) {
-    const EGO_PUBLIC_KEY = (getConfig().publicRuntimeConfig.EGO_PUBLIC_KEY || '').replace(
-      /\\n/g,
-      '\n',
-    );
     initializedTokenUtils = createEgoUtils(EGO_PUBLIC_KEY);
   }
   return initializedTokenUtils;

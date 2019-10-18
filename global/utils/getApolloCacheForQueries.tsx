@@ -3,9 +3,7 @@ import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';
-import getConfig from 'next/config';
-
-const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+import { GATEWAY_API_ROOT } from 'global/config';
 
 export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
   egoJwt?: string,
