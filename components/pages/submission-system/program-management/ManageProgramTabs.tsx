@@ -62,7 +62,7 @@ type PageQueryObject = {
 const usePageQuery = (): PageQueryObject => {
   const router = useRouter();
   const { tab, shortName } = router.query;
-  return { tab, shortName };
+  return { tab, shortName } as PageQueryObject;
 };
 
 const useTabState = () => {
