@@ -16,7 +16,7 @@ import {
   GetInitialPropsContext,
   ClientSideGetInitialPropsContext,
 } from 'global/utils/pages/types';
-import { NextPageContext } from 'next-server/dist/lib/utils';
+import { NextPageContext } from 'next';
 import { AUTH_DISABLED, GA_TRACKING_ID } from 'global/config';
 
 const redirect = (res, url: string) => {

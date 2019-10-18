@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NextPageContext } from 'next-server/dist/lib/utils';
+import { NextPageContext } from 'next';
 
 export type GetInitialPropsContext = NextPageContext & {
   res?: NextPageContext['res'] & {
