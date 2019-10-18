@@ -4,6 +4,7 @@ import DropdownButton from '.';
 import { select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { createKnobs as createButtonKnobs } from 'uikit/Button/stories';
+import Button from 'uikit/Button';
 
 const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = createButtonKnobs();
@@ -17,7 +18,8 @@ const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () 
       onItemClick={action('onItemClick')}
       menuItems={[
         { display: <strong>Some Text</strong>, value: '1' },
-        { display: <strong>Some Text</strong>, value: '2' },
+        { display: 'Some Text', value: '2' },
+        { display: <Button size="sm">Some Text</Button>, value: '4' },
       ]}
       menuShown={menuShown}
       {...knobs}
