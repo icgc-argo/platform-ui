@@ -50,7 +50,7 @@ export type GqlClinicalEntity = {
   schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
   createdAt: string;
-  stats: {
+  stats?: {
     noUpdate: Array<ClinicalSubmissionRecord['row']>;
     updated: Array<ClinicalSubmissionRecord['row']>;
     new: Array<ClinicalSubmissionRecord['row']>;

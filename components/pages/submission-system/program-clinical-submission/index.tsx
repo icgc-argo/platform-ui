@@ -36,7 +36,13 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: 
   gqlFile: GqlClinicalEntity,
 ): ClinicalSubmissionEntityFile => {
   return {
-    stats: gqlFile.stats,
+    stats: {
+      errorsFound: [],
+      new: [],
+      noUpdate: [],
+      updated: [],
+      ...(gqlFile.stats || {}),
+    },
     createdAt: gqlFile.createdAt,
     creator: gqlFile.creator,
     fileName: gqlFile.batchName,
