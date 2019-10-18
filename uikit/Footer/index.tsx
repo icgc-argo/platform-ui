@@ -22,9 +22,10 @@ const Footer = ({
   apiVersion = '[api-version]',
   commitHash = '[commit-hash]',
   links = [],
+  className = '',
   ...otherProps
 }) => (
-  <Container {...otherProps}>
+  <Container className={`footer ${className}`} {...otherProps}>
     <Row
       css={css`
         min-height: 58px;

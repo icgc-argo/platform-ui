@@ -9,7 +9,6 @@ export default function GlobalFooter() {
   return (
     <Footer
       version={APP_VERSION}
-      className="footer"
       css={css`
         background: #fff;
         z-index: 1;
