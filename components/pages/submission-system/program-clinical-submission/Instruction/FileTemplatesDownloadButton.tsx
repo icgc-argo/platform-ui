@@ -1,4 +1,5 @@
 import * as React from 'react';
+import urlJoin from 'url-join';
 import Typography from 'uikit/Typography';
 import Button, { BUTTON_SIZES } from 'uikit/Button';
 import Icon from 'uikit/Icon';
@@ -6,10 +7,13 @@ import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
+  downloadTsvFileTemplate,
 } from '../../common';
 import { css } from 'uikit';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useTheme } from 'uikit/ThemeProvider';
+import { GATEWAY_API_ROOT } from 'global/config';
+import { capitalize } from 'global/utils/stringUtils';
 
 export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
   const [schemaListShown, setSchemaListShown] = React.useState(false);
@@ -25,11 +29,11 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
   });
 
   const onSchemaClick = (clinicalType: string) => e => {
-    console.log('clinicalType: ', clinicalType);
+    downloadTsvFileTemplate(`${clinicalType}.tsv`);
   };
 
   const onDownloadAllClick = () => {
-    console.log('onDownloadAllClick');
+    downloadTsvFileTemplate(`all.zip`);
   };
 
   const MenuItem: typeof Typography = props => (
@@ -93,9 +97,9 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
           `}
         >
           <MenuItem onClick={onDownloadAllClick}>Download All</MenuItem>
-          {clinicalTypes.map(type => (
-            <MenuItem key={type} onClick={onSchemaClick(type)}>
-              {type}
+          {clinicalTypes.map(clinicalType => (
+            <MenuItem key={clinicalType} onClick={onSchemaClick(clinicalType)}>
+              {capitalize(clinicalType.split('_').join(' '))}
             </MenuItem>
           ))}
         </div>

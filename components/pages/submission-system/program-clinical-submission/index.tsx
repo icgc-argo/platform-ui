@@ -341,8 +341,8 @@ export default function ProgramClinicalSubmission() {
         {!isPendingApproval && !loadingClinicalSubmission && (
           <Container css={containerStyle}>
             <Instruction
-              clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(({ clinicalType }) =>
-                capitalize(clinicalType.split('_').join(' ')),
+              clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
+                ({ clinicalType }) => clinicalType,
               )}
               signOffEnabled={isReadyForSignoff && !mutationDisabled}
               validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
