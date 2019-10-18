@@ -1,7 +1,4 @@
 import * as React from 'react';
-import urlJoin from 'url-join';
-import Typography from 'uikit/Typography';
-import Button, { BUTTON_SIZES } from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import {
   instructionBoxButtonIconStyle,
@@ -10,55 +7,34 @@ import {
   downloadTsvFileTemplate,
 } from '../../common';
 import { css } from 'uikit';
-import useClickAway from 'uikit/utils/useClickAway';
-import { useTheme } from 'uikit/ThemeProvider';
-import { GATEWAY_API_ROOT } from 'global/config';
+import DropdownButton from 'uikit/DropdownButton';
 import { capitalize } from 'global/utils/stringUtils';
 
 export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
-  const [schemaListShown, setSchemaListShown] = React.useState(false);
-  const theme = useTheme();
-
-  const menuRef = React.createRef<HTMLDivElement>();
-  useClickAway({
-    domElementRef: menuRef,
-    onClickAway: () => setSchemaListShown(false),
-    onElementClick: () => {
-      setSchemaListShown(false);
-    },
-  });
-
-  const onSchemaClick = (clinicalType: string) => e => {
-    downloadTsvFileTemplate(`${clinicalType}.tsv`);
+  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = item => {
+    if (item.value === 'all') {
+      downloadTsvFileTemplate(`all.zip`);
+    } else {
+      downloadTsvFileTemplate(`${item.value}.tsv`);
+    }
   };
-
-  const onDownloadAllClick = () => {
-    downloadTsvFileTemplate(`all.zip`);
-  };
-
-  const MenuItem: typeof Typography = props => (
-    <Typography
-      variant="default"
-      as="div"
-      css={css`
-        padding: 5px;
-        &:hover {
-          background: ${theme.colors.secondary_4};
-        }
-      `}
-      {...props}
-    />
-  );
 
   return (
-    <Button
-      onClick={e => setSchemaListShown(true)}
-      css={css`
-        ${instructionBoxButtonStyle}
-        position: relative;
-      `}
+    <DropdownButton
+      css={instructionBoxButtonStyle}
       variant="secondary"
-      size={BUTTON_SIZES.SM}
+      size="sm"
+      onItemClick={onItemClick}
+      menuItems={[
+        {
+          display: 'Download All',
+          value: 'all',
+        },
+        ...clinicalTypes.map(clinicalType => ({
+          value: clinicalType,
+          display: capitalize(clinicalType.split('_').join(' ')),
+        })),
+      ]}
     >
       <span css={instructionBoxButtonContentStyle}>
         <Icon
@@ -78,32 +54,6 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
           `}
         />
       </span>
-      {schemaListShown && (
-        <div
-          ref={menuRef}
-          css={css`
-            position: absolute;
-            top: 100%;
-            left: 10px;
-            right: 10px;
-            background: white;
-            z-index: 1000;
-            box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-            border: solid 1px ${theme.colors.grey_1};
-            background-color: ${theme.colors.white};
-            text-transform: none;
-            text-align: left;
-            color: ${theme.colors.black};
-          `}
-        >
-          <MenuItem onClick={onDownloadAllClick}>Download All</MenuItem>
-          {clinicalTypes.map(clinicalType => (
-            <MenuItem key={clinicalType} onClick={onSchemaClick(clinicalType)}>
-              {capitalize(clinicalType.split('_').join(' '))}
-            </MenuItem>
-          ))}
-        </div>
-      )}
-    </Button>
+    </DropdownButton>
   );
 };
