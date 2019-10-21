@@ -92,7 +92,9 @@ const CellContentCenter = styled('div')`
 export default ({
   file,
   submissionData,
+  isPendingApproval,
 }: {
+  isPendingApproval: boolean;
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
@@ -153,6 +155,15 @@ export default ({
     })),
   ];
 
+  const recordHasError = (record: typeof tableData[0]) =>
+    stats.errorsFound.some(row => row === record.row);
+
+  const rowHasUpdate = (record: typeof tableData[0]) =>
+    stats.updated.some(row => row === record.row);
+
+  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
+    rowHasUpdate(cell.row) && !!file.dataUpdates.find(update => update.field === cell.field);
+
   return (
     <div
       css={css`
@@ -173,13 +184,29 @@ export default ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
-        getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
-          style: stats.errorsFound.some(row => row === original.row)
-            ? ({
-                background: theme.colors.error_4,
-              } as CSSProperties)
-            : ({} as CSSProperties),
-        })}
+        getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
+          ({
+            style:
+              isPendingApproval && cellHasUpdate({ row: row.original, field: column.id })
+                ? {
+                    background: theme.colors.accent3_3,
+                  }
+                : {},
+          } as { style: CSSProperties })
+        }
+        getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
+          ({
+            style: recordHasError(original)
+              ? {
+                  background: theme.colors.error_4,
+                }
+              : isPendingApproval && rowHasUpdate(original)
+              ? {
+                  background: theme.colors.accent3_4,
+                }
+              : {},
+          } as { style: CSSProperties })
+        }
         showPagination={false}
         columns={tableColumns}
         data={tableData}

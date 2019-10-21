@@ -2,7 +2,7 @@ import React from 'react';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { css } from 'uikit';
 import Typography from 'uikit/Typography';
-import { ClinicalSubmissionEntityFile } from '../types';
+import { ClinicalSubmissionEntityFile, ClinicalSubmissionQueryData } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
@@ -13,10 +13,13 @@ import Button from 'uikit/Button';
 export default ({
   fileStates,
   clearDataError,
+  submissionState,
 }: {
+  submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'];
   fileStates: Array<ClinicalSubmissionEntityFile>;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
 }) => {
+  const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
   const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
   const onFileClick = (clinicalType: string) => e => {
@@ -126,11 +129,14 @@ export default ({
               >
                 {selectedFile.displayName} File Preview
               </Typography>
-              <Button variant="text" size="sm" onClick={onClearClick}>
-                clear
-              </Button>
+              {!isPendingApproval && (
+                <Button variant="text" size="sm" onClick={onClearClick}>
+                  clear
+                </Button>
+              )}
             </div>
             <FileRecordTable
+              isPendingApproval={isPendingApproval}
               file={selectedFile}
               submissionData={{
                 fileName: selectedFile.fileName,

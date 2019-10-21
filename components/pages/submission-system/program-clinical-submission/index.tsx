@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SubmissionLayout from '../layout';
-import { css } from 'uikit';
+import { css, styled } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Progress from 'uikit/Progress';
@@ -31,18 +31,28 @@ import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
+import SubmissionSummaryTable from './SubmissionSummaryTable';
+import Typography from 'uikit/Typography';
+import { ContentHeader } from 'uikit/PageLayout';
+import { useTheme } from 'uikit/ThemeProvider';
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: boolean) => (
-  gqlFile: GqlClinicalEntity,
-): ClinicalSubmissionEntityFile => {
+const gqlClinicalEntityToClinicalSubmissionEntityFile = (
+  submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
+) => (gqlFile: GqlClinicalEntity): ClinicalSubmissionEntityFile => {
+  const isSubmissionValidated =
+    submissionState === 'INVALID' ||
+    submissionState === 'VALID' ||
+    submissionState === 'PENDING_APPROVAL';
+  const isPendingApproval = submissionState === 'PENDING_APPROVAL';
+  const stats = {
+    errorsFound: [],
+    new: [],
+    noUpdate: [],
+    updated: [],
+    ...(gqlFile.stats || {}),
+  };
   return {
-    stats: {
-      errorsFound: [],
-      new: [],
-      noUpdate: [],
-      updated: [],
-      ...(gqlFile.stats || {}),
-    },
+    stats,
     createdAt: gqlFile.createdAt,
     creator: gqlFile.creator,
     fileName: gqlFile.batchName,
@@ -53,7 +63,11 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: 
     clinicalType: gqlFile.clinicalType,
     records: gqlFile.records,
     recordsCount: gqlFile.records.length,
-    status: !!gqlFile.dataErrors.length
+    status: isPendingApproval
+      ? stats.updated.length
+        ? 'UPDATE'
+        : 'SUCCESS'
+      : !!gqlFile.dataErrors.length
       ? 'ERROR'
       : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'
@@ -62,6 +76,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (isSubmissionValidated: 
 };
 
 export default function ProgramClinicalSubmission() {
+  const theme = useTheme();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const [mutationDisabled, setMutationDisabled] = React.useState(false);
@@ -130,6 +145,7 @@ export default function ProgramClinicalSubmission() {
   const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
   const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
+  const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
 
   const onErrorClose: (
     index: number,
@@ -222,6 +238,9 @@ export default function ProgramClinicalSubmission() {
         </ModalPortal>
       )}
       <SubmissionLayout
+        ContentHeaderComponent={styled(ContentHeader)`
+          background: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+        `}
         contentHeader={
           <div
             css={css`
@@ -252,7 +271,7 @@ export default function ProgramClinicalSubmission() {
                     <Progress.Item
                       text="Validate"
                       state={
-                        isReadyForSignoff
+                        isReadyForSignoff || isPendingApproval
                           ? 'success'
                           : isReadyForValidation
                           ? hasDataError
@@ -263,22 +282,35 @@ export default function ProgramClinicalSubmission() {
                     />
                     <Progress.Item
                       text="Sign Off"
-                      state={isReadyForSignoff ? 'pending' : 'disabled'}
+                      state={
+                        isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled'
+                      }
                     />
+                    {isPendingApproval && (
+                      <Progress.Item
+                        css={css`
+                          width: 100px;
+                        `}
+                        text="Pending Approval"
+                        state="locked"
+                      />
+                    )}
                   </Progress>
                 )}
               </Row>
             </TitleBar>
             <Row nogutter align="center">
-              <Button
-                variant="text"
-                disabled
-                css={css`
-                  margin-right: 10px;
-                `}
-              >
-                Clear submission
-              </Button>
+              {!isPendingApproval && (
+                <Button
+                  variant="text"
+                  disabled
+                  css={css`
+                    margin-right: 10px;
+                  `}
+                >
+                  Clear submission
+                </Button>
+              )}
               <Link
                 bold
                 withChevron
@@ -294,16 +326,48 @@ export default function ProgramClinicalSubmission() {
           </div>
         }
       >
-        <Container css={containerStyle}>
-          <Instruction
-            signOffEnabled={isReadyForSignoff && !mutationDisabled}
-            validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
-            uploadEnabled={!mutationDisabled}
-            onUploadFileSelect={handleSubmissionFilesUpload}
-            onValidateClick={handleSubmissionValidation}
-            onSignOffClick={handleSignOff}
-          />
-        </Container>
+        {!isPendingApproval && !loadingClinicalSubmission && (
+          <Container css={containerStyle}>
+            <Instruction
+              signOffEnabled={isReadyForSignoff && !mutationDisabled}
+              validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
+              uploadEnabled={!mutationDisabled}
+              onUploadFileSelect={handleSubmissionFilesUpload}
+              onValidateClick={handleSubmissionValidation}
+              onSignOffClick={handleSignOff}
+            />
+          </Container>
+        )}
+        {isPendingApproval && !loadingClinicalSubmission && (
+          <Container
+            css={css`
+              padding: 24px;
+            `}
+          >
+            <div
+              css={css`
+                padding-bottom: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              `}
+            >
+              <Typography
+                variant="subtitle"
+                color="primary"
+                css={css`
+                  margin: 0px;
+                `}
+              >
+                Submission Summary
+              </Typography>
+              <Typography variant="data" color="black" as="div">
+                Signed off on <strong>{'SOME_DATE'}</strong> by <strong>{'SOMEONE'}</strong>
+              </Typography>
+            </div>
+            <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
+          </Container>
+        )}
         {data.clinicalSubmissions.fileErrors.map(({ fileNames, msg }, i) => (
           <Notification
             key={i}
@@ -358,6 +422,7 @@ export default function ProgramClinicalSubmission() {
             </div>
           ) : (
             <FilesNavigator
+              submissionState={data.clinicalSubmissions.state}
               clearDataError={async file => {
                 await updateClinicalSubmissionQuery(previous => ({
                   ...previous,
@@ -372,10 +437,7 @@ export default function ProgramClinicalSubmission() {
                 }));
               }}
               fileStates={data.clinicalSubmissions.clinicalEntities.map(
-                gqlClinicalEntityToClinicalSubmissionEntityFile(
-                  data.clinicalSubmissions.state === 'INVALID' ||
-                    data.clinicalSubmissions.state === 'VALID',
-                ),
+                gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
               )}
             />
           )}

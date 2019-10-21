@@ -28,12 +28,14 @@ const SubmissionLayout = ({
   contentHeader,
   children,
   subtitle,
+  ContentHeaderComponent = ContentHeader,
 }: {
   noSidebar?: boolean;
   sideMenu?: React.ReactNode | React.ReactNodeArray;
   contentHeader?: React.ReactNode | React.ReactNodeArray;
   children: React.ReactNode | React.ReactNodeArray;
   subtitle?: string;
+  ContentHeaderComponent?: typeof ContentHeader;
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
   const debouncedSet = setter => debounce(setter, 100);
@@ -64,7 +66,7 @@ const SubmissionLayout = ({
           </Sidebar>
         )}
         <PageContent>
-          {contentHeader && <ContentHeader>{contentHeader}</ContentHeader>}
+          {contentHeader && <ContentHeaderComponent>{contentHeader}</ContentHeaderComponent>}
           <ContentBody>{children}</ContentBody>
           <Footer />
         </PageContent>

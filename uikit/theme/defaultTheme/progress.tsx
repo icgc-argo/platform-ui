@@ -6,6 +6,7 @@ const color: { [key in ProgressStatus]: string } = {
   error: colors.error,
   pending: colors.warning,
   disabled: '#cecfd3',
+  locked: colors.accent3_dark,
 };
 
 export default { color };
