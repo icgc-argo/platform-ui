@@ -23,14 +23,18 @@ fragment Registration on ClinicalRegistrationData {
   }
   newDonors {
     count
+    rows
   }
   newSpecimens {
     count
+    rows
   }
   newSamples {
     count
+    rows
   }
   alreadyRegistered {
     count
+    rows
   }
 }
