@@ -4,11 +4,26 @@ import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
+import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 
 export default function ProgramDashboard() {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+
+  const [justJoined, setJustJoined] = React.useState(null);
+
+  React.useEffect(() => {
+    // to prevent server side rendering mismatch
+    if (typeof window !== 'undefined') {
+      const justJoinedProgram = window.localStorage.getItem('justJoinedProgram');
+      if (justJoinedProgram === programShortName) {
+        setJustJoined(true);
+        console.log('justJoined');
+        window.localStorage.removeItem('justJoinedProgram');
+      }
+    }
+  });
 
   return (
     <SubmissionLayout
@@ -27,6 +42,16 @@ export default function ProgramDashboard() {
         </div>
       }
     >
+      {justJoined && (
+        <Banner
+          title={`Welcome to ${programShortName}`}
+          variant={BANNER_VARIANTS.SUCCESS}
+          content="If you have trouble getting started, please check out our documentation for program management, data access and data submission"
+          css={css`
+            margin-bottom: 30px;
+          `}
+        />
+      )}
       <ContentBox
         css={css`
           padding-top: 0px;
