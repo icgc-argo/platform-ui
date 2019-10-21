@@ -1,0 +1,10 @@
+#import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
+
+mutation SIGN_OFF_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
+  clinicalSubmissions: commitClinicalSubmission(
+    programShortName: $programShortName
+    version: $submissionVersion
+  ) {
+    ...ClinicalSubmissionFragment
+  }
+}

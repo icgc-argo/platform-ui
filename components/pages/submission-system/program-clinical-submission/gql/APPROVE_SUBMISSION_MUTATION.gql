@@ -1,7 +1,0 @@
-#import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
-
-mutation APPROVE_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
-  commitClinicalSubmission(programShortName: $programShortName, version: $submissionVersion) {
-    ...ClinicalSubmissionFragment
-  }
-}
