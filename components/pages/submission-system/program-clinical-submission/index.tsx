@@ -218,8 +218,6 @@ export default function ProgramClinicalSubmission() {
         if (newData.clinicalSubmissions.state === null) {
           router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
         }
-      } else {
-        console.log('sign off canceled');
       }
     } catch (err) {
       toaster.addToast({
