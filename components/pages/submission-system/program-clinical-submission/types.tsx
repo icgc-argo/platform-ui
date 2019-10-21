@@ -24,6 +24,8 @@ export type ClinicalSubmissionUpdate = {
   __typename: 'ClinicalSubmissionUpdate';
 };
 
+export type ClinicalSubmissionStatus = 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL' | null;
+
 export type ClinicalSubmissionEntityFile = {
   clinicalType: string;
   displayName: string | null;
@@ -59,7 +61,7 @@ export type GqlClinicalEntity = {
 export type GqlClinicalSubmissionData = {
   id: string;
   version: string;
-  state?: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
+  state?: ClinicalSubmissionStatus;
   clinicalEntities: GqlClinicalEntity[];
   fileErrors: ClinicalError[];
   __typename: 'ClinicalSubmissionData';
