@@ -16,7 +16,7 @@ import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
-import { GATEWAY_API_ROOT } from 'global/config';
+import { getConfig } from 'global/config';
 
 const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
@@ -116,6 +116,7 @@ export default function ApplicationRoot({
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
 }) {
+  const { GATEWAY_API_ROOT } = getConfig();
   const apolloClient = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createUploadLink({

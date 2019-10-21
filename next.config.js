@@ -29,8 +29,7 @@ module.exports = withImages({
 
     return config;
   },
-
-  env: {
+  publicRuntimeConfig: {
     GATEWAY_API_ROOT: process.env.GATEWAY_API_ROOT,
     EGO_API_ROOT: process.env.EGO_API_ROOT,
     EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
