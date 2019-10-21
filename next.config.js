@@ -37,6 +37,5 @@ module.exports = withImages({
     EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY,
     AUTH_DISABLED: process.env.AUTH_DISABLED,
     GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-    EGO_URL: process.env.EGO_API_ROOT,
   },
 });

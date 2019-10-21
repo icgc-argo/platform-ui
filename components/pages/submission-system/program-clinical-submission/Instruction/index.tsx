@@ -7,8 +7,9 @@ import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
-} from '../common';
+} from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
+import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
 
 export default ({
   validationEnabled,
@@ -17,6 +18,7 @@ export default ({
   onValidateClick,
   uploadEnabled,
   onSignOffClick,
+  clinicalTypes,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
   onValidateClick: () => Promise<any>;
@@ -24,6 +26,7 @@ export default ({
   validationEnabled: boolean;
   signOffEnabled: boolean;
   uploadEnabled: boolean;
+  clinicalTypes: string[];
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
@@ -55,18 +58,7 @@ export default ({
             1. Download the clinical file templates and format them using the latest Data
             Dictionary.
           </Typography>
-
-          <Button css={instructionBoxButtonStyle} variant="secondary" size={BUTTON_SIZES.SM}>
-            <span css={instructionBoxButtonContentStyle}>
-              <Icon
-                name="download"
-                fill="accent2_dark"
-                height="12px"
-                css={instructionBoxButtonIconStyle}
-              />
-              File Templates
-            </span>
-          </Button>
+          <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
         </>,
         <>
           <Typography variant="paragraph" component="span">

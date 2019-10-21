@@ -17,6 +17,7 @@ import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
+  downloadTsvFileTemplate,
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 import { GATEWAY_API_ROOT } from 'global/config';
@@ -42,7 +43,7 @@ function Instructions({
   `;
 
   const downloadTemplate = () => {
-    window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
+    downloadTsvFileTemplate('registration.tsv');
   };
 
   const [showRegisterSamplesModal, setShowRegisterSamplesModal] = React.useState(false);

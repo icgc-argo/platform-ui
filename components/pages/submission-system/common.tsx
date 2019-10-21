@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import urlJoin from 'url-join';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import { ThemeColorNames } from 'uikit/theme/types';
@@ -7,6 +8,7 @@ import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
+import { GATEWAY_API_ROOT } from 'global/config';
 
 export const containerStyle = css`
   padding: 8px;
@@ -140,3 +142,6 @@ export const TableInfoHeaderContainer = ({
     </div>
   );
 };
+
+export const downloadTsvFileTemplate = (fileName: string) =>
+  window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
