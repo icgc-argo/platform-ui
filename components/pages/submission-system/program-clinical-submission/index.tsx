@@ -208,7 +208,7 @@ export default function ProgramClinicalSubmission() {
       const userDidApprove = await getUserApproval();
       if (userDidApprove) {
         setPageLoaderShown(true);
-        await sleep(2000);
+        await sleep();
         const { data: newData } = await signOffSubmission({
           variables: {
             programShortName,

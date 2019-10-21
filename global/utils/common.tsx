@@ -21,7 +21,7 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 const standardDate = 'YYYY-MM-DD';
 export const displayDate = date => formatDate(date, standardDate);
 
-export const sleep = (time: number) =>
+export const sleep = (time: number = 2000) =>
   new Promise(resolve => {
     setTimeout(() => {
       resolve();
