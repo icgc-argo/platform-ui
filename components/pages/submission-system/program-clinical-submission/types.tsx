@@ -7,7 +7,6 @@ export type ClinicalSubmissionRecord = {
 };
 
 export type ClinicalSubmissionError = {
-  type: string;
   message: string;
   row: number;
   field: string;
@@ -29,7 +28,7 @@ export type ClinicalSubmissionEntityFile = {
   clinicalType: string;
   displayName: string | null;
   recordsCount?: number;
-  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE';
+  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'NONE' | 'UPDATE';
 
   createdAt: string;
   creator: string;
@@ -50,7 +49,7 @@ export type GqlClinicalEntity = {
   schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
   createdAt: string;
-  stats: {
+  stats?: {
     noUpdate: Array<ClinicalSubmissionRecord['row']>;
     updated: Array<ClinicalSubmissionRecord['row']>;
     new: Array<ClinicalSubmissionRecord['row']>;
@@ -60,7 +59,7 @@ export type GqlClinicalEntity = {
 export type GqlClinicalSubmissionData = {
   id: string;
   version: string;
-  state: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
+  state?: 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL';
   clinicalEntities: GqlClinicalEntity[];
   fileErrors: ClinicalError[];
   __typename: 'ClinicalSubmissionData';
@@ -82,7 +81,7 @@ export type ValidateSubmissionMutationVariables = {
   submissionVersion: string;
 };
 
-export type ApproveSubmissionMutationVariables = {
+export type SignOffSubmissionMutationVariables = {
   programShortName: string;
   submissionVersion: string;
 };

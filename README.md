@@ -13,7 +13,10 @@ Find the most recent version of this guide at [here](https://github.com/segmenti
 - Install dependencies: `npm i`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
 - Dev commands:
-  - `npm run dev` for work that involves the custom server
+  - `npm run dev` starts local dev server
+  - `npm run build` creates a production build.
+  - `npm run storybook` for starting the storybook on port 6006 for isolated componenet development.
+  - `npm run build-storybook` creates static storybook build in `./storybook-static`
 
 ### Writing commits
 

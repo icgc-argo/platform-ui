@@ -1,6 +1,6 @@
 {
-  "name": "create-next-example-app",
-  "version": "1.6.0",
+  "name": "argo-platform-ui",
+  "version": "1.6.1",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -62,7 +62,7 @@
     "jsdom": "^14.0.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.14",
-    "next": "^9.0.0",
+    "next": "^9.1.1",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.0",

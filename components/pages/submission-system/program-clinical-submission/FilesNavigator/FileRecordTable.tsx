@@ -24,7 +24,9 @@ type FileStat = {
   errorCount: number;
 };
 
-const FILE_STATE_COLORS: { [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'] } = {
+export const FILE_STATE_COLORS: {
+  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill']
+} = {
   ERROR: 'error',
   NEW: 'accent2',
   NONE: 'grey_1',
@@ -90,12 +92,14 @@ const CellContentCenter = styled('div')`
 export default ({
   file,
   submissionData,
+  isPendingApproval,
 }: {
+  isPendingApproval: boolean;
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
-  const { dataErrors, records, dataUpdates } = file;
+  const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
@@ -108,8 +112,9 @@ export default ({
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
-    const hasError = dataErrors.some(error => error.row === original.row);
-    const hasUpdate = dataUpdates.some(update => update.row === original.row);
+    const hasError = stats.errorsFound.some(row => row === original.row);
+    const hasUpdate = stats.updated.some(row => row === original.row);
+    const isNew = stats.new.some(row => row === original.row);
     return (
       <CellContentCenter>
         <StarIcon
@@ -118,6 +123,8 @@ export default ({
               ? FILE_STATE_COLORS.ERROR
               : hasUpdate
               ? FILE_STATE_COLORS.UPDATED
+              : isNew
+              ? FILE_STATE_COLORS.NEW
               : FILE_STATE_COLORS.NONE
           }
         />
@@ -148,6 +155,15 @@ export default ({
     })),
   ];
 
+  const recordHasError = (record: typeof tableData[0]) =>
+    stats.errorsFound.some(row => row === record.row);
+
+  const rowHasUpdate = (record: typeof tableData[0]) =>
+    stats.updated.some(row => row === record.row);
+
+  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
+    rowHasUpdate(cell.row) && !!file.dataUpdates.find(update => update.field === cell.field);
+
   return (
     <div
       css={css`
@@ -168,13 +184,29 @@ export default ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
-        getTrProps={(_, { original }: { original: typeof tableData[0] }) => ({
-          style: {
-            background: dataErrors.some(err => err.row === original.row)
-              ? theme.colors.error_4
-              : 'none',
-          } as CSSProperties,
-        })}
+        getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
+          ({
+            style:
+              isPendingApproval && cellHasUpdate({ row: row.original, field: column.id })
+                ? {
+                    background: theme.colors.accent3_3,
+                  }
+                : {},
+          } as { style: CSSProperties })
+        }
+        getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
+          ({
+            style: recordHasError(original)
+              ? {
+                  background: theme.colors.error_4,
+                }
+              : isPendingApproval && rowHasUpdate(original)
+              ? {
+                  background: theme.colors.accent3_4,
+                }
+              : {},
+          } as { style: CSSProperties })
+        }
         showPagination={false}
         columns={tableColumns}
         data={tableData}

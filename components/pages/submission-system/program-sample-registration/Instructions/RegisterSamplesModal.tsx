@@ -37,12 +37,12 @@ export default function RegisterSamplesModal({
     handleCancelClick();
 
     setRegisterState('INPROGRESS');
-    await sleep(2000);
+    await sleep();
 
     commitRegistration()
       .then(async ({ data, errors }) => {
         setRegisterState('FINISHED');
-        await sleep(2000);
+        await sleep();
 
         const num = get(data, 'commitClinicalRegistration.length', 0);
         Router.push(

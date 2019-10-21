@@ -8,12 +8,14 @@ import selectTable, {
 } from 'react-table/lib/hoc/selectTable';
 import DnaLoader from '../DnaLoader';
 import Checkbox from '../form/Checkbox';
-import { StyledTable } from './styledComponent';
+import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
+
+export type TableVariant = 'DEFAULT' | 'STATIC';
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }: any) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -56,17 +58,22 @@ export const DefaultLoadingComponent = ({
 
 export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0] & {
   accessor?: keyof Data;
+  Cell?: TableProps<Data>['columns'][0]['Cell'] & ((c: { original: Data }) => React.ReactNode);
 };
 function Table<Data = { [k: string]: any }>({
+  variant = 'DEFAULT',
+  withRowBorder = variant === 'STATIC',
+  stripped = variant === 'DEFAULT',
+  highlight = variant === 'DEFAULT',
+  showPagination = variant === 'DEFAULT',
+  sortable = variant === 'DEFAULT',
+  resizable = variant === 'DEFAULT',
   className = '',
-  stripped = true,
-  highlight = true,
   PaginationComponent = TablePagination,
   LoadingComponent = DefaultLoadingComponent,
   NoDataComponent = DefaultNoDataComponent,
   columns,
   data,
-  showPagination,
   getTableProps = ({ data }) => {
     if (isEmpty(data)) {
       return {
@@ -80,13 +87,13 @@ function Table<Data = { [k: string]: any }>({
   },
   ...rest
 }: Partial<TableProps<Data>> & {
+  variant?: TableVariant;
   highlight?: boolean;
   stripped?: boolean;
   selectedIds?: Array<any>;
-  isSelectTable?: boolean;
   primaryKey?: string;
   columns: TableProps<Data>['columns']; //columns is required
-}) {
+} & StyledTableProps) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
 
@@ -97,6 +104,7 @@ function Table<Data = { [k: string]: any }>({
 
   return (
     <StyledTable
+      withRowBorder={withRowBorder}
       getTableProps={getTableProps}
       columns={columns}
       data={data}
@@ -115,6 +123,8 @@ function Table<Data = { [k: string]: any }>({
       NoDataComponent={NoDataComponent}
       showPagination={isEmpty(data) ? false : showPagination}
       getNoDataProps={x => x}
+      sortable={sortable}
+      resizable={resizable}
       {...rest}
     />
   );

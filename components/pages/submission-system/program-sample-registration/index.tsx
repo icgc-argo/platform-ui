@@ -300,7 +300,14 @@ export default function ProgramIDRegistration() {
           {fileRecords.length > 0 ? (
             <>
               <div css={cardHeaderContainerStyle}>
-                <Typography color="primary" variant="data" component="span">
+                <Typography
+                  css={css`
+                    margin: 0;
+                  `}
+                  color="primary"
+                  variant="subtitle2"
+                  component="h2"
+                >
                   File Preview
                 </Typography>
                 <Button

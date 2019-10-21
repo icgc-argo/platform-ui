@@ -4,6 +4,7 @@ import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
+import { useTheme } from 'uikit/ThemeProvider';
 
 const TABLE_COLS = [
   { Header: 'Row #', accessor: 'row', width: 90 },
@@ -33,100 +34,109 @@ const ErrorTable = ({
   count: number;
   onClear: () => any;
   onDownload: () => any;
-}) => (
-  <Container>
-    <div
-      css={css`
-        display: flex;
-      `}
-    >
-      <Icon
-        css={css`
-          margin-right: 14px;
-          min-width: 30px;
-        `}
-        name="warning"
-        fill="error"
-        width="30px"
-        height="30px"
-      />
-
-      <div>
-        <Typography
-          css={css`
-            margin-bottom: 8px;
-          `}
-          variant="sectionHeader"
-          component="div"
-          bold
-        >
-          {`Your file has ${count} error${count > 1 ? 's' : ''}`}
-        </Typography>
-
-        <Typography
-          css={css`
-            margin-bottom: 5px;
-          `}
-          variant="paragraph"
-        >
-          Your file cannot be processed. Please correct the following errors and reupload your file.
-        </Typography>
-      </div>
-
+}) => {
+  const theme = useTheme();
+  return (
+    <Container>
       <div
         css={css`
-          margin-left: auto;
-          min-width: 240px;
           display: flex;
-          align-items: flex-start;
-          justify-content: flex-end;
         `}
       >
-        <Button
+        <Icon
           css={css`
-            display: inline-block;
+            margin-right: 14px;
+            min-width: 30px;
           `}
-          variant={BUTTON_VARIANTS.SECONDARY}
-          size={BUTTON_SIZES.SM}
-          onClick={() => onDownload()}
-        >
-          <span
-            css={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <Icon
-              name="download"
-              fill="accent2_dark"
-              height="12px"
-              css={css`
-                margin-right: 5px;
-              `}
-            />
-            <Typography variant="data">ERROR REPORT</Typography>
-          </span>
-        </Button>
-        <Button
-          css={css`
-            display: inline-block;
-          `}
-          variant={BUTTON_VARIANTS.TEXT}
-          size={BUTTON_SIZES.SM}
-          onClick={onClear}
-        >
-          <Typography variant="data">Clear</Typography>
-        </Button>
-      </div>
-    </div>
+          name="warning"
+          fill="error"
+          width="30px"
+          height="30px"
+        />
 
-    <Table
-      data={errors}
-      columns={TABLE_COLS}
-      showPagination={false}
-      pageSize={Number.MAX_SAFE_INTEGER}
-    />
-  </Container>
-);
+        <div>
+          <Typography
+            css={css`
+              margin-bottom: 8px;
+            `}
+            variant="sectionHeader"
+            component="div"
+            bold
+          >
+            {`Your file has ${count} error${count > 1 ? 's' : ''}`}
+          </Typography>
+
+          <Typography
+            css={css`
+              margin-bottom: 5px;
+            `}
+            variant="paragraph"
+          >
+            Your file cannot be processed. Please correct the following errors and reupload your
+            file.
+          </Typography>
+        </div>
+
+        <div
+          css={css`
+            margin-left: auto;
+            min-width: 240px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+          `}
+        >
+          <Button
+            css={css`
+              display: inline-block;
+            `}
+            variant={BUTTON_VARIANTS.SECONDARY}
+            size={BUTTON_SIZES.SM}
+            onClick={() => onDownload()}
+          >
+            <span
+              css={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <Icon
+                name="download"
+                fill="accent2_dark"
+                height="12px"
+                css={css`
+                  margin-right: 5px;
+                `}
+              />
+              <Typography variant="data">ERROR REPORT</Typography>
+            </span>
+          </Button>
+          <Button
+            css={css`
+              display: inline-block;
+            `}
+            variant={BUTTON_VARIANTS.TEXT}
+            size={BUTTON_SIZES.SM}
+            onClick={onClear}
+          >
+            <Typography variant="data">Clear</Typography>
+          </Button>
+        </div>
+      </div>
+      <div
+        css={css`
+          background-color: ${theme.colors.white};
+        `}
+      >
+        <Table
+          data={errors}
+          columns={TABLE_COLS}
+          showPagination={false}
+          pageSize={Number.MAX_SAFE_INTEGER}
+        />
+      </div>
+    </Container>
+  );
+};
 
 export default ErrorTable;

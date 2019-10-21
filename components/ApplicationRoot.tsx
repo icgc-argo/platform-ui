@@ -4,7 +4,6 @@ import { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
-import getConfig from 'next/config';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css, ThemeProvider } from 'uikit';
@@ -17,6 +16,7 @@ import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
+import { GATEWAY_API_ROOT } from 'global/config';
 
 const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
@@ -116,8 +116,6 @@ export default function ApplicationRoot({
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
 }) {
-  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
-
   const apolloClient = new ApolloClient({
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createUploadLink({
