@@ -8,7 +8,7 @@ import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
-import { GATEWAY_API_ROOT } from 'global/config';
+import { getConfig } from 'global/config';
 
 export const containerStyle = css`
   padding: 8px;
@@ -143,5 +143,7 @@ export const TableInfoHeaderContainer = ({
   );
 };
 
-export const downloadTsvFileTemplate = (fileName: string) =>
+export const downloadTsvFileTemplate = (fileName: string) => {
+  const { GATEWAY_API_ROOT } = getConfig();
   window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
+};

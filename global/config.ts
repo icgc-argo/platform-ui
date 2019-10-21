@@ -14,8 +14,16 @@ export const getConfig = () => {
     AUTH_DISABLED: publicConfig.AUTH_DISABLED === 'true',
     GA_TRACKING_ID: publicConfig.GA_TRACKING_ID || '',
     EGO_URL: urlJoin(
-      publicConfig.EGO_API_ROOT,
-      `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID}`,
-    ) as string,
+      publicConfig.EGO_API_ROOT || '',
+      `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
+    ),
+  } as {
+    GATEWAY_API_ROOT: string;
+    EGO_API_ROOT: string;
+    EGO_CLIENT_ID: string;
+    EGO_PUBLIC_KEY: string;
+    AUTH_DISABLED: boolean;
+    GA_TRACKING_ID: string;
+    EGO_URL: string;
   };
 };
