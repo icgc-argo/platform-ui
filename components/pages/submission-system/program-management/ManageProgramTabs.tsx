@@ -6,7 +6,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';
-import Tabs, { Tab } from 'uikit/Tabs';
+import Tabs, { Tab } from 'uikit/Tabs/Horizontal';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import ProgramForm from '../program-form/ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
