@@ -1,0 +1,3 @@
+fragment SideMenuProgram on Program {
+  shortName
+}

@@ -1,5 +1,7 @@
+#import "./SIDE_MENU_PROGRA,_FRAGMENT.gql"
+
 query SIDE_MENU_PROGRAM_LIST {
   programs {
-    shortName
+    ...SideMenuProgram
   }
 }
