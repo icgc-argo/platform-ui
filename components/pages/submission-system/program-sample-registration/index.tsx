@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
+import union from 'lodash/union';
 import * as React from 'react';
 import { Row } from 'react-grid-system';
 import { css } from 'uikit';
@@ -51,15 +52,19 @@ export type ClinicalRegistration = {
   fileName: string;
   newDonors: {
     count: number;
+    rows: Array<number>;
   };
   newSpecimens: {
     count: number;
+    rows: Array<number>;
   };
   newSamples: {
     count: number;
+    rows: Array<number>;
   };
   alreadyRegistered: {
     count: number;
+    rows: Array<number>;
   };
   records: ClinicalRecords;
   errors: ClinicalErrors;
@@ -73,11 +78,11 @@ const registerStateStringMap: { [key in RegisterState]: string } = {
   '': '',
 };
 
-const recordsToFileTable = (records: ClinicalRecords): Array<FileEntry> =>
+const recordsToFileTable = (records: ClinicalRecords, newRows: Array<number>): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
-    return { ...data, row: record.row };
+    return { ...data, row: record.row, isNew: newRows.includes(record.row) };
   });
 
 export default function ProgramIDRegistration() {
@@ -141,20 +146,25 @@ export default function ProgramIDRegistration() {
   // Data formatting
   let submissionInfo = null;
   let stats = null;
+  let newRows = [];
+
   if (clinicalRegistration) {
     const {
       createdAt = '',
       creator = '',
       fileName = '',
-      alreadyRegistered = { count: 0 },
-      newDonors = { count: 0 },
-      newSamples = { count: 0 },
-      newSpecimens = { count: 0 },
+      alreadyRegistered,
+      newDonors,
+      newSamples,
+      newSpecimens,
     } = clinicalRegistration;
     submissionInfo = { createdAt, creator, fileName };
+
+    newRows = union(newDonors.rows, newSamples.rows, newSpecimens.rows);
+
     stats = {
-      newCount: alreadyRegistered.count,
-      existingCount: newDonors.count + newSamples.count + newSpecimens.count,
+      newCount: newRows.length,
+      existingCount: alreadyRegistered.count,
     };
   }
 
@@ -319,7 +329,7 @@ export default function ProgramIDRegistration() {
                 </Button>
               </div>
               <FileTable
-                records={recordsToFileTable(fileRecords)}
+                records={recordsToFileTable(fileRecords, newRows)}
                 stats={stats}
                 submissionInfo={submissionInfo}
               />

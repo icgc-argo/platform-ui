@@ -5,8 +5,7 @@ import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
-import getConfig from 'next/config';
-import { EGO_URL } from 'global/config';
+import { getConfig } from 'global/config';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -14,6 +13,7 @@ const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage() {
   const theme = useTheme();
+  const { EGO_URL } = getConfig();
   return (
     <DefaultLayout>
       <div

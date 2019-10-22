@@ -1,11 +1,10 @@
 import jwtDecode from 'jwt-decode';
 import memoize from 'lodash/memoize';
-import getConfig from 'next/config';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
-import { EGO_PUBLIC_KEY } from 'global/config';
+import { getConfig } from 'global/config';
 
-const TokenUtils = createEgoUtils(EGO_PUBLIC_KEY);
+const TokenUtils = createEgoUtils(getConfig().EGO_PUBLIC_KEY);
 
 type EgoJwtData = {
   iat: number;
