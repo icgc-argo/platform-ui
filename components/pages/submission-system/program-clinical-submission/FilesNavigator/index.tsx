@@ -9,6 +9,7 @@ import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
 import ErrorNotification from '../ErrorNotification';
 import Button from 'uikit/Button';
+import noDataSvg from 'static/illustration_heart.svg';
 
 export default ({
   fileStates,
@@ -148,7 +149,12 @@ export default ({
             />
           </>
         ) : (
-          <NoData />
+          <NoData
+            title="You do not have any data uploaded."
+            subtitle="Follow the instructions above to get started."
+          >
+            <img alt="no data found" src={noDataSvg} />
+          </NoData>
         )}
       </Col>
     </div>
