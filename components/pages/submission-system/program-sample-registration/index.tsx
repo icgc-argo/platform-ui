@@ -25,6 +25,7 @@ import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { formatFileName } from './util';
 import { containerStyle } from '../common';
+import { useToaster } from 'global/hooks/toaster';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -112,22 +113,30 @@ export default function ProgramIDRegistration() {
     setRegisterString(registerStateStringMap[state]);
   };
 
-  const handleClearClick = () => {
+  const toaster = useToaster();
+
+  const handleClearClick = async () => {
     if (clinicalRegistration.id == null) {
       refetch();
       return;
     }
 
-    clearRegistration({
-      variables: {
-        shortName: programShortName,
-        registrationId: get(clinicalRegistration, 'id'),
-      },
-    })
-      .then(() => {
-        refetch();
-      })
-      .catch(console.log);
+    try {
+      await clearRegistration({
+        variables: {
+          shortName: programShortName,
+          registrationId: get(clinicalRegistration, 'id'),
+        },
+      });
+    } catch (err) {
+      toaster.addToast({
+        variant: 'ERROR',
+        title: 'Something went wrong',
+        content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
+      });
+    } finally {
+      await refetch();
+    }
   };
 
   // update progress steps
