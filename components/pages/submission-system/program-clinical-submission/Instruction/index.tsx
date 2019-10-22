@@ -54,14 +54,14 @@ export default ({
     <InstructionBox
       steps={[
         <>
-          <Typography variant="paragraph" component="span">
+          <Typography variant="data" component="span">
             1. Download the clinical file templates and format them using the latest Data
             Dictionary.
           </Typography>
           <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
         </>,
         <>
-          <Typography variant="paragraph" component="span">
+          <Typography variant="data" component="span">
             2. Upload your formatted clinical TSV files.
           </Typography>
           <FileSelectButton
@@ -89,7 +89,7 @@ export default ({
           </FileSelectButton>
         </>,
         <>
-          <Typography variant="paragraph" component="span">
+          <Typography variant="data" component="span">
             3. Validate your entire submission workspace.
           </Typography>
           <Button
@@ -105,7 +105,7 @@ export default ({
           </Button>
         </>,
         <>
-          <Typography variant="paragraph" component="span">
+          <Typography variant="data" component="span">
             4. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
           <Button
