@@ -13,7 +13,7 @@ import { capitalize } from 'global/utils/stringUtils';
 export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
   const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = item => {
     if (item.value === 'all') {
-      downloadTsvFileTemplate(`all.zip`);
+      downloadTsvFileTemplate(`all`);
     } else {
       downloadTsvFileTemplate(`${item.value}.tsv`);
     }
