@@ -40,7 +40,7 @@ const DefaultIcon = ({ variant, size }) => {
     [NOTIFICATION_VARIANTS.INFO]: 'info' as UikitIconNames,
     [NOTIFICATION_VARIANTS.SUCCESS]: 'success' as UikitIconNames,
     [NOTIFICATION_VARIANTS.WARNING]: 'warning' as UikitIconNames,
-    [NOTIFICATION_VARIANTS.ERROR]: 'times_circle' as UikitIconNames,
+    [NOTIFICATION_VARIANTS.ERROR]: 'warning' as UikitIconNames,
   }[variant];
   const width = {
     [NOTIFICATION_SIZES.MD]: '25px',

@@ -69,7 +69,7 @@ const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
-          {fileStat.errorCount} Errors
+          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
