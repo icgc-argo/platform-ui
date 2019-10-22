@@ -8,7 +8,12 @@ import ascending from '../assets/table/ascending.svg';
 import descending from '../assets/table/descending.svg';
 import unsorted from '../assets/table/unsorted.svg';
 
-export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean }>(ReactTable)`
+export type StyledTableProps = {
+  withRowBorder?: boolean;
+  isSelectTable?: boolean;
+};
+
+export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTable)`
   ${reactTableDefaultStyle}
 
   &.ReactTable .-loading.-active .-loading-inner {
@@ -35,6 +40,17 @@ export const StyledTable = styled<typeof ReactTable, { isSelectTable: boolean }>
           `}
       }
     }
+  }
+
+  &.ReactTable .rt-tbody .rt-tr-group {
+    ${({ theme, withRowBorder }) =>
+      withRowBorder
+        ? css`
+            border-bottom: solid 1px ${theme.colors.grey_2};
+          `
+        : css`
+            border-bottom: none;
+          `};
   }
 
   &.ReactTable .rt-thead.-header .rt-tr .rt-th {

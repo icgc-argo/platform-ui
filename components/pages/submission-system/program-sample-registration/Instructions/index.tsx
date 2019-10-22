@@ -1,5 +1,4 @@
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import * as React from 'react';
 import { css } from 'uikit';
@@ -17,6 +16,7 @@ import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
+  downloadTsvFileTemplate,
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 
@@ -40,10 +40,8 @@ function Instructions({
     padding-top: 8px;
   `;
 
-  const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
-
   const downloadTemplate = () => {
-    window.location.assign(urlJoin(GATEWAY_API_ROOT, 'clinical/template/registration.tsv'));
+    downloadTsvFileTemplate('registration.tsv');
   };
 
   const [showRegisterSamplesModal, setShowRegisterSamplesModal] = React.useState(false);

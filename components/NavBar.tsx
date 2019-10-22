@@ -18,7 +18,7 @@ import AppBar, {
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import getConfig from 'next/config';
+import { getConfig } from 'global/config';
 
 const NavBarLoginButton = () => {
   return (
@@ -57,10 +57,10 @@ const getUserRole = egoJwt => {
 };
 
 export default () => {
+  const { EGO_URL } = getConfig();
   const { token: egoJwt, logOut, data: userModel } = useAuthContext();
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
   const { asPath: path } = usePageContext();
-  const { EGO_URL } = getConfig().publicRuntimeConfig;
 
   return (
     <AppBar

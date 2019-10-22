@@ -12,6 +12,7 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
@@ -24,8 +25,8 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
-import { styled } from 'uikit';
 import usePageContext from 'global/hooks/usePageContext';
+import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
 
 type SideMenuProgram = {
   shortName: string;
@@ -52,9 +53,20 @@ const useToggledSelectState = (initialIndex = -1) => {
   return { activeItem, toggleItem };
 };
 
+type ClinicalSubmissionQueryResponse = {
+  clinicalSubmissions: {
+    state: ClinicalSubmissionStatus;
+  };
+};
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { token } = useAuthContext();
+  const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
+    variables: {
+      programShortName: props.program.shortName,
+    },
+  });
+
   return (
     <div>
       <Link
@@ -94,7 +106,29 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       >
         <MenuItem
           level={3}
-          content="Submit Clinical Data"
+          content={
+            <div
+              css={css`
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                align-items: center;
+                padding-right: 15px;
+              `}
+            >
+              Submit Clinical Data
+              {
+                ({
+                  OPEN: <Icon name="ellipses" fill="warning" width="15px" />,
+                  VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                  INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                  PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
+                  data ? data.clinicalSubmissions.state : null
+                ]
+              }
+            </div>
+          }
           selected={
             PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
           }

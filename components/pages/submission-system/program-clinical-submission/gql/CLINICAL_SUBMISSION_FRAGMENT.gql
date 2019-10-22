@@ -28,7 +28,6 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
       donorId
     }
     dataErrors {
-      type
       message
       row
       field
@@ -36,7 +35,6 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
       donorId
     }
     schemaErrors {
-      type
       message
       row
       field

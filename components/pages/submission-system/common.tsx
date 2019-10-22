@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import urlJoin from 'url-join';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import { ThemeColorNames } from 'uikit/theme/types';
@@ -7,6 +8,7 @@ import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
+import { getConfig } from 'global/config';
 
 export const containerStyle = css`
   padding: 8px;
@@ -86,16 +88,31 @@ export const SubmissionInfoArea = ({
   creator: string;
   createdAt: string;
 }) => (
-  <Typography variant="data" component="div" color="grey">
-    <Typography variant="data" color="secondary_dark">
-      {formatFileName(fileName)}
-    </Typography>{' '}
+  <Typography variant="data" component="div">
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
+      {formatFileName(fileName)}{' '}
+    </Typography>
     uploaded on{' '}
-    <Typography variant="data" color="secondary_dark">
-      {format(new Date(createdAt), 'MMMM D, YYYY ')}
-    </Typography>{' '}
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
+      {format(new Date(createdAt), 'MMMM D, YYYY [at] h:mm A ')}
+    </Typography>
     by{' '}
-    <Typography variant="data" color="secondary_dark">
+    <Typography
+      variant="data"
+      css={css`
+        font-weight: 600;
+      `}
+    >
       {creator}
     </Typography>
   </Typography>
@@ -124,4 +141,9 @@ export const TableInfoHeaderContainer = ({
       </Row>
     </div>
   );
+};
+
+export const downloadTsvFileTemplate = (fileName: string) => {
+  const { GATEWAY_API_ROOT } = getConfig();
+  window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
 };

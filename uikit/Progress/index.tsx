@@ -2,19 +2,22 @@ import * as React from 'react';
 import { styled } from '../';
 import Icon from '../Icon';
 import { css } from '..';
+import { HtmlAttributes } from 'csstype';
 
-export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled';
+export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked';
 
 export const PROGRESS_STATUS: {
   SUCCESS: ProgressStatus;
   ERROR: ProgressStatus;
   PENDING: ProgressStatus;
   DISABLED: ProgressStatus;
+  LOCKED: ProgressStatus;
 } = {
   SUCCESS: 'success',
   ERROR: 'error',
   PENDING: 'pending',
   DISABLED: 'disabled',
+  LOCKED: 'locked',
 };
 
 const Triangle = props => css`
@@ -62,13 +65,6 @@ const ProgressSection = styled('div')`
     ${Triangle};
     z-index: 1;
   }
-
-  /* offset each step for seperator spacing */
-  .step {
-    width: 64px;
-    text-align: center;
-    margin-left: -4px;
-  }
 `;
 
 /* Separator colors - based on state*/
@@ -85,38 +81,44 @@ const Separator = styled<'div', { state: ProgressStatus }>('div')`
   }
 `;
 
-const Text = styled<'div', { completed: boolean }>('div')`
+const Text = styled('div')<{ completed: boolean; state: ProgressStatus }>`
   ${({ theme }) => theme.typography.caption};
   font-weight: ${({ completed }) => (completed ? 600 : 'normal')};
+  color: ${({ theme, state }) => (state === 'locked' ? theme.colors.grey : theme.colors.black)};
 `;
 
-const getIcon = (state: ProgressStatus) => {
-  switch (state) {
-    case PROGRESS_STATUS.SUCCESS:
-      return <Icon width="10px" height="10px" fill="#fff" name="checkmark" />;
-
-    case PROGRESS_STATUS.ERROR:
-      return <Icon width="10px" height="10px" fill="#fff" name="exclamation" />;
-
-    case PROGRESS_STATUS.PENDING:
-      return <Icon width="14px" height="14px" fill="#fff" name="ellipses" />;
-
-    case PROGRESS_STATUS.DISABLED:
-      return null;
-  }
-};
+const getIcon = (state: ProgressStatus) =>
+  ({
+    [PROGRESS_STATUS.SUCCESS]: <Icon width="10px" height="10px" fill="white" name="checkmark" />,
+    [PROGRESS_STATUS.ERROR]: <Icon width="10px" height="10px" fill="white" name="exclamation" />,
+    [PROGRESS_STATUS.PENDING]: <Icon width="14px" height="14px" fill="white" name="ellipses" />,
+    [PROGRESS_STATUS.LOCKED]: <Icon width="10px" height="10px" fill="white" name="lock" />,
+    [PROGRESS_STATUS.DISABLED]: null,
+  }[state]);
 
 export const ProgressItem = ({
   state,
   text,
   completed = state === PROGRESS_STATUS.SUCCESS,
+  className = '',
+  ...rest
 }: {
   state: ProgressStatus;
   text: string;
   completed?: boolean;
-}) => (
-  <div className="step">
-    <Text completed={completed}>{text}</Text>
+} & React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={`${className || ''}`}
+    css={css`
+      width: 64px;
+      text-align: center;
+      margin-left: -4px;
+    `}
+    {...rest}
+  >
+    <Text state={state} completed={completed}>
+      {text}
+    </Text>
     <Separator
       state={state}
       className="row"

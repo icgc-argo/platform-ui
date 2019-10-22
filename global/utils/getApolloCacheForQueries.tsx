@@ -3,13 +3,12 @@ import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';
-import getConfig from 'next/config';
-
-const { GATEWAY_API_ROOT } = getConfig().publicRuntimeConfig;
+import { getConfig } from 'global/config';
 
 export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
   egoJwt?: string,
 ) => {
+  const { GATEWAY_API_ROOT } = getConfig();
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
     // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
