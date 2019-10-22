@@ -117,13 +117,15 @@ export default ({
                 padding: 8px;
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
               `}
             >
               <Typography
-                variant="subtitle"
+                variant="subtitle2"
                 color="primary"
-                as="div"
+                as="h2"
                 css={css`
+                  margin: 0px;
                   margin-left: 10px;
                 `}
               >
