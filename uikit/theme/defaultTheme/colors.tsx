@@ -1,5 +1,3 @@
-
-
 const base = {
   black: '#000000',
   white: '#ffffff',
@@ -29,6 +27,7 @@ const secondary = {
 };
 const accent1 = {
   accent1_dark: '#15846c',
+  accent1_dimmed: '#00C79D',
   accent1: '#24dbb4',
   accent1_1: '#70e7ce',
   accent1_2: '#a7f0e1',
