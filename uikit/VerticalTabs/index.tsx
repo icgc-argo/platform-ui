@@ -72,7 +72,7 @@ const VerticalTabsItem: React.ComponentType<
   return (
     <ContainerComponent {...rest}>
       <Typography
-        variant="label"
+        variant="data"
         as="div"
         css={css`
           width: 100%;
