@@ -8,7 +8,6 @@ import Router from 'next/router';
 import * as React from 'react';
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
-import getConfig from 'next/config';
 import App, { AppContext } from 'next/app';
 
 import {
@@ -17,7 +16,7 @@ import {
   ClientSideGetInitialPropsContext,
 } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
-import { AUTH_DISABLED, GA_TRACKING_ID } from 'global/config';
+import { getConfig } from 'global/config';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -58,6 +57,7 @@ class Root extends App<{
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
+    const { AUTH_DISABLED } = getConfig();
 
     if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
@@ -111,6 +111,7 @@ class Root extends App<{
   componentDidMount() {
     const { ctx, egoJwt } = this.props;
     const userModel = decodeToken(egoJwt);
+    const { GA_TRACKING_ID } = getConfig();
 
     ReactGA.initialize(GA_TRACKING_ID, {
       gaOptions: {

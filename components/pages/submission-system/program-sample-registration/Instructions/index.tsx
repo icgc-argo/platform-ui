@@ -1,5 +1,4 @@
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import * as React from 'react';
 import { css } from 'uikit';
@@ -20,7 +19,6 @@ import {
   downloadTsvFileTemplate,
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
-import { GATEWAY_API_ROOT } from 'global/config';
 
 function Instructions({
   registrationEnabled,
