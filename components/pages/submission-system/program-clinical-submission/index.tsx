@@ -445,8 +445,8 @@ export default function ProgramClinicalSubmission() {
                     ...previous.clinicalSubmissions,
                     clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
                       ...entity,
-                      dataErrors:
-                        file.clinicalType === entity.clinicalType ? [] : entity.dataErrors,
+                      schemaErrors:
+                        file.clinicalType === entity.clinicalType ? [] : entity.schemaErrors,
                     })),
                   },
                 }));
