@@ -107,25 +107,32 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-function MyApolloProvider({ children, cache }) {
+const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: any }> = ({
+  children,
+  egoJwt,
+  apolloCache,
+}) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  const { token } = useAuthContext();
-
-  const apolloClient = new ApolloClient({
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-      fetch: fetch,
-      headers: token
-        ? {
-            authorization: `Bearer ${token}`,
-          }
-        : {},
-    }),
-    cache: createInMemoryCache().restore(cache),
-  });
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
-}
+  const createNewClient = () =>
+    new ApolloClient({
+      // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
+      link: createUploadLink({
+        uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+        fetch: fetch,
+        headers: egoJwt
+          ? {
+              authorization: `Bearer ${egoJwt}`,
+            }
+          : {},
+      }),
+      cache: createInMemoryCache().restore(apolloCache),
+    });
+  const [client, setClient] = React.useState(createNewClient());
+  React.useEffect(() => {
+    setClient(createNewClient());
+  }, [egoJwt]);
+  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+};
 
 export default function ApplicationRoot({
   egoJwt,
@@ -161,7 +168,7 @@ export default function ApplicationRoot({
       </style>
       <Head />
       <AuthProvider egoJwt={egoJwt}>
-        <MyApolloProvider cache={apolloCache}>
+        <ApolloClientProvider egoJwt={egoJwt} apolloCache={apolloCache}>
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
@@ -169,7 +176,7 @@ export default function ApplicationRoot({
               </ToastProvider>
             </ThemeProvider>
           </PageContext.Provider>
-        </MyApolloProvider>
+        </ApolloClientProvider>
       </AuthProvider>
     </>
   );
