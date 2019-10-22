@@ -73,7 +73,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   });
 
   const clinicalSubmissionHasSchemaErrors = data
-    ? data.clinicalSubmissions.clinicalEntities.some(enetity => !!enetity.schemaErrors.length)
+    ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
     : false;
 
   return (
