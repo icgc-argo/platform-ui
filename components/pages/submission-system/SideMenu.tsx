@@ -56,6 +56,11 @@ const useToggledSelectState = (initialIndex = -1) => {
 type ClinicalSubmissionQueryResponse = {
   clinicalSubmissions: {
     state: ClinicalSubmissionStatus;
+    clinicalEntities: Array<{
+      schemaErrors: Array<{
+        row: number;
+      }>;
+    }>;
   };
 };
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
@@ -66,6 +71,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       programShortName: props.program.shortName,
     },
   });
+
+  const clinicalSubmissionHasSchemaErrors = data
+    ? data.clinicalSubmissions.clinicalEntities.some(enetity => !!enetity.schemaErrors.length)
+    : false;
 
   return (
     <div>
@@ -119,7 +128,11 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               Submit Clinical Data
               {
                 ({
-                  OPEN: <Icon name="ellipses" fill="warning" width="15px" />,
+                  OPEN: clinicalSubmissionHasSchemaErrors ? (
+                    <Icon name="exclamation" fill="error" width="15px" />
+                  ) : (
+                    <Icon name="ellipses" fill="warning" width="15px" />
+                  ),
                   VALID: <Icon name="ellipses" fill="warning" width="15px" />,
                   INVALID: <Icon name="exclamation" fill="error" width="15px" />,
                   PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
