@@ -11,7 +11,6 @@ export default (queries: Array<{ query: any; variables?: { [key: string]: any } 
   const { GATEWAY_API_ROOT } = getConfig();
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
     link: createHttpLink({
       uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
       fetch: fetch,

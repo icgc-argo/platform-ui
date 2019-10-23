@@ -115,7 +115,6 @@ const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: a
   const { GATEWAY_API_ROOT } = getConfig();
   const createNewClient = () =>
     new ApolloClient({
-      // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
       link: createUploadLink({
         uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
         fetch: fetch,
