@@ -128,14 +128,14 @@ export default function ProgramIDRegistration() {
           registrationId: get(clinicalRegistration, 'id'),
         },
       });
+      await refetch();
     } catch (err) {
+      await refetch();
       toaster.addToast({
         variant: 'ERROR',
         title: 'Something went wrong',
         content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
       });
-    } finally {
-      await refetch();
     }
   };
 
