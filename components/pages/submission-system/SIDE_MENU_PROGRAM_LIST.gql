@@ -1,4 +1,4 @@
-#import "./SIDE_MENU_PROGRA,_FRAGMENT.gql"
+#import "./SIDE_MENU_PROGRAM_FRAGMENT.gql"
 
 query SIDE_MENU_PROGRAM_LIST {
   programs {
