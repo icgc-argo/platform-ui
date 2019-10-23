@@ -54,6 +54,9 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     updated: [],
     ...(gqlFile.stats || {}),
   };
+  const hasSchemaError = !!gqlFile.schemaErrors.length;
+  const hasDataError = !!gqlFile.dataErrors.length;
+  const hasUpdate = !!stats.updated.length;
   return {
     stats,
     createdAt: gqlFile.createdAt,
@@ -67,10 +70,10 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     records: gqlFile.records,
     recordsCount: gqlFile.records.length,
     status: isPendingApproval
-      ? stats.updated.length
+      ? hasUpdate
         ? 'UPDATE'
         : 'SUCCESS'
-      : !!gqlFile.dataErrors.length
+      : hasSchemaError || hasDataError
       ? 'ERROR'
       : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'

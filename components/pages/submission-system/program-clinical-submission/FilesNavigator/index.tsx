@@ -77,17 +77,14 @@ export default ({
               >
                 {fileState.displayName}
               </div>
-              {!!fileState.recordsCount && (
-                <>
-                  {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
-                    <VerticalTabs.Tag variant={fileState.status}>
-                      {fileState.recordsCount}
-                    </VerticalTabs.Tag>
-                  )}
-                  {fileState.status === 'ERROR' && (
-                    <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-                  )}
-                </>
+              {!!fileState.recordsCount &&
+                (fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                  <VerticalTabs.Tag variant={fileState.status}>
+                    {fileState.recordsCount}
+                  </VerticalTabs.Tag>
+                ))}
+              {fileState.status === 'ERROR' && (
+                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
               )}
             </VerticalTabs.Item>
           ))}
