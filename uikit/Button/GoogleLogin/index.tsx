@@ -15,10 +15,16 @@ const StyledLink = styled('a')`
   display: inline-block;
 `;
 
-const GoogleLogin: React.ComponentType<{ id?: string; link: string }> = ({ link, id }) => {
+const GoogleLogin: React.ComponentType<{
+  id?: string;
+  link: string;
+  className?: string;
+  redirectPath?: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}> = ({ link, id, className, onClick }) => {
   const theme = useTheme();
   return (
-    <StyledLink id={id} href={link}>
+    <StyledLink id={id} href={link} className={className} onClick={onClick}>
       <Button
         css={css`
           padding: 10px 13px;

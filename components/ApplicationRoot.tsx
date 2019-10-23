@@ -15,6 +15,8 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 
+import useAuthContext from 'global/hooks/useAuthContext';
+
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
 
@@ -105,6 +107,26 @@ function PersistentStateProvider({ children }) {
   );
 }
 
+function MyApolloProvider({ children, cache }) {
+  const { GATEWAY_API_ROOT } = getConfig();
+  const { token } = useAuthContext();
+
+  const apolloClient = new ApolloClient({
+    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
+    link: createUploadLink({
+      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+      fetch: fetch,
+      headers: token
+        ? {
+            authorization: `Bearer ${token}`,
+          }
+        : {},
+    }),
+    cache: createInMemoryCache().restore(cache),
+  });
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+}
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -116,20 +138,6 @@ export default function ApplicationRoot({
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
 }) {
-  const { GATEWAY_API_ROOT } = getConfig();
-  const apolloClient = new ApolloClient({
-    // $FlowFixMe apollo-client and apollo-link-http have a type conflict in their typing
-    link: createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-      fetch: fetch,
-      headers: egoJwt
-        ? {
-            authorization: `Bearer ${egoJwt}`,
-          }
-        : {},
-    }),
-    cache: createInMemoryCache().restore(apolloCache),
-  });
   return (
     <>
       <style>
@@ -153,7 +161,7 @@ export default function ApplicationRoot({
       </style>
       <Head />
       <AuthProvider egoJwt={egoJwt}>
-        <ApolloProvider client={apolloClient}>
+        <MyApolloProvider cache={apolloCache}>
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
@@ -161,7 +169,7 @@ export default function ApplicationRoot({
               </ToastProvider>
             </ThemeProvider>
           </PageContext.Provider>
-        </ApolloProvider>
+        </MyApolloProvider>
       </AuthProvider>
     </>
   );

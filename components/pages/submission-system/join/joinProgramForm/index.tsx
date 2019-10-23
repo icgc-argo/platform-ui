@@ -1,10 +1,8 @@
 import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import programsImage from 'static/programs.svg';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import Button from 'uikit/Button';
-import Container from 'uikit/Container';
 import { Input } from 'uikit/form';
 import { INPUT_SIZES } from 'uikit/form/common';
 import FormControl from 'uikit/form/FormControl';
@@ -13,65 +11,6 @@ import InputLabel from 'uikit/form/InputLabel';
 import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import Typography from 'uikit/Typography';
 import schema from './validation';
-
-const FormContainer = styled(Container)`
-  padding: 30px;
-  max-width: 600px;
-`;
-
-const InfoCard = styled(Container)`
-  padding: 16px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-`;
-
-const ProgramInfoCard = ({ programName, userRole }) => (
-  <InfoCard>
-    <img
-      alt=""
-      src={programsImage}
-      css={css`
-        margin-right: 16px;
-      `}
-    />
-    <div>
-      <Row nogutter>
-        <Typography
-          variant="label"
-          color="primary"
-          bold
-          css={css`
-            width: 150px;
-          `}
-        >
-          Program Name:
-        </Typography>
-        <Typography variant="label" color="secondary" bold>
-          {programName}
-        </Typography>
-      </Row>
-      <Row nogutter>
-        <Typography
-          variant="label"
-          color="primary"
-          bold
-          css={css`
-            width: 150px;
-          `}
-        >
-          Role:
-        </Typography>
-        <Typography variant="label" color="secondary" bold>
-          {userRole}
-        </Typography>
-      </Row>
-    </div>
-  </InfoCard>
-);
-
-const Form = () => {};
 
 const JoinProgramForm = ({
   programName,
@@ -101,26 +40,7 @@ const JoinProgramForm = ({
   };
 
   return (
-    <FormContainer>
-      <Row nogutter>
-        <Typography
-          variant="title"
-          color="primary"
-          css={css`
-            margin: 0px;
-          `}
-        >
-          Join a Program
-        </Typography>
-      </Row>
-      <Row nogutter>
-        <Typography variant="paragraph">
-          You have been invited to join the following program, but first we need a few details.
-        </Typography>
-      </Row>
-      <Row nogutter>
-        <ProgramInfoCard programName={programName} userRole={userRole} />
-      </Row>
+    <div>
       <Row
         nogutter
         css={css`
@@ -142,11 +62,12 @@ const JoinProgramForm = ({
           >
             <FormControl required error={!!errors.institutions}>
               <Row nogutter>
-                <Col sm={3} className="pt">
+                <Col sm={4} className="pt">
                   <InputLabel>Institution</InputLabel>
                 </Col>
                 <Col>
                   <MultiSelect
+                    name="institution"
                     size={INPUT_SIZES.LG}
                     aria-label="institution-input"
                     allowNew
@@ -167,10 +88,10 @@ const JoinProgramForm = ({
               </Row>
             </FormControl>
             <Row nogutter>
-              <Col sm={6}>
+              <Col>
                 <FormControl required error={!!errors.piFirstName}>
                   <Row nogutter>
-                    <Col sm={6} className="pt">
+                    <Col sm={4} className="pt">
                       <InputLabel>PI First Name</InputLabel>
                     </Col>
                     <Col>
@@ -188,25 +109,18 @@ const JoinProgramForm = ({
                   </Row>
                 </FormControl>
               </Col>
-              <Col sm={6}>
+            </Row>
+            <Row>
+              <Col>
                 <FormControl required error={!!errors.piLastName}>
-                  <Row
-                    nogutter
-                    style={{
-                      ...(screenSize === 'xs'
-                        ? {}
-                        : {
-                            paddingLeft: 10,
-                          }),
-                    }}
-                  >
-                    <Col sm={6} className="pt">
+                  <Row nogutter>
+                    <Col sm={4} className="pt">
                       <InputLabel>PI Last Name</InputLabel>
                     </Col>
                     <Col>
                       <Input
                         size={INPUT_SIZES.LG}
-                        aria-label="first-last-input"
+                        aria-label="last-name-input"
                         value={data.piLastName}
                         onBlur={handleBlur('piLastName')}
                         onChange={handleChange('piLastName')}
@@ -218,9 +132,9 @@ const JoinProgramForm = ({
               </Col>
             </Row>
 
-            <FormControl required error={!!errors.department}>
+            <FormControl error={!!errors.department}>
               <Row nogutter>
-                <Col sm={3} className="pt">
+                <Col sm={4} className="pt">
                   <InputLabel>Department</InputLabel>
                 </Col>
                 <Col>
@@ -238,10 +152,19 @@ const JoinProgramForm = ({
           </div>
         )}
       />
-      <Row nogutter justify="end">
-        <Button onClick={submitForm}>Join now</Button>
+      <Row
+        nogutter
+        justify="end"
+        css={css`
+          padding-top: 20px;
+          margin-bottom: 13px;
+        `}
+      >
+        <Button onClick={submitForm} id="join-now">
+          Join now
+        </Button>
       </Row>
-    </FormContainer>
+    </div>
   );
 };
 
