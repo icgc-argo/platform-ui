@@ -20,7 +20,7 @@ function Banner({
   content?: React.ReactNode;
   variant?: keyof typeof BANNER_VARIANTS;
   size?: keyof typeof BANNER_SIZE;
-} & React.ComponentProps<typeof Notification>) {
+} & Exclude<React.ComponentProps<typeof Notification>, 'title'>) {
   return (
     <Notification
       noShadow
