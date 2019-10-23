@@ -8,27 +8,30 @@ import Notification, {
 
 export const BANNER_VARIANTS = NOTIFICATION_VARIANTS;
 export const BANNER_SIZE = NOTIFICATION_SIZES;
-const Banner = ({
+
+function Banner({
   title,
   content,
   variant,
   size,
-  ...props
+  ...otherProps
 }: {
   title?: React.ReactNode;
   content?: React.ReactNode;
   variant?: keyof typeof BANNER_VARIANTS;
   size?: keyof typeof BANNER_SIZE;
-}) => (
-  <Notification
-    noShadow
-    interactionType={NOTIFICATION_INTERACTION.NONE}
-    title={title}
-    content={content}
-    variant={variant}
-    size={size}
-    {...props}
-  />
-);
+} & React.ComponentProps<typeof Notification>) {
+  return (
+    <Notification
+      noShadow
+      interactionType={NOTIFICATION_INTERACTION.NONE}
+      title={title}
+      content={content}
+      variant={variant}
+      size={size}
+      {...otherProps}
+    />
+  );
+}
 
 export default Banner;
