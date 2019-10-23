@@ -18,6 +18,8 @@ import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 
+export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
+
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { EGO_URL } = getConfig().publicRuntimeConfig;
 
@@ -70,7 +72,10 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
       const egoToken = await updateToken(); // Side effect
       if (egoToken) {
-        window.localStorage.setItem('justJoinedProgram', joinProgramInvite.program.shortName);
+        window.localStorage.setItem(
+          JUST_JOINED_PROGRAM_STORAGE_KEY,
+          joinProgramInvite.program.shortName,
+        );
         router.push(
           PROGRAM_DASHBOARD_PATH.replace(
             PROGRAM_SHORT_NAME_PATH,

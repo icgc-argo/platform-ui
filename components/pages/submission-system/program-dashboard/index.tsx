@@ -5,6 +5,7 @@ import TitleBar from 'uikit/TitleBar';
 import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
+import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 
 export default function ProgramDashboard() {
   const {
@@ -16,11 +17,10 @@ export default function ProgramDashboard() {
   React.useEffect(() => {
     // to prevent server side rendering mismatch
     if (typeof window !== 'undefined') {
-      const justJoinedProgram = window.localStorage.getItem('justJoinedProgram');
+      const justJoinedProgram = window.localStorage.getItem(JUST_JOINED_PROGRAM_STORAGE_KEY);
       if (justJoinedProgram === programShortName) {
         setJustJoined(true);
-        console.log('justJoined');
-        window.localStorage.removeItem('justJoinedProgram');
+        window.localStorage.removeItem(JUST_JOINED_PROGRAM_STORAGE_KEY);
       }
     }
   });
