@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/react-hooks';
-import { PROGRAM_JOIN_DETAILS_PATH } from 'global/constants/pages';
+import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
@@ -52,7 +52,7 @@ export default () => {
           <GoogleLogin
             id="google-login"
             link={EGO_URL}
-            redirectPath={PROGRAM_JOIN_DETAILS_PATH.replace('[inviteId]', inviteId)}
+            redirectPath={PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId)}
           />
         </div>
       </JoinProgramLayout>
