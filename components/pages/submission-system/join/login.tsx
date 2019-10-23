@@ -56,7 +56,7 @@ export default () => {
             onClick={() => {
               window.localStorage.setItem(
                 LOCAL_STORAGE_REDIRECT_KEY,
-                PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId),
+                PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
               );
             }}
           />

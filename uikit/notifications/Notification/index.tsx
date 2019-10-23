@@ -68,6 +68,17 @@ const Notification = ({
   }) => {},
   noShadow = false,
   ...otherProps
+}: {
+  variant?: keyof typeof NOTIFICATION_VARIANTS;
+  size?: keyof typeof NOTIFICATION_SIZES;
+  interactionType?: keyof typeof NOTIFICATION_INTERACTION;
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  actionText?: string;
+  dismissText?: string;
+  icon?: React.ReactNode;
+  onInteraction?: ({ type, event }) => void;
+  noShadow?: boolean;
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });

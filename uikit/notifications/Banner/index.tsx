@@ -15,12 +15,12 @@ function Banner({
   variant,
   size,
   ...otherProps
-}: {
+}: React.ComponentProps<typeof Notification> & {
   title?: React.ReactNode;
   content?: React.ReactNode;
   variant?: keyof typeof BANNER_VARIANTS;
   size?: keyof typeof BANNER_SIZE;
-} & Exclude<React.ComponentProps<typeof Notification>, 'title'>) {
+}) {
   return (
     <Notification
       noShadow
