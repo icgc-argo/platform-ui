@@ -15,7 +15,6 @@ import getConfig from 'next/config';
 
 export enum InviteState {
   NotFound,
-  IncorrectEmail,
   Expired,
   Accepted,
   Pending,
@@ -36,11 +35,8 @@ export default function JoinProgramLayout({
   loading: boolean;
   notFound: boolean;
 }) {
-  const router = useRouter();
   const { EGO_URL } = getConfig().publicRuntimeConfig;
   let inviteState: InviteState = InviteState.Loading;
-
-  const { data: userModel } = useAuthContext();
 
   if (notFound) {
     inviteState = InviteState.NotFound;
@@ -52,13 +48,7 @@ export default function JoinProgramLayout({
     inviteState = InviteState.Revoked;
   } else if (joinProgramInvite.status == 'ACCEPTED') {
     inviteState = InviteState.Accepted;
-  } else if (
-    !loading &&
-    get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email')
-  ) {
-    inviteState = InviteState.IncorrectEmail;
   }
-
   return (
     <div
       css={css`
@@ -122,16 +112,6 @@ export default function JoinProgramLayout({
           >
             Join an ICGC ARGO Program
           </Typography>
-          {inviteState == InviteState.IncorrectEmail && (
-            <Banner
-              title={'Incorrect email address'}
-              variant={BANNER_VARIANTS.ERROR}
-              content="Please try again using the same email address to which your program invitation was sent."
-              css={css`
-                margin-bottom: 30px;
-              `}
-            />
-          )}
           {inviteState == InviteState.NotFound && (
             <Banner
               title={'Inivitation not found'}

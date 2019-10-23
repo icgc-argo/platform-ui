@@ -1,9 +1,5 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  PROGRAM_DASHBOARD_PATH,
-  PROGRAM_JOIN_DETAILS_PATH,
-  PROGRAM_SHORT_NAME_PATH,
-} from 'global/constants/pages';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
 import get from 'lodash/get';
@@ -13,8 +9,6 @@ import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
 import { css } from 'uikit';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
-import DnaLoader from 'uikit/DnaLoader';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Typography from 'uikit/Typography';
@@ -23,7 +17,6 @@ import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
-import usePersistentState from 'global/hooks/usePersistentContext';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { EGO_URL } = getConfig().publicRuntimeConfig;
@@ -35,7 +28,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const toaster = useToaster();
 
-  const { updateToken } = useAuthContext();
+  const { updateToken, data: userModel } = useAuthContext();
 
   const [notFound, setNotFound] = React.useState(false);
 
@@ -58,6 +51,9 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
       }
     },
   });
+
+  const incorrectEmail =
+    !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
 
   const handleSubmit = async validData => {
     try {
@@ -103,19 +99,34 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
         loading={loading}
         notFound={notFound}
       >
-        <Typography
-          css={css`
-            margin-bottom: 27px;
-          `}
-        >
-          Please provide the following basic details
-        </Typography>
-        <JoinProgramForm
-          onSubmit={handleSubmit}
-          programName={get(joinProgramInvite, 'program.name')}
-          userRole={get(joinProgramInvite, 'user.role')}
-          institutions={institutions}
-        />
+        {incorrectEmail ? (
+          <>
+            <Banner
+              title={'Incorrect email address'}
+              variant={BANNER_VARIANTS.ERROR}
+              content="Please try again using the same email address to which your program invitation was sent."
+              css={css`
+                margin-bottom: 30px;
+              `}
+            />
+          </>
+        ) : (
+          <>
+            <Typography
+              css={css`
+                margin-bottom: 27px;
+              `}
+            >
+              Please provide the following basic details
+            </Typography>
+            <JoinProgramForm
+              onSubmit={handleSubmit}
+              programName={get(joinProgramInvite, 'program.name')}
+              userRole={get(joinProgramInvite, 'user.role')}
+              institutions={institutions}
+            />
+          </>
+        )}
       </JoinProgramLayout>
     </SubmissionLayout>
   );

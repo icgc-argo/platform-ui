@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/react-hooks';
 import { PROGRAM_JOIN_DETAILS_PATH } from 'global/constants/pages';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
@@ -9,9 +8,10 @@ import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
+import { getConfig } from 'global/config';
 
 export default () => {
-  const { EGO_URL } = getConfig().publicRuntimeConfig;
+  const { EGO_URL } = getConfig();
 
   const router = useRouter();
   const { inviteId } = router.query;
@@ -50,6 +50,7 @@ export default () => {
           `}
         >
           <GoogleLogin
+            id="google-login"
             link={EGO_URL}
             redirectPath={PROGRAM_JOIN_DETAILS_PATH.replace('[inviteId]', inviteId)}
           />

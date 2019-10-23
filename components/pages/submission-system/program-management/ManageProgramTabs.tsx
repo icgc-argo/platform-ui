@@ -202,6 +202,7 @@ export default () => {
         >
           {activeTab === TABS.USERS && (
             <Button
+              id="add-users"
               css={css`
                 margin: 9px 0;
               `}

@@ -122,6 +122,7 @@ const AddUserModal = ({
   return (
     <Modal
       title="Add Users"
+      actionButtonId="modal-add-users"
       actionButtonText="Add Users"
       cancelText="Cancel"
       onActionClick={() => submitForm()}

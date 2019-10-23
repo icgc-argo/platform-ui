@@ -67,6 +67,7 @@ const JoinProgramForm = ({
                 </Col>
                 <Col>
                   <MultiSelect
+                    name="institution"
                     size={INPUT_SIZES.LG}
                     aria-label="institution-input"
                     allowNew
@@ -119,7 +120,7 @@ const JoinProgramForm = ({
                     <Col>
                       <Input
                         size={INPUT_SIZES.LG}
-                        aria-label="first-last-input"
+                        aria-label="last-name-input"
                         value={data.piLastName}
                         onBlur={handleBlur('piLastName')}
                         onChange={handleChange('piLastName')}
@@ -159,7 +160,9 @@ const JoinProgramForm = ({
           margin-bottom: 13px;
         `}
       >
-        <Button onClick={submitForm}>Join now</Button>
+        <Button onClick={submitForm} id="join-now">
+          Join now
+        </Button>
       </Row>
     </div>
   );
