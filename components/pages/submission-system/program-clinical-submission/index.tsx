@@ -87,7 +87,6 @@ export default function ProgramClinicalSubmission() {
   const [pageLoaderShown, setPageLoaderShown] = React.useState<boolean>(false);
   const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
-  const [mutationDisabled, setMutationDisabled] = React.useState(false);
   const {
     signOffModalShown,
     getUserApproval,
@@ -111,6 +110,7 @@ export default function ProgramClinicalSubmission() {
     data = placeHolderResponse,
     loading: loadingClinicalSubmission,
     updateQuery: updateClinicalSubmissionQuery,
+    refetch,
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
@@ -186,6 +186,14 @@ export default function ProgramClinicalSubmission() {
     });
   };
 
+  const showReloadToast = () => {
+    toaster.addToast({
+      variant: 'ERROR',
+      title: 'Something went wrong',
+      content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
+    });
+  };
+
   const handleSubmissionValidation = async () => {
     try {
       await validateSubmission({
@@ -195,14 +203,8 @@ export default function ProgramClinicalSubmission() {
         },
       });
     } catch (err) {
-      toaster.addToast({
-        title: 'We could not validate your submission',
-        content:
-          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-        variant: 'ERROR',
-        timeout: Infinity,
-      });
-      setMutationDisabled(true);
+      await refetch();
+      showReloadToast();
     }
   };
 
@@ -223,14 +225,8 @@ export default function ProgramClinicalSubmission() {
         }
       }
     } catch (err) {
-      toaster.addToast({
-        title: 'Your submission could not be signed off on',
-        content:
-          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-        variant: 'ERROR',
-        timeout: Infinity,
-      });
-      setMutationDisabled(true);
+      await refetch();
+      showReloadToast();
     }
     setPageLoaderShown(false);
   };
@@ -347,9 +343,9 @@ export default function ProgramClinicalSubmission() {
               clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
                 ({ clinicalType }) => clinicalType,
               )}
-              signOffEnabled={isReadyForSignoff && !mutationDisabled}
-              validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
-              uploadEnabled={!mutationDisabled}
+              uploadEnabled
+              signOffEnabled={isReadyForSignoff}
+              validationEnabled={isReadyForValidation && !hasDataError}
               onUploadFileSelect={handleSubmissionFilesUpload}
               onValidateClick={handleSubmissionValidation}
               onSignOffClick={handleSignOff}
