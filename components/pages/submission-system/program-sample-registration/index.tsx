@@ -26,6 +26,7 @@ import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
+import { exportToTsv } from 'global/utils/common';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -219,7 +220,7 @@ export default function ProgramIDRegistration() {
     align-items: center;
     margin-bottom: 8px;
   `;
-
+  console.log('file recorsd', fileRecords);
   return (
     <SubmissionLayout
       contentHeader={
@@ -348,7 +349,12 @@ export default function ProgramIDRegistration() {
               errors={fileErrors}
               count={fileErrors.length}
               onClear={handleClearClick}
-              onDownload={() => console.log('download')}
+              onDownload={() =>
+                exportToTsv(fileErrors, {
+                  exclude: ['__typename'],
+                  fileName: 'error_report.tsv',
+                })
+              }
             />
           ) : (
             <NoDataMessage loading={loading} />

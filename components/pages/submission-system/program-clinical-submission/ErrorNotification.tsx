@@ -4,15 +4,9 @@ import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import { ClinicalSubmissionError } from './types';
-import { exportToTsv } from 'global/utils/common';
+import { exportToTsv, insertAt } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from '../common';
-
-const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
-  ...arr.slice(0, i),
-  element,
-  ...arr.slice(i, arr.length),
-];
 
 export default ({
   title,
