@@ -26,6 +26,7 @@ import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
+import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
@@ -102,6 +103,8 @@ export default function ProgramClinicalSubmission() {
       fileErrors: [],
       id: '',
       state: 'OPEN',
+      updatedAt: '',
+      updatedBy: '',
       __typename: 'ClinicalSubmissionData',
     },
   };
@@ -382,7 +385,9 @@ export default function ProgramClinicalSubmission() {
                 Submission Summary
               </Typography>
               <Typography variant="data" color="black" as="div">
-                Signed off on <strong>{'SOME_DATE'}</strong> by <strong>{'SOMEONE'}</strong>
+                Signed off on{' '}
+                <strong>{displayDateAndTime(data.clinicalSubmissions.updatedAt)}</strong> by{' '}
+                <strong>{data.clinicalSubmissions.updatedBy}</strong>
               </Typography>
             </div>
             <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />

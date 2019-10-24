@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { displayDateAndTime } from 'global/utils/common';
 import urlJoin from 'url-join';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
@@ -104,7 +104,7 @@ export const SubmissionInfoArea = ({
         font-weight: 600;
       `}
     >
-      {format(new Date(createdAt), 'MMMM D, YYYY [at] h:mm A ')}
+      {displayDateAndTime(createdAt)}{' '}
     </Typography>
     by{' '}
     <Typography

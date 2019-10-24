@@ -2,6 +2,8 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
   programShortName # this is the ID
   state
   version
+  updatedAt
+  updatedBy
   clinicalEntities {
     clinicalType
     batchName
