@@ -9,6 +9,7 @@ export const StyledInput = styled<'input', { inputSize: string }>('input')`
   outline: none;
   flex: 1;
   width: 100%;
+  min-width: 0;
   background-color: inherit;
   color: inherit;
   font-size: inherit;
