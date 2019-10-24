@@ -39,8 +39,10 @@ export default ({
   onCloseClick,
   onActionClick,
   onCancelClick,
+  hasUpdate,
 }: {
   clinicalSubmissions: GqlClinicalSubmissionData;
+  hasUpdate: boolean;
   onCloseClick: React.ComponentProps<typeof Modal>['onCloseClick'];
   onActionClick: React.ComponentProps<typeof Modal>['onActionClick'];
   onCancelClick: React.ComponentProps<typeof Modal>['onCancelClick'];
@@ -48,15 +50,23 @@ export default ({
   return (
     <Modal
       actionButtonText="yes, sign off"
-      title="Are you sure you want to sign-off your clinical submission?"
+      title={
+        <span
+          css={css`
+            padding-right: 20px;
+          `}
+        >
+          Are you sure you want to sign-off your clinical submission?
+        </span>
+      }
       onCloseClick={onCloseClick}
       onActionClick={onActionClick}
       onCancelClick={onCancelClick}
     >
       <div>
-        The DCC will be notified of the following updates to previously released data and your
-        submission will be locked. Once your submission is approved by the DCC, your clinical data
-        will be placed in a queue for the next release.
+        {hasUpdate
+          ? 'The DCC will be notified of the following updates to previously released data and your submission will be locked. Once your submission is approved by the DCC, your clinical data will be placed in a queue for the next release.'
+          : 'The clinical data in your workspace will be placed in a queue for the next release.'}
       </div>
       <div
         css={css`

@@ -154,6 +154,9 @@ export default function ProgramClinicalSubmission() {
   const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
+  const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
+    clinicalEntity => !!clinicalEntity.dataUpdates.length,
+  );
 
   const onErrorClose: (
     index: number,
@@ -222,13 +225,15 @@ export default function ProgramClinicalSubmission() {
         });
         if (newData.clinicalSubmissions.state === null) {
           router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+        } else {
+          setPageLoaderShown(false);
         }
       }
     } catch (err) {
       await refetch();
       showReloadToast();
+      setPageLoaderShown(false);
     }
-    setPageLoaderShown(false);
   };
 
   return (
@@ -236,6 +241,7 @@ export default function ProgramClinicalSubmission() {
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal
+            hasUpdate={hasUpdate}
             clinicalSubmissions={data.clinicalSubmissions}
             onActionClick={onSignOffApproved}
             onCloseClick={onSignOffCanceled}
