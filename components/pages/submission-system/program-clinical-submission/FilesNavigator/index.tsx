@@ -7,7 +7,7 @@ import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
 import orderBy from 'lodash/orderBy';
@@ -42,6 +42,8 @@ export default ({
     clearDataError(selectedFile);
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
+
+  console.log('schema error', selectedFile.schemaErrors);
   return !selectedFile ? (
     <NoData
       css={css`

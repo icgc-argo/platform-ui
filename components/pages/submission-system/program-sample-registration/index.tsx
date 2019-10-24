@@ -27,6 +27,7 @@ import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import { exportToTsv } from 'global/utils/common';
+import ErrorNotification from '../ErrorNotification';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -220,7 +221,7 @@ export default function ProgramIDRegistration() {
     align-items: center;
     margin-bottom: 8px;
   `;
-  console.log('file recorsd', fileRecords);
+  console.log('file recorsd', fileErrors);
   return (
     <SubmissionLayout
       contentHeader={
@@ -345,15 +346,12 @@ export default function ProgramIDRegistration() {
               />
             </>
           ) : fileErrors.length > 0 ? (
-            <ErrorTable
+            <ErrorNotification
+              onClearClick={handleClearClick}
+              title={`${fileErrors.length} errors found in uploaded file`}
               errors={fileErrors}
-              count={fileErrors.length}
-              onClear={handleClearClick}
-              onDownload={() =>
-                exportToTsv(fileErrors, {
-                  exclude: ['__typename'],
-                  fileName: 'error_report.tsv',
-                })
+              subtitle={
+                'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
             />
           ) : (
