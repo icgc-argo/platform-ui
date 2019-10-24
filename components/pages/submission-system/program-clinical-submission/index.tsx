@@ -54,6 +54,9 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     updated: [],
     ...(gqlFile.stats || {}),
   };
+  const hasSchemaError = !!gqlFile.schemaErrors.length;
+  const hasDataError = !!gqlFile.dataErrors.length;
+  const hasUpdate = !!stats.updated.length;
   return {
     stats,
     createdAt: gqlFile.createdAt,
@@ -67,10 +70,10 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     records: gqlFile.records,
     recordsCount: gqlFile.records.length,
     status: isPendingApproval
-      ? stats.updated.length
+      ? hasUpdate
         ? 'UPDATE'
         : 'SUCCESS'
-      : !!gqlFile.dataErrors.length
+      : hasSchemaError || hasDataError
       ? 'ERROR'
       : !!gqlFile.records && isSubmissionValidated
       ? 'SUCCESS'
@@ -84,7 +87,6 @@ export default function ProgramClinicalSubmission() {
   const [pageLoaderShown, setPageLoaderShown] = React.useState<boolean>(false);
   const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
-  const [mutationDisabled, setMutationDisabled] = React.useState(false);
   const {
     signOffModalShown,
     getUserApproval,
@@ -108,6 +110,7 @@ export default function ProgramClinicalSubmission() {
     data = placeHolderResponse,
     loading: loadingClinicalSubmission,
     updateQuery: updateClinicalSubmissionQuery,
+    refetch,
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
@@ -151,6 +154,9 @@ export default function ProgramClinicalSubmission() {
   const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
+  const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
+    clinicalEntity => !!clinicalEntity.dataUpdates.length,
+  );
 
   const onErrorClose: (
     index: number,
@@ -183,6 +189,14 @@ export default function ProgramClinicalSubmission() {
     });
   };
 
+  const showReloadToast = () => {
+    toaster.addToast({
+      variant: 'ERROR',
+      title: 'Something went wrong',
+      content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
+    });
+  };
+
   const handleSubmissionValidation = async () => {
     try {
       await validateSubmission({
@@ -192,14 +206,8 @@ export default function ProgramClinicalSubmission() {
         },
       });
     } catch (err) {
-      toaster.addToast({
-        title: 'We could not validate your submission',
-        content:
-          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-        variant: 'ERROR',
-        timeout: Infinity,
-      });
-      setMutationDisabled(true);
+      await refetch();
+      showReloadToast();
     }
   };
 
@@ -217,19 +225,15 @@ export default function ProgramClinicalSubmission() {
         });
         if (newData.clinicalSubmissions.state === null) {
           router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+        } else {
+          setPageLoaderShown(false);
         }
       }
     } catch (err) {
-      toaster.addToast({
-        title: 'Your submission could not be signed off on',
-        content:
-          'Someone else might be working on the same submission. Please refresh your browser to see the latest version of this submission. \nIf the issue continues, please contact us.',
-        variant: 'ERROR',
-        timeout: Infinity,
-      });
-      setMutationDisabled(true);
+      await refetch();
+      showReloadToast();
+      setPageLoaderShown(false);
     }
-    setPageLoaderShown(false);
   };
 
   return (
@@ -237,6 +241,7 @@ export default function ProgramClinicalSubmission() {
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal
+            hasUpdate={hasUpdate}
             clinicalSubmissions={data.clinicalSubmissions}
             onActionClick={onSignOffApproved}
             onCloseClick={onSignOffCanceled}
@@ -344,9 +349,9 @@ export default function ProgramClinicalSubmission() {
               clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
                 ({ clinicalType }) => clinicalType,
               )}
-              signOffEnabled={isReadyForSignoff && !mutationDisabled}
-              validationEnabled={isReadyForValidation && !hasDataError && !mutationDisabled}
-              uploadEnabled={!mutationDisabled}
+              uploadEnabled
+              signOffEnabled={isReadyForSignoff}
+              validationEnabled={isReadyForValidation && !hasDataError}
               onUploadFileSelect={handleSubmissionFilesUpload}
               onValidateClick={handleSubmissionValidation}
               onSignOffClick={handleSignOff}
@@ -445,8 +450,8 @@ export default function ProgramClinicalSubmission() {
                     ...previous.clinicalSubmissions,
                     clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
                       ...entity,
-                      dataErrors:
-                        file.clinicalType === entity.clinicalType ? [] : entity.dataErrors,
+                      schemaErrors:
+                        file.clinicalType === entity.clinicalType ? [] : entity.schemaErrors,
                     })),
                   },
                 }));

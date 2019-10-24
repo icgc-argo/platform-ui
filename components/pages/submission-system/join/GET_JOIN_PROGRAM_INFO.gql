@@ -6,7 +6,9 @@ query GET_JOIN_PROGRAM_INFO($inviteId: ID!) {
     }
     user {
       role
+      email
     }
+    status
   }
   programOptions {
     institutions

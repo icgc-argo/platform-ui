@@ -1,15 +1,12 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
     "storybook": "NODE_PATH=./ start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
-    "e2e": "./e2e/scripts/interactive.js",
-    "e2e-dev": "nightwatch -c e2e/conf/dev.js; exit 0",
-    "e2e-local": "./e2e/scripts/local.runner.js -c e2e/conf/local.js; exit 0",
     "gitmoji-config": "gitmoji -g",
     "commit": "gitmoji -c",
     "generate-fragment-types": "ts-node ./scripts/tsconfig.json ./scripts/generateFragmentTypes.ts",

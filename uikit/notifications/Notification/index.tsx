@@ -40,7 +40,7 @@ const DefaultIcon = ({ variant, size }) => {
     [NOTIFICATION_VARIANTS.INFO]: 'info' as UikitIconNames,
     [NOTIFICATION_VARIANTS.SUCCESS]: 'success' as UikitIconNames,
     [NOTIFICATION_VARIANTS.WARNING]: 'warning' as UikitIconNames,
-    [NOTIFICATION_VARIANTS.ERROR]: 'times_circle' as UikitIconNames,
+    [NOTIFICATION_VARIANTS.ERROR]: 'warning' as UikitIconNames,
   }[variant];
   const width = {
     [NOTIFICATION_SIZES.MD]: '25px',
@@ -68,6 +68,17 @@ const Notification = ({
   }) => {},
   noShadow = false,
   ...otherProps
+}: {
+  variant?: keyof typeof NOTIFICATION_VARIANTS;
+  size?: keyof typeof NOTIFICATION_SIZES;
+  interactionType?: keyof typeof NOTIFICATION_INTERACTION;
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  actionText?: string;
+  dismissText?: string;
+  icon?: React.ReactNode;
+  onInteraction?: ({ type, event }) => void;
+  noShadow?: boolean;
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });

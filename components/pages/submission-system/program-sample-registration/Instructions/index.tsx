@@ -41,7 +41,7 @@ function Instructions({
   `;
 
   const downloadTemplate = () => {
-    downloadTsvFileTemplate('registration.tsv');
+    downloadTsvFileTemplate('sample_registration.tsv');
   };
 
   const [showRegisterSamplesModal, setShowRegisterSamplesModal] = React.useState(false);

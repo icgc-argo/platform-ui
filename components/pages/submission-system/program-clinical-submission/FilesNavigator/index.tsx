@@ -9,6 +9,7 @@ import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
 import ErrorNotification from '../ErrorNotification';
 import Button from 'uikit/Button';
+import noDataSvg from 'static/illustration_heart.svg';
 
 export default ({
   fileStates,
@@ -76,17 +77,14 @@ export default ({
               >
                 {fileState.displayName}
               </div>
-              {!!fileState.recordsCount && (
-                <>
-                  {fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
-                    <VerticalTabs.Tag variant={fileState.status}>
-                      {fileState.recordsCount}
-                    </VerticalTabs.Tag>
-                  )}
-                  {fileState.status === 'ERROR' && (
-                    <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-                  )}
-                </>
+              {!!fileState.recordsCount &&
+                (fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                  <VerticalTabs.Tag variant={fileState.status}>
+                    {fileState.recordsCount}
+                  </VerticalTabs.Tag>
+                ))}
+              {fileState.status === 'ERROR' && (
+                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
               )}
             </VerticalTabs.Item>
           ))}
@@ -117,13 +115,15 @@ export default ({
                 padding: 8px;
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
               `}
             >
               <Typography
-                variant="subtitle"
+                variant="subtitle2"
                 color="primary"
-                as="div"
+                as="h2"
                 css={css`
+                  margin: 0px;
                   margin-left: 10px;
                 `}
               >
@@ -146,7 +146,12 @@ export default ({
             />
           </>
         ) : (
-          <NoData />
+          <NoData
+            title="You do not have any data uploaded."
+            subtitle="Follow the instructions above to get started."
+          >
+            <img alt="no data found" src={noDataSvg} />
+          </NoData>
         )}
       </Col>
     </div>

@@ -66,6 +66,7 @@ const ModalComponent: React.ComponentType<{
   };
   buttonSize?: ButtonSize;
   actionButtonText?: React.ReactNode;
+  actionButtonId?: string;
   actionDisabled?: boolean;
   cancelText?: React.ReactNode;
   onActionClick?: React.ComponentProps<typeof Button>['onClick'];
@@ -78,6 +79,7 @@ const ModalComponent: React.ComponentType<{
     fill: null,
   },
   buttonSize = BUTTON_SIZES.MD,
+  actionButtonId,
   actionButtonText = 'Apply',
   cancelText = 'Cancel',
   onActionClick = () => {},
@@ -144,6 +146,7 @@ const ModalComponent: React.ComponentType<{
     <ModalFooter>
       <ButtonContainer>
         <Button
+          id={actionButtonId}
           size={buttonSize || BUTTON_SIZES.MD}
           disabled={actionDisabled}
           onClick={onActionClick}

@@ -46,29 +46,27 @@ export function AuthProvider({
     setToken(null);
     router.push('/');
   };
+
   React.useEffect(() => {
-    const existingToken = Cookies.get(EGO_JWT_KEY);
-    if (existingToken) {
-      setToken(existingToken);
-    } else {
-      fetch(egoLoginUrl, {
-        credentials: 'include',
-        headers: { accept: '*/*' },
-        body: null,
-        method: 'GET',
-        mode: 'cors',
+    fetch(egoLoginUrl, {
+      credentials: 'include',
+      headers: { accept: '*/*' },
+      body: null,
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(res => res.text())
+      .then(egoToken => {
+        decodeToken(egoToken);
+        Cookies.set(EGO_JWT_KEY, egoToken);
+        setToken(egoToken);
       })
-        .then(res => res.text())
-        .then(egoToken => {
-          decodeToken(egoToken);
-          Cookies.set(EGO_JWT_KEY, egoToken);
-          setToken(egoToken);
-        })
-        .catch(err => {
-          console.warn('err: ', err);
-        });
-    }
+      .catch(err => {
+        console.warn('err: ', err);
+        setToken(Cookies.get(EGO_JWT_KEY));
+      });
   }, []);
+
   React.useEffect(() => {
     if (token && !isValidJwt(token)) {
       logOut();
@@ -87,6 +85,7 @@ export function AuthProvider({
       .then(egoToken => {
         Cookies.set(EGO_JWT_KEY, egoToken);
         setToken(egoToken);
+        return egoToken;
       })
       .catch(err => {
         console.warn('err: ', err);
