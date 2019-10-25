@@ -113,7 +113,7 @@ export default () => {
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
-    },
+    }
   });
 
   const fileNavigatorFiles = map(
@@ -121,9 +121,9 @@ export default () => {
     gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
   );
 
-  const getDefaultClinicalEntityFocus = memoize(() => {
+  const getDefaultClinicalEntityIndex = memoize((_data: typeof data = data) => {
     const fileToClinicalEntityType = (file: File): string =>
-      data.clinicalSubmissions.clinicalEntities
+      _data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
     const lastUploadedEntityTypes = uniq(map(currentFileList, fileToClinicalEntityType));
@@ -149,7 +149,7 @@ export default () => {
     return fileNavigatorFiles.length ? fileNavigatorFiles.indexOf(fileToFocusOn) : 0;
   });
   const [selectedClinicalEntityIndex, setSelectedClinicalEntityIndex] = React.useState<number>(
-    getDefaultClinicalEntityFocus(),
+    getDefaultClinicalEntityIndex(),
   );
 
   const [uploadClinicalSubmission] = useMutation<
@@ -157,7 +157,7 @@ export default () => {
     UploadFilesMutationVariables
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
-      setSelectedClinicalEntityIndex(getDefaultClinicalEntityFocus());
+      setSelectedClinicalEntityIndex(getDefaultClinicalEntityIndex());
     },
   });
   const [validateSubmission] = useMutation<
