@@ -131,7 +131,7 @@ export default function ProgramClinicalSubmission() {
     const fileToClinicalEntityType = (file: File): string =>
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
-        .find(entityType => file.name.includes(entityType));
+        .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
     const lastUploadedEntityTypes: string[] = uniq(map(currentFileList, fileToClinicalEntityType));
     const fileToFocusOn = head(
       orderBy(fileNavigatorFiles, file => {
