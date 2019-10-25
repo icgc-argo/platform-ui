@@ -35,6 +35,12 @@ import { sleep } from 'global/utils/common';
 import { useRouter } from 'next/router';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import Header from './Header';
+import orderBy from 'lodash/orderBy';
+import head from 'lodash/head';
+import map from 'lodash/map';
+import memoize from 'lodash/memoize';
+import uniq from 'lodash/uniq';
+import find from 'lodash/find';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -116,10 +122,50 @@ export default function ProgramClinicalSubmission() {
     },
   });
 
+  const fileNavigatorFiles = map(
+    orderBy(data.clinicalSubmissions.clinicalEntities, e => e.clinicalType),
+    gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
+  );
+
+  const getDefaultClinicalEntityFocus = memoize(() => {
+    const fileToClinicalEntityType = (file: File): string =>
+      data.clinicalSubmissions.clinicalEntities
+        .map(e => e.clinicalType)
+        .find(entityType => file.name.includes(entityType));
+    const lastUploadedEntityTypes: string[] = uniq(map(currentFileList, fileToClinicalEntityType));
+    const fileToFocusOn = head(
+      orderBy(fileNavigatorFiles, file => {
+        const wasLastUploaded = lastUploadedEntityTypes.includes(file.clinicalType);
+        switch (file.status) {
+          case 'ERROR':
+            return wasLastUploaded ? 0 : fileNavigatorFiles.length;
+          case 'UPDATE':
+            return wasLastUploaded ? 1 : fileNavigatorFiles.length;
+          case 'WARNING':
+            return wasLastUploaded ? 2 : fileNavigatorFiles.length;
+          case 'SUCCESS':
+            return wasLastUploaded ? 3 : fileNavigatorFiles.length;
+          case 'NONE':
+            return fileNavigatorFiles.length;
+          default:
+            return fileNavigatorFiles.length;
+        }
+      }),
+    );
+    return fileNavigatorFiles.length ? fileNavigatorFiles.indexOf(fileToFocusOn) : 0;
+  });
+  const [selectedClinicalEntityIndex, setSelectedClinicalEntityIndex] = React.useState<number>(
+    getDefaultClinicalEntityFocus(),
+  );
+
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
-  >(UPLOAD_CLINICAL_SUBMISSION);
+  >(UPLOAD_CLINICAL_SUBMISSION, {
+    onCompleted: () => {
+      setSelectedClinicalEntityIndex(getDefaultClinicalEntityFocus());
+    },
+  });
   const [validateSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
@@ -395,9 +441,9 @@ export default function ProgramClinicalSubmission() {
             <FilesNavigator
               submissionState={data.clinicalSubmissions.state}
               clearDataError={handleClearSchemaError}
-              fileStates={data.clinicalSubmissions.clinicalEntities.map(
-                gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
-              )}
+              fileStates={fileNavigatorFiles}
+              selectedFileIndex={selectedClinicalEntityIndex}
+              onFileSelect={setSelectedClinicalEntityIndex}
             />
           )}
         </Container>

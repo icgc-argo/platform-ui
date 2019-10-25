@@ -17,10 +17,14 @@ export default ({
   fileStates,
   clearDataError,
   submissionState,
+  selectedFileIndex,
+  onFileSelect,
 }: {
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'];
   fileStates: Array<ClinicalSubmissionEntityFile>;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
+  selectedFileIndex: number;
+  onFileSelect: (i: number) => void;
 }) => {
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
@@ -45,12 +49,8 @@ export default ({
     );
     return fileStates.indexOf(fileToFocusOn);
   };
-  const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(getDefaultFocusIndex());
-  React.useEffect(() => {
-    setSelectedFileIndex(getDefaultFocusIndex());
-  }, [fileStates]);
   const onFileClick = (clinicalType: string) => e => {
-    setSelectedFileIndex(fileStates.findIndex(file => clinicalType === file.clinicalType));
+    onFileSelect(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
   const selectedFile = fileStates[selectedFileIndex];
   const onClearClick = () => {
