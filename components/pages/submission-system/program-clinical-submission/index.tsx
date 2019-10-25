@@ -157,6 +157,7 @@ export default function ProgramClinicalSubmission() {
   const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
     clinicalEntity => !!clinicalEntity.dataUpdates.length,
   );
+  const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
   const onErrorClose: (
     index: number,
@@ -346,15 +347,15 @@ export default function ProgramClinicalSubmission() {
         {!isPendingApproval && !loadingClinicalSubmission && (
           <Container css={containerStyle}>
             <Instruction
-              clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
-                ({ clinicalType }) => clinicalType,
-              )}
               uploadEnabled
               signOffEnabled={isReadyForSignoff}
-              validationEnabled={isReadyForValidation && !hasDataError}
+              validationEnabled={isReadyForValidation && !hasDataError && !isValidated}
               onUploadFileSelect={handleSubmissionFilesUpload}
               onValidateClick={handleSubmissionValidation}
               onSignOffClick={handleSignOff}
+              clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
+                ({ clinicalType }) => clinicalType,
+              )}
             />
           </Container>
         )}
