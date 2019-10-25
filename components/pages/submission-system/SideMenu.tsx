@@ -229,16 +229,7 @@ export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
-  const [programs, setPrograms] = usePersistentState('sideMenuPrograms');
-  const [getPrograms, { data, loading, called }] = useLazyQuery(SIDE_MENU_PROGRAM_LIST, {
-    onCompleted(data) {
-      setPrograms(data.programs);
-    },
-  });
-
-  if (!programs && !called) {
-    getPrograms();
-  }
+  const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
   const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;

@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import useCommonToasters from 'components/useCommonToasters';
+import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
 
 const SectionTitle = styled('h3')`
   ${({ theme }) => css(theme.typography.subtitle2)};
@@ -49,11 +50,26 @@ const createProgramInput = formData => ({
   primarySites: formData.primarySites,
 });
 
+type CreateProgramMutationResult = { newProgram: { shortName: string } };
+type CreateProgramMutationInput = ReturnType<typeof createProgramInput>;
 export default () => {
   const toaster = useToaster();
   const router = useRouter();
   const commonToasters = useCommonToasters();
-  const [sendCreateProgram] = useMutation(CREATE_PROGRAM_MUTATION);
+  const [sendCreateProgram] = useMutation<
+    CreateProgramMutationResult,
+    { program: CreateProgramMutationInput }
+  >(CREATE_PROGRAM_MUTATION, {
+    update: (store, { data }: { data: CreateProgramMutationResult }) => {
+      const { programs: cachedProgramList } = store.readQuery({ query: SIDE_MENU_PROGRAM_LIST });
+      store.writeQuery({
+        query: SIDE_MENU_PROGRAM_LIST,
+        data: {
+          programs: [...cachedProgramList, data.newProgram],
+        },
+      });
+    },
+  });
   const [formDisabled, setFormDisabled] = React.useState(false);
 
   const onSubmit = async data => {
