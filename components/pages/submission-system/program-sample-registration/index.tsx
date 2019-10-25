@@ -20,60 +20,12 @@ import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
-import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
-import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
-import { exportToTsv } from 'global/utils/common';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
-
-type ClinicalRecords = Array<{
-  row: number;
-  fields: Array<{
-    name: string;
-    value: string;
-  }>;
-}>;
-
-export type ClinicalErrors = Array<{
-  type: string;
-  message: string;
-  row: number;
-  field: string;
-  value: string;
-  sampleId: string;
-  donorId: string;
-  specimenId: string;
-}>;
-
-export type ClinicalRegistration = {
-  id: string;
-  createdAt: string;
-  creator: string;
-  fileName: string;
-  newDonors: {
-    count: number;
-    rows: Array<number>;
-  };
-  newSpecimens: {
-    count: number;
-    rows: Array<number>;
-  };
-  newSamples: {
-    count: number;
-    rows: Array<number>;
-  };
-  alreadyRegistered: {
-    count: number;
-    rows: Array<number>;
-  };
-  records: ClinicalRecords;
-  errors: ClinicalErrors;
-};
-
-export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+import { RegisterState, ClinicalRegistrationData, ClinicalRegistration } from './types';
 
 const registerStateStringMap: { [key in RegisterState]: string } = {
   INPROGRESS: 'Registering...',
@@ -81,7 +33,10 @@ const registerStateStringMap: { [key in RegisterState]: string } = {
   '': '',
 };
 
-const recordsToFileTable = (records: ClinicalRecords, newRows: Array<number>): Array<FileEntry> =>
+const recordsToFileTable = (
+  records: ClinicalRegistrationData[],
+  newRows: Array<number>,
+): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
@@ -98,6 +53,9 @@ export default function ProgramIDRegistration() {
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+
+  console.log('data', clinicalRegistration);
+
   const fileErrors = get(clinicalRegistration, 'errors', []);
   const fileRecords = get(clinicalRegistration, 'records', []);
 
@@ -221,7 +179,7 @@ export default function ProgramIDRegistration() {
     align-items: center;
     margin-bottom: 8px;
   `;
-  console.log('file recorsd', fileErrors);
+  console.log('file errors', fileErrors);
   return (
     <SubmissionLayout
       contentHeader={
