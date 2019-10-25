@@ -149,7 +149,6 @@ export default function ProgramClinicalSubmission() {
   const hasSomeEntity = data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  const hasFileError = !!data.clinicalSubmissions.fileErrors.length;
   const isReadyForValidation = hasSomeEntity && !hasSchemaError;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
