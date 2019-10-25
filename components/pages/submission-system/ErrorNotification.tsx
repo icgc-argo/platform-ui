@@ -4,7 +4,7 @@ import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import { ClinicalSubmissionError } from './program-clinical-submission/types';
-import { exportToTsv, insertAt } from 'global/utils/common';
+import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import { ClinicalRegistrationError } from './program-sample-registration/types';
@@ -60,20 +60,13 @@ export default ({
   >;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
 }) => {
-  // delete me
-  console.log('error error notification', errors[0], typeof errors[0]);
-  const columnsWithClinicalType = insertAt(defaultColumns)(0)({
-    accessor: 'fileName',
-    Header: 'File',
-    maxWidth: 150,
-  });
-
   const onDownloadClick = () => {
+    console.log('onDownload', columnConfig);
     exportToTsv(errors, {
-      exclude: ['__typename'],
+      //      exclude: ['__typename'],
       order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
-      headerDisplays: columnsWithClinicalType.reduce<{}>(
+      headerDisplays: columnConfig.reduce<{}>(
         (acc, { accessor, Header }) => ({
           ...acc,
           [accessor]: Header as string,
