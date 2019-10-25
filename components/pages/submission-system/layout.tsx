@@ -57,7 +57,9 @@ const SubmissionLayout = ({
       <PageBody className={clsx({ noSidebar })}>
         {!noSidebar && (
           <Sidebar>
-            <Panel ref={panelRef}>{sideMenu}</Panel>
+            <Panel ref={panelRef} onScroll={handleSidemenuScroll}>
+              {sideMenu}
+            </Panel>
             <Collapsible />
           </Sidebar>
         )}
