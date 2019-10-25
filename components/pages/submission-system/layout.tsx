@@ -34,11 +34,12 @@ const SubmissionLayout = ({
   ContentHeaderComponent?: typeof ContentHeader;
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
-  const debouncedSet = setter => debounce(setter, 100);
   const panelRef = React.useRef(null);
 
-  const handleSidemenuScroll = e => {
-    debouncedSet(setSidemenuScrollTop)(e.target.scrollTop);
+  const setScroll = debounce(setSidemenuScrollTop, 100);
+
+  const handleSidemenuScroll = (e: any) => {
+    setScroll(e.target.scrollTop);
   };
 
   // Only run on client side, don't run on server side
@@ -57,7 +58,9 @@ const SubmissionLayout = ({
       <PageBody className={clsx({ noSidebar })}>
         {!noSidebar && (
           <Sidebar>
-            <Panel ref={panelRef}>{sideMenu}</Panel>
+            <Panel ref={panelRef} onScroll={handleSidemenuScroll}>
+              {sideMenu}
+            </Panel>
             <Collapsible />
           </Sidebar>
         )}
