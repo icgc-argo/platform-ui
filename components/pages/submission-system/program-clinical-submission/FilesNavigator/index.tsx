@@ -28,27 +28,6 @@ export default ({
 }) => {
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
-  const getDefaultFocusIndex = () => {
-    const fileToFocusOn = head(
-      orderBy(fileStates, file => {
-        switch (file.status) {
-          case 'ERROR':
-            return 0;
-          case 'UPDATE':
-            return 1;
-          case 'WARNING':
-            return 2;
-          case 'SUCCESS':
-            return 3;
-          case 'NONE':
-            return fileStates.length;
-          default:
-            return fileStates.length;
-        }
-      }),
-    );
-    return fileStates.indexOf(fileToFocusOn);
-  };
   const onFileClick = (clinicalType: string) => e => {
     onFileSelect(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
