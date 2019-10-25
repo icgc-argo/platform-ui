@@ -10,6 +10,8 @@ import NoData from 'uikit/NoData';
 import ErrorNotification from '../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
+import orderBy from 'lodash/orderBy';
+import head from 'lodash/head';
 
 export default ({
   fileStates,
@@ -22,7 +24,31 @@ export default ({
 }) => {
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
-  const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
+  const getDefaultFocusIndex = () => {
+    const fileToFocusOn = head(
+      orderBy(fileStates, file => {
+        switch (file.status) {
+          case 'ERROR':
+            return 0;
+          case 'UPDATE':
+            return 1;
+          case 'WARNING':
+            return 2;
+          case 'SUCCESS':
+            return 3;
+          case 'NONE':
+            return fileStates.length;
+          default:
+            return fileStates.length;
+        }
+      }),
+    );
+    return fileStates.indexOf(fileToFocusOn);
+  };
+  const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(getDefaultFocusIndex());
+  React.useEffect(() => {
+    setSelectedFileIndex(getDefaultFocusIndex());
+  }, [fileStates]);
   const onFileClick = (clinicalType: string) => e => {
     setSelectedFileIndex(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
