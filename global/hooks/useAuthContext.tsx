@@ -1,3 +1,4 @@
+import { getConfig } from 'global/config';
 import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
 import fetch from 'isomorphic-fetch';
@@ -5,11 +6,6 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import urlJoin from 'url-join';
-import { getConfig } from 'global/config';
-
-type UseEgoTokenInput = {
-  onError?: (error: Error) => void;
-};
 
 type T_AuthContext = {
   token?: string;
@@ -33,7 +29,6 @@ export function AuthProvider({
   children: React.ReactElement;
 }) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
   const tokenRefreshUrl = urlJoin(
     EGO_API_ROOT,
     `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
@@ -46,26 +41,6 @@ export function AuthProvider({
     setToken(null);
     router.push('/');
   };
-
-  React.useEffect(() => {
-    fetch(egoLoginUrl, {
-      credentials: 'include',
-      headers: { accept: '*/*' },
-      body: null,
-      method: 'GET',
-      mode: 'cors',
-    })
-      .then(res => res.text())
-      .then(egoToken => {
-        decodeToken(egoToken);
-        Cookies.set(EGO_JWT_KEY, egoToken);
-        setToken(egoToken);
-      })
-      .catch(err => {
-        console.warn('err: ', err);
-        setToken(Cookies.get(EGO_JWT_KEY));
-      });
-  }, []);
 
   React.useEffect(() => {
     if (token && !isValidJwt(token)) {
@@ -84,7 +59,6 @@ export function AuthProvider({
       .then(res => res.text())
       .then(egoToken => {
         Cookies.set(EGO_JWT_KEY, egoToken);
-        setToken(egoToken);
         return egoToken;
       })
       .catch(err => {

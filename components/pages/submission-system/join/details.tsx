@@ -4,7 +4,7 @@ import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import getConfig from 'next/config';
+import { getConfig } from 'global/config';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
@@ -12,16 +12,19 @@ import { css } from 'uikit';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Typography from 'uikit/Typography';
-import SubmissionLayout from '../layout';
+import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
+import GoogleLogin from 'uikit/Button/GoogleLogin';
+import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
+import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
 export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
-  const { EGO_URL } = getConfig().publicRuntimeConfig;
+  const { EGO_URL } = getConfig();
 
   const router = useRouter();
   const { inviteId } = router.query;
@@ -97,7 +100,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   };
 
   return (
-    <SubmissionLayout noSidebar>
+    <MinimalLayout>
       <JoinProgramLayout
         tabValue="step2"
         joinProgramInvite={joinProgramInvite}
@@ -114,6 +117,24 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 margin-bottom: 30px;
               `}
             />
+
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+              `}
+            >
+              <GoogleLogin
+                id="google-login"
+                link={EGO_URL}
+                onClick={() => {
+                  window.localStorage.setItem(
+                    LOCAL_STORAGE_REDIRECT_KEY,
+                    PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
+                  );
+                }}
+              />
+            </div>
           </>
         ) : (
           <>
@@ -122,7 +143,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 margin-bottom: 27px;
               `}
             >
-              Please provide the following basic details
+              Please provide the following basic details.
             </Typography>
             <JoinProgramForm
               onSubmit={handleSubmit}
@@ -133,6 +154,6 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           </>
         )}
       </JoinProgramLayout>
-    </SubmissionLayout>
+    </MinimalLayout>
   );
 };

@@ -1,26 +1,22 @@
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { css } from 'uikit';
-import styled from '@emotion/styled';
-
-import {
-  PageContainer,
-  Panel,
-  PageBody,
-  PageContent,
-  ContentHeader,
-  ContentBody,
-  Sidebar,
-  Collapsible,
-} from 'uikit/PageLayout';
 import clsx from 'clsx';
-import Head from '../head';
 import NavBar from 'components/NavBar';
-import SideMenu from './SideMenu';
-import Footer from '../../Footer';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
+import * as React from 'react';
+import {
+  Collapsible,
+  ContentBody,
+  ContentHeader,
+  PageBody,
+  PageContainer,
+  PageContent,
+  Panel,
+  Sidebar,
+} from 'uikit/PageLayout';
+import Footer from '../../Footer';
+import Head from '../head';
+import SideMenu from './SideMenu';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -76,3 +72,18 @@ const SubmissionLayout = ({
 };
 
 export default SubmissionLayout;
+
+export function MinimalLayout({ children }) {
+  return (
+    <PageContainer>
+      <Head title={'ICGC ARGO'} />
+      <NavBar hideLink />
+      <PageBody className={clsx({ noSidebar: true })}>
+        <PageContent>
+          <ContentBody>{children}</ContentBody>
+          <Footer />
+        </PageContent>
+      </PageBody>
+    </PageContainer>
+  );
+}

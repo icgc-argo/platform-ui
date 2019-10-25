@@ -6,7 +6,7 @@ import React from 'react';
 import { css } from 'uikit';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Typography from 'uikit/Typography';
-import SubmissionLayout from '../layout';
+import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
@@ -31,7 +31,7 @@ export default () => {
   });
 
   return (
-    <SubmissionLayout noSidebar>
+    <MinimalLayout>
       <JoinProgramLayout
         tabValue="step1"
         joinProgramInvite={joinProgramInvite}
@@ -62,6 +62,6 @@ export default () => {
           />
         </div>
       </JoinProgramLayout>
-    </SubmissionLayout>
+    </MinimalLayout>
   );
 };

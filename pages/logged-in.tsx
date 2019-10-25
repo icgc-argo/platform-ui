@@ -1,34 +1,46 @@
-
-import React from 'react';
-import Router from 'next/router';
-
+import { getConfig } from 'global/config';
+import { EGO_JWT_KEY, LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
-import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { getDefaultRedirectPathForUser } from 'global/utils/pages';
-import { createPage } from 'global/utils/pages';
+import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
+import Cookies from 'js-cookie';
+import React from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import useTheme from 'uikit/utils/useTheme';
+import urlJoin from 'url-join';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
 
-  const authContext = useAuthContext();
+  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
 
-  React.useEffect(() => {
-    if (authContext) {
-      const { data, token } = authContext;
-      const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
-      if (token) {
-        if (currentRedirect) {
-          localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
-          Router.replace(currentRedirect);
-        } else {
-          Router.replace(getDefaultRedirectPathForUser(token));
-        }
-      }
+  const redirect = (token: string) => {
+    const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
+    if (currentRedirect) {
+      localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
+      location.assign(currentRedirect);
+    } else {
+      location.assign(getDefaultRedirectPathForUser(token));
     }
+  };
+  React.useEffect(() => {
+    const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+    fetch(egoLoginUrl, {
+      credentials: 'include',
+      headers: { accept: '*/*' },
+      body: null,
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(res => res.text())
+      .then(egoToken => {
+        Cookies.set(EGO_JWT_KEY, egoToken);
+        redirect(egoToken);
+      })
+      .catch(err => {
+        console.warn('err: ', err);
+        redirect(null);
+      });
   });
 
   return (
