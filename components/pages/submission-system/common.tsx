@@ -88,7 +88,13 @@ export const SubmissionInfoArea = ({
   creator: string;
   createdAt: string;
 }) => (
-  <Typography variant="data" component="div">
+  <Typography
+    variant="data"
+    component="div"
+    css={css`
+      text-align: right;
+    `}
+  >
     <Typography
       variant="data"
       css={css`
