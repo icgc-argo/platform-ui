@@ -1,12 +1,7 @@
 import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css, styled } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import Progress from 'uikit/Progress';
-import { Row } from 'react-grid-system';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
 import Instruction from './Instruction';
 import Container from 'uikit/Container';
 import { containerStyle } from '../common';
@@ -39,6 +34,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { sleep } from 'global/utils/common';
 import { useRouter } from 'next/router';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import Header from './Header';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -263,88 +259,23 @@ export default function ProgramClinicalSubmission() {
           background: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
         `}
         contentHeader={
-          <div
-            css={css`
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              width: 100%;
-            `}
-          >
-            <TitleBar>
-              <>{programShortName}</>
-              <Row nogutter align="center">
-                <div
-                  css={css`
-                    margin-right: 20px;
-                  `}
-                >
-                  Submit Clinical Data
-                </div>
-                {!loadingClinicalSubmission && (
-                  <Progress>
-                    <Progress.Item
-                      text="Upload"
-                      state={
-                        isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled'
-                      }
-                    />
-                    <Progress.Item
-                      text="Validate"
-                      state={
-                        isReadyForSignoff || isPendingApproval
-                          ? 'success'
-                          : isReadyForValidation
-                          ? hasDataError
-                            ? 'error'
-                            : 'pending'
-                          : 'disabled'
-                      }
-                    />
-                    <Progress.Item
-                      text="Sign Off"
-                      state={
-                        isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled'
-                      }
-                    />
-                    {isPendingApproval && (
-                      <Progress.Item
-                        css={css`
-                          width: 100px;
-                        `}
-                        text="Pending Approval"
-                        state="locked"
-                      />
-                    )}
-                  </Progress>
-                )}
-              </Row>
-            </TitleBar>
-            <Row nogutter align="center">
-              {!isPendingApproval && (
-                <Button
-                  variant="text"
-                  disabled
-                  css={css`
-                    margin-right: 10px;
-                  `}
-                >
-                  Clear submission
-                </Button>
-              )}
-              <Link
-                bold
-                withChevron
-                uppercase
-                underline={false}
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                HELP
-              </Link>
-            </Row>
-          </div>
+          <Header
+            programShortName={programShortName}
+            showProgress={!loadingClinicalSubmission}
+            isPendingApproval={isPendingApproval}
+            progressStates={{
+              upload: isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled',
+              validate:
+                isReadyForSignoff || isPendingApproval
+                  ? 'success'
+                  : isReadyForValidation
+                  ? hasDataError
+                    ? 'error'
+                    : 'pending'
+                  : 'disabled',
+              signOff: isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled',
+            }}
+          />
         }
       >
         {!isPendingApproval && !loadingClinicalSubmission && (
