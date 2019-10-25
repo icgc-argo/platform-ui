@@ -113,7 +113,7 @@ export default () => {
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
-    }
+    },
   });
 
   const fileNavigatorFiles = map(
@@ -382,11 +382,15 @@ export default () => {
           `}
         >
           <ErrorNotification
-            showClinicalType
             onClearClick={handleDataErrorClearance}
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
+            columnConfig={insertAt(defaultColumns)(0)({
+              accessor: 'fileName',
+              Header: 'File',
+              maxWidth: 150,
+            })}
           />
         </div>
       )}

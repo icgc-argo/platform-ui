@@ -27,7 +27,7 @@ import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import { exportToTsv } from 'global/utils/common';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 
 type ClinicalRecords = Array<{
   row: number;
@@ -353,6 +353,7 @@ export default function ProgramIDRegistration() {
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
+              columnConfig={defaultColumns}
             />
           ) : (
             <NoDataMessage loading={loading} />

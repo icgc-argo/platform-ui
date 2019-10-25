@@ -7,51 +7,61 @@ import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { exportToTsv, insertAt } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
+import { ClinicalRegistrationError } from './program-sample-registration/types';
+
+const isClinicalSubmission = (
+  obj: ClinicalSubmissionError | number,
+): obj is ClinicalSubmissionError => {
+  return true;
+};
+
+export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
+  {
+    accessor: 'row',
+    Header: 'Row #',
+    maxWidth: 70,
+  },
+  {
+    accessor: 'donorId',
+    Header: 'Submitter Donor ID',
+    maxWidth: 160,
+  },
+  {
+    accessor: 'field',
+    Header: 'Field with Error',
+    maxWidth: 200,
+  },
+  {
+    accessor: 'value',
+    Header: 'Error Value',
+    maxWidth: 130,
+  },
+  {
+    accessor: 'message',
+    Header: 'Error Description',
+  },
+];
 
 export default ({
   title,
   errors,
   subtitle,
-  showClinicalType,
+  columnConfig,
   onClearClick,
 }: {
   title: string;
   subtitle: string;
+  columnConfig: Array<{ [k: string]: any }>;
   errors: Array<
-    ClinicalSubmissionError & {
-      fileName?: string;
-    }
+    | (ClinicalSubmissionError & {
+        fileName?: string;
+      })
+    | ClinicalRegistrationError
   >;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
-  showClinicalType?: boolean;
 }) => {
-  const defaultColumns: TableColumnConfig<typeof errors[0]>[] = [
-    {
-      accessor: 'row',
-      Header: 'Row #',
-      maxWidth: 70,
-    },
-    {
-      accessor: 'donorId',
-      Header: 'Submitter Donor ID',
-      maxWidth: 160,
-    },
-    {
-      accessor: 'field',
-      Header: 'Field with Error',
-      maxWidth: 200,
-    },
-    {
-      accessor: 'value',
-      Header: 'Error Value',
-      maxWidth: 130,
-    },
-    {
-      accessor: 'message',
-      Header: 'Error Description',
-    },
-  ];
-
+  // delete me
+  console.log('error error notification', errors[0], typeof errors[0]);
   const columnsWithClinicalType = insertAt(defaultColumns)(0)({
     accessor: 'fileName',
     Header: 'File',
@@ -61,7 +71,7 @@ export default ({
   const onDownloadClick = () => {
     exportToTsv(errors, {
       exclude: ['__typename'],
-      order: columnsWithClinicalType.map(entry => entry.accessor),
+      order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
       headerDisplays: columnsWithClinicalType.reduce<{}>(
         (acc, { accessor, Header }) => ({
@@ -72,6 +82,7 @@ export default ({
       ),
     });
   };
+
   return (
     <Notification
       variant="ERROR"
@@ -116,7 +127,7 @@ export default ({
           <Table
             NoDataComponent={() => null}
             showPagination={false}
-            columns={showClinicalType ? columnsWithClinicalType : defaultColumns}
+            columns={columnConfig}
             data={errors}
           />
         </div>
