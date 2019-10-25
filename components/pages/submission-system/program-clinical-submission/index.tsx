@@ -210,6 +210,21 @@ export default function ProgramClinicalSubmission() {
     }
   };
 
+  const handleClearSchemaError: React.ComponentProps<
+    typeof FilesNavigator
+  >['clearDataError'] = async file => {
+    await updateClinicalSubmissionQuery(previous => ({
+      ...previous,
+      clinicalSubmissions: {
+        ...previous.clinicalSubmissions,
+        clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
+          ...entity,
+          schemaErrors: file.clinicalType === entity.clinicalType ? [] : entity.schemaErrors,
+        })),
+      },
+    }));
+  };
+
   const handleSignOff = async () => {
     try {
       const userDidApprove = await getUserApproval();
@@ -379,19 +394,7 @@ export default function ProgramClinicalSubmission() {
           ) : (
             <FilesNavigator
               submissionState={data.clinicalSubmissions.state}
-              clearDataError={async file => {
-                await updateClinicalSubmissionQuery(previous => ({
-                  ...previous,
-                  clinicalSubmissions: {
-                    ...previous.clinicalSubmissions,
-                    clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
-                      ...entity,
-                      schemaErrors:
-                        file.clinicalType === entity.clinicalType ? [] : entity.schemaErrors,
-                    })),
-                  },
-                }));
-              }}
+              clearDataError={handleClearSchemaError}
               fileStates={data.clinicalSubmissions.clinicalEntities.map(
                 gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
               )}
