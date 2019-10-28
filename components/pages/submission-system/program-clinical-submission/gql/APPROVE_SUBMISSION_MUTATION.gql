@@ -1,0 +1,3 @@
+mutation APPROVE_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
+  approveClinicalSubmission(programShortName: $programShortName, version: $submissionVersion)
+}

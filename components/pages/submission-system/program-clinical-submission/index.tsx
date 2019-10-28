@@ -29,9 +29,11 @@ export default function ProgramClinicalSubmission() {
     },
   };
 
-  const { data = placeHolderResponse, loading: loadingClinicalSubmission } = useQuery<
-    ClinicalSubmissionQueryData
-  >(CLINICAL_SUBMISSION_QUERY, {
+  const {
+    data = placeHolderResponse,
+    loading: loadingClinicalSubmission,
+    refetch: refetchSubmission,
+  } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
     },
@@ -80,6 +82,8 @@ export default function ProgramClinicalSubmission() {
             programShortName={programShortName}
             showProgress={!loadingClinicalSubmission}
             isPendingApproval={isPendingApproval}
+            submissionVersion={data.clinicalSubmissions.version}
+            onSubmissionApproved={refetchSubmission}
             progressStates={{
               upload: isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled',
               validate:

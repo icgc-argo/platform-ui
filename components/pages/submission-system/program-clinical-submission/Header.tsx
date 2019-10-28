@@ -5,12 +5,20 @@ import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Button from 'uikit/Button';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { isDccMember } from 'global/utils/egoJwt';
+import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
+import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
+import { useMutation } from '@apollo/react-hooks';
+import { ClinicalSubmissionQueryData } from './types';
 
 export default ({
   programShortName,
   showProgress,
   progressStates,
   isPendingApproval,
+  onSubmissionApproved,
+  submissionVersion,
 }: {
   programShortName: string;
   showProgress: boolean;
@@ -20,7 +28,41 @@ export default ({
     signOff: React.ComponentProps<typeof Progress.Item>['state'];
   };
   isPendingApproval: boolean;
+  onSubmissionApproved: () => void;
+  submissionVersion: string;
 }) => {
+  const { token } = useAuthContext();
+  const isDcc = isDccMember(token);
+
+  const [reopenSubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    { programShortName: string; submissionVersion: string }
+  >(REOPEN_SUBMISSION_MUTATION, {
+    variables: {
+      programShortName,
+      submissionVersion,
+    },
+  });
+
+  const [approveClinicalSubmission] = useMutation<
+    boolean,
+    { programShortName: string; submissionVersion: string }
+  >(APPROVE_SUBMISSION_MUTATION, {
+    variables: {
+      programShortName,
+      submissionVersion,
+    },
+    update: onSubmissionApproved,
+  });
+
+  const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
+    await reopenSubmission();
+  };
+
+  const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
+    await approveClinicalSubmission();
+  };
+
   return (
     <div
       css={css`
@@ -59,28 +101,49 @@ export default ({
         </Row>
       </TitleBar>
       <Row nogutter align="center">
-        {!isPendingApproval && (
-          <Button
-            variant="text"
-            disabled
-            css={css`
-              margin-right: 10px;
-            `}
-          >
-            Clear submission
-          </Button>
+        {!isDcc && (
+          <>
+            {!isPendingApproval && (
+              <Button
+                variant="text"
+                disabled
+                css={css`
+                  margin-right: 10px;
+                `}
+              >
+                Clear submission
+              </Button>
+            )}
+            <Link
+              bold
+              withChevron
+              uppercase
+              underline={false}
+              css={css`
+                font-size: 14px;
+              `}
+            >
+              HELP
+            </Link>
+          </>
         )}
-        <Link
-          bold
-          withChevron
-          uppercase
-          underline={false}
-          css={css`
-            font-size: 14px;
-          `}
-        >
-          HELP
-        </Link>
+        {isDcc && isPendingApproval && (
+          <>
+            <Button
+              variant="secondary"
+              isAsync
+              css={css`
+                margin-right: 10px;
+              `}
+              onClick={handleSubmissionReopen}
+            >
+              reopen
+            </Button>
+            <Button size="sm" isAsync onClick={handleSubmissionApproval}>
+              approve
+            </Button>
+          </>
+        )}
       </Row>
     </div>
   );
