@@ -61,9 +61,11 @@ export default ({
 
   const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
-      title: 'Reopen Submission?',
-      children: 'Are you sure you want to approve this clinical submission?',
-      actionButtonText: 'Yes, Reopen',
+      title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
+      children: isDcc
+        ? 'Are you sure you want to approve this clinical submission?'
+        : 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
+      actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
