@@ -11,6 +11,9 @@ import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData } from './types';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
+import { ModalPortal } from 'components/ApplicationRoot';
+import Modal from 'uikit/Modal';
 
 export default ({
   programShortName,
@@ -33,6 +36,7 @@ export default ({
 }) => {
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
+  const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -56,97 +60,120 @@ export default ({
   });
 
   const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
-    await reopenSubmission();
+    const didUserConfirm = await getUserConfirmation({
+      title: 'Reopen Submission?',
+      children: 'Are you sure you want to approve this clinical submission?',
+      actionButtonText: 'Yes, Reopen',
+      buttonSize: 'sm',
+    });
+    if (didUserConfirm) {
+      await reopenSubmission();
+    }
   };
 
   const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
-    await approveClinicalSubmission();
+    const didUserConfirm = await getUserConfirmation({
+      title: 'Approve Submission?',
+      children: 'Are you sure you want to approve this clinical submission?',
+      actionButtonText: 'Yes, Approve',
+      buttonSize: 'sm',
+    });
+    if (didUserConfirm) {
+      await approveClinicalSubmission();
+    }
   };
 
   return (
-    <div
-      css={css`
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      `}
-    >
-      <TitleBar>
-        <>{programShortName}</>
-        <Row nogutter align="center">
-          <div
-            css={css`
-              margin-right: 20px;
-            `}
-          >
-            Submit Clinical Data
-          </div>
-          {!showProgress && (
-            <Progress>
-              <Progress.Item text="Upload" state={progressStates.upload} />
-              <Progress.Item text="Validate" state={progressStates.validate} />
-              <Progress.Item text="Sign Off" state={progressStates.signOff} />
-              {isPendingApproval && (
-                <Progress.Item
-                  css={css`
-                    width: 100px;
-                  `}
-                  text="Pending Approval"
-                  state="locked"
-                />
-              )}
-            </Progress>
-          )}
-        </Row>
-      </TitleBar>
-      <Row nogutter align="center">
-        {isPendingApproval && (
-          <Button
-            variant="secondary"
-            isAsync
-            css={css`
-              margin-right: 10px;
-            `}
-            onClick={handleSubmissionReopen}
-          >
-            reopen
-          </Button>
-        )}
-        {!isDcc && (
-          <>
-            {!isPendingApproval && (
-              <Button
-                variant="text"
-                disabled
-                css={css`
-                  margin-right: 10px;
-                `}
-              >
-                Clear submission
-              </Button>
-            )}
-            <Link
-              bold
-              withChevron
-              uppercase
-              underline={false}
+    <>
+      {isModalShown && (
+        <ModalPortal>
+          <Modal {...modalProps} />
+        </ModalPortal>
+      )}
+      <div
+        css={css`
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        `}
+      >
+        <TitleBar>
+          <>{programShortName}</>
+          <Row nogutter align="center">
+            <div
               css={css`
-                font-size: 14px;
+                margin-right: 20px;
               `}
             >
-              HELP
-            </Link>
-          </>
-        )}
-        {isDcc && isPendingApproval && (
-          <>
-            <Button size="sm" isAsync onClick={handleSubmissionApproval}>
-              approve
+              Submit Clinical Data
+            </div>
+            {!showProgress && (
+              <Progress>
+                <Progress.Item text="Upload" state={progressStates.upload} />
+                <Progress.Item text="Validate" state={progressStates.validate} />
+                <Progress.Item text="Sign Off" state={progressStates.signOff} />
+                {isPendingApproval && (
+                  <Progress.Item
+                    css={css`
+                      width: 100px;
+                    `}
+                    text="Pending Approval"
+                    state="locked"
+                  />
+                )}
+              </Progress>
+            )}
+          </Row>
+        </TitleBar>
+        <Row nogutter align="center">
+          {isPendingApproval && (
+            <Button
+              variant="secondary"
+              isAsync
+              css={css`
+                margin-right: 10px;
+              `}
+              onClick={handleSubmissionReopen}
+            >
+              reopen
             </Button>
-          </>
-        )}
-      </Row>
-    </div>
+          )}
+          {!isDcc && (
+            <>
+              {!isPendingApproval && (
+                <Button
+                  variant="text"
+                  disabled
+                  css={css`
+                    margin-right: 10px;
+                  `}
+                >
+                  Clear submission
+                </Button>
+              )}
+              <Link
+                bold
+                withChevron
+                uppercase
+                underline={false}
+                css={css`
+                  font-size: 14px;
+                `}
+              >
+                HELP
+              </Link>
+            </>
+          )}
+          {isDcc && isPendingApproval && (
+            <>
+              <Button size="sm" isAsync onClick={handleSubmissionApproval}>
+                approve
+              </Button>
+            </>
+          )}
+        </Row>
+      </div>
+    </>
   );
 };
