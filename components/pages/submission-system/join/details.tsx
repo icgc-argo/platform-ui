@@ -138,12 +138,16 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           </>
         ) : (
           <>
+            <Typography bold>
+              Hello {get(joinProgramInvite, 'user.firstName')}{' '}
+              {get(joinProgramInvite, 'user.lastName')}
+            </Typography>
             <Typography
               css={css`
                 margin-bottom: 27px;
               `}
             >
-              Please provide the following basic details.
+              Please provide the following details about yourself.
             </Typography>
             <JoinProgramForm
               onSubmit={handleSubmit}
