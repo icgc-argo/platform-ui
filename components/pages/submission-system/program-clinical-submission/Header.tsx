@@ -19,7 +19,7 @@ import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { DCC_PATH } from 'global/constants/pages';
 
 export default ({
   programShortName,
@@ -101,7 +101,7 @@ export default ({
       await sleep();
       try {
         await approveClinicalSubmission();
-        router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+        router.push(DCC_PATH);
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
