@@ -37,6 +37,7 @@ import head from 'lodash/head';
 import map from 'lodash/map';
 import memoize from 'lodash/memoize';
 import uniq from 'lodash/uniq';
+import useCommonToasters from 'components/useCommonToasters';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -92,6 +93,7 @@ export default () => {
     onCancel: onSignOffCanceled,
   } = useUserConfirmationModalState();
   const toaster = useToaster();
+  const commonToaster = useCommonToasters();
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
     clinicalSubmissions: {
@@ -251,7 +253,7 @@ export default () => {
       });
     } catch (err) {
       await refetch();
-      showReloadToast();
+      commonToaster.unknownErrorWithReloadMessage();
     }
   };
 
@@ -290,7 +292,7 @@ export default () => {
       }
     } catch (err) {
       await refetch();
-      showReloadToast();
+      commonToaster.unknownErrorWithReloadMessage();
       setPageLoaderShown(false);
     }
   };

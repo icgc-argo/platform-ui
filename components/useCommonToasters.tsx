@@ -11,6 +11,12 @@ export default function useCommonToasters() {
         variant: TOAST_VARIANTS.ERROR,
         content: 'Something went wrong, please try again later or contact us for assistance.',
       }),
+    unknownErrorWithReloadMessage: () =>
+      toaster.addToast({
+        variant: 'ERROR',
+        title: 'Something went wrong',
+        content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
+      }),
     onSave: () =>
       toaster.addToast({
         title: 'Success!',

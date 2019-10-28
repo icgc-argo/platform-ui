@@ -14,13 +14,18 @@ import { ClinicalSubmissionQueryData } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
+import DnaLoader from 'uikit/DnaLoader';
+import { sleep } from 'global/utils/common';
+import { useClinicalSubmissionQuery } from '.';
+import useCommonToasters from 'components/useCommonToasters';
+import { useRouter } from 'next/router';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 export default ({
   programShortName,
   showProgress,
   progressStates,
   isPendingApproval,
-  onSubmissionApproved,
   submissionVersion,
 }: {
   programShortName: string;
@@ -31,12 +36,15 @@ export default ({
     signOff: React.ComponentProps<typeof Progress.Item>['state'];
   };
   isPendingApproval: boolean;
-  onSubmissionApproved: () => void;
   submissionVersion: string;
 }) => {
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
+  const [isLoaderShown, setLoaderShown] = React.useState(false);
+  const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
+  const commonToaster = useCommonToasters();
+  const router = useRouter();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -56,7 +64,7 @@ export default ({
       programShortName,
       submissionVersion,
     },
-    update: onSubmissionApproved,
+    update: refetchClinicalSubmission,
   });
 
   const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
@@ -69,7 +77,15 @@ export default ({
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
-      await reopenSubmission();
+      setLoaderShown(true);
+      await sleep();
+      try {
+        await reopenSubmission();
+      } catch (err) {
+        await refetchClinicalSubmission();
+        commonToaster.unknownErrorWithReloadMessage();
+      }
+      setLoaderShown(false);
     }
   };
 
@@ -81,7 +97,16 @@ export default ({
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
-      await approveClinicalSubmission();
+      setLoaderShown(true);
+      await sleep();
+      try {
+        await approveClinicalSubmission();
+        router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
+      } catch (err) {
+        await refetchClinicalSubmission();
+        commonToaster.unknownErrorWithReloadMessage();
+      }
+      setLoaderShown(false);
     }
   };
 
@@ -90,6 +115,11 @@ export default ({
       {isModalShown && (
         <ModalPortal>
           <Modal {...modalProps} />
+        </ModalPortal>
+      )}
+      {isLoaderShown && (
+        <ModalPortal>
+          <DnaLoader />
         </ModalPortal>
       )}
       <div
