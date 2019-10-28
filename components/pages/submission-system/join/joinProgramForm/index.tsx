@@ -40,7 +40,11 @@ const JoinProgramForm = ({
   };
 
   return (
-    <div>
+    <div
+      css={css`
+        min-height: 400px;
+      `}
+    >
       <Row
         nogutter
         css={css`

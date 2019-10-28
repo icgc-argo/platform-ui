@@ -20,7 +20,7 @@ export enum InviteState {
   Accepted,
   Pending,
   Revoked,
-  Loading,
+  UnSet,
 }
 
 export default function JoinProgramLayout({
@@ -37,7 +37,7 @@ export default function JoinProgramLayout({
   notFound: boolean;
 }) {
   const { EGO_URL } = getConfig();
-  let inviteState: InviteState = InviteState.Loading;
+  let inviteState: InviteState = InviteState.UnSet;
 
   if (notFound) {
     inviteState = InviteState.NotFound;
@@ -185,6 +185,7 @@ export default function JoinProgramLayout({
               <DnaLoader />
             </div>
           )}
+          {inviteState == InviteState.UnSet && !loading && <div>Unknown Error</div>}
         </div>
       </Container>
     </div>
