@@ -90,7 +90,16 @@ export default () => {
         },
       });
     } catch (err) {
-      commonToasters.unknownError();
+      if (err.message.match(/duplicate key.*program_short_name_key/)) {
+        toaster.addToast({
+          title: 'Program Not Created',
+          variant: TOAST_VARIANTS.ERROR,
+          content:
+            'A program with the same Program Short Name already exists. Please choose a new Program Short Name.',
+        });
+      } else {
+        commonToasters.unknownError();
+      }
       setFormDisabled(false);
     }
   };
