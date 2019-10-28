@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 const Li = styled('li')`
+  ${({ theme }) => css(theme.typography.data)};
   list-style: none;
-  font-size: 14px;
-  min-height: 27px;
-  line-height: 27px;
   padding-left: 7px;
   font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
   cursor: pointer;

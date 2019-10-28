@@ -253,7 +253,7 @@ const MultiSelect: React.ComponentType<{
     }
 
     if (searchString !== '') {
-      if (!includes(toLower(child.props.value), toLower(searchString))) {
+      if (!includes(toLower(child.props.children), toLower(searchString))) {
         return null;
       }
     }
@@ -263,6 +263,9 @@ const MultiSelect: React.ComponentType<{
       role: 'option',
       selected,
       value: undefined,
+      css: css`
+        padding: 5px 0px 5px 7px;
+      `,
       children: <Highlight string={child.props.children} searchText={searchString} />,
       'data-value': child.props.value,
     });
