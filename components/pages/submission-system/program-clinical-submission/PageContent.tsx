@@ -25,8 +25,9 @@ import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification from './ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
-import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
+import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
 import Typography from 'uikit/Typography';
 import { sleep } from 'global/utils/common';
 import { useRouter } from 'next/router';
@@ -85,11 +86,11 @@ export default () => {
   const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const {
-    signOffModalShown,
-    getUserApproval,
-    onApprove: onSignOffApproved,
+    isModalShown: signOffModalShown,
+    getUserConfirmation: getSignOffConfirmation,
+    onConfirmed: onSignOffApproved,
     onCancel: onSignOffCanceled,
-  } = useSignOffValidationModalState();
+  } = useUserConfirmationModalState();
   const toaster = useToaster();
 
   const placeHolderResponse: ClinicalSubmissionQueryData = {
@@ -113,7 +114,7 @@ export default () => {
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
-    }
+    },
   });
 
   const fileNavigatorFiles = map(
@@ -271,7 +272,7 @@ export default () => {
 
   const handleSignOff = async () => {
     try {
-      const userDidApprove = await getUserApproval();
+      const userDidApprove = await getSignOffConfirmation();
       if (userDidApprove) {
         setPageLoaderShown(true);
         await sleep();
