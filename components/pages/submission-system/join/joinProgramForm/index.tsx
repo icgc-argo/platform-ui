@@ -71,6 +71,7 @@ const JoinProgramForm = ({
                     size={INPUT_SIZES.LG}
                     aria-label="institution-input"
                     allowNew
+                    single
                     onBlur={handleBlur('institutions')}
                     value={data.institutions}
                     onChange={handleChange('institutions')}

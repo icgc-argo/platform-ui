@@ -62,6 +62,8 @@ export type GqlClinicalSubmissionData = {
   id: string;
   version: string;
   state?: ClinicalSubmissionStatus;
+  updatedAt: string;
+  updatedBy: string;
   clinicalEntities: GqlClinicalEntity[];
   fileErrors: ClinicalError[];
   __typename: 'ClinicalSubmissionData';

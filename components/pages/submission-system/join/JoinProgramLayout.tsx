@@ -11,7 +11,8 @@ import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constant
 import { useRouter } from 'next/router';
 
 import GoogleLogin from 'uikit/Button/GoogleLogin';
-import getConfig from 'next/config';
+import { getConfig } from 'global/config';
+import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 
 export enum InviteState {
   NotFound,
@@ -35,7 +36,7 @@ export default function JoinProgramLayout({
   loading: boolean;
   notFound: boolean;
 }) {
-  const { EGO_URL } = getConfig().publicRuntimeConfig;
+  const { EGO_URL } = getConfig();
   let inviteState: InviteState = InviteState.Loading;
 
   if (notFound) {
@@ -160,10 +161,15 @@ export default function JoinProgramLayout({
               >
                 <GoogleLogin
                   link={EGO_URL}
-                  redirectPath={PROGRAM_DASHBOARD_PATH.replace(
-                    PROGRAM_SHORT_NAME_PATH,
-                    joinProgramInvite.program.shortName,
-                  )}
+                  onClick={() => {
+                    window.localStorage.setItem(
+                      LOCAL_STORAGE_REDIRECT_KEY,
+                      PROGRAM_DASHBOARD_PATH.replace(
+                        PROGRAM_SHORT_NAME_PATH,
+                        joinProgramInvite.program.shortName,
+                      ),
+                    );
+                  }}
                 />
               </div>
             </>

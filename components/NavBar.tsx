@@ -56,7 +56,7 @@ const getUserRole = egoJwt => {
   }
 };
 
-export default () => {
+export default function Navbar({ hideLink }: { hideLink?: boolean }) {
   const { EGO_URL } = getConfig();
   const { token: egoJwt, logOut, data: userModel } = useAuthContext();
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
@@ -80,58 +80,60 @@ export default () => {
         />
       </Section>
       <Section />
-      <Section>
-        <MenuGroup>
-          {egoJwt && canAccessSubmission && (
-            <Link
-              href={getDefaultRedirectPathForUser(egoJwt, true)}
-              as={getDefaultRedirectPathForUser(egoJwt)}
-            >
+      {!hideLink && (
+        <Section>
+          <MenuGroup>
+            {egoJwt && canAccessSubmission && (
+              <Link
+                href={getDefaultRedirectPathForUser(egoJwt, true)}
+                as={getDefaultRedirectPathForUser(egoJwt)}
+              >
+                <a
+                  css={css`
+                    height: 100%;
+                  `}
+                >
+                  <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0}>
+                    <Typography variant={'default'}>Submission</Typography>
+                  </MenuItem>
+                </a>
+              </Link>
+            )}
+            {!userModel && (
               <a
+                id="link-login"
+                href={EGO_URL}
                 css={css`
-                  height: 100%;
+                  align-self: center;
+                  margin-right: 16px;
+                  text-decoration: none;
                 `}
               >
-                <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0}>
-                  <Typography variant={'default'}>Submission</Typography>
-                </MenuItem>
+                <NavBarLoginButton />
               </a>
-            </Link>
-          )}
-          {!userModel && (
-            <a
-              id="link-login"
-              href={EGO_URL}
-              css={css`
-                align-self: center;
-                margin-right: 16px;
-                text-decoration: none;
-              `}
-            >
-              <NavBarLoginButton />
-            </a>
-          )}
-          {userModel && (
-            <MenuItem
-              ref={React.createRef()}
-              dropdownMenu={
-                <DropdownMenu>
-                  <Link href={USER_PAGE_PATH}>
-                    <DropdownMenuItem>Profile & Token</DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
-                </DropdownMenu>
-              }
-            >
-              <UserBadge
-                firstName={userModel.context.user.firstName}
-                lastName={userModel.context.user.lastName}
-                title={getUserRole(egoJwt)}
-              />
-            </MenuItem>
-          )}
-        </MenuGroup>
-      </Section>
+            )}
+            {userModel && (
+              <MenuItem
+                ref={React.createRef()}
+                dropdownMenu={
+                  <DropdownMenu>
+                    <Link href={USER_PAGE_PATH}>
+                      <DropdownMenuItem>Profile & Token</DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
+                  </DropdownMenu>
+                }
+              >
+                <UserBadge
+                  firstName={userModel.context.user.firstName}
+                  lastName={userModel.context.user.lastName}
+                  title={getUserRole(egoJwt)}
+                />
+              </MenuItem>
+            )}
+          </MenuGroup>
+        </Section>
+      )}
     </AppBar>
   );
-};
+}

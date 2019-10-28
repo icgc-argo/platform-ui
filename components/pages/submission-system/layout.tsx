@@ -1,26 +1,22 @@
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { css } from 'uikit';
-import styled from '@emotion/styled';
-
-import {
-  PageContainer,
-  Panel,
-  PageBody,
-  PageContent,
-  ContentHeader,
-  ContentBody,
-  Sidebar,
-  Collapsible,
-} from 'uikit/PageLayout';
 import clsx from 'clsx';
-import Head from '../head';
 import NavBar from 'components/NavBar';
-import SideMenu from './SideMenu';
-import Footer from '../../Footer';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
+import * as React from 'react';
+import {
+  Collapsible,
+  ContentBody,
+  ContentHeader,
+  PageBody,
+  PageContainer,
+  PageContent,
+  Panel,
+  Sidebar,
+} from 'uikit/PageLayout';
+import Footer from '../../Footer';
+import Head from '../head';
+import SideMenu from './SideMenu';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -38,11 +34,12 @@ const SubmissionLayout = ({
   ContentHeaderComponent?: typeof ContentHeader;
 }) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
-  const debouncedSet = setter => debounce(setter, 100);
   const panelRef = React.useRef(null);
 
-  const handleSidemenuScroll = e => {
-    debouncedSet(setSidemenuScrollTop)(e.target.scrollTop);
+  const setScroll = debounce(setSidemenuScrollTop, 100);
+
+  const handleSidemenuScroll = (e: any) => {
+    setScroll(e.target.scrollTop);
   };
 
   // Only run on client side, don't run on server side
@@ -61,7 +58,9 @@ const SubmissionLayout = ({
       <PageBody className={clsx({ noSidebar })}>
         {!noSidebar && (
           <Sidebar>
-            <Panel ref={panelRef}>{sideMenu}</Panel>
+            <Panel ref={panelRef} onScroll={handleSidemenuScroll}>
+              {sideMenu}
+            </Panel>
             <Collapsible />
           </Sidebar>
         )}
@@ -76,3 +75,18 @@ const SubmissionLayout = ({
 };
 
 export default SubmissionLayout;
+
+export function MinimalLayout({ children }) {
+  return (
+    <PageContainer>
+      <Head title={'ICGC ARGO'} />
+      <NavBar hideLink />
+      <PageBody className={clsx({ noSidebar: true })}>
+        <PageContent>
+          <ContentBody>{children}</ContentBody>
+          <Footer />
+        </PageContent>
+      </PageBody>
+    </PageContainer>
+  );
+}
