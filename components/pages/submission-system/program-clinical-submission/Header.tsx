@@ -105,8 +105,8 @@ export default ({
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
+        setLoaderShown(false);
       }
-      setLoaderShown(false);
     }
   };
 
