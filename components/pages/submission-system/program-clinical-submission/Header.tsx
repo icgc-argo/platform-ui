@@ -101,6 +101,18 @@ export default ({
         </Row>
       </TitleBar>
       <Row nogutter align="center">
+        {isPendingApproval && (
+          <Button
+            variant="secondary"
+            isAsync
+            css={css`
+              margin-right: 10px;
+            `}
+            onClick={handleSubmissionReopen}
+          >
+            reopen
+          </Button>
+        )}
         {!isDcc && (
           <>
             {!isPendingApproval && (
@@ -129,16 +141,6 @@ export default ({
         )}
         {isDcc && isPendingApproval && (
           <>
-            <Button
-              variant="secondary"
-              isAsync
-              css={css`
-                margin-right: 10px;
-              `}
-              onClick={handleSubmissionReopen}
-            >
-              reopen
-            </Button>
             <Button size="sm" isAsync onClick={handleSubmissionApproval}>
               approve
             </Button>
