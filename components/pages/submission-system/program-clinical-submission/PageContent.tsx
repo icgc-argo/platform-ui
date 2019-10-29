@@ -172,7 +172,11 @@ export default () => {
   const allDataErrors = React.useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
-        React.ComponentProps<typeof ErrorNotification>['errors']
+        Array<
+          ClinicalSubmissionError & {
+            fileName: string;
+          }
+        >
       >(
         (acc, entity) => [
           ...acc,

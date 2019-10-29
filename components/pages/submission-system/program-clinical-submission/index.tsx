@@ -3,6 +3,24 @@ import SubmissionLayout from '../layout';
 import { styled } from 'uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionQueryData } from './types';
+import Progress from 'uikit/Progress';
+import { Row } from 'react-grid-system';
+import Link from 'uikit/Link';
+import Button from 'uikit/Button';
+import Instruction from './Instruction';
+import Container from 'uikit/Container';
+import { containerStyle } from '../common';
+import FilesNavigator from './FilesNavigator';
+import {
+  ClinicalSubmissionEntityFile,
+  GqlClinicalEntity,
+  ClinicalSubmissionQueryData,
+  ValidateSubmissionMutationVariables,
+  UploadFilesMutationVariables,
+  SignOffSubmissionMutationVariables,
+  ClinicalSubmissionError,
+} from './types';
+import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
@@ -47,23 +65,6 @@ export default function ProgramClinicalSubmission() {
       programShortName,
     },
   });
-
-  const allDataErrors = React.useMemo(
-    () =>
-      data.clinicalSubmissions.clinicalEntities.reduce<
-        React.ComponentProps<typeof ErrorNotification>['errors']
-      >(
-        (acc, entity) => [
-          ...acc,
-          ...entity.dataErrors.map(err => ({
-            ...err,
-            fileName: entity.batchName,
-          })),
-        ],
-        [],
-      ),
-    [data],
-  );
 
   const hasDataError = !!allDataErrors.length;
   const hasSchemaError =
