@@ -12,6 +12,7 @@ import {
 } from '../../common';
 import { CSSProperties } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
+import { Stats } from 'fs';
 
 const StarIcon = DataTableStarIcon;
 
@@ -110,7 +111,19 @@ export default ({
   const tableData = sortedRecords.map(record =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       row: record.row,
-    } as { row: number; [k: string]: number | string }),
+      status: (() => {
+        switch (true) {
+          case stats.updated.some(i => i === record.row):
+            return 'UPDATE';
+          case stats.errorsFound.some(i => i === record.row):
+            return 'ERROR';
+          case stats.new.some(i => i === record.row):
+            return 'NEW';
+          default:
+            return 'NONE';
+        }
+      })(),
+    } as { row: number; [k: string]: number | string; status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE' }),
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
@@ -144,13 +157,23 @@ export default ({
       width: 40,
     },
     {
-      id: 'error',
+      id: 'status',
       Cell: StatusColumCell,
+      accessor: 'status',
       Header: (
         <CellContentCenter>
           <StarIcon fill={FILE_STATE_COLORS.NONE} />
         </CellContentCenter>
       ),
+      sortMethod: (a: typeof tableData[0]['status'], b: typeof tableData[0]['status']) => {
+        const priorities = {
+          ERROR: 1,
+          UPDATE: 2,
+          NEW: 3,
+          NONE: 4,
+        } as { [k in typeof tableData[0]['status']]: number };
+        return priorities[a] - priorities[b];
+      },
       width: 50,
     },
     ...fields.map(({ name }) => ({
