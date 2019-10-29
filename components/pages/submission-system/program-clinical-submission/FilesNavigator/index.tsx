@@ -10,21 +10,26 @@ import NoData from 'uikit/NoData';
 import ErrorNotification from '../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
+import orderBy from 'lodash/orderBy';
+import head from 'lodash/head';
 
 export default ({
   fileStates,
   clearDataError,
   submissionState,
+  selectedFileIndex,
+  onFileSelect,
 }: {
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'];
   fileStates: Array<ClinicalSubmissionEntityFile>;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
+  selectedFileIndex: number;
+  onFileSelect: (i: number) => void;
 }) => {
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
-  const [selectedFileIndex, setSelectedFileIndex] = React.useState<number>(0);
   const onFileClick = (clinicalType: string) => e => {
-    setSelectedFileIndex(fileStates.findIndex(file => clinicalType === file.clinicalType));
+    onFileSelect(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
   const selectedFile = fileStates[selectedFileIndex];
   const onClearClick = () => {
