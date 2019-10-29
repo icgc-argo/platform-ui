@@ -50,14 +50,8 @@ const StatsArea = ({
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
-          {fileStat.newCount} New
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
-          {fileStat.noUpdateCount} No Update
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
+          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
@@ -68,8 +62,14 @@ const StatsArea = ({
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
-          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
+          {fileStat.newCount} New
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
+        <StatAreaDisplay.StatEntryContainer>
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
+          {fileStat.noUpdateCount} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
