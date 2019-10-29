@@ -12,6 +12,7 @@ import {
   ValidateSubmissionMutationVariables,
   UploadFilesMutationVariables,
   SignOffSubmissionMutationVariables,
+  ClinicalSubmissionError,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
@@ -20,10 +21,10 @@ import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
-import { displayDateAndTime } from 'global/utils/common';
+import { displayDateAndTime, insertAt } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification from './ErrorNotification';
+import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';

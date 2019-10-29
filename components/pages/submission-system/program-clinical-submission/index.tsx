@@ -2,39 +2,9 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { styled } from 'uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionQueryData } from './types';
-import Progress from 'uikit/Progress';
-import { Row } from 'react-grid-system';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
-import Instruction from './Instruction';
-import Container from 'uikit/Container';
-import { containerStyle } from '../common';
-import FilesNavigator from './FilesNavigator';
-import {
-  ClinicalSubmissionEntityFile,
-  GqlClinicalEntity,
-  ClinicalSubmissionQueryData,
-  ValidateSubmissionMutationVariables,
-  UploadFilesMutationVariables,
-  SignOffSubmissionMutationVariables,
-  ClinicalSubmissionError,
-} from './types';
-import Notification from 'uikit/notifications/Notification';
+import { ClinicalSubmissionQueryData, ClinicalSubmissionError } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
-import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
-import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
-import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import DnaLoader from 'uikit/DnaLoader';
-import { capitalize } from 'global/utils/stringUtils';
-import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification, { defaultColumns } from '../ErrorNotification';
-import { ModalPortal } from 'components/ApplicationRoot';
-import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
-import SubmissionSummaryTable from './SubmissionSummaryTable';
-import Typography from 'uikit/Typography';
 import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
@@ -65,6 +35,27 @@ export default function ProgramClinicalSubmission() {
       programShortName,
     },
   });
+
+  const allDataErrors = React.useMemo(
+    () =>
+      data.clinicalSubmissions.clinicalEntities.reduce<
+        Array<
+          ClinicalSubmissionError & {
+            fileName: string;
+          }
+        >
+      >(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataErrors.map(err => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [data],
+  );
 
   const hasDataError = !!allDataErrors.length;
   const hasSchemaError =
