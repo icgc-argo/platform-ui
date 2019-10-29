@@ -33,40 +33,40 @@ export const FILE_STATE_COLORS: {
   UPDATED: 'accent3_dark',
 };
 
-const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
+const StatsArea = ({
+  fileStat,
+  total,
+  isSubmissionValidated,
+}: {
+  fileStat: FileStat;
+  total: number;
+  isSubmissionValidated: boolean;
+}) => {
   return (
     <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>
-        {sum([
-          fileStat.newCount,
-          fileStat.noUpdateCount,
-          fileStat.updateCount,
-          fileStat.errorCount,
-        ])}{' '}
-        Total
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>{total} Total</StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
           {fileStat.newCount} New
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
           {fileStat.noUpdateCount} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
           {fileStat.updateCount} Updated
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
           {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
@@ -93,8 +93,10 @@ export default ({
   file,
   submissionData,
   isPendingApproval,
+  isSubmissionValidated,
 }: {
   isPendingApproval: boolean;
+  isSubmissionValidated: boolean;
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
@@ -173,6 +175,8 @@ export default ({
       <TableInfoHeaderContainer
         left={
           <StatsArea
+            isSubmissionValidated={isSubmissionValidated}
+            total={records.length}
             fileStat={{
               errorCount: file.stats.errorsFound.length,
               newCount: file.stats.new.length,
