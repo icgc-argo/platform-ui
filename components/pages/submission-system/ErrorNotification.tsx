@@ -43,7 +43,7 @@ export default ({
   subtitle,
   columnConfig,
   onClearClick,
-  excludedCols,
+  excludedCols = [],
 }: {
   title: string;
   subtitle: string;

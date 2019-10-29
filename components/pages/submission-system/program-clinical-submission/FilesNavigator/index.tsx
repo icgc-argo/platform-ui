@@ -43,7 +43,6 @@ export default ({
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
 
-  console.log('schema error', selectedFile.schemaErrors);
   return !selectedFile ? (
     <NoData
       css={css`
