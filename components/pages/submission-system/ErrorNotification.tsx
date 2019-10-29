@@ -37,7 +37,7 @@ export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
   },
 ];
 
-export default ({
+export default <Error extends { [k: string]: any }>({
   title,
   errors,
   subtitle,
@@ -48,18 +48,13 @@ export default ({
   title: string;
   subtitle: string;
   columnConfig: Array<{ [k: string]: any }>;
-  errors: Array<
-    | (ClinicalSubmissionError & {
-        fileName?: string;
-      })
-    | ClinicalRegistrationError
-  >;
+  errors: Array<Error>;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
-  tsvExcludeCols?: Array<keyof ClinicalRegistrationError>;
+  tsvExcludeCols?: Array<keyof Error>;
 }) => {
   const onDownloadClick = () => {
     exportToTsv(errors, {
-      exclude: union(tsvExcludeCols, ['__typename']),
+      exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
       order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
       headerDisplays: columnConfig.reduce<{}>(
