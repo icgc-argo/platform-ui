@@ -310,7 +310,7 @@ export default function ProgramIDRegistration() {
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
               columnConfig={defaultColumns}
-              excludedCols={['type', 'specimenId', 'donorId', 'sampleId']}
+              tsvExcludeCols={['type', 'specimenId', 'donorId', 'sampleId']}
             />
           ) : (
             <NoDataMessage loading={loading} />

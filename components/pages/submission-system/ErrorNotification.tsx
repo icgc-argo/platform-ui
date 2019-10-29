@@ -43,7 +43,7 @@ export default ({
   subtitle,
   columnConfig,
   onClearClick,
-  excludedCols = [],
+  tsvExcludeCols = [],
 }: {
   title: string;
   subtitle: string;
@@ -55,11 +55,11 @@ export default ({
     | ClinicalRegistrationError
   >;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
-  excludedCols?: Array<any>;
+  tsvExcludeCols?: Array<keyof ClinicalRegistrationError>;
 }) => {
   const onDownloadClick = () => {
     exportToTsv(errors, {
-      exclude: union(excludedCols, ['__typename']),
+      exclude: union(tsvExcludeCols, ['__typename']),
       order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
       headerDisplays: columnConfig.reduce<{}>(
