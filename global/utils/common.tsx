@@ -51,7 +51,7 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   const allKeys = uniq(
     data.reduce((acc, entry) => [...acc, ...Object.keys(entry)], [] as string[]),
   );
-  console.log('all keys', allKeys);
+
   const {
     exclude: excludeKeys = [],
     include: includeKeys = allKeys,
@@ -66,13 +66,15 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
     ),
   } = options;
   const orderedKeys = orderBy(allKeys, key => order.indexOf(key));
-  console.log('ordered keys', options.headerDisplays);
+
   /**
    * construct the tsv data
    */
+
   const filteredKeys = orderedKeys
     .filter(key => !excludeKeys.includes(key))
     .filter(key => includeKeys.includes(key));
+
   const dataRows: string[][] = data.map(entry => filteredKeys.map(key => String(entry[key])));
   const headerRow = filteredKeys.map(key => headerDisplays[key]);
   const tsvString = [headerRow, ...dataRows].map(row => row.join('\t')).join('\n');

@@ -8,12 +8,7 @@ import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import { ClinicalRegistrationError } from './program-sample-registration/types';
-
-const isClinicalSubmission = (
-  obj: ClinicalSubmissionError | number,
-): obj is ClinicalSubmissionError => {
-  return true;
-};
+import union from 'lodash/union';
 
 export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
   {
@@ -48,6 +43,7 @@ export default ({
   subtitle,
   columnConfig,
   onClearClick,
+  excludedCols,
 }: {
   title: string;
   subtitle: string;
@@ -59,11 +55,11 @@ export default ({
     | ClinicalRegistrationError
   >;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
+  excludedCols?: Array<any>;
 }) => {
   const onDownloadClick = () => {
-    console.log('onDownload', columnConfig);
     exportToTsv(errors, {
-      //      exclude: ['__typename'],
+      exclude: union(excludedCols, ['__typename']),
       order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
       headerDisplays: columnConfig.reduce<{}>(

@@ -54,8 +54,6 @@ export default function ProgramIDRegistration() {
     variables: { shortName: programShortName },
   });
 
-  console.log('data', clinicalRegistration);
-
   const fileErrors = get(clinicalRegistration, 'errors', []);
   const fileRecords = get(clinicalRegistration, 'records', []);
 
@@ -179,7 +177,7 @@ export default function ProgramIDRegistration() {
     align-items: center;
     margin-bottom: 8px;
   `;
-  console.log('file errors', fileErrors);
+
   return (
     <SubmissionLayout
       contentHeader={
@@ -312,6 +310,7 @@ export default function ProgramIDRegistration() {
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
               columnConfig={defaultColumns}
+              excludedCols={['type', 'specimenId', 'donorId', 'sampleId']}
             />
           ) : (
             <NoDataMessage loading={loading} />
