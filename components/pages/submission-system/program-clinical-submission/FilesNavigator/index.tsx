@@ -151,12 +151,21 @@ export default ({
             />
           </>
         ) : (
-          <NoData
-            title="You do not have any data uploaded."
-            subtitle="Follow the instructions above to get started."
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100%;
+            `}
           >
-            <img alt="no data found" src={noDataSvg} />
-          </NoData>
+            <NoData
+              title="You do not have any data uploaded."
+              subtitle="Follow the instructions above to get started."
+            >
+              <img alt="no data found" src={noDataSvg} />
+            </NoData>
+          </div>
         )}
       </Col>
     </div>
