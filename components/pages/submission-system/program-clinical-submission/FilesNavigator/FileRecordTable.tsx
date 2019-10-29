@@ -118,19 +118,21 @@ export default ({
     const hasUpdate = stats.updated.some(row => row === original.row);
     const isNew = stats.new.some(row => row === original.row);
     return (
-      <CellContentCenter>
-        <StarIcon
-          fill={
-            hasError
-              ? FILE_STATE_COLORS.ERROR
-              : hasUpdate
-              ? FILE_STATE_COLORS.UPDATED
-              : isNew
-              ? FILE_STATE_COLORS.NEW
-              : FILE_STATE_COLORS.NONE
-          }
-        />
-      </CellContentCenter>
+      isSubmissionValidated && (
+        <CellContentCenter>
+          <StarIcon
+            fill={
+              hasError
+                ? FILE_STATE_COLORS.ERROR
+                : hasUpdate
+                ? FILE_STATE_COLORS.UPDATED
+                : isNew
+                ? FILE_STATE_COLORS.NEW
+                : FILE_STATE_COLORS.NONE
+            }
+          />
+        </CellContentCenter>
+      )
     );
   };
 
