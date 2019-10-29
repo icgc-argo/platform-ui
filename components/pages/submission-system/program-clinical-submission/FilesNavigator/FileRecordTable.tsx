@@ -218,7 +218,20 @@ export default ({
   const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      Cell: ({ original }) => <CellContentCenter>{Number(original.row) + 1}</CellContentCenter>,
+      Cell: ({ original }) => (
+        <CellContentCenter
+          css={
+            rowHasUpdate(original)
+              ? css`
+                  justify-content: flex-start;
+                  padding-top: 5px;
+                `
+              : css``
+          }
+        >
+          {Number(original.row) + 1}
+        </CellContentCenter>
+      ),
       Header: '#',
       resizable: false,
       width: 40,
