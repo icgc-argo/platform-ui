@@ -4,6 +4,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import Router from 'next/router';
+import styled from '@emotion/styled';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -46,6 +47,14 @@ const Loader = () => (
     <DnaLoader />
   </div>
 );
+
+const StatusMenuItem = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding-right: 15px;
+`;
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
@@ -100,7 +109,33 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       >
         <MenuItem
           level={3}
-          content="Register Samples"
+          content={
+            <div
+              css={css`
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                align-items: center;
+                padding-right: 15px;
+              `}
+            >
+              Register Samples
+              {
+                ({
+                  OPEN: clinicalSubmissionHasSchemaErrors ? (
+                    <Icon name="exclamation" fill="error" width="15px" />
+                  ) : (
+                    <Icon name="ellipses" fill="warning" width="15px" />
+                  ),
+                  VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                  INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                  PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
+                  data ? data.clinicalSubmissions.state : null
+                ]
+              }
+            </div>
+          }
           selected={
             PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
           }
@@ -117,15 +152,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         <MenuItem
           level={3}
           content={
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                align-items: center;
-                padding-right: 15px;
-              `}
-            >
+            <StatusMenuItem>
               Submit Clinical Data
               {
                 ({
@@ -141,7 +168,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                   data ? data.clinicalSubmissions.state : null
                 ]
               }
-            </div>
+            </StatusMenuItem>
           }
           selected={
             PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
