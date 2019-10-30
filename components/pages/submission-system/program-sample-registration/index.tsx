@@ -20,58 +20,12 @@ import GET_REGISTRATION from './GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
-import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
-import ErrorTable from './ErrorTable';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
-
-type ClinicalRecords = Array<{
-  row: number;
-  fields: Array<{
-    name: string;
-    value: string;
-  }>;
-}>;
-
-export type ClinicalErrors = Array<{
-  type: string;
-  message: string;
-  row: number;
-  field: string;
-  value: string;
-  sampleId: string;
-  donorId: string;
-  specimenId: string;
-}>;
-
-export type ClinicalRegistration = {
-  id: string;
-  createdAt: string;
-  creator: string;
-  fileName: string;
-  newDonors: {
-    count: number;
-    rows: Array<number>;
-  };
-  newSpecimens: {
-    count: number;
-    rows: Array<number>;
-  };
-  newSamples: {
-    count: number;
-    rows: Array<number>;
-  };
-  alreadyRegistered: {
-    count: number;
-    rows: Array<number>;
-  };
-  records: ClinicalRecords;
-  errors: ClinicalErrors;
-};
-
-export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+import ErrorNotification, { defaultColumns } from '../ErrorNotification';
+import { RegisterState, ClinicalRegistrationData, ClinicalRegistration } from './types';
 
 const registerStateStringMap: { [key in RegisterState]: string } = {
   INPROGRESS: 'Registering...',
@@ -79,7 +33,10 @@ const registerStateStringMap: { [key in RegisterState]: string } = {
   '': '',
 };
 
-const recordsToFileTable = (records: ClinicalRecords, newRows: Array<number>): Array<FileEntry> =>
+const recordsToFileTable = (
+  records: ClinicalRegistrationData[],
+  newRows: Array<number>,
+): Array<FileEntry> =>
   records.map(record => {
     const fields = get(record, 'fields', []);
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
@@ -96,6 +53,7 @@ export default function ProgramIDRegistration() {
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
+
   const fileErrors = get(clinicalRegistration, 'errors', []);
   const fileRecords = get(clinicalRegistration, 'records', []);
 
@@ -344,11 +302,15 @@ export default function ProgramIDRegistration() {
               />
             </>
           ) : fileErrors.length > 0 ? (
-            <ErrorTable
+            <ErrorNotification
+              onClearClick={handleClearClick}
+              title={`${fileErrors.length} errors found in uploaded file`}
               errors={fileErrors}
-              count={fileErrors.length}
-              onClear={handleClearClick}
-              onDownload={() => console.log('download')}
+              subtitle={
+                'Your file cannot be processed. Please correct the following errors and reupload your file.'
+              }
+              columnConfig={defaultColumns}
+              tsvExcludeCols={['type', 'specimenId', 'donorId', 'sampleId']}
             />
           ) : (
             <NoDataMessage loading={loading} />

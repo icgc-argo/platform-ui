@@ -3,71 +3,61 @@ import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
-import { ClinicalSubmissionError } from './types';
+import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
-import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from '../common';
+import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
+import { ClinicalRegistrationError } from './program-sample-registration/types';
+import union from 'lodash/union';
 
-const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
-  ...arr.slice(0, i),
-  element,
-  ...arr.slice(i, arr.length),
+export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
+  {
+    accessor: 'row',
+    Header: 'Row #',
+    maxWidth: 70,
+  },
+  {
+    accessor: 'donorId',
+    Header: 'Submitter Donor ID',
+    maxWidth: 160,
+  },
+  {
+    accessor: 'field',
+    Header: 'Field with Error',
+    maxWidth: 200,
+  },
+  {
+    accessor: 'value',
+    Header: 'Error Value',
+    maxWidth: 130,
+  },
+  {
+    accessor: 'message',
+    Header: 'Error Description',
+  },
 ];
 
-export default ({
+export default <Error extends { [k: string]: any }>({
   title,
   errors,
   subtitle,
-  showClinicalType,
+  columnConfig,
   onClearClick,
+  tsvExcludeCols = [],
 }: {
   title: string;
   subtitle: string;
-  errors: Array<
-    ClinicalSubmissionError & {
-      fileName?: string;
-    }
-  >;
+  columnConfig: Array<{ [k: string]: any }>;
+  errors: Array<Error>;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
-  showClinicalType?: boolean;
+  tsvExcludeCols?: Array<keyof Error>;
 }) => {
-  const defaultColumns: TableColumnConfig<typeof errors[0]>[] = [
-    {
-      accessor: 'row',
-      Header: 'Row #',
-      maxWidth: 70,
-    },
-    {
-      accessor: 'donorId',
-      Header: 'Submitter Donor ID',
-      maxWidth: 160,
-    },
-    {
-      accessor: 'field',
-      Header: 'Field with Error',
-      maxWidth: 200,
-    },
-    {
-      accessor: 'value',
-      Header: 'Error Value',
-      maxWidth: 130,
-    },
-    {
-      accessor: 'message',
-      Header: 'Error Description',
-    },
-  ];
-  const columnsWithClinicalType = insertAt(defaultColumns)(0)({
-    accessor: 'fileName',
-    Header: 'File',
-    maxWidth: 150,
-  });
   const onDownloadClick = () => {
     exportToTsv(errors, {
-      exclude: ['__typename'],
-      order: columnsWithClinicalType.map(entry => entry.accessor),
+      exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
+      order: columnConfig.map(entry => entry.accessor),
       fileName: 'error_report.tsv',
-      headerDisplays: columnsWithClinicalType.reduce<{}>(
+      headerDisplays: columnConfig.reduce<{}>(
         (acc, { accessor, Header }) => ({
           ...acc,
           [accessor]: Header as string,
@@ -76,6 +66,7 @@ export default ({
       ),
     });
   };
+
   return (
     <Notification
       variant="ERROR"
@@ -120,7 +111,7 @@ export default ({
           <Table
             NoDataComponent={() => null}
             showPagination={false}
-            columns={showClinicalType ? columnsWithClinicalType : defaultColumns}
+            columns={columnConfig}
             data={errors}
           />
         </div>

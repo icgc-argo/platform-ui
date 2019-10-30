@@ -7,7 +7,7 @@ import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification, { defaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
 import orderBy from 'lodash/orderBy';
@@ -42,6 +42,7 @@ export default ({
     clearDataError(selectedFile);
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
+
   return !selectedFile ? (
     <NoData
       css={css`
@@ -111,6 +112,7 @@ export default ({
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
+              columnConfig={defaultColumns}
             />
           </div>
         ) : !!selectedFile.records.length ? (
