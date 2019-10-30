@@ -12,6 +12,8 @@ import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
+import debounce from 'lodash/debounce';
+import { css } from 'uikit';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -85,6 +87,7 @@ function Table<Data = { [k: string]: any }>({
       return {};
     }
   },
+  parentRef,
   ...rest
 }: Partial<TableProps<Data>> & {
   variant?: TableVariant;
@@ -93,6 +96,7 @@ function Table<Data = { [k: string]: any }>({
   selectedIds?: Array<any>;
   primaryKey?: string;
   columns: TableProps<Data>['columns']; //columns is required
+  parentRef: React.RefObject<HTMLElement>;
 } & StyledTableProps) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -102,8 +106,29 @@ function Table<Data = { [k: string]: any }>({
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
 
+  // react-table needs an explicit pixel width to handle horizontal scroll properly.
+  // This syncs up the component's width to its container.
+  const [width, setWidthState] = React.useState(0);
+  const setWidth = debounce(setWidthState, 100);
+  React.useEffect(() => {
+    if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
+  }, [!!parentRef.current ? parentRef.current.clientWidth : 0]);
+  React.useEffect(() => {
+    const parentElement = parentRef.current;
+    const onResize = () => {
+      setWidth(parentElement.clientWidth);
+    };
+    if (parentElement) window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [parentRef.current]);
+
   return (
     <StyledTable
+      css={css`
+        width: ${width}px;
+      `}
       withRowBorder={withRowBorder}
       getTableProps={getTableProps}
       columns={columns}
@@ -146,6 +171,8 @@ export function SelectTable<Data = { [k: string]: any }>(
   props: Partial<TableProps<Data>> &
     Partial<SelectTableAdditionalProps> & {
       columns: TableProps<Data>['columns']; //columns is required
+    } & {
+      parentRef: React.RefObject<HTMLElement>;
     },
 ) {
   const { isSelected, data, keyField } = props;
