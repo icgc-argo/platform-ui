@@ -1,14 +1,6 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
-import elementResizeDetectorMaker from 'element-resize-detector';
-import memoize from 'lodash/memoize';
-
-const getElementResizeListener = memoize(elementResizeDetectorMaker as () => {
-  listenTo: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
-  removeListener: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
-  removeAllListener: <T extends HTMLElement>(el: T) => void;
-  uninstall: <T extends HTMLElement>(el: T) => void;
-});
+import getElementResizeListener from 'uikit/utils/getElementResizeListener';
 
 export default (
   parentRef: React.RefObject<HTMLElement>,
