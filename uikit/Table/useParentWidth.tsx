@@ -21,8 +21,10 @@ export default (
     }, config.resizeDebounce);
     const parentElement = parentRef.current;
     const onResize = () => {
-      setResizing(true);
-      setWidth(parentElement.clientWidth);
+      if (parentElement.clientWidth !== width) {
+        setResizing(true);
+        setWidth(parentElement.clientWidth);
+      }
     };
     if (parentElement) window.addEventListener('resize', onResize);
     return () => {

@@ -117,6 +117,7 @@ function Table<Data = { [k: string]: any }>({
         // this is written with style object because css prop someone only applies to the header
         transition: 'all 0.25s',
         filter: resizing ? 'blur(8px)' : 'blur(0px)',
+        width,
       }}
       withRowBorder={withRowBorder}
       getTableProps={getTableProps}
@@ -125,14 +126,7 @@ function Table<Data = { [k: string]: any }>({
       isSelectTable={isSelectTable}
       className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
       TrComponent={props => (
-        <TrComponent
-          {...props}
-          primaryKey={primaryKey}
-          selectedIds={selectedIds}
-          css={css`
-            width: ${width}px;
-          `}
-        />
+        <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
       )}
       LoadingComponent={LoadingComponent}
       getTrProps={(state, rowInfo, column) => ({
