@@ -113,7 +113,7 @@ const VerticalTabs: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>> = ({
 };
 
 const TabsItemTag: typeof Tag = styled(Tag)`
-  min-width: 27px;
+  min-width: 30px;
   justify-content: center;
   text-align: center;
 `;
