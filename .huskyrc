@@ -1,4 +1,6 @@
 {
-  "pre-commit": "pretty-quick --staged",
-  "pre-push": "npm run type-check"
+  "hooks": {
+    "pre-commit": "pretty-quick --staged",
+    "pre-push": "npm run type-check"
+  }
 }
