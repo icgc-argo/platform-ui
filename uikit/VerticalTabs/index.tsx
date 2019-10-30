@@ -1,6 +1,6 @@
 import React, { HtmlHTMLAttributes, HTMLAttributes } from 'react';
-import { useTheme } from '../../ThemeProvider';
-import { css, styled } from '../..';
+import { useTheme } from '../ThemeProvider';
+import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';

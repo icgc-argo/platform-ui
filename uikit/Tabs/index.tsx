@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 import clsx from 'clsx';
-import useTheme from '../../utils/useTheme';
+import useTheme from '../utils/useTheme';
 
 const TabsContext = React.createContext({ onChange: null, value: null });
 
