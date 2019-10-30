@@ -14,6 +14,7 @@ import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
 import debounce from 'lodash/debounce';
 import { css } from 'uikit';
+import useParentWidth from './useParentWidth';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -108,26 +109,7 @@ function Table<Data = { [k: string]: any }>({
 
   // react-table needs an explicit pixel width to handle horizontal scroll properly.
   // This syncs up the component's width to its container.
-  const [width, setWidthState] = React.useState(0);
-  const [resizing, setResizing] = React.useState(false);
-  React.useEffect(() => {
-    if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
-  }, [!!parentRef.current ? parentRef.current.clientWidth : 0]);
-  React.useEffect(() => {
-    const setWidth = debounce((width: number) => {
-      setWidthState(width);
-      setResizing(false);
-    }, 200);
-    const parentElement = parentRef.current;
-    const onResize = () => {
-      setResizing(true);
-      setWidth(parentElement.clientWidth);
-    };
-    if (parentElement) window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
-  }, [parentRef.current]);
+  const { width, resizing } = useParentWidth(parentRef);
 
   return (
     <StyledTable
