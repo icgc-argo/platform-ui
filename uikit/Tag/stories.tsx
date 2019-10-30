@@ -1,11 +1,11 @@
-
 import { storiesOf } from '@storybook/react';
+import { text } from '@storybook/addon-knobs';
 import React from 'react';
 import Tag from '.';
 import Icon from '../Icon';
 
 const TagStories = storiesOf(`${__dirname}`, module)
-  .add('Basic', () => <Tag>Tag label</Tag>)
+  .add('Basic', () => <Tag> {text('Tag label', 'Tag label')}</Tag>)
   .add('Tag with icon', () => (
     <Tag>
       Tag label&nbsp;&nbsp;
