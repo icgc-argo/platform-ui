@@ -145,24 +145,30 @@ const TableStories = storiesOf(`${__dirname}`, module)
       },
     },
   )
-  .add('No Data', () => (
-    <Table
-      columns={[
-        {
-          sortable: false,
-          Header: 'ID',
-          accessor: 'idField',
-        },
-        {
-          Header: 'Property 2',
-          accessor: 'prop2',
-        },
-        {
-          Header: 'Property 3',
-          accessor: 'prop3',
-        },
-      ]}
-    />
-  ));
+  .add('No Data', () => {
+    const containerRef = React.createRef<HTMLDivElement>();
+    return (
+      <div ref={containerRef}>
+        <Table
+          parentRef={containerRef}
+          columns={[
+            {
+              sortable: false,
+              Header: 'ID',
+              accessor: 'idField',
+            },
+            {
+              Header: 'Property 2',
+              accessor: 'prop2',
+            },
+            {
+              Header: 'Property 3',
+              accessor: 'prop3',
+            },
+          ]}
+        />
+      </div>
+    );
+  });
 
 export default TableStories;
