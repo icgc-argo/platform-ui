@@ -109,13 +109,18 @@ function Table<Data = { [k: string]: any }>({
   // react-table needs an explicit pixel width to handle horizontal scroll properly.
   // This syncs up the component's width to its container.
   const [width, setWidthState] = React.useState(0);
-  const setWidth = debounce(setWidthState, 100);
+  const [resizing, setResizing] = React.useState(false);
   React.useEffect(() => {
     if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
   }, [!!parentRef.current ? parentRef.current.clientWidth : 0]);
   React.useEffect(() => {
+    const setWidth = debounce((width: number) => {
+      setWidthState(width);
+      setResizing(false);
+    }, 200);
     const parentElement = parentRef.current;
     const onResize = () => {
+      setResizing(true);
       setWidth(parentElement.clientWidth);
     };
     if (parentElement) window.addEventListener('resize', onResize);
@@ -126,9 +131,11 @@ function Table<Data = { [k: string]: any }>({
 
   return (
     <StyledTable
-      css={css`
-        width: ${width}px;
-      `}
+      style={{
+        // this is written with style object because css prop someone only applies to the header
+        transition: 'all 0.25s',
+        filter: resizing ? 'blur(8px)' : 'blur(0px)',
+      }}
       withRowBorder={withRowBorder}
       getTableProps={getTableProps}
       columns={columns}
@@ -136,7 +143,14 @@ function Table<Data = { [k: string]: any }>({
       isSelectTable={isSelectTable}
       className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
       TrComponent={props => (
-        <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
+        <TrComponent
+          {...props}
+          primaryKey={primaryKey}
+          selectedIds={selectedIds}
+          css={css`
+            width: ${width}px;
+          `}
+        />
       )}
       LoadingComponent={LoadingComponent}
       getTrProps={(state, rowInfo, column) => ({
