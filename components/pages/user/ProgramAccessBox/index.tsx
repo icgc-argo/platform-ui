@@ -42,23 +42,32 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       <UikitLink>{original.shortName}</UikitLink>
     </Link>
   );
+  const containerRef = React.createRef<HTMLDivElement>();
 
   return (
-    <Table
-      sortable={false}
-      showPagination={false}
-      data={props.programs}
-      columns={[
-        {
-          Header: 'Program Name',
-          accessor: 'shortName',
-          maxWidth: 150,
-          Cell: ProgramNameCell,
-        },
-        { Header: 'Role', accessor: 'role', maxWidth: 170 },
-        { Header: 'Permissions', accessor: 'permissions' },
-      ]}
-    />
+    <div
+      css={css`
+        width: 100%;
+      `}
+      ref={containerRef}
+    >
+      <Table
+        parentRef={containerRef}
+        sortable={false}
+        showPagination={false}
+        data={props.programs}
+        columns={[
+          {
+            Header: 'Program Name',
+            accessor: 'shortName',
+            maxWidth: 150,
+            Cell: ProgramNameCell,
+          },
+          { Header: 'Role', accessor: 'role', maxWidth: 170 },
+          { Header: 'Permissions', accessor: 'permissions' },
+        ]}
+      />
+    </div>
   );
 };
 
@@ -113,6 +122,7 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
 export default function ProgramAccessBox() {
   const { token } = useAuthContext();
   const programs = getProgramTableProgramFromEgoJwt(token || '');
+  const tableParentProps = React.createRef<HTMLDivElement>();
 
   return (
     <Box title="Program Access" iconName="programs">

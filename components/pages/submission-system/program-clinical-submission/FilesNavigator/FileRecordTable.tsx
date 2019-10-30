@@ -10,7 +10,7 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
-import { CSSProperties } from 'react';
+import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 
 const StarIcon = DataTableStarIcon;
@@ -104,6 +104,7 @@ export default ({
     ? records[0].fields
     : [];
   const sortedRecords = orderBy<typeof records[0]>(records, REQUIRED_FILE_ENTRY_FIELDS.ROW);
+  const containerRef = createRef<HTMLDivElement>();
 
   const tableData = sortedRecords.map(record =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
@@ -166,8 +167,11 @@ export default ({
 
   return (
     <div
+      ref={containerRef}
+      className="yo"
       css={css`
         margin: 5px 10px;
+        /* width: 100%; */
       `}
     >
       <TableInfoHeaderContainer
@@ -184,6 +188,7 @@ export default ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
+        parentRef={containerRef}
         getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
           ({
             style:

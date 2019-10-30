@@ -42,6 +42,7 @@ export default function ProgramsTable(tableProps: {
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
+  const containerRef = React.createRef<HTMLDivElement>();
   const columns: Array<TableColumnConfig<TableProgramInternal>> = [
     {
       Header: 'Short Name',
@@ -159,13 +160,21 @@ export default function ProgramsTable(tableProps: {
     },
   ];
   return (
-    <Table
-      data={data}
-      columns={columns}
-      showPagination={false}
-      loading={tableProps.loading}
-      pageSize={100}
-      LoadingComponent={tableProps.LoadingComponent}
-    />
+    <div
+      ref={containerRef}
+      css={css`
+        width: 100%;
+      `}
+    >
+      <Table
+        parentRef={containerRef}
+        data={data}
+        columns={columns}
+        showPagination={false}
+        loading={tableProps.loading}
+        pageSize={100}
+        LoadingComponent={tableProps.LoadingComponent}
+      />
+    </div>
   );
 }

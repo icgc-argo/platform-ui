@@ -85,13 +85,17 @@ const FileTable = (props: {
     }),
   );
 
+  const containerRef = React.createRef<HTMLDivElement>();
+
   return (
     <div
+      ref={containerRef}
       css={css`
         position: relative;
       `}
     >
       <Table
+        parentRef={containerRef}
         TheadComponent={({ children, className, ...rest }) => (
           <Affix
             top={58}
