@@ -1,5 +1,14 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
+import elementResizeDetectorMaker from 'element-resize-detector';
+import memoize from 'lodash/memoize';
+
+const getElementResizeListener = memoize(elementResizeDetectorMaker as () => {
+  listenTo: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
+  removeListener: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
+  removeAllListener: <T extends HTMLElement>(el: T) => void;
+  uninstall: <T extends HTMLElement>(el: T) => void;
+});
 
 export default (
   parentRef: React.RefObject<HTMLElement>,
@@ -15,20 +24,21 @@ export default (
     if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
   }, [!!parentRef.current ? parentRef.current.clientWidth : 0]);
   React.useEffect(() => {
+    const currentParent = parentRef.current;
     const setWidth = debounce((width: number) => {
       setWidthState(width);
       setResizing(false);
     }, config.resizeDebounce);
-    const parentElement = parentRef.current;
     const onResize = () => {
-      if (parentElement.clientWidth !== width) {
+      if (currentParent.clientWidth !== width) {
         setResizing(true);
-        setWidth(parentElement.clientWidth);
+        setWidth(currentParent.clientWidth);
       }
     };
-    if (parentElement) window.addEventListener('resize', onResize);
+    const resizeListener = getElementResizeListener();
+    if (currentParent) resizeListener.listenTo(currentParent, onResize);
     return () => {
-      window.removeEventListener('resize', onResize);
+      if (currentParent) resizeListener.removeListener(currentParent, onResize);
     };
   }, [parentRef.current]);
   return { width, resizing };
