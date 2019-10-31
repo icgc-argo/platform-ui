@@ -118,7 +118,7 @@ const FileTable = (props: {
         columns={[
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => original.row + 1,
+            Cell: ({ original }) => Number(original.row) + 1,
             Header: '#',
             width: 48,
           },

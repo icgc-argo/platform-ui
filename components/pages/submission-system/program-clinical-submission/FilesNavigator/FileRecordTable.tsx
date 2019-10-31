@@ -153,7 +153,7 @@ export default ({
   const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      Cell: ({ original }) => <CellContentCenter>{original.row + 1}</CellContentCenter>,
+      Cell: ({ original }) => <CellContentCenter>{Number(original.row) + 1}</CellContentCenter>,
       Header: '#',
       width: 40,
     },
