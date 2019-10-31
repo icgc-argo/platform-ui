@@ -160,6 +160,7 @@ export default function ProgramsTable(tableProps: {
   ];
   return (
     <Table
+      parentRef={React.createRef()}
       data={data}
       columns={columns}
       showPagination={false}

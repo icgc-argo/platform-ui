@@ -101,7 +101,7 @@ export default ({
           ))}
         </VerticalTabs>
       </div>
-      <Col style={{ position: 'relative' }}>
+      <Col style={{ position: 'relative', overflow: 'hidden' }}>
         {shouldShowError ? (
           <div
             css={css`

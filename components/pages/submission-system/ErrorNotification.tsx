@@ -101,21 +101,32 @@ export default <Error extends { [k: string]: any }>({
           </div>
         </div>
       }
-      content={
-        <div
-          css={css`
-            margin-top: 10px;
-          `}
-        >
-          <div>{subtitle}</div>
-          <Table
-            NoDataComponent={() => null}
-            showPagination={false}
-            columns={columnConfig}
-            data={errors}
-          />
-        </div>
-      }
+      contentProps={{
+        css: css`
+          overflow: hidden;
+        `,
+      }}
+      content={(() => {
+        const containerRef = React.createRef<HTMLDivElement>();
+        return (
+          <div
+            ref={containerRef}
+            css={css`
+              margin-top: 10px;
+              width: 100%;
+            `}
+          >
+            <div>{subtitle}</div>
+            <Table
+              parentRef={containerRef}
+              NoDataComponent={() => null}
+              showPagination={false}
+              columns={columnConfig}
+              data={errors}
+            />
+          </div>
+        );
+      })()}
     />
   );
 };

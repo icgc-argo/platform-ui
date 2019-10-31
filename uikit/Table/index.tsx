@@ -12,6 +12,7 @@ import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
+import useElementDimention from '../utils/Hook/useElementDimention';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -85,6 +86,8 @@ function Table<Data = { [k: string]: any }>({
       return {};
     }
   },
+  parentRef,
+  withResizeBlur = false,
   ...rest
 }: Partial<TableProps<Data>> & {
   variant?: TableVariant;
@@ -93,6 +96,8 @@ function Table<Data = { [k: string]: any }>({
   selectedIds?: Array<any>;
   primaryKey?: string;
   columns: TableProps<Data>['columns']; //columns is required
+  parentRef: React.RefObject<HTMLElement>;
+  withResizeBlur?: boolean;
 } & StyledTableProps) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -102,8 +107,18 @@ function Table<Data = { [k: string]: any }>({
   const isSelectTable = rest.isSelectTable || false;
   const primaryKey = rest.primaryKey || 'id';
 
+  // react-table needs an explicit pixel width to handle horizontal scroll properly.
+  // This syncs up the component's width to its container.
+  const { width, resizing } = useElementDimention(parentRef);
+
   return (
     <StyledTable
+      style={{
+        // this is written with style object because css prop somehow only applies to the header
+        transition: 'all 0.25s',
+        filter: resizing && withResizeBlur ? 'blur(8px)' : 'blur(0px)',
+        width,
+      }}
       withRowBorder={withRowBorder}
       getTableProps={getTableProps}
       columns={columns}
@@ -146,6 +161,8 @@ export function SelectTable<Data = { [k: string]: any }>(
   props: Partial<TableProps<Data>> &
     Partial<SelectTableAdditionalProps> & {
       columns: TableProps<Data>['columns']; //columns is required
+      parentRef: React.RefObject<HTMLElement>;
+      withResizeBlur?: boolean;
     },
 ) {
   const { isSelected, data, keyField } = props;

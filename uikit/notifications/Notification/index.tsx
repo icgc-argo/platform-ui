@@ -67,6 +67,7 @@ const Notification = ({
     event: React.SyntheticEvent;
   }) => {},
   noShadow = false,
+  contentProps = {},
   ...otherProps
 }: {
   variant?: keyof typeof NOTIFICATION_VARIANTS;
@@ -79,6 +80,7 @@ const Notification = ({
   icon?: React.ReactNode;
   onInteraction?: ({ type, event }) => void;
   noShadow?: boolean;
+  contentProps?: React.ComponentProps<typeof NotificationBodyContainer>;
 }) => {
   const theme = useTheme();
   const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
@@ -97,7 +99,7 @@ const Notification = ({
   return (
     <NotificationContainer variant={variant} noShadow={noShadow} {...otherProps}>
       {icon && <IconContainer>{icon}</IconContainer>}
-      <NotificationBodyContainer>
+      <NotificationBodyContainer {...contentProps}>
         {title && (
           <Typography
             variant={titleTypographyVariant}
