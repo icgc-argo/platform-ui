@@ -161,8 +161,8 @@ export function SelectTable<Data = { [k: string]: any }>(
   props: Partial<TableProps<Data>> &
     Partial<SelectTableAdditionalProps> & {
       columns: TableProps<Data>['columns']; //columns is required
-    } & {
       parentRef: React.RefObject<HTMLElement>;
+      withResizeBlur?: boolean;
     },
 ) {
   const { isSelected, data, keyField } = props;
