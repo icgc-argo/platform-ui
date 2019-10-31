@@ -14,6 +14,7 @@ import DnaLoader from 'uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
@@ -73,6 +74,12 @@ type ClinicalSubmissionQueryResponse = {
     }>;
   };
 };
+
+type SampleRegistrationQueryResponse = {
+  fileName: string;
+  errors: Array<{ type: string }>;
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { token } = useAuthContext();
@@ -81,6 +88,18 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       programShortName: props.program.shortName,
     },
   });
+
+  const { data: sampleRegistrationData } = useQuery<SampleRegistrationQueryResponse>(
+    SIDE_MENU_SAMPLE_REGISTRATION_STATE,
+    {
+      variables: {
+        programShortName: props.program.shortName,
+      },
+    },
+  );
+  console.log('sample reg dat', sampleRegistrationData);
+  const sampleRegistrationHasErrors = sampleRegistrationData && !!sampleRegistrationData.fileName;
+  console.log('sample reg has errors', sampleRegistrationHasErrors);
 
   const clinicalSubmissionHasSchemaErrors = data
     ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)

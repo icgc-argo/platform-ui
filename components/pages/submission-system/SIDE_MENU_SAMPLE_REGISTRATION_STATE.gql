@@ -1,6 +1,8 @@
 query SIDE_MENU_SAMPLE_REGISTRATION_STATE($programShortName: String!) {
-  clinicalRegistration(shortName: $shortName) {
+  clinicalRegistration(shortName: $programShortName) {
     fileName
-    errors
+    errors {
+      type
+    }
   }
 }
