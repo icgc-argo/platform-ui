@@ -12,7 +12,7 @@ import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
-import useElementWidth from '../utils/Hook/useElementDimention';
+import useElementDimention from '../utils/Hook/useElementDimention';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -109,7 +109,7 @@ function Table<Data = { [k: string]: any }>({
 
   // react-table needs an explicit pixel width to handle horizontal scroll properly.
   // This syncs up the component's width to its container.
-  const { width, resizing } = useElementWidth(parentRef);
+  const { width, resizing } = useElementDimention(parentRef);
 
   return (
     <StyledTable
