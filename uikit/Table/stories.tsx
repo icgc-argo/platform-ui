@@ -23,6 +23,7 @@ const TableStories = storiesOf(`${__dirname}`, module)
         showPaginationTop: boolean('showPaginationTop', false),
         showPaginationBottom: boolean('showPaginationBottom', false),
         stripped: boolean('stripped', true),
+        withResizeBlur: boolean('withResizeBlur', false),
         withRowBorder: boolean('withRowBorder', false),
       };
       const containerRef = React.createRef<HTMLDivElement>();
