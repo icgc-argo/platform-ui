@@ -45,6 +45,7 @@ export default function ProgramDashboard() {
       {justJoined && (
         <Banner
           title={`Welcome to ${programShortName}`}
+          interactionType="CLOSE"
           variant={BANNER_VARIANTS.SUCCESS}
           content="If you have trouble getting started, please check out our documentation for program management, data access and data submission."
           css={css`
