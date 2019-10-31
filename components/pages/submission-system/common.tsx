@@ -32,7 +32,7 @@ export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
 );
 export const StatArea: {
   Container: React.ComponentType;
-  Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
+  Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement> & { faded?: boolean }>;
   StatEntryContainer: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
   StarIcon: typeof DataTableStarIcon;
 } = (() => {
@@ -50,11 +50,12 @@ export const StatArea: {
       {children}
     </Typography>
   );
-  const Section = styled('div')`
+  const Section = styled('div')<{ faded?: boolean }>`
     display: flex;
     align-items: center;
     margin-right: 16px;
     text-align: center;
+    opacity: ${({ faded }) => (faded ? 0.3 : 1)};
   `;
   const StatEntryContainer = styled('div')`
     margin-right: 5px;

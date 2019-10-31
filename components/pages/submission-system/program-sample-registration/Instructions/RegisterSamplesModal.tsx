@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Router from 'next/router';
-import { RegisterState } from '..';
+import { RegisterState } from '../types';
 
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';

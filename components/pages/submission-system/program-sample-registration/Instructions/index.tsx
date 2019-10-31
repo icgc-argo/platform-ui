@@ -9,7 +9,7 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { RegisterState } from '../index';
+import { RegisterState } from '../types';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
 import {

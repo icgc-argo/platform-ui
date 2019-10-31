@@ -2,10 +2,9 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { styled } from 'uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionQueryData } from './types';
+import { ClinicalSubmissionQueryData, ClinicalSubmissionError } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
-import ErrorNotification from './ErrorNotification';
 import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
@@ -40,7 +39,11 @@ export default function ProgramClinicalSubmission() {
   const allDataErrors = React.useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
-        React.ComponentProps<typeof ErrorNotification>['errors']
+        Array<
+          ClinicalSubmissionError & {
+            fileName: string;
+          }
+        >
       >(
         (acc, entity) => [
           ...acc,

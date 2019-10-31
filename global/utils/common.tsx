@@ -2,6 +2,12 @@ import { format as formatDate } from 'date-fns';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 
+export const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
+  ...arr.slice(0, i),
+  element,
+  ...arr.slice(i, arr.length),
+];
+
 export const asEnum = (obj, { name = 'enum' } = {}) =>
   new Proxy(obj, {
     get: (obj, prop) => {
@@ -45,6 +51,7 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   const allKeys = uniq(
     data.reduce((acc, entry) => [...acc, ...Object.keys(entry)], [] as string[]),
   );
+
   const {
     exclude: excludeKeys = [],
     include: includeKeys = allKeys,
@@ -53,7 +60,7 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
     headerDisplays = allKeys.reduce<typeof options['headerDisplays']>(
       (acc, key) => ({
         ...acc,
-        [key]: options.headerDisplays[key] || key,
+        [key]: options.headerDisplays ? options.headerDisplays[key] : key,
       }),
       {},
     ),
@@ -63,9 +70,11 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   /**
    * construct the tsv data
    */
+
   const filteredKeys = orderedKeys
     .filter(key => !excludeKeys.includes(key))
     .filter(key => includeKeys.includes(key));
+
   const dataRows: string[][] = data.map(entry => filteredKeys.map(key => String(entry[key])));
   const headerRow = filteredKeys.map(key => headerDisplays[key]);
   const tsvString = [headerRow, ...dataRows].map(row => row.join('\t')).join('\n');

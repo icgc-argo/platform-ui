@@ -5,6 +5,7 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { useTheme } from 'uikit/ThemeProvider';
+import { css } from 'uikit';
 
 const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
   errorsFound: [],
@@ -68,25 +69,34 @@ export default ({ clinicalSubmissions }: { clinicalSubmissions: GqlClinicalSubmi
         } as TableColumnConfig<Entry>),
     ),
   ];
+  const containerRef = React.createRef<HTMLDivElement>();
   return (
-    <Table
-      variant="STATIC"
-      getTdProps={(_, row, column) => {
-        const isUpdateRow = row.index === 1;
-        const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
-        return {
-          style: {
-            background:
-              row.original[column.id] > 0 || isFirstColumn
-                ? isUpdateRow
-                  ? theme.colors.accent3_3
-                  : theme.colors.accent2_4
-                : null,
-          } as React.CSSProperties,
-        };
-      }}
-      columns={columns}
-      data={[newDataRow, updatedDataRow]}
-    />
+    <div
+      css={css`
+        width: 100%;
+      `}
+      ref={containerRef}
+    >
+      <Table
+        parentRef={containerRef}
+        variant="STATIC"
+        getTdProps={(_, row, column) => {
+          const isUpdateRow = row.index === 1;
+          const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
+          return {
+            style: {
+              background:
+                row.original[column.id] > 0 || isFirstColumn
+                  ? isUpdateRow
+                    ? theme.colors.accent3_3
+                    : theme.colors.accent2_4
+                  : null,
+            } as React.CSSProperties,
+          };
+        }}
+        columns={columns}
+        data={[newDataRow, updatedDataRow]}
+      />
+    </div>
   );
 };

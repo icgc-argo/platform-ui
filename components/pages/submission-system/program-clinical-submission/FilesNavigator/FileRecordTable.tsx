@@ -10,8 +10,9 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
-import { CSSProperties } from 'react';
+import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
+import { Stats } from 'fs';
 
 const StarIcon = DataTableStarIcon;
 
@@ -33,43 +34,43 @@ export const FILE_STATE_COLORS: {
   UPDATED: 'accent3_dark',
 };
 
-const StatsArea = ({ fileStat }: { fileStat: FileStat }) => {
+const StatsArea = ({
+  fileStat,
+  total,
+  isSubmissionValidated,
+}: {
+  fileStat: FileStat;
+  total: number;
+  isSubmissionValidated: boolean;
+}) => {
   return (
     <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>
-        {sum([
-          fileStat.newCount,
-          fileStat.noUpdateCount,
-          fileStat.updateCount,
-          fileStat.errorCount,
-        ])}{' '}
-        Total
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>{total} Total</StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
-          {fileStat.newCount} New
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
+          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
-          {fileStat.noUpdateCount} No Update
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
           {fileStat.updateCount} Updated
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
-          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
+          {fileStat.newCount} New
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section faded={!isSubmissionValidated}>
+        <StatAreaDisplay.StatEntryContainer>
+          <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
+          {fileStat.noUpdateCount} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
@@ -93,8 +94,10 @@ export default ({
   file,
   submissionData,
   isPendingApproval,
+  isSubmissionValidated,
 }: {
   isPendingApproval: boolean;
+  isSubmissionValidated: boolean;
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
@@ -104,11 +107,24 @@ export default ({
     ? records[0].fields
     : [];
   const sortedRecords = orderBy<typeof records[0]>(records, REQUIRED_FILE_ENTRY_FIELDS.ROW);
+  const containerRef = createRef<HTMLDivElement>();
 
   const tableData = sortedRecords.map(record =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       row: record.row,
-    } as { row: number; [k: string]: number | string }),
+      status: (() => {
+        switch (true) {
+          case stats.updated.some(i => i === record.row):
+            return 'UPDATE';
+          case stats.errorsFound.some(i => i === record.row):
+            return 'ERROR';
+          case stats.new.some(i => i === record.row):
+            return 'NEW';
+          default:
+            return 'NONE';
+        }
+      })(),
+    } as { row: number; [k: string]: number | string; status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE' }),
   );
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
@@ -116,19 +132,21 @@ export default ({
     const hasUpdate = stats.updated.some(row => row === original.row);
     const isNew = stats.new.some(row => row === original.row);
     return (
-      <CellContentCenter>
-        <StarIcon
-          fill={
-            hasError
-              ? FILE_STATE_COLORS.ERROR
-              : hasUpdate
-              ? FILE_STATE_COLORS.UPDATED
-              : isNew
-              ? FILE_STATE_COLORS.NEW
-              : FILE_STATE_COLORS.NONE
-          }
-        />
-      </CellContentCenter>
+      isSubmissionValidated && (
+        <CellContentCenter>
+          <StarIcon
+            fill={
+              hasError
+                ? FILE_STATE_COLORS.ERROR
+                : hasUpdate
+                ? FILE_STATE_COLORS.UPDATED
+                : isNew
+                ? FILE_STATE_COLORS.NEW
+                : FILE_STATE_COLORS.NONE
+            }
+          />
+        </CellContentCenter>
+      )
     );
   };
 
@@ -140,13 +158,23 @@ export default ({
       width: 40,
     },
     {
-      id: 'error',
+      id: 'status',
       Cell: StatusColumCell,
+      accessor: 'status',
       Header: (
         <CellContentCenter>
           <StarIcon fill={FILE_STATE_COLORS.NONE} />
         </CellContentCenter>
       ),
+      sortMethod: (a: typeof tableData[0]['status'], b: typeof tableData[0]['status']) => {
+        const priorities = {
+          ERROR: 1,
+          UPDATE: 2,
+          NEW: 3,
+          NONE: 4,
+        } as { [k in typeof tableData[0]['status']]: number };
+        return priorities[a] - priorities[b];
+      },
       width: 50,
     },
     ...fields.map(({ name }) => ({
@@ -166,13 +194,17 @@ export default ({
 
   return (
     <div
+      ref={containerRef}
       css={css`
         margin: 5px 10px;
+        /* width: 100%; */
       `}
     >
       <TableInfoHeaderContainer
         left={
           <StatsArea
+            isSubmissionValidated={isSubmissionValidated}
+            total={records.length}
             fileStat={{
               errorCount: file.stats.errorsFound.length,
               newCount: file.stats.new.length,
@@ -184,6 +216,7 @@ export default ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
+        parentRef={containerRef}
         getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
           ({
             style:

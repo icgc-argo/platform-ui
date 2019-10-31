@@ -12,6 +12,7 @@ import {
   ValidateSubmissionMutationVariables,
   UploadFilesMutationVariables,
   SignOffSubmissionMutationVariables,
+  ClinicalSubmissionError,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
@@ -20,10 +21,10 @@ import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
-import { displayDateAndTime } from 'global/utils/common';
+import { displayDateAndTime, insertAt } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification from './ErrorNotification';
+import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ModalPortal } from 'components/ApplicationRoot';
 import SignOffValidationModal, { useSignOffValidationModalState } from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
@@ -113,7 +114,7 @@ export default () => {
   } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
-    }
+    },
   });
 
   const fileNavigatorFiles = map(
@@ -172,7 +173,11 @@ export default () => {
   const allDataErrors = React.useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
-        React.ComponentProps<typeof ErrorNotification>['errors']
+        Array<
+          ClinicalSubmissionError & {
+            fileName: string;
+          }
+        >
       >(
         (acc, entity) => [
           ...acc,
@@ -295,7 +300,13 @@ export default () => {
   };
 
   return (
-    <>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      `}
+    >
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal
@@ -382,11 +393,15 @@ export default () => {
           `}
         >
           <ErrorNotification
-            showClinicalType
             onClearClick={handleDataErrorClearance}
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
+            columnConfig={insertAt(defaultColumns)(0)({
+              accessor: 'fileName',
+              Header: 'File',
+              maxWidth: 150,
+            })}
           />
         </div>
       )}
@@ -396,8 +411,9 @@ export default () => {
           min-height: 100px;
           position: relative;
           padding: 0px;
-          min-height: calc(100vh - 240px);
+          min-height: 350px;
           display: flex;
+          flex: 1;
         `}
       >
         {loadingClinicalSubmission ? (
@@ -421,6 +437,6 @@ export default () => {
           />
         )}
       </Container>
-    </>
+    </div>
   );
 };

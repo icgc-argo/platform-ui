@@ -102,7 +102,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   return (
     <MinimalLayout>
       <JoinProgramLayout
-        tabValue="step2"
+        tabValue={incorrectEmail ? 'step1' : 'step2'}
         joinProgramInvite={joinProgramInvite}
         loading={loading}
         notFound={notFound}

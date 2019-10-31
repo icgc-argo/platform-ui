@@ -59,7 +59,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
   border-right: solid 1px ${({ theme }) => theme.colors.secondary_2};
   background: ${({ theme }) => theme.colors.secondary_4};
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.secondary_dark};
   &:hover {
     background: ${({ theme }) => theme.colors.secondary_4};
   }
@@ -72,7 +72,7 @@ const VerticalTabsItem: React.ComponentType<
   return (
     <ContainerComponent {...rest}>
       <Typography
-        variant="label"
+        variant="data"
         as="div"
         css={css`
           width: 100%;

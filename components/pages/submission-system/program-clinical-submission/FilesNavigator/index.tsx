@@ -7,11 +7,12 @@ import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification, { defaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
 import orderBy from 'lodash/orderBy';
 import head from 'lodash/head';
+import Icon from 'uikit/Icon';
 
 export default ({
   fileStates,
@@ -42,6 +43,12 @@ export default ({
     clearDataError(selectedFile);
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
+
+  const isSubmissionValidated = ([
+    'INVALID',
+    'VALID',
+    'PENDING_APPROVAL',
+  ] as typeof submissionState[]).includes(submissionState);
   return !selectedFile ? (
     <NoData
       css={css`
@@ -89,13 +96,15 @@ export default ({
                   </VerticalTabs.Tag>
                 ))}
               {fileState.status === 'ERROR' && (
-                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+                <VerticalTabs.Tag variant="ERROR">
+                  <Icon name="exclamation" fill="#fff" height="10px" width="10px" />
+                </VerticalTabs.Tag>
               )}
             </VerticalTabs.Item>
           ))}
         </VerticalTabs>
       </div>
-      <Col style={{ position: 'relative' }}>
+      <Col style={{ position: 'relative', overflow: 'hidden' }}>
         {shouldShowError ? (
           <div
             css={css`
@@ -111,6 +120,7 @@ export default ({
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
+              columnConfig={defaultColumns}
             />
           </div>
         ) : !!selectedFile.records.length ? (
@@ -141,6 +151,7 @@ export default ({
               )}
             </div>
             <FileRecordTable
+              isSubmissionValidated={isSubmissionValidated}
               isPendingApproval={isPendingApproval}
               file={selectedFile}
               submissionData={{
@@ -151,12 +162,21 @@ export default ({
             />
           </>
         ) : (
-          <NoData
-            title="You do not have any data uploaded."
-            subtitle="Follow the instructions above to get started."
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100%;
+            `}
           >
-            <img alt="no data found" src={noDataSvg} />
-          </NoData>
+            <NoData
+              title="You do not have any data uploaded."
+              subtitle="Follow the instructions above to get started."
+            >
+              <img alt="no data found" src={noDataSvg} />
+            </NoData>
+          </div>
         )}
       </Col>
     </div>

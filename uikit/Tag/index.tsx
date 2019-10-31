@@ -27,7 +27,7 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
       [TAG_VARIANTS.ERROR]: theme.colors.error,
       [TAG_VARIANTS.WARNING]: theme.colors.warning,
       [TAG_VARIANTS.INFO]: theme.colors.secondary,
-      [TAG_VARIANTS.SUCCESS]: theme.colors.success,
+      [TAG_VARIANTS.SUCCESS]: theme.colors.accent1_dimmed,
       [TAG_VARIANTS.UPDATE]: theme.colors.accent3_dark,
     }[variant])};
   color: white;

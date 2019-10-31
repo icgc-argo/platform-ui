@@ -124,16 +124,25 @@ const UsersTable = (tableProps: {
       ),
     },
   ];
+  const containerRef = React.createRef<HTMLDivElement>();
 
   return (
-    <Table
-      data={tableProps.users}
-      loading={tableProps.loading}
-      columns={columns}
-      pageSize={Number.MAX_SAFE_INTEGER}
-      showPagination={false}
-      style={{ maxHeight: '500px' }}
-    />
+    <div
+      css={css`
+        width: 100%;
+      `}
+      ref={containerRef}
+    >
+      <Table
+        parentRef={containerRef}
+        data={tableProps.users}
+        loading={tableProps.loading}
+        columns={columns}
+        pageSize={Number.MAX_SAFE_INTEGER}
+        showPagination={false}
+        style={{ maxHeight: '500px' }}
+      />
+    </div>
   );
 };
 
