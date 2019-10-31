@@ -300,7 +300,13 @@ export default () => {
   };
 
   return (
-    <>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      `}
+    >
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal
@@ -405,8 +411,9 @@ export default () => {
           min-height: 100px;
           position: relative;
           padding: 0px;
-          min-height: calc(100vh - 240px);
+          min-height: 350px;
           display: flex;
+          flex: 1;
         `}
       >
         {loadingClinicalSubmission ? (
@@ -430,6 +437,6 @@ export default () => {
           />
         )}
       </Container>
-    </>
+    </div>
   );
 };
