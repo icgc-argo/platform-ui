@@ -1,5 +1,5 @@
 import React from 'react';
-import VerticalTabs from 'uikit/Tabs/Vertical';
+import VerticalTabs from 'uikit/VerticalTabs';
 import { css } from 'uikit';
 import Typography from 'uikit/Typography';
 import { ClinicalSubmissionEntityFile, ClinicalSubmissionQueryData } from '../types';
