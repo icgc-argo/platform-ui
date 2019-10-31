@@ -12,6 +12,7 @@ import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
 import orderBy from 'lodash/orderBy';
 import head from 'lodash/head';
+import Icon from 'uikit/Icon';
 
 export default ({
   fileStates,
@@ -95,7 +96,9 @@ export default ({
                   </VerticalTabs.Tag>
                 ))}
               {fileState.status === 'ERROR' && (
-                <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+                <VerticalTabs.Tag variant="ERROR">
+                  <Icon name="exclamation" fill="#fff" height="10px" width="10px" />
+                </VerticalTabs.Tag>
               )}
             </VerticalTabs.Item>
           ))}

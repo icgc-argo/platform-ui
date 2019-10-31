@@ -14,7 +14,7 @@ const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
       <VerticalTabs>
         <VerticalTabs.Item onClick={onClick(0)} active={activeItem === 0}>
           Donor
-          <VerticalTabs.Tag variant="INFO">12</VerticalTabs.Tag>
+          <VerticalTabs.Tag variant="UPDATE">12</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(1)} active={activeItem === 1}>
           Specimen

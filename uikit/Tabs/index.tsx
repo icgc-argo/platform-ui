@@ -71,17 +71,7 @@ const Container = styled('div')`
   display: flex;
 `;
 
-function Tabs({
-  value,
-  onChange = () => null,
-  children: childrenProp,
-  className,
-}: {
-  value: any;
-  onChange?: (event: any, newValue: any) => void;
-  children: JSX.Element[] | JSX.Element;
-  className?: string;
-}) {
+function Tabs({ value, onChange, children: childrenProp }) {
   const children = React.Children.map(childrenProp, child => {
     return React.cloneElement(child, {
       active: child.props.value == value,
@@ -95,7 +85,7 @@ function Tabs({
 
   return (
     <TabsContext.Provider value={context}>
-      <Container className={className}>{children}</Container>
+      <Container>{children}</Container>
     </TabsContext.Provider>
   );
 }
@@ -105,7 +95,7 @@ Tabs.propTypes = {
   value: PropTypes.any.isRequired,
 
   /* Callback fired when the value changes. */
-  onChange: PropTypes.any,
+  onChange: PropTypes.any.isRequired,
 
   children: PropTypes.node.isRequired,
 };
