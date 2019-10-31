@@ -114,7 +114,7 @@ function Table<Data = { [k: string]: any }>({
   return (
     <StyledTable
       style={{
-        // this is written with style object because css prop someone only applies to the header
+        // this is written with style object because css prop somehow only applies to the header
         transition: 'all 0.25s',
         filter: resizing && withResizeBlur ? 'blur(8px)' : 'blur(0px)',
         width,
