@@ -19,6 +19,5 @@ export default yup.object().shape({
   department: yup
     .string()
     .trim()
-    .label('Department')
-    .required(),
+    .label('Department'),
 });
