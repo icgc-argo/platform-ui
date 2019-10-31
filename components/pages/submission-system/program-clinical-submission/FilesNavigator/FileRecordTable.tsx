@@ -168,7 +168,6 @@ export default ({
   return (
     <div
       ref={containerRef}
-      className="yo"
       css={css`
         margin: 5px 10px;
         /* width: 100%; */

@@ -12,8 +12,6 @@ import { StyledTable, StyledTableProps } from './styledComponent';
 import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
-import debounce from 'lodash/debounce';
-import { css } from 'uikit';
 import useParentWidth from './useParentWidth';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
