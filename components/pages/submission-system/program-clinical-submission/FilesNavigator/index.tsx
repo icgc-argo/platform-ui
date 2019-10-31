@@ -43,6 +43,11 @@ export default ({
   };
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
 
+  const isSubmissionValidated = ([
+    'INVALID',
+    'VALID',
+    'PENDING_APPROVAL',
+  ] as typeof submissionState[]).includes(submissionState);
   return !selectedFile ? (
     <NoData
       css={css`
@@ -143,6 +148,7 @@ export default ({
               )}
             </div>
             <FileRecordTable
+              isSubmissionValidated={isSubmissionValidated}
               isPendingApproval={isPendingApproval}
               file={selectedFile}
               submissionData={{
