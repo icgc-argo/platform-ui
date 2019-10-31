@@ -10,8 +10,8 @@ export default (
     resizeDebounce: 200,
     ..._config,
   };
-  const [width, setWidthState] = React.useState(null);
-  const [height, setHeightState] = React.useState(null);
+  const [width, setWidthState] = React.useState<number | null>(null);
+  const [height, setHeightState] = React.useState<number | null>(null);
   const [resizing, setResizing] = React.useState(false);
   React.useEffect(() => {
     if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
