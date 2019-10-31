@@ -16,7 +16,10 @@ export default (
   React.useEffect(() => {
     if (!!parentRef.current) setWidthState(parentRef.current.clientWidth);
     if (!!parentRef.current) setHeightState(parentRef.current.clientHeight);
-  }, [!!parentRef.current ? parentRef.current.clientWidth : 0]);
+  }, [
+    !!parentRef.current ? parentRef.current.clientWidth : 0,
+    !!parentRef.current ? parentRef.current.clientHeight : 0,
+  ]);
   React.useEffect(() => {
     const currentParent = parentRef.current;
     if (currentParent) {
