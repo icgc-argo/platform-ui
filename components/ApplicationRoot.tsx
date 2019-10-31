@@ -113,7 +113,7 @@ const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: a
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  const createNewClient = () =>
+  const createNewClient = (configs: { connectToDevTools: boolean }) =>
     new ApolloClient({
       link: createUploadLink({
         uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
@@ -124,11 +124,14 @@ const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: a
             }
           : {},
       }),
+      connectToDevTools: configs.connectToDevTools,
       cache: createInMemoryCache().restore(apolloCache),
     });
-  const [client, setClient] = React.useState(createNewClient());
+  const [client, setClient] = React.useState<ReturnType<typeof createNewClient>>(
+    createNewClient({ connectToDevTools: false }),
+  );
   React.useEffect(() => {
-    setClient(createNewClient());
+    setClient(createNewClient({ connectToDevTools: true }));
   }, [egoJwt]);
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
