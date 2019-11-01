@@ -272,7 +272,6 @@ export default ({
       ref={containerRef}
       css={css`
         margin: 5px 10px;
-        /* width: 100%; */
       `}
     >
       <TableInfoHeaderContainer
