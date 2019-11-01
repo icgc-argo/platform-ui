@@ -5,35 +5,6 @@ import Modal from 'uikit/Modal';
 import Typography from 'uikit/Typography';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 
-export const useSignOffValidationModalState = () => {
-  const [signOffModalShown, setSignOffModalShown] = React.useState(false);
-  const [{ onApprove, onCancel }, setSignOffFlow] = React.useState({
-    onApprove: () => setSignOffModalShown(false),
-    onCancel: () => setSignOffModalShown(false),
-  });
-
-  const getUserApproval = (): Promise<boolean> =>
-    new Promise(resolve => {
-      setSignOffModalShown(true);
-      setSignOffFlow({
-        onApprove: () => {
-          setSignOffModalShown(false);
-          resolve(true);
-        },
-        onCancel: () => {
-          setSignOffModalShown(false);
-          resolve(false);
-        },
-      });
-    });
-  return {
-    signOffModalShown,
-    getUserApproval,
-    onApprove,
-    onCancel,
-  };
-};
-
 export default ({
   clinicalSubmissions,
   onCloseClick,
