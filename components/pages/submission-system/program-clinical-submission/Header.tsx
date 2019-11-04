@@ -20,6 +20,7 @@ import { useClinicalSubmissionQuery } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
 import { DCC_PATH } from 'global/constants/pages';
+import { useToaster } from 'global/hooks/toaster';
 
 export default ({
   programShortName,
@@ -45,6 +46,8 @@ export default ({
   const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const commonToaster = useCommonToasters();
   const router = useRouter();
+  const toaster = useToaster();
+  const { data } = useClinicalSubmissionQuery(programShortName);
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -102,6 +105,14 @@ export default ({
       try {
         await approveClinicalSubmission();
         router.push(DCC_PATH);
+        toaster.addToast({
+          variant: 'SUCCESS',
+          interactionType: 'CLOSE',
+          title: 'Clinical Data is successfully approved',
+          content: `${
+            data.program.name
+          } clinical data will be placed in a queue for the next release.`,
+        });
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
