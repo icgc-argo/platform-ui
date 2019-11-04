@@ -19,7 +19,7 @@ import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
-import { DCC_PATH } from 'global/constants/pages';
+import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 
 export default ({
@@ -106,7 +106,7 @@ export default ({
       await sleep();
       try {
         await approveClinicalSubmission();
-        router.push(DCC_PATH);
+        router.push(DCC_DASHBOARD_PATH);
         toaster.addToast({
           variant: 'SUCCESS',
           interactionType: 'CLOSE',
