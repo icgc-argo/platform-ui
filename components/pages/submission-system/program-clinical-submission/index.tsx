@@ -19,7 +19,7 @@ export const placeholderClinicalSubmissionQueryData: ClinicalSubmissionQueryData
     clinicalEntities: [],
     fileErrors: [],
     id: '',
-    state: 'OPEN',
+    state: null,
     updatedAt: '',
     updatedBy: '',
     __typename: 'ClinicalSubmissionData',

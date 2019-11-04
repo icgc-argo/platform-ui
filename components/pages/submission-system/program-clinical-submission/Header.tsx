@@ -16,7 +16,7 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep } from 'global/utils/common';
-import { useClinicalSubmissionQuery } from '.';
+import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
 import { DCC_PATH } from 'global/constants/pages';
@@ -47,7 +47,9 @@ export default ({
   const commonToaster = useCommonToasters();
   const router = useRouter();
   const toaster = useToaster();
-  const { data } = useClinicalSubmissionQuery(programShortName);
+  const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
+    programShortName,
+  );
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -113,6 +115,10 @@ export default ({
             data.program.name
           } clinical data will be placed in a queue for the next release.`,
         });
+        updateClinicalSubmissionQuery(previous => ({
+          ...previous,
+          clinicalSubmissions: placeholderClinicalSubmissionQueryData.clinicalSubmissions,
+        }));
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
