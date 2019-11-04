@@ -10,11 +10,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
 
-export default function ProgramClinicalSubmission() {
-  const theme = useTheme();
-  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const [] = React.useState<FileList | null>(null);
-
+export const useClinicalSubmissionQuery = (programShortName: string) => {
   const placeHolderResponse: ClinicalSubmissionQueryData = {
     clinicalSubmissions: {
       version: '',
@@ -28,13 +24,21 @@ export default function ProgramClinicalSubmission() {
     },
   };
 
-  const { data = placeHolderResponse, loading: loadingClinicalSubmission } = useQuery<
-    ClinicalSubmissionQueryData
-  >(CLINICAL_SUBMISSION_QUERY, {
+  const hook = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
     },
   });
+
+  return { ...hook, data: hook.data || placeHolderResponse };
+};
+
+export default function ProgramClinicalSubmission() {
+  const theme = useTheme();
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const [] = React.useState<FileList | null>(null);
+
+  const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
 
   const allDataErrors = React.useMemo(
     () =>
@@ -83,6 +87,7 @@ export default function ProgramClinicalSubmission() {
             programShortName={programShortName}
             showProgress={!loadingClinicalSubmission}
             isPendingApproval={isPendingApproval}
+            submissionVersion={data.clinicalSubmissions.version}
             progressStates={{
               upload: isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled',
               validate:

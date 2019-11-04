@@ -59,7 +59,7 @@ export const DefaultLoadingComponent = ({
 
 export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0] & {
   accessor?: keyof Data;
-  Cell?: TableProps<Data>['columns'][0]['Cell'] & ((c: { original: Data }) => React.ReactNode);
+  Cell?: TableProps<Data>['columns'][0]['Cell'] | ((c: { original: Data }) => React.ReactNode);
 };
 function Table<Data = { [k: string]: any }>({
   variant = 'DEFAULT',

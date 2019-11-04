@@ -69,6 +69,7 @@ export default function JoinProgramLayout({
       >
         <div
           css={css`
+            border-radius: 8px 0 0 8px;
             background-image: url('/static/argo-data-scientist.jpg');
             background-size: cover;
           `}
@@ -107,6 +108,7 @@ export default function JoinProgramLayout({
           </Tabs>
           <Typography
             variant="title"
+            as="h1"
             css={css`
               margin: 31px 0;
             `}
@@ -146,9 +148,9 @@ export default function JoinProgramLayout({
           {inviteState == InviteState.Accepted && (
             <>
               <Banner
-                title={'Oops, your invitation has been accepted'}
+                title={'This invitation has already been accepted'}
                 variant={BANNER_VARIANTS.WARNING}
-                content="Please log in to access your program"
+                content="Please log in to access your program."
                 css={css`
                   margin-bottom: 30px;
                 `}

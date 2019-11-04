@@ -1,5 +1,4 @@
 import { ClinicalSubmissionEntityFile } from '../types';
-import sum from 'lodash/sum';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
 import { css, styled } from 'uikit';
@@ -12,7 +11,8 @@ import {
 } from '../../common';
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
-import { Stats } from 'fs';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { isDccMember } from 'global/utils/egoJwt';
 
 const StarIcon = DataTableStarIcon;
 
@@ -52,25 +52,26 @@ const StatsArea = ({
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
-          {fileStat.errorCount} {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
+          {isSubmissionValidated && fileStat.errorCount}{' '}
+          {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-          {fileStat.updateCount} Updated
+          {isSubmissionValidated && fileStat.updateCount} Updated
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
-          {fileStat.newCount} New
+          {isSubmissionValidated && fileStat.newCount} New
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
-          {fileStat.noUpdateCount} No Update
+          {isSubmissionValidated && fileStat.noUpdateCount} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>
@@ -83,9 +84,9 @@ const REQUIRED_FILE_ENTRY_FIELDS = {
 
 const CellContentCenter = styled('div')`
   width: 100%;
-  display: flex;
   height: 100%;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -101,12 +102,31 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
+  const { token } = useAuthContext();
+  const isDccPreview = isDccMember(token) && isPendingApproval;
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
-  const sortedRecords = orderBy<typeof records[0]>(records, REQUIRED_FILE_ENTRY_FIELDS.ROW);
+  const sortedRecords = orderBy(
+    records,
+    !isDccPreview
+      ? REQUIRED_FILE_ENTRY_FIELDS.ROW
+      : r => {
+          const priority = (() => {
+            switch (true) {
+              case file.stats.updated.some(i => i === r.row):
+                return 0;
+              case file.stats.new.some(i => i === r.row):
+                return 1;
+              default:
+                return records.length;
+            }
+          })();
+          return `${priority}::${r.row}`;
+        },
+  );
   const containerRef = createRef<HTMLDivElement>();
 
   const tableData = sortedRecords.map(record =>
@@ -127,9 +147,16 @@ export default ({
     } as { row: number; [k: string]: number | string; status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE' }),
   );
 
+  const recordHasError = (record: typeof tableData[0]) =>
+    stats.errorsFound.some(row => row === record.row);
+  const rowHasUpdate = (record: typeof tableData[0]) =>
+    stats.updated.some(row => row === record.row);
+  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
+    rowHasUpdate(cell.row) && !!file.dataUpdates.find(update => update.field === cell.field);
+
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
-    const hasError = stats.errorsFound.some(row => row === original.row);
-    const hasUpdate = stats.updated.some(row => row === original.row);
+    const hasError = recordHasError(original);
+    const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some(row => row === original.row);
     return (
       isSubmissionValidated && (
@@ -145,22 +172,75 @@ export default ({
                 : FILE_STATE_COLORS.NONE
             }
           />
+          {isDccPreview && hasUpdate && (
+            <div
+              css={css`
+                padding-top: 8px;
+              `}
+            >
+              old
+            </div>
+          )}
         </CellContentCenter>
       )
     );
   };
+  const DataFieldCell = ({
+    original,
+    fieldName,
+  }: {
+    original: typeof tableData[0];
+    fieldName: string;
+  }) =>
+    isDccPreview && rowHasUpdate(original) ? (
+      <div
+        css={css`
+          & > div {
+            margin-top: 5px;
+            margin-bottom: 5px;
+          }
+        `}
+      >
+        <div>{original[fieldName]}</div>
+        <div
+          css={css`
+            padding-top: 5px;
+          `}
+        >
+          {(file.dataUpdates.find(u => u.field === fieldName) || {}).oldValue ||
+            original[fieldName]}
+        </div>
+      </div>
+    ) : (
+      <>{original[fieldName]}</>
+    );
 
   const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      Cell: ({ original }) => <CellContentCenter>{original.row}</CellContentCenter>,
+      Cell: ({ original }) => (
+        <CellContentCenter
+          css={
+            rowHasUpdate(original)
+              ? css`
+                  justify-content: flex-start;
+                  padding-top: 5px;
+                `
+              : css``
+          }
+        >
+          {Number(original.row) + 1}
+        </CellContentCenter>
+      ),
       Header: '#',
+      resizable: false,
       width: 40,
     },
     {
       id: 'status',
       Cell: StatusColumCell,
       accessor: 'status',
+      resizable: false,
       Header: (
         <CellContentCenter>
           <StarIcon fill={FILE_STATE_COLORS.NONE} />
@@ -177,27 +257,21 @@ export default ({
       },
       width: 50,
     },
-    ...fields.map(({ name }) => ({
-      accessor: name,
-      Header: name,
-    })),
+    ...fields.map(
+      ({ name: fieldName }) =>
+        ({
+          accessor: fieldName,
+          Header: fieldName,
+          Cell: ({ original }) => <DataFieldCell original={original} fieldName={fieldName} />,
+        } as typeof tableColumns[0]),
+    ),
   ];
-
-  const recordHasError = (record: typeof tableData[0]) =>
-    stats.errorsFound.some(row => row === record.row);
-
-  const rowHasUpdate = (record: typeof tableData[0]) =>
-    stats.updated.some(row => row === record.row);
-
-  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
-    rowHasUpdate(cell.row) && !!file.dataUpdates.find(update => update.field === cell.field);
 
   return (
     <div
       ref={containerRef}
       css={css`
         margin: 5px 10px;
-        /* width: 100%; */
       `}
     >
       <TableInfoHeaderContainer

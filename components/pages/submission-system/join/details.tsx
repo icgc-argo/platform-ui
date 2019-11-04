@@ -138,7 +138,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
           </>
         ) : (
           <>
-            <Typography bold>
+            <Typography variant="subtitle2" as="h2">
               Hello {get(joinProgramInvite, 'user.firstName')}{' '}
               {get(joinProgramInvite, 'user.lastName')}
             </Typography>
