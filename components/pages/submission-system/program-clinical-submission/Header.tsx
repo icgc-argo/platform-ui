@@ -161,14 +161,14 @@ export default ({
         <Row nogutter align="center">
           {isPendingApproval && (
             <Button
-              variant="secondary"
+              variant={isDcc ? 'secondary' : 'text'}
               isAsync
               css={css`
                 margin-right: 10px;
               `}
               onClick={handleSubmissionReopen}
             >
-              reopen
+              {isDcc ? 'reopen' : 'reopen submission'}
             </Button>
           )}
           {!isDcc && (
