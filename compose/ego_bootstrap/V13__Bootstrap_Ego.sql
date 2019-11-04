@@ -3,6 +3,16 @@ INSERT INTO policy
 VALUES
     ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c3', NULL, 'PROGRAMSERVICE');
 
+INSERT INTO policy
+    (id, owner, name)
+VALUES
+    ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c4', NULL, 'CLINICALSERVICE');
+
+INSERT INTO policy
+    (id, owner, name)
+VALUES
+    ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c5', NULL, 'DICTIONARY');
+
 INSERT INTO egoapplication 
     (id, name, clientid, clientsecret, redirecturi, description, status, type) 
 VALUES 
