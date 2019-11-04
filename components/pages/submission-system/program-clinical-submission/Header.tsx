@@ -74,7 +74,7 @@ export default ({
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
       children: isDcc
-        ? 'Are you sure you want to approve this clinical submission?'
+        ? 'Are you sure you want to reopen this clinical submission?'
         : 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
       actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
       buttonSize: 'sm',
