@@ -4,7 +4,8 @@ export const CONTACT_PAGE_PATH = '/contact';
 
 // submission paths
 export const SUBMISSION_PATH = `/submission`;
-export const DCC_PATH = `${SUBMISSION_PATH}/dcc`;
+const DCC_PATH = `${SUBMISSION_PATH}/dcc`;
+export const DCC_DASHBOARD_PATH = `${DCC_PATH}/dashboard`;
 export const PROGRAMS_LIST_PATH = `${SUBMISSION_PATH}/program`;
 export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
 export const CREATE_PROGRAM_PAGE_PATH = `${SUBMISSION_PATH}/program/create`;

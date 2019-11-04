@@ -24,7 +24,7 @@ import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAMS_LIST_PATH,
-  DCC_PATH,
+  DCC_DASHBOARD_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
@@ -267,7 +267,7 @@ export default function SideMenu() {
       ) : (
         <>
           {canSeeDcc && (
-            <Link href={DCC_PATH}>
+            <Link href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
             </Link>
           )}

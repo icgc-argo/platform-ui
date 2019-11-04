@@ -39,6 +39,7 @@ import map from 'lodash/map';
 import memoize from 'lodash/memoize';
 import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
+import { useClinicalSubmissionQuery } from '.';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -96,29 +97,12 @@ export default () => {
   const toaster = useToaster();
   const commonToaster = useCommonToasters();
 
-  const placeHolderResponse: ClinicalSubmissionQueryData = {
-    clinicalSubmissions: {
-      version: '',
-      clinicalEntities: [],
-      fileErrors: [],
-      id: '',
-      state: 'OPEN',
-      updatedAt: '',
-      updatedBy: '',
-      __typename: 'ClinicalSubmissionData',
-    },
-  };
-
   const {
-    data = placeHolderResponse,
+    data,
     loading: loadingClinicalSubmission,
     updateQuery: updateClinicalSubmissionQuery,
     refetch,
-  } = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
-    variables: {
-      programShortName,
-    },
-  });
+  } = useClinicalSubmissionQuery(programShortName);
 
   const fileNavigatorFiles = map(
     orderBy(data.clinicalSubmissions.clinicalEntities, e => e.clinicalType),

@@ -10,27 +10,30 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
 
-export const useClinicalSubmissionQuery = (programShortName: string) => {
-  const placeHolderResponse: ClinicalSubmissionQueryData = {
-    clinicalSubmissions: {
-      version: '',
-      clinicalEntities: [],
-      fileErrors: [],
-      id: '',
-      state: 'OPEN',
-      updatedAt: '',
-      updatedBy: '',
-      __typename: 'ClinicalSubmissionData',
-    },
-  };
+export const placeholderClinicalSubmissionQueryData: ClinicalSubmissionQueryData = {
+  program: {
+    name: '',
+  },
+  clinicalSubmissions: {
+    version: '',
+    clinicalEntities: [],
+    fileErrors: [],
+    id: '',
+    state: null,
+    updatedAt: '',
+    updatedBy: '',
+    __typename: 'ClinicalSubmissionData',
+  },
+};
 
+export const useClinicalSubmissionQuery = (programShortName: string) => {
   const hook = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       programShortName,
     },
   });
 
-  return { ...hook, data: hook.data || placeHolderResponse };
+  return { ...hook, data: hook.data || placeholderClinicalSubmissionQueryData };
 };
 
 export default function ProgramClinicalSubmission() {

@@ -16,10 +16,11 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep } from 'global/utils/common';
-import { useClinicalSubmissionQuery } from '.';
+import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
-import { DCC_PATH } from 'global/constants/pages';
+import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
+import { useToaster } from 'global/hooks/toaster';
 
 export default ({
   programShortName,
@@ -45,6 +46,10 @@ export default ({
   const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const commonToaster = useCommonToasters();
   const router = useRouter();
+  const toaster = useToaster();
+  const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
+    programShortName,
+  );
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -71,7 +76,7 @@ export default ({
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
       children: isDcc
-        ? 'Are you sure you want to approve this clinical submission?'
+        ? 'Are you sure you want to reopen this clinical submission?'
         : 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
       actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
       buttonSize: 'sm',
@@ -101,7 +106,19 @@ export default ({
       await sleep();
       try {
         await approveClinicalSubmission();
-        router.push(DCC_PATH);
+        router.push(DCC_DASHBOARD_PATH);
+        toaster.addToast({
+          variant: 'SUCCESS',
+          interactionType: 'CLOSE',
+          title: 'Clinical Data is successfully approved',
+          content: `${
+            data.program.name
+          } clinical data will be placed in a queue for the next release.`,
+        });
+        updateClinicalSubmissionQuery(previous => ({
+          ...previous,
+          clinicalSubmissions: placeholderClinicalSubmissionQueryData.clinicalSubmissions,
+        }));
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
@@ -140,7 +157,7 @@ export default ({
             >
               Submit Clinical Data
             </div>
-            {!showProgress && (
+            {showProgress && (
               <Progress>
                 <Progress.Item text="Upload" state={progressStates.upload} />
                 <Progress.Item text="Validate" state={progressStates.validate} />
@@ -161,14 +178,14 @@ export default ({
         <Row nogutter align="center">
           {isPendingApproval && (
             <Button
-              variant="secondary"
+              variant={isDcc ? 'secondary' : 'text'}
               isAsync
               css={css`
                 margin-right: 10px;
               `}
               onClick={handleSubmissionReopen}
             >
-              reopen
+              {isDcc ? 'reopen' : 'reopen submission'}
             </Button>
           )}
           {!isDcc && (
