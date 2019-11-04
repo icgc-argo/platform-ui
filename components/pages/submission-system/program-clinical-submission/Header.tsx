@@ -151,7 +151,7 @@ export default ({
             >
               Submit Clinical Data
             </div>
-            {!showProgress && (
+            {showProgress && (
               <Progress>
                 <Progress.Item text="Upload" state={progressStates.upload} />
                 <Progress.Item text="Validate" state={progressStates.validate} />
