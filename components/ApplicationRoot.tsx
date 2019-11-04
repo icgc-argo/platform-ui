@@ -75,7 +75,6 @@ const ToastProvider = ({ children }) => {
   return (
     <ToasterContext.Provider value={toaster}>
       {children}
-      <ToastDisplayArea toaster={toaster} />
       <div
         css={css`
           position: fixed;
@@ -85,6 +84,7 @@ const ToastProvider = ({ children }) => {
         `}
         ref={modalPortalRef}
       />
+      <ToastDisplayArea toaster={toaster} />
     </ToasterContext.Provider>
   );
 };

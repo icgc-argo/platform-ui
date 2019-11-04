@@ -92,4 +92,7 @@ export type SignOffSubmissionMutationVariables = {
 
 export type ClinicalSubmissionQueryData = {
   clinicalSubmissions: GqlClinicalSubmissionData;
+  program: {
+    name: string;
+  };
 };
