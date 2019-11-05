@@ -1,6 +1,6 @@
 #import "./REGISTRATION_FRAGMENT.gql"
 
-query($shortName: String!) {
+query GET_REGISTRATION($shortName: String!) {
   clinicalRegistration(shortName: $shortName) {
     ...Registration
   }
