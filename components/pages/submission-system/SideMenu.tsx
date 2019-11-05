@@ -76,8 +76,10 @@ type ClinicalSubmissionQueryResponse = {
 };
 
 type SampleRegistrationQueryResponse = {
-  fileName: string;
-  errors: Array<{ type: string }>;
+  clinicalRegistration: {
+    fileName: string;
+    errors: Array<{ type: string }>;
+  };
 };
 
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
@@ -89,7 +91,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     },
   });
 
-  const { data: sampleRegistrationData } = useQuery<SampleRegistrationQueryResponse>(
+  const { data: clinicalData } = useQuery<SampleRegistrationQueryResponse>(
     SIDE_MENU_SAMPLE_REGISTRATION_STATE,
     {
       variables: {
@@ -97,9 +99,19 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       },
     },
   );
-  console.log('sample reg dat', sampleRegistrationData);
-  const sampleRegistrationHasErrors = sampleRegistrationData && !!sampleRegistrationData.fileName;
-  console.log('sample reg has errors', sampleRegistrationHasErrors);
+
+  const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
+  const clinicalRegistrationHasError = clinicalRegistration && !!clinicalRegistration.errors.length;
+  const clinicalRegistrationInProgress = clinicalRegistration && clinicalRegistration.fileName;
+  console.log(
+    props.program.shortName,
+    clinicalRegistration,
+    'sample reg has errors',
+    'err',
+    clinicalRegistrationHasError,
+    'progress',
+    clinicalRegistrationInProgress,
+  );
 
   const clinicalSubmissionHasSchemaErrors = data
     ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
@@ -139,20 +151,11 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               `}
             >
               Register Samples
-              {
-                ({
-                  OPEN: clinicalSubmissionHasSchemaErrors ? (
-                    <Icon name="exclamation" fill="error" width="15px" />
-                  ) : (
-                    <Icon name="ellipses" fill="warning" width="15px" />
-                  ),
-                  VALID: <Icon name="ellipses" fill="warning" width="15px" />,
-                  INVALID: <Icon name="exclamation" fill="error" width="15px" />,
-                  PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
-                } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
-                  data ? data.clinicalSubmissions.state : null
-                ]
-              }
+              {clinicalRegistrationHasError ? (
+                <Icon name="exclamation" fill="error" width="15px" />
+              ) : clinicalRegistrationInProgress ? (
+                <Icon name="ellipses" fill="warning" width="15px" />
+              ) : null}
             </div>
           }
           selected={
