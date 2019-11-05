@@ -146,7 +146,6 @@ export default function ProgramIDRegistration() {
     const { __typename: respType, ...resp } = response;
     // display an error banner or clinical data will update with errors array
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      formatFileName;
       showError({
         errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
         fileName: formatFileName(fileName),
