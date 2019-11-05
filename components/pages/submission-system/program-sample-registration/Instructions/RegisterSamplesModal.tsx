@@ -3,6 +3,7 @@ import Modal from 'uikit/Modal';
 import { ModalPortal } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/react-hooks';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
+import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
@@ -29,6 +30,13 @@ export default function RegisterSamplesModal({
       shortName,
       registrationId,
     },
+    // update side menu status
+    refetchQueries: [
+      {
+        query: GET_REGISTRATION,
+        variables: { shortName },
+      },
+    ],
   });
 
   const toaster = useToaster();
