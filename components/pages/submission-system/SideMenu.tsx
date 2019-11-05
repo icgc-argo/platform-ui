@@ -102,16 +102,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
   const clinicalRegistrationHasError = clinicalRegistration && !!clinicalRegistration.errors.length;
-  const clinicalRegistrationInProgress = clinicalRegistration && clinicalRegistration.fileName;
-  console.log(
-    props.program.shortName,
-    clinicalRegistration,
-    'sample reg has errors',
-    'err',
-    clinicalRegistrationHasError,
-    'progress',
-    clinicalRegistrationInProgress,
-  );
+  const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
 
   const clinicalSubmissionHasSchemaErrors = data
     ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
