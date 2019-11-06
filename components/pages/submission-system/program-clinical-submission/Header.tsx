@@ -51,8 +51,6 @@ export default ({
   const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
     programShortName,
   );
-  // no submission if no submission version
-  const isSubmissionExist = submissionVersion !== undefined && submissionVersion !== null;
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -144,6 +142,7 @@ export default ({
     setLoaderShown(true);
     try {
       await clearClinicalSubmission();
+      await sleep();
       toaster.addToast({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',
@@ -224,7 +223,7 @@ export default ({
               css={css`
                 margin-right: 10px;
               `}
-              disabled={!isSubmissionExist}
+              disabled={!submissionVersion}
               onClick={handleSubmissionClear}
             >
               Clear submission
