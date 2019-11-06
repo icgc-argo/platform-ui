@@ -128,14 +128,17 @@ export default function CreateProgramForm({
   /* ****************** *
    * On Change Handlers
    * ****************** */
-  const handleInputChange = (fieldName: string) => event =>
+  const handleInputChange = (fieldName: keyof typeof seedFormData) => event =>
     setData({ key: fieldName, val: event.target.value });
 
   const handleInputBlur = fieldKey => event => {
     validateField({ key: fieldKey });
   };
 
-  const handleCheckboxGroupChange = (selectedItems: any[], fieldName: string) => value => {
+  const handleCheckboxGroupChange = (
+    selectedItems: any[],
+    fieldName: keyof typeof seedFormData,
+  ) => value => {
     if (selectedItems.includes(value)) {
       setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
     } else {
