@@ -11,7 +11,7 @@ import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { RegisterState } from '../types';
 import { useMutation } from '@apollo/react-hooks';
-import UPLOAD_REGISTRATION from '../UPLOAD_REGISTRATION.gql';
+import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,

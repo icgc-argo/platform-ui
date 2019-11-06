@@ -13,10 +13,10 @@ import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
-import CLEAR_CLINICAL_REGISTRATION_MUTATION from './CLEAR_CLINICAL_REGISTRATION_MUTATION.gql';
+import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRATION_MUTATION.gql';
 import FileTable from './FileTable';
 import NoDataMessage from './FileTable/NoDataMessage';
-import GET_REGISTRATION from './GET_REGISTRATION.gql';
+import GET_REGISTRATION from './gql/GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 import { ERROR_CODES } from './common';
@@ -146,7 +146,6 @@ export default function ProgramIDRegistration() {
     const { __typename: respType, ...resp } = response;
     // display an error banner or clinical data will update with errors array
     if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      formatFileName;
       showError({
         errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
         fileName: formatFileName(fileName),
