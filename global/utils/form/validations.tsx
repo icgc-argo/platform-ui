@@ -1,5 +1,5 @@
 import yup from 'global/utils/validations';
-import { PROGRAM_USER_ROLES } from 'global/constants/index';
+import { PROGRAM_USER_ROLES, RoleKey } from 'global/constants/index';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
 import { requiredError, validEmail } from 'global/utils/form/error';
 
@@ -25,4 +25,4 @@ export const email = yup
 export const role = yup
   .string()
   .label('Role')
-  .oneOf(PROGRAM_USER_ROLES.map(type => type.value));
+  .oneOf(PROGRAM_USER_ROLES.map(type => type.value)) as yup.StringSchema<RoleKey>;

@@ -11,10 +11,11 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
   { content: 'Associate', value: 'ASSOCIATE' },
 ];
 
+export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
 export const PROGRAM_USER_ROLES = [
-  { content: 'Administrator', value: 'ADMIN' },
-  { content: 'Collaborator', value: 'COLLABORATOR' },
-  { content: 'Data Submitter', value: 'SUBMITTER' },
+  { content: 'Administrator', value: 'ADMIN' as RoleKey },
+  { content: 'Collaborator', value: 'COLLABORATOR' as RoleKey },
+  { content: 'Data Submitter', value: 'SUBMITTER' as RoleKey },
 ];
 
 export const CANCER_TYPES = [
