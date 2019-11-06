@@ -77,6 +77,7 @@ type ClinicalSubmissionQueryResponse = {
 
 type SampleRegistrationQueryResponse = {
   clinicalRegistration: {
+    programShortName: string;
     fileName: string;
     errors: Array<{ type: string }>;
   };
@@ -132,22 +133,14 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         <MenuItem
           level={3}
           content={
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                align-items: center;
-                padding-right: 15px;
-              `}
-            >
+            <StatusMenuItem>
               Register Samples
               {clinicalRegistrationHasError ? (
                 <Icon name="exclamation" fill="error" width="15px" />
               ) : clinicalRegistrationInProgress ? (
                 <Icon name="ellipses" fill="warning" width="15px" />
               ) : null}
-            </div>
+            </StatusMenuItem>
           }
           selected={
             PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
