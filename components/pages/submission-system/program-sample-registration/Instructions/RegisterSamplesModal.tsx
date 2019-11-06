@@ -60,7 +60,7 @@ export default function RegisterSamplesModal({
 
         toaster.addToast({
           interactionType: 'CLOSE',
-          title: `${num} new sample${num > 1 ? 's' : ''} have been registered`,
+          title: `${num} new samples${num > 1 ? 's' : ''} have been registered`,
           variant: TOAST_VARIANTS.SUCCESS,
           content: (
             <>If you have any changes to this registered sample data, please contact the DCC.</>
