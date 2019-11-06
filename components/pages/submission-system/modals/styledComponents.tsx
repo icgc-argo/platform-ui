@@ -22,8 +22,8 @@ const Section = styled('div')`
 
 export type UserSectionProps = {
   user: typeof UserModel;
-  onChange: (fieldName: string, value: unknown) => unknown | void;
-  validateField: (fieldName: string) => unknown | void;
+  onChange: (fieldName: keyof typeof UserModel, value: unknown) => unknown | void;
+  validateField: (fieldName: keyof typeof UserModel) => unknown | void;
   errors: typeof UserModel;
   onClickDelete: (() => unknown | void) | null;
   disabledFields: Array<string | void>;

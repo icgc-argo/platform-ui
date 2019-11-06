@@ -4,6 +4,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import Router from 'next/router';
+import styled from '@emotion/styled';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -13,6 +14,7 @@ import DnaLoader from 'uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
@@ -47,6 +49,14 @@ const Loader = () => (
   </div>
 );
 
+const StatusMenuItem = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding-right: 15px;
+`;
+
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
   const toggleItem = itemIndex =>
@@ -64,6 +74,15 @@ type ClinicalSubmissionQueryResponse = {
     }>;
   };
 };
+
+type SampleRegistrationQueryResponse = {
+  clinicalRegistration: {
+    programShortName: string;
+    fileName: string;
+    errors: Array<{ type: string }>;
+  };
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { token } = useAuthContext();
@@ -72,6 +91,19 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       programShortName: props.program.shortName,
     },
   });
+
+  const { data: clinicalData } = useQuery<SampleRegistrationQueryResponse>(
+    SIDE_MENU_SAMPLE_REGISTRATION_STATE,
+    {
+      variables: {
+        programShortName: props.program.shortName,
+      },
+    },
+  );
+
+  const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
+  const clinicalRegistrationHasError = clinicalRegistration && !!clinicalRegistration.errors.length;
+  const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
 
   const clinicalSubmissionHasSchemaErrors = data
     ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
@@ -100,7 +132,16 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       >
         <MenuItem
           level={3}
-          content="Register Samples"
+          content={
+            <StatusMenuItem>
+              Register Samples
+              {clinicalRegistrationHasError ? (
+                <Icon name="exclamation" fill="error" width="15px" />
+              ) : clinicalRegistrationInProgress ? (
+                <Icon name="ellipses" fill="warning" width="15px" />
+              ) : null}
+            </StatusMenuItem>
+          }
           selected={
             PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
           }
@@ -117,15 +158,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         <MenuItem
           level={3}
           content={
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                align-items: center;
-                padding-right: 15px;
-              `}
-            >
+            <StatusMenuItem>
               Submit Clinical Data
               {
                 ({
@@ -141,7 +174,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                   data ? data.clinicalSubmissions.state : null
                 ]
               }
-            </div>
+            </StatusMenuItem>
           }
           selected={
             PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed

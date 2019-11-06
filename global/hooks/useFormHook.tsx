@@ -2,25 +2,26 @@ import React, { useState } from 'react';
 import get from 'lodash/get';
 import isArray from 'lodash/isArray';
 import yup from 'global/utils/validations';
-type FormData = {
-  key: string;
+
+type DefaultDataShape = { [k: string]: any };
+
+type FormData<T extends DefaultDataShape> = {
+  key: keyof T;
   val: unknown;
 };
 
 /**
  * Supports single forms only, {} not [{},{}]
  */
-interface T_FormHookInput<T> {
+interface T_FormHookInput<T extends DefaultDataShape> {
   initialFields: T;
-  schema: {
-    validate: typeof yup.object;
-  };
+  schema: yup.ObjectSchema<T>;
 }
-function useFormHook<T = { [k: string]: any }>({
+function useFormHook<T extends DefaultDataShape>({
   initialFields,
   schema: formSchema,
 }: T_FormHookInput<T>) {
-  let initErrors: { [k: string]: string } = {};
+  let initErrors: DefaultDataShape = {};
 
   for (let [key, value] of Object.entries(initialFields)) {
     initErrors[key] = '';
@@ -39,7 +40,7 @@ function useFormHook<T = { [k: string]: any }>({
   const hasErrors = Object.values(errors).some(x => x);
 
   // set form data
-  const setData = ({ key, val }: FormData) => {
+  const setData = ({ key, val }: FormData<T>) => {
     if (!touched) setTouched(true);
 
     setForm({
@@ -56,7 +57,7 @@ function useFormHook<T = { [k: string]: any }>({
     });
 
   // set single error
-  const setError = ({ key, val }: FormData) => {
+  const setError = ({ key, val }: FormData<T>) => {
     setForm({
       ...form,
       errors: { ...errors, [key]: String(val) },
@@ -79,7 +80,7 @@ function useFormHook<T = { [k: string]: any }>({
   };
 
   // validates entire form
-  const validateForm = (): Promise<any> =>
+  const validateForm = (): ReturnType<typeof formSchema.validate> =>
     new Promise(async (resolve, reject) => {
       try {
         const validData = await formSchema.validate(data, {

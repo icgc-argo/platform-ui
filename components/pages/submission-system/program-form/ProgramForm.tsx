@@ -83,11 +83,26 @@ export default function CreateProgramForm({
     membershipType?: string;
     website?: string;
     description?: string;
-    regions?: string;
+    regions?: string[];
   };
   onSubmit: (data: any) => any;
 }) {
-  const seedFormData = {
+  const seedFormData: {
+    programName: string;
+    shortName: string;
+    countries: string[];
+    cancerTypes: string[];
+    primarySites: string[];
+    commitmentLevel: number;
+    institutions: string[];
+    membershipType: string;
+    website: string;
+    description: string;
+    processingRegions: string[];
+    adminFirstName?: string;
+    adminLastName?: string;
+    adminEmail?: string;
+  } = {
     programName: program.name || '',
     shortName: program.shortName || '',
     countries: program.countries || [],
@@ -128,14 +143,17 @@ export default function CreateProgramForm({
   /* ****************** *
    * On Change Handlers
    * ****************** */
-  const handleInputChange = (fieldName: string) => event =>
+  const handleInputChange = (fieldName: keyof typeof seedFormData) => event =>
     setData({ key: fieldName, val: event.target.value });
 
   const handleInputBlur = fieldKey => event => {
     validateField({ key: fieldKey });
   };
 
-  const handleCheckboxGroupChange = (selectedItems: any[], fieldName: string) => value => {
+  const handleCheckboxGroupChange = (
+    selectedItems: any[],
+    fieldName: keyof typeof seedFormData,
+  ) => value => {
     if (selectedItems.includes(value)) {
       setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
     } else {

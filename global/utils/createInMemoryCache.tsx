@@ -14,7 +14,9 @@ export default () =>
           return `Program::${(obj as { shortName: string }).shortName}`;
 
         case 'ClinicalRegistrationData':
-          return `ClinicalRegistrationData::${(obj as { shortName: string }).shortName}`;
+          return `ClinicalRegistrationData::${
+            (obj as { programShortName: string }).programShortName
+          }`;
 
         case 'ClinicalSubmissionData':
           return `ClinicalSubmissionData::${
