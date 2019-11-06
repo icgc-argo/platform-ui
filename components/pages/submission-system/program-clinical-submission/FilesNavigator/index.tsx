@@ -10,9 +10,12 @@ import NoData from 'uikit/NoData';
 import ErrorNotification, { defaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
-import orderBy from 'lodash/orderBy';
-import head from 'lodash/head';
 import Icon from 'uikit/Icon';
+import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
+import { useMutation } from '@apollo/react-hooks';
+import { ClearSubmissionMutationVariables } from '../types';
+import useCommonToasters from 'components/useCommonToasters';
+import { useClinicalSubmissionQuery } from '..';
 
 export default ({
   fileStates,
@@ -20,24 +23,52 @@ export default ({
   submissionState,
   selectedFileIndex,
   onFileSelect,
+  programShortName,
+  submissionVersion,
 }: {
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'];
   fileStates: Array<ClinicalSubmissionEntityFile>;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
   selectedFileIndex: number;
   onFileSelect: (i: number) => void;
+  submissionVersion: ClinicalSubmissionQueryData['clinicalSubmissions']['version'];
+  programShortName: ClinicalSubmissionQueryData['program']['name'];
 }) => {
+  const commonToaster = useCommonToasters();
+  const [clearClinicalEntitySubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    ClearSubmissionMutationVariables
+  >(CLEAR_SUBMISSION_MUTATION);
+
+  const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
   const onFileClick = (clinicalType: string) => e => {
     onFileSelect(fileStates.findIndex(file => clinicalType === file.clinicalType));
   };
   const selectedFile = fileStates[selectedFileIndex];
-  const onClearClick = () => {
-    toaster.addToast({
-      title: 'DUMMY',
-      content: "I'm just a dummy placeholder behaviour",
-    });
+  const onClearClick = (clinicalType: string) => async e => {
+    const fileType: string = fileStates.find(file => clinicalType === file.clinicalType)
+      .clinicalType;
+
+    try {
+      await clearClinicalEntitySubmission({
+        variables: {
+          programShortName,
+          submissionVersion,
+          fileType,
+        },
+      });
+      toaster.addToast({
+        variant: 'SUCCESS',
+        interactionType: 'CLOSE',
+        title: 'Cleared',
+        content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
+      });
+    } catch (err) {
+      await refetchClinicalSubmission();
+      commonToaster.unknownErrorWithReloadMessage();
+    }
   };
   const onErrorClearClick = () => {
     clearDataError(selectedFile);
@@ -145,7 +176,7 @@ export default ({
                 {selectedFile.displayName} File Preview
               </Typography>
               {!isPendingApproval && (
-                <Button variant="text" size="sm" onClick={onClearClick}>
+                <Button variant="text" size="sm" onClick={onClearClick(selectedFile.clinicalType)}>
                   clear
                 </Button>
               )}

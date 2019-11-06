@@ -17,7 +17,13 @@ import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { isDccMember, getAuthorizedProgramScopes, canWriteProgram } from 'global/utils/egoJwt';
+import {
+  isDccMember,
+  getAuthorizedProgramScopes,
+  canWriteProgram,
+  isCollaborator,
+  isRdpcMember,
+} from 'global/utils/egoJwt';
 
 import {
   PROGRAM_SHORT_NAME_PATH,
@@ -122,65 +128,69 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
         />
       </Link>
-      <Link
-        prefetch
-        as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
-          PROGRAM_SHORT_NAME_PATH,
-          props.program.shortName,
-        )}
-        href={PROGRAM_SAMPLE_REGISTRATION_PATH}
-      >
-        <MenuItem
-          level={3}
-          content={
-            <StatusMenuItem>
-              Register Samples
-              {clinicalRegistrationHasError ? (
-                <Icon name="exclamation" fill="error" width="15px" />
-              ) : clinicalRegistrationInProgress ? (
-                <Icon name="ellipses" fill="warning" width="15px" />
-              ) : null}
-            </StatusMenuItem>
-          }
-          selected={
-            PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
-          }
-        />
-      </Link>
-      <Link
-        prefetch
-        as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-          PROGRAM_SHORT_NAME_PATH,
-          props.program.shortName,
-        )}
-        href={PROGRAM_CLINICAL_SUBMISSION_PATH}
-      >
-        <MenuItem
-          level={3}
-          content={
-            <StatusMenuItem>
-              Submit Clinical Data
-              {
-                ({
-                  OPEN: clinicalSubmissionHasSchemaErrors ? (
+      {token && !isCollaborator({ egoJwt: token, programId: props.program.shortName }) && (
+        <>
+          <Link
+            prefetch
+            as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+              PROGRAM_SHORT_NAME_PATH,
+              props.program.shortName,
+            )}
+            href={PROGRAM_SAMPLE_REGISTRATION_PATH}
+          >
+            <MenuItem
+              level={3}
+              content={
+                <StatusMenuItem>
+                  Register Samples
+                  {clinicalRegistrationHasError ? (
                     <Icon name="exclamation" fill="error" width="15px" />
-                  ) : (
+                  ) : clinicalRegistrationInProgress ? (
                     <Icon name="ellipses" fill="warning" width="15px" />
-                  ),
-                  VALID: <Icon name="ellipses" fill="warning" width="15px" />,
-                  INVALID: <Icon name="exclamation" fill="error" width="15px" />,
-                  PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
-                } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
-                  data ? data.clinicalSubmissions.state : null
-                ]
+                  ) : null}
+                </StatusMenuItem>
               }
-            </StatusMenuItem>
-          }
-          selected={
-            PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
-          }
-        />
-      </Link>
+              selected={
+                PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              }
+            />
+          </Link>
+          <Link
+            prefetch
+            as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+              PROGRAM_SHORT_NAME_PATH,
+              props.program.shortName,
+            )}
+            href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+          >
+            <MenuItem
+              level={3}
+              content={
+                <StatusMenuItem>
+                  Submit Clinical Data
+                  {
+                    ({
+                      OPEN: clinicalSubmissionHasSchemaErrors ? (
+                        <Icon name="exclamation" fill="error" width="15px" />
+                      ) : (
+                        <Icon name="ellipses" fill="warning" width="15px" />
+                      ),
+                      VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                      INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                      PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                    } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
+                      data ? data.clinicalSubmissions.state : null
+                    ]
+                  }
+                </StatusMenuItem>
+              }
+              selected={
+                PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              }
+            />
+          </Link>
+        </>
+      )}
       {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
         <Link
           prefetch
@@ -267,6 +277,8 @@ export default function SideMenu() {
 
   const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
+  const isRdpc = token ? isRdpcMember(token) : false;
+
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
@@ -280,22 +292,16 @@ export default function SideMenu() {
           <Loader />
         ) : (
           // if user can only access one program, they only see the links for that program
-          <div
-            css={css`
-              margin-top: 44px;
-            `}
-          >
-            <MenuItem selected>
-              <MenuItem
-                key={programs[0].shortName}
-                content={programs[0].shortName}
-                selected
-                noChevron
-              >
-                <LinksToProgram program={programs[0]} isCurrentlyViewed={true} />
-              </MenuItem>
+          <MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected noChevron>
+            <MenuItem
+              key={programs[0].shortName}
+              content={programs[0].shortName}
+              selected
+              noChevron
+            >
+              <LinksToProgram program={programs[0]} isCurrentlyViewed={true} />
             </MenuItem>
-          </div>
+          </MenuItem>
         )
       ) : (
         <>
@@ -319,6 +325,7 @@ export default function SideMenu() {
             content={'My Programs'}
             selected={activeItem === 1}
             onClick={() => toggleItem(1)}
+            noChevron={!isDcc && !isRdpc}
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
           </MenuItem>
