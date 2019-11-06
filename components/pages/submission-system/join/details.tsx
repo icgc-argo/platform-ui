@@ -60,7 +60,9 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
 
-  const handleSubmit = async validData => {
+  const handleSubmit: React.ComponentProps<
+    typeof JoinProgramForm
+  >['onSubmit'] = async validData => {
     try {
       await joinProgram({
         variables: {
