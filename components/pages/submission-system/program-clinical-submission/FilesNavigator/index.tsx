@@ -63,7 +63,7 @@ export default ({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',
         title: 'Cleared',
-        content: `Uploaded ${fileType.toUpperCase()} file has been cleared`,
+        content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
       });
     } catch (err) {
       await refetchClinicalSubmission();

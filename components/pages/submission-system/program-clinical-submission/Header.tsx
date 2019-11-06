@@ -51,6 +51,8 @@ export default ({
   const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
     programShortName,
   );
+  // no submission if no submission version
+  const isSubmissionExist = submissionVersion !== undefined && submissionVersion !== null;
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -140,23 +142,13 @@ export default ({
 
   const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
     setLoaderShown(true);
-    // no submission if all files are deleted so no submission version
-    if (!submissionVersion) {
-      toaster.addToast({
-        variant: 'INFO',
-        title: 'No submission',
-        content: `There is no submitted files to clear`,
-      });
-      setLoaderShown(false);
-      return;
-    }
     try {
       await clearClinicalSubmission();
       toaster.addToast({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',
         title: 'Submission cleared',
-        content: `All recently uploaded clinical files have been cleared`,
+        content: `All recently uploaded clinical files have been cleared.`,
       });
     } catch (err) {
       await refetchClinicalSubmission();
@@ -232,6 +224,7 @@ export default ({
               css={css`
                 margin-right: 10px;
               `}
+              disabled={!isSubmissionExist}
               onClick={handleSubmissionClear}
             >
               Clear submission
