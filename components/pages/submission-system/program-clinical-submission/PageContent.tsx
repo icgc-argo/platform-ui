@@ -421,6 +421,8 @@ export default () => {
             fileStates={fileNavigatorFiles}
             selectedFileIndex={selectedClinicalEntityIndex}
             onFileSelect={setSelectedClinicalEntityIndex}
+            submissionVersion={data.clinicalSubmissions.version}
+            programShortName={data.program.name}
           />
         )}
       </Container>
