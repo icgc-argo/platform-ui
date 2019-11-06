@@ -123,8 +123,8 @@ const Users = ({
                     <span>
                       The information for{' '}
                       <strong>
-                        {currentDeletingUser && currentDeletingUser.firstName}{' '}
-                        {currentDeletingUser && currentDeletingUser.lastName}
+                        {currentEditingUser && currentEditingUser.firstName}{' '}
+                        {currentEditingUser && currentEditingUser.lastName}
                       </strong>{' '}
                       has been updated.
                     </span>
