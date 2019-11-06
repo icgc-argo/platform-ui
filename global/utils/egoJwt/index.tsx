@@ -97,3 +97,16 @@ export const getReadableProgramDataNames: (egoJwt: string) => string[] = egoJwt 
 
 export const getWritableProgramDataNames: (egoJwt: string) => string[] = egoJwt =>
   !egoJwt ? [] : TokenUtils.getWritableProgramDataNames(egoJwt);
+
+export const isDataSubmitter: (args: { egoJwt: string; programId: string }) => boolean = ({
+  egoJwt,
+  programId,
+}) => canWriteProgramData({ egoJwt, programId }) && canReadProgram({ egoJwt, programId });
+
+export const isCollaborator: (args: { egoJwt: string; programId: string }) => boolean = ({
+  egoJwt,
+  programId,
+}) =>
+  canReadProgramData({ egoJwt, programId }) &&
+  canReadProgram({ egoJwt, programId }) &&
+  !canWriteProgramData({ egoJwt, programId });
