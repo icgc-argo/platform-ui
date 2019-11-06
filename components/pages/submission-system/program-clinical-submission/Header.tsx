@@ -147,6 +147,7 @@ export default ({
         title: 'No submission',
         content: `There is no submitted files to clear`,
       });
+      setLoaderShown(false);
       return;
     }
     try {
