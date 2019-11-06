@@ -106,4 +106,7 @@ export const isDataSubmitter: (args: { egoJwt: string; programId: string }) => b
 export const isCollaborator: (args: { egoJwt: string; programId: string }) => boolean = ({
   egoJwt,
   programId,
-}) => canReadProgramData({ egoJwt, programId }) && canReadProgram({ egoJwt, programId });
+}) =>
+  canReadProgramData({ egoJwt, programId }) &&
+  canReadProgram({ egoJwt, programId }) &&
+  !canWriteProgramData({ egoJwt, programId });
