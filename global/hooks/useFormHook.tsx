@@ -80,7 +80,7 @@ function useFormHook<T extends DefaultDataShape>({
   };
 
   // validates entire form
-  const validateForm = (): Promise<any> =>
+  const validateForm = (): ReturnType<typeof formSchema.validate> =>
     new Promise(async (resolve, reject) => {
       try {
         const validData = await formSchema.validate(data, {

@@ -12,29 +12,36 @@ import MultiSelect, { Option } from 'uikit/form/MultiSelect';
 import Typography from 'uikit/Typography';
 import schema from './validation';
 
+const initialFields = schema.cast({});
+
 const JoinProgramForm = ({
   programName,
   userRole,
   onSubmit,
   institutions,
 }: {
-  onSubmit: (data: any) => any;
+  onSubmit: (data: typeof initialFields) => any;
   programName: string;
   userRole: string;
   institutions: Array<string>;
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
-    initialFields: schema.cast({}),
+    initialFields,
     schema: schema,
   });
 
   const availableInstitutions = institutions || [];
 
-  const handleBlur = fieldKey => _ => validateField({ key: fieldKey });
+  const handleBlur = (
+    fieldKey: keyof typeof initialFields,
+  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => _ => validateField({ key: fieldKey });
 
-  const handleChange = fieldName => ({ target }) => setData({ key: fieldName, val: target.value });
+  const handleChange = (
+    fieldName: keyof typeof initialFields,
+  ): React.ComponentProps<typeof MultiSelect>['onChange'] => ({ target }) =>
+    setData({ key: fieldName, val: target.value });
 
-  const submitForm = async () => {
+  const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const validData = await validateForm();
     onSubmit(validData);
   };
