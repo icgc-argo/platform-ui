@@ -137,7 +137,7 @@ const JoinProgramForm = ({
               </Col>
             </Row>
 
-            <FormControl error={!!errors.department}>
+            <FormControl required error={!!errors.department}>
               <Row nogutter>
                 <Col sm={4} className="pt">
                   <InputLabel>Department</InputLabel>
