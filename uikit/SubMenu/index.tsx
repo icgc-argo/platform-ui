@@ -60,7 +60,7 @@ const MenuItemComponent = React.forwardRef<
           e.stopPropagation();
           if (contentContainerRef.current) contentContainerRef.current.blur();
           setLocalSelectedState(!isSelected);
-          onClick(e);
+          noChevron ? null : onClick(e);
         }}
         className={`${className} MenuItemContainer`}
         {...otherProps}
