@@ -15,6 +15,7 @@ import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';
+import { useClinicalSubmissionQuery } from '..';
 
 export default ({
   fileStates,
@@ -39,6 +40,7 @@ export default ({
     ClearSubmissionMutationVariables
   >(CLEAR_SUBMISSION_MUTATION);
 
+  const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
   const onFileClick = (clinicalType: string) => e => {
@@ -64,6 +66,7 @@ export default ({
         content: `Uploaded ${fileType.toUpperCase()} file has been cleared`,
       });
     } catch (err) {
+      await refetchClinicalSubmission();
       commonToaster.unknownErrorWithReloadMessage();
     }
   };

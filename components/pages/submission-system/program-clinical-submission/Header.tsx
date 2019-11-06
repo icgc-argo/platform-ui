@@ -11,7 +11,7 @@ import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
-import { ClinicalSubmissionQueryData } from './types';
+import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
@@ -75,7 +75,7 @@ export default ({
 
   const [clearClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
-    { programShortName: string; submissionVersion: string }
+    ClearSubmissionMutationVariables
   >(CLEAR_SUBMISSION_MUTATION, {
     variables: {
       programShortName,
