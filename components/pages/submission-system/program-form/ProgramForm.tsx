@@ -83,11 +83,26 @@ export default function CreateProgramForm({
     membershipType?: string;
     website?: string;
     description?: string;
-    regions?: string;
+    regions?: string[];
   };
   onSubmit: (data: any) => any;
 }) {
-  const seedFormData = {
+  const seedFormData: {
+    programName: string;
+    shortName: string;
+    countries: string[];
+    cancerTypes: string[];
+    primarySites: string[];
+    commitmentLevel: number;
+    institutions: string[];
+    membershipType: string;
+    website: string;
+    description: string;
+    processingRegions: string[];
+    adminFirstName?: string;
+    adminLastName?: string;
+    adminEmail?: string;
+  } = {
     programName: program.name || '',
     shortName: program.shortName || '',
     countries: program.countries || [],

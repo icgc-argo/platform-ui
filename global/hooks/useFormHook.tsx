@@ -13,11 +13,9 @@ type FormData<T extends DefaultDataShape> = {
 /**
  * Supports single forms only, {} not [{},{}]
  */
-interface T_FormHookInput<T> {
+interface T_FormHookInput<T extends DefaultDataShape> {
   initialFields: T;
-  schema: {
-    validate: typeof yup.object;
-  };
+  schema: yup.ObjectSchema<T>;
 }
 function useFormHook<T extends DefaultDataShape>({
   initialFields,
