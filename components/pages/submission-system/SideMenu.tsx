@@ -280,22 +280,16 @@ export default function SideMenu() {
           <Loader />
         ) : (
           // if user can only access one program, they only see the links for that program
-          <div
-            css={css`
-              margin-top: 44px;
-            `}
-          >
-            <MenuItem selected>
-              <MenuItem
-                key={programs[0].shortName}
-                content={programs[0].shortName}
-                selected
-                noChevron
-              >
-                <LinksToProgram program={programs[0]} isCurrentlyViewed={true} />
-              </MenuItem>
+          <MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected noChevron>
+            <MenuItem
+              key={programs[0].shortName}
+              content={programs[0].shortName}
+              selected
+              noChevron
+            >
+              <LinksToProgram program={programs[0]} isCurrentlyViewed={true} />
             </MenuItem>
-          </div>
+          </MenuItem>
         )
       ) : (
         <>
