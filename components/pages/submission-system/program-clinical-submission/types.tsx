@@ -90,6 +90,12 @@ export type SignOffSubmissionMutationVariables = {
   submissionVersion: string;
 };
 
+export type ClearSubmissionMutationVariables = {
+  programShortName: string;
+  submissionVersion: string;
+  fileType?: string;
+};
+
 export type ClinicalSubmissionQueryData = {
   clinicalSubmissions: GqlClinicalSubmissionData;
   program: {

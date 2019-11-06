@@ -9,6 +9,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
+import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
@@ -72,6 +73,16 @@ export default ({
     update: refetchClinicalSubmission,
   });
 
+  const [clearClinicalSubmission] = useMutation<
+    ClinicalSubmissionQueryData,
+    { programShortName: string; submissionVersion: string }
+  >(CLEAR_SUBMISSION_MUTATION, {
+    variables: {
+      programShortName,
+      submissionVersion,
+    },
+  });
+
   const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
@@ -125,6 +136,32 @@ export default ({
         setLoaderShown(false);
       }
     }
+  };
+
+  const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
+    setLoaderShown(true);
+    // no submission if all files are deleted so no submission version
+    if (!submissionVersion) {
+      toaster.addToast({
+        variant: 'INFO',
+        title: 'No submission',
+        content: `There is no submitted files to clear`,
+      });
+      return;
+    }
+    try {
+      await clearClinicalSubmission();
+      toaster.addToast({
+        variant: 'SUCCESS',
+        interactionType: 'CLOSE',
+        title: 'Submission cleared',
+        content: `All recently uploaded clinical files have been cleared`,
+      });
+    } catch (err) {
+      await refetchClinicalSubmission();
+      commonToaster.unknownErrorWithReloadMessage();
+    }
+    setLoaderShown(false);
   };
 
   return (
@@ -188,19 +225,19 @@ export default ({
               {isDcc ? 'reopen' : 'reopen submission'}
             </Button>
           )}
+          {!isPendingApproval && (
+            <Button
+              variant="text"
+              css={css`
+                margin-right: 10px;
+              `}
+              onClick={handleSubmissionClear}
+            >
+              Clear submission
+            </Button>
+          )}
           {!isDcc && (
             <>
-              {!isPendingApproval && (
-                <Button
-                  variant="text"
-                  disabled
-                  css={css`
-                    margin-right: 10px;
-                  `}
-                >
-                  Clear submission
-                </Button>
-              )}
               <Link
                 bold
                 withChevron
