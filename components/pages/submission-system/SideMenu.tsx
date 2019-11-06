@@ -22,6 +22,7 @@ import {
   getAuthorizedProgramScopes,
   canWriteProgram,
   isCollaborator,
+  isRdpcMember,
 } from 'global/utils/egoJwt';
 
 import {
@@ -276,6 +277,8 @@ export default function SideMenu() {
 
   const { data: egoTokenData, token } = useAuthContext();
   const isDcc = token ? isDccMember(token) : false;
+  const isRdpc = token ? isRdpcMember(token) : false;
+
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
@@ -322,6 +325,7 @@ export default function SideMenu() {
             content={'My Programs'}
             selected={activeItem === 1}
             onClick={() => toggleItem(1)}
+            noChevron={!isDcc && !isRdpc}
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
           </MenuItem>
