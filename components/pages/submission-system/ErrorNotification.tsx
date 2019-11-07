@@ -47,7 +47,7 @@ export default <Error extends { [k: string]: any }>({
 }: {
   title: string;
   subtitle: string;
-  columnConfig: Array<{ [k: string]: any }>;
+  columnConfig: Array<TableColumnConfig<Error>>;
   errors: Array<Error>;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
