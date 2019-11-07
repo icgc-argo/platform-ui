@@ -17,6 +17,9 @@ import useElementDimention from '../utils/Hook/useElementDimention';
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
 export type TableVariant = 'DEFAULT' | 'STATIC';
+type TableDataBase = {
+  [k: string]: any;
+};
 
 export const DefaultTrComponent = ({ rowInfo, primaryKey, selectedIds, ...props }: any) => {
   const thisRowId = get(rowInfo, `original.${primaryKey}`);
@@ -57,11 +60,12 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
-export type TableColumnConfig<Data = { [k: string]: any }> = TableProps<Data>['columns'][0] & {
-  accessor?: keyof Data;
+export type TableColumnConfig<Data extends TableDataBase> = TableProps<Data>['columns'][0] & {
+  accessor?: TableProps<Data>['columns'][0]['accessor'] | keyof Data;
   Cell?: TableProps<Data>['columns'][0]['Cell'] | ((c: { original: Data }) => React.ReactNode);
+  style?: React.CSSProperties;
 };
-function Table<Data = { [k: string]: any }>({
+function Table<Data extends TableDataBase>({
   variant = 'DEFAULT',
   withRowBorder = variant === 'STATIC',
   stripped = variant === 'DEFAULT',
@@ -95,7 +99,7 @@ function Table<Data = { [k: string]: any }>({
   stripped?: boolean;
   selectedIds?: Array<any>;
   primaryKey?: string;
-  columns: TableProps<Data>['columns']; //columns is required
+  columns: Array<TableColumnConfig<Data>>; //columns is required
   parentRef: React.RefObject<HTMLElement>;
   withResizeBlur?: boolean;
 } & StyledTableProps) {
@@ -157,10 +161,10 @@ const SelectTableCheckbox: React.ComponentType<
   <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-lable="table-select" />
 );
 
-export function SelectTable<Data = { [k: string]: any }>(
+export function SelectTable<Data extends TableDataBase>(
   props: Partial<TableProps<Data>> &
     Partial<SelectTableAdditionalProps> & {
-      columns: TableProps<Data>['columns']; //columns is required
+      columns: Array<TableColumnConfig<Data>>; //columns is required
       parentRef: React.RefObject<HTMLElement>;
       withResizeBlur?: boolean;
     },
