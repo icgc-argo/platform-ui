@@ -384,11 +384,14 @@ export default () => {
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
-            columnConfig={insertAt(defaultColumns)(0)({
-              accessor: 'fileName',
-              Header: 'File',
-              maxWidth: 150,
-            })}
+            columnConfig={[
+              {
+                accessor: 'fileName',
+                Header: 'File',
+                maxWidth: 150,
+              },
+              ...defaultColumns,
+            ]}
           />
         </div>
       )}
