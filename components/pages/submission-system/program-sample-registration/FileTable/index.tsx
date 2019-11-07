@@ -94,25 +94,12 @@ const FileTable = (props: {
         position: relative;
       `}
     >
+      <TableInfoHeaderContainer
+        left={<StatsArea stats={stats} />}
+        right={<SubmissionInfoArea {...submissionInfo} />}
+      />{' '}
       <Table
         parentRef={containerRef}
-        TheadComponent={({ children, className, ...rest }) => (
-          <Affix
-            top={58}
-            css={css`
-              background: white;
-              overflow: hidden;
-            `}
-          >
-            <TableInfoHeaderContainer
-              left={<StatsArea stats={stats} />}
-              right={<SubmissionInfoArea {...submissionInfo} />}
-            />
-            <div className={clsx('rt-thead', className)} {...rest}>
-              {children}
-            </div>
-          </Affix>
-        )}
         showPagination={false}
         pageSize={Number.MAX_SAFE_INTEGER}
         columns={[
