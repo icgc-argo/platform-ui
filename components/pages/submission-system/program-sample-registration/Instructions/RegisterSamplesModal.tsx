@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'uikit/Modal';
 import { ModalPortal } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/react-hooks';
+import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
 import isEmpty from 'lodash/isEmpty';
@@ -60,7 +61,7 @@ export default function RegisterSamplesModal({
 
         toaster.addToast({
           interactionType: 'CLOSE',
-          title: `${num} new samples${num > 1 ? 's' : ''} have been registered`,
+          title: `${num} new ${pluralize('sample', num)} have been registered`,
           variant: TOAST_VARIANTS.SUCCESS,
           content: (
             <>If you have any changes to this registered sample data, please contact the DCC.</>
