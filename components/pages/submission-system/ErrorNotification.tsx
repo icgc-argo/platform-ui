@@ -47,7 +47,11 @@ export default <Error extends { [k: string]: any }>({
 }: {
   title: string;
   subtitle: string;
-  columnConfig: Array<TableColumnConfig<Error>>;
+  columnConfig: Array<
+    TableColumnConfig<Error> & {
+      accessor: string;
+    }
+  >;
   errors: Array<Error>;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
@@ -121,7 +125,13 @@ export default <Error extends { [k: string]: any }>({
               parentRef={containerRef}
               NoDataComponent={() => null}
               showPagination={false}
-              columns={columnConfig}
+              columns={columnConfig.map(col => ({
+                ...col,
+                style: {
+                  whiteSpace: 'unset',
+                  ...(col.style || {}),
+                },
+              }))}
               data={errors}
             />
           </div>
