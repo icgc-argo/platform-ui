@@ -3,14 +3,12 @@ import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
-import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
-import { ClinicalRegistrationError } from './program-sample-registration/types';
 import union from 'lodash/union';
 
-export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
+export const defaultColumns = [
   {
     accessor: 'row',
     Header: 'Row #',
