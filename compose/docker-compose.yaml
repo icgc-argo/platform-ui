@@ -99,7 +99,6 @@ services:
   #####################################################
   argo-clinical:
     image: '${CLINICAL_IMAGE}'
-    command: sleep 100000
     depends_on:
       - mongo
     environment:
