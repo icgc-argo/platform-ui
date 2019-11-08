@@ -106,7 +106,7 @@ services:
       LOG_LEVEL: 'debug'
       CLINICAL_DB_URL: mongodb://mongo:27017/clinical
       JWT_TOKEN_PUBLIC_KEY_URL: 'http://ego-api:8088/api/oauth/token/public_key'
-      LECTERN_URL: 'file:///clinical_bootstrap/sample-schema.json'
+      LECTERN_URL: 'file:///clinical-bootstrap/sample-schema.json'
       # LECTERN_URL: "http://lectern:3000"
       INITIAL_SCHEMA_VERSION: '1.0'
       SCHEMA_NAME: 'ARGO Clinical Submission'
@@ -115,7 +115,7 @@ services:
       # - type: bind
       #   source: ./clinical_bootstrap
       #   target: /clinical_bootstrap
-      - ./clinical_bootstrap:/clinical_bootstrap
+      - ./clinical-bootstrap:/clinical-bootstrap
     ports:
       - 3000:3000
 
