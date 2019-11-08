@@ -48,7 +48,11 @@ $ make nuke
 ### Interacting
 
 - Ego Admin UI: http://localhost:3501
-- ARGO Platform: http://localhost:8080
+- ARGO Platform UI: http://localhost:8080
+- Gateway:
+  - Graphql: http://localhost:9000/graphql
+  - other docs: http://localhost:9000/api-docs
+- Clinical: http://localhost:3000/api-docs
 
 ## Architecture
 
