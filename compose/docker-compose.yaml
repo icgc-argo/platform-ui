@@ -99,21 +99,28 @@ services:
   #####################################################
   argo-clinical:
     image: '${CLINICAL_IMAGE}'
+    command: sleep 100000
     depends_on:
       - mongo
     environment:
       LOG_LEVEL: 'debug'
       CLINICAL_DB_URL: mongodb://mongo:27017/clinical
       JWT_TOKEN_PUBLIC_KEY_URL: 'http://ego-api:8088/api/oauth/token/public_key'
-      LECTERN_URL: 'http://lectern:3000'
-      INITIAL_SCHEMA_VERSION: '4.1'
-      SCHEMA_NAME: 'ICGC-ARGO Data Dictionary'
+      LECTERN_URL: 'file:///clinical_bootstrap/sample-schema.json'
+      # LECTERN_URL: "http://lectern:3000"
+      INITIAL_SCHEMA_VERSION: '1.0'
+      SCHEMA_NAME: 'ARGO Clinical Submission'
       VAULT_ENABLED: 'false'
+    volumes:
+      # - type: bind
+      #   source: ./clinical_bootstrap
+      #   target: /clinical_bootstrap
+      - ./clinical_bootstrap:/clinical_bootstrap
     ports:
       - 3000:3000
 
   #####################################################
-  # Lectern
+  # Lectern //not needed at the moment as clinical is run with local schema
   #####################################################
   lectern:
     image: overture/lectern:edge
