@@ -133,12 +133,14 @@ services:
     depends_on:
       - ego-api
       - program-service
+      - lectern
+      - argo-clinical
     environment:
       EGO_APPLICATION_ID: platform
       EGO_APPLICATION_SECRET: platformsecret
       EGO_ROOT_GRPC: ego-api:50052
       PROGRAM_SERVICE_ROOT: program-service:50051
-      CLINICAL_SERVICE_ROOT: http://argo-clinical:5050
+      CLINICAL_SERVICE_ROOT: http://argo-clinical:3000
     ports:
       - 9000:9000
 
