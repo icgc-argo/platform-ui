@@ -112,9 +112,6 @@ services:
       SCHEMA_NAME: 'ARGO Clinical Submission'
       VAULT_ENABLED: 'false'
     volumes:
-      # - type: bind
-      #   source: ./clinical_bootstrap
-      #   target: /clinical_bootstrap
       - ./clinical-bootstrap:/clinical-bootstrap
     ports:
       - 3000:3000
