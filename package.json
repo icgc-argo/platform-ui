@@ -13,9 +13,9 @@
     "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
     "type-check": "tsc -p ./tsconfig.json",
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
-    "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
+    "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.tsx",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
-    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./queryValidations.test.tsx"
+    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.tsx"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc"
@@ -33,6 +33,7 @@
     "@icgc-argo/ego-token-utils": "^5.2.1",
     "@storybook/addon-a11y": "^5.1.9",
     "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/graphql": "^14.5.0",
     "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
     "@types/next": "^8.0.6",

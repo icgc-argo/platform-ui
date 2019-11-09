@@ -1,56 +1,36 @@
 import gql from 'graphql-tag';
-import { introspectSchema } from 'graphql-tools';
-import { HttpLink } from 'apollo-link-http';
-import fetch from 'node-fetch';
-import { validate } from 'graphql/validation';
 import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 import findFiles from 'file-regex/dist';
-import urlJoin from 'url-join';
 import memoize from 'lodash/memoize';
 
-require('dotenv').config();
-
-const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
 const GRAPHQL_FILE_REGEX = /\.gql$/;
+const ROOT_DIR = '../components';
+export const ABSOLUTE_ROOT_DIR = path.resolve(__dirname, ROOT_DIR);
 
-describe('all gql queries', () => {
-  it(`must be compliant with gql API at ${GRAPHQL_URL}`, async () => {
-    await runTest();
+export const getGqlFiles = memoize(
+  async () => await findFiles(ABSOLUTE_ROOT_DIR, GRAPHQL_FILE_REGEX, Infinity),
+);
+
+describe('Compilation', async () => {
+  const gqlFiles = await getGqlFiles();
+  gqlFiles.forEach(({ dir, file }) => {
+    describe(path.resolve(dir, file).replace(ABSOLUTE_ROOT_DIR, ''), () => {
+      it(`must compile`, async () => {
+        validateGqlFileAgainstSchema({ dir, file });
+      });
+    });
   });
 });
 
-const runTest = async () => {
-  const apolloLink = new HttpLink({
-    uri: GRAPHQL_URL,
-    fetch,
-  });
-  let schema;
-  try {
-    schema = await introspectSchema(apolloLink);
-  } catch (err) {
-    throw new Error(`failed to retrieve remote schema`);
-  }
-  const gqlFiles = await findFiles(
-    path.resolve(__dirname, 'components'),
-    GRAPHQL_FILE_REGEX,
-    Infinity,
-  );
-  gqlFiles.forEach(validateGqlFileAgainstSchema(schema));
-};
-
-const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
+const validateGqlFileAgainstSchema = ({ dir, file }) => {
   const queryFilePath = path.resolve(dir, file);
   const queryAst = compileGqlAst(queryFilePath);
-  const errors = validate(schema, queryAst);
-  if (errors.length) {
-    throw new Error(`validation failed for ${queryFilePath}: ${errors}`);
-  }
-  expect(errors).to.be.empty;
+  expect(queryAst).to.be.not.empty;
 };
 
-const compileGqlAst = memoize((queryFilePath: string) => {
+export const compileGqlAst = memoize((queryFilePath: string) => {
   const gqlStr = String(fs.readFileSync(queryFilePath));
   const gqlImportResults = gqlStr
     .split('\n')
