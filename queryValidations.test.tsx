@@ -12,6 +12,7 @@ import urlJoin from 'url-join';
 require('dotenv').config();
 
 const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
+const GRAPHQL_FILE_REGEX = /\.gql$/;
 
 describe('all gql queries', () => {
   it(`must be compliant with gql API at ${GRAPHQL_URL}`, async () => {
@@ -30,23 +31,49 @@ const runTest = async () => {
   } catch (err) {
     throw new Error(`failed to retrieve remote schema`);
   }
-  const gqlFiles = await findFiles(path.resolve(__dirname, 'components'), /\.gql$/, Infinity);
+  const gqlFiles = await findFiles(
+    path.resolve(__dirname, 'components'),
+    GRAPHQL_FILE_REGEX,
+    Infinity,
+  );
   gqlFiles.forEach(validateGqlFileAgainstSchema(schema));
 };
 
 const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
   const queryFilePath = path.resolve(dir, file);
-  let queryAst;
-  try {
-    queryAst = gql`
-      ${fs.readFileSync(queryFilePath)}
-    `;
-  } catch (err) {
-    throw new Error(`failed to parse AST for ${queryFilePath}: ${err}`);
-  }
+  const queryAst = compileGqlAst(queryFilePath);
   const errors = validate(schema, queryAst);
   if (errors.length) {
     throw new Error(`validation failed for ${queryFilePath}: ${errors}`);
   }
   expect(errors).to.be.empty;
+};
+
+const compileGqlAst = (queryFilePath: string) => {
+  let queryAst;
+  const gqlStr = String(fs.readFileSync(queryFilePath));
+  try {
+    queryAst = gql`
+      ${// this is a poor-man's graphql import resolution
+      gqlStr
+        .split('\n')
+        .filter(str => str.includes('#') && str.includes('import'))
+        .map(importComment => {
+          // example: #import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
+          const relativePath = importComment.includes('"')
+            ? importComment.split('"')[1]
+            : importComment.split("'")[1];
+          const currentPathSegments = queryFilePath.split('/');
+          const currentPath = currentPathSegments
+            .slice(0, currentPathSegments.length - 1)
+            .join('/');
+          const absolutePath = path.resolve(currentPath, relativePath);
+          return compileGqlAst(absolutePath).loc.source.body;
+        })}
+      ${gqlStr}
+    `;
+  } catch (err) {
+    throw new Error(`Failed to parse AST for ${queryFilePath}: ${err}\n`);
+  }
+  return queryAst;
 };
