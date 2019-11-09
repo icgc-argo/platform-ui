@@ -1,34 +1,16 @@
 import gql from 'graphql-tag';
 import fs from 'fs';
 import path from 'path';
-import { expect } from 'chai';
 import findFiles from 'file-regex/dist';
 import memoize from 'lodash/memoize';
 
-const GRAPHQL_FILE_REGEX = /\.gql$/;
-const ROOT_DIR = '../components';
+export const GRAPHQL_FILE_REGEX = /\.gql$/;
+export const ROOT_DIR = '../components';
 export const ABSOLUTE_ROOT_DIR = path.resolve(__dirname, ROOT_DIR);
 
 export const getGqlFiles = memoize(
   async () => await findFiles(ABSOLUTE_ROOT_DIR, GRAPHQL_FILE_REGEX, Infinity),
 );
-
-describe('Compilation', async () => {
-  const gqlFiles = await getGqlFiles();
-  gqlFiles.forEach(({ dir, file }) => {
-    describe(path.resolve(dir, file).replace(ABSOLUTE_ROOT_DIR, ''), () => {
-      it(`must compile`, async () => {
-        validateGqlFileAgainstSchema({ dir, file });
-      });
-    });
-  });
-});
-
-const validateGqlFileAgainstSchema = ({ dir, file }) => {
-  const queryFilePath = path.resolve(dir, file);
-  const queryAst = compileGqlAst(queryFilePath);
-  expect(queryAst).to.be.not.empty;
-};
 
 export const compileGqlAst = memoize((queryFilePath: string) => {
   const gqlStr = String(fs.readFileSync(queryFilePath));
@@ -54,6 +36,6 @@ export const compileGqlAst = memoize((queryFilePath: string) => {
       ${gqlStr}
     `;
   } catch (err) {
-    throw new Error(`Failed to parse AST for ${queryFilePath}: ${err}\n`);
+    throw new Error(err);
   }
 });
