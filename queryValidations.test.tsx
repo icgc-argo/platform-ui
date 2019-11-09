@@ -8,6 +8,7 @@ import path from 'path';
 import { expect } from 'chai';
 import findFiles from 'file-regex/dist';
 import urlJoin from 'url-join';
+import memoize from 'lodash/memoize';
 
 require('dotenv').config();
 
@@ -49,7 +50,7 @@ const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
   expect(errors).to.be.empty;
 };
 
-const compileGqlAst = (queryFilePath: string) => {
+const compileGqlAst = memoize((queryFilePath: string) => {
   const gqlStr = String(fs.readFileSync(queryFilePath));
   const gqlImportResults = gqlStr
     .split('\n')
@@ -75,4 +76,4 @@ const compileGqlAst = (queryFilePath: string) => {
   } catch (err) {
     throw new Error(`Failed to parse AST for ${queryFilePath}: ${err}\n`);
   }
-};
+});
