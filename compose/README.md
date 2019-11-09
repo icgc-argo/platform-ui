@@ -2,6 +2,10 @@
 
 This is the home of the Docker Compose infrastructure that can bring up the ARGO Platform architecture locally for aid in development.
 
+## Compose Structure
+
+![Argo Architecture](./docker-compose.png)
+
 ## Requirements
 
 - Docker
@@ -53,6 +57,14 @@ $ make nuke
   - Graphql: http://localhost:9000/graphql
   - other docs: http://localhost:9000/api-docs
 - Clinical: http://localhost:3000/api-docs
+
+## Development
+
+- edit the `compose/docker-compose.yaml` file
+- update compose diagram:
+  ```
+  $ make graph
+  ```
 
 ## Architecture
 
