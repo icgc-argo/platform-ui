@@ -140,7 +140,7 @@ services:
     environment:
       EGO_APPLICATION_ID: platform
       EGO_APPLICATION_SECRET: platformsecret
-      EGO_ROOT_GRPC: ego-api:50052
+      EGO_ROOT_REST: http://ego-api:8088
       PROGRAM_SERVICE_ROOT: program-service:50051
       CLINICAL_SERVICE_ROOT: http://argo-clinical:3000
     ports:
