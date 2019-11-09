@@ -50,30 +50,29 @@ const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
 };
 
 const compileGqlAst = (queryFilePath: string) => {
-  let queryAst;
   const gqlStr = String(fs.readFileSync(queryFilePath));
+  const gqlImportResults = gqlStr
+    .split('\n')
+    .filter(str => {
+      // example: #import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
+      return str.includes('#') && str.includes('import');
+    })
+    .map(importComment => {
+      const relativePath = importComment.includes('"')
+        ? importComment.split('"')[1]
+        : importComment.split("'")[1];
+      const currentPathSegments = queryFilePath.split('/');
+      const currentPath = currentPathSegments.slice(0, currentPathSegments.length - 1).join('/');
+      const absolutePath = path.resolve(currentPath, relativePath);
+      return compileGqlAst(absolutePath).loc.source.body;
+    })
+    .join('\n');
   try {
-    queryAst = gql`
-      ${// this is a poor-man's graphql import resolution
-      gqlStr
-        .split('\n')
-        .filter(str => str.includes('#') && str.includes('import'))
-        .map(importComment => {
-          // example: #import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
-          const relativePath = importComment.includes('"')
-            ? importComment.split('"')[1]
-            : importComment.split("'")[1];
-          const currentPathSegments = queryFilePath.split('/');
-          const currentPath = currentPathSegments
-            .slice(0, currentPathSegments.length - 1)
-            .join('/');
-          const absolutePath = path.resolve(currentPath, relativePath);
-          return compileGqlAst(absolutePath).loc.source.body;
-        })}
+    return gql`
+      ${gqlImportResults}
       ${gqlStr}
     `;
   } catch (err) {
     throw new Error(`Failed to parse AST for ${queryFilePath}: ${err}\n`);
   }
-  return queryAst;
 };
