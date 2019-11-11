@@ -4,7 +4,7 @@ This is the home of the Docker Compose infrastructure that can bring up the ARGO
 
 ## Compose Structure
 
-![Argo Architecture](./docker-compose.png)
+![Compose Structure](./docker-compose.png)
 
 ## Requirements
 
