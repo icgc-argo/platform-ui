@@ -1,39 +1,53 @@
 import React from 'react';
-import { useRouter, Router } from 'next/router';
+import { useRouter } from 'next/router';
 
-const isServerSide = () => typeof window === 'undefined';
-const getParams = <T extends { [k: string]: string }>(): T | null => {
-  const currentQueryEntries = !isServerSide()
-    ? [...new URLSearchParams(window.location.search).entries()]
-    : [];
+const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
+  const queryString = router.asPath.split('?')[1] || '';
+  const currentQueryEntries = [...new URLSearchParams(queryString).entries()];
   return currentQueryEntries.length
-    ? currentQueryEntries.reduce((acc, [key, val]) => ({ ...acc, [key]: val }), {} as T)
-    : null;
+    ? currentQueryEntries.reduce((acc, [key, val]) => ({ ...acc, [key]: val }), {})
+    : {};
 };
 
-export default <T extends { [key: string]: string }>(initialState: T) => {
+export default <T extends string>(
+  key: string,
+  initialValue: T,
+  { pushNavigation = false } = {},
+) => {
   const router = useRouter();
-  const currentQuery = getParams<T>();
-  const [state, setState] = React.useState(currentQuery || initialState);
+  const currentQuery = getParams(router);
+  const [state, setState] = React.useState({ [key]: initialValue, ...currentQuery });
 
-  // syncs the Next router with state
+  // whether next-router is in sync with this local state
+  const isInSync = currentQuery[key] === state[key];
+
+  // syncs state -> Next router
   React.useEffect(() => {
-    const newPath = `${window.location.pathname}?${new window.URLSearchParams(state).toString()}`;
-    if (router.asPath !== newPath) {
-      router.push(router.pathname, newPath);
+    if (!isInSync) {
+      const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams(
+        state,
+      ).toString()}`;
+      if (pushNavigation) {
+        router.push(router.pathname, newPath);
+      } else {
+        router.replace(router.pathname, newPath);
+      }
     }
   }, [state]);
 
-  // syncs state with Next router
+  // syncs Next router -> state
   React.useEffect(() => {
-    setState(getParams<T>() || initialState);
+    if (!isInSync) {
+      setState({ [key]: initialValue, ...currentQuery });
+    }
   }, [router.asPath]);
 
-  const setUrlState = (_state: T) =>
+  const setUrlState = (value: T) => {
     setState({
       ...state,
-      ..._state,
+      [key]: value,
     });
+  };
 
-  return [state, setUrlState] as [typeof state, typeof setState];
+  return [state[key], setUrlState] as [T, typeof setUrlState];
 };

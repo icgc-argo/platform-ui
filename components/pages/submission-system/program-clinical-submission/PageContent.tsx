@@ -139,15 +139,13 @@ export default () => {
     return fileNavigatorFiles.length ? fileNavigatorFiles.indexOf(fileToFocusOn) : 0;
   });
 
-  const [urlQueryState, setUrlQueryState] = useUrlParamState({
-    tab: String(getDefaultClinicalEntityIndex()),
-  });
-  const selectedClinicalEntityIndex = Number(urlQueryState.tab);
+  const [queryTab, setUrlQueryTab] = useUrlParamState(
+    'tab',
+    String(getDefaultClinicalEntityIndex()),
+  );
+  const selectedClinicalEntityIndex = Number(queryTab);
   const setSelectedClinicalEntityIndex = (index: number) => {
-    setUrlQueryState({
-      ...urlQueryState,
-      tab: String(index),
-    });
+    setUrlQueryTab(String(index));
   };
 
   const [uploadClinicalSubmission] = useMutation<

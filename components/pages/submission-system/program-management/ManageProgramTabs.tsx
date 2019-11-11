@@ -70,16 +70,9 @@ const useTabState = () => {
     PROFILE: 'profile' as TabValue,
     USERS: 'users' as TabValue,
   };
-  const [state, setState] = useUrlParamState({
-    activeTab: TABS.USERS,
-  });
-  const setActiveTab = (tab: TabValue) =>
-    setState({
-      ...state,
-      activeTab: tab,
-    });
+  const [activeTab, setActiveTab] = useUrlParamState('activeTab', TABS.USERS);
 
-  return { activeTab: state.activeTab, setActiveTab, TABS } as {
+  return { activeTab, setActiveTab, TABS } as {
     activeTab: TabValue;
     setActiveTab: (tab: TabValue) => void;
     TABS: typeof TABS;
