@@ -3,14 +3,12 @@ import { css } from 'uikit';
 import Button from 'uikit/Button';
 import Notification from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
-import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
-import { ClinicalRegistrationError } from './program-sample-registration/types';
 import union from 'lodash/union';
 
-export const defaultColumns: TableColumnConfig<{ [k: string]: any }>[] = [
+export const defaultColumns = [
   {
     accessor: 'row',
     Header: 'Row #',
@@ -47,7 +45,11 @@ export default <Error extends { [k: string]: any }>({
 }: {
   title: string;
   subtitle: string;
-  columnConfig: Array<{ [k: string]: any }>;
+  columnConfig: Array<
+    TableColumnConfig<Error> & {
+      accessor: string;
+    }
+  >;
   errors: Array<Error>;
   onClearClick: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
@@ -121,7 +123,13 @@ export default <Error extends { [k: string]: any }>({
               parentRef={containerRef}
               NoDataComponent={() => null}
               showPagination={false}
-              columns={columnConfig}
+              columns={columnConfig.map(col => ({
+                ...col,
+                style: {
+                  whiteSpace: 'unset',
+                  ...(col.style || {}),
+                },
+              }))}
               data={errors}
             />
           </div>
