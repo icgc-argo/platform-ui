@@ -40,6 +40,8 @@ import memoize from 'lodash/memoize';
 import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
+import { number } from 'yup';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -136,9 +138,17 @@ export default () => {
     );
     return fileNavigatorFiles.length ? fileNavigatorFiles.indexOf(fileToFocusOn) : 0;
   });
-  const [selectedClinicalEntityIndex, setSelectedClinicalEntityIndex] = React.useState<number>(
-    getDefaultClinicalEntityIndex(),
-  );
+
+  const [urlQueryState, setUrlQueryState] = useUrlParamState({
+    tab: String(getDefaultClinicalEntityIndex()),
+  });
+  const selectedClinicalEntityIndex = Number(urlQueryState.tab);
+  const setSelectedClinicalEntityIndex = (index: number) => {
+    setUrlQueryState({
+      ...urlQueryState,
+      tab: String(index),
+    });
+  };
 
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
