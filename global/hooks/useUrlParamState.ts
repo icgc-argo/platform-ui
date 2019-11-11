@@ -13,7 +13,7 @@ const getParams = <T extends { [k: string]: string }>(): T | null => {
 
 export default <T extends { [key: string]: string }>(initialState: T) => {
   const router = useRouter();
-  const currentQuery = getParams();
+  const currentQuery = getParams<T>();
   const [state, setState] = React.useState(currentQuery || initialState);
 
   // syncs the Next router with state
