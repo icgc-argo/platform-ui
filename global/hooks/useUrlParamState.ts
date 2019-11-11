@@ -28,5 +28,12 @@ export default <T extends { [key: string]: string }>(initialState: T) => {
   React.useEffect(() => {
     setState(getParams<T>() || initialState);
   }, [router.asPath]);
-  return [state, setState] as [typeof state, typeof setState];
+
+  const setUrlState = (_state: T) =>
+    setState({
+      ...state,
+      ..._state,
+    });
+
+  return [state, setUrlState] as [typeof state, typeof setState];
 };
