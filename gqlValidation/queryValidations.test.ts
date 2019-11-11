@@ -8,11 +8,16 @@ import urlJoin from 'url-join';
 import { ABSOLUTE_ROOT_DIR, compileGqlAst, getGqlFiles } from './utils';
 
 require('dotenv').config();
+const GATEWAY_API_ROOT = process.env.GATEWAY_API_ROOT;
+
+if (!GATEWAY_API_ROOT) {
+  throw new Error(`${GATEWAY_API_ROOT} must be provided`);
+}
 
 const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
 const validationRules = specifiedRules.filter(rule => rule !== NoUnusedFragmentsRule);
 
-describe('this test', async () => {
+describe('gql validations', async () => {
   let gqlFiles;
   it('can get gql files', async () => {
     gqlFiles = await getGqlFiles();
