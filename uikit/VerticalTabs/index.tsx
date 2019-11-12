@@ -38,7 +38,7 @@ const BaseItemContainer = styled(FocusWrapper)`
   width: 100%;
   position: relative;
   transition: all 0.25s;
-  min-height: 22px;
+  min-height: 40px;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 8px;
@@ -59,6 +59,7 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   border-right: solid 1px ${({ theme }) => theme.colors.secondary_2};
   background: ${({ theme }) => theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary_dark};
+
   &:hover {
     background: ${({ theme }) => theme.colors.secondary_4};
   }
