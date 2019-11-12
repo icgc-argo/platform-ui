@@ -11,7 +11,6 @@ const Triangle = styled('div')`
   position: absolute;
   text-align: center;
   left: 100%;
-  top: 1px;
   top: 50%;
   margin-top: -18px;
   transform: scaleX(0.5);
