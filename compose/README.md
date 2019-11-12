@@ -2,10 +2,6 @@
 
 This is the home of the Docker Compose infrastructure that can bring up the ARGO Platform architecture locally for aid in development.
 
-## Compose Structure
-
-![Compose Structure](./docker-compose.png)
-
 ## Requirements
 
 - Docker
@@ -49,6 +45,16 @@ To delete all volumes as well:
 $ make nuke
 ```
 
+## Compose Structure
+
+### Cluster Topology
+
+![Compose Structure](./assets/relationship.png)
+
+### Services Boundaries
+
+![Compose Boundaries](./assets/boundaries.png)
+
 ### Interacting
 
 - Ego Admin UI: http://localhost:3501
@@ -61,9 +67,9 @@ $ make nuke
 ## Development
 
 - edit the `compose/docker-compose.yaml` file
-- update compose diagram:
+- update compose diagrams:
   ```
-  $ make graph
+  $ make graphs
   ```
 
 ## Architecture

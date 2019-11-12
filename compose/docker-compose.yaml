@@ -5,6 +5,10 @@ volumes:
     driver: local
   lectern_mongodb_data:
     driver: local
+  ego_postgresql_data:
+    driver: local
+  program_postgresql_data:
+    driver: local
 
 services:
   #####################################################
@@ -17,6 +21,8 @@ services:
       POSTGRES_DB: ego
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    volumes:
+      - 'ego_postgresql_data:/egodb'
     ports:
       - 18888:5432
   ego-api:
@@ -59,6 +65,8 @@ services:
       POSTGRES_DB: program-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    volumes:
+      - 'program_postgresql_data:/programdb'
     ports:
       - 18889:5432
   program-service:
@@ -100,6 +108,7 @@ services:
     image: '${CLINICAL_IMAGE}'
     depends_on:
       - mongo
+      - ego-api
     environment:
       LOG_LEVEL: 'debug'
       CLINICAL_DB_URL: mongodb://mongo:27017/clinical
@@ -135,7 +144,6 @@ services:
     depends_on:
       - ego-api
       - program-service
-      - lectern
       - argo-clinical
     environment:
       EGO_APPLICATION_ID: platform

@@ -15,5 +15,7 @@ stop:
 nuke:
 	docker-compose down -v
 
-graph:
-	docker run --rm -it --name dcv -v $$(pwd):/input pmsipilot/docker-compose-viz render -m image docker-compose.yaml -f
+graphs:
+	cat docker-compose.yaml | docker run -i funkwerk/compose_plantuml --link-graph | docker run -i think/plantuml -tpng > assets/relationship.png & 
+	cat docker-compose.yaml | docker run -i funkwerk/compose_plantuml --boundaries | docker run -i think/plantuml -tpng > assets/boundaries.png & 
+	cat docker-compose.yaml | docker run -i funkwerk/compose_plantuml --boundaries --link-graph | docker run -i think/plantuml -tpng > assets/full.png 
