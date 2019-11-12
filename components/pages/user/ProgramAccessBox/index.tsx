@@ -23,6 +23,8 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
+import urlJoin from 'url-join';
+import { getConfig } from 'global/config';
 
 type T_ProgramTableProgram = {
   shortName: string;
@@ -123,6 +125,27 @@ export default function ProgramAccessBox() {
   const { token } = useAuthContext();
   const programs = getProgramTableProgramFromEgoJwt(token || '');
   const tableParentProps = React.createRef<HTMLDivElement>();
+
+  const { EGO_API_ROOT } = getConfig();
+
+  React.useEffect(() => {
+    const egoApi = urlJoin(EGO_API_ROOT, `/api/groups`);
+    fetch(egoApi, {
+      headers: { Authorization: `Bearer ${token || ''}` },
+      body: null,
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log('data', data);
+        const dacoGroupId = '';
+        const cloudGroupId = '';
+      })
+      .catch(err => {
+        console.warn('err: ', err);
+      });
+  });
 
   return (
     <Box title="Program Access" iconName="programs">
