@@ -122,13 +122,12 @@ export default ({
           variant: 'SUCCESS',
           interactionType: 'CLOSE',
           title: 'Clinical Data is successfully approved',
-          content: `${
-            data.program.name
-          } clinical data will be placed in a queue for the next release.`,
+          content: `${programShortName} clinical data will be placed in a queue for the next release.`,
         });
         updateClinicalSubmissionQuery(previous => ({
           ...previous,
-          clinicalSubmissions: placeholderClinicalSubmissionQueryData.clinicalSubmissions,
+          clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
+            .clinicalSubmissions,
         }));
       } catch (err) {
         await refetchClinicalSubmission();
@@ -140,9 +139,9 @@ export default ({
 
   const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
     setLoaderShown(true);
+    await sleep();
     try {
       await clearClinicalSubmission();
-      await sleep();
       toaster.addToast({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',

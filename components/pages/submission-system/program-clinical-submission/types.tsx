@@ -61,6 +61,7 @@ export type GqlClinicalEntity = {
 export type GqlClinicalSubmissionData = {
   id: string;
   version: string;
+  programShortName: string;
   state?: ClinicalSubmissionStatus;
   updatedAt: string;
   updatedBy: string;
@@ -98,7 +99,4 @@ export type ClearSubmissionMutationVariables = {
 
 export type ClinicalSubmissionQueryData = {
   clinicalSubmissions: GqlClinicalSubmissionData;
-  program: {
-    name: string;
-  };
 };

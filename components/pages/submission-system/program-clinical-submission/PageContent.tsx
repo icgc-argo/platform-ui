@@ -425,7 +425,7 @@ export default () => {
             selectedFileIndex={selectedClinicalEntityIndex}
             onFileSelect={setSelectedClinicalEntityIndex}
             submissionVersion={data.clinicalSubmissions.version}
-            programShortName={data.program.name}
+            programShortName={programShortName}
           />
         )}
       </Container>

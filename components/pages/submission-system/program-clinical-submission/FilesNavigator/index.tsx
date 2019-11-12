@@ -32,7 +32,7 @@ export default ({
   selectedFileIndex: number;
   onFileSelect: (i: number) => void;
   submissionVersion: ClinicalSubmissionQueryData['clinicalSubmissions']['version'];
-  programShortName: ClinicalSubmissionQueryData['program']['name'];
+  programShortName: ClinicalSubmissionQueryData['clinicalSubmissions']['programShortName'];
 }) => {
   const commonToaster = useCommonToasters();
   const [clearClinicalEntitySubmission] = useMutation<
