@@ -139,7 +139,7 @@ services:
   #####################################################
   # ARGO Platform - GraphQL API Gateway
   #####################################################
-  gateway:
+  platform-gateway:
     image: '${GATEWAY_IMAGE}'
     depends_on:
       - ego-api
@@ -157,10 +157,10 @@ services:
   #####################################################
   # ARGO Platform - Platform UI
   #####################################################
-  platform:
+  platform-ui:
     image: '${PLATFORM_UI_IMAGE}'
     depends_on:
-      - gateway
+      - platform-gateway
     environment:
       GATEWAY_API_ROOT: http://localhost:9000
       EGO_API_ROOT: http://localhost:8088
