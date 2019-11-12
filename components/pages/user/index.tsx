@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
 import { ContentHeader, PageContent, ContentBody, PageBody } from 'uikit/PageLayout';
@@ -8,8 +7,10 @@ import { css } from 'uikit';
 import AccessKeyBox from './AccessKeyBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
+import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
+import { useQuery } from '@apollo/react-hooks';
 
-export function UserPage({ firstName, lastName }: { firstName: string, lastName: string }) {
+export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
   const Column = props => (
     <Col
       style={{
@@ -18,6 +19,9 @@ export function UserPage({ firstName, lastName }: { firstName: string, lastName:
       {...props}
     />
   );
+
+  const { data, loading } = useQuery();
+
   return (
     <DefaultLayout>
       <PageBody className="noSidebar">
