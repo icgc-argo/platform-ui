@@ -10,12 +10,12 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
 
-export const placeholderClinicalSubmissionQueryData: ClinicalSubmissionQueryData = {
-  program: {
-    name: '',
-  },
+export const placeholderClinicalSubmissionQueryData = (
+  shortName: string,
+): ClinicalSubmissionQueryData => ({
   clinicalSubmissions: {
     version: '',
+    programShortName: shortName,
     clinicalEntities: [],
     fileErrors: [],
     id: '',
@@ -24,7 +24,7 @@ export const placeholderClinicalSubmissionQueryData: ClinicalSubmissionQueryData
     updatedBy: '',
     __typename: 'ClinicalSubmissionData',
   },
-};
+});
 
 export const useClinicalSubmissionQuery = (programShortName: string) => {
   const hook = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
@@ -33,7 +33,10 @@ export const useClinicalSubmissionQuery = (programShortName: string) => {
     },
   });
 
-  return { ...hook, data: hook.data || placeholderClinicalSubmissionQueryData };
+  return {
+    ...hook,
+    data: hook.data || placeholderClinicalSubmissionQueryData(programShortName),
+  };
 };
 
 export default function ProgramClinicalSubmission() {
