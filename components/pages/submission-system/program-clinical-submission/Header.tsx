@@ -139,9 +139,9 @@ export default ({
 
   const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
     setLoaderShown(true);
+    await sleep();
     try {
       await clearClinicalSubmission();
-      await sleep();
       toaster.addToast({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',
