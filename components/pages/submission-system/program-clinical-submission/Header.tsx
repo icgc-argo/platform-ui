@@ -70,7 +70,7 @@ export default ({
       programShortName,
       submissionVersion,
     },
-    update: refetchClinicalSubmission,
+    update: () => refetchClinicalSubmission(),
   });
 
   const [clearClinicalSubmission] = useMutation<

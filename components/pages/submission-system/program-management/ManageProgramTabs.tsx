@@ -18,10 +18,10 @@ import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
-import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
 import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 import useCommonToasters from 'components/useCommonToasters';
-import { PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 
 const createUserInput = ({
   data,
@@ -66,27 +66,17 @@ const usePageQuery = (): PageQueryObject => {
 };
 
 const useTabState = () => {
-  const router = useRouter();
-  const { tab: defaultTab, shortName: programShortName } = usePageQuery();
   const TABS = {
     PROFILE: 'profile' as TabValue,
     USERS: 'users' as TabValue,
   };
-  const [activeTab, setActiveTab] = React.useState<TabValue>(
-    defaultTab === TABS.PROFILE ? TABS.PROFILE : TABS.USERS,
-  );
-  React.useEffect(() => {
-    if (router.pathname) {
-      window.history.replaceState(
-        '',
-        '',
-        `${router.pathname.replace(PROGRAM_SHORT_NAME_PATH, programShortName)}?tab=${
-          TABS[activeTab.toUpperCase()]
-        }`,
-      );
-    }
-  }, [activeTab]);
-  return { activeTab, setActiveTab, TABS };
+  const [activeTab, setActiveTab] = useUrlParamState('activeTab', TABS.USERS);
+
+  return { activeTab, setActiveTab, TABS } as {
+    activeTab: TabValue;
+    setActiveTab: (tab: TabValue) => void;
+    TABS: typeof TABS;
+  };
 };
 
 export default () => {
