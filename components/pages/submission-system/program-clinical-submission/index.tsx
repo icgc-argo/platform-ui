@@ -4,7 +4,7 @@ import { styled } from 'uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionQueryData, ClinicalSubmissionError } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
@@ -26,12 +26,26 @@ export const placeholderClinicalSubmissionQueryData = (
   },
 });
 
-export const useClinicalSubmissionQuery = (programShortName: string) => {
-  const hook = useQuery<ClinicalSubmissionQueryData>(CLINICAL_SUBMISSION_QUERY, {
-    variables: {
-      programShortName,
+type ClinicalSubmissionQueryVariables = {
+  programShortName: string;
+};
+
+export const useClinicalSubmissionQuery = (
+  programShortName: string,
+  options: Omit<
+    QueryHookOptions<ClinicalSubmissionQueryData, ClinicalSubmissionQueryVariables>,
+    'variables'
+  > = {},
+) => {
+  const hook = useQuery<ClinicalSubmissionQueryData, ClinicalSubmissionQueryVariables>(
+    CLINICAL_SUBMISSION_QUERY,
+    {
+      ...options,
+      variables: {
+        programShortName,
+      },
     },
-  });
+  );
 
   return {
     ...hook,
