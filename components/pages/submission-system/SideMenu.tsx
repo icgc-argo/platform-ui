@@ -324,7 +324,9 @@ export default function SideMenu() {
             icon={<Icon name="programs" />}
             content={'My Programs'}
             selected={activeItem === 1}
-            onClick={() => toggleItem(1)}
+            onClick={() => {
+              if (isDcc || isRdpc) toggleItem(1);
+            }}
             noChevron={!isDcc && !isRdpc}
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}

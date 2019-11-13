@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -13,9 +13,9 @@
     "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
     "type-check": "tsc -p ./tsconfig.json",
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
-    "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
+    "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
-    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./queryValidations.test.tsx"
+    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc"
@@ -33,9 +33,11 @@
     "@icgc-argo/ego-token-utils": "^5.2.1",
     "@storybook/addon-a11y": "^5.1.9",
     "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/graphql": "^14.5.0",
     "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
     "@types/next": "^8.0.6",
+    "@types/pluralize": "0.0.29",
     "@types/react-table": "^6.8.5",
     "@types/storybook__react": "^4.0.2",
     "@types/yup": "^0.26.24",
@@ -67,6 +69,7 @@
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.0",
     "npm": "^6.12.1",
+    "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^3.1.0",

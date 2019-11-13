@@ -54,8 +54,12 @@ export default function ProgramIDRegistration() {
     variables: { shortName: programShortName },
   });
 
-  const fileErrors = get(clinicalRegistration, 'errors', []);
-  const fileRecords = get(clinicalRegistration, 'records', []);
+  const fileErrors = get(clinicalRegistration, 'errors', [] as typeof clinicalRegistration.errors);
+  const fileRecords = get(
+    clinicalRegistration,
+    'records',
+    [] as typeof clinicalRegistration.records,
+  );
 
   const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
   const [progress, setProgress] = React.useState([

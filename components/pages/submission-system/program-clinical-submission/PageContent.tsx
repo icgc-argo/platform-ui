@@ -40,6 +40,8 @@ import memoize from 'lodash/memoize';
 import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
+import { number } from 'yup';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -102,16 +104,20 @@ export default () => {
     loading: loadingClinicalSubmission,
     updateQuery: updateClinicalSubmissionQuery,
     refetch,
-  } = useClinicalSubmissionQuery(programShortName);
+  } = useClinicalSubmissionQuery(programShortName, {
+    onCompleted: () => {
+      setSelectedClinicalEntityType(selectedClinicalEntityType || defaultClinicalEntityIndex);
+    },
+  });
 
   const fileNavigatorFiles = map(
     orderBy(data.clinicalSubmissions.clinicalEntities, e => e.clinicalType),
     gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
   );
 
-  const getDefaultClinicalEntityIndex = memoize((_data: typeof data = data) => {
+  const defaultClinicalEntityIndex = React.useMemo((): string | null => {
     const fileToClinicalEntityType = (file: File): string =>
-      _data.clinicalSubmissions.clinicalEntities
+      data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
     const lastUploadedEntityTypes = uniq(map(currentFileList, fileToClinicalEntityType));
@@ -134,10 +140,12 @@ export default () => {
         }
       }),
     );
-    return fileNavigatorFiles.length ? fileNavigatorFiles.indexOf(fileToFocusOn) : 0;
-  });
-  const [selectedClinicalEntityIndex, setSelectedClinicalEntityIndex] = React.useState<number>(
-    getDefaultClinicalEntityIndex(),
+    return fileNavigatorFiles.length ? fileToFocusOn.clinicalType : null;
+  }, [data]);
+
+  const [selectedClinicalEntityType, setSelectedClinicalEntityType] = useUrlParamState(
+    'tab',
+    defaultClinicalEntityIndex,
   );
 
   const [uploadClinicalSubmission] = useMutation<
@@ -145,7 +153,7 @@ export default () => {
     UploadFilesMutationVariables
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
-      setSelectedClinicalEntityIndex(getDefaultClinicalEntityIndex());
+      setSelectedClinicalEntityType(defaultClinicalEntityIndex);
     },
   });
   const [validateSubmission] = useMutation<
@@ -384,11 +392,14 @@ export default () => {
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
-            columnConfig={insertAt(defaultColumns)(0)({
-              accessor: 'fileName',
-              Header: 'File',
-              maxWidth: 150,
-            })}
+            columnConfig={[
+              {
+                accessor: 'fileName',
+                Header: 'File',
+                maxWidth: 150,
+              },
+              ...defaultColumns,
+            ]}
           />
         </div>
       )}
@@ -419,10 +430,10 @@ export default () => {
             submissionState={data.clinicalSubmissions.state}
             clearDataError={handleClearSchemaError}
             fileStates={fileNavigatorFiles}
-            selectedFileIndex={selectedClinicalEntityIndex}
-            onFileSelect={setSelectedClinicalEntityIndex}
+            selectedClinicalEntityType={selectedClinicalEntityType}
+            onFileSelect={setSelectedClinicalEntityType}
             submissionVersion={data.clinicalSubmissions.version}
-            programShortName={data.program.name}
+            programShortName={programShortName}
           />
         )}
       </Container>

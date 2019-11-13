@@ -21,7 +21,7 @@ export default ({
   fileStates,
   clearDataError,
   submissionState,
-  selectedFileIndex,
+  selectedClinicalEntityType,
   onFileSelect,
   programShortName,
   submissionVersion,
@@ -29,10 +29,10 @@ export default ({
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'];
   fileStates: Array<ClinicalSubmissionEntityFile>;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
-  selectedFileIndex: number;
-  onFileSelect: (i: number) => void;
+  selectedClinicalEntityType: string;
+  onFileSelect: (clinicalEntityType: string) => void;
   submissionVersion: ClinicalSubmissionQueryData['clinicalSubmissions']['version'];
-  programShortName: ClinicalSubmissionQueryData['program']['name'];
+  programShortName: ClinicalSubmissionQueryData['clinicalSubmissions']['programShortName'];
 }) => {
   const commonToaster = useCommonToasters();
   const [clearClinicalEntitySubmission] = useMutation<
@@ -44,9 +44,9 @@ export default ({
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
   const toaster = useToaster();
   const onFileClick = (clinicalType: string) => e => {
-    onFileSelect(fileStates.findIndex(file => clinicalType === file.clinicalType));
+    onFileSelect(fileStates.find(file => clinicalType === file.clinicalType).clinicalType);
   };
-  const selectedFile = fileStates[selectedFileIndex];
+  const selectedFile = fileStates.find(file => file.clinicalType === selectedClinicalEntityType);
   const onClearClick = (clinicalType: string) => async e => {
     const fileType: string = fileStates.find(file => clinicalType === file.clinicalType)
       .clinicalType;

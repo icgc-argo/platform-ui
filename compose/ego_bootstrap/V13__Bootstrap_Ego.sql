@@ -1,8 +1,42 @@
+-- creates policies
 INSERT INTO policy
     (id, owner, name)
 VALUES
     ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c3', NULL, 'PROGRAMSERVICE');
 
+INSERT INTO policy
+    (id, owner, name)
+VALUES
+    ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c4', NULL, 'CLINICALSERVICE');
+
+INSERT INTO policy
+    (id, owner, name)
+VALUES
+    ('27b08a5b-5328-4223-8ddc-c9e6dcaa48c5', NULL, 'DICTIONARY');
+
+-- create groups
+INSERT INTO egogroup
+    (id, name, description, status)
+VALUES
+    ('6e3ab148-25fb-419b-aba5-e1076afe269e', 'dcc-admin', 'asdf', 'APPROVED');
+
+-- creates group-policy relationships
+INSERT INTO grouppermission 
+    (id, policy_id, group_id, access_level)
+VALUES 
+    ('61b7b772-9643-48dd-a328-5997da14cb67', '27b08a5b-5328-4223-8ddc-c9e6dcaa48c3', '6e3ab148-25fb-419b-aba5-e1076afe269e', 'WRITE');
+
+INSERT INTO grouppermission 
+    (id, policy_id, group_id, access_level)
+VALUES 
+    ('78929989-854d-4f55-aa9f-258c33ef59d7', '27b08a5b-5328-4223-8ddc-c9e6dcaa48c4', '6e3ab148-25fb-419b-aba5-e1076afe269e', 'WRITE');
+
+INSERT INTO grouppermission 
+    (id, policy_id, group_id, access_level)
+VALUES 
+    ('0e155dfb-08a0-4829-93ad-0ccca98bd5c2', '27b08a5b-5328-4223-8ddc-c9e6dcaa48c5', '6e3ab148-25fb-419b-aba5-e1076afe269e', 'WRITE');
+
+-- create applications
 INSERT INTO egoapplication 
     (id, name, clientid, clientsecret, redirecturi, description, status, type) 
 VALUES 
