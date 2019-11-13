@@ -7,8 +7,9 @@ import { css } from 'uikit';
 import AccessKeyBox from './AccessKeyBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
-import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
+import PROFILE from './gql/PROFILE.gql';
 import { useQuery } from '@apollo/react-hooks';
+import get from 'lodash/get';
 
 export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
   const Column = props => (
@@ -20,7 +21,9 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  const { data, loading } = useQuery();
+  const { data, loading } = useQuery(PROFILE);
+  const self = get(data, 'self', {});
+  console.log('xxx', data);
 
   return (
     <DefaultLayout>
@@ -43,7 +46,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
             </Row>
             <Row nogutter>
               <Column sm={12} md={6}>
-                <AccessKeyBox />
+                <AccessKeyBox accessKey={self.apiKey} loading={loading} />
               </Column>
               <Column sm={12} md={6}>
                 <ProgramAccessBox />
