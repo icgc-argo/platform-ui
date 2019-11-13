@@ -9,17 +9,47 @@ const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string 
     : {};
 };
 
-export default <T extends string>(
+const getSanitizedValue = (v: string): null | undefined | string => {
+  return (() => {
+    switch (v) {
+      case 'null':
+        return null;
+      case 'undefined':
+        return undefined;
+      case '':
+        return undefined;
+      default:
+        return v;
+    }
+  })();
+};
+
+export const useHook = <T>(
   key: string,
   initialValue: T,
-  { pushNavigation = false } = {},
+  {
+    pushNavigation = false,
+    serialize,
+    deSerialize,
+  }: {
+    pushNavigation?: boolean;
+    serialize: (val: T) => string;
+    deSerialize: (val: string | null | undefined) => T;
+  },
 ) => {
   const router = useRouter();
   const currentQuery = getParams(router);
-  const [state, setState] = React.useState({ [key]: initialValue, ...currentQuery });
+  const [state, setState] = React.useState({ [key]: serialize(initialValue), ...currentQuery });
 
   // whether next-router is in sync with this local state
   const isInSync = currentQuery[key] === state[key];
+
+  const setUrlState = (value: T) => {
+    setState({
+      ...state,
+      [key]: serialize(value),
+    });
+  };
 
   // syncs state -> Next router
   React.useEffect(() => {
@@ -38,16 +68,16 @@ export default <T extends string>(
   // syncs Next router -> state
   React.useEffect(() => {
     if (!isInSync) {
-      setState({ [key]: initialValue, ...currentQuery });
+      setState({ [key]: serialize(initialValue), ...currentQuery });
     }
   }, [router.asPath]);
 
-  const setUrlState = (value: T) => {
-    setState({
-      ...state,
-      [key]: value,
-    });
+  const deserializeValue = (v: string) => {
+    const sanitized = getSanitizedValue(v);
+    return deSerialize(sanitized);
   };
 
-  return [state[key], setUrlState] as [T, typeof setUrlState];
+  return [deserializeValue(state[key]), setUrlState] as [T, typeof setUrlState];
 };
+
+export default useHook;

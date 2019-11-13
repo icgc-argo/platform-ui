@@ -15,13 +15,12 @@ import {
   ClinicalSubmissionError,
 } from './types';
 import Notification from 'uikit/notifications/Notification';
-import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import DnaLoader from 'uikit/DnaLoader';
-import { displayDateAndTime, insertAt } from 'global/utils/common';
+import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
@@ -36,11 +35,9 @@ import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constant
 import orderBy from 'lodash/orderBy';
 import head from 'lodash/head';
 import map from 'lodash/map';
-import memoize from 'lodash/memoize';
 import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
-import { number } from 'yup';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
@@ -106,7 +103,7 @@ export default () => {
     refetch,
   } = useClinicalSubmissionQuery(programShortName, {
     onCompleted: () => {
-      setSelectedClinicalEntityType(selectedClinicalEntityType || defaultClinicalEntityIndex);
+      setSelectedClinicalEntityType(selectedClinicalEntityType || defaultClinicalEntityType);
     },
   });
 
@@ -115,7 +112,7 @@ export default () => {
     gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
   );
 
-  const defaultClinicalEntityIndex = React.useMemo((): string | null => {
+  const defaultClinicalEntityType = React.useMemo((): string | null => {
     const fileToClinicalEntityType = (file: File): string =>
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
@@ -145,7 +142,11 @@ export default () => {
 
   const [selectedClinicalEntityType, setSelectedClinicalEntityType] = useUrlParamState(
     'tab',
-    defaultClinicalEntityIndex,
+    defaultClinicalEntityType,
+    {
+      serialize: v => v,
+      deSerialize: v => v,
+    },
   );
 
   const [uploadClinicalSubmission] = useMutation<
@@ -153,7 +154,7 @@ export default () => {
     UploadFilesMutationVariables
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
-      setSelectedClinicalEntityType(defaultClinicalEntityIndex);
+      setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
   });
   const [validateSubmission] = useMutation<

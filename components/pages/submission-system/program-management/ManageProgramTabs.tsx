@@ -70,7 +70,10 @@ const useTabState = () => {
     PROFILE: 'profile' as TabValue,
     USERS: 'users' as TabValue,
   };
-  const [activeTab, setActiveTab] = useUrlParamState('activeTab', TABS.USERS);
+  const [activeTab, setActiveTab] = useUrlParamState('activeTab', TABS.USERS, {
+    serialize: v => v,
+    deSerialize: v => v as TabValue,
+  });
 
   return { activeTab, setActiveTab, TABS } as {
     activeTab: TabValue;
