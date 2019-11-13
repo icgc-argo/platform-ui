@@ -117,7 +117,13 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
   }
 };
 
-export default function ProgramAccessBox() {
+const ProgramAccessBox = ({
+  isDacoApproved,
+  loading,
+}: {
+  isDacoApproved: boolean;
+  loading: boolean;
+}) => {
   const { token } = useAuthContext();
   const programs = getProgramTableProgramFromEgoJwt(token || '');
 
@@ -128,7 +134,7 @@ export default function ProgramAccessBox() {
           margin-top: 14px;
         `}
       >
-        <DacoAccessStatusDisplay approved={true} />
+        {loading ? <div>loading</div> : <DacoAccessStatusDisplay approved={isDacoApproved} />}
       </div>
       <div>
         <Typography variant="subtitle2" color="secondary">
@@ -152,4 +158,6 @@ export default function ProgramAccessBox() {
       </div>
     </Box>
   );
-}
+};
+
+export default ProgramAccessBox;

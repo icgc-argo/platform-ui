@@ -23,7 +23,6 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
 
   const { data, loading } = useQuery(PROFILE);
   const self = get(data, 'self', {});
-  console.log('xxx', data);
 
   return (
     <DefaultLayout>
@@ -49,7 +48,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
                 <AccessKeyBox accessKey={self.apiKey} loading={loading} />
               </Column>
               <Column sm={12} md={6}>
-                <ProgramAccessBox />
+                <ProgramAccessBox isDacoApproved={self.isDacoApproved} loading={loading} />
               </Column>
             </Row>
           </ContentBody>

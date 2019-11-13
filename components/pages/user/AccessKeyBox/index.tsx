@@ -10,7 +10,13 @@ import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 
-const AccessTokenBox = ({ accessKey, loading }: { accessKey: string; loading: boolean }) => {
+type AccessKey = {
+  exp: number;
+  key: string;
+  error: string;
+};
+
+const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading: boolean }) => {
   const [generatedKey, setGeneratedKey] = React.useState(null);
   const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
   const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
