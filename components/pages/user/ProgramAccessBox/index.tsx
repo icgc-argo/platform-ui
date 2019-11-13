@@ -21,6 +21,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
+import Icon from 'uikit/Icon';
 
 type T_ProgramTableProgram = {
   shortName: string;
@@ -134,7 +135,11 @@ const ProgramAccessBox = ({
           margin-top: 14px;
         `}
       >
-        {loading ? <div>loading</div> : <DacoAccessStatusDisplay approved={isDacoApproved} />}
+        {loading ? (
+          <Icon name="spinner" height="13px" />
+        ) : (
+          <DacoAccessStatusDisplay approved={isDacoApproved} />
+        )}
       </div>
       <div>
         <Typography variant="subtitle2" color="secondary">
