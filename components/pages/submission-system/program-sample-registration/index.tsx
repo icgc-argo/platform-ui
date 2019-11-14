@@ -139,17 +139,11 @@ export default function ProgramIDRegistration() {
     };
   }
 
-  const responseTypes = {
-    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
-    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
-  };
-
   const onUpload = async ({ response, fileName }) => {
     // reset error banner
     setErrorBanner({ visible: false, content: '', title: '' });
-    const { __typename: respType, ...resp } = response;
     // display an error banner or clinical data will update with errors array
-    if (respType === responseTypes.CLINICAL_REG_INVALID) {
+    if (response.fileErrors.length > 0) {
       showError({
         errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
         fileName: formatFileName(fileName),
