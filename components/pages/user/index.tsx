@@ -22,8 +22,8 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
-  const self = get(data, 'self', {});
+  const { data, loading } = useQuery(PROFILE);
+  const self: ProfileQueryData = get(data, 'self', {});
 
   return (
     <DefaultLayout>
