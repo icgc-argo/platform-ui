@@ -10,6 +10,7 @@ import ProfileBox from './ProfileBox';
 import PROFILE from './gql/PROFILE.gql';
 import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
+import { ProfileQueryData } from './types';
 
 export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
   const Column = props => (
@@ -21,7 +22,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  const { data, loading } = useQuery(PROFILE);
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
   const self = get(data, 'self', {});
 
   return (

@@ -9,12 +9,7 @@ import ClipboardCopyField from 'uikit/ClipboardCopyField';
 import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
-
-type AccessKey = {
-  exp: number;
-  key: string;
-  error: string;
-};
+import { AccessKey } from '../types';
 
 const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading: boolean }) => {
   const [generatedKey, setGeneratedKey] = React.useState(null);
