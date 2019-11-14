@@ -5,6 +5,8 @@ export type AccessKey = {
 };
 
 export type ProfileQueryData = {
-  isDacoApproved: boolean;
-  apiKey: AccessKey;
+  self: {
+    isDacoApproved: boolean;
+    apiKey: AccessKey;
+  };
 };

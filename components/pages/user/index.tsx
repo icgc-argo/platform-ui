@@ -22,8 +22,9 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  const { data, loading } = useQuery(PROFILE);
-  const self: ProfileQueryData = get(data, 'self', {});
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
+  const isDacoApproved = get(data, ['self', 'isDacoApproved']);
+  const apiKey = get(data, ['self', 'apiKey']);
 
   return (
     <DefaultLayout>
@@ -46,10 +47,10 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
             </Row>
             <Row nogutter>
               <Column sm={12} md={6}>
-                <AccessKeyBox accessKey={self.apiKey} loading={loading} />
+                <AccessKeyBox accessKey={apiKey} loading={loading} />
               </Column>
               <Column sm={12} md={6}>
-                <ProgramAccessBox isDacoApproved={self.isDacoApproved} loading={loading} />
+                <ProgramAccessBox isDacoApproved={isDacoApproved} loading={loading} />
               </Column>
             </Row>
           </ContentBody>
