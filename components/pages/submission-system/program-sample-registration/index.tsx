@@ -27,12 +27,6 @@ import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { RegisterState, ClinicalRegistrationData, ClinicalRegistration } from './types';
 
-const registerStateStringMap: { [key in RegisterState]: string } = {
-  INPROGRESS: 'Registering...',
-  FINISHED: 'Registered!',
-  '': '',
-};
-
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
   newRows: Array<number>,
@@ -69,11 +63,7 @@ export default function ProgramIDRegistration() {
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
-  const [registerString, setRegisterString] = React.useState('');
-
-  const setRegisterState = (state: RegisterState) => {
-    setRegisterString(registerStateStringMap[state]);
-  };
+  const [registerState, setRegisterState] = React.useState<RegisterState>('NONE');
 
   const toaster = useToaster();
 
@@ -107,7 +97,7 @@ export default function ProgramIDRegistration() {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
     } else if (fileErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    } else if (registerString === registerStateStringMap['FINISHED']) {
+    } else if (registerState === 'FINISHED') {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
     }
 
@@ -214,7 +204,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      {registerString && (
+      {registerState !== 'NONE' && (
         <div
           css={css`
             position: absolute;
@@ -233,13 +223,21 @@ export default function ProgramIDRegistration() {
               margin-bottom: 10px;
             `}
           />
-          <Typography color="secondary">{registerString}</Typography>
+          <Typography color="secondary">
+            {
+              ({
+                INPROGRESS: 'Registering...',
+                FINISHED: 'Registered!',
+                NONE: '',
+              } as { [k in RegisterState]: string })[registerState]
+            }
+          </Typography>
         </div>
       )}
       <div
         css={css`
-          opacity: ${!!registerString ? 0.3 : 1};
-          pointer-events: ${!!registerString ? 'none' : 'auto'};
+          opacity: ${registerState !== 'NONE' ? 0.3 : 1};
+          pointer-events: ${registerState !== 'NONE' ? 'none' : 'auto'};
         `}
       >
         <Container

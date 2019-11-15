@@ -39,4 +39,4 @@ export type ClinicalRegistration = {
   programShortName: string;
 };
 
-export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+export type RegisterState = 'INPROGRESS' | 'FINISHED' | 'NONE';
