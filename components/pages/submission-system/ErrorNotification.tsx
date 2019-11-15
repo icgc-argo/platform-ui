@@ -13,6 +13,7 @@ export const defaultColumns = [
     accessor: 'row',
     Header: 'Row #',
     maxWidth: 70,
+    Cell: ({ original }) => <>{Number(original.row) + 1}</>,
   },
   {
     accessor: 'donorId',
@@ -47,7 +48,7 @@ export default <Error extends { [k: string]: any }>({
   subtitle: string;
   columnConfig: Array<
     TableColumnConfig<Error> & {
-      accessor: string;
+      accessor: keyof Error;
     }
   >;
   errors: Array<Error>;
