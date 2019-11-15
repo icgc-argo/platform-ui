@@ -1,1244 +1,1327 @@
-[
-  {
-    "schemas": [
-      {
-        "name": "sample_registration",
-        "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
-        "fields": [
+{
+  "diffs": [
+    {
+      "fromVersion": "1.0",
+      "toVersion": "2.0",
+      "name": "ARGO Clinical Submission",
+      "data": [
+        [
+          "donor.donor_submitter_id",
           {
-            "name": "program_id",
-            "valueType": "string",
-            "description": "Unique identifier of the ARGO program.",
-            "restrictions": {
-              "required": true
+            "left": {
+              "name": "donor_submitter_id",
+              "displayName": "Submitter Donor ID",
+              "valueType": "string",
+              "description": "Unique identifier for donor; assigned by data provider",
+              "meta": {
+                "key": true
+              },
+              "restrictions": {
+                "script": "field.length > 5"
+              }
+            },
+            "right": {
+              "name": "donor_submitter_id",
+              "valueType": "string",
+              "description": "Unique identifier for donor; assigned by data provider",
+              "meta": {
+                "key": true
+              },
+              "restrictions": {
+                "script": "THIS WAS UPDATED"
+              }
+            },
+            "diff": {
+              "displayName": {
+                "type": "deleted",
+                "data": "Submitter Donor ID"
+              },
+              "restrictions": {
+                "script": {
+                  "type": "updated",
+                  "data": "THIS WAS UPDATED"
+                }
+              }
             }
-          },
+          }
+        ],
+        [
+          "donor.gender",
           {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "gender",
-            "valueType": "string",
-            "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Male", "Female", "Other"]
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "valueType": "string",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "specimen_tissue_source",
-            "valueType": "string",
-            "description": "Tissue source of the biospecimen.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Blood derived",
-                "Blood derived - bone marrow",
-                "Blood derived - peripheral blood",
-                "Bone marrow",
-                "Buccal cell",
-                "Lymph node",
-                "Solid tissue",
-                "Plasma",
-                "Serum",
-                "Urine",
-                "Cerebrospinal fluid",
-                "Sputum",
-                "Other",
-                "Pleural effusion",
-                "Mononuclear cells from bone marrow",
-                "Saliva",
-                "Skin"
-              ]
-            }
-          },
-          {
-            "name": "tumour_normal_designation",
-            "valueType": "string",
-            "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Normal",
-                "Normal - tissue adjacent to primary tumour",
-                "Primary tumour",
-                "Primary tumour - adjacent to normal",
-                "Primary tumour - additional new primary",
-                "Recurrent tumour",
-                "Metastatic tumour",
-                "Metastatic tumour - metastasis local to lymph node",
-                "Metastatic tumour - metastasis to distant location",
-                "Metastatic tumour - additional metastatic",
-                "Xenograft - derived from primary tumour",
-                "Xenograft - derived from tumour cell line",
-                "Cell line - derived from xenograft tumour",
-                "Cell line - derived from tumour",
-                "Cell line - derived from normal"
-              ]
-            }
-          },
-          {
-            "name": "submitter_sample_id",
-            "valueType": "string",
-            "description": "Unique identifier of the sample, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "sample_type",
-            "valueType": "string",
-            "description": "Description of the type of molecular sample used for testing.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Total DNA",
-                "Amplified DNA",
-                "ctDNA",
-                "Other DNA enrichments",
-                "Total RNA",
-                "Ribo-Zero RNA",
-                "polyA+ RNA",
-                "Other RNA fractions"
-              ]
+            "left": {
+              "name": "gender",
+              "valueType": "string",
+              "description": "Donor Biological Sex",
+              "restrictions": {
+                "codeList": ["Male", "Female", "Other"]
+              }
+            },
+            "right": {
+              "name": "gender",
+              "valueType": "string",
+              "description": "Donor Biological Sex",
+              "restrictions": {
+                "codeList": ["Male", "Female", "Undeclared"]
+              }
+            },
+            "diff": {
+              "restrictions": {
+                "codeList": {
+                  "type": "updated",
+                  "data": {
+                    "added": ["Undeclared"],
+                    "deleted": ["Other"]
+                  }
+                }
+              }
             }
           }
         ]
-      },
-      {
-        "name": "donor",
-        "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
-        "fields": [
-          {
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "name": "submitter_donor_id",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+      ]
+    }
+  ],
+  "dictionaries": [
+    {
+      "schemas": [
+        {
+          "name": "sample_registration",
+          "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
+          "fields": [
+            {
+              "name": "program_id",
+              "valueType": "string",
+              "description": "Unique identifier of the ARGO program.",
+              "restrictions": {
+                "required": true
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Donors last known state of living or deceased.",
-            "name": "vital_status",
-            "restrictions": {
-              "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
-              "required": true
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Description of the cause of a donor's death.",
-            "name": "cause_of_death",
-            "restrictions": {
-              "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+            {
+              "name": "gender",
+              "valueType": "string",
+              "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Male", "Female", "Other"]
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
-            "meta": {
-              "units": "days"
+            {
+              "name": "submitter_specimen_id",
+              "valueType": "string",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
             },
-            "name": "survival_time",
-            "valueType": "integer"
-          }
-        ]
-      },
-      {
-        "name": "primary_diagnosis",
-        "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "age_at_diagnosis",
-            "valueType": "integer",
-            "description": "Age that the donor was first diagnosed with cancer, in years.",
-            "restrictions": {
-              "required": true
+            {
+              "name": "specimen_tissue_source",
+              "valueType": "string",
+              "description": "Tissue source of the biospecimen.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Blood derived",
+                  "Blood derived - bone marrow",
+                  "Blood derived - peripheral blood",
+                  "Bone marrow",
+                  "Buccal cell",
+                  "Lymph node",
+                  "Solid tissue",
+                  "Plasma",
+                  "Serum",
+                  "Urine",
+                  "Cerebrospinal fluid",
+                  "Sputum",
+                  "Other",
+                  "Pleural effusion",
+                  "Mononuclear cells from bone marrow",
+                  "Saliva",
+                  "Skin"
+                ]
+              }
             },
-            "meta": {
-              "units": "years"
-            }
-          },
-          {
-            "name": "cancer_type_code",
-            "valueType": "string",
-            "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
-            }
-          },
-          {
-            "name": "tumour_staging_system",
-            "valueType": "string",
-            "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
-            }
-          },
-          {
-            "name": "clinical_stage_group",
-            "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
-            "valueType": "string"
-          },
-          {
-            "name": "stage_suffix",
-            "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_t_category",
-            "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_n_category",
-            "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_m_category",
-            "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
-            "valueType": "string"
-          },
-          {
-            "name": "number_lymph_nodes_examined",
-            "description": "The total number of lymph nodes tested for the presence of cancer.",
-            "valueType": "integer"
-          },
-          {
-            "name": "presenting_symptoms",
-            "description": "Indicate presenting symptoms at time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
-            }
-          },
-          {
-            "name": "menopause_status",
-            "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
-            }
-          }
-        ]
-      },
-      {
-        "name": "specimen",
-        "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "acquisition_interval",
-            "description": "Interval between primary diagnosis and specimen acquisition, in days.",
-            "valueType": "integer",
-            "restrictions": {
-              "required": true
+            {
+              "name": "tumour_normal_designation",
+              "valueType": "string",
+              "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Normal",
+                  "Normal - tissue adjacent to primary tumour",
+                  "Primary tumour",
+                  "Primary tumour - adjacent to normal",
+                  "Primary tumour - additional new primary",
+                  "Recurrent tumour",
+                  "Metastatic tumour",
+                  "Metastatic tumour - metastasis local to lymph node",
+                  "Metastatic tumour - metastasis to distant location",
+                  "Metastatic tumour - additional metastatic",
+                  "Xenograft - derived from primary tumour",
+                  "Xenograft - derived from tumour cell line",
+                  "Cell line - derived from xenograft tumour",
+                  "Cell line - derived from tumour",
+                  "Cell line - derived from normal"
+                ]
+              }
             },
-            "meta": {
-              "units": "days"
-            }
-          },
-          {
-            "name": "anatomic_location_of_specimen_collection",
-            "description": "Anatomic location of a specimen when it was collected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Muscle", "Other", "Wrist"]
-            }
-          },
-          {
-            "name": "central_pathology_confirmed",
-            "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Yes", "No", "Unknown", "Not reported"]
-            }
-          },
-          {
-            "name": "tumour_histological_type",
-            "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "M-[0-9]{4}/[0-9]{2}$"
-            }
-          },
-          {
-            "name": "tumour_grading_system",
-            "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Default",
-                "Gleason",
-                "Nottingham",
-                "Brain cancer",
-                "ISUP",
-                "Lymphoid neoplasms"
-              ]
-            }
-          },
-          {
-            "name": "tumour_grade",
-            "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "tumour_staging_system",
-            "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
-            }
-          },
-          {
-            "name": "pathological_stage_group",
-            "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "pathological_t_category",
-            "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_n_category",
-            "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_m_category",
-            "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "percent_tumour_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_proliferating_cells",
-            "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_inflammatory_tissue",
-            "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_stromal_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_necrosis",
-            "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          }
-        ]
-      }
-    ],
-    "name": "ARGO Clinical Submission",
-    "version": "1.0"
-  },
-  {
-    "schemas": [
-      {
-        "name": "sample_registration",
-        "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
-        "fields": [
-          {
-            "name": "program_id",
-            "valueType": "string",
-            "description": "Unique identifier of the ARGO program.",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "gender",
-            "valueType": "string",
-            "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Male", "Female", "Other", "Don't Bother"]
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "valueType": "string",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "specimen_tissue_source",
-            "valueType": "string",
-            "description": "Tissue source of the biospecimen.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Blood derived",
-                "Blood derived - bone marrow",
-                "Blood derived - peripheral blood",
-                "Bone marrow",
-                "Buccal cell",
-                "Lymph node",
-                "Solid tissue",
-                "Plasma",
-                "Serum",
-                "Urine",
-                "Cerebrospinal fluid",
-                "Sputum",
-                "Other",
-                "Pleural effusion",
-                "Mononuclear cells from bone marrow",
-                "Saliva",
-                "Skin"
-              ]
-            }
-          },
-          {
-            "name": "tumour_normal_designation",
-            "valueType": "string",
-            "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Normal",
-                "Normal - tissue adjacent to primary tumour",
-                "Primary tumour",
-                "Primary tumour - adjacent to normal",
-                "Primary tumour - additional new primary",
-                "Recurrent tumour",
-                "Metastatic tumour",
-                "Metastatic tumour - metastasis local to lymph node",
-                "Metastatic tumour - metastasis to distant location",
-                "Metastatic tumour - additional metastatic",
-                "Xenograft - derived from primary tumour",
-                "Xenograft - derived from tumour cell line",
-                "Cell line - derived from xenograft tumour",
-                "Cell line - derived from tumour",
-                "Cell line - derived from normal"
-              ]
-            }
-          },
-          {
-            "name": "submitter_sample_id",
-            "valueType": "string",
-            "description": "Unique identifier of the sample, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "sample_type",
-            "valueType": "string",
-            "description": "Description of the type of molecular sample used for testing.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Total DNA",
-                "Amplified DNA",
-                "ctDNA",
-                "Other DNA enrichments",
-                "Total RNA",
-                "Ribo-Zero RNA",
-                "polyA+ RNA",
-                "Other RNA fractions"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "donor",
-        "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
-        "fields": [
-          {
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "name": "submitter_donor_id",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+            {
+              "name": "submitter_sample_id",
+              "valueType": "string",
+              "description": "Unique identifier of the sample, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Donors last known state of living or deceased.",
-            "name": "vital_status",
-            "restrictions": {
-              "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
-              "required": true
+            {
+              "name": "sample_type",
+              "valueType": "string",
+              "description": "Description of the type of molecular sample used for testing.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Total DNA",
+                  "Amplified DNA",
+                  "ctDNA",
+                  "Other DNA enrichments",
+                  "Total RNA",
+                  "Ribo-Zero RNA",
+                  "polyA+ RNA",
+                  "Other RNA fractions"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "donor",
+          "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
+          "fields": [
+            {
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "name": "submitter_donor_id",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              },
+              "valueType": "string"
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Description of the cause of a donor's death.",
-            "name": "cause_of_death",
-            "restrictions": {
-              "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+            {
+              "description": "Donors last known state of living or deceased.",
+              "name": "vital_status",
+              "restrictions": {
+                "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
+                "required": true
+              },
+              "valueType": "string"
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
-            "meta": {
-              "units": "days"
+            {
+              "description": "Description of the cause of a donor's death.",
+              "name": "cause_of_death",
+              "restrictions": {
+                "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+              },
+              "valueType": "string"
             },
-            "name": "survival_time",
-            "valueType": "integer"
-          }
-        ]
-      },
-      {
-        "name": "primary_diagnosis",
-        "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+            {
+              "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
+              "meta": {
+                "units": "days"
+              },
+              "name": "survival_time",
+              "valueType": "integer"
             }
-          },
-          {
-            "name": "age_at_diagnosis",
-            "valueType": "integer",
-            "description": "Age that the donor was first diagnosed with cancer, in years.",
-            "restrictions": {
-              "required": true
+          ]
+        },
+        {
+          "name": "primary_diagnosis",
+          "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
             },
-            "meta": {
-              "units": "years"
-            }
-          },
-          {
-            "name": "cancer_type_code",
-            "valueType": "string",
-            "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
-            }
-          },
-          {
-            "name": "tumour_staging_system",
-            "valueType": "string",
-            "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
-            }
-          },
-          {
-            "name": "clinical_stage_group",
-            "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
-            "valueType": "string"
-          },
-          {
-            "name": "stage_suffix",
-            "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_t_category",
-            "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_n_category",
-            "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_m_category",
-            "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
-            "valueType": "string"
-          },
-          {
-            "name": "number_lymph_nodes_examined",
-            "description": "The total number of lymph nodes tested for the presence of cancer.",
-            "valueType": "integer"
-          },
-          {
-            "name": "presenting_symptoms",
-            "description": "Indicate presenting symptoms at time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
-            }
-          },
-          {
-            "name": "menopause_status",
-            "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
-            }
-          }
-        ]
-      },
-      {
-        "name": "specimen",
-        "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "acquisition_interval",
-            "description": "Interval between primary diagnosis and specimen acquisition, in days.",
-            "valueType": "integer",
-            "restrictions": {
-              "required": true
+            {
+              "name": "age_at_diagnosis",
+              "valueType": "integer",
+              "description": "Age that the donor was first diagnosed with cancer, in years.",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "years"
+              }
             },
-            "meta": {
-              "units": "days"
-            }
-          },
-          {
-            "name": "anatomic_location_of_specimen_collection",
-            "description": "Anatomic location of a specimen when it was collected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Muscle", "Other", "Wrist"]
-            }
-          },
-          {
-            "name": "central_pathology_confirmed",
-            "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Yes", "No", "Unknown", "Not reported"]
-            }
-          },
-          {
-            "name": "tumour_histological_type",
-            "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "M-[0-9]{4}/[0-9]{2}$"
-            }
-          },
-          {
-            "name": "tumour_grading_system",
-            "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Default",
-                "Gleason",
-                "Nottingham",
-                "Brain cancer",
-                "ISUP",
-                "Lymphoid neoplasms"
-              ]
-            }
-          },
-          {
-            "name": "tumour_grade",
-            "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "tumour_staging_system",
-            "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
-            }
-          },
-          {
-            "name": "pathological_stage_group",
-            "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "pathological_t_category",
-            "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_n_category",
-            "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_m_category",
-            "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "percent_tumour_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_proliferating_cells",
-            "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_inflammatory_tissue",
-            "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_stromal_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_necrosis",
-            "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          }
-        ]
-      }
-    ],
-    "name": "ARGO Clinical Submission",
-    "version": "1.1"
-  },
-  {
-    "schemas": [
-      {
-        "name": "sample_registration",
-        "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
-        "fields": [
-          {
-            "name": "program_id",
-            "valueType": "string",
-            "description": "Unique identifier of the ARGO program.",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "gender",
-            "valueType": "string",
-            "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Male", "Female", "Other"]
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "valueType": "string",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "specimen_tissue_source",
-            "valueType": "string",
-            "description": "Tissue source of the biospecimen.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Blood derived",
-                "Blood derived - bone marrow",
-                "Blood derived - peripheral blood",
-                "Bone marrow",
-                "Buccal cell",
-                "Lymph node",
-                "Solid tissue",
-                "Plasma",
-                "Serum",
-                "Urine",
-                "Cerebrospinal fluid",
-                "Sputum",
-                "Other",
-                "Pleural effusion",
-                "Mononuclear cells from bone marrow",
-                "Saliva",
-                "Skin"
-              ]
-            }
-          },
-          {
-            "name": "tumour_normal_designation",
-            "valueType": "string",
-            "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Normal",
-                "Normal - tissue adjacent to primary tumour",
-                "Primary tumour",
-                "Primary tumour - adjacent to normal",
-                "Primary tumour - additional new primary",
-                "Recurrent tumour",
-                "Metastatic tumour",
-                "Metastatic tumour - metastasis local to lymph node",
-                "Metastatic tumour - metastasis to distant location",
-                "Metastatic tumour - additional metastatic",
-                "Xenograft - derived from primary tumour",
-                "Xenograft - derived from tumour cell line",
-                "Cell line - derived from xenograft tumour",
-                "Cell line - derived from tumour",
-                "Cell line - derived from normal"
-              ]
-            }
-          },
-          {
-            "name": "submitter_sample_id",
-            "valueType": "string",
-            "description": "Unique identifier of the sample, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "sample_type",
-            "valueType": "string",
-            "description": "Description of the type of molecular sample used for testing.",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Total DNA",
-                "Amplified DNA",
-                "ctDNA",
-                "Other DNA enrichments",
-                "Total RNA",
-                "Ribo-Zero RNA",
-                "polyA+ RNA",
-                "Other RNA fractions"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "donor",
-        "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
-        "fields": [
-          {
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "name": "submitter_donor_id",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+            {
+              "name": "cancer_type_code",
+              "valueType": "string",
+              "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Donors last known state of living or deceased.",
-            "name": "vital_status",
-            "restrictions": {
-              "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
-              "required": true
+            {
+              "name": "tumour_staging_system",
+              "valueType": "string",
+              "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Description of the cause of a donor's death.",
-            "name": "cause_of_death",
-            "restrictions": {
-              "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+            {
+              "name": "clinical_stage_group",
+              "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
+              "valueType": "string"
             },
-            "valueType": "string"
-          },
-          {
-            "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
-            "meta": {
-              "units": "days"
+            {
+              "name": "stage_suffix",
+              "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
+              "valueType": "string"
             },
-            "name": "survival_time",
-            "valueType": "integer"
-          }
-        ]
-      },
-      {
-        "name": "primary_diagnosis",
-        "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "valueType": "string",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "age_at_diagnosis",
-            "valueType": "integer",
-            "description": "Age that the donor was first diagnosed with cancer, in years.",
-            "restrictions": {
-              "required": true
+            {
+              "name": "clinical_t_category",
+              "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
             },
-            "meta": {
-              "units": "years"
-            }
-          },
-          {
-            "name": "cancer_type_code",
-            "valueType": "string",
-            "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
-            }
-          },
-          {
-            "name": "tumour_staging_system",
-            "valueType": "string",
-            "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
-            }
-          },
-          {
-            "name": "clinical_stage_group",
-            "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
-            "valueType": "string"
-          },
-          {
-            "name": "stage_suffix",
-            "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_t_category",
-            "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_n_category",
-            "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "clinical_m_category",
-            "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
-            "valueType": "string"
-          },
-          {
-            "name": "number_lymph_nodes_examined",
-            "description": "The total number of lymph nodes tested for the presence of cancer.",
-            "valueType": "integer"
-          },
-          {
-            "name": "presenting_symptoms",
-            "description": "Indicate presenting symptoms at time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
-            }
-          },
-          {
-            "name": "menopause_status",
-            "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
-            "valueType": "string",
-            "restrictions": {
-              "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
-            }
-          }
-        ]
-      },
-      {
-        "name": "specimen",
-        "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
-        "fields": [
-          {
-            "name": "submitter_donor_id",
-            "description": "Unique identifier of the donor, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "submitter_specimen_id",
-            "description": "Unique identifier of the specimen, assigned by the data provider.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "[A-Za-z0-9\\-\\._]{1,64}"
-            }
-          },
-          {
-            "name": "acquisition_interval",
-            "description": "Interval between primary diagnosis and specimen acquisition, in days.",
-            "valueType": "integer",
-            "restrictions": {
-              "required": true
+            {
+              "name": "clinical_n_category",
+              "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
             },
-            "meta": {
-              "units": "days"
+            {
+              "name": "clinical_m_category",
+              "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
+              "valueType": "string"
+            },
+            {
+              "name": "number_lymph_nodes_examined",
+              "description": "The total number of lymph nodes tested for the presence of cancer.",
+              "valueType": "integer"
+            },
+            {
+              "name": "presenting_symptoms",
+              "description": "Indicate presenting symptoms at time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
+              }
+            },
+            {
+              "name": "menopause_status",
+              "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
+              }
             }
-          },
-          {
-            "name": "anatomic_location_of_specimen_collection",
-            "description": "Anatomic location of a specimen when it was collected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Muscle", "Other", "Wrist"]
+          ]
+        },
+        {
+          "name": "specimen",
+          "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "submitter_specimen_id",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "acquisition_interval",
+              "description": "Interval between primary diagnosis and specimen acquisition, in days.",
+              "valueType": "integer",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "days"
+              }
+            },
+            {
+              "name": "anatomic_location_of_specimen_collection",
+              "description": "Anatomic location of a specimen when it was collected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Muscle", "Other", "Wrist"]
+              }
+            },
+            {
+              "name": "central_pathology_confirmed",
+              "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Yes", "No", "Unknown", "Not reported"]
+              }
+            },
+            {
+              "name": "tumour_histological_type",
+              "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "M-[0-9]{4}/[0-9]{2}$"
+              }
+            },
+            {
+              "name": "tumour_grading_system",
+              "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Default",
+                  "Gleason",
+                  "Nottingham",
+                  "Brain cancer",
+                  "ISUP",
+                  "Lymphoid neoplasms"
+                ]
+              }
+            },
+            {
+              "name": "tumour_grade",
+              "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "tumour_staging_system",
+              "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
+            },
+            {
+              "name": "pathological_stage_group",
+              "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "pathological_t_category",
+              "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_n_category",
+              "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_m_category",
+              "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "percent_tumour_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_proliferating_cells",
+              "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_inflammatory_tissue",
+              "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_stromal_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_necrosis",
+              "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
             }
-          },
-          {
-            "name": "central_pathology_confirmed",
-            "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Yes", "No", "Unknown", "Not reported"]
+          ]
+        }
+      ],
+      "name": "ARGO Clinical Submission",
+      "version": "1.0"
+    },
+    {
+      "schemas": [
+        {
+          "name": "sample_registration",
+          "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
+          "fields": [
+            {
+              "name": "program_id",
+              "valueType": "string",
+              "description": "Unique identifier of the ARGO program.",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "gender",
+              "valueType": "string",
+              "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Male", "Female", "Other", "Don't Bother"]
+              }
+            },
+            {
+              "name": "submitter_specimen_id",
+              "valueType": "string",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "specimen_tissue_source",
+              "valueType": "string",
+              "description": "Tissue source of the biospecimen.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Blood derived",
+                  "Blood derived - bone marrow",
+                  "Blood derived - peripheral blood",
+                  "Bone marrow",
+                  "Buccal cell",
+                  "Lymph node",
+                  "Solid tissue",
+                  "Plasma",
+                  "Serum",
+                  "Urine",
+                  "Cerebrospinal fluid",
+                  "Sputum",
+                  "Other",
+                  "Pleural effusion",
+                  "Mononuclear cells from bone marrow",
+                  "Saliva",
+                  "Skin"
+                ]
+              }
+            },
+            {
+              "name": "tumour_normal_designation",
+              "valueType": "string",
+              "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Normal",
+                  "Normal - tissue adjacent to primary tumour",
+                  "Primary tumour",
+                  "Primary tumour - adjacent to normal",
+                  "Primary tumour - additional new primary",
+                  "Recurrent tumour",
+                  "Metastatic tumour",
+                  "Metastatic tumour - metastasis local to lymph node",
+                  "Metastatic tumour - metastasis to distant location",
+                  "Metastatic tumour - additional metastatic",
+                  "Xenograft - derived from primary tumour",
+                  "Xenograft - derived from tumour cell line",
+                  "Cell line - derived from xenograft tumour",
+                  "Cell line - derived from tumour",
+                  "Cell line - derived from normal"
+                ]
+              }
+            },
+            {
+              "name": "submitter_sample_id",
+              "valueType": "string",
+              "description": "Unique identifier of the sample, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "sample_type",
+              "valueType": "string",
+              "description": "Description of the type of molecular sample used for testing.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Total DNA",
+                  "Amplified DNA",
+                  "ctDNA",
+                  "Other DNA enrichments",
+                  "Total RNA",
+                  "Ribo-Zero RNA",
+                  "polyA+ RNA",
+                  "Other RNA fractions"
+                ]
+              }
             }
-          },
-          {
-            "name": "tumour_histological_type",
-            "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "regex": "M-[0-9]{4}/[0-9]{2}$"
+          ]
+        },
+        {
+          "name": "donor",
+          "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
+          "fields": [
+            {
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "name": "submitter_donor_id",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Donors last known state of living or deceased.",
+              "name": "vital_status",
+              "restrictions": {
+                "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
+                "required": true
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Description of the cause of a donor's death.",
+              "name": "cause_of_death",
+              "restrictions": {
+                "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
+              "meta": {
+                "units": "days"
+              },
+              "name": "survival_time",
+              "valueType": "integer"
             }
-          },
-          {
-            "name": "tumour_grading_system",
-            "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": [
-                "Default",
-                "Gleason",
-                "Nottingham",
-                "Brain cancer",
-                "ISUP",
-                "Lymphoid neoplasms"
-              ]
+          ]
+        },
+        {
+          "name": "primary_diagnosis",
+          "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "age_at_diagnosis",
+              "valueType": "integer",
+              "description": "Age that the donor was first diagnosed with cancer, in years.",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "years"
+              }
+            },
+            {
+              "name": "cancer_type_code",
+              "valueType": "string",
+              "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
+              }
+            },
+            {
+              "name": "tumour_staging_system",
+              "valueType": "string",
+              "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
+            },
+            {
+              "name": "clinical_stage_group",
+              "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
+              "valueType": "string"
+            },
+            {
+              "name": "stage_suffix",
+              "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_t_category",
+              "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_n_category",
+              "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_m_category",
+              "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
+              "valueType": "string"
+            },
+            {
+              "name": "number_lymph_nodes_examined",
+              "description": "The total number of lymph nodes tested for the presence of cancer.",
+              "valueType": "integer"
+            },
+            {
+              "name": "presenting_symptoms",
+              "description": "Indicate presenting symptoms at time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
+              }
+            },
+            {
+              "name": "menopause_status",
+              "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
+              }
             }
-          },
-          {
-            "name": "tumour_grade",
-            "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
+          ]
+        },
+        {
+          "name": "specimen",
+          "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "submitter_specimen_id",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "acquisition_interval",
+              "description": "Interval between primary diagnosis and specimen acquisition, in days.",
+              "valueType": "integer",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "days"
+              }
+            },
+            {
+              "name": "anatomic_location_of_specimen_collection",
+              "description": "Anatomic location of a specimen when it was collected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Muscle", "Other", "Wrist"]
+              }
+            },
+            {
+              "name": "central_pathology_confirmed",
+              "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Yes", "No", "Unknown", "Not reported"]
+              }
+            },
+            {
+              "name": "tumour_histological_type",
+              "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "M-[0-9]{4}/[0-9]{2}$"
+              }
+            },
+            {
+              "name": "tumour_grading_system",
+              "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Default",
+                  "Gleason",
+                  "Nottingham",
+                  "Brain cancer",
+                  "ISUP",
+                  "Lymphoid neoplasms"
+                ]
+              }
+            },
+            {
+              "name": "tumour_grade",
+              "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "tumour_staging_system",
+              "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
+            },
+            {
+              "name": "pathological_stage_group",
+              "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "pathological_t_category",
+              "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_n_category",
+              "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_m_category",
+              "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "percent_tumour_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_proliferating_cells",
+              "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_inflammatory_tissue",
+              "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_stromal_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_necrosis",
+              "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
             }
-          },
-          {
-            "name": "tumour_staging_system",
-            "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true,
-              "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+          ]
+        }
+      ],
+      "name": "ARGO Clinical Submission",
+      "version": "1.1"
+    },
+    {
+      "schemas": [
+        {
+          "name": "sample_registration",
+          "description": "Collection of elements required to register the required Donor-Specimen-Sample data to the ARGO Platform. Registration of samples is required before genomic and clinical data submission can proceed.",
+          "fields": [
+            {
+              "name": "program_id",
+              "valueType": "string",
+              "description": "Unique identifier of the ARGO program.",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "gender",
+              "valueType": "string",
+              "description": "Description of the donor self-reported gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles.",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Male", "Female", "Other"]
+              }
+            },
+            {
+              "name": "submitter_specimen_id",
+              "valueType": "string",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "specimen_tissue_source",
+              "valueType": "string",
+              "description": "Tissue source of the biospecimen.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Blood derived",
+                  "Blood derived - bone marrow",
+                  "Blood derived - peripheral blood",
+                  "Bone marrow",
+                  "Buccal cell",
+                  "Lymph node",
+                  "Solid tissue",
+                  "Plasma",
+                  "Serum",
+                  "Urine",
+                  "Cerebrospinal fluid",
+                  "Sputum",
+                  "Other",
+                  "Pleural effusion",
+                  "Mononuclear cells from bone marrow",
+                  "Saliva",
+                  "Skin"
+                ]
+              }
+            },
+            {
+              "name": "tumour_normal_designation",
+              "valueType": "string",
+              "description": "Description of the kind of specimen that was collected with respect to tumour/normal tissue origin.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Normal",
+                  "Normal - tissue adjacent to primary tumour",
+                  "Primary tumour",
+                  "Primary tumour - adjacent to normal",
+                  "Primary tumour - additional new primary",
+                  "Recurrent tumour",
+                  "Metastatic tumour",
+                  "Metastatic tumour - metastasis local to lymph node",
+                  "Metastatic tumour - metastasis to distant location",
+                  "Metastatic tumour - additional metastatic",
+                  "Xenograft - derived from primary tumour",
+                  "Xenograft - derived from tumour cell line",
+                  "Cell line - derived from xenograft tumour",
+                  "Cell line - derived from tumour",
+                  "Cell line - derived from normal"
+                ]
+              }
+            },
+            {
+              "name": "submitter_sample_id",
+              "valueType": "string",
+              "description": "Unique identifier of the sample, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "sample_type",
+              "valueType": "string",
+              "description": "Description of the type of molecular sample used for testing.",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Total DNA",
+                  "Amplified DNA",
+                  "ctDNA",
+                  "Other DNA enrichments",
+                  "Total RNA",
+                  "Ribo-Zero RNA",
+                  "polyA+ RNA",
+                  "Other RNA fractions"
+                ]
+              }
             }
-          },
-          {
-            "name": "pathological_stage_group",
-            "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
-            "valueType": "string",
-            "restrictions": {
-              "required": true
+          ]
+        },
+        {
+          "name": "donor",
+          "description": "The collection of data elements related to a specific donor in a specific ICGC-ARGO program.",
+          "fields": [
+            {
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "name": "submitter_donor_id",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Donors last known state of living or deceased.",
+              "name": "vital_status",
+              "restrictions": {
+                "codeList": ["Alive", "Deceased", "Not reported", "Unknown"],
+                "required": true
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Description of the cause of a donor's death.",
+              "name": "cause_of_death",
+              "restrictions": {
+                "codeList": ["Died of cancer", "Died of other reasons", "Not reported", "Unknown"]
+              },
+              "valueType": "string"
+            },
+            {
+              "description": "Interval of how long the donor has survived since primary diagnosis, in days.",
+              "meta": {
+                "units": "days"
+              },
+              "name": "survival_time",
+              "valueType": "integer"
             }
-          },
-          {
-            "name": "pathological_t_category",
-            "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_n_category",
-            "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "pathological_m_category",
-            "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
-            "valueType": "string"
-          },
-          {
-            "name": "percent_tumour_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
+          ]
+        },
+        {
+          "name": "primary_diagnosis",
+          "description": "The collection of data elements related to a donor's primary diagnosis. The primary diagnosis is the first diagnosed case of cancer in a donor.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "valueType": "string",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "age_at_diagnosis",
+              "valueType": "integer",
+              "description": "Age that the donor was first diagnosed with cancer, in years.",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "years"
+              }
+            },
+            {
+              "name": "cancer_type_code",
+              "valueType": "string",
+              "description": "The code to represent the cancer type using the WHO ICD-10 code (https://icd.who.int/browse10/2016/en#/) classification.",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Z]{1}[0-9]{2}.[0-9]{0,3}[A-Z]{0,1}$"
+              }
+            },
+            {
+              "name": "tumour_staging_system",
+              "valueType": "string",
+              "description": "Specify the tumour staging system used to stage the cancer at the time of primary diagnosis (prior to treatment).",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
+            },
+            {
+              "name": "clinical_stage_group",
+              "description": "Stage group of the tumour, as assigned by the reporting tumour_staging_system, that indicates the overall prognostic tumour stage (ie. Stage I, Stage II, Stage III etc.).",
+              "valueType": "string"
+            },
+            {
+              "name": "stage_suffix",
+              "description": "If necessary, use this field to add any applicable stage suffixes. Stage suffixes may apply to certain staging systems such as Ann Arbour staging system where the four stages are divided into 4 categories (A, B, X and E).",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_t_category",
+              "description": "The code to represent the extent of the primary tumour (T) based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_n_category",
+              "description": "The code to represent the stage of cancer defined by which is the extent of the regional lymph node (N) involvement for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "clinical_m_category",
+              "description": "The code to represent the stage of cancer defined bythe extent of the distant metastasis (M) for the cancer based on evidence obtained from clinical assessment parameters determined at time of primary diagnosis and prior to treatment, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual. MX is NOT a valid category and cannot be assigned.",
+              "valueType": "string"
+            },
+            {
+              "name": "number_lymph_nodes_examined",
+              "description": "The total number of lymph nodes tested for the presence of cancer.",
+              "valueType": "integer"
+            },
+            {
+              "name": "presenting_symptoms",
+              "description": "Indicate presenting symptoms at time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Back Pain", "Nausea", "None", "Unknown", "Weight Loss"]
+              }
+            },
+            {
+              "name": "menopause_status",
+              "description": "Indicate the menopause status of the patient at the time of primary diagnosis.",
+              "valueType": "string",
+              "restrictions": {
+                "codeList": ["Perimenopausal", "Postmenopausal", "Premenopausal", "Unknown"]
+              }
             }
-          },
-          {
-            "name": "percent_proliferating_cells",
-            "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
+          ]
+        },
+        {
+          "name": "specimen",
+          "description": "The collection of data elements related to a donor's specimen. A specimen is any material sample taken for testing, diagnostic or research purposes.",
+          "fields": [
+            {
+              "name": "submitter_donor_id",
+              "description": "Unique identifier of the donor, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "submitter_specimen_id",
+              "description": "Unique identifier of the specimen, assigned by the data provider.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "[A-Za-z0-9\\-\\._]{1,64}"
+              }
+            },
+            {
+              "name": "acquisition_interval",
+              "description": "Interval between primary diagnosis and specimen acquisition, in days.",
+              "valueType": "integer",
+              "restrictions": {
+                "required": true
+              },
+              "meta": {
+                "units": "days"
+              }
+            },
+            {
+              "name": "anatomic_location_of_specimen_collection",
+              "description": "Anatomic location of a specimen when it was collected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Muscle", "Other", "Wrist"]
+              }
+            },
+            {
+              "name": "central_pathology_confirmed",
+              "description": "Indicate whether the histologic description of tissue or cells was confirmed by a pathology review of frozen or formalin fixed slide(s) completed after the diagnostic pathology review of the tumour sample used to extract analyte(s).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Yes", "No", "Unknown", "Not reported"]
+              }
+            },
+            {
+              "name": "tumour_histological_type",
+              "description": "The code to represent the histology (morphology) of neoplasms that is usually obtained from a pathology report, according to the International Classification of Diseases for Oncology, 3rd Edition (WHO ICD-O-3).",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "regex": "M-[0-9]{4}/[0-9]{2}$"
+              }
+            },
+            {
+              "name": "tumour_grading_system",
+              "description": "Specify the tumour staging system used to assess the description of a tumour based on how abnormal the tumour cells and the tumour tissue look under a microscope. Tumour grade is an indicator of how quickly a tumour is likely to  grow.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": [
+                  "Default",
+                  "Gleason",
+                  "Nottingham",
+                  "Brain cancer",
+                  "ISUP",
+                  "Lymphoid neoplasms"
+                ]
+              }
+            },
+            {
+              "name": "tumour_grade",
+              "description": "Grade of the tumour as assigned by the reporting tumour_grading_system.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "tumour_staging_system",
+              "description": "Specify the tumour staging system used to assess the cancer at the time the tumour specimen was resected. Pathological classification is based on the clinical stage information (acquired before treatment) and supplemented/modified by operative findings and pathological evaluation of the resected specimen.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true,
+                "codeList": ["Binet", "Rai", "FIGO", "Ann Arbor", "Murphy", "Lugano"]
+              }
+            },
+            {
+              "name": "pathological_stage_group",
+              "description": "Specify the tumour stage, based on tumor_staging_system, used to assess the cancer at the time the tumour specimen was resected.",
+              "valueType": "string",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "pathological_t_category",
+              "description": "The code to represent the stage of cancer defined by the size or contiguous extension of the primary tumour (T), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_n_category",
+              "description": "The code to represent the stage of cancer defined by whether or not the cancer has reached nearby lymph nodes (N), according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "pathological_m_category",
+              "description": "The code to represent the stage of cancer defined by whether there are distant metastases (M), meaning spread of cancer to other parts of the body, according to criteria based on multiple editions of the AJCC's Cancer Staging Manual.",
+              "valueType": "string"
+            },
+            {
+              "name": "percent_tumour_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of infiltration by tumour cells in a specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_proliferating_cells",
+              "description": "Indicate a value, in decimals, that represents the count of proliferating cells determined during pathologic review of the specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_inflammatory_tissue",
+              "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_stromal_cells",
+              "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
+            },
+            {
+              "name": "percent_necrosis",
+              "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
+              "valueType": "number",
+              "restrictions": {
+                "required": true
+              }
             }
-          },
-          {
-            "name": "percent_inflammatory_tissue",
-            "description": "Indicate a value, in decimals, that represents local response to cellular injury, marked by capillary dilatation, edema and leukocyte infiltration; clinically, inflammation is manifest by redness, heat, pain, swelling and loss of function, with the need to heal damaged tissue.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_stromal_cells",
-            "description": "Indicate a value, in decimals, that represents the percentage of reactive cells that are present in a malignant tumour specimen but are not malignant such as fibroblasts, vascular structures, etc.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          },
-          {
-            "name": "percent_necrosis",
-            "description": "Indicate a value, in decimals, that represents the percentage of cell death in a malignant tumour specimen.",
-            "valueType": "number",
-            "restrictions": {
-              "required": true
-            }
-          }
-        ]
-      }
-    ],
-    "name": "ARGO Clinical Submission",
-    "version": "2.0"
-  }
-]
+          ]
+        }
+      ],
+      "name": "ARGO Clinical Submission",
+      "version": "2.0"
+    }
+  ]
+}
