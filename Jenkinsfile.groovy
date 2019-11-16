@@ -52,6 +52,9 @@ spec:
                     sh "npm run build"
                     sh "npm run test"
                 }
+                container('node') {
+                    sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
+                }
             }
         }
 
