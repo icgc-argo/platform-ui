@@ -23,6 +23,7 @@ fragment Registration on ClinicalRegistrationData {
   }
   fileErrors {
     message
+    fileNames
     code
   }
   newDonors {

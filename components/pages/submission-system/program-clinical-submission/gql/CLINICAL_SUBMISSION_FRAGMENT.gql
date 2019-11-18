@@ -45,7 +45,7 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
     }
   }
   fileErrors {
-    msg
+    message
     fileNames
     code
   }

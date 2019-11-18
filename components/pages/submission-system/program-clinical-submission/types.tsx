@@ -70,10 +70,10 @@ export type GqlClinicalSubmissionData = {
   __typename: 'ClinicalSubmissionData';
 };
 export type ClinicalError = {
-  msg: string;
+  message: string;
   fileNames: string[];
   code: string;
-  __typename: 'ClinicalError';
+  __typename: 'ClinicalFileError';
 };
 
 export type UploadFilesMutationVariables = {
