@@ -7,12 +7,14 @@ import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 export const defaultColumns = [
   {
     accessor: 'row',
     Header: 'Row #',
     maxWidth: 70,
+    Cell: ({ original }) => <>{toDisplayRowIndex(original.row)}</>,
   },
   {
     accessor: 'donorId',
@@ -47,7 +49,7 @@ export default <Error extends { [k: string]: any }>({
   subtitle: string;
   columnConfig: Array<
     TableColumnConfig<Error> & {
-      accessor: string;
+      accessor: keyof Error;
     }
   >;
   errors: Array<Error>;
