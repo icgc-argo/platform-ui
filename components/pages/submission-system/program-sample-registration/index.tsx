@@ -44,14 +44,14 @@ export default function ProgramIDRegistration() {
     data: { clinicalRegistration = undefined } = {},
     loading,
     refetch,
-    updateQuery: useRegistrationSubmissionQuery,
+    updateQuery: updateClinicalRegistrationQuery,
   } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
 
-  const schemaAndValidationErrors = get(
+  const schemaOrValidationErrors = get(
     clinicalRegistration,
     'errors',
     [] as typeof clinicalRegistration.errors,
@@ -106,14 +106,14 @@ export default function ProgramIDRegistration() {
   React.useEffect(() => {
     if (clinicalRegistration && clinicalRegistration.records.length > 0) {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
-    } else if (schemaAndValidationErrors.length > 0) {
+    } else if (schemaOrValidationErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
     } else if (registerState === 'FINISHED') {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
     }
 
     return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
-  }, [clinicalRegistration, schemaAndValidationErrors]);
+  }, [clinicalRegistration, schemaOrValidationErrors]);
 
   // Data formatting
   let submissionInfo = null;
@@ -144,7 +144,7 @@ export default function ProgramIDRegistration() {
     index: number,
   ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
     if (type === 'CLOSE') {
-      useRegistrationSubmissionQuery(previous => ({
+      updateClinicalRegistrationQuery(previous => ({
         ...previous,
         clinicalRegistration: {
           ...previous.clinicalRegistration,
@@ -299,11 +299,11 @@ export default function ProgramIDRegistration() {
                 submissionInfo={submissionInfo}
               />
             </>
-          ) : schemaAndValidationErrors.length > 0 ? (
+          ) : schemaOrValidationErrors.length > 0 ? (
             <ErrorNotification
               onClearClick={handleClearClick}
-              title={`${schemaAndValidationErrors.length} errors found in uploaded file`}
-              errors={schemaAndValidationErrors}
+              title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
+              errors={schemaOrValidationErrors}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
