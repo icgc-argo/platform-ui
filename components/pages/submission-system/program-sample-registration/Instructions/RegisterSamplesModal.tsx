@@ -75,7 +75,7 @@ export default function RegisterSamplesModal({
           variant: TOAST_VARIANTS.ERROR,
           content: error.toString(),
         });
-        setRegisterState('');
+        setRegisterState('NONE');
       });
   };
 
