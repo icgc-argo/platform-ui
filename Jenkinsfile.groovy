@@ -5,7 +5,7 @@ def commit = "UNKNOWN"
 pipeline {
     agent {
         kubernetes {
-            label 'gateway-executor'
+            label 'platform-ui-executor'
             yaml """
 apiVersion: v1
 kind: Pod
@@ -14,11 +14,6 @@ spec:
   - name: node
     image: node:12.6.0
     tty: true
-  - name: helm
-    image: alpine/helm:2.12.3
-    tty: true
-    command:
-    - cat
   - name: docker
     image: docker:18-git
     tty: true
@@ -51,6 +46,9 @@ spec:
                     sh "npm run type-check"
                     sh "npm run build"
                     sh "npm run test"
+                }
+                container('node') {
+                    sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
                 }
             }
         }
