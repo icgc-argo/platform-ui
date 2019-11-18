@@ -81,11 +81,17 @@ type ClinicalSubmissionQueryResponse = {
   };
 };
 
+type RegistrationFileError = {
+  message: string;
+  code: string;
+};
+
 type SampleRegistrationQueryResponse = {
   clinicalRegistration: {
     programShortName: string;
     fileName: string;
     errors: Array<{ type: string }>;
+    fileErrors: Array<RegistrationFileError>;
   };
 };
 
@@ -108,7 +114,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   );
 
   const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
-  const clinicalRegistrationHasError = clinicalRegistration && !!clinicalRegistration.errors.length;
+  const clinicalRegistrationHasError =
+    clinicalRegistration &&
+    (!!clinicalRegistration.errors.length || !!clinicalRegistration.fileErrors.length);
   const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
 
   const clinicalSubmissionHasSchemaErrors = data
