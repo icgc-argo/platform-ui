@@ -36,8 +36,8 @@ export default ({
     >
       <div>
         {hasUpdate
-          ? 'The DCC will be notified of the following updates to previously released data and your submission will be locked. Once your submission is approved by the DCC, your clinical data will be placed in a queue for the next release.'
-          : 'The clinical data in your workspace will be placed in a queue for the next release.'}
+          ? 'The DCC will be notified of the following updates to previously released data and your submission will be locked until approval.'
+          : 'The following clinical data will be submitted.'}
       </div>
       <div
         css={css`
