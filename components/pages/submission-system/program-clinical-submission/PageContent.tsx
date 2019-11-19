@@ -310,12 +310,14 @@ export default () => {
             clinicalSubmissions={data.clinicalSubmissions}
             onActionClick={() => {
               onSignOffApproved();
-              toaster.addToast({
-                variant: 'SUCCESS',
-                interactionType: 'CLOSE',
-                title: 'Successful Clinical Submission!',
-                content: 'Your clinical data has been submitted.',
-              });
+              if (!hasUpdate) {
+                toaster.addToast({
+                  variant: 'SUCCESS',
+                  interactionType: 'CLOSE',
+                  title: 'Successful Clinical Submission!',
+                  content: 'Your clinical data has been submitted.',
+                });
+              }
             }}
             onCloseClick={onSignOffCanceled}
             onCancelClick={onSignOffCanceled}
