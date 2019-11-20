@@ -1,14 +1,8 @@
 import * as React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
 import styled from '@emotion/styled-base';
-import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
-import HyperLink from 'uikit/Link';
-import Link from 'next/link';
-import Icon from 'uikit/Icon';
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
 const InstructionBox = ({
   steps,

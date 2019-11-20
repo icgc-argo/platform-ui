@@ -15,7 +15,8 @@
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
-    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts"
+    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
+    "build-uikit": "rm -rf ./uikit/dist && tsc -p ./tsconfig.uikit.json && cp ./uikit/package.release.json ./uikit/dist/package.json && cp ./uikit/readme.md ./uikit/dist/readme.md"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc"

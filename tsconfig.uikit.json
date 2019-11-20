@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./uikit/dist",
+    "sourceMap": true,
+    "noEmit": false,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
+  },
+  "include": ["./uikit/**/*"],
+  "exclude": ["**/testSetup.*", "**/*.test.*", "**/testUtil.*", "**/plopfile.js"]
+}
