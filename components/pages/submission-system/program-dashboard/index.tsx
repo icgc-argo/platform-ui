@@ -46,6 +46,7 @@ export default function ProgramDashboard() {
         <Banner
           title={`Welcome to ${programShortName}!`}
           interactionType="CLOSE"
+          onInteraction={() => setJustJoined(false)}
           variant={BANNER_VARIANTS.SUCCESS}
           content="If you have trouble getting started, please check out our documentation for program management, data access and data submission."
           css={css`
