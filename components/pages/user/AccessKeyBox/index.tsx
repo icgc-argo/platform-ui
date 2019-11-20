@@ -3,18 +3,15 @@ import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import Banner, { BANNER_SIZE, BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Link from 'uikit/Link';
-import { Input } from 'uikit/form';
 import Button from 'uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
-import EGO_ACCESS_KEY from './EGO_ACCESS_KEY.gql';
 import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
+import { AccessKey } from '../types';
 
-export default function AccessTokenBox() {
-  const { data: { accessKey = null } = {}, loading } = useQuery(EGO_ACCESS_KEY);
-
+const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading: boolean }) => {
   const [generatedKey, setGeneratedKey] = React.useState(null);
   const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
   const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
@@ -130,4 +127,6 @@ export default function AccessTokenBox() {
       </div>
     </Box>
   );
-}
+};
+
+export default AccessTokenBox;

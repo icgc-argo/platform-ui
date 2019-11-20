@@ -25,13 +25,11 @@ function Instructions({
   shortName,
   registrationId,
   setRegisterState,
-  onUpload,
 }: {
   registrationEnabled: boolean;
   shortName: string;
   registrationId: string;
   setRegisterState: (state: RegisterState) => void;
-  onUpload: (x: any) => any;
 }) {
   const footerContentStyle = css`
     text-align: center;
@@ -61,7 +59,6 @@ function Instructions({
     } = await uploadFile({
       variables: { shortName, registrationFile: file },
     });
-    onUpload({ response: uploadClinicalRegistration, fileName: file.name });
   };
 
   return (

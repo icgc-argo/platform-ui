@@ -1,0 +1,10 @@
+query PROFILE {
+  self {
+    isDacoApproved
+    apiKey {
+      exp
+      error
+      key
+    }
+  }
+}

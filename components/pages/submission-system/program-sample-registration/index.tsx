@@ -19,19 +19,11 @@ import NoDataMessage from './FileTable/NoDataMessage';
 import GET_REGISTRATION from './gql/GET_REGISTRATION.gql';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
-import { ERROR_CODES } from './common';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
-import { formatFileName } from './util';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { RegisterState, ClinicalRegistrationData, ClinicalRegistration } from './types';
-
-const registerStateStringMap: { [key in RegisterState]: string } = {
-  INPROGRESS: 'Registering...',
-  FINISHED: 'Registered!',
-  '': '',
-};
+import Notification from 'uikit/notifications/Notification';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -48,20 +40,33 @@ export default function ProgramIDRegistration() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const { data: { clinicalRegistration = undefined } = {}, loading, refetch } = useQuery<{
+  const {
+    data: { clinicalRegistration = undefined } = {},
+    loading,
+    refetch,
+    updateQuery: updateClinicalRegistrationQuery,
+  } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
   }>(GET_REGISTRATION, {
     variables: { shortName: programShortName },
   });
 
-  const fileErrors = get(clinicalRegistration, 'errors', [] as typeof clinicalRegistration.errors);
+  const schemaOrValidationErrors = get(
+    clinicalRegistration,
+    'errors',
+    [] as typeof clinicalRegistration.errors,
+  );
+  const fileErrors = get(
+    clinicalRegistration,
+    'fileErrors',
+    [] as typeof clinicalRegistration.fileErrors,
+  );
   const fileRecords = get(
     clinicalRegistration,
     'records',
     [] as typeof clinicalRegistration.records,
   );
 
-  const [errorBanner, setErrorBanner] = React.useState({ title: '', content: '', visible: false });
   const [progress, setProgress] = React.useState([
     PROGRESS_STATUS.DISABLED,
     PROGRESS_STATUS.DISABLED,
@@ -69,11 +74,7 @@ export default function ProgramIDRegistration() {
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
-  const [registerString, setRegisterString] = React.useState('');
-
-  const setRegisterState = (state: RegisterState) => {
-    setRegisterString(registerStateStringMap[state]);
-  };
+  const [registerState, setRegisterState] = React.useState<RegisterState>('NONE');
 
   const toaster = useToaster();
 
@@ -105,14 +106,14 @@ export default function ProgramIDRegistration() {
   React.useEffect(() => {
     if (clinicalRegistration && clinicalRegistration.records.length > 0) {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
-    } else if (fileErrors.length > 0) {
+    } else if (schemaOrValidationErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    } else if (registerString === registerStateStringMap['FINISHED']) {
+    } else if (registerState === 'FINISHED') {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
     }
 
     return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
-  }, [clinicalRegistration, fileErrors]);
+  }, [clinicalRegistration, schemaOrValidationErrors]);
 
   // Data formatting
   let submissionInfo = null;
@@ -139,32 +140,18 @@ export default function ProgramIDRegistration() {
     };
   }
 
-  const responseTypes = {
-    CLINICAL_REG_INVALID: 'ClinicalRegistrationInvalid',
-    CLINICAL_REG_DATA: 'ClinicalRegistrationData',
-  };
-
-  const onUpload = async ({ response, fileName }) => {
-    // reset error banner
-    setErrorBanner({ visible: false, content: '', title: '' });
-    const { __typename: respType, ...resp } = response;
-    // display an error banner or clinical data will update with errors array
-    if (respType === responseTypes.CLINICAL_REG_INVALID) {
-      showError({
-        errorCode: ERROR_CODES.INVALID_FILE_NAME.code,
-        fileName: formatFileName(fileName),
-      });
+  const onErrorClose: (
+    index: number,
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
+    if (type === 'CLOSE') {
+      updateClinicalRegistrationQuery(previous => ({
+        ...previous,
+        clinicalRegistration: {
+          ...previous.clinicalRegistration,
+          fileErrors: previous.clinicalRegistration.fileErrors.filter((_, i) => i !== index),
+        },
+      }));
     }
-  };
-
-  const showError = ({ errorCode, fileName }) => {
-    const { title, content } = ERROR_CODES[errorCode];
-    setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    setErrorBanner({
-      visible: true,
-      title: title(fileName),
-      content: content,
-    });
   };
 
   const pageHeaderStyle = css`
@@ -214,7 +201,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      {registerString && (
+      {registerState !== 'NONE' && (
         <div
           css={css`
             position: absolute;
@@ -233,13 +220,21 @@ export default function ProgramIDRegistration() {
               margin-bottom: 10px;
             `}
           />
-          <Typography color="secondary">{registerString}</Typography>
+          <Typography color="secondary">
+            {
+              ({
+                INPROGRESS: 'Registering...',
+                FINISHED: 'Registered!',
+                NONE: '',
+              } as { [k in RegisterState]: string })[registerState]
+            }
+          </Typography>
         </div>
       )}
       <div
         css={css`
-          opacity: ${!!registerString ? 0.3 : 1};
-          pointer-events: ${!!registerString ? 'none' : 'auto'};
+          opacity: ${registerState !== 'NONE' ? 0.3 : 1};
+          pointer-events: ${registerState !== 'NONE' ? 'none' : 'auto'};
         `}
       >
         <Container
@@ -253,23 +248,23 @@ export default function ProgramIDRegistration() {
             shortName={programShortName as string}
             registrationId={get(clinicalRegistration, 'id')}
             setRegisterState={setRegisterState}
-            onUpload={onUpload}
           />
         </Container>
 
-        {errorBanner.visible ? (
-          <div
+        {fileErrors.map(({ fileNames, message }, i) => (
+          <Notification
+            key={i}
             css={css`
               margin-top: 20px;
             `}
-          >
-            <Banner
-              title={errorBanner.title}
-              variant={BANNER_VARIANTS.ERROR}
-              content={errorBanner.content}
-            />
-          </div>
-        ) : null}
+            size="SM"
+            variant="ERROR"
+            interactionType="CLOSE"
+            title={`File failed to upload: ${fileNames.join(', ')}`}
+            content={message}
+            onInteraction={onErrorClose(i)}
+          />
+        ))}
 
         <Container
           css={css`
@@ -304,11 +299,11 @@ export default function ProgramIDRegistration() {
                 submissionInfo={submissionInfo}
               />
             </>
-          ) : fileErrors.length > 0 ? (
+          ) : schemaOrValidationErrors.length > 0 ? (
             <ErrorNotification
               onClearClick={handleClearClick}
-              title={`${fileErrors.length} errors found in uploaded file`}
-              errors={fileErrors}
+              title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
+              errors={schemaOrValidationErrors}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }

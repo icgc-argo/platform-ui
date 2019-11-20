@@ -366,7 +366,7 @@ export default () => {
           <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
         </Container>
       )}
-      {data.clinicalSubmissions.fileErrors.map(({ fileNames, msg }, i) => (
+      {data.clinicalSubmissions.fileErrors.map(({ fileNames, message }, i) => (
         <Notification
           key={i}
           css={css`
@@ -378,7 +378,7 @@ export default () => {
           title={`${fileNames.length} of ${
             (currentFileList || []).length
           } files failed to upload: ${fileNames.join(', ')}`}
-          content={msg}
+          content={message}
           onInteraction={onErrorClose(i)}
         />
       ))}

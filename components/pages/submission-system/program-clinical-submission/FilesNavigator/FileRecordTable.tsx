@@ -13,6 +13,7 @@ import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const StarIcon = DataTableStarIcon;
 
@@ -229,7 +230,7 @@ export default ({
               : css``
           }
         >
-          {Number(original.row) + 1}
+          {toDisplayRowIndex(original.row)}
         </CellContentCenter>
       ),
       Header: '#',

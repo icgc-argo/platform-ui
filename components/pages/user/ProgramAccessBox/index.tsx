@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
 import uniq from 'lodash/uniq';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import UikitLink from 'uikit/Link';
 import { Box } from '../common';
-import Table, { DefaultLoadingComponent } from 'uikit/Table';
+import Table from 'uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
 import {
   isDccMember,
@@ -15,7 +14,6 @@ import {
   canWriteProgramData,
   canReadProgramData,
 } from 'global/utils/egoJwt';
-import Icon from 'uikit/Icon';
 import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
 import Link from 'next/link';
 import {
@@ -23,6 +21,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
+import Icon from 'uikit/Icon';
 
 type T_ProgramTableProgram = {
   shortName: string;
@@ -119,10 +118,15 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
   }
 };
 
-export default function ProgramAccessBox() {
+const ProgramAccessBox = ({
+  isDacoApproved,
+  loading,
+}: {
+  isDacoApproved: boolean;
+  loading: boolean;
+}) => {
   const { token } = useAuthContext();
   const programs = getProgramTableProgramFromEgoJwt(token || '');
-  const tableParentProps = React.createRef<HTMLDivElement>();
 
   return (
     <Box title="Program Access" iconName="programs">
@@ -131,7 +135,11 @@ export default function ProgramAccessBox() {
           margin-top: 14px;
         `}
       >
-        <DacoAccessStatusDisplay approved={true} />
+        {loading ? (
+          <Icon name="spinner" height="13px" />
+        ) : (
+          <DacoAccessStatusDisplay approved={isDacoApproved} />
+        )}
       </div>
       <div>
         <Typography variant="subtitle2" color="secondary">
@@ -155,4 +163,6 @@ export default function ProgramAccessBox() {
       </div>
     </Box>
   );
-}
+};
+
+export default ProgramAccessBox;

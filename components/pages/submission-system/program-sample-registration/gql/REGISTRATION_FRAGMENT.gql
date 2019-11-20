@@ -21,6 +21,11 @@ fragment Registration on ClinicalRegistrationData {
     donorId
     specimenId
   }
+  fileErrors {
+    message
+    fileNames
+    code
+  }
   newDonors {
     count
     rows

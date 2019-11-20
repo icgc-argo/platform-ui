@@ -25,11 +25,18 @@ export type ClinicalRegistrationData = {
   fields: ClinicalRegistrationRecord[];
 };
 
+type ClinicalFileError = {
+  message: string;
+  fileNames: string[];
+  code: string;
+};
+
 export type ClinicalRegistration = {
   alreadyRegistered: ClinicalRegistrationStats;
   createdAt: string;
   creator: string;
   errors: ClinicalRegistrationError[];
+  fileErrors: ClinicalFileError[];
   records: ClinicalRegistrationData[];
   fileName: string;
   id: string;
@@ -39,4 +46,4 @@ export type ClinicalRegistration = {
   programShortName: string;
 };
 
-export type RegisterState = 'INPROGRESS' | 'FINISHED' | '';
+export type RegisterState = 'INPROGRESS' | 'FINISHED' | 'NONE';
