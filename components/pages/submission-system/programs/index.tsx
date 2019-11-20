@@ -60,13 +60,13 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   const handleProgramUsersClick = ({ program }) => {
     router.push({
       pathname: PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, program.shortName),
-      query: { tab: 'users' },
+      query: { activeTab: 'users' },
     });
   };
   const handleProgramProfileClick = ({ program }) => {
     router.push({
       pathname: PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, program.shortName),
-      query: { tab: 'profile' },
+      query: { activeTab: 'profile' },
     });
   };
   return (
