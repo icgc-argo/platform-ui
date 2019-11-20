@@ -130,37 +130,48 @@ const ProgramAccessBox = ({
 
   return (
     <Box title="Program Access" iconName="programs">
-      <div
-        css={css`
-          margin-top: 14px;
-        `}
-      >
-        {loading ? (
+      {loading ? (
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          `}
+        >
           <Icon name="spinner" height="13px" />
-        ) : (
-          <DacoAccessStatusDisplay approved={isDacoApproved} />
-        )}
-      </div>
-      <div>
-        <Typography variant="subtitle2" color="secondary">
-          My Memberships
-        </Typography>
-      </div>
-      <div>
-        {programs.length > 0 ? (
-          <ProgramTable programs={programs} />
-        ) : (
+        </div>
+      ) : (
+        <div>
           <div
             css={css`
-              margin-top: 10px;
+              margin-top: 14px;
             `}
           >
-            <Typography variant="label" component="div">
-              No program memberships. You are not submitting data to any programs.
+            <DacoAccessStatusDisplay approved={isDacoApproved} />
+          </div>
+          <div>
+            <Typography variant="subtitle2" color="secondary">
+              My Memberships
             </Typography>
           </div>
-        )}
-      </div>
+          <div>
+            {programs.length > 0 ? (
+              <ProgramTable programs={programs} />
+            ) : (
+              <div
+                css={css`
+                  margin-top: 10px;
+                `}
+              >
+                <Typography variant="label" component="div">
+                  No program memberships. You are not submitting data to any programs.
+                </Typography>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </Box>
   );
 };
