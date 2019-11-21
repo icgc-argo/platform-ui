@@ -1,20 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./uikit/dist",
-    "sourceMap": true,
+    "sourceMap": false,
     "noEmit": false,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react",
-    "declaration": true
-  },
-  "include": ["./uikit/**/*"],
-  "exclude": [
-    "**/testSetup.*",
-    "**/*.test.*",
-    "**/testUtil.*",
-    "**/plopfile.js",
-    "**/*.stories.*",
-    "**/stories.*"
-  ]
+    "jsx": "preserve",
+    "declaration": true,
+    "allowJs": false,
+    "isolatedModules": false
+  }
 }

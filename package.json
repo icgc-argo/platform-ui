@@ -17,10 +17,13 @@
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
     "build-uikit": "rm -rf ./uikit/dist && tsc -p ./tsconfig.uikit.json && cp ./uikit/package.release.json ./uikit/dist/package.json && cp ./uikit/readme.md ./uikit/dist/readme.md",
-    "publish-uikit": "cd uikit/dist && npm publish --access public"
+    "publish-uikit": "cd uikit/dist && npm publish --access public",
+    "webpack": "webpack"
   },
   "bin": {
-    "tsc": "./node_modules/.bin/tsc"
+    "tsc": "./node_modules/.bin/tsc",
+    "bable": "./node_modules/@babel/cli/bin/babel.js",
+    "webpack": "./node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.0",
@@ -87,8 +90,9 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.0",
     "@babel/core": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.7.0",
     "@babel/preset-typescript": "^7.6.0",
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-info": "^5.1.9",
@@ -98,6 +102,7 @@
     "@storybook/addon-viewport": "^5.1.9",
     "@storybook/addons": "^5.1.9",
     "@storybook/react": "^5.1.9",
+    "@types/node": "^12.12.11",
     "@types/react": "^16.9.2",
     "babel-loader": "^8.0.5",
     "babel-preset-env": "^1.7.0",
@@ -108,6 +113,7 @@
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.0.1",
     "gitmoji-cli": "^1.9.4",
+    "glob": "^7.1.6",
     "graphql-tools": "^4.0.4",
     "husky": "^2.2.0",
     "inquirer": "^6.3.1",
@@ -120,9 +126,12 @@
     "react-docgen-typescript-loader": "^3.2.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.3",
+    "ts-loader": "^6.2.1",
     "ts-mocha": "^6.0.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typescript": "^3.6.3",
+    "webpack-cli": "^3.3.10"
   },
   "prettier": {
     "printWidth": 100,
