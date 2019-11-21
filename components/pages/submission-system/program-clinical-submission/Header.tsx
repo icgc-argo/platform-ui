@@ -146,7 +146,7 @@ export default ({
         variant: 'SUCCESS',
         interactionType: 'CLOSE',
         title: 'Submission cleared',
-        content: `All recently uploaded clinical files have been cleared.`,
+        content: `All uploaded clinical files have been cleared.`,
       });
     } catch (err) {
       await refetchClinicalSubmission();
