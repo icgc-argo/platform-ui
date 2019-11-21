@@ -5,8 +5,16 @@
     "sourceMap": true,
     "noEmit": false,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react"
+    "jsx": "react",
+    "declaration": true
   },
   "include": ["./uikit/**/*"],
-  "exclude": ["**/testSetup.*", "**/*.test.*", "**/testUtil.*", "**/plopfile.js"]
+  "exclude": [
+    "**/testSetup.*",
+    "**/*.test.*",
+    "**/testUtil.*",
+    "**/plopfile.js",
+    "**/*.stories.*",
+    "**/stories.*"
+  ]
 }
