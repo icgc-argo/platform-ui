@@ -282,7 +282,15 @@ export default () => {
             submissionVersion: data.clinicalSubmissions.version,
           },
         });
+
         if (newData.clinicalSubmissions.state === null) {
+          toaster.addToast({
+            variant: 'SUCCESS',
+            interactionType: 'CLOSE',
+            title: 'Successful Clinical Submission!',
+            content: 'Your clinical data has been submitted.',
+          });
+
           router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
         } else {
           setPageLoaderShown(false);
@@ -308,17 +316,7 @@ export default () => {
           <SignOffValidationModal
             hasUpdate={hasUpdate}
             clinicalSubmissions={data.clinicalSubmissions}
-            onActionClick={() => {
-              onSignOffApproved();
-              if (!hasUpdate) {
-                toaster.addToast({
-                  variant: 'SUCCESS',
-                  interactionType: 'CLOSE',
-                  title: 'Successful Clinical Submission!',
-                  content: 'Your clinical data has been submitted.',
-                });
-              }
-            }}
+            onActionClick={onSignOffApproved}
             onCloseClick={onSignOffCanceled}
             onCancelClick={onSignOffCanceled}
           />
