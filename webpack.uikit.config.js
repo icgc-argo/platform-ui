@@ -21,14 +21,14 @@ module.exports = async () => {
   const entries = allFiles.reduce(
     (acc, filePath) => ({
       ...acc,
-      [filePath.replace(sourceDir, '')]: filePath,
+      [filePath.replace(sourceDir, '').replace('.jsx', '')]: filePath,
     }),
     {},
   );
   return {
     entry: entries,
     output: {
-      path: outPath,
+      path: sourceDir,
     },
     context: sourceDir,
     resolve: {
@@ -41,7 +41,14 @@ module.exports = async () => {
       rules: [
         {
           test: /\.(png|svg|jpg|gif)$/,
-          use: ['file-loader'],
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'assets',
+              },
+            },
+          ],
         },
         {
           test: /\.jsx?$/,
