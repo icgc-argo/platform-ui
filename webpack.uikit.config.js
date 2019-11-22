@@ -1,10 +1,14 @@
 const path = require('path');
 const glob = require('glob');
+const baseTsConfig = require('./tsconfig.json');
 
-const sourceDir = path.resolve(__dirname, './uikit/dist/');
-const sourceFilesPath = path.resolve(sourceDir, './**/*.jsx');
+const SOURCE_EXTENSION = 'tsx';
+const sourceDir = path.resolve(__dirname, './uikit');
+const sourceFilesPath = path.resolve(sourceDir, `./**/*.${SOURCE_EXTENSION}`);
 const outPath = path.resolve(sourceDir, './dist');
-const tsconfigPath = path.resolve(__dirname, './tsconfig.uikit.json');
+const tsConfigPath = path.resolve(__dirname, 'tsconfig.uikit.json');
+const nodeModulesPath = path.resolve(__dirname, 'node_modules');
+const EXCLUDE_REGEX = /.*(testSetup|testUtil|plopfile|stories)\..*$/;
 
 const getFiles = () =>
   new Promise((resolve, reject) =>
@@ -18,29 +22,32 @@ const getFiles = () =>
 
 module.exports = async () => {
   const allFiles = await getFiles();
-  const entries = allFiles.reduce(
-    (acc, filePath) => ({
-      ...acc,
-      [filePath.replace(sourceDir, '').replace('.jsx', '')]: filePath,
-    }),
-    {},
-  );
+  const entries = allFiles
+    .filter(file => !file.match(EXCLUDE_REGEX))
+    .reduce(
+      (acc, filePath) => ({
+        ...acc,
+        [filePath.replace(sourceDir, '').replace(`.${SOURCE_EXTENSION}`, '')]: filePath,
+      }),
+      {},
+    );
   return {
     entry: entries,
     output: {
-      path: sourceDir,
+      path: outPath,
     },
     context: sourceDir,
     resolve: {
       alias: {
         uikit: sourceDir,
       },
-      extensions: ['.js', '.jsx', '.svg'],
+      extensions: ['.ts', '.tsx', '.svg', '.md', '.js'],
+      modules: [nodeModulesPath],
     },
     module: {
       rules: [
         {
-          test: /\.(png|svg|jpg|gif)$/,
+          test: /\.(png|svg|jpg|gif|md)$/,
           use: [
             {
               loader: 'file-loader',
@@ -51,22 +58,28 @@ module.exports = async () => {
           ],
         },
         {
-          test: /\.jsx?$/,
+          test: /\.tsx?$/,
           exclude: /(node_modules|bower_components)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: [
-                '@babel/preset-react',
-                ['@emotion/babel-preset-css-prop', { autoLabel: true }],
-              ],
-              plugins: [
-                '@babel/plugin-transform-react-jsx',
-                '@babel/plugin-proposal-optional-chaining',
-                '@babel/plugin-proposal-object-rest-spread',
-              ],
+          use: [
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: tsConfigPath,
+                useBabel: true,
+                babelOptions: {
+                  babelrc: false,
+                  presets: [
+                    '@babel/preset-react',
+                    ['@emotion/babel-preset-css-prop', { autoLabel: true }],
+                  ],
+                  plugins: [
+                    '@babel/plugin-proposal-optional-chaining',
+                    '@babel/plugin-proposal-object-rest-spread',
+                  ],
+                },
+              },
             },
-          },
+          ],
         },
       ],
     },

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "module": "ES2015",
     "outDir": "./uikit/dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "noEmit": false,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
@@ -13,6 +13,7 @@
   },
   "include": ["./uikit/**/*"],
   "exclude": [
+    "node_modules",
     "**/testSetup.*",
     "**/*.test.*",
     "**/testUtil.*",
