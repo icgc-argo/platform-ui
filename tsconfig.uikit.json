@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "ES2015",
+    "module": "es6",
     "outDir": "./uikit/dist",
     "sourceMap": true,
     "noEmit": false,
@@ -9,7 +9,8 @@
     "jsx": "preserve",
     "declaration": true,
     "allowJs": false,
-    "isolatedModules": false
+    "isolatedModules": false,
+    "resolveJsonModule": false
   },
   "include": ["./uikit/**/*"],
   "exclude": [

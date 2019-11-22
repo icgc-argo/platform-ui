@@ -1,11 +1,12 @@
 {
   "name": "@icgc-argo/uikit",
-  "version": "0.0.0-alpha-3",
+  "version": "0.0.0-alpha-11",
   "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.7.2",
     "@emotion/babel-preset-css-prop": "^10.0.9",
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.11",
