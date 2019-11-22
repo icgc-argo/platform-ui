@@ -1,13 +1,14 @@
 const path = require('path');
 const glob = require('glob');
 
-const sourceDir = path.resolve(__dirname, './uikit/dist/**/*.*');
-const outPath = path.resolve(__dirname, './uikit/dist/dist');
+const sourceDir = path.resolve(__dirname, './uikit/dist/');
+const sourceFilesPath = path.resolve(sourceDir, './**/*.jsx');
+const outPath = path.resolve(sourceDir, './dist');
 const tsconfigPath = path.resolve(__dirname, './tsconfig.uikit.json');
 
 const getFiles = () =>
   new Promise((resolve, reject) =>
-    glob(sourceDir, (err, files) => {
+    glob(sourceFilesPath, (err, files) => {
       if (err) {
         reject(err);
       }
@@ -20,7 +21,7 @@ module.exports = async () => {
   const entries = allFiles.reduce(
     (acc, filePath) => ({
       ...acc,
-      [filePath]: filePath,
+      [filePath.replace(sourceDir, '')]: filePath,
     }),
     {},
   );
@@ -29,12 +30,36 @@ module.exports = async () => {
     output: {
       path: outPath,
     },
+    context: sourceDir,
+    resolve: {
+      alias: {
+        uikit: sourceDir,
+      },
+      extensions: ['.js', '.jsx', '.svg'],
+    },
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
-          loader: 'ts-loader',
-          options: { configFile: tsconfigPath },
+          test: /\.(png|svg|jpg|gif)$/,
+          use: ['file-loader'],
+        },
+        {
+          test: /\.jsx?$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-react',
+                ['@emotion/babel-preset-css-prop', { autoLabel: true }],
+              ],
+              plugins: [
+                '@babel/plugin-transform-react-jsx',
+                '@babel/plugin-proposal-optional-chaining',
+                '@babel/plugin-proposal-object-rest-spread',
+              ],
+            },
+          },
         },
       ],
     },

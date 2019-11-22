@@ -16,13 +16,15 @@
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
-    "build-uikit": "rm -rf ./uikit/dist && tsc -p ./tsconfig.uikit.json && cp ./uikit/package.release.json ./uikit/dist/package.json && cp ./uikit/readme.md ./uikit/dist/readme.md",
-    "publish-uikit": "cd uikit/dist && npm publish --access public",
-    "webpack": "webpack"
+    "build-uikit::ts": "tsc -p ./tsconfig.uikit.json",
+    "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md",
+    "build-uikit::webpack": "webpack --config ./webpack.uikit.config.js",
+    "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::assets && npm run build-uikit::webpack",
+    "publish-uikit": "cd uikit/dist && npm publish --access public"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
-    "bable": "./node_modules/@babel/cli/bin/babel.js",
+    "babel": "./node_modules/@babel/cli/bin/babel.js",
     "webpack": "./node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
@@ -92,6 +94,7 @@
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-react-jsx": "^7.7.0",
     "@babel/preset-react": "^7.7.0",
     "@babel/preset-typescript": "^7.6.0",
     "@storybook/addon-actions": "^5.1.9",
@@ -111,6 +114,7 @@
     "chalk": "^2.4.2",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
+    "file-loader": "^4.3.0",
     "file-regex": "^3.0.1",
     "gitmoji-cli": "^1.9.4",
     "glob": "^7.1.6",

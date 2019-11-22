@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "module": "ES2015",
+    "outDir": "./uikit/dist",
     "sourceMap": false,
     "noEmit": false,
     "allowSyntheticDefaultImports": true,
@@ -8,5 +10,14 @@
     "declaration": true,
     "allowJs": false,
     "isolatedModules": false
-  }
+  },
+  "include": ["./uikit/**/*"],
+  "exclude": [
+    "**/testSetup.*",
+    "**/*.test.*",
+    "**/testUtil.*",
+    "**/plopfile.js",
+    "**/*.stories.*",
+    "**/stories.*"
+  ]
 }
