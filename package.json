@@ -53,6 +53,7 @@
     "apollo-upload-client": "^11.0.0",
     "babel-plugin-graphql-tag": "^2.1.0",
     "babel-plugin-import-graphql": "^2.7.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-polyfill": "^6.26.0",
     "clsx": "^1.0.4",
     "color": "^3.1.2",
