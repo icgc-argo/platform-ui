@@ -4,6 +4,19 @@
 
 This package contains the reusable [React](https://reactjs.org/) UI components for the Icgc Argo project.
 
-- All component import paths matches storybook structure under `uikit`
+Basic setup:
+
+```javascript
+import { ThemeProvider } from '@icgc-argo/uikit';
+
+const App = () => (
+  <ThemeProvider>
+    <YourAwesomeApp />
+  </ThemeProvider>
+);
+```
+
+- Built with [Emotion.sh](https://emotion.sh/docs/introduction)
+- All component import paths matches [Storybook](https://argo-ui-storybook.netlify.com) structure under `uikit`
   - ex: `import Table from '@icgc-argo/uikit/table`
 - Also comes with TypeScript type definitions
