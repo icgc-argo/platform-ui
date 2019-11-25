@@ -18,7 +18,7 @@
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
     "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md",
     "build-uikit::ts": "tsc -p ./uikit/tsconfig.json",
-    "build-uikit::babel": "babel ./uikit/dist --out-dir ./uikit/dist",
+    "build-uikit::babel": "cp ./uikit/.babelrc.json ./uikit/dist/.babelrc && babel ./uikit/dist --out-dir ./uikit/dist && rm ./uikit/dist/.babelrc",
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
     "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
     "publish-uikit": "cd uikit/dist && npm publish --access public"
