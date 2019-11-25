@@ -38,11 +38,17 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://argo-ui-storybook.netlify.com)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c7a6c178-9394-4213-a420-585466232d77/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
+[![npm version](https://badge.fury.io/js/%40icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/%40icgc-argo%2Fuikit)
 
 `/uikit` contains the reusable UI components for Argo.
 
 - ### Development:
   - `npm run storybook` to run start a local storybook.
   - creating a new component: `npm run create-component`
+  - **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
+- ### Build and publish to npm:
+  1. Edit `version` under `uikit/package.release.json`
+  2. Run `npm run build-uikit` which performs the following:
+  3. Run `npm run publish-uikit` to publish latest version to npm
 - ### Restriction:
   - `uikit` components should not reference (`import`) anything outside of the `uikit` directory
