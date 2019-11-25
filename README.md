@@ -1,6 +1,8 @@
 # Argo Platform client
 
 [![Build Status](https://jenkins.qa.cancercollaboratory.org/buildStatus/icon?job=ARGO%2Fui%2Fdevelop)](https://jenkins.qa.cancercollaboratory.org/job/ARGO/job/ui/job/develop/)
+[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
+[![Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://prettier.io/)
 
 This project was bootstrapped with [Create Next App](https://github.com/segmentio/create-next-app).
 
@@ -36,9 +38,10 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 
 ## Uikit
 
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://argo-ui-storybook.netlify.com)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c7a6c178-9394-4213-a420-585466232d77/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
+[![Storybook](./uikit/assets/storybook.svg)](https://argo-ui-storybook.netlify.com)
 [![npm version](https://badge.fury.io/js/%40icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/%40icgc-argo%2Fuikit)
+[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 `/uikit` contains the reusable UI components for Argo.
 
