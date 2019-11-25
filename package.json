@@ -17,9 +17,10 @@
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
     "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md",
-    "build-uikit::ts": "rm -rf ./uikit/dist && tsc -p ./tsconfig.uikit.json && babel ./uikit/dist --out-dir ./uikit/dist",
+    "build-uikit::ts": "rm -rf ./uikit/dist && tsc -p ./tsconfig.uikit.json",
+    "build-uikit::babel": "babel ./uikit/dist --out-dir ./uikit/dist",
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
-    "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::assets && npm run build-uikit::cleanup",
+    "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
     "publish-uikit": "cd uikit/dist && npm publish --access public"
   },
   "bin": {
