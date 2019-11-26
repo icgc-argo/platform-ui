@@ -15,10 +15,9 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 
-import useAuthContext from 'global/hooks/useAuthContext';
-
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
+import DnaLoader from 'uikit/DnaLoader';
 
 /**
  * The global portal where modals will show up
@@ -50,6 +49,37 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
         ref,
       )
     : null;
+};
+
+const GlobalLoadingContext = React.createContext({
+  isLoading: false,
+  setLoading: (isLoading: boolean) => {},
+});
+export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
+const GlobalLoaderProvider = ({ children }) => {
+  const [isLoading, setLoading] = React.useState(false);
+  return (
+    <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
+      {children}
+      {isLoading && (
+        <div
+          className="yo"
+          css={css`
+            transition: all 0.2s;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0px;
+            z-index: 9000;
+          `}
+        >
+          <Modal.Overlay>
+            <DnaLoader />
+          </Modal.Overlay>
+        </div>
+      )}
+    </GlobalLoadingContext.Provider>
+  );
 };
 
 const ToastProvider = ({ children }) => {
@@ -173,7 +203,9 @@ export default function ApplicationRoot({
                   `}
                   ref={modalPortalRef}
                 />
-                <PersistentStateProvider>{children}</PersistentStateProvider>
+                <PersistentStateProvider>
+                  <GlobalLoaderProvider>{children}</GlobalLoaderProvider>
+                </PersistentStateProvider>
               </ToastProvider>
             </ThemeProvider>
           </PageContext.Provider>
