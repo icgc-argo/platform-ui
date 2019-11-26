@@ -7,9 +7,7 @@ import Icon from 'uikit/Icon';
 import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
-import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { RegisterState } from '../types';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
@@ -49,12 +47,10 @@ function Instructions({
     setShowRegisterSamplesModal(false);
   };
 
-  const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
+  const [uploadFile] = useMutation(UPLOAD_REGISTRATION);
 
   const handleUpload = async file => {
-    const {
-      data: { uploadClinicalRegistration },
-    } = await uploadFile({
+    await uploadFile({
       variables: { shortName, registrationFile: file },
     });
   };
