@@ -1,11 +1,10 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { ModalPortal } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
-import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
@@ -40,12 +39,15 @@ export default function RegisterSamplesModal({
     ],
   });
 
+  const { setLoading: setGlobalLoadingState } = useGlobalLoadingState();
+
   const toaster = useToaster();
 
   const handleActionClick = async () => {
     handleCancelClick();
 
     setRegisterState('INPROGRESS');
+    setGlobalLoadingState(true);
     await sleep();
 
     commitRegistration()
@@ -67,6 +69,7 @@ export default function RegisterSamplesModal({
             <>If you have any changes to this registered sample data, please contact the DCC.</>
           ),
         });
+        setGlobalLoadingState(false);
       })
       .catch(error => {
         toaster.addToast({
