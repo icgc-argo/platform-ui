@@ -47,13 +47,12 @@ function Instructions({
     setShowRegisterSamplesModal(false);
   };
 
-  const [uploadFile] = useMutation(UPLOAD_REGISTRATION);
+  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION);
 
-  const handleUpload = async file => {
-    await uploadFile({
+  const handleUpload = file =>
+    uploadFile({
       variables: { shortName, registrationFile: file },
     });
-  };
 
   return (
     <>
@@ -89,11 +88,13 @@ function Instructions({
               2. Upload your formatted registration TSV file.
             </Typography>
             <FileSelectButton
+              isAsync
+              isLoading={isUploading}
               css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
-              onFilesSelect={files => {
-                if (files[0]) handleUpload(files[0]);
+              onFilesSelect={async files => {
+                if (files[0]) await handleUpload(files[0]);
               }}
             >
               <span css={instructionBoxButtonContentStyle}>
