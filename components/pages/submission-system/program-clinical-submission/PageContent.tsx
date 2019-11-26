@@ -24,7 +24,7 @@ import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
-import { ModalPortal } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
@@ -84,7 +84,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const [pageLoaderShown, setPageLoaderShown] = React.useState<boolean>(false);
+  const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
   const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const {
@@ -320,11 +320,6 @@ export default () => {
             onCloseClick={onSignOffCanceled}
             onCancelClick={onSignOffCanceled}
           />
-        </ModalPortal>
-      )}
-      {pageLoaderShown && (
-        <ModalPortal>
-          <DnaLoader />
         </ModalPortal>
       )}
       {!isPendingApproval && !loadingClinicalSubmission && (

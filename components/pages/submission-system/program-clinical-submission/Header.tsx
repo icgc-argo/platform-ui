@@ -13,7 +13,7 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { ModalPortal } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep } from 'global/utils/common';
@@ -43,7 +43,7 @@ export default ({
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
-  const [isLoaderShown, setLoaderShown] = React.useState(false);
+  const { setLoading: setLoaderShown } = useGlobalLoadingState();
   const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const commonToaster = useCommonToasters();
   const router = useRouter();
@@ -100,8 +100,9 @@ export default ({
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
+      } finally {
+        setLoaderShown(false);
       }
-      setLoaderShown(false);
     }
   };
 
@@ -132,6 +133,7 @@ export default ({
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
+      } finally {
         setLoaderShown(false);
       }
     }
@@ -151,8 +153,9 @@ export default ({
     } catch (err) {
       await refetchClinicalSubmission();
       commonToaster.unknownErrorWithReloadMessage();
+    } finally {
+      setLoaderShown(false);
     }
-    setLoaderShown(false);
   };
 
   return (
@@ -160,11 +163,6 @@ export default ({
       {isModalShown && (
         <ModalPortal>
           <Modal {...modalProps} />
-        </ModalPortal>
-      )}
-      {isLoaderShown && (
-        <ModalPortal>
-          <DnaLoader />
         </ModalPortal>
       )}
       <div
