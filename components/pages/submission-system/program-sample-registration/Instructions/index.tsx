@@ -24,12 +24,10 @@ function Instructions({
   registrationEnabled,
   shortName,
   registrationId,
-  setRegisterState,
 }: {
   registrationEnabled: boolean;
   shortName: string;
   registrationId: string;
-  setRegisterState: (state: RegisterState) => void;
 }) {
   const footerContentStyle = css`
     text-align: center;
@@ -145,7 +143,6 @@ function Instructions({
           onCancelClick={handleRegisterCancelClick}
           shortName={shortName}
           registrationId={registrationId}
-          setRegisterState={setRegisterState}
         />
       )}
     </>

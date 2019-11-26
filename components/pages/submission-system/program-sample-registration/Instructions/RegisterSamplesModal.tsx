@@ -18,12 +18,10 @@ export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
   shortName,
   registrationId,
-  setRegisterState,
 }: {
   onCancelClick: () => void;
   shortName: string;
   registrationId: string;
-  setRegisterState: (state: RegisterState) => void;
 }) {
   const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
     variables: {
@@ -46,13 +44,11 @@ export default function RegisterSamplesModal({
   const handleActionClick = async () => {
     handleCancelClick();
 
-    setRegisterState('INPROGRESS');
     setGlobalLoadingState(true);
     await sleep();
 
     commitRegistration()
       .then(async ({ data, errors }) => {
-        setRegisterState('FINISHED');
         await sleep();
 
         const num = get(data, 'commitClinicalRegistration.length', 0);
@@ -78,7 +74,6 @@ export default function RegisterSamplesModal({
           variant: TOAST_VARIANTS.ERROR,
           content: error.toString(),
         });
-        setRegisterState('NONE');
       });
   };
 
