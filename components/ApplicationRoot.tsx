@@ -63,7 +63,6 @@ const GlobalLoaderProvider = ({ children }) => {
       {children}
       {isLoading && (
         <div
-          className="yo"
           css={css`
             transition: all 0.2s;
             height: 100vh;
