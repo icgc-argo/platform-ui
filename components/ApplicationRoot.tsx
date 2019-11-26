@@ -20,6 +20,9 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
 
+/**
+ * The global portal where modals will show up
+ */
 const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -49,42 +52,29 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
     : null;
 };
 
-const ToastDisplayArea = ({ toaster }: { toaster: ReturnType<typeof useToastState> }) => (
-  <div
-    className="toastStackContainer"
-    css={css`
-      position: fixed;
-      z-index: 9999;
-      right: 0px;
-      top: 80px;
-    `}
-  >
-    <div
-      css={css`
-        margin-right: 20px;
-        margin-left: 20px;
-      `}
-    >
-      <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
-    </div>
-  </div>
-);
-
 const ToastProvider = ({ children }) => {
   const toaster = useToastState();
   return (
     <ToasterContext.Provider value={toaster}>
       {children}
       <div
+        className="toastStackContainer"
         css={css`
           position: fixed;
-          left: 0px;
-          top: 0px;
           z-index: 9999;
+          right: 0px;
+          top: 80px;
         `}
-        ref={modalPortalRef}
-      />
-      <ToastDisplayArea toaster={toaster} />
+      >
+        <div
+          css={css`
+            margin-right: 20px;
+            margin-left: 20px;
+          `}
+        >
+          <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
+        </div>
+      </div>
     </ToasterContext.Provider>
   );
 };
@@ -174,6 +164,15 @@ export default function ApplicationRoot({
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
+                <div
+                  css={css`
+                    position: fixed;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 9999;
+                  `}
+                  ref={modalPortalRef}
+                />
                 <PersistentStateProvider>{children}</PersistentStateProvider>
               </ToastProvider>
             </ThemeProvider>
