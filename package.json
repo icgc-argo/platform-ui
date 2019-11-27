@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -15,10 +15,17 @@
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
-    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts"
+    "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
+    "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md",
+    "build-uikit::ts": "tsc -p ./uikit/tsconfig.json",
+    "build-uikit::babel": "cp ./uikit/.babelrc.json ./uikit/dist/.babelrc && babel ./uikit/dist --out-dir ./uikit/dist && rm ./uikit/dist/.babelrc",
+    "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
+    "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
+    "publish-uikit": "cd uikit/dist && npm publish --access public"
   },
   "bin": {
-    "tsc": "./node_modules/.bin/tsc"
+    "tsc": "./node_modules/.bin/tsc",
+    "babel": "./node_modules/@babel/cli/bin/babel.js"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.0",
@@ -47,6 +54,7 @@
     "apollo-upload-client": "^11.0.0",
     "babel-plugin-graphql-tag": "^2.1.0",
     "babel-plugin-import-graphql": "^2.7.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-polyfill": "^6.26.0",
     "clsx": "^1.0.4",
     "color": "^3.1.2",
@@ -68,7 +76,7 @@
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.0",
-    "npm": "^6.12.1",
+    "npm": "^6.13.1",
     "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -85,8 +93,9 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.0",
     "@babel/core": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.7.0",
     "@babel/preset-typescript": "^7.6.0",
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-info": "^5.1.9",

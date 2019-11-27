@@ -114,11 +114,14 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
             )}
             {userModel && (
               <MenuItem
+                active={path.search(USER_PAGE_PATH) === 0}
                 ref={React.createRef()}
                 dropdownMenu={
                   <DropdownMenu>
                     <Link href={USER_PAGE_PATH}>
-                      <DropdownMenuItem>Profile & Token</DropdownMenuItem>
+                      <DropdownMenuItem active={path.search(USER_PAGE_PATH) === 0}>
+                        Profile & Token
+                      </DropdownMenuItem>
                     </Link>
                     <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
                   </DropdownMenu>

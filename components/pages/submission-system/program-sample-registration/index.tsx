@@ -22,7 +22,7 @@ import { FileEntry } from './FileTable';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
-import { RegisterState, ClinicalRegistrationData, ClinicalRegistration } from './types';
+import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 
 const recordsToFileTable = (
@@ -74,8 +74,6 @@ export default function ProgramIDRegistration() {
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
-  const [registerState, setRegisterState] = React.useState<RegisterState>('NONE');
-
   const toaster = useToaster();
 
   const handleClearClick = async () => {
@@ -108,10 +106,7 @@ export default function ProgramIDRegistration() {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
     } else if (schemaOrValidationErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    } else if (registerState === 'FINISHED') {
-      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.SUCCESS]);
     }
-
     return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
   }, [clinicalRegistration, schemaOrValidationErrors]);
 
@@ -201,120 +196,82 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      {registerState !== 'NONE' && (
-        <div
-          css={css`
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%);
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-          `}
-        >
-          <DnaLoader
-            css={css`
-              margin-bottom: 10px;
-            `}
-          />
-          <Typography color="secondary">
-            {
-              ({
-                INPROGRESS: 'Registering...',
-                FINISHED: 'Registered!',
-                NONE: '',
-              } as { [k in RegisterState]: string })[registerState]
-            }
-          </Typography>
-        </div>
-      )}
-      <div
+      <Container
         css={css`
-          opacity: ${registerState !== 'NONE' ? 0.3 : 1};
-          pointer-events: ${registerState !== 'NONE' ? 'none' : 'auto'};
+          ${containerStyle}
+          padding-bottom: 0px;
         `}
       >
-        <Container
-          css={css`
-            ${containerStyle}
-            padding-bottom: 0px;
-          `}
-        >
-          <Instructions
-            registrationEnabled={!!get(clinicalRegistration, 'id')}
-            shortName={programShortName as string}
-            registrationId={get(clinicalRegistration, 'id')}
-            setRegisterState={setRegisterState}
-          />
-        </Container>
+        <Instructions
+          registrationEnabled={!!get(clinicalRegistration, 'id')}
+          shortName={programShortName as string}
+          registrationId={get(clinicalRegistration, 'id')}
+        />
+      </Container>
 
-        {fileErrors.map(({ fileNames, message }, i) => (
-          <Notification
-            key={i}
-            css={css`
-              margin-top: 20px;
-            `}
-            size="SM"
-            variant="ERROR"
-            interactionType="CLOSE"
-            title={`File failed to upload: ${fileNames.join(', ')}`}
-            content={message}
-            onInteraction={onErrorClose(i)}
-          />
-        ))}
-
-        <Container
+      {fileErrors.map(({ fileNames, message }, i) => (
+        <Notification
+          key={i}
           css={css`
-            ${containerStyle}
-            min-height: calc(100vh - 390px);
+            margin-top: 20px;
           `}
-        >
-          {fileRecords.length > 0 ? (
-            <>
-              <div css={cardHeaderContainerStyle}>
-                <Typography
-                  css={css`
-                    margin: 0;
-                  `}
-                  color="primary"
-                  variant="subtitle2"
-                  component="h2"
-                >
-                  File Preview
-                </Typography>
-                <Button
-                  variant={BUTTON_VARIANTS.TEXT}
-                  size={BUTTON_SIZES.SM}
-                  onClick={handleClearClick}
-                >
-                  <Typography variant="data">Clear</Typography>
-                </Button>
-              </div>
-              <FileTable
-                records={recordsToFileTable(fileRecords, newRows)}
-                stats={stats}
-                submissionInfo={submissionInfo}
-              />
-            </>
-          ) : schemaOrValidationErrors.length > 0 ? (
-            <ErrorNotification
-              onClearClick={handleClearClick}
-              title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
-              errors={schemaOrValidationErrors}
-              subtitle={
-                'Your file cannot be processed. Please correct the following errors and reupload your file.'
-              }
-              columnConfig={defaultColumns}
-              tsvExcludeCols={['type', 'specimenId', 'sampleId']}
+          size="SM"
+          variant="ERROR"
+          interactionType="CLOSE"
+          title={`File failed to upload: ${fileNames.join(', ')}`}
+          content={message}
+          onInteraction={onErrorClose(i)}
+        />
+      ))}
+
+      <Container
+        css={css`
+          ${containerStyle}
+          min-height: calc(100vh - 390px);
+        `}
+      >
+        {fileRecords.length > 0 ? (
+          <>
+            <div css={cardHeaderContainerStyle}>
+              <Typography
+                css={css`
+                  margin: 0;
+                `}
+                color="primary"
+                variant="subtitle2"
+                component="h2"
+              >
+                File Preview
+              </Typography>
+              <Button
+                variant={BUTTON_VARIANTS.TEXT}
+                size={BUTTON_SIZES.SM}
+                onClick={handleClearClick}
+              >
+                <Typography variant="data">Clear</Typography>
+              </Button>
+            </div>
+            <FileTable
+              records={recordsToFileTable(fileRecords, newRows)}
+              stats={stats}
+              submissionInfo={submissionInfo}
             />
-          ) : (
-            <NoDataMessage loading={loading} />
-          )}
-        </Container>
-      </div>
+          </>
+        ) : schemaOrValidationErrors.length > 0 ? (
+          <ErrorNotification
+            onClearClick={handleClearClick}
+            title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
+            errors={schemaOrValidationErrors}
+            subtitle={
+              'Your file cannot be processed. Please correct the following errors and reupload your file.'
+            }
+            columnConfig={defaultColumns}
+            tsvExcludeCols={['type', 'specimenId', 'sampleId']}
+          />
+        ) : (
+          <NoDataMessage loading={loading} />
+        )}
+      </Container>
     </SubmissionLayout>
   );
 }

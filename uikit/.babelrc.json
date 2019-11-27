@@ -1,0 +1,31 @@
+{
+  "presets": [
+    [
+      "next/babel",
+      {
+        "transform-runtime": {
+          "useESModules": false
+        }
+      }
+    ],
+    [
+      "@emotion/babel-preset-css-prop",
+      {
+        "autoLabel": true
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-object-rest-spread",
+    [
+      "module-resolver",
+      {
+        "root": ["./uikit/dist"],
+        "alias": {
+          "uikit": "./uikit/dist"
+        }
+      }
+    ]
+  ]
+}

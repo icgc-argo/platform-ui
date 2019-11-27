@@ -7,9 +7,7 @@ import Icon from 'uikit/Icon';
 import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
-import urlJoin from 'url-join';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { RegisterState } from '../types';
 import { useMutation } from '@apollo/react-hooks';
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
@@ -24,12 +22,10 @@ function Instructions({
   registrationEnabled,
   shortName,
   registrationId,
-  setRegisterState,
 }: {
   registrationEnabled: boolean;
   shortName: string;
   registrationId: string;
-  setRegisterState: (state: RegisterState) => void;
 }) {
   const footerContentStyle = css`
     text-align: center;
@@ -51,15 +47,12 @@ function Instructions({
     setShowRegisterSamplesModal(false);
   };
 
-  const [uploadFile, { loading }] = useMutation(UPLOAD_REGISTRATION);
+  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION);
 
-  const handleUpload = async file => {
-    const {
-      data: { uploadClinicalRegistration },
-    } = await uploadFile({
+  const handleUpload = file =>
+    uploadFile({
       variables: { shortName, registrationFile: file },
     });
-  };
 
   return (
     <>
@@ -95,11 +88,13 @@ function Instructions({
               2. Upload your formatted registration TSV file.
             </Typography>
             <FileSelectButton
+              isAsync
+              isLoading={isUploading}
               css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
-              onFilesSelect={files => {
-                if (files[0]) handleUpload(files[0]);
+              onFilesSelect={async files => {
+                if (files[0]) await handleUpload(files[0]);
               }}
             >
               <span css={instructionBoxButtonContentStyle}>
@@ -145,7 +140,6 @@ function Instructions({
           onCancelClick={handleRegisterCancelClick}
           shortName={shortName}
           registrationId={registrationId}
-          setRegisterState={setRegisterState}
         />
       )}
     </>

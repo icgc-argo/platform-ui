@@ -1,6 +1,8 @@
 # Argo Platform client
 
 [![Build Status](https://jenkins.qa.cancercollaboratory.org/buildStatus/icon?job=ARGO%2Fui%2Fdevelop)](https://jenkins.qa.cancercollaboratory.org/job/ARGO/job/ui/job/develop/)
+[![TypeScript](https://img.shields.io/badge/types-%20TypeScript-blue)](https://www.typescriptlang.org/)
+[![Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://prettier.io/)
 
 This project was bootstrapped with [Create Next App](https://github.com/segmentio/create-next-app).
 
@@ -36,13 +38,20 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 
 ## Uikit
 
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://argo-ui-storybook.netlify.com)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c7a6c178-9394-4213-a420-585466232d77/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
+[![Storybook](https://img.shields.io/badge/React-Storybook-ff69b4)](https://argo-ui-storybook.netlify.com)
+[![npm version](https://badge.fury.io/js/%40icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/%40icgc-argo%2Fuikit)
+[![TypeScript](https://img.shields.io/badge/types-%20TypeScript-blue)](https://www.typescriptlang.org/)
 
 `/uikit` contains the reusable UI components for Argo.
 
 - ### Development:
   - `npm run storybook` to run start a local storybook.
   - creating a new component: `npm run create-component`
+  - **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
+- ### Build and publish to npm:
+  1. Edit `version` under `uikit/package.release.json`
+  2. Run `npm run build-uikit` which performs the following:
+  3. Run `npm run publish-uikit` to publish latest version to npm
 - ### Restriction:
   - `uikit` components should not reference (`import`) anything outside of the `uikit` directory

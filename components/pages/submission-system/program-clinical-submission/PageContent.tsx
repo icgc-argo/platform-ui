@@ -24,7 +24,7 @@ import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
-import { ModalPortal } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
@@ -84,7 +84,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const [pageLoaderShown, setPageLoaderShown] = React.useState<boolean>(false);
+  const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
   const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const {
@@ -282,7 +282,15 @@ export default () => {
             submissionVersion: data.clinicalSubmissions.version,
           },
         });
+
         if (newData.clinicalSubmissions.state === null) {
+          toaster.addToast({
+            variant: 'SUCCESS',
+            interactionType: 'CLOSE',
+            title: 'Successful Clinical Submission!',
+            content: 'Your clinical data has been submitted.',
+          });
+
           router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
         } else {
           setPageLoaderShown(false);
@@ -312,11 +320,6 @@ export default () => {
             onCloseClick={onSignOffCanceled}
             onCancelClick={onSignOffCanceled}
           />
-        </ModalPortal>
-      )}
-      {pageLoaderShown && (
-        <ModalPortal>
-          <DnaLoader />
         </ModalPortal>
       )}
       {!isPendingApproval && !loadingClinicalSubmission && (
@@ -389,9 +392,8 @@ export default () => {
           `}
         >
           <ErrorNotification
-            onClearClick={handleDataErrorClearance}
             title={`${allDataErrors.length} errors found in submission workspace`}
-            subtitle="Your submission cannot yet be signed off and sent to DCC. Please correct the following errors and reupload the corresponding files."
+            subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
             columnConfig={[
               {
