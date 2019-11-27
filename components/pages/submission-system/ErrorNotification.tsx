@@ -53,7 +53,7 @@ export default <Error extends { [k: string]: any }>({
     }
   >;
   errors: Array<Error>;
-  onClearClick: React.ComponentProps<typeof Button>['onClick'];
+  onClearClick?: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
 }) => {
   const onDownloadClick = () => {
@@ -99,9 +99,11 @@ export default <Error extends { [k: string]: any }>({
                 Error Report
               </span>
             </Button>
-            <Button isAsync variant="text" size="sm" onClick={onClearClick}>
-              Clear
-            </Button>
+            {onClearClick ? (
+              <Button isAsync variant="text" size="sm" onClick={onClearClick}>
+                Clear
+              </Button>
+            ) : null}
           </div>
         </div>
       }
