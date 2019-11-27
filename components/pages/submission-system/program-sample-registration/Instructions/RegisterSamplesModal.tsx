@@ -46,7 +46,7 @@ export default function RegisterSamplesModal({
     setGlobalLoadingState(true);
     await sleep();
 
-    commitRegistration()
+    await commitRegistration()
       .then(async ({ data, errors }) => {
         await sleep();
 
@@ -64,7 +64,6 @@ export default function RegisterSamplesModal({
             <>If you have any changes to this registered sample data, please contact the DCC.</>
           ),
         });
-        setGlobalLoadingState(false);
       })
       .catch(error => {
         toaster.addToast({
@@ -74,6 +73,7 @@ export default function RegisterSamplesModal({
           content: error.toString(),
         });
       });
+    setGlobalLoadingState(false);
   };
 
   return (
