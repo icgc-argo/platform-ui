@@ -1,1 +1,1 @@
-export const toDisplayRowIndex = (index: number | string) => Number(index) + 1;
+export const toDisplayRowIndex = (index: number | string) => Number(index) + 2;

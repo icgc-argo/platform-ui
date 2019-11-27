@@ -12,7 +12,7 @@ import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 export const defaultColumns = [
   {
     accessor: 'row',
-    Header: 'Row #',
+    Header: 'Line #',
     maxWidth: 70,
     Cell: ({ original }) => <>{toDisplayRowIndex(original.row)}</>,
   },
