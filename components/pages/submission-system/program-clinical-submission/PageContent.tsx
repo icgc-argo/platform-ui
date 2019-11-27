@@ -392,7 +392,6 @@ export default () => {
           `}
         >
           <ErrorNotification
-            onClearClick={handleDataErrorClearance}
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors}
