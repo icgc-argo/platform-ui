@@ -2,5 +2,8 @@
   "javascript.validate.enable": false,
   "flow.useNPMPackagedFlow": true,
   "flow.runOnAllFiles": true,
-  "flow.runOnEdit": true
+  "flow.runOnEdit": true,
+  "jenkins.pipeline.linter.connector.url": "https://jenkins.qa.cancercollaboratory.org/pipeline-model-converter/validate",
+  "jenkins.pipeline.linter.connector.user": "minh-ha",
+  "jenkins.pipeline.linter.connector.pass": "@oicr"
 }
