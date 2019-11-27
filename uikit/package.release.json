@@ -1,6 +1,6 @@
 {
   "name": "@icgc-argo/uikit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/icgc-argo/platform-ui/tree/develop/uikit"
@@ -11,10 +11,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
-    "@emotion/babel-preset-css-prop": "^10.0.9",
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.11",
-    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/lodash": "^4.14.138",
     "@types/react-table": "^6.8.5",
     "clsx": "^1.0.4",
@@ -29,7 +27,6 @@
     "react-grid-system": "^4.4.6",
     "react-table": "^6.10.0",
     "react-tippy": "^1.2.3",
-    "recompose": "^0.30.0",
-    "url-join": "^4.0.0"
+    "recompose": "^0.30.0"
   }
 }
