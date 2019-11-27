@@ -15,11 +15,13 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 
-import useAuthContext from 'global/hooks/useAuthContext';
-
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
+import DnaLoader from 'uikit/DnaLoader';
 
+/**
+ * The global portal where modals will show up
+ */
 const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -49,26 +51,35 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
     : null;
 };
 
-const ToastDisplayArea = ({ toaster }: { toaster: ReturnType<typeof useToastState> }) => (
-  <div
-    className="toastStackContainer"
-    css={css`
-      position: fixed;
-      z-index: 9999;
-      right: 0px;
-      top: 80px;
-    `}
-  >
-    <div
-      css={css`
-        margin-right: 20px;
-        margin-left: 20px;
-      `}
-    >
-      <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
-    </div>
-  </div>
-);
+const GlobalLoadingContext = React.createContext({
+  isLoading: false,
+  setLoading: (isLoading: boolean) => {},
+});
+export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
+const GlobalLoaderProvider = ({ children }) => {
+  const [isLoading, setLoading] = React.useState(false);
+  return (
+    <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
+      {children}
+      {isLoading && (
+        <div
+          css={css`
+            transition: all 0.2s;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0px;
+            z-index: 9000;
+          `}
+        >
+          <Modal.Overlay>
+            <DnaLoader />
+          </Modal.Overlay>
+        </div>
+      )}
+    </GlobalLoadingContext.Provider>
+  );
+};
 
 const ToastProvider = ({ children }) => {
   const toaster = useToastState();
@@ -76,15 +87,23 @@ const ToastProvider = ({ children }) => {
     <ToasterContext.Provider value={toaster}>
       {children}
       <div
+        className="toastStackContainer"
         css={css`
           position: fixed;
-          left: 0px;
-          top: 0px;
           z-index: 9999;
+          right: 0px;
+          top: 80px;
         `}
-        ref={modalPortalRef}
-      />
-      <ToastDisplayArea toaster={toaster} />
+      >
+        <div
+          css={css`
+            margin-right: 20px;
+            margin-left: 20px;
+          `}
+        >
+          <ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
+        </div>
+      </div>
     </ToasterContext.Provider>
   );
 };
@@ -174,7 +193,18 @@ export default function ApplicationRoot({
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
-                <PersistentStateProvider>{children}</PersistentStateProvider>
+                <div
+                  css={css`
+                    position: fixed;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 9999;
+                  `}
+                  ref={modalPortalRef}
+                />
+                <PersistentStateProvider>
+                  <GlobalLoaderProvider>{children}</GlobalLoaderProvider>
+                </PersistentStateProvider>
               </ToastProvider>
             </ThemeProvider>
           </PageContext.Provider>

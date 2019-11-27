@@ -1,16 +1,14 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { ModalPortal } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
-import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Router from 'next/router';
-import { RegisterState } from '../types';
 
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
@@ -19,12 +17,10 @@ export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
   shortName,
   registrationId,
-  setRegisterState,
 }: {
   onCancelClick: () => void;
   shortName: string;
   registrationId: string;
-  setRegisterState: (state: RegisterState) => void;
 }) {
   const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
     variables: {
@@ -40,17 +36,18 @@ export default function RegisterSamplesModal({
     ],
   });
 
+  const { setLoading: setGlobalLoadingState } = useGlobalLoadingState();
+
   const toaster = useToaster();
 
   const handleActionClick = async () => {
     handleCancelClick();
 
-    setRegisterState('INPROGRESS');
+    setGlobalLoadingState(true);
     await sleep();
 
-    commitRegistration()
+    await commitRegistration()
       .then(async ({ data, errors }) => {
-        setRegisterState('FINISHED');
         await sleep();
 
         const num = get(data, 'commitClinicalRegistration.length', 0);
@@ -75,8 +72,8 @@ export default function RegisterSamplesModal({
           variant: TOAST_VARIANTS.ERROR,
           content: error.toString(),
         });
-        setRegisterState('NONE');
       });
+    setGlobalLoadingState(false);
   };
 
   return (

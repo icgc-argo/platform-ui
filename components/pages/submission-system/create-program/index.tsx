@@ -19,11 +19,7 @@ import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
-
-const SectionTitle = styled('h3')`
-  ${({ theme }) => css(theme.typography.subtitle2)};
-  color: ${({ theme }) => theme.colors.secondary};
-`;
+import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
 /* *************************************** *
  * Reshape form data for gql input
@@ -70,7 +66,8 @@ export default () => {
       });
     },
   });
-  const [formDisabled, setFormDisabled] = React.useState(false);
+
+  const { setLoading: setFormDisabled } = useGlobalLoadingState();
 
   const onSubmit = async data => {
     try {
@@ -100,6 +97,7 @@ export default () => {
       } else {
         commonToasters.unknownError();
       }
+    } finally {
       setFormDisabled(false);
     }
   };
@@ -122,7 +120,6 @@ export default () => {
       }
     >
       <Container
-        loading={formDisabled}
         css={css`
           margin: 10px auto;
           padding: 10px 40px;

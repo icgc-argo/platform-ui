@@ -45,5 +45,3 @@ export type ClinicalRegistration = {
   newSpecimens: ClinicalRegistrationStats;
   programShortName: string;
 };
-
-export type RegisterState = 'INPROGRESS' | 'FINISHED' | 'NONE';
