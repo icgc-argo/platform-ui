@@ -99,11 +99,11 @@ export default <Error extends { [k: string]: any }>({
                 Error Report
               </span>
             </Button>
-            {onClearClick ? (
+            {!!onClearClick && (
               <Button isAsync variant="text" size="sm" onClick={onClearClick}>
                 Clear
               </Button>
-            ) : null}
+            )}
           </div>
         </div>
       }
