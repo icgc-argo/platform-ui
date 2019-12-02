@@ -273,6 +273,9 @@ export default ({
       ref={containerRef}
       css={css`
         margin: 5px 10px;
+        .updateRow + .updateRow {
+          border-top: solid 1px ${theme.colors.grey_2};
+        }
       `}
     >
       <TableInfoHeaderContainer
@@ -314,6 +317,13 @@ export default ({
                 }
               : {},
           } as { style: CSSProperties })
+        }
+        getTrGroupProps={(_, { original }: { original: typeof tableData[0] }) =>
+          isPendingApproval && rowHasUpdate(original)
+            ? {
+                className: `updateRow`, // append this classname so parent div's css can apply style
+              }
+            : {}
         }
         showPagination={false}
         columns={tableColumns}
