@@ -32,7 +32,7 @@ const Icon: React.ComponentType<
   return (
     <svg
       css={css`
-        ${svg.css};
+        ${svg.css || ''}
         height: ${height};
         width: ${width};
       `}
