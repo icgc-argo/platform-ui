@@ -90,14 +90,4 @@ function Tabs({ value, onChange, children: childrenProp }) {
   );
 }
 
-Tabs.propTypes = {
-  /* The value of the currently selected Tab.  */
-  value: PropTypes.any.isRequired,
-
-  /* Callback fired when the value changes. */
-  onChange: PropTypes.any.isRequired,
-
-  children: PropTypes.node.isRequired,
-};
-
 export default Tabs;
