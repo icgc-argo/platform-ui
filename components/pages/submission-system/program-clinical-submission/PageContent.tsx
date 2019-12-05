@@ -39,6 +39,8 @@ import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
+import { enhanceErrorWithDocument } from 'apollo-cache-inmemory';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -394,7 +396,10 @@ export default () => {
           <ErrorNotification
             title={`${allDataErrors.length} errors found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
-            errors={allDataErrors}
+            errors={allDataErrors.map(err => ({
+              ...err,
+              row: toDisplayRowIndex(err.row),
+            }))}
             columnConfig={[
               {
                 accessor: 'fileName',
