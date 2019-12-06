@@ -1,6 +1,6 @@
 {
   "name": "@icgc-argo/uikit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/icgc-argo/platform-ui/tree/develop/uikit"
@@ -14,7 +14,7 @@
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.11",
     "@types/lodash": "^4.14.138",
-    "@types/react-table": "6.10.0",
+    "@types/react-table": "6.8.5",
     "clsx": "^1.0.4",
     "color": "^3.1.2",
     "date-fns": "^1.30.1",
