@@ -71,7 +71,11 @@ const Container = styled('div')`
   display: flex;
 `;
 
-function Tabs({ value, onChange, children: childrenProp }) {
+const Tabs: React.ComponentType<{
+  value: any;
+  onChange?: (...any) => void;
+  children: React.ReactElement[];
+}> = ({ value, onChange, children: childrenProp }) => {
   const children = React.Children.map(childrenProp, child => {
     return React.cloneElement(child, {
       active: child.props.value == value,
@@ -88,6 +92,6 @@ function Tabs({ value, onChange, children: childrenProp }) {
       <Container>{children}</Container>
     </TabsContext.Provider>
   );
-}
+};
 
 export default Tabs;

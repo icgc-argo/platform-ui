@@ -84,7 +84,6 @@ export default function JoinProgramLayout({
             css={css`
               margin-bottom: 30px;
             `}
-            onChange={() => {}}
           >
             <Tab
               value="step1"
