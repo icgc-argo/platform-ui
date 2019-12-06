@@ -11,28 +11,27 @@ import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 export const defaultColumns = [
   {
-    accessor: 'row',
+    accessor: 'row' as 'row',
     Header: 'Line #',
     maxWidth: 70,
-    Cell: ({ original }) => <>{toDisplayRowIndex(original.row)}</>,
   },
   {
-    accessor: 'donorId',
+    accessor: 'donorId' as 'donorId',
     Header: 'Submitter Donor ID',
     maxWidth: 160,
   },
   {
-    accessor: 'field',
+    accessor: 'field' as 'field',
     Header: 'Field with Error',
     maxWidth: 200,
   },
   {
-    accessor: 'value',
+    accessor: 'value' as 'value',
     Header: 'Error Value',
     maxWidth: 130,
   },
   {
-    accessor: 'message',
+    accessor: 'message' as 'message',
     Header: 'Error Description',
   },
 ];

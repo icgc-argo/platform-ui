@@ -24,6 +24,7 @@ import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
+import { toDisplayError } from 'global/utils/clinicalUtils';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -261,7 +262,7 @@ export default function ProgramIDRegistration() {
           <ErrorNotification
             onClearClick={handleClearClick}
             title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
-            errors={schemaOrValidationErrors}
+            errors={schemaOrValidationErrors.map(toDisplayError)}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'
             }
