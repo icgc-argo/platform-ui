@@ -16,7 +16,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
+import { toDisplayError } from 'global/utils/clinicalUtils';
 
 export default ({
   fileStates,
@@ -148,10 +148,7 @@ export default ({
               title={`${
                 selectedFile.schemaErrors.length
               } errors found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              errors={selectedFile.schemaErrors.map(err => ({
-                ...err,
-                row: toDisplayRowIndex(err.row),
-              }))}
+              errors={selectedFile.schemaErrors.map(toDisplayError)}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
