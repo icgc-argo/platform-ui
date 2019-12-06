@@ -96,6 +96,7 @@ function Instructions({
               onFilesSelect={async files => {
                 if (files[0]) await handleUpload(files[0]);
               }}
+              id="button-register-file-select" // For Selenium
             >
               <span css={instructionBoxButtonContentStyle}>
                 <Icon
@@ -113,6 +114,7 @@ function Instructions({
               3. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
             <Button
+              id="button-register-samples-commit"
               css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.PRIMARY}
               size={BUTTON_SIZES.SM}

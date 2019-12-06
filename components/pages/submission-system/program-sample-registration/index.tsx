@@ -245,6 +245,7 @@ export default function ProgramIDRegistration() {
                 File Preview
               </Typography>
               <Button
+                id="button-register-clear-file"
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
                 onClick={handleClearClick}
