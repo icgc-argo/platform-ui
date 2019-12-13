@@ -189,13 +189,14 @@ export default () => {
   );
 
   const hasDataError = !!allDataErrors.length;
+  const hasSchemaErrorsAfterMigration = data.clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
   const hasSchemaError =
     !!data.clinicalSubmissions.clinicalEntities.length &&
     data.clinicalSubmissions.clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
   const hasSomeEntity = data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
   const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
@@ -369,6 +370,18 @@ export default () => {
           </div>
           <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
         </Container>
+      )}
+      {hasSchemaErrorsAfterMigration && (
+        <Notification
+          css={css`
+            margin-top: 20px;
+          `}
+          size="SM"
+          variant="ERROR"
+          title={`Your clinical submission is invalid`}
+          content={`Version _link here_ was released and has made your clinical submission invalid. See the details in your clinical workspace.`}
+          interactionType="NONE"
+        />
       )}
       {data.clinicalSubmissions.fileErrors.map(({ fileNames, message }, i) => (
         <Notification

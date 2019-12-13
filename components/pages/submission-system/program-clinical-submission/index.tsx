@@ -88,7 +88,8 @@ export default function ProgramClinicalSubmission() {
   const hasSomeEntity = data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+  const hasSchemaErrorsAfterMigration = data.clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
   const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
@@ -109,7 +110,11 @@ export default function ProgramClinicalSubmission() {
             isPendingApproval={isPendingApproval}
             submissionVersion={data.clinicalSubmissions.version}
             progressStates={{
-              upload: isReadyForValidation ? 'success' : hasSchemaError ? 'error' : 'disabled',
+              upload: isReadyForValidation
+                ? 'success'
+                : hasSchemaError || hasSchemaErrorsAfterMigration
+                ? 'error'
+                : 'disabled',
               validate:
                 isReadyForSignoff || isPendingApproval
                   ? 'success'
