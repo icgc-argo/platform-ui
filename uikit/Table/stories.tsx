@@ -25,6 +25,7 @@ const TableStories = storiesOf(`${__dirname}`, module)
         stripped: boolean('stripped', true),
         withResizeBlur: boolean('withResizeBlur', false),
         withRowBorder: boolean('withRowBorder', false),
+        withOutsideBorder: boolean('withOutsideBorder', false),
       };
       const containerRef = React.createRef<HTMLDivElement>();
       return (

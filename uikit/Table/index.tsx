@@ -68,6 +68,7 @@ export type TableColumnConfig<Data extends TableDataBase> = TableProps<Data>['co
 function Table<Data extends TableDataBase>({
   variant = 'DEFAULT',
   withRowBorder = variant === 'STATIC',
+  withOutsideBorder,
   stripped = variant === 'DEFAULT',
   highlight = variant === 'DEFAULT',
   showPagination = variant === 'DEFAULT',
@@ -124,6 +125,7 @@ function Table<Data extends TableDataBase>({
         width,
       }}
       withRowBorder={withRowBorder}
+      withOutsideBorder={withOutsideBorder}
       getTableProps={getTableProps}
       columns={columns}
       data={data}
