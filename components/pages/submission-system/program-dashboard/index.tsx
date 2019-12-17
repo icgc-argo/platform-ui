@@ -9,7 +9,7 @@ import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import { useQuery } from '@apollo/react-hooks';
 import { GqlClinicalSubmissionData } from '../program-clinical-submission/types';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from '../SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
-import Notification from 'uikit/notifications/Notification';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 export default function ProgramDashboard() {
   const {
@@ -17,17 +17,6 @@ export default function ProgramDashboard() {
   } = usePageContext();
 
   const [justJoined, setJustJoined] = React.useState(null);
-
-  const { data: { clinicalSubmissions = undefined } = {} } = useQuery<{
-    clinicalSubmissions: GqlClinicalSubmissionData;
-  }>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
-    variables: {
-      programShortName: programShortName,
-    },
-  });
-
-  const hasSchemaErrorsAfterMigration =
-    clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
 
   React.useEffect(() => {
     // to prevent server side rendering mismatch
@@ -69,18 +58,12 @@ export default function ProgramDashboard() {
           `}
         />
       )}
-      {hasSchemaErrorsAfterMigration && (
-        <Notification
-          css={css`
-            margin-bottom: 20px;
-          `}
-          size="SM"
-          variant="ERROR"
-          title={`Your clinical submission is invalid`}
-          content={`Version _link here_ was released and has made your clinical submission invalid. See the details in your clinical workspace.`}
-          interactionType="ACTION_DISMISS"
+      {
+        <SchemaInvalidSubmisisonNotification
+          marginBottom={20}
+          programShortName={programShortName as string}
         />
-      )}
+      }
       <ContentBox
         css={css`
           padding-top: 0px;

@@ -9,7 +9,6 @@ import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
 import { getConfig } from 'global/config';
-import Notification from 'uikit/notifications/Notification';
 
 export const containerStyle = css`
   padding: 8px;
@@ -155,17 +154,3 @@ export const downloadTsvFileTemplate = (fileName: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
   window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
 };
-
-// wip
-export const SubmisisonInvalidNotification = () => (
-  <Notification
-    css={css`
-      margin-top: 20px;
-    `}
-    size="SM"
-    variant="ERROR"
-    title={`Your clinical submission is invalid`}
-    content={`Version _link here_ was released and has made your clinical submission invalid. See the details in your clinical workspace.`}
-    interactionType="NONE"
-  />
-);
