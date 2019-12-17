@@ -14,6 +14,7 @@ import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRATION_MUTATION.gql';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE from '../SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import FileTable from './FileTable';
 import NoDataMessage from './FileTable/NoDataMessage';
 import GET_REGISTRATION from './gql/GET_REGISTRATION.gql';
@@ -23,8 +24,11 @@ import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
-import Notification from 'uikit/notifications/Notification';
+import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { GqlClinicalSubmissionData } from '../program-clinical-submission/types';
+import { useRouter } from 'next/router';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -52,6 +56,19 @@ export default function ProgramIDRegistration() {
     variables: { shortName: programShortName },
   });
 
+  const { data: { clinicalSubmissions = undefined } = {} } = useQuery<{
+    clinicalSubmissions: GqlClinicalSubmissionData;
+  }>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
+    variables: {
+      programShortName: programShortName,
+    },
+  });
+
+  const hasSchemaErrorsAfterMigration =
+    clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
+
+  const [closedMigrationMsg, setclosedMigrationMsg] = React.useState(false);
+
   const schemaOrValidationErrors = get(
     clinicalRegistration,
     'errors',
@@ -76,6 +93,7 @@ export default function ProgramIDRegistration() {
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
   const toaster = useToaster();
+  const router = useRouter();
 
   const handleClearClick = async () => {
     if (clinicalRegistration.id == null) {
@@ -197,6 +215,27 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
+      {hasSchemaErrorsAfterMigration && !closedMigrationMsg && (
+        <Notification
+          size="SM"
+          variant="ERROR"
+          title={`Your clinical submission is invalid`}
+          content={`Version _link here_ was released and has made your clinical submission invalid. See the details in your clinical workspace.`}
+          interactionType="ACTION_DISMISS"
+          onInteraction={({ type }) => {
+            if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
+              router.push(
+                PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+                  PROGRAM_SHORT_NAME_PATH,
+                  programShortName as string,
+                ),
+              );
+            } else {
+              setclosedMigrationMsg(true);
+            }
+          }}
+        />
+      )}
       <Container
         css={css`
           ${containerStyle}
