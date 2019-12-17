@@ -11,6 +11,7 @@ const TagStories = storiesOf(`${__dirname}`, module)
       Tag label&nbsp;&nbsp;
       <Icon width="8px" height="8px" name="times" fill="#fff" />
     </Tag>
-  ));
+  ))
+  .add('Tag with override style', () => <Tag style={{ backgroundColor: 'red' }}>Tag label</Tag>);
 
 export default TagStories;

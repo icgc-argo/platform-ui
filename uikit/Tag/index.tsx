@@ -31,6 +31,7 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
       [TAG_VARIANTS.UPDATE]: theme.colors.accent3_dark,
     }[variant])};
   color: white;
+  ${({ style }) => ({ ...style })}
 `;
 
 export default Tag;
