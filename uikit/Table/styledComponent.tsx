@@ -11,6 +11,7 @@ import unsorted from '../assets/table/unsorted.svg';
 export type StyledTableProps = {
   withRowBorder?: boolean;
   isSelectTable?: boolean;
+  withOutsideBorder?: boolean;
 };
 
 export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTable)`
@@ -23,8 +24,16 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
   &.ReactTable {
     border: none;
     & .rt-table {
-      border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
-      border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
+      ${({ theme, withOutsideBorder }) =>
+        withOutsideBorder
+          ? css`
+              border: solid 1px ${theme.colors.grey_2};
+            `
+          : css`
+              border-bottom: solid 1px ${theme.colors.grey_2};
+              border-top: solid 1px ${theme.colors.grey_2};
+            `}
+
       & .rt-thead .rt-tr .rt-th:first-of-type,
       & .rt-tr .rt-td:first-of-type {
         ${({ isSelectTable, theme }) =>
