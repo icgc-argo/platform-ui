@@ -6,9 +6,6 @@ import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
-import { useQuery } from '@apollo/react-hooks';
-import { GqlClinicalSubmissionData } from '../program-clinical-submission/types';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE from '../SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 export default function ProgramDashboard() {

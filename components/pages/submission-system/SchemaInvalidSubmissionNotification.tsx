@@ -12,10 +12,12 @@ export const SchemaInvalidSubmisisonNotification = ({
   marginTop,
   marginBottom,
   programShortName,
+  allowActionDismiss = true,
 }: {
   marginTop?: number;
   marginBottom?: number;
   programShortName: string;
+  allowActionDismiss?: boolean;
 }) => {
   const router = useRouter();
 
@@ -31,6 +33,24 @@ export const SchemaInvalidSubmisisonNotification = ({
     clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
   const [closedMigrationMsg, setclosedMigrationMsg] = React.useState(false);
 
+  const contentWithLink = [
+    <Link href="/">Version Y.Z of the data dictionary</Link>,
+    ` was released and has made your clinical submission invalid. See the details in your clinical workspace.`,
+  ];
+
+  const handleOnInteraction = ({ type }) => {
+    if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
+      router.push(
+        PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          programShortName as string,
+        ),
+      );
+    } else {
+      setclosedMigrationMsg(true);
+    }
+  };
+
   return (
     (hasSchemaErrorsAfterMigration && !closedMigrationMsg && (
       <Notification
@@ -41,23 +61,9 @@ export const SchemaInvalidSubmisisonNotification = ({
         size="SM"
         variant="ERROR"
         title={`Your clinical submission is invalid`}
-        content={[
-          <Link href="/">Version Y.Z of the data dictionary</Link>,
-          ` was released and has made your clinical submission invalid. See the details in your clinical workspace.`,
-        ]}
-        interactionType="ACTION_DISMISS"
-        onInteraction={({ type }) => {
-          if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
-            router.push(
-              PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                programShortName as string,
-              ),
-            );
-          } else {
-            setclosedMigrationMsg(true);
-          }
-        }}
+        content={contentWithLink}
+        interactionType={allowActionDismiss ? 'ACTION_DISMISS' : 'NONE'}
+        onInteraction={allowActionDismiss ? handleOnInteraction : undefined}
       />
     )) ||
     null

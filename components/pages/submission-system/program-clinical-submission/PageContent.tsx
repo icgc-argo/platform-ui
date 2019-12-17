@@ -40,6 +40,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -371,18 +372,13 @@ export default () => {
           <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
         </Container>
       )}
-      {hasSchemaErrorsAfterMigration && (
-        <Notification
-          css={css`
-            margin-top: 20px;
-          `}
-          size="SM"
-          variant="ERROR"
-          title={`Your clinical submission is invalid`}
-          content={`Version _link here_ was released and has made your clinical submission invalid. See the details in your clinical workspace.`}
-          interactionType="NONE"
+      {
+        <SchemaInvalidSubmisisonNotification
+          marginTop={20}
+          programShortName={programShortName}
+          allowActionDismiss={false}
         />
-      )}
+      }
       {data.clinicalSubmissions.fileErrors.map(({ fileNames, message }, i) => (
         <Notification
           key={i}
