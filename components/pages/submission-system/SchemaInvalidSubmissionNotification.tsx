@@ -13,12 +13,12 @@ export const SchemaInvalidSubmisisonNotification = ({
   marginTop,
   marginBottom,
   programShortName,
-  programClinicalSubmissionPage = false,
+  isClinicalSubmissionPage = false,
 }: {
   marginTop?: number;
   marginBottom?: number;
   programShortName: string;
-  programClinicalSubmissionPage?: boolean;
+  isClinicalSubmissionPage?: boolean;
 }) => {
   const router = useRouter();
 
@@ -30,9 +30,9 @@ export const SchemaInvalidSubmisisonNotification = ({
     },
   });
 
-  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery(
-    CLINICAL_SCHEMA_VERSION,
-  );
+  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
+    clinicalSubmissionSchemaVersion: string;
+  }>(CLINICAL_SCHEMA_VERSION);
 
   const hasSchemaErrorsAfterMigration =
     clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
@@ -50,7 +50,9 @@ export const SchemaInvalidSubmisisonNotification = ({
     </div>
   );
 
-  const handleOnInteraction = ({ type }) => {
+  const handleOnInteraction: React.ComponentProps<typeof Notification>['onInteraction'] = ({
+    type,
+  }) => {
     if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
       router.push(
         PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
@@ -73,9 +75,9 @@ export const SchemaInvalidSubmisisonNotification = ({
         size="SM"
         variant="ERROR"
         title={`Your clinical submission is invalid`}
-        content={getContentWithLink(programClinicalSubmissionPage)}
-        interactionType={programClinicalSubmissionPage ? 'NONE' : 'ACTION_DISMISS'}
-        onInteraction={programClinicalSubmissionPage ? undefined : handleOnInteraction}
+        content={getContentWithLink(isClinicalSubmissionPage)}
+        interactionType={isClinicalSubmissionPage ? 'NONE' : 'ACTION_DISMISS'}
+        onInteraction={isClinicalSubmissionPage ? undefined : handleOnInteraction}
       />
     )) ||
     null

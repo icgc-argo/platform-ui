@@ -376,7 +376,7 @@ export default () => {
         <SchemaInvalidSubmisisonNotification
           marginTop={20}
           programShortName={programShortName}
-          programClinicalSubmissionPage={true}
+          isClinicalSubmissionPage={true}
         />
       }
       {data.clinicalSubmissions.fileErrors.map(({ fileNames, message }, i) => (
