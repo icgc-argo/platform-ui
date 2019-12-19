@@ -40,6 +40,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -189,13 +190,14 @@ export default () => {
   );
 
   const hasDataError = !!allDataErrors.length;
+  const hasSchemaErrorsAfterMigration = data.clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
   const hasSchemaError =
     !!data.clinicalSubmissions.clinicalEntities.length &&
     data.clinicalSubmissions.clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
   const hasSomeEntity = data.clinicalSubmissions.clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  const isReadyForValidation = hasSomeEntity && !hasSchemaError;
+  const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
   const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
@@ -370,6 +372,13 @@ export default () => {
           <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
         </Container>
       )}
+      {
+        <SchemaInvalidSubmisisonNotification
+          marginTop={20}
+          programShortName={programShortName}
+          isClinicalSubmissionPage={true}
+        />
+      }
       {data.clinicalSubmissions.fileErrors.map(({ fileNames, message }, i) => (
         <Notification
           key={i}

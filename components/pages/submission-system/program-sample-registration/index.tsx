@@ -7,7 +7,6 @@ import { Row } from 'react-grid-system';
 import { css } from 'uikit';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
 import Container from 'uikit/Container';
-import DnaLoader from 'uikit/DnaLoader';
 import Link from 'uikit/Link';
 import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import TitleBar from 'uikit/TitleBar';
@@ -25,6 +24,7 @@ import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -197,6 +197,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
+      {<SchemaInvalidSubmisisonNotification programShortName={programShortName as string} />}
       <Container
         css={css`
           ${containerStyle}

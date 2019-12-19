@@ -1,0 +1,3 @@
+query CLINICAL_SCHEMA_VERSION {
+  clinicalSubmissionSchemaVersion
+}

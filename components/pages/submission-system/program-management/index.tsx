@@ -1,12 +1,10 @@
-
 import React from 'react';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { useRouter } from 'next/router';
 import { css } from 'uikit';
-import { ContentBox } from 'uikit/PageLayout';
 import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 export default () => {
   const router = useRouter();
@@ -29,6 +27,12 @@ export default () => {
         </div>
       }
     >
+      {
+        <SchemaInvalidSubmisisonNotification
+          marginBottom={20}
+          programShortName={programShortName as string}
+        />
+      }
       <ManageProgramTabs />
     </SubmissionLayout>
   );
