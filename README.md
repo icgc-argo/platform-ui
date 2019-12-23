@@ -6,14 +6,19 @@
 
 This project was bootstrapped with [Create Next App](https://github.com/segmentio/create-next-app).
 
-Find the most recent version of this guide at [here](https://github.com/segmentio/create-next-app/blob/master/lib/templates/default/README.md). And check out [Next.js repo](https://github.com/zeit/next.js) for the most up-to-date info.
+Find the most recent version of this guide [here](https://github.com/segmentio/create-next-app/blob/master/lib/templates/default/README.md), and check out [Next.js repo](https://github.com/zeit/next.js) for the most up-to-date info on Next JS.
 
 ## Development
+
+### Starting local back-end services
+
+A [docker-compose](https://docs.docker.com/compose/) setup is available in the [`compose`](./compose) folder.
+Follow the instructions found in [`compose/README.md`](compose/README.md) to start a local cluster of Argo Platform micro services.
 
 ### Setup
 
 - Install dependencies: `npm i`
-- Set up environment: copy `.env.schema` to `.env` and update environment accordingly if needed. Out-of-the-box values are meant for local development.
+- Set up environment: copy `.env.schema` to `.env` and update environment accordingly. Out-of-the-box values are meant for local development.
 - Dev commands:
   - `npm run dev` starts local dev server
   - `npm run build` creates a production build.
@@ -32,7 +37,7 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 - `npm run type-check`: trigger TypeScript type check for whole repo
 - `npm run type-check -- --watch`: runs the above with watch mode
   - Any `npm run type-check` triggers `tsc`, so any flag layed out [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html) can be used
-- If using [vscode](https://code.visualstudio.com/), `tsc` can also be run as a task in the editor:
+- If using [vscode](https://code.visualstudio.com/) (recommended), `tsc` can also be run as a task in the editor:
   - `Cmd+Shift+B`, then select `tsc:build - tsconfig.json`
   - This will report errors in vscode's `PROBLEMS` tab
 
