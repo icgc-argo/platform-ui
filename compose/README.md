@@ -17,7 +17,7 @@ This is the home of the Docker Compose infrastructure that can bring up the ARGO
 $ cp .env.schema .env
 ```
 
-Please ensure that your google app has the correct Authorized redirect URI: `http://localhost:8088/api/oauth/login/google`
+Please ensure that your google app has the correct Authorized redirect URI: `http://localhost:8088/api/oauth/login/google`. If you don't have one already, create new Google application [here](https://console.developers.google.com/).
 
 1. Start all the services in the background:
 
@@ -25,7 +25,7 @@ Please ensure that your google app has the correct Authorized redirect URI: `htt
 $ make start
 ```
 
-2. Add yourself as an Ego admin as well as an administrator for program creation.
+2. Add yourself as an Ego admin as well as an administrator for program creation. **Note:** Services may take some time to start up, please allow some time for the cluster to fully start before proceeding with this step.
 
 ```bash
 $ make add-admin EMAIL=<your_gmail_here>
@@ -51,6 +51,10 @@ $ make nuke
 
 ![Compose Structure](./assets/relationship.png)
 
+#### Notes:
+
+- For performance reasons, `lectern` and `argo-clinical` are sharing the same `mongo` instance. This is a deviation from the our production plan.
+
 ### Services Boundaries
 
 ![Compose Boundaries](./assets/boundaries.png)
@@ -71,7 +75,3 @@ $ make nuke
   ```
   $ make graphs
   ```
-
-## Architecture
-
-![Argo Architecture](./assets/argo-architecture.png)
