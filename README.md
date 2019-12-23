@@ -13,7 +13,7 @@ Find the most recent version of this guide [here](https://github.com/segmentio/c
 ### Starting local back-end services
 
 A [docker-compose](https://docs.docker.com/compose/) setup is available in the [`compose`](./compose) folder.
-Follow the instructions found in [`compose/README.md`](compose/README.md) to start a local cluster of Argo Platform micro services.
+Navigate to `/compose` (`cd ./compose`) and Follow the instructions found in [`compose/README.md`](compose/README.md) to start a local cluster of Argo Platform micro services.
 
 ### Setup
 
