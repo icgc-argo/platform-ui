@@ -6,6 +6,7 @@ import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
+import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 
 export default function ProgramDashboard() {
   const {
@@ -54,6 +55,12 @@ export default function ProgramDashboard() {
           `}
         />
       )}
+      {
+        <SchemaInvalidSubmisisonNotification
+          marginBottom={20}
+          programShortName={programShortName as string}
+        />
+      }
       <ContentBox
         css={css`
           padding-top: 0px;

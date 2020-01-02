@@ -24,7 +24,13 @@ export type ClinicalSubmissionUpdate = {
   __typename: 'ClinicalSubmissionUpdate';
 };
 
-export type ClinicalSubmissionStatus = 'OPEN' | 'VALID' | 'INVALID' | 'PENDING_APPROVAL' | null;
+export type ClinicalSubmissionStatus =
+  | 'OPEN'
+  | 'VALID'
+  | 'INVALID'
+  | 'PENDING_APPROVAL'
+  | 'INVALID_BY_MIGRATION'
+  | null;
 
 export type ClinicalSubmissionEntityFile = {
   clinicalType: string;
