@@ -34,7 +34,7 @@ const Footer = ({
       nogutter
     >
       <Col
-        md={5}
+        md={7}
         css={css`
           display: flex;
           align-items: center;
@@ -45,7 +45,7 @@ const Footer = ({
         ICGC ARGO Data Platform {version} - API {apiVersion} - {commitHash}
       </Col>
       <Col
-        md={7}
+        md={5}
         css={css`
           display: flex;
           align-items: center;
