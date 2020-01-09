@@ -12,6 +12,7 @@ export type StyledTableProps = {
   withRowBorder?: boolean;
   isSelectTable?: boolean;
   withOutsideBorder?: boolean;
+  cellAlignment?: 'top' | 'center' | 'bottom';
 };
 
 export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTable)`
@@ -73,6 +74,7 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
       border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
     }
   }
+
   &.ReactTable .rt-tbody .rt-td {
     ${({ theme }) => css(theme.typography.data)}
     min-height: 28px;
@@ -80,8 +82,10 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
     padding: 2px 8px;
     border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
     display: flex;
-    align-items: center;
+    align-items: ${({ cellAlignment }) =>
+      cellAlignment === 'top' ? 'flex-start' : cellAlignment === 'bottom' ? 'flex-end' : 'center'};
   }
+
   &.ReactTable .rt-tr {
     &.selected {
       background-color: ${({ theme }) => theme.colors.secondary_4} !important;
