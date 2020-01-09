@@ -1,5 +1,7 @@
 import spinner from './collection/spinner';
+import chevron_up from './collection/chevron_up';
 import chevron_down from './collection/chevron_down';
+import chevron_left from './collection/chevron_left';
 import chevron_right from './collection/chevron_right';
 import dashboard from './collection/dashboard';
 import programs from './collection/programs';
@@ -33,7 +35,9 @@ import lock from './collection/lock';
  */
 const Icons = {
   spinner,
+  chevron_up,
   chevron_down,
+  chevron_left,
   chevron_right,
   dashboard,
   programs,
