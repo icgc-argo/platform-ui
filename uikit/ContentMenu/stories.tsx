@@ -5,7 +5,10 @@ import ContentMenu from '.';
 
 const ContentMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const contentNames = ['Sample Registration', 'Specimen', 'Donor', 'Treatment'];
-  const contents = contentNames.map(content => ({ name: content, contentRef: React.createRef() }));
+  const contents = contentNames.map(content => ({
+    name: content,
+    contentRef: React.createRef<any>(),
+  }));
 
   return (
     <div style={{ display: 'grid' }}>

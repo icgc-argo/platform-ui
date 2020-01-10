@@ -37,7 +37,7 @@ const Menu = ({
   scrollYOffset = 0,
 }: {
   title: string;
-  contents: Array<{ name: string; contentRef?: React.RefObject<HTMLElement> }>;
+  contents: Array<{ name: string; contentRef?: React.RefObject<any> }>;
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
   scrollYOffset?: number;
