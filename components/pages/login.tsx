@@ -18,6 +18,7 @@ export default function LoginPage() {
     <DefaultLayout>
       <div
         css={css`
+          height: 100%;
           display: grid;
           grid-template-columns: 1fr 1fr;
           background: ${theme.colors.white};

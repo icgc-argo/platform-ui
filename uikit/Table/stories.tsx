@@ -26,6 +26,7 @@ const TableStories = storiesOf(`${__dirname}`, module)
         withResizeBlur: boolean('withResizeBlur', false),
         withRowBorder: boolean('withRowBorder', false),
         withOutsideBorder: boolean('withOutsideBorder', false),
+        cellAlignment: select('cellAlignment', ['top', 'center', 'bottom'], 'center'),
       };
       const containerRef = React.createRef<HTMLDivElement>();
       return (
@@ -35,7 +36,12 @@ const TableStories = storiesOf(`${__dirname}`, module)
             parentRef={containerRef}
             data={[
               { id: 1, prop2: 5, prop3: 'some text 1' },
-              { id: 2, prop2: 4, prop3: 'some text 2' },
+              {
+                id: 2,
+                prop2: 4,
+                prop3:
+                  'a large section of text that will probably be big enough to demonstrate the vertical alignment of cells',
+              },
               { id: 3, prop2: 3, prop3: 'some text 3' },
               { id: 4, prop2: 2, prop3: 'some text 4' },
               { id: 5, prop2: 1, prop3: 'some text 5' },

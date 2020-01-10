@@ -69,6 +69,7 @@ function Table<Data extends TableDataBase>({
   variant = 'DEFAULT',
   withRowBorder = variant === 'STATIC',
   withOutsideBorder,
+  cellAlignment,
   stripped = variant === 'DEFAULT',
   highlight = variant === 'DEFAULT',
   showPagination = variant === 'DEFAULT',
@@ -126,6 +127,7 @@ function Table<Data extends TableDataBase>({
       }}
       withRowBorder={withRowBorder}
       withOutsideBorder={withOutsideBorder}
+      cellAlignment={cellAlignment}
       getTableProps={getTableProps}
       columns={columns}
       data={data}

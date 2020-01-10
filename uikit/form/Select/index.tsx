@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { withProps } from 'recompose';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
 import Typography from '../../Typography';
