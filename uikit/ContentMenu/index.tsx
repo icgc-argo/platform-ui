@@ -37,7 +37,7 @@ const Menu = ({
   scrollYOffset = 0,
 }: {
   title: string;
-  contents: Array<{ name: string; contentRef?: React.RefObject<any> }>;
+  contents: Array<{ name: string; contentRef?: React.RefObject<HTMLElement> }>;
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
   scrollYOffset?: number;
@@ -56,7 +56,8 @@ const Menu = ({
             active={activeIndex === index}
             onClick={() => {
               setActiveIndex(index);
-              if (contentRef) window.scrollTo(0, contentRef.current.offsetTop - scrollYOffset);
+              if (contentRef && contentRef.current)
+                window.scrollTo(0, contentRef.current.offsetTop - scrollYOffset);
             }}
           />
         ))}
