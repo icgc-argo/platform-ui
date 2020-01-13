@@ -7,6 +7,7 @@ import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 
 export default function ProgramDashboard() {
   const {
@@ -55,6 +56,7 @@ export default function ProgramDashboard() {
           `}
         />
       )}
+      {<SubmissionSystemLockedNotification marginBottom={20} />}
       {
         <SchemaInvalidSubmisisonNotification
           marginBottom={20}

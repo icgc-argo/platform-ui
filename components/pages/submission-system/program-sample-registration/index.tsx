@@ -25,6 +25,10 @@ import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import {
+  SubmissionSystemLockedNotification,
+  isSubmissionSystemGloballyDisabled,
+} from '../SubmissionSystemLockedNotification';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -67,6 +71,7 @@ export default function ProgramIDRegistration() {
     'records',
     [] as typeof clinicalRegistration.records,
   );
+  const workspaceDisabled = isSubmissionSystemGloballyDisabled();
 
   const [progress, setProgress] = React.useState([
     PROGRESS_STATUS.DISABLED,
@@ -103,7 +108,9 @@ export default function ProgramIDRegistration() {
 
   // update progress steps
   React.useEffect(() => {
-    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
+    if (workspaceDisabled) {
+      setProgress([PROGRESS_STATUS.LOCKED, PROGRESS_STATUS.LOCKED]);
+    } else if (clinicalRegistration && clinicalRegistration.records.length > 0) {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
     } else if (schemaOrValidationErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
@@ -197,6 +204,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
+      {<SubmissionSystemLockedNotification />}
       {<SchemaInvalidSubmisisonNotification programShortName={programShortName as string} />}
       <Container
         css={css`
@@ -205,6 +213,7 @@ export default function ProgramIDRegistration() {
         `}
       >
         <Instructions
+          workspaceDisabled={workspaceDisabled}
           registrationEnabled={!!get(clinicalRegistration, 'id')}
           shortName={programShortName as string}
           registrationId={get(clinicalRegistration, 'id')}
@@ -250,6 +259,7 @@ export default function ProgramIDRegistration() {
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
                 onClick={handleClearClick}
+                disabled={workspaceDisabled}
               >
                 <Typography variant="data">Clear</Typography>
               </Button>

@@ -41,6 +41,7 @@ import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -314,6 +315,7 @@ export default () => {
         height: 100%;
       `}
     >
+      {<SubmissionSystemLockedNotification />}
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal

@@ -1,0 +1,3 @@
+query GLOBAL_SUBMISSION_SYSTEM_STATE {
+  clinicalSubmissionSystemState
+}
