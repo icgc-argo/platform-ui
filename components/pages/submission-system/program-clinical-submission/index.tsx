@@ -9,6 +9,7 @@ import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
+import { isSubmissionSystemGloballyDisabled } from '../SubmissionSystemLockedNotification';
 
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
@@ -96,6 +97,7 @@ export default function ProgramClinicalSubmission() {
     clinicalEntity => !!clinicalEntity.dataUpdates.length,
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
+  const isWorkspaceDisabled = isSubmissionSystemGloballyDisabled();
 
   return (
     <>
@@ -110,21 +112,31 @@ export default function ProgramClinicalSubmission() {
             isPendingApproval={isPendingApproval}
             submissionVersion={data.clinicalSubmissions.version}
             progressStates={{
-              upload: isReadyForValidation
+              upload: isWorkspaceDisabled
+                ? 'locked'
+                : isReadyForValidation
                 ? 'success'
                 : hasSchemaError || hasSchemaErrorsAfterMigration
                 ? 'error'
                 : 'disabled',
-              validate:
-                isReadyForSignoff || isPendingApproval
-                  ? 'success'
-                  : isReadyForValidation
-                  ? hasDataError
-                    ? 'error'
-                    : 'pending'
-                  : 'disabled',
-              signOff: isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled',
+              validate: isWorkspaceDisabled
+                ? 'locked'
+                : isReadyForSignoff || isPendingApproval
+                ? 'success'
+                : isReadyForValidation
+                ? hasDataError
+                  ? 'error'
+                  : 'pending'
+                : 'disabled',
+              signOff: isWorkspaceDisabled
+                ? 'locked'
+                : isReadyForSignoff
+                ? 'pending'
+                : isPendingApproval
+                ? 'success'
+                : 'disabled',
             }}
+            isWorkspaceDisabled={isWorkspaceDisabled}
           />
         }
       >

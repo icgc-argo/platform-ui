@@ -29,6 +29,7 @@ export default ({
   progressStates,
   isPendingApproval,
   submissionVersion,
+  isWorkspaceDisabled,
 }: {
   programShortName: string;
   showProgress: boolean;
@@ -39,6 +40,7 @@ export default ({
   };
   isPendingApproval: boolean;
   submissionVersion: string;
+  isWorkspaceDisabled: boolean;
 }) => {
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
@@ -220,7 +222,7 @@ export default ({
               css={css`
                 margin-right: 10px;
               `}
-              disabled={!submissionVersion}
+              disabled={isWorkspaceDisabled || !submissionVersion}
               onClick={handleSubmissionClear}
             >
               Clear submission

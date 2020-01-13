@@ -41,7 +41,10 @@ import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
-import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
+import {
+  SubmissionSystemLockedNotification,
+  isSubmissionSystemGloballyDisabled,
+} from '../SubmissionSystemLockedNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -206,6 +209,8 @@ export default () => {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
+  const workspaceDisabled = isSubmissionSystemGloballyDisabled();
+
   const onErrorClose: (
     index: number,
   ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
@@ -339,6 +344,7 @@ export default () => {
             clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
               ({ clinicalType }) => clinicalType,
             )}
+            workspaceDisabled={workspaceDisabled}
           />
         </Container>
       )}
