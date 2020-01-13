@@ -1,68 +1,23 @@
 import * as React from 'react';
-import SubmissionLayout from './layout';
-import { styled } from 'uikit';
 import Progress from 'uikit/Progress';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import {
   ClinicalSubmissionQueryData,
   ClinicalSubmissionError,
 } from './program-clinical-submission/types';
-import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
-import { ContentHeader } from 'uikit/PageLayout';
-import { useTheme } from 'uikit/ThemeProvider';
+import {
+  useClinicalSubmissionQuery,
+  placeholderClinicalSubmissionQueryData,
+} from './program-clinical-submission';
 
-export const placeholderClinicalSubmissionQueryData = (
-  shortName: string,
-): ClinicalSubmissionQueryData => ({
-  clinicalSubmissions: {
-    version: '',
-    programShortName: shortName,
-    clinicalEntities: [],
-    fileErrors: [],
-    id: '',
-    state: null,
-    updatedAt: '',
-    updatedBy: '',
-    __typename: 'ClinicalSubmissionData',
-  },
-});
-
-type ClinicalSubmissionQueryVariables = {
-  programShortName: string;
-};
-
-export const useClinicalSubmissionQuery = (
-  programShortName: string,
-  options: Omit<
-    QueryHookOptions<ClinicalSubmissionQueryData, ClinicalSubmissionQueryVariables>,
-    'variables'
-  > = {},
-) => {
-  const hook = useQuery<ClinicalSubmissionQueryData, ClinicalSubmissionQueryVariables>(
-    CLINICAL_SUBMISSION_QUERY,
-    {
-      ...options,
-      variables: {
-        programShortName,
-      },
-    },
-  );
-
-  return {
-    ...hook,
-    data: hook.data || placeholderClinicalSubmissionQueryData(programShortName),
-  };
-};
-
-export default function ProgramClinicalSubmissionProgressBar() {
-  const theme = useTheme();
+export function generateClinicalSubmissionProgressBar() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [] = React.useState<FileList | null>(null);
 
   const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
 
   var progressStates: {
+    // This is repeated code from program-clinical-submissions/Header.tsx.
     upload: React.ComponentProps<typeof Progress.Item>['state'];
     validate: React.ComponentProps<typeof Progress.Item>['state'];
     signOff: React.ComponentProps<typeof Progress.Item>['state'];
@@ -105,7 +60,7 @@ export default function ProgramClinicalSubmissionProgressBar() {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
-  progressStates = {
+  return (progressStates = {
     upload: isReadyForValidation
       ? 'success'
       : hasSchemaError || hasSchemaErrorsAfterMigration
@@ -120,5 +75,5 @@ export default function ProgramClinicalSubmissionProgressBar() {
           : 'pending'
         : 'disabled',
     signOff: isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled',
-  };
+  });
 }
