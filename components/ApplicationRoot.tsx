@@ -18,6 +18,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
+import GdprMessageContainer from './GdprMessageContainer';
 
 /**
  * The global portal where modals will show up
@@ -154,7 +155,6 @@ const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: a
   }, [egoJwt]);
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
-
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -203,7 +203,9 @@ export default function ApplicationRoot({
                   ref={modalPortalRef}
                 />
                 <PersistentStateProvider>
-                  <GlobalLoaderProvider>{children}</GlobalLoaderProvider>
+                  <GlobalLoaderProvider>
+                    <GdprMessageContainer>{children}</GdprMessageContainer>
+                  </GlobalLoaderProvider>
                 </PersistentStateProvider>
               </ToastProvider>
             </ThemeProvider>
