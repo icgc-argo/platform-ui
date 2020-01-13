@@ -7,6 +7,16 @@ import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { Row, Col, ScreenClassRender } from 'react-grid-system';
+import StatsBar from './StatsBar';
+import DonorReleaseSummary from './DonorReleaseSummary';
+import CompletedClinicalData from './CompletedClinicalData';
+import MolecularDataSummary from './MolecularDataSummary';
+import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
+import DonorDataSummary from './DonorDataSummary';
+import { setConfiguration } from 'react-grid-system';
+
+setConfiguration({ gutterWidth: 9 });
 
 export default function ProgramDashboard() {
   const {
@@ -26,6 +36,14 @@ export default function ProgramDashboard() {
     }
   });
 
+  const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
+    !['lg'].includes(size)
+      ? css`
+          padding-bottom: 13px;
+        `
+      : css`
+          padding-bottom: 0px;
+        `;
   return (
     <SubmissionLayout
       contentHeader={
@@ -61,14 +79,63 @@ export default function ProgramDashboard() {
           programShortName={programShortName as string}
         />
       }
-      <ContentBox
+      <Row
         css={css`
-          padding-top: 0px;
-          min-height: calc(100vh - 240px);
+          padding-bottom: 7px;
         `}
       >
-        Dashboard
-      </ContentBox>
+        <Col xs={12}>
+          <StatsBar />
+        </Col>
+      </Row>
+
+      <Row
+        justify="between"
+        css={css`
+          padding-bottom: 9px;
+        `}
+      >
+        <Col lg={4} md={12}>
+          <Row
+            css={css`
+              padding-bottom: 10px;
+            `}
+          >
+            <Col xs={12}>
+              <DonorReleaseSummary />
+            </Col>
+          </Row>
+          <Row
+            css={css`
+              padding-bottom: 9px;
+            `}
+          >
+            <Col xs={12}>
+              <ProgramWorkspaceStatus />
+            </Col>
+          </Row>
+        </Col>
+        <ScreenClassRender
+          render={screenClass => (
+            <Col lg={4} md={12} css={applyStackedStyle(screenClass)}>
+              <CompletedClinicalData />
+            </Col>
+          )}
+        />
+
+        <Col lg={4} md={12}>
+          <MolecularDataSummary />
+        </Col>
+      </Row>
+      <Row
+        css={css`
+          padding-bottom: 7px;
+        `}
+      >
+        <Col xs={12}>
+          <DonorDataSummary />
+        </Col>
+      </Row>
     </SubmissionLayout>
   );
 }
