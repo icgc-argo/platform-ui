@@ -9,19 +9,13 @@ import {
   useClinicalSubmissionQuery,
   placeholderClinicalSubmissionQueryData,
 } from './program-clinical-submission';
+import { css } from '@emotion/core';
 
-export function generateClinicalSubmissionProgressBar() {
+const ClinicalSubmissionProgressBar: React.ComponentType = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const [] = React.useState<FileList | null>(null);
 
   const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
-
-  var progressStates: {
-    // This is repeated code from program-clinical-submissions/Header.tsx.
-    upload: React.ComponentProps<typeof Progress.Item>['state'];
-    validate: React.ComponentProps<typeof Progress.Item>['state'];
-    signOff: React.ComponentProps<typeof Progress.Item>['state'];
-  };
 
   const allDataErrors = React.useMemo(
     () =>
@@ -60,7 +54,11 @@ export function generateClinicalSubmissionProgressBar() {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
-  return (progressStates = {
+  const progressStates: {
+    upload: React.ComponentProps<typeof Progress.Item>['state'];
+    validate: React.ComponentProps<typeof Progress.Item>['state'];
+    signOff: React.ComponentProps<typeof Progress.Item>['state'];
+  } = {
     upload: isReadyForValidation
       ? 'success'
       : hasSchemaError || hasSchemaErrorsAfterMigration
@@ -75,5 +73,24 @@ export function generateClinicalSubmissionProgressBar() {
           : 'pending'
         : 'disabled',
     signOff: isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled',
-  });
-}
+  };
+
+  return (
+    <Progress>
+      <Progress.Item text="Upload" state={progressStates.upload} />
+      <Progress.Item text="Validate" state={progressStates.validate} />
+      <Progress.Item text="Sign Off" state={progressStates.signOff} />
+      {isPendingApproval && (
+        <Progress.Item
+          css={css`
+            width: 100px;
+          `}
+          text="Pending Approval"
+          state="locked"
+        />
+      )}
+    </Progress>
+  );
+};
+
+export default ClinicalSubmissionProgressBar;

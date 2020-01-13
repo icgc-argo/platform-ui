@@ -22,21 +22,16 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
+import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 
 export default ({
   programShortName,
   showProgress,
-  progressStates,
   isPendingApproval,
   submissionVersion,
 }: {
   programShortName: string;
   showProgress: boolean;
-  progressStates: {
-    upload: React.ComponentProps<typeof Progress.Item>['state'];
-    validate: React.ComponentProps<typeof Progress.Item>['state'];
-    signOff: React.ComponentProps<typeof Progress.Item>['state'];
-  };
   isPendingApproval: boolean;
   submissionVersion: string;
 }) => {
@@ -183,22 +178,7 @@ export default ({
             >
               Submit Clinical Data
             </div>
-            {showProgress && (
-              <Progress>
-                <Progress.Item text="Upload" state={progressStates.upload} />
-                <Progress.Item text="Validate" state={progressStates.validate} />
-                <Progress.Item text="Sign Off" state={progressStates.signOff} />
-                {isPendingApproval && (
-                  <Progress.Item
-                    css={css`
-                      width: 100px;
-                    `}
-                    text="Pending Approval"
-                    state="locked"
-                  />
-                )}
-              </Progress>
-            )}
+            {showProgress && <ClinicalSubmissionProgressBar />}
           </Row>
         </TitleBar>
         <Row nogutter align="center">
