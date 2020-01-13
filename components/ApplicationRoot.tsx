@@ -18,7 +18,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
-import GdprMessageContainer from './GdprMessageContainer';
+import GdprMessage from './GdprMessage';
 
 /**
  * The global portal where modals will show up
@@ -204,7 +204,8 @@ export default function ApplicationRoot({
                 />
                 <PersistentStateProvider>
                   <GlobalLoaderProvider>
-                    <GdprMessageContainer>{children}</GdprMessageContainer>
+                    <GdprMessage />
+                    {children}
                   </GlobalLoaderProvider>
                 </PersistentStateProvider>
               </ToastProvider>

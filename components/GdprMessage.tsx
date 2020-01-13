@@ -6,7 +6,7 @@ import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
 import { LOCAL_STORAGE_GDPR_ACCEPTTANCE_KEY } from 'global/constants';
 
-export default ({ children }) => {
+export default () => {
   const theme = useTheme();
   const [accepted, setAcceptedState] = React.useState(true);
   const sync = () => {
@@ -61,7 +61,6 @@ export default ({ children }) => {
           </div>
         </div>
       )}
-      {children}
     </>
   );
 };
