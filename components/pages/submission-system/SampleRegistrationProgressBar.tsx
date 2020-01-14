@@ -5,6 +5,7 @@ import * as React from 'react';
 import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
+import { isSubmissionSystemGloballyDisabled } from './SubmissionSystemLockedNotification';
 
 const SampleRegistrationProgressBar: React.ComponentType = () => {
   const [progress, setProgress] = React.useState([
@@ -28,9 +29,13 @@ const SampleRegistrationProgressBar: React.ComponentType = () => {
     [] as typeof clinicalRegistration.errors,
   );
 
+  const isWorkSpaceDisabled = isSubmissionSystemGloballyDisabled();
+
   // update progress steps
   React.useEffect(() => {
-    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
+    if (isWorkSpaceDisabled) {
+      setProgress([PROGRESS_STATUS.LOCKED, PROGRESS_STATUS.LOCKED]);
+    } else if (clinicalRegistration && clinicalRegistration.records.length > 0) {
       setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
     } else if (schemaOrValidationErrors.length > 0) {
       setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
