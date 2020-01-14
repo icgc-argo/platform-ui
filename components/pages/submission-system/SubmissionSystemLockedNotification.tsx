@@ -20,6 +20,7 @@ export const SubmissionSystemLockedNotification = ({
   marginBottom?: number;
 }) => {
   const [showNotification, setshowNotification] = React.useState(true);
+  const isWorksapceDisabled = useSubmissionSystemState();
 
   // the link is to the home page currently because data dictionary link is not avaialable yet
   const getContentWithLink = () => (
@@ -38,7 +39,7 @@ export const SubmissionSystemLockedNotification = ({
   };
 
   return (
-    (useSubmissionSystemState && showNotification && (
+    (isWorksapceDisabled && showNotification && (
       <Notification
         css={css`
           margin-top: ${marginTop}px;

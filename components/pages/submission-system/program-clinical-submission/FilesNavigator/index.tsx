@@ -17,6 +17,7 @@ import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { useSubmissionSystemState } from '../../SubmissionSystemLockedNotification';
 
 export default ({
   fileStates,
@@ -43,6 +44,8 @@ export default ({
 
   const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';
+  const isWorkspaceDisabled = useSubmissionSystemState();
+
   const toaster = useToaster();
   const onFileClick = (clinicalType: string) => e => {
     onFileSelect(fileStates.find(file => clinicalType === file.clinicalType).clinicalType);
@@ -177,7 +180,12 @@ export default ({
                 {selectedFile.displayName} File Preview
               </Typography>
               {!isPendingApproval && (
-                <Button variant="text" size="sm" onClick={onClearClick(selectedFile.clinicalType)}>
+                <Button
+                  variant="text"
+                  size="sm"
+                  onClick={onClearClick(selectedFile.clinicalType)}
+                  disabled={isWorkspaceDisabled}
+                >
                   clear
                 </Button>
               )}
