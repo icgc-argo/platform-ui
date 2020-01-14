@@ -43,7 +43,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
-  isSubmissionSystemGloballyDisabled,
+  useSubmissionSystemState,
 } from '../SubmissionSystemLockedNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
@@ -209,7 +209,7 @@ export default () => {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
-  const workspaceDisabled = isSubmissionSystemGloballyDisabled();
+  const workspaceDisabled = useSubmissionSystemState();
 
   const onErrorClose: (
     index: number,

@@ -9,7 +9,7 @@ import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
-import { isSubmissionSystemGloballyDisabled } from '../SubmissionSystemLockedNotification';
+import { useSubmissionSystemState } from '../SubmissionSystemLockedNotification';
 
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
@@ -63,7 +63,7 @@ export default function ProgramClinicalSubmission() {
 
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
 
-  const isWorkspaceDisabled = isSubmissionSystemGloballyDisabled();
+  const isWorkspaceDisabled = useSubmissionSystemState();
 
   return (
     <>

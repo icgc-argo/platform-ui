@@ -26,7 +26,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
-  isSubmissionSystemGloballyDisabled,
+  useSubmissionSystemState,
 } from '../SubmissionSystemLockedNotification';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 
@@ -71,7 +71,7 @@ export default function ProgramIDRegistration() {
     'records',
     [] as typeof clinicalRegistration.records,
   );
-  const workspaceDisabled = isSubmissionSystemGloballyDisabled();
+  const workspaceDisabled = useSubmissionSystemState();
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 

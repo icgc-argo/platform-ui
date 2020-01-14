@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 import Notification from 'uikit/notifications/Notification';
 import GLOBAL_SUBMISSION_SYSTEM_STATE from './GLOBAL_SUBMISSION_SYSTEM_STATE.gql';
 
-export const isSubmissionSystemGloballyDisabled = () => {
+export const useSubmissionSystemState = () => {
   const { data: { clinicalSubmissionSystemState = undefined } = {} } = useQuery(
     GLOBAL_SUBMISSION_SYSTEM_STATE,
   );
@@ -38,7 +38,7 @@ export const SubmissionSystemLockedNotification = ({
   };
 
   return (
-    (isSubmissionSystemGloballyDisabled && showNotification && (
+    (useSubmissionSystemState && showNotification && (
       <Notification
         css={css`
           margin-top: ${marginTop}px;

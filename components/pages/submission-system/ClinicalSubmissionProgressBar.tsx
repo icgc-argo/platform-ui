@@ -4,7 +4,7 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';
 import { css } from '@emotion/core';
-import { isSubmissionSystemGloballyDisabled } from './SubmissionSystemLockedNotification';
+import { useSubmissionSystemState } from './SubmissionSystemLockedNotification';
 
 const ClinicalSubmissionProgressBar: React.ComponentType = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -44,7 +44,7 @@ const ClinicalSubmissionProgressBar: React.ComponentType = () => {
   const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
-  const isWorkSpaceDisabled = isSubmissionSystemGloballyDisabled();
+  const isWorkSpaceDisabled = useSubmissionSystemState();
 
   const progressStates: {
     upload: React.ComponentProps<typeof Progress.Item>['state'];
