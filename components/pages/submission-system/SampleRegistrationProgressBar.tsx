@@ -5,7 +5,7 @@ import * as React from 'react';
 import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
-import { useSubmissionSystemState } from './SubmissionSystemLockedNotification';
+import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 const SampleRegistrationProgressBar: React.ComponentType = () => {
   const {
@@ -24,20 +24,20 @@ const SampleRegistrationProgressBar: React.ComponentType = () => {
     [] as typeof clinicalRegistration.errors,
   );
 
-  const isWorkSpaceDisabled = useSubmissionSystemState();
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const progressStates: {
     upload: React.ComponentProps<typeof Progress.Item>['state'];
     register: React.ComponentProps<typeof Progress.Item>['state'];
   } = {
-    upload: isWorkSpaceDisabled
+    upload: isSubmissionSystemDisabled
       ? 'locked'
       : clinicalRegistration && clinicalRegistration.records.length > 0
       ? 'success'
       : schemaOrValidationErrors.length > 0
       ? 'error'
       : 'disabled',
-    register: isWorkSpaceDisabled
+    register: isSubmissionSystemDisabled
       ? 'locked'
       : clinicalRegistration && clinicalRegistration.records.length > 0
       ? 'pending'

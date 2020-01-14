@@ -1,0 +1,3 @@
+query CLINICAL_SUBMISSION_SYSTEM_DISABLED {
+  clinicalSubmissionSystemDisabled
+}

@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
-import { useSubmissionSystemState } from '../SubmissionSystemLockedNotification';
+import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 
 export default ({
   programShortName,
@@ -46,7 +46,7 @@ export default ({
   const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
     programShortName,
   );
-  const isWorkspaceDisabled = useSubmissionSystemState();
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -201,7 +201,7 @@ export default ({
               css={css`
                 margin-right: 10px;
               `}
-              disabled={isWorkspaceDisabled || !submissionVersion}
+              disabled={isSubmissionSystemDisabled || !submissionVersion}
               onClick={handleSubmissionClear}
             >
               Clear submission

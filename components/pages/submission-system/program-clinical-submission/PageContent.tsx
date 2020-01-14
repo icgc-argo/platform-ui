@@ -43,7 +43,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
-  useSubmissionSystemState,
+  useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
@@ -209,7 +209,7 @@ export default () => {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
-  const isWorkspaceDisabled = useSubmissionSystemState();
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const onErrorClose: (
     index: number,
@@ -335,10 +335,10 @@ export default () => {
       {!isPendingApproval && !loadingClinicalSubmission && (
         <Container css={containerStyle}>
           <Instruction
-            uploadEnabled={!isWorkspaceDisabled}
-            signOffEnabled={!isWorkspaceDisabled && isReadyForSignoff}
+            uploadEnabled={!isSubmissionSystemDisabled}
+            signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
             validationEnabled={
-              !isWorkspaceDisabled && (isReadyForValidation && !hasDataError && !isValidated)
+              !isSubmissionSystemDisabled && (isReadyForValidation && !hasDataError && !isValidated)
             }
             onUploadFileSelect={handleSubmissionFilesUpload}
             onValidateClick={handleSubmissionValidation}

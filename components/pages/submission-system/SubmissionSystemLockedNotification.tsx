@@ -2,14 +2,15 @@ import { useQuery } from '@apollo/react-hooks';
 import React from 'react';
 import { css } from '@emotion/core';
 import Notification from 'uikit/notifications/Notification';
-import GLOBAL_SUBMISSION_SYSTEM_STATE from './GLOBAL_SUBMISSION_SYSTEM_STATE.gql';
+import CLINICAL_SUBMISSION_SYSTEM_DISABLED from './CLINICAL_SUBMISSION_SYSTEM_DISABLED.gql';
 
-export const useSubmissionSystemState = (): boolean => {
-  const { data: { clinicalSubmissionSystemState = undefined } = {} } = useQuery(
-    GLOBAL_SUBMISSION_SYSTEM_STATE,
+// Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical
+export const useSubmissionSystemDisabled = (): boolean => {
+  const { data: { clinicalSubmissionSystemDisabled = undefined } = {} } = useQuery(
+    CLINICAL_SUBMISSION_SYSTEM_DISABLED,
   );
 
-  return clinicalSubmissionSystemState as boolean;
+  return clinicalSubmissionSystemDisabled as boolean;
 };
 
 export const SubmissionSystemLockedNotification = ({
@@ -20,7 +21,7 @@ export const SubmissionSystemLockedNotification = ({
   marginBottom?: number;
 }) => {
   const [showNotification, setshowNotification] = React.useState(true);
-  const isWorksapceDisabled = useSubmissionSystemState();
+  const isWorksapceDisabled = useSubmissionSystemDisabled();
 
   // the link is to the home page currently because data dictionary link is not avaialable yet
   const getContentWithLink = () => (

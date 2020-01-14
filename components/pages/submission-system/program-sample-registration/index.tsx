@@ -26,7 +26,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
-  useSubmissionSystemState,
+  useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 
@@ -71,7 +71,7 @@ export default function ProgramIDRegistration() {
     'records',
     [] as typeof clinicalRegistration.records,
   );
-  const isWorkspaceDisabled = useSubmissionSystemState();
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
@@ -193,8 +193,8 @@ export default function ProgramIDRegistration() {
         `}
       >
         <Instructions
-          uploadEnabled={!isWorkspaceDisabled}
-          registrationEnabled={!isWorkspaceDisabled && !!get(clinicalRegistration, 'id')}
+          uploadEnabled={!isSubmissionSystemDisabled}
+          registrationEnabled={!isSubmissionSystemDisabled && !!get(clinicalRegistration, 'id')}
           shortName={programShortName as string}
           registrationId={get(clinicalRegistration, 'id')}
         />
@@ -239,7 +239,7 @@ export default function ProgramIDRegistration() {
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
                 onClick={handleClearClick}
-                disabled={isWorkspaceDisabled}
+                disabled={isSubmissionSystemDisabled}
               >
                 <Typography variant="data">Clear</Typography>
               </Button>
