@@ -10,12 +10,13 @@ type HyperLinkProps = {
   underline?: boolean;
   bold?: boolean;
   href?: string;
+  invert?: boolean;
 } & AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const StyledLink = styled<'a', HyperLinkProps>('a')`
   ${({ theme }) => css(theme.typography.default)}
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.accent2_dark};
+  color: ${({ theme, invert }) => (invert ? theme.colors.white : theme.colors.accent2_dark)};
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'inherit')};
   ${({ uppercase }) =>
@@ -40,6 +41,7 @@ const Link = React.forwardRef<HTMLAnchorElement, HyperLinkProps>(
       withChevron = variant === LINK_VARIANTS.BLOCK,
       underline = variant === LINK_VARIANTS.INLINE,
       bold = variant === LINK_VARIANTS.BLOCK,
+      invert = false,
       children,
       ...rest
     },
@@ -51,6 +53,7 @@ const Link = React.forwardRef<HTMLAnchorElement, HyperLinkProps>(
       underline={underline}
       bold={bold}
       href={href}
+      invert={invert}
       {...rest}
     >
       {children}
