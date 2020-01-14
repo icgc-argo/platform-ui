@@ -2,6 +2,7 @@ import React from 'react';
 import noDataSvg from 'uikit/assets/noData.svg';
 import Typography from '../Typography';
 import { css, styled } from '../';
+import Link from 'uikit/Link';
 
 const Container = styled('div')`
   display: flex;
@@ -14,12 +15,14 @@ const Container = styled('div')`
 type NoDataProps = {
   title?: string;
   subtitle?: string;
+  link?: React.ReactNode;
 } & React.ComponentProps<typeof Container>;
 
 const NoData: React.ComponentType<NoDataProps> = ({
   children = <img alt="no data found" src={noDataSvg} />,
   title = 'No Data Found.',
   subtitle,
+  link,
   ...rest
 }) => (
   <Container {...rest}>
@@ -47,6 +50,7 @@ const NoData: React.ComponentType<NoDataProps> = ({
     >
       {subtitle}
     </Typography>
+    {link}
   </Container>
 );
 
