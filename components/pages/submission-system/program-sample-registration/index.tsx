@@ -25,6 +25,7 @@ import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -68,11 +69,6 @@ export default function ProgramIDRegistration() {
     [] as typeof clinicalRegistration.records,
   );
 
-  const [progress, setProgress] = React.useState([
-    PROGRESS_STATUS.DISABLED,
-    PROGRESS_STATUS.DISABLED,
-  ]);
-
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
   const toaster = useToaster();
@@ -100,16 +96,6 @@ export default function ProgramIDRegistration() {
       });
     }
   };
-
-  // update progress steps
-  React.useEffect(() => {
-    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
-      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
-    } else if (schemaOrValidationErrors.length > 0) {
-      setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    }
-    return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
-  }, [clinicalRegistration, schemaOrValidationErrors]);
 
   // Data formatting
   let submissionInfo = null;
@@ -178,10 +164,7 @@ export default function ProgramIDRegistration() {
               >
                 Register Samples
               </div>
-              <Progress>
-                <Progress.Item state={progress[0]} text="Upload" />
-                <Progress.Item state={progress[1]} text="Register" />
-              </Progress>
+              <SampleRegistrationProgressBar />
             </Row>
           </TitleBar>
           <Link
