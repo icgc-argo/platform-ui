@@ -8,7 +8,6 @@ import { css } from 'uikit';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
 import Container from 'uikit/Container';
 import Link from 'uikit/Link';
-import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
@@ -29,6 +28,7 @@ import {
   SubmissionSystemLockedNotification,
   isSubmissionSystemGloballyDisabled,
 } from '../SubmissionSystemLockedNotification';
+import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -73,11 +73,6 @@ export default function ProgramIDRegistration() {
   );
   const workspaceDisabled = isSubmissionSystemGloballyDisabled();
 
-  const [progress, setProgress] = React.useState([
-    PROGRESS_STATUS.DISABLED,
-    PROGRESS_STATUS.DISABLED,
-  ]);
-
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
   const toaster = useToaster();
@@ -105,18 +100,6 @@ export default function ProgramIDRegistration() {
       });
     }
   };
-
-  // update progress steps
-  React.useEffect(() => {
-    if (workspaceDisabled) {
-      setProgress([PROGRESS_STATUS.LOCKED, PROGRESS_STATUS.LOCKED]);
-    } else if (clinicalRegistration && clinicalRegistration.records.length > 0) {
-      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
-    } else if (schemaOrValidationErrors.length > 0) {
-      setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    }
-    return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
-  }, [clinicalRegistration, schemaOrValidationErrors]);
 
   // Data formatting
   let submissionInfo = null;
@@ -185,10 +168,7 @@ export default function ProgramIDRegistration() {
               >
                 Register Samples
               </div>
-              <Progress>
-                <Progress.Item state={progress[0]} text="Upload" />
-                <Progress.Item state={progress[1]} text="Register" />
-              </Progress>
+              <SampleRegistrationProgressBar />
             </Row>
           </TitleBar>
           <Link
