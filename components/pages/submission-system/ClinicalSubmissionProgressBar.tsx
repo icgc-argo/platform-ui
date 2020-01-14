@@ -11,8 +11,9 @@ import {
 } from './program-clinical-submission';
 import { css } from '@emotion/core';
 
-const ClinicalSubmissionProgressBar: React.ComponentType = () => {
-  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
   const [] = React.useState<FileList | null>(null);
 
   const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
