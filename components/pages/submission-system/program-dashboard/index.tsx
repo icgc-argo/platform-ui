@@ -37,9 +37,9 @@ export default function ProgramDashboard() {
   });
 
   const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
-    !['lg'].includes(size)
+    !['xl'].includes(size)
       ? css`
-          padding-bottom: 13px;
+          padding-bottom: 15px;
         `
       : css`
           padding-bottom: 0px;
@@ -95,7 +95,7 @@ export default function ProgramDashboard() {
           padding-bottom: 9px;
         `}
       >
-        <Col lg={4} md={12}>
+        <Col xl={4} lg={12}>
           <Row
             css={css`
               padding-bottom: 10px;
@@ -117,13 +117,13 @@ export default function ProgramDashboard() {
         </Col>
         <ScreenClassRender
           render={screenClass => (
-            <Col lg={4} md={12} css={applyStackedStyle(screenClass)}>
+            <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
               <CompletedClinicalData />
             </Col>
           )}
         />
 
-        <Col lg={4} md={12}>
+        <Col xl={4} lg={12}>
           <MolecularDataSummary />
         </Col>
       </Row>
