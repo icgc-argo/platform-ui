@@ -71,7 +71,7 @@ export default function ProgramIDRegistration() {
     'records',
     [] as typeof clinicalRegistration.records,
   );
-  const workspaceDisabled = useSubmissionSystemState();
+  const isWorkspaceDisabled = useSubmissionSystemState();
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
@@ -193,8 +193,8 @@ export default function ProgramIDRegistration() {
         `}
       >
         <Instructions
-          workspaceDisabled={workspaceDisabled}
-          registrationEnabled={!!get(clinicalRegistration, 'id')}
+          uploadEnabled={!isWorkspaceDisabled}
+          registrationEnabled={!isWorkspaceDisabled && !!get(clinicalRegistration, 'id')}
           shortName={programShortName as string}
           registrationId={get(clinicalRegistration, 'id')}
         />
@@ -239,7 +239,7 @@ export default function ProgramIDRegistration() {
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
                 onClick={handleClearClick}
-                disabled={workspaceDisabled}
+                disabled={isWorkspaceDisabled}
               >
                 <Typography variant="data">Clear</Typography>
               </Button>

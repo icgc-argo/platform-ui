@@ -209,7 +209,7 @@ export default () => {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
-  const workspaceDisabled = useSubmissionSystemState();
+  const isWorkspaceDisabled = useSubmissionSystemState();
 
   const onErrorClose: (
     index: number,
@@ -335,16 +335,17 @@ export default () => {
       {!isPendingApproval && !loadingClinicalSubmission && (
         <Container css={containerStyle}>
           <Instruction
-            uploadEnabled
-            signOffEnabled={isReadyForSignoff}
-            validationEnabled={isReadyForValidation && !hasDataError && !isValidated}
+            uploadEnabled={!isWorkspaceDisabled}
+            signOffEnabled={!isWorkspaceDisabled && isReadyForSignoff}
+            validationEnabled={
+              !isWorkspaceDisabled && (isReadyForValidation && !hasDataError && !isValidated)
+            }
             onUploadFileSelect={handleSubmissionFilesUpload}
             onValidateClick={handleSubmissionValidation}
             onSignOffClick={handleSignOff}
             clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
               ({ clinicalType }) => clinicalType,
             )}
-            workspaceDisabled={workspaceDisabled}
           />
         </Container>
       )}

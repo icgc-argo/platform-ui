@@ -15,7 +15,6 @@ import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from '.
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
-import DnaLoader from 'uikit/DnaLoader';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
@@ -23,19 +22,18 @@ import { useRouter } from 'next/router';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
+import { useSubmissionSystemState } from '../SubmissionSystemLockedNotification';
 
 export default ({
   programShortName,
   showProgress,
   isPendingApproval,
   submissionVersion,
-  isWorkspaceDisabled,
 }: {
   programShortName: string;
   showProgress: boolean;
   isPendingApproval: boolean;
   submissionVersion: string;
-  isWorkspaceDisabled: boolean;
 }) => {
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
@@ -48,6 +46,7 @@ export default ({
   const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
     programShortName,
   );
+  const isWorkspaceDisabled = useSubmissionSystemState();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,

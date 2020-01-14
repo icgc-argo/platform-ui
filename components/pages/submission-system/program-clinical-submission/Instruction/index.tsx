@@ -19,7 +19,6 @@ export default ({
   uploadEnabled,
   onSignOffClick,
   clinicalTypes,
-  workspaceDisabled,
 }: {
   onUploadFileSelect: (files: FileList) => Promise<any>;
   onValidateClick: () => Promise<any>;
@@ -28,7 +27,6 @@ export default ({
   signOffEnabled: boolean;
   uploadEnabled: boolean;
   clinicalTypes: string[];
-  workspaceDisabled: boolean;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
@@ -77,7 +75,7 @@ export default ({
             }}
             onFilesSelect={handleFileUploadClick}
             isLoading={isUploading}
-            disabled={!uploadEnabled || workspaceDisabled}
+            disabled={!uploadEnabled}
           >
             <span css={instructionBoxButtonContentStyle}>
               <Icon
@@ -98,7 +96,7 @@ export default ({
             css={instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
-            disabled={!validationEnabled || workspaceDisabled}
+            disabled={!validationEnabled}
             onClick={handleValidationClick}
             isLoading={isValidating}
             isAsync
@@ -114,7 +112,7 @@ export default ({
             css={instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
-            disabled={!signOffEnabled || workspaceDisabled}
+            disabled={!signOffEnabled}
             onClick={handleSignOffClick}
             isLoading={isSigningOff}
             isAsync

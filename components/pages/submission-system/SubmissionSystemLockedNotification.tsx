@@ -4,12 +4,12 @@ import { css } from '@emotion/core';
 import Notification from 'uikit/notifications/Notification';
 import GLOBAL_SUBMISSION_SYSTEM_STATE from './GLOBAL_SUBMISSION_SYSTEM_STATE.gql';
 
-export const useSubmissionSystemState = () => {
+export const useSubmissionSystemState = (): boolean => {
   const { data: { clinicalSubmissionSystemState = undefined } = {} } = useQuery(
     GLOBAL_SUBMISSION_SYSTEM_STATE,
   );
 
-  return clinicalSubmissionSystemState;
+  return clinicalSubmissionSystemState as boolean;
 };
 
 export const SubmissionSystemLockedNotification = ({

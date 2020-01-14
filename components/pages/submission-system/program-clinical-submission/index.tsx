@@ -2,15 +2,13 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { styled } from 'uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionQueryData, ClinicalSubmissionError } from './types';
+import { ClinicalSubmissionQueryData } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
-import { useSubmissionSystemState } from '../SubmissionSystemLockedNotification';
-
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
 ): ClinicalSubmissionQueryData => ({
@@ -63,8 +61,6 @@ export default function ProgramClinicalSubmission() {
 
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
 
-  const isWorkspaceDisabled = useSubmissionSystemState();
-
   return (
     <>
       <SubmissionLayout
@@ -77,7 +73,6 @@ export default function ProgramClinicalSubmission() {
             showProgress={!loadingClinicalSubmission}
             isPendingApproval={isPendingApproval}
             submissionVersion={data.clinicalSubmissions.version}
-            isWorkspaceDisabled={isWorkspaceDisabled}
           />
         }
       >
