@@ -108,28 +108,13 @@ const Users = ({
             user={currentEditingUser}
             onSubmit={async (validData: typeof UserModel) => {
               try {
-                if (currentEditingUser.inviteStatus === 'ACCEPTED') {
-                  await triggerEdit({
-                    variables: {
-                      userEmail: validData.email,
-                      programShortName,
-                      userRole: validData.role,
-                    },
-                  });
-                } else {
-                  // user is not actually user yet, so use INVITE_USER_MUTATION not EDIT_USER_MUTATION
-                  await triggerResendInvite({
-                    variables: {
-                      invite: {
-                        programShortName,
-                        userFirstName: currentEditingUser.firstName,
-                        userLastName: currentEditingUser.lastName,
-                        userEmail: currentEditingUser.email,
-                        userRole: currentEditingUser.role,
-                      },
-                    },
-                  });
-                }
+                await triggerEdit({
+                  variables: {
+                    userEmail: validData.email,
+                    programShortName,
+                    userRole: validData.role,
+                  },
+                });
                 toaster.addToast({
                   variant: TOAST_VARIANTS.SUCCESS,
                   interactionType: TOAST_INTERACTION.CLOSE,
