@@ -165,7 +165,7 @@ export default function ProgramsTable(tableProps: {
       columns={columns}
       showPagination={false}
       loading={tableProps.loading}
-      pageSize={100}
+      pageSize={Infinity}
       LoadingComponent={tableProps.LoadingComponent}
     />
   );
