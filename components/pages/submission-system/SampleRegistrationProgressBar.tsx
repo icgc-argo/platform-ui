@@ -6,15 +6,13 @@ import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
 
-const SampleRegistrationProgressBar: React.ComponentType = () => {
+const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
   const [progress, setProgress] = React.useState([
     PROGRESS_STATUS.DISABLED,
     PROGRESS_STATUS.DISABLED,
   ]);
-
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
 
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
