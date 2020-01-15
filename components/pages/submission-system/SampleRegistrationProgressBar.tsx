@@ -7,10 +7,13 @@ import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION
 import { ClinicalRegistration } from './program-sample-registration/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const SampleRegistrationProgressBar: React.ComponentType = () => {
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
+const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
+  const [progress, setProgress] = React.useState([
+    PROGRESS_STATUS.DISABLED,
+    PROGRESS_STATUS.DISABLED,
+  ]);
 
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;

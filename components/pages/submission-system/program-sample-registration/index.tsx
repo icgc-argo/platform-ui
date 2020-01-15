@@ -168,7 +168,7 @@ export default function ProgramIDRegistration() {
               >
                 Register Samples
               </div>
-              <SampleRegistrationProgressBar />
+              <SampleRegistrationProgressBar programShortName={programShortName as string} />
             </Row>
           </TitleBar>
           <Link

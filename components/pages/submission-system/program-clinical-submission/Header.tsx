@@ -179,7 +179,7 @@ export default ({
             >
               Submit Clinical Data
             </div>
-            {showProgress && <ClinicalSubmissionProgressBar />}
+            {showProgress && <ClinicalSubmissionProgressBar programShortName={programShortName} />}
           </Row>
         </TitleBar>
         <Row nogutter align="center">

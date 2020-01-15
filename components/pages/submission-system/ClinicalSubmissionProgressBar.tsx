@@ -6,8 +6,9 @@ import { useClinicalSubmissionQuery } from './program-clinical-submission';
 import { css } from '@emotion/core';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const ClinicalSubmissionProgressBar: React.ComponentType = () => {
-  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
   const [] = React.useState<FileList | null>(null);
 
   const { data } = useClinicalSubmissionQuery(programShortName);
