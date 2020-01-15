@@ -19,10 +19,12 @@ import {
 import FileSelectButton from 'uikit/FileSelectButton';
 
 function Instructions({
+  uploadEnabled,
   registrationEnabled,
   shortName,
   registrationId,
 }: {
+  uploadEnabled: boolean;
   registrationEnabled: boolean;
   shortName: string;
   registrationId: string;
@@ -97,6 +99,7 @@ function Instructions({
                 if (files[0]) await handleUpload(files[0]);
               }}
               id="button-register-file-select" // For Selenium
+              disabled={!uploadEnabled}
             >
               <span css={instructionBoxButtonContentStyle}>
                 <Icon
