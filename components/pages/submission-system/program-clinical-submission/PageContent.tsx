@@ -41,6 +41,10 @@ import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import {
+  SubmissionSystemLockedNotification,
+  useSubmissionSystemDisabled,
+} from '../SubmissionSystemLockedNotification';
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
@@ -205,6 +209,8 @@ export default () => {
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
   const onErrorClose: (
     index: number,
   ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
@@ -314,6 +320,7 @@ export default () => {
         height: 100%;
       `}
     >
+      {<SubmissionSystemLockedNotification />}
       {signOffModalShown && (
         <ModalPortal>
           <SignOffValidationModal
@@ -328,9 +335,11 @@ export default () => {
       {!isPendingApproval && !loadingClinicalSubmission && (
         <Container css={containerStyle}>
           <Instruction
-            uploadEnabled
-            signOffEnabled={isReadyForSignoff}
-            validationEnabled={isReadyForValidation && !hasDataError && !isValidated}
+            uploadEnabled={!isSubmissionSystemDisabled}
+            signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
+            validationEnabled={
+              !isSubmissionSystemDisabled && (isReadyForValidation && !hasDataError && !isValidated)
+            }
             onUploadFileSelect={handleSubmissionFilesUpload}
             onValidateClick={handleSubmissionValidation}
             onSignOffClick={handleSignOff}

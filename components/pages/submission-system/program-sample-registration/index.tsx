@@ -8,7 +8,6 @@ import { css } from 'uikit';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
 import Container from 'uikit/Container';
 import Link from 'uikit/Link';
-import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import TitleBar from 'uikit/TitleBar';
 import Typography from 'uikit/Typography';
 import SubmissionLayout from '../layout';
@@ -25,6 +24,10 @@ import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import {
+  SubmissionSystemLockedNotification,
+  useSubmissionSystemDisabled,
+} from '../SubmissionSystemLockedNotification';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 
 const recordsToFileTable = (
@@ -68,6 +71,7 @@ export default function ProgramIDRegistration() {
     'records',
     [] as typeof clinicalRegistration.records,
   );
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 
@@ -164,7 +168,7 @@ export default function ProgramIDRegistration() {
               >
                 Register Samples
               </div>
-              <SampleRegistrationProgressBar />
+              <SampleRegistrationProgressBar programShortName={programShortName as string} />
             </Row>
           </TitleBar>
           <Link
@@ -180,6 +184,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
+      {<SubmissionSystemLockedNotification />}
       {<SchemaInvalidSubmisisonNotification programShortName={programShortName as string} />}
       <Container
         css={css`
@@ -188,7 +193,8 @@ export default function ProgramIDRegistration() {
         `}
       >
         <Instructions
-          registrationEnabled={!!get(clinicalRegistration, 'id')}
+          uploadEnabled={!isSubmissionSystemDisabled}
+          registrationEnabled={!isSubmissionSystemDisabled && !!get(clinicalRegistration, 'id')}
           shortName={programShortName as string}
           registrationId={get(clinicalRegistration, 'id')}
         />
@@ -233,6 +239,7 @@ export default function ProgramIDRegistration() {
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
                 onClick={handleClearClick}
+                disabled={isSubmissionSystemDisabled}
               >
                 <Typography variant="data">Clear</Typography>
               </Button>

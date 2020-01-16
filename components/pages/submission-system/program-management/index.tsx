@@ -5,6 +5,7 @@ import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 
 export default () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default () => {
         </div>
       }
     >
+      {<SubmissionSystemLockedNotification marginBottom={20} />}
       {
         <SchemaInvalidSubmisisonNotification
           marginBottom={20}

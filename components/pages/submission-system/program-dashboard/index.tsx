@@ -2,11 +2,11 @@ import * as React from 'react';
 import SubmissionLayout from '../layout';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import { ContentBox } from 'uikit/PageLayout';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 import { Row, Col, ScreenClassRender } from 'react-grid-system';
 import StatsBar from './StatsBar';
 import DonorReleaseSummary from './DonorReleaseSummary';
@@ -73,6 +73,7 @@ export default function ProgramDashboard() {
           `}
         />
       )}
+      {<SubmissionSystemLockedNotification marginBottom={20} />}
       {
         <SchemaInvalidSubmisisonNotification
           marginBottom={20}

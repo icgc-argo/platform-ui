@@ -5,16 +5,15 @@ import * as React from 'react';
 import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
+import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const SampleRegistrationProgressBar: React.ComponentType = () => {
+const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
   const [progress, setProgress] = React.useState([
     PROGRESS_STATUS.DISABLED,
     PROGRESS_STATUS.DISABLED,
   ]);
-
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
 
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
@@ -28,20 +27,32 @@ const SampleRegistrationProgressBar: React.ComponentType = () => {
     [] as typeof clinicalRegistration.errors,
   );
 
-  // update progress steps
-  React.useEffect(() => {
-    if (clinicalRegistration && clinicalRegistration.records.length > 0) {
-      setProgress([PROGRESS_STATUS.SUCCESS, PROGRESS_STATUS.PENDING]);
-    } else if (schemaOrValidationErrors.length > 0) {
-      setProgress([PROGRESS_STATUS.ERROR, PROGRESS_STATUS.DISABLED]);
-    }
-    return () => setProgress([PROGRESS_STATUS.DISABLED, PROGRESS_STATUS.DISABLED]);
-  }, [clinicalRegistration, schemaOrValidationErrors]);
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
+  const progressStates: {
+    upload: React.ComponentProps<typeof Progress.Item>['state'];
+    register: React.ComponentProps<typeof Progress.Item>['state'];
+  } = {
+    upload: isSubmissionSystemDisabled
+      ? 'locked'
+      : clinicalRegistration && clinicalRegistration.records.length > 0
+      ? 'success'
+      : schemaOrValidationErrors.length > 0
+      ? 'error'
+      : 'disabled',
+    register: isSubmissionSystemDisabled
+      ? 'locked'
+      : clinicalRegistration && clinicalRegistration.records.length > 0
+      ? 'pending'
+      : schemaOrValidationErrors.length > 0
+      ? 'disabled'
+      : 'disabled',
+  };
 
   return (
     <Progress>
-      <Progress.Item state={progress[0]} text="Upload" />
-      <Progress.Item state={progress[1]} text="Register" />
+      <Progress.Item state={progressStates.upload} text="Upload" />
+      <Progress.Item state={progressStates.register} text="Register" />
     </Progress>
   );
 };

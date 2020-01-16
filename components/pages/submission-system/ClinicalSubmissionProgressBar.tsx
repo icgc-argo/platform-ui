@@ -1,21 +1,17 @@
 import * as React from 'react';
 import Progress from 'uikit/Progress';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import {
-  ClinicalSubmissionQueryData,
-  ClinicalSubmissionError,
-} from './program-clinical-submission/types';
-import {
-  useClinicalSubmissionQuery,
-  placeholderClinicalSubmissionQueryData,
-} from './program-clinical-submission';
+import { ClinicalSubmissionError } from './program-clinical-submission/types';
+import { useClinicalSubmissionQuery } from './program-clinical-submission';
 import { css } from '@emotion/core';
+import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const ClinicalSubmissionProgressBar: React.ComponentType = () => {
-  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: string }> = ({
+  programShortName,
+}) => {
   const [] = React.useState<FileList | null>(null);
 
-  const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
+  const { data } = useClinicalSubmissionQuery(programShortName);
 
   const allDataErrors = React.useMemo(
     () =>
@@ -49,30 +45,36 @@ const ClinicalSubmissionProgressBar: React.ComponentType = () => {
   const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
-  const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
-    clinicalEntity => !!clinicalEntity.dataUpdates.length,
-  );
-  const isValidated = data.clinicalSubmissions.state !== 'OPEN';
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const progressStates: {
     upload: React.ComponentProps<typeof Progress.Item>['state'];
     validate: React.ComponentProps<typeof Progress.Item>['state'];
     signOff: React.ComponentProps<typeof Progress.Item>['state'];
   } = {
-    upload: isReadyForValidation
+    upload: isSubmissionSystemDisabled
+      ? 'locked'
+      : isReadyForValidation
       ? 'success'
       : hasSchemaError || hasSchemaErrorsAfterMigration
       ? 'error'
       : 'disabled',
-    validate:
-      isReadyForSignoff || isPendingApproval
-        ? 'success'
-        : isReadyForValidation
-        ? hasDataError
-          ? 'error'
-          : 'pending'
-        : 'disabled',
-    signOff: isReadyForSignoff ? 'pending' : isPendingApproval ? 'success' : 'disabled',
+    validate: isSubmissionSystemDisabled
+      ? 'locked'
+      : isReadyForSignoff || isPendingApproval
+      ? 'success'
+      : isReadyForValidation
+      ? hasDataError
+        ? 'error'
+        : 'pending'
+      : 'disabled',
+    signOff: isSubmissionSystemDisabled
+      ? 'locked'
+      : isReadyForSignoff
+      ? 'pending'
+      : isPendingApproval
+      ? 'success'
+      : 'disabled',
   };
 
   return (

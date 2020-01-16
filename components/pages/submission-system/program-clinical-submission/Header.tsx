@@ -15,7 +15,6 @@ import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from '.
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
-import DnaLoader from 'uikit/DnaLoader';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
@@ -23,6 +22,7 @@ import { useRouter } from 'next/router';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
+import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 
 export default ({
   programShortName,
@@ -46,6 +46,7 @@ export default ({
   const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
     programShortName,
   );
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -178,7 +179,7 @@ export default ({
             >
               Submit Clinical Data
             </div>
-            {showProgress && <ClinicalSubmissionProgressBar />}
+            {showProgress && <ClinicalSubmissionProgressBar programShortName={programShortName} />}
           </Row>
         </TitleBar>
         <Row nogutter align="center">
@@ -200,7 +201,7 @@ export default ({
               css={css`
                 margin-right: 10px;
               `}
-              disabled={!submissionVersion}
+              disabled={isSubmissionSystemDisabled || !submissionVersion}
               onClick={handleSubmissionClear}
             >
               Clear submission

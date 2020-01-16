@@ -36,6 +36,7 @@ import {
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
+import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 type SideMenuProgram = {
   shortName: string;
@@ -123,6 +124,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
     : false;
 
+  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
   return (
     <div>
       <Link
@@ -151,7 +153,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               content={
                 <StatusMenuItem>
                   Register Samples
-                  {clinicalRegistrationHasError ? (
+                  {isSubmissionSystemDisabled ? (
+                    <Icon name="lock" fill="accent3_dark" width="15px" />
+                  ) : clinicalRegistrationHasError ? (
                     <Icon name="exclamation" fill="error" width="15px" />
                   ) : clinicalRegistrationInProgress ? (
                     <Icon name="ellipses" fill="warning" width="15px" />
@@ -176,7 +180,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               content={
                 <StatusMenuItem>
                   Submit Clinical Data
-                  {
+                  {isSubmissionSystemDisabled ? (
+                    <Icon name="lock" fill="accent3_dark" width="15px" />
+                  ) : (
                     ({
                       OPEN: clinicalSubmissionHasSchemaErrors ? (
                         <Icon name="exclamation" fill="error" width="15px" />
@@ -189,7 +195,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                     } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
                       data ? data.clinicalSubmissions.state : null
                     ]
-                  }
+                  )}
                 </StatusMenuItem>
               }
               selected={
