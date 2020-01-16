@@ -5,7 +5,7 @@ import Typography from 'uikit/Typography';
 export default () => {
   return (
     <SubmissionLayout
-      subtitle="All Programs"
+      subtitle="DCC Dashboard"
       contentHeader={
         <div
           css={css`
