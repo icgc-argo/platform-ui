@@ -325,12 +325,7 @@ export default function SideMenu() {
             </Link>
           )}
           {canSeeRdpcs && (
-            <MenuItem
-              icon={<Icon name="rdpc" />}
-              content={'RDPCs'}
-              selected={activeItem === 0}
-              onClick={() => toggleItem(0)}
-            >
+            <MenuItem icon={<Icon name="rdpc" />} content={'RDPCs'} onClick={() => toggleItem(0)}>
               <MenuItem content="what goes here?" />
             </MenuItem>
           )}
