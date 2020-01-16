@@ -1,6 +1,6 @@
 import SubmissionLayout from '../layout';
 import { css } from '@emotion/core';
-import Typography from 'uikit/dist/Typography';
+import Typography from 'uikit/Typography';
 
 export default () => {
   return (
