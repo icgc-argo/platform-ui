@@ -112,6 +112,9 @@ const Input: React.ComponentType<
               display: flex;
               justify-content: center;
               align-items: center;
+              &:hover {
+                cursor: pointer;
+              }
             `}
           >
             <Icon
