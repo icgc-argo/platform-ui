@@ -5,7 +5,13 @@ import { Row, Col } from 'react-grid-system';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import Link from 'uikit/Link';
+import Hyperlink from 'uikit/Link';
+import Link from 'next/link';
+import {
+  PROGRAM_SAMPLE_REGISTRATION_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
+} from 'global/constants/pages';
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -37,14 +43,21 @@ export default function ProgramWorkplaceStatus() {
               height: 50px;
             `}
           >
-            <Typography
-              css={css`
-                margin-top: 0;
-              `}
+            <Link
+              href={PROGRAM_SAMPLE_REGISTRATION_PATH}
+              as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                programShortName as string,
+              )}
             >
-              Sample <br />
-              Registration
-            </Typography>
+              <Hyperlink
+                css={css`
+                  margin-top: 0;
+                `}
+              >
+                <Typography variant="label">Sample Registration</Typography>
+              </Hyperlink>
+            </Link>
           </div>
           <div
             css={css`
@@ -68,14 +81,21 @@ export default function ProgramWorkplaceStatus() {
               height: 50px;
             `}
           >
-            <Typography
-              css={css`
-                margin-top: 0;
-              `}
+            <Link
+              href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+              as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                programShortName as string,
+              )}
             >
-              Clinical <br />
-              Submission
-            </Typography>
+              <Hyperlink
+                css={css`
+                  margin-top: 0;
+                `}
+              >
+                <Typography variant="label">Clinical Submission</Typography>
+              </Hyperlink>
+            </Link>
           </div>
           <div
             css={css`
