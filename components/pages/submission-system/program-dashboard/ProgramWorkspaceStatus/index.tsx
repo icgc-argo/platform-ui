@@ -18,12 +18,12 @@ export default function ProgramWorkplaceStatus() {
   return (
     <Container
       css={css`
-        height: 134px;
+        height: 170px;
       `}
     >
       <div
         css={css`
-          padding: 12px;
+          padding: 16px;
         `}
       >
         <Typography variant="default" component="span">
@@ -32,9 +32,11 @@ export default function ProgramWorkplaceStatus() {
 
         <div
           css={css`
+            padding-top:20px;
             height: 50px;
             display: flex;
             flex-direction: row;
+            align-items:baseline;
           `}
         >
           <div
@@ -69,6 +71,7 @@ export default function ProgramWorkplaceStatus() {
             height: 50px;
             display: flex;
             flex-direction: row;
+            align-items:baseline;
           `}
         >
           <div
