@@ -81,7 +81,7 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
     <div>
       <div
         css={css`
-          height: 4vh;
+          height: 30px;
           padding-bottom: 4px;
         `}
       >
