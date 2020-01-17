@@ -82,6 +82,7 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
       <div
         css={css`
           height: 4vh;
+          padding-bottom: 4px;
         `}
       >
         <Typography variant="title">{quantity}</Typography>
