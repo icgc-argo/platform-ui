@@ -12,31 +12,22 @@ import {
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
+import { DashboardCard } from '../common';
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   return (
-    <Container
-      css={css`
-        height: 170px;
-      `}
-    >
-      <div
-        css={css`
-          padding: 16px;
-        `}
-      >
-        <Typography variant="default" component="span">
+    <DashboardCard cardHeight="170px">
+     <Typography variant="default" component="span">
           Program Workplace Status
         </Typography>
 
         <div
           css={css`
-            padding-top:20px;
             height: 50px;
             display: flex;
             flex-direction: row;
-            align-items:baseline;
+            padding-top: 10px;
           `}
         >
           <div
@@ -71,7 +62,6 @@ export default function ProgramWorkplaceStatus() {
             height: 50px;
             display: flex;
             flex-direction: row;
-            align-items:baseline;
           `}
         >
           <div
@@ -101,7 +91,6 @@ export default function ProgramWorkplaceStatus() {
             <ClinicalSubmissionProgressBar programShortName={programShortName} />
           </div>
         </div>
-      </div>
-    </Container>
+    </DashboardCard>
   );
 }
