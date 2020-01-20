@@ -39,7 +39,8 @@ export default function ProgramWorkplaceStatus() {
         >
           <div
             css={css`
-              width: 100px;
+              margin-top: 7px;
+              width: 175px;
               height: 50px;
             `}
           >
@@ -50,11 +51,7 @@ export default function ProgramWorkplaceStatus() {
                 programShortName as string,
               )}
             >
-              <Hyperlink
-                css={css`
-                  margin-top: 0;
-                `}
-              >
+              <Hyperlink>
                 <Typography variant="label">Sample Registration</Typography>
               </Hyperlink>
             </Link>
@@ -62,7 +59,6 @@ export default function ProgramWorkplaceStatus() {
           <div
             css={css`
               height: 50px;
-              margin-top: 2px;
             `}
           >
             <SampleRegistrationProgressBar programShortName={programShortName} />
@@ -77,7 +73,8 @@ export default function ProgramWorkplaceStatus() {
         >
           <div
             css={css`
-              width: 100px;
+              margin-top: 7px;
+              width: 175px;
               height: 50px;
             `}
           >
@@ -88,11 +85,7 @@ export default function ProgramWorkplaceStatus() {
                 programShortName as string,
               )}
             >
-              <Hyperlink
-                css={css`
-                  margin-top: 0;
-                `}
-              >
+              <Hyperlink>
                 <Typography variant="label">Clinical Submission</Typography>
               </Hyperlink>
             </Link>
@@ -100,7 +93,6 @@ export default function ProgramWorkplaceStatus() {
           <div
             css={css`
               height: 50px;
-              margin-top: 2px;
             `}
           >
             <ClinicalSubmissionProgressBar programShortName={programShortName} />
