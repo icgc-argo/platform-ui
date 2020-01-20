@@ -6,33 +6,40 @@ import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
 import Link from 'uikit/Link';
+import styled from '@emotion/styled';
+import { DashboardCard } from '../common';
 
-const getStartedLink = <Link href="/">Get started with data submission » </Link>;
+const getStartedLink = (
+  <Typography variant="data" component="span">
+    <Link target="_blank" href="https://platform-ui.qa.argo.cancercollaboratory.org/">
+      Get started with data submission »
+    </Link>
+  </Typography>
+);
+
+const NoDataIcon = styled('img')`
+  padding: 0px 16px;
+  max-width: 100vw;
+`;
+
 export default () => (
-  <Container
-    css={css`
-      height: 330px;
-    `}
-  >
-    <div
-      css={css`
-        padding: 12px;
-      `}
-    >
-      <Typography variant="default" component="span">
-        Donor Data Summary
-      </Typography>
-      <NoData title="You do not have any donor data submitted." link={getStartedLink}>
-        <div
-          css={css`
-            display: flex;
-          `}
-        >
-          <img alt="no data found" src={PicBeakers} />
-          <img alt="no data found" src={PicHeart} />
-          <img alt="no data found" src={PicDna} />
-        </div>
-      </NoData>
-    </div>
-  </Container>
+  <DashboardCard>
+    <Typography variant="default" component="span">
+      Donor Data Summary
+    </Typography>
+    <NoData title="You do not have any donor data submitted." link={getStartedLink}>
+      <div
+        css={css`
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          max-height: 100%;
+        `}
+      >
+        <NoDataIcon alt="no data found" src={PicBeakers} />
+        <NoDataIcon alt="no data found" src={PicHeart} />
+        <NoDataIcon alt="no data found" src={PicDna} />
+      </div>
+    </NoData>
+  </DashboardCard>
 );
