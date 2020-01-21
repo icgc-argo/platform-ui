@@ -16,9 +16,11 @@ export const useSubmissionSystemDisabled = (): boolean => {
 export const SubmissionSystemLockedNotification = ({
   marginTop,
   marginBottom,
+  canClose = false,
 }: {
   marginTop?: number;
   marginBottom?: number;
+  canClose?: boolean;
 }) => {
   const [showNotification, setshowNotification] = React.useState(true);
   const isWorksapceDisabled = useSubmissionSystemDisabled();
@@ -50,7 +52,7 @@ export const SubmissionSystemLockedNotification = ({
         variant="WARNING"
         title={`Your program workspace is locked`}
         content={getContentWithLink()}
-        interactionType="CLOSE"
+        interactionType={canClose ? 'CLOSE' : 'NONE'}
         onInteraction={handleOnInteraction}
       />
     )) ||
