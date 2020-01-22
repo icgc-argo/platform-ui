@@ -28,7 +28,7 @@ export default () => {
         </div>
       }
     >
-      {<SubmissionSystemLockedNotification marginBottom={20} />}
+      {<SubmissionSystemLockedNotification marginBottom={20} canClose={true} />}
       {
         <SchemaInvalidSubmisisonNotification
           marginBottom={20}

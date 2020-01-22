@@ -12,21 +12,13 @@ import {
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
+import { DashboardCard } from '../common';
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   return (
-    <Container
-      css={css`
-        height: 134px;
-      `}
-    >
-      <div
-        css={css`
-          padding: 12px;
-        `}
-      >
-        <Typography variant="default" component="span">
+    <DashboardCard cardHeight="170px">
+     <Typography variant="default" component="span">
           Program Workplace Status
         </Typography>
 
@@ -35,11 +27,13 @@ export default function ProgramWorkplaceStatus() {
             height: 50px;
             display: flex;
             flex-direction: row;
+            padding-top: 10px;
           `}
         >
           <div
             css={css`
-              width: 100px;
+              margin-top: 7px;
+              width: 175px;
               height: 50px;
             `}
           >
@@ -50,11 +44,7 @@ export default function ProgramWorkplaceStatus() {
                 programShortName as string,
               )}
             >
-              <Hyperlink
-                css={css`
-                  margin-top: 0;
-                `}
-              >
+              <Hyperlink>
                 <Typography variant="label">Sample Registration</Typography>
               </Hyperlink>
             </Link>
@@ -62,7 +52,6 @@ export default function ProgramWorkplaceStatus() {
           <div
             css={css`
               height: 50px;
-              margin-top: 2px;
             `}
           >
             <SampleRegistrationProgressBar programShortName={programShortName} />
@@ -77,7 +66,8 @@ export default function ProgramWorkplaceStatus() {
         >
           <div
             css={css`
-              width: 100px;
+              margin-top: 7px;
+              width: 175px;
               height: 50px;
             `}
           >
@@ -88,11 +78,7 @@ export default function ProgramWorkplaceStatus() {
                 programShortName as string,
               )}
             >
-              <Hyperlink
-                css={css`
-                  margin-top: 0;
-                `}
-              >
+              <Hyperlink>
                 <Typography variant="label">Clinical Submission</Typography>
               </Hyperlink>
             </Link>
@@ -100,13 +86,11 @@ export default function ProgramWorkplaceStatus() {
           <div
             css={css`
               height: 50px;
-              margin-top: 2px;
             `}
           >
             <ClinicalSubmissionProgressBar programShortName={programShortName} />
           </div>
         </div>
-      </div>
-    </Container>
+    </DashboardCard>
   );
 }

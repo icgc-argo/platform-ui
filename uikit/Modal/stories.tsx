@@ -19,6 +19,7 @@ const ModalStories = storiesOf(`${__dirname}`, module)
       const cancelText = text('cancelText', 'nevermind');
       const buttonSize = select('buttonSize', [null, ...Object.values(BUTTON_SIZES)], null);
       const actionDisabled = boolean('actionDisabled', false);
+      const actionVisible = boolean('actionVisible', true);
       const titleIconConfig = {
         name: select('titleIconConfig.name', [null, ...Object.values(ICON_NAMES)], null),
         fill: select(
@@ -34,6 +35,7 @@ const ModalStories = storiesOf(`${__dirname}`, module)
         cancelText,
         buttonSize,
         actionDisabled,
+        actionVisible,
         titleIconConfig,
       };
     };

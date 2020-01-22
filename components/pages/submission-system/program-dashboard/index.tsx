@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SubmissionLayout from '../layout';
-import { css } from 'uikit';
+import { css, styled } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
@@ -36,14 +36,19 @@ export default function ProgramDashboard() {
     }
   });
 
+  const PaddedRow = styled(Row)`
+    padding-bottom: 8px;
+  `;
+
   const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
     !['xl'].includes(size)
       ? css`
-          padding-bottom: 15px;
+          padding-bottom: 16px;
         `
       : css`
           padding-bottom: 0px;
         `;
+
   return (
     <SubmissionLayout
       contentHeader={
@@ -73,47 +78,34 @@ export default function ProgramDashboard() {
           `}
         />
       )}
-      {<SubmissionSystemLockedNotification marginBottom={20} />}
+      {<SubmissionSystemLockedNotification marginBottom={20} canClose={true} />}
       {
         <SchemaInvalidSubmisisonNotification
           marginBottom={20}
           programShortName={programShortName as string}
         />
       }
-      <Row
-        css={css`
-          padding-bottom: 7px;
-        `}
-      >
+      <PaddedRow justify="around">
         <Col xs={12}>
           <StatsBar />
         </Col>
-      </Row>
+      </PaddedRow>
 
-      <Row
-        justify="between"
-        css={css`
-          padding-bottom: 9px;
-        `}
-      >
+      <PaddedRow justify="between">
         <Col xl={4} lg={12}>
-          <Row
-            css={css`
-              padding-bottom: 10px;
-            `}
-          >
+          <PaddedRow>
             <Col xs={12}>
               <DonorReleaseSummary />
             </Col>
-          </Row>
-          <Row
-            css={css`
-              padding-bottom: 9px;
-            `}
-          >
-            <Col xs={12}>
-              <ProgramWorkspaceStatus />
-            </Col>
+          </PaddedRow>
+          <Row>
+            <ScreenClassRender
+              render={screenClass => (
+                <Col xs={12} css={applyStackedStyle(screenClass)}>
+                  <ProgramWorkspaceStatus />
+                </Col>
+              )}
+            />
           </Row>
         </Col>
         <ScreenClassRender
@@ -127,16 +119,12 @@ export default function ProgramDashboard() {
         <Col xl={4} lg={12}>
           <MolecularDataSummary />
         </Col>
-      </Row>
-      <Row
-        css={css`
-          padding-bottom: 7px;
-        `}
-      >
+      </PaddedRow>
+      <PaddedRow>
         <Col xs={12}>
           <DonorDataSummary />
         </Col>
-      </Row>
+      </PaddedRow>
     </SubmissionLayout>
   );
 }
