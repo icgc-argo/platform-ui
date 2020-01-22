@@ -5,13 +5,14 @@ import ContentMenu from '.';
 
 const ContentMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const contentNames = ['Sample Registration', 'Specimen', 'Donor', 'Treatment'];
-  const contents = contentNames.map(content => ({
+  const contents = contentNames.map((content, i) => ({
     name: content,
+    disabled: i === 2 ? true : false, // set one as disabled
     contentRef: React.createRef<any>(),
   }));
 
   return (
-    <div style={{ display: 'grid' }}>
+    <div>
       <p>// NB: Jump to content only works on window level</p>
       <ContentMenu
         title={text('Title', 'Clinical Files')}
