@@ -12,7 +12,7 @@ const ContentMenuStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
   }));
 
   return (
-    <div style={null}>
+    <div>
       <p>// NB: Jump to content only works on window level</p>
       <ContentMenu
         title={text('Title', 'Clinical Files')}
