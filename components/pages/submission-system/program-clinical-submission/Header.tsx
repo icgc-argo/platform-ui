@@ -197,6 +197,7 @@ export default ({
           )}
           {!isPendingApproval && (
             <Button
+              id="button-clear-submission"
               variant="text"
               css={css`
                 margin-right: 10px;

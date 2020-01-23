@@ -181,6 +181,7 @@ export default ({
               </Typography>
               {!isPendingApproval && (
                 <Button
+                  id="button-clear-selected-file" // For Selenium
                   variant="text"
                   size="sm"
                   onClick={onClearClick(selectedFile.clinicalType)}
