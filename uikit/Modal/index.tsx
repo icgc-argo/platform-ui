@@ -22,7 +22,7 @@ const ModalContainer = styled('div')`
   padding: 24px;
   padding-bottom: 0px;
 `;
-console.log('modal', ModalContainer, typeof ModalContainer);
+
 const ModalTitle = styled('div')`
   display: flex;
   flex-direction: row;
