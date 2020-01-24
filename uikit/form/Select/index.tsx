@@ -72,6 +72,7 @@ const Select: React.ComponentType<{
       return false;
     }
     setExpanded(false);
+    onBlur(e);
   };
 
   useEffect(() => {
@@ -86,16 +87,16 @@ const Select: React.ComponentType<{
 
   // dismiss on Escape
   const escapeKeyHandler = e => {
-    console.log('key up');
     if (e.key === 'Escape' && isExpanded) {
       setExpanded(false);
+      onBlur(e);
     }
   };
 
   return (
     <div
       className={props.className}
-      style={{ position: 'relative', ...(props.style || {}) }}
+      style={{ position: 'relative', outline: 'none', ...(props.style || {}) }}
       onKeyUp={escapeKeyHandler}
       tabIndex={0}
     >

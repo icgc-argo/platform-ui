@@ -24,6 +24,7 @@ export type StyledInputWrapperProps = {
   getOverrideCss?: (a: any) => any;
 };
 export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
+  outline: none;
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
