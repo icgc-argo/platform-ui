@@ -9,7 +9,7 @@ const Cont = styled('div')`
   border-left: 2px solid ${({ color, theme }) => (color ? color : theme.colors.secondary)};
 `;
 
-const MenuItem = ({ name, onClick, active }) => {
+const MenuItem = ({ name, onClick, active, disabled }) => {
   const theme = useTheme();
   return (
     <div
@@ -18,12 +18,15 @@ const MenuItem = ({ name, onClick, active }) => {
         background-color: ${active && theme.colors.secondary_4};
 
         &:hover {
-          cursor: pointer;
+          cursor: ${disabled ? 'not-allowed' : 'pointer'};
         }
       `}
       onClick={onClick}
     >
-      <Typography variant="data" color={active ? 'primary' : 'secondary_dark'}>
+      <Typography
+        variant="data"
+        color={active ? 'secondary_dark' : disabled ? 'grey_1' : 'primary'}
+      >
         {name}
       </Typography>
     </div>
@@ -37,7 +40,11 @@ const Menu = ({
   scrollYOffset = 0,
 }: {
   title: string;
-  contents: Array<{ name: string; contentRef?: React.RefObject<HTMLElement> }>;
+  contents: Array<{
+    name: string;
+    contentRef?: React.RefObject<HTMLElement>;
+    disabled?: Boolean;
+  }>;
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
   scrollYOffset?: number;
@@ -49,15 +56,17 @@ const Menu = ({
         {title}
       </Typography>
       <Cont color={color}>
-        {contents.map(({ name, contentRef }, index) => (
+        {contents.map(({ name, contentRef, disabled }, index) => (
           <MenuItem
             key={index}
             name={name}
             active={activeIndex === index}
+            disabled={disabled}
             onClick={() => {
-              setActiveIndex(index);
-              if (contentRef && contentRef.current)
+              if (!disabled && contentRef && contentRef.current) {
+                setActiveIndex(index);
                 window.scrollTo(0, contentRef.current.offsetTop - scrollYOffset);
+              }
             }}
           />
         ))}

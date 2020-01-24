@@ -65,6 +65,7 @@ export default ({
             2. Upload your formatted clinical TSV files.
           </Typography>
           <FileSelectButton
+            id="button-submission-file-select" // For Selenium
             isAsync
             css={instructionBoxButtonStyle}
             variant="secondary"
@@ -93,6 +94,7 @@ export default ({
             3. Validate your entire submission workspace.
           </Typography>
           <Button
+            id="button-validate-submission" // For Selenium
             css={instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
@@ -109,6 +111,7 @@ export default ({
             4. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
           <Button
+            id="button-submission-sign-off" // For Selenium
             css={instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
