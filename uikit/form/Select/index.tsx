@@ -83,6 +83,10 @@ const Select: React.ComponentType<{
   useEffect(() => {
     if (isExpanded) {
       document.addEventListener('mouseup', onDocumentClick);
+      // focus first el
+      // const firstOption: HTMLElement =
+      // dropdownRef.current && dropdownRef.current.querySelector(':first-child');
+      //firstOption.focus();
     } else {
       document.removeEventListener('mouseup', onDocumentClick);
     }
@@ -91,49 +95,30 @@ const Select: React.ComponentType<{
   }, [isExpanded]);
 
   // dismiss on Escape
-  const escapeKeyHandler = e => {
+  const handleEscape = e => {
+    console.log('e', e.key);
     if (e.key === 'Escape' && isExpanded) {
       close(e);
+    }
+  };
+
+  const handleKeyboard = ({ key }) => {
+    if (key === 'Tab' && !isExpanded) {
+      //if (!isExpanded) setExpanded(true);
+    } else if (key === 'ArrowUp') {
+      if (!isExpanded) setExpanded(true);
+    } else if (key === 'ArrowDown') {
+      if (!isExpanded) setExpanded(true);
     }
   };
 
   return (
     <div
       className={props.className}
-      style={{ position: 'relative', outline: 'none', ...(props.style || {}) }}
-      onKeyUp={escapeKeyHandler}
-      tabIndex={0}
+      style={{ position: 'relative', ...(props.style || {}) }}
+      onBlur={() => console.log('blur')}
+      onClick={() => console.log('click')}
     >
-      {/**
-       * This HiddenSelect component exists to sync up the focus state with the browser's
-       * native behavior as much as possible for improved accessibility
-       **
-      <HiddenSelect
-        aria-label={ariaLabel}
-        ref={HiddenSelectRef}
-        value={value}
-        onChange={e => {
-          setActive('default');
-          setExpanded(false);
-          onChange(e.target.value);
-        }}
-        onFocus={() => {
-          setActive('focus');
-          setExpanded(true);
-        }}
-        onBlur={event => {
-          setActive('default');
-          setExpanded(false);
-          onBlur(event);
-        }}
-        disabled={disabled}
-      >
-        {options.map(({ content, value: optionValue }) => (
-          <option key={optionValue} value={optionValue}>
-            {content}
-          </option>
-        ))}
-        </HiddenSelect>*/}
       <StyledInputWrapper
         ref={activatorRef}
         id={id}
@@ -143,11 +128,12 @@ const Select: React.ComponentType<{
         inputState={activeState as StyledInputWrapperProps['inputState']}
         role="button"
         aria-haspopup={true}
-        aria-controls={`${id}-options`}
-        onClick={() => {
+        onClick={e => {
           setExpanded(!isExpanded);
           setActive(isExpanded ? 'focus' : 'default');
         }}
+        onKeyUp={handleKeyboard}
+        tabIndex={0}
       >
         <Typography
           variant="paragraph"
@@ -174,9 +160,11 @@ const Select: React.ComponentType<{
           role="listbox"
           id={`${id}-options`}
           className={popupPosition}
+          onKeyDown={handleEscape}
         >
           {options.map(({ content, value: optionValue }) => (
             <Option
+              tabIndex="0"
               key={optionValue}
               value={optionValue}
               onMouseDown={() => {
