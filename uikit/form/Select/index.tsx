@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
@@ -61,6 +61,28 @@ const Select: React.ComponentType<{
 
   const activatorRef = React.createRef<HTMLDivElement>();
   const dropdownRef = React.createRef<HTMLOListElement>();
+
+  // close dropdown
+  const onDocumentClick = e => {
+    const node = e.target;
+    if (
+      (activatorRef.current && activatorRef.current.contains(node)) ||
+      (dropdownRef.current && dropdownRef.current.contains(node))
+    ) {
+      return false;
+    }
+    setExpanded(false);
+  };
+
+  useEffect(() => {
+    if (isExpanded) {
+      document.addEventListener('mouseup', onDocumentClick);
+    } else {
+      document.removeEventListener('mouseup', onDocumentClick);
+    }
+
+    return () => document.removeEventListener('mouseup', onDocumentClick);
+  }, [isExpanded]);
 
   return (
     <div
