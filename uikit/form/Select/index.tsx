@@ -62,6 +62,12 @@ const Select: React.ComponentType<{
   const activatorRef = React.createRef<HTMLDivElement>();
   const dropdownRef = React.createRef<HTMLOListElement>();
 
+  const close = e => {
+    setExpanded(false);
+    setActive('default');
+    onBlur(e);
+  };
+
   // close dropdown on document click
   const onDocumentClick = e => {
     const node = e.target;
@@ -71,8 +77,7 @@ const Select: React.ComponentType<{
     ) {
       return false;
     }
-    setExpanded(false);
-    onBlur(e);
+    close(e);
   };
 
   useEffect(() => {
@@ -88,8 +93,7 @@ const Select: React.ComponentType<{
   // dismiss on Escape
   const escapeKeyHandler = e => {
     if (e.key === 'Escape' && isExpanded) {
-      setExpanded(false);
-      onBlur(e);
+      close(e);
     }
   };
 
@@ -140,7 +144,10 @@ const Select: React.ComponentType<{
         role="button"
         aria-haspopup={true}
         aria-controls={`${id}-options`}
-        onClick={() => setExpanded(!isExpanded)}
+        onClick={() => {
+          setExpanded(!isExpanded);
+          setActive(isExpanded ? 'focus' : 'default');
+        }}
       >
         <Typography
           variant="paragraph"
@@ -169,7 +176,14 @@ const Select: React.ComponentType<{
           className={popupPosition}
         >
           {options.map(({ content, value: optionValue }) => (
-            <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
+            <Option
+              key={optionValue}
+              value={optionValue}
+              onMouseDown={() => {
+                onChange(optionValue);
+                setActive('default');
+              }}
+            >
               {content}
             </Option>
           ))}
