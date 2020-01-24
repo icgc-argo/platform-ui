@@ -59,6 +59,9 @@ const Select: React.ComponentType<{
 
   const theme = useTheme();
 
+  const activatorRef = React.createRef<HTMLDivElement>();
+  const dropdownRef = React.createRef<HTMLOListElement>();
+
   return (
     <div
       className={props.className}
@@ -100,12 +103,15 @@ const Select: React.ComponentType<{
         ))}
       </HiddenSelect>
       <StyledInputWrapper
+        ref={activatorRef}
         id={id}
         size={size}
         style={{ zIndex: 1 }}
         disabled={disabled}
         inputState={activeState as StyledInputWrapperProps['inputState']}
         role="button"
+        aria-haspopup={true}
+        aria-controls={`${id}-options`}
       >
         <Typography
           variant="paragraph"
@@ -127,7 +133,12 @@ const Select: React.ComponentType<{
         <DropdownIcon disabled={disabled} theme={theme} />
       </StyledInputWrapper>
       {isExpanded && (
-        <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
+        <OptionsList
+          ref={dropdownRef}
+          role="listbox"
+          id={`${id}-options`}
+          className={popupPosition}
+        >
           {options.map(({ content, value: optionValue }) => (
             <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
               {content}
