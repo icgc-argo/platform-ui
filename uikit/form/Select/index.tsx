@@ -84,15 +84,20 @@ const Select: React.ComponentType<{
     return () => document.removeEventListener('mouseup', onDocumentClick);
   }, [isExpanded]);
 
+  // dismiss on Escape
+  const escapeKeyHandler = e => {
+    console.log('key up');
+    if (e.key === 'Escape' && isExpanded) {
+      setExpanded(false);
+    }
+  };
+
   return (
     <div
       className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
-      onClick={() => {
-        if (document.activeElement !== HiddenSelectRef.current) {
-          HiddenSelectRef.current.focus();
-        }
-      }}
+      onKeyUp={escapeKeyHandler}
+      tabIndex={0}
     >
       {/**
        * This HiddenSelect component exists to sync up the focus state with the browser's
