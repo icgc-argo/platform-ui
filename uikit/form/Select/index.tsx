@@ -45,6 +45,8 @@ const Select: React.ComponentType<{
   popupPosition = POPUP_POSITIONS.DOWN,
   ...props
 }) => {
+  const theme = useTheme();
+
   const [activeState, setActive] = useState('default');
   const [isExpanded, setExpanded] = useState(false);
 
@@ -57,12 +59,10 @@ const Select: React.ComponentType<{
 
   const isSomethingSelected = !!(value && selectedOption);
 
-  const theme = useTheme();
-
   const activatorRef = React.createRef<HTMLDivElement>();
   const dropdownRef = React.createRef<HTMLOListElement>();
 
-  // close dropdown
+  // close dropdown on document click
   const onDocumentClick = e => {
     const node = e.target;
     if (
@@ -97,7 +97,7 @@ const Select: React.ComponentType<{
       {/**
        * This HiddenSelect component exists to sync up the focus state with the browser's
        * native behavior as much as possible for improved accessibility
-       **/}
+       **
       <HiddenSelect
         aria-label={ariaLabel}
         ref={HiddenSelectRef}
@@ -123,7 +123,7 @@ const Select: React.ComponentType<{
             {content}
           </option>
         ))}
-      </HiddenSelect>
+        </HiddenSelect>*/}
       <StyledInputWrapper
         ref={activatorRef}
         id={id}
@@ -134,6 +134,7 @@ const Select: React.ComponentType<{
         role="button"
         aria-haspopup={true}
         aria-controls={`${id}-options`}
+        onClick={() => setExpanded(!isExpanded)}
       >
         <Typography
           variant="paragraph"
