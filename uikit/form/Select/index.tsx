@@ -62,7 +62,10 @@ const Select: React.ComponentType<{
   const wrapperRef = React.createRef<HTMLDivElement>();
 
   const documentClickHandler = e => {
-    if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+    const target = e.target;
+    const wrapperNode = wrapperRef.current;
+
+    if (wrapperNode && !wrapperNode.contains(target as Node)) {
       setExpanded(false);
       setActive('default');
     }
@@ -83,7 +86,8 @@ const Select: React.ComponentType<{
       style={{ position: 'relative', ...(props.style || {}) }}
       onClick={e => {
         const wrapperNode = wrapperRef.current;
-        if (wrapperNode.contains(e.target) && isExpanded) {
+        const target = e.target;
+        if (wrapperNode && wrapperNode.contains(target as Node) && isExpanded) {
           setExpanded(false);
         } else if (document.activeElement !== HiddenSelectRef.current) {
           HiddenSelectRef.current.focus();
