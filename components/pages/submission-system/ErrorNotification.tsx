@@ -101,7 +101,7 @@ export default <Error extends { [k: string]: any }>({
             {!!onClearClick && (
               <Button
                 isAsync
-                id="button-clear-selected-file"
+                id="button-clear-selected-file-upload"
                 variant="text"
                 size="sm"
                 onClick={onClearClick}
