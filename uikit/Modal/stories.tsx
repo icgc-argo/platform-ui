@@ -79,6 +79,32 @@ const ModalStories = storiesOf(`${__dirname}`, module)
         </div>
       </Modal>
     </Modal.Overlay>
+  ))
+  .add('Custom container', () => (
+    <Modal.Overlay>
+      <Modal
+        title="A small modal"
+        titleIconConfig={{
+          name: ICON_NAMES.warning,
+          fill: BUILT_IN_ICON_COLORS.warning,
+        }}
+        buttonSize={BUTTON_SIZES.SM}
+        actionButtonText="Leave this page"
+        cancelText="Stay here"
+        onActionClick={action('onActionClick')}
+        onCancelClick={action('onCancelClick')}
+        onCloseClick={action('onCloseClick')}
+        ContainerEl={({ children }) => (
+          <div id="custom-div" style={{ backgroundColor: 'teal', borderRadius: '20px' }}>
+            {children}
+          </div>
+        )}
+      >
+        <div style={{ width: '300px' }}>
+          Setting a fixed width of the children will make the modal shrink down to fit
+        </div>
+      </Modal>
+    </Modal.Overlay>
   ));
 
 export default ModalStories;
