@@ -99,7 +99,13 @@ export default <Error extends { [k: string]: any }>({
               </span>
             </Button>
             {!!onClearClick && (
-              <Button isAsync variant="text" size="sm" onClick={onClearClick}>
+              <Button
+                isAsync
+                id="button-clear-selected-file"
+                variant="text"
+                size="sm"
+                onClick={onClearClick}
+              >
                 Clear
               </Button>
             )}
