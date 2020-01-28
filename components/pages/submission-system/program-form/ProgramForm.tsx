@@ -1,18 +1,13 @@
 import css from '@emotion/css';
-import { PROGRAM_MEMBERSHIP_TYPES, RDC_NAMES } from 'global/constants';
+import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
-import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
-import merge from 'lodash/merge';
-import Link from 'next/link';
-import Router from 'next/router';
+import isMatch from 'lodash/isMatch';
 import * as React from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
-import Container from 'uikit/Container';
 import FormCheckbox from 'uikit/form/FormCheckbox';
 import FormControl from 'uikit/form/FormControl';
 import FormHelperText from 'uikit/form/FormHelperText';
@@ -24,7 +19,6 @@ import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
 import Typography from 'uikit/Typography';
 import useFormHook from 'global/hooks/useFormHook';
-import { PROGRAMS_LIST_PATH } from 'global/constants/pages';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
 import QUERY_PROGRAM_VALUES from '../QUERY_PROGRAM_VALUES.gql';
@@ -537,7 +531,7 @@ export default function CreateProgramForm({
           <Button
             id="button-submit-edit-program-form"
             onClick={submitForm}
-            disabled={isEqual(seedFormData, form)}
+            disabled={isMatch(seedFormData, form)}
           >
             Save
           </Button>
