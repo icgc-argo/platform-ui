@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
@@ -61,15 +61,29 @@ const Select: React.ComponentType<{
 
   const wrapperRef = React.createRef<HTMLDivElement>();
 
+  const documentClickHandler = e => {
+    if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+      setExpanded(false);
+      setActive('default');
+    }
+  };
+
+  useEffect(() => {
+    if (isExpanded) {
+      document.addEventListener('mouseup', documentClickHandler);
+    } else {
+      document.removeEventListener('mouseup', documentClickHandler);
+    }
+    return () => document.removeEventListener('mouseup', documentClickHandler);
+  }, [isExpanded]);
+
   return (
     <div
       className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
       onClick={e => {
-        //   console.log('top on click', e.target, 'actove', document.activeElement);
         const wrapperNode = wrapperRef.current;
         if (wrapperNode.contains(e.target) && isExpanded) {
-          console.log('CONTAINS');
           setExpanded(false);
         } else if (document.activeElement !== HiddenSelectRef.current) {
           HiddenSelectRef.current.focus();
@@ -85,20 +99,15 @@ const Select: React.ComponentType<{
         ref={HiddenSelectRef}
         value={value}
         onChange={e => {
-          console.log('Hidden onChange', e.target);
           setActive('default');
           setExpanded(false);
           onChange(e.target.value);
         }}
         onFocus={e => {
-          console.log('Hidden onFocus', e.target);
           setActive('focus');
           setExpanded(true);
         }}
         onBlur={event => {
-          console.log('Hidden onBlur', event.target);
-          // setActive('default');
-          setExpanded(false);
           onBlur(event);
         }}
         disabled={disabled}
@@ -140,7 +149,15 @@ const Select: React.ComponentType<{
       {isExpanded && (
         <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
           {options.map(({ content, value: optionValue }) => (
-            <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
+            <Option
+              key={optionValue}
+              value={optionValue}
+              onMouseDown={() => {
+                onChange(optionValue);
+                setExpanded(false);
+                setActive('default');
+              }}
+            >
               {content}
             </Option>
           ))}

@@ -30,8 +30,9 @@ const createKnobs = () => {
 
 const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = createKnobs();
-  const [value, setValue] = React.useState(null);
-  const [valueTwo, setValueTwo] = React.useState(null);
+  const [value, setValue] = React.useState('');
+  const [valueTwo, setValueTwo] = React.useState('');
+  const onBlur = () => action('blur')();
   return (
     <div style={{ width: '200px' }}>
       <Select
@@ -44,10 +45,10 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         ]}
         onChange={val => {
           setValue(val);
-          action('onChange');
+          action('onChange')();
         }}
         value={value}
-        onBlur={() => '[parent func]'}
+        onBlur={onBlur}
         {...knobs}
       />
       <Select
@@ -61,9 +62,9 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
         ]}
         onChange={val => {
           setValueTwo(val);
-          action('onChange');
+          action('onChange')();
         }}
-        onBlur={() => '[parent func]'}
+        onBlur={onBlur}
         {...knobs}
       />
     </div>
