@@ -12,7 +12,7 @@ import FocusWrapper from '../FocusWrapper';
 import Portal from '../Portal';
 import { UikitIconNames } from 'uikit/Icon/icons';
 
-const ModalContainer = styled('div')`
+export const ModalContainer = styled('div')`
   position: relative;
   overflow: auto;
   border-radius: 20px;
