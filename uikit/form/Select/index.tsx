@@ -107,7 +107,7 @@ const Select: React.ComponentType<{
           setExpanded(false);
           onChange(e.target.value);
         }}
-        onFocus={e => {
+        onFocus={() => {
           setActive('focus');
           setExpanded(true);
         }}
