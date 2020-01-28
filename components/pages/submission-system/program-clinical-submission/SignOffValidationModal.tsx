@@ -7,7 +7,7 @@ import SubmissionSummaryTable from './SubmissionSummaryTable';
 import styled from '@emotion/styled';
 
 const SignOffModalCont = styled(ModalContainer)`
-  max-width: 981px;
+  max-width: 1120px;
 `;
 
 export default ({
