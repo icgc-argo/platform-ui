@@ -59,12 +59,19 @@ const Select: React.ComponentType<{
 
   const theme = useTheme();
 
+  const wrapperRef = React.createRef<HTMLDivElement>();
+
   return (
     <div
       className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
-      onClick={() => {
-        if (document.activeElement !== HiddenSelectRef.current) {
+      onClick={e => {
+        //   console.log('top on click', e.target, 'actove', document.activeElement);
+        const wrapperNode = wrapperRef.current;
+        if (wrapperNode.contains(e.target) && isExpanded) {
+          console.log('CONTAINS');
+          setExpanded(false);
+        } else if (document.activeElement !== HiddenSelectRef.current) {
           HiddenSelectRef.current.focus();
         }
       }}
@@ -78,16 +85,19 @@ const Select: React.ComponentType<{
         ref={HiddenSelectRef}
         value={value}
         onChange={e => {
+          console.log('Hidden onChange', e.target);
           setActive('default');
           setExpanded(false);
           onChange(e.target.value);
         }}
-        onFocus={() => {
+        onFocus={e => {
+          console.log('Hidden onFocus', e.target);
           setActive('focus');
           setExpanded(true);
         }}
         onBlur={event => {
-          setActive('default');
+          console.log('Hidden onBlur', event.target);
+          // setActive('default');
           setExpanded(false);
           onBlur(event);
         }}
@@ -100,6 +110,7 @@ const Select: React.ComponentType<{
         ))}
       </HiddenSelect>
       <StyledInputWrapper
+        ref={wrapperRef}
         id={id}
         size={size}
         style={{ zIndex: 1 }}
