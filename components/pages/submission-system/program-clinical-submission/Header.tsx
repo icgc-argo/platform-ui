@@ -119,7 +119,7 @@ export default ({
           variant: 'SUCCESS',
           interactionType: 'CLOSE',
           title: 'Clinical Data is successfully approved',
-          content: `${programShortName} clinical data will be placed in a queue for the next release.`,
+          content: `${programShortName} updated clinical data has been approved.`,
         });
         updateClinicalSubmissionQuery(previous => ({
           ...previous,
