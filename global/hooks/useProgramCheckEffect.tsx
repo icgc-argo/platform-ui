@@ -6,7 +6,6 @@ import PROGRAM_SHORTNAME from './PROGRAM_SHORTNAME.gql';
 
 export const useProgramCheckEffect = () => {
   const { shortName } = usePageQuery<{ shortName: string }>();
-  console.log(shortName);
   const [programNotExist, setProgramNotExist] = useState(false);
 
   const { loading, data: { program = undefined } = {} } = useQuery<{
