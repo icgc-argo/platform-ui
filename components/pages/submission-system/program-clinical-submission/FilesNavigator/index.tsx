@@ -142,6 +142,7 @@ export default ({
       <Col style={{ position: 'relative', overflow: 'hidden' }}>
         {shouldShowError ? (
           <div
+            id="error-submit-clinical-data"
             css={css`
               padding: 16px;
             `}

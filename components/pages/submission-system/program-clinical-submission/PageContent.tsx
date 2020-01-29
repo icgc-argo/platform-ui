@@ -406,6 +406,7 @@ export default () => {
       ))}
       {hasDataError && (
         <div
+          id="error-submission-workspace"
           css={css`
             margin-top: 20px;
           `}
