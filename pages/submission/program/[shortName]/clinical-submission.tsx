@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';
-import programClinicalSubmission from 'components/pages/submission-system/program-clinical-submission';
+import ProgramClinicalSubmission from 'components/pages/submission-system/program-clinical-submission';
 import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
-import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
+import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
   isPublic: false,
@@ -17,4 +17,7 @@ export default createPage({
       canWriteProgramData({ egoJwt, programId: String(shortName) })
     );
   },
-})(programClinicalSubmission);
+})(props => {
+  useProgramCheckEffect();
+  return <ProgramClinicalSubmission {...props} />;
+});
