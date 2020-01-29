@@ -1,18 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-import PropTypes from 'prop-types';
 import Color from 'color';
-
 import { styled, css } from '..';
 import Typography from '../Typography';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS, ButtonSize } from '../Button';
-import Icon, { ICON_NAMES } from '../Icon';
+import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
-import Portal from '../Portal';
 import { UikitIconNames } from 'uikit/Icon/icons';
 
-const ModalContainer = styled('div')`
+export const ModalContainer = styled('div')`
   position: relative;
   overflow: auto;
   border-radius: 20px;
@@ -22,6 +17,7 @@ const ModalContainer = styled('div')`
   padding: 24px;
   padding-bottom: 0px;
 `;
+
 const ModalTitle = styled('div')`
   display: flex;
   flex-direction: row;
@@ -73,6 +69,7 @@ const ModalComponent: React.ComponentType<{
   onActionClick?: React.ComponentProps<typeof Button>['onClick'];
   onCancelClick?: React.ComponentProps<typeof Button>['onClick'];
   onCloseClick?: React.ComponentProps<typeof FocusWrapper>['onClick'];
+  ContainerEl?: React.ReactType;
 }> = ({
   title = 'Add Users',
   titleIconConfig = {
@@ -89,88 +86,93 @@ const ModalComponent: React.ComponentType<{
   onCloseClick = () => {},
   actionDisabled = false,
   children,
-}) => (
-  <ModalContainer>
-    <FocusWrapper
-      onClick={onCloseClick}
-      css={css`
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        line-height: 0px;
-      `}
-    >
-      <Icon name="times" fill="primary_1" width="13px" height="13px" />
-    </FocusWrapper>
-    <div
-      css={css`
-        display: flex;
-      `}
-    >
-      {titleIconConfig.name && (
-        <div
-          css={css`
-            flex: 1;
-            padding-right: 10px;
-            padding-top: 3px;
-          `}
-        >
-          <Icon
-            name={titleIconConfig.name}
-            width="20px"
-            height="20px"
-            fill={titleIconConfig.fill}
-          />
-        </div>
-      )}
-      <div
+  ContainerEl,
+}) => {
+  const Container = ContainerEl ? ContainerEl : ModalContainer;
+
+  return (
+    <Container>
+      <FocusWrapper
+        onClick={onCloseClick}
         css={css`
-          width: 100%;
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          line-height: 0px;
         `}
       >
-        <ModalTitle>
-          <Typography
+        <Icon name="times" fill="primary_1" width="13px" height="13px" />
+      </FocusWrapper>
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
+        {titleIconConfig.name && (
+          <div
             css={css`
-              margin: 0px;
+              flex: 1;
+              padding-right: 10px;
+              padding-top: 3px;
             `}
-            variant="subtitle"
           >
-            {title}
-          </Typography>
-        </ModalTitle>
-        <ModalBody>
-          <Typography variant="paragraph" component="div">
-            {children}
-          </Typography>
-        </ModalBody>
-      </div>
-    </div>
-    <ModalFooter>
-      <ButtonContainer>
-        {actionVisible && (
-          <Button
-            id={actionButtonId}
-            size={buttonSize || BUTTON_SIZES.MD}
-            disabled={actionDisabled}
-            onClick={onActionClick}
-          >
-            {actionButtonText}
-          </Button>
+            <Icon
+              name={titleIconConfig.name}
+              width="20px"
+              height="20px"
+              fill={titleIconConfig.fill}
+            />
+          </div>
         )}
-        <Button
-          variant={BUTTON_VARIANTS.TEXT}
+        <div
           css={css`
-            margin-left: 10px;
+            width: 100%;
           `}
-          size={buttonSize || BUTTON_SIZES.MD}
-          onClick={onCancelClick}
         >
-          {cancelText}
-        </Button>
-      </ButtonContainer>
-    </ModalFooter>
-  </ModalContainer>
-);
+          <ModalTitle>
+            <Typography
+              css={css`
+                margin: 0px;
+              `}
+              variant="subtitle"
+            >
+              {title}
+            </Typography>
+          </ModalTitle>
+          <ModalBody>
+            <Typography variant="paragraph" component="div">
+              {children}
+            </Typography>
+          </ModalBody>
+        </div>
+      </div>
+      <ModalFooter>
+        <ButtonContainer>
+          {actionVisible && (
+            <Button
+              id={actionButtonId}
+              size={buttonSize || BUTTON_SIZES.MD}
+              disabled={actionDisabled}
+              onClick={onActionClick}
+            >
+              {actionButtonText}
+            </Button>
+          )}
+          <Button
+            variant={BUTTON_VARIANTS.TEXT}
+            css={css`
+              margin-left: 10px;
+            `}
+            size={buttonSize || BUTTON_SIZES.MD}
+            onClick={onCancelClick}
+          >
+            {cancelText}
+          </Button>
+        </ButtonContainer>
+      </ModalFooter>
+    </Container>
+  );
+};
 
 const Overlay = props => <ModalOverlay {...props} />;
 const Modal: typeof ModalComponent & { Overlay: typeof Overlay } = (() => {
