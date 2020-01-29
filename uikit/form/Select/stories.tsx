@@ -30,6 +30,9 @@ const createKnobs = () => {
 
 const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = createKnobs();
+  const [value, setValue] = React.useState('');
+  const [valueTwo, setValueTwo] = React.useState('');
+  const onBlur = () => action('blur')();
   return (
     <div style={{ width: '200px' }}>
       <Select
@@ -40,21 +43,28 @@ const InputStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
           { content: 'Value 3', value: 'v3' },
           { content: 'Value 4', value: 'v4' },
         ]}
-        onChange={action('onChange')}
-        onBlur={() => '[parent func]'}
+        onChange={val => {
+          setValue(val);
+          action('onChange')();
+        }}
+        value={value}
+        onBlur={onBlur}
         {...knobs}
       />
       <Select
         aria-label="demo-select"
-        value="v1"
+        value={valueTwo}
         options={[
           { content: 'Value 1', value: 'v1' },
           { content: 'Value 2', value: 'v2' },
           { content: 'Value 3', value: 'v3' },
           { content: 'Value 4', value: 'v4' },
         ]}
-        onChange={action('onChange')}
-        onBlur={() => '[parent func]'}
+        onChange={val => {
+          setValueTwo(val);
+          action('onChange')();
+        }}
+        onBlur={onBlur}
         {...knobs}
       />
     </div>

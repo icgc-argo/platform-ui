@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
@@ -59,12 +59,37 @@ const Select: React.ComponentType<{
 
   const theme = useTheme();
 
+  const wrapperRef = React.createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    const documentClickHandler = e => {
+      const target = e.target;
+      const wrapperNode = wrapperRef.current;
+
+      if (wrapperNode && !wrapperNode.contains(target as Node)) {
+        setExpanded(false);
+        setActive('default');
+      }
+    };
+
+    if (isExpanded) {
+      document.addEventListener('mouseup', documentClickHandler);
+    } else {
+      document.removeEventListener('mouseup', documentClickHandler);
+    }
+    return () => document.removeEventListener('mouseup', documentClickHandler);
+  }, [isExpanded]);
+
   return (
     <div
       className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
-      onClick={() => {
-        if (document.activeElement !== HiddenSelectRef.current) {
+      onClick={e => {
+        const wrapperNode = wrapperRef.current;
+        const target = e.target;
+        if (wrapperNode && wrapperNode.contains(target as Node) && isExpanded) {
+          setExpanded(false);
+        } else if (document.activeElement !== HiddenSelectRef.current) {
           HiddenSelectRef.current.focus();
         }
       }}
@@ -87,8 +112,6 @@ const Select: React.ComponentType<{
           setExpanded(true);
         }}
         onBlur={event => {
-          setActive('default');
-          setExpanded(false);
           onBlur(event);
         }}
         disabled={disabled}
@@ -100,6 +123,7 @@ const Select: React.ComponentType<{
         ))}
       </HiddenSelect>
       <StyledInputWrapper
+        ref={wrapperRef}
         id={id}
         size={size}
         style={{ zIndex: 1 }}
@@ -129,7 +153,15 @@ const Select: React.ComponentType<{
       {isExpanded && (
         <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
           {options.map(({ content, value: optionValue }) => (
-            <Option key={optionValue} value={optionValue} onMouseDown={() => onChange(optionValue)}>
+            <Option
+              key={optionValue}
+              value={optionValue}
+              onMouseDown={() => {
+                onChange(optionValue);
+                setExpanded(false);
+                setActive('default');
+              }}
+            >
               {content}
             </Option>
           ))}
