@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { css } from 'uikit';
 import { GqlClinicalSubmissionData } from './types';
-import Modal from 'uikit/Modal';
+import Modal, { ModalContainer } from 'uikit/Modal';
 import Typography from 'uikit/Typography';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
+import styled from '@emotion/styled';
+
+const SignOffModalCont = styled(ModalContainer)`
+  max-width: 1120px;
+`;
 
 export default ({
   clinicalSubmissions,
@@ -33,6 +38,7 @@ export default ({
       onCloseClick={onCloseClick}
       onActionClick={onActionClick}
       onCancelClick={onCancelClick}
+      ContainerEl={SignOffModalCont}
     >
       <div>
         {hasUpdate

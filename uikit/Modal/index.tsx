@@ -1,18 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-import PropTypes from 'prop-types';
 import Color from 'color';
-
 import { styled, css } from '..';
 import Typography from '../Typography';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS, ButtonSize } from '../Button';
-import Icon, { ICON_NAMES } from '../Icon';
+import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
-import Portal from '../Portal';
 import { UikitIconNames } from 'uikit/Icon/icons';
 
-const ModalContainer = styled('div')`
+export const ModalContainer = styled('div')`
   position: relative;
   overflow: auto;
   border-radius: 20px;

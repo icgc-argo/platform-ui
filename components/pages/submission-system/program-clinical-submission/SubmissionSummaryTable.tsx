@@ -96,6 +96,7 @@ export default ({ clinicalSubmissions }: { clinicalSubmissions: GqlClinicalSubmi
         }}
         columns={columns}
         data={[newDataRow, updatedDataRow]}
+        resizable
       />
     </div>
   );
