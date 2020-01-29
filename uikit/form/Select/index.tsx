@@ -61,17 +61,17 @@ const Select: React.ComponentType<{
 
   const wrapperRef = React.createRef<HTMLDivElement>();
 
-  const documentClickHandler = e => {
-    const target = e.target;
-    const wrapperNode = wrapperRef.current;
-
-    if (wrapperNode && !wrapperNode.contains(target as Node)) {
-      setExpanded(false);
-      setActive('default');
-    }
-  };
-
   useEffect(() => {
+    const documentClickHandler = e => {
+      const target = e.target;
+      const wrapperNode = wrapperRef.current;
+
+      if (wrapperNode && !wrapperNode.contains(target as Node)) {
+        setExpanded(false);
+        setActive('default');
+      }
+    };
+
     if (isExpanded) {
       document.addEventListener('mouseup', documentClickHandler);
     } else {
