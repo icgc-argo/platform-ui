@@ -40,12 +40,14 @@ type CreatePageConfigs = {
   isAccessible?: PageConfigProps['isAccessible'];
   getInitialProps?: PageConfigProps['getInitialProps'];
   getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
+  startWithGlobalLoader?: PageConfigProps['startWithGlobalLoader'];
 };
 export const createPage = <P extends {} = any>({
   isPublic,
   isAccessible,
   getInitialProps,
   getGqlQueriesToPrefetch,
+  startWithGlobalLoader,
 }: CreatePageConfigs) => (
   page: React.ComponentType<P> & CreatePageConfigs = () => <div>Here's a page</div>,
 ): PageWithConfig => {
@@ -53,5 +55,6 @@ export const createPage = <P extends {} = any>({
   page.isAccessible = isAccessible || (async () => true);
   page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
   page.getInitialProps = getInitialProps || (async () => []);
+  page.startWithGlobalLoader = startWithGlobalLoader || false;
   return page as PageWithConfig;
 };

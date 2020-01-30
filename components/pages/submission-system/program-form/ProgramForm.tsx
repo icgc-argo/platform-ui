@@ -22,6 +22,8 @@ import useFormHook from 'global/hooks/useFormHook';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
 import QUERY_PROGRAM_VALUES from '../QUERY_PROGRAM_VALUES.gql';
+import difference from 'lodash/difference';
+import { isEqual, xor } from 'lodash';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -162,6 +164,16 @@ export default function CreateProgramForm({
     } catch (err) {
       window.scrollTo(0, 0);
     }
+  };
+
+  const isSameContent = (seedFormData, form) => {
+    return Object.entries(seedFormData).every(([fieldName, seedVal]: [string, any[]]) => {
+      const formVal = form[fieldName];
+      if (Array.isArray(seedVal) || Array.isArray(formVal)) {
+        return xor(formVal, seedVal).length === 0;
+      }
+      return seedVal === formVal;
+    });
   };
 
   return (
@@ -531,7 +543,7 @@ export default function CreateProgramForm({
           <Button
             id="button-submit-edit-program-form"
             onClick={submitForm}
-            disabled={isMatch(seedFormData, form)}
+            disabled={isSameContent(seedFormData, form)}
           >
             Save
           </Button>

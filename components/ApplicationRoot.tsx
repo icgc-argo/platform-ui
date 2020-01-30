@@ -57,8 +57,14 @@ const GlobalLoadingContext = React.createContext({
   setLoading: (isLoading: boolean) => {},
 });
 export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
-const GlobalLoaderProvider = ({ children }) => {
-  const [isLoading, setLoading] = React.useState(false);
+export const GlobalLoaderProvider = ({
+  children,
+  startWithGlobalLoader,
+}: {
+  children: React.ReactNode | React.ReactNodeArray;
+  startWithGlobalLoader: boolean;
+}) => {
+  const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
   return (
     <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
       {children}
@@ -160,11 +166,13 @@ export default function ApplicationRoot({
   apolloCache,
   pageContext,
   children,
+  startWithGlobalLoader,
 }: {
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
+  startWithGlobalLoader: boolean;
 }) {
   return (
     <>
@@ -203,7 +211,7 @@ export default function ApplicationRoot({
                   ref={modalPortalRef}
                 />
                 <PersistentStateProvider>
-                  <GlobalLoaderProvider>
+                  <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
                     {children}
                   </GlobalLoaderProvider>
