@@ -8,6 +8,7 @@ import {
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
+  CellContentCenter,
 } from '../../common';
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
@@ -82,15 +83,6 @@ const StatsArea = ({
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
 };
-
-const CellContentCenter = styled('div')`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default ({
   file,
@@ -233,9 +225,9 @@ export default ({
           {toDisplayRowIndex(original.row)}
         </CellContentCenter>
       ),
-      Header: '#',
+      Header: 'Line #',
       resizable: false,
-      width: 40,
+      width: 70,
     },
     {
       id: 'status',
