@@ -53,6 +53,7 @@ class Root extends App<{
   apolloCache: any;
   pathname: string;
   unauthorized: boolean;
+  startWithGlobalLoader: boolean;
 }> {
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
@@ -94,6 +95,9 @@ class Root extends App<{
     } catch (e) {
       console.log(e);
     }
+
+    const startWithGlobalLoader = Component.startWithGlobalLoader || false;
+
     return {
       pageProps,
       unauthorized,
@@ -105,6 +109,7 @@ class Root extends App<{
         asPath: ctx.asPath,
       },
       apolloCache,
+      startWithGlobalLoader,
     };
   }
 
@@ -122,10 +127,15 @@ class Root extends App<{
   }
 
   render() {
-    const { Component, pageProps, ctx, apolloCache, egoJwt } = this.props;
+    const { Component, pageProps, ctx, apolloCache, egoJwt, startWithGlobalLoader } = this.props;
 
     return (
-      <ApplicationRoot egoJwt={egoJwt} apolloCache={apolloCache} pageContext={ctx}>
+      <ApplicationRoot
+        egoJwt={egoJwt}
+        apolloCache={apolloCache}
+        pageContext={ctx}
+        startWithGlobalLoader={startWithGlobalLoader}
+      >
         <Component {...pageProps} />
       </ApplicationRoot>
     );

@@ -17,6 +17,7 @@ export default createPage({
       canWriteProgramData({ egoJwt, programId: String(shortName) })
     );
   },
+  startWithGlobalLoader: true,
 })(props => {
   useProgramCheckEffect();
   return <ProgramClinicalSubmission {...props} />;

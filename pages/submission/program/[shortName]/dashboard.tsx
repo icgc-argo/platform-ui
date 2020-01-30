@@ -13,6 +13,7 @@ export default createPage({
     } = ctx;
     return !isRdpcMember(egoJwt) && canReadProgram({ egoJwt, programId: String(shortName) });
   },
+  startWithGlobalLoader: true,
 })(props => {
   useProgramCheckEffect();
   return <ProgramDashboard {...props} />;
