@@ -166,7 +166,7 @@ export default function CreateProgramForm({
     }
   };
 
-  const disableButton = (seedFormData, form) => {
+  const isSameContent = (seedFormData, form) => {
     return Object.entries(seedFormData).every(([fieldName, seedVal]: [string, any[]]) => {
       const formVal = form[fieldName];
       if (Array.isArray(seedVal) || Array.isArray(formVal)) {
@@ -543,7 +543,7 @@ export default function CreateProgramForm({
           <Button
             id="button-submit-edit-program-form"
             onClick={submitForm}
-            disabled={disableButton(seedFormData, form)}
+            disabled={isSameContent(seedFormData, form)}
           >
             Save
           </Button>
