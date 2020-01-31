@@ -27,6 +27,15 @@ export const instructionBoxButtonStyle = css`
   margin-top: 10px;
 `;
 
+export const CellContentCenter = styled('div')`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
   <Icon name="star" fill={props.fill} width="16px" height="16px" />
 );

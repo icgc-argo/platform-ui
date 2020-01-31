@@ -12,7 +12,9 @@ import {
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
+  CellContentCenter,
 } from '../../common';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -105,22 +107,19 @@ const FileTable = (props: {
         columns={[
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => Number(original.row) + 1,
-            Header: '#',
-            width: 48,
+            Cell: ({ original }) => (
+              <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
+            ),
+            Header: 'Line #',
+            resizable: false,
+            width: 70,
           },
           {
             id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
             Cell: ({ original }) => (
-              <div
-                css={css`
-                  display: flex;
-                  justify-content: center;
-                  width: 100%;
-                `}
-              >
+              <CellContentCenter>
                 <StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
-              </div>
+              </CellContentCenter>
             ),
             width: 48,
             Header: (

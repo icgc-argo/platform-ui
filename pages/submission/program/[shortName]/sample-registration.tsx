@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';
-import programSampleRegistration from 'components/pages/submission-system/program-sample-registration';
+import ProgramSampleRegistration from 'components/pages/submission-system/program-sample-registration';
 import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
-import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
+import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
   isPublic: false,
@@ -17,4 +17,8 @@ export default createPage({
       canWriteProgramData({ egoJwt, programId: String(shortName) })
     );
   },
-})(programSampleRegistration);
+  startWithGlobalLoader: true,
+})(props => {
+  useProgramCheckEffect();
+  return <ProgramSampleRegistration {...props} />;
+});
