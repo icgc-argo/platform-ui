@@ -51,6 +51,7 @@ const EditUserModal = ({
         disabledFields={['email', 'firstName', 'lastName']}
         onClickDelete={null}
       />
+      <br />
     </Modal>
   );
 };
