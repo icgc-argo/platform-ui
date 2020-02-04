@@ -82,6 +82,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
           `}
         >
           <div
+            className="accessTokenBox"
             css={css`
               flex: 1;
             `}
