@@ -82,7 +82,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
           `}
         >
           <div
-            className="accessTokenBox"
+            className="accessTokenBox" // For Selenium
             css={css`
               flex: 1;
             `}
