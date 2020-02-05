@@ -76,7 +76,10 @@ const ClipboardCopyField = ({
       >
         {(errorText || tagText) && !loading && (
           <TagWrapper>
-            <Tag variant={errorText ? TAG_VARIANTS.ERROR : TAG_VARIANTS.INFO}>
+            <Tag
+              id="accessKeyExpiry" // For Selenium
+              variant={errorText ? TAG_VARIANTS.ERROR : TAG_VARIANTS.INFO}
+            >
               {errorText || tagText}
             </Tag>
           </TagWrapper>
@@ -89,7 +92,12 @@ const ClipboardCopyField = ({
             height: 15px;
           `}
         >
-          <Typography variant="default">{value}</Typography>
+          <Typography
+            id="accessKey" // For Selenium
+            variant="default"
+          >
+            {value}
+          </Typography>
         </div>
         <Button
           id={buttonId}
