@@ -82,6 +82,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
           `}
         >
           <div
+            id="accessTokenBox" // For Selenium
             css={css`
               flex: 1;
             `}
@@ -92,6 +93,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
               value={getKeyTextValue()}
               disabled={disableCopy}
               loading={loading || isGeneratingKey}
+              buttonId="button-clipboard-copy-field"
             />
           </div>
           <div
@@ -103,7 +105,12 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
               justify-content: center;
             `}
           >
-            <Button onClick={() => onGenerate()} variant="secondary" disabled={disableGenerate}>
+            <Button
+              id="button-generate-access-token" // For Selenium '
+              onClick={() => onGenerate()}
+              variant="secondary"
+              disabled={disableGenerate}
+            >
               {!key ? 'Generate' : 'Regenerate'}
             </Button>
           </div>

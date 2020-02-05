@@ -28,6 +28,7 @@ const ClipboardCopyField = ({
   errorText,
   timeout = 2000,
   loading,
+  buttonId,
 }: {
   buttonText?: string;
   value?: string;
@@ -36,6 +37,7 @@ const ClipboardCopyField = ({
   errorText?: string;
   timeout?: number;
   loading: boolean;
+  buttonId: string;
 }) => {
   const [promptMsgShown, setPromptMsgShown] = React.useState(false);
   let currentTimeout: any = undefined;
@@ -90,6 +92,7 @@ const ClipboardCopyField = ({
           <Typography variant="default">{value}</Typography>
         </div>
         <Button
+          id={buttonId}
           isAsync
           disabled={disabled}
           onClick={onCopyClicked}
