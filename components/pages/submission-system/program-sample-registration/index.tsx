@@ -253,7 +253,7 @@ export default function ProgramIDRegistration() {
         ) : schemaOrValidationErrors.length > 0 ? (
           <ErrorNotification
             onClearClick={handleClearClick}
-            title={`${schemaOrValidationErrors.length} errors found in uploaded file`}
+            title={`${schemaOrValidationErrors.length} error(s) found in uploaded file`}
             errors={schemaOrValidationErrors.map(toDisplayError)}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'

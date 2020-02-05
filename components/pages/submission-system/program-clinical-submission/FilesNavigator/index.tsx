@@ -151,7 +151,7 @@ export default ({
               onClearClick={onErrorClearClick}
               title={`${
                 selectedFile.schemaErrors.length
-              } errors found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
+              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
               errors={selectedFile.schemaErrors.map(toDisplayError)}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
