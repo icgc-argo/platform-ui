@@ -88,4 +88,4 @@ const Menu = ({
 };
 
 export default Menu;
-export { default as useMenuHighlight } from './hooks';
+export { useMenuHighlight } from './hooks';
