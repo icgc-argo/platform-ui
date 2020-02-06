@@ -45,7 +45,11 @@ const EditUserModal = ({
     >
       <UserSection
         user={form}
-        onChange={(key, val) => setData({ key, val })}
+        onChange={(key, val) => {
+          if (form[key] !== val) {
+            return setData({ key, val });
+          }
+        }}
         validateField={key => validateField({ key })}
         errors={validationErrors}
         disabledFields={['email', 'firstName', 'lastName']}
