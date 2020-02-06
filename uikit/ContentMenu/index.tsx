@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from 'uikit/Typography';
 import styled from '@emotion/styled';
-import useTheme from '../utils/useTheme';
 import { css } from '@emotion/core';
 import kebabCase from 'lodash/kebabCase';
 
@@ -10,20 +9,27 @@ const Cont = styled('div')`
   border-left: 2px solid ${({ color, theme }) => (color ? color : theme.colors.secondary)};
 `;
 
-const Anchor = styled('a')`
-  &.active > div {
-    background-color: ${({ theme }) => theme.colors.secondary_4};
+const Anchor = styled<'a', { disabled: boolean }>('a')`
+  .menu-item {
+    color: ${({ disabled, theme }) => (disabled ? theme.colors.grey_1 : theme.colors.primary)};
+  }
+  &.active {
+    > div {
+      background-color: ${({ theme }) => theme.colors.secondary_4};
+    }
+
+    .menu-item {
+      color: ${({ theme }) => theme.colors.secondary_dark};
+    }
   }
 `;
 
-const MenuItem = ({ name, onClick, active, disabled, className }) => {
-  const theme = useTheme();
+const MenuItem = ({ name, onClick, disabled, className }) => {
   return (
-    <Anchor className={className} onClick={onClick} id={`${kebabCase(name)}`}>
+    <Anchor className={className} onClick={onClick} id={`${kebabCase(name)}`} disabled={disabled}>
       <div
         css={css`
           padding: 8px 0 8px 16px;
-          background-color: ${active && theme.colors.secondary_4};
 
           &:hover {
             cursor: ${disabled ? 'not-allowed' : 'pointer'};
@@ -31,12 +37,7 @@ const MenuItem = ({ name, onClick, active, disabled, className }) => {
         `}
         onClick={onClick}
       >
-        <Typography
-          variant="data"
-          color={active ? 'secondary_dark' : disabled ? 'grey_1' : 'primary'}
-        >
-          {name}
-        </Typography>
+        <Typography variant="data">{name}</Typography>
       </div>
     </Anchor>
   );
@@ -60,7 +61,6 @@ const Menu = ({
   scrollYOffset?: number;
   anchorClassName?: string;
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div>
       <Typography variant="sectionHeader" color="primary">
@@ -72,11 +72,9 @@ const Menu = ({
             className={anchorClassName}
             key={index}
             name={name}
-            active={activeIndex === index}
             disabled={disabled}
             onClick={() => {
               if (!disabled && contentRef && contentRef.current) {
-                setActiveIndex(index);
                 window.scrollTo(0, contentRef.current.offsetTop - scrollYOffset);
               }
             }}
