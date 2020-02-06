@@ -19,11 +19,8 @@ const StyledLink = styled<'a', HyperLinkProps>('a')`
   color: ${({ theme, invert }) => (invert ? theme.colors.white : theme.colors.accent2_dark)};
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'inherit')};
-  ${({ uppercase }) =>
-    uppercase &&
-    css`
-      text-transform: uppercase;
-    `}
+  text-transform: ${({ uppercase }) => (uppercase ? 'uppercase' : 'default')};
+
   :hover {
     color: ${({ theme }) => theme.colors.accent2_1};
   }
