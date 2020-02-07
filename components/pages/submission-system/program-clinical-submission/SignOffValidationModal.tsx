@@ -26,6 +26,7 @@ export default ({
   return (
     <Modal
       actionButtonText="yes, sign off"
+      actionButtonId="modal-confirm-sign-off"
       title={
         <span
           css={css`
