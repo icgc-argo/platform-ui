@@ -1,9 +1,16 @@
-FROM node:alpine
-WORKDIR /usr/src/app
+FROM node:12.13.1
 
-COPY ./package.json ./package-lock.json ./
-RUN npm ci
+ENV UID=9999
+ENV GID=9999
+RUN groupmod -g $GID node 
+RUN usermod -u $UID -g $GID node
+RUN mkdir -p /appDir
+RUN chown -R node /appDir
+USER node
+WORKDIR /appDir
+
 COPY . .
+RUN npm ci
 RUN npx next build
 
 EXPOSE 8080
