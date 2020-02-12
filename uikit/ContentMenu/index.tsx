@@ -9,18 +9,29 @@ const Cont = styled('div')`
 `;
 
 const Anchor = styled<'a', { disabled: boolean; active: boolean }>('a')`
-  color: ${({ disabled, active, theme: { colors } }) =>
-    disabled ? colors.grey_1 : active ? colors.secondary_dark : colors.primary};
-
+  /** specificty for docusaurus, easier to edit here */
   > div {
     background-color: ${({ active, theme: { colors } }) =>
       active ? colors.secondary_4 : colors.white};
+    > span {
+      color: ${({ disabled, active, theme: { colors } }) =>
+        disabled ? colors.grey_1 : active ? colors.secondary_dark : colors.primary};
+
+      font-weight: ${({ active }) => (active ? '600' : 'normal')};
+    }
   }
 
   &:hover {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => theme.colors.grey_3};
+
+    > div {
+      background-color: ${({ theme: { colors }, active }) =>
+        active ? colors.secondary_4 : colors.grey_3};
+      > span {
+        color: ${({ theme: { colors }, active }) =>
+          active ? colors.secondary_dark : colors.primary};
+      }
+    }
   }
 `;
 
