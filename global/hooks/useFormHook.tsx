@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import isArray from 'lodash/isArray';
 import yup from 'global/utils/validations';
 
@@ -34,15 +35,13 @@ function useFormHook<T extends DefaultDataShape>({
   const [form, setForm] = useState<{ errors: typeof initErrors; data: typeof initialFields }>(
     initialState,
   );
-  const [touched, setTouched] = useState(false);
+
   const { errors, data } = form;
 
   const hasErrors = Object.values(errors).some(x => x);
 
   // set form data
   const setData = ({ key, val }: FormData<T>) => {
-    if (!touched) setTouched(true);
-
     setForm({
       ...form,
       data: { ...data, [key]: val },
@@ -113,7 +112,7 @@ function useFormHook<T extends DefaultDataShape>({
     setData,
     validateField,
     validateForm,
-    touched,
+    touched: !isEqual(initialFields, form.data),
     hasErrors,
     reset,
   };
