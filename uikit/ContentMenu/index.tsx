@@ -13,7 +13,14 @@ const Anchor = styled<'a', { disabled: boolean; active: boolean }>('a')`
     disabled ? colors.grey_1 : active ? colors.secondary_dark : colors.primary};
 
   > div {
-    background-color: ${({ active, theme: { colors } }) => (active ? colors.secondary_4 : '#fff')};
+    background-color: ${({ active, theme: { colors } }) =>
+      active ? colors.secondary_4 : colors.white};
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.grey_3};
   }
 `;
 
@@ -52,7 +59,6 @@ const Menu = ({
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
   scrollYOffset?: number;
-  anchorClassName?: string;
 }) => {
   return (
     <div>
