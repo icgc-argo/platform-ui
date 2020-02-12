@@ -2,31 +2,24 @@ import React from 'react';
 import Typography from 'uikit/Typography';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import kebabCase from 'lodash/kebabCase';
 
 const Cont = styled('div')`
   margin-top: 14px;
   border-left: 2px solid ${({ color, theme }) => (color ? color : theme.colors.secondary)};
 `;
 
-const Anchor = styled<'a', { disabled: boolean }>('a')`
-  .menu-item {
-    color: ${({ disabled, theme }) => (disabled ? theme.colors.grey_1 : theme.colors.primary)};
-  }
-  &.active {
-    > div {
-      background-color: ${({ theme }) => theme.colors.secondary_4};
-    }
+const Anchor = styled<'a', { disabled: boolean; active: boolean }>('a')`
+  color: ${({ disabled, active, theme: { colors } }) =>
+    disabled ? colors.grey_1 : active ? colors.secondary_dark : colors.primary};
 
-    .menu-item {
-      color: ${({ theme }) => theme.colors.secondary_dark};
-    }
+  > div {
+    background-color: ${({ active, theme: { colors } }) => (active ? colors.secondary_4 : '#fff')};
   }
 `;
 
-const MenuItem = ({ name, onClick, disabled, className }) => {
+const MenuItem = ({ name, onClick, disabled, active }) => {
   return (
-    <Anchor className={className} onClick={onClick} id={`${kebabCase(name)}`} disabled={disabled}>
+    <Anchor onClick={onClick} active={active} disabled={disabled}>
       <div
         css={css`
           padding: 8px 0 8px 16px;
@@ -48,13 +41,13 @@ const Menu = ({
   contents,
   color,
   scrollYOffset = 0,
-  anchorClassName,
 }: {
   title: string;
   contents: Array<{
     name: string;
     contentRef?: React.RefObject<HTMLElement>;
-    disabled?: Boolean;
+    disabled?: boolean;
+    active?: boolean;
   }>;
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
@@ -67,9 +60,9 @@ const Menu = ({
         {title}
       </Typography>
       <Cont color={color}>
-        {contents.map(({ name, contentRef, disabled }, index) => (
+        {contents.map(({ name, contentRef, disabled, active }, index) => (
           <MenuItem
-            className={anchorClassName}
+            active={active}
             key={index}
             name={name}
             disabled={disabled}
@@ -86,4 +79,3 @@ const Menu = ({
 };
 
 export default Menu;
-export { useMenuHighlight } from './hooks';
