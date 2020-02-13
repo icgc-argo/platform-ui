@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from 'uikit/Typography';
 import styled from '@emotion/styled';
-import useTheme from '../utils/useTheme';
 import { css } from '@emotion/core';
 
 const Cont = styled('div')`
@@ -9,27 +8,49 @@ const Cont = styled('div')`
   border-left: 2px solid ${({ color, theme }) => (color ? color : theme.colors.secondary)};
 `;
 
-const MenuItem = ({ name, onClick, active, disabled }) => {
-  const theme = useTheme();
-  return (
-    <div
-      css={css`
-        padding: 8px 0 8px 16px;
-        background-color: ${active && theme.colors.secondary_4};
+const Anchor = styled<'a', { disabled: boolean; active: boolean }>('a')`
+  /** specificty for docusaurus, easier to edit here */
+  > div {
+    background-color: ${({ active, theme: { colors } }) =>
+      active ? colors.secondary_4 : colors.white};
+    > span {
+      color: ${({ disabled, active, theme: { colors } }) =>
+        disabled ? colors.grey_1 : active ? colors.secondary_dark : colors.primary};
 
-        &:hover {
-          cursor: ${disabled ? 'not-allowed' : 'pointer'};
-        }
-      `}
-      onClick={onClick}
-    >
-      <Typography
-        variant="data"
-        color={active ? 'secondary_dark' : disabled ? 'grey_1' : 'primary'}
+      font-weight: ${({ active }) => (active ? '600' : 'normal')};
+    }
+  }
+
+  &:hover {
+    text-decoration: none;
+
+    > div {
+      background-color: ${({ theme: { colors }, active }) =>
+        active ? colors.secondary_4 : colors.grey_3};
+      > span {
+        color: ${({ theme: { colors }, active }) =>
+          active ? colors.secondary_dark : colors.primary};
+      }
+    }
+  }
+`;
+
+const MenuItem = ({ name, onClick, disabled, active }) => {
+  return (
+    <Anchor onClick={onClick} active={active} disabled={disabled}>
+      <div
+        css={css`
+          padding: 8px 0 8px 16px;
+
+          &:hover {
+            cursor: ${disabled ? 'not-allowed' : 'pointer'};
+          }
+        `}
+        onClick={onClick}
       >
-        {name}
-      </Typography>
-    </div>
+        <Typography variant="data">{name}</Typography>
+      </div>
+    </Anchor>
   );
 };
 
@@ -43,28 +64,27 @@ const Menu = ({
   contents: Array<{
     name: string;
     contentRef?: React.RefObject<HTMLElement>;
-    disabled?: Boolean;
+    disabled?: boolean;
+    active?: boolean;
   }>;
   color?: string;
   // use case: fixed header on page, need extra offset to scroll to top of content
   scrollYOffset?: number;
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div>
       <Typography variant="sectionHeader" color="primary">
         {title}
       </Typography>
       <Cont color={color}>
-        {contents.map(({ name, contentRef, disabled }, index) => (
+        {contents.map(({ name, contentRef, disabled, active }, index) => (
           <MenuItem
+            active={active}
             key={index}
             name={name}
-            active={activeIndex === index}
             disabled={disabled}
             onClick={() => {
               if (!disabled && contentRef && contentRef.current) {
-                setActiveIndex(index);
                 window.scrollTo(0, contentRef.current.offsetTop - scrollYOffset);
               }
             }}

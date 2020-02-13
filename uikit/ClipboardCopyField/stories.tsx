@@ -1,4 +1,3 @@
-
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ClipboardCopyField from '.';
@@ -12,6 +11,7 @@ const ClipboardCopyFieldStories = storiesOf(`${__dirname}`, module).add('Basic',
     disabled: boolean('disabled', false),
     errorText: text('errorText', undefined),
     loading: boolean('loading', false),
+    buttonId: text('buttonId', 'button-generate-access-token'),
   };
   return <ClipboardCopyField {...knobs} />;
 });

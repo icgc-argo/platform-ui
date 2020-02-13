@@ -28,6 +28,7 @@ const ClipboardCopyField = ({
   errorText,
   timeout = 2000,
   loading,
+  buttonId,
 }: {
   buttonText?: string;
   value?: string;
@@ -36,6 +37,7 @@ const ClipboardCopyField = ({
   errorText?: string;
   timeout?: number;
   loading: boolean;
+  buttonId: string;
 }) => {
   const [promptMsgShown, setPromptMsgShown] = React.useState(false);
   let currentTimeout: any = undefined;
@@ -74,7 +76,10 @@ const ClipboardCopyField = ({
       >
         {(errorText || tagText) && !loading && (
           <TagWrapper>
-            <Tag variant={errorText ? TAG_VARIANTS.ERROR : TAG_VARIANTS.INFO}>
+            <Tag
+              id="accessKeyExpiry" // For Selenium
+              variant={errorText ? TAG_VARIANTS.ERROR : TAG_VARIANTS.INFO}
+            >
               {errorText || tagText}
             </Tag>
           </TagWrapper>
@@ -87,9 +92,15 @@ const ClipboardCopyField = ({
             height: 15px;
           `}
         >
-          <Typography variant="default">{value}</Typography>
+          <Typography
+            id="accessKey" // For Selenium
+            variant="default"
+          >
+            {value}
+          </Typography>
         </div>
         <Button
+          id={buttonId}
           isAsync
           disabled={disabled}
           onClick={onCopyClicked}

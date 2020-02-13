@@ -86,6 +86,7 @@ export default ({
         ? 'Are you sure you want to reopen this clinical submission?'
         : 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
       actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
+      actionButtonId: 'modal-confirm-reopen',
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
@@ -107,6 +108,7 @@ export default ({
       title: 'Approve Submission?',
       children: 'Are you sure you want to approve this clinical submission?',
       actionButtonText: 'Yes, Approve',
+      actionButtonId: 'modal-confirm-approve',
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
@@ -185,6 +187,7 @@ export default ({
         <Row nogutter align="center">
           {isPendingApproval && (
             <Button
+              id="button-reopen"
               variant={isDcc ? 'secondary' : 'text'}
               isAsync
               css={css`
@@ -225,7 +228,7 @@ export default ({
           )}
           {isDcc && isPendingApproval && (
             <>
-              <Button size="sm" isAsync onClick={handleSubmissionApproval}>
+              <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
                 approve
               </Button>
             </>
