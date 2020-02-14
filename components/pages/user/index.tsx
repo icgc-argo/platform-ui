@@ -4,7 +4,7 @@ import { ContentHeader, ContentBody } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { css } from 'uikit';
-import AccessKeyBox from './AccessKeyBox';
+import ApiTokenBox from './ApiTokenBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
 import PROFILE from './gql/PROFILE.gql';
@@ -24,7 +24,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
 
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
-  const apiKey = get(data, ['self', 'apiKey']);
+  const apiToken = get(data, ['self', 'apiToken']);
 
   return (
     <DefaultLayout>
@@ -45,7 +45,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <AccessKeyBox accessKey={apiKey} loading={loading} />
+            <ApiTokenBox apiToken={apiToken} loading={loading} />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox isDacoApproved={isDacoApproved} loading={loading} />
