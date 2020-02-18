@@ -10,4 +10,5 @@ RUN npm ci
 RUN npx next build
 
 EXPOSE 8080
+USER 1000
 CMD ["npx", "next", "start", "--", "-p", "8080"]
