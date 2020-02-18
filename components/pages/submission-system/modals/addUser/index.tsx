@@ -131,22 +131,29 @@ const AddUserModal = ({
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      {formIds.map((id, index) => (
-        <AddUser
-          key={id}
-          id={id}
-          formSubscriptions={formSubscriptions}
-          removeSection={id => {
-            removeSection(id);
-          }}
-          onUpdate={() => {
-            touchCheck();
-            errorCheck();
-            lastSectionTouchCheck();
-          }}
-          showDelete={formIds.length > 1}
-        />
-      ))}
+      <div
+        css={css`
+          overflow-y: scroll;
+          max-height: 250px;
+        `}
+      >
+        {formIds.map((id, index) => (
+          <AddUser
+            key={id}
+            id={id}
+            formSubscriptions={formSubscriptions}
+            removeSection={id => {
+              removeSection(id);
+            }}
+            onUpdate={() => {
+              touchCheck();
+              errorCheck();
+              lastSectionTouchCheck();
+            }}
+            showDelete={formIds.length > 1}
+          />
+        ))}
+      </div>
       <AddSection variant="text" disabled={!isLastSectionTouched || hasErrors}>
         <div
           css={css`
