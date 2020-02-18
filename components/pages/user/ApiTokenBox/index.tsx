@@ -19,16 +19,16 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
   // pick either the retrieved key or generated key values
   const exp = generatedApiToken ? generatedApiToken.exp : apiToken ? apiToken.exp : 0;
   const key = generatedApiToken ? generatedApiToken.key : apiToken ? apiToken.key : '';
-  // const keyError = get(acessKey, 'error', '');
+  const keyError = get(apiToken, 'error', '');
 
   const onGenerate = async () => {
     setIsGeneratingApiToken(true);
     try {
       const {
-        data: { generateApiToken },
+        data: { generateAccessKey },
       } = await generateKey();
       setIsGeneratingApiToken(false);
-      setGeneratedApiToken(generateApiToken);
+      setGeneratedApiToken(generateAccessKey);
     } catch (err) {}
   };
 

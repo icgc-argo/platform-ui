@@ -1,5 +1,5 @@
 mutation GENERATE_EGO_API_TOKEN {
-  generateApiToken {
+  generateAccessKey {
     key
     exp
     error
