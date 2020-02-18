@@ -14,7 +14,7 @@ import { ApiToken } from '../types';
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
-  const [generateKey] = useMutation(GENERATE_EGO_API_TOKEN);
+  const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
 
   // pick either the retrieved key or generated key values
   const exp = generatedApiToken ? generatedApiToken.exp : apiToken ? apiToken.exp : 0;
@@ -26,7 +26,7 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
     try {
       const {
         data: { generateAccessKey },
-      } = await generateKey();
+      } = await generateApiToken();
       setIsGeneratingApiToken(false);
       setGeneratedApiToken(generateAccessKey);
     } catch (err) {}
