@@ -1,0 +1,7 @@
+mutation GENERATE_EGO_API_TOKEN {
+  generateApiToken {
+    key
+    exp
+    error
+  }
+}

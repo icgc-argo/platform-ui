@@ -1,7 +1,0 @@
-mutation GENERATE_EGO_ACCESS_KEY {
-  generateAccessKey {
-    key
-    exp
-    error
-  }
-}

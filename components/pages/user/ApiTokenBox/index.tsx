@@ -6,7 +6,7 @@ import Link from 'uikit/Link';
 import Button from 'uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
-import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
+import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { ApiToken } from '../types';
@@ -14,7 +14,7 @@ import { ApiToken } from '../types';
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
-  const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
+  const [generateKey] = useMutation(GENERATE_EGO_API_TOKEN);
 
   // pick either the retrieved key or generated key values
   const exp = generatedApiToken ? generatedApiToken.exp : apiToken ? apiToken.exp : 0;
