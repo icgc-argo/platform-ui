@@ -6,34 +6,34 @@ import Link from 'uikit/Link';
 import Button from 'uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
-import GENERATE_EGO_ACCESS_KEY from './GENERATE_EGO_ACCESS_KEY.gql';
+import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
-import { AccessKey } from '../types';
+import { ApiToken } from '../types';
 
-const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading: boolean }) => {
-  const [generatedKey, setGeneratedKey] = React.useState(null);
-  const [isGeneratingKey, setIsGeneratingKey] = React.useState(false);
-  const [generateKey] = useMutation(GENERATE_EGO_ACCESS_KEY);
+const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
+  const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
+  const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
+  const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
 
   // pick either the retrieved key or generated key values
-  const exp = generatedKey ? generatedKey.exp : accessKey ? accessKey.exp : 0;
-  const key = generatedKey ? generatedKey.key : accessKey ? accessKey.key : '';
-  const keyError = get(accessKey, 'error', '');
+  const exp = generatedApiToken ? generatedApiToken.exp : apiToken ? apiToken.exp : 0;
+  const key = generatedApiToken ? generatedApiToken.key : apiToken ? apiToken.key : '';
+  const keyError = get(apiToken, 'error', '');
 
   const onGenerate = async () => {
-    setIsGeneratingKey(true);
+    setIsGeneratingApiToken(true);
     try {
       const {
         data: { generateAccessKey },
-      } = await generateKey();
-      setIsGeneratingKey(false);
-      setGeneratedKey(generateAccessKey);
+      } = await generateApiToken();
+      setIsGeneratingApiToken(false);
+      setGeneratedApiToken(generateAccessKey);
     } catch (err) {}
   };
 
   const getKeyTextValue = () => {
-    if (loading || (!accessKey && !generatedKey)) {
+    if (loading || (!apiToken && !generatedApiToken)) {
       return '';
     } else {
       return key;
@@ -46,19 +46,19 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
     return `Expires in: ${days} days`;
   };
 
-  const getTagValue = () => (accessKey || generatedKey ? getDayValue(exp) : '');
+  const getTagValue = () => (apiToken || generatedApiToken ? getDayValue(exp) : '');
 
-  const isExpired = exp <= 0 && (accessKey || generatedKey);
-  const disableCopy = loading || isExpired || isGeneratingKey || !key;
-  const disableGenerate = loading || isGeneratingKey;
+  const isExpired = exp <= 0 && (apiToken || generatedApiToken);
+  const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
+  const disableGenerate = loading || isGeneratingApiToken;
 
   return (
-    <Box title="Access Token" iconName="key">
+    <Box title="API Token" iconName="key">
       <Typography variant="paragraph">
-        Your access token can be used instead of a password to access ICGC ARGO resources.
+        Your API token can be used instead of a password to access ICGC ARGO resources.
         <br />
         <Link underline={false} uppercase withChevron bold>
-          How to use your token with ICGC ARGO tools
+          How to use your API token with ICGC ARGO tools
         </Link>
       </Typography>
       <div
@@ -74,7 +74,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
             line-height: 14px;
           `}
         >
-          Access Token
+          API Token
         </Typography>
         <div
           css={css`
@@ -91,7 +91,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
               errorText={isExpired ? 'Expired!' : ''}
               value={getKeyTextValue()}
               disabled={disableCopy}
-              loading={loading || isGeneratingKey}
+              loading={loading || isGeneratingApiToken}
               buttonId="button-clipboard-copy-field"
             />
           </div>
@@ -105,7 +105,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
             `}
           >
             <Button
-              id="button-generate-access-token" // For Selenium '
+              id="button-generate-api-token" // For Selenium '
               onClick={() => onGenerate()}
               variant="secondary"
               disabled={disableGenerate}
@@ -125,7 +125,7 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
           variant={BANNER_VARIANTS.WARNING}
           content={
             <>
-              Please note: your access token is associated with your user credentials and should{' '}
+              Please note: your API token is associated with your user credentials and should{' '}
               <strong>NEVER</strong> be shared with anyone.
             </>
           }
@@ -135,4 +135,4 @@ const AccessTokenBox = ({ accessKey, loading }: { accessKey: AccessKey; loading:
   );
 };
 
-export default AccessTokenBox;
+export default ApiTokenBox;

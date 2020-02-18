@@ -113,6 +113,7 @@ const Select: React.ComponentType<{
         }}
         onBlur={event => {
           onBlur(event);
+          setExpanded(false);
         }}
         disabled={disabled}
       >

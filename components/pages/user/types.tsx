@@ -1,4 +1,4 @@
-export type AccessKey = {
+export type ApiToken = {
   exp: number;
   key: string;
   error: string;
@@ -7,6 +7,6 @@ export type AccessKey = {
 export type ProfileQueryData = {
   self: {
     isDacoApproved: boolean;
-    apiKey: AccessKey;
+    apiToken: ApiToken;
   };
 };
