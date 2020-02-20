@@ -16,25 +16,18 @@ export const useProgramCheckEffect = () => {
     },
   });
 
-  const { setLoading, isLoading } = useGlobalLoadingState();
+  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
   useEffect(() => {
-    // Generate a new loading modal ONLY if the program's existence is unknown
-    if (!program && !isLoading) {
-      setLoading(true);
+    if (!program && !isLoaderShown) {
+      setLoaderShown(true);
     }
-    // Check if the query to check for program existence has finished
     if (!loadingQuery) {
-      // Now that loading is finished, the program must not exist. Break and send to 404.
       if (!program) {
         const err = new Error('Program not found') as Error & { statusCode?: number };
         err[ERROR_STATUS_KEY] = 404;
         throw err;
-      }
-
-      // Otherwise, the query result is back and the program does exist.
-      // Wait for a small buffer time so the loading modal animation has enough time.
-      else if (isLoading) {
-        sleep(1200).then(() => setLoading(false));
+      } else if (isLoaderShown) {
+        sleep(1200).then(() => setLoaderShown(false));
       }
     }
   }, [program, loadingQuery]);
