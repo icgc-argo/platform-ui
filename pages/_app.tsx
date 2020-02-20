@@ -9,6 +9,10 @@ import * as React from 'react';
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import Cookies from 'js-cookie';
+import urlJoin from 'url-join';
+import { get } from 'lodash';
 
 import {
   PageWithConfig,
@@ -83,14 +87,14 @@ class Root extends App<{
 
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
-    let graphqlQueriesToChache;
+    let graphqlQueriesToCache;
     let apolloCache = {};
     try {
-      graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
+      graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
         ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
         : [];
-      apolloCache = graphqlQueriesToChache
-        ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
+      apolloCache = graphqlQueriesToCache
+        ? await getApolloCacheForQueries(graphqlQueriesToCache)(egoJwt)
         : {};
     } catch (e) {
       console.log(e);
@@ -114,7 +118,10 @@ class Root extends App<{
   }
 
   componentDidMount() {
-    const { ctx, egoJwt } = this.props;
+    const {
+      ctx: { asPath, query, res },
+      egoJwt,
+    } = this.props;
     const userModel = decodeToken(egoJwt);
     const { GA_TRACKING_ID } = getConfig();
 
@@ -123,7 +130,33 @@ class Root extends App<{
         userId: userModel ? userModel.context.user.email : 'NA',
       },
     });
-    ReactGA.pageview(ctx.asPath);
+
+    const redirectPath = get(query, 'redirect');
+
+    if (redirectPath && !egoJwt) {
+      const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+      const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+      fetch(egoLoginUrl, {
+        credentials: 'include',
+        headers: { accept: '*/*' },
+        body: null,
+        method: 'GET',
+        mode: 'cors',
+      })
+        .then(res => res.text())
+        .then(egoToken => {
+          if (isValidJwt(egoToken)) {
+            Cookies.set(EGO_JWT_KEY, egoToken);
+            location.assign(`${redirectPath || '/'}`);
+          }
+        })
+        .catch(err => {
+          console.warn('err: ', err);
+          removeCookie(res, EGO_JWT_KEY);
+          redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);
+        });
+    }
+    ReactGA.pageview(asPath);
   }
 
   render() {

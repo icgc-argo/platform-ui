@@ -11,7 +11,7 @@ const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick=
 
 const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
-export default function LoginPage() {
+export default function LoginPage({ redirect }: { redirect: string }) {
   const theme = useTheme();
   const { EGO_URL } = getConfig();
   return (
@@ -55,7 +55,7 @@ export default function LoginPage() {
             </Typography>
           </div>
           <div>
-            <GoogleLogin id="google-login" link={EGO_URL} />
+            <GoogleLogin id="google-login" link={`${EGO_URL}`} redirectPath={redirect || ''} />
           </div>
           <Container
             css={css`

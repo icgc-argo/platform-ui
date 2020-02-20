@@ -15,14 +15,9 @@ export default createPage({ isPublic: true })(() => {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
 
   const redirect = (token: string) => {
-    const currentRedirect = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
-    if (currentRedirect) {
-      localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
-      location.assign(currentRedirect);
-    } else {
-      location.assign(getDefaultRedirectPathForUser(token));
-    }
+    location.assign(getDefaultRedirectPathForUser(token));
   };
+
   React.useEffect(() => {
     const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
     fetch(egoLoginUrl, {

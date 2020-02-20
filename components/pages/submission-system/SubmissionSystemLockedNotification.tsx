@@ -23,7 +23,7 @@ export const SubmissionSystemLockedNotification = ({
   canClose?: boolean;
 }) => {
   const [showNotification, setshowNotification] = React.useState(true);
-  const isWorksapceDisabled = useSubmissionSystemDisabled();
+  const isWorkspaceDisabled = useSubmissionSystemDisabled();
 
   // the link is to the home page currently because data dictionary link is not avaialable yet
   const getContentWithLink = () => (
@@ -42,7 +42,7 @@ export const SubmissionSystemLockedNotification = ({
   };
 
   return (
-    (isWorksapceDisabled && showNotification && (
+    (isWorkspaceDisabled && showNotification && (
       <Notification
         css={css`
           margin-top: ${marginTop}px;
