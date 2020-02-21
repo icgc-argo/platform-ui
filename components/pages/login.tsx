@@ -51,7 +51,7 @@ export default function LoginPage() {
                 font-weight: normal;
               `}
             >
-              Now Open for Data Submission!
+              Welcome to the <br /> ICGC ARGO Data Platform
             </Typography>
           </div>
           <div>
@@ -59,7 +59,7 @@ export default function LoginPage() {
           </div>
           <Container
             css={css`
-              margin: 77px auto 20px auto;
+              margin: 77px 50px 20px 50px;
               padding: 16px;
               text-align: left;
               display: inline-flex;
@@ -83,6 +83,11 @@ export default function LoginPage() {
               >
                 Get started with Data Submission
               </Typography>
+              <Typography component="div">
+                Visit our documentation website to learn how to <a href="">manage a program,</a>{' '}
+                <a href="">register samples,</a> and <a href="">submit clinical data.</a>
+              </Typography>
+              {/* Previous text before beta testing:
               <ul
                 css={css`
                   padding-left: 18px;
@@ -98,7 +103,7 @@ export default function LoginPage() {
                     Our <a href="">documentation</a> outlines the submission process.
                   </Typography>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </Container>
         </div>
