@@ -166,7 +166,11 @@ export default () => {
   const [validateSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
-  >(VALIDATE_SUBMISSION_MUTATION);
+  >(VALIDATE_SUBMISSION_MUTATION, {
+    onCompleted: () => {
+      setSelectedClinicalEntityType(defaultClinicalEntityType);
+    },
+  });
   const [signOffSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     SignOffSubmissionMutationVariables
