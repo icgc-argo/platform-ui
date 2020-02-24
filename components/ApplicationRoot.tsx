@@ -14,11 +14,12 @@ import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
-
+import { CSSTransition } from 'react-transition-group';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
+import { FadingDiv } from './Fader';
 
 /**
  * The global portal where modals will show up
@@ -65,25 +66,21 @@ export const GlobalLoaderProvider = ({
   startWithGlobalLoader: boolean;
 }) => {
   const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
+  const fadeIn = 400;
+  const fadeOut = 600;
+
   return (
     <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
       {children}
-      {isLoading && (
-        <div
-          css={css`
-            transition: all 0.2s;
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-            top: 0px;
-            z-index: 9000;
-          `}
-        >
-          <Modal.Overlay>
-            <DnaLoader />
-          </Modal.Overlay>
-        </div>
-      )}
+      <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
+        {() => (
+          <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
+            <Modal.Overlay>
+              <DnaLoader />
+            </Modal.Overlay>
+          </FadingDiv>
+        )}
+      </CSSTransition>
     </GlobalLoadingContext.Provider>
   );
 };
