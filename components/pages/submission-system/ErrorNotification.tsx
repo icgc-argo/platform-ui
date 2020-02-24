@@ -135,7 +135,7 @@ export default <Error extends { [k: string]: any }>({
               columns={columnConfig.map(col => ({
                 ...col,
                 style: {
-                  whiteSpace: 'unset',
+                  whiteSpace: 'pre-line',
                   ...(col.style || {}),
                 },
               }))}
