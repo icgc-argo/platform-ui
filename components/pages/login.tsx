@@ -6,6 +6,7 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
+import Notification from 'uikit/notifications/Notification';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -16,6 +17,28 @@ export default function LoginPage() {
   const { EGO_URL } = getConfig();
   return (
     <DefaultLayout>
+      <div
+        css={css`
+          position: absolute;
+          width: 100%;
+          top: 100px;
+          display: flex;
+          justify-content: center;
+        `}
+      >
+        <Notification
+          css={css`
+            width: 1000px;
+            max-width: 100%;
+          `}
+          variant="WARNING"
+          interactionType={null}
+          size="MD"
+          title="This is a closed beta testing environment"
+          content="To access the clinical submission system for beta testing, you will be invited to join a program via email. If you log in without an email invite, you will not have access to any programs."
+          noShadow={false}
+        />
+      </div>
       <div
         css={css`
           height: 100%;
@@ -87,23 +110,6 @@ export default function LoginPage() {
                 Visit our documentation website to learn how to <a href="">manage a program,</a>{' '}
                 <a href="">register samples,</a> and <a href="">submit clinical data.</a>
               </Typography>
-              {/* Previous text before beta testing:
-              <ul
-                css={css`
-                  padding-left: 18px;
-                `}
-              >
-                <li>
-                  <Typography component="div">
-                    <a href="">Register for DACO access</a> in order to submit data.
-                  </Typography>
-                </li>
-                <li>
-                  <Typography component="div">
-                    Our <a href="">documentation</a> outlines the submission process.
-                  </Typography>
-                </li>
-              </ul> */}
             </div>
           </Container>
         </div>
