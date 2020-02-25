@@ -17,6 +17,7 @@ export const getConfig = () => {
       publicConfig.EGO_API_ROOT || '',
       `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
     ),
+    DOCS_URL_ROOT: 'https://docs.icgc-argo.org/docs/',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -25,5 +26,6 @@ export const getConfig = () => {
     AUTH_DISABLED: boolean;
     GA_TRACKING_ID: string;
     EGO_URL: string;
+    DOCS_URL_ROOT: string;
   };
 };

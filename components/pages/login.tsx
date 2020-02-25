@@ -7,6 +7,7 @@ import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
 import Notification from 'uikit/notifications/Notification';
+import urljoin from 'url-join';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -15,6 +16,7 @@ const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 export default function LoginPage() {
   const theme = useTheme();
   const { EGO_URL } = getConfig();
+  const { DOCS_URL_ROOT } = getConfig();
   return (
     <DefaultLayout>
       <div
@@ -108,12 +110,12 @@ export default function LoginPage() {
               </Typography>
               <Typography component="div">
                 Visit our documentation website to learn how to{' '}
-                <a href="https://docs.icgc-argo.org/docs/managing-program-access/">
+                <a href={urljoin({ DOCS_URL_ROOT }, 'managing-program-access/')}>
                   manage a program,
                 </a>{' '}
-                <a href="https://docs.icgc-argo.org/docs/registering-samples">register samples,</a>{' '}
+                <a href={urljoin({ DOCS_URL_ROOT }, 'registering-samples')}>register samples,</a>{' '}
                 and{' '}
-                <a href="https://docs.icgc-argo.org/docs/submitting-clinical-data">
+                <a href={urljoin({ DOCS_URL_ROOT }, 'submitting-clinical-data')}>
                   submit clinical data.
                 </a>
               </Typography>
