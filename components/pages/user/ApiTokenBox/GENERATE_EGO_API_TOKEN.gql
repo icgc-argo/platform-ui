@@ -1,4 +1,4 @@
-mutation GENERATE_EGO_ACCESS_KEY {
+mutation GENERATE_EGO_API_TOKEN {
   generateAccessKey {
     key
     exp

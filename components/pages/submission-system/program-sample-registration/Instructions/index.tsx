@@ -104,7 +104,7 @@ function Instructions({
               <span css={instructionBoxButtonContentStyle}>
                 <Icon
                   name="upload"
-                  fill="accent2_dark"
+                  fill={uploadEnabled ? 'accent2_dark' : 'white'}
                   height="12px"
                   css={instructionBoxButtonIconStyle}
                 />{' '}

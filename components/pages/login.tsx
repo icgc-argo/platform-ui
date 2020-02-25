@@ -6,6 +6,7 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
+import Notification from 'uikit/notifications/Notification';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -16,6 +17,28 @@ export default function LoginPage({ redirect }: { redirect: string }) {
   const { EGO_URL } = getConfig();
   return (
     <DefaultLayout>
+      <div
+        css={css`
+          position: absolute;
+          width: 100%;
+          top: 100px;
+          display: flex;
+          justify-content: center;
+        `}
+      >
+        <Notification
+          css={css`
+            width: 1000px;
+            max-width: 100%;
+          `}
+          variant="WARNING"
+          interactionType={null}
+          size="MD"
+          title="This is a closed beta testing environment"
+          content="To access the clinical submission system for beta testing, you will be invited to join a program via email. If you log in without an email invite, you will not have access to any programs."
+          noShadow={false}
+        />
+      </div>
       <div
         css={css`
           height: 100%;
@@ -51,7 +74,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
                 font-weight: normal;
               `}
             >
-              Now Open for Data Submission!
+              Welcome to the <br /> ICGC ARGO Data Platform
             </Typography>
           </div>
           <div>
@@ -59,7 +82,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
           </div>
           <Container
             css={css`
-              margin: 77px auto 20px auto;
+              margin: 77px 50px 20px 50px;
               padding: 16px;
               text-align: left;
               display: inline-flex;
@@ -83,22 +106,10 @@ export default function LoginPage({ redirect }: { redirect: string }) {
               >
                 Get started with Data Submission
               </Typography>
-              <ul
-                css={css`
-                  padding-left: 18px;
-                `}
-              >
-                <li>
-                  <Typography component="div">
-                    <a href="">Register for DACO access</a> in order to submit data.
-                  </Typography>
-                </li>
-                <li>
-                  <Typography component="div">
-                    Our <a href="">documentation</a> outlines the submission process.
-                  </Typography>
-                </li>
-              </ul>
+              <Typography component="div">
+                Visit our documentation website to learn how to <a href="">manage a program,</a>{' '}
+                <a href="">register samples,</a> and <a href="">submit clinical data.</a>
+              </Typography>
             </div>
           </Container>
         </div>
