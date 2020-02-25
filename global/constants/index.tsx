@@ -4,7 +4,7 @@ export const APP_VERSION = packageJson.version;
 
 export const EGO_JWT_KEY = 'EGO_JWT';
 export const LOCAL_STORAGE_REDIRECT_KEY = 'REDIRECT';
-export const LOCAL_STORAGE_GDPR_ACCEPTTANCE_KEY = 'GDPR_ACCEPTED';
+export const LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY = 'GDPR_ACCEPTED';
 
 // Program Membership Types
 export const PROGRAM_MEMBERSHIP_TYPES = [

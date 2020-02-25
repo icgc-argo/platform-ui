@@ -9,6 +9,11 @@ import * as React from 'react';
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';
+import Cookies from 'js-cookie';
+import urlJoin from 'url-join';
+import queryString from 'query-string';
+import { get } from 'lodash';
+import DefaultLayout from '../components/pages/DefaultLayout';
 
 import {
   PageWithConfig,
@@ -17,6 +22,8 @@ import {
 } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
+import DnaLoader from 'uikit/DnaLoader';
+import { sleep } from 'global/utils/common';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -47,14 +54,18 @@ const removeCookie = (res, cookieName) => {
   res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
 };
 
-class Root extends App<{
-  egoJwt?: string;
-  ctx: NextPageContext;
-  apolloCache: any;
-  pathname: string;
-  unauthorized: boolean;
-  startWithGlobalLoader: boolean;
-}> {
+class Root extends App<
+  {
+    egoJwt?: string;
+    ctx: NextPageContext;
+    apolloCache: any;
+    pathname: string;
+    unauthorized: boolean;
+    startWithGlobalLoader: boolean;
+  },
+  {},
+  { isLoadingLoginRedirect: boolean }
+> {
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
@@ -83,14 +94,14 @@ class Root extends App<{
 
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
-    let graphqlQueriesToChache;
+    let graphqlQueriesToCache;
     let apolloCache = {};
     try {
-      graphqlQueriesToChache = Component.getGqlQueriesToPrefetch
+      graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
         ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
         : [];
-      apolloCache = graphqlQueriesToChache
-        ? await getApolloCacheForQueries(graphqlQueriesToChache)(egoJwt)
+      apolloCache = graphqlQueriesToCache
+        ? await getApolloCacheForQueries(graphqlQueriesToCache)(egoJwt)
         : {};
     } catch (e) {
       console.log(e);
@@ -113,22 +124,92 @@ class Root extends App<{
     };
   }
 
-  componentDidMount() {
-    const { ctx, egoJwt } = this.props;
+  isInOauthMode = props => {
+    if (get(props.ctx.query, 'redirect')) {
+      const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
+      return get(parsed.query, 'isOauth') === 'true';
+    } else {
+      return false;
+    }
+  };
+
+  constructor(props) {
+    super(props);
+    const isOauth = this.isInOauthMode(props);
+    this.state = {
+      isLoadingLoginRedirect: isOauth,
+    };
+  }
+
+  static async getEgoToken(props) {
+    const { ctx } = props;
+    const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+    const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+    return await fetch(egoLoginUrl, {
+      credentials: 'include',
+      headers: { accept: '*/*' },
+      body: null,
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(res => {
+        if (res.status !== 200) {
+          enforceLogin({ ctx });
+        }
+        return res.text();
+      })
+      .then(egoToken => {
+        if (isValidJwt(egoToken)) {
+          return egoToken;
+        }
+      })
+      .catch(err => {
+        console.warn(err);
+        enforceLogin({ ctx });
+        return err;
+      });
+  }
+
+  async componentDidMount() {
+    const {
+      ctx: {
+        asPath,
+        query: { redirect },
+      },
+      egoJwt,
+    } = this.props;
+    const { isLoadingLoginRedirect } = this.state;
     const userModel = decodeToken(egoJwt);
     const { GA_TRACKING_ID } = getConfig();
 
+    if (egoJwt) {
+      Cookies.set(EGO_JWT_KEY, egoJwt);
+    } else {
+      if (isLoadingLoginRedirect) {
+        const egoToken = await Root.getEgoToken(this.props);
+        if (isValidJwt(egoToken)) {
+          Cookies.set(EGO_JWT_KEY, egoToken);
+          const redirectPath = decodeURIComponent(`${redirect}`);
+          location.assign(queryString.parseUrl(redirectPath || '/').url);
+        } else {
+          Cookies.set(EGO_JWT_KEY, null);
+          location.assign(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);
+        }
+        await sleep();
+        this.setState({ isLoadingLoginRedirect: false });
+      }
+    }
     ReactGA.initialize(GA_TRACKING_ID, {
       gaOptions: {
         userId: userModel ? userModel.context.user.email : 'NA',
       },
     });
-    ReactGA.pageview(ctx.asPath);
+    ReactGA.pageview(asPath);
   }
 
   render() {
     const { Component, pageProps, ctx, apolloCache, egoJwt, startWithGlobalLoader } = this.props;
-
+    const { isLoadingLoginRedirect } = this.state;
     return (
       <ApplicationRoot
         egoJwt={egoJwt}
@@ -136,7 +217,22 @@ class Root extends App<{
         pageContext={ctx}
         startWithGlobalLoader={startWithGlobalLoader}
       >
-        <Component {...pageProps} />
+        {isLoadingLoginRedirect ? (
+          <DefaultLayout>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+              }}
+            >
+              <DnaLoader />
+            </div>
+          </DefaultLayout>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </ApplicationRoot>
     );
   }
