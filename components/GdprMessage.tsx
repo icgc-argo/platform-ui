@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
-import { LOCAL_STORAGE_GDPR_ACCEPTTANCE_KEY } from 'global/constants';
+import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
 import Link from 'next/link';
 import HyperLink from 'uikit/Link';
 import { PRIVACY_POLICY_PATH } from 'global/constants/pages';
@@ -13,10 +13,10 @@ export default () => {
   const theme = useTheme();
   const [accepted, setAcceptedState] = React.useState(true);
   const sync = () => {
-    setAcceptedState(localStorage.getItem(LOCAL_STORAGE_GDPR_ACCEPTTANCE_KEY) === 'true');
+    setAcceptedState(localStorage.getItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY) === 'true');
   };
   const persistAcceptedState = (accepted: boolean) => {
-    localStorage.setItem(LOCAL_STORAGE_GDPR_ACCEPTTANCE_KEY, String(accepted));
+    localStorage.setItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY, String(accepted));
     sync();
   };
   React.useEffect(() => {

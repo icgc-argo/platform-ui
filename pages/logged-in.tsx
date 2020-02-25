@@ -1,5 +1,5 @@
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY, LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
+import { EGO_JWT_KEY } from 'global/constants';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';

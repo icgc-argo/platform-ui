@@ -18,7 +18,6 @@ import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
@@ -101,6 +100,17 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     }
   };
 
+  const [fullDetailsRedirect, setFullDetailsRedirect] = React.useState('');
+
+  React.useEffect(() => {
+    setFullDetailsRedirect(
+      `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
+        INVITE_ID,
+        inviteId as string,
+      )}`,
+    );
+  }, []);
+
   return (
     <MinimalLayout>
       <JoinProgramLayout
@@ -126,16 +136,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 justify-content: center;
               `}
             >
-              <GoogleLogin
-                id="google-login"
-                link={EGO_URL}
-                onClick={() => {
-                  window.localStorage.setItem(
-                    LOCAL_STORAGE_REDIRECT_KEY,
-                    PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
-                  );
-                }}
-              />
+              <GoogleLogin id="google-login" link={EGO_URL} redirectPath={fullDetailsRedirect} />
             </div>
           </>
         ) : (
