@@ -27,6 +27,7 @@
     "react-grid-system": "^4.4.6",
     "react-table": "6.10.0",
     "react-tippy": "^1.2.3",
-    "recompose": "^0.30.0"
+    "recompose": "^0.30.0",
+    "url-join": "^4.0.0"
   }
 }
