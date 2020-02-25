@@ -30,7 +30,7 @@ import SubmissionSummaryTable from './SubmissionSummaryTable';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import Typography from 'uikit/Typography';
 import { sleep } from 'global/utils/common';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import orderBy from 'lodash/orderBy';
 import head from 'lodash/head';
@@ -91,7 +91,6 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
-  const router = useRouter();
   const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
   const {
     isModalShown: signOffModalShown,
@@ -166,7 +165,11 @@ export default () => {
   const [validateSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
-  >(VALIDATE_SUBMISSION_MUTATION);
+  >(VALIDATE_SUBMISSION_MUTATION, {
+    onCompleted: () => {
+      setSelectedClinicalEntityType(defaultClinicalEntityType);
+    },
+  });
   const [signOffSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     SignOffSubmissionMutationVariables
@@ -293,14 +296,16 @@ export default () => {
         });
 
         if (newData.clinicalSubmissions.state === null) {
+          Router.push(
+            PROGRAM_DASHBOARD_PATH,
+            PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName),
+          );
           toaster.addToast({
             variant: 'SUCCESS',
             interactionType: 'CLOSE',
             title: 'Successful Clinical Submission!',
             content: 'Your clinical data has been submitted.',
           });
-
-          router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programShortName));
         } else {
           setPageLoaderShown(false);
         }
