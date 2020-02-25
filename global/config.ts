@@ -17,7 +17,7 @@ export const getConfig = () => {
       publicConfig.EGO_API_ROOT || '',
       `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
     ),
-    DOCS_URL_ROOT: 'https://docs.icgc-argo.org/docs/',
+    DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org/docs/',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
