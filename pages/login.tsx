@@ -2,7 +2,6 @@ import LoginPage from 'components/pages/login';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
 import React from 'react';
-import { trimEnd } from 'lodash';
 
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
@@ -25,9 +24,9 @@ export default createPage<{ redirect: string; egoJwt: string }>({
       Router.replace(redirect || getDefaultRedirectPathForUser(egoJwt));
     }
     if (redirect && !egoJwt) {
-      // google login will not work if any query params are passed in redirect_uri
-      const trimmedRedirect = trimEnd((redirect || '').split('?')[0], '/');
-      setFullRedirect(`&redirect_uri=${location.origin}${trimmedRedirect}`);
+      setFullRedirect(
+        `&redirect_uri=${location.origin}${redirect}${encodeURIComponent(`?isOauth=true`)}`,
+      );
     }
   }, []);
 
