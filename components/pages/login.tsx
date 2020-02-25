@@ -107,8 +107,15 @@ export default function LoginPage() {
                 Get started with Data Submission
               </Typography>
               <Typography component="div">
-                Visit our documentation website to learn how to <a href="">manage a program,</a>{' '}
-                <a href="">register samples,</a> and <a href="">submit clinical data.</a>
+                Visit our documentation website to learn how to{' '}
+                <a href="https://docs.icgc-argo.org/docs/managing-program-access/">
+                  manage a program,
+                </a>{' '}
+                <a href="https://docs.icgc-argo.org/docs/registering-samples">register samples,</a>{' '}
+                and{' '}
+                <a href="https://docs.icgc-argo.org/docs/submitting-clinical-data">
+                  submit clinical data.
+                </a>
               </Typography>
             </div>
           </Container>
