@@ -21,7 +21,7 @@ export default function LoginPage() {
         css={css`
           position: absolute;
           width: 100%;
-          top: 100px;
+          top: 75px;
           display: flex;
           justify-content: center;
         `}
