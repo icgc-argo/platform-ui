@@ -21,9 +21,10 @@ export default function LoginPage() {
     <DefaultLayout>
       <div
         css={css`
+          z-index: 2;
           position: absolute;
           width: 100%;
-          top: 75px;
+          top: 80px;
           display: flex;
           justify-content: center;
         `}
@@ -110,12 +111,9 @@ export default function LoginPage() {
               </Typography>
               <Typography component="div">
                 Visit our documentation website to learn how to{' '}
-                <a href={urljoin({ DOCS_URL_ROOT }, 'managing-program-access/')}>
-                  manage a program,
-                </a>{' '}
-                <a href={urljoin({ DOCS_URL_ROOT }, 'registering-samples')}>register samples,</a>{' '}
-                and{' '}
-                <a href={urljoin({ DOCS_URL_ROOT }, 'submitting-clinical-data')}>
+                <a href={urljoin(DOCS_URL_ROOT, 'managing-program-access/')}>manage a program,</a>{' '}
+                <a href={urljoin(DOCS_URL_ROOT, 'registering-samples')}>register samples,</a> and{' '}
+                <a href={urljoin(DOCS_URL_ROOT, 'submitting-clinical-data')}>
                   submit clinical data.
                 </a>
               </Typography>
