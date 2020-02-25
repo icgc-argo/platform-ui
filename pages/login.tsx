@@ -2,6 +2,7 @@ import LoginPage from 'components/pages/login';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
 import React from 'react';
+import queryString from 'query-string';
 
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
@@ -24,8 +25,13 @@ export default createPage<{ redirect: string; egoJwt: string }>({
       Router.replace(redirect || getDefaultRedirectPathForUser(egoJwt));
     }
     if (redirect && !egoJwt) {
+      const parsedRedirect = queryString.parseUrl(redirect);
+      const existingQuery = queryString.stringify(parsedRedirect.query);
+
       setFullRedirect(
-        `&redirect_uri=${location.origin}${redirect}${encodeURIComponent(`?isOauth=true`)}`,
+        `&redirect_uri=${location.origin}${parsedRedirect.url}${encodeURIComponent(
+          `?${existingQuery}&isOauth=true`,
+        )}`,
       );
     }
   }, []);

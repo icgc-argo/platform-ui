@@ -63,7 +63,7 @@ class Root extends App<
     unauthorized: boolean;
     startWithGlobalLoader: boolean;
   },
-  any,
+  {},
   { isLoadingLoginRedirect: boolean }
 > {
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
