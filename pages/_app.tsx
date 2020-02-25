@@ -64,11 +64,11 @@ class Root extends App<
     startWithGlobalLoader: boolean;
   },
   any,
-  { isLoading: boolean }
+  { isLoadingLoginRedirect: boolean }
 > {
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
-    let egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
-    const { res, req } = ctx;
+    const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
+    const { res } = ctx;
     const { AUTH_DISABLED } = getConfig();
 
     if (egoJwt) {
@@ -127,7 +127,7 @@ class Root extends App<
   isInOauthMode = props => {
     if (get(props.ctx.query, 'redirect')) {
       const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
-      return get(parsed.query, 'isOauth');
+      return get(parsed.query, 'isOauth') === 'true';
     } else {
       return false;
     }
@@ -137,7 +137,7 @@ class Root extends App<
     super(props);
     const isOauth = this.isInOauthMode(props);
     this.state = {
-      isLoading: !!isOauth,
+      isLoadingLoginRedirect: isOauth,
     };
   }
 
@@ -178,25 +178,25 @@ class Root extends App<
       },
       egoJwt,
     } = this.props;
-    const { isLoading } = this.state;
+    const { isLoadingLoginRedirect } = this.state;
     const userModel = decodeToken(egoJwt);
     const { GA_TRACKING_ID } = getConfig();
 
     if (egoJwt) {
       Cookies.set(EGO_JWT_KEY, egoJwt);
     } else {
-      if (isLoading) {
+      if (isLoadingLoginRedirect) {
         const egoToken = await Root.getEgoToken(this.props);
         if (isValidJwt(egoToken)) {
           Cookies.set(EGO_JWT_KEY, egoToken);
           const redirectPath = decodeURIComponent(`${redirect}`);
-          location.assign(queryString.parseUrl(redirectPath).url);
+          location.assign(queryString.parseUrl(redirectPath || '/').url);
         } else {
           Cookies.set(EGO_JWT_KEY, null);
           location.assign(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);
         }
         await sleep();
-        this.setState({ isLoading: false });
+        this.setState({ isLoadingLoginRedirect: false });
       }
     }
     ReactGA.initialize(GA_TRACKING_ID, {
@@ -204,13 +204,12 @@ class Root extends App<
         userId: userModel ? userModel.context.user.email : 'NA',
       },
     });
-
     ReactGA.pageview(asPath);
   }
 
   render() {
     const { Component, pageProps, ctx, apolloCache, egoJwt, startWithGlobalLoader } = this.props;
-    const { isLoading } = this.state;
+    const { isLoadingLoginRedirect } = this.state;
     return (
       <ApplicationRoot
         egoJwt={egoJwt}
@@ -218,7 +217,7 @@ class Root extends App<
         pageContext={ctx}
         startWithGlobalLoader={startWithGlobalLoader}
       >
-        {isLoading ? (
+        {isLoadingLoginRedirect ? (
           <DefaultLayout>
             <div
               style={{
