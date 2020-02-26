@@ -1,12 +1,12 @@
 import React from 'react';
 import { css } from 'uikit';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
 import Notification from 'uikit/notifications/Notification';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -78,7 +78,11 @@ export default function LoginPage({ redirect }: { redirect: string }) {
             </Typography>
           </div>
           <div>
-            <GoogleLogin id="google-login" link={`${EGO_URL}`} redirectPath={redirect || ''} />
+            <GoogleLoginButton
+              id="google-login"
+              link={`${EGO_URL}`}
+              redirectPath={redirect || ''}
+            />
           </div>
           <Container
             css={css`

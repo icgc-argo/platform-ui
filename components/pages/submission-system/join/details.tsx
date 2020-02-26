@@ -21,6 +21,7 @@ import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
 import queryString from 'query-string';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
@@ -141,7 +142,11 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 justify-content: center;
               `}
             >
-              <GoogleLogin id="google-login" link={EGO_URL} redirectPath={fullDetailsRedirect} />
+              <GoogleLoginButton
+                id="google-login"
+                link={EGO_URL}
+                redirectPath={fullDetailsRedirect}
+              />
             </div>
           </>
         ) : (

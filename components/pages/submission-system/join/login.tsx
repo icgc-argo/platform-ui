@@ -10,12 +10,16 @@ import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
+import useAuthContext from 'global/hooks/useAuthContext';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export default () => {
   const { EGO_URL } = getConfig();
 
   const router = useRouter();
   const { inviteId } = router.query;
+
+  const { logOut } = useAuthContext();
 
   const [notFound, setNotFound] = React.useState(false);
   const {
@@ -66,7 +70,7 @@ export default () => {
             padding-bottom: 25px;
           `}
         >
-          <GoogleLogin
+          <GoogleLoginButton
             id="google-login"
             link={EGO_URL}
             redirectPath={fullJoinLoginRedirect || '/'}

@@ -13,6 +13,7 @@ import { createRedirectURL } from 'global/utils/common';
 
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { getConfig } from 'global/config';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export enum InviteState {
   NotFound,
@@ -161,22 +162,15 @@ export default function JoinProgramLayout({
                   justify-content: center;
                 `}
               >
-                <GoogleLogin
+                <GoogleLoginButton
                   link={EGO_URL}
-                  redirectPath={
-                    createRedirectURL({
-                      origin: location.origin,
-                      path: `${PROGRAM_DASHBOARD_PATH.replace(
-                        PROGRAM_SHORT_NAME_PATH,
-                        joinProgramInvite.program.shortName,
-                      )}`,
-                      // query: `${encodeURIComponent('?isOauth=true')}`,
-                    })
-                    // `&redirect_uri=${location.origin}${PROGRAM_DASHBOARD_PATH.replace(
-                    //   PROGRAM_SHORT_NAME_PATH,
-                    //   joinProgramInvite.program.shortName,
-                    // )}${encodeURIComponent('?isOauth=true')}`
-                  }
+                  redirectPath={createRedirectURL({
+                    origin: location.origin,
+                    path: `${PROGRAM_DASHBOARD_PATH.replace(
+                      PROGRAM_SHORT_NAME_PATH,
+                      joinProgramInvite.program.shortName,
+                    )}`,
+                  })}
                 />
               </div>
             </>
