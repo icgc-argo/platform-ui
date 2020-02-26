@@ -19,6 +19,9 @@ import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
+import { createRedirectURL } from 'global/utils/common';
+import queryString from 'query-string';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
@@ -27,9 +30,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const router = useRouter();
   const { inviteId } = router.query;
-
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
-
   const toaster = useToaster();
 
   const { updateToken, data: userModel } = useAuthContext();
@@ -104,10 +105,10 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   React.useEffect(() => {
     setFullDetailsRedirect(
-      `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
-        INVITE_ID,
-        inviteId as string,
-      )}`,
+      createRedirectURL({
+        origin: location.origin,
+        path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
+      }),
     );
   }, []);
 
@@ -136,7 +137,11 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 justify-content: center;
               `}
             >
-              <GoogleLogin id="google-login" link={EGO_URL} redirectPath={fullDetailsRedirect} />
+              <GoogleLoginButton
+                id="google-login"
+                link={EGO_URL}
+                redirectPath={fullDetailsRedirect}
+              />
             </div>
           </>
         ) : (

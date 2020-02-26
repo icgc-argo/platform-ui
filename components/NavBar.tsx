@@ -123,7 +123,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
                         Profile & Token
                       </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => logOut()}>Logout</DropdownMenuItem>
                   </DropdownMenu>
                 }
               >

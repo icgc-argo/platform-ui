@@ -4,6 +4,8 @@ import Router from 'next/router';
 import React from 'react';
 import queryString from 'query-string';
 
+import { createRedirectURL } from 'global/utils/common';
+
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
   getInitialProps: async ({ query, egoJwt, res }) => {
@@ -29,9 +31,11 @@ export default createPage<{ redirect: string; egoJwt: string }>({
       const existingQuery = queryString.stringify(parsedRedirect.query);
 
       setFullRedirect(
-        `&redirect_uri=${location.origin}${parsedRedirect.url}${encodeURIComponent(
-          `?${existingQuery}&isOauth=true`,
-        )}`,
+        createRedirectURL({
+          origin: location.origin,
+          path: parsedRedirect.url,
+          query: existingQuery,
+        }),
       );
     }
   }, []);
