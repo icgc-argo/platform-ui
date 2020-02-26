@@ -9,6 +9,7 @@ import get from 'lodash/get';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useRouter } from 'next/router';
+import { createRedirectURL } from 'global/utils/common';
 
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { getConfig } from 'global/config';
@@ -163,10 +164,18 @@ export default function JoinProgramLayout({
                 <GoogleLogin
                   link={EGO_URL}
                   redirectPath={
-                    `&redirect_uri=${location.origin}${PROGRAM_DASHBOARD_PATH.replace(
-                      PROGRAM_SHORT_NAME_PATH,
-                      joinProgramInvite.program.shortName,
-                    )}` || '/'
+                    createRedirectURL({
+                      origin: location.origin,
+                      path: `${PROGRAM_DASHBOARD_PATH.replace(
+                        PROGRAM_SHORT_NAME_PATH,
+                        joinProgramInvite.program.shortName,
+                      )}`,
+                      // query: `${encodeURIComponent('?isOauth=true')}`,
+                    })
+                    // `&redirect_uri=${location.origin}${PROGRAM_DASHBOARD_PATH.replace(
+                    //   PROGRAM_SHORT_NAME_PATH,
+                    //   joinProgramInvite.program.shortName,
+                    // )}${encodeURIComponent('?isOauth=true')}`
                   }
                 />
               </div>

@@ -92,3 +92,25 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   link.click();
   document.body.removeChild(link);
 };
+
+export const createRedirectURL = ({
+  origin,
+  path,
+  query,
+}: {
+  origin: string;
+  path: string;
+  query?: string;
+}): string => {
+  // console.log(query ? `?${`${query}&` : ''}isOauth=true`);
+  const mergedQuery = `?${query ? `${query}&` : ''}isOauth=true`;
+  const wat = `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
+  console.log('WAAAAT: ', wat);
+  return wat;
+};
+
+// `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
+//   INVITE_ID,
+//   inviteId as string,
+// )}${encodeURIComponent('?isOauth=true')}`
+// ${existingQuery ? `&${existingQuery}` : ''}

@@ -9,6 +9,7 @@ import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
+import { createRedirectURL } from 'global/utils/common';
 
 export default () => {
   const { EGO_URL } = getConfig();
@@ -33,10 +34,15 @@ export default () => {
 
   React.useEffect(() => {
     setFullJoinLoginRedirect(
-      `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
-        INVITE_ID,
-        inviteId as string,
-      )}`,
+      createRedirectURL({
+        origin: location.origin,
+        path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
+        // query: `${encodeURIComponent('?isOauth=true')}`,
+      }),
+      // `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
+      //   INVITE_ID,
+      //   inviteId as string,
+      // )}${encodeURIComponent('?isOauth=true')}`,
     );
   }, []);
 
