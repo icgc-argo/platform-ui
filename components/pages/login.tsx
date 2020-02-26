@@ -7,6 +7,7 @@ import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
 import Notification from 'uikit/notifications/Notification';
 import GoogleLoginButton from 'components/GoogleLoginButton';
+import urljoin from 'url-join';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
