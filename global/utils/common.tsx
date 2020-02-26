@@ -105,12 +105,5 @@ export const createRedirectURL = ({
   query?: string;
 }): string => {
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
-  const wat = `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
-  return wat;
+  return `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
 };
-
-// `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
-//   INVITE_ID,
-//   inviteId as string,
-// )}${encodeURIComponent('?isOauth=true')}`
-// ${existingQuery ? `&${existingQuery}` : ''}

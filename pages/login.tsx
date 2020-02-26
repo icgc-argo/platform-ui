@@ -29,16 +29,13 @@ export default createPage<{ redirect: string; egoJwt: string }>({
     if (redirect && !egoJwt) {
       const parsedRedirect = queryString.parseUrl(redirect);
       const existingQuery = queryString.stringify(parsedRedirect.query);
-      // console.log('QUERY: ', existingQuery);
+
       setFullRedirect(
         createRedirectURL({
           origin: location.origin,
           path: parsedRedirect.url,
           query: existingQuery,
         }),
-        // `&redirect_uri=${location.origin}${parsedRedirect.url}${encodeURIComponent(
-        //   `?${existingQuery}&isOauth=true`,
-        // )}`,
       );
     }
   }, []);
