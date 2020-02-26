@@ -18,8 +18,10 @@ import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
 import GoogleLogin from 'uikit/Button/GoogleLogin';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
+import { createRedirectURL } from 'global/utils/common';
+import queryString from 'query-string';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
@@ -28,9 +30,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const router = useRouter();
   const { inviteId } = router.query;
-
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
-
   const toaster = useToaster();
 
   const { updateToken, data: userModel } = useAuthContext();
@@ -101,6 +101,17 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     }
   };
 
+  const [fullDetailsRedirect, setFullDetailsRedirect] = React.useState('');
+
+  React.useEffect(() => {
+    setFullDetailsRedirect(
+      createRedirectURL({
+        origin: location.origin,
+        path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
+      }),
+    );
+  }, []);
+
   return (
     <MinimalLayout>
       <JoinProgramLayout
@@ -126,15 +137,10 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
                 justify-content: center;
               `}
             >
-              <GoogleLogin
+              <GoogleLoginButton
                 id="google-login"
                 link={EGO_URL}
-                onClick={() => {
-                  window.localStorage.setItem(
-                    LOCAL_STORAGE_REDIRECT_KEY,
-                    PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
-                  );
-                }}
+                redirectPath={fullDetailsRedirect}
               />
             </div>
           </>

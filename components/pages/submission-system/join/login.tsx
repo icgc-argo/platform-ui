@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/react-hooks';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
-import { LOCAL_STORAGE_REDIRECT_KEY } from 'global/constants';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Typography from 'uikit/Typography';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
+import { createRedirectURL } from 'global/utils/common';
+import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export default () => {
   const { EGO_URL } = getConfig();
@@ -29,6 +29,17 @@ export default () => {
       }
     },
   });
+
+  const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = React.useState('');
+
+  React.useEffect(() => {
+    setFullJoinLoginRedirect(
+      createRedirectURL({
+        origin: location.origin,
+        path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
+      }),
+    );
+  }, []);
 
   return (
     <MinimalLayout>
@@ -50,15 +61,10 @@ export default () => {
             padding-bottom: 25px;
           `}
         >
-          <GoogleLogin
+          <GoogleLoginButton
             id="google-login"
             link={EGO_URL}
-            onClick={() => {
-              window.localStorage.setItem(
-                LOCAL_STORAGE_REDIRECT_KEY,
-                PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
-              );
-            }}
+            redirectPath={fullJoinLoginRedirect || '/'}
           />
         </div>
       </JoinProgramLayout>

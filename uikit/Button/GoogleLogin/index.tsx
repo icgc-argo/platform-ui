@@ -5,6 +5,7 @@ import Button from '../index';
 import Icon from '../../Icon';
 import css from '@emotion/css';
 import useTheme from '../../utils/useTheme';
+import urlJoin from 'url-join';
 
 /**
  * Social login for Google
@@ -21,10 +22,10 @@ const GoogleLogin: React.ComponentType<{
   className?: string;
   redirectPath?: string;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
-}> = ({ link, id, className, onClick }) => {
+}> = ({ link, id, className, onClick, redirectPath = '/' }) => {
   const theme = useTheme();
   return (
-    <StyledLink id={id} href={link} className={className} onClick={onClick}>
+    <StyledLink id={id} href={urlJoin(link, redirectPath)} className={className} onClick={onClick}>
       <Button
         css={css`
           padding: 10px 13px;

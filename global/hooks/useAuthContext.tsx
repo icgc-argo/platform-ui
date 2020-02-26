@@ -9,7 +9,7 @@ import urlJoin from 'url-join';
 
 type T_AuthContext = {
   token?: string;
-  logOut: () => void;
+  logOut: (config?: { toRoot?: boolean }) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
 };
@@ -36,10 +36,16 @@ export function AuthProvider({
 
   const [token, setToken] = React.useState<string>(egoJwt);
   const router = useRouter();
-  const logOut = () => {
+  const logOut: T_AuthContext['logOut'] = (
+    config = {
+      toRoot: true,
+    },
+  ) => {
     Cookies.remove(EGO_JWT_KEY);
     setToken(null);
-    router.push('/');
+    if (config.toRoot) {
+      router.push('/');
+    }
   };
 
   React.useEffect(() => {
