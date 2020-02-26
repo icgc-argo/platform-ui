@@ -3,14 +3,12 @@ import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'uikit';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import Typography from 'uikit/Typography';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
-import useAuthContext from 'global/hooks/useAuthContext';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export default () => {
@@ -18,8 +16,6 @@ export default () => {
 
   const router = useRouter();
   const { inviteId } = router.query;
-
-  const { logOut } = useAuthContext();
 
   const [notFound, setNotFound] = React.useState(false);
   const {
@@ -41,12 +37,7 @@ export default () => {
       createRedirectURL({
         origin: location.origin,
         path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
-        // query: `${encodeURIComponent('?isOauth=true')}`,
       }),
-      // `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
-      //   INVITE_ID,
-      //   inviteId as string,
-      // )}${encodeURIComponent('?isOauth=true')}`,
     );
   }, []);
 

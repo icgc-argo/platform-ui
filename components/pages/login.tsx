@@ -78,11 +78,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
             </Typography>
           </div>
           <div>
-            <GoogleLoginButton
-              id="google-login"
-              link={`${EGO_URL}`}
-              redirectPath={redirect || ''}
-            />
+            <GoogleLoginButton id="google-login" link={EGO_URL} redirectPath={redirect || ''} />
           </div>
           <Container
             css={css`

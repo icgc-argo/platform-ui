@@ -108,12 +108,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
       createRedirectURL({
         origin: location.origin,
         path: PROGRAM_JOIN_DETAILS_PATH.replace(INVITE_ID, inviteId as string),
-        // query: `${encodeURIComponent('?isOauth=true')}`,
       }),
-      // `&redirect_uri=${location.origin}${PROGRAM_JOIN_DETAILS_PATH.replace(
-      //   INVITE_ID,
-      //   inviteId as string,
-      // )}${encodeURIComponent('?isOauth=true')}`,
     );
   }, []);
 
