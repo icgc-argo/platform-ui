@@ -93,6 +93,8 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   document.body.removeChild(link);
 };
 
+export const OAUTH_QUERY_PARAM_NAME = 'isOauth';
+
 export const createRedirectURL = ({
   origin,
   path,
@@ -102,10 +104,8 @@ export const createRedirectURL = ({
   path: string;
   query?: string;
 }): string => {
-  // console.log(query ? `?${`${query}&` : ''}isOauth=true`);
-  const mergedQuery = `?${query ? `${query}&` : ''}isOauth=true`;
+  const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
   const wat = `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
-  console.log('WAAAAT: ', wat);
   return wat;
 };
 

@@ -23,7 +23,8 @@ import {
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
-import { sleep } from 'global/utils/common';
+import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
+import omit from 'lodash/omit';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -189,8 +190,18 @@ class Root extends App<
         const egoToken = await Root.getEgoToken(this.props);
         if (isValidJwt(egoToken)) {
           Cookies.set(EGO_JWT_KEY, egoToken);
-          const redirectPath = decodeURIComponent(`${redirect}`);
-          location.assign(queryString.parseUrl(redirectPath || '/').url);
+          const redirectPath = decodeURIComponent(redirect as string);
+          console.log('redirectPath: ', redirectPath);
+          // const target = queryString.parseUrl(redirectPath || '/').url;
+          // queryString.
+          const obj = queryString.parseUrl(redirectPath || '/');
+          const target = queryString.stringifyUrl({
+            ...obj,
+            query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
+          });
+          console.log('target: ', target);
+
+          location.assign(target);
         } else {
           Cookies.set(EGO_JWT_KEY, null);
           location.assign(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);

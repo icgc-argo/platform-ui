@@ -24,7 +24,6 @@ const GoogleLogin: React.ComponentType<{
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }> = ({ link, id, className, onClick, redirectPath = '/' }) => {
   const theme = useTheme();
-  console.log('REDIRECT: ', redirectPath);
   return (
     <StyledLink id={id} href={urlJoin(link, redirectPath)} className={className} onClick={onClick}>
       <Button

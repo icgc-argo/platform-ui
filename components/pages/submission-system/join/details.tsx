@@ -29,12 +29,7 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
 
   const router = useRouter();
   const { inviteId } = router.query;
-  // const foo = queryString.parseUrl(`${inviteId}`);
-  // console.log(foo);
-  // const wat = foo.url;
-  // console.log(wat);
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
-  // console.log('ID: ', inviteId);
   const toaster = useToaster();
 
   const { updateToken, data: userModel } = useAuthContext();
