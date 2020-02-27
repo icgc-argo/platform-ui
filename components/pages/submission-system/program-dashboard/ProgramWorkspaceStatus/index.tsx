@@ -39,26 +39,26 @@ export default function ProgramWorkplaceStatus() {
   };
   return (
     <DashboardCard cardHeight="170px">
-      <Typography variant="default" component="span">
-        Program Workplace Status
-      </Typography>
+     <Typography variant="default" component="span">
+          Program Workplace Status
+        </Typography>
 
-      <div
-        css={css`
-          height: 50px;
-          display: flex;
-          flex-direction: row;
-          padding-top: 10px;
-        `}
-      >
         <div
           css={css`
-            margin-top: 7px;
-            width: 175px;
             height: 50px;
+            display: flex;
+            flex-direction: row;
+            padding-top: 10px;
           `}
         >
-          <LinkWrapper
+          <div
+            css={css`
+              margin-top: 7px;
+              width: 175px;
+              height: 50px;
+            `}
+          >
+            <LinkWrapper
             access={currentUserStatus}
             wrapper={(children: ReactNode) => (
               <Link
@@ -74,30 +74,30 @@ export default function ProgramWorkplaceStatus() {
           >
             <Typography variant="label">Sample Registration</Typography>
           </LinkWrapper>
+          </div>
+          <div
+            css={css`
+              height: 50px;
+            `}
+          >
+            <SampleRegistrationProgressBar programShortName={programShortName} />
+          </div>
         </div>
         <div
           css={css`
             height: 50px;
+            display: flex;
+            flex-direction: row;
           `}
         >
-          <SampleRegistrationProgressBar programShortName={programShortName} />
-        </div>
-      </div>
-      <div
-        css={css`
-          height: 50px;
-          display: flex;
-          flex-direction: row;
-        `}
-      >
-        <div
-          css={css`
-            margin-top: 7px;
-            width: 175px;
-            height: 50px;
-          `}
-        >
-          <LinkWrapper
+          <div
+            css={css`
+              margin-top: 7px;
+              width: 175px;
+              height: 50px;
+            `}
+          >
+            <LinkWrapper
             access={currentUserStatus}
             wrapper={(children: ReactNode) => (
               <Link
@@ -113,15 +113,15 @@ export default function ProgramWorkplaceStatus() {
           >
             <Typography variant="label">Clinical Submission</Typography>
           </LinkWrapper>
+          </div>
+          <div
+            css={css`
+              height: 50px;
+            `}
+          >
+            <ClinicalSubmissionProgressBar programShortName={programShortName} />
+          </div>
         </div>
-        <div
-          css={css`
-            height: 50px;
-          `}
-        >
-          <ClinicalSubmissionProgressBar programShortName={programShortName} />
-        </div>
-      </div>
     </DashboardCard>
   );
 }
