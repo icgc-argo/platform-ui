@@ -13,9 +13,30 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import { DashboardCard } from '../common';
+import { isCollaborator } from 'global/utils/egoJwt';
+import { ReactNode } from 'react';
+import useAuthContext from 'global/hooks/useAuthContext';
+
+type accessStatus = {
+  jwt: string;
+  programId: string;
+};
+const LinkWrapper: React.ComponentType<{
+  access: accessStatus;
+  wrapper: Function;
+  children: ReactNode;
+}> = ({ wrapper, access, children }) => {
+  const canViewLinks = !isCollaborator({ egoJwt: access.jwt, programId: access.programId });
+  return canViewLinks ? wrapper(children) : children;
+};
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { token } = useAuthContext();
+  const currentUserStatus: accessStatus = {
+    jwt: token,
+    programId: programShortName,
+  };
   return (
     <DashboardCard cardHeight="170px">
      <Typography variant="default" component="span">
@@ -37,17 +58,22 @@ export default function ProgramWorkplaceStatus() {
               height: 50px;
             `}
           >
-            <Link
-              href={PROGRAM_SAMPLE_REGISTRATION_PATH}
-              as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                programShortName as string,
-              )}
-            >
-              <Hyperlink>
-                <Typography variant="label">Sample Registration</Typography>
-              </Hyperlink>
-            </Link>
+            <LinkWrapper
+            access={currentUserStatus}
+            wrapper={(children: ReactNode) => (
+              <Link
+                href={PROGRAM_SAMPLE_REGISTRATION_PATH}
+                as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+                  PROGRAM_SHORT_NAME_PATH,
+                  programShortName as string,
+                )}
+              >
+                <Hyperlink>{children}</Hyperlink>
+              </Link>
+            )}
+          >
+            <Typography variant="label">Sample Registration</Typography>
+          </LinkWrapper>
           </div>
           <div
             css={css`
@@ -71,17 +97,22 @@ export default function ProgramWorkplaceStatus() {
               height: 50px;
             `}
           >
-            <Link
-              href={PROGRAM_CLINICAL_SUBMISSION_PATH}
-              as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                programShortName as string,
-              )}
-            >
-              <Hyperlink>
-                <Typography variant="label">Clinical Submission</Typography>
-              </Hyperlink>
-            </Link>
+            <LinkWrapper
+            access={currentUserStatus}
+            wrapper={(children: ReactNode) => (
+              <Link
+                href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+                as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+                  PROGRAM_SHORT_NAME_PATH,
+                  programShortName as string,
+                )}
+              >
+                <Hyperlink>{children}</Hyperlink>
+              </Link>
+            )}
+          >
+            <Typography variant="label">Clinical Submission</Typography>
+          </LinkWrapper>
           </div>
           <div
             css={css`
