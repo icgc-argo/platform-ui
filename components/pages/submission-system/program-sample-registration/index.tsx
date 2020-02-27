@@ -23,7 +23,7 @@ import ErrorNotification, { defaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
 import Notification from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
-import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
   useSubmissionSystemDisabled,
@@ -185,7 +185,7 @@ export default function ProgramIDRegistration() {
       }
     >
       {<SubmissionSystemLockedNotification />}
-      {<SchemaInvalidSubmisisonNotification programShortName={programShortName as string} />}
+      {<SchemaInvalidSubmissionNotification programShortName={programShortName as string} />}
       <Container
         css={css`
           ${containerStyle}

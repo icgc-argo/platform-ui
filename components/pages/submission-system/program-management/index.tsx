@@ -4,7 +4,7 @@ import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
-import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 
 export default () => {
@@ -30,7 +30,7 @@ export default () => {
     >
       {<SubmissionSystemLockedNotification marginBottom={20} canClose={true} />}
       {
-        <SchemaInvalidSubmisisonNotification
+        <SchemaInvalidSubmissionNotification
           marginBottom={20}
           programShortName={programShortName as string}
         />
