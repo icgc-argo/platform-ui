@@ -24,7 +24,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
 
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
-  const apiToken = get(data, ['self', 'apiToken']);
+  const apiToken = get(data, ['self', 'apiKey']);
 
   return (
     <DefaultLayout>
