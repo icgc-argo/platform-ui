@@ -125,8 +125,14 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
           variant={BANNER_VARIANTS.WARNING}
           content={
             <>
-              Please note: your API token is associated with your user credentials and should{' '}
+              <span />
+              &#8226; Your API token is associated with your user credentials and should{' '}
               <strong>NEVER</strong> be shared with anyone.
+              <span />
+              <br />
+              <span>
+                &#8226; When you generate a new token, all previous tokens become invalid.
+              </span>
             </>
           }
         />
