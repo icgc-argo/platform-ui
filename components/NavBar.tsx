@@ -19,6 +19,9 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import { getConfig } from 'global/config';
+import { createRedirectURL } from 'global/utils/common';
+import { get } from 'lodash';
+import queryString from 'query-string';
 
 const NavBarLoginButton = () => {
   return (
@@ -60,7 +63,32 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
   const { EGO_URL } = getConfig();
   const { token: egoJwt, logOut, data: userModel } = useAuthContext();
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
-  const { asPath: path } = usePageContext();
+  const { asPath: path, query } = usePageContext();
+
+  const [loginPath, setLoginPath] = React.useState('');
+
+  React.useEffect(() => {
+    const redirect = get(query, 'redirect') as string;
+    if (redirect) {
+      const parsedRedirect = queryString.parseUrl(redirect);
+      const existingQuery = queryString.stringify(parsedRedirect.query);
+
+      const queryRedirect = createRedirectURL({
+        origin: location.origin,
+        path: parsedRedirect.url,
+        query: existingQuery,
+      });
+      setLoginPath(`${EGO_URL}${queryRedirect}`);
+    } else if (path === '/' || path === '/login') {
+      setLoginPath(EGO_URL);
+    } else {
+      const redirect = createRedirectURL({
+        origin: location.origin,
+        path,
+      });
+      setLoginPath(`${EGO_URL}${redirect}`);
+    }
+  });
 
   return (
     <AppBar
@@ -102,7 +130,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
             {!userModel && (
               <a
                 id="link-login"
-                href={EGO_URL}
+                href={loginPath}
                 css={css`
                   align-self: center;
                   margin-right: 16px;

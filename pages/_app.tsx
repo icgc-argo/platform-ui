@@ -191,7 +191,7 @@ class Root extends App<
         if (isValidJwt(egoToken)) {
           Cookies.set(EGO_JWT_KEY, egoToken);
           const redirectPath = decodeURIComponent(redirect as string);
-          const obj = queryString.parseUrl(redirectPath || '/');
+          const obj = queryString.parseUrl(redirectPath || '');
           const target = queryString.stringifyUrl({
             ...obj,
             query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
