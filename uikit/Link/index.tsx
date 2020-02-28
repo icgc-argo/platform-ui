@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { styled, css } from '..';
 
 type LinkVariant = 'INLINE' | 'BLOCK';
-type HyperLinkProps = {
+export type HyperLinkProps = {
   variant?: LinkVariant;
   uppercase?: boolean;
   withChevron?: boolean;
