@@ -5,7 +5,7 @@ import TitleBar from 'uikit/TitleBar';
 import usePageContext from 'global/hooks/usePageContext';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
-import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
 import { Row, Col, ScreenClassRender } from 'react-grid-system';
 import StatsBar from './StatsBar';
@@ -80,7 +80,7 @@ export default function ProgramDashboard() {
       )}
       {<SubmissionSystemLockedNotification marginBottom={20} canClose={true} />}
       {
-        <SchemaInvalidSubmisisonNotification
+        <SchemaInvalidSubmissionNotification
           marginBottom={20}
           programShortName={programShortName as string}
         />

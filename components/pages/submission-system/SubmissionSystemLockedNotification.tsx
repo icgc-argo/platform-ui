@@ -25,15 +25,13 @@ export const SubmissionSystemLockedNotification = ({
   const [showNotification, setshowNotification] = React.useState(true);
   const isWorkspaceDisabled = useSubmissionSystemDisabled();
 
-  // the link is to the home page currently because data dictionary link is not avaialable yet
-  const getContentWithLink = () => (
+  const getContent = () => (
     <div
       css={css`
         padding: 8px 8px 8px 0px;
       `}
     >
-      {`The ARGO DCC is currently releasing a new version of the `}
-      <a href="/">data dictionary</a> {`. Your workspace will be unlocked shortly.`}
+      {`The ARGO DCC has currently locked all submissions. Your workspace will be unlocked shortly.`}
     </div>
   );
 
@@ -51,7 +49,7 @@ export const SubmissionSystemLockedNotification = ({
         size="SM"
         variant="WARNING"
         title={`Your program workspace is locked`}
-        content={getContentWithLink()}
+        content={getContent()}
         interactionType={canClose ? 'CLOSE' : 'NONE'}
         onInteraction={handleOnInteraction}
       />
