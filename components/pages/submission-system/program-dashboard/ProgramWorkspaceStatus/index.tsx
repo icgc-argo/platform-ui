@@ -14,7 +14,6 @@ import {
 } from 'global/constants/pages';
 import { DashboardCard } from '../common';
 import { isCollaborator } from 'global/utils/egoJwt';
-import { ReactNode } from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 
 const ConditionalLink: React.ComponentType<{
