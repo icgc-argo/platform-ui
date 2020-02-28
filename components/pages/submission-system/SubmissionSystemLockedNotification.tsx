@@ -25,7 +25,6 @@ export const SubmissionSystemLockedNotification = ({
   const [showNotification, setshowNotification] = React.useState(true);
   const isWorkspaceDisabled = useSubmissionSystemDisabled();
 
-  // the link is to the home page currently because data dictionary link is not avaialable yet
   const getContent = () => (
     <div
       css={css`
