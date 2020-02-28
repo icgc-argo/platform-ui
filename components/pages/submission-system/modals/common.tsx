@@ -13,7 +13,7 @@ export const UserModel = {
   firstName: '',
   lastName: '',
   email: '',
-  role: '',
+  role: null as RoleKey,
 };
 
 export const userSchema = yup.object().shape({
