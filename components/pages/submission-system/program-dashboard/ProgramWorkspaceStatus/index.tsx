@@ -5,8 +5,8 @@ import { Row, Col } from 'react-grid-system';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import Hyperlink from 'uikit/Link';
-import Link from 'next/link';
+import Hyperlink, { HyperLinkProps } from 'uikit/Link';
+import Link, { LinkProps } from 'next/link';
 import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
@@ -17,26 +17,24 @@ import { isCollaborator } from 'global/utils/egoJwt';
 import { ReactNode } from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 
-type AccessStatus = {
-  jwt: string;
-  programId: string;
-};
-const LinkWrapper: React.ComponentType<{
-  access: AccessStatus;
-  wrapper: Function;
-  children: ReactNode;
-}> = ({ wrapper, access, children }) => {
-  const canViewLinks = !isCollaborator({ egoJwt: access.jwt, programId: access.programId });
-  return canViewLinks ? wrapper(children) : children;
+const ConditionalLink: React.ComponentType<{
+  showAsLink: boolean;
+  link: LinkProps;
+  hyperlink?: HyperLinkProps;
+}> = ({ showAsLink, link, hyperlink, children }) => {
+  return showAsLink ? (
+    <Link {...link}>
+      <Hyperlink {...hyperlink}>{children}</Hyperlink>
+    </Link>
+  ) : (
+    <>{children}</>
+  );
 };
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { token } = useAuthContext();
-  const currentUserStatus: AccessStatus = {
-    jwt: token,
-    programId: programShortName,
-  };
+  const canViewLinks = !isCollaborator({ egoJwt: token, programId: programShortName });
   return (
     <DashboardCard cardHeight="170px">
       <Typography variant="default" component="span">
@@ -58,22 +56,18 @@ export default function ProgramWorkplaceStatus() {
             height: 50px;
           `}
         >
-          <LinkWrapper
-            access={currentUserStatus}
-            wrapper={(children: ReactNode) => (
-              <Link
-                href={PROGRAM_SAMPLE_REGISTRATION_PATH}
-                as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
-                  PROGRAM_SHORT_NAME_PATH,
-                  programShortName as string,
-                )}
-              >
-                <Hyperlink>{children}</Hyperlink>
-              </Link>
-            )}
+          <ConditionalLink
+            showAsLink={canViewLinks}
+            link={{
+              href: PROGRAM_SAMPLE_REGISTRATION_PATH,
+              as: PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                programShortName as string,
+              ),
+            }}
           >
             <Typography variant="label">Sample Registration</Typography>
-          </LinkWrapper>
+          </ConditionalLink>
         </div>
         <div
           css={css`
@@ -97,22 +91,18 @@ export default function ProgramWorkplaceStatus() {
             height: 50px;
           `}
         >
-          <LinkWrapper
-            access={currentUserStatus}
-            wrapper={(children: ReactNode) => (
-              <Link
-                href={PROGRAM_CLINICAL_SUBMISSION_PATH}
-                as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-                  PROGRAM_SHORT_NAME_PATH,
-                  programShortName as string,
-                )}
-              >
-                <Hyperlink>{children}</Hyperlink>
-              </Link>
-            )}
+          <ConditionalLink
+            showAsLink={canViewLinks}
+            link={{
+              href: PROGRAM_CLINICAL_SUBMISSION_PATH,
+              as: PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                programShortName as string,
+              ),
+            }}
           >
             <Typography variant="label">Clinical Submission</Typography>
-          </LinkWrapper>
+          </ConditionalLink>
         </div>
         <div
           css={css`
