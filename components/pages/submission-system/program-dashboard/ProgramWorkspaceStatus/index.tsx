@@ -17,12 +17,12 @@ import { isCollaborator } from 'global/utils/egoJwt';
 import { ReactNode } from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 
-type accessStatus = {
+type AccessStatus = {
   jwt: string;
   programId: string;
 };
 const LinkWrapper: React.ComponentType<{
-  access: accessStatus;
+  access: AccessStatus;
   wrapper: Function;
   children: ReactNode;
 }> = ({ wrapper, access, children }) => {
@@ -33,32 +33,32 @@ const LinkWrapper: React.ComponentType<{
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { token } = useAuthContext();
-  const currentUserStatus: accessStatus = {
+  const currentUserStatus: AccessStatus = {
     jwt: token,
     programId: programShortName,
   };
   return (
     <DashboardCard cardHeight="170px">
-     <Typography variant="default" component="span">
-          Program Workplace Status
-        </Typography>
+      <Typography variant="default" component="span">
+        Program Workplace Status
+      </Typography>
 
+      <div
+        css={css`
+          height: 50px;
+          display: flex;
+          flex-direction: row;
+          padding-top: 10px;
+        `}
+      >
         <div
           css={css`
+            margin-top: 7px;
+            width: 175px;
             height: 50px;
-            display: flex;
-            flex-direction: row;
-            padding-top: 10px;
           `}
         >
-          <div
-            css={css`
-              margin-top: 7px;
-              width: 175px;
-              height: 50px;
-            `}
-          >
-            <LinkWrapper
+          <LinkWrapper
             access={currentUserStatus}
             wrapper={(children: ReactNode) => (
               <Link
@@ -74,30 +74,30 @@ export default function ProgramWorkplaceStatus() {
           >
             <Typography variant="label">Sample Registration</Typography>
           </LinkWrapper>
-          </div>
-          <div
-            css={css`
-              height: 50px;
-            `}
-          >
-            <SampleRegistrationProgressBar programShortName={programShortName} />
-          </div>
         </div>
         <div
           css={css`
             height: 50px;
-            display: flex;
-            flex-direction: row;
           `}
         >
-          <div
-            css={css`
-              margin-top: 7px;
-              width: 175px;
-              height: 50px;
-            `}
-          >
-            <LinkWrapper
+          <SampleRegistrationProgressBar programShortName={programShortName} />
+        </div>
+      </div>
+      <div
+        css={css`
+          height: 50px;
+          display: flex;
+          flex-direction: row;
+        `}
+      >
+        <div
+          css={css`
+            margin-top: 7px;
+            width: 175px;
+            height: 50px;
+          `}
+        >
+          <LinkWrapper
             access={currentUserStatus}
             wrapper={(children: ReactNode) => (
               <Link
@@ -113,15 +113,15 @@ export default function ProgramWorkplaceStatus() {
           >
             <Typography variant="label">Clinical Submission</Typography>
           </LinkWrapper>
-          </div>
-          <div
-            css={css`
-              height: 50px;
-            `}
-          >
-            <ClinicalSubmissionProgressBar programShortName={programShortName} />
-          </div>
         </div>
+        <div
+          css={css`
+            height: 50px;
+          `}
+        >
+          <ClinicalSubmissionProgressBar programShortName={programShortName} />
+        </div>
+      </div>
     </DashboardCard>
   );
 }
