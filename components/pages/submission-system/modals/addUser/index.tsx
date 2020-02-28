@@ -68,10 +68,12 @@ const AddUserModal = ({
   // check for errors
   const errorCheck = () => {
     const formSubKeys = Object.keys(formSubscriptions);
-    const validity = formSubKeys
+    const invalidity = formSubKeys
       .map(key => formSubscriptions[key].hasErrors)
       .reduce((acc, val) => acc || val, false);
-    setHasErrors(validity);
+    const formEmails = formSubKeys.map(key => formSubscriptions[key].data.email);
+    const emailInvalidity = new Set(formEmails).size !== formEmails.length;
+    setHasErrors(invalidity || emailInvalidity);
   };
 
   // check if last form section is touched
