@@ -513,7 +513,7 @@ export default function CreateProgramForm({
               <FormControl error={validationErrors.adminEmail} required={true}>
                 <Row>
                   <InputLabelWrapper sm={2}>
-                    <InputLabel htmlFor="email">Email Adress</InputLabel>
+                    <InputLabel htmlFor="email">Email Address</InputLabel>
                   </InputLabelWrapper>
                   <Col sm={10}>
                     <Input
