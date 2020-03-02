@@ -35,10 +35,13 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void;
   onUserResendInviteClick: ({ user: UsersTableUser }) => void;
   loading: boolean;
+  isOnlyOneAdminLeft: boolean;
 }) => {
   const { data: egoTokenData } = useAuthContext();
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
-
+  const isUserThemselves = (user: UsersTableUser) => user.email === userEmail;
+  const isUserTheLastAdmin = (user: UsersTableUser) =>
+    tableProps.isOnlyOneAdminLeft && user.role === 'ADMIN';
   const columns: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
@@ -79,49 +82,63 @@ const UsersTable = (tableProps: {
       sortable: false,
       headerStyle: { display: 'flex', justifyContent: 'center' },
       width: 125,
-      Cell: (props: CellProps) => (
-        <div
-          css={css`
-            flex: 1;
-            display: flex;
-            justify-content: space-around;
-          `}
-        >
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Resend invitation</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="mail"
-              onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
-              disabled={
-                // Disable if:
-                // already accepted
-                props.original.inviteStatus === 'ACCEPTED' ||
-                // OR added without invitation (shows as Accepted)
-                props.original.inviteStatus === null ||
-                // OR the site user is the user in this row
-                userEmail === props.original.email
+      Cell: (props: CellProps) => {
+        return (
+          <div
+            css={css`
+              flex: 1;
+              display: flex;
+              justify-content: space-around;
+            `}
+          >
+            <Tooltip unmountHTMLWhenHide position="left" html={<span>Resend invitation</span>}>
+              <InteractiveIcon
+                height="20px"
+                width="20px"
+                name="mail"
+                onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
+                disabled={
+                  // Disable if:
+                  // already accepted
+                  props.original.inviteStatus === 'ACCEPTED' ||
+                  // OR added without invitation (shows as Accepted)
+                  props.original.inviteStatus === null ||
+                  // OR the site user is the user in this row
+                  isUserThemselves(props.original)
+                }
+              />
+            </Tooltip>
+            <Tooltip unmountHTMLWhenHide position="left" html={<span>Edit user</span>}>
+              <InteractiveIcon
+                height="20px"
+                width="20px"
+                name="edit"
+                onClick={() => tableProps.onUserEditClick({ user: props.original })}
+              />
+            </Tooltip>
+            <Tooltip
+              unmountHTMLWhenHide
+              position="left"
+              html={
+                <span>
+                  {isUserTheLastAdmin(props.original)
+                    ? 'A program must have at least one Program Administrator'
+                    : 'Remove User'}
+                  }
+                </span>
               }
-            />
-          </Tooltip>
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Edit user</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="edit"
-              onClick={() => tableProps.onUserEditClick({ user: props.original })}
-            />
-          </Tooltip>
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Remove user</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="trash"
-              onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
-            />
-          </Tooltip>
-        </div>
-      ),
+            >
+              <InteractiveIcon
+                disabled={isUserTheLastAdmin(props.original) || isUserThemselves(props.original)}
+                height="20px"
+                width="20px"
+                name="trash"
+                onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
+              />
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
   const containerRef = React.createRef<HTMLDivElement>();

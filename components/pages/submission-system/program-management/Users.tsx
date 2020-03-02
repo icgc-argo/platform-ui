@@ -44,6 +44,8 @@ const Users = ({
   useModalViewAnalyticsEffect(`USER_REMOVE_MODAL`, !!currentDeletingUser);
   useModalViewAnalyticsEffect(`USER_EMAIL_RESEND_MODAL`, !!currentResendEmailUser);
 
+  const isOnlyOneAdminLeft = users.filter(user => user.role === 'ADMIN').length <= 1;
+
   return (
     <div>
       <TableActionBar>{users.length} results</TableActionBar>
@@ -56,6 +58,7 @@ const Users = ({
         onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
         onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
+        isOnlyOneAdminLeft={isOnlyOneAdminLeft}
       />
       {!!currentResendEmailUser && (
         <ModalPortal>
@@ -141,6 +144,7 @@ const Users = ({
               setCurrentEditingUser(null);
             }}
             dismissModal={() => setCurrentEditingUser(null)}
+            cannotChangeRole={isOnlyOneAdminLeft && currentEditingUser.role === 'ADMIN'}
           />
         </ModalPortal>
       )}

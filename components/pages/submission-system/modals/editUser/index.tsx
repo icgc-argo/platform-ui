@@ -8,10 +8,12 @@ const EditUserModal = ({
   user,
   dismissModal,
   onSubmit,
+  cannotChangeRole,
 }: {
   user: typeof UserModel;
   onSubmit: (data: typeof UserModel) => any | void;
   dismissModal: () => any | void;
+  cannotChangeRole?: boolean;
 }) => {
   const {
     errors,
@@ -23,7 +25,9 @@ const EditUserModal = ({
     hasErrors,
   } = useFormHook({ initialFields: user, schema: userSchema });
   const validationErrors = errors as UserSectionProps['errors'];
-
+  if (!validationErrors.role && cannotChangeRole) {
+    validationErrors.role = 'ADMIN';
+  }
   const submitForm = async () => {
     try {
       const validData = await validateForm();
@@ -33,6 +37,7 @@ const EditUserModal = ({
     }
   };
 
+  const disabledFields = ['email', 'firstName', 'lastName'];
   return (
     <Modal
       title="Edit Users"
@@ -48,7 +53,7 @@ const EditUserModal = ({
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
         errors={validationErrors}
-        disabledFields={['email', 'firstName', 'lastName']}
+        disabledFields={cannotChangeRole ? [...disabledFields, 'role'] : disabledFields}
         onClickDelete={null}
       />
       <br />
