@@ -3,6 +3,7 @@ import Modal from 'uikit/Modal';
 import { UserSection, UserSectionProps } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
+import { adminRestrictionText } from '../../program-management/Users';
 
 const EditUserModal = ({
   user,
@@ -25,9 +26,6 @@ const EditUserModal = ({
     hasErrors,
   } = useFormHook({ initialFields: user, schema: userSchema });
   const validationErrors = errors as UserSectionProps['errors'];
-  if (!validationErrors.role && cannotChangeRole) {
-    validationErrors.role = 'ADMIN';
-  }
   const submitForm = async () => {
     try {
       const validData = await validateForm();
@@ -37,7 +35,12 @@ const EditUserModal = ({
     }
   };
 
-  const disabledFields = ['email', 'firstName', 'lastName'];
+  const disabledFields = [
+    { fieldName: 'email' },
+    { fieldName: 'firstName' },
+    { fieldName: 'lastName' },
+  ];
+
   return (
     <Modal
       title="Edit Users"
@@ -53,7 +56,11 @@ const EditUserModal = ({
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
         errors={validationErrors}
-        disabledFields={cannotChangeRole ? [...disabledFields, 'role'] : disabledFields}
+        disabledFields={
+          cannotChangeRole
+            ? [...disabledFields, { fieldName: 'role', explanationText: adminRestrictionText }]
+            : disabledFields
+        }
         onClickDelete={null}
       />
       <br />

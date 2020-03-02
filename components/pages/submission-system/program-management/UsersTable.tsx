@@ -7,6 +7,7 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import { RoleDisplayName, RoleKey } from '../modals/common';
+import { adminRestrictionText } from './Users';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
@@ -121,10 +122,7 @@ const UsersTable = (tableProps: {
               position="left"
               html={
                 <span>
-                  {isUserTheLastAdmin(props.original)
-                    ? 'A program must have at least one Program Administrator'
-                    : 'Remove User'}
-                  }
+                  {isUserTheLastAdmin(props.original) ? adminRestrictionText : 'Remove User'}
                 </span>
               }
             >

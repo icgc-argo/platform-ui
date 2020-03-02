@@ -19,6 +19,8 @@ import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
 import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
+export const adminRestrictionText = 'A program must have at least one Program Administrator';
+
 const Users = ({
   users,
   programShortName,
