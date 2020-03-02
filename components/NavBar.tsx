@@ -22,6 +22,7 @@ import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
 import queryString from 'query-string';
+import urlJoin from 'url-join';
 
 const NavBarLoginButton = () => {
   return (
@@ -78,7 +79,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
         path: parsedRedirect.url,
         query: existingQuery,
       });
-      setLoginPath(`${EGO_URL}${queryRedirect}`);
+      setLoginPath(urlJoin(EGO_URL, queryRedirect));
     } else if (path === '/' || path === '/login') {
       setLoginPath(EGO_URL);
     } else {
@@ -86,9 +87,9 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
         origin: location.origin,
         path,
       });
-      setLoginPath(`${EGO_URL}${redirect}`);
+      setLoginPath(urlJoin(EGO_URL, redirect));
     }
-  });
+  }, []);
 
   return (
     <AppBar
