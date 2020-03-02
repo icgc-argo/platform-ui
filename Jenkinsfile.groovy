@@ -48,13 +48,20 @@ spec:
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh "npm run type-check"
-                    sh "npm run build"
                     sh "npm run test"
                     sh "npm run build-uikit"
                 }
                 container('node') {
                     sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
+                }
+            }
+        }
+
+        stage('Build container') {
+            steps {
+                container('docker') {
+                    // DNS error if --network is default
+                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${commit}"
                 }
             }
         }
@@ -71,8 +78,7 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    // DNS error if --network is default
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}-${commit}"
                     sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
@@ -126,7 +132,8 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:latest"
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
