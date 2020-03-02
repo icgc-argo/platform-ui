@@ -25,4 +25,5 @@ export const email = yup
 export const role = yup
   .string()
   .label('Role')
+  .nullable()
   .oneOf(PROGRAM_USER_ROLES.map(type => type.value)) as yup.StringSchema<RoleKey>;

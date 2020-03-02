@@ -1,7 +1,7 @@
 import yup from 'global/utils/validations';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';
 
-export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
+export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER' | null;
 
 export const RoleDisplayName: { [key in RoleKey]: string } = {
   ADMIN: 'Administrator',
