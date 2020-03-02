@@ -64,7 +64,7 @@ export default () => {
           <GoogleLoginButton
             id="google-login"
             link={EGO_URL}
-            redirectPath={fullJoinLoginRedirect || '/'}
+            redirectPath={fullJoinLoginRedirect}
           />
         </div>
       </JoinProgramLayout>

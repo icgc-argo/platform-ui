@@ -40,5 +40,5 @@ export default createPage<{ redirect: string; egoJwt: string }>({
     }
   }, []);
 
-  return <LoginPage redirect={fullRedirect || '/'} />;
+  return <LoginPage redirect={fullRedirect} />;
 });
