@@ -3,6 +3,7 @@ import Typography from 'uikit/Typography';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
 import Icon from 'uikit/Icon';
+import { DACO_PATH } from 'global/constants/pages';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
   /** @description: making these components so it's easier to extract out later if needs arises */
@@ -72,7 +73,10 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
           </Typography>
         ) : (
           <Typography variant="label" component="div">
-            To download controlled data, <Link>apply for DACO access.</Link>
+            To download controlled data,{' '}
+            <Link target="_blank" href={DACO_PATH}>
+              apply for DACO access.
+            </Link>
           </Typography>
         )}
       </Container.Section>
