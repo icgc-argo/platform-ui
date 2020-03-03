@@ -2,9 +2,11 @@ import React from 'react';
 import ErrorLayout from 'components/pages/error';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import Link from 'next/link';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
 
 export default function Error404Page() {
+  const { DOCS_URL_ROOT } = getConfig();
   return (
     <ErrorLayout>
       <div
@@ -45,7 +47,7 @@ export default function Error404Page() {
           </Typography>
           <Typography variant="subtitle2">
             Check out our{' '}
-            <Link href="/">
+            <Link target="_blank" href={DOCS_URL_ROOT}>
               <a>Documentation</a>
             </Link>{' '}
             or head back{' '}

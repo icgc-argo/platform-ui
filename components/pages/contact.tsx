@@ -13,6 +13,17 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import TitleBorder from 'uikit/TitleBorder';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import {
+  DOCS_SUBMITTING_CLINICAL_DATA_PATH,
+  DOCS_SUBMISSION_OVERVIEW_PATH,
+  DOCS_REGISTERING_SAMPLES_PATH,
+  DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
+  DOCS_DATA_ACCESS_PATH,
+  DOCS_DATA_DOWNLOAD,
+} from 'global/constants/pages';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -30,6 +41,7 @@ const FlexRow = styled('div')`
 
 export default function ContactPage() {
   const theme = useTheme();
+  const { DOCS_URL_ROOT } = getConfig();
   return (
     <DefaultLayout>
       <div
@@ -90,22 +102,42 @@ export default function ContactPage() {
                 `}
                 variant="subtitle"
               >
-                Data Submissions
+                Data Submission
               </Typography>
               <img alt="test tube" src="/static/testtube.svg" height="50" />
             </div>
             <Ul>
               <li>
-                How to <A>submit clinical data</A>
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMISSION_OVERVIEW_PATH)}>
+                  Get started:
+                </Link>{' '}
+                a quick guide to data submission
               </li>
               <li>
-                How to <A>submit genomic data</A>
+                How to{' '}
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_REGISTERING_SAMPLES_PATH)}>
+                  register samples
+                </Link>
               </li>
               <li>
-                <A>Program management</A> and <A>member roles</A>
+                How to{' '}
+                <Link
+                  target="_blank"
+                  href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
+                >
+                  submit clinical data
+                </Link>
+              </li>
+              <li>
+                How to{' '}
+                <Link
+                  target="_blank"
+                  href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_MOLECULAR_DATA_PATH)}
+                >
+                  submit molecular data
+                </Link>
               </li>
             </Ul>
-            <Button size="sm">Learn more</Button>
           </div>
           <div>
             <TitleBorder color="accent3" />
@@ -122,25 +154,33 @@ export default function ContactPage() {
                   margin: 0;
                 `}
               >
-                Applying for DACO Access
+                Data Access &amp; Download
               </Typography>
               <img alt="controlled data" src="/static/controlled-data.svg" height="50" />
             </div>
             <Ul>
               <li>
-                How to fill out the <A>DACO Application</A>
+                How to{' '}
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+                  access controlled data
+                </Link>
               </li>
               <li>
-                What is the <A>review and approval process</A>?
+                How to{' '}
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
+                  download data
+                </Link>
               </li>
               <li>
-                What is it mean to have <A>controlled data access</A>?
+                How to use the{' '}
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
+                  Score Download Client
+                </Link>
               </li>
             </Ul>
-            <Button size="sm">Learn more</Button>
           </div>
           <div>
-            <TitleBorder color="accent4" />
+            <TitleBorder color="warning" />
             <div
               css={css`
                 display: flex;
@@ -169,7 +209,6 @@ export default function ContactPage() {
                 Restrictions for using <A>ARGO data in publications</A>
               </li>
             </Ul>
-            <Button size="sm">Learn more</Button>
           </div>
         </div>
         <ContentBox
