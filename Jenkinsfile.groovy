@@ -44,105 +44,114 @@ spec:
                 }
             }
         }
-        stage('Test') {
+        stage('npm test') {
             steps {
                 container('node') {
-                    sh "npm ci"
-                    sh "npm run test"
-                    sh "npm run build-uikit"
-                }
-                container('node') {
-                    sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
-                }
-            }
-        }
-
-        stage('Build container') {
-            steps {
-                container('docker') {
-                    // DNS error if --network is default
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${commit}"
-                }
-            }
-        }
-
-        stage('Deploy to argo-dev') {
-            when {
-                branch "develop"
-            }
-            steps {
-                container('node') {
-                    sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
-                }
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    withNPM(npmrcConfig: 'devops_npm_publish.npmrc') {
+                        sh 'npm login'
                     }
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}-${commit}"
-                    sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
-                ])
             }
         }
+        // stage('Test') {
+        //     steps {
+        //         container('node') {
+        //             sh "npm ci"
+        //             sh "npm run test"
+        //             sh "npm run build-uikit"
+        //         }
+        //         container('node') {
+        //             sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
+        //         }
+        //     }
+        // }
+
+        // stage('Build container') {
+        //     steps {
+        //         container('docker') {
+        //             // DNS error if --network is default
+        //             sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${commit}"
+        //         }
+        //     }
+        // }
+
+        // stage('Deploy to argo-dev') {
+        //     when {
+        //         branch "develop"
+        //     }
+        //     steps {
+        //         container('node') {
+        //             sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
+        //         }
+        //         container('docker') {
+        //             withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //                 sh 'docker login -u $USERNAME -p $PASSWORD'
+        //             }
+        //             sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}-${commit}"
+        //             sh "docker push ${dockerHubRepo}:${version}-${commit}"
+        //         }
+        //         build(job: "/ARGO/provision/platform-ui", parameters: [
+        //              [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
+        //              [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
+        //         ])
+        //     }
+        // }
         
-        stage('Publish uikit') {
-            when {
-                branch "master"
-            }
-            steps {
-                container('node') {
-                    withCredentials([
-                        usernamePassword(credentialsId: 'devops-npm', passwordVariable: 'NPM_PASSWORD', usernameVariable: 'NPM_USERNAME'),
-                        usernamePassword(credentialsId: 'devopsargo_email', passwordVariable: 'EMAIL_PASSWORD', usernameVariable: 'EMAIL'),
-                    ]) {
-                        sh "NPM_EMAIL=${EMAIL} NPM_USERNAME=${NPM_USERNAME} NPM_PASSWORD=${NPM_PASSWORD} npx npm-ci-login"
-                    }
-                    script {
-                        // we still want to run the platform deploy even if this fails, hence try-catch
-                        try {
-                            sh "npm run publish-uikit"
-                            withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                                sh "git tag uikit-${uikitVersion}"
-                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
-                            }
-                        } catch (err) {
-                            echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Publish uikit') {
+        //     when {
+        //         branch "master"
+        //     }
+        //     steps {
+        //         container('node') {
+        //             withCredentials([
+        //                 usernamePassword(credentialsId: 'devops-npm', passwordVariable: 'NPM_PASSWORD', usernameVariable: 'NPM_USERNAME'),
+        //                 usernamePassword(credentialsId: 'devopsargo_email', passwordVariable: 'EMAIL_PASSWORD', usernameVariable: 'EMAIL'),
+        //             ]) {
+        //                 sh "NPM_EMAIL=${EMAIL} NPM_USERNAME=${NPM_USERNAME} NPM_PASSWORD=${NPM_PASSWORD} npx npm-ci-login"
+        //             }
+        //             script {
+        //                 // we still want to run the platform deploy even if this fails, hence try-catch
+        //                 try {
+        //                     sh "npm run publish-uikit"
+        //                     withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+        //                         sh "git tag uikit-${uikitVersion}"
+        //                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+        //                     }
+        //                 } catch (err) {
+        //                     echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Deploy to argo-qa') {
-            when {
-                branch "master"
-            }
-            steps {
-                container('node') {
-                    sh "GATEWAY_API_ROOT=https://argo-gateway.qa.argo.cancercollaboratory.org/ npm run test-gql-validation"
-                }
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git tag ${version}"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
-                    }
-                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
-                    }
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}"
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:latest"
-                    sh "docker push ${dockerHubRepo}:${version}"
-                    sh "docker push ${dockerHubRepo}:latest"
-                }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}" ]
-                ])
-            }
-        }
+        // stage('Deploy to argo-qa') {
+        //     when {
+        //         branch "master"
+        //     }
+        //     steps {
+        //         container('node') {
+        //             sh "GATEWAY_API_ROOT=https://argo-gateway.qa.argo.cancercollaboratory.org/ npm run test-gql-validation"
+        //         }
+        //         container('docker') {
+        //             withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+        //                 sh "git tag ${version}"
+        //                 sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+        //             }
+        //             withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //                 sh 'docker login -u $USERNAME -p $PASSWORD'
+        //             }
+        //             sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}"
+        //             sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:latest"
+        //             sh "docker push ${dockerHubRepo}:${version}"
+        //             sh "docker push ${dockerHubRepo}:latest"
+        //         }
+        //         build(job: "/ARGO/provision/platform-ui", parameters: [
+        //              [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
+        //              [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}" ]
+        //         ])
+        //     }
+        // }
     }
     post {
         unsuccessful {
