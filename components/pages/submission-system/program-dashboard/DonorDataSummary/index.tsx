@@ -8,10 +8,14 @@ import PicDna from 'static/dna.svg';
 import Link from 'uikit/Link';
 import styled from '@emotion/styled';
 import { DashboardCard } from '../common';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
+const { DOCS_URL_ROOT } = getConfig();
 
 const getStartedLink = (
   <Typography variant="data" component="span">
-    <Link target="_blank" href="https://platform-ui.qa.argo.cancercollaboratory.org/">
+    <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}>
       Get started with data submission »
     </Link>
   </Typography>

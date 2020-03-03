@@ -29,6 +29,9 @@ import {
   useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_REGISTERING_SAMPLES_PATH } from 'global/constants/pages';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -41,6 +44,7 @@ const recordsToFileTable = (
   });
 
 export default function ProgramIDRegistration() {
+  const { DOCS_URL_ROOT } = getConfig();
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -172,8 +176,10 @@ export default function ProgramIDRegistration() {
             </Row>
           </TitleBar>
           <Link
+            target="_blank"
+            href={urljoin(DOCS_URL_ROOT, DOCS_REGISTERING_SAMPLES_PATH)}
             css={css`
-              font-size: 12px;
+              font-size: 14px;
             `}
             withChevron
             underline={false}
