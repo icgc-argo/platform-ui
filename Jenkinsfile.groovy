@@ -94,24 +94,22 @@ spec:
             }
             steps {
                 container('node') {
-                    withCredentials([
-                        usernamePassword(credentialsId: 'devops-npm', passwordVariable: 'NPM_PASSWORD', usernameVariable: 'NPM_USERNAME'),
-                        usernamePassword(credentialsId: 'devopsargo_email', passwordVariable: 'EMAIL_PASSWORD', usernameVariable: 'EMAIL'),
-                    ]) {
-                        sh "NPM_EMAIL=${EMAIL} NPM_USERNAME=${NPM_USERNAME} NPM_PASSWORD=${NPM_PASSWORD} npx npm-ci-login"
-                    }
-                    script {
-                        // we still want to run the platform deploy even if this fails, hence try-catch
-                        try {
-                            sh "npm run publish-uikit"
-                            withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                                sh "git tag uikit-${uikitVersion}"
-                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+                    withNPM(npmrcConfig: 'devops_npm_publish.npmrc') {
+                        script {
+                            // we still want to run the platform deploy even if this fails, hence try-catch
+                            try {
+                                sh "npm whoami"
+                                sh "npm run publish-uikit"
+                                withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                                    sh "git tag uikit-${uikitVersion}"
+                                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+                                }
+                            } catch (err) {
+                                echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
                             }
-                        } catch (err) {
-                            echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
                         }
                     }
+
                 }
             }
         }
