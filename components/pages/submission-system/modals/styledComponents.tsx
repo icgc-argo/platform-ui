@@ -26,7 +26,7 @@ export type UserSectionProps = {
   validateField: (fieldName: keyof typeof UserModel) => unknown | void;
   errors: typeof UserModel;
   onClickDelete: (() => unknown | void) | null;
-  disabledFields: Array<{ fieldName: string; explanationText?: string }>;
+  disabledFields: Array<{ fieldName: keyof typeof UserModel; explanationText?: string }>;
   showDelete?: boolean;
 };
 export const UserSection: React.ComponentType<UserSectionProps> = ({
@@ -44,7 +44,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
     email: emailError,
     role: roleError,
   } = errors;
-  const isDisabledField = (fieldName: string) =>
+  const isDisabledField = (fieldName: keyof typeof UserModel) =>
     disabledFields.some(field => field.fieldName === fieldName);
   const fieldsWithExplanations = disabledFields.filter(entry => entry.explanationText);
   const explanations = Object.fromEntries(

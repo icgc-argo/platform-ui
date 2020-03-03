@@ -9,12 +9,12 @@ const EditUserModal = ({
   user,
   dismissModal,
   onSubmit,
-  cannotChangeRole,
+  roleDisabled,
 }: {
   user: typeof UserModel;
   onSubmit: (data: typeof UserModel) => any | void;
   dismissModal: () => any | void;
-  cannotChangeRole?: boolean;
+  roleDisabled?: boolean;
 }) => {
   const {
     errors,
@@ -35,10 +35,14 @@ const EditUserModal = ({
     }
   };
 
+  type Field = keyof typeof UserModel;
   const disabledFields = [
-    { fieldName: 'email' },
-    { fieldName: 'firstName' },
-    { fieldName: 'lastName' },
+    { fieldName: 'email' as Field },
+    { fieldName: 'firstName' as Field },
+    { fieldName: 'lastName' as Field },
+    ...(roleDisabled
+      ? [{ fieldName: 'role' as Field, explanationText: adminRestrictionText }]
+      : []),
   ];
 
   return (
@@ -56,11 +60,7 @@ const EditUserModal = ({
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
         errors={validationErrors}
-        disabledFields={
-          cannotChangeRole
-            ? [...disabledFields, { fieldName: 'role', explanationText: adminRestrictionText }]
-            : disabledFields
-        }
+        disabledFields={disabledFields}
         onClickDelete={null}
       />
       <br />

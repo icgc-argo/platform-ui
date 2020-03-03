@@ -146,7 +146,7 @@ const Users = ({
               setCurrentEditingUser(null);
             }}
             dismissModal={() => setCurrentEditingUser(null)}
-            cannotChangeRole={isOnlyOneAdminLeft && currentEditingUser.role === 'ADMIN'}
+            roleDisabled={isOnlyOneAdminLeft && currentEditingUser.role === 'ADMIN'}
           />
         </ModalPortal>
       )}
