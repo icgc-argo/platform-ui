@@ -20,13 +20,15 @@ const Section = styled('div')`
   display: flex;
 `;
 
+export type UserField = { fieldName: keyof typeof UserModel; explanationText?: string };
+
 export type UserSectionProps = {
   user: typeof UserModel;
   onChange: (fieldName: keyof typeof UserModel, value: unknown) => unknown | void;
   validateField: (fieldName: keyof typeof UserModel) => unknown | void;
   errors: typeof UserModel;
   onClickDelete: (() => unknown | void) | null;
-  disabledFields: Array<{ fieldName: keyof typeof UserModel; explanationText?: string }>;
+  disabledFields: Array<UserField>;
   showDelete?: boolean;
 };
 export const UserSection: React.ComponentType<UserSectionProps> = ({

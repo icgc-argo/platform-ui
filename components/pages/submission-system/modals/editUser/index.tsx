@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { UserSection, UserSectionProps } from '../styledComponents';
+import { UserSection, UserSectionProps, UserField } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
 import { adminRestrictionText } from '../../program-management/Users';
@@ -35,13 +35,12 @@ const EditUserModal = ({
     }
   };
 
-  type Field = keyof typeof UserModel;
-  const disabledFields = [
-    { fieldName: 'email' as Field },
-    { fieldName: 'firstName' as Field },
-    { fieldName: 'lastName' as Field },
+  const disabledFields: Array<UserField> = [
+    { fieldName: 'email' },
+    { fieldName: 'firstName' },
+    { fieldName: 'lastName' },
     ...(roleDisabled
-      ? [{ fieldName: 'role' as Field, explanationText: adminRestrictionText }]
+      ? [{ fieldName: 'role', explanationText: adminRestrictionText } as UserField]
       : []),
   ];
 
