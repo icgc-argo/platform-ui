@@ -8,16 +8,26 @@ import { UserSection, UserSectionProps } from '../styledComponents';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
-import isEmpty from 'lodash/isEmpty';
+import { firstName } from 'global/utils/form/validations';
 
-const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
+const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete, users }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
+
+  const duplicateEmailValidate = form => {
+    const programEmails = Object.keys(formSubscriptions)
+      .map(key => formSubscriptions[key].data.email)
+      .concat(Object.keys(users).map(key => users[key].email));
+    if (new Set(programEmails).size !== programEmails.length) {
+      form.setError({ key: 'email', val: 'A user with this email already exists.' });
+    }
+  };
 
   const { errors, data, setData, validateField, touched } = form;
   const validationErrors = errors as UserSectionProps['errors'];
 
   React.useEffect(() => {
     formSubscriptions[id] = form;
+    duplicateEmailValidate(form);
     onUpdate();
   });
 
@@ -46,9 +56,11 @@ const AddSection = styled(Button)`
 const AddUserModal = ({
   onSubmit,
   dismissModal,
+  users,
 }: {
   onSubmit: (data: typeof UserModel[]) => any | void;
   dismissModal: () => any | void;
+  users: any;
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
@@ -71,9 +83,7 @@ const AddUserModal = ({
     const invalidity = formSubKeys
       .map(key => formSubscriptions[key].hasErrors)
       .reduce((acc, val) => acc || val, false);
-    const formEmails = formSubKeys.map(key => formSubscriptions[key].data.email);
-    const emailInvalidity = new Set(formEmails).size !== formEmails.length;
-    setHasErrors(invalidity || emailInvalidity);
+    setHasErrors(invalidity);
   };
 
   // check if last form section is touched
@@ -153,6 +163,7 @@ const AddUserModal = ({
               lastSectionTouchCheck();
             }}
             showDelete={formIds.length > 1}
+            users={users}
           />
         ))}
       </div>

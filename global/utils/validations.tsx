@@ -8,7 +8,7 @@ yup.setLocale({
     oneOf: requiredMsg,
   },
   string: {
-    email: 'Pleaes enter a valid email address.',
+    email: 'Please enter a valid email address.',
     url: 'Please enter a valid url.',
     min: '${label} must be at least ${min} characters.',
   },
