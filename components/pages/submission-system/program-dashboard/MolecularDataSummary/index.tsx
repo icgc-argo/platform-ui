@@ -5,10 +5,14 @@ import PicClipboard from 'static/clipboard.svg';
 import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_SUBMITTING_MOLECULAR_DATA_PATH } from 'global/constants/pages';
+const { DOCS_URL_ROOT } = getConfig();
 
 const getStartedLink = (
   <Typography variant="data" component="span">
-    <Link target="_blank" href="https://platform-ui.qa.argo.cancercollaboratory.org/">
+    <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_MOLECULAR_DATA_PATH)}>
       Get started with molecular data submission »
     </Link>
   </Typography>

@@ -1,5 +1,5 @@
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import Link from 'next/link';
+import { CONTACT_PAGE_PATH, DOCS_DICTIONARY_PATH } from 'global/constants/pages';
+import Link from 'uikit/Link';
 import * as React from 'react';
 import { css } from 'uikit';
 import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
@@ -17,6 +17,8 @@ import {
   downloadTsvFileTemplate,
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
 
 function Instructions({
   uploadEnabled,
@@ -29,6 +31,7 @@ function Instructions({
   shortName: string;
   registrationId: string;
 }) {
+  const { DOCS_URL_ROOT } = getConfig();
   const footerContentStyle = css`
     text-align: center;
     width: 100%;
@@ -63,8 +66,8 @@ function Instructions({
           <>
             <Typography variant="data" component="span">
               1. Download the registration template and format it using the latest{` `}
-              <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>Data Dictionary</HyperLink>
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
+                Data Dictionary
               </Link>
               .
             </Typography>

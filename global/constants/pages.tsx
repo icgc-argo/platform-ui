@@ -20,3 +20,11 @@ export const PROGRAM_JOIN_LOGIN_PATH = `${SUBMISSION_PATH}/program/join/login/${
 
 // rdpc path
 export const RDPC_PATH = '/rdpc';
+
+// docs paths
+export const DOCS_MANAGING_PROGRAM_ACCESS_PATH = `/docs/managing-program-access/`;
+export const DOCS_REGISTERING_SAMPLES_PATH = `/docs/registering-samples/`;
+export const DOCS_SUBMITTING_CLINICAL_DATA_PATH = `/docs/submitting-clinical-data/`;
+export const DOCS_SUBMITTED_DATA_PATH = `/docs/submitted-data/`;
+export const DOCS_SUBMITTING_MOLECULAR_DATA_PATH = `/docs/submitting-molecular-data/`;
+export const DOCS_DICTIONARY_PATH = `/dictionary/`;

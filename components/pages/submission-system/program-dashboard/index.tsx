@@ -15,10 +15,15 @@ import MolecularDataSummary from './MolecularDataSummary';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
 import DonorDataSummary from './DonorDataSummary';
 import { setConfiguration } from 'react-grid-system';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 
 setConfiguration({ gutterWidth: 9 });
 
 export default function ProgramDashboard() {
+  const { DOCS_URL_ROOT } = getConfig();
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -56,13 +61,35 @@ export default function ProgramDashboard() {
           css={css`
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 100%;
           `}
         >
           <TitleBar>
             <>{programShortName}</>
-            <>Dashboard</>
+            <Row nogutter align="center">
+              <div
+                css={css`
+                  margin-right: 20px;
+                `}
+              >
+                Dashboard
+              </div>
+            </Row>
           </TitleBar>
+          <Link
+            target="_blank"
+            href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}
+            bold
+            withChevron
+            uppercase
+            underline={false}
+            css={css`
+              font-size: 14px;
+            `}
+          >
+            HELP
+          </Link>
         </div>
       }
     >

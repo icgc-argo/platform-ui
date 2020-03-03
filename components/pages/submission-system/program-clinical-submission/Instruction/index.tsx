@@ -10,6 +10,10 @@ import {
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_DICTIONARY_PATH } from 'global/constants/pages';
 
 export default ({
   validationEnabled,
@@ -28,6 +32,8 @@ export default ({
   uploadEnabled: boolean;
   clinicalTypes: string[];
 }) => {
+  const { DOCS_URL_ROOT } = getConfig();
+
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [isValidating, setIsValidating] = React.useState<boolean>(false);
   const [isSigningOff, setIsSigningOff] = React.useState<boolean>(false);
@@ -55,8 +61,10 @@ export default ({
       steps={[
         <>
           <Typography variant="data" component="span">
-            1. Download the clinical file templates and format them using the latest Data
-            Dictionary.
+            1. Download the clinical file templates and format them using the latest{' '}
+            <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
+              Data Dictionary.
+            </Link>
           </Typography>
           <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
         </>,
