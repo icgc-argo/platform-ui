@@ -48,7 +48,7 @@ spec:
             steps {
                 container('node') {
                     withNPM(npmrcConfig: 'devops_npm_publish.npmrc') {
-                        sh 'npm login'
+                        sh 'npm whoami'
                     }
                 }
             }
