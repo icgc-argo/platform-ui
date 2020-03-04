@@ -59,7 +59,9 @@ const Footer = ({
             if (idx !== links.length - 1) {
               return (
                 <React.Fragment key={displayName}>
-                  <A href={href}>{displayName}</A>
+                  <A target={displayName === 'Documentation' ? '_blank' : '_self'} href={href}>
+                    {displayName}
+                  </A>
                   <Icon width="12px" height="12px" name="slash" fill="grey_1" />
                 </React.Fragment>
               );
