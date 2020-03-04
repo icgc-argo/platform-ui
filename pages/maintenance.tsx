@@ -50,10 +50,13 @@ export default createPage({
             We'll be back up and running as quickly as possible. We appreciate your patience.
           </Typography>
           <Typography variant="subtitle2">
-            If you have any questions, <HyperLink href={CONTACT_PAGE_PATH}>Contact Us</HyperLink> or
-            head back{' '}
+            If you have any questions,{' '}
+            <Link href={CONTACT_PAGE_PATH}>
+              <HyperLink>Contact Us</HyperLink>
+            </Link>{' '}
+            or head back{' '}
             <Link href="/">
-              <HyperLink>≈Home.</HyperLink>
+              <HyperLink>Home.</HyperLink>
             </Link>
           </Typography>
         </div>
