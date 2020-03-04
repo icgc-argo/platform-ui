@@ -19,6 +19,8 @@ import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
 import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
 import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 
+export const adminRestrictionText = 'A program must have at least one Program Administrator';
+
 const Users = ({
   users,
   programShortName,
@@ -44,6 +46,8 @@ const Users = ({
   useModalViewAnalyticsEffect(`USER_REMOVE_MODAL`, !!currentDeletingUser);
   useModalViewAnalyticsEffect(`USER_EMAIL_RESEND_MODAL`, !!currentResendEmailUser);
 
+  const isOnlyOneAdminLeft = users.filter(user => user.role === 'ADMIN').length <= 1;
+
   return (
     <div>
       <TableActionBar>{users.length} results</TableActionBar>
@@ -56,6 +60,7 @@ const Users = ({
         onUserDeleteClick={({ user }) => setCurrentDeletingUser(user)}
         onUserResendInviteClick={({ user }) => setCurrentResendEmailUser(user)}
         onUserEditClick={({ user }) => setCurrentEditingUser(user)}
+        isOnlyOneAdminLeft={isOnlyOneAdminLeft}
       />
       {!!currentResendEmailUser && (
         <ModalPortal>
@@ -141,6 +146,7 @@ const Users = ({
               setCurrentEditingUser(null);
             }}
             dismissModal={() => setCurrentEditingUser(null)}
+            roleDisabled={isOnlyOneAdminLeft && currentEditingUser.role === 'ADMIN'}
           />
         </ModalPortal>
       )}

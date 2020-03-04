@@ -1,17 +1,20 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
-import { UserSection, UserSectionProps } from '../styledComponents';
+import { UserSection, UserSectionProps, UserField } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
+import { adminRestrictionText } from '../../program-management/Users';
 
 const EditUserModal = ({
   user,
   dismissModal,
   onSubmit,
+  roleDisabled,
 }: {
   user: typeof UserModel;
   onSubmit: (data: typeof UserModel) => any | void;
   dismissModal: () => any | void;
+  roleDisabled?: boolean;
 }) => {
   const {
     errors,
@@ -23,7 +26,6 @@ const EditUserModal = ({
     hasErrors,
   } = useFormHook({ initialFields: user, schema: userSchema });
   const validationErrors = errors as UserSectionProps['errors'];
-
   const submitForm = async () => {
     try {
       const validData = await validateForm();
@@ -32,6 +34,15 @@ const EditUserModal = ({
       console.log(err);
     }
   };
+
+  const disabledFields: Array<UserField> = [
+    { fieldName: 'email' },
+    { fieldName: 'firstName' },
+    { fieldName: 'lastName' },
+    ...(roleDisabled
+      ? [{ fieldName: 'role', explanationText: adminRestrictionText } as UserField]
+      : []),
+  ];
 
   return (
     <Modal
@@ -48,7 +59,7 @@ const EditUserModal = ({
         onChange={(key, val) => setData({ key, val })}
         validateField={key => validateField({ key })}
         errors={validationErrors}
-        disabledFields={['email', 'firstName', 'lastName']}
+        disabledFields={disabledFields}
         onClickDelete={null}
       />
       <br />

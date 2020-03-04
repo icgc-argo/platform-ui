@@ -12,6 +12,7 @@ import {
   PopupPosition,
 } from './styledComponents';
 import useTheme from '../../utils/useTheme';
+import Tooltip from 'uikit/Tooltip';
 
 const Select: React.ComponentType<{
   ['aria-label']: string;
@@ -31,6 +32,7 @@ const Select: React.ComponentType<{
   value?: string;
   className?: string;
   style?: React.CSSProperties;
+  hintText?: string;
 }> = ({
   placeholder = '- Select an option -',
   id,
@@ -80,6 +82,37 @@ const Select: React.ComponentType<{
     return () => document.removeEventListener('mouseup', documentClickHandler);
   }, [isExpanded]);
 
+  const styledInputWrapper = (
+    <StyledInputWrapper
+      ref={wrapperRef}
+      id={id}
+      size={size}
+      style={{ zIndex: 1 }}
+      disabled={disabled}
+      inputState={activeState as StyledInputWrapperProps['inputState']}
+      role="button"
+    >
+      <Typography
+        variant="paragraph"
+        color={
+          disabled
+            ? theme.input.textColors.disabled
+            : isSomethingSelected || isExpanded
+            ? 'black'
+            : 'grey'
+        }
+        css={css`
+          flex: 1;
+          padding: 0 10px;
+          line-height: 0;
+        `}
+      >
+        {(value && selectedOption ? selectedOption.content : false) || placeholder}
+      </Typography>
+      <DropdownIcon disabled={disabled} theme={theme} />
+    </StyledInputWrapper>
+  );
+
   return (
     <div
       className={props.className}
@@ -123,34 +156,13 @@ const Select: React.ComponentType<{
           </option>
         ))}
       </HiddenSelect>
-      <StyledInputWrapper
-        ref={wrapperRef}
-        id={id}
-        size={size}
-        style={{ zIndex: 1 }}
-        disabled={disabled}
-        inputState={activeState as StyledInputWrapperProps['inputState']}
-        role="button"
-      >
-        <Typography
-          variant="paragraph"
-          color={
-            disabled
-              ? theme.input.textColors.disabled
-              : isSomethingSelected || isExpanded
-              ? 'black'
-              : 'grey'
-          }
-          css={css`
-            flex: 1;
-            padding: 0 10px;
-            line-height: 0;
-          `}
-        >
-          {(value && selectedOption ? selectedOption.content : false) || placeholder}
-        </Typography>
-        <DropdownIcon disabled={disabled} theme={theme} />
-      </StyledInputWrapper>
+      {props.hintText ? (
+        <Tooltip unmountHTMLWhenHide position="bottom" html={<span>{props.hintText}</span>}>
+          {styledInputWrapper}
+        </Tooltip>
+      ) : (
+        styledInputWrapper
+      )}
       {isExpanded && (
         <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
           {options.map(({ content, value: optionValue }) => (

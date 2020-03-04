@@ -18,6 +18,7 @@ const createKnobs = () => {
     },
     'sm',
   );
+  const hintText = text('Hint Text', '');
 
   return {
     error,
@@ -25,6 +26,7 @@ const createKnobs = () => {
     disabled,
     placeholder,
     size,
+    hintText,
   };
 };
 
