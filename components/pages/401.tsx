@@ -1,12 +1,12 @@
-
-
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import Link from 'next/link';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
 
 export default function Error401Page() {
+  const { DOCS_URL_ROOT } = getConfig();
   return (
     <ErrorLayout>
       <div
@@ -51,8 +51,11 @@ export default function Error401Page() {
             You do not have permission to access this page.
           </Typography>
           <Typography variant="subtitle2">
-            Check out our <Link href="/">Documentation</Link> or head back{' '}
-            <Link href="/">Home</Link>.
+            Check out our{' '}
+            <Link target="_blank" href={DOCS_URL_ROOT}>
+              Documentation
+            </Link>{' '}
+            or head back <Link href="/">Home</Link>.
           </Typography>
         </div>
         <div>

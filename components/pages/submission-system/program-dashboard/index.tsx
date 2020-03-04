@@ -15,10 +15,21 @@ import MolecularDataSummary from './MolecularDataSummary';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
 import DonorDataSummary from './DonorDataSummary';
 import { setConfiguration } from 'react-grid-system';
+import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import {
+  DOCS_SUBMITTED_DATA_PATH,
+  DOCS_DATA_ACCESS_PATH,
+  DOCS_MANAGING_PROGRAM_ACCESS_PATH,
+  DOCS_SUBMISSION_OVERVIEW_PATH,
+} from 'global/constants/pages';
+import Typography from 'uikit/Typography';
 
 setConfiguration({ gutterWidth: 9 });
 
 export default function ProgramDashboard() {
+  const { DOCS_URL_ROOT } = getConfig();
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -56,13 +67,35 @@ export default function ProgramDashboard() {
           css={css`
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 100%;
           `}
         >
           <TitleBar>
             <>{programShortName}</>
-            <>Dashboard</>
+            <Row nogutter align="center">
+              <div
+                css={css`
+                  margin-right: 20px;
+                `}
+              >
+                Dashboard
+              </div>
+            </Row>
           </TitleBar>
+          <Link
+            target="_blank"
+            href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}
+            bold
+            withChevron
+            uppercase
+            underline={false}
+            css={css`
+              font-size: 14px;
+            `}
+          >
+            HELP
+          </Link>
         </div>
       }
     >
@@ -72,7 +105,24 @@ export default function ProgramDashboard() {
           interactionType="CLOSE"
           onInteraction={() => setJustJoined(false)}
           variant={BANNER_VARIANTS.SUCCESS}
-          content="If you have trouble getting started, please check out our documentation for program management, data access and data submission."
+          content={
+            <Typography>
+              If you have trouble getting started, please check out our documentation for
+              <Link
+                target="_blank"
+                href={urljoin(DOCS_URL_ROOT, DOCS_MANAGING_PROGRAM_ACCESS_PATH)}
+              >
+                program management,
+              </Link>{' '}
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+                data access
+              </Link>{' '}
+              and{' '}
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMISSION_OVERVIEW_PATH)}>
+                data submission.
+              </Link>
+            </Typography>
+          }
           css={css`
             margin-bottom: 30px;
           `}

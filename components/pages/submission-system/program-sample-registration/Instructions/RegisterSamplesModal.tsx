@@ -10,8 +10,14 @@ import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import Router from 'next/router';
 
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import {
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+  CONTACT_PAGE_PATH,
+} from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
+import Typography from 'uikit/Typography';
+import Link from 'uikit/Link';
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -61,7 +67,10 @@ export default function RegisterSamplesModal({
           title: `${num} new ${pluralize('sample', num)} have been registered`,
           variant: TOAST_VARIANTS.SUCCESS,
           content: (
-            <>If you have any changes to this registered sample data, please contact the DCC.</>
+            <Typography>
+              If you have any changes to this registered sample data, please{' '}
+              <Link href={CONTACT_PAGE_PATH}> contact the DCC.</Link>
+            </Typography>
           ),
         });
       })

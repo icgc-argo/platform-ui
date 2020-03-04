@@ -19,10 +19,13 @@ import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
-import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
+import { DCC_DASHBOARD_PATH, DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
+import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 
 export default ({
   programShortName,
@@ -47,6 +50,7 @@ export default ({
     programShortName,
   );
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+  const { DOCS_URL_ROOT } = getConfig();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -211,21 +215,19 @@ export default ({
               Clear submission
             </Button>
           )}
-          {!isDcc && (
-            <>
-              <Link
-                bold
-                withChevron
-                uppercase
-                underline={false}
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                HELP
-              </Link>
-            </>
-          )}
+          <Link
+            target="_blank"
+            href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
+            bold
+            withChevron
+            uppercase
+            underline={false}
+            css={css`
+              font-size: 14px;
+            `}
+          >
+            HELP
+          </Link>
           {isDcc && isPendingApproval && (
             <>
               <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>

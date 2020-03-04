@@ -8,6 +8,12 @@ import { getConfig } from 'global/config';
 import Notification from 'uikit/notifications/Notification';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import urljoin from 'url-join';
+import Link from 'uikit/Link';
+import {
+  DOCS_MANAGING_PROGRAM_ACCESS_PATH,
+  DOCS_REGISTERING_SAMPLES_PATH,
+  DOCS_SUBMITTING_CLINICAL_DATA_PATH,
+} from 'global/constants/pages';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -111,11 +117,22 @@ export default function LoginPage({ redirect }: { redirect: string }) {
               </Typography>
               <Typography component="div">
                 Visit our documentation website to learn how to{' '}
-                <a href={urljoin(DOCS_URL_ROOT, 'managing-program-access/')}>manage a program,</a>{' '}
-                <a href={urljoin(DOCS_URL_ROOT, 'registering-samples')}>register samples,</a> and{' '}
-                <a href={urljoin(DOCS_URL_ROOT, 'submitting-clinical-data')}>
+                <Link
+                  target="_blank"
+                  href={urljoin(DOCS_URL_ROOT, DOCS_MANAGING_PROGRAM_ACCESS_PATH)}
+                >
+                  manage a program,
+                </Link>{' '}
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_REGISTERING_SAMPLES_PATH)}>
+                  register samples,
+                </Link>{' '}
+                and{' '}
+                <Link
+                  target="_blank"
+                  href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
+                >
                   submit clinical data.
-                </a>
+                </Link>
               </Typography>
             </div>
           </Container>
