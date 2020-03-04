@@ -40,7 +40,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '.';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
-import { SchemaInvalidSubmisisonNotification } from '../SchemaInvalidSubmissionNotification';
+import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
   useSubmissionSystemDisabled,
@@ -387,7 +387,7 @@ export default () => {
         </Container>
       )}
       {
-        <SchemaInvalidSubmisisonNotification
+        <SchemaInvalidSubmissionNotification
           marginTop={20}
           programShortName={programShortName}
           isClinicalSubmissionPage={true}

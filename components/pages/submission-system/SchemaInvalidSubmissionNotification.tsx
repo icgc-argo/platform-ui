@@ -9,7 +9,7 @@ import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'globa
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import CLINICAL_SCHEMA_VERSION from './CLINICAL_SCHEMA_VERSION.gql';
 
-export const SchemaInvalidSubmisisonNotification = ({
+export const SchemaInvalidSubmissionNotification = ({
   marginTop,
   marginBottom,
   programShortName,

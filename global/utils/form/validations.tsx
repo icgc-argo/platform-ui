@@ -25,4 +25,6 @@ export const email = yup
 export const role = yup
   .string()
   .label('Role')
+  // Drop down selector makes the value null if you do not select, the transform makes the null into a string to fix error messaging
+  .transform((value, original) => (value === null ? '' : value))
   .oneOf(PROGRAM_USER_ROLES.map(type => type.value)) as yup.StringSchema<RoleKey>;

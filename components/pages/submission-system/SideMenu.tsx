@@ -191,6 +191,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                       ),
                       VALID: <Icon name="ellipses" fill="warning" width="15px" />,
                       INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                      INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
                       PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
                     } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
                       data ? data.clinicalSubmissions.state : null

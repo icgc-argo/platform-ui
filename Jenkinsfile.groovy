@@ -48,13 +48,20 @@ spec:
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh "npm run type-check"
-                    sh "npm run build"
                     sh "npm run test"
                     sh "npm run build-uikit"
                 }
                 container('node') {
                     sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
+                }
+            }
+        }
+
+        stage('Build container') {
+            steps {
+                container('docker') {
+                    // DNS error if --network is default
+                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${commit}"
                 }
             }
         }
@@ -71,8 +78,7 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    // DNS error if --network is default
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${version}-${commit}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}-${commit}"
                     sh "docker push ${dockerHubRepo}:${version}-${commit}"
                 }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
@@ -88,24 +94,27 @@ spec:
             }
             steps {
                 container('node') {
-                    withCredentials([
-                        usernamePassword(credentialsId: 'devops-npm', passwordVariable: 'NPM_PASSWORD', usernameVariable: 'NPM_USERNAME'),
-                        usernamePassword(credentialsId: 'devopsargo_email', passwordVariable: 'EMAIL_PASSWORD', usernameVariable: 'EMAIL'),
-                    ]) {
-                        sh "NPM_EMAIL=${EMAIL} NPM_USERNAME=${NPM_USERNAME} NPM_PASSWORD=${NPM_PASSWORD} npx npm-ci-login"
-                    }
-                    script {
-                        // we still want to run the platform deploy even if this fails, hence try-catch
-                        try {
-                            sh "npm run publish-uikit"
-                            withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                                sh "git tag uikit-${uikitVersion}"
-                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+                    withNPM(npmrcConfig: 'devops_npm_publish.npmrc') {
+                        withCredentials([
+                            string(credentialsId: "devops.argo-npm-token", variable: 'NPM_TOKEN')
+                        ]) {
+                            script {
+                                // we still want to run the platform deploy even if this fails, hence try-catch
+                                try {
+                                    sh "export NPM_TOKEN=${NPM_TOKEN}"
+                                    sh "npm whoami"
+                                    sh "npm run publish-uikit"
+                                    withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                                        sh "git tag uikit-${uikitVersion}"
+                                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+                                    }
+                                } catch (err) {
+                                    echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
+                                }
                             }
-                        } catch (err) {
-                            echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
                         }
                     }
+
                 }
             }
         }
@@ -126,7 +135,8 @@ spec:
                     withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:latest -t ${dockerHubRepo}:${version}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}"
+                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:latest"
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
