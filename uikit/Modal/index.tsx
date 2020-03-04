@@ -16,6 +16,7 @@ export const ModalContainer = styled('div')`
   max-width: 776px;
   padding: 24px;
   padding-bottom: 0px;
+  max-height: 95vh;
 `;
 
 const ModalTitle = styled('div')`
