@@ -7,6 +7,7 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import { RoleDisplayName, RoleKey } from '../modals/common';
+import { adminRestrictionText } from './Users';
 
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
@@ -35,10 +36,13 @@ const UsersTable = (tableProps: {
   onUserDeleteClick: ({ user: UsersTableUser }) => void;
   onUserResendInviteClick: ({ user: UsersTableUser }) => void;
   loading: boolean;
+  isOnlyOneAdminLeft: boolean;
 }) => {
   const { data: egoTokenData } = useAuthContext();
   const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
-
+  const isUserThemselves = (user: UsersTableUser) => user.email === userEmail;
+  const isUserTheLastAdmin = (user: UsersTableUser) =>
+    tableProps.isOnlyOneAdminLeft && user.role === 'ADMIN';
   const columns: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
@@ -100,7 +104,7 @@ const UsersTable = (tableProps: {
                 // OR added without invitation (shows as Accepted)
                 props.original.inviteStatus === null ||
                 // OR the site user is the user in this row
-                userEmail === props.original.email
+                isUserThemselves(props.original)
               }
             />
           </Tooltip>
@@ -112,8 +116,17 @@ const UsersTable = (tableProps: {
               onClick={() => tableProps.onUserEditClick({ user: props.original })}
             />
           </Tooltip>
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Remove user</span>}>
+          <Tooltip
+            unmountHTMLWhenHide
+            position="left"
+            html={
+              <span>
+                {isUserTheLastAdmin(props.original) ? adminRestrictionText : 'Remove User'}
+              </span>
+            }
+          >
             <InteractiveIcon
+              disabled={isUserTheLastAdmin(props.original) || isUserThemselves(props.original)}
               height="20px"
               width="20px"
               name="trash"

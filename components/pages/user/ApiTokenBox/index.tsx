@@ -9,12 +9,17 @@ import ClipboardCopyField from 'uikit/ClipboardCopyField';
 import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
+import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
+import urljoin from 'url-join';
+import { DOCS_API_TOKEN_PATH } from 'global/constants/pages';
 
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
   const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
+
+  const { DOCS_URL_ROOT } = getConfig();
 
   // pick either the retrieved key or generated key values
   const exp = generatedApiToken ? generatedApiToken.exp : apiToken ? apiToken.exp : 0;
@@ -57,7 +62,14 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
       <Typography variant="paragraph">
         Your API token can be used instead of a password to access ICGC ARGO resources.
         <br />
-        <Link underline={false} uppercase withChevron bold>
+        <Link
+          target="_blank"
+          href={urljoin(DOCS_URL_ROOT, DOCS_API_TOKEN_PATH)}
+          underline={false}
+          uppercase
+          withChevron
+          bold
+        >
           How to use your API token with ICGC ARGO tools
         </Link>
       </Typography>

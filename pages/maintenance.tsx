@@ -4,6 +4,8 @@ import { createPage } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import Link from 'next/link';
+import urljoin from 'url-join';
+import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
 export default createPage({
   isPublic: true,
@@ -47,7 +49,7 @@ export default createPage({
             We'll be back up and running as quickly as possible. We appreciate your patience.
           </Typography>
           <Typography variant="subtitle2">
-            If you have any questions, <Link href="/">Contact Us</Link> or head back{' '}
+            If you have any questions, <Link href={CONTACT_PAGE_PATH}>Contact Us</Link> or head back{' '}
             <Link href="/">Home</Link>.
           </Typography>
         </div>
