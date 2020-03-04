@@ -16,7 +16,7 @@
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
-    "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md",
+    "build-uikit::assets": "cp ./uikit/package.release.json ./uikit/dist/package.json && cp -r ./uikit/assets ./uikit/dist/assets && cp ./uikit/readme.md ./uikit/dist/readme.md && cp ./uikit/.npmrc ./uikit/dist/.npmrc",
     "build-uikit::ts": "tsc -p ./uikit/tsconfig.json",
     "build-uikit::babel": "cp ./uikit/.babelrc.json ./uikit/dist/.babelrc && babel ./uikit/dist --out-dir ./uikit/dist && rm ./uikit/dist/.babelrc",
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",

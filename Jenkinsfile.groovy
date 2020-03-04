@@ -94,27 +94,23 @@ spec:
             }
             steps {
                 container('node') {
-                    withNPM(npmrcConfig: 'devops_npm_publish.npmrc') {
-                        withCredentials([
-                            string(credentialsId: "devops.argo-npm-token", variable: 'NPM_TOKEN')
-                        ]) {
-                            script {
-                                // we still want to run the platform deploy even if this fails, hence try-catch
-                                try {
-                                    sh "export NPM_TOKEN=${NPM_TOKEN}"
-                                    sh "npm whoami"
-                                    sh "npm run publish-uikit"
-                                    withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                                        sh "git tag uikit-${uikitVersion}"
-                                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
-                                    }
-                                } catch (err) {
-                                    echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
+                    withCredentials([
+                        string(credentialsId: "devops.argo-npm-token", variable: 'NPM_TOKEN')
+                    ]) {
+                        script {
+                            // we still want to run the platform deploy even if this fails, hence try-catch
+                            try {
+                                sh "export NPM_TOKEN=${NPM_TOKEN}"
+                                sh "npm run publish-uikit"
+                                withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                                    sh "git tag uikit-${uikitVersion}"
+                                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
                                 }
+                            } catch (err) {
+                                echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
                             }
                         }
                     }
-
                 }
             }
         }
