@@ -9,7 +9,6 @@ import { UikitIconNames } from 'uikit/Icon/icons';
 
 export const ModalContainer = styled('div')`
   position: relative;
-  overflow: auto;
   border-radius: 20px;
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
@@ -17,6 +16,9 @@ export const ModalContainer = styled('div')`
   padding: 24px;
   padding-bottom: 0px;
   max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
 `;
 
 const ModalTitle = styled('div')`
@@ -93,20 +95,34 @@ const ModalComponent: React.ComponentType<{
 
   return (
     <Container>
-      <FocusWrapper
-        onClick={onCloseClick}
-        css={css`
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          line-height: 0px;
-        `}
-      >
-        <Icon name="times" fill="primary_1" width="13px" height="13px" />
-      </FocusWrapper>
       <div
         css={css`
           display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+        `}
+      >
+        <ModalTitle>
+          <Typography
+            css={css`
+              margin: 0px;
+            `}
+            variant="subtitle"
+          >
+            {title}
+          </Typography>
+        </ModalTitle>
+        <FocusWrapper onClick={onCloseClick}>
+          <Icon name="times" fill="primary_1" width="13px" height="13px" />
+        </FocusWrapper>
+      </div>
+
+      <div
+        css={css`
+          display: flex;
+          overflow: scroll;
         `}
       >
         {titleIconConfig.name && (
@@ -130,16 +146,6 @@ const ModalComponent: React.ComponentType<{
             width: 100%;
           `}
         >
-          <ModalTitle>
-            <Typography
-              css={css`
-                margin: 0px;
-              `}
-              variant="subtitle"
-            >
-              {title}
-            </Typography>
-          </ModalTitle>
           <ModalBody>
             <Typography variant="paragraph" component="div">
               {children}
