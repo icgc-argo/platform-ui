@@ -18,11 +18,11 @@ export default function GlobalFooter() {
         border-top: 1px solid ${theme.colors.grey_2};
       `}
       links={[
-        { displayName: 'Contact', href: '/contact' },
-        { displayName: 'Documentation', href: DOCS_URL_ROOT },
-        { displayName: 'Privacy Policy', href: '/privacy' },
-        { displayName: 'Terms & Conditions', href: '#' },
-        { displayName: 'Publication Policy', href: '#' },
+        { displayName: 'Contact', href: '/contact', target: '_self' },
+        { displayName: 'Documentation', href: DOCS_URL_ROOT, target: '_blank' },
+        { displayName: 'Privacy Policy', href: '/privacy', target: '_self' },
+        { displayName: 'Terms & Conditions', href: '#', target: '_self' },
+        { displayName: 'Publication Policy', href: '#', target: '_self' },
       ]}
     />
   );
