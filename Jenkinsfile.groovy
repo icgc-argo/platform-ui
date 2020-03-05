@@ -112,7 +112,7 @@ spec:
 
         stage('Deploy to argo-qa') {
             when {
-                branch "hf/1.8.19-1"
+                branch "ht/1.8.19-2"
             }
             steps {
                 container('node') {
