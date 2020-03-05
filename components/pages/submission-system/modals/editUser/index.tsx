@@ -54,14 +54,17 @@ const EditUserModal = ({
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
-      <UserSection
-        user={form}
-        onChange={(key, val) => setData({ key, val })}
-        validateField={key => validateField({ key })}
-        errors={validationErrors}
-        disabledFields={disabledFields}
-        onClickDelete={null}
-      />
+      {/* added extra margin at bottom to prevent scrolling from modal body, give role dropdown display room */}
+      <div style={{ marginBottom: 40 }}>
+        <UserSection
+          user={form}
+          onChange={(key, val) => setData({ key, val })}
+          validateField={key => validateField({ key })}
+          errors={validationErrors}
+          disabledFields={disabledFields}
+          onClickDelete={null}
+        />
+      </div>
       <br />
     </Modal>
   );

@@ -28,9 +28,9 @@ const ModalTitle = styled('div')`
 `;
 const ModalBody = styled('div')`
   margin-top: 24px;
+  margin-bottom: 24px;
 `;
 const ModalFooter = styled('div')`
-  margin-top: 24px;
   padding: 8px 0px;
   border-top: solid 1px ${({ theme }) => theme.colors.grey_2};
   display: flex;
@@ -122,7 +122,7 @@ const ModalComponent: React.ComponentType<{
       <div
         css={css`
           display: flex;
-          overflow: scroll;
+          overflow-y: auto;
         `}
       >
         {titleIconConfig.name && (
