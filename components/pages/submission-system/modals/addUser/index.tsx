@@ -131,12 +131,7 @@ const AddUserModal = ({
     >
       When you add users, they will receive an email inviting them to register. Note: the provided
       email address must be a Gmail or G Suite email address for login purposes.
-      <div
-        css={css`
-          overflow-y: scroll;
-          max-height: 250px;
-        `}
-      >
+      <div>
         {formIds.map((id, index) => (
           <AddUser
             key={id}
