@@ -27,29 +27,6 @@ export default function LoginPage({ redirect }: { redirect: string }) {
     <DefaultLayout>
       <div
         css={css`
-          z-index: 2;
-          position: absolute;
-          width: 100%;
-          top: 80px;
-          display: flex;
-          justify-content: center;
-        `}
-      >
-        <Notification
-          css={css`
-            width: 1000px;
-            max-width: 100%;
-          `}
-          variant="WARNING"
-          interactionType={null}
-          size="MD"
-          title="This is a closed beta testing environment"
-          content="To access the clinical submission system for beta testing, you will be invited to join a program via email. If you log in without an email invite, you will not have access to any programs."
-          noShadow={false}
-        />
-      </div>
-      <div
-        css={css`
           height: 100%;
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -60,11 +37,24 @@ export default function LoginPage({ redirect }: { redirect: string }) {
           css={css`
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: start;
             align-items: center;
             text-align: center;
           `}
         >
+          <Notification
+            css={css`
+              text-align: left;
+              margin: 20px;
+              margin-bottom: 100px;
+            `}
+            variant="WARNING"
+            interactionType={null}
+            size="MD"
+            title="This is a closed beta testing environment"
+            content="To access the clinical submission system for beta testing, you will be invited to join a program via email. If you log in without an email invite, you will not have access to any programs."
+            noShadow={false}
+          />
           <div>
             <img width="350px" alt="" src="/static/argo.svg" />
           </div>
