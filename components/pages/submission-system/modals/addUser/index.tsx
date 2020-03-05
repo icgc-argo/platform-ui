@@ -50,7 +50,7 @@ const AddUserModal = ({
 }: {
   onSubmit: (data: typeof UserModel[]) => any | void;
   dismissModal: () => any | void;
-  users: any;
+  users: [];
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
