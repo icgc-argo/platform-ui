@@ -17,7 +17,8 @@ import {
 } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
 import Typography from 'uikit/Typography';
-import Link from 'uikit/Link';
+import HyperLink from 'uikit/Link';
+import Link from 'next/link';
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -69,7 +70,10 @@ export default function RegisterSamplesModal({
           content: (
             <Typography>
               If you have any changes to this registered sample data, please{' '}
-              <Link href={CONTACT_PAGE_PATH}> contact the DCC.</Link>
+              <Link href={CONTACT_PAGE_PATH}>
+                {' '}
+                <HyperLink>contact the DCC.</HyperLink>
+              </Link>
             </Typography>
           ),
         });

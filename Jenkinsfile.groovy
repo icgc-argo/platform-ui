@@ -90,7 +90,7 @@ spec:
         
         stage('Publish uikit') {
             when {
-                branch "master"
+                branch "develop"
             }
             steps {
                 container('node') {

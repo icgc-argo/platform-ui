@@ -2,8 +2,9 @@ import React from 'react';
 import ErrorLayout from 'components/pages/error';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import Link from 'uikit/Link';
+import HyperLink from 'uikit/Link';
 import { getConfig } from 'global/config';
+import Link from 'next/link';
 
 export default function Error500Page() {
   const { DOCS_URL_ROOT } = getConfig();
@@ -45,10 +46,14 @@ export default function Error500Page() {
           <Typography variant="subtitle2">Oops! We cannot handle this request.</Typography>
           <Typography variant="subtitle2">
             Check out our{' '}
-            <Link target="_blank" href={DOCS_URL_ROOT}>
+            <HyperLink target="_blank" href={DOCS_URL_ROOT}>
               Documentation
-            </Link>{' '}
-            or head back <Link href="/">Home</Link>.
+            </HyperLink>{' '}
+            or head back{' '}
+            <Link href="/">
+              <HyperLink>Home</HyperLink>
+            </Link>
+            .
           </Typography>
         </div>
         <div>
