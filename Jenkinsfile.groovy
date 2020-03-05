@@ -112,7 +112,7 @@ spec:
 
         stage('Deploy to argo-qa') {
             when {
-                branch "master"
+                branch "hf/1.8.19-1"
             }
             steps {
                 container('node') {
@@ -130,10 +130,10 @@ spec:
                     sh "docker push ${dockerHubRepo}:${version}"
                     sh "docker push ${dockerHubRepo}:latest"
                 }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}" ]
-                ])
+                // build(job: "/ARGO/provision/platform-ui", parameters: [
+                //      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
+                //      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}" ]
+                // ])
             }
         }
     }
