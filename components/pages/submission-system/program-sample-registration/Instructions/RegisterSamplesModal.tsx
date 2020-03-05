@@ -71,7 +71,6 @@ export default function RegisterSamplesModal({
             <Typography>
               If you have any changes to this registered sample data, please{' '}
               <Link href={CONTACT_PAGE_PATH}>
-                {' '}
                 <HyperLink>contact the DCC.</HyperLink>
               </Link>
             </Typography>
