@@ -13,21 +13,11 @@ import { firstName } from 'global/utils/form/validations';
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete, users }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
-  const duplicateEmailValidate = form => {
-    const programEmails = Object.keys(formSubscriptions)
-      .map(key => formSubscriptions[key].data.email)
-      .concat(Object.keys(users).map(key => users[key].email));
-    if (new Set(programEmails).size !== programEmails.length) {
-      form.setError({ key: 'email', val: 'A user with this email already exists.' });
-    }
-  };
-
   const { errors, data, setData, validateField, touched } = form;
   const validationErrors = errors as UserSectionProps['errors'];
 
   React.useEffect(() => {
     formSubscriptions[id] = form;
-    duplicateEmailValidate(form);
     onUpdate();
   });
 
@@ -93,16 +83,36 @@ const AddUserModal = ({
     setIsLastSectionTouched(lastSection.touched);
   };
 
+  // sets Error and returns true if an error exists
+  const duplicateEmailValidate = form => {
+    const programEmails = Object.keys(formSubscriptions)
+      .map(key => formSubscriptions[key].data.email)
+      .concat(Object.keys(users).map(key => users[key].email));
+    if (new Set(programEmails).size !== programEmails.length) {
+      form.setError({ key: 'email', val: 'A user with this email already exists.' });
+      return true;
+    }
+    return false;
+  };
+
   // validate each individual form and fire onSubmit for each
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
       const form = formSubscriptions[key];
       return form.validateForm(form.data);
     });
+    const allFormsDuplicateEmail = Object.keys(formSubscriptions) // True if a duplicate Email exists
+      .map(key => {
+        const form = formSubscriptions[key];
+        return duplicateEmailValidate(form);
+      })
+      .reduce((acc, val) => acc || val, false);
     Promise.all(allForms)
       .then(validData => {
         console.log('Validation succeeded, submitting all forms');
-        onSubmit(validData);
+        if (!allFormsDuplicateEmail) {
+          onSubmit(validData);
+        }
       })
       .catch(err => console.log('Validation Failed', err));
   };
