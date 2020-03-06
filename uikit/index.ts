@@ -1,4 +1,3 @@
-
 import defaultTheme from './theme/defaultTheme';
 
 export type UikitTheme = typeof defaultTheme;
