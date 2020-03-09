@@ -239,7 +239,11 @@ export default () => {
         ))}
       {showModal && (
         <ModalPortal>
-          <AddUserModal onSubmit={onAddUserSubmit} dismissModal={() => setShowModal(false)} />
+          <AddUserModal
+            onSubmit={onAddUserSubmit}
+            dismissModal={() => setShowModal(false)}
+            users={loading ? [] : program ? program.users : []}
+          />
         </ModalPortal>
       )}
     </ContentBox>
