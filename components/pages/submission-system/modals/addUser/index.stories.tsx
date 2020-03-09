@@ -7,7 +7,7 @@ const AddUserModalStory = storiesOf(`${__dirname}`, module).add('Basic', () => (
   <AddUserModal
     onSubmit={data => action('Submit data')(data)}
     dismissModal={action('dismissModal')}
-    users={null}
+    users={[]}
   />
 ));
 

@@ -9,8 +9,9 @@ import useFormHook from 'global/hooks/useFormHook';
 import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
 import { firstName } from 'global/utils/form/validations';
+import { uniq } from 'lodash';
 
-const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete, users }) => {
+const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
   const { errors, data, setData, validateField, touched } = form;
@@ -50,7 +51,7 @@ const AddUserModal = ({
 }: {
   onSubmit: (data: typeof UserModel[]) => any | void;
   dismissModal: () => any | void;
-  users: [];
+  users: Array<typeof UserModel>;
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
@@ -84,33 +85,31 @@ const AddUserModal = ({
   };
 
   // sets Error and returns true if an error exists
-  const duplicateEmailValidate = form => {
+  const formHasDuplicateEmail = form => {
     const programEmails = Object.keys(formSubscriptions)
       .map(key => formSubscriptions[key].data.email)
-      .concat(Object.keys(users).map(key => users[key].email));
-    if (new Set(programEmails).size !== programEmails.length) {
-      form.setError({ key: 'email', val: 'A user with this email already exists.' });
-      return true;
-    }
-    return false;
+      .concat(users.map(({ email }) => email));
+    return uniq(programEmails).length !== programEmails.length;
   };
 
   // validate each individual form and fire onSubmit for each
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
       const form = formSubscriptions[key];
-      return form.validateForm(form.data);
+      return form.validateForm();
     });
-    const allFormsDuplicateEmail = Object.keys(formSubscriptions) // True if a duplicate Email exists
-      .map(key => {
-        const form = formSubscriptions[key];
-        return duplicateEmailValidate(form);
-      })
-      .reduce((acc, val) => acc || val, false);
+    const formsWithDuplicateEmails = Object.values(formSubscriptions) // True if a duplicate Email exists
+      .filter(formHasDuplicateEmail);
+    formsWithDuplicateEmails.forEach((form: ReturnType<typeof useFormHook>) => {
+      form.setError({
+        key: 'email',
+        val: 'A user with this email already exists.',
+      });
+    });
     Promise.all(allForms)
       .then(validData => {
-        console.log('Validation succeeded, submitting all forms');
-        if (!allFormsDuplicateEmail) {
+        if (!formsWithDuplicateEmails.length) {
+          console.log('Validation succeeded, submitting all forms');
           onSubmit(validData);
         }
       })
@@ -173,7 +172,6 @@ const AddUserModal = ({
               lastSectionTouchCheck();
             }}
             showDelete={formIds.length > 1}
-            users={users}
           />
         ))}
       </div>
