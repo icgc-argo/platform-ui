@@ -11,7 +11,9 @@ import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
-const { DOCS_URL_ROOT } = getConfig();
+import DonorSummaryTable from './DonorSummaryTable';
+import { dummyDonorData } from './common';
+const { DOCS_URL_ROOT, DASHBOARD_ENABLED } = getConfig();
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -26,24 +28,40 @@ const NoDataIcon = styled('img')`
   max-width: 100vw;
 `;
 
-export default () => (
-  <DashboardCard>
-    <Typography variant="default" component="span">
-      Donor Data Summary
-    </Typography>
-    <NoData title="You do not have any donor data submitted." link={getStartedLink}>
-      <div
-        css={css`
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          max-height: 100%;
-        `}
-      >
-        <NoDataIcon alt="no data found" src={PicBeakers} />
-        <NoDataIcon alt="no data found" src={PicHeart} />
-        <NoDataIcon alt="no data found" src={PicDna} />
-      </div>
-    </NoData>
-  </DashboardCard>
+const emptyState = (
+  <NoData title="You do not have any donor data submitted." link={getStartedLink}>
+    <div
+      css={css`
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-height: 100%;
+      `}
+    >
+      <NoDataIcon alt="no data found" src={PicBeakers} />
+      <NoDataIcon alt="no data found" src={PicHeart} />
+      <NoDataIcon alt="no data found" src={PicDna} />
+    </div>
+  </NoData>
 );
+
+const readyState = (
+  <div
+    css={css`
+      padding-top: 10px;
+    `}
+  >
+    <DonorSummaryTable donors={dummyDonorData} />
+  </div>
+);
+
+export default () => {
+  return (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        Donor Data Summary
+      </Typography>
+      {DASHBOARD_ENABLED ? readyState : emptyState}
+    </DashboardCard>
+  );
+};

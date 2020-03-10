@@ -7,7 +7,8 @@ import defaultTheme from '../theme/defaultTheme';
 import { ThemeColorNames } from '../theme/types';
 import { UikitIconNames } from './icons';
 import { SvgProperties } from 'csstype';
-
+import get from 'lodash/get';
+export type Outline = { color: keyof ThemeColorNames | string; width: number };
 const Icon: React.ComponentType<
   {
     name: UikitIconNames;
@@ -16,8 +17,9 @@ const Icon: React.ComponentType<
     width?: string;
     height?: string;
     fill?: keyof ThemeColorNames | string;
+    outline?: Outline;
   } & SVGAttributes<SVGElement>
-> = ({ name, width, height, fill, className, title, ...rest }) => {
+> = ({ name, width, height, fill, className, title, outline, ...rest }) => {
   const theme = useTheme();
   const svg: Omit<typeof icons[typeof name], 'fillRule'> & {
     mask?: string;
@@ -28,6 +30,9 @@ const Icon: React.ComponentType<
   } = icons[name];
 
   const resolveFill = (fill?: string): string | undefined => (fill && theme.colors[fill]) || fill;
+
+  const resolveOutline = (outline?: Outline) =>
+    outline ? { ...outline, color: resolveFill(outline.color) } : null;
 
   return (
     <svg
@@ -55,6 +60,8 @@ const Icon: React.ComponentType<
             <path
               key={i}
               fill={pathDef.fill || resolveFill(fill) || pathDef.defaultFill || svg.defaultFill}
+              stroke={get(resolveOutline(outline), 'color', null)}
+              strokeWidth={get(resolveOutline(outline), 'width', null)}
               fillRule={pathDef.fillRule || svg.fillRule || 'nonzero'}
               d={pathDef.d}
               mask={pathDef.mask || svg.mask ? 'url(#mask)' : ''}
@@ -63,6 +70,8 @@ const Icon: React.ComponentType<
         ) : (
           <path
             fill={resolveFill(fill) || svg.defaultFill}
+            stroke={get(resolveOutline(outline), 'color', null)}
+            strokeWidth={get(resolveOutline(outline), 'width', null)}
             fillRule={(svg.fillRule as SVGAttributes<SVGPathElement>['fillRule']) || 'nonzero'}
             d={svg.path}
             mask={svg.mask ? 'url(#mask)' : ''}

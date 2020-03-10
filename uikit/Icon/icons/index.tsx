@@ -29,6 +29,7 @@ import star from './collection/star';
 import download from './collection/download';
 import upload from './collection/upload';
 import lock from './collection/lock';
+import dash from './collection/dash';
 /**
  * Icon path and property lookup object
  * css - sensible defaults - can be overridden from component
@@ -65,6 +66,7 @@ const Icons = {
   download,
   upload,
   lock,
+  dash,
 };
 
 export type UikitIconNames = keyof typeof Icons;
