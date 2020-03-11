@@ -8,7 +8,8 @@ import { UserSection, UserSectionProps } from '../styledComponents';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
-import isEmpty from 'lodash/isEmpty';
+import { firstName } from 'global/utils/form/validations';
+import { uniq } from 'lodash';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
@@ -46,9 +47,11 @@ const AddSection = styled(Button)`
 const AddUserModal = ({
   onSubmit,
   dismissModal,
+  users,
 }: {
   onSubmit: (data: typeof UserModel[]) => any | void;
   dismissModal: () => any | void;
+  users: Array<typeof UserModel>;
 }) => {
   const [formIds, setFormIds] = React.useState([uniqueId()]);
   const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
@@ -68,10 +71,10 @@ const AddUserModal = ({
   // check for errors
   const errorCheck = () => {
     const formSubKeys = Object.keys(formSubscriptions);
-    const validity = formSubKeys
+    const invalidity = formSubKeys
       .map(key => formSubscriptions[key].hasErrors)
       .reduce((acc, val) => acc || val, false);
-    setHasErrors(validity);
+    setHasErrors(invalidity);
   };
 
   // check if last form section is touched
@@ -81,16 +84,35 @@ const AddUserModal = ({
     setIsLastSectionTouched(lastSection.touched);
   };
 
+  // sets Error and returns true if an error exists
+  const formHasDuplicateEmail = form => {
+    const formsWithThisEmail = Object.keys(formSubscriptions)
+      .map(key => formSubscriptions[key].data.email)
+      .concat(users.map(({ email }) => email))
+      .filter(email => email === form.data.email);
+    return formsWithThisEmail.length > 1;
+  };
+
   // validate each individual form and fire onSubmit for each
   const submitForm = async () => {
     const allForms = Object.keys(formSubscriptions).map(async key => {
       const form = formSubscriptions[key];
-      return form.validateForm(form.data);
+      return form.validateForm();
+    });
+    const formsWithDuplicateEmails = Object.values(formSubscriptions) // True if a duplicate Email exists
+      .filter(formHasDuplicateEmail);
+    formsWithDuplicateEmails.forEach((form: ReturnType<typeof useFormHook>) => {
+      form.setError({
+        key: 'email',
+        val: 'A user with this email already exists.',
+      });
     });
     Promise.all(allForms)
       .then(validData => {
-        console.log('Validation succeeded, submitting all forms');
-        onSubmit(validData);
+        if (!formsWithDuplicateEmails.length) {
+          console.log('Validation succeeded, submitting all forms');
+          onSubmit(validData);
+        }
       })
       .catch(err => console.log('Validation Failed', err));
   };
