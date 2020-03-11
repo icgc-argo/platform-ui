@@ -1,7 +1,7 @@
 import { displayDateAndTime } from 'global/utils/common';
 import urlJoin from 'url-join';
 import { css, styled } from 'uikit';
-import Icon from 'uikit/Icon';
+import Icon, { Outline } from 'uikit/Icon';
 import { ThemeColorNames } from 'uikit/theme/types';
 import Typography from 'uikit/Typography';
 import { formatFileName } from './program-sample-registration/util';
@@ -36,8 +36,8 @@ export const CellContentCenter = styled('div')`
   align-items: center;
 `;
 
-export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames }) => (
-  <Icon name="star" fill={props.fill} width="16px" height="16px" />
+export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (
+  <Icon name="star" width="16px" height="16px" {...props} />
 );
 export const StatArea: {
   Container: React.ComponentType;
@@ -137,15 +137,17 @@ export const SubmissionInfoArea = ({
 export const TableInfoHeaderContainer = ({
   left,
   right,
+  noMargin,
 }: {
   left?: React.ReactNode;
   right?: React.ReactNode;
+  noMargin?: boolean;
 }) => {
   const theme = useTheme();
   return (
     <div
       css={css`
-        margin-bottom: 3px;
+        margin-bottom: ${noMargin ? '0px' : '3px'};
         border-radius: 2px;
         background-color: ${theme.colors.grey_3};
         padding: 8px;

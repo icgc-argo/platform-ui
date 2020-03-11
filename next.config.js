@@ -37,5 +37,6 @@ module.exports = withImages({
     AUTH_DISABLED: process.env.AUTH_DISABLED,
     GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     DOCS_URL_ROOT: process.env.DOCS_URL_ROOT,
+    DASHBOARD_ENABLED: process.env.DASHBOARD_ENABLED,
   },
 });
