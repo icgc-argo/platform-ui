@@ -75,6 +75,14 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
     }
   }
 
+  &.ReactTable .rt-thead.-headerGroups {
+    ${({ theme }) => css(theme.typography.data)};
+    background: ${({ theme }) => theme.colors.grey_2};
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.27;
+  }
+
   &.ReactTable .rt-tbody .rt-td {
     ${({ theme }) => css(theme.typography.data)}
     min-height: 28px;
