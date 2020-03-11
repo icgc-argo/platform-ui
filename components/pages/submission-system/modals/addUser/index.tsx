@@ -86,10 +86,12 @@ const AddUserModal = ({
 
   // sets Error and returns true if an error exists
   const formHasDuplicateEmail = form => {
-    const programEmails = Object.keys(formSubscriptions)
-      .map(key => formSubscriptions[key].data.email)
-      .concat(users.map(({ email }) => email));
-    return uniq(programEmails).length !== programEmails.length;
+    let programEmails = Object.keys(formSubscriptions).map(
+      key => formSubscriptions[key].data.email,
+    );
+    programEmails.splice(programEmails.findIndex(email => email === form.data.email), 1);
+    programEmails = programEmails.concat(users.map(({ email }) => email));
+    return programEmails.includes(form.data.email);
   };
 
   // validate each individual form and fire onSubmit for each
