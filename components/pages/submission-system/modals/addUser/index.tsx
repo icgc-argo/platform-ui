@@ -84,13 +84,19 @@ const AddUserModal = ({
     setIsLastSectionTouched(lastSection.touched);
   };
 
-  // sets Error and returns true if an error exists
+  // Returns true if form has duplicate emails within Modal
   const formHasDuplicateEmail = form => {
     const formsWithThisEmail = Object.keys(formSubscriptions)
-      .map(key => formSubscriptions[key].data.email)
-      .concat(users.map(({ email }) => email))
-      .filter(email => email === form.data.email);
+      .map(key => formSubscriptions[key].data.email.toLowerCase())
+      //.concat(users.map(({ email }) => email.toLowerCase()))
+      .filter(email => email === form.data.email.toLowerCase());
     return formsWithThisEmail.length > 1;
+  };
+
+  // Returns true if an error exists
+  const formHasExistingEmail = form => {
+    const existingEmails = users.map(({ email }) => email.toLowerCase());
+    return existingEmails.includes(form.data.email.toLowerCase());
   };
 
   // validate each individual form and fire onSubmit for each
@@ -99,9 +105,15 @@ const AddUserModal = ({
       const form = formSubscriptions[key];
       return form.validateForm();
     });
-    const formsWithDuplicateEmails = Object.values(formSubscriptions) // True if a duplicate Email exists
-      .filter(formHasDuplicateEmail);
-    formsWithDuplicateEmails.forEach((form: ReturnType<typeof useFormHook>) => {
+    const matchingEmails = Object.values(formSubscriptions).filter(formHasDuplicateEmail);
+    const existingEmails = Object.values(formSubscriptions).filter(formHasExistingEmail);
+    matchingEmails.forEach((form: ReturnType<typeof useFormHook>) => {
+      form.setError({
+        key: 'email',
+        val: 'You have already added this user email.',
+      });
+    });
+    existingEmails.forEach((form: ReturnType<typeof useFormHook>) => {
       form.setError({
         key: 'email',
         val: 'A user with this email already exists.',
@@ -109,7 +121,7 @@ const AddUserModal = ({
     });
     Promise.all(allForms)
       .then(validData => {
-        if (!formsWithDuplicateEmails.length) {
+        if (!matchingEmails.length && !existingEmails.length) {
           console.log('Validation succeeded, submitting all forms');
           onSubmit(validData);
         }
