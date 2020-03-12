@@ -93,7 +93,7 @@ const AddUserModal = ({
     return formsWithThisEmail.length > 1;
   };
 
-  // Returns true if an error exists
+  // Returns true if an form has email that already exists outside of Modal
   const formHasExistingEmail = form => {
     const existingEmails = users.map(({ email }) => email.toLowerCase());
     return existingEmails.includes(form.data.email.toLowerCase());
