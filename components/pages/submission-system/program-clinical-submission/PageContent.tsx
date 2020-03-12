@@ -339,6 +339,7 @@ export default () => {
       )}
       {!isPendingApproval && !loadingClinicalSubmission && (
         <Container css={containerStyle}>
+          {/* memory leak here when signing off submission */}
           <Instruction
             uploadEnabled={!isSubmissionSystemDisabled}
             signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}

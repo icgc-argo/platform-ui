@@ -136,6 +136,26 @@ const Button = React.forwardRef<
       await onClick(event);
       setLoading(false);
     };
+    // useEffect(() => {
+    //   (async function() {
+    //     setIsError(false);
+    //     setIsLoading(true);
+    //     try {
+    //       const result = await axios(url);
+    //       setData(result.data);
+    //     } catch (error) {
+    //       setIsError(true);
+    //     }
+    //     setIsLoading(false);
+    //   })();
+
+    //   return function() {
+    //     /**
+    //      * Add cleanup code here
+    //      */
+    //   };
+    // }, [url]);
+
     return (
       <StyledButton
         ref={ref}
