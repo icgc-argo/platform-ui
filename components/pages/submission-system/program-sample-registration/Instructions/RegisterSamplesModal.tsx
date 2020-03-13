@@ -65,7 +65,7 @@ export default function RegisterSamplesModal({
 
         toaster.addToast({
           interactionType: 'CLOSE',
-          title: `${num} new ${pluralize('sample', num)} have been registered`,
+          title: `${num} new registered ${pluralize('sample', num)}`,
           variant: TOAST_VARIANTS.SUCCESS,
           content: (
             <Typography>
