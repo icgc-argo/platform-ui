@@ -87,8 +87,6 @@ export const GlobalLoaderProvider = ({
   startWithGlobalLoader: boolean;
 }) => {
   const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
-  const fadeIn = 400;
-  const fadeOut = 600;
 
   return (
     <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>

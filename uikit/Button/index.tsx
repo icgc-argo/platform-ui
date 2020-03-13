@@ -136,7 +136,6 @@ const Button = React.forwardRef<
       await onClick(event);
       setLoading(false);
     };
-
     return (
       <StyledButton
         ref={ref}
