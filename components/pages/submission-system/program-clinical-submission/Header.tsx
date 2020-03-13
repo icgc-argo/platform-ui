@@ -13,7 +13,7 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
+import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
@@ -25,7 +25,6 @@ import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 
 export default ({
   programShortName,
@@ -41,14 +40,15 @@ export default ({
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
-  const { setLoading: setLoaderShown } = useGlobalLoadingState();
-  const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
+  const [loaderShown, setLoaderShown] = React.useState(false);
+  const {
+    refetch: refetchClinicalSubmission,
+    updateQuery: updateClinicalSubmissionQuery,
+  } = useClinicalSubmissionQuery(programShortName);
+
   const commonToaster = useCommonToasters();
   const router = useRouter();
   const toaster = useToaster();
-  const { data, updateQuery: updateClinicalSubmissionQuery } = useClinicalSubmissionQuery(
-    programShortName,
-  );
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
   const { DOCS_URL_ROOT } = getConfig();
 
@@ -70,7 +70,6 @@ export default ({
       programShortName,
       submissionVersion,
     },
-    update: () => refetchClinicalSubmission(),
   });
 
   const [clearClinicalSubmission] = useMutation<
@@ -115,11 +114,19 @@ export default ({
       actionButtonId: 'modal-confirm-approve',
       buttonSize: 'sm',
     });
+
     if (didUserConfirm) {
       setLoaderShown(true);
       await sleep();
       try {
         await approveClinicalSubmission();
+
+        updateClinicalSubmissionQuery(previous => ({
+          ...previous,
+          clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
+            .clinicalSubmissions,
+        }));
+
         router.push(DCC_DASHBOARD_PATH);
         toaster.addToast({
           variant: 'SUCCESS',
@@ -127,11 +134,6 @@ export default ({
           title: 'Clinical Data is successfully approved',
           content: `${programShortName} updated clinical data has been approved.`,
         });
-        updateClinicalSubmissionQuery(previous => ({
-          ...previous,
-          clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
-            .clinicalSubmissions,
-        }));
       } catch (err) {
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
@@ -167,6 +169,7 @@ export default ({
           <Modal {...modalProps} />
         </ModalPortal>
       )}
+      <GlobalLoaderView isLoading={loaderShown} />
       <div
         css={css`
           display: flex;
@@ -203,31 +206,33 @@ export default ({
             </Button>
           )}
           {!isPendingApproval && (
-            <Button
-              id="button-clear-submission" // For Selenium
-              variant="text"
-              css={css`
-                margin-right: 10px;
-              `}
-              disabled={isSubmissionSystemDisabled || !submissionVersion}
-              onClick={handleSubmissionClear}
-            >
-              Clear submission
-            </Button>
+            <React.Fragment>
+              <Button
+                id="button-clear-submission" // For Selenium
+                variant="text"
+                css={css`
+                  margin-right: 10px;
+                `}
+                disabled={isSubmissionSystemDisabled || !submissionVersion}
+                onClick={handleSubmissionClear}
+              >
+                Clear submission
+              </Button>
+              <Link
+                target="_blank"
+                href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
+                bold
+                withChevron
+                uppercase
+                underline={false}
+                css={css`
+                  font-size: 14px;
+                `}
+              >
+                HELP
+              </Link>
+            </React.Fragment>
           )}
-          <Link
-            target="_blank"
-            href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
-            bold
-            withChevron
-            uppercase
-            underline={false}
-            css={css`
-              font-size: 14px;
-            `}
-          >
-            HELP
-          </Link>
           {isDcc && isPendingApproval && (
             <>
               <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>

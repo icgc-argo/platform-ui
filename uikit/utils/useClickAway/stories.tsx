@@ -21,7 +21,7 @@ export default storiesOf(`${__dirname}`, module).add(
   {
     info: {
       text: `
-      This is a vonvenient hook for implementing clickaways. While using this hook, do not use an \`onClick\` handler on your DOM element. Instead, attach a ref to it, and pass \`useClickAway\` the callback under \`onElementClick\`.
+      This is a convenient hook for implementing clickaways. While using this hook, do not use an \`onClick\` handler on your DOM element. Instead, attach a ref to it, and pass \`useClickAway\` the callback under \`onElementClick\`.
 
       Observe the *Action* tab to see events from this hook.
       `,
