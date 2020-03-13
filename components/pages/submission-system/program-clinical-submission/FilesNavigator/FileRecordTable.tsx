@@ -15,6 +15,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
+import get from 'lodash/get';
 
 const StarIcon = DataTableStarIcon;
 
@@ -153,7 +154,12 @@ export default ({
     const isNew = stats.new.some(row => row === original.row);
     return (
       isSubmissionValidated && (
-        <CellContentCenter>
+        <CellContentCenter
+          css={css`
+            display: flex;
+            justify-content: space-around;
+          `}
+        >
           <StarIcon
             fill={
               hasError
@@ -165,15 +171,7 @@ export default ({
                 : FILE_STATE_COLORS.NONE
             }
           />
-          {isDccPreview && hasUpdate && (
-            <div
-              css={css`
-                padding-top: 8px;
-              `}
-            >
-              old
-            </div>
-          )}
+          {isDccPreview && hasUpdate && <div>old</div>}
         </CellContentCenter>
       )
     );
@@ -188,6 +186,9 @@ export default ({
     isDccPreview && rowHasUpdate(original) ? (
       <div
         css={css`
+          height: 100%;
+          display: flex;
+          flex-direction: column;
           & > div {
             margin-top: 5px;
             margin-bottom: 5px;
@@ -195,13 +196,8 @@ export default ({
         `}
       >
         <div>{original[fieldName]}</div>
-        <div
-          css={css`
-            padding-top: 5px;
-          `}
-        >
-          {(file.dataUpdates.find(u => u.field === fieldName) || {}).oldValue ||
-            original[fieldName]}
+        <div>
+          {get(file.dataUpdates.find(u => u.field === fieldName), 'oldValue', original[fieldName])}
         </div>
       </div>
     ) : (
