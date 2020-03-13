@@ -45,14 +45,9 @@ export const useClinicalSubmissionQuery = (
       },
     },
   );
-  const refetch = (...stuff) => {
-    console.log('refetch!!! ', stuff);
-    return hook.refetch(...stuff);
-  };
 
   return {
     ...hook,
-    refetch,
     data: hook.data || placeholderClinicalSubmissionQueryData(programShortName),
   };
 };

@@ -13,7 +13,7 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { ModalPortal, useGlobalLoadingState, GlobalLoaderView } from 'components/ApplicationRoot';
+import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
 import Modal from 'uikit/Modal';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
@@ -25,9 +25,8 @@ import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-// import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 
-export default function({
+export default ({
   programShortName,
   showProgress,
   isPendingApproval,
@@ -37,13 +36,16 @@ export default function({
   showProgress: boolean;
   isPendingApproval: boolean;
   submissionVersion: string;
-}) {
+}) => {
   const { token } = useAuthContext();
   const isDcc = isDccMember(token);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
-  // const { setLoading: setLoaderShown } = useGlobalLoadingState();
   const [loaderShown, setLoaderShown] = React.useState(false);
-  const clinicalSubmissionQuery = useClinicalSubmissionQuery(programShortName);
+  const {
+    refetch: refetchClinicalSubmission,
+    updateQuery: updateClinicalSubmissionQuery,
+  } = useClinicalSubmissionQuery(programShortName);
+
   const commonToaster = useCommonToasters();
   const router = useRouter();
   const toaster = useToaster();
@@ -96,7 +98,7 @@ export default function({
       try {
         await reopenSubmission();
       } catch (err) {
-        await clinicalSubmissionQuery.refetch();
+        await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
       } finally {
         setLoaderShown(false);
@@ -104,9 +106,7 @@ export default function({
     }
   };
 
-  const handleSubmissionApproval: React.ComponentProps<
-    typeof Button
-  >['onClick'] = async function() {
+  const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: 'Approve Submission?',
       children: 'Are you sure you want to approve this clinical submission?',
@@ -116,51 +116,26 @@ export default function({
     });
 
     if (didUserConfirm) {
-      // modal is already closed because confirm = true
       setLoaderShown(true);
-      // set GLOBAL loader
       await sleep();
       try {
-        // approval mutation succeeds
-        try {
-          await approveClinicalSubmission();
-          console.log('very very hopefully calling refetch');
-          // await refetchClinicalSubmission();
-        } catch (err) {
-          console.warn('FIRST ERR: ', err);
-        }
-        // but update callback fails
+        await approveClinicalSubmission();
 
-        try {
-          const data = placeholderClinicalSubmissionQueryData(programShortName).clinicalSubmissions;
-          console.log('data: ', data);
-          console.log('clinicalSubmissionQuery in callback: ', clinicalSubmissionQuery);
-          clinicalSubmissionQuery.updateQuery(function(previous) {
-            console.log('previous: ', previous);
-            const newCache = {
-              ...previous,
-              clinicalSubmissions: data,
-            };
-            console.log('newCache: ', newCache);
-            return newCache;
-          });
-        } catch (err) {
-          console.log('err: ', err);
-        }
+        updateClinicalSubmissionQuery(previous => ({
+          ...previous,
+          clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
+            .clinicalSubmissions,
+        }));
 
         router.push(DCC_DASHBOARD_PATH);
-        try {
-          toaster.addToast({
-            variant: 'SUCCESS',
-            interactionType: 'CLOSE',
-            title: 'Clinical Data is successfully approved',
-            content: `${programShortName} updated clinical data has been approved.`,
-          });
-        } catch (err) {
-          console.warn('caught!!!?? ', err);
-        }
+        toaster.addToast({
+          variant: 'SUCCESS',
+          interactionType: 'CLOSE',
+          title: 'Clinical Data is successfully approved',
+          content: `${programShortName} updated clinical data has been approved.`,
+        });
       } catch (err) {
-        await clinicalSubmissionQuery.refetch();
+        await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
       } finally {
         setLoaderShown(false);
@@ -180,13 +155,13 @@ export default function({
         content: `All uploaded clinical files have been cleared.`,
       });
     } catch (err) {
-      await clinicalSubmissionQuery.refetch();
+      await refetchClinicalSubmission();
       commonToaster.unknownErrorWithReloadMessage();
     } finally {
       setLoaderShown(false);
     }
   };
-  console.log('IS PENDING: ', isPendingApproval);
+
   return (
     <>
       {isModalShown && (
@@ -269,4 +244,4 @@ export default function({
       </div>
     </>
   );
-}
+};

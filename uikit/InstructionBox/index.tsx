@@ -43,7 +43,6 @@ const InstructionBox = ({
           <Row nogutter>
             {steps.map((step, i) => (
               <Col md={12} lg={12 / steps.length} css={stepStyle(size)} key={i}>
-                {/* memory leak here on validate submission */}
                 <InstructionStep>{step}</InstructionStep>
               </Col>
             ))}
