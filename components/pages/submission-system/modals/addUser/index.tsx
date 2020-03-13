@@ -88,7 +88,6 @@ const AddUserModal = ({
   const formHasDuplicateEmail = form => {
     const formsWithThisEmail = Object.keys(formSubscriptions)
       .map(key => formSubscriptions[key].data.email.toLowerCase())
-      //.concat(users.map(({ email }) => email.toLowerCase()))
       .filter(email => email === form.data.email.toLowerCase());
     return formsWithThisEmail.length > 1;
   };
