@@ -82,9 +82,11 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
         : 'SUCCESS'
       : hasSchemaError || hasDataError
       ? 'ERROR'
-      : !!gqlFile.records && isSubmissionValidated
-      ? 'SUCCESS'
-      : 'WARNING',
+      : gqlFile.records.length
+      ? isSubmissionValidated
+        ? 'SUCCESS'
+        : 'WARNING'
+      : 'NONE',
   };
 };
 
@@ -125,16 +127,19 @@ export default () => {
     const lastUploadedEntityTypes = uniq(map(currentFileList, fileToClinicalEntityType));
     const fileToFocusOn = head(
       orderBy(fileNavigatorFiles, file => {
-        const wasLastUploaded = lastUploadedEntityTypes.includes(file.clinicalType);
+        const wereFilesUploaded = lastUploadedEntityTypes.length > 0;
+        const applyPriorityRule = wereFilesUploaded
+          ? lastUploadedEntityTypes.includes(file.clinicalType)
+          : true;
         switch (file.status) {
           case 'ERROR':
-            return wasLastUploaded ? 0 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 0 : fileNavigatorFiles.length;
           case 'UPDATE':
-            return wasLastUploaded ? 1 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 1 : fileNavigatorFiles.length;
           case 'WARNING':
-            return wasLastUploaded ? 2 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 2 : fileNavigatorFiles.length;
           case 'SUCCESS':
-            return wasLastUploaded ? 3 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 3 : fileNavigatorFiles.length;
           case 'NONE':
             return fileNavigatorFiles.length;
           default:
