@@ -110,7 +110,7 @@ export default () => {
     refetch,
   } = useClinicalSubmissionQuery(programShortName, {
     onCompleted: () => {
-      setSelectedClinicalEntityType(selectedClinicalEntityType || defaultClinicalEntityType);
+      setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
   });
 
