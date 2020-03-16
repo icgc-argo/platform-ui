@@ -53,6 +53,27 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
     : null;
 };
 
+const loaderPortalRef = React.createRef<HTMLDivElement>();
+export const GlobalLoaderView = ({ isLoading }: { isLoading: boolean }) => {
+  const ref = loaderPortalRef.current;
+  const fadeIn = 400;
+  const fadeOut = 600;
+  return ref
+    ? ReactDOM.createPortal(
+        <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
+          {() => (
+            <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
+              <Modal.Overlay>
+                <DnaLoader />
+              </Modal.Overlay>
+            </FadingDiv>
+          )}
+        </CSSTransition>,
+        ref,
+      )
+    : null;
+};
+
 const GlobalLoadingContext = React.createContext({
   isLoading: false,
   setLoading: (isLoading: boolean) => {},
@@ -66,21 +87,11 @@ export const GlobalLoaderProvider = ({
   startWithGlobalLoader: boolean;
 }) => {
   const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
-  const fadeIn = 400;
-  const fadeOut = 600;
 
   return (
     <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
       {children}
-      <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
-        {() => (
-          <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
-            <Modal.Overlay>
-              <DnaLoader />
-            </Modal.Overlay>
-          </FadingDiv>
-        )}
-      </CSSTransition>
+      <GlobalLoaderView isLoading={isLoading} />
     </GlobalLoadingContext.Provider>
   );
 };
@@ -206,6 +217,15 @@ export default function ApplicationRoot({
                     z-index: 9999;
                   `}
                   ref={modalPortalRef}
+                />
+                <div
+                  css={css`
+                    position: fixed;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 9999;
+                  `}
+                  ref={loaderPortalRef}
                 />
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
