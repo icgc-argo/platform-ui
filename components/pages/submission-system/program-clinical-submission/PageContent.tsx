@@ -165,6 +165,7 @@ export default () => {
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
+      setCurrentFileList(null);
     },
   });
   const [validateSubmission] = useMutation<
