@@ -93,7 +93,14 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
-  const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
+
+  // not declared as a side effect that changes with program change
+  // change in 'data' always seems to take precedence over currentFileList within `defaultClinicalEntityType`
+  const [currentFileList, setCurrentFileList] = React.useState<{
+    fileList: FileList | null;
+    shortName: string;
+  }>({ fileList: null, shortName: programShortName });
+
   const {
     isModalShown: signOffModalShown,
     getUserConfirmation: getSignOffConfirmation,
@@ -110,7 +117,7 @@ export default () => {
     refetch,
   } = useClinicalSubmissionQuery(programShortName, {
     onCompleted: () => {
-      setSelectedClinicalEntityType(selectedClinicalEntityType || defaultClinicalEntityType);
+      setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
   });
 
@@ -124,7 +131,15 @@ export default () => {
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
-    const lastUploadedEntityTypes = uniq(map(currentFileList, fileToClinicalEntityType));
+
+    // currentfileList state can persist when the program changes
+    // ensure currentfileList is specific to the current program, so sorting does not get affected by different program
+    // adding currentFileList to the dependency list array had no effect (https://github.com/icgc-argo/platform-ui/pull/1220)
+    const lastUploadedEntityTypes =
+      currentFileList.shortName === programShortName
+        ? uniq(map(currentFileList.fileList, fileToClinicalEntityType))
+        : [];
+
     const fileToFocusOn = head(
       orderBy(fileNavigatorFiles, file => {
         const wereFilesUploaded = lastUploadedEntityTypes.length > 0;
@@ -234,7 +249,7 @@ export default () => {
   };
 
   const handleSubmissionFilesUpload = (files: FileList) => {
-    setCurrentFileList(files);
+    setCurrentFileList({ fileList: files, shortName: programShortName });
     return uploadClinicalSubmission({
       variables: {
         files,
@@ -408,7 +423,7 @@ export default () => {
           variant="ERROR"
           interactionType="CLOSE"
           title={`${fileNames.length} of ${
-            (currentFileList || []).length
+            (currentFileList.fileList || []).length
           } files failed to upload: ${fileNames.join(', ')}`}
           content={message}
           onInteraction={onErrorClose(i)}
