@@ -23,11 +23,19 @@ import {
   DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
   DOCS_DATA_ACCESS_PATH,
   DOCS_DATA_DOWNLOAD,
+  DACO_PATH,
 } from 'global/constants/pages';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
   padding-left: 18px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+`;
+
+const Ul2 = styled('ul')`
+  ${({ theme }) => css(theme.typography.paragraph)};
+  padding-left: 0px;
   margin-top: 5px;
   margin-bottom: 30px;
 `;
@@ -46,49 +54,27 @@ export default function ContactPage() {
     <DefaultLayout>
       <div
         css={css`
-          background-color: ${theme.colors.grey_4};
+          height: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          background: ${theme.colors.white};
         `}
       >
         <div
           css={css`
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            column-gap: 48px;
-            padding: 0 96px 57px 96px;
-            box-shadow: inset 0 -1px 0 0 ${theme.colors.grey_2};
+            display: flex;
+            flex-direction: column;
+            padding: 42px 0 0 47px;
             background-color: white;
           `}
         >
-          <div
-            css={css`
-              grid-column-start: 1;
-              grid-column-end: 4;
-              display: flex;
-              align-items: center;
-              flex-direction: column;
-            `}
-          >
-            <Typography
-              variant="hero"
-              css={css`
-                margin-top: 42px;
-                margin-bottom: 28px;
-              `}
-            >
-              Contact
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              css={css`
-                margin: 0;
-                margin-bottom: 42px;
-              `}
-            >
-              Check out these common topics before submitting a question below.
+          <div>
+            <Typography variant="hero">Contact</Typography>
+            <Typography variant="subtitle2">
+              You may find the answer to your question in the following common topics:
             </Typography>
           </div>
           <div>
-            <TitleBorder color="accent1" />
             <div
               css={css`
                 display: flex;
@@ -100,11 +86,75 @@ export default function ContactPage() {
                 css={css`
                   margin: 0;
                 `}
-                variant="subtitle"
+                variant="sectionHeader"
+                color="secondary"
+                bold
               >
                 Data Submission
               </Typography>
-              <img alt="test tube" src="/static/testtube.svg" height="50" />
+            </div>
+            <Ul2>
+              You will need to{' '}
+              <Link target="_blank" href={urljoin(DACO_PATH)}>
+                apply to ICGC DACO
+              </Link>{' '}
+              in order to access controlled data. Visit our documentation for assistance with{' '}
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+                applying for access to controlled data.
+              </Link>
+            </Ul2>
+          </div>
+          <div>
+            <div
+              css={css`
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+              `}
+            >
+              <Typography
+                css={css`
+                  margin: 0;
+                `}
+                variant="sectionHeader"
+                color="secondary"
+                bold
+              >
+                Downloading Data
+              </Typography>
+            </div>
+            <Ul>
+              <li>
+                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
+                  How to download data
+                </Link>{' '}
+                using the API Token and Score Client
+              </li>
+              <li>
+                <Link target="_self" href={'#'}>
+                  Troubleshooting data download
+                </Link>
+              </li>
+            </Ul>
+          </div>
+          <div>
+            <div
+              css={css`
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+              `}
+            >
+              <Typography
+                css={css`
+                  margin: 0;
+                `}
+                variant="subtitle2"
+                color="secondary"
+                bold
+              >
+                Submitting Data
+              </Typography>
             </div>
             <Ul>
               <li>
@@ -139,82 +189,10 @@ export default function ContactPage() {
               </li>
             </Ul>
           </div>
-          <div>
-            <TitleBorder color="accent3" />
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                margin-top: 10px;
-              `}
-            >
-              <Typography
-                variant="subtitle"
-                css={css`
-                  margin: 0;
-                `}
-              >
-                Data Access &amp; Download
-              </Typography>
-              <img alt="controlled data" src="/static/controlled-data.svg" height="50" />
-            </div>
-            <Ul>
-              <li>
-                How to{' '}
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
-                  access controlled data
-                </Link>
-              </li>
-              <li>
-                How to{' '}
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
-                  download data
-                </Link>
-              </li>
-              <li>
-                How to use the{' '}
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
-                  Score Download Client
-                </Link>
-              </li>
-            </Ul>
-          </div>
-          <div>
-            <TitleBorder color="warning" />
-            <div
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                margin-top: 10px;
-              `}
-            >
-              <Typography
-                variant="subtitle"
-                css={css`
-                  margin: 0;
-                `}
-              >
-                FAQs
-              </Typography>
-              <img alt="faq" src="/static/faq.svg" height="50" />
-            </div>
-            <Ul>
-              <li>
-                How to <A>collaborate with ICGC ARGO</A>
-              </li>
-              <li>
-                How to <A>register your program</A> with ICGC ARGO
-              </li>
-              <li>
-                Restrictions for using <A>ARGO data in publications</A>
-              </li>
-            </Ul>
-          </div>
         </div>
         <ContentBox
           css={css`
-            width: 711px;
-            margin: 39px auto;
+            margin: auto 30px;
             padding: 25px 29px;
           `}
         >
