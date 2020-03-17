@@ -33,7 +33,7 @@ export default function Error401Page() {
             4
             <img
               css={css`
-                margin: 0 8px;
+                margin: 0 8px -2px;
               `}
               alt="Logo mark"
               src="/static/logomark.svg"
