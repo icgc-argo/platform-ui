@@ -100,6 +100,7 @@ export default () => {
     fileList: FileList | null;
     shortName: string;
   }>({ fileList: null, shortName: programShortName });
+
   const {
     isModalShown: signOffModalShown,
     getUserConfirmation: getSignOffConfirmation,
