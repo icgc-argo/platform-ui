@@ -93,10 +93,14 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
+
+  // not declared as a side effect that changes with program change
+  // change in 'data' always seems to take precedence over currentFileList within `defaultClinicalEntityType`
   const [currentFileList, setCurrentFileList] = React.useState<{
     fileList: FileList | null;
     shortName: string;
   }>({ fileList: null, shortName: programShortName });
+
   const {
     isModalShown: signOffModalShown,
     getUserConfirmation: getSignOffConfirmation,
@@ -127,6 +131,9 @@ export default () => {
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
+
+    // currentfilelist state can persist when the program changes
+    // ensure currentfilelist is specific to the current program, so sorting does not get affected by different program
     const lastUploadedEntityTypes =
       currentFileList.shortName === programShortName
         ? uniq(map(currentFileList.fileList, fileToClinicalEntityType))
