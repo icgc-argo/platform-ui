@@ -100,7 +100,6 @@ export default () => {
     fileList: FileList | null;
     shortName: string;
   }>({ fileList: null, shortName: programShortName });
-
   const {
     isModalShown: signOffModalShown,
     getUserConfirmation: getSignOffConfirmation,
@@ -180,7 +179,6 @@ export default () => {
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
-      setCurrentFileList(null);
     },
   });
   const [validateSubmission] = useMutation<
