@@ -93,7 +93,10 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
-  const [currentFileList, setCurrentFileList] = React.useState<FileList | null>(null);
+  const [currentFileList, setCurrentFileList] = React.useState<{
+    fileList: FileList | null;
+    shortName: string;
+  }>({ fileList: null, shortName: programShortName });
   const {
     isModalShown: signOffModalShown,
     getUserConfirmation: getSignOffConfirmation,
@@ -124,7 +127,11 @@ export default () => {
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
-    const lastUploadedEntityTypes = uniq(map(currentFileList, fileToClinicalEntityType));
+    const lastUploadedEntityTypes =
+      currentFileList.shortName === programShortName
+        ? uniq(map(currentFileList.fileList, fileToClinicalEntityType))
+        : [];
+
     const fileToFocusOn = head(
       orderBy(fileNavigatorFiles, file => {
         const wereFilesUploaded = lastUploadedEntityTypes.length > 0;
@@ -165,7 +172,6 @@ export default () => {
   >(UPLOAD_CLINICAL_SUBMISSION, {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
-      setCurrentFileList(null);
     },
   });
   const [validateSubmission] = useMutation<
@@ -235,7 +241,7 @@ export default () => {
   };
 
   const handleSubmissionFilesUpload = (files: FileList) => {
-    setCurrentFileList(files);
+    setCurrentFileList({ fileList: files, shortName: programShortName });
     return uploadClinicalSubmission({
       variables: {
         files,
@@ -409,7 +415,7 @@ export default () => {
           variant="ERROR"
           interactionType="CLOSE"
           title={`${fileNames.length} of ${
-            (currentFileList || []).length
+            (currentFileList.fileList || []).length
           } files failed to upload: ${fileNames.join(', ')}`}
           content={message}
           onInteraction={onErrorClose(i)}
