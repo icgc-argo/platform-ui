@@ -132,8 +132,9 @@ export default () => {
         .map(e => e.clinicalType)
         .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
 
-    // currentfilelist state can persist when the program changes
-    // ensure currentfilelist is specific to the current program, so sorting does not get affected by different program
+    // currentfileList state can persist when the program changes
+    // ensure currentfileList is specific to the current program, so sorting does not get affected by different program
+    // adding currentFileList to the dependency list array had no effect (https://github.com/icgc-argo/platform-ui/pull/1220)
     const lastUploadedEntityTypes =
       currentFileList.shortName === programShortName
         ? uniq(map(currentFileList.fileList, fileToClinicalEntityType))
