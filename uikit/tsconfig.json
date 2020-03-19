@@ -10,7 +10,8 @@
     "declaration": true,
     "allowJs": false,
     "isolatedModules": false,
-    "resolveJsonModule": false
+    "resolveJsonModule": false,
+    "target": "es6"
   },
   "include": ["./**/*"],
   "exclude": [

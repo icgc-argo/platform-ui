@@ -6,7 +6,7 @@ import HyperLink from 'uikit/Link';
 import Link from 'next/link';
 import { getConfig } from 'global/config';
 
-export default function Error401Page() {
+export default function Error403Page() {
   const { DOCS_URL_ROOT } = getConfig();
   return (
     <ErrorLayout>
@@ -33,15 +33,15 @@ export default function Error401Page() {
             4
             <img
               css={css`
-                margin: 0 8px;
+                margin: 0 8px -2px;
               `}
               alt="Logo mark"
               src="/static/logomark.svg"
             />
-            1
+            3
           </Typography>
           <Typography as="div" variant="subtitle" color="secondary">
-            Authorization Required
+            Forbidden
           </Typography>
           <Typography
             variant="subtitle2"
