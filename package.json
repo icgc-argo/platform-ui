@@ -86,6 +86,7 @@
     "react-ga": "^2.6.0",
     "react-grid-system": "^4.4.6",
     "react-json-view": "^1.19.1",
+    "react-recaptcha": "^2.3.10",
     "react-table": "6.10.0",
     "react-tippy": "^1.2.3",
     "react-transition-group": "^4.3.0",

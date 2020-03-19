@@ -7,15 +7,14 @@ import FormControl from 'uikit/form/FormControl';
 import InputLabel from 'uikit/form/InputLabel';
 import Select from 'uikit/form/Select';
 import Textarea from 'uikit/form/Textarea';
-import A from 'uikit/Link';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
-import TitleBorder from 'uikit/TitleBorder';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
+import ReCAPTCHA from 'react-recaptcha';
 import {
   DOCS_SUBMITTING_CLINICAL_DATA_PATH,
   DOCS_SUBMISSION_OVERVIEW_PATH,
@@ -47,11 +46,16 @@ const FlexRow = styled('div')`
   margin-bottom: 16px;
 `;
 
+function onChange(value) {
+  console.log('Captcha value:', value);
+}
+
 export default function ContactPage() {
   const theme = useTheme();
   const { DOCS_URL_ROOT } = getConfig();
   return (
     <DefaultLayout>
+      <script src="https://www.google.com/recaptcha/api.js" />
       <div
         css={css`
           height: 100%;
@@ -189,6 +193,19 @@ export default function ContactPage() {
               </li>
             </Ul>
           </div>
+          <div>
+            <Button variant="secondary">
+              <Link
+                css={css`
+                  text-decoration: none;
+                `}
+                target="_blank"
+                href={DOCS_URL_ROOT}
+              >
+                More Documentation
+              </Link>
+            </Button>
+          </div>
         </div>
         <ContentBox
           css={css`
@@ -213,7 +230,7 @@ export default function ContactPage() {
             If you still can’t find what you’re looking for, get in touch and let us know how we can
             help.
           </Typography>
-          <form name="createProgram">
+          <form name="sendMessage">
             <Row align="center">
               <Col sm={6}>
                 <FormControl required={true}>
@@ -303,12 +320,17 @@ export default function ContactPage() {
                     `}
                     options={[
                       {
-                        content: 'Applying for controlled data access through DACO',
+                        content: 'Applying for Access to Controlled Data through DACO',
                         value: 'v1',
                       },
-                      { content: 'Data Submissions', value: 'v2' },
-                      { content: 'Technical Support', value: 'v3' },
-                      { content: 'Other (please specify below)', value: 'v4' },
+                      { content: 'Data Download', value: 'v2' },
+                      { content: 'Data Submission', value: 'v3' },
+                      { content: 'General Data or Analysis Query', value: 'v4' },
+                      { content: 'Reporting a Bug', value: 'v5' },
+                      { content: 'Reporting a Data Discrepancy', value: 'v6' },
+                      { content: 'Media or Collaboration Inquiry', value: 'v7' },
+                      { content: 'Publication Inquiry', value: 'v8' },
+                      { content: 'Other', value: 'v9' },
                     ]}
                   />
                 </FormControl>
@@ -330,8 +352,13 @@ export default function ContactPage() {
                 </FormControl>
               </Col>
             </Row>
-            <Row>
-              <Col align="start">
+            <Row align="end">
+              <Col>
+                <ReCAPTCHA sitekey="6Lfvf-IUAAAAAGJNRhb_urfYwVVBVjOPiQQJbxuz" onChange={onChange} />
+              </Col>
+            </Row>
+            <Row justify="end">
+              <Col sm={4}>
                 <Button>SEND MESSAGE</Button>
               </Col>
             </Row>
