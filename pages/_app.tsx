@@ -88,8 +88,8 @@ class Root extends App<
       : false;
 
     if (unauthorized && !AUTH_DISABLED) {
-      const err = new Error('Unauthorized') as Error & { statusCode?: number };
-      err[ERROR_STATUS_KEY] = 401;
+      const err = new Error('Forbidden') as Error & { statusCode?: number };
+      err[ERROR_STATUS_KEY] = 403;
       throw err;
     }
 

@@ -33,7 +33,7 @@ export default function Error500Page() {
             5
             <img
               css={css`
-                margin: 0 8px;
+                margin: 0 8px -2px;
               `}
               alt="Logo mark"
               src="/static/logomark.svg"
