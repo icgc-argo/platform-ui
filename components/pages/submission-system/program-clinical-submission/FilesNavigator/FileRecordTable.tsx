@@ -197,7 +197,11 @@ export default ({
       >
         <div>{original[fieldName]}</div>
         <div>
-          {get(file.dataUpdates.find(u => u.field === fieldName), 'oldValue', original[fieldName])}
+          {get(
+            file.dataUpdates.find(u => u.field === fieldName && u.row === original.row),
+            'oldValue',
+            original[fieldName],
+          )}
         </div>
       </div>
     ) : (
