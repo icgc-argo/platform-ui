@@ -14,7 +14,7 @@ import DefaultLayout from './DefaultLayout';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import ReCAPTCHA from 'react-recaptcha';
+import ReCAPTCHA from 'react-google-recaptcha';
 import {
   DOCS_SUBMITTING_CLINICAL_DATA_PATH,
   DOCS_SUBMISSION_OVERVIEW_PATH,
