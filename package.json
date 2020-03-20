@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -84,6 +84,7 @@
     "react-apollo": "^3.1.0",
     "react-dom": "^16.8.6",
     "react-ga": "^2.6.0",
+    "react-google-recaptcha": "^2.0.1",
     "react-grid-system": "^4.4.6",
     "react-json-view": "^1.19.1",
     "react-table": "6.10.0",
