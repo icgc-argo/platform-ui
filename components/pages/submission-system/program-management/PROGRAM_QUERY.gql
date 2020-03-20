@@ -18,6 +18,7 @@ query PROGRAM_QUERY($shortName: String!) {
       firstName
       lastName
       role
+      isDacoApproved
       inviteAcceptedAt
       inviteStatus
     }
