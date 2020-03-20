@@ -69,7 +69,8 @@ export default function RegisterSamplesModal({
           variant: TOAST_VARIANTS.SUCCESS,
           content: (
             <Typography>
-              If you have any changes to this registered sample data, please{' '}
+              You will see the updates on your dashboard shortly. If you have any changes to this
+              registered sample data, please{' '}
               <Link href={CONTACT_PAGE_PATH}>
                 <HyperLink>contact the DCC.</HyperLink>
               </Link>

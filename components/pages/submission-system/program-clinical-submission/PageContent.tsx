@@ -324,7 +324,8 @@ export default () => {
             variant: 'SUCCESS',
             interactionType: 'CLOSE',
             title: 'Successful Clinical Submission!',
-            content: 'Your clinical data has been submitted.',
+            content:
+              'Your clinical data has been submitted. You will see the updates on your dashboard shortly.',
           });
         } else {
           setPageLoaderShown(false);
