@@ -18,8 +18,7 @@ export const getConfig = () => {
       `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
     ),
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org/docs/',
-    SITE_KEY: publicConfig.SITE_KEY || '6Lfvf-IUAAAAAGJNRhb_urfYwVVBVjOPiQQJbxuz',
-    SECRET_KEY: publicConfig.SECRET_KEY,
+    RECAPTCHA_SITE_KEY: publicConfig.SITE_KEY || '6Lfvf-IUAAAAAGJNRhb_urfYwVVBVjOPiQQJbxuz',
     DASHBOARD_ENABLED: publicConfig.DASHBOARD_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
@@ -30,8 +29,7 @@ export const getConfig = () => {
     GA_TRACKING_ID: string;
     EGO_URL: string;
     DOCS_URL_ROOT: string;
-    SITE_KEY: string;
-    SECRET_KEY: string;
+    RECAPTCHA_SITE_KEY: string;
     DASHBOARD_ENABLED: boolean;
   };
 };
