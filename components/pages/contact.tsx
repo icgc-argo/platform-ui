@@ -46,13 +46,9 @@ const FlexRow = styled('div')`
   margin-bottom: 16px;
 `;
 
-function onChange(value) {
-  console.log('Captcha value:', value);
-}
-
 export default function ContactPage() {
   const theme = useTheme();
-  const { DOCS_URL_ROOT } = getConfig();
+  const { DOCS_URL_ROOT, SITE_KEY, SECRET_KEY } = getConfig();
   return (
     <DefaultLayout>
       <script src="https://www.google.com/recaptcha/api.js" />
@@ -354,7 +350,12 @@ export default function ContactPage() {
             </Row>
             <Row align="end">
               <Col>
-                <ReCAPTCHA sitekey="6Lfvf-IUAAAAAGJNRhb_urfYwVVBVjOPiQQJbxuz" onChange={onChange} />
+                <ReCAPTCHA
+                  sitekey={SITE_KEY}
+                  onChange={(value: string) => {
+                    console.log('Captcha value:', value); // Needs to be hooked up, just looks the part rn
+                  }}
+                />
               </Col>
             </Row>
             <Row justify="end">
