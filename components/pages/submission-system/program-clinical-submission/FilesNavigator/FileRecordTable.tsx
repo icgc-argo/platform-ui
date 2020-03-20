@@ -192,6 +192,7 @@ export default ({
           & > div {
             margin-top: 5px;
             margin-bottom: 5px;
+            flex: 1;
           }
         `}
       >
