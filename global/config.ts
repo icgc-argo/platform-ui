@@ -19,7 +19,7 @@ export const getConfig = () => {
     ),
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org/docs/',
     RECAPTCHA_SITE_KEY:
-      publicConfig.RECATCHPHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
+      publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     DASHBOARD_ENABLED: publicConfig.DASHBOARD_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
