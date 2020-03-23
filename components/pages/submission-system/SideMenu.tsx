@@ -193,6 +193,8 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                       INVALID: <Icon name="exclamation" fill="error" width="15px" />,
                       INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
                       PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                      // submission state remains as null and rejects creating open state with initial invalid upload
+                      // if errors exist, error icon should still show up despite the null state
                       null: clinicalSubmissionHasSchemaErrors ? (
                         <Icon name="exclamation" fill="error" width="15px" />
                       ) : null,
