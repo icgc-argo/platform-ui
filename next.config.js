@@ -37,6 +37,7 @@ module.exports = withImages({
     AUTH_DISABLED: process.env.AUTH_DISABLED,
     GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     DOCS_URL_ROOT: process.env.DOCS_URL_ROOT,
+    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     DASHBOARD_ENABLED: process.env.DASHBOARD_ENABLED,
   },
 });
