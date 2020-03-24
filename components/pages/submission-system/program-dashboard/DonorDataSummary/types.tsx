@@ -1,27 +1,51 @@
-export type DonorEntityRecord = {
-  releaseState: ReleasedFilesState;
+// Elasticsearch mapping of the donor summary document
+export type DonorSummaryRecord = {
+  releaseStatus: DonorDataReleaseState;
   donorId: string;
-  coreFields: number;
-  extendedFields: number;
-  samples: TumourDesignationPair;
-  rawReads: TumourDesignationPair;
-  alignment: PipelineStats;
-  sangerVC: PipelineStats;
-  processingStatus: ProcessingStates;
-  lastUpdated: Date | String;
+  submitterDonorId: string;
+  submittedCoreDataPercent: number;
+  submittedExtendedDataPercent: number;
+  registeredNormalSamples: number;
+  registeredTumourSamples: number;
+  publishedNormalAnalysis: number;
+  publishedTumourAnalysis: number;
+  alignmentsCompleted: number;
+  alignmentsRunning: number;
+  alignmentsFailed: number;
+  sangerVcsCompleted: number;
+  sangerVcsRunning: number;
+  sangerVcsFailed: number;
+  processingStatus: MolecularProcessingStatus;
+  updatedAt: Date | String;
 };
 
-export type ReleasedFilesState = 'FULLY' | 'PARTIALLY' | 'NO';
-
-export type TumourDesignationPair = {
-  normal: number;
-  tumour: number;
+export type ProgoramDonorReleasStats = {
+  fullyReleasedDonorsCount: number;
+  partiallyReleasedDonorsCount: number;
+  noReleaseDonorsCount: number;
 };
 
-export type PipelineStats = {
-  complete: number;
-  inProgress: number;
-  error: number;
+// **** Elasticsearch ENUMS *****
+export enum DonorDataReleaseState {
+  FULLY = 'FULLY_RELEASED',
+  PARTIALLY = 'PARTIALLY_RELEASED',
+  NO = 'NO_RELEASE',
+}
+export enum MolecularProcessingStatus {
+  COMPLETE = 'COMPLETE',
+  PROCESSING = 'PROCESSING',
+  REGISTERED = 'REGISTERED',
+}
+
+// **** GQL types ****
+export type ProgramDonorsSummaryQueryData = {
+  programDonorSummaryEntries: DonorSummaryRecord[];
 };
 
-export type ProcessingStates = 'Registered' | 'Processing' | 'Complete';
+export type ProgramDonorReleaseStatQueryData = {
+  programDonorSummaryStats: ProgoramDonorReleasStats;
+};
+
+export type SummaryQueryVariables = {
+  programShortName: string;
+};

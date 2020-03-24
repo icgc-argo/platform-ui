@@ -1,4 +1,3 @@
-import Container from 'uikit/Container';
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
 import NoData from 'uikit/NoData';
@@ -12,8 +11,35 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 import DonorSummaryTable from './DonorSummaryTable';
-import { dummyDonorData } from './common';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import PROGRAM_DONOR_SUMMARY_ENTRIES_QUERY from './gql/PROGRAM_DONOR_SUMMARY_ENTRIES_QUERY.gql';
+import { ProgramDonorsSummaryQueryData, SummaryQueryVariables } from './types';
+
 const { DOCS_URL_ROOT, DASHBOARD_ENABLED } = getConfig();
+
+const useProgramDonorsSummaryQuery = (
+  programShortName: string,
+  options: Omit<
+    QueryHookOptions<ProgramDonorsSummaryQueryData, SummaryQueryVariables>,
+    'variables'
+  > = {},
+) => {
+  const hook = useQuery<ProgramDonorsSummaryQueryData, SummaryQueryVariables>(
+    PROGRAM_DONOR_SUMMARY_ENTRIES_QUERY,
+    {
+      ...options,
+      variables: {
+        programShortName,
+      },
+    },
+  );
+
+  return {
+    ...hook,
+    data: hook.data,
+  };
+};
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -45,23 +71,27 @@ const emptyState = (
   </NoData>
 );
 
-const readyState = (
+const readyState = (donorSummaries: any) => (
   <div
     css={css`
       padding-top: 10px;
     `}
   >
-    <DonorSummaryTable donors={dummyDonorData} />
+    <DonorSummaryTable donors={donorSummaries} />
   </div>
 );
 
 export default () => {
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { data: { programDonorSummaryEntries = [] } = {} } = useProgramDonorsSummaryQuery(
+    programShortName,
+  );
   return (
     <DashboardCard>
       <Typography variant="default" component="span">
         Donor Data Summary
       </Typography>
-      {DASHBOARD_ENABLED ? readyState : emptyState}
+      {DASHBOARD_ENABLED ? readyState(programDonorSummaryEntries) : emptyState}
     </DashboardCard>
   );
 };
