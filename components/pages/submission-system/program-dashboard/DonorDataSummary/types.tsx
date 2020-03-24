@@ -1,4 +1,3 @@
-// Elasticsearch mapping of the donor summary document
 export type DonorSummaryRecord = {
   releaseStatus: DonorDataReleaseState;
   donorId: string;
@@ -25,7 +24,6 @@ export type ProgoramDonorReleasStats = {
   noReleaseDonorsCount: number;
 };
 
-// **** Elasticsearch ENUMS *****
 export enum DonorDataReleaseState {
   FULLY = 'FULLY_RELEASED',
   PARTIALLY = 'PARTIALLY_RELEASED',
@@ -40,12 +38,9 @@ export enum MolecularProcessingStatus {
 // **** GQL types ****
 export type ProgramDonorsSummaryQueryData = {
   programDonorSummaryEntries: DonorSummaryRecord[];
-};
-
-export type ProgramDonorReleaseStatQueryData = {
   programDonorSummaryStats: ProgoramDonorReleasStats;
 };
 
-export type SummaryQueryVariables = {
+export type ProgramDonorsSummaryQueryVariables = {
   programShortName: string;
 };

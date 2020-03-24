@@ -1,4 +1,9 @@
-import { DonorSummaryRecord, DonorDataReleaseState, MolecularProcessingStatus } from './types';
+import {
+  DonorSummaryRecord,
+  DonorDataReleaseState,
+  MolecularProcessingStatus,
+  ProgoramDonorReleasStats,
+} from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
@@ -27,7 +32,13 @@ enum PIPELINE_STATUS {
 }
 type PipelineStats = Record<PIPELINE_STATUS, number>;
 
-export default ({ donors }: { donors: Array<DonorSummaryRecord> }) => {
+export default ({
+  donorSummaryEntries,
+  programDonorSummaryStats,
+}: {
+  donorSummaryEntries: Array<DonorSummaryRecord>;
+  programDonorSummaryStats: ProgoramDonorReleasStats;
+}) => {
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
@@ -286,10 +297,19 @@ export default ({ donors }: { donors: Array<DonorSummaryRecord> }) => {
       // this z-index needs to be greater then GlobalFooter's z-index otherwise the drop down is hidden behind it
       css={css`
         z-index: 2;
+        padding-top: 10px;
       `}
     >
-      <TableInfoHeaderContainer left={<DonorStatsArea />} noMargin={true} />
-      <Table parentRef={containerRef} showPagination={true} columns={tableColumns} data={donors} />
+      <TableInfoHeaderContainer
+        left={<DonorStatsArea programDonorSummaryStats={programDonorSummaryStats} />}
+        noMargin={true}
+      />
+      <Table
+        parentRef={containerRef}
+        showPagination={true}
+        columns={tableColumns}
+        data={donorSummaryEntries}
+      />
     </div>
   );
 };
