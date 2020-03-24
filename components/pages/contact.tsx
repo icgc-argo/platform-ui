@@ -43,7 +43,7 @@ const FlexRow = styled('div')`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 `;
 
 export default function ContactPage() {
@@ -220,11 +220,10 @@ export default function ContactPage() {
           </Typography>
           <Typography
             css={css`
-              margin-bottom: 25px;
+              margin-bottom: 10px;
             `}
           >
-            If you still can’t find what you’re looking for, get in touch and let us know how we can
-            help.
+            If you still can’t find what you’re looking for, let us know how we can help:
           </Typography>
           <form name="sendMessage">
             <Row align="center">
@@ -321,12 +320,10 @@ export default function ContactPage() {
                       },
                       { content: 'Data Download', value: 'v2' },
                       { content: 'Data Submission', value: 'v3' },
-                      { content: 'General Data or Analysis Query', value: 'v4' },
-                      { content: 'Reporting a Bug', value: 'v5' },
-                      { content: 'Reporting a Data Discrepancy', value: 'v6' },
-                      { content: 'Media or Collaboration Inquiry', value: 'v7' },
-                      { content: 'Publication Inquiry', value: 'v8' },
-                      { content: 'Other', value: 'v9' },
+                      { content: 'Data or Analysis Query', value: 'v4' },
+                      { content: 'Media or Collaboration Inquiry', value: 'v5' },
+                      { content: 'Publication Inquiry', value: 'v6' },
+                      { content: 'Other', value: 'v7' },
                     ]}
                   />
                 </FormControl>
