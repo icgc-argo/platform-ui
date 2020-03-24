@@ -64,7 +64,7 @@ export default function ContactPage() {
           css={css`
             display: flex;
             flex-direction: column;
-            padding: 42px 0 0 47px;
+            padding: 0px 0 0 47px;
             background-color: white;
           `}
         >
@@ -205,7 +205,7 @@ export default function ContactPage() {
         </div>
         <ContentBox
           css={css`
-            margin: auto 30px;
+            margin: 30px 30px auto 0px;
             padding: 25px 29px;
           `}
         >
@@ -341,7 +341,7 @@ export default function ContactPage() {
                     id="message"
                     css={css`
                       margin-top: 6px;
-                      margin-bottom: 16px;
+                      margin-bottom: 0px;
                       height: 115px;
                     `}
                   />
@@ -358,9 +358,16 @@ export default function ContactPage() {
                 />
               </Col>
             </Row>
-            <Row justify="end">
-              <Col sm={4}>
-                <Button>SEND MESSAGE</Button>
+            <Row>
+              <Col>
+                <Button
+                  css={css`
+                    margin-left: auto;
+                    margin-right: 0px;
+                  `}
+                >
+                  SEND MESSAGE
+                </Button>
               </Col>
             </Row>
           </form>

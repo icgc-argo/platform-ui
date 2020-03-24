@@ -1,0 +1,14 @@
+query($programShortName: String!) {
+  programDonorSummaryStats(programShortName: $programShortName) {
+    registeredDonorsCount
+    percentageCoreClinical
+    percentageTumourAndNormal
+    donorsProcessingMolecularDataCount
+    filesToQcCount
+    donorsWithReleasedFilesCount
+    allFilesCount
+    fullyReleasedDonorsCount
+    partiallyReleasedDonorsCount
+    noReleaseDonorsCount
+  }
+}
