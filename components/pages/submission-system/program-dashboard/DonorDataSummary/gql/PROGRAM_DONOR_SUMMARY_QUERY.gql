@@ -20,6 +20,7 @@ query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!) {
     updatedAt
   }
   programDonorSummaryStats(programShortName: $programShortName) {
+    registeredDonorsCount
     fullyReleasedDonorsCount
     partiallyReleasedDonorsCount
     noReleaseDonorsCount

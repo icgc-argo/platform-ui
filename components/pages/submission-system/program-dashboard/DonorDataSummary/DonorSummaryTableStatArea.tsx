@@ -5,6 +5,7 @@ import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './co
 import { StatArea as StatAreaDisplay } from '../../common';
 
 const emptyProgramDonorSummaryStats: ProgoramDonorReleasStats = {
+  registeredDonorsCount: 0,
   fullyReleasedDonorsCount: 0,
   noReleaseDonorsCount: 0,
   partiallyReleasedDonorsCount: 0,
@@ -15,13 +16,11 @@ const DonorStatsArea = ({
 }: {
   programDonorSummaryStats: ProgoramDonorReleasStats;
 }) => {
-  const total = Object.values(programDonorSummaryStats)
-    .filter(Number)
-    .reduce((a, b) => a + b, 0);
-
   return (
     <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>{total} donors</StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        {programDonorSummaryStats.registeredDonorsCount} donors
+      </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
       </StatAreaDisplay.Section>

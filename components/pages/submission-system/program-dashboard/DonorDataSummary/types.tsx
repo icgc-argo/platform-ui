@@ -19,6 +19,7 @@ export type DonorSummaryRecord = {
 };
 
 export type ProgoramDonorReleasStats = {
+  registeredDonorsCount: number;
   fullyReleasedDonorsCount: number;
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
