@@ -70,12 +70,50 @@ class Root extends App<
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
-    const { AUTH_DISABLED } = getConfig();
-
+    const { AUTH_DISABLED, EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+    let isRefreshing = false;
+    let refreshedJwt = null;
     if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
-        removeCookie(res, EGO_JWT_KEY);
-        redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+        if (res) {
+          removeCookie(res, EGO_JWT_KEY);
+          redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+        } else {
+          // pass client_id to get ego api to set correct response headers
+          if (!isRefreshing) {
+            const refreshUrl = urlJoin(
+              EGO_API_ROOT,
+              `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`,
+            );
+            isRefreshing = true;
+            try {
+              const newRefresh = await fetch(refreshUrl, {
+                credentials: 'include',
+                headers: {
+                  accept: '*/*',
+                  authorization: egoJwt || '',
+                },
+                body: null,
+                method: 'POST',
+                mode: 'cors',
+              });
+              const newJwt = await newRefresh.text();
+              if (isValidJwt(newJwt)) {
+                Cookies.set(EGO_JWT_KEY, newJwt);
+                refreshedJwt = newJwt;
+              }
+            } catch (err) {
+              console.warn('Error refreshing token, logging out: ', err);
+              Cookies.remove(EGO_JWT_KEY);
+              redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+            } finally {
+              isRefreshing = false;
+            }
+          } else {
+            Cookies.remove(EGO_JWT_KEY);
+            redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+          }
+        }
       }
     } else {
       if (!Component.isPublic) {
@@ -114,7 +152,7 @@ class Root extends App<
       pageProps,
       unauthorized,
       pathname: ctx.pathname,
-      egoJwt,
+      egoJwt: refreshedJwt || egoJwt,
       ctx: {
         pathname: ctx.pathname,
         query: ctx.query,

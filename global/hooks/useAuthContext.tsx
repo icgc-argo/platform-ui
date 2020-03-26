@@ -29,7 +29,7 @@ export function AuthProvider({
   children: React.ReactElement;
 }) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const tokenRefreshUrl = urlJoin(
+  const updateTokenUrl = urlJoin(
     EGO_API_ROOT,
     `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
   );
@@ -48,14 +48,17 @@ export function AuthProvider({
     }
   };
 
-  React.useEffect(() => {
-    if (token && !isValidJwt(token)) {
+  // checks for updated egoJwt from refresh
+  if (token !== egoJwt) {
+    if (!isValidJwt(token) && isValidJwt(egoJwt)) {
+      setToken(egoJwt);
+    } else {
       logOut();
     }
-  });
+  }
 
   const updateToken = () => {
-    return fetch(tokenRefreshUrl, {
+    return fetch(updateTokenUrl, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${token || ''}` },
       body: null,
@@ -86,6 +89,7 @@ export function AuthProvider({
       },
     },
   );
+
   return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
 }
 

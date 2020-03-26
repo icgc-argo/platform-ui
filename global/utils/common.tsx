@@ -104,6 +104,9 @@ export const createRedirectURL = ({
   path: string;
   query?: string;
 }): string => {
+  if (path === '/' || path === '/login') {
+    return '';
+  }
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
   return `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
 };
