@@ -42,17 +42,16 @@ export default function ProgramWorkplaceStatus() {
 
       <div
         css={css`
-          height: 50px;
+          height: 40px;
           display: flex;
           flex-direction: row;
+          align-items: flex-end;
           padding-top: 10px;
         `}
       >
         <div
           css={css`
-            margin-top: 7px;
-            width: 175px;
-            height: 50px;
+            width: 100px;
           `}
         >
           <ConditionalLink
@@ -65,12 +64,15 @@ export default function ProgramWorkplaceStatus() {
               ),
             }}
           >
-            <Typography variant="label">Sample Registration</Typography>
+            <Typography variant="caption">
+              Sample <br />
+              Registration
+            </Typography>
           </ConditionalLink>
         </div>
         <div
           css={css`
-            height: 50px;
+            margin-bottom: 2px;
           `}
         >
           <SampleRegistrationProgressBar programShortName={programShortName} />
@@ -78,16 +80,16 @@ export default function ProgramWorkplaceStatus() {
       </div>
       <div
         css={css`
-          height: 50px;
+          height: 40px;
+          padding-top: 20px;
           display: flex;
           flex-direction: row;
+          align-items: flex-end;
         `}
       >
         <div
           css={css`
-            margin-top: 7px;
-            width: 175px;
-            height: 50px;
+            width: 100px;
           `}
         >
           <ConditionalLink
@@ -100,12 +102,15 @@ export default function ProgramWorkplaceStatus() {
               ),
             }}
           >
-            <Typography variant="label">Clinical Submission</Typography>
+            <Typography variant="caption">
+              Clinical <br />
+              Submission
+            </Typography>
           </ConditionalLink>
         </div>
         <div
           css={css`
-            height: 50px;
+            margin-bottom: 2px;
           `}
         >
           <ClinicalSubmissionProgressBar programShortName={programShortName} />
