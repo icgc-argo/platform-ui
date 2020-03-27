@@ -51,7 +51,7 @@ export default function ProgramWorkplaceStatus() {
       >
         <div
           css={css`
-            width: 100px;
+            width: 90px;
           `}
         >
           <ConditionalLink
@@ -89,7 +89,7 @@ export default function ProgramWorkplaceStatus() {
       >
         <div
           css={css`
-            width: 100px;
+            width: 90px;
           `}
         >
           <ConditionalLink
