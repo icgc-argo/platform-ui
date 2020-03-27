@@ -101,6 +101,8 @@ class Root extends App<
               if (isValidJwt(newJwt)) {
                 Cookies.set(EGO_JWT_KEY, newJwt);
                 refreshedJwt = newJwt;
+              } else {
+                throw new Error('Unauthorized');
               }
             } catch (err) {
               console.warn('Error refreshing token, logging out: ', err);

@@ -48,9 +48,8 @@ export function AuthProvider({
     }
   };
 
-  // checks for updated egoJwt from refresh
-  if (token !== egoJwt) {
-    if (!isValidJwt(token) && isValidJwt(egoJwt)) {
+  if (token && !isValidJwt(token)) {
+    if (token !== egoJwt && isValidJwt(egoJwt)) {
       setToken(egoJwt);
     } else {
       logOut();
