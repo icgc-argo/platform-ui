@@ -1,67 +1,62 @@
-import Container from 'uikit/Container';
-import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
-import NoData from 'uikit/NoData';
-import PicBeakers from 'static/register.svg';
-import PicHeart from 'static/clinical.svg';
-import PicDna from 'static/dna.svg';
-import Link from 'uikit/Link';
-import styled from '@emotion/styled';
 import { DashboardCard } from '../common';
-import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 import DonorSummaryTable from './DonorSummaryTable';
-import { dummyDonorData } from './common';
-const { DOCS_URL_ROOT, DASHBOARD_ENABLED } = getConfig();
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY.gql';
+import { ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables } from './types';
+import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
-const getStartedLink = (
-  <Typography variant="data" component="span">
-    <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}>
-      Get started with data submission »
-    </Link>
-  </Typography>
-);
+const useProgramDonorsSummaryQuery = (
+  programShortName: string,
+  options: Omit<
+    QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
+    'variables'
+  > = {},
+) => {
+  const hook = useQuery<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>(
+    PROGRAM_DONOR_SUMMARY_QUERY,
+    {
+      ...options,
+      variables: {
+        programShortName,
+      },
+    },
+  );
 
-const NoDataIcon = styled('img')`
-  padding: 0px 16px;
-  max-width: 100vw;
-`;
-
-const emptyState = (
-  <NoData title="You do not have any donor data submitted." link={getStartedLink}>
-    <div
-      css={css`
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        max-height: 100%;
-      `}
-    >
-      <NoDataIcon alt="no data found" src={PicBeakers} />
-      <NoDataIcon alt="no data found" src={PicHeart} />
-      <NoDataIcon alt="no data found" src={PicDna} />
-    </div>
-  </NoData>
-);
-
-const readyState = (
-  <div
-    css={css`
-      padding-top: 10px;
-    `}
-  >
-    <DonorSummaryTable donors={dummyDonorData} />
-  </div>
-);
+  return {
+    ...hook,
+    data: hook.data,
+  };
+};
 
 export default () => {
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const {
+    data: { programDonorSummaryEntries = [], programDonorSummaryStats = undefined } = {},
+    loading: isLoading = true,
+  } = useProgramDonorsSummaryQuery(programShortName);
+
+  const isDonorSummaryEntriesEmpty = programDonorSummaryEntries.length === 0;
+
   return (
-    <DashboardCard>
+    <DashboardCard loading={isLoading} cardHeight={isLoading ? '170px' : '100%'}>
       <Typography variant="default" component="span">
         Donor Data Summary
       </Typography>
-      {DASHBOARD_ENABLED ? readyState : emptyState}
+
+      {!isLoading ? (
+        isDonorSummaryEntriesEmpty ? (
+          <EmptyDonorSummaryState />
+        ) : (
+          <DonorSummaryTable
+            donorSummaryEntries={programDonorSummaryEntries}
+            programDonorSummaryStats={programDonorSummaryStats}
+          />
+        )
+      ) : (
+        undefined
+      )}
     </DashboardCard>
   );
 };
