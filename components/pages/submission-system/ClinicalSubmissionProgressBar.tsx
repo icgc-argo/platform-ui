@@ -85,7 +85,7 @@ const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: str
       {isPendingApproval && (
         <Progress.Item
           css={css`
-            width: 100px;
+            width: 75px;
           `}
           text="Pending Approval"
           state="locked"
