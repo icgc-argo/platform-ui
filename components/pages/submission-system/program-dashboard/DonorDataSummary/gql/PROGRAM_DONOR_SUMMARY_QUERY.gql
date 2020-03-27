@@ -1,0 +1,28 @@
+query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!) {
+  programDonorSummaryEntries(programShortName: $programShortName) {
+    donorId
+    validWithCurrentDictionary
+    releaseStatus
+    submitterDonorId
+    submittedCoreDataPercent
+    submittedExtendedDataPercent
+    registeredNormalSamples
+    registeredTumourSamples
+    publishedNormalAnalysis
+    publishedTumourAnalysis
+    alignmentsCompleted
+    alignmentsRunning
+    alignmentsFailed
+    sangerVcsCompleted
+    sangerVcsRunning
+    sangerVcsFailed
+    processingStatus
+    updatedAt
+  }
+  programDonorSummaryStats(programShortName: $programShortName) {
+    registeredDonorsCount
+    fullyReleasedDonorsCount
+    partiallyReleasedDonorsCount
+    noReleaseDonorsCount
+  }
+}
