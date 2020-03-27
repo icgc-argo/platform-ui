@@ -67,7 +67,7 @@ const Footer = ({
               );
             } else {
               return (
-                <A key={displayName} href={href}>
+                <A key={displayName} href={href} target={target}>
                   {displayName}
                 </A>
               );
