@@ -113,7 +113,10 @@ export default function ProgramWorkplaceStatus() {
             margin-bottom: 2px;
           `}
         >
-          <ClinicalSubmissionProgressBar programShortName={programShortName} />
+          <ClinicalSubmissionProgressBar
+            programShortName={programShortName}
+            approvalBarWidth={75}
+          />
         </div>
       </div>
     </DashboardCard>
