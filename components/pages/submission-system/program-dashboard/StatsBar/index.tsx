@@ -23,29 +23,6 @@ const StatDesc = styled('div')`
   justify-content: space-between;
 `;
 
-// type DasboardSummaryData = {
-//   registeredDonorsCount: number;
-//   percentageCoreClinical: number;
-//   percentageTumourAndNormal: number;
-//   donorsProcessingMolecularDataCount: number;
-//   filesToQcCount: number;
-//   donorsWithReleasedFilesCount: number;
-//   allFilesCount: number;
-//   fullyReleasedDonorsCount: number;
-//   partiallyReleasedDonorsCount: number;
-//   noReleaseDonorsCount: number;
-// };
-
-// const getData = () => {
-//   const { data: { dashboardStats = undefined } = {} } = useQuery<{
-//     dashboardStats: DasboardSummaryData;
-//   }>(DASHBOARD_SUMMARY_QUERY, {
-//     variables: {
-//       programShortName: programShortName,
-//     },
-//   });
-// };
-
 const PercentBar: React.ComponentType<{ num: number; den: number; fillColor?: string }> = ({
   num,
   den,
