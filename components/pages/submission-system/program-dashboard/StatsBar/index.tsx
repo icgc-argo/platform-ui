@@ -127,13 +127,18 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.registeredDonorsCount.toString()}
+                quantity={`${data.programDonorSummaryStats.registeredDonorsCount}`}
                 description="Registered Donors"
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.registeredDonorsCount}
                   den={data.program.commitmentDonors}
-                  fillColor="warning"
+                  fillColor={
+                    data.programDonorSummaryStats.registeredDonorsCount ===
+                    data.program.commitmentDonors
+                      ? 'success'
+                      : 'warning'
+                  }
                 />
               </Statistic>
             ) : (
@@ -145,15 +150,17 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={(data.programDonorSummaryStats.percentageCoreClinical * 100)
-                  .toString()
-                  .concat('%')}
+                quantity={`${data.programDonorSummaryStats.percentageCoreClinical * 100}%`}
                 description="Donors with all Core Clinical Data"
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.percentageCoreClinical * 100}
                   den={100}
-                  fillColor="warning"
+                  fillColor={
+                    data.programDonorSummaryStats.percentageCoreClinical === 1
+                      ? 'success'
+                      : 'warning'
+                  }
                 />
               </Statistic>
             ) : (
@@ -165,15 +172,17 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={(data.programDonorSummaryStats.percentageTumourAndNormal * 100)
-                  .toString()
-                  .concat('%')}
+                quantity={`${data.programDonorSummaryStats.percentageTumourAndNormal * 10}%`}
                 description="Donors with Tumour & Normal"
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.percentageTumourAndNormal * 100}
                   den={100}
-                  fillColor="warning"
+                  fillColor={
+                    data.programDonorSummaryStats.percentageTumourAndNormal === 1
+                      ? 'success'
+                      : 'warning'
+                  }
                 />
               </Statistic>
             ) : (
@@ -185,7 +194,7 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.donorsProcessingMolecularDataCount.toString()}
+                quantity={`${data.programDonorSummaryStats.donorsProcessingMolecularDataCount}`}
                 description="Donors in Molecular Data Processing"
               />
             ) : (
@@ -195,7 +204,7 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.filesToQcCount.toString()}
+                quantity={`${data.programDonorSummaryStats.filesToQcCount}`}
                 description="Files to QC"
               >
                 <Button variant="text">
@@ -228,25 +237,25 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.donorsWithReleasedFilesCount.toString()}
+                quantity={`${data.programDonorSummaryStats.donorsWithReleasedFilesCount}`}
                 description="Donors with Released Files"
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.donorsWithReleasedFilesCount}
                   den={data.programDonorSummaryStats.registeredDonorsCount}
-                  fillColor="warning"
+                  fillColor="secondary"
                 />
               </Statistic>
             ) : (
               <Statistic quantity="..." description="Donors with Released Files">
-                <PercentBar num={0} den={100} fillColor="warning" />
+                <PercentBar num={0} den={100} fillColor="secondary" />
               </Statistic>
             )}
           </Col>
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.allFilesCount.toString()}
+                quantity={`${data.programDonorSummaryStats.allFilesCount}`}
                 description="All Files"
               >
                 <Button variant="text">
