@@ -6,9 +6,10 @@ import { useClinicalSubmissionQuery } from './program-clinical-submission';
 import { css } from '@emotion/core';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: string }> = ({
-  programShortName,
-}) => {
+const ClinicalSubmissionProgressBar: React.ComponentType<{
+  programShortName: string;
+  approvalBarWidth?: number;
+}> = ({ programShortName, approvalBarWidth }) => {
   const [] = React.useState<FileList | null>(null);
 
   const { data } = useClinicalSubmissionQuery(programShortName);
@@ -77,6 +78,7 @@ const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: str
       : 'disabled',
   };
 
+  const pendingApprovalWidth = `${approvalBarWidth || 100}px`;
   return (
     <Progress>
       <Progress.Item text="Upload" state={progressStates.upload} />
@@ -85,7 +87,7 @@ const ClinicalSubmissionProgressBar: React.ComponentType<{ programShortName: str
       {isPendingApproval && (
         <Progress.Item
           css={css`
-            width: 75px;
+            width: ${pendingApprovalWidth};
           `}
           text="Pending Approval"
           state="locked"
