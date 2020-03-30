@@ -71,8 +71,8 @@ class Root extends App<
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
     const { AUTH_DISABLED, EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-    let isRefreshing = false;
     let refreshedJwt = null;
+
     if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
         if (res) {
@@ -80,38 +80,29 @@ class Root extends App<
           redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
         } else {
           // pass client_id to get ego api to set correct response headers
-          if (!isRefreshing) {
-            const refreshUrl = urlJoin(
-              EGO_API_ROOT,
-              `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`,
-            );
-            isRefreshing = true;
-            try {
-              const newRefresh = await fetch(refreshUrl, {
-                credentials: 'include',
-                headers: {
-                  accept: '*/*',
-                  authorization: egoJwt || '',
-                },
-                body: null,
-                method: 'POST',
-                mode: 'cors',
-              });
-              const newJwt = await newRefresh.text();
-              if (isValidJwt(newJwt)) {
-                Cookies.set(EGO_JWT_KEY, newJwt);
-                refreshedJwt = newJwt;
-              } else {
-                throw new Error('Unauthorized');
-              }
-            } catch (err) {
-              console.warn('Error refreshing token, logging out: ', err);
-              Cookies.remove(EGO_JWT_KEY);
-              redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
-            } finally {
-              isRefreshing = false;
+          const refreshUrl = urlJoin(EGO_API_ROOT, `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
+          try {
+            const newRefresh = await fetch(refreshUrl, {
+              credentials: 'include',
+              headers: {
+                accept: '*/*',
+                authorization: egoJwt || '',
+              },
+              body: null,
+              method: 'POST',
+              mode: 'cors',
+            });
+            const newJwt = await newRefresh.text();
+            if (isValidJwt(newJwt)) {
+              Cookies.set(EGO_JWT_KEY, newJwt);
+              refreshedJwt = newJwt;
+            } else {
+              const err = new Error('Unauthorized') as Error & { statusCode?: number };
+              err[ERROR_STATUS_KEY] = 401;
+              throw err;
             }
-          } else {
+          } catch (err) {
+            console.warn('Error refreshing token, logging out: ', err);
             Cookies.remove(EGO_JWT_KEY);
             redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
           }

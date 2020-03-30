@@ -1,6 +1,7 @@
 import { format as formatDate } from 'date-fns';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
+import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 
 export const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
   ...arr.slice(0, i),
@@ -104,7 +105,7 @@ export const createRedirectURL = ({
   path: string;
   query?: string;
 }): string => {
-  if (path === '/' || path === '/login') {
+  if (path === '/' || path === LOGIN_PAGE_PATH) {
     return '';
   }
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
