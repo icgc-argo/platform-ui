@@ -172,7 +172,7 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${data.programDonorSummaryStats.percentageTumourAndNormal * 10}%`}
+                quantity={`${data.programDonorSummaryStats.percentageTumourAndNormal * 100}%`}
                 description="Donors with Tumour & Normal"
               >
                 <PercentBar
