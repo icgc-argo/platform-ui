@@ -6,6 +6,10 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
+import DASHBOARD_SUMMARY_QUERY from './DASHBOARD_SUMMARY_QUERY.gql';
+import { useQuery } from '@apollo/react-hooks';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import _ from 'lodash';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -19,6 +23,29 @@ const StatDesc = styled('div')`
   justify-content: space-between;
 `;
 
+// type DasboardSummaryData = {
+//   registeredDonorsCount: number;
+//   percentageCoreClinical: number;
+//   percentageTumourAndNormal: number;
+//   donorsProcessingMolecularDataCount: number;
+//   filesToQcCount: number;
+//   donorsWithReleasedFilesCount: number;
+//   allFilesCount: number;
+//   fullyReleasedDonorsCount: number;
+//   partiallyReleasedDonorsCount: number;
+//   noReleaseDonorsCount: number;
+// };
+
+// const getData = () => {
+//   const { data: { dashboardStats = undefined } = {} } = useQuery<{
+//     dashboardStats: DasboardSummaryData;
+//   }>(DASHBOARD_SUMMARY_QUERY, {
+//     variables: {
+//       programShortName: programShortName,
+//     },
+//   });
+// };
+
 const PercentBar: React.ComponentType<{ num: number; den: number; fillColor?: string }> = ({
   num,
   den,
@@ -28,6 +55,7 @@ const PercentBar: React.ComponentType<{ num: number; den: number; fillColor?: st
 
   // Negative Numbers should be zero, percentages over 100 should be capped
   num < 0 ? (num = 0) : { num };
+  den <= 0 ? (den = 1) : { den };
   const fraction = Math.min((num / den) * 100, 100);
   const fill_amount = `${fraction}%`;
 
@@ -110,64 +138,170 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
   </StatDesc>
 );
 
-export default () => (
-  <div>
-    <Container>
-      <Row justify="around">
-        <Col>
-          <Statistic quantity="0" description="Registered Donors">
-            <PercentBar num={0} den={100} fillColor="warning" />
-          </Statistic>
-        </Col>
-        <Col>
-          <Statistic quantity="0%" description="Donors with all Core Clinical Data">
-            <PercentBar num={0} den={100} fillColor="warning" />
-          </Statistic>
-        </Col>
-        <Col>
-          <Statistic quantity="0%" description="Donors with Tumour & Normal">
-            <PercentBar num={0} den={100} fillColor="warning" />
-          </Statistic>
-        </Col>
-        <Col>
-          <Statistic quantity="0" description="Donors in Molecular Data Processing" />
-        </Col>
-        <Col>
-          <Statistic quantity="0" description="Files to QC">
-            <Button variant="text" disabled>
-              <Icon
-                css={css`
-                  padding-right: 4px;
-                `}
-                name="download"
-                fill="grey_2"
-                height="12px"
+export default () => {
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { data, loading } = useQuery(DASHBOARD_SUMMARY_QUERY, {
+    variables: { programShortName: programShortName },
+  });
+  return (
+    <div>
+      <Container>
+        <Row justify="around">
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={data.programDonorSummaryStats.registeredDonorsCount.toString()}
+                description="Registered Donors"
+              >
+                <PercentBar
+                  num={data.programDonorSummaryStats.registeredDonorsCount}
+                  // den={data.program.commitmentDonors}
+                  den={100}
+                  fillColor="warning"
+                />
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="Registered Donors">
+                <PercentBar num={0} den={100} fillColor="warning" />
+              </Statistic>
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={(data.programDonorSummaryStats.percentageCoreClinical * 100)
+                  .toString()
+                  .concat('%')}
+                description="Donors with all Core Clinical Data"
+              >
+                <PercentBar
+                  num={data.programDonorSummaryStats.percentageCoreClinical * 100}
+                  den={100}
+                  fillColor="warning"
+                />
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="Donors with all Core Clinical Data">
+                <PercentBar num={0} den={100} fillColor="warning" />
+              </Statistic>
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={(data.programDonorSummaryStats.percentageTumourAndNormal * 100)
+                  .toString()
+                  .concat('%')}
+                description="Donors with Tumour & Normal"
+              >
+                <PercentBar
+                  num={data.programDonorSummaryStats.percentageTumourAndNormal * 100}
+                  den={100}
+                  fillColor="warning"
+                />
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="Donors with Tumour & Normal">
+                <PercentBar num={0} den={100} fillColor="warning" />
+              </Statistic>
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={data.programDonorSummaryStats.donorsProcessingMolecularDataCount.toString()}
+                description="Donors in Molecular Data Processing"
               />
-              Manifest
-            </Button>
-          </Statistic>
-        </Col>
-        <Col>
-          <Statistic quantity="0" description="Donors with Released Files">
-            <PercentBar num={0} den={2000} />
-          </Statistic>
-        </Col>
-        <Col>
-          <Statistic quantity="0" description="All Files">
-            <Button variant="text" disabled>
-              <Icon
-                css={css`
-                  padding-right: 4px;
-                `}
-                name="download"
-                fill="grey_2"
-                height="12px"
-              />
-              Manifest
-            </Button>
-          </Statistic>
-        </Col>
-      </Row>
-    </Container>
-  </div>
-);
+            ) : (
+              <Statistic quantity="..." description="Donors in Molecular Data Processing" />
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={data.programDonorSummaryStats.filesToQcCount.toString()}
+                description="Files to QC"
+              >
+                <Button variant="text">
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    height="12px"
+                  />
+                  Manifest
+                </Button>
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="Files to QC">
+                <Button variant="text" disabled>
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    fill="grey_2"
+                    height="12px"
+                  />
+                  Manifest
+                </Button>
+              </Statistic>
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={data.programDonorSummaryStats.donorsWithReleasedFilesCount.toString()}
+                description="Donors with Released Files"
+              >
+                <PercentBar
+                  num={data.programDonorSummaryStats.donorsWithReleasedFilesCount}
+                  den={data.programDonorSummaryStats.registeredDonorsCount}
+                  fillColor="warning"
+                />
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="Donors with Released Files">
+                <PercentBar num={0} den={100} fillColor="warning" />
+              </Statistic>
+            )}
+          </Col>
+          <Col>
+            {!loading ? (
+              <Statistic
+                quantity={data.programDonorSummaryStats.allFilesCount.toString()}
+                description="All Files"
+              >
+                <Button variant="text">
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    height="12px"
+                  />
+                  Manifest
+                </Button>
+              </Statistic>
+            ) : (
+              <Statistic quantity="..." description="All Files">
+                <Button variant="text" disabled>
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    fill="grey_2"
+                    height="12px"
+                  />
+                  Manifest
+                </Button>
+              </Statistic>
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
