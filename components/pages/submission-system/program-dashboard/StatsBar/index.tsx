@@ -155,8 +155,7 @@ export default () => {
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.registeredDonorsCount}
-                  // den={data.program.commitmentDonors}
-                  den={100}
+                  den={data.program.commitmentDonors}
                   fillColor="warning"
                 />
               </Statistic>
