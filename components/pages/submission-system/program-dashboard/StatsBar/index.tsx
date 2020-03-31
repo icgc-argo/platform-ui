@@ -115,11 +115,40 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
   </StatDesc>
 );
 
+type ProgramDonorSummaryStats = {
+  registeredDonorsCount: number;
+  percentageCoreClinical: number;
+  percentageTumourAndNormal: number;
+  donorsProcessingMolecularDataCount: number;
+  filesToQcCount: number;
+  donorsWithReleasedFilesCount: number;
+  allFilesCount: number;
+  fullyReleasedDonorsCount: number;
+  partiallyReleasedDonorsCount: number;
+  noReleaseDonorsCount: number;
+};
+
+type Program = {
+  commitmentDonors: number;
+};
+
+type DasboardSummaryData = {
+  programDonorSummaryStats: ProgramDonorSummaryStats;
+  program: Program;
+};
+
+type DashboardSummaryDataVariables = {
+  programShortName: string;
+};
+
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { data, loading } = useQuery(DASHBOARD_SUMMARY_QUERY, {
-    variables: { programShortName: programShortName },
-  });
+  const { data, loading } = useQuery<DasboardSummaryData, DashboardSummaryDataVariables>(
+    DASHBOARD_SUMMARY_QUERY,
+    {
+      variables: { programShortName: programShortName },
+    },
+  );
   return (
     <div>
       <Container>
