@@ -1,0 +1,7 @@
+# robots.txt file for ICGC ARGO
+
+User-agent: *
+Disallow: /submission
+Disallow: /logged-in
+Disallow: /user
+Disallow: /contact
