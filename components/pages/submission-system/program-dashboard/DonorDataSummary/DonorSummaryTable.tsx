@@ -207,14 +207,14 @@ export default ({
         },
         {
           Header: 'Core Fields',
-          accessor: 'coreFields',
+          accessor: 'submittedCoreDataPercent',
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
         },
         {
           Header: 'Extended Fields',
-          accessor: 'extendedFields',
+          accessor: 'submittedExtendedDataPercent',
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedExtendedDataPercent" />
           ),

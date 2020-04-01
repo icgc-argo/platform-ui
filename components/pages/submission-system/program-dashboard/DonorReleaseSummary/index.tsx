@@ -24,6 +24,7 @@ export default () => (
     <div
       css={css`
         display: flex;
+        align-items: flex-end;
         flex-direction: row;
         justify-content: space-between;
       `}
