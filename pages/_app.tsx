@@ -80,7 +80,6 @@ class Root extends App<
           removeCookie(res, EGO_JWT_KEY);
           redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
         } else {
-          // pass client_id to get ego api to set correct response headers
           try {
             const newJwt = await refreshJwt(egoJwt);
 
