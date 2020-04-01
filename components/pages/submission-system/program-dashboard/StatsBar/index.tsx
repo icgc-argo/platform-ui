@@ -10,6 +10,7 @@ import DASHBOARD_SUMMARY_QUERY from './DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import _ from 'lodash';
+import { POLL_INTERVAL_MILLISECONDS } from '../common';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -147,6 +148,7 @@ export default () => {
     DASHBOARD_SUMMARY_QUERY,
     {
       variables: { programShortName: programShortName },
+      pollInterval: POLL_INTERVAL_MILLISECONDS,
     },
   );
   return (
@@ -179,7 +181,9 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${data.programDonorSummaryStats.percentageCoreClinical * 100}%`}
+                quantity={`${(data.programDonorSummaryStats.percentageCoreClinical * 100).toFixed(
+                  2,
+                )}%`}
                 description="Donors with all Core Clinical Data"
               >
                 <PercentBar
@@ -201,7 +205,9 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${data.programDonorSummaryStats.percentageTumourAndNormal * 100}%`}
+                quantity={`${(
+                  data.programDonorSummaryStats.percentageTumourAndNormal * 100
+                ).toFixed(2)}%`}
                 description="Donors with Tumour & Normal"
               >
                 <PercentBar

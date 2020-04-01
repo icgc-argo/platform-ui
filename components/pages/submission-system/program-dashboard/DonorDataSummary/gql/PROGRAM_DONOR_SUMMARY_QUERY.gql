@@ -1,5 +1,5 @@
-query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!) {
-  programDonorSummaryEntries(programShortName: $programShortName) {
+query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!, $first: Int!) {
+  programDonorSummaryEntries(programShortName: $programShortName, first: $first) {
     donorId
     validWithCurrentDictionary
     releaseStatus
