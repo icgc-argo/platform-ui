@@ -1,11 +1,15 @@
-import { ReleasedFilesState, DonorEntityRecord, ProcessingStates, PipelineStats } from './types';
+import {
+  DonorSummaryRecord,
+  DonorDataReleaseState,
+  MolecularProcessingStatus,
+  ProgoramDonorReleasStats,
+} from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import {
-  DataTableStarIcon,
-  StatArea as StatAreaDisplay,
+  DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
   CellContentCenter,
 } from '../../common';
@@ -17,93 +21,33 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import HyperLink from 'uikit/Link';
 import Pipe from 'uikit/Pipe';
+import DonorStatsArea from './DonorSummaryTableStatArea';
+import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
+import { startCase } from 'lodash';
 
-const StarIcon = DataTableStarIcon;
+enum PIPELINE_STATUS {
+  COMPLETE = 'complete',
+  IN_PROGRESS = 'inProgress',
+  ERROR = 'error',
+}
+type PipelineStats = Record<PIPELINE_STATUS, number>;
 
-type ReleasedStats = {
-  fullyCount: number;
-  partiallyCount: number;
-  noCount: number;
-};
-
-const PROCESSING_STATUS: {
-  COMPLETE: ProcessingStates;
-  PROCESSING: ProcessingStates;
-  REGISTERED: ProcessingStates;
-} = {
-  COMPLETE: 'Complete',
-  PROCESSING: 'Processing',
-  REGISTERED: 'Registered',
-};
-
-const PIPELINE_STATUS: {
-  COMPLETE: keyof PipelineStats;
-  IN_PROGRESS: keyof PipelineStats;
-  ERROR: keyof PipelineStats;
-} = {
-  COMPLETE: 'complete',
-  IN_PROGRESS: 'inProgress',
-  ERROR: 'error',
-};
-
-const RELEASED_STATE_FILL_COLOURS: {
-  [k in ReleasedFilesState]: React.ComponentProps<typeof StarIcon>['fill']
-} = {
-  FULLY: 'secondary',
-  PARTIALLY: 'secondary_2',
-  NO: 'white',
-};
-
-const RELEASED_STATE_STROKE_COLOURS: {
-  [k in ReleasedFilesState]: React.ComponentProps<typeof StarIcon>['outline']
-} = {
-  FULLY: null,
-  PARTIALLY: null,
-  NO: { color: 'secondary', width: 1 },
-};
-
-const DonorStatsArea = ({ stats, total }: { stats: ReleasedStats; total: number }) => {
-  return (
-    <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>{total} donors</StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <Icon name="chevron_right" fill="grey_1" width="8px" />
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={RELEASED_STATE_FILL_COLOURS.FULLY} />
-          {stats.fullyCount} with fully released files
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill={RELEASED_STATE_FILL_COLOURS.PARTIALLY} />
-          {stats.partiallyCount} with partially released files
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon
-            fill={RELEASED_STATE_FILL_COLOURS.NO}
-            outline={RELEASED_STATE_STROKE_COLOURS.NO}
-          />
-          {stats.noCount} with no released files
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-    </StatAreaDisplay.Container>
-  );
-};
-
-export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
+export default ({
+  donorSummaryEntries,
+  programDonorSummaryStats,
+}: {
+  donorSummaryEntries: Array<DonorSummaryRecord>;
+  programDonorSummaryStats: ProgoramDonorReleasStats;
+}) => {
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
-  const StatusColumnCell = ({ original }: { original: DonorEntityRecord }) => {
+  const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
     return (
       <CellContentCenter>
         <StarIcon
-          fill={RELEASED_STATE_FILL_COLOURS[original.releaseState]}
-          outline={RELEASED_STATE_STROKE_COLOURS[original.releaseState]}
+          fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
+          outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
         />
       </CellContentCenter>
     );
@@ -113,15 +57,13 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
     original,
     fieldName,
   }: {
-    original: DonorEntityRecord;
-    fieldName: 'coreFields' | 'extendedFields';
+    original: DonorSummaryRecord;
+    fieldName: 'submittedCoreDataPercent' | 'submittedExtendedDataPercent';
   }) => {
+    // original[fieldName] value is expected to be a fraction in decimal form
+    const percentageVal = Math.round(original[fieldName] * 100);
     const cellContent =
-      original[fieldName] === 100
-        ? checkmarkIcon
-        : original[fieldName] === 0
-        ? ''
-        : `${original[fieldName]}%`;
+      percentageVal === 100 ? checkmarkIcon : percentageVal === 0 ? '' : `${percentageVal}%`;
     return (
       <div
         css={css`
@@ -133,13 +75,7 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
     );
   };
 
-  const DesignationCell = ({
-    original,
-    fieldName,
-  }: {
-    original: DonorEntityRecord;
-    fieldName: 'samples' | 'rawReads';
-  }) => {
+  const DesignationCell = ({ left, right }: { left: number; right: number }) => {
     const theme = useTheme();
     const isValid = (num: number) => num > 0;
     const DesignationContainer = styled('div')`
@@ -156,34 +92,32 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
         isValid(props.num) ? theme.colors.black : theme.colors.error};
     `;
 
-    const numNormal = original[fieldName].normal;
-    const numTumour = original.samples.tumour;
     return (
       <DesignationContainer>
-        <DesignationEntry num={numNormal}>{numNormal}N</DesignationEntry>
+        <DesignationEntry num={left}>{left}N</DesignationEntry>
         <DesignationEntry
-          num={numTumour}
+          num={right}
           css={css`
             border-left: solid 1px ${theme.colors.grey_2};
           `}
         >
-          {numTumour}T
+          {right}T
         </DesignationEntry>
       </DesignationContainer>
     );
   };
 
-  const ProcessingCell = ({ original }: { original: DonorEntityRecord }) => {
-    const getIcon = (state: ProcessingStates) =>
+  const ProcessingCell = ({ original }: { original: DonorSummaryRecord }) => {
+    const getIcon = (status: MolecularProcessingStatus) =>
       ({
-        [PROCESSING_STATUS.COMPLETE]: checkmarkIcon,
-        [PROCESSING_STATUS.PROCESSING]: (
+        [MolecularProcessingStatus.COMPLETE]: checkmarkIcon,
+        [MolecularProcessingStatus.PROCESSING]: (
           <Icon width="12px" height="12px" fill="warning_dark" name="ellipses" />
         ),
-        [PROCESSING_STATUS.REGISTERED]: (
+        [MolecularProcessingStatus.REGISTERED]: (
           <Icon width="12px" height="12px" fill="primary_2" name="dash" />
         ),
-      }[state]);
+      }[status]);
 
     return (
       <div
@@ -202,18 +136,12 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
         >
           {getIcon(original.processingStatus)}
         </div>
-        <div>{original.processingStatus}</div>
+        <div>{startCase(original.processingStatus.toLowerCase())}</div>
       </div>
     );
   };
 
-  const PipelineCell = ({
-    original,
-    fieldName,
-  }: {
-    original: DonorEntityRecord;
-    fieldName: 'alignment' | 'sangerVC';
-  }) => {
+  const PipelineCell = (stats: PipelineStats) => {
     const theme = useTheme();
 
     const getBackgroundColour = (state: keyof PipelineStats) => {
@@ -230,19 +158,17 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
 
     const shouldRender = (num: number) => num > 0;
 
-    const renderableStats = Object.keys(original[fieldName]).filter(key =>
-      shouldRender(original[fieldName][key]),
-    );
+    const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
 
     const pipeStats = renderableStats.map(stat => (
       <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
-        {original[fieldName][stat]}
+        {stats[stat]}
       </Pipe.Item>
     ));
     return <Pipe>{pipeStats}</Pipe>;
   };
 
-  const tableColumns: Array<TableColumnConfig<DonorEntityRecord>> = [
+  const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
       headerStyle: {
@@ -259,42 +185,49 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
           accessor: 'releaseState',
           resizable: false,
           width: 50,
-          sortMethod: (a: ReleasedFilesState, b: ReleasedFilesState) => {
+          sortMethod: (a: DonorDataReleaseState, b: DonorDataReleaseState) => {
             const priorities = {
-              NO: 1,
-              PARTIALLY: 2,
-              FULLY: 3,
-            } as { [k in ReleasedFilesState]: number };
+              [DonorDataReleaseState.NO]: 1,
+              [DonorDataReleaseState.PARTIALLY]: 2,
+              [DonorDataReleaseState.FULLY]: 3,
+            } as { [k in DonorDataReleaseState]: number };
             return priorities[a] - priorities[b];
           },
         },
         {
           Header: 'Donor ID',
           accessor: 'donorID',
-          Cell: ({ original }: { original: DonorEntityRecord }) => {
+          Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return (
               <Link href="">
-                <HyperLink>{original.donorId}</HyperLink>
+                <HyperLink>{`${original.donorId} (${original.submitterDonorId})`}</HyperLink>
               </Link>
             );
           },
         },
         {
           Header: 'Core Fields',
-          accessor: 'coreFields',
-          Cell: ({ original }) => <PercentageCell original={original} fieldName={'coreFields'} />,
+          accessor: 'submittedCoreDataPercent',
+          Cell: ({ original }) => (
+            <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
+          ),
         },
         {
           Header: 'Extended Fields',
-          accessor: 'extendedFields',
+          accessor: 'submittedExtendedDataPercent',
           Cell: ({ original }) => (
-            <PercentageCell original={original} fieldName={'extendedFields'} />
+            <PercentageCell original={original} fieldName="submittedExtendedDataPercent" />
           ),
         },
         {
           Header: 'Samples',
           accessor: 'samples',
-          Cell: ({ original }) => <DesignationCell original={original} fieldName={'samples'} />,
+          Cell: ({ original }) => (
+            <DesignationCell
+              left={original.registeredNormalSamples}
+              right={original.registeredTumourSamples}
+            />
+          ),
           width: 100,
         },
       ],
@@ -308,18 +241,35 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
         {
           Header: 'Raw Reads',
           accessor: 'rawReads',
-          Cell: ({ original }) => <DesignationCell original={original} fieldName={'rawReads'} />,
+          Cell: ({ original }) => (
+            <DesignationCell
+              left={original.publishedNormalAnalysis}
+              right={original.publishedTumourAnalysis}
+            />
+          ),
           width: 100,
         },
         {
           Header: 'Alignment',
           accessor: 'alignment',
-          Cell: ({ original }) => <PipelineCell original={original} fieldName={'alignment'} />,
+          Cell: ({ original }) => (
+            <PipelineCell
+              complete={original.alignmentsCompleted}
+              inProgress={original.alignmentsRunning}
+              error={original.alignmentsFailed}
+            />
+          ),
         },
         {
           Header: 'Sanger VC',
           accessor: 'sangerVC',
-          Cell: ({ original }) => <PipelineCell original={original} fieldName={'sangerVC'} />,
+          Cell: ({ original }) => (
+            <PipelineCell
+              complete={original.sangerVcsCompleted}
+              inProgress={original.sangerVcsRunning}
+              error={original.sangerVcsFailed}
+            />
+          ),
         },
       ],
     },
@@ -333,30 +283,33 @@ export default ({ donors }: { donors: Array<DonorEntityRecord> }) => {
         {
           Header: 'Last Updated',
           accessor: 'lastUpdated',
-          Cell: ({ original }: { original: DonorEntityRecord }) => {
-            return <div>{displayDate(original.lastUpdated)}</div>;
+          Cell: ({ original }: { original: DonorSummaryRecord }) => {
+            return <div>{displayDate(original.updatedAt)}</div>;
           },
         },
       ],
     },
   ];
 
-  const getStateCount = (allDonors: Array<DonorEntityRecord>, releaseState: ReleasedFilesState) =>
-    allDonors.filter(donor => donor.releaseState === releaseState).length;
-
-  const stateCountSummary: ReleasedStats = {
-    fullyCount: getStateCount(donors, 'FULLY'),
-    partiallyCount: getStateCount(donors, 'PARTIALLY'),
-    noCount: getStateCount(donors, 'NO'),
-  };
-
   return (
-    <div ref={containerRef}>
+    <div
+      ref={containerRef}
+      // this z-index needs to be greater then GlobalFooter's z-index otherwise the drop down is hidden behind it
+      css={css`
+        z-index: 2;
+        padding-top: 10px;
+      `}
+    >
       <TableInfoHeaderContainer
-        left={<DonorStatsArea total={donors.length} stats={stateCountSummary} />}
+        left={<DonorStatsArea programDonorSummaryStats={programDonorSummaryStats} />}
         noMargin={true}
       />
-      <Table parentRef={containerRef} showPagination={false} columns={tableColumns} data={donors} />
+      <Table
+        parentRef={containerRef}
+        showPagination={true}
+        columns={tableColumns}
+        data={donorSummaryEntries}
+      />
     </div>
   );
 };

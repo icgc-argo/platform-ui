@@ -146,7 +146,7 @@ export default ({
   const rowHasUpdate = (record: typeof tableData[0]) =>
     stats.updated.some(row => row === record.row);
   const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
-    rowHasUpdate(cell.row) && !!file.dataUpdates.find(update => update.field === cell.field);
+    file.dataUpdates.some(update => update.field === cell.field && update.row === cell.row.row);
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
     const hasError = recordHasError(original);
@@ -192,12 +192,17 @@ export default ({
           & > div {
             margin-top: 5px;
             margin-bottom: 5px;
+            flex: 1;
           }
         `}
       >
         <div>{original[fieldName]}</div>
         <div>
-          {get(file.dataUpdates.find(u => u.field === fieldName), 'oldValue', original[fieldName])}
+          {get(
+            file.dataUpdates.find(u => u.field === fieldName && u.row === original.row),
+            'oldValue',
+            original[fieldName],
+          )}
         </div>
       </div>
     ) : (

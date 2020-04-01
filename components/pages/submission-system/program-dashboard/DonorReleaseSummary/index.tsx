@@ -9,23 +9,9 @@ export default () => (
       Donor Release Summary
     </Typography>
 
-    <br />
-
     <div
       css={css`
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-      `}
-    >
-      <Typography variant="subtitle2" bold>
-        2000
-      </Typography>
-    </div>
-
-    <div
-      css={css`
-        margin-top: -10px;
+        margin-top: 40px;
         background-color: #dcdde1;
         border-radius: 8px;
         width: 100%;
@@ -38,6 +24,7 @@ export default () => (
     <div
       css={css`
         display: flex;
+        align-items: flex-end;
         flex-direction: row;
         justify-content: space-between;
       `}
@@ -45,9 +32,21 @@ export default () => (
       <Typography variant="caption" color="grey">
         With Released Files
       </Typography>
-      <Typography variant="caption" color="grey">
-        Committed
-      </Typography>
+
+      <div>
+        <Typography
+          variant="caption"
+          bold={true}
+          css={css`
+            margin-right: 5px;
+          `}
+        >
+          2,000
+        </Typography>
+        <Typography variant="caption" color="grey">
+          Committed
+        </Typography>
+      </div>
     </div>
   </DashboardCard>
 );
