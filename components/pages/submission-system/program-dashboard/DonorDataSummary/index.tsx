@@ -9,6 +9,7 @@ import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
 const useProgramDonorsSummaryQuery = (
   programShortName: string,
+  first: number,
   options: Omit<
     QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
     'variables'
@@ -20,7 +21,9 @@ const useProgramDonorsSummaryQuery = (
       ...options,
       variables: {
         programShortName,
+        first,
       },
+      pollInterval: 500, // milliseconds
     },
   );
 
@@ -32,12 +35,14 @@ const useProgramDonorsSummaryQuery = (
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const MAX_RECORDS_TO_FETCH = 500;
   const {
     data: { programDonorSummaryEntries = [], programDonorSummaryStats = undefined } = {},
     loading: isLoading = true,
-  } = useProgramDonorsSummaryQuery(programShortName);
+  } = useProgramDonorsSummaryQuery(programShortName, MAX_RECORDS_TO_FETCH);
 
   const isDonorSummaryEntriesEmpty = programDonorSummaryEntries.length === 0;
+  console.log(programDonorSummaryEntries.length);
 
   return (
     <DashboardCard loading={isLoading} cardHeight={isLoading ? '170px' : '100%'}>
