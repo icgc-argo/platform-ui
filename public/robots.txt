@@ -1,0 +1,5 @@
+# robots.txt file for ICGC ARGO
+
+User-agent: *
+Disallow: /
+Allow: /$
