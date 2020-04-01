@@ -42,7 +42,6 @@ export default () => {
   } = useProgramDonorsSummaryQuery(programShortName, MAX_RECORDS_TO_FETCH);
 
   const isDonorSummaryEntriesEmpty = programDonorSummaryEntries.length === 0;
-  console.log(programDonorSummaryEntries.length);
 
   return (
     <DashboardCard loading={isLoading} cardHeight={isLoading ? '170px' : '100%'}>
