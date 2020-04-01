@@ -6,12 +6,14 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import urlJoin from 'url-join';
+import refreshJwt from 'global/utils/refreshJwt';
 
 type T_AuthContext = {
   token?: string;
   logOut: (config?: { toRoot?: boolean }) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
+  fetchWithRefresh: (uri: string, options: any) => Promise<string | void>;
 };
 
 const AuthContext = React.createContext<T_AuthContext>({
@@ -19,6 +21,7 @@ const AuthContext = React.createContext<T_AuthContext>({
   logOut: () => {},
   updateToken: async () => {},
   data: null,
+  fetchWithRefresh: async () => {},
 });
 
 export function AuthProvider({
@@ -46,6 +49,53 @@ export function AuthProvider({
     if (config.toRoot) {
       router.push('/');
     }
+  };
+
+  const fetchWithRefresh: T_AuthContext['fetchWithRefresh'] = (uri, options) => {
+    let isRefreshingToken = null;
+    const initialFetch = fetch(uri, options);
+
+    return initialFetch
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        // log for testing
+        console.warn('JSON: ', json);
+        if (json.errors && json.errors[0].message === '403') {
+          if (!isRefreshingToken) {
+            // log for testing
+            console.warn('trying refresh');
+            isRefreshingToken = refreshJwt(options.headers.authorization);
+          }
+
+          return isRefreshingToken.then(newJwt => {
+            isRefreshingToken = null;
+            if (isValidJwt(newJwt)) {
+              Cookies.set(EGO_JWT_KEY, newJwt);
+              setToken(newJwt);
+              options.headers.authorization = `Bearer ${newJwt || ''}`;
+            } else {
+              logOut();
+            }
+
+            return fetch(uri, options);
+          });
+        }
+
+        var result: any = {};
+        result.ok = true;
+        result.json = () =>
+          new Promise(function(resolve, reject) {
+            resolve(json);
+          });
+        result.text = () =>
+          new Promise(resolve => {
+            resolve(JSON.stringify(json));
+          });
+
+        return result;
+      });
   };
 
   if (token && !isValidJwt(token)) {
@@ -76,7 +126,7 @@ export function AuthProvider({
   };
 
   const authData = new Proxy<T_AuthContext>(
-    { token, logOut, data: null, updateToken },
+    { token, logOut, data: null, updateToken, fetchWithRefresh },
     {
       get: (obj, key) => {
         switch (key) {

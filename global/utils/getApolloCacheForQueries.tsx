@@ -5,6 +5,7 @@ import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';
 import { getConfig } from 'global/config';
 
+// should the changes made in ApplicationRoot for ApolloClient instantiation be added here as well?
 export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
   egoJwt?: string,
 ) => {

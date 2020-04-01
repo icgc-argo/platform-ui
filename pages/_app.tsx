@@ -25,6 +25,7 @@ import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
+import refreshJwt from 'global/utils/refreshJwt';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -70,7 +71,7 @@ class Root extends App<
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
-    const { AUTH_DISABLED, EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+    const { AUTH_DISABLED } = getConfig();
     let refreshedJwt = null;
 
     if (egoJwt) {
@@ -80,19 +81,9 @@ class Root extends App<
           redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
         } else {
           // pass client_id to get ego api to set correct response headers
-          const refreshUrl = urlJoin(EGO_API_ROOT, `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
           try {
-            const newRefresh = await fetch(refreshUrl, {
-              credentials: 'include',
-              headers: {
-                accept: '*/*',
-                authorization: egoJwt || '',
-              },
-              body: null,
-              method: 'POST',
-              mode: 'cors',
-            });
-            const newJwt = await newRefresh.text();
+            const newJwt = await refreshJwt(egoJwt);
+
             if (isValidJwt(newJwt)) {
               Cookies.set(EGO_JWT_KEY, newJwt);
               refreshedJwt = newJwt;

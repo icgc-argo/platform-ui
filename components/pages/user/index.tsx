@@ -22,7 +22,10 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
+  // can/should the pollInterval be left in for testing on dev?
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, {
+    pollInterval: 5000,
+  });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
 

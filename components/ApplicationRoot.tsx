@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client';
+import { ApolloLink } from 'apollo-link';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
-import { AuthProvider } from 'global/hooks/useAuthContext';
+import useAuthContext, { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
@@ -20,7 +21,9 @@ import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
-
+import Cookies from 'js-cookie';
+import { EGO_JWT_KEY } from 'global/constants';
+import { setContext } from 'apollo-link-context';
 /**
  * The global portal where modals will show up
  */
@@ -147,17 +150,23 @@ const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: a
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
+  const { fetchWithRefresh } = useAuthContext();
+
+  const headerLink = setContext((request, previousContext) => ({
+    headers: {
+      ...previousContext.headers,
+      authorization: `Bearer ${Cookies.get(EGO_JWT_KEY) || ''}`,
+    },
+  }));
+
+  const uploadLink = createUploadLink({
+    uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+    fetch: fetchWithRefresh,
+  });
+
   const createNewClient = (configs: { connectToDevTools: boolean }) =>
     new ApolloClient({
-      link: createUploadLink({
-        uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-        fetch: fetch,
-        headers: egoJwt
-          ? {
-              authorization: `Bearer ${egoJwt}`,
-            }
-          : {},
-      }),
+      link: ApolloLink.from([headerLink, uploadLink]),
       connectToDevTools: configs.connectToDevTools,
       cache: createInMemoryCache().restore(apolloCache),
     });
