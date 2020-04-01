@@ -1,5 +1,5 @@
 import Typography from 'uikit/Typography';
-import { DashboardCard } from '../common';
+import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
@@ -23,7 +23,7 @@ const useProgramDonorsSummaryQuery = (
         programShortName,
         first,
       },
-      pollInterval: 500, // milliseconds
+      pollInterval: POLL_INTERVAL_MILLISECONDS, // milliseconds
     },
   );
 
