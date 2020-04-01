@@ -5,7 +5,8 @@ import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';
 import { getConfig } from 'global/config';
 
-// should the changes made in ApplicationRoot for ApolloClient instantiation be added here as well?
+// if/when this is used, verify the fetch call and authorization headers are being properly
+// updated when a jwt is refreshed. See ApplicationRoot ApolloClient implementation
 export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
   egoJwt?: string,
 ) => {
