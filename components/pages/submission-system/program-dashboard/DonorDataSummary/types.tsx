@@ -44,4 +44,5 @@ export type ProgramDonorsSummaryQueryData = {
 
 export type ProgramDonorsSummaryQueryVariables = {
   programShortName: string;
+  first: number;
 };

@@ -1,5 +1,5 @@
 import Typography from 'uikit/Typography';
-import { DashboardCard } from '../common';
+import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
@@ -9,6 +9,7 @@ import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
 const useProgramDonorsSummaryQuery = (
   programShortName: string,
+  first: number,
   options: Omit<
     QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
     'variables'
@@ -20,7 +21,9 @@ const useProgramDonorsSummaryQuery = (
       ...options,
       variables: {
         programShortName,
+        first,
       },
+      pollInterval: POLL_INTERVAL_MILLISECONDS, // milliseconds
     },
   );
 
@@ -32,10 +35,11 @@ const useProgramDonorsSummaryQuery = (
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const MAX_RECORDS_TO_FETCH = 500;
   const {
     data: { programDonorSummaryEntries = [], programDonorSummaryStats = undefined } = {},
     loading: isLoading = true,
-  } = useProgramDonorsSummaryQuery(programShortName);
+  } = useProgramDonorsSummaryQuery(programShortName, MAX_RECORDS_TO_FETCH);
 
   const isDonorSummaryEntriesEmpty = programDonorSummaryEntries.length === 0;
 

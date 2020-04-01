@@ -21,3 +21,5 @@ export const DashboardCard: React.ComponentType<{ cardHeight?: string; loading?:
     </div>
   </Container>
 );
+
+export const POLL_INTERVAL_MILLISECONDS: number = 3000;
