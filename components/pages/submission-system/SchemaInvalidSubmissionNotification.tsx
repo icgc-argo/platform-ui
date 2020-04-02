@@ -5,9 +5,15 @@ import React from 'react';
 import { css } from '@emotion/core';
 import Link from 'uikit/Link';
 import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import {
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+  DOCS_DICTIONARY_PATH,
+} from 'global/constants/pages';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import CLINICAL_SCHEMA_VERSION from './CLINICAL_SCHEMA_VERSION.gql';
+import { getConfig } from 'global/config';
+import urljoin from 'url-join';
 
 export const SchemaInvalidSubmissionNotification = ({
   marginTop,
@@ -30,6 +36,7 @@ export const SchemaInvalidSubmissionNotification = ({
     },
   });
 
+  const { DOCS_URL_ROOT } = getConfig();
   const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
     clinicalSubmissionSchemaVersion: string;
   }>(CLINICAL_SCHEMA_VERSION);
@@ -44,8 +51,10 @@ export const SchemaInvalidSubmissionNotification = ({
         padding: 8px 8px 8px 0px;
       `}
     >
-      <a href="/">Version {clinicalSubmissionSchemaVersion} of the data dictionary</a>{' '}
-      {`was released and has made your clinical submission invalid. `}
+      <Link href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} target="_blank">
+        Version {clinicalSubmissionSchemaVersion} of the data dictionary
+      </Link>
+      {` was released and has made your clinical submission invalid. `}
       {submissionPage ? `See the details below.` : `See the details in your clinical workspace.`}
     </div>
   );
