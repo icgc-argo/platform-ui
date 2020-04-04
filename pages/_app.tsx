@@ -80,21 +80,16 @@ class Root extends App<
           removeCookie(res, EGO_JWT_KEY);
           redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
         } else {
-          try {
-            const newJwt = await refreshJwt(egoJwt);
-
-            if (isValidJwt(newJwt)) {
-              Cookies.set(EGO_JWT_KEY, newJwt);
-              refreshedJwt = newJwt;
-            } else {
-              const err = new Error('Unauthorized') as Error & { statusCode?: number };
-              err[ERROR_STATUS_KEY] = 401;
-              throw err;
-            }
-          } catch (err) {
-            console.warn('Error refreshing token, logging out: ', err);
+          const forceLogin = () => {
             Cookies.remove(EGO_JWT_KEY);
             redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+          };
+          const newJwt = (await refreshJwt(egoJwt).catch(forceLogin)) as string;
+          if (isValidJwt(newJwt)) {
+            Cookies.set(EGO_JWT_KEY, newJwt);
+            refreshedJwt = newJwt;
+          } else {
+            forceLogin();
           }
         }
       }

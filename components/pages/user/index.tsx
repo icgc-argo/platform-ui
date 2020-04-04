@@ -22,10 +22,12 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  // can/should the pollInterval be left in for testing on dev?
+  // TODO: leaving the polling and fetchPolicy in for testing in dev
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, {
     pollInterval: 5000,
+    fetchPolicy: 'network-only',
   });
+
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
 

@@ -13,9 +13,5 @@ export default egoJwt =>
       accept: '*/*',
       authorization: egoJwt || '',
     },
-    body: null,
     method: 'POST',
-    mode: 'cors',
-  })
-    .then(res => res.text())
-    .catch(err => err);
+  }).then(res => res.text());

@@ -24,6 +24,8 @@ import { FadingDiv } from './Fader';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from 'global/constants';
 import { setContext } from 'apollo-link-context';
+import { isValidJwt } from 'global/utils/egoJwt';
+import refreshJwt from 'global/utils/refreshJwt';
 /**
  * The global portal where modals will show up
  */
@@ -144,40 +146,27 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: any }> = ({
+const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   children,
-  egoJwt,
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  const { fetchWithRefresh } = useAuthContext();
-
-  const headerLink = setContext((request, previousContext) => ({
-    headers: {
-      ...previousContext.headers,
-      authorization: `Bearer ${Cookies.get(EGO_JWT_KEY) || ''}`,
-    },
-  }));
+  const { fetchWithEgoToken } = useAuthContext();
 
   const uploadLink = createUploadLink({
     uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-    fetch: fetchWithRefresh,
+    fetch: fetchWithEgoToken,
   });
 
-  const createNewClient = (configs: { connectToDevTools: boolean }) =>
-    new ApolloClient({
-      link: ApolloLink.from([headerLink, uploadLink]),
-      connectToDevTools: configs.connectToDevTools,
-      cache: createInMemoryCache().restore(apolloCache),
-    });
-  const [client, setClient] = React.useState<ReturnType<typeof createNewClient>>(
-    createNewClient({ connectToDevTools: false }),
-  );
-  React.useEffect(() => {
-    setClient(createNewClient({ connectToDevTools: true }));
-  }, [egoJwt]);
+  const client = new ApolloClient({
+    link: ApolloLink.from([uploadLink]),
+    connectToDevTools: true,
+    cache: createInMemoryCache().restore(apolloCache),
+  });
+
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -214,7 +203,7 @@ export default function ApplicationRoot({
       </style>
       <Head />
       <AuthProvider egoJwt={egoJwt}>
-        <ApolloClientProvider egoJwt={egoJwt} apolloCache={apolloCache}>
+        <ApolloClientProvider apolloCache={apolloCache}>
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
