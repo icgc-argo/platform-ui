@@ -73,7 +73,7 @@
     "jsdom": "^14.0.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.14",
-    "next": "^9.1.1",
+    "next": "^9.3.2",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.0",
