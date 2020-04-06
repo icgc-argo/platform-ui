@@ -148,17 +148,19 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
   const { fetchWithEgoToken } = useAuthContext();
+  const clientSideCache = React.useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
-  const uploadLink = createUploadLink({
-    uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-    fetch: fetchWithEgoToken,
-  });
-
-  const client = new ApolloClient({
-    link: ApolloLink.from([uploadLink]),
-    connectToDevTools: true,
-    cache: createInMemoryCache().restore(apolloCache),
-  });
+  const client = React.useMemo(() => {
+    const uploadLink = createUploadLink({
+      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+      fetch: fetchWithEgoToken,
+    });
+    return new ApolloClient({
+      link: ApolloLink.from([uploadLink]),
+      connectToDevTools: true,
+      cache: clientSideCache,
+    });
+  }, [fetchWithEgoToken, clientSideCache]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
