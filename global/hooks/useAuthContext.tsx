@@ -23,7 +23,6 @@ const AuthContext = React.createContext<T_AuthContext>({
   data: null,
   fetchWithEgoToken: fetch,
 });
-let refreshJwtPromise = null;
 
 export function AuthProvider({
   egoJwt,
@@ -65,15 +64,13 @@ export function AuthProvider({
       headers: { ...((options && options.headers) || {}), authorization: `Bearer ${token || ''}` },
     };
 
-    if (token && !isValidJwt(token) && !refreshJwtPromise) {
-      refreshJwtPromise = refreshJwt(token);
-      const newJwt = await refreshJwtPromise;
+    if (token && !isValidJwt(token)) {
+      const newJwt = await refreshJwt();
       if (isValidJwt(newJwt)) {
         setToken(newJwt);
       } else {
         logOut();
       }
-      refreshJwtPromise = null;
       return fetch(uri, {
         ...modifiedOption,
         headers: { ...modifiedOption.headers, authorization: `Bearer ${newJwt}` },

@@ -84,7 +84,7 @@ class Root extends App<
             Cookies.remove(EGO_JWT_KEY);
             redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
           };
-          const newJwt = (await refreshJwt(egoJwt).catch(forceLogin)) as string;
+          const newJwt = (await refreshJwt().catch(forceLogin)) as string;
           if (isValidJwt(newJwt)) {
             Cookies.set(EGO_JWT_KEY, newJwt);
             refreshedJwt = newJwt;
