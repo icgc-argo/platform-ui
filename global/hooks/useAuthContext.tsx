@@ -6,12 +6,14 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import urlJoin from 'url-join';
+import refreshJwt from 'global/utils/refreshJwt';
 
 type T_AuthContext = {
   token?: string;
   logOut: (config?: { toRoot?: boolean }) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
+  fetchWithEgoToken: typeof fetch;
 };
 
 const AuthContext = React.createContext<T_AuthContext>({
@@ -19,7 +21,9 @@ const AuthContext = React.createContext<T_AuthContext>({
   logOut: () => {},
   updateToken: async () => {},
   data: null,
+  fetchWithEgoToken: fetch,
 });
+let refreshJwtPromise = null;
 
 export function AuthProvider({
   egoJwt,
@@ -29,33 +33,66 @@ export function AuthProvider({
   children: React.ReactElement;
 }) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const tokenRefreshUrl = urlJoin(
+  const updateTokenUrl = urlJoin(
     EGO_API_ROOT,
     `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
   );
 
-  const [token, setToken] = React.useState<string>(egoJwt);
+  const [token, setTokenState] = React.useState<string>(egoJwt);
   const router = useRouter();
+  const setToken = (token: string) => {
+    Cookies.set(EGO_JWT_KEY, token);
+    setTokenState(token);
+  };
+  const removeToken = () => {
+    Cookies.remove(EGO_JWT_KEY);
+    setTokenState(null);
+  };
   const logOut: T_AuthContext['logOut'] = (
     config = {
       toRoot: true,
     },
   ) => {
-    Cookies.remove(EGO_JWT_KEY);
-    setToken(null);
+    removeToken();
     if (config.toRoot) {
       router.push('/');
     }
   };
 
-  React.useEffect(() => {
-    if (token && !isValidJwt(token)) {
+  const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
+    const modifiedOption = {
+      ...(options || {}),
+      headers: { ...((options && options.headers) || {}), authorization: `Bearer ${token || ''}` },
+    };
+
+    if (token && !isValidJwt(token) && !refreshJwtPromise) {
+      refreshJwtPromise = refreshJwt(token);
+      const newJwt = await refreshJwtPromise;
+      if (isValidJwt(newJwt)) {
+        setToken(newJwt);
+      } else {
+        logOut();
+      }
+      refreshJwtPromise = null;
+      return fetch(uri, {
+        ...modifiedOption,
+        headers: { ...modifiedOption.headers, authorization: `Bearer ${newJwt}` },
+      });
+    } else {
+      return fetch(uri, modifiedOption);
+    }
+  };
+
+  if (token && !isValidJwt(token)) {
+    if (token !== egoJwt && isValidJwt(egoJwt)) {
+      setToken(egoJwt);
+    } else {
       logOut();
     }
-  });
+  }
 
   const updateToken = () => {
-    return fetch(tokenRefreshUrl, {
+    return fetch(updateTokenUrl, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${token || ''}` },
       body: null,
@@ -73,19 +110,14 @@ export function AuthProvider({
       });
   };
 
-  const authData = new Proxy<T_AuthContext>(
-    { token, logOut, data: null, updateToken },
-    {
-      get: (obj, key) => {
-        switch (key) {
-          case 'data':
-            return token ? decodeToken(token || '') : null;
-          default:
-            return obj[key];
-        }
-      },
-    },
-  );
+  const authData = {
+    token,
+    logOut,
+    data: token ? decodeToken(token || '') : null,
+    updateToken,
+    fetchWithEgoToken,
+  };
+
   return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
 }
 

@@ -25,6 +25,7 @@ import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
+import refreshJwt from 'global/utils/refreshJwt';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -71,11 +72,26 @@ class Root extends App<
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
     const { AUTH_DISABLED } = getConfig();
+    let refreshedJwt = null;
 
     if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
-        removeCookie(res, EGO_JWT_KEY);
-        redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+        if (res) {
+          removeCookie(res, EGO_JWT_KEY);
+          redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+        } else {
+          const forceLogin = () => {
+            Cookies.remove(EGO_JWT_KEY);
+            redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+          };
+          const newJwt = (await refreshJwt(egoJwt).catch(forceLogin)) as string;
+          if (isValidJwt(newJwt)) {
+            Cookies.set(EGO_JWT_KEY, newJwt);
+            refreshedJwt = newJwt;
+          } else {
+            forceLogin();
+          }
+        }
       }
     } else {
       if (!Component.isPublic) {
@@ -114,7 +130,7 @@ class Root extends App<
       pageProps,
       unauthorized,
       pathname: ctx.pathname,
-      egoJwt,
+      egoJwt: refreshedJwt || egoJwt,
       ctx: {
         pathname: ctx.pathname,
         query: ctx.query,

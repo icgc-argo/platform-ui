@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client';
+import { ApolloLink } from 'apollo-link';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
-import { AuthProvider } from 'global/hooks/useAuthContext';
+import useAuthContext, { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
@@ -141,34 +142,27 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ egoJwt: string; apolloCache: any }> = ({
+const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   children,
-  egoJwt,
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  const createNewClient = (configs: { connectToDevTools: boolean }) =>
-    new ApolloClient({
-      link: createUploadLink({
-        uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
-        fetch: fetch,
-        headers: egoJwt
-          ? {
-              authorization: `Bearer ${egoJwt}`,
-            }
-          : {},
-      }),
-      connectToDevTools: configs.connectToDevTools,
-      cache: createInMemoryCache().restore(apolloCache),
-    });
-  const [client, setClient] = React.useState<ReturnType<typeof createNewClient>>(
-    createNewClient({ connectToDevTools: false }),
-  );
-  React.useEffect(() => {
-    setClient(createNewClient({ connectToDevTools: true }));
-  }, [egoJwt]);
+  const { fetchWithEgoToken } = useAuthContext();
+
+  const uploadLink = createUploadLink({
+    uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+    fetch: fetchWithEgoToken,
+  });
+
+  const client = new ApolloClient({
+    link: ApolloLink.from([uploadLink]),
+    connectToDevTools: true,
+    cache: createInMemoryCache().restore(apolloCache),
+  });
+
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -205,7 +199,7 @@ export default function ApplicationRoot({
       </style>
       <Head />
       <AuthProvider egoJwt={egoJwt}>
-        <ApolloClientProvider egoJwt={egoJwt} apolloCache={apolloCache}>
+        <ApolloClientProvider apolloCache={apolloCache}>
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
