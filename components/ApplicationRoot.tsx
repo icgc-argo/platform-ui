@@ -159,7 +159,7 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
       connectToDevTools: true,
       cache: createInMemoryCache().restore(apolloCache),
     });
-  }, []);
+  }, [fetchWithEgoToken]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
