@@ -148,6 +148,7 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
   const { fetchWithEgoToken } = useAuthContext();
+  const clientSideCache = React.useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
   const client = React.useMemo(() => {
     const uploadLink = createUploadLink({
@@ -157,9 +158,9 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
     return new ApolloClient({
       link: ApolloLink.from([uploadLink]),
       connectToDevTools: true,
-      cache: createInMemoryCache().restore(apolloCache),
+      cache: clientSideCache,
     });
-  }, [fetchWithEgoToken]);
+  }, [fetchWithEgoToken, clientSideCache]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
