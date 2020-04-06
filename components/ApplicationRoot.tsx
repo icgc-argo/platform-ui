@@ -21,11 +21,7 @@ import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { setContext } from 'apollo-link-context';
-import { isValidJwt } from 'global/utils/egoJwt';
-import refreshJwt from 'global/utils/refreshJwt';
+
 /**
  * The global portal where modals will show up
  */
