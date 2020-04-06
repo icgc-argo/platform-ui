@@ -24,7 +24,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
 
   // TODO: leaving the polling and fetchPolicy in for testing in dev
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, {
-    pollInterval: 5000,
+    pollInterval: 10000,
     fetchPolicy: 'network-only',
   });
 
