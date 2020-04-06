@@ -12,7 +12,7 @@ var maxQueue = Infinity;
 var queue = new Queue(maxConcurrent, maxQueue);
 
 // pass client_id to get ego api to set correct response headers
-const refreshUrl = urlJoin(EGO_API_ROOT, `/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
+const refreshUrl = urlJoin(EGO_API_ROOT, `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
 
 export default () =>
   queue.add(() => {
