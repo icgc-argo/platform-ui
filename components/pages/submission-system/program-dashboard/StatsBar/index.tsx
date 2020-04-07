@@ -6,6 +6,7 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
+import PercentBar from 'uikit/PercentBar';
 import DASHBOARD_SUMMARY_QUERY from './DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
@@ -23,59 +24,6 @@ const StatDesc = styled('div')`
   height: 100%;
   justify-content: space-between;
 `;
-
-const PercentBar: React.ComponentType<{ num: number; den: number; fillColor?: string }> = ({
-  num,
-  den,
-  fillColor,
-}) => {
-  const theme = useTheme();
-
-  // Negative Numbers should be zero, percentages over 100 should be capped
-  num < 0 ? (num = 0) : { num };
-  den <= 0 ? (den = 1) : { den };
-  const fraction = Math.min((num / den) * 100, 100);
-  const fill_amount = `${fraction}%`;
-
-  // Animation
-  const grow = keyframes`
-    0% {
-      width: 0%;
-    }
-
-    100% {
-      width: ${fill_amount};
-    }
-   `;
-
-  return (
-    <div
-      css={css`
-        padding-bottom: 10px;
-      `}
-    >
-      <div
-        css={css`
-          background-color: ${theme.colors.grey_2};
-          border-radius: 8px;
-          width: 120px;
-        `}
-      >
-        <div
-          css={css`
-            background-color: ${theme.colors[fillColor] || fillColor || theme.colors.secondary};
-            width: ${fill_amount};
-            height: 6px;
-            border-radius: 8px;
-            animation-name: ${grow};
-            animation-duration: 1s;
-            transition: width 2s ease-in-out;
-          `}
-        />
-      </div>
-    </div>
-  );
-};
 
 const Statistic: React.ComponentType<{ quantity: String; description: String }> = ({
   children,
