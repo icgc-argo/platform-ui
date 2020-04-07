@@ -24,6 +24,8 @@ const AuthContext = React.createContext<T_AuthContext>({
   fetchWithEgoToken: fetch,
 });
 
+const TOKEN_BUFFER = 30000;
+
 export function AuthProvider({
   egoJwt,
   children,
@@ -65,7 +67,7 @@ export function AuthProvider({
     };
 
     if (token && !isValidJwt(token)) {
-      const newJwt = await refreshJwt();
+      const newJwt = (await refreshJwt()) as string;
       if (isValidJwt(newJwt)) {
         setToken(newJwt);
       } else {
@@ -106,6 +108,15 @@ export function AuthProvider({
         throw err;
       });
   };
+
+  React.useEffect(() => {
+    if (token && isValidJwt(token)) {
+      const expiry = decodeToken(token).exp;
+      setTimeout(() => {
+        refreshJwt().then(newJwt => setToken(newJwt));
+      }, expiry * 1000 - Date.now() - TOKEN_BUFFER);
+    }
+  }, [token]);
 
   const authData = {
     token,
