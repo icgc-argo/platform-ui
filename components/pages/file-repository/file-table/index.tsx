@@ -1,5 +1,5 @@
 import React from 'react';
-import Table, { SelectTable, TableColumnConfig } from 'uikit/Table';
+import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
 import { FileRepositoryRecord } from './types';
 import Link from 'uikit/Link';
@@ -11,7 +11,7 @@ import DropdownButton from 'uikit/DropdownButton';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
-} from '../../components/pages/submission-system/common';
+} from '../../submission-system/common';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
