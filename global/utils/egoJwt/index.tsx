@@ -60,7 +60,7 @@ export const serializeScope = (scopeObj: PermissionScopeObj): string =>
   TokenUtils.serializeScope(scopeObj);
 
 export const getAuthorizedProgramScopes = (egoJwt: string): Array<PermissionScopeObj> =>
-  isValidJwt(egoJwt) && TokenUtils.getReadableProgramScopes(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramScopes(egoJwt) : [];
 
 export const canReadProgram = (args: { egoJwt: string; programId: string }): boolean =>
   isValidJwt(args.egoJwt) && TokenUtils.canReadProgram(args);
@@ -72,7 +72,7 @@ export const isProgramAdmin: (args: { egoJwt: string; programId: string }) => bo
   isValidJwt(args.egoJwt) && TokenUtils.isProgramAdmin(args);
 
 export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
-  isValidJwt(egoJwt) && TokenUtils.getReadableProgramShortNames(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramShortNames(egoJwt) : [];
 
 export const canReadProgramData: (args: { egoJwt: string; programId: string }) => boolean = args =>
   isValidJwt(args.egoJwt) && TokenUtils.canReadProgramData(args);
@@ -87,16 +87,16 @@ export const canWriteSomeProgramData: (egoJwt: string) => boolean = egoJwt =>
   isValidJwt(egoJwt) && TokenUtils.canWriteSomeProgramData(egoJwt);
 
 export const getReadableProgramDataScopes: (egoJwt: string) => PermissionScopeObj[] = egoJwt =>
-  isValidJwt(egoJwt) ? [] : TokenUtils.getReadableProgramDataScopes(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramDataScopes(egoJwt) : [];
 
 export const getWritableProgramDataScopes: (egoJwt: string) => PermissionScopeObj[] = egoJwt =>
-  isValidJwt(egoJwt) ? [] : TokenUtils.getWritableProgramDataScopes(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getWritableProgramDataScopes(egoJwt) : [];
 
 export const getReadableProgramDataNames: (egoJwt: string) => string[] = egoJwt =>
-  isValidJwt(egoJwt) ? [] : TokenUtils.getReadableProgramDataNames(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramDataNames(egoJwt) : [];
 
 export const getWritableProgramDataNames: (egoJwt: string) => string[] = egoJwt =>
-  isValidJwt(egoJwt) ? [] : TokenUtils.getWritableProgramDataNames(egoJwt);
+  isValidJwt(egoJwt) ? TokenUtils.getWritableProgramDataNames(egoJwt) : [];
 
 export const isDataSubmitter: (args: { egoJwt: string; programId: string }) => boolean = ({
   egoJwt,
