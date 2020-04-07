@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.9.8",
+  "version": "1.9.14",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -72,12 +72,13 @@
     "jsdom": "^14.0.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.14",
-    "next": "^9.1.1",
+    "next": "^9.3.2",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.0",
     "npm": "^6.13.1",
     "pluralize": "^8.0.0",
+    "promise-queue": "^2.2.5",
     "prop-types": "^15.7.2",
     "query-string": "^6.11.0",
     "react": "^16.8.6",

@@ -1,11 +1,13 @@
 import { css } from 'uikit';
 import Container from 'uikit/Container';
 
-export const DashboardCard: React.ComponentType<{ cardHeight?: string }> = ({
+export const DashboardCard: React.ComponentType<{ cardHeight?: string; loading?: boolean }> = ({
   children,
   cardHeight = '100%',
+  loading = false,
 }) => (
   <Container
+    loading={loading}
     css={css`
       height: ${cardHeight};
     `}
@@ -19,3 +21,5 @@ export const DashboardCard: React.ComponentType<{ cardHeight?: string }> = ({
     </div>
   </Container>
 );
+
+export const POLL_INTERVAL_MILLISECONDS: number = 3000;

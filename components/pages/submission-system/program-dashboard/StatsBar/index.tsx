@@ -10,6 +10,7 @@ import DASHBOARD_SUMMARY_QUERY from './DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import _ from 'lodash';
+import { POLL_INTERVAL_MILLISECONDS } from '../common';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -147,6 +148,7 @@ export default () => {
     DASHBOARD_SUMMARY_QUERY,
     {
       variables: { programShortName: programShortName },
+      pollInterval: POLL_INTERVAL_MILLISECONDS,
     },
   );
   return (
