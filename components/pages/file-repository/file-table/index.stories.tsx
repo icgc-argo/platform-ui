@@ -5,16 +5,16 @@ import { dummyData } from './dummyData';
 import { boolean } from '@storybook/addon-knobs';
 
 export const createKnobs = () => {
-  const canUserDownLoadFiles = boolean('can user download file', false);
+  const lockAllDownLoads = boolean('is the user logged in', false);
 
   return {
-    disabled: canUserDownLoadFiles,
+    userLoggedIn: lockAllDownLoads,
   };
 };
 
 const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const props = createKnobs();
-  return <FileRepositoryTable fileRepoEntries={dummyData} userHasAccess={props.disabled} />;
+  return <FileRepositoryTable fileRepoEntries={dummyData} userLoggedIn={props.userLoggedIn} />;
 });
 
 export default FileRepositoryTableStories;

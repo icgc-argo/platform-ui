@@ -12,6 +12,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
     strategy: FileStrategyNames.WXS,
     format: FileFormatNames.FASTQ,
     size: 129580000,
+    isDownloadable: true,
   },
   {
     fileID: 'FL9981',
@@ -21,6 +22,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
     strategy: FileStrategyNames.WGS,
     format: FileFormatNames.FASTQ,
     size: 7695800000,
+    isDownloadable: false,
   },
   {
     fileID: 'FL9980',
@@ -30,6 +32,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
     strategy: FileStrategyNames.WXS,
     format: FileFormatNames.FASTQ,
     size: 121130000,
+    isDownloadable: true,
   },
 ];
 

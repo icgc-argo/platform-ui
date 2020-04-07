@@ -18,10 +18,10 @@ import Icon from 'uikit/Icon';
 
 export default ({
   fileRepoEntries,
-  userHasAccess,
+  userLoggedIn,
 }: {
   fileRepoEntries: Array<FileRepositoryRecord>;
-  userHasAccess: boolean;
+  userLoggedIn: Boolean;
 }) => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
@@ -47,6 +47,15 @@ export default ({
     alert(`we are working hard to download your file, ${fileID}`);
   };
 
+  const getDownloadStatus = (isDownloadable: boolean) => {
+    const canUserDownload = userLoggedIn && isDownloadable;
+    const toolTipText = userLoggedIn
+      ? isDownloadable
+        ? 'Download file'
+        : 'You do not have permission to download this file'
+      : 'Please log in to access controlled files';
+    return { canUserDownload, toolTipText };
+  };
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
       Header: 'File ID',
@@ -101,36 +110,36 @@ export default ({
       Header: 'Actions',
       width: 80,
       sortable: false,
-      Cell: ({ original }: { original: FileRepositoryRecord }) => (
-        <div
-          css={css`
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-          `}
-        >
-          <Tooltip
-            unmountHTMLWhenHide
-            position="top"
-            html={
-              <span>
-                {userHasAccess ? 'Download File' : 'Please log in to access controlled files'}
-              </span>
-            }
+      Cell: ({ original }: { original: FileRepositoryRecord }) => {
+        const downloadStatus = getDownloadStatus(original.isDownloadable);
+
+        return (
+          <div
+            css={css`
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+            `}
           >
-            <InteractiveIcon
-              disabled={!userHasAccess}
-              height="16px"
-              width="16px"
-              name={userHasAccess ? 'download' : 'lock'}
-              fill={userHasAccess ? 'accent2_dark' : 'primary_2'}
-              onClick={e => fileDownloader(original.fileID)}
-            />
-          </Tooltip>
-        </div>
-      ),
+            <Tooltip
+              unmountHTMLWhenHide
+              position="top"
+              html={<span>{downloadStatus.toolTipText}</span>}
+            >
+              <InteractiveIcon
+                disabled={!downloadStatus.canUserDownload}
+                height="16px"
+                width="16px"
+                name={downloadStatus.canUserDownload ? 'download' : 'lock'}
+                fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
+                onClick={e => fileDownloader(original.fileID)}
+              />
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
   const containerRef = React.createRef<HTMLDivElement>();

@@ -6,6 +6,7 @@ export type FileRepositoryRecord = {
   strategy: FileStrategyNames;
   format: FileFormatNames;
   size: number; //in bytes
+  isDownloadable: boolean;
 };
 
 export enum FileDataNames {
