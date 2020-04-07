@@ -237,6 +237,7 @@ export default () => {
               <Button
                 variant="text"
                 disabled
+                size="sm"
                 css={css`
                   margin: 0;
                 `}
@@ -254,36 +255,88 @@ export default () => {
             </FilesButton>
           </Col>
         </Row>
-        <Row justify="around">
+        <Row
+          justify="around"
+          css={css`
+            text-align: center;
+            align-items: center;
+          `}
+        >
           <Col lg={2.5}>
             <Designation description="Raw Reads Submitted" left={3} right={4} />
           </Col>
-          <Col lg={6}>
+          <Col
+            lg={6}
+            css={css`
+              align-self: center;
+            `}
+          >
             <Row
               css={css`
-                text-align: center;
+                align-items: center;
               `}
             >
-              <Col md={2.4}>
+              <Col
+                md={2}
+                css={css`
+                  align-self: center;
+                `}
+              >
                 <Typography color="grey" variant="caption">
                   Alignment
                 </Typography>
               </Col>
-              <Col md={2.4}>
+              <Col
+                md={3}
+                css={css`
+                  align-self: center;
+                `}
+              >
                 <Pipeline complete={3} inProgress={2} error={4} />
               </Col>
-              <Col md={2.4}>
-                <Typography color="grey" variant="caption">
-                  arrow
-                </Typography>
+              <Col
+                md={2}
+                css={css`
+                  align-self: center;
+                  white-space: nowrap;
+                  padding-top: 3px;
+                `}
+              >
+                <Icon
+                  css={css`
+                    margin-right: -6px;
+                  `}
+                  name="dash"
+                  fill="grey_2"
+                  height="15px"
+                />
+                <Icon name="dash" fill="grey_2" height="15px" />
+                <Icon
+                  css={css`
+                    margin-left: -12px;
+                  `}
+                  name="chevron_right"
+                  fill="grey_2"
+                  height="15px"
+                />
               </Col>
-              <Col md={2.4}>
+              <Col
+                md={2}
+                css={css`
+                  align-self: center;
+                `}
+              >
                 <Typography color="grey" variant="caption">
                   Variant Calling
                 </Typography>
               </Col>
-              <Col md={2.4}>
-                <Pipeline complete={3} inProgress={2} error={4} />
+              <Col
+                md={3}
+                css={css`
+                  align-self: center;
+                `}
+              >
+                <Pipeline complete={3} inProgress={0} error={0} />
               </Col>
             </Row>
           </Col>
