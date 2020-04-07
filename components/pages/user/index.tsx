@@ -22,11 +22,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
     />
   );
 
-  // TODO: leaving the polling and fetchPolicy in for testing in dev
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, {
-    pollInterval: 10000,
-    fetchPolicy: 'network-only',
-  });
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
 
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
