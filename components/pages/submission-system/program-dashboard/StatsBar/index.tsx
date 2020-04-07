@@ -165,7 +165,7 @@ export default () => {
                   num={data.programDonorSummaryStats.registeredDonorsCount}
                   den={data.program.commitmentDonors}
                   fillColor={
-                    data.programDonorSummaryStats.registeredDonorsCount ===
+                    data.programDonorSummaryStats.registeredDonorsCount >=
                     data.program.commitmentDonors
                       ? 'success'
                       : 'warning'
@@ -181,8 +181,8 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${(data.programDonorSummaryStats.percentageCoreClinical * 100).toFixed(
-                  2,
+                quantity={`${Math.round(
+                  data.programDonorSummaryStats.percentageCoreClinical * 100,
                 )}%`}
                 description="Donors with all Core Clinical Data"
               >
@@ -190,7 +190,7 @@ export default () => {
                   num={data.programDonorSummaryStats.percentageCoreClinical * 100}
                   den={100}
                   fillColor={
-                    data.programDonorSummaryStats.percentageCoreClinical === 1
+                    data.programDonorSummaryStats.percentageCoreClinical >= 1
                       ? 'success'
                       : 'warning'
                   }
@@ -205,16 +205,16 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${(
-                  data.programDonorSummaryStats.percentageTumourAndNormal * 100
-                ).toFixed(2)}%`}
+                quantity={`${Math.round(
+                  data.programDonorSummaryStats.percentageTumourAndNormal * 100,
+                )}%`}
                 description="Donors with Tumour & Normal"
               >
                 <PercentBar
                   num={data.programDonorSummaryStats.percentageTumourAndNormal * 100}
                   den={100}
                   fillColor={
-                    data.programDonorSummaryStats.percentageTumourAndNormal === 1
+                    data.programDonorSummaryStats.percentageTumourAndNormal >= 1
                       ? 'success'
                       : 'warning'
                   }

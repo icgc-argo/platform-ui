@@ -124,29 +124,13 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
       display: flex;
       justify-content: space-between;
     }
-
-    ${({ sortable }) =>
-      sortable
-        ? css`
-            /* .-cursor-pointer idicates a sortable column */
-            & .rt-th.-cursor-pointer {
-              &:after {
-                content: url(${unsorted});
-              }
-              &.-sort-asc {
-                box-shadow: none;
-                &:after {
-                  content: url(${ascending});
-                }
-              }
-              &.-sort-desc {
-                box-shadow: none;
-                &:after {
-                  content: url(${descending});
-                }
-              }
-            }
-          `
-        : css``}
+  }
+  &.ReactTable .rt-thead .rt-th.-sort-asc,
+  &.ReactTable .rt-thead .rt-td.-sort-asc {
+    box-shadow: inset 0 3px 0 0 rgba(7, 116, 211, 1);
+  }
+  &.ReactTable .rt-thead .rt-th.-sort-desc,
+  &.ReactTable .rt-thead .rt-td.-sort-desc {
+    box-shadow: inset 0 -3px 0 0 rgba(7, 116, 211, 1);
   }
 `;
