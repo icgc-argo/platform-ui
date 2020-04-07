@@ -64,6 +64,7 @@
     "element-resize-detector": "^1.1.15",
     "emotion-theming": "^10.0.10",
     "express": "^4.16.4",
+    "filesize": "^6.1.0",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "i": "^0.3.6",

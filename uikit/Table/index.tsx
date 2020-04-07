@@ -162,8 +162,10 @@ const SelectTableCheckbox: React.ComponentType<
   SelectInputComponentProps & SelectAllInputComponentProps
 > = ({ checked, onClick, id }) => (
   // @ts-ignore area-label not supported by ts
-  <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-lable="table-select" />
+  <Checkbox value={id} checked={checked} onChange={() => onClick(id)} aria-label="table-select" />
 );
+
+const TableWithSelect = selectTable(Table);
 
 export function SelectTable<Data extends TableDataBase>(
   props: Partial<TableProps<Data>> &
@@ -175,9 +177,8 @@ export function SelectTable<Data extends TableDataBase>(
 ) {
   const { isSelected, data, keyField } = props;
   const selectedIds = (data || []).map(data => data[keyField]).filter(isSelected);
-  const Component = selectTable(Table);
   return (
-    <Component
+    <TableWithSelect
       {...props}
       isSelectTable
       primaryKey={keyField}
