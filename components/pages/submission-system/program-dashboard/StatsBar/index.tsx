@@ -249,6 +249,7 @@ export default () => {
                     `}
                     name="download"
                     height="12px"
+                    fill="accent2_dark"
                   />
                   Manifest
                 </Button>
@@ -261,7 +262,7 @@ export default () => {
                       padding-right: 4px;
                     `}
                     name="download"
-                    fill="grey_2"
+                    fill="accent2_dark"
                     height="12px"
                   />
                   Manifest
@@ -298,6 +299,7 @@ export default () => {
                     css={css`
                       padding-right: 4px;
                     `}
+                    fill="accent2_dark"
                     name="download"
                     height="12px"
                   />
@@ -312,7 +314,7 @@ export default () => {
                       padding-right: 4px;
                     `}
                     name="download"
-                    fill="grey_2"
+                    fill="accent2_dark"
                     height="12px"
                   />
                   Manifest
