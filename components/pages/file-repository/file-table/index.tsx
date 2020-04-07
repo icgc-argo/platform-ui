@@ -153,11 +153,6 @@ export default ({
       `}
     >
       <SelectTable
-        onFetchData={(state, instance) => {
-          // todo,
-          // triggering a change in the selected rows is triggering this call ( state change for table)
-          // certain user-led changes such as pagination get reset to their inital settings upon row selections
-        }}
         keyField="fileID"
         parentRef={containerRef}
         showPagination={true}
