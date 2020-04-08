@@ -8,7 +8,6 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import PercentBar from 'uikit/PercentBar';
 import Pipe from 'uikit/Pipe';
-import { StatArea as StatAreaDisplay } from '../../common';
 import _ from 'lodash';
 
 enum PIPELINE_STATUS {
@@ -22,7 +21,6 @@ const StatDesc = styled('div')`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
   padding-left: 8px;
   padding-right: 8px;
   justify-content: space-between;
@@ -37,19 +35,20 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
     <StatDesc>
       {/* Div for Quantity */}
       <Row align="center" nogutter>
-        <Col md={6}>
+        <Col xs={6}>
           <Typography
             variant="title"
             css={css`
               margin-top: 10px;
               margin-bottom: 10px;
+              text-align: center;
             `}
           >
             {quantity}
           </Typography>
         </Col>
         {/* Div for Description */}
-        <Col md={6}>
+        <Col xs={6}>
           <Typography color="grey" variant="caption">
             {description}
           </Typography>
@@ -92,19 +91,20 @@ const FilesButton: React.ComponentType<{ quantity: String }> = ({ children, quan
     <StatDesc>
       {/* Div for Quantity */}
       <Row align="center" nogutter>
-        <Col md={2}>
+        <Col xs={1}>
           <Typography
             variant="title"
             css={css`
               margin-top: 10px;
               margin-bottom: 10px;
+              text-align: center;
             `}
           >
             {quantity}
           </Typography>
         </Col>
         {/* Div for Children*/}
-        <Col md={10}>{children}</Col>
+        <Col xs={11}>{children}</Col>
       </Row>
     </StatDesc>
   </div>
@@ -126,7 +126,7 @@ const Designation: React.ComponentType<{
           min-width: 160px;
         `}
       >
-        <Col xl={7.5}>
+        <Col xs={7.5}>
           <Row
             justify="center"
             align="center"
@@ -146,6 +146,7 @@ const Designation: React.ComponentType<{
                 css={css`
                   margin-top: 10px;
                   margin-bottom: 10px;
+                  text-align: center;
                 `}
               >
                 {left}N
@@ -172,6 +173,7 @@ const Designation: React.ComponentType<{
                 css={css`
                   margin-top: 10px;
                   margin-bottom: 10px;
+                  text-align: center;
                 `}
               >
                 {right}T
@@ -180,7 +182,7 @@ const Designation: React.ComponentType<{
           </Row>
         </Col>
         {/* Div for Description */}
-        <Col xl={4.5}>
+        <Col xs={4.5}>
           <Typography color="grey" variant="caption">
             {description}
           </Typography>
@@ -199,7 +201,7 @@ export default () => {
         `}
       >
         <Row>
-          <Col lg={2.5}>
+          <Col xl={2.4} lg={4} md={12}>
             <Designation
               description="Registered Samples"
               left={2}
@@ -207,19 +209,26 @@ export default () => {
               validity={[true, false]}
             />
           </Col>
-          <Col lg={3}>
-            <Statistic quantity="100%" description="Core Clinical Data Completeness">
-              <PercentBar num={100} den={100} length={170} fillColor="success" />
+          <Col xl={2.4} lg={4} md={6}>
+            <Statistic quantity="100%" description="Core Clinical Data">
+              <PercentBar num={100} den={100} length={150} fillColor="success" />
             </Statistic>
           </Col>
-          <Col lg={3}>
-            <Statistic quantity="29%" description="Extended Data Completeness">
-              <PercentBar num={29} den={100} length={170} fillColor="warning" />
+          <Col xl={2.4} lg={4} md={6}>
+            <Statistic quantity="29%" description="Extended Data">
+              <PercentBar num={29} den={100} length={150} fillColor="warning" />
             </Statistic>
           </Col>
-          <Col lg={1.75}>
+          <Col xl={2.4} lg={4} md={6}>
             <FilesButton quantity="0">
-              <Button variant="text" disabled>
+              <Button
+                variant="text"
+                disabled
+                size="sm"
+                css={css`
+                  margin-left: 5px;
+                `}
+              >
                 <Icon
                   css={css`
                     padding-right: 4px;
@@ -232,14 +241,14 @@ export default () => {
               </Button>
             </FilesButton>
           </Col>
-          <Col lg={1.75}>
+          <Col xl={2.4} lg={4} md={6}>
             <FilesButton quantity="0">
               <Button
                 variant="text"
                 disabled
                 size="sm"
                 css={css`
-                  margin: 0;
+                  margin-left: 5px;
                 `}
               >
                 <Icon
@@ -254,21 +263,16 @@ export default () => {
               </Button>
             </FilesButton>
           </Col>
-        </Row>
-        <Row
-          justify="around"
-          css={css`
-            text-align: center;
-            align-items: center;
-          `}
-        >
-          <Col lg={2.5}>
+          <Col xl={2.4} lg={4} md={12}>
             <Designation description="Raw Reads Submitted" left={3} right={4} />
           </Col>
           <Col
-            lg={6}
+            xl={4.8}
+            lg={8}
+            md={12}
             css={css`
               align-self: center;
+              padding-right: 10px;
             `}
           >
             <Row
@@ -280,6 +284,7 @@ export default () => {
                 md={2}
                 css={css`
                   align-self: center;
+                  text-align: center;
                 `}
               >
                 <Typography color="grey" variant="caption">
@@ -298,6 +303,7 @@ export default () => {
                 md={2}
                 css={css`
                   align-self: center;
+                  text-align: center;
                   white-space: nowrap;
                   padding-top: 3px;
                 `}
@@ -324,6 +330,7 @@ export default () => {
                 md={2}
                 css={css`
                   align-self: center;
+                  text-align: center;
                 `}
               >
                 <Typography color="grey" variant="caption">
@@ -340,7 +347,6 @@ export default () => {
               </Col>
             </Row>
           </Col>
-          <Col lg={3.5} />
         </Row>
       </Container>
     </div>
