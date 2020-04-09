@@ -1,5 +1,5 @@
 import Container from 'uikit/Container';
-import { css, keyframes } from '@emotion/core';
+import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled-base';
 import { useTheme } from 'uikit/ThemeProvider';
