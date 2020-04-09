@@ -9,50 +9,29 @@ import useTheme from 'uikit/utils/useTheme';
 import Icon from 'uikit/Icon';
 import { ContentBox } from 'uikit/PageLayout';
 import { UikitIconNames } from 'uikit/Icon/icons';
+import { mockData } from './stories';
 
 type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
-  type: FileRepoDataType;
+  type?: FileRepoDataType; // will not be optional when moved out of uikit
 };
 
 // <--for dev-->
-const chartType = 'data type';
-const rawData = [
-  { category: 'liver', count: 72 },
-  { category: 'pancreas', count: 36 },
-  { category: 'lungs', count: 24 },
-  { category: 'skin', count: 67 },
-  { category: 'cervix', count: 90 },
-  { category: 'brain', count: 91 },
-  { category: 'bone', count: 45 },
-  { category: 'lymph nodes', count: 32 },
-  { category: 'stomach', count: 31 },
-  { category: 'prostate', count: 31 },
-  { category: 'blood', count: 46 },
-  { category: 'uterus', count: 3 },
-  { category: 'thyroid', count: 4 },
-  { category: 'esophagus', count: 4 },
-  { category: 'eye', count: 18 },
-  { category: 'breast', count: 19 },
-  { category: 'spine', count: 27 },
-  { category: 'kidney', count: 44 },
-  { category: 'bladder', count: 41 },
-];
-const orderedData = orderBy(rawData, 'count', 'desc');
+const chartType = 'primary site';
 const chartHeight = 100;
 const chartWidth = 300;
 // <--end for dev-->
 
-const getBarHeight = value => {
+const getBarHeight = (value: number): number => {
   return (value / chartHeight) * 100;
 };
 
-const getBarWidth = () => {
-  return Math.floor(chartWidth / orderedData.length) - 2;
+const getBarWidth = (data: Array<any>): number => {
+  return Math.floor(chartWidth / data.length) - 2;
 };
 
-const typeMeta = {
+const chartTypeMeta = {
   program: {
     title: 'Programs',
     color: '#00b3d3',
@@ -119,10 +98,11 @@ const YAxis = ({ max = 600, theme }) => {
 };
 
 const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
-  data = orderedData, // default to mock data
+  data = mockData, // default to mock data
   type = chartType, // default to mock type
 }) => {
   const theme = useTheme();
+
   return (
     <ContentBox
       css={css`
@@ -141,7 +121,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
         >
           <FlexRow>
             <Icon
-              name={typeMeta[type].iconName as UikitIconNames}
+              name={chartTypeMeta[type].iconName as UikitIconNames}
               fill={`#4e546d`}
               color={`#bbc8dd`}
               width="20px"
@@ -166,7 +146,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                 margin: 0px;
               `}
             >
-              {typeMeta[type].title}
+              {chartTypeMeta[type].title}
             </Typography>
           </FlexRow>
         </div>
@@ -204,7 +184,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                 backgroundColor: theme.colors.grey_2,
               }}
             />
-            {data.map(({ category, count }) => (
+            {orderBy(data, 'count', 'desc').map(({ category, count }) => (
               <Tooltip
                 key={`bar-${category}`}
                 unmountHTMLWhenHide
@@ -220,9 +200,9 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
               >
                 <Bar
                   style={{
-                    width: getBarWidth(),
+                    width: getBarWidth(data),
                     height: getBarHeight(count),
-                    backgroundColor: typeMeta[type].color,
+                    backgroundColor: chartTypeMeta[type].color,
                   }}
                 />
               </Tooltip>
