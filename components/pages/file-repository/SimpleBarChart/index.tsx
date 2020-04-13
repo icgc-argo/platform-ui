@@ -8,7 +8,7 @@ import useTheme from 'uikit/utils/useTheme';
 import Icon from 'uikit/Icon';
 import { ContentBox } from 'uikit/PageLayout';
 import { UikitIconNames } from 'uikit/Icon/icons';
-import { ThemeColorNames } from 'uikit/dist/uikit/theme/types';
+import { ThemeColorNames } from 'uikit/theme/types';
 
 type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
