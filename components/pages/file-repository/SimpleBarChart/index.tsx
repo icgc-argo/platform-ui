@@ -1,7 +1,6 @@
 import React from 'react';
-import Container from 'uikit/Container';
-import { css, styled } from '..';
-import { orderBy, maxBy } from 'lodash';
+import { css, styled } from 'uikit';
+import { orderBy, maxBy, min } from 'lodash';
 import Tooltip from 'uikit/Tooltip';
 import { capitalize } from 'global/utils/stringUtils';
 import Typography from 'uikit/Typography';
@@ -9,42 +8,55 @@ import useTheme from 'uikit/utils/useTheme';
 import Icon from 'uikit/Icon';
 import { ContentBox } from 'uikit/PageLayout';
 import { UikitIconNames } from 'uikit/Icon/icons';
-import { mockData } from './stories';
+import { ThemeColorNames } from 'uikit/dist/uikit/theme/types';
 
 type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
-  type?: FileRepoDataType; // will not be optional when moved out of uikit
+  type: FileRepoDataType;
+  totalDataSize?: string | null; // not sure yet how this prop will be determined
+  totalCount: number; // calculation will vary based on chart type
+  containerStyle?: React.CSSProperties;
 };
 
 // <--for dev-->
-const chartType = 'primary site';
 const chartHeight = 100;
-const chartWidth = 300;
+const maxChartWidth = 300;
+const minBarWidth = 6;
 // <--end for dev-->
 
-const getBarHeight = (value: number): number => {
-  return (value / chartHeight) * 100;
+const getBarHeight = (value: number, maxValue: number): number => {
+  return Math.ceil((value / maxValue) * chartHeight);
 };
 
 const getBarWidth = (data: Array<any>): number => {
-  return Math.floor(chartWidth / data.length) - 2;
+  return min([Math.floor(getChartWidth(data) / data.length) - 2, minBarWidth]);
 };
 
-const chartTypeMeta = {
+const getChartWidth = (data: Array<any>): number => {
+  return min([35 * data.length, maxChartWidth]);
+};
+
+export const chartTypeMeta: {
+  [k in FileRepoDataType]: {
+    title: string;
+    getColor: (theme: any) => keyof ThemeColorNames;
+    iconName: string;
+  }
+} = {
   program: {
     title: 'Programs',
-    color: '#00b3d3',
+    getColor: theme => theme.colors.accent3_dark,
     iconName: 'programs',
   },
   'data type': {
     title: 'Files',
-    color: '#fea430',
+    getColor: theme => theme.colors.warning,
     iconName: 'file',
   },
   'primary site': {
     title: 'Donors',
-    color: '#24dbb4',
+    getColor: theme => theme.colors.accent1,
     iconName: 'user',
   },
 };
@@ -52,7 +64,6 @@ const chartTypeMeta = {
 const Bar = styled('div')`
   height: ${({ style }) => style.height}px;
   background-color: ${({ style }) => style.backgroundColor};
-  max-width: 6px;
   border-radius: 3px;
 `;
 
@@ -74,7 +85,7 @@ const AxisText = styled(Typography)`
   margin: 0;
 `;
 
-const YAxis = ({ max = 600, theme }) => {
+const YAxis = ({ max, theme }) => {
   return (
     <FlexColumn
       css={css`
@@ -84,30 +95,27 @@ const YAxis = ({ max = 600, theme }) => {
     >
       <AxisText color={theme.colors.grey}>{max}</AxisText>
       <br />
-      <AxisText
-        color={theme.colors.grey}
-        css={css`
-          margin-bottom: 6px;
-        `}
-      >
-        0
-      </AxisText>
+      <AxisText color={theme.colors.grey}>0</AxisText>
     </FlexColumn>
   );
 };
 
 const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
-  data = mockData, // default to mock data
-  type = chartType, // default to mock type
+  data = [],
+  type,
+  totalDataSize = null, // unit will be passed in with string prop
+  totalCount,
+  containerStyle = {},
 }) => {
   const theme = useTheme();
+  const maxValue = data.length ? maxBy(data, 'count').count : 0;
 
   return (
     <ContentBox
+      style={containerStyle}
       css={css`
         display: flex;
         justify-content: space-between;
-        max-width: 500px;
         padding: 3px 10px 8px;
       `}
     >
@@ -121,8 +129,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
           <FlexRow>
             <Icon
               name={chartTypeMeta[type].iconName as UikitIconNames}
-              fill={`#4e546d`}
-              color={`#bbc8dd`}
+              fill={theme.colors.primary_1}
               width="20px"
               height="20px"
               style={{ margin: 0 }}
@@ -134,7 +141,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                 margin: 0px 0px 0px 10px;
               `}
             >
-              {data.reduce((acc, { category, count }) => acc + count, 0)}
+              {totalCount}
             </Typography>
           </FlexRow>
 
@@ -149,16 +156,18 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
             </Typography>
           </FlexRow>
         </div>
-        <FlexRow>
-          <Typography
-            css={css`
-              font-size: 12px;
-              margin: 0;
-            `}
-          >
-            1.66 TB
-          </Typography>
-        </FlexRow>
+        {totalDataSize && (
+          <FlexRow>
+            <Typography
+              css={css`
+                font-size: 12px;
+                margin: 0;
+              `}
+            >
+              {totalDataSize}
+            </Typography>
+          </FlexRow>
+        )}
       </FlexColumn>
       <div
         css={css`
@@ -166,20 +175,21 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
           padding-top: 12px;
         `}
       >
-        <YAxis max={data.length} theme={theme} />
+        <YAxis max={maxValue} theme={theme} />
         <div>
           <FlexRow
             css={css`
               align-items: baseline;
               padding-left: 6px;
-              width: ${chartWidth}px;
+              padding-bottom: 5px;
+              width: ${getChartWidth(data)}px;
               height: ${chartHeight}px;
             `}
           >
             <Bar
               style={{
                 width: 1,
-                height: maxBy(data, 'count').count,
+                height: chartHeight,
                 backgroundColor: theme.colors.grey_2,
               }}
             />
@@ -200,8 +210,8 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                 <Bar
                   style={{
                     width: getBarWidth(data),
-                    height: getBarHeight(count),
-                    backgroundColor: chartTypeMeta[type].color,
+                    height: getBarHeight(count, maxValue),
+                    backgroundColor: chartTypeMeta[type].getColor(theme),
                   }}
                 />
               </Tooltip>

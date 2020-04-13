@@ -5,8 +5,8 @@ import { Tooltip as ReactTippy } from 'react-tippy';
 
 import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
-import Typography from '../Typography';
 import { Global } from '@emotion/core';
+import { merge } from 'lodash';
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
 type TooltipProps = {
@@ -14,7 +14,7 @@ type TooltipProps = {
   open?: boolean;
   useContext?: boolean;
   onRequestClose?: (e: any) => any;
-  position: 'top' | 'bottom' | 'left' | 'right';
+  position?: 'top' | 'bottom' | 'left' | 'right';
   trigger?: 'mouseenter' | 'focus' | 'click' | 'manual';
   tabIndex?: number;
   interactive?: boolean;
@@ -111,18 +111,20 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
       />
       <ReactTippy
         popperOptions={{
-          modifiers: {
-            preventOverflow: {
-              enabled: false,
+          modifiers: merge(
+            {
+              preventOverflow: {
+                enabled: false,
+              },
+              flip: {
+                enabled: false,
+              },
+              hide: {
+                enabled: false,
+              },
             },
-            flip: {
-              enabled: false,
-            },
-            hide: {
-              enabled: false,
-            },
-          },
-          ...rest.popperOptions,
+            rest.popperOptions,
+          ),
         }}
         html={<TooltipContainer id="tooltip">{html}</TooltipContainer>}
         position={position}
