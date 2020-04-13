@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.9.14",
+  "version": "1.9.16",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -64,6 +64,7 @@
     "element-resize-detector": "^1.1.15",
     "emotion-theming": "^10.0.10",
     "express": "^4.16.4",
+    "filesize": "^6.1.0",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "i": "^0.3.6",
@@ -78,6 +79,7 @@
     "node-fetch": "^2.6.0",
     "npm": "^6.13.1",
     "pluralize": "^8.0.0",
+    "promise-queue": "^2.2.5",
     "prop-types": "^15.7.2",
     "query-string": "^6.11.0",
     "react": "^16.8.6",
