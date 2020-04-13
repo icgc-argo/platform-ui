@@ -69,7 +69,7 @@ const FlexColumn = styled('div')`
 `;
 
 const AxisText = styled(Typography)`
-  textalign: right;
+  text-align: right;
   font-size: 10px;
   margin: 0;
 `;
@@ -79,7 +79,6 @@ const YAxis = ({ max = 600, theme }) => {
     <FlexColumn
       css={css`
         font-size: 10px;
-        color: 1px solid ${theme.colors.grey_2};
         height: ${chartHeight}px;
       `}
     >
@@ -88,7 +87,7 @@ const YAxis = ({ max = 600, theme }) => {
       <AxisText
         color={theme.colors.grey}
         css={css`
-          margin: 0px 0px 6px;
+          margin-bottom: 6px;
         `}
       >
         0
