@@ -47,9 +47,13 @@ const mock = {
   ],
 };
 
+const Timeline = data => <div>Timeline</div>;
+
 type ComponentProps = {};
 const Component: React.ComponentType<ComponentProps> = () => {
   const theme = useTheme();
+
+  const [activeEntities, setActiveEntities] = React.useState([]);
 
   return (
     <Container>
@@ -69,8 +73,14 @@ const Component: React.ComponentType<ComponentProps> = () => {
               <div>
                 <Checkbox
                   value={title}
-                  checked
-                  onChange={x => x}
+                  checked={activeEntities.includes(type)}
+                  onChange={() =>
+                    setActiveEntities(
+                      activeEntities.includes(type)
+                        ? activeEntities.filter(e => e !== type)
+                        : [...activeEntities, type],
+                    )
+                  }
                   aria-label={title}
                   color={color}
                 />
@@ -85,6 +95,9 @@ const Component: React.ComponentType<ComponentProps> = () => {
             );
           })}
         </div>
+      </div>
+      <div>
+        <Timeline entities={null} />
       </div>
     </Container>
   );
