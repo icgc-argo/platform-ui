@@ -100,7 +100,6 @@ const Checkbox = ({
   'aria-label': ariaLabel,
   value,
   color,
-  ...props
 }: {
   checked: boolean;
   disabled?: boolean;
