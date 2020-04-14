@@ -1,9 +1,5 @@
 import Container from 'uikit/Container';
-import { css, keyframes } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled-base';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
 import Table from 'uikit/Table';
 
 export default () => {
