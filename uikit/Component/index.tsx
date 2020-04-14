@@ -2,6 +2,8 @@ import React from 'react';
 import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
 import Checkbox from 'uikit/form/Checkbox';
+import { css } from 'uikit';
+import useTheme from '../utils/useTheme';
 
 const TIMELINE_TYPES = {
   pd: {
@@ -46,22 +48,46 @@ const mock = {
 };
 
 type ComponentProps = {};
-const Component: React.ComponentType<ComponentProps> = () => (
-  <Container>
-    <div>
-      <Typography variant="default">Component</Typography>
+const Component: React.ComponentType<ComponentProps> = () => {
+  const theme = useTheme();
+
+  return (
+    <Container>
       <div>
-        Show:
-        {Object.keys(mock).map(type => {
-          const { title, color } = TIMELINE_TYPES[type];
-          console.log('title', title, 'color', color);
-          return (
-            <Checkbox value={title} checked onChange={x => x} aria-label={title} color={color} />
-          );
-        })}
+        <Typography variant="default">Component</Typography>
+        <div
+          css={css`
+            display: flex;
+            ${css(theme.typography.data as any)};
+          `}
+        >
+          Show:
+          {Object.keys(mock).map(type => {
+            const { title, color } = TIMELINE_TYPES[type];
+
+            return (
+              <div>
+                <Checkbox
+                  value={title}
+                  checked
+                  onChange={x => x}
+                  aria-label={title}
+                  color={color}
+                />
+                <label
+                  css={css`
+                    margin-left: 8px;
+                  `}
+                >
+                  {title}
+                </label>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </Container>
-);
+    </Container>
+  );
+};
 
 export default Component;
