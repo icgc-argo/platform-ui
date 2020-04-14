@@ -3,10 +3,11 @@ import {
   DonorDataReleaseState,
   MolecularProcessingStatus,
   ProgoramDonorReleasStats,
+  DonorSummaryEntrySort,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
-import { displayDate } from 'global/utils/common';
+import { displayDate, sleep } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import {
   DataTableStarIcon as StarIcon,
@@ -24,6 +25,9 @@ import Pipe from 'uikit/Pipe';
 import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
+import { useProgramDonorsSummaryQuery } from '.';
+import React from 'react';
+import { SortedChangeFunction, SortingRule } from 'react-table';
 
 enum PIPELINE_STATUS {
   COMPLETE = 'complete',
@@ -35,10 +39,25 @@ type PipelineStats = Record<PIPELINE_STATUS, number>;
 export default ({
   donorSummaryEntries,
   programDonorSummaryStats,
+  programShortName,
+  offset: initialOffset,
+  pageSize: initialPageSize,
+  sorts: initialSorts,
+  isEntriesLoading,
 }: {
   donorSummaryEntries: Array<DonorSummaryRecord>;
   programDonorSummaryStats: ProgoramDonorReleasStats;
+  programShortName: string;
+  pageSize: number;
+  offset: number;
+  sorts: DonorSummaryEntrySort[];
+  isEntriesLoading: boolean;
 }) => {
+  const {
+    fetchMore: fetchMoreSummaryEntries,
+    loading: isUpdatedEntriesLoading,
+  } = useProgramDonorsSummaryQuery(programShortName, initialPageSize, initialOffset, initialSorts);
+
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
@@ -196,7 +215,7 @@ export default ({
         },
         {
           Header: 'Donor ID',
-          accessor: 'donorID',
+          accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return (
               <Link href="">
@@ -282,7 +301,7 @@ export default ({
         },
         {
           Header: 'Last Updated',
-          accessor: 'lastUpdated',
+          accessor: 'updatedAt',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
@@ -290,6 +309,81 @@ export default ({
       ],
     },
   ];
+
+  const [tableState, setTableState] = React.useState({
+    pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / initialPageSize),
+    pageSize: initialPageSize,
+    page: 0,
+    sorts: initialSorts,
+  });
+
+  const [isTableLoading, setIsTableLoading] = React.useState(false);
+
+  // effect used to set/unset table loader
+  React.useEffect(() => {
+    if (isUpdatedEntriesLoading || isEntriesLoading) {
+      setIsTableLoading(true);
+    } else {
+      sleep(500).then(() => setIsTableLoading(false));
+    }
+  }, [isUpdatedEntriesLoading, isEntriesLoading]);
+
+  const updateProgarmDonorSummariesQuery = async (updatedVariables: any) => {
+    // turn on loader and wait before fetching more data so data doesn't render before loader
+    setIsTableLoading(true);
+    await sleep(100);
+    fetchMoreSummaryEntries({
+      variables: updatedVariables,
+      updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult || prev,
+    });
+  };
+
+  const fetchNext = async (newPageNum: number) => {
+    newPageNum =
+      newPageNum > tableState.pages - 1 ? tableState.pages - 1 : newPageNum < 0 ? 0 : newPageNum; // newPageNum is zero indexed
+
+    const newOffset = newPageNum * tableState.pageSize;
+
+    await updateProgarmDonorSummariesQuery({
+      offset: newOffset,
+      first: tableState.pageSize,
+      sorts: tableState.sorts,
+    });
+
+    setTableState({ ...tableState, page: newPageNum });
+  };
+
+  const repage = async (newPageSize: number, newPage: number) => {
+    const newOffset = newPage * newPageSize; // newPage is zero indexed
+
+    await updateProgarmDonorSummariesQuery({
+      offset: newOffset,
+      first: newPageSize,
+      sorts: tableState.sorts,
+    });
+
+    setTableState({
+      ...tableState,
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
+    });
+  };
+
+  const resort: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+    const sorts = newSorted.map(sortingRule => ({
+      field: sortingRule.id,
+      order: sortingRule.desc ? 'desc' : 'asc',
+    }));
+
+    await updateProgarmDonorSummariesQuery({
+      sorts,
+      first: tableState.pageSize,
+      offset: tableState.page * tableState.pageSize,
+    });
+
+    setTableState({ ...tableState, sorts });
+  };
 
   return (
     <div
@@ -305,10 +399,18 @@ export default ({
         noMargin={true}
       />
       <Table
+        loading={isTableLoading}
         parentRef={containerRef}
-        showPagination={true}
         columns={tableColumns}
         data={donorSummaryEntries}
+        showPagination={true}
+        manual={true}
+        pages={tableState.pages}
+        pageSize={tableState.pageSize}
+        page={tableState.page}
+        onPageChange={fetchNext}
+        onPageSizeChange={repage}
+        onSortedChange={resort}
       />
     </div>
   );

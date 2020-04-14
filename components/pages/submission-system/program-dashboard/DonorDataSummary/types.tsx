@@ -42,7 +42,18 @@ export type ProgramDonorsSummaryQueryData = {
   programDonorSummaryStats: ProgoramDonorReleasStats;
 };
 
+export type ProgramDonorsSummaryStatsQueryData = {
+  programDonorSummaryStats: ProgoramDonorReleasStats;
+};
+
 export type ProgramDonorsSummaryQueryVariables = {
   programShortName: string;
   first: number;
+  offset: number;
+  sorts: DonorSummaryEntrySort[];
+};
+
+export type DonorSummaryEntrySort = {
+  field: string; // keyof DonorSummaryRecord;
+  order: string; //'asc' | 'desc';
 };

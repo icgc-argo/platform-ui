@@ -148,7 +148,7 @@ export default () => {
     DASHBOARD_SUMMARY_QUERY,
     {
       variables: { programShortName: programShortName },
-      pollInterval: POLL_INTERVAL_MILLISECONDS,
+      // pollInterval: POLL_INTERVAL_MILLISECONDS,
     },
   );
   return (

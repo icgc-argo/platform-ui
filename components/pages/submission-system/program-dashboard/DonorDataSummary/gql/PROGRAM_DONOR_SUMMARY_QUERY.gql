@@ -1,5 +1,15 @@
-query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!, $first: Int!) {
-  programDonorSummaryEntries(programShortName: $programShortName, first: $first) {
+query PROGRAM_DONOR_SUMMARY_QUERY(
+  $programShortName: String!
+  $first: Int!
+  $offset: Int!
+  $sorts: [DonorSummaryEntrySort]
+) {
+  programDonorSummaryEntries(
+    programShortName: $programShortName
+    first: $first
+    offset: $offset
+    sorts: $sorts
+  ) {
     donorId
     validWithCurrentDictionary
     releaseStatus
@@ -18,11 +28,5 @@ query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!, $first: Int!) {
     sangerVcsFailed
     processingStatus
     updatedAt
-  }
-  programDonorSummaryStats(programShortName: $programShortName) {
-    registeredDonorsCount
-    fullyReleasedDonorsCount
-    partiallyReleasedDonorsCount
-    noReleaseDonorsCount
   }
 }
