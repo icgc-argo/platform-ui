@@ -1,52 +1,70 @@
 import Container from 'uikit/Container';
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
-import { DashboardCard } from '../common';
+import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
+import { useQuery } from '@apollo/react-hooks';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import {
+  DashboardCard,
+  DashboardSummaryData,
+  DashboardSummaryDataVariables,
+  POLL_INTERVAL_MILLISECONDS,
+} from '../common';
 
-export default () => (
-  <DashboardCard>
-    <Typography variant="default" component="span">
-      Donor Release Summary
-    </Typography>
-
-    <div
-      css={css`
-        margin-top: 40px;
-        background-color: #dcdde1;
-        border-radius: 8px;
-        width: 100%;
-        margin-bottom: 8px;
-      `}
-    >
-      &nbsp;
-    </div>
-
-    <div
-      css={css`
-        display: flex;
-        align-items: flex-end;
-        flex-direction: row;
-        justify-content: space-between;
-      `}
-    >
-      <Typography variant="caption" color="grey">
-        With Released Files
+export default () => {
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { data, loading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
+    DASHBOARD_SUMMARY_QUERY,
+    {
+      variables: { programShortName: programShortName },
+      pollInterval: POLL_INTERVAL_MILLISECONDS,
+    },
+  );
+  return (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        Donor Release Summary
       </Typography>
 
-      <div>
-        <Typography
-          variant="caption"
-          bold={true}
-          css={css`
-            margin-right: 5px;
-          `}
-        >
-          2,000
-        </Typography>
-        <Typography variant="caption" color="grey">
-          Committed
-        </Typography>
+      <div
+        css={css`
+          margin-top: 40px;
+          background-color: #dcdde1;
+          border-radius: 8px;
+          width: 100%;
+          margin-bottom: 8px;
+        `}
+      >
+        &nbsp;
       </div>
-    </div>
-  </DashboardCard>
-);
+
+      <div
+        css={css`
+          display: flex;
+          align-items: flex-end;
+          flex-direction: row;
+          justify-content: space-between;
+        `}
+      >
+        <Typography variant="caption" color="grey">
+          With Released Files
+        </Typography>
+
+        <div>
+          <Typography
+            variant="caption"
+            bold={true}
+            css={css`
+              margin-right: 5px;
+            `}
+          >
+            {loading ? '...' : data.program.commitmentDonors}
+          </Typography>
+          <Typography variant="caption" color="grey">
+            Committed
+          </Typography>
+        </div>
+      </div>
+    </DashboardCard>
+  );
+};
