@@ -115,6 +115,9 @@ const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<F
     }
   }, [allOptionsVisible, selectedFacetOptions, searchQueryState]);
 
+  const numberofMoreOptions = options.length - visibleOptions.length;
+  const moreToggleVisibility =
+    numberofMoreOptions === 0 ? (allOptionsVisible ? 'visible' : 'hidden') : 'visible';
   const viewAmountController = (
     <div
       className=""
@@ -142,6 +145,7 @@ const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<F
           display: flex;
           align-content: center;
           align-items: center;
+          visibility: ${moreToggleVisibility};
         `}
       >
         <HyperLink
@@ -160,7 +164,7 @@ const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<F
             `}
             fill={useTheme().colors.accent2}
           />
-          {allOptionsVisible ? `Less` : `${options.length - visibleOptions.length} More`}
+          {allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
         </HyperLink>
       </div>
     </div>
