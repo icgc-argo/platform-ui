@@ -5,8 +5,8 @@ import { Tooltip as ReactTippy } from 'react-tippy';
 
 import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
-import Typography from '../Typography';
 import { Global } from '@emotion/core';
+import { merge } from 'lodash';
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
 type TooltipProps = {
@@ -45,8 +45,43 @@ type TooltipProps = {
   style?: {};
 };
 
-const Tooltip: React.ComponentType<TooltipProps> = ({ html, ...rest }) => {
+const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ...rest }) => {
   const theme = useTheme();
+  const arrowStyles = {
+    top: `
+    right: 50%;
+      top: 100%;
+      border-top-color: ${theme.colors.primary_1};
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
+      margin-right: -5px;
+    `,
+    left: `
+      bottom: 50%;
+      left: 100%;
+      border-left-color: ${theme.colors.primary_1};
+      border-bottom: 5px solid transparent;
+      border-top: 5px solid transparent;
+      margin-bottom: -5px;
+    `,
+    bottom: `
+      left: 50%;
+      bottom: 100%;
+      border-bottom-color: ${theme.colors.primary_1};
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      margin-left: -5px;
+    `,
+    right: `
+      top: 50%;
+      right: 100%;
+      border-right-color: ${theme.colors.primary_1};
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      margin-top: -5px
+    `,
+  };
+
   const TooltipContainer = styled('div')`
     ${css(theme.typography.caption as any)}
     background: ${theme.colors.primary_1};
@@ -54,7 +89,17 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, ...rest }) => {
     padding: 2px 4px;
     color: white;
     font-weight: normal;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 5px solid transparent;
+      ${arrowStyles[position]}
+    }
   `;
+
   return (
     <>
       <Global
@@ -64,7 +109,27 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, ...rest }) => {
           }
         `}
       />
-      <ReactTippy html={<TooltipContainer id="tooltip">{html}</TooltipContainer>} {...rest} />
+      <ReactTippy
+        popperOptions={{
+          modifiers: merge(
+            {
+              preventOverflow: {
+                enabled: false,
+              },
+              flip: {
+                enabled: false,
+              },
+              hide: {
+                enabled: false,
+              },
+            },
+            rest.popperOptions,
+          ),
+        }}
+        html={<TooltipContainer id="tooltip">{html}</TooltipContainer>}
+        position={position}
+        {...rest}
+      />
     </>
   );
 };
