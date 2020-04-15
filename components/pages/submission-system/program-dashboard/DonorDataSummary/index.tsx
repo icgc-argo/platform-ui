@@ -1,5 +1,5 @@
 import Typography from 'uikit/Typography';
-import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
+import { DashboardCard } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
@@ -33,8 +33,9 @@ export const useProgramDonorsSummaryQuery = (
         offset,
         sorts,
       },
+      // default cache doesn't cache data for updated query variables, so data and query variables may not match
+      fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
-      // pollInterval: POLL_INTERVAL_MILLISECONDS, // milliseconds
     },
   );
   return {

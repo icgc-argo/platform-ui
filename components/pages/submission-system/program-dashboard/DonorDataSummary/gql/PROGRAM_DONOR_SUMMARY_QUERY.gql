@@ -10,7 +10,9 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
     offset: $offset
     sorts: $sorts
   ) {
+    id
     donorId
+    programShortName
     validWithCurrentDictionary
     releaseStatus
     submitterDonorId

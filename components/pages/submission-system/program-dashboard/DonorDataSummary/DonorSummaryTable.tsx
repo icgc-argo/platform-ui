@@ -4,6 +4,7 @@ import {
   MolecularProcessingStatus,
   ProgoramDonorReleasStats,
   DonorSummaryEntrySort,
+  ProgramDonorsSummaryQueryVariables,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
@@ -53,6 +54,14 @@ export default ({
   sorts: DonorSummaryEntrySort[];
   isEntriesLoading: boolean;
 }) => {
+  // These are used to sort columns with multiple fields
+  // the order of the fields is how its is order in asc or desc
+  const ID_SEPERATOR = '-';
+  const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
+  const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
+  const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
+  const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
+
   const {
     fetchMore: fetchMoreSummaryEntries,
     loading: isUpdatedEntriesLoading,
@@ -201,7 +210,7 @@ export default ({
             </CellContentCenter>
           ),
           Cell: StatusColumnCell,
-          accessor: 'releaseState',
+          accessor: 'releaseStatus',
           resizable: false,
           width: 50,
           sortMethod: (a: DonorDataReleaseState, b: DonorDataReleaseState) => {
@@ -240,7 +249,7 @@ export default ({
         },
         {
           Header: 'Samples',
-          accessor: 'samples',
+          id: REGISTERD_SAMPLE_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
               left={original.registeredNormalSamples}
@@ -259,7 +268,7 @@ export default ({
       columns: [
         {
           Header: 'Raw Reads',
-          accessor: 'rawReads',
+          id: RAW_READS_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
               left={original.publishedNormalAnalysis}
@@ -270,7 +279,7 @@ export default ({
         },
         {
           Header: 'Alignment',
-          accessor: 'alignment',
+          id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
             <PipelineCell
               complete={original.alignmentsCompleted}
@@ -281,7 +290,7 @@ export default ({
         },
         {
           Header: 'Sanger VC',
-          accessor: 'sangerVC',
+          id: SANGER_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <PipelineCell
               complete={original.sangerVcsCompleted}
@@ -328,7 +337,9 @@ export default ({
     }
   }, [isUpdatedEntriesLoading, isEntriesLoading]);
 
-  const updateProgarmDonorSummariesQuery = async (updatedVariables: any) => {
+  const updateProgarmDonorSummariesQuery = async (
+    updatedVariables: Partial<ProgramDonorsSummaryQueryVariables>,
+  ) => {
     // turn on loader and wait before fetching more data so data doesn't render before loader
     setIsTableLoading(true);
     await sleep(100);
@@ -371,10 +382,14 @@ export default ({
   };
 
   const resort: SortedChangeFunction = async (newSorted: SortingRule[]) => {
-    const sorts = newSorted.map(sortingRule => ({
-      field: sortingRule.id,
-      order: sortingRule.desc ? 'desc' : 'asc',
-    }));
+    const sorts = newSorted.reduce(
+      (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
+        const fields = sortRule.id.split(ID_SEPERATOR);
+        const order = sortRule.desc ? 'desc' : 'asc';
+        return accSorts.concat(fields.map(field => ({ field, order })));
+      },
+      [],
+    );
 
     await updateProgarmDonorSummariesQuery({
       sorts,
