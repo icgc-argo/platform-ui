@@ -319,13 +319,6 @@ export default ({
     },
   ];
 
-  const [tableState, setTableState] = React.useState({
-    pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / initialPageSize),
-    pageSize: initialPageSize,
-    page: 0,
-    sorts: initialSorts,
-  });
-
   const [isTableLoading, setIsTableLoading] = React.useState(false);
 
   // effect used to set/unset table loader
@@ -340,49 +333,20 @@ export default ({
   const updateProgarmDonorSummariesQuery = async (
     updatedVariables: Partial<ProgramDonorsSummaryQueryVariables>,
   ) => {
-    // turn on loader and wait before fetching more data so data doesn't render before loader
-    setIsTableLoading(true);
-    await sleep(100);
     fetchMoreSummaryEntries({
       variables: updatedVariables,
       updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult || prev,
     });
   };
 
-  const fetchNext = async (newPageNum: number) => {
-    newPageNum =
-      newPageNum > tableState.pages - 1 ? tableState.pages - 1 : newPageNum < 0 ? 0 : newPageNum; // newPageNum is zero indexed
+  const [pages, setPages] = React.useState(
+    Math.ceil(programDonorSummaryStats.registeredDonorsCount / initialPageSize),
+  );
 
-    const newOffset = newPageNum * tableState.pageSize;
+  const handleFetchData = async (state: any, instance: any) => {
+    setIsTableLoading(true);
 
-    await updateProgarmDonorSummariesQuery({
-      offset: newOffset,
-      first: tableState.pageSize,
-      sorts: tableState.sorts,
-    });
-
-    setTableState({ ...tableState, page: newPageNum });
-  };
-
-  const repage = async (newPageSize: number, newPage: number) => {
-    const newOffset = newPage * newPageSize; // newPage is zero indexed
-
-    await updateProgarmDonorSummariesQuery({
-      offset: newOffset,
-      first: newPageSize,
-      sorts: tableState.sorts,
-    });
-
-    setTableState({
-      ...tableState,
-      page: 0,
-      pageSize: newPageSize,
-      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
-    });
-  };
-
-  const resort: SortedChangeFunction = async (newSorted: SortingRule[]) => {
-    const sorts = newSorted.reduce(
+    const sorts = state.sorted.reduce(
       (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
         const fields = sortRule.id.split(ID_SEPERATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
@@ -391,13 +355,14 @@ export default ({
       [],
     );
 
-    await updateProgarmDonorSummariesQuery({
+    updateProgarmDonorSummariesQuery({
+      programShortName,
       sorts,
-      first: tableState.pageSize,
-      offset: tableState.page * tableState.pageSize,
+      first: state.pageSize,
+      offset: state.page * state.pageSize,
     });
 
-    setTableState({ ...tableState, sorts });
+    setPages(Math.ceil(programDonorSummaryStats.registeredDonorsCount / state.pageSize));
   };
 
   return (
@@ -420,12 +385,8 @@ export default ({
         data={donorSummaryEntries}
         showPagination={true}
         manual={true}
-        pages={tableState.pages}
-        pageSize={tableState.pageSize}
-        page={tableState.page}
-        onPageChange={fetchNext}
-        onPageSizeChange={repage}
-        onSortedChange={resort}
+        pages={pages}
+        onFetchData={handleFetchData}
       />
     </div>
   );
