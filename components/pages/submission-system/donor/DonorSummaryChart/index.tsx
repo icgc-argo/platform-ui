@@ -1,12 +1,22 @@
+import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { Row, Col } from 'react-grid-system';
 import Table from 'uikit/Table';
+import Typography from 'uikit/Typography';
 
 export default () => {
   return (
     <div>
-      <Container>
+      <Container
+        css={css`
+          padding: 20px;
+          padding-top: 0px;
+        `}
+      >
         <Row>
+          <Col xs={12}>
+            <Typography variant="subtitle">Summary</Typography>
+          </Col>
           <Col xs={6}>
             <Table
               TheadComponent={props => null}
@@ -25,7 +35,10 @@ export default () => {
                 { id: 'Height', val: '...' },
                 { id: 'Weight', val: '...' },
               ]}
-              columns={[{ sortable: false, accessor: 'id' }, { accessor: 'val' }]}
+              columns={[
+                { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
+                { accessor: 'val', style: { whiteSpace: 'unset' } },
+              ]}
             />
           </Col>
           <Col xs={6}>
@@ -45,7 +58,10 @@ export default () => {
                 { id: 'Age at Prior Malignancy', val: '...' },
                 { id: 'Laterality of Prior Malignancy', val: '...' },
               ]}
-              columns={[{ sortable: false, accessor: 'id' }, { accessor: 'val' }]}
+              columns={[
+                { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
+                { accessor: 'val', style: { whiteSpace: 'unset' } },
+              ]}
             />
           </Col>
         </Row>
