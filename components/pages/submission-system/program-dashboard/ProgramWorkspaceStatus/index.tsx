@@ -13,7 +13,7 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import { DashboardCard } from '../common';
-import { isCollaborator } from 'global/utils/egoJwt';
+import { isCollaborator, getPermissionsFromToken } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
 
 const ConditionalLink: React.ComponentType<{
@@ -33,7 +33,10 @@ const ConditionalLink: React.ComponentType<{
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { token } = useAuthContext();
-  const canViewLinks = !isCollaborator({ egoJwt: token, programId: programShortName });
+  const canViewLinks = !isCollaborator({
+    permissions: getPermissionsFromToken(token),
+    programId: programShortName,
+  });
   return (
     <DashboardCard cardHeight="170px">
       <Typography variant="default" component="span">

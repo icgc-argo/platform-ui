@@ -42,71 +42,82 @@ export const decodeToken = memoize(
 export const isValidJwt: (egoJwt: string) => boolean = egoJwt =>
   !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
-export const isDccMember = (egoJwt: string): boolean =>
-  isValidJwt(egoJwt) && TokenUtils.isDccMember(egoJwt);
+export const getPermissionsFromToken: (egoJwt: string) => string[] = egoJwt => {
+  return TokenUtils.getScopesFromToken(egoJwt);
+};
 
-export const isRdpcMember = (egoJwt: string): boolean =>
-  isValidJwt(egoJwt) && TokenUtils.isRdpcMember(egoJwt);
+export const isDccMember = (permissions: string[]): boolean => TokenUtils.isDccMember(permissions);
 
-export const canReadSomeProgram = (egoJwt: string): boolean =>
-  isValidJwt(egoJwt) && TokenUtils.canReadSomeProgram(egoJwt);
+export const isRdpcMember = (permissions: string[]): boolean =>
+  TokenUtils.isRdpcMember(permissions);
 
-export const canWriteSomeProgram = (egoJwt: string): boolean =>
-  isValidJwt(egoJwt) && TokenUtils.canWriteSomeProgram(egoJwt);
+export const canReadSomeProgram = (permissions: string[]): boolean =>
+  TokenUtils.canReadSomeProgram(permissions);
+
+export const canWriteSomeProgram = (permissions: string[]): boolean =>
+  TokenUtils.canWriteSomeProgram(permissions);
 
 export const parseScope = (scope: string): PermissionScopeObj => TokenUtils.parseScope(scope);
 
 export const serializeScope = (scopeObj: PermissionScopeObj): string =>
   TokenUtils.serializeScope(scopeObj);
 
-export const getAuthorizedProgramScopes = (egoJwt: string): Array<PermissionScopeObj> =>
-  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramScopes(egoJwt) : [];
+export const getAuthorizedProgramScopes = (permissions: string[]): Array<PermissionScopeObj> =>
+  TokenUtils.getReadableProgramScopes(permissions);
 
-export const canReadProgram = (args: { egoJwt: string; programId: string }): boolean =>
-  isValidJwt(args.egoJwt) && TokenUtils.canReadProgram(args);
+export const canReadProgram = (args: { permissions: string[]; programId: string }): boolean =>
+  TokenUtils.canReadProgram(args);
 
-export const canWriteProgram = (args: { egoJwt: string; programId: string }): boolean =>
-  isValidJwt(args.egoJwt) && TokenUtils.canWriteProgram(args);
+export const canWriteProgram = (args: { permissions: string[]; programId: string }): boolean =>
+  TokenUtils.canWriteProgram(args);
 
-export const isProgramAdmin: (args: { egoJwt: string; programId: string }) => boolean = args =>
-  isValidJwt(args.egoJwt) && TokenUtils.isProgramAdmin(args);
+export const isProgramAdmin: (args: {
+  permissions: string[];
+  programId: string;
+}) => boolean = args => TokenUtils.isProgramAdmin(args);
 
-export const getReadableProgramShortNames = (egoJwt: string): Array<string> =>
-  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramShortNames(egoJwt) : [];
+export const getReadableProgramShortNames = (scopes: PermissionScopeObj[]): Array<string> =>
+  TokenUtils.getReadableProgramShortNames(scopes);
 
-export const canReadProgramData: (args: { egoJwt: string; programId: string }) => boolean = args =>
-  isValidJwt(args.egoJwt) && TokenUtils.canReadProgramData(args);
+export const canReadProgramData: (args: {
+  permissions: string[];
+  programId: string;
+}) => boolean = args => TokenUtils.canReadProgramData(args);
 
-export const canWriteProgramData: (args: { egoJwt: string; programId: string }) => boolean = args =>
-  isValidJwt(args.egoJwt) && TokenUtils.canWriteProgramData(args);
+export const canWriteProgramData: (args: {
+  permissions: string[];
+  programId: string;
+}) => boolean = args => TokenUtils.canWriteProgramData(args);
 
-export const canReadSomeProgramData: (egoJwt: string) => boolean = egoJwt =>
-  isValidJwt(egoJwt) && TokenUtils.canReadSomeProgramData(egoJwt);
+export const canReadSomeProgramData: (permissions: string[]) => boolean = permissions =>
+  TokenUtils.canReadSomeProgramData(permissions);
 
-export const canWriteSomeProgramData: (egoJwt: string) => boolean = egoJwt =>
-  isValidJwt(egoJwt) && TokenUtils.canWriteSomeProgramData(egoJwt);
+export const canWriteSomeProgramData: (permissions: string[]) => boolean = permissions =>
+  TokenUtils.canWriteSomeProgramData(permissions);
 
-export const getReadableProgramDataScopes: (egoJwt: string) => PermissionScopeObj[] = egoJwt =>
-  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramDataScopes(egoJwt) : [];
+export const getReadableProgramDataScopes: (
+  permissions: string[],
+) => PermissionScopeObj[] = permissions => TokenUtils.getReadableProgramDataScopes(permissions);
 
-export const getWritableProgramDataScopes: (egoJwt: string) => PermissionScopeObj[] = egoJwt =>
-  isValidJwt(egoJwt) ? TokenUtils.getWritableProgramDataScopes(egoJwt) : [];
+export const getWritableProgramDataScopes: (
+  permissions: string[],
+) => PermissionScopeObj[] = permissions => TokenUtils.getWritableProgramDataScopes(permissions);
 
-export const getReadableProgramDataNames: (egoJwt: string) => string[] = egoJwt =>
-  isValidJwt(egoJwt) ? TokenUtils.getReadableProgramDataNames(egoJwt) : [];
+export const getReadableProgramDataNames: (permissions: string[]) => string[] = permissions =>
+  TokenUtils.getReadableProgramDataNames(permissions);
 
-export const getWritableProgramDataNames: (egoJwt: string) => string[] = egoJwt =>
-  isValidJwt(egoJwt) ? TokenUtils.getWritableProgramDataNames(egoJwt) : [];
+export const getWritableProgramDataNames: (permissions: string[]) => string[] = permissions =>
+  TokenUtils.getWritableProgramDataNames(permissions);
 
-export const isDataSubmitter: (args: { egoJwt: string; programId: string }) => boolean = ({
-  egoJwt,
+export const isDataSubmitter: (args: { permissions: string[]; programId: string }) => boolean = ({
+  permissions,
   programId,
-}) => canWriteProgramData({ egoJwt, programId }) && canReadProgram({ egoJwt, programId });
+}) => canWriteProgramData({ permissions, programId }) && canReadProgram({ permissions, programId });
 
-export const isCollaborator: (args: { egoJwt: string; programId: string }) => boolean = ({
-  egoJwt,
+export const isCollaborator: (args: { permissions: string[]; programId: string }) => boolean = ({
+  permissions,
   programId,
 }) =>
-  canReadProgramData({ egoJwt, programId }) &&
-  canReadProgram({ egoJwt, programId }) &&
-  !canWriteProgramData({ egoJwt, programId });
+  canReadProgramData({ permissions, programId }) &&
+  canReadProgram({ permissions, programId }) &&
+  !canWriteProgramData({ permissions, programId });

@@ -2,7 +2,12 @@ import React from 'react';
 
 import { createPage } from 'global/utils/pages';
 import ProgramSampleRegistration from 'components/pages/submission-system/program-sample-registration';
-import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import {
+  isRdpcMember,
+  canReadProgram,
+  canWriteProgramData,
+  getPermissionsFromToken,
+} from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
@@ -11,10 +16,11 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
+    const permissions = getPermissionsFromToken(egoJwt);
     return (
-      !isRdpcMember(egoJwt) &&
-      canReadProgram({ egoJwt, programId: String(shortName) }) &&
-      canWriteProgramData({ egoJwt, programId: String(shortName) })
+      !isRdpcMember(permissions) &&
+      canReadProgram({ permissions, programId: String(shortName) }) &&
+      canWriteProgramData({ permissions, programId: String(shortName) })
     );
   },
   startWithGlobalLoader: true,

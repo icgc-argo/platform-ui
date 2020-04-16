@@ -13,6 +13,8 @@ import {
   canWriteProgram,
   canWriteProgramData,
   canReadProgramData,
+  getPermissionsFromToken,
+  getAuthorizedProgramScopes,
 } from 'global/utils/egoJwt';
 import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
 import Link from 'next/link';
@@ -33,7 +35,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <Link
       href={
-        isDccMember(token)
+        isDccMember(getPermissionsFromToken(token))
           ? PROGRAMS_LIST_PATH
           : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
       }
@@ -85,7 +87,8 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
 };
 
 const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
-  if (isDccMember(egoJwt)) {
+  const permissions = getPermissionsFromToken(egoJwt);
+  if (isDccMember(permissions)) {
     return [
       {
         shortName: 'All Programs',
@@ -94,25 +97,27 @@ const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram
       },
     ];
   } else {
-    const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
-    const readableProgramDataShortNames = getReadableProgramDataNames(egoJwt);
+    const scopes = getAuthorizedProgramScopes(permissions);
+
+    const readableProgramShortNames = getReadableProgramShortNames(scopes);
+    const readableProgramDataShortNames = getReadableProgramDataNames(permissions);
     return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(shortName => {
       let role: string = '';
-      let permissions: string = '';
-      if (canWriteProgram({ egoJwt, programId: shortName })) {
+      let displayPermissions: string = '';
+      if (canWriteProgram({ permissions, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-      } else if (canWriteProgramData({ egoJwt, programId: shortName })) {
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+      } else if (canWriteProgramData({ permissions, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-      } else if (canReadProgramData({ egoJwt, programId: shortName })) {
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+      } else if (canReadProgramData({ permissions, programId: shortName })) {
         role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-        permissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
       }
       return {
         shortName,
         role,
-        permissions,
+        permissions: displayPermissions,
       };
     });
   }

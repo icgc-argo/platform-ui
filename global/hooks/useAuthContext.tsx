@@ -109,15 +109,6 @@ export function AuthProvider({
       });
   };
 
-  React.useEffect(() => {
-    if (token && isValidJwt(token)) {
-      const expiry = decodeToken(token).exp;
-      setTimeout(() => {
-        refreshJwt().then(newJwt => setToken(newJwt));
-      }, expiry * 1000 - Date.now() - TOKEN_BUFFER);
-    }
-  }, [token]);
-
   const authData = {
     token,
     logOut,

@@ -6,7 +6,7 @@ import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Button from 'uikit/Button';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
+import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
@@ -38,7 +38,7 @@ export default ({
   submissionVersion: string;
 }) => {
   const { token } = useAuthContext();
-  const isDcc = isDccMember(token);
+  const isDcc = isDccMember(getPermissionsFromToken(token));
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
   const {

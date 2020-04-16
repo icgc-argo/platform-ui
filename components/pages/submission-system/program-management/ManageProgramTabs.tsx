@@ -10,7 +10,7 @@ import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import ProgramForm from '../program-form/ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
-import { isDccMember } from 'global/utils/egoJwt';
+import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
 import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
@@ -84,7 +84,7 @@ const useTabState = () => {
 
 export default () => {
   const { token } = useAuthContext();
-  const isDcc = token ? isDccMember(token) : false;
+  const isDcc = token ? isDccMember(getPermissionsFromToken(token)) : false;
 
   const { shortName: programShortName } = usePageQuery();
 

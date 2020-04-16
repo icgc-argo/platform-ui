@@ -13,7 +13,7 @@ import {
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
+import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 
@@ -97,7 +97,7 @@ export default ({
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { token } = useAuthContext();
-  const isDccPreview = isDccMember(token) && isPendingApproval;
+  const isDccPreview = isDccMember(getPermissionsFromToken(token)) && isPendingApproval;
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length

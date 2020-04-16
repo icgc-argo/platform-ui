@@ -4,7 +4,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
+import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
@@ -90,7 +90,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
           >
             All Programs
           </Typography>
-          {authContext.token && isDccMember(authContext.token) && (
+          {authContext.token && isDccMember(getPermissionsFromToken(authContext.token)) && (
             <Link href={CREATE_PROGRAM_PAGE_PATH}>
               <Button id="primary-action-create-program">Create a program</Button>
             </Link>
