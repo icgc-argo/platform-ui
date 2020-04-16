@@ -4,18 +4,18 @@ import Facet, { FilterOption } from '.';
 
 const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const exampleOptions: Array<FilterOption> = [
-    { name: 'Gall Bladder', quantity: 587 },
-    { name: 'Breast', quantity: 525 },
-    { name: 'Prostate', quantity: 510 },
-    { name: 'Brain', quantity: 478 },
-    { name: 'Liver', quantity: 415 },
-    { name: 'Eye', quantity: 623 },
-    { name: 'Bone', quantity: 834 },
-    { name: 'Cardiac', quantity: 626 },
-    { name: 'Colorectal', quantity: 144 },
-    { name: 'Skin', quantity: 882 },
-    { name: 'Bile Duct', quantity: 573 },
-    { name: 'Esophagus', quantity: 221 },
+    { key: 'Gall Bladder', doc_count: 587 },
+    { key: 'Breast', doc_count: 525 },
+    { key: 'Prostate', doc_count: 510 },
+    { key: 'Brain', doc_count: 478 },
+    { key: 'Liver', doc_count: 415 },
+    { key: 'Eye', doc_count: 623 },
+    { key: 'Bone', doc_count: 834 },
+    { key: 'Cardiac', doc_count: 626 },
+    { key: 'Colorectal', doc_count: 144 },
+    { key: 'Skin', doc_count: 882 },
+    { key: 'Bile Duct', doc_count: 573 },
+    { key: 'Esophagus', doc_count: 221 },
   ];
   return <Facet subMenuName="Primary Site" options={exampleOptions} />;
 });

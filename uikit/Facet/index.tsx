@@ -1,6 +1,5 @@
 import React from 'react';
 import { MenuItem } from '../SubMenu';
-import Icon from 'uikit/Icon';
 import Checkbox from 'uikit/form/Checkbox';
 import { css } from '@emotion/core';
 import Tag from 'uikit/Tag';
@@ -8,167 +7,124 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import orderBy from 'lodash/orderBy';
 
-import HyperLink from 'uikit/Link';
+import ViewAmountController from '../ViewAmountController';
 
 export type FilterOption = {
-  name: string;
-  quantity: number;
+  key: string;
+  doc_count: number;
 };
+
+type SelectableFilterOption = FilterOption & { isChecked: boolean };
+
 const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<FilterOption> }) => {
+  const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
   const [searchQueryState, setSearchQueryState] = React.useState('');
-  const queriedOptionNames = options
+  const queriedOptionKeys = options
     .filter(
-      ({ name }) => !searchQueryState.length || name.search(new RegExp(searchQueryState, 'i')) > -1,
+      ({ key }) => !searchQueryState.length || key.search(new RegExp(searchQueryState, 'i')) > -1,
     )
-    .map(option => option.name);
+    .map(option => option.key);
 
-  const [selectedFacetOptions, setSelectedFacetOptions] = React.useState([]);
   const [selectAll, setSelectAll] = React.useState(true);
+
+  const initalStates = options.map(option => {
+    return { ...option, isChecked: false };
+  });
+
+  const [optionStates, setOptionStates] = React.useState<Array<SelectableFilterOption>>(
+    initalStates,
+  );
 
   const defaultRenderLimit = 5;
 
-  const buildStyledOption = (option: FilterOption) => {
-    const [checked, setChecked] = React.useState(false);
-    const styledOption = (
-      <MenuItem
-        key={option.name}
-        css={css`
-          height: 35px;
-        `}
-        level={1}
-        selected={false}
-        onClick={e => {
-          setChecked(!checked);
-          !selectedFacetOptions.includes(option.name)
-            ? setSelectedFacetOptions([...selectedFacetOptions, option.name])
-            : setSelectedFacetOptions(selectedFacetOptions.filter(name => name !== option.name));
-        }}
-        content={
+  const StyledOption: React.ComponentType<{
+    option: SelectableFilterOption;
+  }> = ({ option }) => (
+    <MenuItem
+      key={option.key}
+      css={css`
+        height: 35px;
+      `}
+      level={1}
+      selected={false}
+      onClick={e => {
+        toggleOption(option.key);
+      }}
+      content={
+        <div
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+          `}
+        >
           <div
             css={css`
-              width: 100%;
               display: flex;
-              justify-content: space-between;
+              align-items: center;
             `}
           >
-            <div
+            <Checkbox
+              checked={option.isChecked}
+              value={option.key}
+              onChange={e => console.log(e)}
+              aria-label={`${option.key}-facet`}
+            />
+            <Typography
+              variant={'subtitle2'}
               css={css`
-                display: flex;
-                align-items: center;
+                margin: 0px 0px 0px 7px;
               `}
             >
-              <Checkbox
-                checked={selectedFacetOptions.includes(option.name)}
-                value={option.name}
-                onChange={e => console.log(e)}
-                aria-label={`${option.name}-facet`}
-              />
-              <Typography
-                variant={'subtitle2'}
-                css={css`
-                  margin: 0px 0px 0px 7px;
-                `}
-              >
-                {option.name}
-              </Typography>
-            </div>
-
-            <Tag variant={'NEUTRAL'}>{option.quantity}</Tag>
+              {option.key}
+            </Typography>
           </div>
-        }
-      />
-    );
 
-    return {
-      styledOption: styledOption,
-      isOptionChecked: selectedFacetOptions.includes(option.name),
-      name: option.name,
-    };
-  };
+          <Tag variant={'NEUTRAL'}>{option.doc_count}</Tag>
+        </div>
+      }
+    />
+  );
 
-  const allRenderedOptions = options.map(option => buildStyledOption(option));
   const [visibleOptions, setVisibleOptions] = React.useState([]);
 
-  const getStyledOptions = (inputArray: typeof allRenderedOptions) =>
-    inputArray.map(optionObject => optionObject.styledOption);
+  const toggleOption = (optionKey: string) => {
+    setOptionStates(
+      optionStates.map(state => ({
+        ...state,
+        isChecked: state.key === optionKey ? !state.isChecked : state.isChecked,
+      })),
+    );
+  };
+
+  const renderOptions = (arr: Array<SelectableFilterOption>) =>
+    arr.map(inputOption => <StyledOption option={inputOption} />);
 
   React.useEffect(() => {
-    const sortedOptions = orderBy(allRenderedOptions, ['isOptionChecked', 'name'], ['desc', 'asc']);
-    const selectedOptions = sortedOptions.filter(option => option.isOptionChecked);
+    const sortedOptions = orderBy(optionStates, ['isChecked', 'key'], ['desc', 'asc']);
+
+    const selectedOptions = optionStates.filter(option => option.isChecked);
 
     if (searchQueryState) {
       const queriedOptions = sortedOptions.filter(
-        option => queriedOptionNames.includes(option.name) && !selectedOptions.includes(option),
+        option => queriedOptionKeys.includes(option.key) && !selectedOptions.includes(option),
       );
-      setVisibleOptions(getStyledOptions(selectedOptions.concat(queriedOptions)));
+      setVisibleOptions(renderOptions(selectedOptions.concat(queriedOptions)));
     } else {
       if (allOptionsVisible) {
-        setVisibleOptions(getStyledOptions(sortedOptions));
+        setVisibleOptions(renderOptions(sortedOptions));
       } else {
         const defaultNonSelectedOptions = sortedOptions
           .slice(0, defaultRenderLimit)
-          .filter(option => !option.isOptionChecked);
-        setVisibleOptions(getStyledOptions(selectedOptions.concat(defaultNonSelectedOptions)));
+          .filter(option => !option.isChecked);
+        setVisibleOptions(renderOptions(selectedOptions.concat(defaultNonSelectedOptions)));
       }
     }
-  }, [allOptionsVisible, selectedFacetOptions, searchQueryState]);
+  }, [allOptionsVisible, searchQueryState, optionStates]);
 
   const numberofMoreOptions = options.length - visibleOptions.length;
-  const moreToggleVisibility =
-    numberofMoreOptions === 0 ? (allOptionsVisible ? 'visible' : 'hidden') : 'visible';
-  const viewAmountController = (
-    <div
-      className=""
-      css={css`
-        display: flex;
-        justify-content: space-between;
-        padding: 12px;
-      `}
-      onClick={e => e.stopPropagation()}
-    >
-      <HyperLink
-        onClick={e => {
-          selectAll
-            ? setSelectedFacetOptions(options.map(option => option.name))
-            : setSelectedFacetOptions([]);
-          setSelectAll(!selectAll);
-        }}
-      >
-        {selectAll ? 'Select all' : 'Deselect all'}
-      </HyperLink>
-
-      {/* The div containing the show more / show less toggler */}
-      <div
-        css={css`
-          display: flex;
-          align-content: center;
-          align-items: center;
-          visibility: ${moreToggleVisibility};
-        `}
-      >
-        <HyperLink
-          css={css`
-            display: flex;
-            align-items: center;
-          `}
-          onClick={e => {
-            setAllOptionsVisible(!allOptionsVisible);
-          }}
-        >
-          <Icon
-            name={allOptionsVisible ? 'minus_circle' : 'plus_circle'}
-            css={css`
-              margin-right: 6px;
-            `}
-            fill={useTheme().colors.accent2}
-          />
-          {allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
-        </HyperLink>
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -185,15 +141,35 @@ const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<F
           <div
             css={css`
               border-top: 1px solid;
-              border-color: ${useTheme().colors.grey_2};
+              border-color: ${theme.colors.grey_2};
             `}
           >
             {visibleOptions}
           </div>
         }
-        {viewAmountController}
+        <ViewAmountController
+          selectAllHander={() => {
+            setOptionStates(
+              optionStates.map(state => {
+                return { ...state, isChecked: selectAll };
+              }),
+            );
+            setSelectAll(!selectAll);
+          }}
+          moreToggleHandler={() => {
+            setAllOptionsVisible(!allOptionsVisible);
+          }}
+          selectAllState={selectAll}
+          toggleVisiblityCss={
+            numberofMoreOptions === 0 ? (allOptionsVisible ? 'visible' : 'hidden') : 'visible'
+          }
+          toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
+          moreOptionsAvailable={!allOptionsVisible}
+        />
       </MenuItem>
-      <div>{JSON.stringify(selectedFacetOptions)}</div>
+      <div>
+        {JSON.stringify(optionStates.filter(state => state.isChecked).map(state => state.key))}
+      </div>
     </>
   );
 };
