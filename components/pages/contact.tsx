@@ -64,7 +64,7 @@ export default function ContactPage() {
           css={css`
             display: flex;
             flex-direction: column;
-            padding: 0px 0 0 47px;
+            padding: 0px 47px 0px 47px;
             background-color: white;
           `}
         >
@@ -320,7 +320,7 @@ export default function ContactPage() {
                       },
                       { content: 'Data Download', value: 'v2' },
                       { content: 'Data Submission', value: 'v3' },
-                      { content: 'Data or Analysis Query', value: 'v4' },
+                      { content: 'Data or Analysis Inquiry', value: 'v4' },
                       { content: 'Media or Collaboration Inquiry', value: 'v5' },
                       { content: 'Publication Inquiry', value: 'v6' },
                       { content: 'Other', value: 'v7' },
