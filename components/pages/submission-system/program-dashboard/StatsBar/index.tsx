@@ -15,6 +15,7 @@ import {
   DashboardSummaryData,
   DashboardSummaryDataVariables,
 } from '../common';
+import PercentBar from 'uikit/PercentBar';
 
 const StatDesc = styled('div')`
   display: flex;
