@@ -7,14 +7,8 @@ import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import PercentBar from 'uikit/PercentBar';
-import Pipe from 'uikit/Pipe';
 import _ from 'lodash';
-
-enum PIPELINE_STATUS {
-  COMPLETE = 'complete',
-  IN_PROGRESS = 'inProgress',
-  ERROR = 'error',
-}
+import { Pipeline } from '../../common';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -58,33 +52,6 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
     </StatDesc>
   </div>
 );
-
-const Pipeline = (stats: Record<PIPELINE_STATUS, number>) => {
-  const theme = useTheme();
-
-  const getBackgroundColour = (state: keyof Record<PIPELINE_STATUS, number>) => {
-    interface ColourMapper {
-      [key: string]: keyof typeof theme.colors;
-    }
-    const mapper: ColourMapper = {
-      [PIPELINE_STATUS.COMPLETE]: 'accent1_dimmed',
-      [PIPELINE_STATUS.IN_PROGRESS]: 'warning_dark',
-      [PIPELINE_STATUS.ERROR]: 'error',
-    };
-    return mapper[state];
-  };
-
-  const shouldRender = (num: number) => num > 0;
-
-  const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
-
-  const pipeStats = renderableStats.map(stat => (
-    <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof Record<PIPELINE_STATUS, number>)}>
-      {stats[stat]}
-    </Pipe.Item>
-  ));
-  return <Pipe>{pipeStats}</Pipe>;
-};
 
 const FilesButton: React.ComponentType<{ quantity: String }> = ({ children, quantity }) => (
   <div>

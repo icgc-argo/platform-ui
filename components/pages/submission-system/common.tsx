@@ -4,6 +4,7 @@ import { css, styled } from 'uikit';
 import Icon, { Outline } from 'uikit/Icon';
 import { ThemeColorNames } from 'uikit/theme/types';
 import Typography from 'uikit/Typography';
+import Pipe from 'uikit/Pipe';
 import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
@@ -164,4 +165,38 @@ export const TableInfoHeaderContainer = ({
 export const downloadTsvFileTemplate = (fileName: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
   window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
+};
+
+enum PIPELINE_STATUS {
+  COMPLETE = 'complete',
+  IN_PROGRESS = 'inProgress',
+  ERROR = 'error',
+}
+type PipelineStats = Record<PIPELINE_STATUS, number>;
+
+export const Pipeline = (stats: PipelineStats) => {
+  const theme = useTheme();
+
+  const getBackgroundColour = (state: keyof PipelineStats) => {
+    interface ColourMapper {
+      [key: string]: keyof typeof theme.colors;
+    }
+    const mapper: ColourMapper = {
+      [PIPELINE_STATUS.COMPLETE]: 'accent1_dimmed',
+      [PIPELINE_STATUS.IN_PROGRESS]: 'warning_dark',
+      [PIPELINE_STATUS.ERROR]: 'error',
+    };
+    return mapper[state];
+  };
+
+  const shouldRender = (num: number) => num > 0;
+
+  const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
+
+  const pipeStats = renderableStats.map(stat => (
+    <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
+      {stats[stat]}
+    </Pipe.Item>
+  ));
+  return <Pipe>{pipeStats}</Pipe>;
 };
