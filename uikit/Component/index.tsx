@@ -56,9 +56,21 @@ const Component: React.ComponentType<ComponentProps> = () => {
   const [activeEntities, setActiveEntities] = React.useState([]);
 
   return (
-    <Container>
-      <div>
-        <Typography variant="default">Component</Typography>
+    <Container
+      css={css`
+        padding: 12px 14px;
+      `}
+    >
+      <div
+        css={css`
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px solid ${theme.colors.grey_2};
+          padding-bottom: 9px;
+          margin-bottom: 15px;
+        `}
+      >
+        <Typography variant="default">Clinical Timeline</Typography>
         <div
           css={css`
             display: flex;
@@ -70,7 +82,12 @@ const Component: React.ComponentType<ComponentProps> = () => {
             const { title, color } = TIMELINE_TYPES[type];
 
             return (
-              <div>
+              <div
+                css={css`
+                  margin-left: 3px;
+                  display: flex;
+                `}
+              >
                 <Checkbox
                   value={title}
                   checked={activeEntities.includes(type)}
