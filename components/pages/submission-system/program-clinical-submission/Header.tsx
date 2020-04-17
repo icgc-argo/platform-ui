@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Button from 'uikit/Button';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';

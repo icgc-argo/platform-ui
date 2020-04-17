@@ -10,7 +10,7 @@ import Tabs, { Tab } from 'uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import ProgramForm from '../program-form/ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
-import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
 import PROGRAM_QUERY from './PROGRAM_QUERY.gql';

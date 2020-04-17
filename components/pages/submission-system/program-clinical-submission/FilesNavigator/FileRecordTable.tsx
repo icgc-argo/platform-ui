@@ -1,7 +1,7 @@
 import { ClinicalSubmissionEntityFile } from '../types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import Icon from 'uikit/Icon';
 import {
   DataTableStarIcon,
@@ -13,7 +13,7 @@ import {
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isDccMember } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import React from 'react';

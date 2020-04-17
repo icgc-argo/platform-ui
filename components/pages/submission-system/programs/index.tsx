@@ -4,7 +4,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isDccMember } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';

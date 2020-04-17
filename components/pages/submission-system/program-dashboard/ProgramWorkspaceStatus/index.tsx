@@ -1,7 +1,5 @@
-import Container from 'uikit/Container';
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
@@ -13,7 +11,7 @@ import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
 import { DashboardCard } from '../common';
-import { isCollaborator, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isCollaborator } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
 import React from 'react';
 
