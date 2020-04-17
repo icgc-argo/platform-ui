@@ -99,7 +99,7 @@ type SampleRegistrationQueryResponse = {
 
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -141,7 +141,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       </Link>
       {token &&
         !isCollaborator({
-          permissions: getPermissionsFromToken(token),
+          permissions,
           programId: props.program.shortName,
         }) && (
           <>
@@ -220,7 +220,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         )}
       {token &&
         canWriteProgram({
-          permissions: getPermissionsFromToken(token),
+          permissions,
           programId: props.program.shortName,
         }) && (
           <Link
@@ -253,7 +253,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
     currentViewingProgramIndex,
   );
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
   return (
     <>
       <MenuItem
@@ -274,7 +274,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         }
       />
-      {token && isDccMember(getPermissionsFromToken(token)) && (
+      {token && isDccMember(permissions) && (
         <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
@@ -306,13 +306,10 @@ export default function SideMenu() {
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
   const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
-  const { data: egoTokenData, token } = useAuthContext();
-  const permissions = getPermissionsFromToken(token);
+  const { data: egoTokenData, token, permissions } = useAuthContext();
 
   const isDcc = React.useMemo(() => (token ? isDccMember(permissions) : false), [token]);
   const isRdpc = React.useMemo(() => (token ? isRdpcMember(permissions) : false), [token]);
-  // const isDcc = token ? isDccMember(permissions) : false;
-  // const isRdpc = token ? isRdpcMember(permissions) : false;
 
   const accessibleProgramScopes = token ? getAuthorizedProgramScopes(permissions) : [];
 

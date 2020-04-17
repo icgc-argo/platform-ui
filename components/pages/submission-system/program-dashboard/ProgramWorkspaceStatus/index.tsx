@@ -32,9 +32,9 @@ const ConditionalLink: React.ComponentType<{
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
   const canViewLinks = !isCollaborator({
-    permissions: getPermissionsFromToken(token),
+    permissions,
     programId: programShortName,
   });
   return (

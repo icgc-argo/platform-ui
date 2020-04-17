@@ -54,7 +54,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
     });
   }
 
-  const authContext = useAuthContext();
+  const { token, permissions } = useAuthContext();
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
@@ -90,7 +90,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
           >
             All Programs
           </Typography>
-          {authContext.token && isDccMember(getPermissionsFromToken(authContext.token)) && (
+          {token && isDccMember(permissions) && (
             <Link href={CREATE_PROGRAM_PAGE_PATH}>
               <Button id="primary-action-create-program">Create a program</Button>
             </Link>

@@ -5,6 +5,7 @@ import React from 'react';
 import queryString from 'query-string';
 
 import { createRedirectURL } from 'global/utils/common';
+import { getPermissionsFromToken } from 'global/utils/egoJwt';
 
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
@@ -12,7 +13,9 @@ export default createPage<{ redirect: string; egoJwt: string }>({
     const { redirect } = query;
     if (egoJwt && res) {
       // TODO: res.redirect breaks if jwt exists and '/login' route is hard refreshed
-      res.redirect(String(redirect || getDefaultRedirectPathForUser(egoJwt)));
+      res.redirect(
+        String(redirect || getDefaultRedirectPathForUser(getPermissionsFromToken(egoJwt))),
+      );
     }
     return {
       redirect,
@@ -24,7 +27,7 @@ export default createPage<{ redirect: string; egoJwt: string }>({
 
   React.useEffect(() => {
     if (egoJwt) {
-      Router.replace(redirect || getDefaultRedirectPathForUser(egoJwt));
+      Router.replace(redirect || getDefaultRedirectPathForUser(getPermissionsFromToken(egoJwt)));
     }
     if (redirect && !egoJwt) {
       const parsedRedirect = queryString.parseUrl(redirect);

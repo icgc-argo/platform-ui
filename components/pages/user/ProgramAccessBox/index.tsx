@@ -31,11 +31,11 @@ type T_ProgramTableProgram = {
   permissions: string;
 };
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <Link
       href={
-        isDccMember(getPermissionsFromToken(token))
+        isDccMember(permissions)
           ? PROGRAMS_LIST_PATH
           : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
       }
@@ -86,8 +86,7 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
   COLLABORATOR: 'Download Data',
 };
 
-const getProgramTableProgramFromEgoJwt = (egoJwt: string): T_ProgramTableProgram[] => {
-  const permissions = getPermissionsFromToken(egoJwt);
+const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTableProgram[] => {
   if (isDccMember(permissions)) {
     return [
       {
@@ -130,8 +129,8 @@ const ProgramAccessBox = ({
   isDacoApproved: boolean;
   loading: boolean;
 }) => {
-  const { token } = useAuthContext();
-  const programs = getProgramTableProgramFromEgoJwt(token || '');
+  const { token, permissions } = useAuthContext();
+  const programs = getProgramTableProgramFromEgoJwt(permissions || []);
 
   return (
     <Box title="Program Access" iconName="programs">

@@ -51,8 +51,7 @@ const NavBarLoginButton = () => {
   );
 };
 
-const getUserRole = egoJwt => {
-  const permissions = getPermissionsFromToken(egoJwt);
+const getUserRole = (egoJwt, permissions) => {
   if (!egoJwt) {
     return null;
   } else if (isDccMember(permissions)) {
@@ -68,10 +67,9 @@ const getUserRole = egoJwt => {
 
 export default function Navbar({ hideLink }: { hideLink?: boolean }) {
   const { EGO_URL } = getConfig();
-  const { token: egoJwt, logOut, data: userModel } = useAuthContext();
+  const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
 
   const canAccessSubmission = React.useMemo(() => {
-    const permissions = getPermissionsFromToken(egoJwt);
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
@@ -125,8 +123,8 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
           <MenuGroup>
             {egoJwt && canAccessSubmission && (
               <Link
-                href={getDefaultRedirectPathForUser(egoJwt, true)}
-                as={getDefaultRedirectPathForUser(egoJwt)}
+                href={getDefaultRedirectPathForUser(permissions, true)}
+                as={getDefaultRedirectPathForUser(permissions)}
               >
                 <a
                   css={css`
@@ -170,7 +168,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
                 <UserBadge
                   firstName={userModel.context.user.firstName}
                   lastName={userModel.context.user.lastName}
-                  title={getUserRole(egoJwt)}
+                  title={getUserRole(egoJwt, permissions)}
                 />
               </MenuItem>
             )}

@@ -8,5 +8,5 @@ import PROGRAMS_LIST_QUERY from 'components/pages/submission-system/programs/PRO
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx }) => isDccMember(getPermissionsFromToken(egoJwt)),
+  isAccessible: async ({ egoJwt, ctx, initialPermissions }) => isDccMember(initialPermissions),
 })(ProgramsPage);

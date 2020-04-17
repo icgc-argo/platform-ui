@@ -37,8 +37,8 @@ export default ({
   isPendingApproval: boolean;
   submissionVersion: string;
 }) => {
-  const { token } = useAuthContext();
-  const isDcc = isDccMember(getPermissionsFromToken(token));
+  const { token, permissions } = useAuthContext();
+  const isDcc = isDccMember(permissions);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
   const {
