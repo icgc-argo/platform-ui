@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Facet, { FilterOption } from '.';
+import Facet from '.';
+import { FilterOption } from '../OptionsList';
 
 const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const exampleOptions: Array<FilterOption> = [

@@ -52,9 +52,9 @@ const IntegerFieldDisplay = ({ subMenuName }: { subMenuName: string }) => {
             <NumberRangeField
               min={minimumInput}
               max={maximumInput}
-              minSetter={setMinimumInput}
-              maxSetter={setMaximumInput}
-              goButtonHandler={goButtonHandler}
+              onMinChange={setMinimumInput}
+              onMaxChange={setMaximumInput}
+              onGoClick={goButtonHandler}
               goButtonEnabled={inputsValid}
             />
           }

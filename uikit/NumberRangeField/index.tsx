@@ -17,12 +17,12 @@ const inputHandler = (
 
 const NumberRangeField: React.ComponentType<{
   min: string;
-  minSetter: React.Dispatch<React.SetStateAction<string>>;
+  onMinChange: React.Dispatch<React.SetStateAction<string>>;
   max: string;
-  maxSetter: React.Dispatch<React.SetStateAction<string>>;
-  goButtonHandler: () => any;
-  goButtonEnabled?: boolean;
-}> = ({ min, minSetter, max, maxSetter, goButtonHandler, goButtonEnabled = true }) => {
+  onMaxChange: React.Dispatch<React.SetStateAction<string>>;
+  onGoClick: () => any;
+  goButtonEnabled: boolean;
+}> = ({ min, onMinChange, max, onMaxChange, onGoClick, goButtonEnabled }) => {
   return (
     <div
       css={css`
@@ -41,7 +41,7 @@ const NumberRangeField: React.ComponentType<{
           // they get registered as empty strings, which are required characters in order to allow backspaces on the input
           value={min}
           onChange={e => {
-            inputHandler(e.target.value, minSetter);
+            inputHandler(e.target.value, onMinChange);
           }}
           getOverrideCss={() =>
             css`
@@ -60,7 +60,7 @@ const NumberRangeField: React.ComponentType<{
           size="sm"
           value={max}
           onChange={e => {
-            inputHandler(e.target.value, maxSetter);
+            inputHandler(e.target.value, onMaxChange);
           }}
           getOverrideCss={() =>
             css`
@@ -75,7 +75,7 @@ const NumberRangeField: React.ComponentType<{
           margin-left: 5px;
         `}
         variant="secondary"
-        onClick={e => goButtonHandler()}
+        onClick={e => onGoClick()}
         disabled={!goButtonEnabled}
       >
         GO
