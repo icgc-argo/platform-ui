@@ -14,6 +14,7 @@ import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
   CellContentCenter,
+  Pipeline,
 } from '../../common';
 
 import { createRef } from 'react';
@@ -22,20 +23,12 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import HyperLink from 'uikit/Link';
-import Pipe from 'uikit/Pipe';
 import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
 import React from 'react';
 import { SortedChangeFunction, SortingRule } from 'react-table';
-
-enum PIPELINE_STATUS {
-  COMPLETE = 'complete',
-  IN_PROGRESS = 'inProgress',
-  ERROR = 'error',
-}
-type PipelineStats = Record<PIPELINE_STATUS, number>;
 
 export default ({
   donorSummaryEntries,
@@ -169,33 +162,6 @@ export default ({
     );
   };
 
-  const PipelineCell = (stats: PipelineStats) => {
-    const theme = useTheme();
-
-    const getBackgroundColour = (state: keyof PipelineStats) => {
-      interface ColourMapper {
-        [key: string]: keyof typeof theme.colors;
-      }
-      const mapper: ColourMapper = {
-        [PIPELINE_STATUS.COMPLETE]: 'accent1_dimmed',
-        [PIPELINE_STATUS.IN_PROGRESS]: 'warning_dark',
-        [PIPELINE_STATUS.ERROR]: 'error',
-      };
-      return mapper[state];
-    };
-
-    const shouldRender = (num: number) => num > 0;
-
-    const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
-
-    const pipeStats = renderableStats.map(stat => (
-      <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
-        {stats[stat]}
-      </Pipe.Item>
-    ));
-    return <Pipe>{pipeStats}</Pipe>;
-  };
-
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -281,7 +247,7 @@ export default ({
           Header: 'Alignment',
           id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
-            <PipelineCell
+            <Pipeline
               complete={original.alignmentsCompleted}
               inProgress={original.alignmentsRunning}
               error={original.alignmentsFailed}
@@ -292,7 +258,7 @@ export default ({
           Header: 'Sanger VC',
           id: SANGER_VC_COLUMN_ID,
           Cell: ({ original }) => (
-            <PipelineCell
+            <Pipeline
               complete={original.sangerVcsCompleted}
               inProgress={original.sangerVcsRunning}
               error={original.sangerVcsFailed}
