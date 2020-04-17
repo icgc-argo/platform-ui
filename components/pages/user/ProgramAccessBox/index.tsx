@@ -31,7 +31,7 @@ type T_ProgramTableProgram = {
   permissions: string;
 };
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
-  const { token, permissions } = useAuthContext();
+  const { permissions } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <Link
       href={

@@ -38,7 +38,7 @@ export default ({
   submissionVersion: string;
 }) => {
   const { token, permissions } = useAuthContext();
-  const isDcc = isDccMember(permissions);
+  const isDcc = React.useMemo(() => isDccMember(permissions), [token]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
   const {

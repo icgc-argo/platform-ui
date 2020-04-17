@@ -16,6 +16,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
+import React from 'react';
 
 const StarIcon = DataTableStarIcon;
 
@@ -97,7 +98,7 @@ export default ({
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { token, permissions } = useAuthContext();
-  const isDccPreview = isDccMember(permissions) && isPendingApproval;
+  const isDccPreview = React.useMemo(() => isDccMember(permissions) && isPendingApproval, [token]);
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length

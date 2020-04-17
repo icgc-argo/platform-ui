@@ -15,6 +15,7 @@ import {
 import { DashboardCard } from '../common';
 import { isCollaborator, getPermissionsFromToken } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
+import React from 'react';
 
 const ConditionalLink: React.ComponentType<{
   showAsLink: boolean;
@@ -33,10 +34,14 @@ const ConditionalLink: React.ComponentType<{
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { token, permissions } = useAuthContext();
-  const canViewLinks = !isCollaborator({
-    permissions,
-    programId: programShortName,
-  });
+
+  const canViewLinks = React.useMemo(() => {
+    return !isCollaborator({
+      permissions,
+      programId: programShortName,
+    });
+  }, [token]);
+
   return (
     <DashboardCard cardHeight="170px">
       <Typography variant="default" component="span">
