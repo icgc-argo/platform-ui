@@ -42,9 +42,8 @@ export const decodeToken = memoize(
 export const isValidJwt: (egoJwt: string) => boolean = egoJwt =>
   !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
-export const getPermissionsFromToken: (egoJwt: string) => string[] = egoJwt => {
-  return TokenUtils.getScopesFromToken(egoJwt);
-};
+export const getPermissionsFromToken: (egoJwt: string) => string[] = egoJwt =>
+  isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
 
 export const isDccMember = (permissions: string[]): boolean => TokenUtils.isDccMember(permissions);
 
