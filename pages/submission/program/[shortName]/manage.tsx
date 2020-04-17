@@ -7,7 +7,7 @@ import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx, initialPermissions: permissions }) => {
+  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
     const {
       query: { shortName },
     } = ctx;

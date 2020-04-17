@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isRdpcMember, isDccMember, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { isDccMember } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 import ProgramsPage from 'components/pages/submission-system/programs';
 import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
@@ -8,5 +8,5 @@ import PROGRAMS_LIST_QUERY from 'components/pages/submission-system/programs/PRO
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx, initialPermissions }) => isDccMember(initialPermissions),
+  isAccessible: async ({ initialPermissions }) => isDccMember(initialPermissions),
 })(ProgramsPage);

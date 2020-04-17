@@ -17,14 +17,7 @@ import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import {
-  isDccMember,
-  getAuthorizedProgramScopes,
-  canWriteProgram,
-  isCollaborator,
-  isRdpcMember,
-  getPermissionsFromToken,
-} from 'global/utils/egoJwt';
+import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
 
 import {
   PROGRAM_SHORT_NAME_PATH,
@@ -126,6 +119,26 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
+  const canSeeCollaboratorView = React.useMemo(() => {
+    return (
+      token &&
+      !isCollaborator({
+        permissions,
+        programId: props.program.shortName,
+      })
+    );
+  }, [token]);
+  const canWriteToProgram = React.useMemo(() => {
+    return (
+      token &&
+      canWriteProgram({
+        permissions,
+        programId: props.program.shortName,
+      })
+    );
+  }, [token]);
+
   return (
     <div>
       <Link
@@ -139,102 +152,92 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
         />
       </Link>
-      {token &&
-        !isCollaborator({
-          permissions,
-          programId: props.program.shortName,
-        }) && (
-          <>
-            <Link
-              prefetch
-              as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                props.program.shortName,
-              )}
-              href={PROGRAM_SAMPLE_REGISTRATION_PATH}
-            >
-              <MenuItem
-                level={3}
-                content={
-                  <StatusMenuItem>
-                    Register Samples
-                    {isSubmissionSystemDisabled ? (
-                      <Icon name="lock" fill="accent3_dark" width="15px" />
-                    ) : clinicalRegistrationHasError ? (
-                      <Icon name="exclamation" fill="error" width="15px" />
-                    ) : clinicalRegistrationInProgress ? (
-                      <Icon name="ellipses" fill="warning" width="15px" />
-                    ) : null}
-                  </StatusMenuItem>
-                }
-                selected={
-                  PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname &&
-                  props.isCurrentlyViewed
-                }
-              />
-            </Link>
-            <Link
-              prefetch
-              as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                props.program.shortName,
-              )}
-              href={PROGRAM_CLINICAL_SUBMISSION_PATH}
-            >
-              <MenuItem
-                level={3}
-                content={
-                  <StatusMenuItem>
-                    Submit Clinical Data
-                    {isSubmissionSystemDisabled ? (
-                      <Icon name="lock" fill="accent3_dark" width="15px" />
-                    ) : (
-                      ({
-                        OPEN: clinicalSubmissionHasSchemaErrors ? (
-                          <Icon name="exclamation" fill="error" width="15px" />
-                        ) : (
-                          <Icon name="ellipses" fill="warning" width="15px" />
-                        ),
-                        VALID: <Icon name="ellipses" fill="warning" width="15px" />,
-                        INVALID: <Icon name="exclamation" fill="error" width="15px" />,
-                        INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
-                        PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
-                        // submission state remains as null and rejects creating open state with initial invalid upload
-                        // if errors exist, error icon should still show up despite the null state
-                        [null as any]: clinicalSubmissionHasSchemaErrors ? (
-                          <Icon name="exclamation" fill="error" width="15px" />
-                        ) : null,
-                      } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
-                        data ? data.clinicalSubmissions.state : null
-                      ]
-                    )}
-                  </StatusMenuItem>
-                }
-                selected={
-                  PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname &&
-                  props.isCurrentlyViewed
-                }
-              />
-            </Link>
-          </>
-        )}
-      {token &&
-        canWriteProgram({
-          permissions,
-          programId: props.program.shortName,
-        }) && (
+      {canSeeCollaboratorView && (
+        <>
           <Link
             prefetch
-            as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
-            href={PROGRAM_MANAGE_PATH}
+            as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
+              PROGRAM_SHORT_NAME_PATH,
+              props.program.shortName,
+            )}
+            href={PROGRAM_SAMPLE_REGISTRATION_PATH}
           >
             <MenuItem
               level={3}
-              content="Manage Program"
-              selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
+              content={
+                <StatusMenuItem>
+                  Register Samples
+                  {isSubmissionSystemDisabled ? (
+                    <Icon name="lock" fill="accent3_dark" width="15px" />
+                  ) : clinicalRegistrationHasError ? (
+                    <Icon name="exclamation" fill="error" width="15px" />
+                  ) : clinicalRegistrationInProgress ? (
+                    <Icon name="ellipses" fill="warning" width="15px" />
+                  ) : null}
+                </StatusMenuItem>
+              }
+              selected={
+                PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              }
             />
           </Link>
-        )}
+          <Link
+            prefetch
+            as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+              PROGRAM_SHORT_NAME_PATH,
+              props.program.shortName,
+            )}
+            href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+          >
+            <MenuItem
+              level={3}
+              content={
+                <StatusMenuItem>
+                  Submit Clinical Data
+                  {isSubmissionSystemDisabled ? (
+                    <Icon name="lock" fill="accent3_dark" width="15px" />
+                  ) : (
+                    ({
+                      OPEN: clinicalSubmissionHasSchemaErrors ? (
+                        <Icon name="exclamation" fill="error" width="15px" />
+                      ) : (
+                        <Icon name="ellipses" fill="warning" width="15px" />
+                      ),
+                      VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                      INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                      INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
+                      PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                      // submission state remains as null and rejects creating open state with initial invalid upload
+                      // if errors exist, error icon should still show up despite the null state
+                      [null as any]: clinicalSubmissionHasSchemaErrors ? (
+                        <Icon name="exclamation" fill="error" width="15px" />
+                      ) : null,
+                    } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
+                      data ? data.clinicalSubmissions.state : null
+                    ]
+                  )}
+                </StatusMenuItem>
+              }
+              selected={
+                PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              }
+            />
+          </Link>
+        </>
+      )}
+      {canWriteToProgram && (
+        <Link
+          prefetch
+          as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+          href={PROGRAM_MANAGE_PATH}
+        >
+          <MenuItem
+            level={3}
+            content="Manage Program"
+            selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
+          />
+        </Link>
+      )}
     </div>
   );
 };
@@ -254,6 +257,10 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     currentViewingProgramIndex,
   );
   const { token, permissions } = useAuthContext();
+  const canSeeAllPrograms = React.useMemo(() => {
+    return token && isDccMember(permissions);
+  }, [token]);
+
   return (
     <>
       <MenuItem
@@ -274,7 +281,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         }
       />
-      {token && isDccMember(permissions) && (
+      {canSeeAllPrograms && (
         <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
@@ -310,8 +317,6 @@ export default function SideMenu() {
 
   const isDcc = React.useMemo(() => (token ? isDccMember(permissions) : false), [token]);
   const isRdpc = React.useMemo(() => (token ? isRdpcMember(permissions) : false), [token]);
-
-  const accessibleProgramScopes = token ? getAuthorizedProgramScopes(permissions) : [];
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;
