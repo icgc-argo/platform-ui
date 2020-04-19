@@ -1,8 +1,0 @@
-query PROGRAM_DONOR_SUMMARY_STATS_QUERY($programShortName: String!) {
-  programDonorSummaryStats(programShortName: $programShortName) {
-    registeredDonorsCount
-    fullyReleasedDonorsCount
-    partiallyReleasedDonorsCount
-    noReleaseDonorsCount
-  }
-}

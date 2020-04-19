@@ -42,10 +42,6 @@ export type ProgramDonorsSummaryQueryData = {
   programDonorSummaryStats: ProgoramDonorReleasStats;
 };
 
-export type ProgramDonorsSummaryStatsQueryData = {
-  programDonorSummaryStats: ProgoramDonorReleasStats;
-};
-
 export type ProgramDonorsSummaryQueryVariables = {
   programShortName: string;
   first: number;

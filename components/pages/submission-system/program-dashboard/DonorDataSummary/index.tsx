@@ -4,12 +4,10 @@ import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY.gql';
-import PROGRAM_DONOR_SUMMARY_STATS_QUERY from './gql/PROGRAM_DONOR_SUMMARY_STATS_QUERY.gql';
 import {
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   DonorSummaryEntrySort,
-  ProgramDonorsSummaryStatsQueryData,
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
@@ -33,27 +31,9 @@ export const useProgramDonorsSummaryQuery = (
         offset,
         sorts,
       },
-      // default cache doesn't cache data for updated query variables, so data and query variables may not match
-      fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
     },
   );
-  return {
-    ...hook,
-    data: hook.data,
-  };
-};
-
-const useProgramDonorsSummaryStatsQuery = (programShortName: string) => {
-  const hook = useQuery<ProgramDonorsSummaryStatsQueryData, { programShortName: string }>(
-    PROGRAM_DONOR_SUMMARY_STATS_QUERY,
-    {
-      variables: {
-        programShortName,
-      },
-    },
-  );
-
   return {
     ...hook,
     data: hook.data,
@@ -66,46 +46,39 @@ export default () => {
   const DEFAULT_SORTS = [{ field: 'updatedAt', order: 'desc' }];
   const DEFAULT_OFFSET = 0;
 
+  // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryEntries = [] } = {},
-    loading: isEntriesLoading = true,
+    data: { programDonorSummaryStats = undefined } = {},
+    loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
     programShortName,
     DEFAULT_PAGE_SIZE,
     DEFAULT_OFFSET,
     DEFAULT_SORTS,
   );
-
-  const {
-    data: { programDonorSummaryStats = undefined } = {},
-    loading: isStatsLoading = true,
-  } = useProgramDonorsSummaryStatsQuery(programShortName);
+  const initalPages = !isCardLoading
+    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+    : 1;
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
   return (
-    <DashboardCard loading={isStatsLoading} cardHeight={isStatsLoading ? '170px' : '100%'}>
+    <DashboardCard loading={isCardLoading}>
       <Typography variant="default" component="span">
         Donor Data Summary
       </Typography>
 
-      {!isStatsLoading ? (
-        isDonorSummaryEntriesEmpty ? (
-          <EmptyDonorSummaryState />
-        ) : (
-          <DonorSummaryTable
-            isEntriesLoading={isEntriesLoading}
-            programShortName={programShortName}
-            pageSize={DEFAULT_PAGE_SIZE}
-            offset={DEFAULT_OFFSET}
-            sorts={DEFAULT_SORTS}
-            donorSummaryEntries={programDonorSummaryEntries}
-            programDonorSummaryStats={programDonorSummaryStats}
-          />
-        )
+      {!isCardLoading && isDonorSummaryEntriesEmpty ? (
+        <EmptyDonorSummaryState />
       ) : (
-        undefined
+        <DonorSummaryTable
+          programShortName={programShortName}
+          initalPages={initalPages}
+          initialPageSize={DEFAULT_PAGE_SIZE}
+          initialSorts={DEFAULT_SORTS}
+          isCardLoading={isCardLoading}
+        />
       )}
     </DashboardCard>
   );

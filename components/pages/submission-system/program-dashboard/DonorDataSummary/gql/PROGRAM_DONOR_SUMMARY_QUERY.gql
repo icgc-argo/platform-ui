@@ -31,4 +31,10 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
     processingStatus
     updatedAt
   }
+  programDonorSummaryStats(programShortName: $programShortName) {
+    registeredDonorsCount
+    fullyReleasedDonorsCount
+    partiallyReleasedDonorsCount
+    noReleaseDonorsCount
+  }
 }

@@ -31,21 +31,17 @@ import React from 'react';
 import { SortedChangeFunction, SortingRule } from 'react-table';
 
 export default ({
-  donorSummaryEntries,
-  programDonorSummaryStats,
   programShortName,
-  offset: initialOffset,
-  pageSize: initialPageSize,
-  sorts: initialSorts,
-  isEntriesLoading,
+  initalPages,
+  initialPageSize,
+  initialSorts,
+  isCardLoading = true,
 }: {
-  donorSummaryEntries: Array<DonorSummaryRecord>;
-  programDonorSummaryStats: ProgoramDonorReleasStats;
   programShortName: string;
-  pageSize: number;
-  offset: number;
-  sorts: DonorSummaryEntrySort[];
-  isEntriesLoading: boolean;
+  initalPages: number;
+  initialPageSize: number;
+  initialSorts: DonorSummaryEntrySort[];
+  isCardLoading?: boolean;
 }) => {
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
@@ -55,10 +51,12 @@ export default ({
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
 
-  const {
-    fetchMore: fetchMoreSummaryEntries,
-    loading: isUpdatedEntriesLoading,
-  } = useProgramDonorsSummaryQuery(programShortName, initialPageSize, initialOffset, initialSorts);
+  const emptyProgramSummaryStats: ProgoramDonorReleasStats = {
+    registeredDonorsCount: 0,
+    fullyReleasedDonorsCount: 0,
+    partiallyReleasedDonorsCount: 0,
+    noReleaseDonorsCount: 0,
+  };
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -285,34 +283,54 @@ export default ({
     },
   ];
 
-  const [isTableLoading, setIsTableLoading] = React.useState(false);
+  const [tableState, setTableState] = React.useState({
+    pages: initalPages,
+    pageSize: initialPageSize,
+    page: 0,
+    sorts: initialSorts,
+  });
+
+  const offset = tableState.pageSize * tableState.page;
+  const first = tableState.pageSize;
+  const sorts = tableState.sorts;
+
+  const {
+    data: {
+      programDonorSummaryEntries = [],
+      programDonorSummaryStats = emptyProgramSummaryStats,
+    } = {},
+    loading: isQueryLoading,
+  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts);
+
+  const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
 
   // effect used to set/unset table loader
   React.useEffect(() => {
-    if (isUpdatedEntriesLoading || isEntriesLoading) {
+    if (isQueryLoading || isCardLoading) {
       setIsTableLoading(true);
     } else {
       sleep(500).then(() => setIsTableLoading(false));
     }
-  }, [isUpdatedEntriesLoading, isEntriesLoading]);
+  }, [isQueryLoading, isCardLoading]);
 
-  const updateProgarmDonorSummariesQuery = async (
-    updatedVariables: Partial<ProgramDonorsSummaryQueryVariables>,
-  ) => {
-    fetchMoreSummaryEntries({
-      variables: updatedVariables,
-      updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult || prev,
+  const fetchNext = async (newPageNum: number) => {
+    newPageNum =
+      newPageNum > tableState.pages - 1 ? tableState.pages - 1 : newPageNum < 0 ? 0 : newPageNum; // newPageNum is zero indexed
+
+    setTableState({ ...tableState, page: newPageNum });
+  };
+
+  const repage = async (newPageSize: number, newPage: number) => {
+    setTableState({
+      ...tableState,
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
     });
   };
 
-  const [pages, setPages] = React.useState(
-    Math.ceil(programDonorSummaryStats.registeredDonorsCount / initialPageSize),
-  );
-
-  const handleFetchData = async (state: any, instance: any) => {
-    setIsTableLoading(true);
-
-    const sorts = state.sorted.reduce(
+  const resort: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+    const sorts = newSorted.reduce(
       (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
         const fields = sortRule.id.split(ID_SEPERATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
@@ -320,15 +338,7 @@ export default ({
       },
       [],
     );
-
-    updateProgarmDonorSummariesQuery({
-      programShortName,
-      sorts,
-      first: state.pageSize,
-      offset: state.page * state.pageSize,
-    });
-
-    setPages(Math.ceil(programDonorSummaryStats.registeredDonorsCount / state.pageSize));
+    setTableState({ ...tableState, sorts });
   };
 
   return (
@@ -341,18 +351,29 @@ export default ({
       `}
     >
       <TableInfoHeaderContainer
-        left={<DonorStatsArea programDonorSummaryStats={programDonorSummaryStats} />}
+        left={
+          <DonorStatsArea
+            css={css`
+              opacity: ${isTableLoading ? 0.5 : 1};
+            `}
+            programDonorSummaryStats={programDonorSummaryStats}
+          />
+        }
         noMargin={true}
       />
       <Table
         loading={isTableLoading}
         parentRef={containerRef}
         columns={tableColumns}
-        data={donorSummaryEntries}
+        data={programDonorSummaryEntries}
         showPagination={true}
         manual={true}
-        pages={pages}
-        onFetchData={handleFetchData}
+        pages={tableState.pages}
+        pageSize={tableState.pageSize}
+        page={tableState.page}
+        onPageChange={fetchNext}
+        onPageSizeChange={repage}
+        onSortedChange={resort}
       />
     </div>
   );
