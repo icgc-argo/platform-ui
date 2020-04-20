@@ -105,7 +105,7 @@ export const createRedirectURL = ({
   path: string;
   query?: string;
 }): string => {
-  if (path === '/' || path === LOGIN_PAGE_PATH) {
+  if (path === '/' || path === LOGIN_PAGE_PATH || path === 'undefined') {
     return '';
   }
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;

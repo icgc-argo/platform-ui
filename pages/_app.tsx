@@ -38,8 +38,11 @@ const redirect = (res, url: string) => {
   }
 };
 
+const getRedirect = (ctxAsPath: string): string =>
+  ctxAsPath ? `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctxAsPath)}` : LOGIN_PAGE_PATH;
+
 const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
-  const loginRedirect = `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`;
+  const loginRedirect = getRedirect(ctx.asPath);
   redirect(ctx.res, loginRedirect);
 };
 
@@ -79,11 +82,11 @@ class Root extends App<
       if (!isValidJwt(egoJwt)) {
         if (res) {
           removeCookie(res, EGO_JWT_KEY);
-          redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+          redirect(res, getRedirect(ctx.asPath));
         } else {
           const forceLogin = () => {
             Cookies.remove(EGO_JWT_KEY);
-            redirect(res, `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctx.asPath)}`);
+            redirect(res, getRedirect(ctx.asPath));
           };
           const newJwt = (await refreshJwt().catch(forceLogin)) as string;
           if (isValidJwt(newJwt)) {
@@ -218,7 +221,7 @@ class Root extends App<
           location.assign(target);
         } else {
           Cookies.set(EGO_JWT_KEY, null);
-          location.assign(`${LOGIN_PAGE_PATH}?redirect=${encodeURI(asPath)}`);
+          location.assign(getRedirect(asPath));
         }
         await sleep();
         this.setState({ isLoadingLoginRedirect: false });
