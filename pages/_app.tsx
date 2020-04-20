@@ -38,7 +38,7 @@ const redirect = (res, url: string) => {
   }
 };
 
-const getRedirect = (ctxAsPath: string): string =>
+const getRedirect = (ctxAsPath: string | undefined): string =>
   ctxAsPath ? `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctxAsPath)}` : LOGIN_PAGE_PATH;
 
 const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
