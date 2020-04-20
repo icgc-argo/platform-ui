@@ -50,6 +50,9 @@ export type ProgramDonorsSummaryQueryVariables = {
 };
 
 export type DonorSummaryEntrySort = {
-  field: string; // keyof DonorSummaryRecord;
-  order: string; //'asc' | 'desc';
+  field: DonorSummaryEntrySortField;
+  order: DonorSummaryEntrySortOrder;
 };
+
+export type DonorSummaryEntrySortField = keyof DonorSummaryRecord;
+export type DonorSummaryEntrySortOrder = 'asc' | 'desc';

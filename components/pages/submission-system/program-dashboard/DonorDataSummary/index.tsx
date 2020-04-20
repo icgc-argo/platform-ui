@@ -8,6 +8,8 @@ import {
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   DonorSummaryEntrySort,
+  DonorSummaryEntrySortField,
+  DonorSummaryEntrySortOrder,
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
@@ -43,7 +45,12 @@ export const useProgramDonorsSummaryQuery = (
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const DEFAULT_PAGE_SIZE = 20;
-  const DEFAULT_SORTS = [{ field: 'updatedAt', order: 'desc' }];
+  const DEFAULT_SORTS = [
+    {
+      field: 'updatedAt' as DonorSummaryEntrySortField,
+      order: 'desc' as DonorSummaryEntrySortOrder,
+    },
+  ];
   const DEFAULT_OFFSET = 0;
 
   // using the default query variables will get us all registered donors

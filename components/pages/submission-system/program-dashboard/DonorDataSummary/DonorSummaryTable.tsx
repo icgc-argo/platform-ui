@@ -5,6 +5,8 @@ import {
   ProgoramDonorReleasStats,
   DonorSummaryEntrySort,
   ProgramDonorsSummaryQueryVariables,
+  DonorSummaryEntrySortField,
+  DonorSummaryEntrySortOrder,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
@@ -313,14 +315,11 @@ export default ({
     }
   }, [isQueryLoading, isCardLoading]);
 
-  const fetchNext = async (newPageNum: number) => {
-    newPageNum =
-      newPageNum > tableState.pages - 1 ? tableState.pages - 1 : newPageNum < 0 ? 0 : newPageNum; // newPageNum is zero indexed
-
-    setTableState({ ...tableState, page: newPageNum });
+  const onPageChange = async (newPageNum: number) => {
+    setTableState({ ...tableState, page: newPageNum }); // newPageNum is zero indexed
   };
 
-  const repage = async (newPageSize: number, newPage: number) => {
+  const onPageSizeChange = async (newPageSize: number, newPage: number) => {
     setTableState({
       ...tableState,
       page: 0,
@@ -329,12 +328,17 @@ export default ({
     });
   };
 
-  const resort: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+  const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
     const sorts = newSorted.reduce(
       (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
         const fields = sortRule.id.split(ID_SEPERATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
-        return accSorts.concat(fields.map(field => ({ field, order })));
+        return accSorts.concat(
+          fields.map(field => ({
+            field: field as DonorSummaryEntrySortField,
+            order: order as DonorSummaryEntrySortOrder,
+          })),
+        );
       },
       [],
     );
@@ -371,9 +375,9 @@ export default ({
         pages={tableState.pages}
         pageSize={tableState.pageSize}
         page={tableState.page}
-        onPageChange={fetchNext}
-        onPageSizeChange={repage}
-        onSortedChange={resort}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        onSortedChange={onSortedChange}
       />
     </div>
   );
