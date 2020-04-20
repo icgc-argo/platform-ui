@@ -1,7 +1,5 @@
-import Container from 'uikit/Container';
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
-import { Row, Col } from 'react-grid-system';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
@@ -15,6 +13,7 @@ import {
 import { DashboardCard } from '../common';
 import { isCollaborator } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
+import React from 'react';
 
 const ConditionalLink: React.ComponentType<{
   showAsLink: boolean;
@@ -32,8 +31,15 @@ const ConditionalLink: React.ComponentType<{
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { token } = useAuthContext();
-  const canViewLinks = !isCollaborator({ egoJwt: token, programId: programShortName });
+  const { token, permissions } = useAuthContext();
+
+  const canViewLinks = React.useMemo(() => {
+    return !isCollaborator({
+      permissions,
+      programId: programShortName,
+    });
+  }, [token]);
+
   return (
     <DashboardCard cardHeight="170px">
       <Typography variant="default" component="span">

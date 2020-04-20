@@ -1,7 +1,12 @@
 import { SUBMISSION_PATH, USER_PAGE_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
-import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import {
+  canReadSomeProgram,
+  isDccMember,
+  isRdpcMember,
+  getPermissionsFromToken,
+} from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Link from 'next/link';
 import * as React from 'react';
@@ -46,14 +51,14 @@ const NavBarLoginButton = () => {
   );
 };
 
-const getUserRole = egoJwt => {
+const getUserRole = (egoJwt, permissions) => {
   if (!egoJwt) {
     return null;
-  } else if (isDccMember(egoJwt)) {
+  } else if (isDccMember(permissions)) {
     return 'DCC Member';
-  } else if (isRdpcMember(egoJwt)) {
+  } else if (isRdpcMember(permissions)) {
     return 'RDPC User';
-  } else if (canReadSomeProgram(egoJwt)) {
+  } else if (canReadSomeProgram(permissions)) {
     return 'Program Member';
   } else {
     return null;
@@ -62,8 +67,12 @@ const getUserRole = egoJwt => {
 
 export default function Navbar({ hideLink }: { hideLink?: boolean }) {
   const { EGO_URL } = getConfig();
-  const { token: egoJwt, logOut, data: userModel } = useAuthContext();
-  const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
+  const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
+
+  const canAccessSubmission = React.useMemo(() => {
+    return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
+  }, [egoJwt]);
+
   const { asPath: path, query } = usePageContext();
 
   const [loginPath, setLoginPath] = React.useState('');
@@ -114,8 +123,8 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
           <MenuGroup>
             {egoJwt && canAccessSubmission && (
               <Link
-                href={getDefaultRedirectPathForUser(egoJwt, true)}
-                as={getDefaultRedirectPathForUser(egoJwt)}
+                href={getDefaultRedirectPathForUser(permissions, true)}
+                as={getDefaultRedirectPathForUser(permissions)}
               >
                 <a
                   css={css`
@@ -159,7 +168,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
                 <UserBadge
                   firstName={userModel.context.user.firstName}
                   lastName={userModel.context.user.lastName}
-                  title={getUserRole(egoJwt)}
+                  title={getUserRole(egoJwt, permissions)}
                 />
               </MenuItem>
             )}

@@ -17,13 +17,7 @@ import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import {
-  isDccMember,
-  getAuthorizedProgramScopes,
-  canWriteProgram,
-  isCollaborator,
-  isRdpcMember,
-} from 'global/utils/egoJwt';
+import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
 
 import {
   PROGRAM_SHORT_NAME_PATH,
@@ -98,7 +92,7 @@ type SampleRegistrationQueryResponse = {
 
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -125,6 +119,26 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
+  const canSeeCollaboratorView = React.useMemo(() => {
+    return (
+      token &&
+      !isCollaborator({
+        permissions,
+        programId: props.program.shortName,
+      })
+    );
+  }, [token]);
+  const canWriteToProgram = React.useMemo(() => {
+    return (
+      token &&
+      canWriteProgram({
+        permissions,
+        programId: props.program.shortName,
+      })
+    );
+  }, [token]);
+
   return (
     <div>
       <Link
@@ -138,7 +152,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
         />
       </Link>
-      {token && !isCollaborator({ egoJwt: token, programId: props.program.shortName }) && (
+      {canSeeCollaboratorView && (
         <>
           <Link
             prefetch
@@ -211,7 +225,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           </Link>
         </>
       )}
-      {token && canWriteProgram({ egoJwt: token, programId: props.program.shortName }) && (
+      {canWriteToProgram && (
         <Link
           prefetch
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
@@ -242,7 +256,11 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
     currentViewingProgramIndex,
   );
-  const { token } = useAuthContext();
+  const { token, permissions } = useAuthContext();
+  const canSeeAllPrograms = React.useMemo(() => {
+    return token && isDccMember(permissions);
+  }, [token]);
+
   return (
     <>
       <MenuItem
@@ -263,7 +281,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         }
       />
-      {token && isDccMember(token) && (
+      {canSeeAllPrograms && (
         <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
@@ -295,11 +313,10 @@ export default function SideMenu() {
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
   const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
-  const { data: egoTokenData, token } = useAuthContext();
-  const isDcc = token ? isDccMember(token) : false;
-  const isRdpc = token ? isRdpcMember(token) : false;
+  const { data: egoTokenData, token, permissions } = useAuthContext();
 
-  const accessibleProgramScopes = token ? getAuthorizedProgramScopes(token) : [];
+  const isDcc = React.useMemo(() => (token ? isDccMember(permissions) : false), [token]);
+  const isRdpc = React.useMemo(() => (token ? isRdpcMember(permissions) : false), [token]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;

@@ -16,7 +16,11 @@ type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
 };
 export type PageConfigProps = {
   isPublic: boolean;
-  isAccessible: (args: { egoJwt?: string; ctx: GetInitialPropsContext }) => Promise<boolean>;
+  isAccessible: (args: {
+    egoJwt?: string;
+    ctx: GetInitialPropsContext;
+    initialPermissions?: string[];
+  }) => Promise<boolean>;
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
   getGqlQueriesToPrefetch: (
     args: GetInitialPropsContextWithEgo,

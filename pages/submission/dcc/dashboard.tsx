@@ -4,5 +4,5 @@ import DccDashboard from 'components/pages/submission-system/dcc';
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx }) => isDccMember(egoJwt),
+  isAccessible: async ({ initialPermissions }) => isDccMember(initialPermissions),
 })(DccDashboard);

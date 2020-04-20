@@ -1,7 +1,7 @@
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
-import { decodeToken, isValidJwt } from 'global/utils/egoJwt';
+import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
@@ -64,6 +64,7 @@ class Root extends App<
     pathname: string;
     unauthorized: boolean;
     startWithGlobalLoader: boolean;
+    initialPermissions: string[];
   },
   {},
   { isLoadingLoginRedirect: boolean }
@@ -73,7 +74,7 @@ class Root extends App<
     const { res } = ctx;
     const { AUTH_DISABLED } = getConfig();
     let refreshedJwt = null;
-
+    let initialPermissions = getPermissionsFromToken(egoJwt);
     if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
         if (res) {
@@ -88,6 +89,7 @@ class Root extends App<
           if (isValidJwt(newJwt)) {
             Cookies.set(EGO_JWT_KEY, newJwt);
             refreshedJwt = newJwt;
+            initialPermissions = getPermissionsFromToken(newJwt);
           } else {
             forceLogin();
           }
@@ -100,7 +102,7 @@ class Root extends App<
     }
 
     const unauthorized = Component.isAccessible
-      ? !(await Component.isAccessible({ egoJwt, ctx }))
+      ? !(await Component.isAccessible({ egoJwt, ctx, initialPermissions }))
       : false;
 
     if (unauthorized && !AUTH_DISABLED) {
@@ -138,6 +140,7 @@ class Root extends App<
       },
       apolloCache,
       startWithGlobalLoader,
+      initialPermissions,
     };
   }
 
@@ -230,7 +233,15 @@ class Root extends App<
   }
 
   render() {
-    const { Component, pageProps, ctx, apolloCache, egoJwt, startWithGlobalLoader } = this.props;
+    const {
+      Component,
+      pageProps,
+      ctx,
+      apolloCache,
+      egoJwt,
+      startWithGlobalLoader,
+      initialPermissions,
+    } = this.props;
     const { isLoadingLoginRedirect } = this.state;
     return (
       <ApplicationRoot
@@ -238,6 +249,7 @@ class Root extends App<
         apolloCache={apolloCache}
         pageContext={ctx}
         startWithGlobalLoader={startWithGlobalLoader}
+        initialPermissions={initialPermissions}
       >
         {isLoadingLoginRedirect ? (
           <DefaultLayout>

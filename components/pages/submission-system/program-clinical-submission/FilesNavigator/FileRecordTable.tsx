@@ -1,7 +1,7 @@
 import { ClinicalSubmissionEntityFile } from '../types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import Icon from 'uikit/Icon';
 import {
   DataTableStarIcon,
@@ -16,6 +16,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
+import React from 'react';
 
 const StarIcon = DataTableStarIcon;
 
@@ -96,8 +97,8 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
-  const { token } = useAuthContext();
-  const isDccPreview = isDccMember(token) && isPendingApproval;
+  const { token, permissions } = useAuthContext();
+  const isDccPreview = React.useMemo(() => isDccMember(permissions) && isPendingApproval, [token]);
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
