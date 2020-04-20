@@ -285,43 +285,53 @@ export default ({
     },
   ];
 
-  const [tableState, setTableState] = React.useState({
+  const [pagingState, setPagingState] = React.useState({
     pages: initalPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,
   });
 
-  const offset = tableState.pageSize * tableState.page;
-  const first = tableState.pageSize;
-  const sorts = tableState.sorts;
+  const offset = pagingState.pageSize * pagingState.page;
+  const first = pagingState.pageSize;
+  const sorts = pagingState.sorts;
+
+  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
 
   const {
     data: {
       programDonorSummaryEntries = [],
       programDonorSummaryStats = emptyProgramSummaryStats,
     } = {},
-    loading: isQueryLoading,
-  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts);
+  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
+    onCompleted: () => {
+      if (loaderTimeout) {
+        clearTimeout(loaderTimeout);
+      }
+      setLoaderTimeout(
+        setTimeout(() => {
+          setIsTableLoading(false);
+        }, 500),
+      );
+    },
+  });
 
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
 
-  // effect used to set/unset table loader
-  React.useEffect(() => {
-    if (isQueryLoading || isCardLoading) {
-      setIsTableLoading(true);
-    } else {
-      sleep(500).then(() => setIsTableLoading(false));
-    }
-  }, [isQueryLoading, isCardLoading]);
+  const handlePagingStateChange = (state: typeof pagingState) => {
+    setIsTableLoading(true);
+    Promise.resolve().then(() => {
+      setPagingState(state);
+    });
+  };
 
   const onPageChange = async (newPageNum: number) => {
-    setTableState({ ...tableState, page: newPageNum }); // newPageNum is zero indexed
+    handlePagingStateChange({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
   };
 
   const onPageSizeChange = async (newPageSize: number, newPage: number) => {
-    setTableState({
-      ...tableState,
+    handlePagingStateChange({
+      ...pagingState,
       page: 0,
       pageSize: newPageSize,
       pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
@@ -342,7 +352,7 @@ export default ({
       },
       [],
     );
-    setTableState({ ...tableState, sorts });
+    handlePagingStateChange({ ...pagingState, sorts });
   };
 
   return (
@@ -372,9 +382,9 @@ export default ({
         data={programDonorSummaryEntries}
         showPagination={true}
         manual={true}
-        pages={tableState.pages}
-        pageSize={tableState.pageSize}
-        page={tableState.page}
+        pages={pagingState.pages}
+        pageSize={pagingState.pageSize}
+        page={pagingState.page}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         onSortedChange={onSortedChange}
