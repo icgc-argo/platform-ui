@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 
 import Icon from '../Icon';
+import Input from '../form/Input';
 import useTheme from '../utils/useTheme';
 import { MenuItemContainer, IconContainer, ContentContainer } from './styledComponents';
 
@@ -30,6 +31,12 @@ const MenuItemComponent = React.forwardRef<
     noChevron?: boolean;
     icon?: React.ReactElement<React.ComponentProps<typeof Icon>>;
     contentAs?: keyof JSX.IntrinsicElements;
+    chevronOnLeftSide?: boolean;
+    isFacetVariant?: boolean;
+    searchStateParams?: {
+      query: string;
+      querySetter: React.Dispatch<React.SetStateAction<string>>;
+    };
   } & React.ComponentProps<typeof MenuItemContainer>
 >(
   (
@@ -43,6 +50,9 @@ const MenuItemComponent = React.forwardRef<
       icon,
       noChevron = false,
       contentAs = 'button',
+      chevronOnLeftSide = false,
+      isFacetVariant = false,
+      searchStateParams,
       ...otherProps
     },
     ref,
@@ -50,7 +60,22 @@ const MenuItemComponent = React.forwardRef<
     const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
     const isSelected =
       typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
+    const [searchbarState, setSearchbarState] = React.useState(false);
+
     const contentContainerRef = React.createRef<HTMLButtonElement>();
+    const chevronIcon =
+      children && !noChevron ? (
+        <Icon
+          css={css`
+            margin-right: ${chevronOnLeftSide ? '7px' : '0px'};
+          `}
+          name={isSelected ? 'chevron_down' : 'chevron_right'}
+          fill={isSelected ? 'secondary' : 'primary'}
+        />
+      ) : (
+        <></>
+      );
+
     return (
       <MenuItemContainer
         ref={ref}
@@ -67,6 +92,7 @@ const MenuItemComponent = React.forwardRef<
       >
         {content && (
           <div className="MenuItemContent">
+            {chevronOnLeftSide && chevronIcon}
             <ContentContainer ref={contentContainerRef} as={contentAs}>
               {icon && (
                 <IconContainer>
@@ -77,13 +103,48 @@ const MenuItemComponent = React.forwardRef<
               )}
               {content}
             </ContentContainer>
-            {children && !noChevron && (
-              <Icon
-                name={isSelected ? 'chevron_down' : 'chevron_right'}
-                fill={isSelected ? 'secondary' : 'primary'}
-              />
+            {!chevronOnLeftSide && chevronIcon}
+            {isSelected && isFacetVariant && (
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                <Icon
+                  onClick={e => {
+                    e.stopPropagation();
+                    setSearchbarState(!searchbarState);
+                  }}
+                  name={'search'}
+                  fill={searchbarState ? 'secondary' : 'primary_3'}
+                  height="16px"
+                  width="16px"
+                />
+              </div>
             )}
           </div>
+        )}
+        {isSelected && searchbarState && (
+          <MenuItem
+            level={1}
+            selected
+            contentAs="div"
+            content={
+              <Input
+                aria-label="search-for-facets"
+                css={css`
+                  flex: 1;
+                `}
+                preset="search"
+                value={searchStateParams.query}
+                onChange={e => {
+                  searchStateParams.querySetter(e.target.value);
+                }}
+                showClear={true}
+              />
+            }
+          />
         )}
         {isSelected && children}
       </MenuItemContainer>
