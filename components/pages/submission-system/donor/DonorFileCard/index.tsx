@@ -88,120 +88,103 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
   </Row>
 );
 
-const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => (
-  <Col xs={12}>
-    <Table
-      variant="STATIC"
-      parentRef={{ current: null }}
-      showPagination={false}
-      data={data}
-      columns={[
-        {
-          sortable: false,
-          Header: header.toUpperCase(),
-          headerStyle: {
-            background: useTheme().colors.secondary_4,
+const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
+  const theme = useTheme();
+  return (
+    <Col xs={12}>
+      <Table
+        variant="STATIC"
+        parentRef={{ current: null }}
+        showPagination={false}
+        data={data}
+        columns={[
+          {
+            sortable: false,
+            Header: header.toUpperCase(),
+            headerStyle: {
+              background: theme.colors.secondary_4,
+            },
+            accessor: 'id',
+            style: { whiteSpace: 'unset' },
           },
-          accessor: 'id',
-          style: { whiteSpace: 'unset' },
-        },
-      ]}
-    />
-  </Col>
-);
+        ]}
+      />
+    </Col>
+  );
+};
 
 export default () => {
   return (
-    <div>
-      <Container
-        css={css`
-          padding: 20px;
-          padding-top: 0px;
-          min-width: 370px;
-        `}
-      >
-        <Row justify="between">
-          <Col xs={5}>
-            <Typography
-              css={css`
-                white-space: nowrap;
-              `}
-              variant="subtitle"
-            >
-              Available Files
-            </Typography>
-          </Col>
-          <Col
-            xs={3.5}
+    <Container
+      css={css`
+        padding: 20px;
+        padding-top: 0px;
+      `}
+    >
+      <Row justify="between">
+        <Col>
+          <Typography variant="subtitle">Available Files</Typography>
+        </Col>
+        <Col
+          css={css`
+            display: flex;
+            align-self: center;
+            justify-content: right;
+          `}
+        >
+          <Button
             css={css`
-              display: flex;
-              align-self: center;
-              justify-content: center;
+              white-space: nowrap;
             `}
+            variant="text"
           >
-            <Button
+            <Icon
               css={css`
-                white-space: nowrap;
+                padding-right: 4px;
               `}
-              variant="text"
-            >
-              <Icon
-                css={css`
-                  padding-right: 4px;
-                `}
-                name="download"
-                fill="accent2_dark"
-                height="12px"
-              />
-              Manifest
-            </Button>
-          </Col>
-          <Col
-            xs={3.5}
+              name="download"
+              fill="accent2_dark"
+              height="12px"
+            />
+            Manifest
+          </Button>
+          <Button
             css={css`
-              display: flex;
-              align-self: center;
-              justify-content: right;
+              white-space: nowrap;
             `}
+            variant="text"
           >
-            <Button
+            View All
+            <Icon
               css={css`
-                white-space: nowrap;
+                padding-left: 3px;
+                position: relative;
+                top: 1px;
               `}
-              variant="text"
-            >
-              View All
-              <Icon
-                css={css`
-                  padding-left: 3px;
-                  position: relative;
-                  top: 1px;
-                `}
-                name="chevron_right"
-                fill="accent2_dark"
-                height="12px"
-              />
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <FileTable
-            header={'Data Types'}
-            data={[
-              { id: <DataRow name={'Simple Nucleotide Variation'} link={'#'} fileCount={5} /> },
-              { id: <DataRow name={'Copy Number Variation'} link={'#'} fileCount={21} /> },
-            ]}
-          />
-          <FileTable
-            header={'Experimental Strategies'}
-            data={[
-              { id: <DataRow name={'WXS'} link={'#'} fileCount={5} /> },
-              { id: <DataRow name={'WGS'} link={'#'} fileCount={0} /> },
-              { id: <DataRow name={'Targeted Sequencing'} link={'#'} fileCount={0} /> },
-            ]}
-          />
-        </Row>
-      </Container>
-    </div>
+              name="chevron_right"
+              fill="accent2_dark"
+              height="12px"
+            />
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <FileTable
+          header={'Data Types'}
+          data={[
+            { id: <DataRow name={'Simple Nucleotide Variation'} link={'#'} fileCount={5} /> },
+            { id: <DataRow name={'Copy Number Variation'} link={'#'} fileCount={21} /> },
+          ]}
+        />
+        <FileTable
+          header={'Experimental Strategies'}
+          data={[
+            { id: <DataRow name={'WXS'} link={'#'} fileCount={5} /> },
+            { id: <DataRow name={'WGS'} link={'#'} fileCount={0} /> },
+            { id: <DataRow name={'Targeted Sequencing'} link={'#'} fileCount={0} /> },
+          ]}
+        />
+      </Row>
+    </Container>
   );
 };
