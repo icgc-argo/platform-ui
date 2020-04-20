@@ -1,15 +1,23 @@
 import Typography from 'uikit/Typography';
-import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
+import { DashboardCard } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY.gql';
-import { ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables } from './types';
+import {
+  ProgramDonorsSummaryQueryData,
+  ProgramDonorsSummaryQueryVariables,
+  DonorSummaryEntrySort,
+  DonorSummaryEntrySortField,
+  DonorSummaryEntrySortOrder,
+} from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 
-const useProgramDonorsSummaryQuery = (
+export const useProgramDonorsSummaryQuery = (
   programShortName: string,
   first: number,
+  offset: number,
+  sorts: DonorSummaryEntrySort[],
   options: Omit<
     QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
     'variables'
@@ -22,11 +30,12 @@ const useProgramDonorsSummaryQuery = (
       variables: {
         programShortName,
         first,
+        offset,
+        sorts,
       },
-      pollInterval: POLL_INTERVAL_MILLISECONDS, // milliseconds
+      notifyOnNetworkStatusChange: true,
     },
   );
-
   return {
     ...hook,
     data: hook.data,
@@ -35,31 +44,48 @@ const useProgramDonorsSummaryQuery = (
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const MAX_RECORDS_TO_FETCH = 500;
-  const {
-    data: { programDonorSummaryEntries = [], programDonorSummaryStats = undefined } = {},
-    loading: isLoading = true,
-  } = useProgramDonorsSummaryQuery(programShortName, MAX_RECORDS_TO_FETCH);
+  const DEFAULT_PAGE_SIZE = 20;
+  const DEFAULT_SORTS = [
+    {
+      field: 'updatedAt' as DonorSummaryEntrySortField,
+      order: 'desc' as DonorSummaryEntrySortOrder,
+    },
+  ];
+  const DEFAULT_OFFSET = 0;
 
-  const isDonorSummaryEntriesEmpty = programDonorSummaryEntries.length === 0;
+  // using the default query variables will get us all registered donors
+  const {
+    data: { programDonorSummaryStats = undefined } = {},
+    loading: isCardLoading = true,
+  } = useProgramDonorsSummaryQuery(
+    programShortName,
+    DEFAULT_PAGE_SIZE,
+    DEFAULT_OFFSET,
+    DEFAULT_SORTS,
+  );
+  const initalPages = !isCardLoading
+    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+    : 1;
+
+  const isDonorSummaryEntriesEmpty =
+    !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
   return (
-    <DashboardCard loading={isLoading} cardHeight={isLoading ? '170px' : '100%'}>
+    <DashboardCard loading={isCardLoading}>
       <Typography variant="default" component="span">
         Donor Data Summary
       </Typography>
 
-      {!isLoading ? (
-        isDonorSummaryEntriesEmpty ? (
-          <EmptyDonorSummaryState />
-        ) : (
-          <DonorSummaryTable
-            donorSummaryEntries={programDonorSummaryEntries}
-            programDonorSummaryStats={programDonorSummaryStats}
-          />
-        )
+      {!isCardLoading && isDonorSummaryEntriesEmpty ? (
+        <EmptyDonorSummaryState />
       ) : (
-        undefined
+        <DonorSummaryTable
+          programShortName={programShortName}
+          initalPages={initalPages}
+          initialPageSize={DEFAULT_PAGE_SIZE}
+          initialSorts={DEFAULT_SORTS}
+          isCardLoading={isCardLoading}
+        />
       )}
     </DashboardCard>
   );
