@@ -30,6 +30,9 @@ import download from './collection/download';
 import upload from './collection/upload';
 import lock from './collection/lock';
 import dash from './collection/dash';
+import file from './collection/file';
+import minus_circle from './collection/minus_circle';
+
 /**
  * Icon path and property lookup object
  * css - sensible defaults - can be overridden from component
@@ -58,6 +61,7 @@ const Icons = {
   trash,
   google,
   plus_circle,
+  minus_circle,
   key,
   user,
   ellipses,
@@ -67,6 +71,7 @@ const Icons = {
   upload,
   lock,
   dash,
+  file,
 };
 
 export type UikitIconNames = keyof typeof Icons;

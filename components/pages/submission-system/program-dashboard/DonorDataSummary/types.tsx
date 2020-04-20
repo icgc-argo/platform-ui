@@ -45,4 +45,14 @@ export type ProgramDonorsSummaryQueryData = {
 export type ProgramDonorsSummaryQueryVariables = {
   programShortName: string;
   first: number;
+  offset: number;
+  sorts: DonorSummaryEntrySort[];
 };
+
+export type DonorSummaryEntrySort = {
+  field: DonorSummaryEntrySortField;
+  order: DonorSummaryEntrySortOrder;
+};
+
+export type DonorSummaryEntrySortField = keyof DonorSummaryRecord;
+export type DonorSummaryEntrySortOrder = 'asc' | 'desc';

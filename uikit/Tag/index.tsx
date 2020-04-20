@@ -3,13 +3,14 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
 
-type TagVariant = 'INFO' | 'WARNING' | 'ERROR' | 'SUCCESS' | 'UPDATE';
+type TagVariant = 'INFO' | 'WARNING' | 'ERROR' | 'SUCCESS' | 'UPDATE' | 'NEUTRAL';
 export const TAG_VARIANTS: { [k in TagVariant]: k } = {
   INFO: 'INFO',
   WARNING: 'WARNING',
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
   UPDATE: 'UPDATE',
+  NEUTRAL: 'NEUTRAL',
 };
 
 const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
@@ -29,8 +30,9 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
       [TAG_VARIANTS.INFO]: theme.colors.secondary,
       [TAG_VARIANTS.SUCCESS]: theme.colors.accent1_dimmed,
       [TAG_VARIANTS.UPDATE]: theme.colors.accent3_dark,
+      [TAG_VARIANTS.NEUTRAL]: theme.colors.grey_2,
     }[variant])};
-  color: white;
+  color: ${({ theme, variant = 'INFO' }) => (variant === TAG_VARIANTS.NEUTRAL ? 'black' : 'white')};
 `;
 
 export default Tag;

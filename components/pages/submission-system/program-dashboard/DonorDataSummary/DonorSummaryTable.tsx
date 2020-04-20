@@ -3,15 +3,20 @@ import {
   DonorDataReleaseState,
   MolecularProcessingStatus,
   ProgoramDonorReleasStats,
+  DonorSummaryEntrySort,
+  ProgramDonorsSummaryQueryVariables,
+  DonorSummaryEntrySortField,
+  DonorSummaryEntrySortOrder,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
-import { displayDate } from 'global/utils/common';
+import { displayDate, sleep } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
   CellContentCenter,
+  Pipeline,
 } from '../../common';
 
 import { createRef } from 'react';
@@ -20,25 +25,41 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import HyperLink from 'uikit/Link';
-import Pipe from 'uikit/Pipe';
 import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
-
-enum PIPELINE_STATUS {
-  COMPLETE = 'complete',
-  IN_PROGRESS = 'inProgress',
-  ERROR = 'error',
-}
-type PipelineStats = Record<PIPELINE_STATUS, number>;
+import { useProgramDonorsSummaryQuery } from '.';
+import React from 'react';
+import { SortedChangeFunction, SortingRule } from 'react-table';
 
 export default ({
-  donorSummaryEntries,
-  programDonorSummaryStats,
+  programShortName,
+  initalPages,
+  initialPageSize,
+  initialSorts,
+  isCardLoading = true,
 }: {
-  donorSummaryEntries: Array<DonorSummaryRecord>;
-  programDonorSummaryStats: ProgoramDonorReleasStats;
+  programShortName: string;
+  initalPages: number;
+  initialPageSize: number;
+  initialSorts: DonorSummaryEntrySort[];
+  isCardLoading?: boolean;
 }) => {
+  // These are used to sort columns with multiple fields
+  // the order of the fields is how its is order in asc or desc
+  const ID_SEPERATOR = '-';
+  const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
+  const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
+  const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
+  const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
+
+  const emptyProgramSummaryStats: ProgoramDonorReleasStats = {
+    registeredDonorsCount: 0,
+    fullyReleasedDonorsCount: 0,
+    partiallyReleasedDonorsCount: 0,
+    noReleaseDonorsCount: 0,
+  };
+
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
@@ -141,33 +162,6 @@ export default ({
     );
   };
 
-  const PipelineCell = (stats: PipelineStats) => {
-    const theme = useTheme();
-
-    const getBackgroundColour = (state: keyof PipelineStats) => {
-      interface ColourMapper {
-        [key: string]: keyof typeof theme.colors;
-      }
-      const mapper: ColourMapper = {
-        [PIPELINE_STATUS.COMPLETE]: 'accent1_dimmed',
-        [PIPELINE_STATUS.IN_PROGRESS]: 'warning_dark',
-        [PIPELINE_STATUS.ERROR]: 'error',
-      };
-      return mapper[state];
-    };
-
-    const shouldRender = (num: number) => num > 0;
-
-    const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
-
-    const pipeStats = renderableStats.map(stat => (
-      <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
-        {stats[stat]}
-      </Pipe.Item>
-    ));
-    return <Pipe>{pipeStats}</Pipe>;
-  };
-
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -182,7 +176,7 @@ export default ({
             </CellContentCenter>
           ),
           Cell: StatusColumnCell,
-          accessor: 'releaseState',
+          accessor: 'releaseStatus',
           resizable: false,
           width: 50,
           sortMethod: (a: DonorDataReleaseState, b: DonorDataReleaseState) => {
@@ -196,7 +190,7 @@ export default ({
         },
         {
           Header: 'Donor ID',
-          accessor: 'donorID',
+          accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return (
               <Link href="">
@@ -221,7 +215,7 @@ export default ({
         },
         {
           Header: 'Samples',
-          accessor: 'samples',
+          id: REGISTERD_SAMPLE_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
               left={original.registeredNormalSamples}
@@ -240,7 +234,7 @@ export default ({
       columns: [
         {
           Header: 'Raw Reads',
-          accessor: 'rawReads',
+          id: RAW_READS_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
               left={original.publishedNormalAnalysis}
@@ -251,9 +245,9 @@ export default ({
         },
         {
           Header: 'Alignment',
-          accessor: 'alignment',
+          id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
-            <PipelineCell
+            <Pipeline
               complete={original.alignmentsCompleted}
               inProgress={original.alignmentsRunning}
               error={original.alignmentsFailed}
@@ -262,9 +256,9 @@ export default ({
         },
         {
           Header: 'Sanger VC',
-          accessor: 'sangerVC',
+          id: SANGER_VC_COLUMN_ID,
           Cell: ({ original }) => (
-            <PipelineCell
+            <Pipeline
               complete={original.sangerVcsCompleted}
               inProgress={original.sangerVcsRunning}
               error={original.sangerVcsFailed}
@@ -282,7 +276,7 @@ export default ({
         },
         {
           Header: 'Last Updated',
-          accessor: 'lastUpdated',
+          accessor: 'updatedAt',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
@@ -290,6 +284,66 @@ export default ({
       ],
     },
   ];
+
+  const [tableState, setTableState] = React.useState({
+    pages: initalPages,
+    pageSize: initialPageSize,
+    page: 0,
+    sorts: initialSorts,
+  });
+
+  const offset = tableState.pageSize * tableState.page;
+  const first = tableState.pageSize;
+  const sorts = tableState.sorts;
+
+  const {
+    data: {
+      programDonorSummaryEntries = [],
+      programDonorSummaryStats = emptyProgramSummaryStats,
+    } = {},
+    loading: isQueryLoading,
+  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts);
+
+  const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
+
+  // effect used to set/unset table loader
+  React.useEffect(() => {
+    if (isQueryLoading || isCardLoading) {
+      setIsTableLoading(true);
+    } else {
+      sleep(500).then(() => setIsTableLoading(false));
+    }
+  }, [isQueryLoading, isCardLoading]);
+
+  const onPageChange = async (newPageNum: number) => {
+    setTableState({ ...tableState, page: newPageNum }); // newPageNum is zero indexed
+  };
+
+  const onPageSizeChange = async (newPageSize: number, newPage: number) => {
+    setTableState({
+      ...tableState,
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
+    });
+  };
+
+  const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+    const sorts = newSorted.reduce(
+      (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
+        const fields = sortRule.id.split(ID_SEPERATOR);
+        const order = sortRule.desc ? 'desc' : 'asc';
+        return accSorts.concat(
+          fields.map(field => ({
+            field: field as DonorSummaryEntrySortField,
+            order: order as DonorSummaryEntrySortOrder,
+          })),
+        );
+      },
+      [],
+    );
+    setTableState({ ...tableState, sorts });
+  };
 
   return (
     <div
@@ -301,14 +355,29 @@ export default ({
       `}
     >
       <TableInfoHeaderContainer
-        left={<DonorStatsArea programDonorSummaryStats={programDonorSummaryStats} />}
+        left={
+          <DonorStatsArea
+            css={css`
+              opacity: ${isTableLoading ? 0.5 : 1};
+            `}
+            programDonorSummaryStats={programDonorSummaryStats}
+          />
+        }
         noMargin={true}
       />
       <Table
+        loading={isTableLoading}
         parentRef={containerRef}
-        showPagination={true}
         columns={tableColumns}
-        data={donorSummaryEntries}
+        data={programDonorSummaryEntries}
+        showPagination={true}
+        manual={true}
+        pages={tableState.pages}
+        pageSize={tableState.pageSize}
+        page={tableState.page}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        onSortedChange={onSortedChange}
       />
     </div>
   );

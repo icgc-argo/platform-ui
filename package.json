@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.9.16",
+  "version": "1.9.19",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -28,7 +28,7 @@
     "babel": "./node_modules/@babel/cli/bin/babel.js"
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.0",
+    "@apollo/react-hooks": "^3.1.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/polyfill": "^7.4.4",
