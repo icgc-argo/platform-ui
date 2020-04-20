@@ -21,6 +21,7 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
     `}
   >
     <Col
+      xs={10}
       css={css`
         white-space: nowrap;
         align-self: center;
@@ -29,7 +30,7 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
       <Typography variant="data">{name}</Typography>
     </Col>
     <Col
-      xs={1}
+      xs={2}
       css={css`
         white-space: nowrap;
       `}
@@ -55,7 +56,7 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
               top: -3px;
             `}
           >
-            0
+            {fileCount}
           </Typography>
         </div>
       ) : (
