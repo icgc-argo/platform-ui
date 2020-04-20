@@ -302,9 +302,18 @@ export default ({
       programDonorSummaryStats = emptyProgramSummaryStats,
     } = {},
     loading: isQueryLoading,
-  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts);
+  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
+    onCompleted: () => {
+      setAllowRenderLoading(false);
+    },
+  });
 
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
+  const [allowRenderLoading, setAllowRenderLoading] = React.useState(true);
+  const onTableStateChange = (_tableState: typeof tableState) => {
+    setAllowRenderLoading(true);
+    setTableState(_tableState);
+  };
 
   // effect used to set/unset table loader
   React.useEffect(() => {
@@ -316,11 +325,11 @@ export default ({
   }, [isQueryLoading, isCardLoading]);
 
   const onPageChange = async (newPageNum: number) => {
-    setTableState({ ...tableState, page: newPageNum }); // newPageNum is zero indexed
+    onTableStateChange({ ...tableState, page: newPageNum }); // newPageNum is zero indexed
   };
 
   const onPageSizeChange = async (newPageSize: number, newPage: number) => {
-    setTableState({
+    onTableStateChange({
       ...tableState,
       page: 0,
       pageSize: newPageSize,
@@ -342,7 +351,7 @@ export default ({
       },
       [],
     );
-    setTableState({ ...tableState, sorts });
+    onTableStateChange({ ...tableState, sorts });
   };
 
   return (
@@ -366,7 +375,7 @@ export default ({
         noMargin={true}
       />
       <Table
-        loading={isTableLoading}
+        loading={allowRenderLoading && isTableLoading}
         parentRef={containerRef}
         columns={tableColumns}
         data={programDonorSummaryEntries}
