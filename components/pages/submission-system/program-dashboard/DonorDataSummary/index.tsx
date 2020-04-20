@@ -1,5 +1,5 @@
 import Typography from 'uikit/Typography';
-import { DashboardCard } from '../common';
+import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
@@ -12,6 +12,7 @@ import {
   DonorSummaryEntrySortOrder,
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
+import { useTimeout } from './common';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -23,6 +24,7 @@ export const useProgramDonorsSummaryQuery = (
     'variables'
   > = {},
 ) => {
+  const pollingTimeout = useTimeout(30000);
   const hook = useQuery<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>(
     PROGRAM_DONOR_SUMMARY_QUERY,
     {
@@ -34,6 +36,7 @@ export const useProgramDonorsSummaryQuery = (
         sorts,
       },
       notifyOnNetworkStatusChange: true,
+      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
   return {
