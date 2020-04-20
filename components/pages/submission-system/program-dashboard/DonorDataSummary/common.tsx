@@ -1,3 +1,4 @@
+import React from 'react';
 import { DonorDataReleaseState } from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
 
@@ -15,4 +16,15 @@ export const RELEASED_STATE_STROKE_COLOURS: {
   [DonorDataReleaseState.FULLY]: null,
   [DonorDataReleaseState.PARTIALLY]: null,
   [DonorDataReleaseState.NO]: { color: 'secondary', width: 1 },
+};
+
+export const useTimeout = (msTimeout: number = 30000) => {
+  const [isTimeOut, setIsTimeOut] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsTimeOut(true);
+    }, msTimeout);
+    return () => clearTimeout(timer);
+  }, []);
+  return isTimeOut;
 };

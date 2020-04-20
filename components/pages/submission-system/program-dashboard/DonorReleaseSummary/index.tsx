@@ -1,15 +1,9 @@
-import Container from 'uikit/Container';
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import {
-  DashboardCard,
-  DashboardSummaryData,
-  DashboardSummaryDataVariables,
-  POLL_INTERVAL_MILLISECONDS,
-} from '../common';
+import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -17,7 +11,7 @@ export default () => {
     DASHBOARD_SUMMARY_QUERY,
     {
       variables: { programShortName: programShortName },
-      pollInterval: POLL_INTERVAL_MILLISECONDS,
+      // polling is not necessary here because it only wants the commitmentDonors
     },
   );
   return (

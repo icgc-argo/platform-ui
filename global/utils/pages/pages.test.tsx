@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { getDefaultRedirectPathForUser } from './index';
+import { getPermissionsFromToken } from '../egoJwt';
 
 /** has the following scopes:
  * "PROGRAMDATA-PACA-AU.WRITE"
@@ -27,27 +28,31 @@ const EXPIRED_TOKEN =
 
 const BOGUS_PROGRAM_ID = 'BOGUS_PROGRAM';
 
+const dccPermissions = getPermissionsFromToken(DCC_USER);
+const programAdminPermissions = getPermissionsFromToken(PROGRAM_ADMIN);
+const dataSubmitterPermissions = getPermissionsFromToken(DATA_SUBMITTER);
+
 describe('getDefaultRedirectPathForUser', () => {
   it('should return program list page for DCC', () => {
-    expect(getDefaultRedirectPathForUser(DCC_USER)).to.equal('/submission/program');
+    expect(getDefaultRedirectPathForUser(dccPermissions)).to.equal('/submission/program');
   });
   it('should return the right program dashboard page for program admin', () => {
-    expect(getDefaultRedirectPathForUser(PROGRAM_ADMIN)).to.equal(
+    expect(getDefaultRedirectPathForUser(programAdminPermissions)).to.equal(
       '/submission/program/PACA-AU/dashboard',
     );
   });
   it('should return the static program dashboard url for program admin', () => {
-    expect(getDefaultRedirectPathForUser(PROGRAM_ADMIN, true)).to.equal(
+    expect(getDefaultRedirectPathForUser(programAdminPermissions, true)).to.equal(
       '/submission/program/[shortName]/dashboard',
     );
   });
   it('should return the right program dashboard page for data submitter', () => {
-    expect(getDefaultRedirectPathForUser(DATA_SUBMITTER)).to.equal(
+    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions)).to.equal(
       '/submission/program/PACA-AU/dashboard',
     );
   });
   it('should return the static program dashboard url for data submitter', () => {
-    expect(getDefaultRedirectPathForUser(DATA_SUBMITTER, true)).to.equal(
+    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions, true)).to.equal(
       '/submission/program/[shortName]/dashboard',
     );
   });

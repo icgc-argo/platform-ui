@@ -4,8 +4,8 @@ import { isDccMember } from 'global/utils/egoJwt';
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx }) => {
-    return isDccMember(egoJwt);
+  isAccessible: async ({ initialPermissions }) => {
+    return isDccMember(initialPermissions);
   },
   getInitialProps: async ({ egoJwt, asPath, query }) => {
     return {};

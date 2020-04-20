@@ -11,11 +11,12 @@ import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import _ from 'lodash';
 import {
-  POLL_INTERVAL_MILLISECONDS,
   DashboardSummaryData,
   DashboardSummaryDataVariables,
+  POLL_INTERVAL_MILLISECONDS,
 } from '../common';
 import PercentBar from 'uikit/PercentBar';
+import { useTimeout } from '../DonorDataSummary/common';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -70,11 +71,12 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const pollingTimeout = useTimeout(30000);
   const { data, loading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
     DASHBOARD_SUMMARY_QUERY,
     {
       variables: { programShortName: programShortName },
-      pollInterval: POLL_INTERVAL_MILLISECONDS,
+      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
   return (

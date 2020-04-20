@@ -8,14 +8,14 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import useTheme from 'uikit/utils/useTheme';
 import urlJoin from 'url-join';
+import { getPermissionsFromToken } from 'global/utils/egoJwt';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
-
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
 
   const redirect = (token: string) => {
-    location.assign(getDefaultRedirectPathForUser(token));
+    location.assign(getDefaultRedirectPathForUser(getPermissionsFromToken(token)));
   };
 
   React.useEffect(() => {
