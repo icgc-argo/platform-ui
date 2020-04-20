@@ -32,6 +32,7 @@ import lock from './collection/lock';
 import dash from './collection/dash';
 import file from './collection/file';
 import minus_circle from './collection/minus_circle';
+import arrow_left from './collection/arrow_left';
 
 /**
  * Icon path and property lookup object
@@ -72,6 +73,7 @@ const Icons = {
   lock,
   dash,
   file,
+  arrow_left,
 };
 
 export type UikitIconNames = keyof typeof Icons;
