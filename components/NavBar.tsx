@@ -1,4 +1,4 @@
-import { SUBMISSION_PATH, USER_PAGE_PATH } from 'global/constants/pages';
+import { SUBMISSION_PATH, USER_PAGE_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
@@ -61,7 +61,7 @@ const getUserRole = egoJwt => {
 };
 
 export default function Navbar({ hideLink }: { hideLink?: boolean }) {
-  const { EGO_URL } = getConfig();
+  const { EGO_URL, REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel } = useAuthContext();
   const canAccessSubmission = !!egoJwt && (canReadSomeProgram(egoJwt) || isRdpcMember(egoJwt));
   const { asPath: path, query } = usePageContext();
@@ -107,7 +107,24 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
             </Link>
           )}
         />
+        <MenuGroup>
+          {/* need to ensure the path itself doesn't resolve when disabled */}
+          {REPOSITORY_ENABLED && (
+            <Link href={FILE_REPOSITORY_PATH} as={FILE_REPOSITORY_PATH}>
+              <a
+                css={css`
+                  height: 100%;
+                `}
+              >
+                <MenuItem ref={React.createRef()} active={path.search(FILE_REPOSITORY_PATH) === 0}>
+                  <Typography variant={'default'}>File Repository</Typography>
+                </MenuItem>
+              </a>
+            </Link>
+          )}
+        </MenuGroup>
       </Section>
+
       <Section />
       {!hideLink && (
         <Section>

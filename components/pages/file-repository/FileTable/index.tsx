@@ -23,6 +23,7 @@ export default ({
   fileRepoEntries: Array<FileRepositoryRecord>;
   userLoggedIn: Boolean;
 }) => {
+  console.log('user logged in :', userLoggedIn);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
