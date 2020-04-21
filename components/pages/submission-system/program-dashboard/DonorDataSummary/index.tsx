@@ -13,6 +13,10 @@ import {
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import { useTimeout } from './common';
+import { css } from '@emotion/core';
+import Button from 'uikit/Button';
+import { Row, Col } from 'react-grid-system';
+import Icon from 'uikit/Icon';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -74,11 +78,80 @@ export default () => {
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
   return (
-    <DashboardCard loading={isCardLoading}>
-      <Typography variant="default" component="span">
-        Donor Data Summary
-      </Typography>
-
+    <DashboardCard>
+      <Row>
+        <Col md={3.5} sm={12}>
+          <Typography variant="default" component="span">
+            Donor Data Summary
+          </Typography>
+        </Col>
+        <Col
+          md={8.5}
+          sm={12}
+          css={css`
+            display: flex;
+            align-self: center;
+            justify-content: right;
+          `}
+        >
+          <Row>
+            <Col>
+              <Button
+                css={css`
+                  white-space: nowrap;
+                `}
+                variant="secondary"
+              >
+                <Icon
+                  css={css`
+                    padding-right: 4px;
+                  `}
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                />
+                All Clinical Data
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                css={css`
+                  white-space: nowrap;
+                `}
+                variant="secondary"
+              >
+                <Icon
+                  css={css`
+                    padding-right: 4px;
+                  `}
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                />
+                Missing Data
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                css={css`
+                  white-space: nowrap;
+                `}
+                variant="secondary"
+              >
+                <Icon
+                  css={css`
+                    padding-right: 4px;
+                  `}
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                />
+                Table Data
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
       {!isCardLoading && isDonorSummaryEntriesEmpty ? (
         <EmptyDonorSummaryState />
       ) : (
