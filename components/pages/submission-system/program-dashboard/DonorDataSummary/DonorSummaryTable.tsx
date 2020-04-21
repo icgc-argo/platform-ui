@@ -305,9 +305,6 @@ export default ({
     } = {},
   } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
     onCompleted: () => {
-      if (loaderTimeout) {
-        clearTimeout(loaderTimeout);
-      }
       setLoaderTimeout(
         setTimeout(() => {
           setIsTableLoading(false);
@@ -319,6 +316,9 @@ export default ({
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
 
   const handlePagingStateChange = (state: typeof pagingState) => {
+    if (loaderTimeout) {
+      clearTimeout(loaderTimeout);
+    }
     setIsTableLoading(true);
     Promise.resolve().then(() => {
       setPagingState(state);
