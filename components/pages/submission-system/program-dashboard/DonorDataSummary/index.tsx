@@ -35,7 +35,6 @@ export const useProgramDonorsSummaryQuery = (
         offset,
         sorts,
       },
-      notifyOnNetworkStatusChange: true,
       pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
