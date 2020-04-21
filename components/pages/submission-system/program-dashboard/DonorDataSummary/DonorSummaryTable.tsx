@@ -321,6 +321,7 @@ export default ({
     }
     setIsTableLoading(true);
     Promise.resolve().then(() => {
+      // this is to push the pagination state render to the next tick
       setPagingState(state);
     });
   };
