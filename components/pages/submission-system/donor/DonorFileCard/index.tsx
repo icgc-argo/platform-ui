@@ -123,7 +123,9 @@ export default () => {
     >
       <Row justify="between">
         <Col>
-          <Typography variant="subtitle">Available Files</Typography>
+          <Typography variant="subtitle" as="h2">
+            Available Files
+          </Typography>
         </Col>
         <Col
           css={css`
