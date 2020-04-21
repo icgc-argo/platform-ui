@@ -41,16 +41,17 @@ export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?
   <Icon name="star" width="16px" height="16px" {...props} />
 );
 export const StatArea: {
-  Container: React.ComponentType;
+  Container: React.ComponentType<{ className?: string }>;
   Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement> & { faded?: boolean }>;
   StatEntryContainer: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
   StarIcon: typeof DataTableStarIcon;
 } = (() => {
-  const Container: React.ComponentType = ({ children }) => (
+  const Container: React.ComponentType<{ className?: string }> = ({ children, className }) => (
     <Typography
       variant="data"
       component="div"
       color="grey"
+      className={className}
       css={css`
         display: flex;
         align-items: center;
