@@ -62,44 +62,42 @@ const DayCount = ({ days }) => (
   </Typography>
 );
 
-const TimelineItem = withTheme(({ id, description, index, type, theme }) => (
-  <div
-    css={css`
-      display: flex;
-      align-items: center;
-      ${index === 5
-        ? css`
-            border: 1px solid ${TIMELINE_TYPES[type].borderColor};
-            margin: 0 -1px;
-          `
-        : null};
-    `}
-  >
-    <VerticalTabs.Item
+const TimelineItem = withTheme(({ id, description, index, type }) => {
+  const { backgroundColor, borderColor } = TIMELINE_TYPES[type];
+  return (
+    <div
       css={css`
-        width: 100%;
-        border: 0;
-        color: black;
-
-        ${index === 5
+        display: flex;
+        align-items: center;
+        ${index === 2
           ? css`
-              background: ${TIMELINE_TYPES[type].backgroundColor};
+              border: 1px solid ${borderColor};
+              margin: 0 -1px;
             `
-          : null}
+          : null};
       `}
-      active={index === 5}
     >
-      <div>
-        <Typography variant="caption" as="div">
-          {id}
-        </Typography>
-        <Typography variant="data" as="div" bold>
-          {description}
-        </Typography>
-      </div>
-    </VerticalTabs.Item>
-  </div>
-));
+      <VerticalTabs.Item
+        tabStyle={{ border: borderColor, background: backgroundColor }} // border and background, then we can match it, no logic so dont pass Triangle component
+        css={css`
+          width: 100%;
+          border: 0;
+          color: black;
+        `}
+        active={index === 2}
+      >
+        <div>
+          <Typography variant="caption" as="div">
+            {id}
+          </Typography>
+          <Typography variant="data" as="div" bold>
+            {description}
+          </Typography>
+        </div>
+      </VerticalTabs.Item>
+    </div>
+  );
+});
 
 const TimelineTabs = styled(VerticalTabs)``;
 

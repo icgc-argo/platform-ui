@@ -25,16 +25,18 @@ const Triangle = styled('div')`
   }
   &:after {
     top: 0px;
-    border-color: transparent transparent transparent ${({ theme }) => theme.colors.secondary_4};
+    border-color: transparent transparent transparent
+      ${({ theme, tabStyle }) => (tabStyle ? tabStyle.background : theme.colors.secondary_4)};
     border-width: calc(20px - 2px);
   }
   &:before {
     top: -3px;
-    border-color: transparent transparent transparent ${({ theme }) => theme.colors.secondary_2};
+    border-color: transparent transparent transparent
+      ${({ theme, tabStyle }) => (tabStyle ? tabStyle.border : theme.colors.secondary_2)};
     border-width: calc(23px - 2px);
   }
 `;
-const BaseItemContainer = styled(FocusWrapper)`
+export const BaseItemContainer = styled(FocusWrapper)`
   width: 100%;
   position: relative;
   transition: all 0.25s;
@@ -57,7 +59,8 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
   border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
   border-right: solid 1px ${({ theme }) => theme.colors.secondary_2};
-  background: ${({ theme }) => theme.colors.secondary_4};
+  background: ${({ theme, tabStyle }) =>
+    tabStyle ? tabStyle.background : theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary_dark};
 
   &:hover {
@@ -65,12 +68,15 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   }
 `;
 
+type tabStyleType = { border: string; background: string };
+
 const VerticalTabsItem: React.ComponentType<
-  { active?: boolean } & HTMLAttributes<HTMLButtonElement>
-> = ({ active = false, children, ...rest }) => {
+  { active?: boolean; tabStyle?: tabStyleType } & HTMLAttributes<HTMLButtonElement>
+> = ({ active = false, children, tabStyle, ...rest }) => {
+  console.log('log', active);
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
   return (
-    <ContainerComponent {...rest}>
+    <ContainerComponent tabStyle={tabStyle} {...rest}>
       <Typography
         variant="data"
         as="div"
@@ -89,7 +95,7 @@ const VerticalTabsItem: React.ComponentType<
           {children}
         </div>
       </Typography>
-      {active && <Triangle />}
+      {active && <Triangle tabStyle={tabStyle} />}
     </ContainerComponent>
   );
 };
