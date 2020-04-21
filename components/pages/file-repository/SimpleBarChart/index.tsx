@@ -10,23 +10,22 @@ import { ContentBox } from 'uikit/PageLayout';
 import { UikitIconNames } from 'uikit/Icon/icons';
 import { ThemeColorNames } from 'uikit/theme/types';
 
-type FileRepoDataType = 'data type' | 'program' | 'primary site';
+export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
   type: FileRepoDataType;
   totalDataSize?: string | null; // not sure yet how this prop will be determined
   totalCount: number; // calculation will vary based on chart type
   containerStyle?: React.CSSProperties;
+  chartHeight?: number;
 };
 
-// <--for dev-->
-const chartHeight = 100;
-const maxChartWidth = 300;
+const defaultChartHeight = 100;
+const maxChartWidth = 500;
 const minBarWidth = 6;
-// <--end for dev-->
 
 const getBarHeight = (value: number, maxValue: number): number => {
-  return Math.ceil((value / maxValue) * chartHeight);
+  return Math.ceil((value / maxValue) * defaultChartHeight);
 };
 
 const getBarWidth = (data: Array<any>): number => {
@@ -90,7 +89,7 @@ const YAxis = ({ max, theme }) => {
     <FlexColumn
       css={css`
         font-size: 10px;
-        height: ${chartHeight}px;
+        height: ${defaultChartHeight}px;
       `}
     >
       <AxisText color={theme.colors.grey}>{max}</AxisText>
@@ -106,6 +105,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   totalDataSize = null, // unit will be passed in with string prop
   totalCount,
   containerStyle = {},
+  chartHeight = defaultChartHeight,
 }) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
@@ -119,24 +119,34 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
         padding: 3px 10px 8px;
       `}
     >
-      <FlexColumn>
+      <FlexColumn
+        css={css`
+          margin-right: 1.5rem;
+        `}
+      >
         <div
           css={css`
             display: flex;
             flex-direction: column;
           `}
         >
-          <FlexRow>
+          <FlexRow
+            css={css`
+              justify-content: start;
+            `}
+          >
             <Icon
               name={chartTypeMeta[type].iconName as UikitIconNames}
               fill={theme.colors.primary_1}
               width="20px"
               height="20px"
-              style={{ margin: 0 }}
+              css={css`
+                margin: 0;
+              `}
             />
             <Typography
               css={css`
-                font-size: 26px;
+                font-size: 20px;
                 color: ${theme.colors.primary};
                 margin: 0px 0px 0px 10px;
               `}
@@ -173,16 +183,22 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
         css={css`
           display: flex;
           padding-top: 12px;
+          flex-grow: 1;
+          justify-content: space-between;
+          max-width: ${maxChartWidth}px;
         `}
       >
         <YAxis max={maxValue} theme={theme} />
-        <div>
+        <div
+          css={css`
+            flex-grow: 1;
+          `}
+        >
           <FlexRow
             css={css`
               align-items: baseline;
               padding-left: 6px;
               padding-bottom: 5px;
-              width: ${getChartWidth(data)}px;
               height: ${chartHeight}px;
             `}
           >
