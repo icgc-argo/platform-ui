@@ -34,6 +34,10 @@ const level1Style = ({ selected, theme }: StyleCalculationInput) => css`
   & > .MenuItemContent {
     padding: 12px;
   }
+  & a {
+    text-decoration: underline;
+    font-weight:normal;
+  }
 `;
 
 const level2Style = ({ selected, theme }: StyleCalculationInput) => css`

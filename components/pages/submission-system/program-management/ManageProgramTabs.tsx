@@ -83,8 +83,8 @@ const useTabState = () => {
 };
 
 export default () => {
-  const { token } = useAuthContext();
-  const isDcc = token ? isDccMember(token) : false;
+  const { token, permissions } = useAuthContext();
+  const isDcc = React.useMemo(() => isDccMember(permissions), [token]);
 
   const { shortName: programShortName } = usePageQuery();
 

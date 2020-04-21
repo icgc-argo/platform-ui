@@ -14,19 +14,22 @@ import {
   isRdpcMember,
   canReadSomeProgram,
   getReadableProgramShortNames,
+  getAuthorizedProgramScopes,
 } from '../egoJwt';
 import { PageConfigProps, PageWithConfig } from './types';
 
 export const getDefaultRedirectPathForUser = (
-  egoJwt: string,
+  permissions: string[],
   useStatic: boolean = false,
 ): string => {
-  if (isDccMember(egoJwt)) {
+  if (isDccMember(permissions)) {
     return PROGRAMS_LIST_PATH;
-  } else if (isRdpcMember(egoJwt)) {
+  } else if (isRdpcMember(permissions)) {
     return RDPC_PATH;
-  } else if (canReadSomeProgram(egoJwt)) {
-    const readableProgramShortNames = getReadableProgramShortNames(egoJwt);
+  } else if (canReadSomeProgram(permissions)) {
+    const readableProgramShortNames = getReadableProgramShortNames(
+      getAuthorizedProgramScopes(permissions),
+    );
     const orderedProgramShortNames = orderBy(readableProgramShortNames);
     return useStatic
       ? PROGRAM_DASHBOARD_PATH

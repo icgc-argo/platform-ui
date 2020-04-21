@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { css } from 'uikit';
 import TitleBar from 'uikit/TitleBar';
-import Progress from 'uikit/Progress';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Button from 'uikit/Button';
@@ -37,8 +36,8 @@ export default ({
   isPendingApproval: boolean;
   submissionVersion: string;
 }) => {
-  const { token } = useAuthContext();
-  const isDcc = isDccMember(token);
+  const { token, permissions } = useAuthContext();
+  const isDcc = React.useMemo(() => isDccMember(permissions), [token]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
   const {

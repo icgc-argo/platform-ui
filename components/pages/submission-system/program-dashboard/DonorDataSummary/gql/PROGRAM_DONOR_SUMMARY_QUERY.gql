@@ -1,6 +1,18 @@
-query PROGRAM_DONOR_SUMMARY_QUERY($programShortName: String!, $first: Int!) {
-  programDonorSummaryEntries(programShortName: $programShortName, first: $first) {
+query PROGRAM_DONOR_SUMMARY_QUERY(
+  $programShortName: String!
+  $first: Int!
+  $offset: Int!
+  $sorts: [DonorSummaryEntrySort]
+) {
+  programDonorSummaryEntries(
+    programShortName: $programShortName
+    first: $first
+    offset: $offset
+    sorts: $sorts
+  ) {
+    id
     donorId
+    programShortName
     validWithCurrentDictionary
     releaseStatus
     submitterDonorId

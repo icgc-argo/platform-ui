@@ -7,11 +7,13 @@ import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ egoJwt, ctx }) => {
+  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
     const {
       query: { shortName },
     } = ctx;
-    return !isRdpcMember(egoJwt) && isProgramAdmin({ egoJwt, programId: String(shortName) });
+    return (
+      !isRdpcMember(permissions) && isProgramAdmin({ permissions, programId: String(shortName) })
+    );
   },
   startWithGlobalLoader: true,
 })(props => {
