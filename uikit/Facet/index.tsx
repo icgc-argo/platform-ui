@@ -16,7 +16,7 @@ const Facet = ({ subMenuName, options }: { subMenuName: string; options: Array<F
         isFacetVariant={true}
         searchStateParams={{ query: searchQueryState, querySetter: setSearchQueryState }}
         css={css`
-          width: 300px;
+          flex: 1;
         `}
       >
         <OptionsList options={options} searchQuery={searchQueryState} />

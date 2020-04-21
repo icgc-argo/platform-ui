@@ -1,20 +1,27 @@
 import React from 'react';
-import Typography from 'uikit/dist/uikit/Typography';
+import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
 import { FileRepositoryRecord } from './FileTable/types';
-import { PageContainer } from 'uikit/PageLayout';
+import { PageContainer, Collapsible } from 'uikit/PageLayout';
 import NavBar from 'components/NavBar';
 import Footer from '../../Footer';
 import Head from '../head';
-import { PageContent, PageBody, ContentBody } from 'uikit/dist/uikit/PageLayout';
-import SimpleBarChart, { FileRepoDataType } from './SimpleBarChart';
-import mockData from './SimpleBarChart/mockData';
+import { PageContent, PageBody, ContentBody } from 'uikit/PageLayout';
+import SimpleBarChart from './SimpleBarChart';
+import mockChartData from './SimpleBarChart/mockData';
 import { SubMenu } from 'uikit/SubMenu';
-import { useTheme } from 'uikit/dist/uikit/ThemeProvider';
+import { useTheme } from 'uikit/ThemeProvider';
 import Container from 'uikit/Container';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 import Icon from 'uikit/Icon';
 import { css, styled } from 'uikit';
+import Facet from 'uikit/Facet';
+import { MenuItem } from 'uikit/SubMenu';
+import mockFacetData from './mockFacetData';
+import { capitalize } from 'global/utils/stringUtils';
+import { Input } from 'uikit/form';
+import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
+import { ThemeContext } from '@emotion/core';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -25,6 +32,108 @@ const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
 `;
 
+export const FacetRow = styled('div')`
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey_2};
+  justify-content: space-between;
+`;
+
+export const FacetContainer = styled('div')`
+  z-index: 1;
+  background: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => theme.shadows.pageElement};
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: calc(100vh - 58px);
+  max-height: calc(100vh - 58px);
+  overflow-y: auto;
+`;
+
+// TODO: implement search and upload functionality
+const UploadIdsButton = () => {
+  const disabled = false;
+  return (
+    <Button
+      id="button-search-id-upload"
+      isAsync
+      isLoading={false}
+      variant={BUTTON_VARIANTS.SECONDARY}
+      size={BUTTON_SIZES.SM}
+      onClick={() => null}
+      disabled={disabled}
+    >
+      <input
+        type="file"
+        // ref={ref}
+        accept=".tsv"
+        onChange={e => null}
+        css={css`
+          display: none;
+        `}
+        // {...inputProps}
+      />
+      <Icon name="upload" height="12px" fill={disabled ? 'white' : 'accent2_dark'} />
+      {' Upload a list of ids'}
+    </Button>
+  );
+};
+
+const FacetPanel = ({ theme, facets }) => {
+  return (
+    <SubMenu>
+      <FacetRow>
+        <Typography
+          css={css`
+            font-size: 16px;
+            padding-left: 12px;
+          `}
+          color={theme.colors.primary}
+        >
+          Filters
+        </Typography>
+      </FacetRow>
+      <FacetRow>
+        <MenuItem
+          css={css`
+            flex: 1;
+          `}
+          content={'Search Files by ID'}
+          chevronOnLeftSide
+        >
+          <Input
+            css={css`
+              margin: 8px;
+            `}
+            icon={<Icon name="search" />}
+            aria-label={'Search'}
+            placeholder="e.g. FL9998, DO9898..."
+          />
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+              margin: 8px;
+            `}
+          >
+            <UploadIdsButton />
+          </div>
+        </MenuItem>
+      </FacetRow>
+      {facets.map(type => {
+        return (
+          <FacetRow key={type}>
+            <Facet subMenuName={capitalize(type)} options={mockFacetData[type]} />
+          </FacetRow>
+        );
+      })}
+    </SubMenu>
+  );
+};
+
 export default ({
   token,
   data,
@@ -34,16 +143,29 @@ export default ({
   data: FileRepositoryRecord[];
   subtitle?: string;
 }) => {
-  const { primarySiteData, fileTypeData, programData, dataTypes } = mockData;
+  const { dataTypes } = mockChartData;
   const theme = useTheme();
   return (
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
       <PageBody>
-        <SubMenu>
-          <Typography color={theme.colors.primary}>Filters</Typography>
-        </SubMenu>
+        <FacetContainer>
+          <FacetPanel
+            theme={theme}
+            facets={[
+              'program',
+              'primary site',
+              'age at diagnosis',
+              'vital status',
+              'gender',
+              'experimental strategy',
+              'data type',
+            ]}
+          />
+          <Collapsible />
+        </FacetContainer>
+
         <PageContent>
           <ContentBody>
             <PaddedRow justify="around">
