@@ -22,6 +22,7 @@ export default () => {
                 margin-bottom: 10px;
               `}
               variant="subtitle2"
+              as="h2"
             >
               Summary
             </Typography>
