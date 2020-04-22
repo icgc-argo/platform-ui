@@ -39,7 +39,7 @@ const programData = [
   { category: 'ABCD-GB', count: 209 },
   { category: 'EFGH-CA', count: 1000 },
   { category: 'IJKL-CA', count: 1100 },
-  { category: 'TEST2-CA', count: 462 },
+  { category: 'TEST4-CA', count: 462 },
 ];
 
 const dataTypes = {

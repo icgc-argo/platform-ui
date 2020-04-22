@@ -1,4 +1,4 @@
-import { SUBMISSION_PATH, USER_PAGE_PATH } from 'global/constants/pages';
+import { SUBMISSION_PATH, USER_PAGE_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import {
@@ -66,7 +66,7 @@ const getUserRole = (egoJwt, permissions) => {
 };
 
 export default function Navbar({ hideLink }: { hideLink?: boolean }) {
-  const { EGO_URL } = getConfig();
+  const { EGO_URL, REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
 
   const canAccessSubmission = React.useMemo(() => {
@@ -116,6 +116,22 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
             </Link>
           )}
         />
+        <MenuGroup>
+          {/* need to ensure the path itself doesn't resolve when disabled */}
+          {REPOSITORY_ENABLED && (
+            <Link href={FILE_REPOSITORY_PATH} as={FILE_REPOSITORY_PATH}>
+              <a
+                css={css`
+                  height: 100%;
+                `}
+              >
+                <MenuItem ref={React.createRef()} active={path.search(FILE_REPOSITORY_PATH) === 0}>
+                  <Typography variant={'default'}>File Repository</Typography>
+                </MenuItem>
+              </a>
+            </Link>
+          )}
+        </MenuGroup>
       </Section>
       <Section />
       {!hideLink && (
