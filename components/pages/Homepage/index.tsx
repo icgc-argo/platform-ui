@@ -154,17 +154,16 @@ export default function Homepage() {
               </Button>
             </Link>
           </div>
-          {
-            <DataReleaseBar
-              stats={[
-                { quantity: 2, description: 'PROGRAMS' },
-                { quantity: 4600, description: 'DONORS' },
-                { quantity: 2, description: 'CANCER PRIMARY SITES' },
-                { quantity: 400, description: 'FILES' },
-              ]}
-              version={{ date: 'July 2, 2020', releaseIteration: 1 }}
-            />
-          }
+
+          <DataReleaseBar
+            stats={[
+              { quantity: 2, description: 'PROGRAMS' },
+              { quantity: 4600, description: 'DONORS' },
+              { quantity: 2, description: 'CANCER PRIMARY SITES' },
+              { quantity: 400, description: 'FILES' },
+            ]}
+            version={{ date: 'July 2, 2020', releaseIteration: 1 }}
+          />
         </div>
       </HeroDiv>
       <div

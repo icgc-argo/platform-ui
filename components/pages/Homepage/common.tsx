@@ -26,7 +26,7 @@ export const DataReleaseBar: React.ComponentType<{
 }> = ({ stats, version }) => {
   const theme = useTheme();
   const formattedStats = stats.map(stat => (
-    <Col md={3} sm={6}>
+    <Col md={3} sm={6} key={stat.description}>
       <div
         css={css`
           display: flex;
@@ -244,8 +244,9 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
               padding: 20px;
             `}
           >
-            {newsItems.map(item => (
+            {newsItems.map((item, index) => (
               <Typography
+                key={`newsText-${index}`}
                 as="h3"
                 variant="paragraph"
                 css={css`

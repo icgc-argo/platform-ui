@@ -39,5 +39,6 @@ module.exports = withImages({
     DOCS_URL_ROOT: process.env.DOCS_URL_ROOT,
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     DASHBOARD_ENABLED: process.env.DASHBOARD_ENABLED,
+    FEATURE_NEW_HOMEPAGE_ENABLED: process.env.FEATURE_NEW_HOMEPAGE_ENABLED,
   },
 });
