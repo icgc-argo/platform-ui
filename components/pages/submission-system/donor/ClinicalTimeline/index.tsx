@@ -3,8 +3,8 @@ import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
 import Checkbox from 'uikit/form/Checkbox';
 import { css } from 'uikit';
-import useTheme from '../utils/useTheme';
-import colors from '../theme/defaultTheme/colors';
+import useTheme from 'uikit/utils/useTheme';
+import colors from 'uikit/theme/defaultTheme/colors';
 
 const TIMELINE_TYPES = Object.freeze({
   primary_diagnosis: {
