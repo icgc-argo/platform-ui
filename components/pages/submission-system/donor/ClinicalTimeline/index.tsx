@@ -4,32 +4,46 @@ import Container from 'uikit/Container';
 import Checkbox from 'uikit/form/Checkbox';
 import { css } from 'uikit';
 import useTheme from 'uikit/utils/useTheme';
-import colors from 'uikit/theme/defaultTheme/colors';
+import defaultTheme from 'uikit/theme/defaultTheme';
 
-const TIMELINE_TYPES = Object.freeze({
+const getTimelineStyles = (theme: typeof defaultTheme) => {
+  const colors = theme.colors;
+  return {
+    primary_diagnosis: {
+      checkboxColor: colors.secondary,
+      borderColor: colors.secondary_1,
+      backgroundColor: colors.secondary_4,
+    },
+    specimen: {
+      checkboxColor: colors.accent3_dark,
+      borderColor: colors.accent3,
+      backgroundColor: colors.accent3_4,
+    },
+    treatment: {
+      checkboxColor: colors.accent4,
+      borderColor: colors.accent4_1,
+      backgroundColor: colors.accent4_4,
+    },
+    follow_up: {
+      checkboxColor: colors.accent2,
+      borderColor: colors.accent2_1,
+      backgroundColor: colors.accent2_4,
+    },
+  };
+};
+
+const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
     title: 'Primary Diagnosis',
-    checkboxColor: colors.secondary,
-    borderColor: colors.secondary_1,
-    backgroundColor: colors.secondary_4,
   },
   specimen: {
     title: 'Specimen',
-    checkboxColor: colors.accent3_dark,
-    borderColor: colors.accent3,
-    backgroundColor: colors.accent3_4,
   },
   treatment: {
     title: 'Treatment',
-    checkboxColor: colors.accent4,
-    borderColor: colors.accent4_1,
-    backgroundColor: colors.accent4_4,
   },
   follow_up: {
     title: 'Follow Up',
-    checkboxColor: colors.accent2,
-    borderColor: colors.accent2_1,
-    backgroundColor: colors.accent2_4,
   },
 });
 
@@ -61,6 +75,8 @@ const Header = ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
   const theme = useTheme();
   const counts: Array<EntityType> = Object.keys(entityCounts) as Array<EntityType>;
 
+  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+
   return (
     <div
       css={css`
@@ -88,8 +104,10 @@ const Header = ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
       >
         Show:
         {counts.map(entityKey => {
-          const { title, checkboxColor } = TIMELINE_TYPES[entityKey];
+          const { checkboxColor } = timelineStyles[entityKey];
+          const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
+
           const changeFilter = () =>
             setFilters(
               activeEntities.includes(entityKey)
