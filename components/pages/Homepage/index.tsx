@@ -1,104 +1,108 @@
 import React from 'react';
-import { Col, Row } from 'react-grid-system';
+import { Col, Row, ScreenClassRender, Visible, Hidden } from 'react-grid-system';
 import { css, styled } from 'uikit';
 import Button from 'uikit/Button';
 
-import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
 import Link from 'uikit/Link';
 
-import Container from 'uikit/Container';
 import Icon from 'uikit/Icon';
-import { DataReleaseBar } from './common';
+import { DataReleaseBar, DataCallout, NewsContainer, ResourceBox, OvertureBanner } from './common';
 
-const Ul = styled('ul')`
-  ${({ theme }) => css(theme.typography.paragraph)};
-  padding-left: 18px;
-  margin-top: 5px;
-  margin-bottom: 30px;
-`;
+const SeparationLine: React.ComponentType<{}> = () => {
+  const theme = useTheme();
+  return (
+    <>
+      <Hidden sm>
+        <div
+          css={css`
+            background: ${theme.colors.grey_2};
+            height: calc(35vw-100px);
 
-const Ul2 = styled('ul')`
-  ${({ theme }) => css(theme.typography.paragraph)};
-  padding-left: 0px;
-  margin-top: 5px;
-  margin-bottom: 30px;
-`;
+            width: 1px;
+          `}
+        />
+      </Hidden>
+      <Visible sm>
+        <div
+          css={css`
+            background: ${theme.colors.grey_2};
+            height: 1px;
+            margin-bottom: 20px;
+            width: 100%;
+          `}
+        />
+      </Visible>
+    </>
+  );
+};
 
-const FlexRow = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
+const layoutProps = {
+  lg: 4,
+  md: 6,
+  sm: 12,
+};
+
+const HeroDiv = styled('div')`
+  background-image: ${({ theme }) =>
+    `linear-gradient(to bottom, 
+      ${theme.colors.primary}, 
+      ${theme.colors.accent2}00 105%),
+      url('/static/icgc-galaxy-bg.png');`};
+
+  background-position: center;
+  background-size: cover;
+  background-color: ${({ theme }) => theme.colors.primary};
+  width: 100%;
+  min-height: 354px;
+  border-top: 1px solid ${({ theme }) => theme.colors.grey};
 `;
 
 export default function Homepage() {
   const theme = useTheme();
   return (
     <DefaultLayout>
-      <div
-        css={css`
-          background-image: linear-gradient(
-              to bottom,
-              rgba(21, 28, 61, 1),
-              rgba(127, 85, 204, 0) 105%
-            ),
-            url('/static/icgc-galaxy-bg.png');
-          background-position: center;
-          background-size: cover;
-          background-color: ${theme.colors.primary};
-          width: 100%;
-          min-height: 354px;
-          border-top: 1px solid ${theme.colors.grey};
-        `}
-      >
+      <HeroDiv>
         <div
           css={css`
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            /* margin: 0 10%; */
           `}
         >
           <Typography
             variant="hero"
             color="white"
+            bold={true}
             css={css`
               margin: 30px 50px 10px;
-              font-weight: 600;
               text-align: center;
             `}
+            as="h1"
           >
             ICGC ARGO Data Platform
           </Typography>
           <Typography
+            as="h2"
             variant="title"
             color="white"
             css={css`
               margin: 0 50px;
-              font-size: 16px;
-              font-weight: 400;
-              font-stretch: normal;
-              font-style: normal;
+              font-size: 15px;
+
               line-height: 24px;
-              letter-spacing: normal;
+
               text-align: center;
               width: 60%;
             `}
           >
             The International Cancer Genome Consortium Accelerating Research in Genomic Oncology
             (ICGC ARGO) aims to{' '}
-            <span
-              css={css`
-                font-weight: 600;
-              `}
-            >
-              uniformly analyze specimens from 100,000 donors with high quality clinical data{' '}
-            </span>
+            <b>uniformly analyze specimens from 100,000 donors with high quality clinical data </b>
             in order to address outstanding questions that are vital to the quest to defeat cancer.
           </Typography>
           <div
@@ -110,6 +114,7 @@ export default function Homepage() {
             `}
           >
             <Link
+              // todo: add link
               href=""
               underline={false}
               css={css`
@@ -124,7 +129,7 @@ export default function Homepage() {
                   name="file"
                   fill="accent2"
                   height="12px"
-                />{' '}
+                />
                 Browse the Data
               </Button>
             </Link>
@@ -161,148 +166,161 @@ export default function Homepage() {
             />
           }
         </div>
-      </div>
+      </HeroDiv>
       <div
         css={css`
-          height: 100%;
-          padding: 0 10%;
-          /* display: grid; */
-          /* grid-template-columns: 1fr 1fr; */
-          background: ${theme.colors.white};
+          padding: 24px 10%;
+          background-color: ${theme.colors.white};
         `}
       >
-        fasdfasdfasdfasdfaskdfakjsdfnkjashdfkjashfakjsdhf
+        <Row
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+          `}
+        >
+          <Col sm={12} md={3.8}>
+            <DataCallout
+              iconName={'dna_locked'}
+              iconFill={'secondary'}
+              circleFill={'secondary_3'}
+              title={'Access Controlled Data'}
+              urlData={{
+                text: 'How to apply',
+                href: 'https://docs.icgc-argo.org/docs/data-access',
+              }}
+            >
+              <b>The Data Access Compliance Office (DACO) </b> handles approval for access to
+              controlled molecular data in the ARGO Data Platform.
+            </DataCallout>
+          </Col>
+          <SeparationLine />
+          <Col sm={12} md={3.8}>
+            <DataCallout
+              iconName={'download'}
+              iconFill={'accent4_dark'}
+              circleFill={'accent4_3'}
+              title={'Download Data'}
+              urlData={{
+                text: 'How to Download',
+                href: 'https://docs.icgc-argo.org/docs/data-download',
+              }}
+            >
+              ICGC ARGO <b>clinical data </b>is available for download in the File Repository.
+              <b> Molecular data</b> can be downloaded after obtaining DACO approval.
+            </DataCallout>
+          </Col>
+          <SeparationLine />
+          <Col sm={12} md={3.8}>
+            <DataCallout
+              iconName={'workflow'}
+              iconFill={'accent2_dark'}
+              circleFill={'accent2_3'}
+              title={'Data Analysis Workflows'}
+              urlData={{
+                text: 'About our Workflows',
+                href: 'https://docs.icgc-argo.org/docs/dna-pipeline',
+              }}
+            >
+              ICGC ARGO uniformly analyzes molecular data against the{' '}
+              <b>GRCh38 Human Reference Genome</b>.
+            </DataCallout>
+          </Col>
+        </Row>
+        <NewsContainer
+          newsItems={[
+            <span>
+              <b>Data Release:</b> ICGC ARGO has just released a new set of data, with new donors
+              and somatic mutations from 2 programs. For the release summary, please visit{' '}
+              <Link>Data Release 1</Link>.
+            </span>,
+            <span>
+              <b>Software Release:</b> Analyze ICGC ARGO data from a Jupyter notebook that comes
+              preinstalled with our new python API. Access the feature: <Link>Data Analysis</Link>{' '}
+              and release notes: <Link>Software Release 2</Link>.
+            </span>,
+          ]}
+        />
+        <div
+          css={css`
+            background-image: url('/static/icgc-globe-bg.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            padding: 20px 0px;
+          `}
+        >
+          <Row justify="end">
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'Publication Guidelines'}
+                bodyText={
+                  'How to cite the ARGO Data Platform and datasets within your publication.'
+                }
+                iconName={'article'}
+                iconFill={'error_1'}
+                circleFill={'error_3'}
+                href={'https://docs.icgc-argo.org/docs/publication-guidelines'}
+              />
+            </Col>
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'Release Notes'}
+                bodyText={'Find details about Platform software releases and data releases.'}
+                iconName={'calendar'}
+                iconFill={'secondary'}
+                circleFill={'secondary_3'}
+                href={'https://docs.icgc-argo.org/docs/data-release-notes'}
+              />
+            </Col>
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'Programmatic APIs'}
+                bodyText={'Access Platform data through our public ARGO API.'}
+                iconName={'brackets'}
+                iconFill={'accent4_dark'}
+                circleFill={'accent4_3'}
+                //todo: add link
+                href={''}
+              />
+            </Col>
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'ICGC 25K Data Portal'}
+                bodyText={
+                  'Explore the original initiative that produced >20,000 tumour genomes across 26 cancer types.'
+                }
+                iconName={'programs'}
+                iconFill={'accent3_dark'}
+                circleFill={'accent3_3'}
+                href={'https://dcc.icgc.org/'}
+              />
+            </Col>
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'Data Submission'}
+                bodyText={'Instructions for programs to submit clinical and molecular data.'}
+                iconName={'testtube'}
+                iconFill={'accent1_dimmed'}
+                circleFill={'accent1_3'}
+                href={'https://docs.icgc-argo.org/docs/submission-overview'}
+              />
+            </Col>
+            <Col {...layoutProps}>
+              <ResourceBox
+                title={'Documentation'}
+                bodyText={'Resources for how to use the ARGO Data Platform and how to access data.'}
+                iconName={'question'}
+                iconFill={'warning'}
+                circleFill={'warning_3'}
+                href={'https://docs.icgc-argo.org/'}
+              />
+            </Col>
+          </Row>
+        </div>
       </div>
+      <OvertureBanner />
     </DefaultLayout>
-    // <DefaultLayout>
-    //   <div
-    //     css={css`
-    //       height: 100%;
-    //       display: grid;
-    //       grid-template-columns: 1fr 1fr;
-    //       background: ${theme.colors.white};
-    //     `}
-    //   >
-    //     <div
-    //       css={css`
-    //         display: flex;
-    //         flex-direction: column;
-    //         justify-content: start;
-    //         align-items: center;
-    //         text-align: center;
-    //       `}
-    //     >
-    //       <div>
-    //         <img width="350px" alt="" src="/static/argo.svg" />
-    //       </div>
-    //       <div
-    //         css={css`
-    //           margin: 0 10px;
-    //         `}
-    //       >
-    //         <Typography
-    //           variant="hero"
-    //           bold
-    //           color="primary"
-    //           css={css`
-    //             width: 100%;
-    //             margin: 28px 0 25px 0;
-    //             font-weight: normal;
-    //           `}
-    //         >
-    //           Welcome to the cool new page
-    //         </Typography>
-    //       </div>
-
-    //       <Container
-    //         css={css`
-    //           margin: 77px 50px 20px 50px;
-    //           padding: 16px;
-    //           text-align: left;
-    //           display: inline-flex;
-    //         `}
-    //       >
-    //         <div
-    //           css={css`
-    //             margin-right: 16px;
-    //           `}
-    //         >
-    //           <img alt="" src="/static/testtube.svg" />
-    //         </div>
-    //         <div>
-    //           <Typography
-    //             component="div"
-    //             css={css`
-    //               font-size: 16px;
-    //               font-weight: 600;
-    //             `}
-    //             color="secondary"
-    //           >
-    //             Get started with Data Submission
-    //           </Typography>
-    //         </div>
-    //       </Container>
-    //     </div>
-    //     <div>
-    //       <div
-    //         css={css`
-    //           display: grid;
-    //           height: 100%;
-    //           text-align: center;
-    //           column-gap: 6px;
-    //           row-gap: 6px;
-    //           grid-template-columns: 1fr 1fr;
-    //           grid-template-rows: 2.3318fr 1fr;
-    //         `}
-    //       >
-    //         <div
-    //           css={css`
-    //             grid-column-start: 1;
-    //             grid-column-end: 3;
-    //             display: flex;
-    //             align-items: center;
-    //             justify-content: center;
-    //             background-image: url('/static/icgc-argo-galaxy.jpg');
-    //             background-position: center;
-    //             background-size: cover;
-    //           `}
-    //         >
-    //           <Typography
-    //             variant="title"
-    //             color="white"
-    //             css={css`
-    //               margin: 0 50px;
-    //               line-height: 42px;
-    //             `}
-    //           >
-    //             ICGC ARGO aims to analyze specimens from cancer patients with{' '}
-    //             <span
-    //               css={css`
-    //                 font-weight: 600;
-    //               `}
-    //             >
-    //               high quality clinical data
-    //             </span>{' '}
-    //             to address outstanding questions that are vital to our quest to defeat cancer.
-    //           </Typography>
-    //         </div>
-    //         <div
-    //           css={css`
-    //             background-image: url('/static/icgc-argo-researcher.jpg');
-    //             background-position: center;
-    //             background-size: cover;
-    //           `}
-    //         />
-    //         <div
-    //           css={css`
-    //             background-image: url('/static/icgc-argo-clinician-and-patient.jpg');
-    //             background-position: center;
-    //             background-size: cover;
-    //           `}
-    //         />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </DefaultLayout>
   );
 }
