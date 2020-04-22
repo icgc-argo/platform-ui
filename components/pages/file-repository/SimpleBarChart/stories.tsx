@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import SimpleBarChart from '.';
-import data from './mockData';
+import { dataTypes } from './mockData';
 import { select } from '@storybook/addon-knobs';
 import { chartTypeMeta } from './';
 
@@ -21,13 +21,10 @@ const SimpleBarChartStories = storiesOf(`${__dirname}`, module).add('Basic', () 
 
   const currentDisplay = knobs().state;
   // calculations for data count and size is tbd, will depend on chart type
-  const totalCount = data.dataTypes[currentDisplay].reduce(
-    (acc, { category, count }) => acc + count,
-    0,
-  );
+  const totalCount = dataTypes[currentDisplay].reduce((acc, { category, count }) => acc + count, 0);
   return (
     <SimpleBarChart
-      data={data.dataTypes[currentDisplay]}
+      data={dataTypes[currentDisplay]}
       type={currentDisplay}
       totalDataSize={currentDisplay !== 'program' && totalCount}
       totalCount={totalCount}

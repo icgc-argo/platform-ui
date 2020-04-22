@@ -166,8 +166,6 @@ export default ({
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
       />
-      {/* this div is for demonstration purposes only, to be removed upon use */}
-      <div> {JSON.stringify(selectedRows)}</div>
     </div>
   );
 

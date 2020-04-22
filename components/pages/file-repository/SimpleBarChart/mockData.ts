@@ -1,4 +1,4 @@
-export const primarySiteData = [
+const primarySiteData = [
   { category: 'liver', count: 72 },
   { category: 'pancreas', count: 36 },
   { category: 'lungs', count: 24 },
@@ -48,9 +48,4 @@ const dataTypes = {
   'primary site': primarySiteData,
 };
 
-export default {
-  primarySiteData,
-  fileTypeData,
-  programData,
-  dataTypes,
-};
+export { primarySiteData, fileTypeData, programData, dataTypes };
