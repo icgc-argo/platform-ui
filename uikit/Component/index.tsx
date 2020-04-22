@@ -52,7 +52,7 @@ const mock = [
   { type: 'follow_up', id: 'FOLLOW UP FO2123', description: 'Relapse' },
 ];
 
-const Header = ({ entityCounts }) => {
+const Header = ({ entityCounts, activeEntities, setFilters }) => {
   const theme = useTheme();
   return (
     <div
@@ -83,26 +83,39 @@ const Header = ({ entityCounts }) => {
         {Object.keys(entityCounts).map(entityKey => {
           const { title, checkboxColor } = TIMELINE_TYPES[entityKey];
           const count = entityCounts[entityKey];
+          const changeFilter = () =>
+            setFilters(
+              activeEntities.includes(entityKey)
+                ? activeEntities.filter(e => e !== entityKey)
+                : [...activeEntities, entityKey],
+            );
 
           return (
             <div
               css={css`
                 margin-left: 3px;
                 display: flex;
+                &:hover {
+                  cursor: pointer;
+                }
               `}
+              onClick={changeFilter}
             >
               <Checkbox
                 value={title}
-                checked
-                onChange={x => x}
+                checked={activeEntities.includes(entityKey)}
+                onChange={changeFilter}
                 aria-label={title}
-                disabled={count <= 0}
+                disabled={count <= 0 || !activeEntities.includes(entityKey)}
                 color={checkboxColor}
               />
 
               <label
                 css={css`
                   margin-left: 8px;
+                  &:hover {
+                    cursor: pointer;
+                  }
                 `}
               >
                 {`${count} ${title}`}
@@ -117,12 +130,16 @@ const Header = ({ entityCounts }) => {
 
 type ComponentProps = {};
 const Component: React.ComponentType<ComponentProps> = () => {
-  const [activeEntities, setActiveEntities] = React.useState([]);
+  const [activeEntities, setActiveEntities] = React.useState([
+    'primary_diagnosis',
+    'specimen',
+    'treatment',
+    'follow_up',
+  ]);
 
   const entityCounts = mock.reduce(
     (acc, entity) => {
       const { type } = entity;
-      console.log('type', type);
       acc[type]++;
       return acc;
     },
@@ -138,7 +155,18 @@ const Component: React.ComponentType<ComponentProps> = () => {
         flex-direction: column;
       `}
     >
-      <Header entityCounts={entityCounts} />
+      <Header
+        entityCounts={entityCounts}
+        activeEntities={activeEntities}
+        setFilters={activeEntities => setActiveEntities(activeEntities)}
+      />
+      <div>
+        {mock
+          .filter(d => activeEntities.includes(d.type))
+          .map(d => (
+            <p>{d.type}</p>
+          ))}
+      </div>
     </Container>
   );
 };
