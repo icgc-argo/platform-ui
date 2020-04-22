@@ -49,8 +49,18 @@ const mock = [
   { type: 'follow_up', id: 'FOLLOW UP FO2123', description: 'Relapse' },
 ];
 
-const Header = ({ entityCounts, activeEntities, setFilters }) => {
+type EntityType = 'primary_diagnosis' | 'specimen' | 'treatment' | 'follow_up';
+type Entity = { type: EntityType; id: string; description: string };
+type HeaderTypes = {
+  entityCounts: { [k in EntityType]: number };
+  activeEntities: Array<EntityType>;
+  setFilters: (e: Array<EntityType>) => void;
+};
+
+const Header = ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
   const theme = useTheme();
+  const counts: Array<EntityType> = Object.keys(entityCounts) as Array<EntityType>;
+
   return (
     <div
       css={css`
@@ -77,7 +87,7 @@ const Header = ({ entityCounts, activeEntities, setFilters }) => {
         `}
       >
         Show:
-        {Object.keys(entityCounts).map(entityKey => {
+        {counts.map(entityKey => {
           const { title, checkboxColor } = TIMELINE_TYPES[entityKey];
           const count = entityCounts[entityKey];
           const changeFilter = () =>
@@ -125,9 +135,8 @@ const Header = ({ entityCounts, activeEntities, setFilters }) => {
   );
 };
 
-type ComponentProps = {};
-const ClinicalTimeline: React.ComponentType<ComponentProps> = () => {
-  const [activeEntities, setActiveEntities] = React.useState([
+const ClinicalTimeline = () => {
+  const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     'primary_diagnosis',
     'specimen',
     'treatment',
@@ -159,7 +168,7 @@ const ClinicalTimeline: React.ComponentType<ComponentProps> = () => {
       />
       <div>
         {mock
-          .filter(d => activeEntities.includes(d.type))
+          .filter(d => activeEntities.includes(d.type as EntityType))
           .map(d => (
             <p>{d.type}</p>
           ))}
