@@ -13,11 +13,13 @@ const emptyProgramDonorSummaryStats: ProgoramDonorReleasStats = {
 
 const DonorStatsArea = ({
   programDonorSummaryStats = emptyProgramDonorSummaryStats,
+  className,
 }: {
   programDonorSummaryStats: ProgoramDonorReleasStats;
+  className?: string;
 }) => {
   return (
-    <StatAreaDisplay.Container>
+    <StatAreaDisplay.Container className={className}>
       <StatAreaDisplay.Section>
         {programDonorSummaryStats.registeredDonorsCount} donors
       </StatAreaDisplay.Section>
