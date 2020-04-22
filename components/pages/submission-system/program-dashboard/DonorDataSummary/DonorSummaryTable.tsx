@@ -296,15 +296,15 @@ export default ({
   const first = pagingState.pageSize;
   const sorts = pagingState.sorts;
 
-  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
-
   const {
     data: {
       programDonorSummaryEntries = [],
       programDonorSummaryStats = emptyProgramSummaryStats,
     } = {},
+    loading,
   } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
     onCompleted: () => {
+      clearTimeout(loaderTimeout);
       setLoaderTimeout(
         setTimeout(() => {
           setIsTableLoading(false);
@@ -313,17 +313,16 @@ export default ({
     },
   });
 
+  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
+  React.useEffect(() => {
+    if (loading) {
+      setIsTableLoading(true);
+    }
+  }, [loading]);
 
   const handlePagingStateChange = (state: typeof pagingState) => {
-    if (loaderTimeout) {
-      clearTimeout(loaderTimeout);
-    }
-    setIsTableLoading(true);
-    Promise.resolve().then(() => {
-      // this is to push the pagination state render to the next tick
-      setPagingState(state);
-    });
+    setPagingState(state);
   };
 
   const onPageChange = async (newPageNum: number) => {

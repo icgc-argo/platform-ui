@@ -33,6 +33,13 @@ import dash from './collection/dash';
 import file from './collection/file';
 import minus_circle from './collection/minus_circle';
 import arrow_left from './collection/arrow_left';
+import dna_locked from './collection/dna_locked';
+import workflow from './collection/workflow';
+import article from './collection/article';
+import calendar from './collection/calendar';
+import brackets from './collection/brackets';
+import testtube from './collection/testtube';
+import question from './collection/question';
 
 /**
  * Icon path and property lookup object
@@ -74,6 +81,13 @@ const Icons = {
   dash,
   file,
   arrow_left,
+  dna_locked,
+  workflow,
+  question,
+  testtube,
+  brackets,
+  calendar,
+  article,
 };
 
 export type UikitIconNames = keyof typeof Icons;
