@@ -2,11 +2,8 @@ import React from 'react';
 import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
 import Checkbox from 'uikit/form/Checkbox';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import useTheme from '../utils/useTheme';
-import VerticalTabs from 'uikit/VerticalTabs';
-import { withTheme } from 'emotion-theming';
-import random from 'lodash/random';
 import colors from '../theme/defaultTheme/colors';
 
 const TIMELINE_TYPES = Object.freeze({
