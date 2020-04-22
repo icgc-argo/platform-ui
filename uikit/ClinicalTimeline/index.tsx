@@ -126,7 +126,7 @@ const Header = ({ entityCounts, activeEntities, setFilters }) => {
 };
 
 type ComponentProps = {};
-const Component: React.ComponentType<ComponentProps> = () => {
+const ClinicalTimeline: React.ComponentType<ComponentProps> = () => {
   const [activeEntities, setActiveEntities] = React.useState([
     'primary_diagnosis',
     'specimen',
@@ -168,4 +168,4 @@ const Component: React.ComponentType<ComponentProps> = () => {
   );
 };
 
-export default Component;
+export default ClinicalTimeline;
