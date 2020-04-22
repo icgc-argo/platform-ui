@@ -66,7 +66,7 @@ const getUserRole = (egoJwt, permissions) => {
 };
 
 export default function Navbar({ hideLink }: { hideLink?: boolean }) {
-  const { EGO_URL, REPOSITORY_ENABLED } = getConfig();
+  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
 
   const canAccessSubmission = React.useMemo(() => {
@@ -117,8 +117,7 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
           )}
         />
         <MenuGroup>
-          {/* need to ensure the path itself doesn't resolve when disabled */}
-          {REPOSITORY_ENABLED && (
+          {FEATURE_REPOSITORY_ENABLED && (
             <Link href={FILE_REPOSITORY_PATH} as={FILE_REPOSITORY_PATH}>
               <a
                 css={css`
