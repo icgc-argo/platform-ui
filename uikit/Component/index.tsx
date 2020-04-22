@@ -12,21 +12,25 @@ import colors from '../theme/defaultTheme/colors';
 const TIMELINE_TYPES = Object.freeze({
   primary_diagnosis: {
     title: 'Primary Diagnosis',
+    checkboxColor: colors.secondary,
     borderColor: colors.secondary_1,
     backgroundColor: colors.secondary_4,
   },
   specimen: {
     title: 'Specimen',
+    checkboxColor: colors.accent3_dark,
     borderColor: colors.accent3,
     backgroundColor: colors.accent3_4,
   },
   treatment: {
     title: 'Treatment',
+    checkboxColor: colors.accent4,
     borderColor: colors.accent4_1,
     backgroundColor: colors.accent4_4,
   },
   follow_up: {
     title: 'Follow Up',
+    checkboxColor: colors.accent2,
     borderColor: colors.accent2_1,
     backgroundColor: colors.accent2_4,
   },
@@ -77,7 +81,7 @@ const Header = ({ entityCounts }) => {
       >
         Show:
         {Object.keys(entityCounts).map(entityKey => {
-          const { title, color } = TIMELINE_TYPES[entityKey];
+          const { title, checkboxColor } = TIMELINE_TYPES[entityKey];
           const count = entityCounts[entityKey];
 
           return (
@@ -93,6 +97,7 @@ const Header = ({ entityCounts }) => {
                 onChange={x => x}
                 aria-label={title}
                 disabled={count <= 0}
+                color={checkboxColor}
               />
 
               <label

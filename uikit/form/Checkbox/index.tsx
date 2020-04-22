@@ -8,7 +8,10 @@ import styled from '@emotion/styled';
  * ::after - box
  */
 
-export const StyledCheckbox = styled<'div', { disabled?: boolean; checked?: boolean }>('div')`
+export const StyledCheckbox = styled<
+  'div',
+  { disabled?: boolean; checked?: boolean; color?: string }
+>('div')`
   position: relative;
   cursor: pointer;
 
@@ -26,8 +29,12 @@ export const StyledCheckbox = styled<'div', { disabled?: boolean; checked?: bool
     }
 
     &:after {
-      background: ${({ theme, disabled }) =>
-        theme.radiocheckbox.radio[disabled ? 'disabled' : 'checked']};
+      background: ${({ theme, disabled, color }) =>
+        disabled
+          ? theme.radiocheckbox.radio.disabled
+          : color
+          ? color
+          : theme.radiocheckbox.radio.checked};
     }
   }
 
@@ -68,10 +75,15 @@ export const StyledCheckbox = styled<'div', { disabled?: boolean; checked?: bool
         theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
 
       border: 1px solid
-        ${({ theme, checked, disabled }) =>
-          theme.radiocheckbox.radio[
-            checked && !disabled ? 'checked' : disabled ? 'disabled' : 'default'
-          ]};
+        ${({ theme, checked, disabled, color }) => {
+          if (disabled) {
+            return theme.radiocheckbox.radio.disabled;
+          } else if (checked && !disabled) {
+            return color ? color : theme.radiocheckbox.radio.checked;
+          } else {
+            return theme.radiocheckbox.radio.default;
+          }
+        }};
 
       border-radius: 2px;
     }
@@ -87,18 +99,25 @@ const Checkbox = ({
   onChange,
   'aria-label': ariaLabel,
   value,
-  ...props
+  color,
 }: {
   checked: boolean;
   disabled?: boolean;
   onChange: (e: any | void) => any | void;
   'aria-label': string;
   value: string | number;
+  color?: string;
 }) => {
   const HiddenCheckboxRef = React.createRef<HTMLInputElement>();
 
   return (
-    <StyledCheckbox data-value={value} checked={checked} disabled={disabled} onClick={onChange}>
+    <StyledCheckbox
+      data-value={value}
+      checked={checked}
+      disabled={disabled}
+      onClick={onChange}
+      color={color}
+    >
       <input
         type="checkbox"
         ref={HiddenCheckboxRef}
