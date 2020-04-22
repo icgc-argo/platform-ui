@@ -76,7 +76,14 @@ export default () => {
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
-  return (
+  return !isCardLoading && isDonorSummaryEntriesEmpty ? (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        Donor Data Summary
+      </Typography>
+      <EmptyDonorSummaryState />
+    </DashboardCard>
+  ) : (
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
@@ -90,7 +97,7 @@ export default () => {
           css={css`
             display: flex;
             align-self: center;
-            justify-content: right;
+            justify-content: flex-end;
           `}
         >
           <Row>
@@ -151,17 +158,13 @@ export default () => {
           </Row>
         </Col>
       </Row>
-      {!isCardLoading && isDonorSummaryEntriesEmpty ? (
-        <EmptyDonorSummaryState />
-      ) : (
-        <DonorSummaryTable
-          programShortName={programShortName}
-          initalPages={initalPages}
-          initialPageSize={DEFAULT_PAGE_SIZE}
-          initialSorts={DEFAULT_SORTS}
-          isCardLoading={isCardLoading}
-        />
-      )}
+      <DonorSummaryTable
+        programShortName={programShortName}
+        initalPages={initalPages}
+        initialPageSize={DEFAULT_PAGE_SIZE}
+        initialSorts={DEFAULT_SORTS}
+        isCardLoading={isCardLoading}
+      />
     </DashboardCard>
   );
 };
