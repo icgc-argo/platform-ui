@@ -55,7 +55,6 @@ const Header = ({ entityCounts }) => {
       css={css`
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid ${theme.colors.grey_2};
         padding-bottom: 9px;
         margin-bottom: 15px;
       `}
