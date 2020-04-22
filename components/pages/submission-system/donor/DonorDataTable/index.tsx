@@ -11,13 +11,28 @@ export default () => {
         css={css`
           padding: 20px;
           padding-top: 0px;
+          padding-right: 10px;
         `}
       >
         <Row>
           <Col xs={12}>
-            <Typography variant="subtitle">Summary</Typography>
+            <Typography
+              css={css`
+                margin-top: 15px;
+                margin-bottom: 10px;
+              `}
+              variant="subtitle2"
+              as="h2"
+            >
+              Summary
+            </Typography>
           </Col>
-          <Col xs={6}>
+          <Col
+            xs={6}
+            css={css`
+              margin-right: -10px;
+            `}
+          >
             <Table
               TheadComponent={props => null}
               parentRef={{ current: null }}

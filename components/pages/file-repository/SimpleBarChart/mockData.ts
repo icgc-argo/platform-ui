@@ -1,4 +1,4 @@
-export const primarySiteData = [
+const primarySiteData = [
   { category: 'liver', count: 72 },
   { category: 'pancreas', count: 36 },
   { category: 'lungs', count: 24 },
@@ -39,7 +39,7 @@ const programData = [
   { category: 'ABCD-GB', count: 209 },
   { category: 'EFGH-CA', count: 1000 },
   { category: 'IJKL-CA', count: 1100 },
-  { category: 'TEST2-CA', count: 462 },
+  { category: 'TEST4-CA', count: 462 },
 ];
 
 const dataTypes = {
@@ -48,9 +48,4 @@ const dataTypes = {
   'primary site': primarySiteData,
 };
 
-export default {
-  primarySiteData,
-  fileTypeData,
-  programData,
-  dataTypes,
-};
+export { primarySiteData, fileTypeData, programData, dataTypes };
