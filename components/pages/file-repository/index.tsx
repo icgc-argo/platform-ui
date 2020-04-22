@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from 'uikit/Typography';
 import FileTable from './FileTable';
-import { PageContainer, Collapsible } from 'uikit/PageLayout';
+import { PageContainer } from 'uikit/PageLayout';
 import NavBar from 'components/NavBar';
 import Footer from '../../Footer';
 import Head from '../head';
@@ -26,20 +26,6 @@ const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
 `;
 
-export const FacetContainer = styled('div')`
-  z-index: 1;
-  background: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => theme.shadows.pageElement};
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  height: calc(100vh - 58px);
-  max-height: calc(100vh - 58px);
-  overflow-y: auto;
-`;
-
 export default ({ subtitle }: { subtitle?: string }) => {
   const { token } = useAuthContext();
   return (
@@ -47,11 +33,7 @@ export default ({ subtitle }: { subtitle?: string }) => {
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
       <PageBody>
-        <FacetContainer>
-          <FacetPanel />
-          <Collapsible />
-        </FacetContainer>
-
+        <FacetPanel />
         <PageContent>
           <ContentBody>
             <PaddedRow justify="around">
