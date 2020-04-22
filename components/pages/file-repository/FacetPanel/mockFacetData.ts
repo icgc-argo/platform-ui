@@ -21,7 +21,20 @@ const experimentalStrategies = [
 
 const vitalStatuses = [];
 
-const programs = [];
+const programs = [
+  { key: 'TEST2-CA', doc_count: 100 },
+  { key: 'TEST-CA', doc_count: 243 },
+  { key: 'TEST3-CA', doc_count: 989 },
+  { key: 'SAMPLE-CA', doc_count: 1254 },
+  { key: 'SAMPLE2-CA', doc_count: 90 },
+  { key: 'AACC-CA', doc_count: 3 },
+  { key: 'CCAA-CA', doc_count: 750 },
+  { key: 'HELLO-GB', doc_count: 500 },
+  { key: 'ABCD-GB', doc_count: 209 },
+  { key: 'EFGH-CA', doc_count: 1000 },
+  { key: 'IJKL-CA', doc_count: 1100 },
+  { key: 'TEST4-CA', doc_count: 462 },
+];
 
 const genders = [];
 const dataTypes = [];
