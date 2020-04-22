@@ -34,3 +34,6 @@ export const DOCS_SUBMISSION_OVERVIEW_PATH = `/docs/submission-overview/`;
 export const DOCS_DATA_DOWNLOAD = `/docs/data-download/`;
 
 export const DACO_PATH = `https://icgc.org/daco`;
+
+// file repository paths
+export const FILE_REPOSITORY_PATH = `/repository`;

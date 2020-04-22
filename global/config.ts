@@ -20,7 +20,7 @@ export const getConfig = () => {
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org/docs/',
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
-    DASHBOARD_ENABLED: publicConfig.DASHBOARD_ENABLED === 'true',
+    FEATURE_REPOSITORY_ENABLED: publicConfig.FEATURE_REPOSITORY_ENABLED === 'true',
     FEATURE_NEW_HOMEPAGE_ENABLED: publicConfig.FEATURE_NEW_HOMEPAGE_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
@@ -32,7 +32,7 @@ export const getConfig = () => {
     EGO_URL: string;
     DOCS_URL_ROOT: string;
     RECAPTCHA_SITE_KEY: string;
-    DASHBOARD_ENABLED: boolean;
+    FEATURE_REPOSITORY_ENABLED: boolean;
     FEATURE_NEW_HOMEPAGE_ENABLED: boolean;
   };
 };
