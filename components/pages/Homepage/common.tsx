@@ -33,6 +33,7 @@ export const DataReleaseBar: React.ComponentType<{
           flex-direction: column;
           justify-content: center;
           text-align: center;
+          margin: 0 5%;
         `}
       >
         <div>
@@ -77,7 +78,7 @@ export const DataReleaseBar: React.ComponentType<{
           border-top: 4px solid ${theme.colors.accent3_2};
         `}
       >
-        <Row>{formattedStats}</Row>
+        <Row nogutter>{formattedStats}</Row>
       </div>
     </div>
   );
@@ -120,6 +121,7 @@ export const DataCallout: React.ComponentType<{
         justify-content: space-between;
         text-align: center;
         height: 100%;
+        margin: 0 5%;
       `}
     >
       <div
@@ -190,12 +192,12 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
   return (
     <Container
       css={css`
-        margin: 50px 0px;
+        margin: 50px 0px 35px 0px;
         overflow: hidden;
       `}
     >
-      <Row>
-        <Col md={4} sm={12} style={{ padding: '0px 0px 0px 15px' }}>
+      <Row nogutter>
+        <Col md={4} sm={12}>
           <div
             css={css`
               background-image: linear-gradient(
@@ -291,6 +293,8 @@ export const ResourceBox: React.ComponentType<{
     <Link underline={false} href={href} target="_blank">
       <Container
         css={css`
+          height: 75%;
+          margin: 0 10px;
           &:hover {
             background-color: ${theme.colors.grey_4};
           }
@@ -357,6 +361,7 @@ export const OvertureBanner: React.ComponentType<{}> = ({}) => {
         justify-content: center;
         align-items: center;
         border-top: 1px solid ${theme.colors.grey_2};
+        background-color: ${theme.colors.grey_4};
       `}
     >
       <Link

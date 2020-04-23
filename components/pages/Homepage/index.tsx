@@ -178,6 +178,7 @@ export default function Homepage() {
             justify-content: space-between;
             align-items: flex-start;
           `}
+          nogutter
         >
           <Col sm={12} md={3.8}>
             <DataCallout
@@ -250,7 +251,7 @@ export default function Homepage() {
             padding: 20px 0px;
           `}
         >
-          <Row justify="end">
+          <Row justify="end" nogutter>
             <Col {...layoutProps}>
               <ResourceBox
                 title={'Publication Guidelines'}
