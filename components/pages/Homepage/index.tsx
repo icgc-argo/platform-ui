@@ -250,7 +250,7 @@ export default function Homepage() {
             padding: 20px 0px;
           `}
         >
-          <Row justify="end">
+          <Row justify="end" nogutter>
             <Col {...layoutProps}>
               <ResourceBox
                 title={'Publication Guidelines'}
