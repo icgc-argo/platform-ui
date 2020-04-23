@@ -121,6 +121,7 @@ export const DataCallout: React.ComponentType<{
         justify-content: space-between;
         text-align: center;
         height: 100%;
+        margin: 0 5%;
       `}
     >
       <div

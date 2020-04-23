@@ -178,6 +178,7 @@ export default function Homepage() {
             justify-content: space-between;
             align-items: flex-start;
           `}
+          nogutter
         >
           <Col sm={12} md={3.8}>
             <DataCallout
