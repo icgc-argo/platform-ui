@@ -6,6 +6,7 @@ const PipeContainer = styled('div')`
   flex-direction: row;
   align-items: center;
   color: white;
+  font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
   font-size: 11px;
   font-weight: bold;
   line-height: 1.27;
@@ -13,13 +14,13 @@ const PipeContainer = styled('div')`
   text-align: center;
   width: 100%;
   padding: 5px;
-  height: 10px;
+  height: 14px;
 `;
 
 const PipeItem = styled<'div', { fill: keyof typeof defaultTheme.colors }>('div')`
   flex-grow: 1;
   background-color: ${({ theme, fill }) => theme.colors[fill]};
-  margin-right: 2px;
+  margin-right: 1px;
 
   &:only-child {
     margin: 0px;
