@@ -10,8 +10,9 @@ const PercentBar: React.ComponentType<{
   const theme = useTheme();
 
   // Negative Numbers should be zero, percentages over 100 should be capped
+  // A zero denominator should show as 0% fill
   num < 0 ? (num = 0) : { num };
-  const fraction = Math.min((num / den) * 100, 100);
+  const fraction = den <= 0 ? 0 : Math.min((num / den) * 100, 100);
   const fill_amount = `${fraction}%`;
   const lengthpx = `${length || 120}px`;
 
