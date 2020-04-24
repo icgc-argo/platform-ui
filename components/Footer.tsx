@@ -5,7 +5,6 @@ import { APP_VERSION } from 'global/constants';
 import useTheme from 'uikit/utils/useTheme';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
-import { trim } from 'lodash';
 
 export default function GlobalFooter() {
   const theme = useTheme();
@@ -14,9 +13,9 @@ export default function GlobalFooter() {
 
   React.useEffect(() => {
     fetch(urlJoin(GATEWAY_API_ROOT, 'status'))
-      .then(res => res.text())
+      .then(res => res.json())
       .then(version => {
-        setApiVersion(trim(version, '"'));
+        setApiVersion(version);
       })
       .catch(err => {
         console.warn(err);
