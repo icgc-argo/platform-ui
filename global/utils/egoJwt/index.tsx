@@ -1,46 +1,20 @@
 import memoize from 'lodash/memoize';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils/dist/lib/ego-token-utils';
+import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { getConfig } from 'global/config';
 
 const TokenUtils = createEgoUtils(getConfig().EGO_PUBLIC_KEY);
-
-type EgoJwtData = {
-  iat: number;
-  exp: number;
-  sub: string;
-  iss: string;
-  aud: string[];
-  jti: string;
-  context: {
-    scope: string[];
-    user: {
-      name: string;
-      email: string;
-      status: 'APPROVED' | 'DISABLED' | 'PENDING' | 'REJECTED';
-      firstName: string;
-      lastName: string;
-      createdAt: number;
-      lastLogin: number;
-      preferredLanguage?: string;
-      type: 'ADMIN' | 'USER';
-      permissions: string[];
-    };
-  };
-  scope: string[];
-};
 
 type PermissionScopeObj = {
   policy: string;
   permission: 'READ' | 'WRITE' | 'ADMIN' | 'DENY';
 };
 
-export const decodeToken = memoize(
-  (egoJwt?: string): EgoJwtData | null => (egoJwt ? TokenUtils.decodeToken(egoJwt) : null),
+export const decodeToken = memoize((egoJwt?: string) =>
+  egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
 );
 
-export const isValidJwt: (egoJwt: string) => boolean = egoJwt =>
-  !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
 export const getPermissionsFromToken: (egoJwt: string) => string[] = egoJwt =>
   isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];

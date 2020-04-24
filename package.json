@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
@@ -37,7 +37,7 @@
     "@emotion/babel-preset-css-prop": "^10.0.9",
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.11",
-    "@icgc-argo/ego-token-utils": "^6.0.0",
+    "@icgc-argo/ego-token-utils": "^7.0.0",
     "@storybook/addon-a11y": "^5.1.9",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/graphql": "^14.5.0",
