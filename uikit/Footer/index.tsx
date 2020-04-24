@@ -20,7 +20,6 @@ const Container = styled('footer')`
 const Footer = ({
   version = '[version]',
   apiVersion = '[api-version]',
-  commitHash = '[commit-hash]',
   links = [],
   className = '',
   ...otherProps
@@ -40,9 +39,9 @@ const Footer = ({
           align-items: center;
         `}
       >
-        © 2019 ICGC ARGO. All rights reserved.
+        © 2020 ICGC ARGO. All rights reserved.
         <br />
-        ICGC ARGO Data Platform {version} - API {apiVersion} - {commitHash}
+        ICGC ARGO Data Platform {version} - API {apiVersion}
       </Col>
       <Col
         md={7}
@@ -100,7 +99,6 @@ const Footer = ({
 Footer.propTypes = {
   version: PropTypes.string,
   apiVersion: PropTypes.string,
-  commitHash: PropTypes.string,
   links: PropTypes.array,
 };
 

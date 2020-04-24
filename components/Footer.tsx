@@ -4,13 +4,28 @@ import { css } from 'uikit';
 import { APP_VERSION } from 'global/constants';
 import useTheme from 'uikit/utils/useTheme';
 import { getConfig } from 'global/config';
+import urlJoin from 'url-join';
 
 export default function GlobalFooter() {
   const theme = useTheme();
-  const { DOCS_URL_ROOT } = getConfig();
+  const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = getConfig();
+  const [apiVersion, setApiVersion] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(urlJoin(GATEWAY_API_ROOT, 'status'))
+      .then(res => res.json())
+      .then(version => {
+        setApiVersion(version);
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }, []);
+
   return (
     <Footer
       version={APP_VERSION}
+      apiVersion={apiVersion}
       css={css`
         background: #fff;
         z-index: 1;
