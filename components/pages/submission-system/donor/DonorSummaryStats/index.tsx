@@ -14,7 +14,8 @@ const StatDesc = styled('div')`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  align-content: center;
   padding-left: 8px;
   padding-right: 8px;
   justify-content: space-between;
@@ -35,7 +36,7 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
             css={css`
               margin-top: 10px;
               margin-bottom: 10px;
-              text-align: center;
+              text-align: start;
             `}
           >
             {quantity}
@@ -86,71 +87,37 @@ const Designation: React.ComponentType<{
   <div>
     <StatDesc>
       {/* Div for Quantity */}
-      <Row
-        justify="center"
-        align="center"
-        css={css`
-          min-width: 160px;
-        `}
-      >
-        <Col xs={7.5}>
-          <Row
-            justify="center"
-            align="center"
+      <Row align="center" nogutter>
+        <Col xs={6}>
+          <Typography
+            variant="title"
+            color={validity[0] ? 'black' : 'error'}
             css={css`
-              min-width: 100px;
+              margin-top: 10px;
+              margin-bottom: 10px;
+              padding-right: 5px;
             `}
+            as="span"
           >
-            <Col
-              xs={5}
-              css={css`
-                min-width: 50px;
-              `}
-            >
-              <Typography
-                variant="title"
-                color={validity[0] ? 'black' : 'error'}
-                css={css`
-                  margin-top: 10px;
-                  margin-bottom: 10px;
-                  text-align: center;
-                `}
-              >
-                {left}N
-              </Typography>
-            </Col>
-            <div
-              css={css`
-                margin-top: 10px;
-                margin-bottom: 10px;
-                background: grey;
-                height: 25px;
-                width: 1px;
-              `}
-            />
-            <Col
-              xs={5}
-              css={css`
-                min-width: 50px;
-              `}
-            >
-              <Typography
-                variant="title"
-                color={validity[1] ? 'black' : 'error'}
-                css={css`
-                  margin-top: 10px;
-                  margin-bottom: 10px;
-                  text-align: center;
-                `}
-              >
-                {right}T
-              </Typography>
-            </Col>
-          </Row>
+            {left}N
+          </Typography>
+          <Typography
+            variant="title"
+            color={validity[1] ? 'black' : 'error'}
+            css={css`
+              margin-top: 10px;
+              margin-bottom: 10px;
+              padding-left: 5px;
+              border-left: 1px solid grey;
+            `}
+            as="span"
+          >
+            {right}T
+          </Typography>
         </Col>
         {/* Div for Description */}
-        <Col xs={4.5}>
-          <Typography color="grey" variant="caption">
+        <Col xs={6}>
+          <Typography color="grey" variant="caption" as="span">
             {description}
           </Typography>
         </Col>
@@ -165,10 +132,11 @@ export default () => {
       <Container
         css={css`
           padding: 10px;
+          padding-left: 20px;
         `}
       >
         <Row>
-          <Col xl={2.4} lg={4} md={12}>
+          <Col xl={2.4} lg={3} md={4} sm={6}>
             <Designation
               description="Registered Samples"
               left={2}
@@ -176,17 +144,17 @@ export default () => {
               validity={[true, false]}
             />
           </Col>
-          <Col xl={2.4} lg={4} md={6}>
-            <Statistic quantity="100%" description="Core Clinical Data">
-              <PercentBar num={100} den={100} length={150} fillColor="success" />
+          <Col xl={2.4} lg={3} md={4} sm={6}>
+            <Statistic quantity="100%" description="Core Clinical Data Completeness">
+              <PercentBar num={100} den={100} length={200} fillColor="success" />
             </Statistic>
           </Col>
-          <Col xl={2.4} lg={4} md={6}>
-            <Statistic quantity="29%" description="Extended Data">
-              <PercentBar num={29} den={100} length={150} fillColor="warning" />
+          <Col xl={2.4} lg={3} md={4} sm={6}>
+            <Statistic quantity="29%" description="Extended Data Conpleteness">
+              <PercentBar num={29} den={100} length={200} fillColor="warning" />
             </Statistic>
           </Col>
-          <Col xl={2.4} lg={4} md={6}>
+          <Col xl={2.4} lg={3} md={4} sm={6}>
             <FilesButton quantity="0">
               <Button
                 variant="text"
@@ -208,7 +176,7 @@ export default () => {
               </Button>
             </FilesButton>
           </Col>
-          <Col xl={2.4} lg={4} md={6}>
+          <Col xl={2.4} lg={3} md={4} sm={6}>
             <FilesButton quantity="0">
               <Button
                 variant="text"
@@ -230,13 +198,14 @@ export default () => {
               </Button>
             </FilesButton>
           </Col>
-          <Col xl={2.4} lg={4} md={12}>
-            <Designation description="Raw Reads Submitted" left={3} right={4} />
+          <Col xl={2.4} lg={3} md={4} sm={6}>
+            <Designation description="Submitted Raw Reads" left={3} right={4} />
           </Col>
           <Col
             xl={4.8}
-            lg={8}
+            lg={6}
             md={12}
+            sm={12}
             css={css`
               align-self: center;
               padding-right: 10px;
@@ -248,18 +217,18 @@ export default () => {
               `}
             >
               <Col
-                md={2}
+                xs={2}
                 css={css`
                   align-self: center;
                   text-align: center;
                 `}
               >
-                <Typography color="grey" variant="caption">
+                <Typography color="grey" variant="caption" as="span">
                   Alignment
                 </Typography>
               </Col>
               <Col
-                md={3}
+                xs={3}
                 css={css`
                   align-self: center;
                 `}
@@ -267,7 +236,7 @@ export default () => {
                 <Pipeline complete={3} inProgress={2} error={4} />
               </Col>
               <Col
-                md={2}
+                xs={1}
                 css={css`
                   align-self: center;
                   text-align: center;
@@ -294,18 +263,18 @@ export default () => {
                 />
               </Col>
               <Col
-                md={2}
+                xs={2}
                 css={css`
                   align-self: center;
                   text-align: center;
                 `}
               >
-                <Typography color="grey" variant="caption">
+                <Typography color="grey" variant="caption" as="span">
                   Variant Calling
                 </Typography>
               </Col>
               <Col
-                md={3}
+                xs={3}
                 css={css`
                   align-self: center;
                 `}
