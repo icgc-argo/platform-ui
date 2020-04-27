@@ -165,14 +165,6 @@ const Timeline = withTheme(({ entities, theme }) => (
     </div>
   </div>
 ));
-/* 
-    {entities.map(({ id, description }, i) => (
-      <>
-        <DayCount days={random(323, 2245)} />
-        <TimelineItem id={id} description={description} index={i} />
-      </>
-    ))}
-  </div> */
 
 const Header = withTheme(({ entities, theme }) => (
   <div
@@ -249,7 +241,16 @@ const Component: React.ComponentType<ComponentProps> = () => {
           display: flex;
         `}
       >
-        <div>Text Probably Vertical But For Now Horizontal</div>
+        <div
+          css={css`
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            margin-right: 50px;
+            text-align: center;
+          `}
+        >
+          Interval since diagnosis (days)
+        </div>
         <Timeline entities={mock} />
       </div>
     </Container>
