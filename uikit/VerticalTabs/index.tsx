@@ -5,7 +5,7 @@ import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';
 
-const Triangle = styled('div')`
+const Triangle = styled('div')<{ tabStyle: TabStyleType }>`
   transition: all 0.25s;
   width: 0px;
   position: absolute;
@@ -36,7 +36,7 @@ const Triangle = styled('div')`
     border-width: calc(23px - 2px);
   }
 `;
-export const BaseItemContainer = styled(FocusWrapper)`
+export const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
   width: 100%;
   position: relative;
   transition: all 0.25s;
@@ -54,7 +54,7 @@ export const BaseItemContainer = styled(FocusWrapper)`
     background: ${({ theme }) => theme.colors.grey_3};
   }
 `;
-const ActiveItemContainer = styled(BaseItemContainer)`
+const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }>`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
   border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
@@ -68,10 +68,10 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   }
 `;
 
-type tabStyleType = { border: string; background: string };
+type TabStyleType = { border: string; background: string };
 
 const VerticalTabsItem: React.ComponentType<
-  { active?: boolean; tabStyle?: tabStyleType } & HTMLAttributes<HTMLButtonElement>
+  { active?: boolean; tabStyle?: TabStyleType } & HTMLAttributes<HTMLButtonElement>
 > = ({ active = false, children, tabStyle, ...rest }) => {
   console.log('log', active);
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;

@@ -37,27 +37,41 @@ const mock = [
     type: 'primary_diagnosis',
     id: 'PRIMARY DIAGNOSIS PD1',
     description: 'Malignant neoplasm of pancreatic something something',
+    interval: 242222,
   },
-  { type: 'specimen', id: 'SPECIMEN SP0013', description: 'Normal' },
-  { type: 'specimen', id: 'SPECIMEN SP0032', description: 'Tumour' },
-  { type: 'specimen', id: 'SPECIMEN SP2123', description: 'Tumour' },
-  { type: 'specimen', id: 'SPECIMEN SP0123', description: 'Tumour' },
-  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Chemotherapy' },
-  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Ablation' },
-  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Loco-regional progression' },
-  { type: 'follow_up', id: 'FOLLOW UP FO2123', description: 'Relapse' },
+  { type: 'specimen', id: 'SPECIMEN SP0013', description: 'Normal', interval: 2 },
+  { type: 'specimen', id: 'SPECIMEN SP0032', description: 'Tumour', interval: 353 },
+  { type: 'specimen', id: 'SPECIMEN SP2123', description: 'Tumour', interval: 3535353 },
+  { type: 'specimen', id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
+  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Chemotherapy', interval: 33333 },
+  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Ablation', interval: 888774341 },
+  {
+    type: 'treatment',
+    id: 'TREATMENT TR8982',
+    description: 'Loco-regional progression',
+    interval: 13241241414141,
+  },
+  { type: 'follow_up', id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
 ];
 
 const DayCount = ({ days }) => (
-  <Typography
-    variant="data"
+  <div
     css={css`
-      margin-right: 12px;
-      text-align: right;
+      height: 46px;
+      display: flex;
+      align-items: center;
     `}
   >
-    {days}
-  </Typography>
+    <Typography
+      variant="data"
+      css={css`
+        margin-right: 12px;
+        text-align: right;
+      `}
+    >
+      {days}
+    </Typography>
+  </div>
 );
 
 const TimelineItem = withTheme(({ id, description, index, type }) => {
@@ -65,6 +79,7 @@ const TimelineItem = withTheme(({ id, description, index, type }) => {
   return (
     <div
       css={css`
+        height: 46px;
         display: flex;
         align-items: center;
         width: 100%;
@@ -98,10 +113,38 @@ const TimelineItem = withTheme(({ id, description, index, type }) => {
   );
 });
 
-const TimelineTabs = styled(VerticalTabs)``;
-
 const Timeline = withTheme(({ entities, theme }) => (
-  <div>
+  <div
+    css={css`
+      height: 100%;
+      display: flex;
+    `}
+  >
+    <div>
+      {entities.map(({ type, interval }, i) => (
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            &::after {
+              content: '';
+              display: inline-block;
+              width: 7px;
+              height: 7px;
+              border-radius: 25px;
+              background-color: ${TIMELINE_TYPES[type].borderColor};
+              position: relative;
+              left: 4px;
+              z-index: 2;
+            }
+          `}
+        >
+          <DayCount days={interval} />
+        </div>
+      ))}
+    </div>
     <div
       css={css`
         flex: 1;
@@ -116,7 +159,6 @@ const Timeline = withTheme(({ entities, theme }) => (
             align-items: center;
           `}
         >
-          <DayCount days={random(99, 2222)} />
           <TimelineItem type={type} id={id} description={description} index={i} />
         </div>
       ))}
@@ -202,7 +244,14 @@ const Component: React.ComponentType<ComponentProps> = () => {
       `}
     >
       <Header entities={activeEntities} />
-      <Timeline entities={mock} />
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
+        <div>Text Probably Vertical But For Now Horizontal</div>
+        <Timeline entities={mock} />
+      </div>
     </Container>
   );
 };
