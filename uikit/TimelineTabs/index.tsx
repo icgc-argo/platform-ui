@@ -32,8 +32,6 @@ const TIMELINE_TYPES = {
   },
 };
 
-console.log('tiem line', TIMELINE_TYPES);
-
 const mock = [
   {
     type: 'primary_diagnosis',
@@ -69,6 +67,7 @@ const TimelineItem = withTheme(({ id, description, index, type }) => {
       css={css`
         display: flex;
         align-items: center;
+        width: 100%;
         ${index === 2
           ? css`
               border: 1px solid ${borderColor};
@@ -102,16 +101,26 @@ const TimelineItem = withTheme(({ id, description, index, type }) => {
 const TimelineTabs = styled(VerticalTabs)``;
 
 const Timeline = withTheme(({ entities, theme }) => (
-  <div
-    css={css`
-      flex: 1;
-      border: 1px solid grey;
-      width: 350px;
-    `}
-  >
-    {entities.map(({ id, description, type }, i) => (
-      <TimelineItem type={type} id={id} description={description} index={i} />
-    ))}
+  <div>
+    <div
+      css={css`
+        flex: 1;
+        border: 1px solid grey;
+        width: 350px;
+      `}
+    >
+      {entities.map(({ id, description, type }, i) => (
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <DayCount days={random(99, 2222)} />
+          <TimelineItem type={type} id={id} description={description} index={i} />
+        </div>
+      ))}
+    </div>
   </div>
 ));
 /* 
