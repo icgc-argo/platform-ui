@@ -36,7 +36,8 @@ const Triangle = styled('div')<{ tabStyle: TabStyleType }>`
     border-width: calc(23px - 2px);
   }
 `;
-export const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
+
+const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
   width: 100%;
   position: relative;
   transition: all 0.25s;
