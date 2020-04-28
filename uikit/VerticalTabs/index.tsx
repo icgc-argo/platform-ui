@@ -4,15 +4,15 @@ import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';
+import useElementDimention from 'uikit/utils/Hook/useElementDimention';
 
-const Triangle = styled('div')<{ tabStyle: TabStyleType }>`
+const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
   transition: all 0.25s;
   width: 0px;
   position: absolute;
   text-align: center;
   left: 100%;
-  top: 50%;
-  margin-top: -18px;
+  top: 0;
   transform: scaleX(0.5);
   &:after,
   &:before {
@@ -24,16 +24,16 @@ const Triangle = styled('div')<{ tabStyle: TabStyleType }>`
     border-style: solid;
   }
   &:after {
-    top: 0px;
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.background : theme.colors.secondary_4)};
-    border-width: calc(20px - 2px);
+    border-width: ${({ contHeight }) => contHeight / 2}px;
   }
   &:before {
-    top: -3px;
+    top: -1px;
+    left: 1px;
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.border : theme.colors.secondary_2)};
-    border-width: calc(23px - 2px);
+    border-width: ${({ contHeight }) => (contHeight + 2) / 2}px; /* +2 for border around button */
   }
 `;
 
@@ -75,8 +75,12 @@ const VerticalTabsItem: React.ComponentType<
   { active?: boolean; tabStyle?: TabStyleType } & HTMLAttributes<HTMLButtonElement>
 > = ({ active = false, children, tabStyle, ...rest }) => {
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
+  const containerRef = React.useRef(null);
+
+  const { height: contHeight } = useElementDimention(containerRef);
+
   return (
-    <ContainerComponent tabStyle={tabStyle} {...rest}>
+    <ContainerComponent tabStyle={tabStyle} {...rest} ref={containerRef}>
       <Typography
         variant="data"
         as="div"
@@ -95,7 +99,7 @@ const VerticalTabsItem: React.ComponentType<
           {children}
         </div>
       </Typography>
-      {active && <Triangle tabStyle={tabStyle} />}
+      {active && <Triangle tabStyle={tabStyle} contHeight={contHeight} />}
     </ContainerComponent>
   );
 };
