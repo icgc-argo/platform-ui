@@ -51,7 +51,7 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
         ${active
           ? css`
               border: 1px solid ${borderColor};
-              margin: 0 -1px;
+              margin: -1px;
             `
           : null};
       `}
@@ -70,7 +70,16 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
           <Typography variant="caption" as="div">
             {id}
           </Typography>
-          <Typography variant="data" as="div" bold>
+          <Typography
+            variant="data"
+            as="div"
+            css={css`
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            `}
+            bold
+          >
             {description}
           </Typography>
         </div>
