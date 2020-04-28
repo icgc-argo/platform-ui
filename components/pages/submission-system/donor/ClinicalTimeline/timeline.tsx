@@ -4,8 +4,9 @@ import Typography from 'uikit/Typography';
 import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
+import { Entity } from './types';
 
-const DayCount = ({ days }) => (
+const DayCount = ({ days }: { days: number }) => (
   <div
     css={css`
       height: 46px;
@@ -25,7 +26,16 @@ const DayCount = ({ days }) => (
   </div>
 );
 
-const TimelineItem = ({ id, description, index, type, onClick, disabled }) => {
+type TimeLineItem = {
+  id: string;
+  description: string;
+  index: number;
+  type: string;
+  onClick?: () => void;
+  disabled?: boolean;
+};
+
+const TimelineItem = ({ id, description, index, type, onClick, disabled }: TimeLineItem) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
@@ -68,7 +78,7 @@ const TimelineItem = ({ id, description, index, type, onClick, disabled }) => {
   );
 };
 
-const Timeline = ({ entities }) => {
+const Timeline = ({ entities }: { entities: Array<Entity> }) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   return (

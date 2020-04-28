@@ -3,27 +3,37 @@ import Container from 'uikit/Container';
 import { css } from 'uikit';
 import Header from './header';
 import Timeline from './timeline';
-
+import { EntityType } from './types';
 const mock = [
   {
-    type: 'primary_diagnosis',
+    type: EntityType.PRIMARY_DIAGNOSIS,
     id: 'PRIMARY DIAGNOSIS PD1',
     description: 'Malignant neoplasm of pancreatic something something',
     interval: 242222,
   },
-  { type: 'specimen', id: 'SPECIMEN SP0013', description: 'Normal', interval: 2 },
-  { type: 'specimen', id: 'SPECIMEN SP0032', description: 'Tumour', interval: 353 },
-  { type: 'specimen', id: 'SPECIMEN SP2123', description: 'Tumour', interval: 3535353 },
-  { type: 'specimen', id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
-  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Chemotherapy', interval: 33333 },
-  { type: 'treatment', id: 'TREATMENT TR8982', description: 'Ablation', interval: 888774341 },
+  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0013', description: 'Normal', interval: 2 },
+  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0032', description: 'Tumour', interval: 353 },
+  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP2123', description: 'Tumour', interval: 3535353 },
+  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
   {
-    type: 'treatment',
+    type: EntityType.TREATMENT,
+    id: 'TREATMENT TR8982',
+    description: 'Chemotherapy',
+    interval: 33333,
+  },
+  {
+    type: EntityType.TREATMENT,
+    id: 'TREATMENT TR8982',
+    description: 'Ablation',
+    interval: 888774341,
+  },
+  {
+    type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Loco-regional progression',
     interval: 13241241414141,
   },
-  { type: 'follow_up', id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
+  { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
 ];
 
 export const ENTITY_DISPLAY = Object.freeze({
@@ -43,10 +53,10 @@ export const ENTITY_DISPLAY = Object.freeze({
 
 const ClinicalTimeline = () => {
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
-    'primary_diagnosis',
-    'specimen',
-    'treatment',
-    'follow_up',
+    EntityType.FOLLOW_UP,
+    EntityType.PRIMARY_DIAGNOSIS,
+    EntityType.SPECIMEN,
+    EntityType.TREATMENT,
   ]);
 
   const entityCounts = mock.reduce(

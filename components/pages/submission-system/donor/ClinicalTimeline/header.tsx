@@ -5,6 +5,7 @@ import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
 import { css } from 'uikit';
 import { ENTITY_DISPLAY } from './index';
+import { EntityType, HeaderTypes } from './types';
 
 export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
   const theme = useTheme();
