@@ -25,13 +25,14 @@ const DayCount = ({ days }) => (
   </div>
 );
 
-const TimelineItem = ({ id, description, index, type }) => {
+const TimelineItem = ({ id, description, index, type, onClick, disabled }) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
 
   return (
     <div
+      onClick={() => !disabled && onClick()}
       css={css`
         height: 46px;
         display: flex;

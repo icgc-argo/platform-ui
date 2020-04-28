@@ -73,7 +73,6 @@ type TabStyleType = { border: string; background: string };
 const VerticalTabsItem: React.ComponentType<
   { active?: boolean; tabStyle?: TabStyleType } & HTMLAttributes<HTMLButtonElement>
 > = ({ active = false, children, tabStyle, ...rest }) => {
-  console.log('log', active);
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
   return (
     <ContainerComponent tabStyle={tabStyle} {...rest}>
