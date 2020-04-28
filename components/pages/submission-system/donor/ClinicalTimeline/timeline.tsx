@@ -29,13 +29,13 @@ const DayCount = ({ days }: { days: number }) => (
 type TimeLineItem = {
   id: string;
   description: string;
-  index: number;
   type: string;
   onClick?: () => void;
   disabled?: boolean;
+  active: boolean;
 };
 
-const TimelineItem = ({ id, description, index, type, onClick, disabled }: TimeLineItem) => {
+const TimelineItem = ({ id, description, type, active, onClick, disabled }: TimeLineItem) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
@@ -48,7 +48,7 @@ const TimelineItem = ({ id, description, index, type, onClick, disabled }: TimeL
         display: flex;
         align-items: center;
         width: 100%;
-        ${index === 2
+        ${active
           ? css`
               border: 1px solid ${borderColor};
               margin: 0 -1px;
@@ -63,7 +63,7 @@ const TimelineItem = ({ id, description, index, type, onClick, disabled }: TimeL
           border: 0;
           color: black;
         `}
-        active={index === 2}
+        active={active}
       >
         <div>
           <Typography variant="caption" as="div">
@@ -78,9 +78,17 @@ const TimelineItem = ({ id, description, index, type, onClick, disabled }: TimeL
   );
 };
 
-const Timeline = ({ entities }: { entities: Array<Entity> }) => {
+const Timeline = ({
+  entities,
+  onClickTab,
+}: {
+  entities: Array<Entity>;
+  onClickTab: (number) => void;
+}) => {
+  const [activeTab, setActiveTab] = React.useState(0);
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+
   return (
     <div
       css={css`
@@ -127,7 +135,16 @@ const Timeline = ({ entities }: { entities: Array<Entity> }) => {
               align-items: center;
             `}
           >
-            <TimelineItem type={type} id={id} description={description} index={i} />
+            <TimelineItem
+              type={type}
+              id={id}
+              description={description}
+              active={activeTab === i}
+              onClick={() => {
+                setActiveTab(i);
+                onClickTab(i);
+              }}
+            />
           </div>
         ))}
       </div>

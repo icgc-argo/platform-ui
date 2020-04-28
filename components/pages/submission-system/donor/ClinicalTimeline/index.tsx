@@ -102,7 +102,10 @@ const ClinicalTimeline = () => {
         >
           Interval since diagnosis (days)
         </div>
-        <Timeline entities={mock.filter(({ type }) => activeEntities.includes(type))} />
+        <Timeline
+          entities={mock.filter(({ type }) => activeEntities.includes(type))}
+          onClickTab={tabIndex => console.log('Clicked', tabIndex)}
+        />
       </div>
     </Container>
   );
