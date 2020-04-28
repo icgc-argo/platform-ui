@@ -59,6 +59,7 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
       <VerticalTabs.Item
         tabStyle={{ border: borderColor, background: backgroundColor }}
         css={css`
+          height: 100%;
           width: 100%;
           border: 0;
           color: black;
