@@ -29,11 +29,7 @@ const TimelineItem = ({ id, description, index, type }) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
-  console.log('bac', borderColor, backgroundColor);
-  const x = css`
-    background: black;
-  `;
-  console.log('x', x);
+
   return (
     <div
       css={css`
@@ -129,5 +125,3 @@ const Timeline = ({ entities }) => {
 };
 
 export default Timeline;
-
-/**/
