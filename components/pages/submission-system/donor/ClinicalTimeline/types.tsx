@@ -3,10 +3,6 @@ export enum EntityType {
   SPECIMEN = 'specimen',
   TREATMENT = 'treatment',
   FOLLOW_UP = 'follow_up',
+  DECEASED = 'deceased',
 }
 export type Entity = { type: EntityType; id: string; description: string; interval: number };
-export type HeaderTypes = {
-  entityCounts: { [k in EntityType]: number };
-  activeEntities: Array<EntityType>;
-  setFilters: (e: Array<EntityType>) => void;
-};
