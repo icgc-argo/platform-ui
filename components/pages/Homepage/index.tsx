@@ -120,7 +120,6 @@ export default function Homepage() {
             `}
           >
             <Link
-              // todo: add link
               href="/repository"
               underline={false}
               css={css`
