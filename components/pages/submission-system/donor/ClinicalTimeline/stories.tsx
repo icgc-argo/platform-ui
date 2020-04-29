@@ -1,7 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Component from '.';
+import ClinicalTimeline from '.';
 
-const ComponentStories = storiesOf(`${__dirname}`, module).add('Basic', () => <Component />);
+const ClinicalTimelineStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
+  <ClinicalTimeline />
+));
 
-export default ComponentStories;
+export default ClinicalTimelineStories;
