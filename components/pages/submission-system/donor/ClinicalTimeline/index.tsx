@@ -4,12 +4,30 @@ import { css } from 'uikit';
 import Header from './header';
 import Timeline from './timeline';
 import { EntityType } from './types';
+import Typography from 'uikit/Typography';
+
 const mock = [
   {
     type: EntityType.PRIMARY_DIAGNOSIS,
     id: 'PRIMARY DIAGNOSIS PD1',
     description: 'Malignant neoplasm of pancreatic something something',
     interval: 242222,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
+      'Clinical Stage Group': '',
+      'Stage Suffix': 'A',
+      'Clinical T Category': '',
+      'Clinical N Category': '',
+      'Clinical M Category': '',
+      'Presenting Symptoms': 'Back Pain',
+      'Performance Status': '',
+    },
   },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0013', description: 'Normal', interval: 2 },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0032', description: 'Tumour', interval: 353 },
@@ -60,6 +78,9 @@ const ClinicalTimeline = () => {
     EntityType.TREATMENT,
   ]);
 
+  // BAD NAMING
+  const [activeEntity, setActiveEntity] = React.useState<EntityType>(mock[0].type);
+
   const entityCounts = mock
     .filter(entity => entity.type !== EntityType.DECEASED)
     .reduce(
@@ -92,11 +113,6 @@ const ClinicalTimeline = () => {
       >
         <div
           css={css`
-            background: red;
-          `}
-        />
-        <div
-          css={css`
             writing-mode: vertical-lr;
             transform: rotate(180deg);
             margin-right: 50px;
@@ -109,8 +125,11 @@ const ClinicalTimeline = () => {
           entities={mock.filter(
             ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
           )}
-          onClickTab={tabIndex => console.log('Clicked', tabIndex)}
+          onClickTab={type => setActiveEntity(type)}
         />
+        <div>
+          <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity].title}</Typography>
+        </div>
       </div>
     </Container>
   );
