@@ -34,6 +34,7 @@ const mock = [
     interval: 13241241414141,
   },
   { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
+  { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },
 ];
 
 export const ENTITY_DISPLAY = Object.freeze({
@@ -59,14 +60,16 @@ const ClinicalTimeline = () => {
     EntityType.TREATMENT,
   ]);
 
-  const entityCounts = mock.reduce(
-    (acc, entity) => {
-      const { type } = entity;
-      acc[type]++;
-      return acc;
-    },
-    { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
-  );
+  const entityCounts = mock
+    .filter(entity => entity.type !== EntityType.DECEASED)
+    .reduce(
+      (acc, entity) => {
+        const { type } = entity;
+        acc[type]++;
+        return acc;
+      },
+      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
+    );
 
   return (
     <Container
@@ -103,7 +106,9 @@ const ClinicalTimeline = () => {
           Interval since diagnosis (days)
         </div>
         <Timeline
-          entities={mock.filter(({ type }) => activeEntities.includes(type))}
+          entities={mock.filter(
+            ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
+          )}
           onClickTab={tabIndex => console.log('Clicked', tabIndex)}
         />
       </div>

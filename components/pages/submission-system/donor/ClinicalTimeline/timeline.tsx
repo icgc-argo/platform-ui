@@ -4,7 +4,7 @@ import Typography from 'uikit/Typography';
 import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
-import { Entity } from './types';
+import { Entity, EntityType } from './types';
 
 const DayCount = ({ days }: { days: number }) => (
   <div
@@ -63,6 +63,21 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
           width: 100%;
           border: 0;
           color: black;
+          &:focus {
+            ${disabled
+              ? css`
+                  box-shadow: none;
+                `
+              : null};
+          }
+          &:hover {
+            ${disabled
+              ? css`
+                  background: white;
+                  cursor: default;
+                `
+              : null}
+          }
         `}
         active={active}
       >
@@ -78,7 +93,7 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
               white-space: nowrap;
               text-overflow: ellipsis;
             `}
-            bold
+            bold={type !== EntityType.DECEASED}
           >
             {description}
           </Typography>
@@ -149,6 +164,7 @@ const Timeline = ({
               type={type}
               id={id}
               description={description}
+              disabled={type === EntityType.DECEASED}
               active={activeTab === i}
               onClick={() => {
                 setActiveTab(i);

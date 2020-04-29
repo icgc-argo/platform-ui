@@ -23,5 +23,9 @@ export const getTimelineStyles = (theme: typeof defaultTheme) => {
       borderColor: colors.accent2_1,
       backgroundColor: colors.accent2_4,
     },
+    deceased: {
+      borderColor: colors.grey_1,
+      backgroundColor: colors.white,
+    },
   };
 };
