@@ -36,15 +36,12 @@ export const DataReleaseBar: React.ComponentType<{
           margin: 0 5%;
         `}
       >
-        <div>
-          <Typography
-            color={theme.colors.white}
-            variant={'hero'}
-            bold={true}
-            css={css`
-              margin-bottom: 5px;
-            `}
-          >
+        <div
+          css={css`
+            margin: 25px 0px 5px;
+          `}
+        >
+          <Typography as="span" color={theme.colors.white} variant={'hero'} bold={true}>
             {stat.quantity.toLocaleString()}
           </Typography>
         </div>
@@ -144,7 +141,7 @@ export const DataCallout: React.ComponentType<{
         >
           {title}
         </Typography>
-        <Typography as="h3">{children}</Typography>
+        <Typography as="p">{children}</Typography>
       </div>
 
       <div
@@ -205,7 +202,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
                   rgba(21, 28, 61, 0.33),
                   rgba(21, 28, 61, 0.33) 105%
                 ),
-                url('/static/icgc-data-scientist-wide.png');
+                url('/static/icgc-data-scientist-wide.jpg');
               background-size: cover;
               /* fade bg into solid color */
               /* background-repeat: no-repeat;
@@ -249,17 +246,15 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
             {newsItems.map((item, index) => (
               <Typography
                 key={`newsText-${index}`}
-                as="h3"
                 variant="paragraph"
                 css={css`
-                  padding-bottom: 15px;
                   border-bottom: 1px solid ${theme.colors.grey_2};
                 `}
               >
                 {item}
               </Typography>
             ))}
-            <Typography variant="paragraph" as="h3">
+            <Typography variant="paragraph" as="p">
               If you have feature suggestions, feedback, or want to report a bug, please{' '}
               <Link href="/contact">contact us</Link>.
             </Typography>
@@ -334,7 +329,7 @@ export const ResourceBox: React.ComponentType<{
             <Typography
               variant={'data'}
               color={theme.colors.black}
-              as="h3"
+              as="p"
               css={css`
                 margin: 0px;
               `}
@@ -355,7 +350,7 @@ export const OvertureBanner: React.ComponentType<{}> = ({}) => {
   return (
     <div
       css={css`
-        padding: 20px 12%;
+        padding: 10px 12%;
         display: flex;
         text-align: center;
         justify-content: center;

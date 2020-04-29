@@ -26,7 +26,7 @@ const SeparationLine: React.ComponentType<{}> = () => {
           `}
         />
       </Hidden>
-      <Visible sm>
+      <Visible sm xs>
         <div
           css={css`
             background: ${theme.colors.grey_2};
@@ -51,14 +51,13 @@ const HeroDiv = styled('div')`
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
-      url('/static/icgc-galaxy-bg.png');`};
+      url('/static/icgc-galaxy-bg.jpg');`};
 
   background-position: center;
   background-size: cover;
   background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
   min-height: 354px;
-  border-top: 1px solid ${({ theme }) => theme.colors.grey};
 `;
 
 export default function Homepage() {
@@ -87,7 +86,7 @@ export default function Homepage() {
             ICGC ARGO Data Platform
           </Typography>
           <Typography
-            as="h2"
+            as="p"
             variant="title"
             color="white"
             css={css`
@@ -115,7 +114,7 @@ export default function Homepage() {
           >
             <Link
               // todo: add link
-              href=""
+              href="/repository"
               underline={false}
               css={css`
                 margin: 0 15px;
@@ -230,16 +229,16 @@ export default function Homepage() {
         </Row>
         <NewsContainer
           newsItems={[
-            <span>
+            <p>
               <b>Data Release:</b> ICGC ARGO has just released a new set of data, with new donors
               and somatic mutations from 2 programs. For the release summary, please visit{' '}
               <Link>Data Release 1</Link>.
-            </span>,
-            <span>
+            </p>,
+            <p>
               <b>Software Release:</b> Analyze ICGC ARGO data from a Jupyter notebook that comes
               preinstalled with our new python API. Access the feature: <Link>Data Analysis</Link>{' '}
               and release notes: <Link>Software Release 2</Link>.
-            </span>,
+            </p>,
           ]}
         />
         <div
