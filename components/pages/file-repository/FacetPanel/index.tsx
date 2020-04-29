@@ -123,7 +123,9 @@ export default () => {
           };
           return (
             <FacetRow key={type.name}>
-              {type.variant === 'Basic' && <Facet {...props} options={mockFacetData[type.name]} />}
+              {type.variant === 'Basic' && (
+                <Facet {...props} options={mockFacetData[type.name]} countUnit={'files'} />
+              )}
               {type.variant === 'Number' && <NumberRangeFacet {...props} />}
             </FacetRow>
           );

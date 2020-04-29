@@ -21,7 +21,8 @@ const OptionsList: React.ComponentType<{
   options: Array<FilterOption>;
   searchQuery?: string;
   defaultRenderLimit?: number;
-}> = ({ options, searchQuery = '', defaultRenderLimit = 5 }) => {
+  countUnit?: string;
+}> = ({ options, searchQuery = '', defaultRenderLimit = 5, countUnit }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
@@ -77,7 +78,7 @@ const OptionsList: React.ComponentType<{
           value={option.key}
           onChange={e => null}
           aria-label={`${option.key}-facet`}
-          small={true}
+          size="sm"
         />
         <Typography
           variant={'data'}
@@ -155,17 +156,19 @@ const OptionsList: React.ComponentType<{
             border-color: ${theme.colors.grey_2};
           `}
         >
-          <div
-            css={css`
-              display: flex;
-              justify-content: flex-end;
-              padding: 4px 12px 0px 12px;
-            `}
-          >
-            <Typography variant={'caption'} color={theme.colors.grey}>
-              # files
-            </Typography>
-          </div>
+          {countUnit && (
+            <div
+              css={css`
+                display: flex;
+                justify-content: flex-end;
+                padding: 4px 12px 0px 12px;
+              `}
+            >
+              <Typography variant={'caption'} color={theme.colors.grey}>
+                # {countUnit}
+              </Typography>
+            </div>
+          )}
           {optionsToShow.map(option => (
             <StyledOption key={option.key} option={option} />
           ))}

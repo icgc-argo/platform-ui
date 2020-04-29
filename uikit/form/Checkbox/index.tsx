@@ -7,10 +7,19 @@ import styled from '@emotion/styled';
  * ::before - checkmark
  * ::after - box
  */
+export type StyledCheckboxStyles = 'sm' | 'md';
+
+export const STYLEDCHECKBOX_SIZES: {
+  SM: StyledCheckboxStyles;
+  MD: StyledCheckboxStyles;
+} = Object.freeze({
+  SM: 'sm',
+  MD: 'md',
+});
 
 export const StyledCheckbox = styled<
   'div',
-  { disabled?: boolean; checked?: boolean; color?: string; small?: boolean }
+  { disabled?: boolean; checked?: boolean; color?: string; size?: 'sm' | 'md' }
 >('div')`
   position: relative;
   cursor: pointer;
@@ -50,12 +59,12 @@ export const StyledCheckbox = styled<
       content: '';
 
       position: absolute;
-      top: ${({ small }) => (small ? '3px' : '4px')};
-      left: ${({ small }) => (small ? '2px' : '2px')};
+      top: ${({ theme, size }) => theme.checkbox.checkTopPositions[size]};
+      left: ${({ theme, size }) => theme.checkbox.checkLeftPositions[size]};
       z-index: 1;
 
-      width: ${({ small }) => (small ? '6px' : '10px')};
-      height: ${({ small }) => (small ? '2px' : '4px')};
+      width: ${({ theme, size }) => theme.checkbox.checkWidths[size]};
+      height: ${({ theme, size }) => theme.checkbox.checkHeights[size]};
 
       border: 2px solid white;
       border-top-style: none;
@@ -68,11 +77,8 @@ export const StyledCheckbox = styled<
       cursor: pointer;
       content: '';
 
-      width: 15px;
-      height: 15px;
-
-      width: ${({ small }) => (small ? '10px' : '15px')};
-      height: ${({ small }) => (small ? '10px' : '15px')};
+      width: ${({ theme, size }) => theme.checkbox.boxWidths[size]};
+      height: ${({ theme, size }) => theme.checkbox.boxHeights[size]};
 
       background-color: ${({ theme, disabled }) =>
         theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
@@ -103,12 +109,12 @@ const Checkbox = ({
   'aria-label': ariaLabel,
   value,
   color,
-  small,
+  size = STYLEDCHECKBOX_SIZES.MD,
   ...props
 }: {
   checked: boolean;
   disabled?: boolean;
-  small?: boolean;
+  size?: StyledCheckboxStyles;
   onChange: (e: any | void) => any | void;
   'aria-label': string;
   value: string | number;
@@ -123,7 +129,7 @@ const Checkbox = ({
       disabled={disabled}
       onClick={onChange}
       color={color}
-      small={small}
+      size={size}
     >
       <input
         type="checkbox"

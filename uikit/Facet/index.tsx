@@ -10,11 +10,13 @@ const Facet = ({
   options,
   isSelected,
   onClick,
+  countUnit,
 }: {
   subMenuName: string;
   options: Array<FilterOption>;
   isSelected?: boolean;
   onClick?: (e: any) => void;
+  countUnit?: string;
 }) => {
   const [searchQueryState, setSearchQueryState] = React.useState('');
 
@@ -33,7 +35,7 @@ const Facet = ({
           width: 300px;
         `}
       >
-        <OptionsList options={options} searchQuery={searchQueryState} />
+        <OptionsList options={options} searchQuery={searchQueryState} countUnit={countUnit} />
       </MenuItem>
     </>
   );
