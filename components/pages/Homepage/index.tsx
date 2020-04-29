@@ -10,7 +10,14 @@ import DefaultLayout from '../DefaultLayout';
 import Link from 'uikit/Link';
 
 import Icon from 'uikit/Icon';
-import { DataReleaseBar, DataCallout, NewsContainer, ResourceBox, OvertureBanner } from './common';
+import {
+  DataReleaseBar,
+  DataCallout,
+  NewsContainer,
+  ResourceBox,
+  OvertureBanner,
+  ResponsiveGridLayout,
+} from './common';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -229,16 +236,16 @@ export default function Homepage() {
         </Row>
         <NewsContainer
           newsItems={[
-            <p>
+            <>
               <b>Data Release:</b> ICGC ARGO has just released a new set of data, with new donors
               and somatic mutations from 2 programs. For the release summary, please visit{' '}
               <Link>Data Release 1</Link>.
-            </p>,
-            <p>
+            </>,
+            <>
               <b>Software Release:</b> Analyze ICGC ARGO data from a Jupyter notebook that comes
               preinstalled with our new python API. Access the feature: <Link>Data Analysis</Link>{' '}
               and release notes: <Link>Software Release 2</Link>.
-            </p>,
+            </>,
           ]}
         />
         <div
@@ -247,76 +254,67 @@ export default function Homepage() {
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
-            padding: 20px 0px;
+            padding: 10px 0px;
           `}
         >
-          <Row justify="end" nogutter>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'Publication Guidelines'}
-                bodyText={
-                  'How to cite the ARGO Data Platform and datasets within your publication.'
-                }
-                iconName={'article'}
-                iconFill={'error_1'}
-                circleFill={'error_3'}
-                href={'https://docs.icgc-argo.org/docs/publication-guidelines'}
-              />
-            </Col>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'Release Notes'}
-                bodyText={'Find details about Platform software releases and data releases.'}
-                iconName={'calendar'}
-                iconFill={'secondary'}
-                circleFill={'secondary_3'}
-                href={'https://docs.icgc-argo.org/docs/data-release-notes'}
-              />
-            </Col>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'Programmatic APIs'}
-                bodyText={'Access Platform data through our public ARGO API.'}
-                iconName={'brackets'}
-                iconFill={'accent4_dark'}
-                circleFill={'accent4_3'}
-                //todo: add link
-                href={''}
-              />
-            </Col>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'ICGC 25K Data Portal'}
-                bodyText={
-                  'Explore the original initiative that produced >20,000 tumour genomes across 26 cancer types.'
-                }
-                iconName={'programs'}
-                iconFill={'accent3_dark'}
-                circleFill={'accent3_3'}
-                href={'https://dcc.icgc.org/'}
-              />
-            </Col>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'Data Submission'}
-                bodyText={'Instructions for programs to submit clinical and molecular data.'}
-                iconName={'testtube'}
-                iconFill={'accent1_dimmed'}
-                circleFill={'accent1_3'}
-                href={'https://docs.icgc-argo.org/docs/submission-overview'}
-              />
-            </Col>
-            <Col {...layoutProps}>
-              <ResourceBox
-                title={'Documentation'}
-                bodyText={'Resources for how to use the ARGO Data Platform and how to access data.'}
-                iconName={'question'}
-                iconFill={'warning'}
-                circleFill={'warning_3'}
-                href={'https://docs.icgc-argo.org/'}
-              />
-            </Col>
-          </Row>
+          <ResponsiveGridLayout>
+            <ResourceBox
+              title={'Publication Guidelines'}
+              bodyText={'How to cite the ARGO Data Platform and datasets within your publication.'}
+              iconName={'article'}
+              iconFill={'error_1'}
+              circleFill={'error_3'}
+              href={'https://docs.icgc-argo.org/docs/publication-guidelines'}
+            />
+
+            <ResourceBox
+              title={'Release Notes'}
+              bodyText={'Find details about Platform software releases and data releases.'}
+              iconName={'calendar'}
+              iconFill={'secondary'}
+              circleFill={'secondary_3'}
+              href={'https://docs.icgc-argo.org/docs/data-release-notes'}
+            />
+
+            <ResourceBox
+              title={'Programmatic APIs'}
+              bodyText={'Access Platform data through our public ARGO API.'}
+              iconName={'brackets'}
+              iconFill={'accent4_dark'}
+              circleFill={'accent4_3'}
+              //todo: add link
+              href={''}
+            />
+
+            <ResourceBox
+              title={'ICGC 25K Data Portal'}
+              bodyText={
+                'Explore the original initiative that produced >20,000 tumour genomes across 26 cancer types.'
+              }
+              iconName={'programs'}
+              iconFill={'accent3_dark'}
+              circleFill={'accent3_3'}
+              href={'https://dcc.icgc.org/'}
+            />
+
+            <ResourceBox
+              title={'Data Submission'}
+              bodyText={'Instructions for programs to submit clinical and molecular data.'}
+              iconName={'testtube'}
+              iconFill={'accent1_dimmed'}
+              circleFill={'accent1_3'}
+              href={'https://docs.icgc-argo.org/docs/submission-overview'}
+            />
+
+            <ResourceBox
+              title={'Documentation'}
+              bodyText={'Resources for how to use the ARGO Data Platform and how to access data.'}
+              iconName={'question'}
+              iconFill={'warning'}
+              circleFill={'warning_3'}
+              href={'https://docs.icgc-argo.org/'}
+            />
+          </ResponsiveGridLayout>
         </div>
       </div>
       <OvertureBanner />

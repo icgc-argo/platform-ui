@@ -248,13 +248,14 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
                 key={`newsText-${index}`}
                 variant="paragraph"
                 css={css`
+                  padding-bottom: 15px;
                   border-bottom: 1px solid ${theme.colors.grey_2};
                 `}
               >
                 {item}
               </Typography>
             ))}
-            <Typography variant="paragraph" as="p">
+            <Typography variant="paragraph">
               If you have feature suggestions, feedback, or want to report a bug, please{' '}
               <Link href="/contact">contact us</Link>.
             </Typography>
@@ -266,13 +267,29 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
 };
 
 const BoxLinkContainer = styled('div')`
-  padding: 10px 5px;
-  margin: 20px 10px;
+  padding: 10px 15px;
   display: grid;
   grid-template-columns: 1.5fr 9fr 0.8fr;
   align-items: center;
   justify-content: center;
   min-height: 100px;
+`;
+
+// source: https://www.npmjs.com/package/react-grid-system#configuration
+export const reactGridBreakpoints = {
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+};
+
+export const ResponsiveGridLayout = styled('div')`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  @media (min-width: ${reactGridBreakpoints.lg}px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  grid-gap: 1rem;
 `;
 
 export const ResourceBox: React.ComponentType<{
@@ -288,8 +305,7 @@ export const ResourceBox: React.ComponentType<{
     <Link underline={false} href={href} target="_blank">
       <Container
         css={css`
-          height: 75%;
-          margin: 0 10px;
+          height: 100%;
           &:hover {
             background-color: ${theme.colors.grey_4};
           }
