@@ -10,7 +10,7 @@ import styled from '@emotion/styled';
 
 export const StyledCheckbox = styled<
   'div',
-  { disabled?: boolean; checked?: boolean; color?: string }
+  { disabled?: boolean; checked?: boolean; color?: string; small?: boolean }
 >('div')`
   position: relative;
   cursor: pointer;
@@ -50,12 +50,12 @@ export const StyledCheckbox = styled<
       content: '';
 
       position: absolute;
-      top: 4px;
-      left: 2px;
+      top: ${({ small }) => (small ? '3px' : '4px')};
+      left: ${({ small }) => (small ? '2px' : '2px')};
       z-index: 1;
 
-      width: 10px;
-      height: 4px;
+      width: ${({ small }) => (small ? '6px' : '10px')};
+      height: ${({ small }) => (small ? '2px' : '4px')};
 
       border: 2px solid white;
       border-top-style: none;
@@ -70,6 +70,9 @@ export const StyledCheckbox = styled<
 
       width: 15px;
       height: 15px;
+
+      width: ${({ small }) => (small ? '10px' : '15px')};
+      height: ${({ small }) => (small ? '10px' : '15px')};
 
       background-color: ${({ theme, disabled }) =>
         theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : 'default']};
@@ -100,9 +103,12 @@ const Checkbox = ({
   'aria-label': ariaLabel,
   value,
   color,
+  small,
+  ...props
 }: {
   checked: boolean;
   disabled?: boolean;
+  small?: boolean;
   onChange: (e: any | void) => any | void;
   'aria-label': string;
   value: string | number;
@@ -117,6 +123,7 @@ const Checkbox = ({
       disabled={disabled}
       onClick={onChange}
       color={color}
+      small={small}
     >
       <input
         type="checkbox"

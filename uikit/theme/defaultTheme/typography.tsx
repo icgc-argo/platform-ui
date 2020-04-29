@@ -72,6 +72,15 @@ export default {
     lineHeight: '1.57',
     letterSpacing: 'normal',
   } as CSSProperties,
+  paragraph2: {
+    fontFamily: 'Work Sans, sans-serif',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    fontStyle: 'normal',
+    fontStretch: 'normal',
+    lineHeight: '1.71',
+    letterSpacing: 'normal',
+  } as CSSProperties,
   label: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '14px',

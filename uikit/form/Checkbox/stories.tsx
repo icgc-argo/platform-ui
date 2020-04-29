@@ -1,4 +1,3 @@
-
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import Checkbox from '.';
@@ -8,10 +7,12 @@ import { action } from '@storybook/addon-actions';
 const createKnobs = () => {
   const checked = boolean('checked', false);
   const disabled = boolean('disabled', false);
+  const small = boolean('small', false);
 
   return {
     checked,
     disabled,
+    small,
   };
 };
 

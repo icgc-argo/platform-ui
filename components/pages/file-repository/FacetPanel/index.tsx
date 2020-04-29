@@ -12,22 +12,27 @@ import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
+import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 
 const FacetRow = styled('div')`
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey_2};
   justify-content: space-between;
 `;
 
-const presetFacets = [
-  'program',
-  'primary site',
-  'age at diagnosis',
-  'vital status',
-  'gender',
-  'experimental strategy',
-  'data type',
+type FacetDetails = {
+  name: string;
+  variant: 'Basic' | 'Number';
+};
+
+const presetFacets: Array<FacetDetails> = [
+  { name: 'program', variant: 'Basic' },
+  { name: 'primary site', variant: 'Basic' },
+  { name: 'age at diagnosis', variant: 'Number' },
+  { name: 'vital status', variant: 'Basic' },
+  { name: 'gender', variant: 'Basic' },
+  { name: 'experimental strategy', variant: 'Basic' },
+  { name: 'data type', variant: 'Basic' },
 ];
 
 const FacetContainer = styled('div')`
@@ -48,6 +53,14 @@ export default () => {
   const [selectedFacets, setSelectedFacets] = React.useState(presetFacets);
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
+
+  const clickHander = (targetFacet: FacetDetails) => {
+    if (selectedFacets.includes(targetFacet)) {
+      setSelectedFacets(selectedFacets.filter(facet => facet !== targetFacet));
+    } else {
+      setSelectedFacets(selectedFacets.concat(targetFacet));
+    }
+  };
 
   return (
     <FacetContainer>
@@ -101,20 +114,17 @@ export default () => {
           </MenuItem>
         </FacetRow>
         {presetFacets.map(type => {
+          const props = {
+            onClick: e => {
+              clickHander(type);
+            },
+            isSelected: selectedFacets.includes(type),
+            subMenuName: capitalize(type.name),
+          };
           return (
-            <FacetRow key={type}>
-              <Facet
-                onClick={e => {
-                  if (selectedFacets.includes(type)) {
-                    setSelectedFacets(selectedFacets.filter(facet => facet !== type));
-                  } else {
-                    setSelectedFacets(selectedFacets.concat(type));
-                  }
-                }}
-                isSelected={selectedFacets.includes(type)}
-                subMenuName={capitalize(type)}
-                options={mockFacetData[type]}
-              />
+            <FacetRow key={type.name}>
+              {type.variant === 'Basic' && <Facet {...props} options={mockFacetData[type.name]} />}
+              {type.variant === 'Number' && <NumberRangeFacet {...props} />}
             </FacetRow>
           );
         })}

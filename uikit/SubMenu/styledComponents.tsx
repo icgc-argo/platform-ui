@@ -24,6 +24,16 @@ const defaultLabelStyle = ({ selected, theme }: StyleCalculationInput) => css`
       background: ${theme.colors.grey_3};
     }
   }
+  & > .FacetMenu {
+    display: flex;
+    border-bottom: ${selected ? '0px' : '1px'} solid;
+    border-color: ${theme.colors.grey_2};
+    color: ${theme.colors.primary};
+    padding: 8px 12px;
+    font-weight: 600;
+    width: calc(100% - (2 * 12px));
+    ${css(theme.typography.paragraph2 as any)}
+  }
 `;
 
 const level1Style = ({ selected, theme }: StyleCalculationInput) => css`
@@ -33,6 +43,14 @@ const level1Style = ({ selected, theme }: StyleCalculationInput) => css`
   animation: all 1s;
   & > .MenuItemContent {
     padding: 12px;
+  }
+  & > .FacetContent .MenuItemContent {
+    padding: 6px 12px;
+  }
+  & > .FacetContentSlim .MenuItemContent {
+    padding: 6px;
+    border-bottom: 1px solid;
+        border-color: ${theme.colors.grey_2};
   }
   & a {
     text-decoration: underline;
@@ -108,7 +126,7 @@ export const IconContainer = styled('span')`
 export const ContentContainer = styled('button')<{ as?: keyof JSX.IntrinsicElements }>`
   border: none;
   width: 100%;
-  padding: 0px;
+  padding: 0px 2px 0px 0px;
   background: none;
   font-size: inherit;
   font-weight: inherit;
@@ -119,4 +137,6 @@ export const ContentContainer = styled('button')<{ as?: keyof JSX.IntrinsicEleme
   flex-direction: row;
   align-items: center;
   flex: 1;
+
+  text-align: left;
 `;

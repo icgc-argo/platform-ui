@@ -21,11 +21,13 @@ const Facet = ({
   return (
     <>
       <MenuItem
+        className="FacetMenu"
         onClick={onClick}
         selected={isSelected}
         content={subMenuName}
         chevronOnLeftSide={true}
         isFacetVariant={true}
+        searchBar={true}
         searchStateParams={{ query: searchQueryState, querySetter: setSearchQueryState }}
         css={css`
           width: 300px;
