@@ -26,7 +26,7 @@ const DayCount = ({ days }: { days: number }) => (
   </div>
 );
 
-type TimeLineItem = {
+type TimeLineItemProps = {
   id: string;
   description: string;
   type: string;
@@ -35,7 +35,7 @@ type TimeLineItem = {
   active: boolean;
 };
 
-const TimelineItem = ({ id, description, type, active, onClick, disabled }: TimeLineItem) => {
+const TimelineItem = ({ id, description, type, active, onClick, disabled }: TimeLineItemProps) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
