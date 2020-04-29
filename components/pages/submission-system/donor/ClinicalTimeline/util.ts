@@ -26,6 +26,7 @@ export const getTimelineStyles = (theme: typeof defaultTheme) => {
     deceased: {
       borderColor: colors.grey_1,
       backgroundColor: colors.white,
+      checkboxColor: colors.white,
     },
   };
 };
