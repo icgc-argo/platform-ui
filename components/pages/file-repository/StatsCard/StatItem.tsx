@@ -1,13 +1,14 @@
+import filesize from 'filesize';
+import { css } from 'uikit';
+import { UikitIconNames } from 'uikit/Icon/icons';
+import { capitalize } from 'global/utils/stringUtils';
 import { Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import { UikitIconNames } from 'uikit/Icon/icons';
-import { capitalize } from 'global/utils/stringUtils';
-import filesize from 'filesize';
 
 type TSTatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
+
 type StatItemProps = {
   iconName: UikitIconNames;
   statType: TSTatType;

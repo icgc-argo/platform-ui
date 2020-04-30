@@ -16,9 +16,9 @@ import FacetPanel from './FacetPanel';
 import FileBarChart from './FileBarChart';
 import DonorBarChart from './DonorBarChart';
 import ProgramBarChart from './ProgramBarChart';
-import StatItem from './StatItem';
+import StatsCard from './StatsCard';
 
-const PaddedRow = styled(Row)`
+export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
 `;
 setConfiguration({ gutterWidth: 9 });
@@ -59,23 +59,7 @@ export default ({ subtitle }: { subtitle?: string }) => {
                 </Container>
               </Col>
             </PaddedRow>
-            <Container
-              css={css`
-                margin-bottom: 16px;
-              `}
-            >
-              <PaddedRow
-                css={css`
-                  justify-content: space-around;
-                `}
-              >
-                <StatItem iconName="file" statType="file" count={11350} />
-                <StatItem iconName="user" statType="donor" count={487} />
-                <StatItem iconName="crosshairs" statType="primary site" count={20} />
-                <StatItem iconName="programs" statType="program" count={25} />
-                <StatItem iconName="filesize" statType="filesize" count={1900000000000} />
-              </PaddedRow>
-            </Container>
+            <StatsCard />
             <PaddedRow justify="between">
               <PaddedColumn xl={4} lg={6} md={12}>
                 <FileBarChart />
