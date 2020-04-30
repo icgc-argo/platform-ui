@@ -2,23 +2,15 @@ import { styled } from 'uikit';
 
 export const FieldInputWrapper = styled('div')`
   width: 35%;
-  height: 100%;
-
-  border: solid 1px ${({ theme }) => theme.colors.grey_1}!important;
-
   &:first-of-type:not(:last-of-type) {
-    border-radius: 10px 0 0 10px !important;
-  }
-  &:last-of-type:not(:first-of-type) {
-    margin: 0px;
-    border-radius: 0 10px 10px 0 !important;
+    border-radius: 10px 0 0 10px;
   }
 `;
 
 export const FieldDescriptionLabel = styled('div')`
   display: flex;
   width: 15%;
-  height: 100%;
+  height: 30px;
   background-color: ${({ theme }) => theme.colors.grey_2};
   color: ${({ theme }) => theme.colors.black};
   border: solid 1px ${({ theme }) => theme.colors.grey_1};
@@ -30,9 +22,12 @@ export const FieldDescriptionLabel = styled('div')`
   justify-content: center;
   &:first-of-type:not(:last-of-type) {
     border-radius: 10px 0 0 10px;
+    border-right: 0px;
   }
-  &:last-of-type:not(:first-of-type) {
+  &:nth-last-of-type(2) {
     margin: 0px;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
   }
 `;

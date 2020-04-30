@@ -19,7 +19,11 @@ const experimentalStrategies = [
   { key: 'RNA Seq', doc_count: 858 },
 ];
 
-const vitalStatuses = [];
+const vitalStatuses = [
+  { key: 'Alive', doc_count: 623 },
+  { key: 'Deceased', doc_count: 121 },
+  { key: 'Unknown', doc_count: 861 },
+];
 
 const programs = [
   { key: 'TEST2-CA', doc_count: 100 },
@@ -36,14 +40,21 @@ const programs = [
   { key: 'TEST4-CA', doc_count: 462 },
 ];
 
-const genders = [];
-const dataTypes = [];
-const ages = [];
+const genders = [
+  { key: 'Male', doc_count: 124 },
+  { key: 'Female', doc_count: 234 },
+  { key: 'Other', doc_count: 345 },
+];
+const dataTypes = [
+  { key: 'Booleans ', doc_count: 4 },
+  { key: 'Strings', doc_count: 14 },
+  { key: 'Integers', doc_count: 55 },
+  { key: 'Floats', doc_count: 39 },
+];
 
 export default {
   program: programs,
   'primary site': primarySites,
-  'age at diagnosis': ages,
   'vital status': vitalStatuses,
   gender: genders,
   'experimental strategy': experimentalStrategies,
