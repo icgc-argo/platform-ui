@@ -33,6 +33,7 @@ const MenuItemComponent = React.forwardRef<
     contentAs?: keyof JSX.IntrinsicElements;
     chevronOnLeftSide?: boolean;
     isFacetVariant?: boolean;
+    searchBar?: boolean;
     searchStateParams?: {
       query: string;
       querySetter: React.Dispatch<React.SetStateAction<string>>;
@@ -52,11 +53,13 @@ const MenuItemComponent = React.forwardRef<
       contentAs = 'button',
       chevronOnLeftSide = false,
       isFacetVariant = false,
+      searchBar = false,
       searchStateParams,
       ...otherProps
     },
     ref,
   ) => {
+    const theme = useTheme();
     const [localSelectedState, setLocalSelectedState] = React.useState(controlledSelectedState);
     const isSelected =
       typeof controlledSelectedState === 'undefined' ? localSelectedState : controlledSelectedState;
@@ -70,7 +73,7 @@ const MenuItemComponent = React.forwardRef<
             margin-right: ${chevronOnLeftSide ? '7px' : '0px'};
           `}
           name={isSelected ? 'chevron_down' : 'chevron_right'}
-          fill={isSelected ? 'secondary' : 'primary'}
+          fill={isSelected && !isFacetVariant ? 'secondary' : 'primary'}
         />
       ) : (
         <></>
@@ -91,7 +94,7 @@ const MenuItemComponent = React.forwardRef<
         {...otherProps}
       >
         {content && (
-          <div className="MenuItemContent">
+          <div className={`${className} MenuItemContent`}>
             {chevronOnLeftSide && chevronIcon}
             <ContentContainer ref={contentContainerRef} as={contentAs}>
               {icon && (
@@ -104,7 +107,7 @@ const MenuItemComponent = React.forwardRef<
               {content}
             </ContentContainer>
             {!chevronOnLeftSide && chevronIcon}
-            {isSelected && isFacetVariant && (
+            {isSelected && searchBar && (
               <div
                 css={css`
                   display: flex;
@@ -127,13 +130,16 @@ const MenuItemComponent = React.forwardRef<
         )}
         {isSelected && searchbarState && (
           <MenuItem
+            className="FacetContent"
             level={1}
             selected
             contentAs="div"
             content={
               <Input
+                size="sm"
                 aria-label="search-for-facets"
                 css={css`
+                  ${css(theme.typography.data as any)}
                   flex: 1;
                 `}
                 preset="search"

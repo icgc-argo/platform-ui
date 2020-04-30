@@ -21,69 +21,89 @@ const OptionsList: React.ComponentType<{
   options: Array<FilterOption>;
   searchQuery?: string;
   defaultRenderLimit?: number;
-}> = ({ options, searchQuery = '', defaultRenderLimit = 5 }) => {
+  countUnit?: string;
+}> = ({ options, searchQuery = '', defaultRenderLimit = 5, countUnit }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
-  const queriedOptionKeys = options
-    .filter(({ key }) => !searchQuery.length || key.search(new RegExp(searchQuery, 'i')) > -1)
-    .map(option => option.key);
+  const queriedOptionKeys = React.useMemo(
+    () =>
+      options
+        .filter(({ key }) => !searchQuery.length || key.search(new RegExp(searchQuery, 'i')) > -1)
+        .map(option => option.key),
+    [searchQuery],
+  );
 
   const [selectAll, setSelectAll] = React.useState(true);
 
-  const initalStates = options.map(option => {
-    return { ...option, isChecked: false };
-  });
+  const initalStates = orderBy(
+    options.map(option => {
+      return { ...option, isChecked: false };
+    }),
+    ['doc_count'],
+    ['desc'],
+  );
 
   const [optionStates, setOptionStates] = React.useState(initalStates);
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
   }> = ({ option }) => (
-    <MenuItem
-      key={option.key}
+    <div
       css={css`
-        height: 35px;
+        display: flex;
+        justify-content: space-between;
+        height: 25px;
+        padding: 2px 12px;
+        width: calc(100% - (2 * 12px));
+        &:hover {
+          background: ${theme.colors.grey_3};
+        }
+        cursor: pointer;
       `}
-      level={1}
-      selected={false}
+      key={option.key}
       onClick={e => {
+        e.stopPropagation();
         toggleOption(option.key);
       }}
-      content={
-        <div
+    >
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <Checkbox
+          checked={option.isChecked}
+          value={option.key}
+          onChange={e => null}
+          aria-label={`${option.key}-facet`}
+          size="sm"
+        />
+        <Typography
+          variant={'data'}
           css={css`
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
+            margin: 0px 0px 0px 7px;
+            list-style-type: none;
           `}
+          as={'li'}
         >
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <Checkbox
-              checked={option.isChecked}
-              value={option.key}
-              onChange={e => console.log(e)}
-              aria-label={`${option.key}-facet`}
-            />
-            <Typography
-              variant={'subtitle2'}
-              css={css`
-                margin: 0px 0px 0px 7px;
-              `}
-            >
-              {option.key}
-            </Typography>
-          </div>
+          {option.key}
+        </Typography>
+      </div>
 
-          <Tag variant={'NEUTRAL'}>{option.doc_count}</Tag>
-        </div>
-      }
-    />
+      <Tag
+        variant={'NEUTRAL'}
+        css={css`
+          height: 18px;
+
+          font-size: 10px;
+          align-self: center;
+        `}
+      >
+        {option.doc_count}
+      </Tag>
+    </div>
   );
 
   const toggleOption = (optionKey: string) => {
@@ -96,10 +116,9 @@ const OptionsList: React.ComponentType<{
   };
 
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-  const sortedOptions = React.useMemo(
-    () => orderBy(optionStates, ['isChecked', 'key'], ['desc', 'asc']),
-    [optionStates],
-  );
+  const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
+    optionStates,
+  ]);
 
   const selectedOptions = React.useMemo(() => optionStates.filter(option => option.isChecked), [
     optionStates,
@@ -137,30 +156,61 @@ const OptionsList: React.ComponentType<{
             border-color: ${theme.colors.grey_2};
           `}
         >
+          {countUnit && (
+            <div
+              css={css`
+                display: flex;
+                justify-content: flex-end;
+                padding: 4px 12px 0px 12px;
+              `}
+            >
+              <Typography variant={'caption'} color={theme.colors.grey}>
+                # {countUnit}
+              </Typography>
+            </div>
+          )}
           {optionsToShow.map(option => (
             <StyledOption key={option.key} option={option} />
           ))}
         </div>
       }
-      <ViewAmountController
-        selectAllHander={() => {
-          setOptionStates(
-            optionStates.map(state => {
-              return { ...state, isChecked: selectAll };
-            }),
-          );
-          setSelectAll(!selectAll);
-        }}
-        moreToggleHandler={() => {
-          setAllOptionsVisible(!allOptionsVisible);
-        }}
-        selectAllState={selectAll}
-        toggleVisiblityCss={
-          numberofMoreOptions === 0 ? (allOptionsVisible ? 'visible' : 'hidden') : 'visible'
-        }
-        toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
-        moreOptionsAvailable={!allOptionsVisible}
-      />
+      {!!options.length && (
+        <ViewAmountController
+          selectAllHander={() => {
+            if (searchQuery) {
+              setOptionStates(
+                optionStates.map(state =>
+                  queriedOptionKeys.includes(state.key)
+                    ? { ...state, isChecked: selectAll }
+                    : { ...state },
+                ),
+              );
+            } else {
+              setOptionStates(
+                sortedOptions.map(state => {
+                  return { ...state, isChecked: selectAll };
+                }),
+              );
+              setSelectAll(!selectAll);
+            }
+          }}
+          moreToggleHandler={() => {
+            setAllOptionsVisible(!allOptionsVisible);
+          }}
+          selectAllState={selectAll}
+          toggleVisiblityCss={
+            searchQuery
+              ? 'hidden'
+              : numberofMoreOptions === 0
+              ? allOptionsVisible
+                ? 'visible'
+                : 'hidden'
+              : 'visible'
+          }
+          toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
+          moreOptionsAvailable={!allOptionsVisible}
+        />
+      )}
     </>
   );
 };

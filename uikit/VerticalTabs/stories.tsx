@@ -18,6 +18,10 @@ const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(1)} active={activeItem === 1}>
           Specimen
+          <br />
+          larger tab
+          <br />
+          content
           <VerticalTabs.Tag variant="WARNING">23</VerticalTabs.Tag>
         </VerticalTabs.Item>
         <VerticalTabs.Item onClick={onClick(2)} active={activeItem === 2}>

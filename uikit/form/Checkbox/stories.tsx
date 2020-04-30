@@ -1,17 +1,18 @@
-
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import Checkbox from '.';
-import { boolean, button } from '@storybook/addon-knobs';
+import Checkbox, { STYLEDCHECKBOX_SIZES } from '.';
+import { boolean, radios } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
 const createKnobs = () => {
   const checked = boolean('checked', false);
   const disabled = boolean('disabled', false);
+  const size = radios('size', STYLEDCHECKBOX_SIZES);
 
   return {
     checked,
     disabled,
+    size,
   };
 };
 

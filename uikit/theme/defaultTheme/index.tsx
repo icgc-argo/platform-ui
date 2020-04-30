@@ -1,4 +1,3 @@
-
 import colors from './colors';
 import shadows from './shadows';
 import button from './button';
@@ -9,6 +8,7 @@ import input from './input';
 import multiSelect from './multiSelect';
 import radiocheckbox from './radiocheckbox';
 import progress from './progress';
+import checkbox from './checkbox';
 
 export default {
   colors,
@@ -21,4 +21,5 @@ export default {
   multiSelect,
   radiocheckbox,
   progress,
+  checkbox,
 };

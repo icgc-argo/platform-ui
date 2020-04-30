@@ -3,8 +3,6 @@ import { css } from '@emotion/core';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 
-// Working example lives inside the Facet Story
-
 const ViewAmountController: React.ComponentType<{
   /** Function to handle what happens when the selectAll/DeselectAll button is clicked */
   selectAllHander: () => any;
@@ -34,11 +32,16 @@ const ViewAmountController: React.ComponentType<{
       css={css`
         display: flex;
         justify-content: space-between;
-        padding: 12px;
+        padding: 6px 12px;
+        border-bottom: 1px solid;
+        border-color: ${theme.colors.grey_2};
       `}
       onClick={e => e.stopPropagation()}
     >
       <HyperLink
+        css={css`
+          font-size: 11px;
+        `}
         onClick={e => {
           selectAllHander();
         }}
@@ -59,6 +62,7 @@ const ViewAmountController: React.ComponentType<{
           css={css`
             display: flex;
             align-items: center;
+            font-size: 11px;
           `}
           onClick={e => {
             moreToggleHandler();

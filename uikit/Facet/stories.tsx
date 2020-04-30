@@ -2,8 +2,12 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import Facet from '.';
 import { FilterOption } from '../OptionsList';
+import { text } from '@storybook/addon-knobs';
 
 const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  const knobs = {
+    countUnit: text('count unit description label', 'files'),
+  };
   const exampleOptions: Array<FilterOption> = [
     { key: 'Gall Bladder', doc_count: 587 },
     { key: 'Breast', doc_count: 525 },
@@ -18,7 +22,7 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     { key: 'Bile Duct', doc_count: 573 },
     { key: 'Esophagus', doc_count: 221 },
   ];
-  return <Facet subMenuName="Primary Site" options={exampleOptions} />;
+  return <Facet subMenuName="Primary Site" options={exampleOptions} {...knobs} />;
 });
 
 export default FacetStories;
