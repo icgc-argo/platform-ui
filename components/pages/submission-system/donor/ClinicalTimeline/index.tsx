@@ -80,7 +80,8 @@ const ClinicalTimeline = () => {
   ]);
 
   // BAD NAMING
-  const [activeEntity, setActiveEntity] = React.useState<EntityType>(mock[0].type);
+  const [activeEntityIndex, setActiveEntityIndex] = React.useState<number>(0);
+  const activeEntity = mock[activeEntityIndex];
 
   const entityCounts = mock
     .filter(entity => entity.type !== EntityType.DECEASED)
@@ -126,23 +127,27 @@ const ClinicalTimeline = () => {
           entities={mock.filter(
             ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
           )}
-          onClickTab={type => setActiveEntity(type)}
+          onClickTab={idx => setActiveEntityIndex(idx)}
         />
         <div>
-          <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity].title}</Typography>
+          <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity.type].title}</Typography>
           <DonorDataTable
-            data={[
-              { key: 'Submitter Donor ID', val: '...' },
-              { key: 'Gender', val: '...' },
-              { key: 'Vital Status', val: '...' },
-              { key: 'Cause of Death', val: '...' },
-              { key: 'Survival Time', val: '...' },
-              { key: 'Program Name', val: '...' },
-              { key: 'Cancer Type', val: '...' },
-              { key: 'Primary Site', val: '...' },
-              { key: 'Height', val: '...' },
-              { key: 'Weight', val: '...' },
-            ]}
+            data={{
+              'Primary Diagnosis ID': 'PD1',
+              'Age at Diagnosis': '28 years',
+              'Cancer Type Code': 'C25.3',
+              'Cancer Type': 'Malignant neoplam of pancreas',
+              'Number of Positive Lymph Nodes': '2',
+              'Number of Examined Lymph Nodes': '',
+              'Clinical Tumour Staging System': 'Binet',
+              'Clinical Stage Group': '',
+              'Stage Suffix': 'A',
+              'Clinical T Category': '',
+              'Clinical N Category': '',
+              'Clinical M Category': '',
+              'Presenting Symptoms': 'Back Pain',
+              'Performance Status': '',
+            }}
           />
         </div>
       </div>

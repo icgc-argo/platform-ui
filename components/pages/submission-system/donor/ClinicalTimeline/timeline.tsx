@@ -108,7 +108,7 @@ const Timeline = ({
   onClickTab,
 }: {
   entities: Array<Entity>;
-  onClickTab: (type: EntityType) => void;
+  onClickTab: (idx: number) => void;
 }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const theme = useTheme();
@@ -169,7 +169,7 @@ const Timeline = ({
               active={activeTab === i}
               onClick={() => {
                 setActiveTab(i);
-                onClickTab(type);
+                onClickTab(i);
               }}
             />
           </div>
