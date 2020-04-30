@@ -5,6 +5,7 @@ import Header from './header';
 import Timeline from './timeline';
 import { EntityType } from './types';
 import Typography from 'uikit/Typography';
+import DonorDataTable from './table';
 
 const mock = [
   {
@@ -129,6 +130,20 @@ const ClinicalTimeline = () => {
         />
         <div>
           <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity].title}</Typography>
+          <DonorDataTable
+            data={[
+              { key: 'Submitter Donor ID', val: '...' },
+              { key: 'Gender', val: '...' },
+              { key: 'Vital Status', val: '...' },
+              { key: 'Cause of Death', val: '...' },
+              { key: 'Survival Time', val: '...' },
+              { key: 'Program Name', val: '...' },
+              { key: 'Cancer Type', val: '...' },
+              { key: 'Primary Site', val: '...' },
+              { key: 'Height', val: '...' },
+              { key: 'Weight', val: '...' },
+            ]}
+          />
         </div>
       </div>
     </Container>
