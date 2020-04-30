@@ -14,7 +14,7 @@ import { dummyData } from 'components/pages/file-repository/FileTable/dummyData'
 import useAuthContext from 'global/hooks/useAuthContext';
 import FacetPanel from './FacetPanel';
 import FileBarChart from './FileBarChart';
-import DonorBarChart from './DonorBarChart';
+import PrimarySiteBarChart from './PrimarySiteBarChart';
 import ProgramBarChart from './ProgramBarChart';
 
 const PaddedRow = styled(Row)`
@@ -64,7 +64,7 @@ export default ({ subtitle }: { subtitle?: string }) => {
                 <FileBarChart />
               </PaddedColumn>
               <PaddedColumn xl={4} lg={6} md={12}>
-                <DonorBarChart />
+                <PrimarySiteBarChart />
               </PaddedColumn>
               <PaddedColumn xl={4} lg={6} md={12}>
                 <ProgramBarChart />
