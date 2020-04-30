@@ -73,7 +73,7 @@ export default ({ subtitle }: { subtitle?: string }) => {
                 <StatItem iconName="user" statType="donor" count={487} />
                 <StatItem iconName="crosshairs" statType="primary site" count={20} />
                 <StatItem iconName="programs" statType="program" count={25} />
-                <StatItem iconName="filesize" statType="filesize" count={1900000000} />
+                <StatItem iconName="filesize" statType="filesize" count={1900000000000} />
               </PaddedRow>
             </Container>
             <PaddedRow justify="between">

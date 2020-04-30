@@ -5,6 +5,7 @@ import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { UikitIconNames } from 'uikit/Icon/icons';
 import { capitalize } from 'global/utils/stringUtils';
+import filesize from 'filesize';
 
 type TSTatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
 type StatItemProps = {
@@ -13,13 +14,9 @@ type StatItemProps = {
   count: number;
 };
 
-// for mock data display, not sure how this will be calculated esp for file size
-const fileSizeUnits = 'PB';
-const getStatCount = (type: TSTatType, count: number): string => {
-  if (type === 'filesize') {
-    return `${count / 1000000000} ${fileSizeUnits}`;
-  }
-  return `${count} ${capitalize(type)}s`;
+// for mock data display. this could change when data is integrated
+const getDisplayStat = (type: TSTatType, count: number): string => {
+  return type === 'filesize' ? `${filesize(count)}` : `${count} ${capitalize(type)}s`;
 };
 
 const StatItem = ({ iconName, statType, count }: StatItemProps) => {
@@ -47,7 +44,7 @@ const StatItem = ({ iconName, statType, count }: StatItemProps) => {
           fill={theme.colors.primary_1}
           name={iconName}
         />
-        {getStatCount(statType, count)}
+        {getDisplayStat(statType, count)}
       </Typography>
     </Col>
   );
