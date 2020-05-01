@@ -1,4 +1,5 @@
 import filesize from 'filesize';
+import pluralize from 'pluralize';
 import { css } from 'uikit';
 import { UikitIconNames } from 'uikit/Icon/icons';
 import { capitalize } from 'global/utils/stringUtils';
@@ -7,17 +8,19 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 
-type TSTatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
+type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
 
 type StatItemProps = {
   iconName: UikitIconNames;
-  statType: TSTatType;
+  statType: StatType;
   count: number;
 };
 
 // for mock data display. this could change when data is integrated
-const getDisplayStat = (type: TSTatType, count: number): string => {
-  return type === 'filesize' ? `${filesize(count)}` : `${count} ${capitalize(type)}s`;
+const getDisplayStat = (type: StatType, count: number): string => {
+  return type === 'filesize'
+    ? `${filesize(count)}`
+    : `${count} ${capitalize(pluralize(type, count))}`;
 };
 
 const StatItem = ({ iconName, statType, count }: StatItemProps) => {
