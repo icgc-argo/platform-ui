@@ -148,11 +148,7 @@ const ClinicalTimeline = () => {
             text-align: center;
           `}
         >
-          {/**
-           *
-           * TODO: TYPOGRAPHY!
-           */}
-          Interval since diagnosis (days)
+          <Typography variant="data">Interval since diagnosis (days)</Typography>
         </div>
         <Timeline
           entities={mock.filter(
