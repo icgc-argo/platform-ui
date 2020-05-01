@@ -12,6 +12,7 @@ type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
 
 type StatItemProps = {
   iconName: UikitIconNames;
+  iconDiameter?: number;
   statType: StatType;
   count: number;
 };
@@ -23,7 +24,7 @@ const getDisplayStat = (type: StatType, count: number): string => {
     : `${count} ${capitalize(pluralize(type, count))}`;
 };
 
-const StatItem = ({ iconName, statType, count }: StatItemProps) => {
+const StatItem = ({ iconName, statType, count, iconDiameter = 20 }: StatItemProps) => {
   const theme = useTheme();
   return (
     <Col xl={2.4} lg={2.4} md={4} sm={6}>
@@ -40,8 +41,8 @@ const StatItem = ({ iconName, statType, count }: StatItemProps) => {
         <Icon
           css={css`
             padding-right: 0.3em;
-            width: 16px;
-            height: 16px;
+            width: ${iconDiameter}px;
+            height: ${iconDiameter}px;
           `}
           fill={theme.colors.primary_1}
           name={iconName}

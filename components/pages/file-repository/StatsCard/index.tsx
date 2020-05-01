@@ -24,11 +24,11 @@ const StatsCard = () => {
           justify-content: space-around;
         `}
       >
-        <StatItem iconName="file" statType="file" count={files} />
-        <StatItem iconName="user" statType="donor" count={donors} />
+        <StatItem iconName="file" statType="file" count={files} iconDiameter={16} />
+        <StatItem iconName="user" statType="donor" count={donors} iconDiameter={16} />
         <StatItem iconName="crosshairs" statType="primary site" count={primarySites} />
-        <StatItem iconName="programs" statType="program" count={programs} />
-        <StatItem iconName="filesize" statType="filesize" count={filesize} />
+        <StatItem iconName="programs" statType="program" count={programs} iconDiameter={16} />
+        <StatItem iconName="filesize" statType="filesize" count={filesize} iconDiameter={19} />
       </PaddedRow>
     </Container>
   );
