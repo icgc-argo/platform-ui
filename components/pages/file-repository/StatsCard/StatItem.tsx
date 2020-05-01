@@ -40,6 +40,8 @@ const StatItem = ({ iconName, statType, count }: StatItemProps) => {
         <Icon
           css={css`
             padding-right: 0.3em;
+            width: 16px;
+            height: 16px;
           `}
           fill={theme.colors.primary_1}
           name={iconName}
