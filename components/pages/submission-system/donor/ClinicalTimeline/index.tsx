@@ -118,8 +118,13 @@ const ClinicalTimeline = () => {
   ]);
 
   const [activeEntity, setActiveEntity] = React.useState<Entity>(mock[0]);
+  const [activeTab, setActiveTab] = React.useState<number>(0);
   const activeEntityData = get(activeEntity, 'data', []);
   const activeEntitySamples = get(activeEntity, 'samples', []);
+
+  const filteredMock = mock.filter(
+    ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
+  );
 
   return (
     <Container
@@ -133,7 +138,11 @@ const ClinicalTimeline = () => {
       <Header
         entities={mock}
         activeEntities={activeEntities}
-        setFilters={activeEntities => setActiveEntities(activeEntities)}
+        setFilters={activeEntities => {
+          setActiveTab(0);
+          setActiveEntity(filteredMock[0]);
+          setActiveEntities(activeEntities);
+        }}
       />
       <div
         css={css`
@@ -151,10 +160,12 @@ const ClinicalTimeline = () => {
           <Typography variant="data">Interval since diagnosis (days)</Typography>
         </div>
         <Timeline
-          entities={mock.filter(
-            ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
-          )}
-          onClickTab={entity => setActiveEntity(entity)}
+          entities={filteredMock}
+          activeTab={activeTab}
+          onClickTab={({ entity, idx }) => {
+            setActiveEntity(entity);
+            setActiveTab(idx);
+          }}
         />
 
         <Row

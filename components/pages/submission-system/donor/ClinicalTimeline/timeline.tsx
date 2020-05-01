@@ -105,11 +105,12 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
 const Timeline = ({
   entities,
   onClickTab,
+  activeTab,
 }: {
   entities: Array<Entity>;
-  onClickTab: (entity: Entity) => void;
+  activeTab: number;
+  onClickTab: ({ entity: Entity, idx: number }) => void;
 }) => {
-  const [activeTab, setActiveTab] = React.useState(0);
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
@@ -164,10 +165,7 @@ const Timeline = ({
               item={entity}
               disabled={entity.type === EntityType.DECEASED}
               active={activeTab === i}
-              onClick={() => {
-                setActiveTab(i);
-                onClickTab(entity);
-              }}
+              onClick={() => onClickTab({ entity, idx: i })}
             />
           </div>
         ))}
