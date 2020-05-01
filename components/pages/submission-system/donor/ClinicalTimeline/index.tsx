@@ -8,6 +8,7 @@ import Typography from 'uikit/Typography';
 import DonorDataTable from './table';
 import get from 'lodash/get';
 import Samples from './samples';
+import { Row, Col } from 'react-grid-system';
 
 const mock = [
   {
@@ -155,42 +156,48 @@ const ClinicalTimeline = () => {
         {/**
          * TODO: ROWS AND COLS
          */}
-        <div>
-          <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity.type].title}</Typography>
-          <div
-            css={css`
-              display: flex;
-              margin-top: 10px;
-            `}
-          >
-            <DonorDataTable
-              data={{
-                'Primary Diagnosis ID': 'PD1',
-                'Age at Diagnosis': '28 years',
-                'Cancer Type Code': 'C25.3',
-                'Cancer Type': 'Malignant neoplam of pancreas',
-                'Number of Positive Lymph Nodes': '2',
-                'Number of Examined Lymph Nodes': '',
-                'Clinical Tumour Staging System': 'Binet',
-                'Clinical Stage Group': '',
-                'Stage Suffix': 'A',
-                'Clinical T Category': '',
-                'Clinical N Category': '',
-                'Clinical M Category': '',
-                'Presenting Symptoms': 'Back Pain',
-                'Performance Status': '',
-              }}
-            />
-          </div>
+        <Row
+          style={{
+            flex: 1,
+          }}
+        >
+          <Col>
+            <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity.type].title}</Typography>
+            <div
+              css={css`
+                display: flex;
+                margin-top: 10px;
+              `}
+            >
+              <DonorDataTable
+                data={{
+                  'Primary Diagnosis ID': 'PD1',
+                  'Age at Diagnosis': '28 years',
+                  'Cancer Type Code': 'C25.3',
+                  'Cancer Type': 'Malignant neoplam of pancreas',
+                  'Number of Positive Lymph Nodes': '2',
+                  'Number of Examined Lymph Nodes': '',
+                  'Clinical Tumour Staging System': 'Binet',
+                  'Clinical Stage Group': '',
+                  'Stage Suffix': 'A',
+                  'Clinical T Category': '',
+                  'Clinical N Category': '',
+                  'Clinical M Category': '',
+                  'Presenting Symptoms': 'Back Pain',
+                  'Performance Status': '',
+                }}
+              />
+            </div>
+          </Col>
           {activeEntitySamples.length > 0 ? (
-            <>
+            <Col>
               <Typography variant="navigation">
                 Samples from this Specimen ({activeEntitySamples.length})
               </Typography>
               <Samples samples={activeEntitySamples} />
-            </>
+            </Col>
           ) : null}
-        </div>
+        </Row>
       </div>
     </Container>
   );
