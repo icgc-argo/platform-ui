@@ -26,14 +26,10 @@ const getDisplayStat = (type: StatType, count: number): string => {
 const StatItem = ({ iconName, statType, count }: StatItemProps) => {
   const theme = useTheme();
   return (
-    <Col
-      css={css`
-        justify-content: center;
-      `}
-    >
+    <Col xl={2.4} lg={2.4} md={4} sm={6}>
       <Typography
         css={css`
-          font-size: 16px;
+          font-size: 14px;
           margin: 0.8rem 0 0.2rem;
           display: flex;
           justify-content: center;
