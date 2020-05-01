@@ -1,39 +1,25 @@
 import React from 'react';
 import { css, styled } from 'uikit';
-import { orderBy, maxBy, min } from 'lodash';
+import { orderBy, maxBy } from 'lodash';
 import Tooltip from 'uikit/Tooltip';
 import { capitalize } from 'global/utils/stringUtils';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
-import Icon from 'uikit/Icon';
 import { ContentBox } from 'uikit/PageLayout';
-import { UikitIconNames } from 'uikit/Icon/icons';
 import { ThemeColorNames } from 'uikit/theme/types';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
   type: FileRepoDataType;
-  totalDataSize?: string | null; // not sure yet how this prop will be determined
-  totalCount: number; // calculation will vary based on chart type
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
 };
 
 const defaultChartHeight = 100;
-const maxChartWidth = 500;
-const minBarWidth = 6;
 
 const getBarHeight = (value: number, maxValue: number): number => {
   return Math.ceil((value / maxValue) * defaultChartHeight);
-};
-
-const getBarWidth = (data: Array<any>): number => {
-  return min([Math.floor(getChartWidth(data) / data.length) - 2, minBarWidth]);
-};
-
-const getChartWidth = (data: Array<any>): number => {
-  return min([35 * data.length, maxChartWidth]);
 };
 
 export const chartTypeMeta: {
@@ -63,7 +49,7 @@ export const chartTypeMeta: {
 const Bar = styled('div')`
   height: ${({ style }) => style.height}px;
   background-color: ${({ style }) => style.backgroundColor};
-  border-radius: 3px;
+  border-radius: 3px 3px 0 0;
 `;
 
 const FlexRow = styled('div')`
@@ -86,24 +72,46 @@ const AxisText = styled(Typography)`
 
 const YAxis = ({ max, theme }) => {
   return (
-    <FlexColumn
+    <FlexRow
       css={css`
-        font-size: 10px;
-        height: ${defaultChartHeight}px;
+        margin-bottom: 0.6em;
       `}
     >
-      <AxisText color={theme.colors.grey}>{max}</AxisText>
-      <br />
-      <AxisText color={theme.colors.grey}>0</AxisText>
-    </FlexColumn>
+      <Typography
+        css={css`
+          transform: rotate(-90deg);
+          font-size: 10px;
+          color: ${theme.colors.grey};
+          margin: 0;
+          margin-right: -0.5rem;
+        `}
+      >
+        # Files
+      </Typography>
+      <FlexColumn
+        css={css`
+          font-size: 10px;
+          height: ${defaultChartHeight}px;
+        `}
+      >
+        <AxisText
+          css={css`
+            margin-top: -0.9em;
+          `}
+          color={theme.colors.primary}
+        >
+          {max}
+        </AxisText>
+        <br />
+        <AxisText color={theme.colors.primary}>0</AxisText>
+      </FlexColumn>
+    </FlexRow>
   );
 };
 
 const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   data = [],
   type,
-  totalDataSize = null, // unit will be passed in with string prop
-  totalCount,
   containerStyle = {},
   chartHeight = defaultChartHeight,
 }) => {
@@ -115,77 +123,30 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
       style={containerStyle}
       css={css`
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        padding: 3px 10px 8px;
+        padding: 3px 10px 8px 3px;
       `}
     >
-      <FlexColumn
-        css={css`
-          margin-right: 1.5rem;
-        `}
-      >
-        <div
+      <FlexRow style={{ justifyContent: 'flex-end', position: 'relative' }}>
+        <Typography
           css={css`
-            display: flex;
-            flex-direction: column;
+            position: absolute;
+            top: 0.5rem;
+            margin: 0;
+            font-size: 12px;
+            color: ${theme.colors.primary};
           `}
         >
-          <FlexRow
-            css={css`
-              justify-content: start;
-            `}
-          >
-            <Icon
-              name={chartTypeMeta[type].iconName as UikitIconNames}
-              fill={theme.colors.primary_1}
-              width="20px"
-              height="20px"
-              css={css`
-                margin: 0;
-              `}
-            />
-            <Typography
-              css={css`
-                font-size: 20px;
-                color: ${theme.colors.primary};
-                margin: 0px 0px 0px 10px;
-              `}
-            >
-              {totalCount}
-            </Typography>
-          </FlexRow>
-
-          <FlexRow>
-            <Typography
-              css={css`
-                font-size: 14px;
-                margin: 0px;
-              `}
-            >
-              {chartTypeMeta[type].title}
-            </Typography>
-          </FlexRow>
-        </div>
-        {totalDataSize && (
-          <FlexRow>
-            <Typography
-              css={css`
-                font-size: 12px;
-                margin: 0;
-              `}
-            >
-              {totalDataSize}
-            </Typography>
-          </FlexRow>
-        )}
-      </FlexColumn>
+          Files by {type}
+        </Typography>
+      </FlexRow>
       <div
         css={css`
           display: flex;
           padding-top: 12px;
           flex-grow: 1;
           justify-content: space-between;
-          max-width: ${maxChartWidth}px;
         `}
       >
         <YAxis max={maxValue} theme={theme} />
@@ -197,9 +158,9 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
           <FlexRow
             css={css`
               align-items: baseline;
-              padding-left: 6px;
-              padding-bottom: 5px;
+              margin-left: 6px;
               height: ${chartHeight}px;
+              border-bottom: 1px solid ${theme.colors.grey_2};
             `}
           >
             <Bar
@@ -211,6 +172,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
             />
             {orderBy(data, 'count', 'desc').map(({ category, count }) => (
               <Tooltip
+                style={{ flexGrow: 1 }}
                 key={`bar-${category}`}
                 unmountHTMLWhenHide
                 position="bottom"
@@ -225,7 +187,8 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
               >
                 <Bar
                   style={{
-                    width: getBarWidth(data),
+                    flexGrow: 1,
+                    margin: '0 4px',
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
                   }}
@@ -235,13 +198,14 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
           </FlexRow>
           <Typography
             css={css`
-              padding-left: 10px;
-              font-size: 11px;
+              padding-top: 5px;
+              font-size: 10px;
               color: ${theme.colors.grey};
+              text-align: center;
             `}
             component="div"
           >
-            Files by {type}
+            {`${capitalize(type)}s`}
           </Typography>
         </div>
       </div>

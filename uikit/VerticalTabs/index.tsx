@@ -4,7 +4,7 @@ import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';
-import useElementDimention from 'uikit/utils/Hook/useElementDimention';
+import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 
 const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
   transition: all 0.25s;
@@ -77,7 +77,7 @@ const VerticalTabsItem: React.ComponentType<
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
   const containerRef = React.useRef(null);
 
-  const { height: contHeight } = useElementDimention(containerRef);
+  const { height: contHeight } = useElementDimension(containerRef);
 
   return (
     <ContainerComponent tabStyle={tabStyle} {...rest} ref={containerRef}>
