@@ -3,9 +3,11 @@ import Container from 'uikit/Container';
 import { css } from 'uikit';
 import Header from './header';
 import Timeline from './timeline';
-import { EntityType } from './types';
+import { EntityType, Entity } from './types';
 import Typography from 'uikit/Typography';
 import DonorDataTable from './table';
+import get from 'lodash/get';
+import Samples from './samples';
 
 const mock = [
   {
@@ -30,7 +32,23 @@ const mock = [
       'Performance Status': '',
     },
   },
-  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0013', description: 'Normal', interval: 2 },
+  {
+    type: EntityType.SPECIMEN,
+    id: 'SPECIMEN SP0013',
+    description: 'Normal',
+    interval: 2,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
+      'Clinical Stage Group': '',
+    },
+    samples: [{ id: 'SAB5353', type: 'Amplified DNA' }, { id: 'SAD3053', type: 'Total DNA' }],
+  },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0032', description: 'Tumour', interval: 353 },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP2123', description: 'Tumour', interval: 3535353 },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
@@ -79,9 +97,10 @@ const ClinicalTimeline = () => {
     EntityType.TREATMENT,
   ]);
 
-  // BAD NAMING
+  // TODO: BAD NAMING
   const [activeEntityIndex, setActiveEntityIndex] = React.useState<number>(0);
-  const activeEntity = mock[activeEntityIndex];
+  const activeEntity: Entity = mock[activeEntityIndex];
+  const activeEntitySamples: Entity['samples'] = get(activeEntity, 'samples', []);
 
   const entityCounts = mock
     .filter(entity => entity.type !== EntityType.DECEASED)
@@ -121,6 +140,10 @@ const ClinicalTimeline = () => {
             text-align: center;
           `}
         >
+          {/**
+           *
+           * TODO: TYPOGRAPHY!
+           */}
           Interval since diagnosis (days)
         </div>
         <Timeline
@@ -129,26 +152,44 @@ const ClinicalTimeline = () => {
           )}
           onClickTab={idx => setActiveEntityIndex(idx)}
         />
+        {/**
+         * TODO: ROWS AND COLS
+         */}
         <div>
           <Typography variant="navigation">{ENTITY_DISPLAY[activeEntity.type].title}</Typography>
-          <DonorDataTable
-            data={{
-              'Primary Diagnosis ID': 'PD1',
-              'Age at Diagnosis': '28 years',
-              'Cancer Type Code': 'C25.3',
-              'Cancer Type': 'Malignant neoplam of pancreas',
-              'Number of Positive Lymph Nodes': '2',
-              'Number of Examined Lymph Nodes': '',
-              'Clinical Tumour Staging System': 'Binet',
-              'Clinical Stage Group': '',
-              'Stage Suffix': 'A',
-              'Clinical T Category': '',
-              'Clinical N Category': '',
-              'Clinical M Category': '',
-              'Presenting Symptoms': 'Back Pain',
-              'Performance Status': '',
-            }}
-          />
+          <div
+            css={css`
+              display: flex;
+              margin-top: 10px;
+            `}
+          >
+            <DonorDataTable
+              data={{
+                'Primary Diagnosis ID': 'PD1',
+                'Age at Diagnosis': '28 years',
+                'Cancer Type Code': 'C25.3',
+                'Cancer Type': 'Malignant neoplam of pancreas',
+                'Number of Positive Lymph Nodes': '2',
+                'Number of Examined Lymph Nodes': '',
+                'Clinical Tumour Staging System': 'Binet',
+                'Clinical Stage Group': '',
+                'Stage Suffix': 'A',
+                'Clinical T Category': '',
+                'Clinical N Category': '',
+                'Clinical M Category': '',
+                'Presenting Symptoms': 'Back Pain',
+                'Performance Status': '',
+              }}
+            />
+          </div>
+          {activeEntitySamples.length > 0 ? (
+            <>
+              <Typography variant="navigation">
+                Samples from this Specimen ({activeEntitySamples.length})
+              </Typography>
+              <Samples samples={activeEntitySamples} />
+            </>
+          ) : null}
         </div>
       </div>
     </Container>
