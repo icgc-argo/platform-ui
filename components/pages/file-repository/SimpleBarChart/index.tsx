@@ -7,6 +7,7 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import { ContentBox } from 'uikit/PageLayout';
 import { ThemeColorNames } from 'uikit/theme/types';
+import pluralize from 'pluralize';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
@@ -138,7 +139,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
             color: ${theme.colors.primary};
           `}
         >
-          Files by {type}
+          Files by {capitalize(type)}
         </Typography>
       </FlexRow>
       <div
@@ -181,7 +182,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                   <div>
                     <span>{capitalize(category)}</span>
                     <br />
-                    <span>{count}</span>
+                    <span>{`${count} ${pluralize('file', count)}`}</span>
                   </div>
                 }
               >
