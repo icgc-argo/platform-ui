@@ -27,15 +27,14 @@ const DayCount = ({ days }: { days: number }) => (
 );
 
 type TimeLineItemProps = {
-  id: string;
-  description: string;
-  type: string;
+  item: { id: string; description: string; type: string };
   onClick?: () => void;
   disabled?: boolean;
   active: boolean;
 };
 
-const TimelineItem = ({ id, description, type, active, onClick, disabled }: TimeLineItemProps) => {
+const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) => {
+  const { type, description, id } = item;
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
@@ -108,7 +107,7 @@ const Timeline = ({
   onClickTab,
 }: {
   entities: Array<Entity>;
-  onClickTab: (idx: number) => void;
+  onClickTab: (entity: Entity) => void;
 }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const theme = useTheme();
@@ -154,7 +153,7 @@ const Timeline = ({
           width: 350px;
         `}
       >
-        {entities.map(({ id, description, type }, i) => (
+        {entities.map((entity, i) => (
           <div
             css={css`
               display: flex;
@@ -162,14 +161,12 @@ const Timeline = ({
             `}
           >
             <TimelineItem
-              type={type}
-              id={id}
-              description={description}
-              disabled={type === EntityType.DECEASED}
+              item={entity}
+              disabled={entity.type === EntityType.DECEASED}
               active={activeTab === i}
               onClick={() => {
                 setActiveTab(i);
-                onClickTab(i);
+                onClickTab(entity);
               }}
             />
           </div>

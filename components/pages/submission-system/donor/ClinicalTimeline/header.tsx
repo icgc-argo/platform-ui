@@ -5,19 +5,32 @@ import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
 import { css } from 'uikit';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType } from './types';
+import { EntityType, Entity } from './types';
 
 type HeaderTypes = {
-  entityCounts: Omit<{ [k in EntityType]: number }, EntityType.DECEASED>;
+  entities: Array<Entity>;
   activeEntities: Array<EntityType>;
   setFilters: (e: Array<EntityType>) => void;
 };
 
-export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
+type Filters = Exclude<EntityType, 'deceased'>;
+type EntityCounts = { [k in Filters]: number };
+
+export default ({ entities, activeEntities, setFilters }: HeaderTypes) => {
   const theme = useTheme();
-  const counts: Array<EntityType> = Object.keys(entityCounts) as Array<EntityType>;
 
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+
+  const entityCounts: EntityCounts = entities
+    .filter(entity => entity.type !== EntityType.DECEASED)
+    .reduce(
+      (acc, entity) => {
+        const { type } = entity;
+        acc[type]++;
+        return acc;
+      },
+      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
+    );
 
   return (
     <div
@@ -45,7 +58,7 @@ export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
         `}
       >
         Show:
-        {counts.map(entityKey => {
+        {(Object.keys(entityCounts) as Array<Filters>).map(entityKey => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
