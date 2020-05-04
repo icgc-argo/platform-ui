@@ -186,11 +186,13 @@ const OptionsList: React.ComponentType<{
                 ),
               );
             } else {
-              setOptionStates(
-                sortedOptions.map(state => {
-                  return { ...state, isChecked: selectAll };
-                }),
-              );
+              selectAll
+                ? setOptionStates(
+                    sortedOptions.map(state => {
+                      return { ...state, isChecked: selectAll };
+                    }),
+                  )
+                : setOptionStates(initalStates);
               setSelectAll(!selectAll);
             }
           }}
