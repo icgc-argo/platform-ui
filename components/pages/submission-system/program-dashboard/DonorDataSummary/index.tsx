@@ -14,9 +14,8 @@ import {
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import { useTimeout } from './common';
 import { css } from '@emotion/core';
-import Button from 'uikit/Button';
 import { Row, Col } from 'react-grid-system';
-import Icon from 'uikit/Icon';
+import DownloadButtons from './DownloadButtons';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -76,20 +75,22 @@ export default () => {
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
+  const CardTtile = () => (
+    <Typography variant="default" component="span">
+      Donor Data Summary
+    </Typography>
+  );
+
   return !isCardLoading && isDonorSummaryEntriesEmpty ? (
     <DashboardCard>
-      <Typography variant="default" component="span">
-        Donor Data Summary
-      </Typography>
+      <CardTtile />
       <EmptyDonorSummaryState />
     </DashboardCard>
   ) : (
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
-          <Typography variant="default" component="span">
-            Donor Data Summary
-          </Typography>
+          <CardTtile />
         </Col>
         <Col
           md={8.5}
@@ -100,62 +101,7 @@ export default () => {
             justify-content: flex-end;
           `}
         >
-          <Row>
-            <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                All Clinical Data
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                Missing Data
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                Table Data
-              </Button>
-            </Col>
-          </Row>
+          <DownloadButtons />
         </Col>
       </Row>
       <DonorSummaryTable
