@@ -8,7 +8,13 @@ import { Entity, EntityType } from './types';
 import Icon from 'uikit/Icon';
 import { InvalidIcon } from './common';
 
-const DayCount = ({ days }: { days: number }) => (
+const DayCount = ({
+  days,
+  format = days => days.toLocaleString(),
+}: {
+  days: number;
+  format: (number) => string;
+}) => (
   <div
     css={css`
       height: 46px;
@@ -23,7 +29,7 @@ const DayCount = ({ days }: { days: number }) => (
         text-align: right;
       `}
     >
-      {days}
+      {format(days)}
     </Typography>
   </div>
 );
