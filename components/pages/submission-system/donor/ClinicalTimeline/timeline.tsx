@@ -4,7 +4,9 @@ import Typography from 'uikit/Typography';
 import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
-import { Entity } from './types';
+import { Entity, EntityType } from './types';
+import Icon from 'uikit/Icon';
+import { InvalidIcon } from './common';
 
 const DayCount = ({ days }: { days: number }) => (
   <div
@@ -27,15 +29,14 @@ const DayCount = ({ days }: { days: number }) => (
 );
 
 type TimeLineItemProps = {
-  id: string;
-  description: string;
-  type: string;
+  item: Pick<Entity, 'id' | 'description' | 'type' | 'invalid'>;
   onClick?: () => void;
   disabled?: boolean;
   active: boolean;
 };
 
-const TimelineItem = ({ id, description, type, active, onClick, disabled }: TimeLineItemProps) => {
+const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) => {
+  const { type, description, id, invalid } = item;
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
@@ -63,13 +64,48 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
           width: 100%;
           border: 0;
           color: black;
+          &:focus {
+            ${disabled
+              ? css`
+                  box-shadow: none;
+                `
+              : null};
+          }
+          &:hover {
+            ${disabled
+              ? css`
+                  background: white;
+                  cursor: default;
+                `
+              : null}
+          }
         `}
         active={active}
       >
-        <div>
-          <Typography variant="caption" as="div">
-            {id}
-          </Typography>
+        <div
+          css={css`
+            width: 100%;
+          `}
+        >
+          <div
+            css={css`
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            `}
+          >
+            <Typography variant="caption" as="div">
+              {id}
+            </Typography>
+            {invalid ? (
+              <InvalidIcon
+                css={css`
+                  margin-right: 5px;
+                `}
+              />
+            ) : null}
+          </div>
           <Typography
             variant="data"
             as="div"
@@ -78,11 +114,11 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
               white-space: nowrap;
               text-overflow: ellipsis;
             `}
-            bold
+            bold={type !== EntityType.DECEASED}
           >
             {description}
           </Typography>
-        </div>
+        </div>{' '}
       </VerticalTabs.Item>
     </div>
   );
@@ -91,11 +127,12 @@ const TimelineItem = ({ id, description, type, active, onClick, disabled }: Time
 const Timeline = ({
   entities,
   onClickTab,
+  activeTab,
 }: {
   entities: Array<Entity>;
-  onClickTab: (number) => void;
+  activeTab: number;
+  onClickTab: ({ entity: Entity, idx: number }) => void;
 }) => {
-  const [activeTab, setActiveTab] = React.useState(0);
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
@@ -134,11 +171,11 @@ const Timeline = ({
       <div
         css={css`
           flex: 1;
-          border: 1px solid grey;
+          border: 1px solid ${theme.colors.grey_1};
           width: 350px;
         `}
       >
-        {entities.map(({ id, description, type }, i) => (
+        {entities.map((entity, i) => (
           <div
             css={css`
               display: flex;
@@ -146,14 +183,10 @@ const Timeline = ({
             `}
           >
             <TimelineItem
-              type={type}
-              id={id}
-              description={description}
+              item={entity}
+              disabled={entity.type === EntityType.DECEASED}
               active={activeTab === i}
-              onClick={() => {
-                setActiveTab(i);
-                onClickTab(i);
-              }}
+              onClick={() => onClickTab({ entity, idx: i })}
             />
           </div>
         ))}
