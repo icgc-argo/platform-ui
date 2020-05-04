@@ -29,7 +29,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 });
 
 const ClinicalTimeline = ({ data }) => {
-  console.log('data', data);
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,

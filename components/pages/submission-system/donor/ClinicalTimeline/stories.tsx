@@ -62,6 +62,7 @@ const mock = [
     data: {
       'Age at Diagnosis': '28 years',
     },
+    invalid: true,
   },
   { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
   {

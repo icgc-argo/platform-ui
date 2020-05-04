@@ -15,4 +15,5 @@ export type Entity = {
   interval: number;
   data?: {};
   samples?: Array<Sample>;
+  invalid?: Boolean;
 };
