@@ -93,7 +93,7 @@ export default () => {
             chevronOnLeftSide={true}
             isFacetVariant={true}
             css={css`
-              width: 100%;
+              flex: 1;
             `}
           >
             <div
