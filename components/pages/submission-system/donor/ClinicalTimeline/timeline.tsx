@@ -5,10 +5,15 @@ import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { Entity, EntityType } from './types';
-import Icon from 'uikit/Icon';
 import { InvalidIcon } from './common';
 
-const DayCount = ({ days }: { days: number }) => (
+const DayCount = ({
+  days,
+  format = days => days.toLocaleString(),
+}: {
+  days: number;
+  format?: (number) => string;
+}) => (
   <div
     css={css`
       height: 46px;
@@ -23,7 +28,7 @@ const DayCount = ({ days }: { days: number }) => (
         text-align: right;
       `}
     >
-      {days}
+      {format(days)}
     </Typography>
   </div>
 );
@@ -148,6 +153,7 @@ const Timeline = ({
           <div
             css={css`
               display: flex;
+              width: 50px; /* Approx width for 5 digits which is approximately 270 years */
               align-items: center;
               justify-content: flex-end;
 

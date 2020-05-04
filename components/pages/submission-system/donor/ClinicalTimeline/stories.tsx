@@ -1,8 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ClinicalTimeline from '.';
-import { array } from '@storybook/addon-knobs';
-import { EntityType, Entity } from './types';
+import { EntityType } from './types';
 import { select } from '@storybook/addon-knobs';
 
 const mock = [
@@ -58,7 +57,7 @@ const mock = [
     type: EntityType.SPECIMEN,
     id: 'SPECIMEN SP2123',
     description: 'Tumour',
-    interval: 3535353,
+    interval: 36500,
     data: {
       'Age at Diagnosis': '28 years',
     },
@@ -75,13 +74,13 @@ const mock = [
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Ablation',
-    interval: 888774341,
+    interval: 13525,
   },
   {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Loco-regional progression',
-    interval: 13241241414141,
+    interval: 88664,
     data: {
       'Clinical Stage Group': '',
     },
