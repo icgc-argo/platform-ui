@@ -5,7 +5,6 @@ import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { Entity, EntityType } from './types';
-import Icon from 'uikit/Icon';
 import { InvalidIcon } from './common';
 
 const DayCount = ({

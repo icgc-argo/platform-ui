@@ -1,8 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ClinicalTimeline from '.';
-import { array } from '@storybook/addon-knobs';
-import { EntityType, Entity } from './types';
+import { EntityType } from './types';
 import { select } from '@storybook/addon-knobs';
 
 const mock = [
