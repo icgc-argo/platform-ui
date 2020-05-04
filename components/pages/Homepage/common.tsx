@@ -36,15 +36,12 @@ export const DataReleaseBar: React.ComponentType<{
           margin: 0 5%;
         `}
       >
-        <div>
-          <Typography
-            color={theme.colors.white}
-            variant={'hero'}
-            bold={true}
-            css={css`
-              margin-bottom: 5px;
-            `}
-          >
+        <div
+          css={css`
+            margin: 25px 0px 5px;
+          `}
+        >
+          <Typography as="span" color={theme.colors.white} variant={'hero'} bold={true}>
             {stat.quantity.toLocaleString()}
           </Typography>
         </div>
@@ -144,7 +141,7 @@ export const DataCallout: React.ComponentType<{
         >
           {title}
         </Typography>
-        <Typography as="h3">{children}</Typography>
+        <Typography as="p">{children}</Typography>
       </div>
 
       <div
@@ -205,7 +202,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
                   rgba(21, 28, 61, 0.33),
                   rgba(21, 28, 61, 0.33) 105%
                 ),
-                url('/static/icgc-data-scientist-wide.png');
+                url('/static/icgc-data-scientist-wide.jpg');
               background-size: cover;
               /* fade bg into solid color */
               /* background-repeat: no-repeat;
@@ -249,7 +246,6 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
             {newsItems.map((item, index) => (
               <Typography
                 key={`newsText-${index}`}
-                as="h3"
                 variant="paragraph"
                 css={css`
                   padding-bottom: 15px;
@@ -259,7 +255,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
                 {item}
               </Typography>
             ))}
-            <Typography variant="paragraph" as="h3">
+            <Typography variant="paragraph">
               If you have feature suggestions, feedback, or want to report a bug, please{' '}
               <Link href="/contact">contact us</Link>.
             </Typography>
@@ -271,13 +267,29 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
 };
 
 const BoxLinkContainer = styled('div')`
-  padding: 10px 5px;
-  margin: 20px 10px;
+  padding: 10px 15px;
   display: grid;
   grid-template-columns: 1.5fr 9fr 0.8fr;
   align-items: center;
   justify-content: center;
   min-height: 100px;
+`;
+
+// source: https://www.npmjs.com/package/react-grid-system#configuration
+export const reactGridBreakpoints = {
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+};
+
+export const ResponsiveGridLayout = styled('div')`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  @media (min-width: ${reactGridBreakpoints.lg}px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  grid-gap: 1rem;
 `;
 
 export const ResourceBox: React.ComponentType<{
@@ -293,8 +305,7 @@ export const ResourceBox: React.ComponentType<{
     <Link underline={false} href={href} target="_blank">
       <Container
         css={css`
-          height: 75%;
-          margin: 0 10px;
+          height: 100%;
           &:hover {
             background-color: ${theme.colors.grey_4};
           }
@@ -334,7 +345,7 @@ export const ResourceBox: React.ComponentType<{
             <Typography
               variant={'data'}
               color={theme.colors.black}
-              as="h3"
+              as="p"
               css={css`
                 margin: 0px;
               `}
@@ -355,7 +366,7 @@ export const OvertureBanner: React.ComponentType<{}> = ({}) => {
   return (
     <div
       css={css`
-        padding: 20px 12%;
+        padding: 10px 12%;
         display: flex;
         text-align: center;
         justify-content: center;
