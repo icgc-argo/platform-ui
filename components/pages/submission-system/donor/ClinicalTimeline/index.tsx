@@ -9,6 +9,7 @@ import DonorDataTable from './table';
 import get from 'lodash/get';
 import Samples from './samples';
 import { Row, Col } from 'react-grid-system';
+import { useTheme } from 'uikit/ThemeProvider';
 
 const mock = [
   {
@@ -126,6 +127,8 @@ const ClinicalTimeline = () => {
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
 
+  const theme = useTheme();
+
   return (
     <Container
       css={css`
@@ -147,6 +150,7 @@ const ClinicalTimeline = () => {
       <div
         css={css`
           display: flex;
+          flex: 1;
         `}
       >
         <div
@@ -171,6 +175,9 @@ const ClinicalTimeline = () => {
         <Row
           style={{
             flex: 1,
+            padding: '10px 20px',
+            border: `1px solid ${theme.colors.grey_1}`,
+            marginLeft: '-1px',
           }}
         >
           <Col>

@@ -119,7 +119,6 @@ const Timeline = ({
       css={css`
         height: 100%;
         display: flex;
-        margin-right: 25px;
       `}
     >
       <div>
@@ -150,7 +149,7 @@ const Timeline = ({
       <div
         css={css`
           flex: 1;
-          border: 1px solid grey;
+          border: 1px solid ${theme.colors.grey_1};
           width: 350px;
         `}
       >
