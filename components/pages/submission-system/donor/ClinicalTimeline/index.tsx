@@ -77,7 +77,7 @@ const ClinicalTimeline = ({ data }) => {
               css={css`
                 writing-mode: vertical-lr;
                 transform: rotate(180deg);
-                margin-right: 50px;
+                margin-right: 10px;
                 text-align: center;
               `}
             >

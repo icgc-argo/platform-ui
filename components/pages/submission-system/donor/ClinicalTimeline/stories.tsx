@@ -57,7 +57,7 @@ const mock = [
     type: EntityType.SPECIMEN,
     id: 'SPECIMEN SP2123',
     description: 'Tumour',
-    interval: 3535353,
+    interval: 36500,
     data: {
       'Age at Diagnosis': '28 years',
     },
@@ -74,13 +74,13 @@ const mock = [
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Ablation',
-    interval: 888774341,
+    interval: 13525,
   },
   {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Loco-regional progression',
-    interval: 13241241414141,
+    interval: 88664,
     data: {
       'Clinical Stage Group': '',
     },
