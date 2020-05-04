@@ -6,13 +6,6 @@ import { select } from '@storybook/addon-knobs';
 import { chartTypeMeta } from './';
 
 const displayTypes = Object.keys(chartTypeMeta);
-const createKnobs = () => {
-  const chartType = select('chartType', displayTypes, 'data type');
-
-  return {
-    chartType,
-  };
-};
 
 const SimpleBarChartStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = (index = 0, state = 'program', title = 'By Program') => ({
@@ -20,14 +13,10 @@ const SimpleBarChartStories = storiesOf(`${__dirname}`, module).add('Basic', () 
   });
 
   const currentDisplay = knobs().state;
-  // calculations for data count and size is tbd, will depend on chart type
-  const totalCount = dataTypes[currentDisplay].reduce((acc, { category, count }) => acc + count, 0);
   return (
     <SimpleBarChart
       data={dataTypes[currentDisplay]}
       type={currentDisplay}
-      totalDataSize={currentDisplay !== 'program' && totalCount}
-      totalCount={totalCount}
       containerStyle={{ maxWidth: 450 }}
     />
   );

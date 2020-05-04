@@ -72,6 +72,9 @@ const ViewAmountController: React.ComponentType<{
             name={moreOptionsAvailable ? 'plus_circle' : 'minus_circle'}
             css={css`
               margin-right: 6px;
+              --iconSize: 12px;
+              width: var(--iconSize);
+              height: var(--iconSize);
             `}
             fill={theme.colors.accent2}
           />

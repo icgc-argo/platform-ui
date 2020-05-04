@@ -40,6 +40,8 @@ import calendar from './collection/calendar';
 import brackets from './collection/brackets';
 import testtube from './collection/testtube';
 import question from './collection/question';
+import filesize from './collection/filesize';
+import crosshairs from './collection/crosshairs';
 
 /**
  * Icon path and property lookup object
@@ -88,6 +90,8 @@ const Icons = {
   brackets,
   calendar,
   article,
+  filesize,
+  crosshairs,
 };
 
 export type UikitIconNames = keyof typeof Icons;

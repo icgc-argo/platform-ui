@@ -14,10 +14,11 @@ import { dummyData } from 'components/pages/file-repository/FileTable/dummyData'
 import useAuthContext from 'global/hooks/useAuthContext';
 import FacetPanel from './FacetPanel';
 import FileBarChart from './FileBarChart';
-import DonorBarChart from './DonorBarChart';
+import PrimarySiteBarChart from './PrimarySiteBarChart';
 import ProgramBarChart from './ProgramBarChart';
+import StatsCard from './StatsCard';
 
-const PaddedRow = styled(Row)`
+export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
 `;
 setConfiguration({ gutterWidth: 9 });
@@ -58,13 +59,13 @@ export default ({ subtitle }: { subtitle?: string }) => {
                 </Container>
               </Col>
             </PaddedRow>
-
+            <StatsCard />
             <PaddedRow justify="between">
               <PaddedColumn xl={4} lg={6} md={12}>
                 <FileBarChart />
               </PaddedColumn>
               <PaddedColumn xl={4} lg={6} md={12}>
-                <DonorBarChart />
+                <PrimarySiteBarChart />
               </PaddedColumn>
               <PaddedColumn xl={4} lg={6} md={12}>
                 <ProgramBarChart />
