@@ -10,13 +10,13 @@ import { EntityType, Entity } from './types';
 type HeaderTypes = {
   entities: Array<Entity>;
   activeEntities: Array<EntityType>;
-  onFilterChange: (e: Array<EntityType>) => void;
+  onFiltersChange: (e: Array<EntityType>) => void;
 };
 
 type Filters = Exclude<EntityType, 'deceased'>;
 type EntityCounts = { [k in Filters]: number };
 
-export default ({ entities, activeEntities, onFilterChange }: HeaderTypes) => {
+export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const theme = useTheme();
 
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
@@ -66,7 +66,7 @@ export default ({ entities, activeEntities, onFilterChange }: HeaderTypes) => {
 
           const changeFilter = () =>
             !isDisabled &&
-            onFilterChange(
+            onFiltersChange(
               activeEntities.includes(entityKey)
                 ? activeEntities.filter(e => e !== entityKey)
                 : [...activeEntities, entityKey],

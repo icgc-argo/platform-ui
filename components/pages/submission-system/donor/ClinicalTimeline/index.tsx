@@ -60,7 +60,7 @@ const ClinicalTimeline = ({ data }) => {
       <Header
         entities={data}
         activeEntities={activeEntities}
-        onFilterChange={activeEntities => {
+        onFiltersChange={activeEntities => {
           setActiveTab(0);
           setActiveEntity(filteredData[0]);
           setActiveEntities(activeEntities);
