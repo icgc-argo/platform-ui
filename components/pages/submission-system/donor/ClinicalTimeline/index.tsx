@@ -13,92 +13,6 @@ import { useTheme } from 'uikit/ThemeProvider';
 import NoData from 'uikit/NoData';
 import noDataSvg from '../../../../../static/illustration_heart.svg';
 
-let mock = [
-  {
-    type: EntityType.PRIMARY_DIAGNOSIS,
-    id: 'PRIMARY DIAGNOSIS PD1',
-    description: 'Malignant neoplasm of pancreatic something something',
-    interval: 242222,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplam of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '',
-      'Clinical Tumour Staging System': 'Binet',
-      'Clinical Stage Group': '',
-      'Stage Suffix': 'A',
-      'Clinical T Category': '',
-      'Clinical N Category': '',
-      'Clinical M Category': '',
-      'Presenting Symptoms': 'Back Pain',
-      'Performance Status': '',
-    },
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0013',
-    description: 'Normal',
-    interval: 2,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplam of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '',
-      'Clinical Tumour Staging System': 'Binet',
-      'Clinical Stage Group': '',
-    },
-    samples: [{ id: 'SAB5353', type: 'Amplified DNA' }, { id: 'SAD3053', type: 'Total DNA' }],
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0032',
-    description: 'Tumour',
-    interval: 353,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-    },
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP2123',
-    description: 'Tumour',
-    interval: 3535353,
-    data: {
-      'Age at Diagnosis': '28 years',
-    },
-  },
-  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
-  {
-    type: EntityType.TREATMENT,
-    id: 'TREATMENT TR8982',
-    description: 'Chemotherapy',
-    interval: 33333,
-  },
-  {
-    type: EntityType.TREATMENT,
-    id: 'TREATMENT TR8982',
-    description: 'Ablation',
-    interval: 888774341,
-  },
-  {
-    type: EntityType.TREATMENT,
-    id: 'TREATMENT TR8982',
-    description: 'Loco-regional progression',
-    interval: 13241241414141,
-    data: {
-      'Clinical Stage Group': '',
-    },
-  },
-  { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
-  { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },
-];
-
-mock = [];
-
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
     title: 'Primary Diagnosis',
@@ -114,7 +28,8 @@ export const ENTITY_DISPLAY = Object.freeze({
   },
 });
 
-const ClinicalTimeline = () => {
+const ClinicalTimeline = ({ data }) => {
+  console.log('data', data);
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
@@ -122,12 +37,12 @@ const ClinicalTimeline = () => {
     EntityType.TREATMENT,
   ]);
 
-  const [activeEntity, setActiveEntity] = React.useState<Entity>(mock[0]);
+  const [activeEntity, setActiveEntity] = React.useState<Entity>(data[0]);
   const [activeTab, setActiveTab] = React.useState<number>(0);
   const activeEntityData = get(activeEntity, 'data', []);
   const activeEntitySamples = get(activeEntity, 'samples', []);
 
-  const filteredMock = mock.filter(
+  const filteredData = data.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
 
@@ -143,11 +58,11 @@ const ClinicalTimeline = () => {
       `}
     >
       <Header
-        entities={mock}
+        entities={data}
         activeEntities={activeEntities}
         setFilters={activeEntities => {
           setActiveTab(0);
-          setActiveEntity(filteredMock[0]);
+          setActiveEntity(filteredData[0]);
           setActiveEntities(activeEntities);
         }}
       />
@@ -157,7 +72,7 @@ const ClinicalTimeline = () => {
           flex: 1;
         `}
       >
-        {mock.length > 0 ? (
+        {data.length > 0 ? (
           <>
             <div
               css={css`
@@ -170,7 +85,7 @@ const ClinicalTimeline = () => {
               <Typography variant="data">Interval since diagnosis (days)</Typography>
             </div>
             <Timeline
-              entities={filteredMock}
+              entities={filteredData}
               activeTab={activeTab}
               onClickTab={({ entity, idx }) => {
                 setActiveEntity(entity);
