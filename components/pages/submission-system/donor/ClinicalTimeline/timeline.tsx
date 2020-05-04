@@ -13,7 +13,7 @@ const DayCount = ({
   format = days => days.toLocaleString(),
 }: {
   days: number;
-  format: (number) => string;
+  format?: (number) => string;
 }) => (
   <div
     css={css`
