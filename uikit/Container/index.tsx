@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import color from 'color';
 import { css, styled } from '..';
 import useTheme from '../utils/useTheme';

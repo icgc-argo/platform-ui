@@ -4,15 +4,15 @@ import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';
+import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 
-const Triangle = styled('div')`
+const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
   transition: all 0.25s;
   width: 0px;
   position: absolute;
   text-align: center;
   left: 100%;
-  top: 50%;
-  margin-top: -18px;
+  top: 0;
   transform: scaleX(0.5);
   &:after,
   &:before {
@@ -24,17 +24,20 @@ const Triangle = styled('div')`
     border-style: solid;
   }
   &:after {
-    top: 0px;
-    border-color: transparent transparent transparent ${({ theme }) => theme.colors.secondary_4};
-    border-width: calc(20px - 2px);
+    border-color: transparent transparent transparent
+      ${({ theme, tabStyle }) => (tabStyle ? tabStyle.background : theme.colors.secondary_4)};
+    border-width: ${({ contHeight }) => contHeight / 2}px;
   }
   &:before {
-    top: -3px;
-    border-color: transparent transparent transparent ${({ theme }) => theme.colors.secondary_2};
-    border-width: calc(23px - 2px);
+    top: -1px;
+    left: 1px;
+    border-color: transparent transparent transparent
+      ${({ theme, tabStyle }) => (tabStyle ? tabStyle.border : theme.colors.secondary_2)};
+    border-width: ${({ contHeight }) => (contHeight + 2) / 2}px; /* +2 for border around button */
   }
 `;
-const BaseItemContainer = styled(FocusWrapper)`
+
+const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
   width: 100%;
   position: relative;
   transition: all 0.25s;
@@ -52,12 +55,13 @@ const BaseItemContainer = styled(FocusWrapper)`
     background: ${({ theme }) => theme.colors.grey_3};
   }
 `;
-const ActiveItemContainer = styled(BaseItemContainer)`
+const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }>`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
   border-bottom-color: ${({ theme }) => theme.colors.secondary_2};
   border-right: solid 1px ${({ theme }) => theme.colors.secondary_2};
-  background: ${({ theme }) => theme.colors.secondary_4};
+  background: ${({ theme, tabStyle }) =>
+    tabStyle ? tabStyle.background : theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary_dark};
 
   &:hover {
@@ -65,12 +69,18 @@ const ActiveItemContainer = styled(BaseItemContainer)`
   }
 `;
 
+type TabStyleType = { border: string; background: string };
+
 const VerticalTabsItem: React.ComponentType<
-  { active?: boolean } & HTMLAttributes<HTMLButtonElement>
-> = ({ active = false, children, ...rest }) => {
+  { active?: boolean; tabStyle?: TabStyleType } & HTMLAttributes<HTMLButtonElement>
+> = ({ active = false, children, tabStyle, ...rest }) => {
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
+  const containerRef = React.useRef(null);
+
+  const { height: contHeight } = useElementDimension(containerRef);
+
   return (
-    <ContainerComponent {...rest}>
+    <ContainerComponent tabStyle={tabStyle} {...rest} ref={containerRef}>
       <Typography
         variant="data"
         as="div"
@@ -89,7 +99,7 @@ const VerticalTabsItem: React.ComponentType<
           {children}
         </div>
       </Typography>
-      {active && <Triangle />}
+      {active && <Triangle tabStyle={tabStyle} contHeight={contHeight} />}
     </ContainerComponent>
   );
 };
