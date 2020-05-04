@@ -41,9 +41,13 @@ export const PageContent = styled('div')`
   z-index: 0;
 `;
 
+type PageBodyProps = {
+  sidebarColSize?: string;
+};
+
 export const PageBody = styled('div')`
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: ${(props: PageBodyProps) => props.sidebarColSize || `230px`} 1fr;
 
   &.noSidebar {
     grid-template-columns: 1fr;
