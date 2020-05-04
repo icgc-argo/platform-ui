@@ -5,6 +5,8 @@ import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { Entity, EntityType } from './types';
+import Icon from 'uikit/Icon';
+import { InvalidIcon } from './common';
 
 const DayCount = ({ days }: { days: number }) => (
   <div
@@ -27,14 +29,14 @@ const DayCount = ({ days }: { days: number }) => (
 );
 
 type TimeLineItemProps = {
-  item: { id: string; description: string; type: string };
+  item: Pick<Entity, 'id' | 'description' | 'type' | 'invalid'>;
   onClick?: () => void;
   disabled?: boolean;
   active: boolean;
 };
 
 const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) => {
-  const { type, description, id } = item;
+  const { type, description, id, invalid } = item;
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
@@ -80,10 +82,30 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         `}
         active={active}
       >
-        <div>
-          <Typography variant="caption" as="div">
-            {id}
-          </Typography>
+        <div
+          css={css`
+            width: 100%;
+          `}
+        >
+          <div
+            css={css`
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            `}
+          >
+            <Typography variant="caption" as="div">
+              {id}
+            </Typography>
+            {invalid ? (
+              <InvalidIcon
+                css={css`
+                  margin-right: 5px;
+                `}
+              />
+            ) : null}
+          </div>
           <Typography
             variant="data"
             as="div"
@@ -96,7 +118,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           >
             {description}
           </Typography>
-        </div>
+        </div>{' '}
       </VerticalTabs.Item>
     </div>
   );
