@@ -33,7 +33,7 @@ export default ({ subtitle }: { subtitle?: string }) => {
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
-      <PageBody>
+      <PageBody sidebarColSize="250px">
         <FacetPanel />
         <PageContent>
           <ContentBody>
