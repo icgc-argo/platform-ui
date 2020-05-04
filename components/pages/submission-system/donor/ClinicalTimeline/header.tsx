@@ -62,8 +62,10 @@ export default ({ entities, activeEntities, setFilters }: HeaderTypes) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
+          const isDisabled = count <= 0 || !activeEntities.includes(entityKey);
 
           const changeFilter = () =>
+            !isDisabled &&
             setFilters(
               activeEntities.includes(entityKey)
                 ? activeEntities.filter(e => e !== entityKey)
@@ -86,7 +88,7 @@ export default ({ entities, activeEntities, setFilters }: HeaderTypes) => {
                 checked={activeEntities.includes(entityKey)}
                 onChange={changeFilter}
                 aria-label={title}
-                disabled={count <= 0 || !activeEntities.includes(entityKey)}
+                disabled={isDisabled}
                 color={checkboxColor}
               />
 
