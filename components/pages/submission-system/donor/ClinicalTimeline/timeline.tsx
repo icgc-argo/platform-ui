@@ -153,7 +153,7 @@ const Timeline = ({
           <div
             css={css`
               display: flex;
-              width: 50px; /* Approx width for 5 digits which is approximately 270 years */
+              width: 70px; /* Approx width for 5 digits which is approximately 270 years */
               align-items: center;
               justify-content: flex-end;
 
