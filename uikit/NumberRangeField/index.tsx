@@ -29,7 +29,7 @@ const NumberRangeField: React.ComponentType<{
 
   const errorMsg = (
     <Typography variant={'caption'} color={theme.colors.error}>
-      Invalid Input
+      Invalid
     </Typography>
   );
 

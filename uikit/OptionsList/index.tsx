@@ -145,6 +145,24 @@ const OptionsList: React.ComponentType<{
 
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 
+  const onSelectAll = () => {
+    if (searchQuery) {
+      setOptionStates(
+        optionStates.map(state =>
+          queriedOptionKeys.includes(state.key) ? { ...state, isChecked: selectAll } : { ...state },
+        ),
+      );
+    } else {
+      if (selectAll) {
+        setOptionStates(
+          sortedOptions.map(state => {
+            return { ...state, isChecked: selectAll };
+          }),
+        );
+      } else setOptionStates(initalStates);
+      setSelectAll(!selectAll);
+    }
+  };
   const numberofMoreOptions = options.length - optionsToShow.length;
 
   return (
@@ -176,24 +194,7 @@ const OptionsList: React.ComponentType<{
       }
       {!!options.length && (
         <ViewAmountController
-          selectAllHander={() => {
-            if (searchQuery) {
-              setOptionStates(
-                optionStates.map(state =>
-                  queriedOptionKeys.includes(state.key)
-                    ? { ...state, isChecked: selectAll }
-                    : { ...state },
-                ),
-              );
-            } else {
-              setOptionStates(
-                sortedOptions.map(state => {
-                  return { ...state, isChecked: selectAll };
-                }),
-              );
-              setSelectAll(!selectAll);
-            }
-          }}
+          selectAllHander={onSelectAll}
           moreToggleHandler={() => {
             setAllOptionsVisible(!allOptionsVisible);
           }}

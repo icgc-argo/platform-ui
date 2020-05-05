@@ -27,6 +27,7 @@ const defaultLabelStyle = ({ selected, theme }: StyleCalculationInput) => css`
   & > .FacetMenu {
     display: flex;
     border-bottom: ${selected ? '0px' : '1px'} solid;
+    background: ${selected ? theme.colors.white : theme.colors.grey_4};
     border-color: ${theme.colors.grey_2};
     color: ${theme.colors.primary};
     padding: 8px 12px;
