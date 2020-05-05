@@ -16,7 +16,7 @@ const DayCount = ({
 }) => (
   <div
     css={css`
-      height: 46px;
+      height: 48px;
       display: flex;
       align-items: center;
     `}
@@ -48,16 +48,19 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
 
   return (
     <div
+      className="timelineItem"
       onClick={() => !disabled && onClick()}
       css={css`
         height: 46px;
         display: flex;
         align-items: center;
         width: 100%;
+        border: 1px solid transparent;
+        margin-left: -1px;
+
         ${active
           ? css`
-              border: 1px solid ${borderColor};
-              margin: -1px;
+              border-color: ${borderColor};
             `
           : null};
       `}
@@ -69,6 +72,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           width: 100%;
           border: 0;
           color: black;
+
           &:focus {
             ${disabled
               ? css`
