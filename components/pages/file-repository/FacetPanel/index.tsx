@@ -45,7 +45,7 @@ const FacetContainer = styled('div')`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  position: relative;
   height: calc(100vh - 58px);
   max-height: calc(100vh - 58px);
   overflow-y: auto;
