@@ -119,7 +119,7 @@ export default () => {
                 All Clinical Data
               </Button>
             </Col>
-            <Col>
+            {/* <Col>
               <Button
                 css={css`
                   white-space: nowrap;
@@ -154,7 +154,7 @@ export default () => {
                 />
                 Table Data
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </Col>
       </Row>
