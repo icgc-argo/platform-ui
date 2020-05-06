@@ -57,6 +57,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         width: 100%;
         border: 1px solid transparent;
         margin-left: -1px;
+        margin-right: -1px;
 
         ${active
           ? css`
