@@ -1,11 +1,7 @@
-import React from 'react';
-import LoginPage from 'components/pages/login';
 import HomePage from '../components/pages/Homepage';
 import { createPage } from 'global/utils/pages';
-import { getConfig } from 'global/config';
 
-const { FEATURE_NEW_HOMEPAGE_ENABLED } = getConfig();
-const landingPage = FEATURE_NEW_HOMEPAGE_ENABLED ? HomePage : LoginPage;
+const landingPage = HomePage;
 
 export default createPage({
   isPublic: true,
