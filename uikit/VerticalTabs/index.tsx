@@ -66,6 +66,10 @@ const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }
 
   &:hover {
     background: ${({ theme }) => theme.colors.secondary_4};
+
+    .activeTriangle::after {
+      border-left-color: ${({ theme }) => theme.colors.secondary_4};
+    }
   }
 `;
 
@@ -99,7 +103,9 @@ const VerticalTabsItem: React.ComponentType<
           {children}
         </div>
       </Typography>
-      {active && <Triangle tabStyle={tabStyle} contHeight={contHeight} />}
+      {active && (
+        <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
+      )}
     </ContainerComponent>
   );
 };
