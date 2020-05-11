@@ -1,9 +1,8 @@
 import { css } from '@emotion/core';
 import theme from 'uikit/theme/defaultTheme';
-import {
-  CurrentSQON,
-  // @ts-ignore
-} from '@arranger/components/dist/Arranger/CurrentSQON';
+import dynamic from 'next/dynamic';
+type Sqon = React.FunctionComponent<{ sqon: any; onClear: () => void }>;
+const CurrentSQON = dynamic(() => import('@arranger/components/dist/Arranger/CurrentSQON')) as Sqon;
 
 const content = css`
   & .sqon-view {
