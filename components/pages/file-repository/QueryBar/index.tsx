@@ -1,7 +1,24 @@
 import { css } from '@emotion/core';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
-type Sqon = React.FunctionComponent<{ sqon: any; onClear: () => void }>;
+
+type AndOp = 'and';
+
+type FilterOp = AndOp | 'in' | 'is' | '>=' | '<=' | '>' | '<' | 'not' | 'filter';
+type FilterObj = {
+  op: FilterOp;
+  content: {
+    field: string;
+    value: string[];
+  };
+};
+
+type Filters = {
+  op: AndOp;
+  content: FilterObj[];
+};
+
+type Sqon = React.FunctionComponent<{ sqon: Filters | {} }>;
 const CurrentSQON = dynamic(() => import('@arranger/components/dist/Arranger/CurrentSQON')) as Sqon;
 
 const content = css`
@@ -120,10 +137,10 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ sqon = {}, onClear = () => {} }) => {
+const QueryBar = ({ sqon = {} }) => {
   return (
     <div css={content}>
-      <CurrentSQON sqon={sqon} onClear={onClear} />
+      <CurrentSQON sqon={sqon} />
     </div>
   );
 };
