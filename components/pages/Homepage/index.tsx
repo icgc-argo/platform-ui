@@ -18,6 +18,7 @@ import {
   OvertureBanner,
   ResponsiveGridLayout,
 } from './common';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -120,7 +121,7 @@ export default function Homepage() {
             `}
           >
             <Link
-              href="/repository"
+              href={FILE_REPOSITORY_PATH}
               underline={false}
               css={css`
                 margin: 0 15px;

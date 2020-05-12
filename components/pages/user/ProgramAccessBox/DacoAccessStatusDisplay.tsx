@@ -3,7 +3,7 @@ import Typography from 'uikit/Typography';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
 import Icon from 'uikit/Icon';
-import { DACO_PATH } from 'global/constants/pages';
+import { DACO_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
   /** @description: making these components so it's easier to extract out later if needs arises */
@@ -67,7 +67,7 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
         {approved ? (
           <Typography variant="label" component="div">
             You have access to download controlled data.{' '}
-            <Link withChevron underline={false}>
+            <Link withChevron underline={false} href={FILE_REPOSITORY_PATH}>
               VIEW FILES
             </Link>
           </Typography>
