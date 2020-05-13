@@ -16,8 +16,6 @@ import { useTimeout } from './common';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -103,62 +101,7 @@ export default () => {
             justify-content: flex-end;
           `}
         >
-          <Row>
-            <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                All Clinical Data
-              </Button>
-            </Col>
-            {/* <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                Missing Data
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                css={css`
-                  white-space: nowrap;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                Table Data
-              </Button>
-            </Col> */}
-          </Row>
+          <DownloadButtons />
         </Col>
       </Row>
       <DonorSummaryTable

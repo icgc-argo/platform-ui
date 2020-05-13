@@ -70,13 +70,14 @@ const DownloadButtons = () => {
 
   const onClickDownloadAll = () => {
     const { GATEWAY_API_ROOT } = getConfig();
-    // const GATEWAY_API_ROOT = `http://localhost:9000`;
+
     const url = urlJoin(
       GATEWAY_API_ROOT,
       `/clinical/program/${programShortName}/all-clinical-data`,
     );
 
     setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
+
     fetch(url, {
       headers: {
         authorization: `Bearer ${Cookies.get(EGO_JWT_KEY) || ''}`,
@@ -87,7 +88,7 @@ const DownloadButtons = () => {
       .then(res => res.blob())
       .then(blob => {
         const now = formatDate(Date.now(), 'YYYYMMDD');
-        const fileName = `${programShortName}_Clinical_data_${now}.zip`;
+        const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 
         setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
 
@@ -105,12 +106,12 @@ const DownloadButtons = () => {
           isLoading={buttonLoadingState.isDownloadAllLoading}
         />
       </Col>
-      <Col>
+      {/* <Col>
         <DownloadButton text={'Missing Data'} />
       </Col>
       <Col>
         <DownloadButton text={'Table Data'} />
-      </Col>
+      </Col> */}
     </Row>
   );
 };
