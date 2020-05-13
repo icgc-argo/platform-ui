@@ -5,13 +5,32 @@ import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
 import { css } from 'uikit';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType, HeaderTypes } from './types';
+import { EntityType, Entity } from './types';
 
-export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
+type HeaderTypes = {
+  entities: Array<Entity>;
+  activeEntities: Array<EntityType>;
+  onFiltersChange: (e: Array<EntityType>) => void;
+};
+
+type Filters = Exclude<EntityType, 'deceased'>;
+type EntityCounts = { [k in Filters]: number };
+
+export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const theme = useTheme();
-  const counts: Array<EntityType> = Object.keys(entityCounts) as Array<EntityType>;
 
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+
+  const entityCounts: EntityCounts = entities
+    .filter(entity => entity.type !== EntityType.DECEASED)
+    .reduce(
+      (acc, entity) => {
+        const { type } = entity;
+        acc[type]++;
+        return acc;
+      },
+      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
+    );
 
   return (
     <div
@@ -39,13 +58,15 @@ export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
         `}
       >
         Show:
-        {counts.map(entityKey => {
+        {(Object.keys(entityCounts) as Array<Filters>).map(entityKey => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
+          const isDisabled = count <= 0;
 
           const changeFilter = () =>
-            setFilters(
+            !isDisabled &&
+            onFiltersChange(
               activeEntities.includes(entityKey)
                 ? activeEntities.filter(e => e !== entityKey)
                 : [...activeEntities, entityKey],
@@ -67,7 +88,7 @@ export default ({ entityCounts, activeEntities, setFilters }: HeaderTypes) => {
                 checked={activeEntities.includes(entityKey)}
                 onChange={changeFilter}
                 aria-label={title}
-                disabled={count <= 0 || !activeEntities.includes(entityKey)}
+                disabled={isDisabled}
                 color={checkboxColor}
               />
 

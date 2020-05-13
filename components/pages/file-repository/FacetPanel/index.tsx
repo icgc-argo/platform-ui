@@ -13,6 +13,7 @@ import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
+import concat from 'lodash/concat';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -22,7 +23,7 @@ const FacetRow = styled('div')`
 
 type FacetDetails = {
   name: string;
-  variant: 'Basic' | 'Number';
+  variant: 'Basic' | 'Number' | 'Other';
 };
 
 const presetFacets: Array<FacetDetails> = [
@@ -35,6 +36,7 @@ const presetFacets: Array<FacetDetails> = [
   { name: 'data type', variant: 'Basic' },
 ];
 
+const fileIDSearch: FacetDetails = { name: 'Search Files by ID', variant: 'Other' };
 const FacetContainer = styled('div')`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
@@ -43,14 +45,14 @@ const FacetContainer = styled('div')`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  position: relative;
   height: calc(100vh - 58px);
   max-height: calc(100vh - 58px);
   overflow-y: auto;
 `;
 
 export default () => {
-  const [selectedFacets, setSelectedFacets] = React.useState(presetFacets);
+  const [selectedFacets, setSelectedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
 
@@ -61,43 +63,63 @@ export default () => {
       setSelectedFacets(selectedFacets.concat(targetFacet));
     }
   };
+  const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
 
   return (
     <FacetContainer>
       <SubMenu>
         <FacetRow>
           <Typography
+            as="span"
             css={css`
               font-size: 16px;
-              padding-left: 12px;
+              padding: 8px 14px;
             `}
             color={theme.colors.primary}
           >
             Filters
           </Typography>
         </FacetRow>
-        <FacetRow>
+        <FacetRow
+          css={css`
+            border-top: 1px solid ${theme.colors.grey_2};
+          `}
+        >
           <MenuItem
+            onClick={e => clickHander(fileIDSearch)}
+            selected={selectedFacets.includes(fileIDSearch)}
+            className="FacetMenu"
+            content={fileIDSearch.name}
+            chevronOnLeftSide={true}
+            isFacetVariant={true}
             css={css`
               flex: 1;
             `}
-            content={'Search Files by ID'}
-            chevronOnLeftSide
           >
-            <Input
-              css={css`
-                margin: 8px;
-              `}
-              aria-label={'Search'}
-              placeholder="e.g. FL9998, DO9898..."
-              preset="search"
-            />
             <div
+              onClick={e => e.stopPropagation()}
               css={css`
-                display: flex;
-                margin: 8px;
+                padding: 6px 12px;
+                border-bottom: 1px solid ${theme.colors.grey_2};
+                &:hover {
+                  background-color: ${theme.colors.grey_3};
+                }
               `}
             >
+              <Input
+                size="sm"
+                aria-label="search-for-files"
+                css={css`
+                  ${css(theme.typography.data as any)}
+                  margin-bottom: 6px;
+                `}
+                placeholder="e.g. FL9998, DO9898…"
+                preset="search"
+                value={queriedFileIDs}
+                onChange={e => {
+                  setQueriedFileIDs(e.target.value);
+                }}
+              />
               <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action
                 variant={BUTTON_VARIANTS.SECONDARY}

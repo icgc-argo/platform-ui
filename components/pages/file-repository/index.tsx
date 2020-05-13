@@ -17,6 +17,9 @@ import FileBarChart from './FileBarChart';
 import PrimarySiteBarChart from './PrimarySiteBarChart';
 import ProgramBarChart from './ProgramBarChart';
 import StatsCard from './StatsCard';
+import QueryBar from './QueryBar';
+import isEmpty from 'lodash/isEmpty';
+import { useTheme } from 'uikit/ThemeProvider';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -27,13 +30,18 @@ const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
 `;
 
+// display empty on file repository, show with filters in storybook
+const mockSqon = {};
+
 export default ({ subtitle }: { subtitle?: string }) => {
   const { token } = useAuthContext();
+  const theme = useTheme();
+
   return (
     <PageContainer>
       <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
       <NavBar />
-      <PageBody>
+      <PageBody sidebarColSize="250px">
         <FacetPanel />
         <PageContent>
           <ContentBody>
@@ -44,18 +52,29 @@ export default ({ subtitle }: { subtitle?: string }) => {
                     margin-bottom: 8px;
                     justify-content: start;
                     padding: 2px 10px;
+                    border-radius: 0px;
+                    background-color: ${theme.colors.grey_4};
                   `}
                 >
-                  <Typography>
-                    <Icon
+                  {isEmpty(mockSqon) ? (
+                    <Typography
                       css={css`
-                        vertical-align: middle;
-                        margin-right: 10px;
+                        display: flex;
+                        align-items: center;
                       `}
-                      name="arrow_left"
-                    />
-                    Search the file repository by selecting filters
-                  </Typography>
+                    >
+                      <Icon
+                        css={css`
+                          vertical-align: middle;
+                          margin-right: 10px;
+                        `}
+                        name="arrow_left"
+                      />
+                      <span>Search the file repository by selecting filters</span>
+                    </Typography>
+                  ) : (
+                    <QueryBar sqon={mockSqon} />
+                  )}
                 </Container>
               </Col>
             </PaddedRow>
