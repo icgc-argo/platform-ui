@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
 
@@ -19,7 +19,7 @@ type Filters = {
 };
 
 type Sqon = React.FunctionComponent<{ sqon: Filters | {} }>;
-const CurrentSQON = dynamic(() => import('@arranger/components/dist/Arranger/CurrentSQON')) as Sqon;
+const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Sqon;
 
 const content = css`
   & .sqon-view {
@@ -140,7 +140,7 @@ const content = css`
 const QueryBar = ({ sqon = {} }) => {
   return (
     <div css={content}>
-      <CurrentSQON sqon={sqon} />
+      <SQONView sqon={sqon} />
     </div>
   );
 };
