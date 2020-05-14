@@ -4,13 +4,12 @@ import {
   MolecularProcessingStatus,
   ProgoramDonorReleasStats,
   DonorSummaryEntrySort,
-  ProgramDonorsSummaryQueryVariables,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
-import { displayDate, sleep } from 'global/utils/common';
+import { displayDate } from 'global/utils/common';
 import Icon from 'uikit/Icon';
 import {
   DataTableStarIcon as StarIcon,
@@ -20,11 +19,9 @@ import {
 } from '../../common';
 
 import { createRef } from 'react';
-import Link from 'next/link';
 import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import HyperLink from 'uikit/Link';
 import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
