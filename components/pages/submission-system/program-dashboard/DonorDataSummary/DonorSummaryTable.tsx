@@ -192,11 +192,7 @@ export default ({
           Header: 'Donor ID',
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return (
-              <Link href="">
-                <HyperLink>{`${original.donorId} (${original.submitterDonorId})`}</HyperLink>
-              </Link>
-            );
+            return `${original.donorId} (${original.submitterDonorId})`;
           },
         },
         {
