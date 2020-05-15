@@ -130,7 +130,7 @@ export default () => {
     const fileToClinicalEntityType = (file: File): string =>
       data.clinicalSubmissions.clinicalEntities
         .map(e => e.clinicalType)
-        .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`)));
+        .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`, 'i')));
 
     // currentfileList state can persist when the program changes
     // ensure currentfileList is specific to the current program, so sorting does not get affected by different program
