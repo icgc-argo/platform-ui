@@ -3,9 +3,6 @@ import ErrorLayout from 'components/pages/error';
 import { createPage } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import Link from 'next/link';
-import HyperLink from 'uikit/Link';
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
 export default createPage({
   isPublic: true,
