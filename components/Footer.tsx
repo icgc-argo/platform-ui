@@ -8,7 +8,7 @@ import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as internalPaths from 'global/constants/pages';
 
-export default function GlobalFooter() {
+export default function GlobalFooter({ hideInternalPaths = false }) {
   const theme = useTheme();
   const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = getConfig();
   const [apiVersion, setApiVersion] = React.useState(null);
@@ -35,8 +35,16 @@ export default function GlobalFooter() {
         border-top: 1px solid ${theme.colors.grey_2};
       `}
       links={[
-        { displayName: 'Contact', href: CONTACT_PAGE_PATH, target: '_self' },
-        { displayName: 'Documentation', href: DOCS_URL_ROOT, target: '_blank' },
+        {
+          displayName: 'Contact',
+          href: CONTACT_PAGE_PATH,
+          target: '_self',
+        },
+        {
+          displayName: 'Documentation',
+          href: DOCS_URL_ROOT,
+          target: '_blank',
+        },
         {
           displayName: 'Privacy Policy',
           href: 'https://www.icgc-argo.org/page/2/privacy',
@@ -52,7 +60,9 @@ export default function GlobalFooter() {
           href: 'https://www.icgc-argo.org/page/77/e3-publication-policy',
           target: '_blank',
         },
-      ]}
+      ].filter(({ href }) =>
+        hideInternalPaths ? !Object.values(internalPaths).includes(href) : true,
+      )}
     />
   );
 }

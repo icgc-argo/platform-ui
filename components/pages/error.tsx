@@ -6,7 +6,11 @@ import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { PageContainer } from 'uikit/PageLayout';
 
-export default function ErrorLayout({ children, hideNavbarLinks = false }) {
+export default function ErrorLayout({
+  children,
+  hideNavbarLinks = false,
+  hideInternalPaths = false,
+}) {
   return (
     <PageContainer>
       <NavBar hideLink={hideNavbarLinks} />
@@ -26,7 +30,7 @@ export default function ErrorLayout({ children, hideNavbarLinks = false }) {
         </Container>
       </div>
 
-      <Footer />
+      <Footer hideInternalPaths={hideInternalPaths} />
     </PageContainer>
   );
 }

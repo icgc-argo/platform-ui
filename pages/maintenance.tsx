@@ -12,7 +12,7 @@ export default createPage({
   getInitialProps: async () => ({}),
 })(function() {
   return (
-    <ErrorLayout hideNavbarLinks>
+    <ErrorLayout hideNavbarLinks hideInternalPaths>
       <div
         css={css`
           display: flex;
