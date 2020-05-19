@@ -48,16 +48,6 @@ export default createPage({
           <Typography variant="subtitle2" as="p">
             We'll be back up and running as quickly as possible. We appreciate your patience.
           </Typography>
-          <Typography variant="subtitle2">
-            If you have any questions,{' '}
-            <Link href={CONTACT_PAGE_PATH}>
-              <HyperLink>Contact Us</HyperLink>
-            </Link>{' '}
-            or head back{' '}
-            <Link href="/">
-              <HyperLink>Home.</HyperLink>
-            </Link>
-          </Typography>
         </div>
         <div>
           <img alt="Broken dna" src="/static/dna-maintenance.svg" />
