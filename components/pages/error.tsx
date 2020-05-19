@@ -6,10 +6,10 @@ import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { PageContainer } from 'uikit/PageLayout';
 
-export default function ErrorLayout({ children }) {
+export default function ErrorLayout({ children, hideNavbarLinks = false }) {
   return (
     <PageContainer>
-      <NavBar />
+      <NavBar hideLink={hideNavbarLinks} />
       <div
         css={css`
           display: flex;

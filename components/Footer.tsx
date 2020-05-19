@@ -5,6 +5,8 @@ import { APP_VERSION } from 'global/constants';
 import useTheme from 'uikit/utils/useTheme';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
+import { CONTACT_PAGE_PATH } from 'global/constants/pages';
+import * as internalPaths from 'global/constants/pages';
 
 export default function GlobalFooter() {
   const theme = useTheme();
@@ -33,7 +35,7 @@ export default function GlobalFooter() {
         border-top: 1px solid ${theme.colors.grey_2};
       `}
       links={[
-        { displayName: 'Contact', href: '/contact', target: '_self' },
+        { displayName: 'Contact', href: CONTACT_PAGE_PATH, target: '_self' },
         { displayName: 'Documentation', href: DOCS_URL_ROOT, target: '_blank' },
         {
           displayName: 'Privacy Policy',

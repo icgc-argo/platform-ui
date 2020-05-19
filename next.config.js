@@ -37,6 +37,7 @@ module.exports = withImages({
     AUTH_DISABLED: process.env.AUTH_DISABLED,
     GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     DOCS_URL_ROOT: process.env.DOCS_URL_ROOT,
+    DACO_URL: process.env.DACO_URL,
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     FEATURE_REPOSITORY_ENABLED: process.env.FEATURE_REPOSITORY_ENABLED,
   },

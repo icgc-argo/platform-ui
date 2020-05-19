@@ -5,7 +5,6 @@ import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import Link from 'next/link';
 import HyperLink from 'uikit/Link';
-import urljoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
 export default createPage({
@@ -13,7 +12,7 @@ export default createPage({
   getInitialProps: async () => ({}),
 })(function() {
   return (
-    <ErrorLayout>
+    <ErrorLayout hideNavbarLinks>
       <div
         css={css`
           display: flex;
