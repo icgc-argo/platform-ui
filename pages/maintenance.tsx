@@ -6,7 +6,6 @@ import { css } from 'uikit';
 
 export default createPage({
   isPublic: true,
-  getInitialProps: async () => ({}),
 })(function() {
   return (
     <ErrorLayout hideNavbarLinks hideInternalPaths>

@@ -13,7 +13,7 @@ export default function ErrorLayout({
 }) {
   return (
     <PageContainer>
-      <NavBar hideLink={hideNavbarLinks} />
+      <NavBar hideLink={hideNavbarLinks} disableLogoLink={hideInternalPaths} />
       <div
         css={css`
           display: flex;
