@@ -179,11 +179,9 @@ export default function Homepage() {
         `}
       >
         <Row
-          css={css`
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-          `}
+          style={{
+            justifyContent: 'center',
+          }}
           nogutter
         >
           <Col sm={12} md={3.8}>
