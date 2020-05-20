@@ -30,7 +30,7 @@ import {
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import { DOCS_REGISTERING_SAMPLES_PATH } from 'global/constants/pages';
+import { DOCS_REGISTERING_SAMPLES_PATH } from 'global/constants/docSitePaths';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],

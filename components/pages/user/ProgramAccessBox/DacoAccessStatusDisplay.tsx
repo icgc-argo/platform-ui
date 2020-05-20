@@ -3,9 +3,11 @@ import Typography from 'uikit/Typography';
 import { css, styled } from 'uikit';
 import Link from 'uikit/Link';
 import Icon from 'uikit/Icon';
-import { DACO_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { getConfig } from 'global/config';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
+  const { DACO_URL } = getConfig();
   /** @description: making these components so it's easier to extract out later if needs arises */
   const ContainerComponent = styled('div')`
     display: flex;
@@ -74,7 +76,7 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
         ) : (
           <Typography variant="label" component="div">
             To download controlled data,{' '}
-            <Link target="_blank" href={DACO_PATH}>
+            <Link target="_blank" href={DACO_URL}>
               apply for DACO access.
             </Link>
           </Typography>

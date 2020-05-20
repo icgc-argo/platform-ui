@@ -22,8 +22,7 @@ import {
   DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
   DOCS_DATA_ACCESS_PATH,
   DOCS_DATA_DOWNLOAD,
-  DACO_PATH,
-} from 'global/constants/pages';
+} from 'global/constants/docSitePaths';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -48,7 +47,7 @@ const FlexRow = styled('div')`
 
 export default function ContactPage() {
   const theme = useTheme();
-  const { DOCS_URL_ROOT, RECAPTCHA_SITE_KEY } = getConfig();
+  const { DOCS_URL_ROOT, RECAPTCHA_SITE_KEY, DACO_URL } = getConfig();
   return (
     <DefaultLayout>
       <script src="https://www.google.com/recaptcha/api.js" />
@@ -95,7 +94,7 @@ export default function ContactPage() {
             </div>
             <Ul2>
               You will need to{' '}
-              <Link target="_blank" href={urljoin(DACO_PATH)}>
+              <Link target="_blank" href={urljoin(DACO_URL)}>
                 apply to ICGC DACO
               </Link>{' '}
               in order to access controlled data. Visit our documentation for assistance with{' '}

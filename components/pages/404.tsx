@@ -5,23 +5,19 @@ import { css } from 'uikit';
 import HyperLink from 'uikit/Link';
 import { getConfig } from 'global/config';
 import Link from 'next/link';
+import { Row, Col } from 'react-grid-system';
 
 export default function Error404Page() {
   const { DOCS_URL_ROOT } = getConfig();
   return (
     <ErrorLayout>
-      <div
+      <Row
+        nogutter
         css={css`
-          display: flex;
-          justify-content: space-between;
-          padding: 48px 80px 42px 48px;
+          padding: 32px;
         `}
       >
-        <div
-          css={css`
-            margin-right: 106px;
-          `}
-        >
+        <Col sm={12} md={6}>
           <Typography
             css={css`
               font-size: 100px;
@@ -57,11 +53,17 @@ export default function Error404Page() {
             </Link>
             .
           </Typography>
-        </div>
-        <div>
+        </Col>
+        <Col
+          sm={12}
+          md={6}
+          css={css`
+            text-align: center;
+          `}
+        >
           <img alt="Broken dna" src="/static/dna-broken.svg" />
-        </div>
-      </div>
+        </Col>
+      </Row>
     </ErrorLayout>
   );
 }

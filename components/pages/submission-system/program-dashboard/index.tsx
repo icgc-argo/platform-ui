@@ -18,13 +18,13 @@ import { setConfiguration } from 'react-grid-system';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
+import Typography from 'uikit/Typography';
 import {
   DOCS_SUBMITTED_DATA_PATH,
   DOCS_DATA_ACCESS_PATH,
   DOCS_MANAGING_PROGRAM_ACCESS_PATH,
   DOCS_SUBMISSION_OVERVIEW_PATH,
-} from 'global/constants/pages';
-import Typography from 'uikit/Typography';
+} from 'global/constants/docSitePaths';
 
 setConfiguration({ gutterWidth: 9 });
 
