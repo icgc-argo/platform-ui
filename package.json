@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
+    "export-maintenance": "EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
     "storybook": "NODE_PATH=./ start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
