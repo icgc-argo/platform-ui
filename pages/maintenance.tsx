@@ -3,23 +3,19 @@ import ErrorLayout from 'components/pages/error';
 import { createPage } from 'global/utils/pages';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
+import { Row, Col } from 'react-grid-system';
 
 export default createPage({
   isPublic: true,
 })(() => (
   <ErrorLayout hideNavbarLinks hideInternalPaths>
-    <div
+    <Row
+      nogutter
       css={css`
-        display: flex;
-        justify-content: space-between;
-        padding: 32px 47px 27px 47px;
+        padding: 32px;
       `}
     >
-      <div
-        css={css`
-          margin-right: 106px;
-        `}
-      >
+      <Col sm={12} md={6}>
         <Typography
           css={css`
             font-size: 44px;
@@ -43,10 +39,16 @@ export default createPage({
         <Typography variant="subtitle2" as="p">
           We'll be back up and running as quickly as possible. We appreciate your patience.
         </Typography>
-      </div>
-      <div>
+      </Col>
+      <Col
+        sm={12}
+        md={6}
+        css={css`
+          text-align: center;
+        `}
+      >
         <img alt="Broken dna" src="/static/dna-maintenance.svg" />
-      </div>
-    </div>
+      </Col>
+    </Row>
   </ErrorLayout>
 ));
