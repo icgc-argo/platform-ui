@@ -6,49 +6,47 @@ import { css } from 'uikit';
 
 export default createPage({
   isPublic: true,
-})(function() {
-  return (
-    <ErrorLayout hideNavbarLinks hideInternalPaths>
+})(() => (
+  <ErrorLayout hideNavbarLinks hideInternalPaths>
+    <div
+      css={css`
+        display: flex;
+        justify-content: space-between;
+        padding: 32px 47px 27px 47px;
+      `}
+    >
       <div
         css={css`
-          display: flex;
-          justify-content: space-between;
-          padding: 32px 47px 27px 47px;
+          margin-right: 106px;
         `}
       >
-        <div
+        <Typography
           css={css`
-            margin-right: 106px;
+            font-size: 44px;
+            margin: 10px 0;
+            line-height: normal;
+          `}
+          as="h1"
+        >
+          Be back soon
+        </Typography>
+        <Typography
+          as="h2"
+          variant="subtitle"
+          color="secondary"
+          css={css`
+            margin: 0;
           `}
         >
-          <Typography
-            css={css`
-              font-size: 44px;
-              margin: 10px 0;
-              line-height: normal;
-            `}
-            as="h1"
-          >
-            Be back soon
-          </Typography>
-          <Typography
-            as="h2"
-            variant="subtitle"
-            color="secondary"
-            css={css`
-              margin: 0;
-            `}
-          >
-            Down for Maintenance
-          </Typography>
-          <Typography variant="subtitle2" as="p">
-            We'll be back up and running as quickly as possible. We appreciate your patience.
-          </Typography>
-        </div>
-        <div>
-          <img alt="Broken dna" src="/static/dna-maintenance.svg" />
-        </div>
+          Down for Maintenance
+        </Typography>
+        <Typography variant="subtitle2" as="p">
+          We'll be back up and running as quickly as possible. We appreciate your patience.
+        </Typography>
       </div>
-    </ErrorLayout>
-  );
-});
+      <div>
+        <img alt="Broken dna" src="/static/dna-maintenance.svg" />
+      </div>
+    </div>
+  </ErrorLayout>
+));
