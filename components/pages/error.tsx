@@ -10,6 +10,7 @@ export default function ErrorLayout({
   children,
   hideNavbarLinks = false,
   hideInternalPaths = false,
+  hideApiVersion = false,
 }) {
   return (
     <PageContainer>
@@ -30,7 +31,7 @@ export default function ErrorLayout({
         </Container>
       </div>
 
-      <Footer hideInternalPaths={hideInternalPaths} />
+      <Footer hideApiVersion={hideApiVersion} hideInternalPaths={hideInternalPaths} />
     </PageContainer>
   );
 }

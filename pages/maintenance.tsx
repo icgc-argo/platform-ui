@@ -8,7 +8,7 @@ import { Row, Col } from 'react-grid-system';
 export default createPage({
   isPublic: true,
 })(() => (
-  <ErrorLayout hideNavbarLinks hideInternalPaths>
+  <ErrorLayout hideApiVersion hideNavbarLinks hideInternalPaths>
     <Row
       nogutter
       css={css`

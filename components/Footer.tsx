@@ -8,7 +8,7 @@ import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as internalPaths from 'global/constants/pages';
 
-export default function GlobalFooter({ hideInternalPaths = false }) {
+export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();
   const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = getConfig();
   const [apiVersion, setApiVersion] = React.useState(null);
@@ -27,7 +27,7 @@ export default function GlobalFooter({ hideInternalPaths = false }) {
   return (
     <Footer
       version={APP_VERSION}
-      apiVersion={apiVersion}
+      apiVersion={hideApiVersion ? null : apiVersion}
       css={css`
         background: #fff;
         z-index: 1;

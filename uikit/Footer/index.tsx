@@ -19,7 +19,7 @@ const Container = styled('footer')`
 
 const Footer = ({
   version = '[version]',
-  apiVersion = '[api-version]',
+  apiVersion = null,
   links = [],
   className = '',
   ...otherProps
@@ -41,7 +41,7 @@ const Footer = ({
       >
         © 2020 ICGC ARGO. All rights reserved.
         <br />
-        ICGC ARGO Data Platform {version} - API {apiVersion}
+        ICGC ARGO Data Platform {version} {apiVersion && `- API ${apiVersion}`}
       </Col>
       <Col
         md={7}
