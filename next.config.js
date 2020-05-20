@@ -7,10 +7,13 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = withImages({
-  exportPathMap: () => ({
-    '/': { page: process.env.EXPORT_PATH },
-    '/404': { page: process.env.EXPORT_PATH },
-  }),
+  exportPathMap: defaultPathMap =>
+    process.env.EXPORT_PATH
+      ? {
+          '/': { page: process.env.EXPORT_PATH },
+          '/404': { page: process.env.EXPORT_PATH },
+        }
+      : defaultPathMap,
   webpack: config => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
