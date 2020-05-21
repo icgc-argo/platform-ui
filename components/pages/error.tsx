@@ -6,10 +6,15 @@ import { css } from 'uikit';
 import Container from 'uikit/Container';
 import { PageContainer } from 'uikit/PageLayout';
 
-export default function ErrorLayout({ children }) {
+export default function ErrorLayout({
+  children,
+  hideNavbarLinks = false,
+  hideInternalPaths = false,
+  hideApiVersion = false,
+}) {
   return (
     <PageContainer>
-      <NavBar />
+      <NavBar hideLink={hideNavbarLinks} disableLogoLink={hideInternalPaths} />
       <div
         css={css`
           display: flex;
@@ -26,7 +31,7 @@ export default function ErrorLayout({ children }) {
         </Container>
       </div>
 
-      <Footer />
+      <Footer hideApiVersion={hideApiVersion} hideInternalPaths={hideInternalPaths} />
     </PageContainer>
   );
 }

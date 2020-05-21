@@ -18,12 +18,13 @@ import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
 import { useRouter } from 'next/router';
-import { DCC_DASHBOARD_PATH, DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/pages';
+import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/docSitePaths';
 
 export default ({
   programShortName,

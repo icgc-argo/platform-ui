@@ -12,7 +12,7 @@ import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
 import urljoin from 'url-join';
-import { DOCS_DATA_DOWNLOAD } from 'global/constants/pages';
+import { DOCS_DATA_DOWNLOAD } from 'global/constants/docSitePaths';
 
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);

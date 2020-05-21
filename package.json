@@ -1,9 +1,10 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "scripts": {
     "dev": "next -p 8080",
-    "build": "next build",
+    "build": "rm -rf .next && next build",
+    "export-maintenance": "npm run build && rm -rf ./out/maintenance && EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
     "storybook": "NODE_PATH=./ start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
