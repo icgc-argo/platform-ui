@@ -1,6 +1,8 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
+import useSqonContext from 'global/hooks/useSqonContext';
+import Button from 'uikit/Button';
 
 type AndOp = 'and';
 
@@ -18,8 +20,22 @@ type Filters = {
   content: FilterObj[];
 };
 
-type Sqon = React.FunctionComponent<{ sqon: Filters | {} }>;
+type ValueNode = React.FunctionComponent<{
+  onClick?: Function;
+}>;
+type Sqon = React.FunctionComponent<{
+  sqon: Filters | {};
+  setSQON: Function;
+  onClear?: Function;
+  Clear?: any;
+  ValueCrumb?: ValueNode;
+  FieldCrumb?: any;
+}>;
+
 const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Sqon;
+const Value = dynamic(() =>
+  import('@arranger/components/dist/SQONView').then(comp => comp.Value),
+) as ValueNode;
 
 const content = css`
   & .sqon-view {
@@ -138,9 +154,24 @@ const content = css`
 `;
 
 const QueryBar = ({ sqon = {} }) => {
+  const { clearSQON, setSQON } = useSqonContext();
+
   return (
     <div css={content}>
-      <SQONView sqon={sqon} />
+      <SQONView
+        sqon={sqon}
+        setSQON={setSQON}
+        Clear={() => (
+          <Button className="sqon-bubble sqon-clear" onClick={() => clearSQON()}>
+            Clear
+          </Button>
+        )}
+        ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
+          <Value onClick={() => setSQON(nextSQON)} {...props}>
+            {value}
+          </Value>
+        )}
+      />
     </div>
   );
 };

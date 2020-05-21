@@ -95,6 +95,7 @@
     "react-transition-group": "^4.3.0",
     "recompose": "^0.30.0",
     "resize-sensor": "0.0.6",
+    "sqon-builder": "^1.0.0",
     "url-join": "^4.0.0",
     "yup": "^0.27.0"
   },
