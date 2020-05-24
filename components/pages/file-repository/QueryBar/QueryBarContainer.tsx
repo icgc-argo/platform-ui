@@ -16,7 +16,7 @@ import { PaddedRow } from '../index';
 
 const QueryBarContainer = () => {
   const theme = useTheme();
-  const { currentSQON, setSQON } = useSqonContext();
+  const { filters, setSQON } = useSqonContext();
 
   return (
     <PaddedRow justify="around">
@@ -30,7 +30,7 @@ const QueryBarContainer = () => {
             background-color: ${theme.colors.grey_4};
           `}
         >
-          {isEmpty(currentSQON) || currentSQON.content.length === 0 ? (
+          {isEmpty(filters) || filters.content.length === 0 ? (
             <Typography
               css={css`
                 display: flex;
@@ -62,7 +62,7 @@ const QueryBarContainer = () => {
               <span>Search the file repository by selecting filters</span>
             </Typography>
           ) : (
-            <QueryBar sqon={currentSQON} />
+            <QueryBar sqon={filters} />
           )}
         </Container>
       </Col>

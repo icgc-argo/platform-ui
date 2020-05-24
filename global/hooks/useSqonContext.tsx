@@ -1,6 +1,8 @@
 import React from 'react';
-import useUrlParamState from 'global/hooks/useUrlParamState';
+import useUrlParamState, { getParams } from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
+import { useRouter } from 'next/router';
+import stringify from 'fast-json-stable-stringify';
 
 enum ArrayFieldKeys {
   In = 'in',
@@ -51,7 +53,7 @@ type SqonType = {
 };
 
 type SqonContextType = {
-  currentSQON: SqonType;
+  filters: SqonType;
   clearSQON: () => any;
   setSQON: (SqonType) => void;
 };
@@ -59,38 +61,36 @@ type SqonContextType = {
 const defaultSqon = { op: 'and', content: [] } as SqonType;
 
 const FiltersContext = React.createContext<SqonContextType>({
-  currentSQON: defaultSqon,
+  filters: defaultSqon,
   clearSQON: () => {},
   setSQON: (sqon: SqonType) => null,
 });
 
 export function FiltersProvider({ children }) {
-  const [currentSQON, setCurrentSQON] = React.useState(defaultSqon);
+  const router = useRouter();
+  const currentQuery = getParams(router);
 
-  const [activeFilters, setActiveFilters] = useUrlParamState(
-    'filters',
-    JSON.stringify(currentSQON),
-    {
-      serialize: v => v,
-      deSerialize: v => v,
-    },
+  const [filters, setCurrentSQON] = React.useState(
+    JSON.parse(currentQuery.filters || null) || defaultSqon,
   );
 
+  const [activeFilters, setActiveFilters] = useUrlParamState('filters', filters, {
+    serialize: v => stringify(v),
+    deSerialize: v => JSON.parse(v),
+  });
+
   const clearSQON = () => {
-    console.log('clearing sqon');
     setCurrentSQON(defaultSqon);
-    setActiveFilters(JSON.stringify(defaultSqon));
+    setActiveFilters(defaultSqon);
   };
 
-  const setSQON = mockSqon => {
-    console.log('setting sqon');
-    setCurrentSQON(mockSqon);
-    setActiveFilters(JSON.stringify(mockSqon));
+  const setSQON = sqon => {
+    setCurrentSQON(sqon);
+    setActiveFilters(sqon);
   };
 
-  // return React.useContext(SqonContext);
   const data = {
-    currentSQON,
+    filters,
     setSQON,
     clearSQON,
   };
@@ -100,4 +100,3 @@ export function FiltersProvider({ children }) {
 export default function useSqonContext() {
   return React.useContext(FiltersContext);
 }
-// export default useSqonContext;
