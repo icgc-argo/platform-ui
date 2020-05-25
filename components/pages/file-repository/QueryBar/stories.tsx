@@ -5,7 +5,7 @@ import QueryBar from './index';
 const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('one field, one value', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -21,7 +21,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('one field, two values', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -37,7 +37,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('one field, 5 values', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -53,7 +53,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('one field, 20 values', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -90,7 +90,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('two fields, 3 values each', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -113,7 +113,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('range', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -136,7 +136,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('range and term', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -166,7 +166,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('value is not array', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
@@ -189,7 +189,7 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   ))
   .add('text filter', () => (
     <QueryBar
-      sqon={{
+      filters={{
         op: 'and',
         content: [
           {
