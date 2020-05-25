@@ -2,6 +2,10 @@ import React from 'react';
 import Modal from 'uikit/Modal';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
+import Link from 'uikit/Link';
+import urljoin from 'url-join';
+import { DOCS_DATA_ACCESS_PATH } from 'global/constants/pages';
+import { getConfig } from 'global/config';
 
 const Row = styled('span')`
   display: flex;
@@ -23,6 +27,8 @@ const MemberDescription = styled('div')`
 `;
 
 const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void }) => {
+  const { DOCS_URL_ROOT } = getConfig();
+
   return (
     <Modal
       title="For Program Members"
@@ -96,7 +102,9 @@ const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void
           `}
         >
           <b>Note:</b> For all user roles, downloading controlled data requires{' '}
-          <a href="">DACO approval.</a>
+          <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+            DACO approval.
+          </Link>
         </div>
       </div>
     </Modal>
