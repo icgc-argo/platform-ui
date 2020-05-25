@@ -1,7 +1,7 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
-import useFiltersContext, { FiltersType } from 'global/hooks/useFiltersContext';
+import useFiltersContext, { FiltersType } from '../hooks/useFiltersContext';
 import Button from 'uikit/Button';
 
 type AndOp = 'and';

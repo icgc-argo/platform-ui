@@ -15,7 +15,7 @@ import PrimarySiteBarChart from './PrimarySiteBarChart';
 import ProgramBarChart from './ProgramBarChart';
 import StatsCard from './StatsCard';
 
-import { FiltersProvider } from 'global/hooks/useFiltersContext';
+import { FiltersProvider } from './hooks/useFiltersContext';
 import QueryBarContainer from './QueryBar/QueryBarContainer';
 
 export const PaddedRow = styled(Row)`

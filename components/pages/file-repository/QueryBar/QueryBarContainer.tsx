@@ -7,7 +7,7 @@ import { css } from 'uikit';
 import QueryBar from './';
 import isEmpty from 'lodash/isEmpty';
 import { useTheme } from 'uikit/ThemeProvider';
-import useFiltersContext from 'global/hooks/useFiltersContext';
+import useFiltersContext from '../hooks/useFiltersContext';
 import Button from 'uikit/Button';
 import sqonBuilder from 'sqon-builder';
 import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
