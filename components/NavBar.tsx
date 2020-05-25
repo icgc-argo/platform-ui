@@ -1,12 +1,12 @@
-import { SUBMISSION_PATH, USER_PAGE_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import {
+  SUBMISSION_PATH,
+  USER_PAGE_PATH,
+  FILE_REPOSITORY_PATH,
+  LOGIN_PAGE_PATH,
+} from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
-import {
-  canReadSomeProgram,
-  isDccMember,
-  isRdpcMember,
-  getPermissionsFromToken,
-} from 'global/utils/egoJwt';
+import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Link from 'next/link';
 import * as React from 'react';
@@ -89,16 +89,20 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
         query: existingQuery,
       });
       setLoginPath(urlJoin(EGO_URL, queryRedirect));
-    } else if (path === '/' || path === '/login') {
+    } else if (path === '/' || path === LOGIN_PAGE_PATH) {
       setLoginPath(EGO_URL);
     } else {
+      const queryString = path.split('?')[1] || '';
+      const pathRoot = path.split('?')[0];
+
       const redirect = createRedirectURL({
         origin: location.origin,
-        path,
+        path: pathRoot,
+        query: queryString,
       });
       setLoginPath(urlJoin(EGO_URL, redirect));
     }
-  }, []);
+  }, [path, query]);
 
   return (
     <AppBar

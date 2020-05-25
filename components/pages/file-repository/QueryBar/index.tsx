@@ -1,6 +1,8 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
+import useFiltersContext, { FiltersType } from '../hooks/useFiltersContext';
+import Button from 'uikit/Button';
 
 type AndOp = 'and';
 
@@ -18,8 +20,26 @@ type Filters = {
   content: FilterObj[];
 };
 
-type Sqon = React.FunctionComponent<{ sqon: Filters | {} }>;
-const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Sqon;
+type ValueNode = React.FunctionComponent<{
+  onClick?: () => void;
+}>;
+
+type FieldNode = React.FunctionComponent<{
+  onClick?: () => void;
+}>;
+type Filter = React.FunctionComponent<{
+  sqon: Filters | {};
+  setSQON: (sqon: FiltersType) => void;
+  onClear?: () => void;
+  Clear?: React.FunctionComponent<{}>;
+  ValueCrumb?: ValueNode;
+  FieldCrumb?: FieldNode;
+}>;
+
+const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Filter;
+const Value = dynamic(() =>
+  import('@arranger/components/dist/SQONView').then(comp => comp.Value),
+) as ValueNode;
 
 const content = css`
   & .sqon-view {
@@ -137,10 +157,25 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ sqon = {} }) => {
+const QueryBar = ({ filters = {} }) => {
+  const { clearFilters, setFilters } = useFiltersContext();
+
   return (
     <div css={content}>
-      <SQONView sqon={sqon} />
+      <SQONView
+        sqon={filters}
+        setSQON={setFilters}
+        Clear={() => (
+          <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
+            Clear
+          </Button>
+        )}
+        ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
+          <Value onClick={() => setFilters(nextSQON)} {...props}>
+            {value}
+          </Value>
+        )}
+      />
     </div>
   );
 };
