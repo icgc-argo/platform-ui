@@ -65,7 +65,7 @@ const getUserRole = (egoJwt, permissions) => {
   }
 };
 
-export default function Navbar({ hideLink }: { hideLink?: boolean }) {
+export default function Navbar({ hideLink = false, disableLogoLink = false }) {
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
 
@@ -114,11 +114,15 @@ export default function Navbar({ hideLink }: { hideLink?: boolean }) {
     >
       <Section>
         <Logo
-          DomComponent={props => (
-            <Link prefetch href={`/`}>
-              <a {...props} id="home-login" />
-            </Link>
-          )}
+          DomComponent={props =>
+            disableLogoLink ? (
+              <div {...props} />
+            ) : (
+              <Link prefetch href={`/`}>
+                <a {...props} id="home-login" />
+              </Link>
+            )
+          }
         />
         <MenuGroup>
           {FEATURE_REPOSITORY_ENABLED && (

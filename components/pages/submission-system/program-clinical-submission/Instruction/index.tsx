@@ -13,7 +13,7 @@ import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import { DOCS_DICTIONARY_PATH } from 'global/constants/pages';
+import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
 
 export default ({
   validationEnabled,

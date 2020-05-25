@@ -5,10 +5,10 @@ import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
 import Link from 'uikit/Link';
-import { DOCS_MANAGING_PROGRAM_ACCESS_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { Row } from 'react-grid-system';
+import { DOCS_MANAGING_PROGRAM_ACCESS_PATH } from 'global/constants/docSitePaths';
 
 export default () => {
   const router = useRouter();

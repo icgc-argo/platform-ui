@@ -13,7 +13,7 @@ import {
   DOCS_MANAGING_PROGRAM_ACCESS_PATH,
   DOCS_REGISTERING_SAMPLES_PATH,
   DOCS_SUBMITTING_CLINICAL_DATA_PATH,
-} from 'global/constants/pages';
+} from 'global/constants/docSitePaths';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 

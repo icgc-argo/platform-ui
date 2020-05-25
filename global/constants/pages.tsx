@@ -1,3 +1,13 @@
+/*******************
+ * @important
+ * This file should only contain references to internal pages,
+ * i.e, pages that are hosted by this app itself.
+ *
+ * For external pages, consider:
+ * - make an environment config variable with a default, and/or
+ * - create a new constant file in this directory.
+ *******************/
+
 export const LOGIN_PAGE_PATH = '/login';
 export const USER_PAGE_PATH = '/user';
 export const CONTACT_PAGE_PATH = '/contact';
@@ -20,20 +30,6 @@ export const PROGRAM_JOIN_LOGIN_PATH = `${SUBMISSION_PATH}/program/join/login/${
 
 // rdpc path
 export const RDPC_PATH = '/rdpc';
-
-// docs paths
-export const DOCS_MANAGING_PROGRAM_ACCESS_PATH = `/docs/managing-program-access/`;
-export const DOCS_REGISTERING_SAMPLES_PATH = `/docs/registering-samples/`;
-export const DOCS_SUBMITTING_CLINICAL_DATA_PATH = `/docs/submitting-clinical-data/`;
-export const DOCS_SUBMITTED_DATA_PATH = `/docs/submitted-data/`;
-export const DOCS_SUBMITTING_MOLECULAR_DATA_PATH = `/docs/submitting-molecular-data/`;
-export const DOCS_DICTIONARY_PATH = `/dictionary/`;
-export const DOCS_API_TOKEN_PATH = `/docs/user-profile-and-api-token/`;
-export const DOCS_DATA_ACCESS_PATH = `/docs/data-access/`;
-export const DOCS_SUBMISSION_OVERVIEW_PATH = `/docs/submission-overview/`;
-export const DOCS_DATA_DOWNLOAD = `/docs/data-download/`;
-
-export const DACO_PATH = `https://icgc.org/daco`;
 
 // file repository paths
 export const FILE_REPOSITORY_PATH = `/repository`;
