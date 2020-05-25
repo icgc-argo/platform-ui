@@ -52,7 +52,12 @@ const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
     >
-      <div style={{ maxWidth: '770px' }}>
+      <div
+        css={css`
+          max-width: 770px;
+          margin-top: -18px;
+        `}
+      >
         <div
           css={css`
             margin-bottom: 13px;
