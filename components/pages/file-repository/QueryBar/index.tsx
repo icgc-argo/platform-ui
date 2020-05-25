@@ -1,7 +1,7 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
-import useSqonContext from 'global/hooks/useSqonContext';
+import useFiltersContext, { FiltersType } from 'global/hooks/useFiltersContext';
 import Button from 'uikit/Button';
 
 type AndOp = 'and';
@@ -21,18 +21,22 @@ type Filters = {
 };
 
 type ValueNode = React.FunctionComponent<{
-  onClick?: Function;
-}>;
-type Sqon = React.FunctionComponent<{
-  sqon: Filters | {};
-  setSQON: Function;
-  onClear?: Function;
-  Clear?: any;
-  ValueCrumb?: ValueNode;
-  FieldCrumb?: any;
+  onClick?: () => void;
 }>;
 
-const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Sqon;
+type FieldNode = React.FunctionComponent<{
+  onClick?: () => void;
+}>;
+type Filter = React.FunctionComponent<{
+  sqon: Filters | {};
+  setSQON: (sqon: FiltersType) => void;
+  onClear?: () => void;
+  Clear?: React.FunctionComponent<{}>;
+  ValueCrumb?: ValueNode;
+  FieldCrumb?: FieldNode;
+}>;
+
+const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Filter;
 const Value = dynamic(() =>
   import('@arranger/components/dist/SQONView').then(comp => comp.Value),
 ) as ValueNode;
@@ -153,21 +157,21 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ sqon = {} }) => {
-  const { clearSQON, setSQON } = useSqonContext();
+const QueryBar = ({ filters = {} }) => {
+  const { clearFilters, setFilters } = useFiltersContext();
 
   return (
     <div css={content}>
       <SQONView
-        sqon={sqon}
-        setSQON={setSQON}
+        sqon={filters}
+        setSQON={setFilters}
         Clear={() => (
-          <Button className="sqon-bubble sqon-clear" onClick={() => clearSQON()}>
+          <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
           </Button>
         )}
         ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
-          <Value onClick={() => setSQON(nextSQON)} {...props}>
+          <Value onClick={() => setFilters(nextSQON)} {...props}>
             {value}
           </Value>
         )}

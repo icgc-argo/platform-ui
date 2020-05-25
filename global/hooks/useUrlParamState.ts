@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import stringify from 'fast-json-stable-stringify';
 
 export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
   const queryString = router.asPath.split('?')[1] || '';

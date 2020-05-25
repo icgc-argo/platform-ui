@@ -47,31 +47,31 @@ interface CombinationOperator {
 
 type Operator = FieldOperator | CombinationOperator;
 
-type SqonType = {
+export type FiltersType = {
   op: CombinationKeys;
   content: Operator[];
 };
 
-type SqonContextType = {
-  filters: SqonType;
-  clearSQON: () => any;
-  setSQON: (SqonType) => void;
+type FiltersContextType = {
+  filters: FiltersType;
+  clearFilters: () => void;
+  setFilters: (FiltersType) => void;
 };
 
-const defaultSqon = { op: 'and', content: [] } as SqonType;
+const defaultFilters = { op: 'and', content: [] } as FiltersType;
 
-const FiltersContext = React.createContext<SqonContextType>({
-  filters: defaultSqon,
-  clearSQON: () => {},
-  setSQON: (sqon: SqonType) => null,
+const FiltersContext = React.createContext<FiltersContextType>({
+  filters: defaultFilters,
+  clearFilters: () => {},
+  setFilters: (filter: FiltersType) => null,
 });
 
 export function FiltersProvider({ children }) {
   const router = useRouter();
   const currentQuery = getParams(router);
 
-  const [filters, setCurrentSQON] = React.useState(
-    JSON.parse(currentQuery.filters || null) || defaultSqon,
+  const [filters, setCurrentFilters] = React.useState(
+    JSON.parse(currentQuery.filters || null) || defaultFilters,
   );
 
   const [activeFilters, setActiveFilters] = useUrlParamState('filters', filters, {
@@ -79,24 +79,24 @@ export function FiltersProvider({ children }) {
     deSerialize: v => JSON.parse(v),
   });
 
-  const clearSQON = () => {
-    setCurrentSQON(defaultSqon);
-    setActiveFilters(defaultSqon);
+  const clearFilters = () => {
+    setCurrentFilters(defaultFilters);
+    setActiveFilters(defaultFilters);
   };
 
-  const setSQON = sqon => {
-    setCurrentSQON(sqon);
-    setActiveFilters(sqon);
+  const setFilters = filters => {
+    setCurrentFilters(filters);
+    setActiveFilters(filters);
   };
 
   const data = {
     filters,
-    setSQON,
-    clearSQON,
+    setFilters,
+    clearFilters,
   };
   return <FiltersContext.Provider value={data}>{children}</FiltersContext.Provider>;
 }
 
-export default function useSqonContext() {
+export default function useFiltersContext() {
   return React.useContext(FiltersContext);
 }

@@ -7,7 +7,7 @@ import { css } from 'uikit';
 import QueryBar from './';
 import isEmpty from 'lodash/isEmpty';
 import { useTheme } from 'uikit/ThemeProvider';
-import useSqonContext from 'global/hooks/useSqonContext';
+import useFiltersContext from 'global/hooks/useFiltersContext';
 import Button from 'uikit/Button';
 import sqonBuilder from 'sqon-builder';
 import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
@@ -16,7 +16,7 @@ import { PaddedRow } from '../index';
 
 const QueryBarContainer = () => {
   const theme = useTheme();
-  const { filters, setSQON } = useSqonContext();
+  const { filters, setFilters } = useFiltersContext();
 
   return (
     <PaddedRow justify="around">
@@ -42,7 +42,7 @@ const QueryBarContainer = () => {
                 variant={BUTTON_VARIANTS.SECONDARY}
                 size={BUTTON_SIZES.SM}
                 onClick={() =>
-                  setSQON(
+                  setFilters(
                     sqonBuilder
                       .has('primary_site', ['lung', 'heart', 'brain', 'blood', 'kidney'])
                       .build(),
@@ -62,7 +62,7 @@ const QueryBarContainer = () => {
               <span>Search the file repository by selecting filters</span>
             </Typography>
           ) : (
-            <QueryBar sqon={filters} />
+            <QueryBar filters={filters} />
           )}
         </Container>
       </Col>
