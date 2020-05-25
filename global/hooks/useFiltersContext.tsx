@@ -66,31 +66,28 @@ const FiltersContext = React.createContext<FiltersContextType>({
   setFilters: (filter: FiltersType) => null,
 });
 
-export function FiltersProvider({ children }) {
-  const router = useRouter();
-  const currentQuery = getParams(router);
-
-  const [filters, setCurrentFilters] = React.useState(
-    JSON.parse(currentQuery.filters || null) || defaultFilters,
-  );
-
-  const [activeFilters, setActiveFilters] = useUrlParamState('filters', filters, {
+const useFilterState = () => {
+  const [currentFilters, setCurrentFilters] = useUrlParamState('filters', defaultFilters, {
     serialize: v => stringify(v),
     deSerialize: v => JSON.parse(v),
   });
 
+  return { currentFilters, setCurrentFilters };
+};
+
+export function FiltersProvider({ children }) {
+  const { currentFilters, setCurrentFilters } = useFilterState();
+
   const clearFilters = () => {
     setCurrentFilters(defaultFilters);
-    setActiveFilters(defaultFilters);
   };
 
   const setFilters = filters => {
     setCurrentFilters(filters);
-    setActiveFilters(filters);
   };
 
   const data = {
-    filters,
+    filters: currentFilters,
     setFilters,
     clearFilters,
   };
