@@ -15,6 +15,21 @@ import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import ReCAPTCHA from 'react-google-recaptcha';
+import yup from 'global/utils/validations';
+import CREATE_JIRA_TICKET from './CREATE_JIRA_TICKET.gql';
+import { CONTACT_CATEGORY_OPTIONS } from 'global/constants';
+
+import {
+  firstName,
+  lastName,
+  email,
+  messageCategory,
+  messageDescription,
+  reCaptcha,
+} from 'global/utils/form/validations';
+import useFormHook from 'global/hooks/useFormHook';
+import FormHelperText from 'uikit/form/FormHelperText';
+
 import {
   DOCS_SUBMITTING_CLINICAL_DATA_PATH,
   DOCS_SUBMISSION_OVERVIEW_PATH,
@@ -23,6 +38,9 @@ import {
   DOCS_DATA_ACCESS_PATH,
   DOCS_DATA_DOWNLOAD,
 } from 'global/constants/docSitePaths';
+import { useMutation } from '@apollo/react-hooks';
+import { useToaster } from 'global/hooks/toaster';
+import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -48,6 +66,89 @@ const FlexRow = styled('div')`
 export default function ContactPage() {
   const theme = useTheme();
   const { DOCS_URL_ROOT, RECAPTCHA_SITE_KEY, DACO_URL } = getConfig();
+  const contactFormSchema = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    messageCategory: '',
+    messageDescription: '',
+    reCaptcha: '',
+  };
+  const schema = yup.object().shape({
+    firstName,
+    lastName,
+    email,
+    messageCategory,
+    messageDescription,
+    reCaptcha,
+  });
+
+  const {
+    errors,
+    data,
+    setData,
+    validateField,
+    validateForm,
+    touched,
+    hasErrors,
+    reset,
+  } = useFormHook({
+    initialFields: contactFormSchema,
+    schema,
+  });
+
+  const {
+    firstName: firstNameError,
+    lastName: lastNameError,
+    email: emailError,
+    messageCategory: messageCategoryError,
+    messageDescription: messageDescriptionError,
+    reCaptcha: reCaptchaError,
+  } = errors as typeof contactFormSchema;
+
+  const [createTicket] = useMutation(CREATE_JIRA_TICKET);
+  const toaster = useToaster();
+  const reCaptchaRef = React.useRef(null);
+  const [requestLoader, setRequestLoader] = React.useState(false);
+
+  const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
+    try {
+      const validData = await validateForm();
+      try {
+        setRequestLoader(true);
+        const result = await createTicket({
+          variables: {
+            messageCategory: validData.messageCategory,
+            emailAddress: validData.email,
+            requestText: validData.messageDescription,
+            displayName: `${validData.firstName} ${validData.lastName}`,
+          },
+        });
+
+        reCaptchaRef.current.reset();
+        reset();
+        setRequestLoader(false);
+
+        toaster.addToast({
+          variant: TOAST_VARIANTS.SUCCESS,
+          interactionType: 'CLOSE',
+          title: 'Your message has been sent!',
+          content:
+            'You should expect an email shortly from ICGC ARGO Helpdesk with further instructions.',
+        });
+      } catch (err) {
+        console.log(err);
+        toaster.addToast({
+          variant: TOAST_VARIANTS.ERROR,
+          interactionType: 'CLOSE',
+          title: 'An error has occurred.',
+          content: 'Your message could not be sent at this time. Please try again shortly.',
+        });
+      }
+    } catch (err) {
+      window.scrollTo(0, 0);
+    }
+  };
   return (
     <DefaultLayout>
       <script src="https://www.google.com/recaptcha/api.js" />
@@ -203,6 +304,7 @@ export default function ContactPage() {
           </div>
         </div>
         <ContentBox
+          loading={requestLoader}
           css={css`
             margin: 30px 30px auto 0px;
             padding: 25px 29px;
@@ -226,85 +328,122 @@ export default function ContactPage() {
           </Typography>
           <form name="sendMessage">
             <Row align="center">
-              <Col sm={6}>
-                <FormControl required={true}>
-                  <FlexRow>
-                    <InputLabel
-                      htmlFor="first-name"
+              <Col md={6} sm={12}>
+                <FormControl required={true} error={!!firstNameError}>
+                  <Row>
+                    <Col
+                      sm={5}
                       css={css`
-                        margin: 0;
-                        width: 120px;
+                        align-self: center;
                       `}
                     >
-                      First Name
-                    </InputLabel>
-                    <Input
-                      css={css`
-                        flex-grow: 1;
-                      `}
-                      aria-label="First Name"
-                      id="first-name"
-                      size="lg"
-                    />
-                  </FlexRow>
+                      <InputLabel
+                        htmlFor="first-name"
+                        css={css`
+                          margin: 0;
+                          width: 120px;
+                        `}
+                      >
+                        First Name
+                      </InputLabel>
+                    </Col>
+                    <Col>
+                      <Input
+                        css={css`
+                          flex-grow: 1;
+                        `}
+                        aria-label="First Name"
+                        id="first-name"
+                        value={data.firstName}
+                        onChange={e => setData({ key: 'firstName', val: e.target.value })}
+                        onBlur={() => validateField({ key: 'firstName' })}
+                        size="lg"
+                      />
+                      {!!firstNameError && <FormHelperText>{firstNameError}</FormHelperText>}
+                    </Col>
+                  </Row>
                 </FormControl>
               </Col>
-              <Col sm={6}>
-                <FormControl required={true}>
-                  <FlexRow>
-                    <InputLabel
-                      htmlFor="last-name"
+              <Col md={6} sm={12}>
+                <FormControl required={true} error={!!lastNameError}>
+                  <Row>
+                    <Col
+                      sm={5}
                       css={css`
-                        margin: 0;
-                        width: 120px;
+                        align-self: center;
                       `}
                     >
-                      Last Name
-                    </InputLabel>
-                    <Input
-                      css={css`
-                        flex-grow: 1;
-                      `}
-                      aria-label="Last Name"
-                      id="last-name"
-                      size="lg"
-                    />
-                  </FlexRow>
+                      <InputLabel
+                        htmlFor="last-name"
+                        css={css`
+                          margin: 0;
+                          width: 120px;
+                        `}
+                      >
+                        Last Name
+                      </InputLabel>
+                    </Col>
+                    <Col>
+                      <Input
+                        css={css`
+                          flex-grow: 1;
+                        `}
+                        aria-label="Last Name"
+                        id="last-name"
+                        size="lg"
+                        value={data.lastName}
+                        onChange={e => setData({ key: 'lastName', val: e.target.value })}
+                        onBlur={() => validateField({ key: 'lastName' })}
+                      />
+                      {!!lastNameError && <FormHelperText>{lastNameError}</FormHelperText>}
+                    </Col>
+                  </Row>
                 </FormControl>
               </Col>
             </Row>
             <Row>
               <Col>
-                <FormControl required={true}>
-                  <FlexRow>
-                    <InputLabel
-                      htmlFor="email-address"
-                      css={css`
-                        width: 120px;
-                        margin: 0;
-                      `}
-                    >
-                      Email Address
-                    </InputLabel>
-                    <Input
-                      css={css`
-                        flex-grow: 1;
-                      `}
-                      aria-label="Email Address"
-                      id="email-address"
-                      size="lg"
-                    />
-                  </FlexRow>
+                <FormControl required={true} error={!!emailError}>
+                  <Row>
+                    <Col sm={2.5}>
+                      <InputLabel
+                        htmlFor="email-address"
+                        css={css`
+                          width: 120px;
+                          margin: 0;
+                        `}
+                      >
+                        Email Address
+                      </InputLabel>
+                    </Col>
+                    <Col>
+                      <Input
+                        css={css`
+                          flex-grow: 1;
+                        `}
+                        aria-label="Email Address"
+                        id="email-address"
+                        size="lg"
+                        value={data.email}
+                        onChange={e => {
+                          setData({ key: 'email', val: e.target.value });
+                        }}
+                        onBlur={() => validateField({ key: 'email' })}
+                      />
+                      {!!emailError && <FormHelperText>{emailError}</FormHelperText>}
+                    </Col>
+                  </Row>
                 </FormControl>
               </Col>
             </Row>
             <Row>
               <Col>
-                <FormControl required={true}>
-                  <InputLabel htmlFor="assistance-type">
+                <FormControl required={true} error={!!messageCategoryError}>
+                  <InputLabel htmlFor="messageCategory">
                     What do you need assistance with?
                   </InputLabel>
                   <Select
+                    value={data.messageCategory}
                     size="lg"
                     aria-label="What do you need assistance with"
                     id="assistance-type"
@@ -312,26 +451,20 @@ export default function ContactPage() {
                       margin-top: 6px;
                       margin-bottom: 16px;
                     `}
-                    options={[
-                      {
-                        content: 'Applying for Access to Controlled Data through DACO',
-                        value: 'v1',
-                      },
-                      { content: 'Data Download', value: 'v2' },
-                      { content: 'Data Submission', value: 'v3' },
-                      { content: 'Data or Analysis Inquiry', value: 'v4' },
-                      { content: 'Media or Collaboration Inquiry', value: 'v5' },
-                      { content: 'Publication Inquiry', value: 'v6' },
-                      { content: 'Other', value: 'v7' },
-                    ]}
+                    options={CONTACT_CATEGORY_OPTIONS}
+                    onChange={val => setData({ key: 'messageCategory', val })}
+                    onBlur={() => validateField({ key: 'messageCategory' })}
                   />
+                  {!!messageCategoryError && (
+                    <FormHelperText>{messageCategoryError}</FormHelperText>
+                  )}
                 </FormControl>
               </Col>
             </Row>
             <Row>
               <Col>
-                <FormControl required={true}>
-                  <InputLabel htmlFor="message">Your message</InputLabel>
+                <FormControl required={true} error={!!messageDescriptionError}>
+                  <InputLabel htmlFor="messageDescription">Your message</InputLabel>
                   <Textarea
                     aria-label="Your message"
                     id="message"
@@ -340,33 +473,45 @@ export default function ContactPage() {
                       margin-bottom: 0px;
                       height: 115px;
                     `}
+                    value={data.messageDescription}
+                    onChange={e => setData({ key: 'messageDescription', val: e.target.value })}
+                    onBlur={() => validateField({ key: 'messageDescription' })}
                   />
+                  {!!messageDescriptionError && (
+                    <FormHelperText>{messageDescriptionError}</FormHelperText>
+                  )}
                 </FormControl>
               </Col>
             </Row>
             <Row align="end">
               <Col>
-                <ReCAPTCHA
-                  sitekey={RECAPTCHA_SITE_KEY}
-                  onChange={(value: string) => {
-                    console.log('Captcha value:', value); // Needs to be hooked up, just looks the part rn
-                  }}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Button
-                  css={css`
-                    margin-left: auto;
-                    margin-right: 0px;
-                  `}
-                >
-                  SEND MESSAGE
-                </Button>
+                <FormControl required={true} error={!!reCaptchaError}>
+                  <ReCAPTCHA
+                    ref={reCaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    onChange={(value: string) => {
+                      setData({ key: 'reCaptcha', val: value });
+                    }}
+                    onBlur={() => validateField({ key: 'reCaptcha' })}
+                  />
+                  {!!reCaptchaError && <FormHelperText>{reCaptchaError}</FormHelperText>}
+                </FormControl>
               </Col>
             </Row>
           </form>
+          <Row>
+            <Col>
+              <Button
+                css={css`
+                  margin-left: auto;
+                  margin-right: 0px;
+                `}
+                onClick={submitForm}
+              >
+                SEND MESSAGE
+              </Button>
+            </Col>
+          </Row>
         </ContentBox>
       </div>
     </DefaultLayout>
