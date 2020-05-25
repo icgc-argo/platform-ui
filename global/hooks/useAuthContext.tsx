@@ -63,6 +63,7 @@ export function AuthProvider({
       toRoot: true,
     },
   ) => {
+    // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
     if (config.toRoot) {
