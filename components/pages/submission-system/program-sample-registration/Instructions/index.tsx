@@ -1,4 +1,4 @@
-import { CONTACT_PAGE_PATH, DOCS_DICTIONARY_PATH } from 'global/constants/pages';
+import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import Link from 'uikit/Link';
 import * as React from 'react';
 import { css } from 'uikit';
@@ -19,6 +19,7 @@ import {
 import FileSelectButton from 'uikit/FileSelectButton';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
+import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
 
 function Instructions({
   uploadEnabled,

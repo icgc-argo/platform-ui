@@ -7,7 +7,7 @@ import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/pages';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/docSitePaths';
 const { DOCS_URL_ROOT } = getConfig();
 
 const getStartedLink = (

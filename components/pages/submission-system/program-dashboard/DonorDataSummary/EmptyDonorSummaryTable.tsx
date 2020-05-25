@@ -1,6 +1,5 @@
 import Typography from 'uikit/Typography';
 import Link from 'uikit/Link';
-import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/pages';
 import styled from '@emotion/styled';
 import NoData from 'uikit/NoData';
 import urljoin from 'url-join';
@@ -9,6 +8,7 @@ import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
 import { css } from '@emotion/core';
 import { getConfig } from 'global/config';
+import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/docSitePaths';
 
 const { DOCS_URL_ROOT } = getConfig();
 
