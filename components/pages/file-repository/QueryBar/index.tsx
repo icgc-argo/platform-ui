@@ -157,7 +157,7 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ filters = {} }: { filters?: Filters | {} }) => {
+const QueryBar = ({ filters = {} }) => {
   const { clearFilters, setFilters } = useFiltersContext();
 
   return (
