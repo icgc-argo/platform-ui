@@ -26,7 +26,26 @@ const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void
   return (
     <Modal
       title="For Program Members"
-      actionButtonText="LOGIN WITH GOOGLE"
+      actionButtonContent={
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          {' '}
+          <Icon
+            width="18px"
+            height="18px"
+            name="google"
+            fill="none"
+            css={css`
+              margin-right: 8px;
+            `}
+          />
+          Login with Google
+        </div>
+      }
       buttonSize="sm"
       cancelText="Cancel"
       onActionClick={null}
