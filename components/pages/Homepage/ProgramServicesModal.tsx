@@ -26,7 +26,7 @@ const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void
   return (
     <Modal
       title="For Program Members"
-      actionButtonContent={
+      actionButtonText={
         <div
           css={css`
             display: flex;
