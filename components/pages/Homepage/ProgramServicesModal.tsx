@@ -4,7 +4,7 @@ import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import urljoin from 'url-join';
-import { DOCS_DATA_ACCESS_PATH } from 'global/constants/pages';
+import { DOCS_DATA_ACCESS_PATH } from 'global/constants/docSitePaths';
 import { getConfig } from 'global/config';
 import useTheme from 'uikit/utils/useTheme';
 import Banner from 'uikit/notifications/Banner';
