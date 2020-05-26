@@ -28,6 +28,8 @@ import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
+import { ModalPortal } from './ApplicationRoot';
+import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 
 const NavBarLoginButton = () => {
   return (
@@ -76,6 +78,7 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
   const { asPath: path, query } = usePageContext();
 
   const [loginPath, setLoginPath] = React.useState('');
+  const [isModalVisible, setModalVisibility] = React.useState(false);
 
   React.useEffect(() => {
     const redirect = get(query, 'redirect') as string;
@@ -103,6 +106,12 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
       setLoginPath(urlJoin(EGO_URL, redirect));
     }
   }, [path, query]);
+
+  const programServices = (
+    <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0 || isModalVisible}>
+      <Typography variant={'default'}>Program Services</Typography>
+    </MenuItem>
+  );
 
   return (
     <AppBar
@@ -144,7 +153,7 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
       {!hideLink && (
         <Section>
           <MenuGroup>
-            {egoJwt && canAccessSubmission && (
+            {egoJwt && canAccessSubmission ? (
               <Link
                 href={getDefaultRedirectPathForUser(permissions, true)}
                 as={getDefaultRedirectPathForUser(permissions)}
@@ -154,11 +163,12 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
                     height: 100%;
                   `}
                 >
-                  <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0}>
-                    <Typography variant={'default'}>Submission</Typography>
-                  </MenuItem>
+                  {' '}
+                  {programServices}
                 </a>
               </Link>
+            ) : (
+              <div onClick={() => setModalVisibility(!isModalVisible)}> {programServices}</div>
             )}
             {!userModel && (
               <a
@@ -197,6 +207,14 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
             )}
           </MenuGroup>
         </Section>
+      )}
+      {isModalVisible && (
+        <ModalPortal>
+          <ProgramServicesModal
+            dismissModal={() => setModalVisibility(false)}
+            hasPrograms={egoJwt && canAccessSubmission}
+          />
+        </ModalPortal>
       )}
     </AppBar>
   );

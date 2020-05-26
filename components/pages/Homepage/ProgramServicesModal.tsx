@@ -28,13 +28,20 @@ const MemberDescription = styled('div')`
   padding: 9px 0;
 `;
 
-const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void }) => {
+const ProgramServicesModal = ({
+  dismissModal,
+  hasPrograms,
+}: {
+  dismissModal: () => any | void;
+  hasPrograms: boolean;
+}) => {
   const { DOCS_URL_ROOT, EGO_URL } = getConfig();
   const theme = useTheme();
 
   return (
     <Modal
       title="For Program Members"
+      actionVisible={hasPrograms}
       actionButtonText={
         <a
           css={css`
