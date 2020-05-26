@@ -4,8 +4,10 @@ import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import urljoin from 'url-join';
-import { DOCS_DATA_ACCESS_PATH } from 'global/constants/pages';
+import { DOCS_DATA_ACCESS_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
+import { createRedirectURL } from 'global/utils/common';
+import useTheme from 'uikit/utils/useTheme';
 
 const Row = styled('span')`
   display: flex;
@@ -27,30 +29,39 @@ const MemberDescription = styled('div')`
 `;
 
 const ProgramServicesModal = ({ dismissModal }: { dismissModal: () => any | void }) => {
-  const { DOCS_URL_ROOT } = getConfig();
+  const { DOCS_URL_ROOT, EGO_URL } = getConfig();
+  const theme = useTheme();
 
   return (
     <Modal
       title="For Program Members"
       actionButtonText={
-        <div
+        <a
           css={css`
-            display: flex;
-            align-items: center;
+            text-decoration: none;
+            color: ${theme.colors.white};
           `}
+          href={EGO_URL}
         >
-          {' '}
-          <Icon
-            width="18px"
-            height="18px"
-            name="google"
-            fill="none"
+          <div
             css={css`
-              margin-right: 8px;
+              display: flex;
+              align-items: center;
             `}
-          />
-          Login with Google
-        </div>
+          >
+            {' '}
+            <Icon
+              width="18px"
+              height="18px"
+              name="google"
+              fill="none"
+              css={css`
+                margin-right: 8px;
+              `}
+            />
+            Login with Google
+          </div>
+        </a>
       }
       buttonSize="sm"
       cancelText="Cancel"
