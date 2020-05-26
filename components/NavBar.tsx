@@ -176,8 +176,8 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
                 href={loginPath}
                 css={css`
                   align-self: center;
-                  margin-right: 16px;
                   text-decoration: none;
+                  padding: 0 16px;
                 `}
               >
                 <NavBarLoginButton />
