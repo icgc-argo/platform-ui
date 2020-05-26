@@ -10,23 +10,21 @@ import Textarea from 'uikit/form/Textarea';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
-import DefaultLayout from './DefaultLayout';
+import DefaultLayout from '../DefaultLayout';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import ReCAPTCHA from 'react-google-recaptcha';
 import yup from 'global/utils/validations';
-import CREATE_JIRA_TICKET from './CREATE_JIRA_TICKET.gql';
-import { CONTACT_CATEGORY_OPTIONS } from 'global/constants';
 
-import {
-  firstName,
-  lastName,
-  email,
-  messageCategory,
-  messageDescription,
-  reCaptcha,
-} from 'global/utils/form/validations';
+import CREATE_JIRA_TICKET from './CREATE_JIRA_TICKET.gql';
+
+import { CONTACT_CATEGORY_OPTIONS } from './common';
+
+import { firstName, lastName, email } from 'global/utils/form/validations';
+
+import { messageCategory, messageDescription, reCaptcha } from './common';
+
 import useFormHook from 'global/hooks/useFormHook';
 import FormHelperText from 'uikit/form/FormHelperText';
 
@@ -114,8 +112,9 @@ export default function ContactPage() {
   const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
     try {
       const validData = await validateForm();
+
+      setRequestLoader(true);
       try {
-        setRequestLoader(true);
         const result = await createTicket({
           variables: {
             messageCategory: validData.messageCategory,
@@ -124,34 +123,33 @@ export default function ContactPage() {
             displayName: `${validData.firstName} ${validData.lastName}`,
           },
         });
-
-        reCaptchaRef.current.reset();
-        reset();
-        setRequestLoader(false);
-
-        toaster.addToast({
-          variant: TOAST_VARIANTS.SUCCESS,
-          interactionType: 'CLOSE',
-          title: 'Your message has been sent!',
-          content:
-            'You should expect an email shortly from ICGC ARGO Helpdesk with further instructions.',
-        });
       } catch (err) {
-        console.log(err);
+        console.error('The request to create a jira ticket failed: ', err);
         toaster.addToast({
           variant: TOAST_VARIANTS.ERROR,
           interactionType: 'CLOSE',
           title: 'An error has occurred.',
           content: 'Your message could not be sent at this time. Please try again shortly.',
         });
+        setRequestLoader(false);
+        throw err;
       }
+      reCaptchaRef.current.reset();
+      reset();
+      setRequestLoader(false);
+      toaster.addToast({
+        variant: TOAST_VARIANTS.SUCCESS,
+        interactionType: 'CLOSE',
+        title: 'Your message has been sent!',
+        content:
+          'You should expect an email shortly from ICGC ARGO Helpdesk with further instructions.',
+      });
     } catch (err) {
       window.scrollTo(0, 0);
     }
   };
   return (
     <DefaultLayout>
-      <script src="https://www.google.com/recaptcha/api.js" />
       <div
         css={css`
           height: 100%;

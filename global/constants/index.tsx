@@ -19,30 +19,6 @@ export const PROGRAM_USER_ROLES = [
   { content: 'Data Submitter', value: 'SUBMITTER' as RoleKey },
 ];
 
-// For the 'contact us' form
-
-export type ContactCategoryKey =
-  | 'APPLYING_ACCESS'
-  | 'DATA_DOWNLOAD'
-  | 'DATA_SUBMISSION'
-  | 'DATA_QUERY'
-  | 'MEDIA_QUERY'
-  | 'PUBLICATION_QUERY'
-  | 'OTHER';
-
-export const CONTACT_CATEGORY_OPTIONS = [
-  {
-    content: 'Applying for Access to Controlled Data through DACO',
-    value: 'APPLYING_ACCESS' as ContactCategoryKey,
-  },
-  { content: 'Data Download', value: 'DATA_DOWNLOAD' as ContactCategoryKey },
-  { content: 'Data Submission', value: 'DATA_SUBMISSION' as ContactCategoryKey },
-  { content: 'Data or Analysis Query', value: 'DATA_QUERY' as ContactCategoryKey },
-  { content: 'Media or Collaboration Inquiry', value: 'MEDIA_QUERY' as ContactCategoryKey },
-  { content: 'Publication Inquiry', value: 'PUBLICATION_QUERY' as ContactCategoryKey },
-  { content: 'Other', value: 'OTHER' as ContactCategoryKey },
-];
-
 export const CANCER_TYPES = [
   `Biliary Tract cancer`,
   `Bladder cancer`,
