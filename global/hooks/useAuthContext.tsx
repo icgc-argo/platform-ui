@@ -15,6 +15,7 @@ type T_AuthContext = {
   data: ReturnType<typeof decodeToken> | null;
   fetchWithEgoToken: typeof fetch;
   permissions: string[];
+  isLoggingOut: boolean;
 };
 
 const AuthContext = React.createContext<T_AuthContext>({
@@ -24,6 +25,7 @@ const AuthContext = React.createContext<T_AuthContext>({
   data: null,
   fetchWithEgoToken: fetch,
   permissions: [],
+  isLoggingOut: false,
 });
 
 export function AuthProvider({
@@ -43,6 +45,8 @@ export function AuthProvider({
 
   const [token, setTokenState] = React.useState<string>(egoJwt);
   const [permissions, setPermissions] = React.useState<Array<string>>(initialPermissions);
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+
   const router = useRouter();
   const setToken = (token: string) => {
     Cookies.set(EGO_JWT_KEY, token);
@@ -59,6 +63,8 @@ export function AuthProvider({
       toRoot: true,
     },
   ) => {
+    // this will be reset to false when user logs in again, and AuthContext is re-instantiated
+    setIsLoggingOut(true);
     removeToken();
     if (config.toRoot) {
       router.push('/');
@@ -121,6 +127,7 @@ export function AuthProvider({
     updateToken,
     fetchWithEgoToken,
     permissions,
+    isLoggingOut,
   };
 
   return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;

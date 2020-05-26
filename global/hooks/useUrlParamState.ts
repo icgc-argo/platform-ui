@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
+export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
   const queryString = router.asPath.split('?')[1] || '';
   const currentQueryEntries = [...new URLSearchParams(queryString).entries()];
   return currentQueryEntries.length

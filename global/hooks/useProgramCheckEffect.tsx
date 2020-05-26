@@ -5,6 +5,7 @@ import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME from './PROGRAM_SHORTNAME.gql';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 import { sleep } from 'global/utils/common';
+import useAuthContext from './useAuthContext';
 
 export const useProgramCheckEffect = () => {
   const { shortName } = usePageQuery<{ shortName: string }>();
@@ -17,12 +18,14 @@ export const useProgramCheckEffect = () => {
   });
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { isLoggingOut } = useAuthContext();
+
   useEffect(() => {
     if (!program && !isLoaderShown) {
       setLoaderShown(true);
     }
     if (!loadingQuery) {
-      if (!program) {
+      if (!program && !isLoggingOut) {
         const err = new Error('Program not found') as Error & { statusCode?: number };
         err[ERROR_STATUS_KEY] = 404;
         throw err;

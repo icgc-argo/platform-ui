@@ -2,7 +2,7 @@ import React from 'react';
 import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
 import { FileRepositoryRecord } from './types';
-import Link from 'uikit/Link';
+import Link from 'next/link';
 import HyperLink from 'uikit/Link';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
