@@ -107,7 +107,10 @@ export default function ProgramDashboard() {
           variant={BANNER_VARIANTS.SUCCESS}
           content={
             <Typography>
-              If you have trouble getting started, please check out our documentation for{' '}
+              Data submitters can get started registering samples and submitting clinical data using
+              the <strong>Program ID: {programShortName}</strong>.
+              <br />
+              If you have any questions, please check out our documentation for{' '}
               <Link
                 target="_blank"
                 href={urljoin(DOCS_URL_ROOT, DOCS_MANAGING_PROGRAM_ACCESS_PATH)}
