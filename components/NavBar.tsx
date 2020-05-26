@@ -212,7 +212,8 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
         <ModalPortal>
           <ProgramServicesModal
             dismissModal={() => setModalVisibility(false)}
-            hasPrograms={egoJwt && canAccessSubmission}
+            hasPrograms={canAccessSubmission}
+            isLoggedIn={!!egoJwt}
           />
         </ModalPortal>
       )}

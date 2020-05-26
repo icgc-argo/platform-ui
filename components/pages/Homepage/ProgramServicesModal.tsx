@@ -4,10 +4,10 @@ import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import urljoin from 'url-join';
-import { DOCS_DATA_ACCESS_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+import { DOCS_DATA_ACCESS_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
-import { createRedirectURL } from 'global/utils/common';
 import useTheme from 'uikit/utils/useTheme';
+import Banner from 'uikit/notifications/Banner';
 
 const Row = styled('span')`
   display: flex;
@@ -31,9 +31,11 @@ const MemberDescription = styled('div')`
 const ProgramServicesModal = ({
   dismissModal,
   hasPrograms,
+  isLoggedIn,
 }: {
   dismissModal: () => any | void;
   hasPrograms: boolean;
+  isLoggedIn: boolean;
 }) => {
   const { DOCS_URL_ROOT, EGO_URL } = getConfig();
   const theme = useTheme();
@@ -41,7 +43,7 @@ const ProgramServicesModal = ({
   return (
     <Modal
       title="For Program Members"
-      actionVisible={hasPrograms}
+      actionVisible={!isLoggedIn}
       actionButtonText={
         <a
           css={css`
@@ -82,6 +84,15 @@ const ProgramServicesModal = ({
           margin-top: -18px;
         `}
       >
+        {isLoggedIn && !hasPrograms && (
+          <Banner
+            variant="WARNING"
+            title="You do not have access to any programs"
+            css={css`
+              margin-bottom: 16px;
+            `}
+          />
+        )}
         <div
           css={css`
             margin-bottom: 13px;
