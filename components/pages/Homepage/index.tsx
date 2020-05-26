@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, ScreenClassRender, Visible, Hidden } from 'react-grid-system';
+import { Col, Row, Visible, Hidden } from 'react-grid-system';
 import { css, styled } from 'uikit';
 import Button from 'uikit/Button';
 
@@ -19,8 +19,6 @@ import {
   ResponsiveGridLayout,
 } from './common';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import { ModalPortal } from 'components/ApplicationRoot';
-import ProgramServicesModal from './ProgramServicesModal';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
