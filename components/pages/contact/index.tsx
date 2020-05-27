@@ -101,7 +101,7 @@ export default function ContactPage() {
 
       setRequestLoader(true);
       try {
-        const result = await createTicket({
+        await createTicket({
           variables: {
             messageCategory: validData.messageCategory,
             emailAddress: validData.email,
