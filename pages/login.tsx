@@ -10,17 +10,29 @@ import { getPermissionsFromToken } from 'global/utils/egoJwt';
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
   getInitialProps: async ({ query, egoJwt, res }) => {
-    const { redirect } = query;
-    if (egoJwt && res) {
-      // TODO: res.redirect breaks if jwt exists and '/login' route is hard refreshed
-      res.redirect(
-        String(redirect || getDefaultRedirectPathForUser(getPermissionsFromToken(egoJwt))),
-      );
+    // temporarily disabling login path, may be restored in future: https://github.com/icgc-argo/platform-ui/issues/1487
+    if (res) {
+      res.writeHead(301, {
+        Location: '/',
+      });
+      res.end();
+    } else {
+      Router.push('/');
     }
-    return {
-      redirect,
-      egoJwt,
-    };
+
+    return {};
+
+    // const { redirect } = query;
+    // if (egoJwt && res) {
+    //   // TODO: res.redirect breaks if jwt exists and '/login' route is hard refreshed
+    //   res.redirect(
+    //     String(redirect || getDefaultRedirectPathForUser(getPermissionsFromToken(egoJwt))),
+    //   );
+    // }
+    // return {
+    //   redirect,
+    //   egoJwt,
+    // };
   },
 })(({ redirect, egoJwt }) => {
   const [fullRedirect, setFullRedirect] = React.useState('');
@@ -42,6 +54,5 @@ export default createPage<{ redirect: string; egoJwt: string }>({
       );
     }
   }, []);
-
   return <LoginPage redirect={fullRedirect} />;
 });
