@@ -111,29 +111,32 @@ export default function TeamPage() {
           margin-bottom: 25px;
         `}
       >
-        {teamData.map(team => (
-          <div>
+        {teamData.map((team, i) => (
+          <div key={i}>
             <SectionTitle>{team.title}</SectionTitle>
             <TitleBorder color={team.color} width="86px" />
-            <Typography
-              variant="paragraph"
-              css={css`
-                line-height: 1.71;
-              `}
-            >
-              <Row>
-                {chunk(team.members, 6).map((col, i, arr) => (
-                  <Col
+
+            <Row>
+              {chunk(team.members, 6).map((col, i, arr) => (
+                <Col
+                  key={i}
+                  css={css`
+                    max-width: 330px;
+                  `}
+                  sm={12}
+                  md={arr.length === 1 ? 12 : 12 / arr.length}
+                >
+                  <Typography
+                    variant="paragraph"
                     css={css`
-                      max-width: 330px;
+                      line-height: 1.71;
                     `}
-                    sm={12}
-                    md={arr.length === 1 ? 12 : 12 / arr.length}
                   >
-                    {col.map(member => {
+                    {col.map((member, i) => {
                       const title = get(member, 'title', false);
                       return (
-                        <div
+                        <span
+                          key={i}
                           css={css`
                             display: flex;
                             flex-wrap: wrap;
@@ -149,13 +152,13 @@ export default function TeamPage() {
                           >
                             {title ? `${member.title}` : null}
                           </span>
-                        </div>
+                        </span>
                       );
                     })}
-                  </Col>
-                ))}
-              </Row>
-            </Typography>
+                  </Typography>
+                </Col>
+              ))}
+            </Row>
           </div>
         ))}
       </div>
