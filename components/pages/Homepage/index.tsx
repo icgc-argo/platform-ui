@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, ScreenClassRender, Visible, Hidden } from 'react-grid-system';
+import { Col, Row, Visible, Hidden } from 'react-grid-system';
 import { css, styled } from 'uikit';
 import Button from 'uikit/Button';
 
@@ -70,6 +70,7 @@ const HeroDiv = styled('div')`
 
 export default function Homepage() {
   const theme = useTheme();
+
   return (
     <DefaultLayout>
       <HeroDiv>
