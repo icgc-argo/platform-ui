@@ -193,7 +193,7 @@ export default ({
           },
         },
         {
-          Header: 'Core Fields',
+          Header: 'Core Completion',
           accessor: 'submittedCoreDataPercent',
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
