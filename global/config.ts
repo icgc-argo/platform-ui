@@ -22,6 +22,7 @@ export const getConfig = () => {
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     FEATURE_REPOSITORY_ENABLED: publicConfig.FEATURE_REPOSITORY_ENABLED === 'true',
+    MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -34,5 +35,6 @@ export const getConfig = () => {
     DACO_URL: string;
     RECAPTCHA_SITE_KEY: string;
     FEATURE_REPOSITORY_ENABLED: boolean;
+    MAINTENANCE_MODE_ON: boolean;
   };
 };
