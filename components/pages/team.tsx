@@ -5,6 +5,8 @@ import DefaultLayout from './DefaultLayout';
 import Typography from 'uikit/Typography';
 import TitleBorder from 'uikit/TitleBorder';
 import { ThemeColorNames } from 'uikit/theme/types';
+import { Row, Col } from 'react-grid-system';
+import chunk from 'lodash/chunk';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };
@@ -105,18 +107,27 @@ export default function TeamPage() {
             <>
               <SectionTitle>{team.title}</SectionTitle>
               <TitleBorder color={team.color} />
-              <Typography>
-                Any of your personal information which OICR collects via this Platform is subject to
-                the OICR Privacy Policies, which is incorporated into these Terms and Conditions by
-                reference.
-                <br />
-                <br />
-                We are concerned about privacy and committed to your privacy while accessing the
-                Platform and using its Content. The approach to communications on the Internet taken
-                by OICR and the participants of the ICGC research projects is to respect, and
-                protect your privacy rights. Our privacy policy outlines our Site information
-                practices including our utilization of personal information we may learn about you
-                when visiting our Site.
+              <Typography
+                variant="paragraph"
+                css={css`
+                  line-height: 1.71;
+                `}
+              >
+                <Row>
+                  {chunk(team.members, 6).map(col => (
+                    <Col>
+                      {col.map(member => (
+                        <div>
+                          {' '}
+                          <Typography variant="paragraph2" bold>
+                            {member.name}
+                          </Typography>
+                          {member['title'] ? `, ${member.title}` : null}
+                        </div>
+                      ))}
+                    </Col>
+                  ))}
+                </Row>
               </Typography>
             </>
           ))}
