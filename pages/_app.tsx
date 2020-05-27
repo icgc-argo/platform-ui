@@ -15,17 +15,14 @@ import queryString from 'query-string';
 import { get } from 'lodash';
 import DefaultLayout from '../components/pages/DefaultLayout';
 
-import {
-  PageWithConfig,
-  GetInitialPropsContext,
-  ClientSideGetInitialPropsContext,
-} from 'global/utils/pages/types';
+import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
+import MaintenancePage from 'components/pages/MaintenancePage';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -68,14 +65,33 @@ class Root extends App<
     unauthorized: boolean;
     startWithGlobalLoader: boolean;
     initialPermissions: string[];
+    maintenanceModeOn: boolean;
   },
   {},
   { isLoadingLoginRedirect: boolean }
 > {
   static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
+    const { AUTH_DISABLED, MAINTENANCE_MODE_ON } = getConfig();
+    if (MAINTENANCE_MODE_ON) {
+      return {
+        pageProps: {},
+        unauthorized: false,
+        pathname: ctx.pathname,
+        egoJwt: null,
+        ctx: {
+          pathname: ctx.pathname,
+          query: ctx.query,
+          asPath: ctx.asPath,
+        },
+        apolloCache: null,
+        startWithGlobalLoader: false,
+        initialPermissions: [],
+        maintenanceModeOn: MAINTENANCE_MODE_ON,
+      };
+    }
+
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
     const { res } = ctx;
-    const { AUTH_DISABLED } = getConfig();
     let refreshedJwt = null;
     let initialPermissions = getPermissionsFromToken(egoJwt);
     if (egoJwt) {
@@ -144,6 +160,7 @@ class Root extends App<
       apolloCache,
       startWithGlobalLoader,
       initialPermissions,
+      maintenanceModeOn: MAINTENANCE_MODE_ON,
     };
   }
 
@@ -244,6 +261,7 @@ class Root extends App<
       egoJwt,
       startWithGlobalLoader,
       initialPermissions,
+      maintenanceModeOn,
     } = this.props;
     const { isLoadingLoginRedirect } = this.state;
     return (
@@ -254,7 +272,9 @@ class Root extends App<
         startWithGlobalLoader={startWithGlobalLoader}
         initialPermissions={initialPermissions}
       >
-        {isLoadingLoginRedirect ? (
+        {maintenanceModeOn ? (
+          <MaintenancePage />
+        ) : isLoadingLoginRedirect ? (
           <DefaultLayout>
             <div
               style={{
