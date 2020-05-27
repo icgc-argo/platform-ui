@@ -10,24 +10,16 @@ import Textarea from 'uikit/form/Textarea';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
-import DefaultLayout from '../DefaultLayout';
+import DefaultLayout from 'components/pages/DefaultLayout';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import ReCAPTCHA from 'react-google-recaptcha';
 import yup from 'global/utils/validations';
-
 import CREATE_JIRA_TICKET from './CREATE_JIRA_TICKET.gql';
-
-import { CONTACT_CATEGORY_OPTIONS } from './common';
-
 import { firstName, lastName, email } from 'global/utils/form/validations';
-
-import { messageCategory, messageDescription, reCaptcha } from './common';
-
 import useFormHook from 'global/hooks/useFormHook';
 import FormHelperText from 'uikit/form/FormHelperText';
-
 import {
   DOCS_SUBMITTING_CLINICAL_DATA_PATH,
   DOCS_SUBMISSION_OVERVIEW_PATH,
@@ -39,6 +31,7 @@ import {
 import { useMutation } from '@apollo/react-hooks';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -52,13 +45,6 @@ const Ul2 = styled('ul')`
   padding-left: 0px;
   margin-top: 5px;
   margin-bottom: 30px;
-`;
-
-const FlexRow = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
 `;
 
 export default function ContactPage() {
