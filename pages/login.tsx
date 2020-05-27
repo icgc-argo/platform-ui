@@ -16,6 +16,8 @@ export default createPage<{ redirect: string; egoJwt: string }>({
         Location: '/',
       });
       res.end();
+    } else {
+      Router.push('/');
     }
 
     return {};
