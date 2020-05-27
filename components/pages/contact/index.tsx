@@ -150,21 +150,20 @@ export default function ContactPage() {
   };
   return (
     <DefaultLayout>
-      <div
+      <Row
+        nogutter
         css={css`
           height: 100%;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
           background: ${theme.colors.white};
         `}
       >
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            padding: 0px 47px 0px 47px;
-            background-color: white;
-          `}
+        <Col
+          md={12}
+          lg={6}
+          style={{
+            padding: '0px 47px 0px 47px',
+            backgroundColor: theme.colors.white,
+          }}
         >
           <div>
             <Typography variant="hero">Contact</Typography>
@@ -300,218 +299,220 @@ export default function ContactPage() {
               </Link>
             </Button>
           </div>
-        </div>
-        <ContentBox
-          loading={requestLoader}
-          css={css`
-            margin: 30px 30px auto 0px;
-            padding: 25px 29px;
-          `}
-        >
-          <Typography
-            variant="title"
+        </Col>
+        <Col md={12} lg={6}>
+          <ContentBox
+            loading={requestLoader}
             css={css`
-              margin-top: 0;
-              margin-bottom: 25px;
+              margin: 30px;
+              padding: 25px 29px;
             `}
           >
-            Send a Message
-          </Typography>
-          <Typography
-            css={css`
-              margin-bottom: 10px;
-            `}
-          >
-            If you still can’t find what you’re looking for, let us know how we can help:
-          </Typography>
-          <form name="sendMessage">
-            <Row align="center">
-              <Col md={6} sm={12}>
-                <FormControl required={true} error={!!firstNameError}>
-                  <Row>
-                    <Col
-                      sm={5}
+            <Typography
+              variant="title"
+              css={css`
+                margin-top: 0;
+                margin-bottom: 25px;
+              `}
+            >
+              Send a Message
+            </Typography>
+            <Typography
+              css={css`
+                margin-bottom: 10px;
+              `}
+            >
+              If you still can’t find what you’re looking for, let us know how we can help:
+            </Typography>
+            <form name="sendMessage">
+              <Row align="center">
+                <Col md={6} sm={12}>
+                  <FormControl required={true} error={!!firstNameError}>
+                    <Row>
+                      <Col
+                        sm={5}
+                        css={css`
+                          align-self: center;
+                        `}
+                      >
+                        <InputLabel
+                          htmlFor="first-name"
+                          css={css`
+                            margin: 0;
+                            width: 120px;
+                          `}
+                        >
+                          First Name
+                        </InputLabel>
+                      </Col>
+                      <Col>
+                        <Input
+                          css={css`
+                            flex-grow: 1;
+                          `}
+                          aria-label="First Name"
+                          id="first-name"
+                          value={data.firstName}
+                          onChange={e => setData({ key: 'firstName', val: e.target.value })}
+                          onBlur={() => validateField({ key: 'firstName' })}
+                          size="lg"
+                        />
+                        {!!firstNameError && <FormHelperText>{firstNameError}</FormHelperText>}
+                      </Col>
+                    </Row>
+                  </FormControl>
+                </Col>
+                <Col md={6} sm={12}>
+                  <FormControl required={true} error={!!lastNameError}>
+                    <Row>
+                      <Col
+                        sm={5}
+                        css={css`
+                          align-self: center;
+                        `}
+                      >
+                        <InputLabel
+                          htmlFor="last-name"
+                          css={css`
+                            margin: 0;
+                            width: 120px;
+                          `}
+                        >
+                          Last Name
+                        </InputLabel>
+                      </Col>
+                      <Col>
+                        <Input
+                          css={css`
+                            flex-grow: 1;
+                          `}
+                          aria-label="Last Name"
+                          id="last-name"
+                          size="lg"
+                          value={data.lastName}
+                          onChange={e => setData({ key: 'lastName', val: e.target.value })}
+                          onBlur={() => validateField({ key: 'lastName' })}
+                        />
+                        {!!lastNameError && <FormHelperText>{lastNameError}</FormHelperText>}
+                      </Col>
+                    </Row>
+                  </FormControl>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormControl required={true} error={!!emailError}>
+                    <Row>
+                      <Col sm={2.5}>
+                        <InputLabel
+                          htmlFor="email-address"
+                          css={css`
+                            width: 120px;
+                            margin: 0;
+                          `}
+                        >
+                          Email Address
+                        </InputLabel>
+                      </Col>
+                      <Col>
+                        <Input
+                          css={css`
+                            flex-grow: 1;
+                          `}
+                          aria-label="Email Address"
+                          id="email-address"
+                          size="lg"
+                          value={data.email}
+                          onChange={e => {
+                            setData({ key: 'email', val: e.target.value });
+                          }}
+                          onBlur={() => validateField({ key: 'email' })}
+                        />
+                        {!!emailError && <FormHelperText>{emailError}</FormHelperText>}
+                      </Col>
+                    </Row>
+                  </FormControl>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormControl required={true} error={!!messageCategoryError}>
+                    <InputLabel htmlFor="messageCategory">
+                      What do you need assistance with?
+                    </InputLabel>
+                    <Select
+                      value={data.messageCategory}
+                      size="lg"
+                      aria-label="What do you need assistance with"
+                      id="assistance-type"
                       css={css`
-                        align-self: center;
+                        margin-top: 6px;
+                        margin-bottom: 16px;
                       `}
-                    >
-                      <InputLabel
-                        htmlFor="first-name"
-                        css={css`
-                          margin: 0;
-                          width: 120px;
-                        `}
-                      >
-                        First Name
-                      </InputLabel>
-                    </Col>
-                    <Col>
-                      <Input
-                        css={css`
-                          flex-grow: 1;
-                        `}
-                        aria-label="First Name"
-                        id="first-name"
-                        value={data.firstName}
-                        onChange={e => setData({ key: 'firstName', val: e.target.value })}
-                        onBlur={() => validateField({ key: 'firstName' })}
-                        size="lg"
-                      />
-                      {!!firstNameError && <FormHelperText>{firstNameError}</FormHelperText>}
-                    </Col>
-                  </Row>
-                </FormControl>
-              </Col>
-              <Col md={6} sm={12}>
-                <FormControl required={true} error={!!lastNameError}>
-                  <Row>
-                    <Col
-                      sm={5}
+                      options={CONTACT_CATEGORY_OPTIONS}
+                      onChange={val => setData({ key: 'messageCategory', val })}
+                      onBlur={() => validateField({ key: 'messageCategory' })}
+                    />
+                    {!!messageCategoryError && (
+                      <FormHelperText>{messageCategoryError}</FormHelperText>
+                    )}
+                  </FormControl>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormControl required={true} error={!!messageDescriptionError}>
+                    <InputLabel htmlFor="messageDescription">Your message</InputLabel>
+                    <Textarea
+                      aria-label="Your message"
+                      id="message"
                       css={css`
-                        align-self: center;
+                        margin-top: 6px;
+                        margin-bottom: 0px;
+                        height: 115px;
                       `}
-                    >
-                      <InputLabel
-                        htmlFor="last-name"
-                        css={css`
-                          margin: 0;
-                          width: 120px;
-                        `}
-                      >
-                        Last Name
-                      </InputLabel>
-                    </Col>
-                    <Col>
-                      <Input
-                        css={css`
-                          flex-grow: 1;
-                        `}
-                        aria-label="Last Name"
-                        id="last-name"
-                        size="lg"
-                        value={data.lastName}
-                        onChange={e => setData({ key: 'lastName', val: e.target.value })}
-                        onBlur={() => validateField({ key: 'lastName' })}
-                      />
-                      {!!lastNameError && <FormHelperText>{lastNameError}</FormHelperText>}
-                    </Col>
-                  </Row>
-                </FormControl>
-              </Col>
-            </Row>
+                      value={data.messageDescription}
+                      onChange={e => setData({ key: 'messageDescription', val: e.target.value })}
+                      onBlur={() => validateField({ key: 'messageDescription' })}
+                    />
+                    {!!messageDescriptionError && (
+                      <FormHelperText>{messageDescriptionError}</FormHelperText>
+                    )}
+                  </FormControl>
+                </Col>
+              </Row>
+              <Row align="end">
+                <Col>
+                  <FormControl required={true} error={!!reCaptchaError}>
+                    <ReCAPTCHA
+                      ref={reCaptchaRef}
+                      sitekey={RECAPTCHA_SITE_KEY}
+                      onChange={(value: string) => {
+                        setData({ key: 'reCaptcha', val: value });
+                      }}
+                      onBlur={() => validateField({ key: 'reCaptcha' })}
+                    />
+                    {!!reCaptchaError && <FormHelperText>{reCaptchaError}</FormHelperText>}
+                  </FormControl>
+                </Col>
+              </Row>
+            </form>
             <Row>
               <Col>
-                <FormControl required={true} error={!!emailError}>
-                  <Row>
-                    <Col sm={2.5}>
-                      <InputLabel
-                        htmlFor="email-address"
-                        css={css`
-                          width: 120px;
-                          margin: 0;
-                        `}
-                      >
-                        Email Address
-                      </InputLabel>
-                    </Col>
-                    <Col>
-                      <Input
-                        css={css`
-                          flex-grow: 1;
-                        `}
-                        aria-label="Email Address"
-                        id="email-address"
-                        size="lg"
-                        value={data.email}
-                        onChange={e => {
-                          setData({ key: 'email', val: e.target.value });
-                        }}
-                        onBlur={() => validateField({ key: 'email' })}
-                      />
-                      {!!emailError && <FormHelperText>{emailError}</FormHelperText>}
-                    </Col>
-                  </Row>
-                </FormControl>
+                <Button
+                  css={css`
+                    margin-left: auto;
+                    margin-right: 0px;
+                  `}
+                  onClick={submitForm}
+                >
+                  SEND MESSAGE
+                </Button>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <FormControl required={true} error={!!messageCategoryError}>
-                  <InputLabel htmlFor="messageCategory">
-                    What do you need assistance with?
-                  </InputLabel>
-                  <Select
-                    value={data.messageCategory}
-                    size="lg"
-                    aria-label="What do you need assistance with"
-                    id="assistance-type"
-                    css={css`
-                      margin-top: 6px;
-                      margin-bottom: 16px;
-                    `}
-                    options={CONTACT_CATEGORY_OPTIONS}
-                    onChange={val => setData({ key: 'messageCategory', val })}
-                    onBlur={() => validateField({ key: 'messageCategory' })}
-                  />
-                  {!!messageCategoryError && (
-                    <FormHelperText>{messageCategoryError}</FormHelperText>
-                  )}
-                </FormControl>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FormControl required={true} error={!!messageDescriptionError}>
-                  <InputLabel htmlFor="messageDescription">Your message</InputLabel>
-                  <Textarea
-                    aria-label="Your message"
-                    id="message"
-                    css={css`
-                      margin-top: 6px;
-                      margin-bottom: 0px;
-                      height: 115px;
-                    `}
-                    value={data.messageDescription}
-                    onChange={e => setData({ key: 'messageDescription', val: e.target.value })}
-                    onBlur={() => validateField({ key: 'messageDescription' })}
-                  />
-                  {!!messageDescriptionError && (
-                    <FormHelperText>{messageDescriptionError}</FormHelperText>
-                  )}
-                </FormControl>
-              </Col>
-            </Row>
-            <Row align="end">
-              <Col>
-                <FormControl required={true} error={!!reCaptchaError}>
-                  <ReCAPTCHA
-                    ref={reCaptchaRef}
-                    sitekey={RECAPTCHA_SITE_KEY}
-                    onChange={(value: string) => {
-                      setData({ key: 'reCaptcha', val: value });
-                    }}
-                    onBlur={() => validateField({ key: 'reCaptcha' })}
-                  />
-                  {!!reCaptchaError && <FormHelperText>{reCaptchaError}</FormHelperText>}
-                </FormControl>
-              </Col>
-            </Row>
-          </form>
-          <Row>
-            <Col>
-              <Button
-                css={css`
-                  margin-left: auto;
-                  margin-right: 0px;
-                `}
-                onClick={submitForm}
-              >
-                SEND MESSAGE
-              </Button>
-            </Col>
-          </Row>
-        </ContentBox>
-      </div>
+          </ContentBox>
+        </Col>
+      </Row>
     </DefaultLayout>
   );
 }
