@@ -42,6 +42,9 @@ import testtube from './collection/testtube';
 import question from './collection/question';
 import filesize from './collection/filesize';
 import crosshairs from './collection/crosshairs';
+import person_admin from './collection/person_admin';
+import person_collaborator from './collection/person_collaborator';
+import person_submitter from './collection/person_submitter';
 
 /**
  * Icon path and property lookup object
@@ -92,6 +95,9 @@ const Icons = {
   article,
   filesize,
   crosshairs,
+  person_admin,
+  person_collaborator,
+  person_submitter,
 };
 
 export type UikitIconNames = keyof typeof Icons;
