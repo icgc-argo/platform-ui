@@ -1,6 +1,5 @@
 import React from 'react';
 import { css } from 'uikit';
-import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import Typography from 'uikit/Typography';
 import TitleBorder from 'uikit/TitleBorder';
@@ -82,56 +81,64 @@ const SectionTitle = props => (
 );
 
 export default function TeamPage() {
-  const theme = useTheme();
   return (
     <DefaultLayout>
       <div
         css={css`
+          height: 140px;
           display: flex;
-          justify-content: center;
-          padding: 0 20px;
+          align-items: center;
+          background-image: url('/static/icgc-galaxy-bg.jpg');
+          background-position: center;
+          background-size: cover;
+          margin-bottom: 36px;
+          padding: 0 10vw;
         `}
       >
-        <div
-          css={css`
-            width: 100%;
-            max-width: 875px;
-            padding: 44px 0;
-            & ul {
-              padding-left: 18px;
-              margin: 0;
-            }
-          `}
-        >
-          {teamData.map(team => (
-            <>
-              <SectionTitle>{team.title}</SectionTitle>
-              <TitleBorder color={team.color} />
-              <Typography
-                variant="paragraph"
-                css={css`
-                  line-height: 1.71;
-                `}
-              >
-                <Row>
-                  {chunk(team.members, 6).map(col => (
-                    <Col>
-                      {col.map(member => (
-                        <div>
-                          {' '}
-                          <Typography variant="paragraph2" bold>
-                            {member.name}
-                          </Typography>
-                          {member['title'] ? `, ${member.title}` : null}
-                        </div>
-                      ))}
-                    </Col>
-                  ))}
-                </Row>
-              </Typography>
-            </>
-          ))}
-        </div>
+        <Typography variant="hero" color="white">
+          {' '}
+          The ICGC ARGO DCC Team
+        </Typography>
+      </div>
+
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          width: 100%;
+          max-width: 875px;
+          padding: 0 10vw;
+        `}
+      >
+        {teamData.map(team => (
+          <div>
+            <SectionTitle>{team.title}</SectionTitle>
+            <TitleBorder color={team.color} width="86px" />
+            <Typography
+              variant="paragraph"
+              css={css`
+                line-height: 1.71;
+              `}
+            >
+              <Row>
+                {chunk(team.members, 6).map(col => (
+                  <Col sm={12} md={4}>
+                    {col.map(member => (
+                      <div>
+                        {' '}
+                        <Typography variant="paragraph2" bold>
+                          {member.name}
+                        </Typography>
+                        {member['title'] ? `, ${member.title}` : null}
+                      </div>
+                    ))}
+                  </Col>
+                ))}
+              </Row>
+            </Typography>
+          </div>
+        ))}
       </div>
     </DefaultLayout>
   );
