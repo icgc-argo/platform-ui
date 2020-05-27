@@ -39,7 +39,8 @@ const redirect = (res, url: string) => {
 };
 
 const getRedirect = (ctxAsPath: string | undefined): string =>
-  ctxAsPath ? `${LOGIN_PAGE_PATH}?redirect=${encodeURI(ctxAsPath)}` : LOGIN_PAGE_PATH;
+  // login path for redirect may be restored in future, see https://github.com/icgc-argo/platform-ui/issues/1487
+  ctxAsPath ? `/?redirect=${encodeURI(ctxAsPath)}` : '/';
 
 const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
   const loginRedirect = getRedirect(ctx.asPath);
