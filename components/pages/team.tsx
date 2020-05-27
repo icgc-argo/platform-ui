@@ -6,6 +6,7 @@ import TitleBorder from 'uikit/TitleBorder';
 import { ThemeColorNames } from 'uikit/theme/types';
 import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
+import get from 'lodash/get';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };
@@ -106,9 +107,8 @@ export default function TeamPage() {
           display: flex;
           justify-content: center;
           flex-direction: column;
-          width: 100%;
-          max-width: 875px;
           padding: 0 10vw;
+          margin-bottom: 25px;
         `}
       >
         {teamData.map(team => (
@@ -122,17 +122,36 @@ export default function TeamPage() {
               `}
             >
               <Row>
-                {chunk(team.members, 6).map(col => (
-                  <Col sm={12} md={4}>
-                    {col.map(member => (
-                      <div>
-                        {' '}
-                        <Typography variant="paragraph2" bold>
-                          {member.name}
-                        </Typography>
-                        {member['title'] ? `, ${member.title}` : null}
-                      </div>
-                    ))}
+                {chunk(team.members, 6).map((col, i, arr) => (
+                  <Col
+                    css={css`
+                      max-width: 330px;
+                    `}
+                    sm={12}
+                    md={arr.length === 1 ? 12 : 12 / arr.length}
+                  >
+                    {col.map(member => {
+                      const title = get(member, 'title', false);
+                      return (
+                        <div
+                          css={css`
+                            display: flex;
+                            flex-wrap: wrap;
+                          `}
+                        >
+                          <Typography variant="paragraph2" bold>
+                            {`${member.name}${title ? ',\u00A0' : ''}`}
+                          </Typography>
+                          <span
+                            css={css`
+                              flex-grow: 1;
+                            `}
+                          >
+                            {title ? `${member.title}` : null}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </Col>
                 ))}
               </Row>
