@@ -32,8 +32,8 @@ export default () => (
         align-items: center;
       `}
     >
-      <NoData title="No data found." link={getStartedLink}>
-        <img alt="no data found" src={PicClipboard} />
+      <NoData title="Coming Soon." link={getStartedLink}>
+        <img alt="Coming Soon." src={PicClipboard} />
       </NoData>
     </div>
   </DashboardCard>
