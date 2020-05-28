@@ -47,7 +47,7 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
         },
         {
           displayName: 'The Team',
-          href: '/team',
+          href: internalPaths.TEAM_PATH,
         },
         {
           displayName: 'Privacy Policy',
