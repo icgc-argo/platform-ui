@@ -47,5 +47,6 @@ module.exports = withImages({
     DACO_URL: process.env.DACO_URL,
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     FEATURE_REPOSITORY_ENABLED: process.env.FEATURE_REPOSITORY_ENABLED,
+    MAINTENANCE_MODE_ON: process.env.MAINTENANCE_MODE_ON,
   },
 });

@@ -46,6 +46,10 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
           target: '_blank',
         },
         {
+          displayName: 'The Team',
+          href: internalPaths.TEAM_PATH,
+        },
+        {
           displayName: 'Privacy Policy',
           href: 'https://www.icgc-argo.org/page/2/privacy',
           target: '_blank',

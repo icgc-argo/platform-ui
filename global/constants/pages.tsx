@@ -33,3 +33,6 @@ export const RDPC_PATH = '/rdpc';
 
 // file repository paths
 export const FILE_REPOSITORY_PATH = `/repository`;
+
+// team page
+export const TEAM_PATH = '/team';
