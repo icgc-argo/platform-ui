@@ -3,6 +3,7 @@ import ErrorLayout from 'components/pages/error';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
+import image from 'static/group-33.svg';
 
 export default () => (
   <ErrorLayout hideApiVersion hideNavbarLinks hideInternalPaths>
@@ -44,7 +45,7 @@ export default () => (
           text-align: center;
         `}
       >
-        <img alt="Broken dna" src="/static/group-33.svg" />
+        <img alt="Broken dna" src={image} />
       </Col>
     </Row>
   </ErrorLayout>
