@@ -6,6 +6,8 @@ import HyperLink from 'uikit/Link';
 import Link from 'next/link';
 import { getConfig } from 'global/config';
 import { Row, Col } from 'react-grid-system';
+import image from 'static/dna-locked.svg';
+import logoMark from 'static/logomark.svg';
 
 export default function Error403Page() {
   const { DOCS_URL_ROOT } = getConfig();
@@ -32,7 +34,7 @@ export default function Error403Page() {
                 margin: 0 8px -2px;
               `}
               alt="Logo mark"
-              src="/static/logomark.svg"
+              src={logoMark}
             />
             3
           </Typography>
@@ -66,7 +68,7 @@ export default function Error403Page() {
             text-align: center;
           `}
         >
-          <img alt="Broken dna" src="/static/dna-locked.svg" />
+          <img alt="Broken dna" src={image} />
         </Col>
       </Row>
     </ErrorLayout>
