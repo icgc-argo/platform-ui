@@ -45,7 +45,6 @@ const teamData: Array<Team> = [
       { name: 'Jared Baker' },
       { name: 'Jaser Uddin' },
       { name: 'Jon Eubank' },
-      { name: 'Kevin Hartmann' },
       { name: 'Minh Ha' },
       { name: 'Robert Tisma' },
       { name: 'Wajiha Shah' },
@@ -64,7 +63,12 @@ const teamData: Array<Team> = [
   },
   {
     title: 'Alumni',
-    members: [{ name: 'Aleks Pejovic' }, { name: 'Priyonto Saha' }, { name: 'Xu Deng' }],
+    members: [
+      { name: 'Aleks Pejovic' },
+      { name: 'Priyonto Saha' },
+      { name: 'Xu Deng' },
+      { name: 'Kevin Hartmann' },
+    ],
     color: 'accent3',
   },
 ];
