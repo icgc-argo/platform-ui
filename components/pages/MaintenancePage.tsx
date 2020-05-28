@@ -44,7 +44,7 @@ export default () => (
           text-align: center;
         `}
       >
-        <img alt="Broken dna" src="/static/dna-maintenance.svg" />
+        <img alt="Broken dna" src="/static/group-33.svg" />
       </Col>
     </Row>
   </ErrorLayout>
