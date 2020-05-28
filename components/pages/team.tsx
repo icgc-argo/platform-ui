@@ -7,6 +7,7 @@ import { ThemeColorNames } from 'uikit/theme/types';
 import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
+import { useTheme } from 'uikit/ThemeProvider';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };
@@ -86,85 +87,92 @@ const SectionTitle = props => (
 );
 
 export default function TeamPage() {
+  const theme = useTheme();
   return (
     <DefaultLayout>
       <div
         css={css`
-          height: 140px;
-          display: flex;
-          align-items: center;
-          background-image: url('/static/icgc-galaxy-bg.jpg');
-          background-position: center;
-          background-size: cover;
-          margin-bottom: 36px;
-          padding: 0 10vw;
+          background: ${theme.colors.white};
+          padding-bottom: 25px;
         `}
       >
-        <Typography variant="hero" color="white">
-          {' '}
-          The ICGC ARGO DCC Team
-        </Typography>
-      </div>
+        <div
+          css={css`
+            height: 140px;
+            display: flex;
+            align-items: center;
+            background-image: url('/static/icgc-galaxy-bg.jpg');
+            background-position: center;
+            background-size: cover;
+            margin-bottom: 36px;
+            padding: 0 10vw;
+          `}
+        >
+          <Typography variant="hero" color="white">
+            {' '}
+            The ICGC ARGO DCC Team
+          </Typography>
+        </div>
 
-      <div
-        css={css`
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          padding: 0 10vw;
-          margin-bottom: 25px;
-        `}
-      >
-        {teamData.map((team, i) => (
-          <div key={i}>
-            <SectionTitle>{team.title}</SectionTitle>
-            <TitleBorder color={team.color} width="86px" />
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 10vw;
+          `}
+        >
+          {teamData.map((team, i) => (
+            <div key={i}>
+              <SectionTitle>{team.title}</SectionTitle>
+              <TitleBorder color={team.color} width="86px" />
 
-            <Row>
-              {chunk(team.members, 6).map((col, i, arr) => (
-                <Col
-                  key={i}
-                  css={css`
-                    max-width: 330px;
-                  `}
-                  sm={12}
-                  md={arr.length === 1 ? 12 : 12 / arr.length}
-                >
-                  <Typography
-                    variant="paragraph"
+              <Row>
+                {chunk(team.members, 6).map((col, i, arr) => (
+                  <Col
+                    key={i}
                     css={css`
-                      line-height: 1.71;
+                      max-width: 330px;
                     `}
+                    sm={12}
+                    md={arr.length === 1 ? 12 : 12 / arr.length}
                   >
-                    {col.map((member, i) => {
-                      const title = get(member, 'title', false);
-                      return (
-                        <span
-                          key={i}
-                          css={css`
-                            display: flex;
-                            flex-wrap: wrap;
-                          `}
-                        >
-                          <Typography variant="paragraph2" bold>
-                            {`${member.name}${title ? ',\u00A0' : ''}`}
-                          </Typography>
+                    <Typography
+                      variant="paragraph"
+                      css={css`
+                        line-height: 1.71;
+                      `}
+                    >
+                      {col.map((member, i) => {
+                        const title = get(member, 'title', false);
+                        return (
                           <span
+                            key={i}
                             css={css`
-                              flex-grow: 1;
+                              display: flex;
+                              flex-wrap: wrap;
                             `}
                           >
-                            {title ? `${member.title}` : null}
+                            <Typography variant="paragraph2" bold>
+                              {`${member.name}${title ? ',\u00A0' : ''}`}
+                            </Typography>
+                            <span
+                              css={css`
+                                flex-grow: 1;
+                              `}
+                            >
+                              {title ? `${member.title}` : null}
+                            </span>
                           </span>
-                        </span>
-                      );
-                    })}
-                  </Typography>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ))}
+                        );
+                      })}
+                    </Typography>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          ))}
+        </div>
       </div>
     </DefaultLayout>
   );
