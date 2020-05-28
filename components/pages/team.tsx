@@ -8,6 +8,7 @@ import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
 import { useTheme } from 'uikit/ThemeProvider';
+import banner from 'static/icgc-galaxy-bg.jpg';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };
@@ -101,7 +102,7 @@ export default function TeamPage() {
             height: 140px;
             display: flex;
             align-items: center;
-            background-image: url('/static/icgc-galaxy-bg.jpg');
+            background-image: url(${banner});
             background-position: center;
             background-size: cover;
             margin-bottom: 36px;
