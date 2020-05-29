@@ -319,6 +319,7 @@ export default ({
               }
             : {}
         }
+        pageSize={tableData.length}
         showPagination={false}
         columns={tableColumns}
         data={tableData}
