@@ -57,9 +57,8 @@ export type FiltersType =
 type FiltersContextType = {
   filters: FiltersType;
   clearFilters: () => void;
-  setFilters: any;
-  setFiltersFromSqon: Function;
-  // setFilters: (FiltersType) => void;
+  setFilters: ({ field, value }: { field: string; value: string }) => void;
+  setFiltersFromSqon: (filters: FiltersType) => void;
 };
 
 export const defaultFilters = { op: 'and', content: [] } as FiltersType;
@@ -67,9 +66,8 @@ export const defaultFilters = { op: 'and', content: [] } as FiltersType;
 const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
-  setFilters: ({ field, value }: { field: string; value: string }) => null,
+  setFilters: () => {},
   setFiltersFromSqon: () => {},
-  // setFilters: (filter: FiltersType) => null,
 });
 
 const useFilterState = () => {

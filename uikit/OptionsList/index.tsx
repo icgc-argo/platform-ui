@@ -44,7 +44,6 @@ const OptionsList: React.ComponentType<{
     [searchQuery],
   );
 
-  const [selectAll, setSelectAll] = React.useState(true);
   const initialState = orderBy(options, ['doc_count'], ['desc']);
   const [optionStates, setOptionStates] = React.useState(initialState);
 
@@ -113,15 +112,6 @@ const OptionsList: React.ComponentType<{
     </div>
   );
 
-  // const toggleOption = (optionKey: string) => {
-  //   const targetState = optionStates.find(state => state.key === optionKey);
-  //   const updatedStates = [
-  //     ...optionStates.filter(state => state !== targetState),
-  //     { ...targetState, isChecked: !targetState.isChecked },
-  //   ];
-  //   setOptionStates(updatedStates);
-  // };
-
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
     optionStates,
@@ -139,6 +129,10 @@ const OptionsList: React.ComponentType<{
     [searchQuery, sortedOptions],
   );
 
+  const allOptionsSelected: boolean = (searchQuery ? queriedOptions : options).every(
+    opt => opt.isChecked,
+  );
+
   const defaultNonSelectedOptions = React.useMemo(
     () => sortedOptions.slice(0, defaultRenderLimit).filter(option => !option.isChecked),
     [sortedOptions],
@@ -154,24 +148,9 @@ const OptionsList: React.ComponentType<{
 
   const onSelectAll = () => {
     if (searchQuery) {
-      setOptionStates(
-        optionStates.map(state =>
-          queriedOptionKeys.includes(state.key) ? { ...state, isChecked: selectAll } : { ...state },
-        ),
-      );
+      onToggle(queriedOptionKeys);
     } else {
-      if (selectAll) {
-        setOptionStates(
-          sortedOptions.map(state => {
-            return { ...state, isChecked: selectAll };
-          }),
-        );
-      } else {
-        setOptionStates(initialState);
-      }
-      // this state management may be unreliable
-      onSelectAllValues(selectAll);
-      setSelectAll(!selectAll);
+      onSelectAllValues(allOptionsSelected);
     }
   };
   const numberOfMoreOptions = options.length - optionsToShow.length;
@@ -209,7 +188,7 @@ const OptionsList: React.ComponentType<{
           moreToggleHandler={() => {
             setAllOptionsVisible(!allOptionsVisible);
           }}
-          selectAllState={selectAll}
+          selectAllState={allOptionsSelected}
           toggleVisiblityCss={
             searchQuery
               ? 'hidden'

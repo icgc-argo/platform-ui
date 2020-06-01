@@ -46,7 +46,7 @@ const ViewAmountController: React.ComponentType<{
           selectAllHander();
         }}
       >
-        {selectAllState ? 'Select all' : 'Deselect all'}
+        {selectAllState ? 'Deselect all' : 'Select all'}
       </HyperLink>
 
       {/* The div containing the show more / show less toggler */}

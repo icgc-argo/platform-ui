@@ -13,7 +13,7 @@ import {
   TFilterByWhitelist,
   TRemoveSQON,
 } from './types';
-
+import { defaultFilters as defaultEmptySQON } from '../hooks/useFiltersContext';
 //** from uri/utils */
 // export const parseIntParam: TParseIntParam = (str, defaults) =>
 //   str ? Math.max(parseInt(str, 10), 0) : defaults;
@@ -118,7 +118,7 @@ export const toggleSQON: TMergeSQON = (q, ctxq) => {
       .sort(sortSQON),
   };
 
-  return merged.content.length ? merged : null;
+  return merged.content.length ? merged : defaultEmptySQON;
 };
 
 export const replaceSQON: TMergeSQON = (q, ctxq) => {
@@ -137,7 +137,7 @@ export const replaceSQON: TMergeSQON = (q, ctxq) => {
       .sort(sortSQON),
   };
 
-  return merged.content.length ? merged : null;
+  return merged.content.length ? merged : defaultEmptySQON;
 };
 
 export const addInSQON: TMergeSQON = (q, ctxq) => {
@@ -159,7 +159,7 @@ export const addInSQON: TMergeSQON = (q, ctxq) => {
       .sort(sortSQON),
   };
 
-  return merged.content.length ? merged : null;
+  return merged.content.length ? merged : defaultEmptySQON;
 };
 
 export const replaceFilterSQON: TMergeSQON = (q, ctxq) => {
@@ -301,7 +301,7 @@ export const removeSQON: TRemoveSQON = (field, sqon) => {
         ...sqon,
         content: filteredContent,
       }
-    : null;
+    : defaultEmptySQON;
 };
 
 export default makeSQON;

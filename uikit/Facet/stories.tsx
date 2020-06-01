@@ -54,11 +54,11 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
             );
           }
         }}
-        onSelectAllValues={selectAll => {
-          if (selectAll) {
-            setFilters(SqonBuilder.has('primary site', exampleOptions.map(opt => opt.key)).build());
-          } else {
+        onSelectAllValues={allValuesSelected => {
+          if (allValuesSelected) {
             setFilters(defaultFilters);
+          } else {
+            setFilters(SqonBuilder.has('primary site', exampleOptions.map(opt => opt.key)).build());
           }
         }}
         {...knobs}

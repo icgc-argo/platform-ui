@@ -16,7 +16,8 @@ import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
 import sqonBuilder from 'sqon-builder';
-import { removeSQON, inCurrentSQON } from '../utils';
+import { removeSQON, inCurrentSQON, toggleSQON } from '../utils';
+import SqonBuilder from 'sqon-builder';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -166,16 +167,17 @@ export default () => {
                   // maybe rename this to onSelect because that is the action - to differentiate between this and the SQON
                   // remove Value on SQONView
                   onChange={(facetValue: any) => {
-                    setFilters({ field: type.name, value: facetValue });
+                    const currentValue = SqonBuilder.has(type.name, facetValue).build();
+                    setFiltersFromSqon(toggleSQON(currentValue, filters));
                   }}
-                  onSelectAllValues={(selectAll: boolean) => {
-                    if (selectAll) {
+                  onSelectAllValues={(allValuesSelected: boolean) => {
+                    if (allValuesSelected) {
+                      setFiltersFromSqon(removeSQON(type.name, filters));
+                    } else {
                       setFilters({
                         field: type.name,
                         value: mockFacetData[type.name].map(v => v.key),
                       });
-                    } else {
-                      setFiltersFromSqon(removeSQON(type.name, filters));
                     }
                   }}
                 />
