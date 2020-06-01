@@ -9,6 +9,7 @@ import Link from 'uikit/Link';
 import Button from 'uikit/Button';
 import Container from 'uikit/Container';
 import overtureLogo from 'uikit/assets/overture-logo.svg';
+import scientistImage from 'static/icgc-data-scientist-wide.jpg';
 
 type DataReleaseStatistic = {
   quantity: number;
@@ -194,23 +195,26 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
       `}
     >
       <Row nogutter>
-        <Col md={4} sm={12}>
+        <Col
+          md={4}
+          sm={12}
+          css={css`
+            background-color: rgba(21, 28, 61, 1);
+          `}
+        >
           <div
             css={css`
               background-image: linear-gradient(
                   to bottom,
                   rgba(21, 28, 61, 0.33),
-                  rgba(21, 28, 61, 0.33) 105%
+                  rgba(21, 28, 61, 0.33) 66%,
+                  rgba(21, 28, 61, 1) 100%
                 ),
-                url('/static/icgc-data-scientist-wide.jpg');
+                url(${scientistImage});
               background-size: cover;
-              /* fade bg into solid color */
-              /* background-repeat: no-repeat;
-              background-size: contain;
-              background-position: top; */
-              background-color: ${theme.colors.primary};
               width: 100%;
               min-height: 210px;
+              max-height: 350px;
               height: 100%;
               display: flex;
               flex-direction: column;

@@ -7,6 +7,9 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
+import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
+import globeBackground from 'static/icgc-globe-bg.svg';
+
 import Link from 'uikit/Link';
 
 import Icon from 'uikit/Icon';
@@ -19,6 +22,7 @@ import {
   ResponsiveGridLayout,
 } from './common';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { getConfig } from 'global/config';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -48,28 +52,22 @@ const SeparationLine: React.ComponentType<{}> = () => {
   );
 };
 
-const layoutProps = {
-  lg: 4,
-  md: 6,
-  sm: 12,
-};
-
 const HeroDiv = styled('div')`
   background-image: ${({ theme }) =>
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
-      url('/static/icgc-galaxy-bg.jpg');`};
+      url(${galaxyBackground});`};
 
   background-position: center;
   background-size: cover;
   background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
-  min-height: 354px;
 `;
 
 export default function Homepage() {
   const theme = useTheme();
+  const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
   return (
     <DefaultLayout>
@@ -80,6 +78,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
+            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED ? '0px' : '40px'};
           `}
         >
           <Typography
@@ -121,25 +120,28 @@ export default function Homepage() {
               margin-top: 20px;
             `}
           >
-            <Link
-              href={FILE_REPOSITORY_PATH}
-              underline={false}
-              css={css`
-                margin: 0 15px;
-              `}
-            >
-              <Button variant="secondary">
-                <Icon
-                  css={css`
-                    padding-right: 2px;
-                  `}
-                  name="file"
-                  fill="accent2"
-                  height="12px"
-                />
-                Browse the Data
-              </Button>
-            </Link>
+            {FEATURE_REPOSITORY_ENABLED && (
+              <Link
+                href={FILE_REPOSITORY_PATH}
+                underline={false}
+                css={css`
+                  margin: 0 15px;
+                `}
+              >
+                <Button variant="secondary">
+                  <Icon
+                    css={css`
+                      padding-right: 2px;
+                    `}
+                    name="file"
+                    fill="accent2"
+                    height="12px"
+                  />
+                  Browse the Data
+                </Button>
+              </Link>
+            )}
+
             <Link
               href="https://www.icgc-argo.org/"
               underline={false}
@@ -162,15 +164,17 @@ export default function Homepage() {
             </Link>
           </div>
 
-          <DataReleaseBar
-            stats={[
-              { quantity: 2, description: 'PROGRAMS' },
-              { quantity: 4600, description: 'DONORS' },
-              { quantity: 2, description: 'CANCER PRIMARY SITES' },
-              { quantity: 400, description: 'FILES' },
-            ]}
-            version={{ date: 'July 2, 2020', releaseIteration: 1 }}
-          />
+          {FEATURE_LANDING_PAGE_STATS_ENABLED && (
+            <DataReleaseBar
+              stats={[
+                { quantity: 2, description: 'PROGRAMS' },
+                { quantity: 4600, description: 'DONORS' },
+                { quantity: 2, description: 'CANCER PRIMARY SITES' },
+                { quantity: 400, description: 'FILES' },
+              ]}
+              version={{ date: 'July 2, 2020', releaseIteration: 1 }}
+            />
+          )}
         </div>
       </HeroDiv>
       <div
@@ -236,24 +240,40 @@ export default function Homepage() {
         <NewsContainer
           newsItems={[
             <>
-              <b>Data Release:</b> ICGC ARGO has just released a new set of data, with new donors
-              and somatic mutations from 2 programs. For the release summary, please visit{' '}
-              <Link>Data Release 1</Link>.
-            </>,
-            <>
-              <b>Software Release:</b> Analyze ICGC ARGO data from a Jupyter notebook that comes
-              preinstalled with our new python API. Access the feature: <Link>Data Analysis</Link>{' '}
-              and release notes: <Link>Software Release 2</Link>.
+              <b>Announcement:</b> We are excited to announce the soft launch of the ARGO Data
+              Platform, the next major phase following the{' '}
+              <Link target="_blank" href="https://dcc.icgc.org/">
+                ICGC 25K Data Portal
+              </Link>
+              . This release represents an international effort to advance cancer genomics through
+              high-quality clinical and molecular data for international researchers.
+              <br />
+              <br />
+              Our team is working hard to roll out the first release, which includes the ability:
+              <ul
+                css={css`
+                  list-style-position: outside;
+                  padding-left: 20px;
+                `}
+              >
+                <li>for ARGO programs to submit clinical data</li>
+                <li>
+                  to browse newly processed files from the ICGC 25K projects against the GRCh38
+                  Human Reference Genome in the file repository
+                </li>
+                <li>to download newly analyzed molecular data files.</li>
+              </ul>
+              <b>Check back soon for updates!</b>
             </>,
           ]}
         />
         <div
           css={css`
-            background-image: url('/static/icgc-globe-bg.svg');
+            background-image: url(${globeBackground});
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
-            padding: 10px 0px;
+            padding: 40px 0px;
           `}
         >
           <ResponsiveGridLayout>
