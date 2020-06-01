@@ -13,6 +13,9 @@ import TablePagination from './TablePagination';
 import DefaultNoDataComponent from './NoDataComponent';
 import { TableProps } from 'react-table';
 import useElementDimension from '../utils/Hook/useElementDimension';
+import Typography from '../Typography';
+import css from '@emotion/css';
+import pluralize from 'pluralize';
 
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
@@ -94,6 +97,8 @@ function Table<Data extends TableDataBase>({
   },
   parentRef,
   withResizeBlur = false,
+  rowName = '',
+  tableTopContent,
   ...rest
 }: Partial<TableProps<Data>> & {
   variant?: TableVariant;
@@ -104,6 +109,8 @@ function Table<Data extends TableDataBase>({
   columns: Array<TableColumnConfig<Data>>; //columns is required
   parentRef: React.RefObject<HTMLElement>;
   withResizeBlur?: boolean;
+  rowName?: string;
+  tableTopContent?: JSX.Element;
 } & StyledTableProps) {
   const TrComponent = rest.TrComponent || DefaultTrComponent;
   const getTrProps = rest.getTrProps || (() => ({}));
@@ -117,39 +124,81 @@ function Table<Data extends TableDataBase>({
   // This syncs up the component's width to its container.
   const { width, resizing } = useElementDimension(parentRef);
 
+  const defaultPageSize = rest.defaultPageSize || 20;
+  const [pageSize, setPageSize] = React.useState(defaultPageSize);
+  const [pageIndex, setPageIndex] = React.useState(0);
+
+  const PageRowCounter = () =>
+    React.useMemo(() => {
+      const startRow = pageSize * pageIndex + 1;
+      const endRow = Math.min(pageSize * (pageIndex + 1), data.length);
+      const totalRows = data.length;
+
+      const rowCountSummary = `${startRow}-${endRow} of ${totalRows} ${pluralize(
+        rowName,
+        totalRows,
+      )}`;
+      return (
+        <div>
+          <Typography variant="data" color="grey">
+            {rowCountSummary}
+          </Typography>
+        </div>
+      );
+    }, [pageIndex, pageSize, data.length]);
+
   return (
-    <StyledTable
-      style={{
-        // this is written with style object because css prop somehow only applies to the header
-        transition: 'all 0.25s',
-        filter: resizing && withResizeBlur ? 'blur(8px)' : 'blur(0px)',
-        width,
-      }}
-      withRowBorder={withRowBorder}
-      withOutsideBorder={withOutsideBorder}
-      cellAlignment={cellAlignment}
-      getTableProps={getTableProps}
-      columns={columns}
-      data={data}
-      isSelectTable={isSelectTable}
-      className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
-      TrComponent={props => (
-        <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
-      )}
-      LoadingComponent={LoadingComponent}
-      getTrProps={(state, rowInfo, column) => ({
-        rowInfo,
-        ...getTrProps(state, rowInfo, column),
-      })}
-      minRows={0}
-      PaginationComponent={PaginationComponent}
-      NoDataComponent={NoDataComponent}
-      showPagination={isEmpty(data) ? false : showPagination}
-      getNoDataProps={x => x}
-      sortable={sortable}
-      resizable={resizable}
-      {...rest}
-    />
+    <>
+      <div
+        css={css`
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          padding: 0px 8px 20px 8px;
+        `}
+      >
+        {data.length > 0 && rowName && PageRowCounter()}
+        {tableTopContent}
+      </div>
+      <StyledTable
+        style={{
+          // this is written with style object because css prop somehow only applies to the header
+          transition: 'all 0.25s',
+          filter: resizing && withResizeBlur ? 'blur(8px)' : 'blur(0px)',
+          width,
+        }}
+        // the on-pageChange won't correctly recalculate the value triggered by the pagesize change
+        getPaginationProps={(state, _rowInfo, _column, _instance) => {
+          setPageSize(state.pageSize);
+          setPageIndex(state.page);
+          return {};
+        }}
+        withRowBorder={withRowBorder}
+        withOutsideBorder={withOutsideBorder}
+        cellAlignment={cellAlignment}
+        getTableProps={getTableProps}
+        columns={columns}
+        data={data}
+        isSelectTable={isSelectTable}
+        className={`${className} ${stripped ? '-striped' : ''} ${highlight ? '-highlight' : ''}`}
+        TrComponent={props => (
+          <TrComponent {...props} primaryKey={primaryKey} selectedIds={selectedIds} />
+        )}
+        LoadingComponent={LoadingComponent}
+        getTrProps={(state, rowInfo, column) => ({
+          rowInfo,
+          ...getTrProps(state, rowInfo, column),
+        })}
+        minRows={0}
+        PaginationComponent={PaginationComponent}
+        NoDataComponent={NoDataComponent}
+        showPagination={isEmpty(data) ? false : showPagination}
+        getNoDataProps={x => x}
+        sortable={sortable}
+        resizable={resizable}
+        {...rest}
+      />
+    </>
   );
 }
 export default Table;
@@ -173,6 +222,8 @@ export function SelectTable<Data extends TableDataBase>(
       columns: Array<TableColumnConfig<Data>>; //columns is required
       parentRef: React.RefObject<HTMLElement>;
       withResizeBlur?: boolean;
+      rowName?: string;
+      tableTopContent?: JSX.Element;
     },
 ) {
   const { isSelected, data, keyField } = props;

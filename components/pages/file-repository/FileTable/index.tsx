@@ -144,16 +144,91 @@ export default ({
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
+  const tableTopContent = (
+    <div
+      css={css`
+        display: flex;
+      `}
+    >
+      <DropdownButton
+        css={css`
+          margin-right: 8px;
+        `}
+        variant="secondary"
+        size="sm"
+        onItemClick={item => console.log('well done, you clicked the button')}
+        menuItems={[
+          {
+            display: 'Clinical Data',
+            value: 'Clinical Data',
+          },
+          {
+            display: 'File Manifest',
+            value: 'File Manifest',
+          },
+          {
+            display: 'File Table',
+            value: 'File Table',
+          },
+        ]}
+      >
+        <span css={instructionBoxButtonContentStyle}>
+          <Icon
+            name="download"
+            fill="accent2_dark"
+            height="12px"
+            css={instructionBoxButtonIconStyle}
+          />
+          Download
+          <Icon
+            name="chevron_down"
+            fill="accent2_dark"
+            height="9px"
+            css={css`
+              ${instructionBoxButtonIconStyle}
+              margin-left: 5px;
+            `}
+          />
+        </span>
+      </DropdownButton>
+      <DropdownButton
+        variant="secondary"
+        size="sm"
+        onItemClick={item => console.log('well done, you clicked the button')}
+        menuItems={[
+          {
+            display: 'placeholder',
+            value: 'placeholder',
+          },
+        ]}
+      >
+        <span css={instructionBoxButtonContentStyle}>
+          Columns
+          <Icon
+            name="chevron_down"
+            fill="accent2_dark"
+            height="9px"
+            css={css`
+              ${instructionBoxButtonIconStyle}
+              margin-left: 5px;
+            `}
+          />
+        </span>
+      </DropdownButton>
+    </div>
+  );
+
   const tableElement = (
     <div
       ref={containerRef}
       css={css`
         z-index: 2;
-        padding-top: 10px;
       `}
     >
       <SelectTable
         keyField="fileID"
+        rowName="file"
+        tableTopContent={tableTopContent}
         parentRef={containerRef}
         showPagination={true}
         columns={tableColumns}
@@ -175,94 +250,6 @@ export default ({
         padding: 10px;
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        `}
-      >
-        <div
-          css={css`
-            margin-left: 10px;
-          `}
-        >
-          <Typography variant="data" color="grey">
-            {fileRepoEntries.length} files
-          </Typography>
-        </div>
-        <div
-          css={css`
-            display: flex;
-          `}
-        >
-          <DropdownButton
-            css={css`
-              margin-right: 8px;
-            `}
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'Clinical Data',
-                value: 'Clinical Data',
-              },
-              {
-                display: 'File Manifest',
-                value: 'File Manifest',
-              },
-              {
-                display: 'File Table',
-                value: 'File Table',
-              },
-            ]}
-          >
-            <span css={instructionBoxButtonContentStyle}>
-              <Icon
-                name="download"
-                fill="accent2_dark"
-                height="12px"
-                css={instructionBoxButtonIconStyle}
-              />
-              Download
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
-          <DropdownButton
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'placeholder',
-                value: 'placeholder',
-              },
-            ]}
-          >
-            <span css={instructionBoxButtonContentStyle}>
-              Columns
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
-        </div>
-      </div>
       {tableElement}
     </Container>
   );
