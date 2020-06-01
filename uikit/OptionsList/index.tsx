@@ -13,6 +13,7 @@ import ViewAmountController from '../OptionsList/ViewAmountController';
 export type FilterOption = {
   key: string;
   doc_count: number;
+  isChecked: boolean;
 };
 
 type SelectableFilterOption = FilterOption & { isChecked: boolean };
@@ -22,7 +23,16 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-}> = ({ options, searchQuery = '', defaultRenderLimit = 5, countUnit }) => {
+  onToggle: Function;
+  onSelectAllValues?: Function;
+}> = ({
+  options,
+  searchQuery = '',
+  defaultRenderLimit = 5,
+  countUnit,
+  onToggle,
+  onSelectAllValues,
+}) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
@@ -35,16 +45,13 @@ const OptionsList: React.ComponentType<{
   );
 
   const [selectAll, setSelectAll] = React.useState(true);
+  const initialState = orderBy(options, ['doc_count'], ['desc']);
+  const [optionStates, setOptionStates] = React.useState(initialState);
 
-  const initalStates = orderBy(
-    options.map(option => {
-      return { ...option, isChecked: false };
-    }),
-    ['doc_count'],
-    ['desc'],
-  );
-
-  const [optionStates, setOptionStates] = React.useState(initalStates);
+  // can changes be watched directly through options prop?
+  React.useEffect(() => {
+    setOptionStates(options);
+  }, [options]);
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
@@ -64,7 +71,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        toggleOption(option.key);
+        onToggle(option.key);
       }}
     >
       <div
@@ -106,14 +113,14 @@ const OptionsList: React.ComponentType<{
     </div>
   );
 
-  const toggleOption = (optionKey: string) => {
-    const targetState = optionStates.find(state => state.key === optionKey);
-    const updatedStates = [
-      ...optionStates.filter(state => state !== targetState),
-      { ...targetState, isChecked: !targetState.isChecked },
-    ];
-    setOptionStates(updatedStates);
-  };
+  // const toggleOption = (optionKey: string) => {
+  //   const targetState = optionStates.find(state => state.key === optionKey);
+  //   const updatedStates = [
+  //     ...optionStates.filter(state => state !== targetState),
+  //     { ...targetState, isChecked: !targetState.isChecked },
+  //   ];
+  //   setOptionStates(updatedStates);
+  // };
 
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
@@ -159,11 +166,15 @@ const OptionsList: React.ComponentType<{
             return { ...state, isChecked: selectAll };
           }),
         );
-      } else setOptionStates(initalStates);
+      } else {
+        setOptionStates(initialState);
+      }
+      // this state management may be unreliable
+      onSelectAllValues(selectAll);
       setSelectAll(!selectAll);
     }
   };
-  const numberofMoreOptions = options.length - optionsToShow.length;
+  const numberOfMoreOptions = options.length - optionsToShow.length;
 
   return (
     <>
@@ -202,13 +213,13 @@ const OptionsList: React.ComponentType<{
           toggleVisiblityCss={
             searchQuery
               ? 'hidden'
-              : numberofMoreOptions === 0
+              : numberOfMoreOptions === 0
               ? allOptionsVisible
                 ? 'visible'
                 : 'hidden'
               : 'visible'
           }
-          toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
+          toggleText={allOptionsVisible ? `Less` : `${numberOfMoreOptions} More`}
           moreOptionsAvailable={!allOptionsVisible}
         />
       )}

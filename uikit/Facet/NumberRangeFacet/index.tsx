@@ -1,5 +1,4 @@
 import React from 'react';
-// import { MenuItem } from './../SubMenu';
 import { MenuItem } from '../../SubMenu';
 
 import { css } from '@emotion/core';
@@ -7,11 +6,11 @@ import NumberRangeField from 'uikit/NumberRangeField';
 
 const NumberRangeFacet = ({
   subMenuName,
-  isSelected,
+  isExpanded,
   onClick,
 }: {
   subMenuName: string;
-  isSelected?: boolean;
+  isExpanded?: boolean;
   onClick?: (e: any) => void;
 }) => {
   // must be initialized, use string to handle 'backspaces' from input field
@@ -48,7 +47,7 @@ const NumberRangeFacet = ({
   return (
     <MenuItem
       onClick={onClick}
-      selected={isSelected}
+      selected={isExpanded}
       isFacetVariant={true}
       className="FacetMenu"
       content={subMenuName}

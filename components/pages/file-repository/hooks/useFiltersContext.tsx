@@ -1,8 +1,8 @@
 import React from 'react';
-import useUrlParamState, { getParams } from 'global/hooks/useUrlParamState';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
-import { useRouter } from 'next/router';
 import stringify from 'fast-json-stable-stringify';
+import { addInSQON, inCurrentSQON } from '../utils';
 
 enum ArrayFieldKeys {
   In = 'in',
@@ -47,23 +47,29 @@ interface CombinationOperator {
 
 type Operator = FieldOperator | CombinationOperator;
 
-export type FiltersType = {
-  op: CombinationKeys;
-  content: Operator[];
-};
+export type FiltersType =
+  | {
+      op: CombinationKeys;
+      content: Operator[];
+    }
+  | any;
 
 type FiltersContextType = {
   filters: FiltersType;
   clearFilters: () => void;
-  setFilters: (FiltersType) => void;
+  setFilters: any;
+  setFiltersFromSqon: Function;
+  // setFilters: (FiltersType) => void;
 };
 
-const defaultFilters = { op: 'and', content: [] } as FiltersType;
+export const defaultFilters = { op: 'and', content: [] } as FiltersType;
 
 const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
-  setFilters: (filter: FiltersType) => null,
+  setFilters: ({ field, value }: { field: string; value: string }) => null,
+  setFiltersFromSqon: () => {},
+  // setFilters: (filter: FiltersType) => null,
 });
 
 const useFilterState = () => {
@@ -82,14 +88,18 @@ export function FiltersProvider({ children }) {
     setCurrentFilters(defaultFilters);
   };
 
-  const setFilters = filters => {
-    setCurrentFilters(filters);
+  const setFiltersFromSqon = filters => setCurrentFilters(filters);
+  const setFilters = ({ field, value }) => {
+    const q = sqonBuilder.has(field, value).build();
+    const ctx = addInSQON(q, currentFilters);
+    setCurrentFilters(ctx);
   };
 
   const data = {
     filters: currentFilters,
     setFilters,
     clearFilters,
+    setFiltersFromSqon,
   };
   return <FiltersContext.Provider value={data}>{children}</FiltersContext.Provider>;
 }

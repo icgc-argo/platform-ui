@@ -3,6 +3,7 @@ import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
 import useFiltersContext, { FiltersType } from '../hooks/useFiltersContext';
 import Button from 'uikit/Button';
+import isEmpty from 'lodash/isEmpty';
 
 type AndOp = 'and';
 
@@ -157,8 +158,8 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ filters = {} }) => {
-  const { clearFilters, setFilters } = useFiltersContext();
+const QueryBar = ({ filters }) => {
+  const { clearFilters, setFilters, setFiltersFromSqon } = useFiltersContext();
 
   return (
     <div css={content}>
@@ -171,7 +172,17 @@ const QueryBar = ({ filters = {} }) => {
           </Button>
         )}
         ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
-          <Value onClick={() => setFilters(nextSQON)} {...props}>
+          <Value
+            onClick={() => {
+              // deleting the last value listed returns nextSQON = null, so check if empty to reset to defaultFilters
+              if (isEmpty(nextSQON)) {
+                clearFilters();
+              } else {
+                setFiltersFromSqon(nextSQON);
+              }
+            }}
+            {...props}
+          >
             {value}
           </Value>
         )}

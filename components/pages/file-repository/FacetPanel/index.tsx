@@ -14,6 +14,9 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
+import useFiltersContext from '../hooks/useFiltersContext';
+import sqonBuilder from 'sqon-builder';
+import { removeSQON, inCurrentSQON } from '../utils';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -52,15 +55,15 @@ const FacetContainer = styled('div')`
 `;
 
 export default () => {
-  const [selectedFacets, setSelectedFacets] = React.useState(concat(presetFacets, fileIDSearch));
+  const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
-
-  const clickHander = (targetFacet: FacetDetails) => {
-    if (selectedFacets.includes(targetFacet)) {
-      setSelectedFacets(selectedFacets.filter(facet => facet !== targetFacet));
+  const { filters, setFilters, setFiltersFromSqon } = useFiltersContext();
+  const clickHandler = (targetFacet: FacetDetails) => {
+    if (expandedFacets.includes(targetFacet)) {
+      setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
     } else {
-      setSelectedFacets(selectedFacets.concat(targetFacet));
+      setExpandedFacets(expandedFacets.concat(targetFacet));
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
@@ -86,8 +89,8 @@ export default () => {
           `}
         >
           <MenuItem
-            onClick={e => clickHander(fileIDSearch)}
-            selected={selectedFacets.includes(fileIDSearch)}
+            onClick={e => clickHandler(fileIDSearch)}
+            selected={expandedFacets.includes(fileIDSearch)}
             className="FacetMenu"
             content={fileIDSearch.name}
             chevronOnLeftSide={true}
@@ -138,15 +141,44 @@ export default () => {
         {presetFacets.map(type => {
           const props = {
             onClick: e => {
-              clickHander(type);
+              clickHandler(type);
             },
-            isSelected: selectedFacets.includes(type),
+            isExpanded: expandedFacets.includes(type),
             subMenuName: capitalize(type.name),
           };
+
           return (
             <FacetRow key={type.name}>
               {type.variant === 'Basic' && (
-                <Facet {...props} options={mockFacetData[type.name]} countUnit={'files'} />
+                <Facet
+                  {...props}
+                  options={mockFacetData[type.name].map(d => {
+                    return {
+                      ...d,
+                      isChecked: inCurrentSQON({
+                        currentSQON: filters,
+                        value: d.key,
+                        dotField: type.name,
+                      }),
+                    };
+                  })}
+                  countUnit={'files'}
+                  // maybe rename this to onSelect because that is the action - to differentiate between this and the SQON
+                  // remove Value on SQONView
+                  onChange={(facetValue: any) => {
+                    setFilters({ field: type.name, value: facetValue });
+                  }}
+                  onSelectAllValues={(selectAll: boolean) => {
+                    if (selectAll) {
+                      setFilters({
+                        field: type.name,
+                        value: mockFacetData[type.name].map(v => v.key),
+                      });
+                    } else {
+                      setFiltersFromSqon(removeSQON(type.name, filters));
+                    }
+                  }}
+                />
               )}
               {type.variant === 'Number' && <NumberRangeFacet {...props} />}
             </FacetRow>
