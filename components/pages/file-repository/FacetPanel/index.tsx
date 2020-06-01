@@ -182,7 +182,21 @@ export default () => {
                   }}
                 />
               )}
-              {type.variant === 'Number' && <NumberRangeFacet {...props} />}
+              {type.variant === 'Number' && (
+                <NumberRangeFacet
+                  {...props}
+                  // need >= and <=, and displayed that way
+                  // either add to sqon-builder or make a custom function
+                  // also should clear filters clear out the state from this facet?
+                  onChange={(min, max) => {
+                    setFiltersFromSqon(
+                      SqonBuilder.gt(type.name, min)
+                        .lt(type.name, max)
+                        .build(),
+                    );
+                  }}
+                />
+              )}
             </FacetRow>
           );
         })}
