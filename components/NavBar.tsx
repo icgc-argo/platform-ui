@@ -67,7 +67,7 @@ const getUserRole = (egoJwt, permissions) => {
   }
 };
 
-export default function Navbar({ hideLink = false, disableLogoLink = false }) {
+export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
 
@@ -134,7 +134,7 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
           }
         />
         <MenuGroup>
-          {FEATURE_REPOSITORY_ENABLED && (
+          {FEATURE_REPOSITORY_ENABLED && !hideLinks && (
             <Link href={FILE_REPOSITORY_PATH} as={FILE_REPOSITORY_PATH}>
               <a
                 css={css`
@@ -150,7 +150,7 @@ export default function Navbar({ hideLink = false, disableLogoLink = false }) {
         </MenuGroup>
       </Section>
       <Section />
-      {!hideLink && (
+      {!hideLinks && (
         <Section>
           <MenuGroup>
             {egoJwt && canAccessSubmission ? (
