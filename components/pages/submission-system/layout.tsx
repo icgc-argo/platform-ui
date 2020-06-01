@@ -80,7 +80,7 @@ export function MinimalLayout({ children }) {
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
-      <NavBar hideLink />
+      <NavBar hideLinks />
       <PageBody className={clsx({ noSidebar: true })}>
         <PageContent>
           <ContentBody>{children}</ContentBody>

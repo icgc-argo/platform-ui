@@ -319,9 +319,9 @@ export default ({
               }
             : {}
         }
-        showPagination={false}
         columns={tableColumns}
         data={tableData}
+        showPagination
       />
     </div>
   );
