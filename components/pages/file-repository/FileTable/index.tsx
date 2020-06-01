@@ -44,7 +44,6 @@ export default ({
   };
   const fileDownloader = (fileID: String) => {
     //todo
-    alert(`we are working hard to download your file, ${fileID}`);
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
@@ -156,7 +155,7 @@ export default ({
         `}
         variant="secondary"
         size="sm"
-        onItemClick={item => console.log('well done, you clicked the button')}
+        onItemClick={item => null}
         menuItems={[
           {
             display: 'Clinical Data',
@@ -194,7 +193,7 @@ export default ({
       <DropdownButton
         variant="secondary"
         size="sm"
-        onItemClick={item => console.log('well done, you clicked the button')}
+        onItemClick={item => null}
         menuItems={[
           {
             display: 'placeholder',
