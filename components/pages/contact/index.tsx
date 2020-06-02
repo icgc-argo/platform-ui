@@ -103,6 +103,7 @@ export default function ContactPage() {
       try {
         await createTicket({
           variables: {
+            reCaptchaResponse: validData.reCaptcha,
             messageCategory: validData.messageCategory,
             emailAddress: validData.email,
             requestText: validData.messageDescription,
