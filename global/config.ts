@@ -23,6 +23,7 @@ export const getConfig = () => {
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     FEATURE_REPOSITORY_ENABLED: publicConfig.FEATURE_REPOSITORY_ENABLED === 'true',
     FEATURE_LANDING_PAGE_STATS_ENABLED: publicConfig.FEATURE_LANDING_PAGE_STATS_ENABLED === 'true',
+    FEATURE_PRIVACY_PAGE_ENABLED: publicConfig.FEATURE_PRIVACY_PAGE_ENABLED === 'true',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
   } as {
     GATEWAY_API_ROOT: string;
@@ -37,6 +38,7 @@ export const getConfig = () => {
     RECAPTCHA_SITE_KEY: string;
     FEATURE_REPOSITORY_ENABLED: boolean;
     FEATURE_LANDING_PAGE_STATS_ENABLED: boolean;
+    FEATURE_PRIVACY_PAGE_ENABLED: boolean;
     MAINTENANCE_MODE_ON: boolean;
   };
 };
