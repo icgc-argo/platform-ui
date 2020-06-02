@@ -1,10 +1,6 @@
 // import { parseSQONParam } from '../utils/uri';
 
 import {
-  TValueContent,
-  TValueSQON,
-  TGroupContent,
-  TGroupSQON,
   TMergeSQON,
   TCombineValues,
   TMergeFns,
@@ -12,6 +8,8 @@ import {
   TSortSQON,
   TFilterByWhitelist,
   TRemoveSQON,
+  FiltersType,
+  FieldOperator,
 } from './types';
 import { defaultFilters as defaultEmptySQON } from '../hooks/useFiltersContext';
 //** from uri/utils */
@@ -162,19 +160,19 @@ export const addInSQON: TMergeSQON = (q, ctxq) => {
   return merged.content.length ? merged : defaultEmptySQON;
 };
 
-export const replaceFilterSQON: TMergeSQON = (q, ctxq) => {
-  const { entity, fields, value } = q.content[0].content;
-  const merged = {
-    op: 'and',
-    content: [
-      ...(ctxq.content.filter(x =>
-        entity ? !(x.op === 'filter' && x.content.entity === entity) : x.op !== 'filter',
-      ) || []),
-      ...(!fields.length || !value.length ? [] : q.content),
-    ].sort(sortSQON),
-  };
-  return merged.content.length ? merged : null;
-};
+// export const replaceFilterSQON: TMergeSQON = (q, ctxq) => {
+//   const { entity, fields, value } = q.content[0].content;
+//   const merged = {
+//     op: 'and',
+//     content: [
+//       ...(ctxq.content.filter(x =>
+//         entity ? !(x.op === 'filter' && x.content.entity === entity) : x.op !== 'filter',
+//       ) || []),
+//       ...(!fields.length || !value.length ? [] : q.content),
+//     ].sort(sortSQON),
+//   };
+//   return merged.content.length ? merged : defaultEmptySQON;
+// };
 
 export const currentFilterValue = (sqon, entity = null) =>
   sqon.content.find(({ op, content }) => op === 'filter' && (!entity || entity === content.entity))
@@ -194,24 +192,23 @@ const mergeFns: TMergeFns = v => {
 const filterByWhitelist: TFilterByWhitelist = (obj, wls) =>
   Object.keys(obj || {}).reduce((acc, k) => (wls.includes(k) ? { ...acc, [k]: obj[k] } : acc), {});
 
-// TMergeQuery
-export const mergeQuery: any = (q, c, mergeType, whitelist) => {
-  const ctx = c || {};
-  const query = q || {};
-  const wlCtx = whitelist ? filterByWhitelist(ctx, whitelist) : ctx;
+// export const mergeQuery: any = (q, c, mergeType, whitelist) => {
+//   const ctx = c || {};
+//   const query = q || {};
+//   const wlCtx = whitelist ? filterByWhitelist(ctx, whitelist) : ctx;
 
-  const mQs: Object = {
-    ...wlCtx,
-    ...query,
-  };
+//   const mQs: Object = {
+//     ...wlCtx,
+//     ...query,
+//   };
 
-  return {
-    ...mQs,
-    sqon: mergeFns(mergeType)(query.sqon, parseSQONParam(wlCtx.sqon, null)),
-  };
-};
+//   return {
+//     ...mQs,
+//     sqon: mergeFns(mergeType)(query.sqon, parseSQONParam(wlCtx.sqon, null)),
+//   };
+// };
 
-export const setSQON = ({ value, field }: TValueContent) => ({
+export const setSQON = ({ value, field }: { value: string; field: string }) => ({
   op: 'and',
   content: [
     {
@@ -221,13 +218,13 @@ export const setSQON = ({ value, field }: TValueContent) => ({
   ],
 });
 
-export const setSQONContent = (sqonContent: Array<TValueSQON>): TGroupSQON =>
-  sqonContent.length
-    ? {
-        op: 'and',
-        content: sqonContent,
-      }
-    : null;
+// export const setSQONContent = (sqonContent: Array<TValueSQON>): TGroupSQON =>
+//   sqonContent.length
+//     ? {
+//         op: 'and',
+//         content: sqonContent,
+//       }
+//     : null;
 
 // returns current value for a given field / operation
 export const currentFieldValue = ({ sqon, dotField, op }) =>
@@ -240,7 +237,7 @@ export const inCurrentSQON = ({
   value,
   dotField,
 }: {
-  currentSQON: TGroupSQON;
+  currentSQON: FiltersType;
   value: string;
   dotField: string;
 }): boolean => {
@@ -255,7 +252,7 @@ export const fieldInCurrentSQON = ({
   currentSQON,
   field,
 }: {
-  currentSQON: TGroupContent;
+  currentSQON: FieldOperator[];
   field: string;
 }) => currentSQON.some(f => f.content.field === field);
 
@@ -263,7 +260,7 @@ export const getSQONValue = ({
   currentSQON,
   dotField,
 }: {
-  currentSQON: TGroupContent;
+  currentSQON: FieldOperator[];
   dotField: string;
 }) => currentSQON.find(f => f.content.field === dotField);
 
@@ -294,7 +291,7 @@ export const removeSQON: TRemoveSQON = (field, sqon) => {
     return fieldFilter(sqon.content.field) ? null : sqon;
   }
 
-  const filteredContent = sqon.content.map(q => removeSQON(field, q as any)).filter(Boolean);
+  const filteredContent = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
 
   return filteredContent.length
     ? {

@@ -1,7 +1,8 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
-import useFiltersContext, { FiltersType } from '../hooks/useFiltersContext';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { FiltersType } from '../utils/types';
 import Button from 'uikit/Button';
 import isEmpty from 'lodash/isEmpty';
 
@@ -30,7 +31,7 @@ type FieldNode = React.FunctionComponent<{
 }>;
 type Filter = React.FunctionComponent<{
   sqon: Filters | {};
-  setSQON: (sqon: FiltersType) => void;
+  setSQON: ({ field, value }: { field: string; value: string }) => void;
   onClear?: () => void;
   Clear?: React.FunctionComponent<{}>;
   ValueCrumb?: ValueNode;

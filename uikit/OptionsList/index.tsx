@@ -23,7 +23,7 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-  onToggle: (facetValue: string[]) => void;
+  onToggle: (facetValue: string[] | string) => void;
   onSelectAllValues: (allValuesSelected: boolean) => void;
 }> = ({
   options,

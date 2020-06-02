@@ -3,56 +3,7 @@ import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
 import { addInSQON } from '../utils';
-
-enum ArrayFieldKeys {
-  In = 'in',
-}
-enum ScalarFieldKeys {
-  GreaterThan = 'gt',
-  LesserThan = 'lt',
-}
-
-enum CombinationKeys {
-  And = 'and',
-  Or = 'or',
-  Not = 'not',
-}
-
-interface ArrayField {
-  field: string;
-  value: Array<string | number>;
-}
-
-interface ScalarField {
-  field: string;
-  value: number;
-}
-
-interface ArrayFieldOperator {
-  op: ArrayFieldKeys;
-  content: ArrayField;
-}
-
-interface ScalarFieldOperator {
-  op: ScalarFieldKeys;
-  content: ScalarField;
-}
-
-type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
-
-interface CombinationOperator {
-  op: CombinationKeys;
-  content: Operator[];
-}
-
-type Operator = FieldOperator | CombinationOperator;
-
-export type FiltersType =
-  | {
-      op: CombinationKeys;
-      content: Operator[];
-    }
-  | any;
+import { FiltersType, CombinationKeys } from '../utils/types';
 
 type FiltersContextType = {
   filters: FiltersType;
@@ -61,7 +12,7 @@ type FiltersContextType = {
   setFiltersFromSqon: (filters: FiltersType) => void;
 };
 
-export const defaultFilters = { op: 'and', content: [] } as FiltersType;
+export const defaultFilters: FiltersType = { op: CombinationKeys.And, content: [] };
 
 const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,

@@ -17,6 +17,7 @@ import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { removeSQON, inCurrentSQON, toggleSQON, replaceSQON } from '../utils';
 import SqonBuilder from 'sqon-builder';
+import { FiltersType, CombinationKeys, ScalarFieldKeys } from '../utils/types';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -123,7 +124,8 @@ export default () => {
                   setQueriedFileIDs(e.target.value);
                 }}
               />
-              <FileSelectButton
+              {/* disabling until upload feature is implemented */}
+              {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action
                 variant={BUTTON_VARIANTS.SECONDARY}
                 size={BUTTON_SIZES.SM}
@@ -134,7 +136,7 @@ export default () => {
                   fill={uploadDisabled ? 'white' : 'accent2_dark'}
                 />
                 {' Upload a list of ids'}
-              </FileSelectButton>
+              </FileSelectButton> */}
             </div>
           </MenuItem>
         </FacetRow>
@@ -183,13 +185,13 @@ export default () => {
                 <NumberRangeFacet
                   {...props}
                   onChange={(min, max) => {
-                    const newFilters = {
-                      op: 'and',
+                    const newFilters: FiltersType = {
+                      op: CombinationKeys.And,
                       content: [
                         ...(min
                           ? [
                               {
-                                op: '>=',
+                                op: ScalarFieldKeys.GreaterThanEqualTo,
                                 content: {
                                   field: type.name,
                                   value: min,
@@ -200,7 +202,7 @@ export default () => {
                         ...(max
                           ? [
                               {
-                                op: '<=',
+                                op: ScalarFieldKeys.LesserThanEqualTo,
                                 content: {
                                   field: type.name,
                                   value: max,
