@@ -11,7 +11,6 @@
 export const LOGIN_PAGE_PATH = '/login';
 export const USER_PAGE_PATH = '/user';
 export const CONTACT_PAGE_PATH = '/contact';
-export const PRIVACY_POLICY_PATH = '/privacy';
 
 // submission paths
 export const SUBMISSION_PATH = `/submission`;
