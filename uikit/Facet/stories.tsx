@@ -39,7 +39,7 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       <Facet
         subMenuName="Primary Site"
         options={exampleOptions}
-        onChange={facetValue => {
+        onSelect={facetValue => {
           const currentValue = get(filters, 'content[0].content.value');
           if (currentValue && currentValue.includes(facetValue)) {
             setFilters(

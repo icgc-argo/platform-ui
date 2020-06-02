@@ -11,7 +11,7 @@ const Facet = ({
   isExpanded,
   onClick,
   countUnit,
-  onChange,
+  onSelect,
   onSelectAllValues,
 }: {
   subMenuName: string;
@@ -19,7 +19,7 @@ const Facet = ({
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   countUnit?: string;
-  onChange: Function;
+  onSelect: Function;
   onSelectAllValues: Function;
 }) => {
   const [searchQueryState, setSearchQueryState] = React.useState('');
@@ -43,7 +43,7 @@ const Facet = ({
           options={options}
           searchQuery={searchQueryState}
           countUnit={countUnit}
-          onToggle={onChange}
+          onToggle={onSelect}
           onSelectAllValues={onSelectAllValues}
         />
       </MenuItem>

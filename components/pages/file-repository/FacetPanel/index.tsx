@@ -15,8 +15,7 @@ import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
-import sqonBuilder from 'sqon-builder';
-import { removeSQON, inCurrentSQON, toggleSQON } from '../utils';
+import { removeSQON, inCurrentSQON, toggleSQON, replaceSQON } from '../utils';
 import SqonBuilder from 'sqon-builder';
 
 const FacetRow = styled('div')`
@@ -164,9 +163,7 @@ export default () => {
                     };
                   })}
                   countUnit={'files'}
-                  // maybe rename this to onSelect because that is the action - to differentiate between this and the SQON
-                  // remove Value on SQONView
-                  onChange={(facetValue: any) => {
+                  onSelect={(facetValue: any) => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
                     setFiltersFromSqon(toggleSQON(currentValue, filters));
                   }}
@@ -185,15 +182,35 @@ export default () => {
               {type.variant === 'Number' && (
                 <NumberRangeFacet
                   {...props}
-                  // need >= and <=, and displayed that way
-                  // either add to sqon-builder or make a custom function
-                  // also should clear filters clear out the state from this facet?
                   onChange={(min, max) => {
-                    setFiltersFromSqon(
-                      SqonBuilder.gt(type.name, min)
-                        .lt(type.name, max)
-                        .build(),
-                    );
+                    const newFilters = {
+                      op: 'and',
+                      content: [
+                        ...(min
+                          ? [
+                              {
+                                op: '>=',
+                                content: {
+                                  field: type.name,
+                                  value: min,
+                                },
+                              },
+                            ]
+                          : []),
+                        ...(max
+                          ? [
+                              {
+                                op: '<=',
+                                content: {
+                                  field: type.name,
+                                  value: max,
+                                },
+                              },
+                            ]
+                          : []),
+                      ],
+                    };
+                    setFiltersFromSqon(replaceSQON(newFilters, filters));
                   }}
                 />
               )}
