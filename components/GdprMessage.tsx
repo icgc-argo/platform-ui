@@ -5,7 +5,7 @@ import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
-import Link from 'uikit/link';
+import Link from 'uikit/Link';
 import HyperLink from 'uikit/Link';
 import { PRIVACY_POLICY_PATH } from 'global/constants/pages';
 import { ICGC_PRIVACY_PATH } from '../global/constants/icgcPaths';
