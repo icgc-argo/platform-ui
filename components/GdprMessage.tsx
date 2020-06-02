@@ -7,7 +7,7 @@ import Button from 'uikit/Button';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
 import Link from 'uikit/Link';
 import HyperLink from 'uikit/Link';
-import { ICGC_PRIVACY_PATH } from '../global/constants/icgcPaths';
+import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 export default () => {
   const theme = useTheme();
@@ -50,7 +50,7 @@ export default () => {
             ARGO Data Platform. By continuing to use our website site without changing your browser
             settings, you consent to our use of cookies in accordance with our Privacy Policy. To
             learn more about how we use cookies on this website, please review our{' '}
-            <Link href={ICGC_PRIVACY_PATH} target="_blank">
+            <Link href={ARGO_PRIVACY_PAGE} target="_blank">
               <HyperLink invert>Privacy Policy</HyperLink>
             </Link>
           </Typography>

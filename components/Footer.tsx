@@ -8,10 +8,10 @@ import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as internalPaths from 'global/constants/pages';
 import {
-  ICGC_PRIVACY_PATH,
-  ICGC_TERMS_PATH,
-  ICGC_PUBLICATION_PATH,
-} from 'global/constants/icgcPaths';
+  ARGO_PRIVACY_PAGE,
+  ARGO_TERMS_PAGE,
+  ARGO_PUBLICATION_PAGE,
+} from 'global/constants/argoPages';
 
 export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();
@@ -56,17 +56,17 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
         },
         {
           displayName: 'Privacy Policy',
-          href: ICGC_PRIVACY_PATH,
+          href: ARGO_PRIVACY_PAGE,
           target: '_blank',
         },
         {
           displayName: 'Terms & Conditions',
-          href: ICGC_TERMS_PATH,
+          href: ARGO_TERMS_PAGE,
           target: '_blank',
         },
         {
           displayName: 'Publication Policy',
-          href: ICGC_PUBLICATION_PATH,
+          href: ARGO_PUBLICATION_PAGE,
           target: '_blank',
         },
       ].filter(({ href }) =>
