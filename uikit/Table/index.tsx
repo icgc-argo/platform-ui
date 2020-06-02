@@ -128,6 +128,22 @@ function Table<Data extends TableDataBase>({
   const [pageSize, setPageSize] = React.useState(defaultPageSize);
   const [pageIndex, setPageIndex] = React.useState(0);
 
+  const onPageChangeOverride = (newIndex: number) => setPageIndex(newIndex);
+  const onPageSizeChangeOverride = (newSize: number) => {
+    setPageSize(newSize);
+    setPageIndex(0);
+  };
+
+  const paginationOverride = props =>
+    TablePagination({
+      ...props,
+      pageSize,
+      page: pageIndex,
+      onPageChange: onPageChangeOverride,
+      onPageSizeChange: onPageSizeChangeOverride,
+      pages: Math.ceil(data.length / pageSize),
+    });
+
   const PageRowCounter = () =>
     React.useMemo(() => {
       const startRow = pageSize * pageIndex + 1;
@@ -167,12 +183,6 @@ function Table<Data extends TableDataBase>({
           filter: resizing && withResizeBlur ? 'blur(8px)' : 'blur(0px)',
           width,
         }}
-        // the on-pageChange won't correctly recalculate the value triggered by the pagesize change
-        getPaginationProps={(state, _rowInfo, _column, _instance) => {
-          setPageSize(state.pageSize);
-          setPageIndex(state.page);
-          return {};
-        }}
         withRowBorder={withRowBorder}
         withOutsideBorder={withOutsideBorder}
         cellAlignment={cellAlignment}
@@ -190,7 +200,9 @@ function Table<Data extends TableDataBase>({
           ...getTrProps(state, rowInfo, column),
         })}
         minRows={0}
-        PaginationComponent={PaginationComponent}
+        PaginationComponent={paginationOverride}
+        page={pageIndex}
+        pageSize={pageSize}
         NoDataComponent={NoDataComponent}
         showPagination={isEmpty(data) ? false : showPagination}
         getNoDataProps={x => x}

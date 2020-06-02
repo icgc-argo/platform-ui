@@ -106,7 +106,15 @@ function getPagesAround(p, num, pages) {
 
 function TablePagination(props) {
   // page is zero indexed!
-  const { pages, page, showPageSizeOptions, pageSizeOptions, pageSize, onPageSizeChange } = props;
+  const {
+    pages,
+    page,
+    showPageSizeOptions,
+    pageSizeOptions,
+    pageSize,
+    onPageSizeChange,
+    onPageChange,
+  } = props;
 
   const theme = useTheme();
 
@@ -157,7 +165,7 @@ function TablePagination(props) {
           <A
             onClick={() => {
               if (page === 0) return;
-              props.onPageChange(0);
+              onPageChange(0);
             }}
           >
             <DoubleArrow transform="rotate(180)" />
@@ -165,7 +173,7 @@ function TablePagination(props) {
           <A
             onClick={() => {
               if (page === 0) return;
-              props.onPageChange(page - 1);
+              onPageChange(page - 1);
             }}
           >
             <Arrow transform="rotate(180)" />
@@ -176,7 +184,7 @@ function TablePagination(props) {
               p < pages && (
                 <A
                   key={p}
-                  onClick={() => props.onPageChange(p)}
+                  onClick={() => onPageChange(p)}
                   css={css`
                     background-color: ${page === p ? theme.colors.secondary_4 : ''};
                   `}
@@ -188,7 +196,7 @@ function TablePagination(props) {
           <A
             onClick={() => {
               if (page === pages - 1) return;
-              props.onPageChange(page + 1);
+              onPageChange(page + 1);
             }}
           >
             <Arrow />
@@ -196,7 +204,7 @@ function TablePagination(props) {
           <A
             onClick={() => {
               if (page === pages - 1) return;
-              props.onPageChange(pages - 1);
+              onPageChange(pages - 1);
             }}
           >
             <DoubleArrow />
