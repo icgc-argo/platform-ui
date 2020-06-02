@@ -1,10 +1,12 @@
 mutation CREATE_JIRA_TICKET(
+  $reCaptchaResponse: String!
   $messageCategory: JiraTicketCategory!
   $emailAddress: String!
   $requestText: String!
   $displayName: String
 ) {
-  createJiraTicket(
+  createJiraTicketWithReCaptcha(
+    reCaptchaResponse: $reCaptchaResponse
     messageCategory: $messageCategory
     emailAddress: $emailAddress
     requestText: $requestText
