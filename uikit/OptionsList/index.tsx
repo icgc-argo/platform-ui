@@ -23,8 +23,8 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-  onToggle: Function;
-  onSelectAllValues?: Function;
+  onToggle: (facetValue: string[]) => void;
+  onSelectAllValues: (allValuesSelected: boolean) => void;
 }> = ({
   options,
   searchQuery = '',
@@ -70,7 +70,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        onToggle(option.key);
+        onToggle([option.key]);
       }}
     >
       <div

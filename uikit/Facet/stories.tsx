@@ -50,7 +50,10 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
             );
           } else {
             setFilters(
-              SqonBuilder.has('primary site', [...(currentValue || []), facetValue]).build(),
+              SqonBuilder.has(
+                'primary site',
+                currentValue ? currentValue.concat(facetValue) : facetValue,
+              ).build(),
             );
           }
         }}

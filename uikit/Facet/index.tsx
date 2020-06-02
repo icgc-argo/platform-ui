@@ -19,8 +19,8 @@ const Facet = ({
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   countUnit?: string;
-  onSelect: Function;
-  onSelectAllValues: Function;
+  onSelect: (facetValue: string | string[]) => void;
+  onSelectAllValues: (allValuesSelected: boolean) => void;
 }) => {
   const [searchQueryState, setSearchQueryState] = React.useState('');
 

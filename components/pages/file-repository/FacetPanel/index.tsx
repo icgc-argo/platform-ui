@@ -163,11 +163,11 @@ export default () => {
                     };
                   })}
                   countUnit={'files'}
-                  onSelect={(facetValue: any) => {
+                  onSelect={facetValue => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
                     setFiltersFromSqon(toggleSQON(currentValue, filters));
                   }}
-                  onSelectAllValues={(allValuesSelected: boolean) => {
+                  onSelectAllValues={allValuesSelected => {
                     if (allValuesSelected) {
                       setFiltersFromSqon(removeSQON(type.name, filters));
                     } else {

@@ -12,7 +12,33 @@ const NumberRangeFacetStories = storiesOf(`${__dirname}`, module).add('Basic', (
       <NumberRangeFacet
         subMenuName="Age at Diagnosis"
         onChange={(min, max) => {
-          const newFilters = SqonBuilder.gt('age at diagnosis', min).lt('age at diagnosis', max);
+          const newFilters = {
+            op: 'and',
+            content: [
+              ...(min
+                ? [
+                    {
+                      op: '>=',
+                      content: {
+                        field: 'age at diagnosis',
+                        value: min,
+                      },
+                    },
+                  ]
+                : []),
+              ...(max
+                ? [
+                    {
+                      op: '<=',
+                      content: {
+                        field: 'age at diagnosis',
+                        value: max,
+                      },
+                    },
+                  ]
+                : []),
+            ],
+          };
           setFilters(newFilters);
         }}
       />

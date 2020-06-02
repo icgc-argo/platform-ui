@@ -2,7 +2,7 @@ import React from 'react';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
-import { addInSQON, inCurrentSQON } from '../utils';
+import { addInSQON } from '../utils';
 
 enum ArrayFieldKeys {
   In = 'in',
