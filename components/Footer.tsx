@@ -7,6 +7,11 @@ import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as internalPaths from 'global/constants/pages';
+import {
+  ARGO_PRIVACY_PAGE,
+  ARGO_TERMS_PAGE,
+  ARGO_PUBLICATION_PAGE,
+} from 'global/constants/argoPages';
 
 export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();
@@ -51,17 +56,17 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
         },
         {
           displayName: 'Privacy Policy',
-          href: 'https://www.icgc-argo.org/page/2/privacy',
+          href: ARGO_PRIVACY_PAGE,
           target: '_blank',
         },
         {
           displayName: 'Terms & Conditions',
-          href: 'https://www.icgc-argo.org/page/1/terms-and-conditions',
+          href: ARGO_TERMS_PAGE,
           target: '_blank',
         },
         {
           displayName: 'Publication Policy',
-          href: 'https://www.icgc-argo.org/page/77/e3-publication-policy',
+          href: ARGO_PUBLICATION_PAGE,
           target: '_blank',
         },
       ].filter(({ href }) =>
