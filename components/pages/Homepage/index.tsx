@@ -23,6 +23,7 @@ import {
 } from './common';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
+import { DOCS_DATA_ACCESS_PATH, DOCS_DATA_DOWNLOAD } from 'global/constants/docSitePaths';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -197,7 +198,7 @@ export default function Homepage() {
               title={'Access Controlled Data'}
               urlData={{
                 text: 'How to apply',
-                href: 'https://docs.icgc-argo.org/docs/data-access',
+                href: DOCS_DATA_ACCESS_PATH,
               }}
             >
               <b>The Data Access Compliance Office (DACO) </b> handles approval for access to
@@ -213,7 +214,7 @@ export default function Homepage() {
               title={'Download Data'}
               urlData={{
                 text: 'How to Download',
-                href: 'https://docs.icgc-argo.org/docs/data-download',
+                href: DOCS_DATA_DOWNLOAD,
               }}
             >
               ICGC ARGO <b>clinical data </b>is available for download in the File Repository.
@@ -229,7 +230,7 @@ export default function Homepage() {
               title={'Data Analysis Workflows'}
               urlData={{
                 text: 'About our Workflows',
-                href: 'https://docs.icgc-argo.org/docs/dna-pipeline',
+                href: DOCS_DNA_PIPELINE,
               }}
             >
               ICGC ARGO uniformly analyzes molecular data against the{' '}
