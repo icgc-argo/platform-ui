@@ -38,21 +38,9 @@ export interface ScalarFieldOperator {
 
 export type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
 
-export interface CombinationOperator {
-  op: CombinationKeys;
-  content: Array<Operator>;
-}
-
 export type FiltersType = {
-  op: CombinationKeys;
+  op: string;
   content: FieldOperator[];
-};
-
-export type Operator = FieldOperator | CombinationOperator;
-
-export type TValueSQON = {
-  content: FieldOperator;
-  op: ScalarFieldKeys | ArrayFieldKeys;
 };
 
 export type TCombineValues = (x: FieldOperator, y: FieldOperator) => FieldOperator | null;
@@ -63,4 +51,7 @@ export type TMergeEnum = boolean | 'toggle' | 'replace' | 'add';
 
 export type TSortSQON = (a: FieldOperator, b: FieldOperator) => number;
 
-export type TRemoveSQON = (field: string, query: FiltersType | FieldOperator) => FiltersType | null;
+export type TRemoveSQON = (
+  field: string,
+  sqon: FieldOperator | FiltersType,
+) => FiltersType | FieldOperator | null;

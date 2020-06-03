@@ -171,7 +171,8 @@ export default () => {
                   }}
                   onSelectAllValues={allValuesSelected => {
                     if (allValuesSelected) {
-                      setFiltersFromSqon(removeSQON(type.name, filters));
+                      const updatedFilters = removeSQON(type.name, filters) as FiltersType;
+                      setFiltersFromSqon(updatedFilters);
                     } else {
                       setFilters({
                         field: type.name,

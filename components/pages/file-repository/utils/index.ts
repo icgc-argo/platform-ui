@@ -211,20 +211,19 @@ export const makeSQON: TMakeSQON = fields => {
   };
 };
 
-export const removeSQON: (
-  field: string,
-  sqon: FiltersType | FieldOperator,
-) => FiltersType | null = (field, sqon) => {
+export const removeSQON: TRemoveSQON = (field, sqon) => {
   if (!sqon) return null;
   if (!field) return sqon;
   if (Object.keys(sqon).length === 0) return sqon;
 
   if (!Array.isArray(sqon.content)) {
     const fieldFilter = typeof field === 'function' ? field : f => f === field;
-    return fieldFilter(sqon.content.field) ? null : (sqon as any);
+    return fieldFilter(sqon.content.field) ? null : (sqon as FieldOperator);
   }
 
-  const filteredContent: Array<any> = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
+  const filteredContent: Array<any> = sqon.content
+    .map(q => removeSQON(field, q as FieldOperator))
+    .filter(Boolean);
 
   return filteredContent.length
     ? {

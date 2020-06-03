@@ -14,7 +14,7 @@ type FiltersContextType = {
 
 export const defaultFilters: FiltersType = {
   op: CombinationKeys.And,
-  content: [],
+  content: [] as FieldOperator[],
 };
 
 const FiltersContext = React.createContext<FiltersContextType>({
