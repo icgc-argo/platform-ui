@@ -2,17 +2,9 @@ import urljoin from 'url-join';
 import { getConfig } from 'global/config';
 
 const { DOCS_URL_ROOT } = getConfig();
-console.log(DOCS_URL_ROOT);
-
-// docs paths
-//export const DOCS_SUBMITTED_DATA_PATH = `/docs/submitted-data/`;
-//export const DOCS_SUBMITTING_MOLECULAR_DATA_PATH = `/docs/submitting-molecular-data/`;
-//export const DOCS_API_TOKEN_PATH = `/docs/user-profile-and-api-token/`;
-//export const DOCS_DATA_DOWNLOAD = `/docs/data-download/`;
 
 export const DOCS_DICTIONARY_PATH = `/dictionary/`;
 
-//
 export const DOCS_DNA_PIPELINE_PATH = urljoin(
   DOCS_URL_ROOT,
   '/docs/analysis-workflows/dna-pipeline',
