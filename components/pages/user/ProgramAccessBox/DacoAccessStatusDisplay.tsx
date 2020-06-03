@@ -69,9 +69,10 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
         {approved ? (
           <Typography variant="label" component="div">
             You have access to download controlled data.{' '}
-            <Link withChevron underline={false} href={FILE_REPOSITORY_PATH}>
+            {/* <Link withChevron underline={false} href={FILE_REPOSITORY_PATH}>
               VIEW FILES
             </Link>
+           */}
           </Typography>
         ) : (
           <Typography variant="label" component="div">
