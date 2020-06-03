@@ -3,7 +3,7 @@ import React from 'react';
 import NumberRangeFacet from '.';
 import { defaultFilters } from 'components/pages/file-repository/hooks/useFiltersContext';
 import Typography from 'uikit/Typography';
-import SqonBuilder from 'sqon-builder';
+import { CombinationKeys, ScalarFieldKeys } from 'components/pages/file-repository/utils/types';
 
 const NumberRangeFacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const [filters, setFilters] = React.useState(defaultFilters);
@@ -13,12 +13,12 @@ const NumberRangeFacetStories = storiesOf(`${__dirname}`, module).add('Basic', (
         subMenuName="Age at Diagnosis"
         onChange={(min, max) => {
           const newFilters = {
-            op: 'and',
+            op: CombinationKeys.And,
             content: [
               ...(min
                 ? [
                     {
-                      op: '>=',
+                      op: ScalarFieldKeys.GreaterThanEqualTo,
                       content: {
                         field: 'age at diagnosis',
                         value: min,
@@ -29,7 +29,7 @@ const NumberRangeFacetStories = storiesOf(`${__dirname}`, module).add('Basic', (
               ...(max
                 ? [
                     {
-                      op: '<=',
+                      op: ScalarFieldKeys.LesserThanEqualTo,
                       content: {
                         field: 'age at diagnosis',
                         value: max,

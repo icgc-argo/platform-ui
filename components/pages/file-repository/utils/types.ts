@@ -1,6 +1,7 @@
-enum ArrayFieldKeys {
+export enum ArrayFieldKeys {
   In = 'in',
   Is = 'is',
+  Filter = 'filter',
 }
 export enum ScalarFieldKeys {
   GreaterThanEqualTo = '>=',
@@ -15,17 +16,17 @@ export enum CombinationKeys {
   Not = 'not',
 }
 
-interface ArrayField {
+export interface ArrayField {
   field: string;
   value: Array<string | number>;
 }
 
-interface ScalarField {
+export interface ScalarField {
   field: string;
   value: number;
 }
 
-interface ArrayFieldOperator {
+export interface ArrayFieldOperator {
   op: ArrayFieldKeys;
   content: ArrayField;
 }
@@ -42,12 +43,10 @@ export interface CombinationOperator {
   content: Array<Operator>;
 }
 
-export type FiltersType =
-  | {
-      op: CombinationKeys;
-      content: Operator[] | Array<undefined>;
-    }
-  | { op: string; content: any };
+export type FiltersType = {
+  op: CombinationKeys;
+  content: FieldOperator[];
+};
 
 export type Operator = FieldOperator | CombinationOperator;
 
@@ -56,42 +55,12 @@ export type TValueSQON = {
   op: ScalarFieldKeys | ArrayFieldKeys;
 };
 
-export type TCombineValues = (x: FieldOperator, y: FieldOperator) => any;
+export type TCombineValues = (x: FieldOperator, y: FieldOperator) => FieldOperator | null;
 
 export type TMergeSQON = (q: FiltersType, c: FiltersType) => FiltersType | null;
 
 export type TMergeEnum = boolean | 'toggle' | 'replace' | 'add';
 
-export type TMergeFns = (v: TMergeEnum) => TMergeSQON;
-
-export type TMergeQuery = (q: any, c: any, t: any) => any;
-
-export type TFilterByWhitelist = (o: any, w: Array<string>) => any;
-
-// export type TGroupContent = Array<TValueSQON>;
-// export type TGroupOp = 'and' | 'or';
-// export type TGroupSQON = {
-//   content?: TGroupContent,
-//   op?: TGroupOp,
-// };
-
-// export type TCombineValues = (x: TValueSQON, y: TValueSQON) => ?TValueSQON;
-
-// export type TMergeSQON = (q: ?TGroupSQON, c: ?TGroupSQON) => ?TGroupSQON;
-
-// export type TMergeFns = (v: TMergeEnum) => TMergeSQON;
-
-// export type TMergeQuery = (
-//   q: ?TUriQuery,
-//   c: TRawQuery,
-//   t: TMergeEnum,
-// ) => TUriQuery;
-
 export type TSortSQON = (a: FieldOperator, b: FieldOperator) => number;
 
-// export type TFilterByWhitelist = (
-//   o: ?TRawQuery,
-//   w: ?Array<string>,
-// ) => TRawQuery;
-
-export type TRemoveSQON = (field: string, query: FiltersType | FieldOperator) => FiltersType;
+export type TRemoveSQON = (field: string, query: FiltersType | FieldOperator) => FiltersType | null;

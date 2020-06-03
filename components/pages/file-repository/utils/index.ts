@@ -1,37 +1,19 @@
-// import { parseSQONParam } from '../utils/uri';
-
 import {
   TMergeSQON,
   TCombineValues,
-  TMergeFns,
-  TMergeQuery,
   TSortSQON,
-  TFilterByWhitelist,
   TRemoveSQON,
   FiltersType,
   FieldOperator,
+  CombinationKeys,
+  ArrayFieldKeys,
+  ArrayFieldOperator,
+  ScalarFieldOperator,
+  ScalarFieldKeys,
+  ScalarField,
+  ArrayField,
 } from './types';
 import { defaultFilters as defaultEmptySQON } from '../hooks/useFiltersContext';
-//** from uri/utils */
-// export const parseIntParam: TParseIntParam = (str, defaults) =>
-//   str ? Math.max(parseInt(str, 10), 0) : defaults;
-type TParseJSONParam = any;
-type TParseSQONParam = any;
-
-export const parseJSONParam: TParseJSONParam = (str, defaults) => {
-  if (str) {
-    return JSON.parse(str) || defaults;
-  } else {
-    return defaults;
-  }
-};
-
-// export const stringifyJSONParam: TParseJSONParam = (str, defaults) =>
-//   str ? JSON.stringify(str) : defaults;
-
-const parseSQONParam: TParseSQONParam = parseJSONParam;
-
-//** end from uri/utils */
 
 function compareTerms(a, b) {
   return (
@@ -83,7 +65,7 @@ export const addInValue: TCombineValues = (x, y) => {
   if (yValue.length === 0) return x;
 
   const merged = {
-    op: 'in',
+    op: ArrayFieldKeys.In,
     content: {
       field: x.content.field,
       value: xValue
@@ -104,7 +86,7 @@ export const toggleSQON: TMergeSQON = (q, ctxq) => {
   if (!q) return ctxq;
 
   const merged = {
-    op: 'and',
+    op: CombinationKeys.And,
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -125,7 +107,7 @@ export const replaceSQON: TMergeSQON = (q, ctxq) => {
   if (!q) return ctxq;
 
   const merged = {
-    op: 'and',
+    op: CombinationKeys.And,
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -144,7 +126,7 @@ export const addInSQON: TMergeSQON = (q, ctxq) => {
   if (!q) return ctxq;
 
   const merged = {
-    op: 'and',
+    op: CombinationKeys.And,
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -160,71 +142,19 @@ export const addInSQON: TMergeSQON = (q, ctxq) => {
   return merged.content.length ? merged : defaultEmptySQON;
 };
 
-// export const replaceFilterSQON: TMergeSQON = (q, ctxq) => {
-//   const { entity, fields, value } = q.content[0].content;
-//   const merged = {
-//     op: 'and',
-//     content: [
-//       ...(ctxq.content.filter(x =>
-//         entity ? !(x.op === 'filter' && x.content.entity === entity) : x.op !== 'filter',
-//       ) || []),
-//       ...(!fields.length || !value.length ? [] : q.content),
-//     ].sort(sortSQON),
-//   };
-//   return merged.content.length ? merged : defaultEmptySQON;
-// };
-
 export const currentFilterValue = (sqon, entity = null) =>
   sqon.content.find(({ op, content }) => op === 'filter' && (!entity || entity === content.entity))
     .content.value || '';
 
-const mergeFns: TMergeFns = v => {
-  switch (v) {
-    case 'toggle':
-      return toggleSQON;
-    case 'add':
-      return addInSQON;
-    default:
-      return replaceSQON;
-  }
-};
-
-const filterByWhitelist: TFilterByWhitelist = (obj, wls) =>
-  Object.keys(obj || {}).reduce((acc, k) => (wls.includes(k) ? { ...acc, [k]: obj[k] } : acc), {});
-
-// export const mergeQuery: any = (q, c, mergeType, whitelist) => {
-//   const ctx = c || {};
-//   const query = q || {};
-//   const wlCtx = whitelist ? filterByWhitelist(ctx, whitelist) : ctx;
-
-//   const mQs: Object = {
-//     ...wlCtx,
-//     ...query,
-//   };
-
-//   return {
-//     ...mQs,
-//     sqon: mergeFns(mergeType)(query.sqon, parseSQONParam(wlCtx.sqon, null)),
-//   };
-// };
-
 export const setSQON = ({ value, field }: { value: string; field: string }) => ({
-  op: 'and',
+  op: CombinationKeys.And,
   content: [
     {
-      op: 'in',
+      op: ArrayFieldKeys.In,
       content: { field, value: [].concat(value || []) },
     },
   ],
 });
-
-// export const setSQONContent = (sqonContent: Array<TValueSQON>): TGroupSQON =>
-//   sqonContent.length
-//     ? {
-//         op: 'and',
-//         content: sqonContent,
-//       }
-//     : null;
 
 // returns current value for a given field / operation
 export const currentFieldValue = ({ sqon, dotField, op }) =>
@@ -268,10 +198,10 @@ type TMakeSQON = (fields: [{ field: string; value: string }]) => Object | string
 export const makeSQON: TMakeSQON = fields => {
   if (!fields.length) return {};
   return {
-    op: 'and',
+    op: CombinationKeys.And,
     content: fields.map(item => {
       return {
-        op: 'in',
+        op: ArrayFieldKeys.In,
         content: {
           field: item.field,
           value: [].concat(item.value || []),
@@ -281,17 +211,20 @@ export const makeSQON: TMakeSQON = fields => {
   };
 };
 
-export const removeSQON: TRemoveSQON = (field, sqon) => {
+export const removeSQON: (
+  field: string,
+  sqon: FiltersType | FieldOperator,
+) => FiltersType | null = (field, sqon) => {
   if (!sqon) return null;
   if (!field) return sqon;
   if (Object.keys(sqon).length === 0) return sqon;
 
   if (!Array.isArray(sqon.content)) {
     const fieldFilter = typeof field === 'function' ? field : f => f === field;
-    return fieldFilter(sqon.content.field) ? null : sqon;
+    return fieldFilter(sqon.content.field) ? null : (sqon as any);
   }
 
-  const filteredContent = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
+  const filteredContent: Array<any> = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
 
   return filteredContent.length
     ? {

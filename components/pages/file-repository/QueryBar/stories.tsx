@@ -1,15 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import QueryBar from './index';
+import { CombinationKeys, ArrayFieldKeys, ScalarFieldKeys } from '../utils/types';
 
 const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('one field, one value', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: ['lung'],
@@ -22,10 +23,10 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('one field, two values', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: ['lung', 'heart'],
@@ -38,10 +39,10 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('one field, 5 values', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: ['lung', 'heart', 'brain', 'blood', 'kidney'],
@@ -54,10 +55,10 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('one field, 20 values', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: [
@@ -91,17 +92,17 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('two fields, 3 values each', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: ['lung', 'heart', 'brain'],
             },
           },
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'gender',
               value: ['female', 'male', 'unknown'],
@@ -114,17 +115,17 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('range', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: '>=',
+            op: ScalarFieldKeys.GreaterThanEqualTo,
             content: {
               field: 'cases.exposures.cigarettes_per_day',
               value: ['1'],
             },
           },
           {
-            op: '<=',
+            op: ScalarFieldKeys.LesserThanEqualTo,
             content: {
               field: 'cases.exposures.cigarettes_per_day',
               value: ['5'],
@@ -137,24 +138,24 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('range and term', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: '>=',
+            op: ScalarFieldKeys.GreaterThanEqualTo,
             content: {
               field: 'cases.exposures.cigarettes_per_day',
               value: ['1'],
             },
           },
           {
-            op: '<=',
+            op: ScalarFieldKeys.LesserThanEqualTo,
             content: {
               field: 'cases.exposures.cigarettes_per_day',
               value: ['5'],
             },
           },
           {
-            op: 'in',
+            op: ArrayFieldKeys.In,
             content: {
               field: 'primary_site',
               value: ['heart', 'lung', 'bone', 'blood', 'liver'],
@@ -167,17 +168,17 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('value is not array', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'is',
+            op: ArrayFieldKeys.Is,
             content: {
               field: 'gender',
               value: 'female',
             },
           },
           {
-            op: 'is',
+            op: ArrayFieldKeys.Is,
             content: {
               field: 'cases.exposures.cigarettes_per_day',
               value: 5,
@@ -190,10 +191,10 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
   .add('text filter', () => (
     <QueryBar
       filters={{
-        op: 'and',
+        op: CombinationKeys.And,
         content: [
           {
-            op: 'filter',
+            op: ArrayFieldKeys.Filter,
             content: {
               fields: ['gender', 'state', 'country'],
               value: 'fema',

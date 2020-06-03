@@ -3,7 +3,7 @@ import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
 import { addInSQON } from '../utils';
-import { FiltersType, CombinationKeys } from '../utils/types';
+import { FiltersType, CombinationKeys, FieldOperator } from '../utils/types';
 
 type FiltersContextType = {
   filters: FiltersType;
@@ -12,7 +12,10 @@ type FiltersContextType = {
   setFiltersFromSqon: (filters: FiltersType) => void;
 };
 
-export const defaultFilters: FiltersType = { op: CombinationKeys.And, content: [] };
+export const defaultFilters: FiltersType = {
+  op: CombinationKeys.And,
+  content: [],
+};
 
 const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,

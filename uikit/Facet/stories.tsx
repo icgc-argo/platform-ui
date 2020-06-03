@@ -7,13 +7,13 @@ import SqonBuilder from 'sqon-builder';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { get } from 'lodash';
+import { defaultFilters } from 'components/pages/file-repository/hooks/useFiltersContext';
 
 const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = {
     countUnit: text('count unit description label', 'files'),
   };
 
-  const defaultFilters = { op: 'and', content: [] };
   const [filters, setFilters] = React.useState(defaultFilters);
 
   const exampleOptions: Array<FilterOption> = [

@@ -5,9 +5,9 @@ import { get } from 'lodash';
 import SqonBuilder from 'sqon-builder';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
+import { defaultFilters } from 'components/pages/file-repository/hooks/useFiltersContext';
 
 const OptionsListStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  const defaultFilters = { op: 'and', content: [] };
   const [filters, setFilters] = React.useState(defaultFilters);
 
   const exampleOptions: Array<FilterOption> = [
