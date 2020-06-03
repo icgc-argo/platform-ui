@@ -27,6 +27,7 @@ import {
   DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
   DOCS_DATA_ACCESS_PATH,
   DOCS_DATA_DOWNLOAD_PATH,
+  DOCS_API_TOKEN_PATH,
 } from 'global/constants/docSitePaths';
 import { useMutation } from '@apollo/react-hooks';
 import { useToaster } from 'global/hooks/toaster';
@@ -174,7 +175,7 @@ export default function ContactPage() {
                 color="secondary"
                 bold
               >
-                Data Submission
+                Accessing Controlled Data{' '}
               </Typography>
             </div>
             <Ul2>
@@ -212,11 +213,11 @@ export default function ContactPage() {
                 <Link target="_blank" href={DOCS_DATA_DOWNLOAD_PATH}>
                   How to download data
                 </Link>{' '}
-                using the API Token and Score Client
+                using the API Token and score-client
               </li>
               <li>
-                <Link target="_self" href={'#'}>
-                  Troubleshooting data download
+                <Link target="_self" href={DOCS_API_TOKEN_PATH}>
+                  User profile and API token{' '}
                 </Link>
               </li>
             </Ul>
