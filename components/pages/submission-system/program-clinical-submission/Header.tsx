@@ -23,7 +23,6 @@ import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 import { getConfig } from 'global/config';
-import urljoin from 'url-join';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/docSitePaths';
 
 export default ({
@@ -50,7 +49,6 @@ export default ({
   const router = useRouter();
   const toaster = useToaster();
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
-  const { DOCS_URL_ROOT } = getConfig();
 
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
@@ -220,7 +218,7 @@ export default ({
               </Button>
               <Link
                 target="_blank"
-                href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
+                href={DOCS_SUBMITTING_CLINICAL_DATA_PATH}
                 bold
                 withChevron
                 uppercase

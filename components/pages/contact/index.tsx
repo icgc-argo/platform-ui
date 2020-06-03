@@ -26,7 +26,7 @@ import {
   DOCS_REGISTERING_SAMPLES_PATH,
   DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
   DOCS_DATA_ACCESS_PATH,
-  DOCS_DATA_DOWNLOAD,
+  DOCS_DATA_DOWNLOAD_PATH,
 } from 'global/constants/docSitePaths';
 import { useMutation } from '@apollo/react-hooks';
 import { useToaster } from 'global/hooks/toaster';
@@ -49,7 +49,7 @@ const Ul2 = styled('ul')`
 
 export default function ContactPage() {
   const theme = useTheme();
-  const { DOCS_URL_ROOT, RECAPTCHA_SITE_KEY, DACO_URL } = getConfig();
+  const { RECAPTCHA_SITE_KEY, DACO_URL, DOCS_URL_ROOT } = getConfig();
   const contactFormSchema = {
     firstName: '',
     lastName: '',
@@ -183,7 +183,7 @@ export default function ContactPage() {
                 apply to ICGC DACO
               </Link>{' '}
               in order to access controlled data. Visit our documentation for assistance with{' '}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+              <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
                 applying for access to controlled data.
               </Link>
             </Ul2>
@@ -209,7 +209,7 @@ export default function ContactPage() {
             </div>
             <Ul>
               <li>
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_DOWNLOAD)}>
+                <Link target="_blank" href={DOCS_DATA_DOWNLOAD_PATH}>
                   How to download data
                 </Link>{' '}
                 using the API Token and Score Client
@@ -242,32 +242,26 @@ export default function ContactPage() {
             </div>
             <Ul>
               <li>
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMISSION_OVERVIEW_PATH)}>
+                <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PATH}>
                   Get started:
                 </Link>{' '}
                 a quick guide to data submission
               </li>
               <li>
                 How to{' '}
-                <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_REGISTERING_SAMPLES_PATH)}>
+                <Link target="_blank" href={DOCS_REGISTERING_SAMPLES_PATH}>
                   register samples
                 </Link>
               </li>
               <li>
                 How to{' '}
-                <Link
-                  target="_blank"
-                  href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_CLINICAL_DATA_PATH)}
-                >
+                <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PATH}>
                   submit clinical data
                 </Link>
               </li>
               <li>
                 How to{' '}
-                <Link
-                  target="_blank"
-                  href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_MOLECULAR_DATA_PATH)}
-                >
+                <Link target="_blank" href={DOCS_SUBMITTING_MOLECULAR_DATA_PATH}>
                   submit molecular data
                 </Link>
               </li>

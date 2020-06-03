@@ -23,7 +23,15 @@ import {
 } from './common';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
-import { DOCS_DATA_ACCESS_PATH, DOCS_DATA_DOWNLOAD } from 'global/constants/docSitePaths';
+import {
+  DOCS_DATA_ACCESS_PATH,
+  DOCS_DNA_PIPELINE_PATH,
+  DOCS_PUBLICATION_GUIDELINE_PATH,
+  DOCS_DATA_RELEASES_PATH,
+  DOCS_PROGRAMMATIC_APIS_PATH,
+  DOCS_SUBMISSION_OVERVIEW_PATH,
+  DOCS_DATA_DOWNLOAD_PATH,
+} from 'global/constants/docSitePaths';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -214,7 +222,7 @@ export default function Homepage() {
               title={'Download Data'}
               urlData={{
                 text: 'How to Download',
-                href: DOCS_DATA_DOWNLOAD,
+                href: DOCS_DATA_DOWNLOAD_PATH,
               }}
             >
               ICGC ARGO <b>clinical data </b>is available for download in the File Repository.
@@ -230,7 +238,7 @@ export default function Homepage() {
               title={'Data Analysis Workflows'}
               urlData={{
                 text: 'About our Workflows',
-                href: DOCS_DNA_PIPELINE,
+                href: DOCS_DNA_PIPELINE_PATH,
               }}
             >
               ICGC ARGO uniformly analyzes molecular data against the{' '}
@@ -284,7 +292,7 @@ export default function Homepage() {
               iconName={'article'}
               iconFill={'error_1'}
               circleFill={'error_3'}
-              href={'https://docs.icgc-argo.org/docs/publication-guidelines'}
+              href={DOCS_PUBLICATION_GUIDELINE_PATH}
             />
 
             <ResourceBox
@@ -293,7 +301,7 @@ export default function Homepage() {
               iconName={'calendar'}
               iconFill={'secondary'}
               circleFill={'secondary_3'}
-              href={'https://docs.icgc-argo.org/docs/data-release-notes'}
+              href={DOCS_DATA_RELEASES_PATH}
             />
 
             <ResourceBox
@@ -302,8 +310,7 @@ export default function Homepage() {
               iconName={'brackets'}
               iconFill={'accent4_dark'}
               circleFill={'accent4_3'}
-              //todo: add link
-              href={''}
+              href={DOCS_PROGRAMMATIC_APIS_PATH}
             />
 
             <ResourceBox
@@ -323,7 +330,7 @@ export default function Homepage() {
               iconName={'testtube'}
               iconFill={'accent1_dimmed'}
               circleFill={'accent1_3'}
-              href={'https://docs.icgc-argo.org/docs/submission-overview'}
+              href={DOCS_SUBMISSION_OVERVIEW_PATH}
             />
 
             <ResourceBox

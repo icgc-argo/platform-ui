@@ -131,7 +131,7 @@ const ProgramServicesModal = ({
           `}
         >
           <b>Note:</b> For all user roles, downloading controlled data requires{' '}
-          <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+          <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
             DACO approval.
           </Link>
         </div>

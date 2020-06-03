@@ -85,7 +85,7 @@ export default function ProgramDashboard() {
           </TitleBar>
           <Link
             target="_blank"
-            href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}
+            href={DOCS_SUBMITTED_DATA_PATH}
             bold
             withChevron
             uppercase
@@ -110,19 +110,16 @@ export default function ProgramDashboard() {
               Submitters can get started registering samples and submitting clinical data using the{' '}
               <strong>Program ID: {programShortName}</strong>.
               <br />
-              If you have any questions, please check out our documentation for{' '}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMISSION_OVERVIEW_PATH)}>
+              If you have any questions, please check out our documentation for help with{' '}
+              <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PATH}>
                 data submission
               </Link>
               {', '}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DATA_ACCESS_PATH)}>
+              <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
                 data access
               </Link>{' '}
               and{' '}
-              <Link
-                target="_blank"
-                href={urljoin(DOCS_URL_ROOT, DOCS_MANAGING_PROGRAM_ACCESS_PATH)}
-              >
+              <Link target="_blank" href={DOCS_MANAGING_PROGRAM_ACCESS_PATH}>
                 program management
               </Link>
               .
