@@ -12,7 +12,7 @@ import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
 import urljoin from 'url-join';
-import { DOCS_DATA_DOWNLOAD_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
 
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
@@ -64,7 +64,7 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
         <br />
         <Link
           target="_blank"
-          href={DOCS_DATA_DOWNLOAD_PATH}
+          href={DOCS_DATA_DOWNLOAD_PAGE}
           underline={false}
           uppercase
           withChevron

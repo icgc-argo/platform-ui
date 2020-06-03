@@ -29,7 +29,7 @@ import {
 } from '../SubmissionSystemLockedNotification';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import { getConfig } from 'global/config';
-import { DOCS_REGISTERING_SAMPLES_PATH } from 'global/constants/docSitePaths';
+import { DOCS_REGISTERING_SAMPLES_PAGE } from 'global/constants/docSitePaths';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -174,7 +174,7 @@ export default function ProgramIDRegistration() {
           </TitleBar>
           <Link
             target="_blank"
-            href={DOCS_REGISTERING_SAMPLES_PATH}
+            href={DOCS_REGISTERING_SAMPLES_PAGE}
             css={css`
               font-size: 14px;
             `}

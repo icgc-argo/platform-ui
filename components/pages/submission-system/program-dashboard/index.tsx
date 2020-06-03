@@ -20,10 +20,10 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import Typography from 'uikit/Typography';
 import {
-  DOCS_SUBMITTED_DATA_PATH,
-  DOCS_DATA_ACCESS_PATH,
-  DOCS_MANAGING_PROGRAM_ACCESS_PATH,
-  DOCS_SUBMISSION_OVERVIEW_PATH,
+  DOCS_SUBMITTED_DATA_PAGE,
+  DOCS_DATA_ACCESS_PAGE,
+  DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
+  DOCS_SUBMISSION_OVERVIEW_PAGE,
 } from 'global/constants/docSitePaths';
 
 setConfiguration({ gutterWidth: 9 });
@@ -85,7 +85,7 @@ export default function ProgramDashboard() {
           </TitleBar>
           <Link
             target="_blank"
-            href={DOCS_SUBMITTED_DATA_PATH}
+            href={DOCS_SUBMITTED_DATA_PAGE}
             bold
             withChevron
             uppercase
@@ -111,15 +111,15 @@ export default function ProgramDashboard() {
               <strong>Program ID: {programShortName}</strong>.
               <br />
               If you have any questions, please check out our documentation for help with{' '}
-              <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PATH}>
+              <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PAGE}>
                 data submission
               </Link>
               {', '}
-              <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
+              <Link target="_blank" href={DOCS_DATA_ACCESS_PAGE}>
                 data access
               </Link>{' '}
               and{' '}
-              <Link target="_blank" href={DOCS_MANAGING_PROGRAM_ACCESS_PATH}>
+              <Link target="_blank" href={DOCS_MANAGING_PROGRAM_ACCESS_PAGE}>
                 program management
               </Link>
               .

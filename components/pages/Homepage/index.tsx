@@ -24,13 +24,13 @@ import {
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
 import {
-  DOCS_DATA_ACCESS_PATH,
-  DOCS_DNA_PIPELINE_PATH,
-  DOCS_PUBLICATION_GUIDELINE_PATH,
-  DOCS_DATA_RELEASES_PATH,
-  DOCS_PROGRAMMATIC_APIS_PATH,
-  DOCS_SUBMISSION_OVERVIEW_PATH,
-  DOCS_DATA_DOWNLOAD_PATH,
+  DOCS_DATA_ACCESS_PAGE,
+  DOCS_DNA_PIPELINE_PAGE,
+  DOCS_PUBLICATION_GUIDELINE_PAGE,
+  DOCS_DATA_RELEASES_PAGE,
+  DOCS_PROGRAMMATIC_APIS_PAGE,
+  DOCS_SUBMISSION_OVERVIEW_PAGE,
+  DOCS_DATA_DOWNLOAD_PAGE,
 } from 'global/constants/docSitePaths';
 
 const SeparationLine: React.ComponentType<{}> = () => {
@@ -206,7 +206,7 @@ export default function Homepage() {
               title={'Access Controlled Data'}
               urlData={{
                 text: 'How to apply',
-                href: DOCS_DATA_ACCESS_PATH,
+                href: DOCS_DATA_ACCESS_PAGE,
               }}
             >
               <b>The Data Access Compliance Office (DACO) </b> handles approval for access to
@@ -222,7 +222,7 @@ export default function Homepage() {
               title={'Download Data'}
               urlData={{
                 text: 'How to Download',
-                href: DOCS_DATA_DOWNLOAD_PATH,
+                href: DOCS_DATA_DOWNLOAD_PAGE,
               }}
             >
               ICGC ARGO <b>clinical data </b>is available for download in the File Repository.
@@ -238,7 +238,7 @@ export default function Homepage() {
               title={'Data Analysis Workflows'}
               urlData={{
                 text: 'About our Workflows',
-                href: DOCS_DNA_PIPELINE_PATH,
+                href: DOCS_DNA_PIPELINE_PAGE,
               }}
             >
               ICGC ARGO uniformly analyzes molecular data against the{' '}
@@ -292,7 +292,7 @@ export default function Homepage() {
               iconName={'article'}
               iconFill={'error_1'}
               circleFill={'error_3'}
-              href={DOCS_PUBLICATION_GUIDELINE_PATH}
+              href={DOCS_PUBLICATION_GUIDELINE_PAGE}
             />
 
             <ResourceBox
@@ -301,7 +301,7 @@ export default function Homepage() {
               iconName={'calendar'}
               iconFill={'secondary'}
               circleFill={'secondary_3'}
-              href={DOCS_DATA_RELEASES_PATH}
+              href={DOCS_DATA_RELEASES_PAGE}
             />
 
             <ResourceBox
@@ -310,7 +310,7 @@ export default function Homepage() {
               iconName={'brackets'}
               iconFill={'accent4_dark'}
               circleFill={'accent4_3'}
-              href={DOCS_PROGRAMMATIC_APIS_PATH}
+              href={DOCS_PROGRAMMATIC_APIS_PAGE}
             />
 
             <ResourceBox
@@ -330,7 +330,7 @@ export default function Homepage() {
               iconName={'testtube'}
               iconFill={'accent1_dimmed'}
               circleFill={'accent1_3'}
-              href={DOCS_SUBMISSION_OVERVIEW_PATH}
+              href={DOCS_SUBMISSION_OVERVIEW_PAGE}
             />
 
             <ResourceBox

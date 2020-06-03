@@ -23,7 +23,7 @@ import { useToaster } from 'global/hooks/toaster';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
 import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/docSitePaths';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 
 export default ({
   programShortName,
@@ -218,7 +218,7 @@ export default ({
               </Button>
               <Link
                 target="_blank"
-                href={DOCS_SUBMITTING_CLINICAL_DATA_PATH}
+                href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
                 bold
                 withChevron
                 uppercase

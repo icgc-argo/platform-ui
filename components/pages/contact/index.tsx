@@ -21,13 +21,13 @@ import { firstName, lastName, email } from 'global/utils/form/validations';
 import useFormHook from 'global/hooks/useFormHook';
 import FormHelperText from 'uikit/form/FormHelperText';
 import {
-  DOCS_SUBMITTING_CLINICAL_DATA_PATH,
-  DOCS_SUBMISSION_OVERVIEW_PATH,
-  DOCS_REGISTERING_SAMPLES_PATH,
-  DOCS_SUBMITTING_MOLECULAR_DATA_PATH,
-  DOCS_DATA_ACCESS_PATH,
-  DOCS_DATA_DOWNLOAD_PATH,
-  DOCS_API_TOKEN_PATH,
+  DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
+  DOCS_SUBMISSION_OVERVIEW_PAGE,
+  DOCS_REGISTERING_SAMPLES_PAGE,
+  DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
+  DOCS_DATA_ACCESS_PAGE,
+  DOCS_DATA_DOWNLOAD_PAGE,
+  DOCS_API_TOKEN_PAGE,
 } from 'global/constants/docSitePaths';
 import { useMutation } from '@apollo/react-hooks';
 import { useToaster } from 'global/hooks/toaster';
@@ -184,7 +184,7 @@ export default function ContactPage() {
                 apply to ICGC DACO
               </Link>{' '}
               in order to access controlled data. Visit our documentation for assistance with{' '}
-              <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
+              <Link target="_blank" href={DOCS_DATA_ACCESS_PAGE}>
                 applying for access to controlled data.
               </Link>
             </Ul2>
@@ -210,13 +210,13 @@ export default function ContactPage() {
             </div>
             <Ul>
               <li>
-                <Link target="_blank" href={DOCS_DATA_DOWNLOAD_PATH}>
+                <Link target="_blank" href={DOCS_DATA_DOWNLOAD_PAGE}>
                   How to download data
                 </Link>{' '}
                 using the API Token and score-client
               </li>
               <li>
-                <Link target="_self" href={DOCS_API_TOKEN_PATH}>
+                <Link target="_self" href={DOCS_API_TOKEN_PAGE}>
                   User profile and API token{' '}
                 </Link>
               </li>
@@ -243,26 +243,26 @@ export default function ContactPage() {
             </div>
             <Ul>
               <li>
-                <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PATH}>
+                <Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PAGE}>
                   Get started:
                 </Link>{' '}
                 a quick guide to data submission
               </li>
               <li>
                 How to{' '}
-                <Link target="_blank" href={DOCS_REGISTERING_SAMPLES_PATH}>
+                <Link target="_blank" href={DOCS_REGISTERING_SAMPLES_PAGE}>
                   register samples
                 </Link>
               </li>
               <li>
                 How to{' '}
-                <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PATH}>
+                <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
                   submit clinical data
                 </Link>
               </li>
               <li>
                 How to{' '}
-                <Link target="_blank" href={DOCS_SUBMITTING_MOLECULAR_DATA_PATH}>
+                <Link target="_blank" href={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}>
                   submit molecular data
                 </Link>
               </li>

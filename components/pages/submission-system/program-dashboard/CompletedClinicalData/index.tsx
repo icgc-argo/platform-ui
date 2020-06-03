@@ -6,11 +6,11 @@ import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PATH } from 'global/constants/docSitePaths';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 
 const getStartedLink = (
   <Typography variant="data" component="span">
-    <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PATH}>
+    <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
       {' '}
       Get started with clinical data submission »{' '}
     </Link>

@@ -6,12 +6,12 @@ import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
 import { css } from '@emotion/core';
-import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/docSitePaths';
+import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
 export default () => {
   const getStartedLink = (
     <Typography variant="data" component="span">
-      <Link target="_blank" href={DOCS_SUBMITTED_DATA_PATH}>
+      <Link target="_blank" href={DOCS_SUBMITTED_DATA_PAGE}>
         Read more about the donor data summary »
       </Link>
     </Typography>

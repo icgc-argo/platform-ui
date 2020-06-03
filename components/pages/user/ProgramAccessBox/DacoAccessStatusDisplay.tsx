@@ -5,7 +5,7 @@ import Link from 'uikit/Link';
 import Icon from 'uikit/Icon';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
-import { DOCS_DATA_ACCESS_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
   const { DACO_URL } = getConfig();
@@ -78,7 +78,7 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
         ) : (
           <Typography variant="label" component="div">
             Learn more about the{' '}
-            <Link target="_blank" href={DOCS_DATA_ACCESS_PATH}>
+            <Link target="_blank" href={DOCS_DATA_ACCESS_PAGE}>
               DACO application process,{' '}
             </Link>
             or{' '}

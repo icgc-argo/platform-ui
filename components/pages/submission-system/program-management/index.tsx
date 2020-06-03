@@ -6,7 +6,7 @@ import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
 import Link from 'uikit/Link';
 import { Row } from 'react-grid-system';
-import { DOCS_MANAGING_PROGRAM_ACCESS_PATH } from 'global/constants/docSitePaths';
+import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 export default () => {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default () => {
           </TitleBar>
           <Link
             target="_blank"
-            href={DOCS_MANAGING_PROGRAM_ACCESS_PATH}
+            href={DOCS_MANAGING_PROGRAM_ACCESS_PAGE}
             bold
             withChevron
             uppercase
