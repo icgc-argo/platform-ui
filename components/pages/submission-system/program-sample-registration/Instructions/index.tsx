@@ -39,6 +39,7 @@ import FileSelectButton from 'uikit/FileSelectButton';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import useCommonToasters from 'components/useCommonToasters';
 
 function Instructions({
   uploadEnabled,
@@ -72,7 +73,13 @@ function Instructions({
     setShowRegisterSamplesModal(false);
   };
 
-  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION);
+  const commonToaster = useCommonToasters();
+
+  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION, {
+    onError: () => {
+      commonToaster.unknownError();
+    },
+  });
 
   const handleUpload = file =>
     uploadFile({

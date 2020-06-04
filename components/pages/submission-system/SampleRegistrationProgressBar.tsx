@@ -21,7 +21,7 @@ import { useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
 import * as React from 'react';
-import Progress, { PROGRESS_STATUS } from 'uikit/Progress';
+import Progress from 'uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
@@ -29,11 +29,6 @@ import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotificatio
 const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: string }> = ({
   programShortName,
 }) => {
-  const [progress, setProgress] = React.useState([
-    PROGRESS_STATUS.DISABLED,
-    PROGRESS_STATUS.DISABLED,
-  ]);
-
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
   }>(GET_REGISTRATION, {

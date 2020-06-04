@@ -200,6 +200,9 @@ export default () => {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
+    onError: () => {
+      commonToaster.unknownError();
+    },
   });
   const [validateSubmission] = useMutation<
     ClinicalSubmissionQueryData,
