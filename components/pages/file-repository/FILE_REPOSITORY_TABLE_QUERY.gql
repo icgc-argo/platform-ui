@@ -1,0 +1,30 @@
+query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON) {
+  file {
+    hits(first: $first, offset: $offset, filters: $filters) {
+      edges {
+        node {
+          data_type
+          file_type
+          object_id
+          analysis {
+            workflow {
+              name
+              version
+            }
+          }
+          study_id
+          id
+          donors {
+            aggregations {
+              donor_id {
+                buckets {
+                  key
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
