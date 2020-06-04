@@ -131,7 +131,6 @@ export default <Error extends { [k: string]: any }>({
             <Table
               parentRef={containerRef}
               NoDataComponent={() => null}
-              showPagination={false}
               columns={columnConfig.map(col => ({
                 ...col,
                 style: {
@@ -140,6 +139,7 @@ export default <Error extends { [k: string]: any }>({
                 },
               }))}
               data={errors}
+              showPagination
             />
           </div>
         );
