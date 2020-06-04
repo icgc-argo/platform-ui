@@ -2,21 +2,17 @@ import Typography from 'uikit/Typography';
 import Link from 'uikit/Link';
 import styled from '@emotion/styled';
 import NoData from 'uikit/NoData';
-import urljoin from 'url-join';
 import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
 import { css } from '@emotion/core';
-import { getConfig } from 'global/config';
-import { DOCS_SUBMITTED_DATA_PATH } from 'global/constants/docSitePaths';
-
-const { DOCS_URL_ROOT } = getConfig();
+import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
 export default () => {
   const getStartedLink = (
     <Typography variant="data" component="span">
-      <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTED_DATA_PATH)}>
-        Get started with data submission »
+      <Link target="_blank" href={DOCS_SUBMITTED_DATA_PAGE}>
+        Read more about the donor data summary »
       </Link>
     </Typography>
   );
