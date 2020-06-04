@@ -60,24 +60,12 @@ export default ({
     {
       Header: 'File ID',
       accessor: 'fileID',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        return (
-          <Link href="">
-            <HyperLink>{`${original.fileID}`}</HyperLink>
-          </Link>
-        );
-      },
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.fileID,
     },
     {
       Header: 'Donor ID',
       accessor: 'donorID',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        return (
-          <Link href="">
-            <HyperLink>{`${original.donorID}`}</HyperLink>
-          </Link>
-        );
-      },
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.donorID,
     },
     {
       Header: 'Program',
