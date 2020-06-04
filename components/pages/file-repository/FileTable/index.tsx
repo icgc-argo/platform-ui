@@ -144,7 +144,7 @@ export default ({
           >
             <Tooltip
               unmountHTMLWhenHide
-              position="top"
+              position="left"
               html={<span>{downloadStatus.toolTipText}</span>}
             >
               <InteractiveIcon

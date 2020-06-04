@@ -24,6 +24,7 @@ import Link from 'uikit/Link';
 import Icon from 'uikit/Icon';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
+import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 export default function DacoAccessStatusDisplay({ approved }: { approved: boolean }) {
   const { DACO_URL } = getConfig();
@@ -88,15 +89,20 @@ export default function DacoAccessStatusDisplay({ approved }: { approved: boolea
         {approved ? (
           <Typography variant="label" component="div">
             You have access to download controlled data.{' '}
-            <Link withChevron underline={false} href={FILE_REPOSITORY_PATH}>
+            {/* <Link withChevron underline={false} href={FILE_REPOSITORY_PATH}>
               VIEW FILES
             </Link>
+           */}
           </Typography>
         ) : (
           <Typography variant="label" component="div">
-            To download controlled data,{' '}
+            Learn more about the{' '}
+            <Link target="_blank" href={DOCS_DATA_ACCESS_PAGE}>
+              DACO application process,{' '}
+            </Link>
+            or{' '}
             <Link target="_blank" href={DACO_URL}>
-              apply for DACO access.
+              apply for DACO approval.{' '}
             </Link>
           </Typography>
         )}

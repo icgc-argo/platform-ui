@@ -24,14 +24,11 @@ import PicClipboard from 'static/clipboard.svg';
 import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
-import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_SUBMITTING_MOLECULAR_DATA_PATH } from 'global/constants/docSitePaths';
-const { DOCS_URL_ROOT } = getConfig();
+import { DOCS_SUBMITTING_MOLECULAR_DATA_PAGE } from 'global/constants/docSitePaths';
 
 const getStartedLink = (
   <Typography variant="data" component="span">
-    <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_SUBMITTING_MOLECULAR_DATA_PATH)}>
+    <Link target="_blank" href={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}>
       Get started with molecular data submission »
     </Link>
   </Typography>

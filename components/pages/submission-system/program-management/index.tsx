@@ -24,15 +24,12 @@ import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
 import Link from 'uikit/Link';
-import { getConfig } from 'global/config';
-import urljoin from 'url-join';
 import { Row } from 'react-grid-system';
-import { DOCS_MANAGING_PROGRAM_ACCESS_PATH } from 'global/constants/docSitePaths';
+import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 export default () => {
   const router = useRouter();
   const { shortName: programShortName } = router.query;
-  const { DOCS_URL_ROOT } = getConfig();
 
   return (
     <SubmissionLayout
@@ -59,7 +56,7 @@ export default () => {
           </TitleBar>
           <Link
             target="_blank"
-            href={urljoin(DOCS_URL_ROOT, DOCS_MANAGING_PROGRAM_ACCESS_PATH)}
+            href={DOCS_MANAGING_PROGRAM_ACCESS_PAGE}
             bold
             withChevron
             uppercase
