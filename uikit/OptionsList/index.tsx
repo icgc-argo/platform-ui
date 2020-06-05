@@ -24,14 +24,14 @@ const OptionsList: React.ComponentType<{
   defaultRenderLimit?: number;
   countUnit?: string;
   onOptionToggle: (facetValue: string[] | string) => void;
-  onSelectAllValues: (allValuesSelected: boolean) => void;
+  onSelectAllOptions: (allOptionsSelected: boolean) => void;
 }> = ({
   options,
   searchQuery = '',
   defaultRenderLimit = 5,
   countUnit,
   onOptionToggle,
-  onSelectAllValues,
+  onSelectAllOptions,
 }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
@@ -140,7 +140,7 @@ const OptionsList: React.ComponentType<{
     if (searchQuery) {
       onOptionToggle(queriedOptionKeys);
     } else {
-      onSelectAllValues(allOptionsSelected);
+      onSelectAllOptions(allOptionsSelected);
     }
   };
   const numberOfMoreOptions = options.length - optionsToShow.length;

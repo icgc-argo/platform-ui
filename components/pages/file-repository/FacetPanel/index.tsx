@@ -169,8 +169,8 @@ export default () => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
                     setFiltersFromSqon(toggleSQON(currentValue, filters));
                   }}
-                  onSelectAllValues={allValuesSelected => {
-                    if (allValuesSelected) {
+                  onSelectAllOptions={allOptionsSelected => {
+                    if (allOptionsSelected) {
                       const updatedFilters = removeSQON(type.name, filters) as FiltersType;
                       setFiltersFromSqon(updatedFilters);
                     } else {
