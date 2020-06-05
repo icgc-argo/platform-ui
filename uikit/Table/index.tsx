@@ -63,6 +63,30 @@ export const DefaultLoadingComponent = ({
   </div>
 );
 
+const usePaginationState = (
+  paginationComponentProps: React.MutableRefObject<{ page: number; pageSize: number }>,
+) => {
+  const [currentPageSize, setCurrentPageSize] = React.useState(20);
+  const [currentPageIndex, setCurrentPageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    // This side effect initializes pageSize and page on first render
+    if (paginationComponentProps.current) {
+      console.log('paginationComponentProps.current: ', paginationComponentProps.current);
+      const { page, pageSize } = paginationComponentProps.current;
+      setCurrentPageSize(pageSize);
+      setCurrentPageIndex(page);
+    }
+  }, []);
+
+  return {
+    currentPageSize,
+    setCurrentPageSize,
+    currentPageIndex,
+    setCurrentPageIndex,
+  };
+};
+
 export type TableColumnConfig<Data extends TableDataBase> = TableProps<Data>['columns'][0] & {
   accessor?: TableProps<Data>['columns'][0]['accessor'] | keyof Data;
   Cell?: TableProps<Data>['columns'][0]['Cell'] | ((c: { original: Data }) => React.ReactNode);
@@ -124,21 +148,13 @@ function Table<Data extends TableDataBase>({
   // This syncs up the component's width to its container.
   const { width, resizing } = useElementDimension(parentRef);
 
-  const [currentPageSize, setCurrentPageSize] = React.useState(20);
-  const [currentPageIndex, setCurrentPageIndex] = React.useState(0);
-
-  /** @IMPORTANT do not use paginationComponentProps outside of the following side effect  */
-  const paginationComponentProps = React.createRef();
-  React.useEffect(() => {
-    // This side effect initializes pageSize and page on first render
-    if (paginationComponentProps.current) {
-      console.log('paginationComponentProps.current: ', paginationComponentProps.current);
-      // @ts-ignore
-      const { page, pageSize } = paginationComponentProps.current;
-      setCurrentPageSize(pageSize);
-      setCurrentPageIndex(page);
-    }
-  }, []);
+  const paginationComponentProps = React.useRef<{ page: number; pageSize: number }>();
+  const {
+    currentPageSize,
+    setCurrentPageSize,
+    currentPageIndex,
+    setCurrentPageIndex,
+  } = usePaginationState(paginationComponentProps);
 
   const startRowDisplay = currentPageSize * currentPageIndex + 1;
   const endRowDisplay = Math.min(currentPageSize * (currentPageIndex + 1), data.length);
@@ -193,7 +209,6 @@ function Table<Data extends TableDataBase>({
         minRows={0}
         PaginationComponent={props => {
           React.useEffect(() => {
-            // @ts-ignore
             paginationComponentProps.current = props;
           });
           return (
