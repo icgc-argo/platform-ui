@@ -220,7 +220,9 @@ export default () => {
                           : []),
                       ],
                     };
-                    replaceAllFilters(replaceFilter(newFilters, filters));
+                    // remove any existing fields for this type first
+                    const withPreviousFieldRemoved = removeFilter(type.name, filters);
+                    replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
                   }}
                 />
               )}

@@ -42,9 +42,9 @@ export function FiltersProvider({ children }) {
 
   const replaceAllFilters = filters => setCurrentFilters(filters);
   const setFilterFromFieldAndValue = ({ field, value }) => {
-    const q = sqonBuilder.has(field, value).build();
-    const ctx = addInFilters(q, currentFilters);
-    setCurrentFilters(ctx);
+    const operator = sqonBuilder.has(field, value).build();
+    const newFilters = addInFilters(operator, currentFilters);
+    setCurrentFilters(newFilters);
   };
 
   const data = {
