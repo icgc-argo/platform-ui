@@ -39,13 +39,9 @@ import pluralize from 'pluralize';
 export default ({
   fileRepoEntries,
   userLoggedIn,
-  initialPageSize = 20,
-  initalPages,
 }: {
   fileRepoEntries: Array<FileRepositoryRecord>;
   userLoggedIn: Boolean;
-  initialPageSize?: number;
-  initalPages?: number;
 }) => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
