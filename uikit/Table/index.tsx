@@ -64,16 +64,16 @@ export const DefaultLoadingComponent = ({
 );
 
 const usePaginationState = (
-  paginationComponentProps: React.MutableRefObject<{ page: number; pageSize: number }>,
+  paginationComponentPropsRef: React.MutableRefObject<{ page: number; pageSize: number }>,
 ) => {
   const [currentPageSize, setCurrentPageSize] = React.useState(20);
   const [currentPageIndex, setCurrentPageIndex] = React.useState(0);
 
   React.useEffect(() => {
     // This side effect initializes pageSize and page on first render
-    if (paginationComponentProps.current) {
-      console.log('paginationComponentProps.current: ', paginationComponentProps.current);
-      const { page, pageSize } = paginationComponentProps.current;
+    if (paginationComponentPropsRef.current) {
+      console.log('paginationComponentPropsRef.current: ', paginationComponentPropsRef.current);
+      const { page, pageSize } = paginationComponentPropsRef.current;
       setCurrentPageSize(pageSize);
       setCurrentPageIndex(page);
     }
@@ -148,13 +148,13 @@ function Table<Data extends TableDataBase>({
   // This syncs up the component's width to its container.
   const { width, resizing } = useElementDimension(parentRef);
 
-  const paginationComponentProps = React.useRef<{ page: number; pageSize: number }>();
+  const paginationComponentPropsRef = React.useRef<{ page: number; pageSize: number }>();
   const {
     currentPageSize,
     setCurrentPageSize,
     currentPageIndex,
     setCurrentPageIndex,
-  } = usePaginationState(paginationComponentProps);
+  } = usePaginationState(paginationComponentPropsRef);
 
   const onPageChange = paginationProps => (pageIndex: number) => {
     setCurrentPageIndex(pageIndex);
@@ -218,7 +218,7 @@ function Table<Data extends TableDataBase>({
         minRows={0}
         PaginationComponent={props => {
           React.useEffect(() => {
-            paginationComponentProps.current = props;
+            paginationComponentPropsRef.current = props;
           });
           return (
             <PaginationComponent
