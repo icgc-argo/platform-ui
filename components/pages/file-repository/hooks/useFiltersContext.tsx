@@ -8,7 +8,13 @@ import { FileRepoFiltersType, FieldOperator } from '../utils/types';
 type FiltersContextType = {
   filters: FileRepoFiltersType;
   clearFilters: () => void;
-  setFilterFromFieldAndValue: ({ field, value }: { field: string; value: string }) => void;
+  setFilterFromFieldAndValue: ({
+    field,
+    value,
+  }: {
+    field: string;
+    value: string | string[];
+  }) => void;
   replaceAllFilters: (filters: FileRepoFiltersType) => void;
 };
 

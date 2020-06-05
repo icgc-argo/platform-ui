@@ -221,7 +221,10 @@ export default () => {
                       ],
                     };
                     // remove any existing fields for this type first
-                    const withPreviousFieldRemoved = removeFilter(type.name, filters);
+                    const withPreviousFieldRemoved = removeFilter(
+                      type.name,
+                      filters,
+                    ) as FileRepoFiltersType;
                     replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
                   }}
                 />

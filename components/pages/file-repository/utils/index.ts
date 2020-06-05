@@ -30,23 +30,23 @@ const sortFilters: TSortFilters = (a, b) => {
   }
 };
 
-export const combineValues: TCombineValues = (x, y) => {
-  const xValue = [].concat(x.content.value || []);
-  const yValue = [].concat(y.content.value || []);
+export const combineValues: TCombineValues = (operatorA, operatorB) => {
+  const operatorAValue = [].concat(operatorA.content.value || []);
+  const operatorBValue = [].concat(operatorB.content.value || []);
 
-  if (xValue.length === 0 && yValue.length === 0) return null;
-  if (xValue.length === 0) return y;
-  if (yValue.length === 0) return x;
+  if (operatorAValue.length === 0 && operatorBValue.length === 0) return null;
+  if (operatorAValue.length === 0) return operatorB;
+  if (operatorBValue.length === 0) return operatorA;
 
   const merged = {
-    op: x.op,
+    op: operatorA.op,
     content: {
-      field: x.content.field,
-      value: xValue
+      field: operatorA.content.field,
+      value: operatorAValue
         .reduce((acc, v) => {
           if (acc.includes(v)) return acc.filter(f => f !== v);
           return [...acc, v];
-        }, yValue)
+        }, operatorBValue)
         .sort(),
     },
   };
@@ -55,22 +55,22 @@ export const combineValues: TCombineValues = (x, y) => {
 };
 
 export const addInValue: TCombineValues = (operatorA, operatorB) => {
-  const xValue = [].concat(operatorA.content.value || []);
-  const yValue = [].concat(operatorB.content.value || []);
-  console.log('B:', operatorB);
-  if (xValue.length === 0 && yValue.length === 0) return null;
-  if (xValue.length === 0) return operatorB;
-  if (yValue.length === 0) return operatorA;
+  const operatorAValue = [].concat(operatorA.content.value || []);
+  const operatorBValue = [].concat(operatorB.content.value || []);
+
+  if (operatorAValue.length === 0 && operatorBValue.length === 0) return null;
+  if (operatorAValue.length === 0) return operatorB;
+  if (operatorBValue.length === 0) return operatorA;
 
   const merged: FieldOperator = {
     op: 'in',
     content: {
       field: operatorA.content.field,
-      value: xValue
+      value: operatorAValue
         .reduce((acc, v) => {
           if (acc.includes(v)) return acc;
           return [...acc, v];
-        }, yValue)
+        }, operatorBValue)
         .sort(),
     },
   };
@@ -85,12 +85,12 @@ export const toggleFilter: TMergeFilters = (newFilter, currentFilters) => {
   const merged: FileRepoFiltersType = {
     op: 'and',
     content: currentFilters.content
-      .reduce((acc, filter) => {
-        const foundOperator = acc.find(a => compareTerms(a, filter));
-        if (!foundOperator) return [...acc, filter];
+      .reduce((acc, operator) => {
+        const foundOperator = acc.find(a => compareTerms(a, operator));
+        if (!foundOperator) return [...acc, operator];
         return [
           ...acc.filter(f => !compareTerms(f, foundOperator)),
-          combineValues(foundOperator, filter),
+          combineValues(foundOperator, operator),
         ].filter(Boolean);
       }, newFilter.content)
       .sort(sortFilters),
@@ -183,17 +183,14 @@ export const getFiltersValue = ({
   dotField: string;
 }) => currentFilters.find(f => f.content.field === dotField);
 
-export const removeFilter: (
-  field: string,
-  filters: FieldOperator | FileRepoFiltersType,
-) => FileRepoFiltersType | FieldOperator | null | any = (field, filters) => {
+export const removeFilter: TRemoveFilter = (field, filters) => {
   if (!filters) return null;
   if (!field) return filters;
   if (Object.keys(filters).length === 0) return filters;
 
   if (!Array.isArray(filters.content)) {
     const fieldFilter = typeof field === 'function' ? field : f => f === field;
-    return fieldFilter(filters.content.field) ? null : (filters as FieldOperator);
+    return fieldFilter(filters.content.field) ? null : filters;
   }
 
   const filteredContent = filters.content
@@ -201,9 +198,9 @@ export const removeFilter: (
     .filter(Boolean);
 
   return filteredContent.length
-    ? {
+    ? ({
         ...filters,
         content: filteredContent,
-      }
+      } as FileRepoFiltersType)
     : defaultEmptyFilters;
 };

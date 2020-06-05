@@ -31,14 +31,17 @@ export type FileRepoFiltersType = {
   content: FieldOperator[];
 };
 
-export type TCombineValues = (x: FieldOperator, y: FieldOperator) => FieldOperator | null;
+export type TCombineValues = (
+  operatorA: FieldOperator,
+  operatorB: FieldOperator,
+) => FieldOperator | null;
 
 export type TMergeFilters = (
-  q: FileRepoFiltersType,
-  c: FileRepoFiltersType,
+  newFilter: FileRepoFiltersType,
+  currentFilters: FileRepoFiltersType,
 ) => FileRepoFiltersType | null;
 
-export type TSortFilters = (a: FieldOperator, b: FieldOperator) => number;
+export type TSortFilters = (operatorA: FieldOperator, operatorB: FieldOperator) => number;
 
 export type TRemoveFilter = (
   field: string,
