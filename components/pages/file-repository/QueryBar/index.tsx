@@ -160,7 +160,7 @@ const content = css`
 `;
 
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
-  const { clearFilters, setFilterFromFieldAndValue, replaceFilters } = useFiltersContext();
+  const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
   return (
     <div css={content}>
@@ -179,7 +179,7 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
               if (isEmpty(nextSQON)) {
                 clearFilters();
               } else {
-                replaceFilters(nextSQON);
+                replaceAllFilters(nextSQON);
               }
             }}
             {...props}

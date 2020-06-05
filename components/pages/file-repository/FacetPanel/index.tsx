@@ -15,7 +15,7 @@ import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
-import { removeSQON, inCurrentSQON, toggleSQON, replaceSQON } from '../utils';
+import { removeFilter, inCurrentFilters, toggleFilter, replaceFilter } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
@@ -60,7 +60,7 @@ export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
-  const { filters, setFilterFromFieldAndValue, replaceFilters } = useFiltersContext();
+  const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
   const clickHandler = (targetFacet: FacetDetails) => {
     if (expandedFacets.includes(targetFacet)) {
       setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
@@ -73,8 +73,8 @@ export default () => {
     return mockFacetData[facetType].map(d => {
       return {
         ...d,
-        isChecked: inCurrentSQON({
-          currentSQON: filters,
+        isChecked: inCurrentFilters({
+          currentFilters: filters,
           value: d.key,
           dotField: facetType,
         }),
@@ -171,12 +171,15 @@ export default () => {
                   countUnit={'files'}
                   onOptionToggle={facetValue => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
-                    replaceFilters(toggleSQON(currentValue, filters));
+                    replaceAllFilters(toggleFilter(currentValue, filters));
                   }}
                   onSelectAllOptions={allOptionsSelected => {
                     if (allOptionsSelected) {
-                      const updatedFilters = removeSQON(type.name, filters) as FileRepoFiltersType;
-                      replaceFilters(updatedFilters);
+                      const updatedFilters = removeFilter(
+                        type.name,
+                        filters,
+                      ) as FileRepoFiltersType;
+                      replaceAllFilters(updatedFilters);
                     } else {
                       setFilterFromFieldAndValue({
                         field: type.name,
@@ -217,7 +220,7 @@ export default () => {
                           : []),
                       ],
                     };
-                    replaceFilters(replaceSQON(newFilters, filters));
+                    replaceAllFilters(replaceFilter(newFilters, filters));
                   }}
                 />
               )}

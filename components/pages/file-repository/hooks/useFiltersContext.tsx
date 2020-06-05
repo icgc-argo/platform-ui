@@ -2,14 +2,14 @@ import React from 'react';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
-import { addInSQON } from '../utils';
+import { addInFilters } from '../utils';
 import { FileRepoFiltersType, FieldOperator } from '../utils/types';
 
 type FiltersContextType = {
   filters: FileRepoFiltersType;
   clearFilters: () => void;
   setFilterFromFieldAndValue: ({ field, value }: { field: string; value: string }) => void;
-  replaceFilters: (filters: FileRepoFiltersType) => void;
+  replaceAllFilters: (filters: FileRepoFiltersType) => void;
 };
 
 export const defaultFilters: FileRepoFiltersType = {
@@ -21,7 +21,7 @@ const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
   setFilterFromFieldAndValue: () => {},
-  replaceFilters: () => {},
+  replaceAllFilters: () => {},
 });
 
 const useFilterState = () => {
@@ -40,10 +40,10 @@ export function FiltersProvider({ children }) {
     setCurrentFilters(defaultFilters);
   };
 
-  const replaceFilters = filters => setCurrentFilters(filters);
+  const replaceAllFilters = filters => setCurrentFilters(filters);
   const setFilterFromFieldAndValue = ({ field, value }) => {
     const q = sqonBuilder.has(field, value).build();
-    const ctx = addInSQON(q, currentFilters);
+    const ctx = addInFilters(q, currentFilters);
     setCurrentFilters(ctx);
   };
 
@@ -51,7 +51,7 @@ export function FiltersProvider({ children }) {
     filters: currentFilters,
     setFilterFromFieldAndValue,
     clearFilters,
-    replaceFilters,
+    replaceAllFilters,
   };
   return <FiltersContext.Provider value={data}>{children}</FiltersContext.Provider>;
 }

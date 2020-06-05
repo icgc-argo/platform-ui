@@ -1,8 +1,8 @@
 import {
-  TMergeSQON,
+  TMergeFilters,
   TCombineValues,
-  TSortSQON,
-  TRemoveSQON,
+  TSortFilters,
+  TRemoveFilter,
   FileRepoFiltersType,
   FieldOperator,
   ArrayFieldOperator,
@@ -11,7 +11,7 @@ import {
   ArrayField,
   ScalarFieldOperator,
 } from './types';
-import { defaultFilters as defaultEmptySQON } from '../hooks/useFiltersContext';
+import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 
 function compareTerms(a, b) {
   return (
@@ -20,7 +20,7 @@ function compareTerms(a, b) {
   );
 }
 
-const sortSQON: TSortSQON = (a, b) => {
+const sortFilters: TSortFilters = (a, b) => {
   if (a.content.field && b.content.field) {
     return a.content.field.localeCompare(b.content.field);
   } else if (a.content.field || b.content.field) {
@@ -54,18 +54,18 @@ export const combineValues: TCombineValues = (x, y) => {
   return merged.content.value.length ? merged : null;
 };
 
-export const addInValue: TCombineValues = (x, y) => {
-  const xValue = [].concat(x.content.value || []);
-  const yValue = [].concat(y.content.value || []);
-
+export const addInValue: TCombineValues = (operatorA, operatorB) => {
+  const xValue = [].concat(operatorA.content.value || []);
+  const yValue = [].concat(operatorB.content.value || []);
+  console.log('B:', operatorB);
   if (xValue.length === 0 && yValue.length === 0) return null;
-  if (xValue.length === 0) return y;
-  if (yValue.length === 0) return x;
+  if (xValue.length === 0) return operatorB;
+  if (yValue.length === 0) return operatorA;
 
   const merged: FieldOperator = {
     op: 'in',
     content: {
-      field: x.content.field,
+      field: operatorA.content.field,
       value: xValue
         .reduce((acc, v) => {
           if (acc.includes(v)) return acc;
@@ -78,129 +78,132 @@ export const addInValue: TCombineValues = (x, y) => {
   return merged.content.value.length ? merged : null;
 };
 
-export const toggleSQON: TMergeSQON = (q, ctxq) => {
-  if (!ctxq && !q) return null;
-  if (!ctxq) return q;
-  if (!q) return ctxq;
-
+export const toggleFilter: TMergeFilters = (newFilter, currentFilters) => {
+  if (!currentFilters && !newFilter) return null;
+  if (!currentFilters) return newFilter;
+  if (!newFilter) return currentFilters;
   const merged: FileRepoFiltersType = {
     op: 'and',
-    content: ctxq.content
-      .reduce((acc, ctx) => {
-        const found = acc.find(a => compareTerms(a, ctx));
-        if (!found) return [...acc, ctx];
-        return [...acc.filter(y => !compareTerms(y, found)), combineValues(found, ctx)].filter(
-          Boolean,
-        );
-      }, q.content)
-      .sort(sortSQON),
+    content: currentFilters.content
+      .reduce((acc, filter) => {
+        const foundOperator = acc.find(a => compareTerms(a, filter));
+        if (!foundOperator) return [...acc, filter];
+        return [
+          ...acc.filter(f => !compareTerms(f, foundOperator)),
+          combineValues(foundOperator, filter),
+        ].filter(Boolean);
+      }, newFilter.content)
+      .sort(sortFilters),
   };
 
-  return merged.content.length ? merged : defaultEmptySQON;
+  return merged.content.length ? merged : defaultEmptyFilters;
 };
 
-export const replaceSQON: TMergeSQON = (q, ctxq) => {
-  if (!ctxq && !q) return null;
-  if (!ctxq) return q;
-  if (!q) return ctxq;
+export const replaceFilter: TMergeFilters = (newFilter, currentFilters) => {
+  if (!currentFilters && !newFilter) return null;
+  if (!currentFilters) return newFilter;
+  if (!newFilter) return currentFilters;
 
   const merged: FileRepoFiltersType = {
     op: 'and',
-    content: ctxq.content
-      .reduce((acc, ctx) => {
-        const found = acc.find(a => compareTerms(a, ctx));
-        if (!found) return [...acc, ctx];
+    content: currentFilters.content
+      .reduce((acc, filter) => {
+        const found = acc.find(a => compareTerms(a, filter));
+        if (!found) return [...acc, filter];
         return acc;
-      }, q.content)
-      .sort(sortSQON),
+      }, newFilter.content)
+      .sort(sortFilters),
   };
 
-  return merged.content.length ? merged : defaultEmptySQON;
+  return merged.content.length ? merged : defaultEmptyFilters;
 };
 
-export const addInSQON: TMergeSQON = (q, ctxq) => {
-  if (!ctxq && !q) return null;
-  if (!ctxq) return q;
-  if (!q) return ctxq;
+export const addInFilters: TMergeFilters = (newFilter, currentFilter) => {
+  if (!currentFilter && !newFilter) return null;
+  if (!currentFilter) return newFilter;
+  if (!newFilter) return currentFilter;
 
   const merged: FileRepoFiltersType = {
     op: 'and',
-    content: ctxq.content
-      .reduce((acc, ctx) => {
-        const found = acc.find(a => compareTerms(a, ctx));
-        if (!found) return [...acc, ctx];
+    content: currentFilter.content
+      .reduce((acc, filter) => {
+        const found = acc.find(a => compareTerms(a, filter));
+        if (!found) return [...acc, filter];
         return [
           ...acc.filter(y => y.content.field !== found.content.field),
-          addInValue(found, ctx),
+          addInValue(found, filter),
         ].filter(Boolean);
-      }, q.content)
-      .sort(sortSQON),
+      }, newFilter.content)
+      .sort(sortFilters),
   };
 
-  return merged.content.length ? merged : defaultEmptySQON;
+  return merged.content.length ? merged : defaultEmptyFilters;
 };
 
-export const currentFilterValue = (sqon, entity = null) =>
-  sqon.content.find(({ op, content }) => op === 'filter' && (!entity || entity === content.entity))
-    .content.value || '';
+export const currentFilterValue = (filters, entity = null) =>
+  filters.content.find(
+    ({ op, content }) => op === 'filter' && (!entity || entity === content.entity),
+  ).content.value || '';
 
 // returns current value for a given field / operation
-export const currentFieldValue = ({ sqon, dotField, op }) =>
-  sqon.content.find(content => content.content.field === dotField && content.op === op).content
+export const currentFieldValue = ({ filters, dotField, op }) =>
+  filters.content.find(content => content.content.field === dotField && content.op === op).content
     .value;
 
 // true if field and value in
-export const inCurrentSQON = ({
-  currentSQON,
+export const inCurrentFilters = ({
+  currentFilters,
   value,
   dotField,
 }: {
-  currentSQON: FileRepoFiltersType;
+  currentFilters: FileRepoFiltersType;
   value: string;
   dotField: string;
 }): boolean => {
-  const content = currentSQON.content;
-  return (Array.isArray(content) ? content : [].concat(currentSQON || [])).some(
+  const content = currentFilters.content;
+  return (Array.isArray(content) ? content : [].concat(currentFilters || [])).some(
     f => f.content.field === dotField && [].concat(f.content.value || []).includes(value),
   );
 };
 
 // true if field in
-export const fieldInCurrentSQON = ({
-  currentSQON,
+export const fieldInCurrentFilters = ({
+  currentFilters,
   field,
 }: {
-  currentSQON: FieldOperator[];
+  currentFilters: FieldOperator[];
   field: string;
-}) => currentSQON.some(f => f.content.field === field);
+}): boolean => currentFilters.some(f => f.content.field === field);
 
-export const getSQONValue = ({
-  currentSQON,
+export const getFiltersValue = ({
+  currentFilters,
   dotField,
 }: {
-  currentSQON: FieldOperator[];
+  currentFilters: FieldOperator[];
   dotField: string;
-}) => currentSQON.find(f => f.content.field === dotField);
+}) => currentFilters.find(f => f.content.field === dotField);
 
-export const removeSQON: (
+export const removeFilter: (
   field: string,
-  sqon: FieldOperator | FileRepoFiltersType,
-) => FileRepoFiltersType | FieldOperator | null | any = (field, sqon) => {
-  if (!sqon) return null;
-  if (!field) return sqon;
-  if (Object.keys(sqon).length === 0) return sqon;
+  filters: FieldOperator | FileRepoFiltersType,
+) => FileRepoFiltersType | FieldOperator | null | any = (field, filters) => {
+  if (!filters) return null;
+  if (!field) return filters;
+  if (Object.keys(filters).length === 0) return filters;
 
-  if (!Array.isArray(sqon.content)) {
+  if (!Array.isArray(filters.content)) {
     const fieldFilter = typeof field === 'function' ? field : f => f === field;
-    return fieldFilter(sqon.content.field) ? null : (sqon as FieldOperator);
+    return fieldFilter(filters.content.field) ? null : (filters as FieldOperator);
   }
 
-  const filteredContent = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
+  const filteredContent = filters.content
+    .map(filter => removeFilter(field, filter))
+    .filter(Boolean);
 
   return filteredContent.length
     ? {
-        ...sqon,
+        ...filters,
         content: filteredContent,
       }
-    : defaultEmptySQON;
+    : defaultEmptyFilters;
 };
