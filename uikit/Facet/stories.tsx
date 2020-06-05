@@ -3,18 +3,11 @@ import React from 'react';
 import Facet from '.';
 import { FilterOption } from '../OptionsList';
 import { text } from '@storybook/addon-knobs';
-import SqonBuilder from 'sqon-builder';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import { get } from 'lodash';
-import { defaultFilters } from 'components/pages/file-repository/hooks/useFiltersContext';
 
 const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = {
     countUnit: text('count unit description label', 'files'),
   };
-
-  const [filters, setFilters] = React.useState(defaultFilters);
 
   const exampleOptions: Array<FilterOption> = [
     { key: 'Gall Bladder', doc_count: 587 },
@@ -31,49 +24,33 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     { key: 'Esophagus', doc_count: 221 },
   ].map((opt: any) => ({
     ...opt,
-    isChecked: (get(filters, 'content[0].content.value') || []).includes(opt.key),
+    isChecked: false,
   }));
+
+  const [options, setOptions] = React.useState(exampleOptions);
 
   return (
     <div>
       <Facet
         subMenuName="Primary Site"
-        options={exampleOptions}
+        options={options}
         onSelect={facetValue => {
-          const currentValue = get(filters, 'content[0].content.value');
-          if (currentValue && currentValue.includes(facetValue)) {
-            setFilters(
-              SqonBuilder.has(
-                'primary site',
-                currentValue.filter((value: any) => value !== facetValue),
-              ).build(),
-            );
-          } else {
-            setFilters(
-              SqonBuilder.has(
-                'primary site',
-                currentValue ? currentValue.concat(facetValue) : facetValue,
-              ).build(),
-            );
-          }
+          const currentIndex = options.findIndex(val => val.key === facetValue);
+          setOptions([
+            ...options.slice(0, currentIndex),
+            ...[{ ...options[currentIndex], isChecked: !options[currentIndex].isChecked }],
+            ...options.slice(currentIndex + 1, Infinity),
+          ]);
         }}
         onSelectAllValues={allValuesSelected => {
           if (allValuesSelected) {
-            setFilters(defaultFilters);
+            setOptions(options.map(opt => ({ ...opt, isChecked: false })));
           } else {
-            setFilters(SqonBuilder.has('primary site', exampleOptions.map(opt => opt.key)).build());
+            setOptions(options.map(opt => ({ ...opt, isChecked: true })));
           }
         }}
         {...knobs}
       />
-      <Typography
-        css={css`
-          margin-top: 20px;
-          color: black;
-        `}
-      >
-        {filters && JSON.stringify(filters)}
-      </Typography>
     </div>
   );
 });

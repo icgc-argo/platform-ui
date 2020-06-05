@@ -70,7 +70,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        onToggle([option.key]);
+        onToggle(option.key);
       }}
     >
       <div
