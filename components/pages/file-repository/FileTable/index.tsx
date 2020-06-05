@@ -39,13 +39,9 @@ import pluralize from 'pluralize';
 export default ({
   fileRepoEntries,
   userLoggedIn,
-  initialPageSize = 20,
-  initalPages,
 }: {
   fileRepoEntries: Array<FileRepositoryRecord>;
   userLoggedIn: Boolean;
-  initialPageSize?: number;
-  initalPages?: number;
 }) => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
@@ -169,11 +165,12 @@ export default ({
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
+  const initalPageSize = 20;
   const numFiles = fileRepoEntries.length;
   const [pagingState, setPagingState] = React.useState({
-    pageSize: initialPageSize,
+    pageSize: initalPageSize,
     page: 0,
-    pages: initalPages || Math.ceil(numFiles / initialPageSize),
+    pages: Math.ceil(numFiles / initalPageSize),
   });
 
   const handlePagingStateChange = (state: typeof pagingState) => {
