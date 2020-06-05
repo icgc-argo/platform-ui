@@ -1,24 +1,12 @@
-export enum ArrayFieldKeys {
-  In = 'in',
-  Is = 'is',
-  Filter = 'filter',
-}
-export enum ScalarFieldKeys {
-  GreaterThanEqualTo = '>=',
-  LesserThanEqualTo = '<=',
-  GreaterThan = '>',
-  LesserThan = '<',
-}
+export type ArrayFieldKeys = 'in' | 'is' | 'filter';
 
-export enum CombinationKeys {
-  And = 'and',
-  Or = 'or',
-  Not = 'not',
-}
+export type ScalarFieldKeys = '>=' | '<=' | '>' | '<';
+
+type CombinationKeys = 'and' | 'or' | 'not';
 
 export interface ArrayField {
   field: string;
-  value: Array<string | number>;
+  value: Array<string | number> | string;
 }
 
 export interface ScalarField {
@@ -38,20 +26,21 @@ export interface ScalarFieldOperator {
 
 export type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
 
-export type FiltersType = {
-  op: string;
+export type FileRepoFiltersType = {
+  op: 'and';
   content: FieldOperator[];
 };
 
 export type TCombineValues = (x: FieldOperator, y: FieldOperator) => FieldOperator | null;
 
-export type TMergeSQON = (q: FiltersType, c: FiltersType) => FiltersType | null;
-
-export type TMergeEnum = boolean | 'toggle' | 'replace' | 'add';
+export type TMergeSQON = (
+  q: FileRepoFiltersType,
+  c: FileRepoFiltersType,
+) => FileRepoFiltersType | null;
 
 export type TSortSQON = (a: FieldOperator, b: FieldOperator) => number;
 
 export type TRemoveSQON = (
   field: string,
-  sqon: FieldOperator | FiltersType,
-) => FiltersType | FieldOperator | null;
+  sqon: FieldOperator | FileRepoFiltersType,
+) => FileRepoFiltersType | FieldOperator | null;

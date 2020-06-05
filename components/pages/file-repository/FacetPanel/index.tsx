@@ -17,7 +17,8 @@ import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { removeSQON, inCurrentSQON, toggleSQON, replaceSQON } from '../utils';
 import SqonBuilder from 'sqon-builder';
-import { FiltersType, CombinationKeys, ScalarFieldKeys } from '../utils/types';
+import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
+import { FilterOption } from 'uikit/OptionsList';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -59,7 +60,7 @@ export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
-  const { filters, setFilters, setFiltersFromSqon } = useFiltersContext();
+  const { filters, setFilterFromFieldAndValue, replaceFilters } = useFiltersContext();
   const clickHandler = (targetFacet: FacetDetails) => {
     if (expandedFacets.includes(targetFacet)) {
       setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
@@ -68,6 +69,18 @@ export default () => {
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
+  const getOptions = (facetType: string): FilterOption[] => {
+    return mockFacetData[facetType].map(d => {
+      return {
+        ...d,
+        isChecked: inCurrentSQON({
+          currentSQON: filters,
+          value: d.key,
+          dotField: facetType,
+        }),
+      };
+    });
+  };
 
   return (
     <FacetContainer>
@@ -154,27 +167,18 @@ export default () => {
               {type.variant === 'Basic' && (
                 <Facet
                   {...props}
-                  options={mockFacetData[type.name].map(d => {
-                    return {
-                      ...d,
-                      isChecked: inCurrentSQON({
-                        currentSQON: filters,
-                        value: d.key,
-                        dotField: type.name,
-                      }),
-                    };
-                  })}
+                  options={getOptions(type.name)}
                   countUnit={'files'}
                   onOptionToggle={facetValue => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
-                    setFiltersFromSqon(toggleSQON(currentValue, filters));
+                    replaceFilters(toggleSQON(currentValue, filters));
                   }}
                   onSelectAllOptions={allOptionsSelected => {
                     if (allOptionsSelected) {
-                      const updatedFilters = removeSQON(type.name, filters) as FiltersType;
-                      setFiltersFromSqon(updatedFilters);
+                      const updatedFilters = removeSQON(type.name, filters) as FileRepoFiltersType;
+                      replaceFilters(updatedFilters);
                     } else {
-                      setFilters({
+                      setFilterFromFieldAndValue({
                         field: type.name,
                         value: mockFacetData[type.name].map(v => v.key),
                       });
@@ -186,13 +190,13 @@ export default () => {
                 <NumberRangeFacet
                   {...props}
                   onSubmit={(min, max) => {
-                    const newFilters: FiltersType = {
-                      op: CombinationKeys.And,
+                    const newFilters: FileRepoFiltersType = {
+                      op: 'and',
                       content: [
                         ...(min
                           ? [
                               {
-                                op: ScalarFieldKeys.GreaterThanEqualTo,
+                                op: '>=' as ScalarFieldKeys,
                                 content: {
                                   field: type.name,
                                   value: min,
@@ -203,7 +207,7 @@ export default () => {
                         ...(max
                           ? [
                               {
-                                op: ScalarFieldKeys.LesserThanEqualTo,
+                                op: '<=' as ScalarFieldKeys,
                                 content: {
                                   field: type.name,
                                   value: max,
@@ -213,7 +217,7 @@ export default () => {
                           : []),
                       ],
                     };
-                    setFiltersFromSqon(replaceSQON(newFilters, filters));
+                    replaceFilters(replaceSQON(newFilters, filters));
                   }}
                 />
               )}

@@ -2,7 +2,7 @@ import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
 import useFiltersContext from '../hooks/useFiltersContext';
-import { FiltersType } from '../utils/types';
+import { FileRepoFiltersType } from '../utils/types';
 import Button from 'uikit/Button';
 import isEmpty from 'lodash/isEmpty';
 
@@ -159,14 +159,14 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ filters }) => {
-  const { clearFilters, setFilters, setFiltersFromSqon } = useFiltersContext();
+const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
+  const { clearFilters, setFilterFromFieldAndValue, replaceFilters } = useFiltersContext();
 
   return (
     <div css={content}>
       <SQONView
         sqon={filters}
-        setSQON={setFilters}
+        setSQON={setFilterFromFieldAndValue}
         Clear={() => (
           <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
@@ -179,7 +179,7 @@ const QueryBar = ({ filters }) => {
               if (isEmpty(nextSQON)) {
                 clearFilters();
               } else {
-                setFiltersFromSqon(nextSQON);
+                replaceFilters(nextSQON);
               }
             }}
             {...props}

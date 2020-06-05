@@ -3,15 +3,13 @@ import {
   TCombineValues,
   TSortSQON,
   TRemoveSQON,
-  FiltersType,
+  FileRepoFiltersType,
   FieldOperator,
-  CombinationKeys,
-  ArrayFieldKeys,
   ArrayFieldOperator,
-  ScalarFieldOperator,
-  ScalarFieldKeys,
   ScalarField,
+  ArrayFieldKeys,
   ArrayField,
+  ScalarFieldOperator,
 } from './types';
 import { defaultFilters as defaultEmptySQON } from '../hooks/useFiltersContext';
 
@@ -64,8 +62,8 @@ export const addInValue: TCombineValues = (x, y) => {
   if (xValue.length === 0) return y;
   if (yValue.length === 0) return x;
 
-  const merged = {
-    op: ArrayFieldKeys.In,
+  const merged: FieldOperator = {
+    op: 'in',
     content: {
       field: x.content.field,
       value: xValue
@@ -85,8 +83,8 @@ export const toggleSQON: TMergeSQON = (q, ctxq) => {
   if (!ctxq) return q;
   if (!q) return ctxq;
 
-  const merged = {
-    op: CombinationKeys.And,
+  const merged: FileRepoFiltersType = {
+    op: 'and',
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -106,8 +104,8 @@ export const replaceSQON: TMergeSQON = (q, ctxq) => {
   if (!ctxq) return q;
   if (!q) return ctxq;
 
-  const merged = {
-    op: CombinationKeys.And,
+  const merged: FileRepoFiltersType = {
+    op: 'and',
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -125,8 +123,8 @@ export const addInSQON: TMergeSQON = (q, ctxq) => {
   if (!ctxq) return q;
   if (!q) return ctxq;
 
-  const merged = {
-    op: CombinationKeys.And,
+  const merged: FileRepoFiltersType = {
+    op: 'and',
     content: ctxq.content
       .reduce((acc, ctx) => {
         const found = acc.find(a => compareTerms(a, ctx));
@@ -146,16 +144,6 @@ export const currentFilterValue = (sqon, entity = null) =>
   sqon.content.find(({ op, content }) => op === 'filter' && (!entity || entity === content.entity))
     .content.value || '';
 
-export const setSQON = ({ value, field }: { value: string; field: string }) => ({
-  op: CombinationKeys.And,
-  content: [
-    {
-      op: ArrayFieldKeys.In,
-      content: { field, value: [].concat(value || []) },
-    },
-  ],
-});
-
 // returns current value for a given field / operation
 export const currentFieldValue = ({ sqon, dotField, op }) =>
   sqon.content.find(content => content.content.field === dotField && content.op === op).content
@@ -167,7 +155,7 @@ export const inCurrentSQON = ({
   value,
   dotField,
 }: {
-  currentSQON: FiltersType;
+  currentSQON: FileRepoFiltersType;
   value: string;
   dotField: string;
 }): boolean => {
@@ -194,24 +182,10 @@ export const getSQONValue = ({
   dotField: string;
 }) => currentSQON.find(f => f.content.field === dotField);
 
-type TMakeSQON = (fields: [{ field: string; value: string }]) => Object | string;
-export const makeSQON: TMakeSQON = fields => {
-  if (!fields.length) return {};
-  return {
-    op: CombinationKeys.And,
-    content: fields.map(item => {
-      return {
-        op: ArrayFieldKeys.In,
-        content: {
-          field: item.field,
-          value: [].concat(item.value || []),
-        },
-      };
-    }),
-  };
-};
-
-export const removeSQON: TRemoveSQON = (field, sqon) => {
+export const removeSQON: (
+  field: string,
+  sqon: FieldOperator | FileRepoFiltersType,
+) => FileRepoFiltersType | FieldOperator | null | any = (field, sqon) => {
   if (!sqon) return null;
   if (!field) return sqon;
   if (Object.keys(sqon).length === 0) return sqon;
@@ -221,9 +195,7 @@ export const removeSQON: TRemoveSQON = (field, sqon) => {
     return fieldFilter(sqon.content.field) ? null : (sqon as FieldOperator);
   }
 
-  const filteredContent: Array<any> = sqon.content
-    .map(q => removeSQON(field, q as FieldOperator))
-    .filter(Boolean);
+  const filteredContent = sqon.content.map(q => removeSQON(field, q)).filter(Boolean);
 
   return filteredContent.length
     ? {
@@ -232,5 +204,3 @@ export const removeSQON: TRemoveSQON = (field, sqon) => {
       }
     : defaultEmptySQON;
 };
-
-export default makeSQON;
