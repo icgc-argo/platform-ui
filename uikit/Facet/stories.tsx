@@ -42,8 +42,8 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
             ...options.slice(currentIndex + 1, Infinity),
           ]);
         }}
-        onSelectAllValues={allValuesSelected => {
-          if (allValuesSelected) {
+        onSelectAllOptions={allOptionsSelected => {
+          if (allOptionsSelected) {
             setOptions(options.map(opt => ({ ...opt, isChecked: false })));
           } else {
             setOptions(options.map(opt => ({ ...opt, isChecked: true })));
