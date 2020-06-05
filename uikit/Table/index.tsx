@@ -156,6 +156,15 @@ function Table<Data extends TableDataBase>({
     setCurrentPageIndex,
   } = usePaginationState(paginationComponentProps);
 
+  const onPageChange = paginationProps => (pageIndex: number) => {
+    setCurrentPageIndex(pageIndex);
+    paginationProps.onPageChange(pageIndex);
+  };
+  const onPageSizeChange = paginationProps => (pageSize: number) => {
+    setCurrentPageSize(pageSize);
+    paginationProps.onPageSizeChange(pageSize);
+  };
+
   const startRowDisplay = currentPageSize * currentPageIndex + 1;
   const endRowDisplay = Math.min(currentPageSize * (currentPageIndex + 1), data.length);
   const totalRows = data.length;
@@ -214,14 +223,8 @@ function Table<Data extends TableDataBase>({
           return (
             <PaginationComponent
               {...props}
-              onPageChange={(pageIndex: number) => {
-                setCurrentPageIndex(pageIndex);
-                props.onPageChange(pageIndex);
-              }}
-              onPageSizeChange={(pageSize: number) => {
-                setCurrentPageSize(pageSize);
-                props.onPageSizeChange(pageSize);
-              }}
+              onPageChange={onPageChange(props)}
+              onPageSizeChange={onPageSizeChange(props)}
             />
           );
         }}
