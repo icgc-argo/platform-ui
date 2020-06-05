@@ -8,7 +8,7 @@ const NumberRangeFacetStories = storiesOf(`${__dirname}`, module).add('Basic', (
     <div>
       <NumberRangeFacet
         subMenuName="Age at Diagnosis"
-        onChange={(min, max) => setRange({ min, max })}
+        onSubmit={(min, max) => setRange({ min, max })}
       />
     </div>
   );

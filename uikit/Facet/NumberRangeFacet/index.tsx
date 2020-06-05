@@ -8,12 +8,12 @@ const NumberRangeFacet = ({
   subMenuName,
   isExpanded,
   onClick,
-  onChange,
+  onSubmit,
 }: {
   subMenuName: string;
   isExpanded?: boolean;
   onClick?: (e: any) => void;
-  onChange: (min: number, max: number) => void;
+  onSubmit: (min: number, max: number) => void;
 }) => {
   // must be initialized, use string to handle 'backspaces' from input field
   // parse to number upon use
@@ -43,7 +43,7 @@ const NumberRangeFacet = ({
 
   const goButtonHandler = () => {
     const { min, max } = getRangeValues();
-    onChange(min, max);
+    onSubmit(min, max);
     setMinimumInput('');
     setMaximumInput('');
   };

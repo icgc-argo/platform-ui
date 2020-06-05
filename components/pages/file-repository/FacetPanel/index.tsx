@@ -165,7 +165,7 @@ export default () => {
                     };
                   })}
                   countUnit={'files'}
-                  onSelect={facetValue => {
+                  onOptionToggle={facetValue => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
                     setFiltersFromSqon(toggleSQON(currentValue, filters));
                   }}
@@ -185,7 +185,7 @@ export default () => {
               {type.variant === 'Number' && (
                 <NumberRangeFacet
                   {...props}
-                  onChange={(min, max) => {
+                  onSubmit={(min, max) => {
                     const newFilters: FiltersType = {
                       op: CombinationKeys.And,
                       content: [

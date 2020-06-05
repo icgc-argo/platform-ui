@@ -29,7 +29,7 @@ const OptionsListStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
     <div>
       <OptionsList
         options={options}
-        onToggle={facetValue => {
+        onOptionToggle={facetValue => {
           const currentIndex = options.findIndex(val => val.key === facetValue);
           setOptions([
             ...options.slice(0, currentIndex),

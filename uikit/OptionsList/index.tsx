@@ -23,14 +23,14 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-  onToggle: (facetValue: string[] | string) => void;
+  onOptionToggle: (facetValue: string[] | string) => void;
   onSelectAllValues: (allValuesSelected: boolean) => void;
 }> = ({
   options,
   searchQuery = '',
   defaultRenderLimit = 5,
   countUnit,
-  onToggle,
+  onOptionToggle,
   onSelectAllValues,
 }) => {
   const theme = useTheme();
@@ -43,14 +43,6 @@ const OptionsList: React.ComponentType<{
         .map(option => option.key),
     [searchQuery],
   );
-
-  const initialState = orderBy(options, ['doc_count'], ['desc']);
-  const [optionStates, setOptionStates] = React.useState(initialState);
-
-  // can changes be watched directly through options prop?
-  React.useEffect(() => {
-    setOptionStates(options);
-  }, [options]);
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
@@ -70,7 +62,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        onToggle(option.key);
+        onOptionToggle(option.key);
       }}
     >
       <div
@@ -113,12 +105,10 @@ const OptionsList: React.ComponentType<{
   );
 
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-  const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
-    optionStates,
-  ]);
+  const sortedOptions = React.useMemo(() => orderBy(options, ['isChecked'], ['desc']), [options]);
 
-  const selectedOptions = React.useMemo(() => optionStates.filter(option => option.isChecked), [
-    optionStates,
+  const selectedOptions = React.useMemo(() => options.filter(option => option.isChecked), [
+    options,
   ]);
 
   const queriedOptions = React.useMemo(
@@ -148,7 +138,7 @@ const OptionsList: React.ComponentType<{
 
   const onSelectAll = () => {
     if (searchQuery) {
-      onToggle(queriedOptionKeys);
+      onOptionToggle(queriedOptionKeys);
     } else {
       onSelectAllValues(allOptionsSelected);
     }

@@ -34,7 +34,7 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       <Facet
         subMenuName="Primary Site"
         options={options}
-        onSelect={facetValue => {
+        onOptionToggle={facetValue => {
           const currentIndex = options.findIndex(val => val.key === facetValue);
           setOptions([
             ...options.slice(0, currentIndex),
