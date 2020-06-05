@@ -124,8 +124,8 @@ function Table<Data extends TableDataBase>({
   // This syncs up the component's width to its container.
   const { width, resizing } = useElementDimension(parentRef);
 
-  const [pageSize, setPageSize] = React.useState(20);
-  const [pageIndex, setPageIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(20);
+  const [currentPageIndex, setCurrentPageIndex] = React.useState(0);
 
   /** @IMPORTANT do not use paginationComponentProps outside of the following side effect  */
   const paginationComponentProps = React.createRef();
@@ -135,15 +135,18 @@ function Table<Data extends TableDataBase>({
       console.log('paginationComponentProps.current: ', paginationComponentProps.current);
       // @ts-ignore
       const { page, pageSize } = paginationComponentProps.current;
-      setPageSize(pageSize);
-      setPageIndex(page);
+      setCurrentPageSize(pageSize);
+      setCurrentPageIndex(page);
     }
   }, []);
 
-  const startRow = pageSize * pageIndex + 1;
-  const endRow = Math.min(pageSize * (pageIndex + 1), data.length);
+  const startRowDisplay = currentPageSize * currentPageIndex + 1;
+  const endRowDisplay = Math.min(currentPageSize * (currentPageIndex + 1), data.length);
   const totalRows = data.length;
-  const rowCountSummary = `${startRow}-${endRow} of ${totalRows} ${pluralize(rowName, totalRows)}`;
+  const rowCountSummary = `${startRowDisplay}-${endRowDisplay} of ${totalRows} ${pluralize(
+    rowName,
+    totalRows,
+  )}`;
 
   return (
     <>
@@ -197,18 +200,18 @@ function Table<Data extends TableDataBase>({
             <PaginationComponent
               {...props}
               onPageChange={(pageIndex: number) => {
-                setPageIndex(pageIndex);
+                setCurrentPageIndex(pageIndex);
                 props.onPageChange(pageIndex);
               }}
               onPageSizeChange={(pageSize: number) => {
-                setPageSize(pageSize);
+                setCurrentPageSize(pageSize);
                 props.onPageSizeChange(pageSize);
               }}
             />
           );
         }}
-        page={pageIndex}
-        pageSize={pageSize}
+        page={currentPageIndex}
+        pageSize={currentPageSize}
         NoDataComponent={NoDataComponent}
         showPagination={isEmpty(data) ? false : showPagination}
         getNoDataProps={x => x}
