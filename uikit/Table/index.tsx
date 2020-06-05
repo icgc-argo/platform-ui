@@ -124,44 +124,26 @@ function Table<Data extends TableDataBase>({
   // This syncs up the component's width to its container.
   const { width, resizing } = useElementDimension(parentRef);
 
-  const defaultPageSize = rest.defaultPageSize || 20;
-  const [pageSize, setPageSize] = React.useState(defaultPageSize);
+  const [pageSize, setPageSize] = React.useState(20);
   const [pageIndex, setPageIndex] = React.useState(0);
 
-  const onPageChangeOverride = (newIndex: number) => setPageIndex(newIndex);
-  const onPageSizeChangeOverride = (newSize: number) => {
-    setPageSize(newSize);
-    setPageIndex(0);
-  };
+  /** @IMPORTANT do not use paginationComponentProps outside of the following side effect  */
+  const paginationComponentProps = React.createRef();
+  React.useEffect(() => {
+    // This side effect initializes pageSize and page on first render
+    if (paginationComponentProps.current) {
+      console.log('paginationComponentProps.current: ', paginationComponentProps.current);
+      // @ts-ignore
+      const { page, pageSize } = paginationComponentProps.current;
+      setPageSize(pageSize);
+      setPageIndex(page);
+    }
+  }, []);
 
-  const paginationOverride = props =>
-    TablePagination({
-      ...props,
-      pageSize,
-      page: pageIndex,
-      onPageChange: onPageChangeOverride,
-      onPageSizeChange: onPageSizeChangeOverride,
-      pages: Math.ceil(data.length / pageSize),
-    });
-
-  const PageRowCounter = () =>
-    React.useMemo(() => {
-      const startRow = pageSize * pageIndex + 1;
-      const endRow = Math.min(pageSize * (pageIndex + 1), data.length);
-      const totalRows = data.length;
-
-      const rowCountSummary = `${startRow}-${endRow} of ${totalRows} ${pluralize(
-        rowName,
-        totalRows,
-      )}`;
-      return (
-        <div>
-          <Typography variant="data" color="grey">
-            {rowCountSummary}
-          </Typography>
-        </div>
-      );
-    }, [pageIndex, pageSize, data.length]);
+  const startRow = pageSize * pageIndex + 1;
+  const endRow = Math.min(pageSize * (pageIndex + 1), data.length);
+  const totalRows = data.length;
+  const rowCountSummary = `${startRow}-${endRow} of ${totalRows} ${pluralize(rowName, totalRows)}`;
 
   return (
     <>
@@ -173,7 +155,13 @@ function Table<Data extends TableDataBase>({
           padding: 0px 8px 20px 8px;
         `}
       >
-        {data.length > 0 && rowName && PageRowCounter()}
+        {data.length > 0 && rowName && (
+          <div>
+            <Typography variant="data" color="grey">
+              {rowCountSummary}
+            </Typography>
+          </div>
+        )}
         {tableTopContent}
       </div>
       <StyledTable
@@ -200,7 +188,25 @@ function Table<Data extends TableDataBase>({
           ...getTrProps(state, rowInfo, column),
         })}
         minRows={0}
-        PaginationComponent={paginationOverride}
+        PaginationComponent={props => {
+          React.useEffect(() => {
+            // @ts-ignore
+            paginationComponentProps.current = props;
+          });
+          return (
+            <PaginationComponent
+              {...props}
+              onPageChange={(pageIndex: number) => {
+                setPageIndex(pageIndex);
+                props.onPageChange(pageIndex);
+              }}
+              onPageSizeChange={(pageSize: number) => {
+                setPageSize(pageSize);
+                props.onPageSizeChange(pageSize);
+              }}
+            />
+          );
+        }}
         page={pageIndex}
         pageSize={pageSize}
         NoDataComponent={NoDataComponent}
