@@ -133,19 +133,21 @@ export default ({
         const downloadStatus = getDownloadStatus(original.isDownloadable);
 
         return (
-          <div
+          <Tooltip
+            unmountHTMLWhenHide
+            position="left"
+            html={<span>{downloadStatus.toolTipText}</span>}
             css={css`
-              display: flex;
-              flex-direction: row;
-              justify-content: center;
-              align-items: center;
               width: 100%;
             `}
           >
-            <Tooltip
-              unmountHTMLWhenHide
-              position="left"
-              html={<span>{downloadStatus.toolTipText}</span>}
+            <div
+              css={css`
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+              `}
             >
               <InteractiveIcon
                 disabled={!downloadStatus.canUserDownload}
@@ -155,8 +157,8 @@ export default ({
                 fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
                 onClick={e => fileDownloader(original.fileID)}
               />
-            </Tooltip>
-          </div>
+            </div>
+          </Tooltip>
         );
       },
     },
