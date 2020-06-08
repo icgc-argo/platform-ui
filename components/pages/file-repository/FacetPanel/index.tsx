@@ -82,6 +82,35 @@ export default () => {
     });
   };
 
+  const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
+    return {
+      op: 'and',
+      content: [
+        ...(min
+          ? [
+              {
+                op: '>=' as ScalarFieldKeys,
+                content: {
+                  field: facetType,
+                  value: min,
+                },
+              },
+            ]
+          : []),
+        ...(max
+          ? [
+              {
+                op: '<=' as ScalarFieldKeys,
+                content: {
+                  field: facetType,
+                  value: max,
+                },
+              },
+            ]
+          : []),
+      ],
+    };
+  };
   return (
     <FacetContainer>
       <SubMenu>
@@ -193,33 +222,7 @@ export default () => {
                 <NumberRangeFacet
                   {...props}
                   onSubmit={(min, max) => {
-                    const newFilters: FileRepoFiltersType = {
-                      op: 'and',
-                      content: [
-                        ...(min
-                          ? [
-                              {
-                                op: '>=' as ScalarFieldKeys,
-                                content: {
-                                  field: type.name,
-                                  value: min,
-                                },
-                              },
-                            ]
-                          : []),
-                        ...(max
-                          ? [
-                              {
-                                op: '<=' as ScalarFieldKeys,
-                                content: {
-                                  field: type.name,
-                                  value: max,
-                                },
-                              },
-                            ]
-                          : []),
-                      ],
-                    };
+                    const newFilters = getRangeFilters(type.name, min, max);
                     // remove any existing fields for this type first
                     const withPreviousFieldRemoved = removeFilter(
                       type.name,
