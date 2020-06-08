@@ -8,7 +8,7 @@ query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON) {
           file_type
           analysis {
             experiment {
-              experiment_strategy
+              library_strategy
             }
           }
           study_id

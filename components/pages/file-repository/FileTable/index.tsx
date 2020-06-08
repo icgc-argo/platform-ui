@@ -15,16 +15,33 @@ import {
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
+import { useQuery } from '@apollo/react-hooks';
+import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
+import useFiltersContext from '../hooks/useFiltersContext';
 
-export default ({
-  fileRepoEntries = [],
-  userLoggedIn,
-  isLoading,
-}: {
-  fileRepoEntries: Array<FileRepositoryRecord>;
-  userLoggedIn: Boolean;
-  isLoading: boolean;
-}) => {
+export default ({ userLoggedIn }: { userLoggedIn: Boolean }) => {
+  const { filters } = useFiltersContext();
+  const { data, loading } = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
+    variables: {
+      first: 20,
+      offset: 0,
+      filters,
+    },
+  });
+
+  const fileRepoEntries: Array<FileRepositoryRecord> = data
+    ? data.file.hits.edges.map(({ node }) => ({
+        fileID: node.object_id,
+        donorID: node.donors.hits.edges[0].node.donor_id,
+        program: { shortName: node.study_id, fullName: node.study_id },
+        dataType: node.data_type,
+        // TODO: this field name will need to be changed https://github.com/icgc-argo/argo-metadata-schemas/issues/32
+        strategy: node.analysis.experiment.library_strategy,
+        format: node.file_type,
+        size: node.file.size,
+        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+      }))
+    : [];
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
@@ -139,7 +156,7 @@ export default ({
       `}
     >
       <SelectTable
-        loading={isLoading}
+        loading={loading}
         keyField="fileID"
         parentRef={containerRef}
         showPagination={true}
