@@ -41,16 +41,19 @@ const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
     },
   });
 
-  const tableData = data.file.hits.edges.map(({ node }) => ({
-    fileID: node.file.file_id,
-    donorID: node.donors.hits.edges[0].node.donor_id,
-    program: { shortName: node.study_id, fullName: node.study_id },
-    dataType: node.data_type,
-    strategy: node.analysis.experiment.library_strategy,
-    format: node.file_type,
-    size: node.file.size, //in bytes
-    isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
-  }));
+  const tableData =
+    (data &&
+      data.file.hits.edges.map(({ node }) => ({
+        fileID: node.file.file_id,
+        donorID: node.donors.hits.edges[0].node.donor_id,
+        program: { shortName: node.study_id, fullName: node.study_id },
+        dataType: node.data_type,
+        strategy: node.analysis.experiment.library_strategy,
+        format: node.file_type,
+        size: node.file.size, //in bytes
+        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+      }))) ||
+    [];
 
   return (
     <FiltersProvider>

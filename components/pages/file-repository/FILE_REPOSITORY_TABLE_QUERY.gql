@@ -3,23 +3,22 @@ query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON) {
     hits(first: $first, offset: $offset, filters: $filters) {
       edges {
         node {
+          object_id
           data_type
           file_type
           analysis {
             experiment {
-              library_strategy
+              experiment_strategy
             }
           }
           study_id
           file {
-            file_id
             size
           }
           donors {
             hits {
               edges {
                 node {
-                  submitter_donor_id
                   donor_id
                 }
               }
