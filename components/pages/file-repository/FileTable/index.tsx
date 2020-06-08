@@ -125,43 +125,44 @@ export default ({
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
-    {
-      Header: 'Actions',
-      width: 80,
-      sortable: false,
-      Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        const downloadStatus = getDownloadStatus(original.isDownloadable);
+    // disabled for initial File Repo release
+    // {
+    //   Header: 'Actions',
+    //   width: 80,
+    //   sortable: false,
+    //   Cell: ({ original }: { original: FileRepositoryRecord }) => {
+    //     const downloadStatus = getDownloadStatus(original.isDownloadable);
 
-        return (
-          <Tooltip
-            unmountHTMLWhenHide
-            position="left"
-            html={<span>{downloadStatus.toolTipText}</span>}
-            css={css`
-              width: 100%;
-            `}
-          >
-            <div
-              css={css`
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-              `}
-            >
-              <InteractiveIcon
-                disabled={!downloadStatus.canUserDownload}
-                height="16px"
-                width="16px"
-                name={downloadStatus.canUserDownload ? 'download' : 'lock'}
-                fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
-                onClick={e => fileDownloader(original.fileID)}
-              />
-            </div>
-          </Tooltip>
-        );
-      },
-    },
+    //     return (
+    //       <Tooltip
+    //         unmountHTMLWhenHide
+    //         position="left"
+    //         html={<span>{downloadStatus.toolTipText}</span>}
+    //         css={css`
+    //           width: 100%;
+    //         `}
+    //       >
+    //         <div
+    //           css={css`
+    //             display: flex;
+    //             flex-direction: row;
+    //             justify-content: center;
+    //             align-items: center;
+    //           `}
+    //         >
+    //           <InteractiveIcon
+    //             disabled={!downloadStatus.canUserDownload}
+    //             height="16px"
+    //             width="16px"
+    //             name={downloadStatus.canUserDownload ? 'download' : 'lock'}
+    //             fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
+    //             onClick={e => fileDownloader(original.fileID)}
+    //           />
+    //         </div>
+    //       </Tooltip>
+    //     );
+    //   },
+    // },
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
@@ -260,18 +261,19 @@ export default ({
               size="sm"
               onItemClick={item => null}
               menuItems={[
-                {
-                  display: 'Clinical Data',
-                  value: 'Clinical Data',
-                },
+                // only manifest download enabled for initial File Repo release
+                // {
+                //   display: 'Clinical Data',
+                //   value: 'Clinical Data',
+                // },
                 {
                   display: 'File Manifest',
                   value: 'File Manifest',
                 },
-                {
-                  display: 'File Table',
-                  value: 'File Table',
-                },
+                // {
+                //   display: 'File Table',
+                //   value: 'File Table',
+                // },
               ]}
             >
               <span css={instructionBoxButtonContentStyle}>
@@ -293,7 +295,8 @@ export default ({
                 />
               </span>
             </DropdownButton>
-            <DropdownButton
+            {/* disabled for initial File Repo release */}
+            {/* <DropdownButton
               variant="secondary"
               size="sm"
               onItemClick={item => null}
@@ -316,7 +319,7 @@ export default ({
                   `}
                 />
               </span>
-            </DropdownButton>
+            </DropdownButton> */}
           </div>
         </div>
       )}

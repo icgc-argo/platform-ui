@@ -139,7 +139,8 @@ export default () => {
                   setQueriedFileIDs(e.target.value);
                 }}
               />
-              <FileSelectButton
+              {/* disabled for initial File Repo release */}
+              {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action
                 variant={BUTTON_VARIANTS.SECONDARY}
                 size={BUTTON_SIZES.SM}
@@ -150,7 +151,7 @@ export default () => {
                   fill={uploadDisabled ? 'white' : 'accent2_dark'}
                 />
                 {' Upload a list of ids'}
-              </FileSelectButton>
+              </FileSelectButton> */}
             </div>
           </MenuItem>
         </FacetRow>
