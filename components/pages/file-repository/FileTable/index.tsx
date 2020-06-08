@@ -17,11 +17,13 @@ import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 
 export default ({
-  fileRepoEntries,
+  fileRepoEntries = [],
   userLoggedIn,
+  isLoading,
 }: {
   fileRepoEntries: Array<FileRepositoryRecord>;
   userLoggedIn: Boolean;
+  isLoading: boolean;
 }) => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
@@ -71,15 +73,12 @@ export default ({
       Header: 'Program',
       id: 'programShortName',
       accessor: d => d.program.shortName,
-      Cell: ({ original }: { original: FileRepositoryRecord }) => (
-        <Tooltip unmountHTMLWhenHide position="top" html={<span>{original.program.fullName}</span>}>
-          {original.program.shortName}
-        </Tooltip>
-      ),
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.program.shortName,
     },
     {
       Header: 'Data Type',
       accessor: 'dataType',
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.dataType,
     },
     {
       Header: 'Strategy',
@@ -131,7 +130,6 @@ export default ({
     },
   ];
   const containerRef = React.createRef<HTMLDivElement>();
-
   const tableElement = (
     <div
       ref={containerRef}
@@ -141,6 +139,7 @@ export default ({
       `}
     >
       <SelectTable
+        loading={isLoading}
         keyField="fileID"
         parentRef={containerRef}
         showPagination={true}
