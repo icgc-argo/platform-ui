@@ -31,13 +31,13 @@ import { SortedChangeFunction, SortingRule } from 'react-table';
 
 export default ({
   programShortName,
-  initalPages,
+  initialPages,
   initialPageSize,
   initialSorts,
   isCardLoading = true,
 }: {
   programShortName: string;
-  initalPages: number;
+  initialPages: number;
   initialPageSize: number;
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
@@ -279,7 +279,7 @@ export default ({
   ];
 
   const [pagingState, setPagingState] = React.useState({
-    pages: initalPages,
+    pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,

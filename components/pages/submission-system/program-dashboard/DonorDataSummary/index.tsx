@@ -68,7 +68,7 @@ export default () => {
     DEFAULT_OFFSET,
     DEFAULT_SORTS,
   );
-  const initalPages = !isCardLoading
+  const initialPages = !isCardLoading
     ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
     : 1;
 
@@ -106,7 +106,7 @@ export default () => {
       </Row>
       <DonorSummaryTable
         programShortName={programShortName}
-        initalPages={initalPages}
+        initialPages={initialPages}
         initialPageSize={DEFAULT_PAGE_SIZE}
         initialSorts={DEFAULT_SORTS}
         isCardLoading={isCardLoading}

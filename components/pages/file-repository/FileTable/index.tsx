@@ -18,8 +18,10 @@ import Icon from 'uikit/Icon';
 import { useQuery } from '@apollo/react-hooks';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 
-export default ({ userLoggedIn }: { userLoggedIn: Boolean }) => {
+export default () => {
+  const { token } = useAuthContext();
   const { filters } = useFiltersContext();
   const { data, loading } = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
     variables: {
@@ -67,8 +69,8 @@ export default ({ userLoggedIn }: { userLoggedIn: Boolean }) => {
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
-    const canUserDownload = userLoggedIn && isDownloadable;
-    const toolTipText = userLoggedIn
+    const canUserDownload = token && isDownloadable;
+    const toolTipText = token
       ? isDownloadable
         ? 'Download file'
         : 'You do not have permission to download this file'
@@ -159,7 +161,6 @@ export default ({ userLoggedIn }: { userLoggedIn: Boolean }) => {
         loading={loading}
         keyField="fileID"
         parentRef={containerRef}
-        showPagination={true}
         columns={tableColumns}
         data={fileRepoEntries}
         isSelected={key => {
