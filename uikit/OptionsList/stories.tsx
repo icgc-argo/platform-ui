@@ -38,8 +38,34 @@ const OptionsListStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
     { key: 'Liberator', doc_count: 523 },
     { key: 'Banshee', doc_count: 949 },
     { key: 'Hellbat', doc_count: 2000 },
-  ];
-  return <OptionsList options={exampleOptions} />;
+  ].map((opt: any) => ({
+    ...opt,
+    isChecked: false,
+  }));
+  const [options, setOptions] = React.useState(exampleOptions);
+
+  return (
+    <div>
+      <OptionsList
+        options={options}
+        onOptionToggle={facetValue => {
+          const currentIndex = options.findIndex(val => val.key === facetValue);
+          setOptions([
+            ...options.slice(0, currentIndex),
+            ...[{ ...options[currentIndex], isChecked: !options[currentIndex].isChecked }],
+            ...options.slice(currentIndex + 1, Infinity),
+          ]);
+        }}
+        onSelectAllOptions={allOptionsSelected => {
+          if (allOptionsSelected) {
+            setOptions(options.map(opt => ({ ...opt, isChecked: false })));
+          } else {
+            setOptions(options.map(opt => ({ ...opt, isChecked: true })));
+          }
+        }}
+      />
+    </div>
+  );
 });
 
 export default OptionsListStories;

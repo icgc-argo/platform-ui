@@ -27,15 +27,12 @@ import QueryBar from './';
 import isEmpty from 'lodash/isEmpty';
 import { useTheme } from 'uikit/ThemeProvider';
 import useFiltersContext from '../hooks/useFiltersContext';
-import Button from 'uikit/Button';
-import sqonBuilder from 'sqon-builder';
-import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 
 import { PaddedRow } from '../index';
 
 const QueryBarContainer = () => {
   const theme = useTheme();
-  const { filters, setFilters } = useFiltersContext();
+  const { filters } = useFiltersContext();
 
   return (
     <PaddedRow justify="around">
@@ -56,21 +53,6 @@ const QueryBarContainer = () => {
                 align-items: center;
               `}
             >
-              {/* for testing only */}
-              <Button
-                variant={BUTTON_VARIANTS.SECONDARY}
-                size={BUTTON_SIZES.SM}
-                onClick={() =>
-                  setFilters(
-                    sqonBuilder
-                      .has('primary_site', ['lung', 'heart', 'brain', 'blood', 'kidney'])
-                      .build(),
-                  )
-                }
-              >
-                Filters
-              </Button>
-              {/* for testing only */}
               <Icon
                 css={css`
                   vertical-align: middle;

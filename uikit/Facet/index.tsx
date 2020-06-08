@@ -27,15 +27,19 @@ import OptionsList, { FilterOption } from 'uikit/OptionsList';
 const Facet = ({
   subMenuName,
   options,
-  isSelected,
+  isExpanded,
   onClick,
   countUnit,
+  onOptionToggle,
+  onSelectAllOptions,
 }: {
   subMenuName: string;
   options: Array<FilterOption>;
-  isSelected?: boolean;
+  isExpanded?: boolean;
   onClick?: (e: any) => void;
   countUnit?: string;
+  onOptionToggle: (facetValue: string | string[]) => void;
+  onSelectAllOptions: (allOptionsSelected: boolean) => void;
 }) => {
   const [searchQueryState, setSearchQueryState] = React.useState('');
 
@@ -44,7 +48,7 @@ const Facet = ({
       <MenuItem
         className="FacetMenu"
         onClick={onClick}
-        selected={isSelected}
+        selected={isExpanded}
         content={subMenuName}
         chevronOnLeftSide={true}
         isFacetVariant={true}
@@ -54,7 +58,13 @@ const Facet = ({
           width: 300px;
         `}
       >
-        <OptionsList options={options} searchQuery={searchQueryState} countUnit={countUnit} />
+        <OptionsList
+          options={options}
+          searchQuery={searchQueryState}
+          countUnit={countUnit}
+          onOptionToggle={onOptionToggle}
+          onSelectAllOptions={onSelectAllOptions}
+        />
       </MenuItem>
     </>
   );
