@@ -166,8 +166,7 @@ export default () => {
                   setQueriedFileIDs(e.target.value);
                 }}
               />
-              {/* disabling until upload feature is implemented */}
-              {/* <FileSelectButton
+              <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action
                 variant={BUTTON_VARIANTS.SECONDARY}
                 size={BUTTON_SIZES.SM}
@@ -178,7 +177,7 @@ export default () => {
                   fill={uploadDisabled ? 'white' : 'accent2_dark'}
                 />
                 {' Upload a list of ids'}
-              </FileSelectButton> */}
+              </FileSelectButton>
             </div>
           </MenuItem>
         </FacetRow>
