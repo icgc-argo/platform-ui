@@ -1,6 +1,6 @@
-query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON) {
+query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON, $sort: [Sort]) {
   file {
-    hits(first: $first, offset: $offset, filters: $filters) {
+    hits(first: $first, offset: $offset, filters: $filters, sort: $sort) {
       total
       edges {
         node {

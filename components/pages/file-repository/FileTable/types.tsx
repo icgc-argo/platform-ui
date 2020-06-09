@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { FileRepoFiltersType } from '../utils/types';
+
 export type FileRepositoryRecord = {
   fileID: string;
   donorID: string;
@@ -27,3 +29,23 @@ export type FileRepositoryRecord = {
   size: number; //in bytes
   isDownloadable: boolean;
 };
+
+export type FileRepositoryTableQueryData = {
+  total: number;
+  data: FileRepositoryRecord[];
+};
+
+export type FileRepositoryTableQueryVariables = {
+  filters: FileRepoFiltersType;
+  first: number;
+  offset: number;
+  sorts: any[];
+};
+
+export type FileRepositoryRecordSort = {
+  field: FileRepositoryRecordSortField;
+  order: FileRepositoryRecordSortOrder;
+};
+
+export type FileRepositoryRecordSortField = any;
+export type FileRepositoryRecordSortOrder = 'asc' | 'desc';

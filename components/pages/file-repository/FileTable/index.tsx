@@ -20,7 +20,14 @@
 import React from 'react';
 import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
-import { FileRepositoryRecord } from './types';
+import {
+  FileRepositoryRecord,
+  FileRepositoryTableQueryData,
+  FileRepositoryTableQueryVariables,
+  FileRepositoryRecordSort,
+  FileRepositoryRecordSortField,
+  FileRepositoryRecordSortOrder,
+} from './types';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from '@emotion/core';
@@ -38,16 +45,26 @@ import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
+import { SortedChangeFunction, SortingRule } from 'react-table';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
+const DEFAULT_SORT = [
+  {
+    field: 'object_id' as FileRepositoryRecordSortField,
+    order: 'asc' as FileRepositoryRecordSortOrder,
+  },
+];
 
 const useFileRepoTableQuery = (
   first: number,
   offset: number,
+  sort: FileRepositoryRecordSort[],
   filters: FileRepoFiltersType,
-  // sorts: any[],
-  options: Omit<QueryHookOptions<any, any>, 'variables'> = {},
+  options: Omit<
+    QueryHookOptions<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>,
+    'variables'
+  > = {},
 ) => {
   const hook = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
     ...options,
@@ -55,6 +72,7 @@ const useFileRepoTableQuery = (
       first,
       offset,
       filters,
+      sort,
     },
   });
 
@@ -63,35 +81,23 @@ const useFileRepoTableQuery = (
     data: hook.data,
   };
 };
+
 export default () => {
   const { token } = useAuthContext();
   const { filters } = useFiltersContext();
   const [pagingState, setPagingState] = React.useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
-    pages: 1,
+    sort: DEFAULT_SORT,
   });
   const offset = pagingState.pageSize * pagingState.page;
   const first = pagingState.pageSize;
-  // const sorts = pagingState.sorts;
+  const sort = pagingState.sort;
 
-  const { data, loading = true } = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
-    variables: {
-      first,
-      offset,
-      filters,
-    },
-    onCompleted: () => {
-      setPagingState({
-        ...pagingState,
-        pages: Math.ceil(data.file.hits.total / pagingState.pageSize),
-      });
-    },
-  });
+  const { data, loading = true } = useFileRepoTableQuery(first, offset, sort, filters);
 
   const totalEntries = data ? data.file.hits.total : 0;
-  // const initialPages = !loading ? Math.ceil(totalEntries / DEFAULT_PAGE_SIZE) : 1;
-
+  const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
   };
@@ -105,10 +111,22 @@ export default () => {
       ...pagingState,
       page: 0,
       pageSize: newPageSize,
-      pages: Math.ceil(totalEntries / newPageSize),
     });
   };
 
+  const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+    const sort = newSorted.reduce(
+      (accSort: Array<FileRepositoryRecordSort>, sortRule: SortingRule) => {
+        const order = sortRule.desc ? 'desc' : 'asc';
+        return accSort.concat({
+          field: sortRule.id as FileRepositoryRecordSortField,
+          order: order as FileRepositoryRecordSortOrder,
+        });
+      },
+      [],
+    );
+    handlePagingStateChange({ ...pagingState, sort });
+  };
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
@@ -144,36 +162,38 @@ export default () => {
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
       Header: 'File ID',
-      accessor: 'fileID',
+      accessor: 'object_id',
       Cell: ({ original }: { original: FileRepositoryRecord }) => original.fileID,
     },
     {
       Header: 'Donor ID',
-      accessor: 'donorID',
+      accessor: 'donors.donor_id',
       Cell: ({ original }: { original: FileRepositoryRecord }) => original.donorID,
     },
     {
       Header: 'Program',
-      id: 'programShortName',
+      id: 'study_id',
       accessor: d => d.program.shortName,
       Cell: ({ original }: { original: FileRepositoryRecord }) => original.program.shortName,
     },
     {
       Header: 'Data Type',
-      accessor: 'dataType',
+      accessor: 'data_type',
       Cell: ({ original }: { original: FileRepositoryRecord }) => original.dataType,
     },
     {
       Header: 'Strategy',
-      accessor: 'strategy',
+      accessor: 'analysis.experiment.library_strategy',
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.strategy,
     },
     {
       Header: 'Format',
-      accessor: 'format',
+      accessor: 'file_type',
+      Cell: ({ original }: { original: FileRepositoryRecord }) => original.format,
     },
     {
       Header: 'Size',
-      accessor: 'size',
+      accessor: 'file.size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
     {
@@ -239,6 +259,7 @@ export default () => {
       `}
     >
       <SelectTable
+        manual
         loading={loading}
         keyField="fileID"
         parentRef={containerRef}
@@ -252,10 +273,12 @@ export default () => {
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
         page={pagingState.page}
-        pages={pagingState.pages}
+        pages={pageCount}
         pageSize={pagingState.pageSize}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
+        onSortedChange={onSortedChange}
+        showPagination
       />
     </div>
   );
