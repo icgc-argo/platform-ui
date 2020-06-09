@@ -21,7 +21,7 @@ import {
   DonorSummaryRecord,
   DonorDataReleaseState,
   MolecularProcessingStatus,
-  ProgoramDonorReleasStats,
+  ProgramDonorReleaseStats,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
@@ -69,7 +69,7 @@ export default ({
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
 
-  const emptyProgramSummaryStats: ProgoramDonorReleasStats = {
+  const emptyProgramSummaryStats: ProgramDonorReleaseStats = {
     registeredDonorsCount: 0,
     fullyReleasedDonorsCount: 0,
     partiallyReleasedDonorsCount: 0,
