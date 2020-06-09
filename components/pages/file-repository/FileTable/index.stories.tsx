@@ -14,7 +14,7 @@ export const createKnobs = () => {
 
 const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const props = createKnobs();
-  return <FileRepositoryTable fileRepoEntries={dummyData} userLoggedIn={props.userLoggedIn} />;
+  return <FileRepositoryTable />;
 });
 
 export default FileRepositoryTableStories;
