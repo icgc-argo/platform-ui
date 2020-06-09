@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import React from 'react';
 import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
@@ -19,6 +38,7 @@ import { useQuery } from '@apollo/react-hooks';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';
+import pluralize from 'pluralize';
 
 export default () => {
   const { token } = useAuthContext();
@@ -65,7 +85,6 @@ export default () => {
   };
   const fileDownloader = (fileID: String) => {
     //todo
-    alert(`we are working hard to download your file, ${fileID}`);
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
@@ -120,19 +139,21 @@ export default () => {
         const downloadStatus = getDownloadStatus(original.isDownloadable);
 
         return (
-          <div
+          <Tooltip
+            unmountHTMLWhenHide
+            position="left"
+            html={<span>{downloadStatus.toolTipText}</span>}
             css={css`
-              display: flex;
-              flex-direction: row;
-              justify-content: center;
-              align-items: center;
               width: 100%;
             `}
           >
-            <Tooltip
-              unmountHTMLWhenHide
-              position="left"
-              html={<span>{downloadStatus.toolTipText}</span>}
+            <div
+              css={css`
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+              `}
             >
               <InteractiveIcon
                 disabled={!downloadStatus.canUserDownload}
@@ -142,13 +163,38 @@ export default () => {
                 fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
                 onClick={e => fileDownloader(original.fileID)}
               />
-            </Tooltip>
-          </div>
+            </div>
+          </Tooltip>
         );
       },
     },
   ];
   const containerRef = React.createRef<HTMLDivElement>();
+
+  const initalPageSize = 20;
+  const numFiles = fileRepoEntries.length;
+  const [pagingState, setPagingState] = React.useState({
+    pageSize: initalPageSize,
+    page: 0,
+    pages: Math.ceil(numFiles / initalPageSize),
+  });
+
+  const handlePagingStateChange = (state: typeof pagingState) => {
+    setPagingState(state);
+  };
+
+  const onPageChange = (newPageNum: number) => {
+    handlePagingStateChange({ ...pagingState, page: newPageNum });
+  };
+
+  const onPageSizeChange = (newPageSize: number) => {
+    handlePagingStateChange({
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(numFiles / newPageSize),
+    });
+  };
+
   const tableElement = (
     <div
       ref={containerRef}
@@ -170,9 +216,17 @@ export default () => {
         toggleSelection={fileID => toggleHandler(fileID)}
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
+        page={pagingState.page}
+        pages={pagingState.pages}
+        pageSize={pagingState.pageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </div>
   );
+
+  const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
+  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), numFiles);
 
   return (
     <Container
@@ -180,94 +234,98 @@ export default () => {
         padding: 10px;
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        `}
-      >
-        <div
-          css={css`
-            margin-left: 10px;
-          `}
-        >
-          <Typography variant="data" color="grey">
-            {fileRepoEntries.length} files
-          </Typography>
-        </div>
+      {numFiles > 0 && (
         <div
           css={css`
             display: flex;
+            justify-content: space-between;
+            align-items: center;
           `}
         >
-          <DropdownButton
+          <div
             css={css`
-              margin-right: 8px;
+              margin-left: 10px;
             `}
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'Clinical Data',
-                value: 'Clinical Data',
-              },
-              {
-                display: 'File Manifest',
-                value: 'File Manifest',
-              },
-              {
-                display: 'File Table',
-                value: 'File Table',
-              },
-            ]}
           >
-            <span css={instructionBoxButtonContentStyle}>
-              <Icon
-                name="download"
-                fill="accent2_dark"
-                height="12px"
-                css={instructionBoxButtonIconStyle}
-              />
-              Download
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
-          <DropdownButton
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'placeholder',
-                value: 'placeholder',
-              },
-            ]}
+            <div>
+              <Typography variant="data" color="grey">
+                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', numFiles, true)}`}
+              </Typography>
+            </div>
+          </div>
+          <div
+            css={css`
+              display: flex;
+            `}
           >
-            <span css={instructionBoxButtonContentStyle}>
-              Columns
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
+            <DropdownButton
+              css={css`
+                margin-right: 8px;
+              `}
+              variant="secondary"
+              size="sm"
+              onItemClick={item => null}
+              menuItems={[
+                {
+                  display: 'Clinical Data',
+                  value: 'Clinical Data',
+                },
+                {
+                  display: 'File Manifest',
+                  value: 'File Manifest',
+                },
+                {
+                  display: 'File Table',
+                  value: 'File Table',
+                },
+              ]}
+            >
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />
+                Download
+                <Icon
+                  name="chevron_down"
+                  fill="accent2_dark"
+                  height="9px"
+                  css={css`
+                    ${instructionBoxButtonIconStyle}
+                    margin-left: 5px;
+                  `}
+                />
+              </span>
+            </DropdownButton>
+            <DropdownButton
+              variant="secondary"
+              size="sm"
+              onItemClick={item => null}
+              menuItems={[
+                {
+                  display: 'placeholder',
+                  value: 'placeholder',
+                },
+              ]}
+            >
+              <span css={instructionBoxButtonContentStyle}>
+                Columns
+                <Icon
+                  name="chevron_down"
+                  fill="accent2_dark"
+                  height="9px"
+                  css={css`
+                    ${instructionBoxButtonIconStyle}
+                    margin-left: 5px;
+                  `}
+                />
+              </span>
+            </DropdownButton>
+          </div>
         </div>
-      </div>
+      )}
       {tableElement}
     </Container>
   );
