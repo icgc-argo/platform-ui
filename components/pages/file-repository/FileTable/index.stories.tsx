@@ -20,7 +20,6 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import FileRepositoryTable from './index';
-import { dummyData } from './dummyData';
 import { boolean } from '@storybook/addon-knobs';
 
 export const createKnobs = () => {

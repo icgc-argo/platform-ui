@@ -94,7 +94,7 @@ export default () => {
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
-  const CardTtile = () => (
+  const CardTitle = () => (
     <Typography variant="default" component="span">
       Donor Data Summary
     </Typography>
@@ -102,14 +102,14 @@ export default () => {
 
   return !isCardLoading && isDonorSummaryEntriesEmpty ? (
     <DashboardCard>
-      <CardTtile />
+      <CardTitle />
       <EmptyDonorSummaryState />
     </DashboardCard>
   ) : (
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
-          <CardTtile />
+          <CardTitle />
         </Col>
         <Col
           md={8.5}

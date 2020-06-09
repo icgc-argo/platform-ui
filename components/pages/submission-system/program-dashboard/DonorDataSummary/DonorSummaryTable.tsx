@@ -63,7 +63,7 @@ export default ({
 }) => {
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
-  const ID_SEPERATOR = '-';
+  const ID_SEPARATOR = '-';
   const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
@@ -353,7 +353,7 @@ export default ({
   const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
     const sorts = newSorted.reduce(
       (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
-        const fields = sortRule.id.split(ID_SEPERATOR);
+        const fields = sortRule.id.split(ID_SEPARATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
         return accSorts.concat(
           fields.map(field => ({

@@ -21,8 +21,6 @@ import React from 'react';
 import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
 import { FileRepositoryRecord } from './types';
-import Link from 'next/link';
-import HyperLink from 'uikit/Link';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from '@emotion/core';
@@ -34,36 +32,83 @@ import {
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
+import { FileRepoFiltersType } from '../utils/types';
 
-export default () => {
-  const { token } = useAuthContext();
-  const { filters } = useFiltersContext();
-  const { data, loading } = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
+const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE_OFFSET = 0;
+
+const useFileRepoTableQuery = (
+  first: number,
+  offset: number,
+  filters: FileRepoFiltersType,
+  // sorts: any[],
+  options: Omit<QueryHookOptions<any, any>, 'variables'> = {},
+) => {
+  const hook = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
+    ...options,
     variables: {
-      first: 20,
-      offset: 0,
+      first,
+      offset,
       filters,
     },
   });
 
-  const fileRepoEntries: Array<FileRepositoryRecord> = data
-    ? data.file.hits.edges.map(({ node }) => ({
-        fileID: node.object_id,
-        donorID: node.donors.hits.edges[0].node.donor_id,
-        program: { shortName: node.study_id, fullName: node.study_id },
-        dataType: node.data_type,
-        // TODO: this field name will need to be changed https://github.com/icgc-argo/argo-metadata-schemas/issues/32
-        strategy: node.analysis.experiment.library_strategy,
-        format: node.file_type,
-        size: node.file.size,
-        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
-      }))
-    : [];
+  return {
+    ...hook,
+    data: hook.data,
+  };
+};
+export default () => {
+  const { token } = useAuthContext();
+  const { filters } = useFiltersContext();
+  const [pagingState, setPagingState] = React.useState({
+    pageSize: DEFAULT_PAGE_SIZE,
+    page: DEFAULT_PAGE_OFFSET,
+    pages: 1,
+  });
+  const offset = pagingState.pageSize * pagingState.page;
+  const first = pagingState.pageSize;
+  // const sorts = pagingState.sorts;
+
+  const { data, loading = true } = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
+    variables: {
+      first,
+      offset,
+      filters,
+    },
+    onCompleted: () => {
+      setPagingState({
+        ...pagingState,
+        pages: Math.ceil(data.file.hits.total / pagingState.pageSize),
+      });
+    },
+  });
+
+  const totalEntries = data ? data.file.hits.total : 0;
+  // const initialPages = !loading ? Math.ceil(totalEntries / DEFAULT_PAGE_SIZE) : 1;
+
+  const handlePagingStateChange = (state: typeof pagingState) => {
+    setPagingState(state);
+  };
+
+  const onPageChange = (newPageNum: number) => {
+    handlePagingStateChange({ ...pagingState, page: newPageNum });
+  };
+
+  const onPageSizeChange = (newPageSize: number) => {
+    handlePagingStateChange({
+      ...pagingState,
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(totalEntries / newPageSize),
+    });
+  };
+
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
@@ -171,29 +216,19 @@ export default () => {
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const initalPageSize = 20;
-  const numFiles = fileRepoEntries.length;
-  const [pagingState, setPagingState] = React.useState({
-    pageSize: initalPageSize,
-    page: 0,
-    pages: Math.ceil(numFiles / initalPageSize),
-  });
-
-  const handlePagingStateChange = (state: typeof pagingState) => {
-    setPagingState(state);
-  };
-
-  const onPageChange = (newPageNum: number) => {
-    handlePagingStateChange({ ...pagingState, page: newPageNum });
-  };
-
-  const onPageSizeChange = (newPageSize: number) => {
-    handlePagingStateChange({
-      page: 0,
-      pageSize: newPageSize,
-      pages: Math.ceil(numFiles / newPageSize),
-    });
-  };
+  const fileRepoEntries = data
+    ? data.file.hits.edges.map(({ node }) => ({
+        fileID: node.object_id,
+        donorID: node.donors.hits.edges[0].node.donor_id,
+        program: { shortName: node.study_id, fullName: node.study_id },
+        dataType: node.data_type,
+        // TODO: this field name will need to be changed https://github.com/icgc-argo/argo-metadata-schemas/issues/32
+        strategy: node.analysis.experiment.library_strategy,
+        format: node.file_type,
+        size: node.file.size,
+        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+      }))
+    : [];
 
   const tableElement = (
     <div
@@ -226,7 +261,7 @@ export default () => {
   );
 
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
-  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), numFiles);
+  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), totalEntries);
 
   return (
     <Container
@@ -234,7 +269,7 @@ export default () => {
         padding: 10px;
       `}
     >
-      {numFiles > 0 && (
+      {totalEntries > 0 && (
         <div
           css={css`
             display: flex;
@@ -249,7 +284,7 @@ export default () => {
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', numFiles, true)}`}
+                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
               </Typography>
             </div>
           </div>
