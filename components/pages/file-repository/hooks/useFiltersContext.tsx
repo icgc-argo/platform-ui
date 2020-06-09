@@ -1,69 +1,52 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import React from 'react';
-import useUrlParamState, { getParams } from 'global/hooks/useUrlParamState';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 import sqonBuilder from 'sqon-builder';
-import { useRouter } from 'next/router';
 import stringify from 'fast-json-stable-stringify';
-
-enum ArrayFieldKeys {
-  In = 'in',
-}
-enum ScalarFieldKeys {
-  GreaterThan = 'gt',
-  LesserThan = 'lt',
-}
-
-enum CombinationKeys {
-  And = 'and',
-  Or = 'or',
-  Not = 'not',
-}
-
-interface ArrayField {
-  field: string;
-  value: Array<string | number>;
-}
-
-interface ScalarField {
-  field: string;
-  value: number;
-}
-
-interface ArrayFieldOperator {
-  op: ArrayFieldKeys;
-  content: ArrayField;
-}
-
-interface ScalarFieldOperator {
-  op: ScalarFieldKeys;
-  content: ScalarField;
-}
-
-type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
-
-interface CombinationOperator {
-  op: CombinationKeys;
-  content: Operator[];
-}
-
-type Operator = FieldOperator | CombinationOperator;
-
-export type FiltersType = {
-  op: CombinationKeys;
-  content: Operator[];
-};
+import { addInFilters } from '../utils';
+import { FileRepoFiltersType, FieldOperator } from '../utils/types';
 
 type FiltersContextType = {
-  filters: FiltersType;
+  filters: FileRepoFiltersType;
   clearFilters: () => void;
-  setFilters: (FiltersType) => void;
+  setFilterFromFieldAndValue: ({
+    field,
+    value,
+  }: {
+    field: string;
+    value: string | string[];
+  }) => void;
+  replaceAllFilters: (filters: FileRepoFiltersType) => void;
 };
 
-const defaultFilters = { op: 'and', content: [] } as FiltersType;
+export const defaultFilters: FileRepoFiltersType = {
+  op: 'and',
+  content: [],
+};
 
 const FiltersContext = React.createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
-  setFilters: (filter: FiltersType) => null,
+  setFilterFromFieldAndValue: () => {},
+  replaceAllFilters: () => {},
 });
 
 const useFilterState = () => {
@@ -82,14 +65,18 @@ export function FiltersProvider({ children }) {
     setCurrentFilters(defaultFilters);
   };
 
-  const setFilters = filters => {
-    setCurrentFilters(filters);
+  const replaceAllFilters = filters => setCurrentFilters(filters);
+  const setFilterFromFieldAndValue = ({ field, value }) => {
+    const operator = sqonBuilder.has(field, value).build();
+    const newFilters = addInFilters(operator, currentFilters);
+    setCurrentFilters(newFilters);
   };
 
   const data = {
     filters: currentFilters,
-    setFilters,
+    setFilterFromFieldAndValue,
     clearFilters,
+    replaceAllFilters,
   };
   return <FiltersContext.Provider value={data}>{children}</FiltersContext.Provider>;
 }

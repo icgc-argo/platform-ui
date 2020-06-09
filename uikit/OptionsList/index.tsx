@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import React from 'react';
 import { MenuItem } from '../SubMenu';
 import Checkbox from 'uikit/form/Checkbox';
@@ -13,6 +32,7 @@ import ViewAmountController from '../OptionsList/ViewAmountController';
 export type FilterOption = {
   key: string;
   doc_count: number;
+  isChecked: boolean;
 };
 
 type SelectableFilterOption = FilterOption & { isChecked: boolean };
@@ -22,7 +42,16 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-}> = ({ options, searchQuery = '', defaultRenderLimit = 5, countUnit }) => {
+  onOptionToggle: (facetValue: string[] | string) => void;
+  onSelectAllOptions: (allOptionsSelected: boolean) => void;
+}> = ({
+  options,
+  searchQuery = '',
+  defaultRenderLimit = 5,
+  countUnit,
+  onOptionToggle,
+  onSelectAllOptions,
+}) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
@@ -33,18 +62,6 @@ const OptionsList: React.ComponentType<{
         .map(option => option.key),
     [searchQuery],
   );
-
-  const [selectAll, setSelectAll] = React.useState(true);
-
-  const initalStates = orderBy(
-    options.map(option => {
-      return { ...option, isChecked: false };
-    }),
-    ['doc_count'],
-    ['desc'],
-  );
-
-  const [optionStates, setOptionStates] = React.useState(initalStates);
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
@@ -64,7 +81,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        toggleOption(option.key);
+        onOptionToggle(option.key);
       }}
     >
       <div
@@ -106,22 +123,11 @@ const OptionsList: React.ComponentType<{
     </div>
   );
 
-  const toggleOption = (optionKey: string) => {
-    const targetState = optionStates.find(state => state.key === optionKey);
-    const updatedStates = [
-      ...optionStates.filter(state => state !== targetState),
-      { ...targetState, isChecked: !targetState.isChecked },
-    ];
-    setOptionStates(updatedStates);
-  };
-
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-  const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
-    optionStates,
-  ]);
+  const sortedOptions = React.useMemo(() => orderBy(options, ['isChecked'], ['desc']), [options]);
 
-  const selectedOptions = React.useMemo(() => optionStates.filter(option => option.isChecked), [
-    optionStates,
+  const selectedOptions = React.useMemo(() => options.filter(option => option.isChecked), [
+    options,
   ]);
 
   const queriedOptions = React.useMemo(
@@ -130,6 +136,10 @@ const OptionsList: React.ComponentType<{
         option => queriedOptionKeys.includes(option.key) && !selectedOptions.includes(option),
       ),
     [searchQuery, sortedOptions],
+  );
+
+  const allOptionsSelected: boolean = (searchQuery ? queriedOptions : options).every(
+    opt => opt.isChecked,
   );
 
   const defaultNonSelectedOptions = React.useMemo(
@@ -147,23 +157,12 @@ const OptionsList: React.ComponentType<{
 
   const onSelectAll = () => {
     if (searchQuery) {
-      setOptionStates(
-        optionStates.map(state =>
-          queriedOptionKeys.includes(state.key) ? { ...state, isChecked: selectAll } : { ...state },
-        ),
-      );
+      onOptionToggle(queriedOptionKeys);
     } else {
-      if (selectAll) {
-        setOptionStates(
-          sortedOptions.map(state => {
-            return { ...state, isChecked: selectAll };
-          }),
-        );
-      } else setOptionStates(initalStates);
-      setSelectAll(!selectAll);
+      onSelectAllOptions(allOptionsSelected);
     }
   };
-  const numberofMoreOptions = options.length - optionsToShow.length;
+  const numberOfMoreOptions = options.length - optionsToShow.length;
 
   return (
     <>
@@ -198,17 +197,17 @@ const OptionsList: React.ComponentType<{
           moreToggleHandler={() => {
             setAllOptionsVisible(!allOptionsVisible);
           }}
-          selectAllState={selectAll}
+          selectAllState={allOptionsSelected}
           toggleVisiblityCss={
             searchQuery
               ? 'hidden'
-              : numberofMoreOptions === 0
+              : numberOfMoreOptions === 0
               ? allOptionsVisible
                 ? 'visible'
                 : 'hidden'
               : 'visible'
           }
-          toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
+          toggleText={allOptionsVisible ? `Less` : `${numberOfMoreOptions} More`}
           moreOptionsAvailable={!allOptionsVisible}
         />
       )}

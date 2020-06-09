@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import React from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
@@ -14,6 +33,11 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { removeFilter, inCurrentFilters, toggleFilter, replaceFilter } from '../utils';
+import SqonBuilder from 'sqon-builder';
+import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
+import { FilterOption } from 'uikit/OptionsList';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -52,19 +76,60 @@ const FacetContainer = styled('div')`
 `;
 
 export default () => {
-  const [selectedFacets, setSelectedFacets] = React.useState(concat(presetFacets, fileIDSearch));
+  const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
-
-  const clickHander = (targetFacet: FacetDetails) => {
-    if (selectedFacets.includes(targetFacet)) {
-      setSelectedFacets(selectedFacets.filter(facet => facet !== targetFacet));
+  const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+  const clickHandler = (targetFacet: FacetDetails) => {
+    if (expandedFacets.includes(targetFacet)) {
+      setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
     } else {
-      setSelectedFacets(selectedFacets.concat(targetFacet));
+      setExpandedFacets(expandedFacets.concat(targetFacet));
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
+  const getOptions = (facetType: string): FilterOption[] => {
+    return mockFacetData[facetType].map(d => {
+      return {
+        ...d,
+        isChecked: inCurrentFilters({
+          currentFilters: filters,
+          value: d.key,
+          dotField: facetType,
+        }),
+      };
+    });
+  };
 
+  const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
+    return {
+      op: 'and',
+      content: [
+        ...(min
+          ? [
+              {
+                op: '>=' as ScalarFieldKeys,
+                content: {
+                  field: facetType,
+                  value: min,
+                },
+              },
+            ]
+          : []),
+        ...(max
+          ? [
+              {
+                op: '<=' as ScalarFieldKeys,
+                content: {
+                  field: facetType,
+                  value: max,
+                },
+              },
+            ]
+          : []),
+      ],
+    };
+  };
   return (
     <FacetContainer>
       <SubMenu>
@@ -86,8 +151,8 @@ export default () => {
           `}
         >
           <MenuItem
-            onClick={e => clickHander(fileIDSearch)}
-            selected={selectedFacets.includes(fileIDSearch)}
+            onClick={e => clickHandler(fileIDSearch)}
+            selected={expandedFacets.includes(fileIDSearch)}
             className="FacetMenu"
             content={fileIDSearch.name}
             chevronOnLeftSide={true}
@@ -138,17 +203,53 @@ export default () => {
         {presetFacets.map(type => {
           const props = {
             onClick: e => {
-              clickHander(type);
+              clickHandler(type);
             },
-            isSelected: selectedFacets.includes(type),
+            isExpanded: expandedFacets.includes(type),
             subMenuName: capitalize(type.name),
           };
+
           return (
             <FacetRow key={type.name}>
               {type.variant === 'Basic' && (
-                <Facet {...props} options={mockFacetData[type.name]} countUnit={'files'} />
+                <Facet
+                  {...props}
+                  options={getOptions(type.name)}
+                  countUnit={'files'}
+                  onOptionToggle={facetValue => {
+                    const currentValue = SqonBuilder.has(type.name, facetValue).build();
+                    replaceAllFilters(toggleFilter(currentValue, filters));
+                  }}
+                  onSelectAllOptions={allOptionsSelected => {
+                    if (allOptionsSelected) {
+                      const updatedFilters = removeFilter(
+                        type.name,
+                        filters,
+                      ) as FileRepoFiltersType;
+                      replaceAllFilters(updatedFilters);
+                    } else {
+                      setFilterFromFieldAndValue({
+                        field: type.name,
+                        value: mockFacetData[type.name].map(v => v.key),
+                      });
+                    }
+                  }}
+                />
               )}
-              {type.variant === 'Number' && <NumberRangeFacet {...props} />}
+              {type.variant === 'Number' && (
+                <NumberRangeFacet
+                  {...props}
+                  onSubmit={(min, max) => {
+                    const newFilters = getRangeFilters(type.name, min, max);
+                    // remove any existing fields for this type first
+                    const withPreviousFieldRemoved = removeFilter(
+                      type.name,
+                      filters,
+                    ) as FileRepoFiltersType;
+                    replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
+                  }}
+                />
+              )}
             </FacetRow>
           );
         })}
