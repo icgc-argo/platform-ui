@@ -163,6 +163,7 @@ function TablePagination(props) {
               options={pageSizeOptions.map(v => ({ content: v.toString(), value: v }))}
               onChange={onPageSizeChange}
               value={pageSize}
+              popupPosition={POPUP_POSITIONS.UP}
             />
           </div>
           rows

@@ -34,6 +34,7 @@ import {
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
+import pluralize from 'pluralize';
 
 export default ({
   fileRepoEntries,
@@ -63,7 +64,6 @@ export default ({
   };
   const fileDownloader = (fileID: String) => {
     //todo
-    alert(`we are working hard to download your file, ${fileID}`);
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
@@ -165,6 +165,30 @@ export default ({
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
+  const initalPageSize = 20;
+  const numFiles = fileRepoEntries.length;
+  const [pagingState, setPagingState] = React.useState({
+    pageSize: initalPageSize,
+    page: 0,
+    pages: Math.ceil(numFiles / initalPageSize),
+  });
+
+  const handlePagingStateChange = (state: typeof pagingState) => {
+    setPagingState(state);
+  };
+
+  const onPageChange = (newPageNum: number) => {
+    handlePagingStateChange({ ...pagingState, page: newPageNum });
+  };
+
+  const onPageSizeChange = (newPageSize: number) => {
+    handlePagingStateChange({
+      page: 0,
+      pageSize: newPageSize,
+      pages: Math.ceil(numFiles / newPageSize),
+    });
+  };
+
   const tableElement = (
     <div
       ref={containerRef}
@@ -186,9 +210,17 @@ export default ({
         toggleSelection={fileID => toggleHandler(fileID)}
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
+        page={pagingState.page}
+        pages={pagingState.pages}
+        pageSize={pagingState.pageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </div>
   );
+
+  const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
+  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), numFiles);
 
   return (
     <Container
@@ -196,94 +228,98 @@ export default ({
         padding: 10px;
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        `}
-      >
-        <div
-          css={css`
-            margin-left: 10px;
-          `}
-        >
-          <Typography variant="data" color="grey">
-            {fileRepoEntries.length} files
-          </Typography>
-        </div>
+      {numFiles > 0 && (
         <div
           css={css`
             display: flex;
+            justify-content: space-between;
+            align-items: center;
           `}
         >
-          <DropdownButton
+          <div
             css={css`
-              margin-right: 8px;
+              margin-left: 10px;
             `}
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'Clinical Data',
-                value: 'Clinical Data',
-              },
-              {
-                display: 'File Manifest',
-                value: 'File Manifest',
-              },
-              {
-                display: 'File Table',
-                value: 'File Table',
-              },
-            ]}
           >
-            <span css={instructionBoxButtonContentStyle}>
-              <Icon
-                name="download"
-                fill="accent2_dark"
-                height="12px"
-                css={instructionBoxButtonIconStyle}
-              />
-              Download
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
-          <DropdownButton
-            variant="secondary"
-            size="sm"
-            onItemClick={item => console.log('well done, you clicked the button')}
-            menuItems={[
-              {
-                display: 'placeholder',
-                value: 'placeholder',
-              },
-            ]}
+            <div>
+              <Typography variant="data" color="grey">
+                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', numFiles, true)}`}
+              </Typography>
+            </div>
+          </div>
+          <div
+            css={css`
+              display: flex;
+            `}
           >
-            <span css={instructionBoxButtonContentStyle}>
-              Columns
-              <Icon
-                name="chevron_down"
-                fill="accent2_dark"
-                height="9px"
-                css={css`
-                  ${instructionBoxButtonIconStyle}
-                  margin-left: 5px;
-                `}
-              />
-            </span>
-          </DropdownButton>
+            <DropdownButton
+              css={css`
+                margin-right: 8px;
+              `}
+              variant="secondary"
+              size="sm"
+              onItemClick={item => null}
+              menuItems={[
+                {
+                  display: 'Clinical Data',
+                  value: 'Clinical Data',
+                },
+                {
+                  display: 'File Manifest',
+                  value: 'File Manifest',
+                },
+                {
+                  display: 'File Table',
+                  value: 'File Table',
+                },
+              ]}
+            >
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />
+                Download
+                <Icon
+                  name="chevron_down"
+                  fill="accent2_dark"
+                  height="9px"
+                  css={css`
+                    ${instructionBoxButtonIconStyle}
+                    margin-left: 5px;
+                  `}
+                />
+              </span>
+            </DropdownButton>
+            <DropdownButton
+              variant="secondary"
+              size="sm"
+              onItemClick={item => null}
+              menuItems={[
+                {
+                  display: 'placeholder',
+                  value: 'placeholder',
+                },
+              ]}
+            >
+              <span css={instructionBoxButtonContentStyle}>
+                Columns
+                <Icon
+                  name="chevron_down"
+                  fill="accent2_dark"
+                  height="9px"
+                  css={css`
+                    ${instructionBoxButtonIconStyle}
+                    margin-left: 5px;
+                  `}
+                />
+              </span>
+            </DropdownButton>
+          </div>
         </div>
-      </div>
+      )}
       {tableElement}
     </Container>
   );

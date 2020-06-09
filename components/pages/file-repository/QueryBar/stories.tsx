@@ -139,14 +139,14 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
             op: '>=',
             content: {
               field: 'cases.exposures.cigarettes_per_day',
-              value: ['1'],
+              value: 1,
             },
           },
           {
             op: '<=',
             content: {
               field: 'cases.exposures.cigarettes_per_day',
-              value: ['5'],
+              value: 5,
             },
           },
         ],
@@ -162,14 +162,14 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
             op: '>=',
             content: {
               field: 'cases.exposures.cigarettes_per_day',
-              value: ['1'],
+              value: 1,
             },
           },
           {
             op: '<=',
             content: {
               field: 'cases.exposures.cigarettes_per_day',
-              value: ['5'],
+              value: 5,
             },
           },
           {
@@ -177,45 +177,6 @@ const QueryBarStories = storiesOf(`${__dirname}`, module)
             content: {
               field: 'primary_site',
               value: ['heart', 'lung', 'bone', 'blood', 'liver'],
-            },
-          },
-        ],
-      }}
-    />
-  ))
-  .add('value is not array', () => (
-    <QueryBar
-      filters={{
-        op: 'and',
-        content: [
-          {
-            op: 'is',
-            content: {
-              field: 'gender',
-              value: 'female',
-            },
-          },
-          {
-            op: 'is',
-            content: {
-              field: 'cases.exposures.cigarettes_per_day',
-              value: 5,
-            },
-          },
-        ],
-      }}
-    />
-  ))
-  .add('text filter', () => (
-    <QueryBar
-      filters={{
-        op: 'and',
-        content: [
-          {
-            op: 'filter',
-            content: {
-              fields: ['gender', 'state', 'country'],
-              value: 'fema',
             },
           },
         ],

@@ -32,6 +32,7 @@ import ViewAmountController from '../OptionsList/ViewAmountController';
 export type FilterOption = {
   key: string;
   doc_count: number;
+  isChecked: boolean;
 };
 
 type SelectableFilterOption = FilterOption & { isChecked: boolean };
@@ -41,7 +42,16 @@ const OptionsList: React.ComponentType<{
   searchQuery?: string;
   defaultRenderLimit?: number;
   countUnit?: string;
-}> = ({ options, searchQuery = '', defaultRenderLimit = 5, countUnit }) => {
+  onOptionToggle: (facetValue: string[] | string) => void;
+  onSelectAllOptions: (allOptionsSelected: boolean) => void;
+}> = ({
+  options,
+  searchQuery = '',
+  defaultRenderLimit = 5,
+  countUnit,
+  onOptionToggle,
+  onSelectAllOptions,
+}) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
 
@@ -52,18 +62,6 @@ const OptionsList: React.ComponentType<{
         .map(option => option.key),
     [searchQuery],
   );
-
-  const [selectAll, setSelectAll] = React.useState(true);
-
-  const initalStates = orderBy(
-    options.map(option => {
-      return { ...option, isChecked: false };
-    }),
-    ['doc_count'],
-    ['desc'],
-  );
-
-  const [optionStates, setOptionStates] = React.useState(initalStates);
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
@@ -83,7 +81,7 @@ const OptionsList: React.ComponentType<{
       key={option.key}
       onClick={e => {
         e.stopPropagation();
-        toggleOption(option.key);
+        onOptionToggle(option.key);
       }}
     >
       <div
@@ -125,22 +123,11 @@ const OptionsList: React.ComponentType<{
     </div>
   );
 
-  const toggleOption = (optionKey: string) => {
-    const targetState = optionStates.find(state => state.key === optionKey);
-    const updatedStates = [
-      ...optionStates.filter(state => state !== targetState),
-      { ...targetState, isChecked: !targetState.isChecked },
-    ];
-    setOptionStates(updatedStates);
-  };
-
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-  const sortedOptions = React.useMemo(() => orderBy(optionStates, ['isChecked'], ['desc']), [
-    optionStates,
-  ]);
+  const sortedOptions = React.useMemo(() => orderBy(options, ['isChecked'], ['desc']), [options]);
 
-  const selectedOptions = React.useMemo(() => optionStates.filter(option => option.isChecked), [
-    optionStates,
+  const selectedOptions = React.useMemo(() => options.filter(option => option.isChecked), [
+    options,
   ]);
 
   const queriedOptions = React.useMemo(
@@ -149,6 +136,10 @@ const OptionsList: React.ComponentType<{
         option => queriedOptionKeys.includes(option.key) && !selectedOptions.includes(option),
       ),
     [searchQuery, sortedOptions],
+  );
+
+  const allOptionsSelected: boolean = (searchQuery ? queriedOptions : options).every(
+    opt => opt.isChecked,
   );
 
   const defaultNonSelectedOptions = React.useMemo(
@@ -166,23 +157,12 @@ const OptionsList: React.ComponentType<{
 
   const onSelectAll = () => {
     if (searchQuery) {
-      setOptionStates(
-        optionStates.map(state =>
-          queriedOptionKeys.includes(state.key) ? { ...state, isChecked: selectAll } : { ...state },
-        ),
-      );
+      onOptionToggle(queriedOptionKeys);
     } else {
-      if (selectAll) {
-        setOptionStates(
-          sortedOptions.map(state => {
-            return { ...state, isChecked: selectAll };
-          }),
-        );
-      } else setOptionStates(initalStates);
-      setSelectAll(!selectAll);
+      onSelectAllOptions(allOptionsSelected);
     }
   };
-  const numberofMoreOptions = options.length - optionsToShow.length;
+  const numberOfMoreOptions = options.length - optionsToShow.length;
 
   return (
     <>
@@ -217,17 +197,17 @@ const OptionsList: React.ComponentType<{
           moreToggleHandler={() => {
             setAllOptionsVisible(!allOptionsVisible);
           }}
-          selectAllState={selectAll}
+          selectAllState={allOptionsSelected}
           toggleVisiblityCss={
             searchQuery
               ? 'hidden'
-              : numberofMoreOptions === 0
+              : numberOfMoreOptions === 0
               ? allOptionsVisible
                 ? 'visible'
                 : 'hidden'
               : 'visible'
           }
-          toggleText={allOptionsVisible ? `Less` : `${numberofMoreOptions} More`}
+          toggleText={allOptionsVisible ? `Less` : `${numberOfMoreOptions} More`}
           moreOptionsAvailable={!allOptionsVisible}
         />
       )}

@@ -27,6 +27,7 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = {
     countUnit: text('count unit description label', 'files'),
   };
+
   const exampleOptions: Array<FilterOption> = [
     { key: 'Gall Bladder', doc_count: 587 },
     { key: 'Breast', doc_count: 525 },
@@ -40,8 +41,37 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
     { key: 'Skin', doc_count: 882 },
     { key: 'Bile Duct', doc_count: 573 },
     { key: 'Esophagus', doc_count: 221 },
-  ];
-  return <Facet subMenuName="Primary Site" options={exampleOptions} {...knobs} />;
+  ].map((opt: any) => ({
+    ...opt,
+    isChecked: false,
+  }));
+
+  const [options, setOptions] = React.useState(exampleOptions);
+
+  return (
+    <div>
+      <Facet
+        subMenuName="Primary Site"
+        options={options}
+        onOptionToggle={facetValue => {
+          const currentIndex = options.findIndex(val => val.key === facetValue);
+          setOptions([
+            ...options.slice(0, currentIndex),
+            ...[{ ...options[currentIndex], isChecked: !options[currentIndex].isChecked }],
+            ...options.slice(currentIndex + 1, Infinity),
+          ]);
+        }}
+        onSelectAllOptions={allOptionsSelected => {
+          if (allOptionsSelected) {
+            setOptions(options.map(opt => ({ ...opt, isChecked: false })));
+          } else {
+            setOptions(options.map(opt => ({ ...opt, isChecked: true })));
+          }
+        }}
+        {...knobs}
+      />
+    </div>
+  );
 });
 
 export default FacetStories;

@@ -56,6 +56,6 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
 ];
 
 export let dummyData = [];
-for (let i = 0; i < 100; i++) {
-  dummyData.push({ ...sample(dummyExamples), fileID: idmaker() });
+for (let i = 0; i < 108; i++) {
+  dummyData.push({ ...sample(dummyExamples), fileID: `FL-${i + 1}` });
 }
