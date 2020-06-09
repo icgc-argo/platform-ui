@@ -279,6 +279,7 @@ export default () => {
         onPageSizeChange={onPageSizeChange}
         onSortedChange={onSortedChange}
         showPagination
+        sortable
       />
     </div>
   );
