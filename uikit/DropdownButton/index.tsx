@@ -24,6 +24,7 @@ import Icon from 'uikit/Icon';
 import { css } from 'uikit';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useTheme } from 'uikit/ThemeProvider';
+import { SerializedStyles } from '@emotion/core';
 
 const MenuItem: typeof Typography = props => {
   const theme = useTheme();
@@ -37,14 +38,6 @@ const MenuItem: typeof Typography = props => {
         &:hover {
           background: ${theme.colors.secondary_4};
         }
-        &.Description {
-          color: ${theme.colors.secondary_dark};
-          border-bottom: 1px solid ${theme.colors.grey_2};
-          cursor: auto;
-          &:hover {
-            background: transparent;
-          }
-        }
       `}
     />
   );
@@ -53,7 +46,7 @@ const MenuItem: typeof Typography = props => {
 type DropdownButtonItemConfig = {
   value: string;
   display: React.ReactNode;
-  className?: string;
+  css?: SerializedStyles;
 };
 const DropdownButton = ({
   children,

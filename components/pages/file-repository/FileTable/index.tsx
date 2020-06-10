@@ -277,7 +277,14 @@ export default ({
                       ? 'All Files'
                       : `${pluralize('file', selectedRows.length, true)} selected`,
                   value: 'Number of Files',
-                  className: 'Description',
+                  css: css`
+                    color: ${theme.colors.secondary_dark};
+                    border-bottom: 1px solid ${theme.colors.grey_2};
+                    cursor: auto;
+                    &:hover {
+                      background: transparent;
+                    }
+                  `,
                 },
                 {
                   display: 'Clinical Data',
