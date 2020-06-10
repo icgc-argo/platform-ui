@@ -161,7 +161,7 @@ export default () => {
   };
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
-      Header: 'File ID',
+      Header: 'Object ID',
       id: 'object_id',
       accessor: 'objectId',
     },
@@ -171,7 +171,7 @@ export default () => {
       accessor: 'donorId',
     },
     {
-      Header: 'Program',
+      Header: 'Program ID',
       id: 'study_id',
       accessor: 'programId',
     },
@@ -181,14 +181,14 @@ export default () => {
       accessor: 'dataType',
     },
     {
-      Header: 'Strategy',
-      id: 'analysis.experiment.experimental_strategy',
-      accessor: 'strategy',
+      Header: 'File Type',
+      id: 'file_type',
+      accessor: 'fileType',
     },
     {
-      Header: 'Format',
-      id: 'file_type',
-      accessor: 'format',
+      Header: 'Experimental Strategy',
+      id: 'analysis.experiment.experimental_strategy',
+      accessor: 'experimentalStrategy',
     },
     {
       Header: 'Size',
@@ -242,8 +242,8 @@ export default () => {
         donorId: node.donors.hits.edges[0].node.donor_id,
         programId: node.study_id,
         dataType: node.data_type,
-        strategy: node.analysis.experiment.experimental_strategy,
-        format: node.file_type,
+        experimentalStrategy: node.analysis.experiment.experimental_strategy,
+        fileType: node.file_type,
         size: node.file.size,
         isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
       }))
