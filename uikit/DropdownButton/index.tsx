@@ -31,13 +31,21 @@ const MenuItem: typeof Typography = props => {
     <Typography
       variant="default"
       as="div"
+      {...props}
       css={css`
         padding: 5px;
         &:hover {
           background: ${theme.colors.secondary_4};
         }
+        &.Description {
+          color: ${theme.colors.secondary_dark};
+          border-bottom: 1px solid ${theme.colors.grey_2};
+          cursor: auto;
+          &:hover {
+            background: transparent;
+          }
+        }
       `}
-      {...props}
     />
   );
 };
@@ -45,6 +53,7 @@ const MenuItem: typeof Typography = props => {
 type DropdownButtonItemConfig = {
   value: string;
   display: React.ReactNode;
+  className?: string;
 };
 const DropdownButton = ({
   children,
@@ -102,7 +111,7 @@ const DropdownButton = ({
           `}
         >
           {menuItems.map(item => (
-            <MenuItem key={item.value} onClick={() => onItemClick(item)}>
+            <MenuItem key={item.value} onClick={() => onItemClick(item)} {...item}>
               {item.display}
             </MenuItem>
           ))}
