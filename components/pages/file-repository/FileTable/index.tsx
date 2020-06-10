@@ -162,38 +162,38 @@ export default () => {
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
       Header: 'File ID',
-      accessor: 'object_id',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.fileID,
+      id: 'object_id',
+      accessor: 'objectId',
     },
     {
       Header: 'Donor ID',
-      accessor: 'donors.donor_id',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.donorID,
+      id: 'donors.donor_id',
+      accessor: 'donorId',
     },
     {
       Header: 'Program',
       id: 'study_id',
-      accessor: d => d.program.shortName,
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.program.shortName,
+      accessor: 'programId',
     },
     {
       Header: 'Data Type',
-      accessor: 'data_type',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.dataType,
+      id: 'data_type',
+      accessor: 'dataType',
     },
     {
       Header: 'Strategy',
-      accessor: 'analysis.experiment.library_strategy',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.strategy,
+      id: 'analysis.experiment.library_strategy',
+      accessor: 'strategy',
     },
     {
       Header: 'Format',
-      accessor: 'file_type',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => original.format,
+      id: 'file_type',
+      accessor: 'format',
     },
     {
       Header: 'Size',
-      accessor: 'file.size',
+      id: 'file.size',
+      accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
     {
@@ -238,9 +238,9 @@ export default () => {
 
   const fileRepoEntries = data
     ? data.file.hits.edges.map(({ node }) => ({
-        fileID: node.object_id,
-        donorID: node.donors.hits.edges[0].node.donor_id,
-        program: { shortName: node.study_id, fullName: node.study_id },
+        objectId: node.object_id,
+        donorId: node.donors.hits.edges[0].node.donor_id,
+        programId: node.study_id,
         dataType: node.data_type,
         // TODO: this field name will need to be changed https://github.com/icgc-argo/argo-metadata-schemas/issues/32
         strategy: node.analysis.experiment.library_strategy,
@@ -261,7 +261,7 @@ export default () => {
       <SelectTable
         manual
         loading={loading}
-        keyField="fileID"
+        keyField="objectId"
         parentRef={containerRef}
         columns={tableColumns}
         data={fileRepoEntries}
@@ -279,7 +279,6 @@ export default () => {
         onPageSizeChange={onPageSizeChange}
         onSortedChange={onSortedChange}
         showPagination
-        sortable
       />
     </div>
   );
