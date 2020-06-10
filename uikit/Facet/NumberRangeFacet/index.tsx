@@ -35,8 +35,8 @@ const NumberRangeFacet = ({
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   onSubmit: (min: number, max: number) => void;
-  min: string;
-  max: string;
+  min?: string;
+  max?: string;
 }) => {
   // must be initialized, use string to handle 'backspaces' from input field
   // parse to number upon use
