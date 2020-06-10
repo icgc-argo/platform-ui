@@ -1,0 +1,48 @@
+query($filters: JSON) {
+  file {
+    aggregations(filters: $filters) {
+      study_id {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      donors__gender {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      analysis__experiment__experimental_strategy {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      data_type {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      file_type {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      variant_class {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      file_access {
+        buckets {
+          key
+          doc_count
+        }
+      }
+    }
+  }
+}
