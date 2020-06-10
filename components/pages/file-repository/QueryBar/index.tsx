@@ -20,8 +20,10 @@
 import { css } from 'uikit';
 import theme from 'uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
-import useFiltersContext, { FiltersType } from '../hooks/useFiltersContext';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { FileRepoFiltersType } from '../utils/types';
 import Button from 'uikit/Button';
+import isEmpty from 'lodash/isEmpty';
 
 type AndOp = 'and';
 
@@ -48,7 +50,7 @@ type FieldNode = React.FunctionComponent<{
 }>;
 type Filter = React.FunctionComponent<{
   sqon: Filters | {};
-  setSQON: (sqon: FiltersType) => void;
+  setSQON: ({ field, value }: { field: string; value: string }) => void;
   onClear?: () => void;
   Clear?: React.FunctionComponent<{}>;
   ValueCrumb?: ValueNode;
@@ -176,21 +178,31 @@ const content = css`
   }
 `;
 
-const QueryBar = ({ filters = {} }) => {
-  const { clearFilters, setFilters } = useFiltersContext();
+const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
+  const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
   return (
     <div css={content}>
       <SQONView
         sqon={filters}
-        setSQON={setFilters}
+        setSQON={setFilterFromFieldAndValue}
         Clear={() => (
           <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
           </Button>
         )}
         ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
-          <Value onClick={() => setFilters(nextSQON)} {...props}>
+          <Value
+            onClick={() => {
+              // deleting the last value listed returns nextSQON = null, so check if empty to reset to defaultFilters
+              if (isEmpty(nextSQON)) {
+                clearFilters();
+              } else {
+                replaceAllFilters(nextSQON);
+              }
+            }}
+            {...props}
+          >
             {value}
           </Value>
         )}

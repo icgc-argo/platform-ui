@@ -35,6 +35,7 @@ import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import pluralize from 'pluralize';
+import { useTheme } from 'uikit/ThemeProvider';
 
 export default ({
   fileRepoEntries,
@@ -43,6 +44,7 @@ export default ({
   fileRepoEntries: Array<FileRepositoryRecord>;
   userLoggedIn: Boolean;
 }) => {
+  const theme = useTheme();
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
@@ -223,6 +225,8 @@ export default ({
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
   const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), numFiles);
 
+  const allFilesSelected = selectedRows.length === numFiles;
+
   return (
     <Container
       css={css`
@@ -246,6 +250,13 @@ export default ({
               <Typography variant="data" color="grey">
                 {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', numFiles, true)}`}
               </Typography>
+              <Typography variant="data" color={theme.colors.secondary_dark}>
+                {selectedRows.length > 0 &&
+                  ` (${allFilesSelected ? 'All' : selectedRows.length} ${pluralize(
+                    'file',
+                    selectedRows.length,
+                  )} selected)`}
+              </Typography>
             </div>
           </div>
           <div
@@ -261,6 +272,21 @@ export default ({
               size="sm"
               onItemClick={item => null}
               menuItems={[
+                {
+                  display:
+                    allFilesSelected || selectedRows.length === 0
+                      ? 'All Files'
+                      : `${pluralize('file', selectedRows.length, true)} selected`,
+                  value: 'Number of Files',
+                  css: css`
+                    color: ${theme.colors.secondary_dark};
+                    border-bottom: 1px solid ${theme.colors.grey_2};
+                    cursor: auto;
+                    &:hover {
+                      background: transparent;
+                    }
+                  `,
+                },
                 // only manifest download enabled for initial File Repo release
                 // {
                 //   display: 'Clinical Data',
