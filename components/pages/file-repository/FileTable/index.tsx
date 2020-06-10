@@ -182,7 +182,7 @@ export default () => {
     },
     {
       Header: 'Strategy',
-      id: 'analysis.experiment.library_strategy',
+      id: 'analysis.experiment.experimental_strategy',
       accessor: 'strategy',
     },
     {
@@ -242,8 +242,7 @@ export default () => {
         donorId: node.donors.hits.edges[0].node.donor_id,
         programId: node.study_id,
         dataType: node.data_type,
-        // TODO: this field name will need to be changed https://github.com/icgc-argo/argo-metadata-schemas/issues/32
-        strategy: node.analysis.experiment.library_strategy,
+        strategy: node.analysis.experiment.experimental_strategy,
         format: node.file_type,
         size: node.file.size,
         isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
