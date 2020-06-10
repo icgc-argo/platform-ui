@@ -29,7 +29,7 @@ import { styled } from 'uikit';
 import { dummyData } from 'components/pages/file-repository/FileTable/dummyData';
 import useAuthContext from 'global/hooks/useAuthContext';
 import FacetPanel from './FacetPanel';
-import FileBarChart from './FileBarChart';
+import FileBarChart from './DataTypesChart';
 import PrimarySiteBarChart from './PrimarySiteBarChart';
 import ProgramBarChart from './ProgramBarChart';
 import StatsCard from './StatsCard';
