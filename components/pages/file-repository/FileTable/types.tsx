@@ -20,12 +20,12 @@
 import { FileRepoFiltersType } from '../utils/types';
 
 export type FileRepositoryRecord = {
-  fileID: string;
-  donorID: string;
-  program: { shortName: string; fullName: string };
+  objectId: string;
+  donorId: string;
+  programId: string;
   dataType: string;
-  strategy: string;
-  format: string;
+  experimentalStrategy: string;
+  fileType: string;
   size: number; //in bytes
   isDownloadable: boolean;
 };

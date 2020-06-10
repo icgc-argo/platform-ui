@@ -47,7 +47,7 @@ import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction, SortingRule } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
-        
+
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
@@ -133,24 +133,24 @@ export default () => {
 
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-  const toggleHandler = (fileID: String) => {
-    if (selectedRows.includes(fileID)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== fileID);
+  const toggleHandler = (objectId: String) => {
+    if (selectedRows.includes(objectId)) {
+      const newSelectionState = selectedRows.filter(selection => selection !== objectId);
       setSelectedRows(newSelectionState);
     } else {
-      setSelectedRows(prevSelected => [...prevSelected, fileID]);
+      setSelectedRows(prevSelected => [...prevSelected, objectId]);
     }
   };
   const toggleAllHandler = () => {
     if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.fileID}`);
+      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.objectId}`);
       setSelectedRows(newSelectionState);
     } else {
       setSelectedRows([]);
     }
     setAllRowsSelected(!allRowsSelected);
   };
-  const fileDownloader = (fileID: String) => {
+  const fileDownloader = (objectId: String) => {
     //todo
   };
 
@@ -230,7 +230,7 @@ export default () => {
                 width="16px"
                 name={downloadStatus.canUserDownload ? 'download' : 'lock'}
                 fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
-                onClick={e => fileDownloader(original.fileID)}
+                onClick={e => fileDownloader(original.objectId)}
               />
             </div>
           </Tooltip>
@@ -272,7 +272,7 @@ export default () => {
           // react table prepends the word `select-` to the selected keys
           return selectedRows.includes(`select-${key}`);
         }}
-        toggleSelection={fileID => toggleHandler(fileID)}
+        toggleSelection={objectId => toggleHandler(objectId)}
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
         page={pagingState.page}
