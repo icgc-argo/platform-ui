@@ -117,7 +117,10 @@ export default ({
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { token, permissions } = useAuthContext();
-  const isDccPreview = React.useMemo(() => isDccMember(permissions) && isPendingApproval, [token]);
+  const isDccPreview = React.useMemo(() => isDccMember(permissions) && isPendingApproval, [
+    token,
+    isPendingApproval,
+  ]);
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length

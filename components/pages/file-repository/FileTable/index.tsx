@@ -46,7 +46,8 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction, SortingRule } from 'react-table';
-
+import { useTheme } from 'uikit/ThemeProvider';
+        
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
@@ -85,6 +86,8 @@ const useFileRepoTableQuery = (
 export default () => {
   const { token } = useAuthContext();
   const { filters } = useFiltersContext();
+  const theme = useTheme();
+
   const [pagingState, setPagingState] = React.useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
@@ -127,6 +130,7 @@ export default () => {
     );
     handlePagingStateChange({ ...pagingState, sort });
   };
+
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
   const toggleHandler = (fileID: String) => {
@@ -285,6 +289,8 @@ export default () => {
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
   const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), totalEntries);
 
+  const allFilesSelected = selectedRows.length === totalEntries;
+
   return (
     <Container
       css={css`
@@ -308,6 +314,13 @@ export default () => {
               <Typography variant="data" color="grey">
                 {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
               </Typography>
+              <Typography variant="data" color={theme.colors.secondary_dark}>
+                {selectedRows.length > 0 &&
+                  ` (${allFilesSelected ? 'All' : selectedRows.length} ${pluralize(
+                    'file',
+                    selectedRows.length,
+                  )} selected)`}
+              </Typography>
             </div>
           </div>
           <div
@@ -323,6 +336,21 @@ export default () => {
               size="sm"
               onItemClick={item => null}
               menuItems={[
+                {
+                  display:
+                    allFilesSelected || selectedRows.length === 0
+                      ? 'All Files'
+                      : `${pluralize('file', selectedRows.length, true)} selected`,
+                  value: 'Number of Files',
+                  css: css`
+                    color: ${theme.colors.secondary_dark};
+                    border-bottom: 1px solid ${theme.colors.grey_2};
+                    cursor: auto;
+                    &:hover {
+                      background: transparent;
+                    }
+                  `,
+                },
                 {
                   display: 'Clinical Data',
                   value: 'Clinical Data',
