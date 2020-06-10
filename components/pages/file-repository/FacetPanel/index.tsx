@@ -34,7 +34,13 @@ import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
 import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
-import { removeFilter, inCurrentFilters, toggleFilter, replaceFilter } from '../utils';
+import {
+  removeFilter,
+  inCurrentFilters,
+  toggleFilter,
+  replaceFilter,
+  currentFieldValue,
+} from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
@@ -248,6 +254,20 @@ export default () => {
                     ) as FileRepoFiltersType;
                     replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
                   }}
+                  min={(
+                    currentFieldValue({
+                      filters,
+                      dotField: type.name,
+                      op: '>=',
+                    }) || ''
+                  ).toString()}
+                  max={(
+                    currentFieldValue({
+                      filters,
+                      dotField: type.name,
+                      op: '<=',
+                    }) || ''
+                  ).toString()}
                 />
               )}
             </FacetRow>

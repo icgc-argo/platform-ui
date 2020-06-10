@@ -44,6 +44,7 @@ const QueryBarContainer = () => {
             padding: 2px 10px;
             border-radius: 0px;
             background-color: ${theme.colors.grey_4};
+            min-height: 50px;
           `}
         >
           {isEmpty(filters) || filters.content.length === 0 ? (
