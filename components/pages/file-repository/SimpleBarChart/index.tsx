@@ -27,6 +27,7 @@ import useTheme from 'uikit/utils/useTheme';
 import { ContentBox } from 'uikit/PageLayout';
 import { ThemeColorNames } from 'uikit/theme/types';
 import pluralize from 'pluralize';
+import DnaLoader from 'uikit/dist/uikit/DnaLoader';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
@@ -34,6 +35,7 @@ type SimpleBarChartProps = {
   type: FileRepoDataType;
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
+  loading?: boolean;
 };
 
 const defaultChartHeight = 100;
@@ -134,6 +136,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   type,
   containerStyle = {},
   chartHeight = defaultChartHeight,
+  loading = false,
 }) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
@@ -177,6 +180,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
         >
           <FlexRow
             css={css`
+              position: relative;
               align-items: baseline;
               margin-left: 6px;
               height: ${chartHeight}px;
@@ -215,6 +219,22 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                 />
               </Tooltip>
             ))}
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                pointer-events: none;
+                background: ${loading
+                  ? `${theme.colors.white}90` //this is alpha hex
+                  : 'none'};
+              `}
+            >
+              {loading && <DnaLoader />}
+            </div>
           </FlexRow>
           <Typography
             css={css`
