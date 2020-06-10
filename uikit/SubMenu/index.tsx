@@ -142,6 +142,9 @@ const MenuItemComponent = React.forwardRef<
                   fill={searchbarState ? 'secondary' : 'primary_3'}
                   height="16px"
                   width="16px"
+                  css={css`
+                    padding-left: 10px;
+                  `}
                 />
               </div>
             )}
