@@ -28,8 +28,8 @@ const NumberRangeFacet = ({
   isExpanded,
   onClick,
   onSubmit,
-  min = '',
-  max = '',
+  min,
+  max,
 }: {
   subMenuName: string;
   isExpanded?: boolean;
