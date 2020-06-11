@@ -81,13 +81,12 @@ export default ({
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
-        window.location.assign(
-          urlJoin(
-            GATEWAY_API_ROOT,
-            MANIFEST_DOWNLOAD_PATH,
-            `?filters=${encodeURIComponent(JSON.stringify(filters))}`,
-          ),
+        const downloadUrl = urlJoin(
+          GATEWAY_API_ROOT,
+          MANIFEST_DOWNLOAD_PATH,
+          `?filter=${encodeURIComponent(JSON.stringify(filters))}`,
         );
+        window.location.assign(downloadUrl);
         break;
       default:
         console.log(`${item.value} was selected`);
