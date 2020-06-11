@@ -52,6 +52,7 @@ import {
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
 } from './types';
+import { FileCentricDocumentField } from '../FileTable/types';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -60,21 +61,58 @@ const FacetRow = styled('div')`
 `;
 
 const presetFacets: Array<FacetDetails> = [
-  { name: 'program id', facetPath: FileFacetPath.PROGRAM_ID, variant: 'Basic' },
-  { name: 'gender', facetPath: FileFacetPath.GENDER, variant: 'Basic' },
-  { name: 'experimental strategy', facetPath: FileFacetPath.STRATEGY, variant: 'Basic' },
-  { name: 'data type', facetPath: FileFacetPath.DATA_TYPE, variant: 'Basic' },
-  { name: 'file type', facetPath: FileFacetPath.FILE_TYPE, variant: 'Basic' },
-  { name: 'variant class', facetPath: FileFacetPath.VARIANT_CLASS, variant: 'Basic' },
-  { name: 'file access', facetPath: FileFacetPath.FILE_ACCESS, variant: 'Basic' },
+  {
+    name: 'program id',
+    facetPath: FileFacetPath.study_id,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.study_id,
+  },
+  {
+    name: 'gender',
+    facetPath: FileFacetPath.donors__gender,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['donors.gender'],
+  },
+  {
+    name: 'experimental strategy',
+    facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+  },
+  {
+    name: 'data type',
+    facetPath: FileFacetPath.data_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.data_type,
+  },
+  {
+    name: 'file type',
+    facetPath: FileFacetPath.file_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_type,
+  },
+  {
+    name: 'variant class',
+    facetPath: FileFacetPath.variant_class,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.variant_class,
+  },
+  {
+    name: 'file access',
+    facetPath: FileFacetPath.file_access,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_access,
+  },
 ];
 
-// fix
+// might need extended type to account for mutliple fields allowed
 const fileIDSearch: FacetDetails = {
   name: 'Search Files by ID',
-  facetPath: FileFacetPath.FILE_TYPE,
+  facetPath: FileFacetPath.study_id,
   variant: 'Other',
+  esDocumentField: FileCentricDocumentField.study_id,
 };
+
 const FacetContainer = styled('div')`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
@@ -121,23 +159,15 @@ export default () => {
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
-  const getOptions = (facetType: string): FilterOption[] => {
-    aggregations[facetType].buckets;
-    // if (!loading) {
-    //   debugger;
-    // }
-    // return loading ? [] : parsedData[facetType].buckets;
-
-    // .map(d => {
-    //   return {
-    //     ...d,
-    //     isChecked: inCurrentFilters({
-    //       currentFilters: filters,
-    //       value: d.key,
-    //       dotField: facetType,
-    //     }),
-    //   };
-    // });
+  const getOptions = (facet: FacetDetails): FilterOption[] => {
+    return (loading ? [] : aggregations[facet.facetPath].buckets).map(bucket => ({
+      ...bucket,
+      isChecked: inCurrentFilters({
+        currentFilters: filters,
+        value: bucket.key,
+        dotField: facet.esDocumentField,
+      }),
+    }));
   };
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
@@ -254,10 +284,10 @@ export default () => {
               {type.variant === 'Basic' && (
                 <Facet
                   {...props}
-                  options={getOptions(type.facetPath)}
+                  options={getOptions(type)}
                   countUnit={'files'}
                   onOptionToggle={facetValue => {
-                    const currentValue = SqonBuilder.has(type.name, facetValue).build();
+                    const currentValue = SqonBuilder.has(type.esDocumentField, facetValue).build();
                     replaceAllFilters(toggleFilter(currentValue, filters));
                   }}
                   onSelectAllOptions={allOptionsSelected => {
