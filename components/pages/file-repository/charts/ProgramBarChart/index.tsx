@@ -19,8 +19,8 @@
 
 import SimpleBarChart from '../SimpleBarChart';
 import PROGRAMS_CHART from './PROGRAMS_CHART.gql';
-import { FileRepoFiltersType } from '../utils/types';
-import useFiltersContext from '../hooks/useFiltersContext';
+import { FileRepoFiltersType } from '../../utils/types';
+import useFiltersContext from '../../hooks/useFiltersContext';
 import { useQuery } from '@apollo/react-hooks';
 
 type ProgramIdsChartData = {

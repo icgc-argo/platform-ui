@@ -1,0 +1,12 @@
+query PRIMARY_SITES_CHART($filters: JSON) {
+  file {
+    aggregations(filters: $filters, include_missing: true) {
+      data_type {
+        buckets {
+          doc_count
+          key
+        }
+      }
+    }
+  }
+}
