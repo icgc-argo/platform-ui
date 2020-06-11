@@ -27,9 +27,9 @@ import { PageContent, PageBody, ContentBody } from 'uikit/PageLayout';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 import { styled } from 'uikit';
 import FacetPanel from './FacetPanel';
-import FileBarChart from './FileBarChart';
-import PrimarySiteBarChart from './PrimarySiteBarChart';
-import ProgramBarChart from './ProgramBarChart';
+import FileBarChart from './charts/DataTypesChart';
+import PrimarySiteBarChart from './charts/PrimarySiteBarChart';
+import ProgramBarChart from './charts/ProgramBarChart';
 import StatsCard from './StatsCard';
 
 import { FiltersProvider } from './hooks/useFiltersContext';
