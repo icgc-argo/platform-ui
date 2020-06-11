@@ -185,7 +185,7 @@ export default () => {
   );
 
   const totalEntries = records ? records.file.hits.total : 0;
-  const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
+  const pageCount = Math.ceil(totalEntries / pagingState.pageSize);
 
   const fileDownloader = (objectId: String) => {
     //todo
