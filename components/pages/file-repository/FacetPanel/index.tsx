@@ -20,7 +20,6 @@
 import React from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
-// import mockFacetData from './mockFacetData';
 import { capitalize } from 'global/utils/stringUtils';
 import { Input } from 'uikit/form';
 import FileSelectButton from 'uikit/FileSelectButton';
@@ -43,7 +42,6 @@ import {
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
-import { FilterOption } from 'uikit/OptionsList';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
 import {
@@ -106,7 +104,7 @@ const presetFacets: Array<FacetDetails> = [
   },
 ];
 
-// might need extended type to account for mutliple fields allowed
+// TODO: implement correctly. probably need extended/different type to account for multiple search fields
 const fileIDSearch: FacetDetails = {
   name: 'Search Files by ID',
   facetPath: FileFacetPath.study_id,
@@ -118,7 +116,6 @@ const FacetContainer = styled('div')`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
