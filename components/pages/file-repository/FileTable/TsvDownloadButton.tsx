@@ -29,6 +29,7 @@ import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import useFiltersContext from '../hooks/useFiltersContext';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -46,6 +47,7 @@ export default ({
 }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
+  const { filters } = useFiltersContext();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     {
       display:
@@ -79,7 +81,13 @@ export default ({
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
-        window.location.assign(urlJoin(GATEWAY_API_ROOT, MANIFEST_DOWNLOAD_PATH));
+        window.location.assign(
+          urlJoin(
+            GATEWAY_API_ROOT,
+            MANIFEST_DOWNLOAD_PATH,
+            `?filters=${encodeURIComponent(JSON.stringify(filters))}`,
+          ),
+        );
         break;
       default:
         console.log(`${item.value} was selected`);
