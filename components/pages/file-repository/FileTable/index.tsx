@@ -85,27 +85,33 @@ const useFileRepoTableQuery = (
 const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[]) => {
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-  const toggleHandler: React.ComponentProps<typeof SelectTable>['toggleSelection'] = objectId => {
-    if (selectedRows.includes(objectId)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== objectId);
-      setSelectedRows(newSelectionState);
+
+  const setSelectedRowsObjectIds = (selectionString: string[]) =>
+    // react table prepends the word `select-` to the selected objectIds
+    setSelectedRows(selectionString.map(str => str.replace('select-', '')));
+
+  const toggleHandler: React.ComponentProps<
+    typeof SelectTable
+  >['toggleSelection'] = selectionString => {
+    if (selectedRows.includes(selectionString)) {
+      const newSelectionState = selectedRows.filter(selection => selection !== selectionString);
+      setSelectedRowsObjectIds(newSelectionState);
     } else {
-      setSelectedRows(prevSelected => [...prevSelected, objectId]);
+      setSelectedRowsObjectIds([...selectedRows, selectionString]);
     }
   };
   const toggleAllHandler: React.ComponentProps<typeof SelectTable>['toggleAll'] = () => {
     if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.objectId}`);
-      setSelectedRows(newSelectionState);
+      const newSelectionState = fileRepoEntries.map(entry => entry.objectId);
+      setSelectedRowsObjectIds(newSelectionState);
     } else {
-      setSelectedRows([]);
+      setSelectedRowsObjectIds([]);
     }
     setAllRowsSelected(!allRowsSelected);
   };
-  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = key => {
-    // react table prepends the word `select-` to the selected keys
-    return selectedRows.includes(`select-${key}`);
-  };
+  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = objectId =>
+    selectedRows.includes(objectId);
+
   return {
     selectedRows,
     allRowsSelected,
