@@ -19,11 +19,11 @@
 
 import Icon from 'uikit/Icon';
 
-import { DonorDataReleaseState, ProgoramDonorReleasStats } from './types';
+import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { StatArea as StatAreaDisplay } from '../../common';
 
-const emptyProgramDonorSummaryStats: ProgoramDonorReleasStats = {
+const emptyProgramDonorSummaryStats: ProgramDonorReleaseStats = {
   registeredDonorsCount: 0,
   fullyReleasedDonorsCount: 0,
   noReleaseDonorsCount: 0,
@@ -34,7 +34,7 @@ const DonorStatsArea = ({
   programDonorSummaryStats = emptyProgramDonorSummaryStats,
   className,
 }: {
-  programDonorSummaryStats: ProgoramDonorReleasStats;
+  programDonorSummaryStats: ProgramDonorReleaseStats;
   className?: string;
 }) => {
   return (
