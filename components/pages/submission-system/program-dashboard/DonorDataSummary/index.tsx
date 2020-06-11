@@ -87,14 +87,14 @@ export default () => {
     DEFAULT_OFFSET,
     DEFAULT_SORTS,
   );
-  const initalPages = !isCardLoading
+  const initialPages = !isCardLoading
     ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
     : 1;
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
-  const CardTtile = () => (
+  const CardTitle = () => (
     <Typography variant="default" component="span">
       Donor Data Summary
     </Typography>
@@ -102,14 +102,14 @@ export default () => {
 
   return !isCardLoading && isDonorSummaryEntriesEmpty ? (
     <DashboardCard>
-      <CardTtile />
+      <CardTitle />
       <EmptyDonorSummaryState />
     </DashboardCard>
   ) : (
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
-          <CardTtile />
+          <CardTitle />
         </Col>
         <Col
           md={8.5}
@@ -125,7 +125,7 @@ export default () => {
       </Row>
       <DonorSummaryTable
         programShortName={programShortName}
-        initalPages={initalPages}
+        initialPages={initialPages}
         initialPageSize={DEFAULT_PAGE_SIZE}
         initialSorts={DEFAULT_SORTS}
         isCardLoading={isCardLoading}

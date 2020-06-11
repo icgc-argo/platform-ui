@@ -37,7 +37,7 @@ export type DonorSummaryRecord = {
   updatedAt: Date | String;
 };
 
-export type ProgoramDonorReleasStats = {
+export type ProgramDonorReleaseStats = {
   registeredDonorsCount: number;
   fullyReleasedDonorsCount: number;
   partiallyReleasedDonorsCount: number;
@@ -58,7 +58,7 @@ export enum MolecularProcessingStatus {
 // **** GQL types ****
 export type ProgramDonorsSummaryQueryData = {
   programDonorSummaryEntries: DonorSummaryRecord[];
-  programDonorSummaryStats: ProgoramDonorReleasStats;
+  programDonorSummaryStats: ProgramDonorReleaseStats;
 };
 
 export type ProgramDonorsSummaryQueryVariables = {
