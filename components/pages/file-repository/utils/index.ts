@@ -10,6 +10,8 @@ import {
   ArrayFieldKeys,
   ArrayField,
   ScalarFieldOperator,
+  ArrayFieldValue,
+  ScalarFieldValue,
 } from './types';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 
@@ -146,9 +148,20 @@ export const currentFilterValue = (filters, entity = null) =>
   ).content.value || '';
 
 // returns current value for a given field / operation
-export const currentFieldValue = ({ filters, dotField, op }) =>
-  filters.content.find(content => content.content.field === dotField && content.op === op).content
-    .value;
+export const currentFieldValue = ({
+  filters,
+  dotField,
+  op,
+}: {
+  filters: FileRepoFiltersType;
+  dotField: string;
+  op: string;
+}): ArrayFieldValue | ScalarFieldValue | undefined => {
+  const foundField = filters.content.find(
+    content => content.content.field === dotField && content.op === op,
+  );
+  return foundField ? foundField.content.value : undefined;
+};
 
 // true if field and value in
 export const inCurrentFilters = ({

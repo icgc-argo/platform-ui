@@ -18,8 +18,41 @@
  */
 
 import SimpleBarChart from '../SimpleBarChart';
-import { programData } from '../SimpleBarChart/mockData';
+import DATA_TYPES_CHART from './DATA_TYPES_CHART.gql';
+import { useQuery } from '@apollo/react-hooks';
+import { FileRepoFiltersType } from '../../utils/types';
+import useFiltersContext from '../../hooks/useFiltersContext';
+
+type DataTypesChartData = {
+  file: {
+    aggregations: {
+      data_type: {
+        buckets: {
+          doc_count: number;
+          key: string;
+        }[];
+      };
+    };
+  };
+};
+type ChartQueryInput = {
+  filters: FileRepoFiltersType;
+};
 
 export default () => {
-  return <SimpleBarChart data={programData} type={'program'} />;
+  const { filters } = useFiltersContext();
+  const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(DATA_TYPES_CHART, {
+    variables: {
+      filters,
+    },
+  });
+
+  const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
+    ? data.file.aggregations.data_type.buckets.map(bucket => ({
+        category: bucket.key,
+        count: bucket.doc_count,
+      }))
+    : [];
+
+  return <SimpleBarChart loading={loading} data={chartData} type={'data type'} />;
 };

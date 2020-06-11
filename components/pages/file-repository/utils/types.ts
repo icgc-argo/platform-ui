@@ -4,14 +4,17 @@ export type ScalarFieldKeys = '>=' | '<=' | '>' | '<';
 
 type CombinationKeys = 'and' | 'or' | 'not';
 
+export type ArrayFieldValue = Array<string | number> | string;
+export type ScalarFieldValue = number;
+
 export interface ArrayField {
   field: string;
-  value: Array<string | number> | string;
+  value: ArrayFieldValue;
 }
 
 export interface ScalarField {
   field: string;
-  value: number;
+  value: ScalarFieldValue;
 }
 
 export interface ArrayFieldOperator {
