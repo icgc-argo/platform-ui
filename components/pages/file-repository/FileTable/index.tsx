@@ -27,6 +27,7 @@ import {
   FileRepositoryRecordSort,
   FileRepositoryRecordSortField,
   FileRepositoryRecordSortOrder,
+  FileRepositorySortingRule,
 } from './types';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
@@ -45,7 +46,7 @@ import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
-import { SortedChangeFunction, SortingRule } from 'react-table';
+import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -93,14 +94,14 @@ export default () => {
   });
   const offset = pagingState.pageSize * pagingState.page;
 
-  const { data, loading = true } = useFileRepoTableQuery(
+  const { data: records, loading = true } = useFileRepoTableQuery(
     pagingState.pageSize,
     offset,
     pagingState.sort,
     filters,
   );
 
-  const totalEntries = data ? data.file.hits.total : 0;
+  const totalEntries = records ? records.file.hits.total : 0;
   const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
@@ -118,9 +119,9 @@ export default () => {
     });
   };
 
-  const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
+  const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
     const sort = newSorted.reduce(
-      (accSort: Array<FileRepositoryRecordSort>, sortRule: SortingRule) => {
+      (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
         const order = sortRule.desc ? 'desc' : 'asc';
         return accSort.concat({
           field: sortRule.id as FileRepositoryRecordSortField,
@@ -167,37 +168,37 @@ export default () => {
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
       Header: 'Object ID',
-      id: 'object_id',
+      id: FileRepositoryRecordSortField.OBJECT_ID,
       accessor: 'objectId',
     },
     {
       Header: 'Donor ID',
-      id: 'donors.donor_id',
+      id: FileRepositoryRecordSortField.DONOR_ID,
       accessor: 'donorId',
     },
     {
       Header: 'Program ID',
-      id: 'study_id',
+      id: FileRepositoryRecordSortField.PROGRAM_ID,
       accessor: 'programId',
     },
     {
       Header: 'Data Type',
-      id: 'data_type',
+      id: FileRepositoryRecordSortField.DATA_TYPE,
       accessor: 'dataType',
     },
     {
       Header: 'File Type',
-      id: 'file_type',
+      id: FileRepositoryRecordSortField.FILE_TYPE,
       accessor: 'fileType',
     },
     {
       Header: 'Experimental Strategy',
-      id: 'analysis.experiment.experimental_strategy',
+      id: FileRepositoryRecordSortField.EXPERIMENTAL_STRATEGY,
       accessor: 'experimentalStrategy',
     },
     {
       Header: 'Size',
-      id: 'file.size',
+      id: FileRepositoryRecordSortField.FILE_SIZE,
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
@@ -242,8 +243,8 @@ export default () => {
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const fileRepoEntries = data
-    ? data.file.hits.edges.map(({ node }) => ({
+  const fileRepoEntries: FileRepositoryRecord[] = records
+    ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
         donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
         programId: node.study_id,

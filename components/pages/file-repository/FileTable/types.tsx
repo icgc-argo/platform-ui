@@ -18,6 +18,7 @@
  */
 
 import { FileRepoFiltersType } from '../utils/types';
+import { SortingRule } from 'react-table';
 
 export type FileRepositoryRecord = {
   objectId: string;
@@ -79,5 +80,17 @@ export type FileRepositoryRecordSort = {
   order: FileRepositoryRecordSortOrder;
 };
 
-export type FileRepositoryRecordSortField = 'string';
+export enum FileRepositoryRecordSortField {
+  OBJECT_ID = 'object_id',
+  DONOR_ID = 'donors.donor_id',
+  PROGRAM_ID = 'study_id',
+  DATA_TYPE = 'data_type',
+  FILE_TYPE = 'file_type',
+  EXPERIMENTAL_STRATEGY = 'analysis.experiment.experimental_strategy',
+  FILE_SIZE = 'file.size',
+}
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
+
+export type FileRepositorySortingRule = SortingRule & {
+  id: FileRepositoryRecordSortField;
+};
