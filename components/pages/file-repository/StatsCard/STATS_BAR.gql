@@ -3,7 +3,7 @@ query STATS($filters: JSON) {
     hits(filters: $filters) {
       total
     }
-    aggregations(filters: $filters, include_missing: true) {
+    aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
       donors__donor_id {
         buckets {
           key
