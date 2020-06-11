@@ -19,7 +19,7 @@
 
 query DATA_TYPE_CHART($filters: JSON) {
   file {
-    aggregations(filters: $filters, include_missing: true) {
+    aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
       program_ids: study_id {
         buckets {
           doc_count
