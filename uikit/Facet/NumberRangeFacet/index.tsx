@@ -28,16 +28,20 @@ const NumberRangeFacet = ({
   isExpanded,
   onClick,
   onSubmit,
+  min,
+  max,
 }: {
   subMenuName: string;
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   onSubmit: (min: number, max: number) => void;
+  min?: string;
+  max?: string;
 }) => {
   // must be initialized, use string to handle 'backspaces' from input field
   // parse to number upon use
-  const [minimumInput, setMinimumInput] = React.useState('');
-  const [maximumInput, setMaximumInput] = React.useState('');
+  const [minimumInput, setMinimumInput] = React.useState(min || '');
+  const [maximumInput, setMaximumInput] = React.useState(max || '');
 
   const getRangeValues = () => {
     return {
@@ -49,6 +53,14 @@ const NumberRangeFacet = ({
   const [inputsValid, setInputsValid] = React.useState(false);
 
   const validator = (i: number) => i >= 0;
+
+  React.useEffect(() => {
+    setMaximumInput(max || '');
+  }, [max]);
+
+  React.useEffect(() => {
+    setMinimumInput(min || '');
+  }, [min]);
 
   React.useEffect(() => {
     const { min, max } = getRangeValues();
@@ -63,8 +75,6 @@ const NumberRangeFacet = ({
   const goButtonHandler = () => {
     const { min, max } = getRangeValues();
     onSubmit(min, max);
-    setMinimumInput('');
-    setMaximumInput('');
   };
 
   return (
