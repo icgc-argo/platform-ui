@@ -33,6 +33,8 @@ import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { useQuery } from '@apollo/react-hooks';
+import CLINICAL_SCHEMA_VERSION from '../../CLINICAL_SCHEMA_VERSION.gql';
 
 export default ({
   validationEnabled,
@@ -75,14 +77,18 @@ export default ({
     setIsSigningOff(false);
   };
 
+  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
+    clinicalSubmissionSchemaVersion: string;
+  }>(CLINICAL_SCHEMA_VERSION);
+
   return (
     <InstructionBox
       steps={[
         <>
           <Typography variant="data" component="span">
-            1. Download the clinical file templates and format them using the latest{' '}
-            <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
-              Data Dictionary.
+            1. Download the clinical file templates and format them using{' '}
+            <Link target="_blank" bold href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
+              Data&nbsp;Dictionary&nbsp;v{clinicalSubmissionSchemaVersion}
             </Link>
           </Typography>
           <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />

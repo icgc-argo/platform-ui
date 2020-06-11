@@ -27,7 +27,9 @@ import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import CLINICAL_SCHEMA_VERSION from '../../CLINICAL_SCHEMA_VERSION.gql';
+
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
   instructionBoxButtonIconStyle,
@@ -81,6 +83,10 @@ function Instructions({
     },
   });
 
+  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
+    clinicalSubmissionSchemaVersion: string;
+  }>(CLINICAL_SCHEMA_VERSION);
+
   const handleUpload = file =>
     uploadFile({
       variables: { shortName, registrationFile: file },
@@ -92,9 +98,9 @@ function Instructions({
         steps={[
           <>
             <Typography variant="data" component="span">
-              1. Download the registration template and format it using the latest{` `}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
-                Data Dictionary
+              1. Download the registration template and format it using{' '}
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} bold>
+                Data&nbsp;Dictionary&nbsp;v{clinicalSubmissionSchemaVersion}
               </Link>
               .
             </Typography>
