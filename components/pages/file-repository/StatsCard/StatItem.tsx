@@ -22,7 +22,6 @@ import pluralize from 'pluralize';
 import { css } from 'uikit';
 import { UikitIconNames } from 'uikit/Icon/icons';
 import { capitalize } from 'global/utils/stringUtils';
-import { Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
@@ -44,27 +43,25 @@ const StatItem = ({ iconName, statType, count, loading = false }: StatItemProps)
       : `${count} ${capitalize(pluralize(statType, count))}`;
 
   return (
-    <Col xl={2.4} lg={2.4} md={4} sm={6}>
-      <Typography
+    <Typography
+      css={css`
+        font-size: 14px;
+        margin: 0.8rem 0 0.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: ${theme.colors.primary};
+      `}
+    >
+      <Icon
         css={css`
-          font-size: 14px;
-          margin: 0.8rem 0 0.2rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          color: ${theme.colors.primary};
+          padding-right: 0.3em;
         `}
-      >
-        <Icon
-          css={css`
-            padding-right: 0.3em;
-          `}
-          fill={theme.colors.primary_1}
-          name={iconName}
-        />
-        {loading ? <Icon name={'spinner'} fill={theme.colors.grey} /> : displayStat}
-      </Typography>
-    </Col>
+        fill={theme.colors.primary_1}
+        name={iconName}
+      />
+      {loading ? <Icon name={'spinner'} fill={theme.colors.grey} /> : displayStat}
+    </Typography>
   );
 };
 
