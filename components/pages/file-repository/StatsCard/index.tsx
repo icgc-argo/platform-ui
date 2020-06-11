@@ -25,6 +25,7 @@ import STATS_BAR from './STATS_BAR.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
 import { useQuery } from '@apollo/react-hooks';
+import { Col } from 'react-grid-system';
 
 type StatsBarQueryInput = {
   filters: FileRepoFiltersType;
@@ -78,19 +79,36 @@ const StatsCard = () => {
       <PaddedRow
         css={css`
           justify-content: space-around;
-          position: relative;
         `}
       >
-        <StatItem iconName="file" statType="file" count={filesCount} loading={loading} />
-        <StatItem iconName="user" statType="donor" count={donorsCount} loading={loading} />
-        <StatItem
+        <Col md={3} sm={6}>
+          <StatItem iconName="file" statType="file" count={filesCount} loading={loading} />
+        </Col>
+        <Col md={3} sm={6}>
+          <StatItem iconName="user" statType="donor" count={donorsCount} loading={loading} />
+        </Col>
+        {/* <Col md={3} sm={6}></Col><StatItem
           iconName="crosshairs"
           statType="primary site"
           count={primarySites}
           loading={loading}
-        />
-        <StatItem iconName="programs" statType="program" count={programsCount} loading={loading} />
-        <StatItem iconName="filesize" statType="fileSize" count={totalFileSize} loading={loading} />
+        /></Col> */}
+        <Col md={3} sm={6}>
+          <StatItem
+            iconName="programs"
+            statType="program"
+            count={programsCount}
+            loading={loading}
+          />
+        </Col>
+        <Col md={3} sm={6}>
+          <StatItem
+            iconName="filesize"
+            statType="fileSize"
+            count={totalFileSize}
+            loading={loading}
+          />
+        </Col>
       </PaddedRow>
     </Container>
   );
