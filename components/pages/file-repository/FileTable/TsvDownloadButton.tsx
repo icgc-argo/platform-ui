@@ -7,6 +7,8 @@ import {
 } from '../../submission-system/common';
 import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
+import { getConfig } from 'global/config';
+import urlJoin from 'url-join';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -23,6 +25,7 @@ export default ({
   selectedRows: string[];
 }) => {
   const theme = useTheme();
+  const { GATEWAY_API_ROOT } = getConfig();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     {
       display:
@@ -53,7 +56,16 @@ export default ({
     //   value: DownloadOptionValues.FILE_TABLE,
     // },
   ];
-  const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {};
+  const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
+    switch (item.value) {
+      case DownloadOptionValues.SCORE_MANIFEST:
+        window.location.assign(urlJoin(GATEWAY_API_ROOT, '/file-centric-tsv/score-manifest'));
+        break;
+      default:
+        console.log(`${item.value} was selected`);
+        break;
+    }
+  };
   return (
     <DropdownButton
       css={css`
@@ -61,7 +73,7 @@ export default ({
       `}
       variant="secondary"
       size="sm"
-      onItemClick={item => null}
+      onItemClick={onItemClick}
       menuItems={menuItems}
     >
       <span css={instructionBoxButtonContentStyle}>
