@@ -76,21 +76,21 @@ export type FileRepositoryTableQueryVariables = {
 };
 
 export type FileRepositoryRecordSort = {
-  field: FileRepositoryRecordSortField;
+  field: FileCentricDocumentField;
   order: FileRepositoryRecordSortOrder;
 };
 
-export enum FileRepositoryRecordSortField {
-  OBJECT_ID = 'object_id',
-  DONOR_ID = 'donors.donor_id',
-  PROGRAM_ID = 'study_id',
-  DATA_TYPE = 'data_type',
-  FILE_TYPE = 'file_type',
-  EXPERIMENTAL_STRATEGY = 'analysis.experiment.experimental_strategy',
-  FILE_SIZE = 'file.size',
+export enum FileCentricDocumentField {
+  object_id = 'object_id',
+  'donors.donor_id' = 'donors.donor_id',
+  study_id = 'study_id',
+  data_type = 'data_type',
+  file_type = 'file_type',
+  'analysis.experiment.experimental_strategy' = 'analysis.experiment.experimental_strategy',
+  'file.size' = 'file.size',
 }
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
 
 export type FileRepositorySortingRule = SortingRule & {
-  id: FileRepositoryRecordSortField;
+  id: FileCentricDocumentField;
 };

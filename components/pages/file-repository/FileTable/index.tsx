@@ -25,7 +25,7 @@ import {
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
   FileRepositoryRecordSort,
-  FileRepositoryRecordSortField,
+  FileCentricDocumentField,
   FileRepositoryRecordSortOrder,
   FileRepositorySortingRule,
 } from './types';
@@ -53,7 +53,7 @@ const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
-    field: 'object_id' as FileRepositoryRecordSortField,
+    field: FileCentricDocumentField.object_id,
     order: 'asc' as FileRepositoryRecordSortOrder,
   },
 ];
@@ -124,7 +124,7 @@ export default () => {
       (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
         const order = sortRule.desc ? 'desc' : 'asc';
         return accSort.concat({
-          field: sortRule.id as FileRepositoryRecordSortField,
+          field: sortRule.id as FileCentricDocumentField,
           order: order as FileRepositoryRecordSortOrder,
         });
       },
@@ -168,37 +168,37 @@ export default () => {
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
       Header: 'Object ID',
-      id: FileRepositoryRecordSortField.OBJECT_ID,
+      id: FileCentricDocumentField.object_id,
       accessor: 'objectId',
     },
     {
       Header: 'Donor ID',
-      id: FileRepositoryRecordSortField.DONOR_ID,
+      id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
     },
     {
       Header: 'Program ID',
-      id: FileRepositoryRecordSortField.PROGRAM_ID,
+      id: FileCentricDocumentField.study_id,
       accessor: 'programId',
     },
     {
       Header: 'Data Type',
-      id: FileRepositoryRecordSortField.DATA_TYPE,
+      id: FileCentricDocumentField.data_type,
       accessor: 'dataType',
     },
     {
       Header: 'File Type',
-      id: FileRepositoryRecordSortField.FILE_TYPE,
+      id: FileCentricDocumentField.file_type,
       accessor: 'fileType',
     },
     {
       Header: 'Experimental Strategy',
-      id: FileRepositoryRecordSortField.EXPERIMENTAL_STRATEGY,
+      id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessor: 'experimentalStrategy',
     },
     {
       Header: 'Size',
-      id: FileRepositoryRecordSortField.FILE_SIZE,
+      id: FileCentricDocumentField['file.size'],
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
