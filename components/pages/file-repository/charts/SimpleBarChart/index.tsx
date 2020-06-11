@@ -27,7 +27,7 @@ import useTheme from 'uikit/utils/useTheme';
 import { ContentBox } from 'uikit/PageLayout';
 import { ThemeColorNames } from 'uikit/theme/types';
 import pluralize from 'pluralize';
-import DnaLoader from 'uikit/dist/uikit/DnaLoader';
+import DnaLoader from 'uikit/DnaLoader';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
