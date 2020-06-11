@@ -33,10 +33,6 @@ import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from '@emotion/core';
 import DropdownButton from 'uikit/DropdownButton';
-import {
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonIconStyle,
-} from '../../submission-system/common';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
@@ -48,6 +44,7 @@ import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
+import TsvDownloadButton from './TsvDownloadButton';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -377,63 +374,7 @@ export default () => {
               display: flex;
             `}
           >
-            <DropdownButton
-              css={css`
-                margin-right: 8px;
-              `}
-              variant="secondary"
-              size="sm"
-              onItemClick={item => null}
-              menuItems={[
-                {
-                  display:
-                    allFilesSelected || selectedRows.length === 0
-                      ? 'All Files'
-                      : `${pluralize('file', selectedRows.length, true)} selected`,
-                  value: 'Number of Files',
-                  css: css`
-                    color: ${theme.colors.secondary_dark};
-                    border-bottom: 1px solid ${theme.colors.grey_2};
-                    cursor: auto;
-                    &:hover {
-                      background: transparent;
-                    }
-                  `,
-                },
-                // only manifest download enabled for initial File Repo release
-                // {
-                //   display: 'Clinical Data',
-                //   value: 'Clinical Data',
-                // },
-                {
-                  display: 'File Manifest',
-                  value: 'File Manifest',
-                },
-                // {
-                //   display: 'File Table',
-                //   value: 'File Table',
-                // },
-              ]}
-            >
-              <span css={instructionBoxButtonContentStyle}>
-                <Icon
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                  css={instructionBoxButtonIconStyle}
-                />
-                Download
-                <Icon
-                  name="chevron_down"
-                  fill="accent2_dark"
-                  height="9px"
-                  css={css`
-                    ${instructionBoxButtonIconStyle}
-                    margin-left: 5px;
-                  `}
-                />
-              </span>
-            </DropdownButton>
+            <TsvDownloadButton allFilesSelected={allFilesSelected} selectedRows={selectedRows} />
             {/* disabled for initial File Repo release */}
             {/* <DropdownButton
               variant="secondary"
