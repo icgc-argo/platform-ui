@@ -90,7 +90,7 @@ const StatsCard = () => {
           loading={loading}
         />
         <StatItem iconName="programs" statType="program" count={programsCount} loading={loading} />
-        <StatItem iconName="filesize" statType="filesize" count={totalFileSize} loading={loading} />
+        <StatItem iconName="filesize" statType="fileSize" count={totalFileSize} loading={loading} />
       </PaddedRow>
     </Container>
   );
