@@ -82,27 +82,46 @@ const useFileRepoTableQuery = (
   );
 };
 
-export default () => {
-  const { token } = useAuthContext();
-  const { filters } = useFiltersContext();
-  const theme = useTheme();
+const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[]) => {
+  const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
+  const [allRowsSelected, setAllRowsSelected] = React.useState(false);
+  const toggleHandler: React.ComponentProps<typeof SelectTable>['toggleSelection'] = objectId => {
+    if (selectedRows.includes(objectId)) {
+      const newSelectionState = selectedRows.filter(selection => selection !== objectId);
+      setSelectedRows(newSelectionState);
+    } else {
+      setSelectedRows(prevSelected => [...prevSelected, objectId]);
+    }
+  };
+  const toggleAllHandler: React.ComponentProps<typeof SelectTable>['toggleAll'] = () => {
+    if (!allRowsSelected) {
+      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.objectId}`);
+      setSelectedRows(newSelectionState);
+    } else {
+      setSelectedRows([]);
+    }
+    setAllRowsSelected(!allRowsSelected);
+  };
+  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = key => {
+    // react table prepends the word `select-` to the selected keys
+    return selectedRows.includes(`select-${key}`);
+  };
+  return {
+    selectedRows,
+    allRowsSelected,
+    toggleHandler,
+    toggleAllHandler,
+    isSelected,
+  };
+};
 
+const useFileRepoPaginationState = () => {
   const [pagingState, setPagingState] = React.useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
     sort: DEFAULT_SORT,
   });
-  const offset = pagingState.pageSize * pagingState.page;
 
-  const { data: records, loading = true } = useFileRepoTableQuery(
-    pagingState.pageSize,
-    offset,
-    pagingState.sort,
-    filters,
-  );
-
-  const totalEntries = records ? records.file.hits.total : 0;
-  const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
   };
@@ -118,7 +137,6 @@ export default () => {
       pageSize: newPageSize,
     });
   };
-
   const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
     const sort = newSorted.reduce(
       (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
@@ -132,26 +150,37 @@ export default () => {
     );
     handlePagingStateChange({ ...pagingState, sort });
   };
+  return {
+    pagingState,
+    onPageChange,
+    onPageSizeChange,
+    onSortedChange,
+  };
+};
 
-  const [selectedRows, setSelectedRows] = React.useState([]);
-  const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-  const toggleHandler = (objectId: String) => {
-    if (selectedRows.includes(objectId)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== objectId);
-      setSelectedRows(newSelectionState);
-    } else {
-      setSelectedRows(prevSelected => [...prevSelected, objectId]);
-    }
-  };
-  const toggleAllHandler = () => {
-    if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.objectId}`);
-      setSelectedRows(newSelectionState);
-    } else {
-      setSelectedRows([]);
-    }
-    setAllRowsSelected(!allRowsSelected);
-  };
+export default () => {
+  const { token } = useAuthContext();
+  const { filters } = useFiltersContext();
+  const theme = useTheme();
+
+  const {
+    pagingState,
+    onPageChange,
+    onPageSizeChange,
+    onSortedChange,
+  } = useFileRepoPaginationState();
+
+  const offset = pagingState.pageSize * pagingState.page;
+  const { data: records, loading = true } = useFileRepoTableQuery(
+    pagingState.pageSize,
+    offset,
+    pagingState.sort,
+    filters,
+  );
+
+  const totalEntries = records ? records.file.hits.total : 0;
+  const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
+
   const fileDownloader = (objectId: String) => {
     //todo
   };
@@ -256,6 +285,14 @@ export default () => {
       }))
     : [];
 
+  const {
+    allRowsSelected,
+    isSelected,
+    selectedRows,
+    toggleAllHandler,
+    toggleHandler,
+  } = useFileRepoTableSelectionState(fileRepoEntries);
+
   const tableElement = (
     <div
       ref={containerRef}
@@ -271,12 +308,9 @@ export default () => {
         parentRef={containerRef}
         columns={tableColumns}
         data={fileRepoEntries}
-        isSelected={key => {
-          // react table prepends the word `select-` to the selected keys
-          return selectedRows.includes(`select-${key}`);
-        }}
-        toggleSelection={objectId => toggleHandler(objectId)}
-        toggleAll={() => toggleAllHandler()}
+        isSelected={isSelected}
+        toggleSelection={toggleHandler}
+        toggleAll={toggleAllHandler}
         selectAll={allRowsSelected}
         page={pagingState.page}
         pages={pageCount}
