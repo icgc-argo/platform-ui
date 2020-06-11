@@ -28,6 +28,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
+import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -78,7 +79,7 @@ export default ({
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
-        window.location.assign(urlJoin(GATEWAY_API_ROOT, '/file-centric-tsv/score-manifest'));
+        window.location.assign(urlJoin(GATEWAY_API_ROOT, MANIFEST_DOWNLOAD_PATH));
         break;
       default:
         console.log(`${item.value} was selected`);

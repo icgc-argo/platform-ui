@@ -29,6 +29,7 @@ import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
 import { getConfig } from 'global/config';
+import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';
 
 export const containerStyle = css`
   padding: 8px;
@@ -184,7 +185,7 @@ export const TableInfoHeaderContainer = ({
 
 export const downloadTsvFileTemplate = (fileName: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  window.location.assign(urlJoin(GATEWAY_API_ROOT, `clinical/template/${fileName}`));
+  window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
 };
 
 enum PIPELINE_STATUS {

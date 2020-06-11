@@ -171,7 +171,7 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
 
   const client = React.useMemo(() => {
     const uploadLink = createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+      uri: urljoin(GATEWAY_API_ROOT, GRAPHQL),
       fetch: fetchWithEgoToken,
     });
     return new ApolloClient({
