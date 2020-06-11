@@ -194,10 +194,12 @@ export default () => {
       : 'Please log in to access controlled files';
     return { canUserDownload, toolTipText };
   };
-  const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
+  const tableColumns: Array<
+    TableColumnConfig<FileRepositoryRecord> & { id: FileCentricDocumentField }
+  > = [
     {
       Header: 'Object ID',
-      id: FileCentricDocumentField.object_id,
+      id: FileCentricDocumentField['object_id'],
       accessor: 'objectId',
     },
     {
@@ -207,17 +209,17 @@ export default () => {
     },
     {
       Header: 'Program ID',
-      id: FileCentricDocumentField.study_id,
+      id: FileCentricDocumentField['study_id'],
       accessor: 'programId',
     },
     {
       Header: 'Data Type',
-      id: FileCentricDocumentField.data_type,
+      id: FileCentricDocumentField['data_type'],
       accessor: 'dataType',
     },
     {
       Header: 'File Type',
-      id: FileCentricDocumentField.file_type,
+      id: FileCentricDocumentField['file_type'],
       accessor: 'fileType',
     },
     {
