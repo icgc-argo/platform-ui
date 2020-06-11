@@ -67,20 +67,18 @@ const useFileRepoTableQuery = (
     'variables'
   > = {},
 ) => {
-  const hook = useQuery<any, any>(FILE_REPOSITORY_TABLE_QUERY, {
-    ...options,
-    variables: {
-      first,
-      offset,
-      filters,
-      sort,
+  return useQuery<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>(
+    FILE_REPOSITORY_TABLE_QUERY,
+    {
+      ...options,
+      variables: {
+        first,
+        offset,
+        filters,
+        sort,
+      },
     },
-  });
-
-  return {
-    ...hook,
-    data: hook.data,
-  };
+  );
 };
 
 export default () => {
@@ -94,10 +92,13 @@ export default () => {
     sort: DEFAULT_SORT,
   });
   const offset = pagingState.pageSize * pagingState.page;
-  const first = pagingState.pageSize;
-  const sort = pagingState.sort;
 
-  const { data, loading = true } = useFileRepoTableQuery(first, offset, sort, filters);
+  const { data, loading = true } = useFileRepoTableQuery(
+    pagingState.pageSize,
+    offset,
+    pagingState.sort,
+    filters,
+  );
 
   const totalEntries = data ? data.file.hits.total : 0;
   const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
@@ -243,7 +244,7 @@ export default () => {
   const fileRepoEntries = data
     ? data.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
-        donorId: node.donors.hits.edges[0].node.donor_id,
+        donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,

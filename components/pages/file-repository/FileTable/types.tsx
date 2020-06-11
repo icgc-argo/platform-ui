@@ -30,16 +30,48 @@ export type FileRepositoryRecord = {
   isDownloadable: boolean;
 };
 
+type FileSize = { size: number };
+type Donor = {
+  node: {
+    donor_id: string;
+  };
+};
+type Strategy = {
+  experiment: {
+    experimental_strategy;
+  };
+};
+
+type FileRepoQueryNode = {
+  node: {
+    object_id: string;
+    data_type: string;
+    file_type: string;
+    study_id: string;
+    file: FileSize;
+    donors: {
+      hits: {
+        edges: Donor[];
+      };
+    };
+    analysis: Strategy;
+  };
+};
+
 export type FileRepositoryTableQueryData = {
-  total: number;
-  data: FileRepositoryRecord[];
+  file: {
+    hits: {
+      total: number;
+      edges: FileRepoQueryNode[];
+    };
+  };
 };
 
 export type FileRepositoryTableQueryVariables = {
   filters: FileRepoFiltersType;
   first: number;
   offset: number;
-  sorts: any[];
+  sort: FileRepositoryRecordSort[];
 };
 
 export type FileRepositoryRecordSort = {
@@ -47,5 +79,5 @@ export type FileRepositoryRecordSort = {
   order: FileRepositoryRecordSortOrder;
 };
 
-export type FileRepositoryRecordSortField = any;
+export type FileRepositoryRecordSortField = 'string';
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
