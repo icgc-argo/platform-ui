@@ -20,7 +20,7 @@
 import React from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
-import mockFacetData from './mockFacetData';
+// import mockFacetData from './mockFacetData';
 import { capitalize } from 'global/utils/stringUtils';
 import { Input } from 'uikit/form';
 import FileSelectButton from 'uikit/FileSelectButton';
@@ -38,6 +38,14 @@ import { removeFilter, inCurrentFilters, toggleFilter, replaceFilter } from '../
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
+import {
+  FacetDetails,
+  FileFacetPath,
+  FileRepoFacetsQueryData,
+  FileRepoFacetsQueryVariables,
+} from './types';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -45,22 +53,22 @@ const FacetRow = styled('div')`
   justify-content: space-between;
 `;
 
-type FacetDetails = {
-  name: string;
-  variant: 'Basic' | 'Number' | 'Other';
-};
-
 const presetFacets: Array<FacetDetails> = [
-  { name: 'program', variant: 'Basic' },
-  { name: 'primary site', variant: 'Basic' },
-  { name: 'age at diagnosis', variant: 'Number' },
-  { name: 'vital status', variant: 'Basic' },
-  { name: 'gender', variant: 'Basic' },
-  { name: 'experimental strategy', variant: 'Basic' },
-  { name: 'data type', variant: 'Basic' },
+  { name: 'program id', facetPath: FileFacetPath.PROGRAM_ID, variant: 'Basic' },
+  { name: 'gender', facetPath: FileFacetPath.GENDER, variant: 'Basic' },
+  { name: 'experimental strategy', facetPath: FileFacetPath.STRATEGY, variant: 'Basic' },
+  { name: 'data type', facetPath: FileFacetPath.DATA_TYPE, variant: 'Basic' },
+  { name: 'file type', facetPath: FileFacetPath.FILE_TYPE, variant: 'Basic' },
+  { name: 'variant class', facetPath: FileFacetPath.VARIANT_CLASS, variant: 'Basic' },
+  { name: 'file access', facetPath: FileFacetPath.FILE_ACCESS, variant: 'Basic' },
 ];
 
-const fileIDSearch: FacetDetails = { name: 'Search Files by ID', variant: 'Other' };
+// fix
+const fileIDSearch: FacetDetails = {
+  name: 'Search Files by ID',
+  facetPath: FileFacetPath.FILE_TYPE,
+  variant: 'Other',
+};
 const FacetContainer = styled('div')`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
@@ -75,11 +83,30 @@ const FacetContainer = styled('div')`
   overflow-y: auto;
 `;
 
+const useFileFacetQuery = (
+  filters: FileRepoFiltersType,
+  options: Omit<QueryHookOptions<any, any>, 'variables'> = {},
+) => {
+  return useQuery<FileRepoFacetsQueryData, FileRepoFacetsQueryVariables>(
+    FILE_REPOSITORY_FACETS_QUERY,
+    {
+      ...options,
+      variables: {
+        filters,
+      },
+    },
+  );
+};
+
 export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  const { data, loading } = useFileFacetQuery(filters);
+  const aggregations = loading ? {} : data.file.aggregations;
+
   const clickHandler = (targetFacet: FacetDetails) => {
     if (expandedFacets.includes(targetFacet)) {
       setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
@@ -89,16 +116,22 @@ export default () => {
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
   const getOptions = (facetType: string): FilterOption[] => {
-    return mockFacetData[facetType].map(d => {
-      return {
-        ...d,
-        isChecked: inCurrentFilters({
-          currentFilters: filters,
-          value: d.key,
-          dotField: facetType,
-        }),
-      };
-    });
+    aggregations[facetType].buckets;
+    // if (!loading) {
+    //   debugger;
+    // }
+    // return loading ? [] : parsedData[facetType].buckets;
+
+    // .map(d => {
+    //   return {
+    //     ...d,
+    //     isChecked: inCurrentFilters({
+    //       currentFilters: filters,
+    //       value: d.key,
+    //       dotField: facetType,
+    //     }),
+    //   };
+    // });
   };
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
@@ -214,7 +247,7 @@ export default () => {
               {type.variant === 'Basic' && (
                 <Facet
                   {...props}
-                  options={getOptions(type.name)}
+                  options={getOptions(type.facetPath)}
                   countUnit={'files'}
                   onOptionToggle={facetValue => {
                     const currentValue = SqonBuilder.has(type.name, facetValue).build();
@@ -230,7 +263,7 @@ export default () => {
                     } else {
                       setFilterFromFieldAndValue({
                         field: type.name,
-                        value: mockFacetData[type.name].map(v => v.key),
+                        value: aggregations[type.facetPath].map(v => v.key),
                       });
                     }
                   }}

@@ -1,6 +1,6 @@
 query($filters: JSON) {
   file {
-    aggregations(filters: $filters) {
+    aggregations(filters: $filters, aggregations_filter_themselves: false) {
       study_id {
         buckets {
           key
