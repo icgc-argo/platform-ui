@@ -170,6 +170,7 @@ export default () => {
       Header: 'Object ID',
       id: FileCentricDocumentField.object_id,
       accessor: 'objectId',
+      width: 275,
     },
     {
       Header: 'Donor ID',
@@ -185,6 +186,7 @@ export default () => {
       Header: 'Data Type',
       id: FileCentricDocumentField.data_type,
       accessor: 'dataType',
+      width: 180,
     },
     {
       Header: 'File Type',
