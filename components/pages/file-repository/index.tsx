@@ -26,8 +26,6 @@ import Head from '../head';
 import { PageContent, PageBody, ContentBody } from 'uikit/PageLayout';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 import { styled } from 'uikit';
-import { dummyData } from 'components/pages/file-repository/FileTable/dummyData';
-import useAuthContext from 'global/hooks/useAuthContext';
 import FacetPanel from './FacetPanel';
 import FileBarChart from './FileBarChart';
 import PrimarySiteBarChart from './PrimarySiteBarChart';
@@ -47,8 +45,6 @@ const PaddedColumn = styled(Col)`
 `;
 
 const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
-  const { token } = useAuthContext();
-
   return (
     <FiltersProvider>
       <PageContainer>
@@ -73,7 +69,7 @@ const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
               </PaddedRow>
               <PaddedRow>
                 <Col xl={12}>
-                  <FileTable fileRepoEntries={dummyData} userLoggedIn={!!token} />
+                  <FileTable />
                 </Col>
               </PaddedRow>
             </ContentBody>

@@ -17,28 +17,80 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { FileRepoFiltersType } from '../utils/types';
+import { SortingRule } from 'react-table';
+
 export type FileRepositoryRecord = {
-  fileID: String;
-  donorID: String;
-  program: { shortName: String; fullName: String };
-  dataType: FileDataNames;
-  strategy: FileStrategyNames;
-  format: FileFormatNames;
+  objectId: string;
+  donorId: string;
+  programId: string;
+  dataType: string;
+  experimentalStrategy: string;
+  fileType: string;
   size: number; //in bytes
   isDownloadable: boolean;
 };
 
-export enum FileDataNames {
-  ALIGNED_READS = 'Aligned Reads',
-  UNALIGNED_READS = 'Unaligned Reads',
-  SSM = 'SSM',
-}
-export enum FileStrategyNames {
-  WXS = 'WXS',
-  WGS = 'WGS',
-  SSM = 'SSM',
-}
+type FileSize = { size: number };
+type Donor = {
+  node: {
+    donor_id: string;
+  };
+};
+type Strategy = {
+  experiment: {
+    experimental_strategy;
+  };
+};
 
-export enum FileFormatNames {
-  FASTQ = 'FASTQ',
+type FileRepoQueryNode = {
+  node: {
+    object_id: string;
+    data_type: string;
+    file_type: string;
+    study_id: string;
+    file: FileSize;
+    donors: {
+      hits: {
+        edges: Donor[];
+      };
+    };
+    analysis: Strategy;
+  };
+};
+
+export type FileRepositoryTableQueryData = {
+  file: {
+    hits: {
+      total: number;
+      edges: FileRepoQueryNode[];
+    };
+  };
+};
+
+export type FileRepositoryTableQueryVariables = {
+  filters: FileRepoFiltersType;
+  first: number;
+  offset: number;
+  sort: FileRepositoryRecordSort[];
+};
+
+export type FileRepositoryRecordSort = {
+  field: FileCentricDocumentField;
+  order: FileRepositoryRecordSortOrder;
+};
+
+export enum FileCentricDocumentField {
+  object_id = 'object_id',
+  'donors.donor_id' = 'donors.donor_id',
+  study_id = 'study_id',
+  data_type = 'data_type',
+  file_type = 'file_type',
+  'analysis.experiment.experimental_strategy' = 'analysis.experiment.experimental_strategy',
+  'file.size' = 'file.size',
 }
+export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
+
+export type FileRepositorySortingRule = SortingRule & {
+  id: FileCentricDocumentField;
+};

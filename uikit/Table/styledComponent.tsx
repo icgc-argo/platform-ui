@@ -136,7 +136,7 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
     border-bottom: solid 1px ${({ theme }) => theme.colors.grey_2};
 
     & .rt-tr .rt-th {
-      padding: ${({ sortable }) => (sortable ? '2px 6px 2px 8px' : '2px 8px')};
+      padding: ${({ sortable }) => (sortable ? '2px 6px' : '2px 8px')};
       border-left: none;
       border-right: none;
       text-align: left;

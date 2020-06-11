@@ -20,7 +20,6 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import FileRepositoryTable from './index';
-import { dummyData } from './dummyData';
 import { boolean } from '@storybook/addon-knobs';
 
 export const createKnobs = () => {
@@ -33,7 +32,7 @@ export const createKnobs = () => {
 
 const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const props = createKnobs();
-  return <FileRepositoryTable fileRepoEntries={dummyData} userLoggedIn={props.userLoggedIn} />;
+  return <FileRepositoryTable />;
 });
 
 export default FileRepositoryTableStories;

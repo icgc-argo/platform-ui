@@ -20,9 +20,15 @@
 import React from 'react';
 import { SelectTable, TableColumnConfig } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
-import { FileRepositoryRecord } from './types';
-import Link from 'next/link';
-import HyperLink from 'uikit/Link';
+import {
+  FileRepositoryRecord,
+  FileRepositoryTableQueryData,
+  FileRepositoryTableQueryVariables,
+  FileRepositoryRecordSort,
+  FileCentricDocumentField,
+  FileRepositoryRecordSortOrder,
+  FileRepositorySortingRule,
+} from './types';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from '@emotion/core';
@@ -34,43 +40,125 @@ import {
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
+import useFiltersContext from '../hooks/useFiltersContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
+import { FileRepoFiltersType } from '../utils/types';
+import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
 
-export default ({
-  fileRepoEntries,
-  userLoggedIn,
-}: {
-  fileRepoEntries: Array<FileRepositoryRecord>;
-  userLoggedIn: Boolean;
-}) => {
+const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE_OFFSET = 0;
+const DEFAULT_SORT = [
+  {
+    field: FileCentricDocumentField.object_id,
+    order: 'asc' as FileRepositoryRecordSortOrder,
+  },
+];
+
+const useFileRepoTableQuery = (
+  first: number,
+  offset: number,
+  sort: FileRepositoryRecordSort[],
+  filters: FileRepoFiltersType,
+  options: Omit<
+    QueryHookOptions<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>,
+    'variables'
+  > = {},
+) => {
+  return useQuery<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>(
+    FILE_REPOSITORY_TABLE_QUERY,
+    {
+      ...options,
+      variables: {
+        first,
+        offset,
+        filters,
+        sort,
+      },
+    },
+  );
+};
+
+export default () => {
+  const { token } = useAuthContext();
+  const { filters } = useFiltersContext();
   const theme = useTheme();
+
+  const [pagingState, setPagingState] = React.useState({
+    pageSize: DEFAULT_PAGE_SIZE,
+    page: DEFAULT_PAGE_OFFSET,
+    sort: DEFAULT_SORT,
+  });
+  const offset = pagingState.pageSize * pagingState.page;
+
+  const { data: records, loading = true } = useFileRepoTableQuery(
+    pagingState.pageSize,
+    offset,
+    pagingState.sort,
+    filters,
+  );
+
+  const totalEntries = records ? records.file.hits.total : 0;
+  const pageCount = loading ? 1 : Math.ceil(totalEntries / DEFAULT_PAGE_SIZE);
+  const handlePagingStateChange = (state: typeof pagingState) => {
+    setPagingState(state);
+  };
+
+  const onPageChange = (newPageNum: number) => {
+    handlePagingStateChange({ ...pagingState, page: newPageNum });
+  };
+
+  const onPageSizeChange = (newPageSize: number) => {
+    handlePagingStateChange({
+      ...pagingState,
+      page: 0,
+      pageSize: newPageSize,
+    });
+  };
+
+  const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
+    const sort = newSorted.reduce(
+      (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
+        const order = sortRule.desc ? 'desc' : 'asc';
+        return accSort.concat({
+          field: sortRule.id as FileCentricDocumentField,
+          order: order as FileRepositoryRecordSortOrder,
+        });
+      },
+      [],
+    );
+    handlePagingStateChange({ ...pagingState, sort });
+  };
+
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-  const toggleHandler = (fileID: String) => {
-    if (selectedRows.includes(fileID)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== fileID);
+  const toggleHandler = (objectId: String) => {
+    if (selectedRows.includes(objectId)) {
+      const newSelectionState = selectedRows.filter(selection => selection !== objectId);
       setSelectedRows(newSelectionState);
     } else {
-      setSelectedRows(prevSelected => [...prevSelected, fileID]);
+      setSelectedRows(prevSelected => [...prevSelected, objectId]);
     }
   };
   const toggleAllHandler = () => {
     if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.fileID}`);
+      const newSelectionState = fileRepoEntries.map(entry => `select-${entry.objectId}`);
       setSelectedRows(newSelectionState);
     } else {
       setSelectedRows([]);
     }
     setAllRowsSelected(!allRowsSelected);
   };
-  const fileDownloader = (fileID: String) => {
+  const fileDownloader = (objectId: String) => {
     //todo
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
-    const canUserDownload = userLoggedIn && isDownloadable;
-    const toolTipText = userLoggedIn
+    const canUserDownload = token && isDownloadable;
+    const toolTipText = token
       ? isDownloadable
         ? 'Download file'
         : 'You do not have permission to download this file'
@@ -79,51 +167,38 @@ export default ({
   };
   const tableColumns: Array<TableColumnConfig<FileRepositoryRecord>> = [
     {
-      Header: 'File ID',
-      accessor: 'fileID',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        return (
-          <Link href="">
-            <HyperLink>{`${original.fileID}`}</HyperLink>
-          </Link>
-        );
-      },
+      Header: 'Object ID',
+      id: FileCentricDocumentField.object_id,
+      accessor: 'objectId',
     },
     {
       Header: 'Donor ID',
-      accessor: 'donorID',
-      Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        return (
-          <Link href="">
-            <HyperLink>{`${original.donorID}`}</HyperLink>
-          </Link>
-        );
-      },
+      id: FileCentricDocumentField['donors.donor_id'],
+      accessor: 'donorId',
     },
     {
-      Header: 'Program',
-      id: 'programShortName',
-      accessor: d => d.program.shortName,
-      Cell: ({ original }: { original: FileRepositoryRecord }) => (
-        <Tooltip unmountHTMLWhenHide position="top" html={<span>{original.program.fullName}</span>}>
-          {original.program.shortName}
-        </Tooltip>
-      ),
+      Header: 'Program ID',
+      id: FileCentricDocumentField.study_id,
+      accessor: 'programId',
     },
     {
       Header: 'Data Type',
+      id: FileCentricDocumentField.data_type,
       accessor: 'dataType',
     },
     {
-      Header: 'Strategy',
-      accessor: 'strategy',
+      Header: 'File Type',
+      id: FileCentricDocumentField.file_type,
+      accessor: 'fileType',
     },
     {
-      Header: 'Format',
-      accessor: 'format',
+      Header: 'Experimental Strategy',
+      id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+      accessor: 'experimentalStrategy',
     },
     {
       Header: 'Size',
+      id: FileCentricDocumentField['file.size'],
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
@@ -168,29 +243,18 @@ export default ({
   ];
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const initalPageSize = 20;
-  const numFiles = fileRepoEntries.length;
-  const [pagingState, setPagingState] = React.useState({
-    pageSize: initalPageSize,
-    page: 0,
-    pages: Math.ceil(numFiles / initalPageSize),
-  });
-
-  const handlePagingStateChange = (state: typeof pagingState) => {
-    setPagingState(state);
-  };
-
-  const onPageChange = (newPageNum: number) => {
-    handlePagingStateChange({ ...pagingState, page: newPageNum });
-  };
-
-  const onPageSizeChange = (newPageSize: number) => {
-    handlePagingStateChange({
-      page: 0,
-      pageSize: newPageSize,
-      pages: Math.ceil(numFiles / newPageSize),
-    });
-  };
+  const fileRepoEntries: FileRepositoryRecord[] = records
+    ? records.file.hits.edges.map(({ node }) => ({
+        objectId: node.object_id,
+        donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
+        programId: node.study_id,
+        dataType: node.data_type,
+        experimentalStrategy: node.analysis.experiment.experimental_strategy,
+        fileType: node.file_type,
+        size: node.file.size,
+        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+      }))
+    : [];
 
   const tableElement = (
     <div
@@ -201,31 +265,34 @@ export default ({
       `}
     >
       <SelectTable
-        keyField="fileID"
+        manual
+        loading={loading}
+        keyField="objectId"
         parentRef={containerRef}
-        showPagination={true}
         columns={tableColumns}
         data={fileRepoEntries}
         isSelected={key => {
           // react table prepends the word `select-` to the selected keys
           return selectedRows.includes(`select-${key}`);
         }}
-        toggleSelection={fileID => toggleHandler(fileID)}
+        toggleSelection={objectId => toggleHandler(objectId)}
         toggleAll={() => toggleAllHandler()}
         selectAll={allRowsSelected}
         page={pagingState.page}
-        pages={pagingState.pages}
+        pages={pageCount}
         pageSize={pagingState.pageSize}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
+        onSortedChange={onSortedChange}
+        showPagination
       />
     </div>
   );
 
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
-  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), numFiles);
+  const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), totalEntries);
 
-  const allFilesSelected = selectedRows.length === numFiles;
+  const allFilesSelected = selectedRows.length === totalEntries;
 
   return (
     <Container
@@ -233,7 +300,7 @@ export default ({
         padding: 10px;
       `}
     >
-      {numFiles > 0 && (
+      {totalEntries > 0 && (
         <div
           css={css`
             display: flex;
@@ -248,7 +315,7 @@ export default ({
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', numFiles, true)}`}
+                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
                 {selectedRows.length > 0 &&

@@ -21,7 +21,7 @@ import {
   DonorSummaryRecord,
   DonorDataReleaseState,
   MolecularProcessingStatus,
-  ProgoramDonorReleasStats,
+  ProgramDonorReleaseStats,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
@@ -50,26 +50,26 @@ import { SortedChangeFunction, SortingRule } from 'react-table';
 
 export default ({
   programShortName,
-  initalPages,
+  initialPages,
   initialPageSize,
   initialSorts,
   isCardLoading = true,
 }: {
   programShortName: string;
-  initalPages: number;
+  initialPages: number;
   initialPageSize: number;
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
-  const ID_SEPERATOR = '-';
+  const ID_SEPARATOR = '-';
   const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
 
-  const emptyProgramSummaryStats: ProgoramDonorReleasStats = {
+  const emptyProgramSummaryStats: ProgramDonorReleaseStats = {
     registeredDonorsCount: 0,
     fullyReleasedDonorsCount: 0,
     partiallyReleasedDonorsCount: 0,
@@ -298,7 +298,7 @@ export default ({
   ];
 
   const [pagingState, setPagingState] = React.useState({
-    pages: initalPages,
+    pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,
@@ -353,7 +353,7 @@ export default ({
   const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
     const sorts = newSorted.reduce(
       (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
-        const fields = sortRule.id.split(ID_SEPERATOR);
+        const fields = sortRule.id.split(ID_SEPARATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
         return accSorts.concat(
           fields.map(field => ({
