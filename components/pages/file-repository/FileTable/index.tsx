@@ -86,6 +86,8 @@ const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[])
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [allRowsSelected, setAllRowsSelected] = React.useState(false);
 
+  const selectionKeyField: keyof FileRepositoryRecord = 'objectId';
+
   const setSelectedRowsObjectIds = (selectionString: string[]) =>
     // react table prepends the word `select-` to the selected objectIds
     setSelectedRows(selectionString.map(str => str.replace('select-', '')));
@@ -113,6 +115,7 @@ const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[])
     selectedRows.includes(objectId);
 
   return {
+    selectionKeyField,
     selectedRows,
     allRowsSelected,
     toggleHandler,
@@ -299,6 +302,7 @@ export default () => {
     selectedRows,
     toggleAllHandler,
     toggleHandler,
+    selectionKeyField,
   } = useFileRepoTableSelectionState(fileRepoEntries);
 
   const tableElement = (
@@ -312,7 +316,7 @@ export default () => {
       <SelectTable
         manual
         loading={loading}
-        keyField="objectId"
+        keyField={selectionKeyField}
         parentRef={containerRef}
         columns={tableColumns}
         data={fileRepoEntries}
