@@ -51,6 +51,7 @@ import {
   FileFacetPath,
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
+  GetAggregationResult,
 } from './types';
 import { FileCentricDocumentField } from '../FileTable/types';
 
@@ -159,7 +160,8 @@ export default () => {
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
-  const getOptions = (facet: FacetDetails): FilterOption[] => {
+
+  const getOptions: GetAggregationResult = facet => {
     return (loading ? [] : aggregations[facet.facetPath].buckets).map(bucket => ({
       ...bucket,
       isChecked: inCurrentFilters({
@@ -293,14 +295,14 @@ export default () => {
                   onSelectAllOptions={allOptionsSelected => {
                     if (allOptionsSelected) {
                       const updatedFilters = removeFilter(
-                        type.name,
+                        type.facetPath,
                         filters,
                       ) as FileRepoFiltersType;
                       replaceAllFilters(updatedFilters);
                     } else {
                       setFilterFromFieldAndValue({
-                        field: type.name,
-                        value: aggregations[type.facetPath].map(v => v.key),
+                        field: type.facetPath,
+                        value: aggregations[type.facetPath].buckets.map(v => v.key),
                       });
                     }
                   }}

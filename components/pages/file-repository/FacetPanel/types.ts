@@ -1,5 +1,6 @@
 import { FileRepoFiltersType } from '../utils/types';
 import { FileCentricDocumentField } from '../FileTable/types';
+import { FilterOption } from 'uikit/OptionsList';
 
 export enum FileFacetPath {
   study_id = 'study_id',
@@ -11,42 +12,45 @@ export enum FileFacetPath {
   file_access = 'file_access',
 }
 
+type BucketAggregation = {
+  key: string;
+  doc_count: number;
+};
+
+type NumericAggregation = any;
+
 export type FacetDetails = {
   name: string;
   facetPath: FileFacetPath;
   variant: 'Basic' | 'Number' | 'Other';
   esDocumentField: FileCentricDocumentField;
-  //   getAggregationResult: (queryData: AggregationQueryData) => BucketAggregation | NumericAggregation
 };
 
-type FacetBucket = {
-  key: string;
-  doc_count: number;
-};
+export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
 
 export type FileRepoFacetsQueryData = {
   file: {
     aggregations: {
       [FileFacetPath.study_id]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.donors__gender]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.analysis__experiment__experimental_strategy]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.data_type]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.file_type]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.variant_class]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
       [FileFacetPath.file_access]: {
-        buckets: FacetBucket[];
+        buckets: BucketAggregation[];
       };
     };
   };
