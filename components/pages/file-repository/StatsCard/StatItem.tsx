@@ -27,24 +27,22 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 
-type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
+type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'fileSize';
 
 type StatItemProps = {
   iconName: UikitIconNames;
-  iconDiameter?: number;
   statType: StatType;
   count: number;
+  loading?: boolean;
 };
 
-// for mock data display. this could change when data is integrated
-const getDisplayStat = (type: StatType, count: number): string => {
-  return type === 'filesize'
-    ? `${filesize(count)}`
-    : `${count} ${capitalize(pluralize(type, count))}`;
-};
-
-const StatItem = ({ iconName, statType, count, iconDiameter = 20 }: StatItemProps) => {
+const StatItem = ({ iconName, statType, count, loading = false }: StatItemProps) => {
   const theme = useTheme();
+  const displayStat =
+    statType === 'fileSize'
+      ? `${filesize(count)}`
+      : `${count} ${capitalize(pluralize(statType, count))}`;
+
   return (
     <Col xl={2.4} lg={2.4} md={4} sm={6}>
       <Typography
@@ -64,7 +62,7 @@ const StatItem = ({ iconName, statType, count, iconDiameter = 20 }: StatItemProp
           fill={theme.colors.primary_1}
           name={iconName}
         />
-        {getDisplayStat(statType, count)}
+        {loading ? <Icon name={'spinner'} fill={theme.colors.grey} /> : displayStat}
       </Typography>
     </Col>
   );
