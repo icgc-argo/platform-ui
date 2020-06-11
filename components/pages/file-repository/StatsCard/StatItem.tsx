@@ -31,9 +31,9 @@ type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'filesize';
 
 type StatItemProps = {
   iconName: UikitIconNames;
-  iconDiameter?: number;
   statType: StatType;
   count: number;
+  loading?: boolean;
 };
 
 // for mock data display. this could change when data is integrated
@@ -43,7 +43,7 @@ const getDisplayStat = (type: StatType, count: number): string => {
     : `${count} ${capitalize(pluralize(type, count))}`;
 };
 
-const StatItem = ({ iconName, statType, count, iconDiameter = 20 }: StatItemProps) => {
+const StatItem = ({ iconName, statType, count, loading = false }: StatItemProps) => {
   const theme = useTheme();
   return (
     <Col xl={2.4} lg={2.4} md={4} sm={6}>
@@ -64,7 +64,11 @@ const StatItem = ({ iconName, statType, count, iconDiameter = 20 }: StatItemProp
           fill={theme.colors.primary_1}
           name={iconName}
         />
-        {getDisplayStat(statType, count)}
+        {loading ? (
+          <Icon name={'spinner'} fill={theme.colors.grey} />
+        ) : (
+          getDisplayStat(statType, count)
+        )}
       </Typography>
     </Col>
   );
