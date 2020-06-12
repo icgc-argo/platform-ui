@@ -24,6 +24,7 @@ import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
 import Button from 'uikit/Button';
 import isEmpty from 'lodash/isEmpty';
+import { isMissing } from '../utils';
 
 type AndOp = 'and';
 
@@ -203,7 +204,7 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
             }}
             {...props}
           >
-            {value}
+            {isMissing(value)}
           </Value>
         )}
       />

@@ -52,6 +52,7 @@ import {
   GetAggregationResult,
 } from './types';
 import { FileCentricDocumentField } from '../FileTable/types';
+import Container from 'uikit/Container';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -112,7 +113,7 @@ const fileIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField.study_id,
 };
 
-const FacetContainer = styled('div')`
+const FacetContainer = styled(Container)`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
@@ -147,7 +148,7 @@ export default () => {
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
   const { data, loading } = useFileFacetQuery(filters);
-  const aggregations = loading ? {} : data.file.aggregations;
+  const aggregations = data ? data.file.aggregations : {};
 
   const clickHandler = (targetFacet: FacetDetails) => {
     if (expandedFacets.includes(targetFacet)) {
@@ -198,8 +199,9 @@ export default () => {
       ],
     };
   };
+
   return (
-    <FacetContainer>
+    <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
         <FacetRow>
           <Typography

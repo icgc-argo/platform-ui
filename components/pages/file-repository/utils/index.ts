@@ -217,3 +217,6 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
       } as FileRepoFiltersType)
     : defaultEmptyFilters;
 };
+
+export const isMissing: (value: string) => string = value =>
+  value === '__missing__' ? 'No Data' : value;
