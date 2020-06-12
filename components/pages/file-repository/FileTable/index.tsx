@@ -336,6 +336,7 @@ export default () => {
               allFilesSelected={allRowsSelected}
               selectedFilesObjectIds={selectedRows}
               unSelectedFilesObjectIds={unselectedRows}
+              selectedFilesCount={selectedRowsCount}
             />
             {/* disabled for initial File Repo release */}
             {/* <DropdownButton

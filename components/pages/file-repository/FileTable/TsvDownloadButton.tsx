@@ -42,10 +42,12 @@ enum DownloadOptionValues {
 
 export default ({
   allFilesSelected,
+  selectedFilesCount,
   selectedFilesObjectIds,
   unSelectedFilesObjectIds,
 }: {
   allFilesSelected: boolean;
+  selectedFilesCount: number;
   selectedFilesObjectIds: string[];
   unSelectedFilesObjectIds: string[];
 }) => {
@@ -53,21 +55,22 @@ export default ({
   const { GATEWAY_API_ROOT } = getConfig();
   const { filters: repoFilters } = useFiltersContext();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
-    {
-      display:
-        allFilesSelected || selectedFilesObjectIds.length === 0
-          ? 'All Files'
-          : `${pluralize('file', selectedFilesObjectIds.length, true)} selected`,
-      value: DownloadOptionValues.ALL_FILES,
-      css: css`
-        color: ${theme.colors.secondary_dark};
-        border-bottom: 1px solid ${theme.colors.grey_2};
-        cursor: auto;
-        &:hover {
-          background: transparent;
-        }
-      `,
-    },
+    ...(!!selectedFilesCount
+      ? [
+          {
+            display: `${pluralize('file', selectedFilesCount, true)} selected`,
+            value: DownloadOptionValues.ALL_FILES,
+            css: css`
+              color: ${theme.colors.secondary_dark};
+              border-bottom: 1px solid ${theme.colors.grey_2};
+              cursor: auto;
+              &:hover {
+                background: transparent;
+              }
+            `,
+          },
+        ]
+      : []),
     // only manifest download enabled for initial File Repo release
     // {
     //   display: 'Clinical Data',
