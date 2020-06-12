@@ -91,7 +91,6 @@ export enum FileCentricDocumentField {
   'donors.gender' = 'donors.gender',
   variant_class = 'variant_class',
   file_access = 'file_access',
-  __missing__ = '__missing__',
 }
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
 
