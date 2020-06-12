@@ -159,7 +159,7 @@ export default () => {
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
 
   const getOptions: GetAggregationResult = facet => {
-    return (loading ? [] : aggregations[facet.facetPath].buckets).map(bucket => ({
+    return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map(bucket => ({
       ...bucket,
       isChecked: inCurrentFilters({
         currentFilters: filters,
@@ -292,13 +292,13 @@ export default () => {
                   onSelectAllOptions={allOptionsSelected => {
                     if (allOptionsSelected) {
                       const updatedFilters = removeFilter(
-                        type.facetPath,
+                        type.esDocumentField,
                         filters,
                       ) as FileRepoFiltersType;
                       replaceAllFilters(updatedFilters);
                     } else {
                       setFilterFromFieldAndValue({
-                        field: type.facetPath,
+                        field: type.esDocumentField,
                         value: aggregations[type.facetPath].buckets.map(v => v.key),
                       });
                     }

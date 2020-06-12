@@ -1,4 +1,4 @@
-query($filters: JSON) {
+query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
   file {
     aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: false) {
       study_id {
