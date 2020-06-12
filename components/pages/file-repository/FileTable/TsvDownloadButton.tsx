@@ -29,7 +29,9 @@ import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
-import useFiltersContext from '../hooks/useFiltersContext';
+import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
+import { FileCentricDocumentField } from './types';
+import { RecursiveFilter } from '../utils/types';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -40,20 +42,22 @@ enum DownloadOptionValues {
 
 export default ({
   allFilesSelected,
-  selectedRows,
+  selectedFilesObjectIds,
+  unSelectedFilesObjectIds,
 }: {
   allFilesSelected: boolean;
-  selectedRows: string[];
+  selectedFilesObjectIds: string[];
+  unSelectedFilesObjectIds: string[];
 }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
-  const { filters } = useFiltersContext();
+  const { filters: repoFilters } = useFiltersContext();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     {
       display:
-        allFilesSelected || selectedRows.length === 0
+        allFilesSelected || selectedFilesObjectIds.length === 0
           ? 'All Files'
-          : `${pluralize('file', selectedRows.length, true)} selected`,
+          : `${pluralize('file', selectedFilesObjectIds.length, true)} selected`,
       value: DownloadOptionValues.ALL_FILES,
       css: css`
         color: ${theme.colors.secondary_dark};
@@ -78,13 +82,42 @@ export default ({
     //   value: DownloadOptionValues.FILE_TABLE,
     // },
   ];
+
+  const downloadFilter: RecursiveFilter = {
+    op: 'and',
+    content: [
+      repoFilters,
+      allFilesSelected
+        ? {
+            op: 'not',
+            content: [
+              {
+                op: 'in',
+                content: {
+                  field: FileCentricDocumentField['object_id'],
+                  value: unSelectedFilesObjectIds,
+                },
+              },
+            ],
+          }
+        : selectedFilesObjectIds.length
+        ? {
+            op: 'in',
+            content: {
+              field: FileCentricDocumentField['object_id'],
+              value: selectedFilesObjectIds,
+            },
+          }
+        : defaultFilters,
+    ],
+  };
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
         const downloadUrl = urlJoin(
           GATEWAY_API_ROOT,
           MANIFEST_DOWNLOAD_PATH,
-          `?filter=${encodeURIComponent(JSON.stringify(filters))}`,
+          `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
         window.location.assign(downloadUrl);
         break;

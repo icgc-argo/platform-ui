@@ -255,6 +255,7 @@ export default () => {
     allRowsSelected,
     isSelected,
     selectedRows,
+    unselectedRows,
     toggleAllHandler,
     toggleHandler,
     selectionKeyField,
@@ -331,7 +332,11 @@ export default () => {
               display: flex;
             `}
           >
-            <TsvDownloadButton allFilesSelected={allRowsSelected} selectedRows={selectedRows} />
+            <TsvDownloadButton
+              allFilesSelected={allRowsSelected}
+              selectedFilesObjectIds={selectedRows}
+              unSelectedFilesObjectIds={unselectedRows}
+            />
             {/* disabled for initial File Repo release */}
             {/* <DropdownButton
               variant="secondary"

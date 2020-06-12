@@ -34,6 +34,11 @@ export type FileRepoFiltersType = {
   content: FieldOperator[];
 };
 
+export type RecursiveFilter = {
+  op: CombinationKeys;
+  content: Array<RecursiveFilter | FieldOperator>;
+};
+
 export type TCombineValues = (
   operatorA: FieldOperator,
   operatorB: FieldOperator,

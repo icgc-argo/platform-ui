@@ -241,6 +241,7 @@ export function useSelectTableSelectionState<TableEntry = {}>({
   return {
     selectionKeyField,
     selectedRows,
+    unselectedRows,
     allRowsSelected,
     toggleHandler,
     toggleAllHandler,
