@@ -44,6 +44,7 @@ const OptionsList: React.ComponentType<{
   countUnit?: string;
   onOptionToggle: (facetValue: string[] | string) => void;
   onSelectAllOptions: (allOptionsSelected: boolean) => void;
+  parseDisplayValue: (inputValue: string) => string;
 }> = ({
   options,
   searchQuery = '',
@@ -51,6 +52,7 @@ const OptionsList: React.ComponentType<{
   countUnit,
   onOptionToggle,
   onSelectAllOptions,
+  parseDisplayValue = value => value,
 }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
@@ -105,7 +107,7 @@ const OptionsList: React.ComponentType<{
           `}
           as={'li'}
         >
-          {option.key}
+          {parseDisplayValue(option.key)}
         </Typography>
       </div>
 
