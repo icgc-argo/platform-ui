@@ -63,6 +63,7 @@ const OptionsListStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
             setOptions(options.map(opt => ({ ...opt, isChecked: true })));
           }
         }}
+        parseDisplayValue={value => value}
       />
     </div>
   );

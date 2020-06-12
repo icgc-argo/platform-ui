@@ -154,9 +154,8 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
       <FlexRow style={{ justifyContent: 'flex-end', position: 'relative' }}>
         <Typography
           css={css`
-            position: absolute;
-            top: 0.5rem;
             margin: 0;
+            margin-bottom: -8px;
             font-size: 12px;
             color: ${theme.colors.primary};
           `}

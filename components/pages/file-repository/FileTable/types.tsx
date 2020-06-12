@@ -88,6 +88,9 @@ export enum FileCentricDocumentField {
   file_type = 'file_type',
   'analysis.experiment.experimental_strategy' = 'analysis.experiment.experimental_strategy',
   'file.size' = 'file.size',
+  'donors.gender' = 'donors.gender',
+  variant_class = 'variant_class',
+  file_access = 'file_access',
 }
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
 

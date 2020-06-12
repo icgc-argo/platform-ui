@@ -32,6 +32,7 @@ const Facet = ({
   countUnit,
   onOptionToggle,
   onSelectAllOptions,
+  parseDisplayValue,
 }: {
   subMenuName: string;
   options: Array<FilterOption>;
@@ -40,6 +41,7 @@ const Facet = ({
   countUnit?: string;
   onOptionToggle: (facetValue: string | string[]) => void;
   onSelectAllOptions: (allOptionsSelected: boolean) => void;
+  parseDisplayValue?: (inputValue: string) => string;
 }) => {
   const [searchQueryState, setSearchQueryState] = React.useState('');
 
@@ -64,6 +66,7 @@ const Facet = ({
           countUnit={countUnit}
           onOptionToggle={onOptionToggle}
           onSelectAllOptions={onSelectAllOptions}
+          parseDisplayValue={parseDisplayValue}
         />
       </MenuItem>
     </>
