@@ -40,6 +40,7 @@ import { getConfig } from 'global/config';
 import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
+import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 
 /**
  * The global portal where modals will show up
@@ -171,7 +172,7 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
 
   const client = React.useMemo(() => {
     const uploadLink = createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, '/graphql'),
+      uri: urljoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
       fetch: fetchWithEgoToken,
     });
     return new ApolloClient({

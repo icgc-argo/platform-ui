@@ -23,6 +23,7 @@ import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';
 import { getConfig } from 'global/config';
+import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 
 // if/when this is used, check how ApplicationRoot ApolloClient implements a
 // custom fetch with ego authorization headers, and verify the fetch call and
@@ -34,7 +35,7 @@ export default (queries: Array<{ query: any; variables?: { [key: string]: any } 
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createHttpLink({
-      uri: urlJoin(GATEWAY_API_ROOT, '/graphql'),
+      uri: urlJoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
       fetch: fetch,
       headers: egoJwt
         ? {
