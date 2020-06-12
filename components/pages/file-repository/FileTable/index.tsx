@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { SelectTable, TableColumnConfig } from 'uikit/Table';
+import { SelectTable, TableColumnConfig, useSelectTableSelectionState } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
 import {
   FileRepositoryRecord,
@@ -77,48 +77,6 @@ const useFileRepoTableQuery = (
       },
     },
   );
-};
-
-const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[]) => {
-  const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
-  const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-
-  const selectionKeyField: keyof FileRepositoryRecord = 'objectId';
-
-  const setSelectedRowsObjectIds = (selectionString: string[]) =>
-    // react table prepends the word `select-` to the selected objectIds
-    setSelectedRows(selectionString.map(str => str.replace('select-', '')));
-
-  const toggleHandler: React.ComponentProps<
-    typeof SelectTable
-  >['toggleSelection'] = selectionString => {
-    if (selectedRows.includes(selectionString)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== selectionString);
-      setSelectedRowsObjectIds(newSelectionState);
-    } else {
-      setSelectedRowsObjectIds([...selectedRows, selectionString]);
-    }
-  };
-  const toggleAllHandler: React.ComponentProps<typeof SelectTable>['toggleAll'] = () => {
-    if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => entry.objectId);
-      setSelectedRowsObjectIds(newSelectionState);
-    } else {
-      setSelectedRowsObjectIds([]);
-    }
-    setAllRowsSelected(!allRowsSelected);
-  };
-  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = objectId =>
-    selectedRows.includes(objectId);
-
-  return {
-    selectionKeyField,
-    selectedRows,
-    allRowsSelected,
-    toggleHandler,
-    toggleAllHandler,
-    isSelected,
-  };
 };
 
 const useFileRepoPaginationState = () => {
@@ -300,7 +258,11 @@ export default () => {
     toggleAllHandler,
     toggleHandler,
     selectionKeyField,
-  } = useFileRepoTableSelectionState(fileRepoEntries);
+    selectedRowsCount,
+  } = useSelectTableSelectionState<FileRepositoryRecord>({
+    totalEntriesCount: totalEntries,
+    selectionKeyField: 'objectId',
+  });
 
   const tableElement = (
     <div
@@ -335,8 +297,6 @@ export default () => {
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
   const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), totalEntries);
 
-  const allFilesSelected = selectedRows.length === totalEntries;
-
   return (
     <Container
       css={css`
@@ -361,11 +321,8 @@ export default () => {
                 {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
-                {selectedRows.length > 0 &&
-                  ` (${allFilesSelected ? 'All' : selectedRows.length} ${pluralize(
-                    'file',
-                    selectedRows.length,
-                  )} selected)`}
+                {!!selectedRowsCount &&
+                  ` (${selectedRowsCount} ${pluralize('file', selectedRowsCount)} selected)`}
               </Typography>
             </div>
           </div>
@@ -374,7 +331,7 @@ export default () => {
               display: flex;
             `}
           >
-            <TsvDownloadButton allFilesSelected={allFilesSelected} selectedRows={selectedRows} />
+            <TsvDownloadButton allFilesSelected={allRowsSelected} selectedRows={selectedRows} />
             {/* disabled for initial File Repo release */}
             {/* <DropdownButton
               variant="secondary"
