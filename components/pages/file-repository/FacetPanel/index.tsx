@@ -20,7 +20,6 @@
 import React from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
-import { capitalize } from 'global/utils/stringUtils';
 import { Input } from 'uikit/form';
 import FileSelectButton from 'uikit/FileSelectButton';
 import { SubMenu } from 'uikit/SubMenu';
@@ -54,6 +53,8 @@ import {
 } from './types';
 import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import DnaLoader from 'uikit/DnaLoader';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -61,45 +62,47 @@ const FacetRow = styled('div')`
   justify-content: space-between;
 `;
 
-const presetFacets: Array<FacetDetails> = [
+const createPresetFacets = (
+  displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
+): Array<FacetDetails> => [
   {
-    name: 'program id',
+    name: displayNames['study_id'] || '__',
     facetPath: FileFacetPath.study_id,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.study_id,
   },
   {
-    name: 'gender',
+    name: displayNames['donors.gender'] || '__',
     facetPath: FileFacetPath.donors__gender,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['donors.gender'],
   },
   {
-    name: 'experimental strategy',
+    name: displayNames['analysis.experiment.experimental_strategy'] || '__',
     facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
   },
   {
-    name: 'data type',
+    name: displayNames['data_type'] || '__',
     facetPath: FileFacetPath.data_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.data_type,
   },
   {
-    name: 'file type',
+    name: displayNames['file_type'] || '__',
     facetPath: FileFacetPath.file_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_type,
   },
   {
-    name: 'variant class',
+    name: displayNames['variant_class'] || '__',
     facetPath: FileFacetPath.variant_class,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.variant_class,
   },
   {
-    name: 'file access',
+    name: displayNames['file_access'] || '__',
     facetPath: FileFacetPath.file_access,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_access,
@@ -143,7 +146,15 @@ const useFileFacetQuery = (
 };
 
 export default () => {
-  const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
+  const {
+    data: fieldDisplayNames,
+    loading: loadingFieldDisplayNames,
+  } = useFileCentricFieldDisplayName();
+  const presetFacets = createPresetFacets(fieldDisplayNames);
+  const [expandedFacets, setExpandedFacets] = React.useState(
+    [...presetFacets, fileIDSearch].map(facet => facet.facetPath),
+  );
+  console.log('presetFacets: ', presetFacets);
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -152,10 +163,11 @@ export default () => {
   const aggregations = data ? data.file.aggregations : {};
 
   const clickHandler = (targetFacet: FacetDetails) => {
-    if (expandedFacets.includes(targetFacet)) {
-      setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
+    const targetFacetPath = targetFacet.facetPath;
+    if (expandedFacets.includes(targetFacetPath)) {
+      setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacetPath));
     } else {
-      setExpandedFacets(expandedFacets.concat(targetFacet));
+      setExpandedFacets(expandedFacets.concat(targetFacetPath));
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
@@ -223,7 +235,7 @@ export default () => {
         >
           <MenuItem
             onClick={e => clickHandler(fileIDSearch)}
-            selected={expandedFacets.includes(fileIDSearch)}
+            selected={expandedFacets.includes(fileIDSearch.facetPath)}
             className="FacetMenu"
             content={fileIDSearch.name}
             chevronOnLeftSide={true}
@@ -272,74 +284,79 @@ export default () => {
             </div>
           </MenuItem>
         </FacetRow>
-        {presetFacets.map(type => {
-          const props = {
-            onClick: e => {
-              clickHandler(type);
-            },
-            isExpanded: expandedFacets.includes(type),
-            subMenuName: capitalize(type.name),
-          };
+        {!loadingFieldDisplayNames &&
+          presetFacets.map(type => {
+            const commonFacetProps = {
+              onClick: e => {
+                console.log('e: ', e);
+                clickHandler(type);
+              },
+              isExpanded: expandedFacets.includes(type.facetPath),
+              subMenuName: type.name,
+            };
 
-          return (
-            <FacetRow key={type.name}>
-              {type.variant === 'Basic' && (
-                <Facet
-                  {...props}
-                  options={getOptions(type)}
-                  countUnit={'files'}
-                  onOptionToggle={facetValue => {
-                    const currentValue = SqonBuilder.has(type.esDocumentField, facetValue).build();
-                    replaceAllFilters(toggleFilter(currentValue, filters));
-                  }}
-                  onSelectAllOptions={allOptionsSelected => {
-                    if (allOptionsSelected) {
-                      const updatedFilters = removeFilter(
+            return (
+              <FacetRow key={type.name}>
+                {type.variant === 'Basic' && (
+                  <Facet
+                    {...commonFacetProps}
+                    options={getOptions(type)}
+                    countUnit={'files'}
+                    onOptionToggle={facetValue => {
+                      const currentValue = SqonBuilder.has(
                         type.esDocumentField,
+                        facetValue,
+                      ).build();
+                      replaceAllFilters(toggleFilter(currentValue, filters));
+                    }}
+                    onSelectAllOptions={allOptionsSelected => {
+                      if (allOptionsSelected) {
+                        const updatedFilters = removeFilter(
+                          type.esDocumentField,
+                          filters,
+                        ) as FileRepoFiltersType;
+                        replaceAllFilters(updatedFilters);
+                      } else {
+                        setFilterFromFieldAndValue({
+                          field: type.esDocumentField,
+                          value: aggregations[type.facetPath].buckets.map(v => v.key),
+                        });
+                      }
+                    }}
+                    parseDisplayValue={toDisplayValue}
+                  />
+                )}
+                {type.variant === 'Number' && (
+                  <NumberRangeFacet
+                    {...commonFacetProps}
+                    onSubmit={(min, max) => {
+                      const newFilters = getRangeFilters(type.name, min, max);
+                      // remove any existing fields for this type first
+                      const withPreviousFieldRemoved = removeFilter(
+                        type.name,
                         filters,
                       ) as FileRepoFiltersType;
-                      replaceAllFilters(updatedFilters);
-                    } else {
-                      setFilterFromFieldAndValue({
-                        field: type.esDocumentField,
-                        value: aggregations[type.facetPath].buckets.map(v => v.key),
-                      });
-                    }
-                  }}
-                  parseDisplayValue={toDisplayValue}
-                />
-              )}
-              {type.variant === 'Number' && (
-                <NumberRangeFacet
-                  {...props}
-                  onSubmit={(min, max) => {
-                    const newFilters = getRangeFilters(type.name, min, max);
-                    // remove any existing fields for this type first
-                    const withPreviousFieldRemoved = removeFilter(
-                      type.name,
-                      filters,
-                    ) as FileRepoFiltersType;
-                    replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
-                  }}
-                  min={(
-                    currentFieldValue({
-                      filters,
-                      dotField: type.name,
-                      op: '>=',
-                    }) || ''
-                  ).toString()}
-                  max={(
-                    currentFieldValue({
-                      filters,
-                      dotField: type.name,
-                      op: '<=',
-                    }) || ''
-                  ).toString()}
-                />
-              )}
-            </FacetRow>
-          );
-        })}
+                      replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
+                    }}
+                    min={(
+                      currentFieldValue({
+                        filters,
+                        dotField: type.name,
+                        op: '>=',
+                      }) || ''
+                    ).toString()}
+                    max={(
+                      currentFieldValue({
+                        filters,
+                        dotField: type.name,
+                        op: '<=',
+                      }) || ''
+                    ).toString()}
+                  />
+                )}
+              </FacetRow>
+            );
+          })}
       </SubMenu>
       <Collapsible />
     </FacetContainer>
