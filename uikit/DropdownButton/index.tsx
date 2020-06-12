@@ -43,23 +43,24 @@ const MenuItem: typeof Typography = props => {
   );
 };
 
-type DropdownButtonItemConfig = {
-  value: string;
+type DropdownButtonItemConfig<ValueType = string> = {
+  value: ValueType;
   display: React.ReactNode;
   css?: SerializedStyles;
 };
-const DropdownButton = ({
+export type DownloadButtonProps<ValueType> = {
+  onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
+  menuItems: Array<DropdownButtonItemConfig<ValueType>>;
+  menuShown?: boolean;
+};
+function DropdownButton<ValueType = string>({
   children,
   onItemClick,
   menuItems,
-  onClick = e => {},
   menuShown: controlledMenuShowState,
+  onClick,
   ...rest
-}: {
-  onItemClick: (item: DropdownButtonItemConfig) => void;
-  menuItems: Array<DropdownButtonItemConfig>;
-  menuShown?: boolean;
-} & React.ComponentProps<typeof Button>) => {
+}: DownloadButtonProps<ValueType> & React.ComponentProps<typeof Button>) {
   const [menuShown, setMenuShown] = React.useState(false);
   const theme = useTheme();
 
@@ -76,7 +77,9 @@ const DropdownButton = ({
     <Button
       onClick={e => {
         setMenuShown(true);
-        onClick(e);
+        if (onClick) {
+          onClick(e);
+        }
       }}
       css={css`
         position: relative;
@@ -104,7 +107,7 @@ const DropdownButton = ({
           `}
         >
           {menuItems.map(item => (
-            <MenuItem key={item.value} onClick={() => onItemClick(item)} {...item}>
+            <MenuItem key={String(item.value)} onClick={() => onItemClick(item)} {...item}>
               {item.display}
             </MenuItem>
           ))}
@@ -112,6 +115,6 @@ const DropdownButton = ({
       )}
     </Button>
   );
-};
+}
 
 export default DropdownButton;
