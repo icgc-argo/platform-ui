@@ -39,6 +39,7 @@ import {
   toggleFilter,
   replaceFilter,
   currentFieldValue,
+  isMissing,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
@@ -305,6 +306,7 @@ export default () => {
                       });
                     }
                   }}
+                  parseDisplayValue={isMissing}
                 />
               )}
               {type.variant === 'Number' && (
