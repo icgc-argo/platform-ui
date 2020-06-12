@@ -133,6 +133,7 @@ export default ({
     <DropdownButton
       css={css`
         margin-right: 8px;
+        width: 160px;
       `}
       variant="secondary"
       size="sm"
@@ -154,6 +155,7 @@ export default ({
           css={css`
             ${instructionBoxButtonIconStyle}
             margin-left: 5px;
+            margin-right: 0px;
           `}
         />
       </span>
