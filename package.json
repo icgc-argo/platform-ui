@@ -137,7 +137,7 @@
     "react-docgen-typescript-loader": "^3.2.1",
     "ts-mocha": "^6.0.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.9.5"
   },
   "prettier": {
     "printWidth": 100,
