@@ -21,7 +21,7 @@ import urlJoin from 'url-join';
 import getNextConfig from 'next/config';
 
 export const getConfig = () => {
-  const publicConfig: { [k: string]: string } = getNextConfig().publicRuntimeConfig;
+  const publicConfig: { [k: string]: string } = getNextConfig()?.publicRuntimeConfig || {};
   return {
     GATEWAY_API_ROOT: publicConfig.GATEWAY_API_ROOT || 'http://localhost:9000',
     EGO_API_ROOT: publicConfig.EGO_API_ROOT || '',
