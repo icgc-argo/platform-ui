@@ -86,6 +86,10 @@ const useFileRepoPaginationState = () => {
     sort: DEFAULT_SORT,
   });
 
+  React.useEffect(() => {
+    resetCurrentPage();
+  }, [pagingState.pageSize]);
+
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
   };
@@ -97,7 +101,6 @@ const useFileRepoPaginationState = () => {
   const onPageSizeChange = (newPageSize: number) => {
     handlePagingStateChange({
       ...pagingState,
-      page: 0,
       pageSize: newPageSize,
     });
   };
