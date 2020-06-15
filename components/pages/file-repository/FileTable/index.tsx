@@ -86,6 +86,10 @@ const useFileRepoPaginationState = () => {
     sort: DEFAULT_SORT,
   });
 
+  React.useEffect(() => {
+    resetCurrentPage();
+  }, [pagingState.pageSize]);
+
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
   };
@@ -97,7 +101,6 @@ const useFileRepoPaginationState = () => {
   const onPageSizeChange = (newPageSize: number) => {
     handlePagingStateChange({
       ...pagingState,
-      page: 0,
       pageSize: newPageSize,
     });
   };
@@ -114,11 +117,18 @@ const useFileRepoPaginationState = () => {
     );
     handlePagingStateChange({ ...pagingState, sort });
   };
+  const resetCurrentPage = () => {
+    setPagingState({
+      ...pagingState,
+      page: 0,
+    });
+  };
   return {
     pagingState,
     onPageChange,
     onPageSizeChange,
     onSortedChange,
+    resetCurrentPage,
   };
 };
 
@@ -132,7 +142,11 @@ export default () => {
     onPageChange,
     onPageSizeChange,
     onSortedChange,
+    resetCurrentPage,
   } = useFileRepoPaginationState();
+  React.useEffect(() => {
+    resetCurrentPage();
+  }, [filters]);
 
   const offset = pagingState.pageSize * pagingState.page;
   const { data: records, loading = true } = useFileRepoTableQuery(
@@ -243,7 +257,7 @@ export default () => {
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
-        donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
+        donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,
