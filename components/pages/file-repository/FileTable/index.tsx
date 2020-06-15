@@ -25,7 +25,6 @@ import {
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
   FileRepositoryRecordSort,
-  FileCentricDocumentField,
   FileRepositoryRecordSortOrder,
   FileRepositorySortingRule,
 } from './types';
@@ -45,6 +44,8 @@ import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
 import TsvDownloadButton from './TsvDownloadButton';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import { FileCentricDocumentField } from '../types';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -137,6 +138,8 @@ export default () => {
   const { filters } = useFiltersContext();
   const theme = useTheme();
 
+  const { data: fieldDisplayNames } = useFileCentricFieldDisplayName();
+
   const {
     pagingState,
     onPageChange,
@@ -176,39 +179,39 @@ export default () => {
     TableColumnConfig<FileRepositoryRecord> & { id: FileCentricDocumentField }
   > = [
     {
-      Header: 'Object ID',
+      Header: fieldDisplayNames['object_id'],
       id: FileCentricDocumentField['object_id'],
       accessor: 'objectId',
       width: 275,
     },
     {
-      Header: 'Donor ID',
+      Header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
     },
     {
-      Header: 'Program ID',
+      Header: fieldDisplayNames['study_id'],
       id: FileCentricDocumentField['study_id'],
       accessor: 'programId',
     },
     {
-      Header: 'Data Type',
+      Header: fieldDisplayNames['data_type'],
       id: FileCentricDocumentField['data_type'],
       accessor: 'dataType',
       width: 180,
     },
     {
-      Header: 'File Type',
+      Header: fieldDisplayNames['file_type'],
       id: FileCentricDocumentField['file_type'],
       accessor: 'fileType',
     },
     {
-      Header: 'Experimental Strategy',
+      Header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
       id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessor: 'experimentalStrategy',
     },
     {
-      Header: 'Size',
+      Header: fieldDisplayNames['file.size'],
       id: FileCentricDocumentField['file.size'],
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
