@@ -28,6 +28,7 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { useMutation } from '@apollo/react-hooks';
+
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
   instructionBoxButtonIconStyle,
@@ -40,6 +41,7 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
 import useCommonToasters from 'components/useCommonToasters';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 function Instructions({
   uploadEnabled,
@@ -81,6 +83,8 @@ function Instructions({
     },
   });
 
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+
   const handleUpload = file =>
     uploadFile({
       variables: { shortName, registrationFile: file },
@@ -92,9 +96,11 @@ function Instructions({
         steps={[
           <>
             <Typography variant="data" component="span">
-              1. Download the registration template and format it using the latest{` `}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
-                Data Dictionary
+              1. Download the registration template and format it using{' '}
+              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} bold>
+                Data&nbsp;Dictionary&nbsp;{' '}
+                {!latestDictionaryResponse.loading &&
+                  `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
               </Link>
               .
             </Typography>
