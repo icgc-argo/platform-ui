@@ -51,10 +51,10 @@ import {
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
 } from './types';
-import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import DnaLoader from 'uikit/DnaLoader';
+import { FileCentricDocumentField } from '../types';
 
 const FacetRow = styled('div')`
   display: flex;
