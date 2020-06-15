@@ -212,6 +212,77 @@ export default () => {
     };
   };
 
+  const commonFacetProps = (facetDetails: FacetDetails) => ({
+    onClick: (e) => {
+      clickHandler(facetDetails);
+    },
+    isExpanded: expandedFacets.includes(facetDetails.facetPath),
+    subMenuName: facetDetails.name,
+  });
+
+  const onFacetOptionToggle: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
+    return (facetValue) => {
+      const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
+      replaceAllFilters(toggleFilter(currentValue, filters));
+    };
+  };
+  const onFacetSelectAllOptionsToggle: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
+    return (allOptionsSelected) => {
+      if (allOptionsSelected) {
+        const updatedFilters = removeFilter(
+          facetDetails.esDocumentField,
+          filters,
+        ) as FileRepoFiltersType;
+        replaceAllFilters(updatedFilters);
+      } else {
+        setFilterFromFieldAndValue({
+          field: facetDetails.esDocumentField,
+          value: aggregations[facetDetails.facetPath].buckets.map((v) => v.key),
+        });
+      }
+    };
+  };
+
+  const onNumberRangeFacetSubmit: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
+    return (min, max) => {
+      const newFilters = getRangeFilters(facetDetails.name, min, max);
+      // remove any existing fields for this facetDetails first
+      const withPreviousFieldRemoved = removeFilter(
+        facetDetails.name,
+        filters,
+      ) as FileRepoFiltersType;
+      replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
+    };
+  };
+  const numberRangeFacetMin: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
+    return (
+      currentFieldValue({
+        filters,
+        dotField: facetDetails.name,
+        op: '>=',
+      }) || ''
+    ).toString();
+  };
+  const numberRangeFacetMax: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
+    return (
+      currentFieldValue({
+        filters,
+        dotField: facetDetails.name,
+        op: '<=',
+      }) || ''
+    ).toString();
+  };
+
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -285,71 +356,26 @@ export default () => {
         </FacetRow>
         {!loadingFieldDisplayNames &&
           presetFacets.map((type) => {
-            const commonFacetProps = {
-              onClick: (e) => {
-                clickHandler(type);
-              },
-              isExpanded: expandedFacets.includes(type.facetPath),
-              subMenuName: type.name,
-            };
+            const facetProps = commonFacetProps(type);
 
             return (
               <FacetRow key={type.name}>
                 {type.variant === 'Basic' && (
                   <Facet
-                    {...commonFacetProps}
+                    {...facetProps}
                     options={getOptions(type)}
                     countUnit={'files'}
-                    onOptionToggle={(facetValue) => {
-                      const currentValue = SqonBuilder.has(
-                        type.esDocumentField,
-                        facetValue,
-                      ).build();
-                      replaceAllFilters(toggleFilter(currentValue, filters));
-                    }}
-                    onSelectAllOptions={(allOptionsSelected) => {
-                      if (allOptionsSelected) {
-                        const updatedFilters = removeFilter(
-                          type.esDocumentField,
-                          filters,
-                        ) as FileRepoFiltersType;
-                        replaceAllFilters(updatedFilters);
-                      } else {
-                        setFilterFromFieldAndValue({
-                          field: type.esDocumentField,
-                          value: aggregations[type.facetPath].buckets.map((v) => v.key),
-                        });
-                      }
-                    }}
+                    onOptionToggle={onFacetOptionToggle(type)}
+                    onSelectAllOptions={onFacetSelectAllOptionsToggle(type)}
                     parseDisplayValue={toDisplayValue}
                   />
                 )}
                 {type.variant === 'Number' && (
                   <NumberRangeFacet
-                    {...commonFacetProps}
-                    onSubmit={(min, max) => {
-                      const newFilters = getRangeFilters(type.name, min, max);
-                      // remove any existing fields for this type first
-                      const withPreviousFieldRemoved = removeFilter(
-                        type.name,
-                        filters,
-                      ) as FileRepoFiltersType;
-                      replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
-                    }}
-                    min={(
-                      currentFieldValue({
-                        filters,
-                        dotField: type.name,
-                        op: '>=',
-                      }) || ''
-                    ).toString()}
-                    max={(
-                      currentFieldValue({
-                        filters,
-                        dotField: type.name,
-                        op: '<=',
-                      }) || ''
-                    ).toString()}
+                    {...facetProps}
+                    onSubmit={onNumberRangeFacetSubmit(type)}
+                    min={numberRangeFacetMin(type)}
+                    max={numberRangeFacetMax(type)}
                   />
                 )}
               </FacetRow>
