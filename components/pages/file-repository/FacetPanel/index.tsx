@@ -355,27 +355,27 @@ export default () => {
           </MenuItem>
         </FacetRow>
         {!loadingFieldDisplayNames &&
-          presetFacets.map((type) => {
-            const facetProps = commonFacetProps(type);
+          presetFacets.map((facetDetails) => {
+            const facetProps = commonFacetProps(facetDetails);
 
             return (
-              <FacetRow key={type.name}>
-                {type.variant === 'Basic' && (
+              <FacetRow key={facetDetails.name}>
+                {facetDetails.variant === 'Basic' && (
                   <Facet
                     {...facetProps}
-                    options={getOptions(type)}
+                    options={getOptions(facetDetails)}
                     countUnit={'files'}
-                    onOptionToggle={onFacetOptionToggle(type)}
-                    onSelectAllOptions={onFacetSelectAllOptionsToggle(type)}
+                    onOptionToggle={onFacetOptionToggle(facetDetails)}
+                    onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
                     parseDisplayValue={toDisplayValue}
                   />
                 )}
-                {type.variant === 'Number' && (
+                {facetDetails.variant === 'Number' && (
                   <NumberRangeFacet
                     {...facetProps}
-                    onSubmit={onNumberRangeFacetSubmit(type)}
-                    min={numberRangeFacetMin(type)}
-                    max={numberRangeFacetMax(type)}
+                    onSubmit={onNumberRangeFacetSubmit(facetDetails)}
+                    min={numberRangeFacetMin(facetDetails)}
+                    max={numberRangeFacetMax(facetDetails)}
                   />
                 )}
               </FacetRow>
