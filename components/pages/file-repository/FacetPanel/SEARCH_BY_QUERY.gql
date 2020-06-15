@@ -5,7 +5,6 @@ query SEARCH_BY_QUERY($filters: JSON) {
       edges {
         node {
           object_id
-          program_id: study_id
           file {
             name
           }

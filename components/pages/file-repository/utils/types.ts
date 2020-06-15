@@ -30,7 +30,7 @@ export interface ScalarFieldOperator {
 export type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
 
 export type FileRepoFiltersType = {
-  op: 'and';
+  op: 'and' | 'or';
   content: FieldOperator[];
 };
 

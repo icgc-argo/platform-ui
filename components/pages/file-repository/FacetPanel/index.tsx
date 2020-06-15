@@ -54,6 +54,8 @@ import {
 } from './types';
 import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
+import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
+import { trim, debounce } from 'lodash';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -142,6 +144,48 @@ const useFileFacetQuery = (
   );
 };
 
+// const foo = {"filters": {
+//   "op": "or",
+//   "content": [
+//     {
+//       "op": "filter",
+//       "content": {
+//         "value": "*8d*",
+//         "fields": [
+//           "file_autocomplete"
+//         ]
+//       }
+//     }
+//   ]
+// }}
+
+const useIdSearchQuery = searchValue => {
+  // if (!searchValue.length) {
+  //   return {
+  //     data: [],
+  //     loading: false,
+  //   };
+  // }
+  return useQuery<any, any>(SEARCH_BY_QUERY, {
+    variables: {
+      filters: {
+        op: 'or',
+        content: [
+          {
+            op: 'filter',
+            content: {
+              value: `*${searchValue}*`,
+              fields: ['file_autocomplete'],
+            },
+          },
+        ],
+      },
+    },
+  });
+};
+
+const debouncedSearchQuery = debounce(useIdSearchQuery, 100);
+
 export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
@@ -158,8 +202,12 @@ export default () => {
       setExpandedFacets(expandedFacets.concat(targetFacet));
     }
   };
-  const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
 
+  // i think this doesn't apply anymore. ids will be set in filters on select
+  // hide files that already appear in filters
+  // show top 5 results
+  const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
   const getOptions: GetAggregationResult = facet => {
     return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map(bucket => ({
       ...bucket,
@@ -170,6 +218,13 @@ export default () => {
       }),
     }));
   };
+
+  // use the input value to run this query
+  // set filters when a result file is selected
+  // debounce query
+  // do not query empty string
+  // const { data, loading } = useIdSearchQuery(searchQuery);
+  console.log(data);
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
@@ -251,9 +306,9 @@ export default () => {
                 `}
                 placeholder="e.g. FL9998, DO9898…"
                 preset="search"
-                value={queriedFileIDs}
+                value={searchQuery}
                 onChange={e => {
-                  setQueriedFileIDs(e.target.value);
+                  setSearchQuery(trim(e.target.value));
                 }}
               />
               {/* disabled for initial File Repo release */}
