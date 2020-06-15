@@ -25,7 +25,6 @@ import {
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
   FileRepositoryRecordSort,
-  FileCentricDocumentField,
   FileRepositoryRecordSortOrder,
   FileRepositorySortingRule,
 } from './types';
@@ -46,6 +45,7 @@ import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
 import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import { FileCentricDocumentField } from '../types';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -246,7 +246,7 @@ export default () => {
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
-        donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
+        donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,

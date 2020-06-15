@@ -26,8 +26,8 @@ import Button from 'uikit/Button';
 import isEmpty from 'lodash/isEmpty';
 import { toDisplayValue } from '../utils';
 import Typography from 'uikit/Typography';
-import { FileCentricDocumentField } from '../FileTable/types';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import { FileCentricDocumentField } from '../types';
 
 type AndOp = 'and';
 

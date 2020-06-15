@@ -1,6 +1,6 @@
 import { FileRepoFiltersType } from '../utils/types';
-import { FileCentricDocumentField } from '../FileTable/types';
 import { FilterOption } from 'uikit/OptionsList';
+import { FileCentricDocumentField } from '../types';
 
 export enum FileFacetPath {
   study_id = 'study_id',

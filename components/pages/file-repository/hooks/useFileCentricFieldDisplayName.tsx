@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/react-hooks';
 import FILE_CENTRIC_EXTENDED_MAPPING from './FILE_CENTRIC_EXTENDED_MAPPING.gql';
-import { FileCentricDocumentField } from '../FileTable/types';
+import { FileCentricDocumentField } from '../types';
 
 type ExtendedMapping = {
   displayName: string;
