@@ -66,43 +66,43 @@ const createPresetFacets = (
   displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
 ): Array<FacetDetails> => [
   {
-    name: displayNames['study_id'] || '__',
+    name: displayNames['study_id'],
     facetPath: FileFacetPath.study_id,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.study_id,
   },
   {
-    name: displayNames['donors.gender'] || '__',
+    name: displayNames['donors.gender'],
     facetPath: FileFacetPath.donors__gender,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['donors.gender'],
   },
   {
-    name: displayNames['analysis.experiment.experimental_strategy'] || '__',
+    name: displayNames['analysis.experiment.experimental_strategy'],
     facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
   },
   {
-    name: displayNames['data_type'] || '__',
+    name: displayNames['data_type'],
     facetPath: FileFacetPath.data_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.data_type,
   },
   {
-    name: displayNames['file_type'] || '__',
+    name: displayNames['file_type'],
     facetPath: FileFacetPath.file_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_type,
   },
   {
-    name: displayNames['variant_class'] || '__',
+    name: displayNames['variant_class'],
     facetPath: FileFacetPath.variant_class,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.variant_class,
   },
   {
-    name: displayNames['file_access'] || '__',
+    name: displayNames['file_access'],
     facetPath: FileFacetPath.file_access,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_access,
@@ -152,9 +152,8 @@ export default () => {
   } = useFileCentricFieldDisplayName();
   const presetFacets = createPresetFacets(fieldDisplayNames);
   const [expandedFacets, setExpandedFacets] = React.useState(
-    [...presetFacets, fileIDSearch].map(facet => facet.facetPath),
+    [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
   );
-  console.log('presetFacets: ', presetFacets);
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -165,15 +164,15 @@ export default () => {
   const clickHandler = (targetFacet: FacetDetails) => {
     const targetFacetPath = targetFacet.facetPath;
     if (expandedFacets.includes(targetFacetPath)) {
-      setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacetPath));
+      setExpandedFacets(expandedFacets.filter((facet) => facet !== targetFacetPath));
     } else {
       setExpandedFacets(expandedFacets.concat(targetFacetPath));
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
 
-  const getOptions: GetAggregationResult = facet => {
-    return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map(bucket => ({
+  const getOptions: GetAggregationResult = (facet) => {
+    return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
       ...bucket,
       isChecked: inCurrentFilters({
         currentFilters: filters,
@@ -234,7 +233,7 @@ export default () => {
           `}
         >
           <MenuItem
-            onClick={e => clickHandler(fileIDSearch)}
+            onClick={(e) => clickHandler(fileIDSearch)}
             selected={expandedFacets.includes(fileIDSearch.facetPath)}
             className="FacetMenu"
             content={fileIDSearch.name}
@@ -245,7 +244,7 @@ export default () => {
             `}
           >
             <div
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               css={css`
                 padding: 6px 12px;
                 border-bottom: 1px solid ${theme.colors.grey_2};
@@ -264,7 +263,7 @@ export default () => {
                 placeholder="e.g. FL9998, DO9898…"
                 preset="search"
                 value={queriedFileIDs}
-                onChange={e => {
+                onChange={(e) => {
                   setQueriedFileIDs(e.target.value);
                 }}
               />
@@ -285,10 +284,9 @@ export default () => {
           </MenuItem>
         </FacetRow>
         {!loadingFieldDisplayNames &&
-          presetFacets.map(type => {
+          presetFacets.map((type) => {
             const commonFacetProps = {
-              onClick: e => {
-                console.log('e: ', e);
+              onClick: (e) => {
                 clickHandler(type);
               },
               isExpanded: expandedFacets.includes(type.facetPath),
@@ -302,14 +300,14 @@ export default () => {
                     {...commonFacetProps}
                     options={getOptions(type)}
                     countUnit={'files'}
-                    onOptionToggle={facetValue => {
+                    onOptionToggle={(facetValue) => {
                       const currentValue = SqonBuilder.has(
                         type.esDocumentField,
                         facetValue,
                       ).build();
                       replaceAllFilters(toggleFilter(currentValue, filters));
                     }}
-                    onSelectAllOptions={allOptionsSelected => {
+                    onSelectAllOptions={(allOptionsSelected) => {
                       if (allOptionsSelected) {
                         const updatedFilters = removeFilter(
                           type.esDocumentField,
@@ -319,7 +317,7 @@ export default () => {
                       } else {
                         setFilterFromFieldAndValue({
                           field: type.esDocumentField,
-                          value: aggregations[type.facetPath].buckets.map(v => v.key),
+                          value: aggregations[type.facetPath].buckets.map((v) => v.key),
                         });
                       }
                     }}

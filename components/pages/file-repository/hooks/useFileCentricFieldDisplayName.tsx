@@ -8,7 +8,7 @@ type ExtendedMapping = {
 }[];
 
 const useFileCentricFieldDisplayName = (): {
-  data: { [k in FileCentricDocumentField]: string };
+  data: { [k in FileCentricDocumentField]: string } | {};
   loading: boolean;
 } => {
   const { data, loading } = useQuery<{ file: { extended: ExtendedMapping } }>(
