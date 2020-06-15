@@ -15,6 +15,8 @@ import {
 } from './types';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 
+const IS_MISSING = '__missing__';
+
 function compareTerms(a, b) {
   return (
     a.op.toLowerCase() === b.op.toLowerCase() &&
@@ -217,3 +219,6 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
       } as FileRepoFiltersType)
     : defaultEmptyFilters;
 };
+
+export const toDisplayValue: (value: string) => string = value =>
+  value === IS_MISSING ? 'No Data' : value;

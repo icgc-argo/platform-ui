@@ -20,7 +20,6 @@
 import React from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
-import mockFacetData from './mockFacetData';
 import { capitalize } from 'global/utils/stringUtils';
 import { Input } from 'uikit/form';
 import FileSelectButton from 'uikit/FileSelectButton';
@@ -40,10 +39,21 @@ import {
   toggleFilter,
   replaceFilter,
   currentFieldValue,
+  toDisplayValue,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
-import { FilterOption } from 'uikit/OptionsList';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
+import {
+  FacetDetails,
+  FileFacetPath,
+  FileRepoFacetsQueryData,
+  FileRepoFacetsQueryVariables,
+  GetAggregationResult,
+} from './types';
+import { FileCentricDocumentField } from '../FileTable/types';
+import Container from 'uikit/Container';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -51,27 +61,63 @@ const FacetRow = styled('div')`
   justify-content: space-between;
 `;
 
-type FacetDetails = {
-  name: string;
-  variant: 'Basic' | 'Number' | 'Other';
-};
-
 const presetFacets: Array<FacetDetails> = [
-  { name: 'program', variant: 'Basic' },
-  { name: 'primary site', variant: 'Basic' },
-  { name: 'age at diagnosis', variant: 'Number' },
-  { name: 'vital status', variant: 'Basic' },
-  { name: 'gender', variant: 'Basic' },
-  { name: 'experimental strategy', variant: 'Basic' },
-  { name: 'data type', variant: 'Basic' },
+  {
+    name: 'program id',
+    facetPath: FileFacetPath.study_id,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.study_id,
+  },
+  {
+    name: 'gender',
+    facetPath: FileFacetPath.donors__gender,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['donors.gender'],
+  },
+  {
+    name: 'experimental strategy',
+    facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+  },
+  {
+    name: 'data type',
+    facetPath: FileFacetPath.data_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.data_type,
+  },
+  {
+    name: 'file type',
+    facetPath: FileFacetPath.file_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_type,
+  },
+  {
+    name: 'variant class',
+    facetPath: FileFacetPath.variant_class,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.variant_class,
+  },
+  {
+    name: 'file access',
+    facetPath: FileFacetPath.file_access,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_access,
+  },
 ];
 
-const fileIDSearch: FacetDetails = { name: 'Search Files by ID', variant: 'Other' };
-const FacetContainer = styled('div')`
+// TODO: implement correctly. probably need extended/different type to account for multiple search fields
+const fileIDSearch: FacetDetails = {
+  name: 'Search Files by ID',
+  facetPath: FileFacetPath.study_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField.study_id,
+};
+
+const FacetContainer = styled(Container)`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.pageElement};
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -81,11 +127,30 @@ const FacetContainer = styled('div')`
   overflow-y: auto;
 `;
 
+const useFileFacetQuery = (
+  filters: FileRepoFiltersType,
+  options: Omit<QueryHookOptions<any, any>, 'variables'> = {},
+) => {
+  return useQuery<FileRepoFacetsQueryData, FileRepoFacetsQueryVariables>(
+    FILE_REPOSITORY_FACETS_QUERY,
+    {
+      ...options,
+      variables: {
+        filters,
+      },
+    },
+  );
+};
+
 export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  const { data, loading } = useFileFacetQuery(filters);
+  const aggregations = data ? data.file.aggregations : {};
+
   const clickHandler = (targetFacet: FacetDetails) => {
     if (expandedFacets.includes(targetFacet)) {
       setExpandedFacets(expandedFacets.filter(facet => facet !== targetFacet));
@@ -94,17 +159,16 @@ export default () => {
     }
   };
   const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
-  const getOptions = (facetType: string): FilterOption[] => {
-    return mockFacetData[facetType].map(d => {
-      return {
-        ...d,
-        isChecked: inCurrentFilters({
-          currentFilters: filters,
-          value: d.key,
-          dotField: facetType,
-        }),
-      };
-    });
+
+  const getOptions: GetAggregationResult = facet => {
+    return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map(bucket => ({
+      ...bucket,
+      isChecked: inCurrentFilters({
+        currentFilters: filters,
+        value: bucket.key,
+        dotField: facet.esDocumentField,
+      }),
+    }));
   };
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
@@ -136,8 +200,9 @@ export default () => {
       ],
     };
   };
+
   return (
-    <FacetContainer>
+    <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
         <FacetRow>
           <Typography
@@ -221,26 +286,27 @@ export default () => {
               {type.variant === 'Basic' && (
                 <Facet
                   {...props}
-                  options={getOptions(type.name)}
+                  options={getOptions(type)}
                   countUnit={'files'}
                   onOptionToggle={facetValue => {
-                    const currentValue = SqonBuilder.has(type.name, facetValue).build();
+                    const currentValue = SqonBuilder.has(type.esDocumentField, facetValue).build();
                     replaceAllFilters(toggleFilter(currentValue, filters));
                   }}
                   onSelectAllOptions={allOptionsSelected => {
                     if (allOptionsSelected) {
                       const updatedFilters = removeFilter(
-                        type.name,
+                        type.esDocumentField,
                         filters,
                       ) as FileRepoFiltersType;
                       replaceAllFilters(updatedFilters);
                     } else {
                       setFilterFromFieldAndValue({
-                        field: type.name,
-                        value: mockFacetData[type.name].map(v => v.key),
+                        field: type.esDocumentField,
+                        value: aggregations[type.facetPath].buckets.map(v => v.key),
                       });
                     }
                   }}
+                  parseDisplayValue={toDisplayValue}
                 />
               )}
               {type.variant === 'Number' && (

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { SelectTable, TableColumnConfig } from 'uikit/Table';
+import { SelectTable, TableColumnConfig, useSelectTableSelectionState } from 'uikit/Table';
 import Tooltip from 'uikit/Tooltip';
 import {
   FileRepositoryRecord,
@@ -33,10 +33,6 @@ import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Table/InteractiveIcon';
 import { css } from '@emotion/core';
 import DropdownButton from 'uikit/DropdownButton';
-import {
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonIconStyle,
-} from '../../submission-system/common';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
@@ -48,6 +44,7 @@ import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction } from 'react-table';
 import { useTheme } from 'uikit/ThemeProvider';
+import TsvDownloadButton from './TsvDownloadButton';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -82,54 +79,16 @@ const useFileRepoTableQuery = (
   );
 };
 
-const useFileRepoTableSelectionState = (fileRepoEntries: FileRepositoryRecord[]) => {
-  const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
-  const [allRowsSelected, setAllRowsSelected] = React.useState(false);
-
-  const selectionKeyField: keyof FileRepositoryRecord = 'objectId';
-
-  const setSelectedRowsObjectIds = (selectionString: string[]) =>
-    // react table prepends the word `select-` to the selected objectIds
-    setSelectedRows(selectionString.map(str => str.replace('select-', '')));
-
-  const toggleHandler: React.ComponentProps<
-    typeof SelectTable
-  >['toggleSelection'] = selectionString => {
-    if (selectedRows.includes(selectionString)) {
-      const newSelectionState = selectedRows.filter(selection => selection !== selectionString);
-      setSelectedRowsObjectIds(newSelectionState);
-    } else {
-      setSelectedRowsObjectIds([...selectedRows, selectionString]);
-    }
-  };
-  const toggleAllHandler: React.ComponentProps<typeof SelectTable>['toggleAll'] = () => {
-    if (!allRowsSelected) {
-      const newSelectionState = fileRepoEntries.map(entry => entry.objectId);
-      setSelectedRowsObjectIds(newSelectionState);
-    } else {
-      setSelectedRowsObjectIds([]);
-    }
-    setAllRowsSelected(!allRowsSelected);
-  };
-  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = objectId =>
-    selectedRows.includes(objectId);
-
-  return {
-    selectionKeyField,
-    selectedRows,
-    allRowsSelected,
-    toggleHandler,
-    toggleAllHandler,
-    isSelected,
-  };
-};
-
 const useFileRepoPaginationState = () => {
   const [pagingState, setPagingState] = React.useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
     sort: DEFAULT_SORT,
   });
+
+  React.useEffect(() => {
+    resetCurrentPage();
+  }, [pagingState.pageSize]);
 
   const handlePagingStateChange = (state: typeof pagingState) => {
     setPagingState(state);
@@ -142,7 +101,6 @@ const useFileRepoPaginationState = () => {
   const onPageSizeChange = (newPageSize: number) => {
     handlePagingStateChange({
       ...pagingState,
-      page: 0,
       pageSize: newPageSize,
     });
   };
@@ -159,11 +117,18 @@ const useFileRepoPaginationState = () => {
     );
     handlePagingStateChange({ ...pagingState, sort });
   };
+  const resetCurrentPage = () => {
+    setPagingState({
+      ...pagingState,
+      page: 0,
+    });
+  };
   return {
     pagingState,
     onPageChange,
     onPageSizeChange,
     onSortedChange,
+    resetCurrentPage,
   };
 };
 
@@ -177,7 +142,11 @@ export default () => {
     onPageChange,
     onPageSizeChange,
     onSortedChange,
+    resetCurrentPage,
   } = useFileRepoPaginationState();
+  React.useEffect(() => {
+    resetCurrentPage();
+  }, [filters]);
 
   const offset = pagingState.pageSize * pagingState.page;
   const { data: records, loading = true } = useFileRepoTableQuery(
@@ -210,6 +179,7 @@ export default () => {
       Header: 'Object ID',
       id: FileCentricDocumentField['object_id'],
       accessor: 'objectId',
+      width: 275,
     },
     {
       Header: 'Donor ID',
@@ -225,6 +195,7 @@ export default () => {
       Header: 'Data Type',
       id: FileCentricDocumentField['data_type'],
       accessor: 'dataType',
+      width: 180,
     },
     {
       Header: 'File Type',
@@ -286,7 +257,7 @@ export default () => {
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
-        donorId: node.donors.hits.edges.map(edge => edge.node.donor_id).join(', '),
+        donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,
@@ -300,10 +271,15 @@ export default () => {
     allRowsSelected,
     isSelected,
     selectedRows,
+    unselectedRows,
     toggleAllHandler,
     toggleHandler,
     selectionKeyField,
-  } = useFileRepoTableSelectionState(fileRepoEntries);
+    selectedRowsCount,
+  } = useSelectTableSelectionState<FileRepositoryRecord>({
+    totalEntriesCount: totalEntries,
+    selectionKeyField: 'objectId',
+  });
 
   const tableElement = (
     <div
@@ -338,8 +314,6 @@ export default () => {
   const startRowDisplay = pagingState.pageSize * pagingState.page + 1;
   const endRowDisplay = Math.min(pagingState.pageSize * (pagingState.page + 1), totalEntries);
 
-  const allFilesSelected = selectedRows.length === totalEntries;
-
   return (
     <Container
       css={css`
@@ -364,11 +338,8 @@ export default () => {
                 {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
-                {selectedRows.length > 0 &&
-                  ` (${allFilesSelected ? 'All' : selectedRows.length} ${pluralize(
-                    'file',
-                    selectedRows.length,
-                  )} selected)`}
+                {!!selectedRowsCount &&
+                  ` (${selectedRowsCount} ${pluralize('file', selectedRowsCount)} selected)`}
               </Typography>
             </div>
           </div>
@@ -377,63 +348,12 @@ export default () => {
               display: flex;
             `}
           >
-            <DropdownButton
-              css={css`
-                margin-right: 8px;
-              `}
-              variant="secondary"
-              size="sm"
-              onItemClick={item => null}
-              menuItems={[
-                {
-                  display:
-                    allFilesSelected || selectedRows.length === 0
-                      ? 'All Files'
-                      : `${pluralize('file', selectedRows.length, true)} selected`,
-                  value: 'Number of Files',
-                  css: css`
-                    color: ${theme.colors.secondary_dark};
-                    border-bottom: 1px solid ${theme.colors.grey_2};
-                    cursor: auto;
-                    &:hover {
-                      background: transparent;
-                    }
-                  `,
-                },
-                // only manifest download enabled for initial File Repo release
-                // {
-                //   display: 'Clinical Data',
-                //   value: 'Clinical Data',
-                // },
-                {
-                  display: 'File Manifest',
-                  value: 'File Manifest',
-                },
-                // {
-                //   display: 'File Table',
-                //   value: 'File Table',
-                // },
-              ]}
-            >
-              <span css={instructionBoxButtonContentStyle}>
-                <Icon
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                  css={instructionBoxButtonIconStyle}
-                />
-                Download
-                <Icon
-                  name="chevron_down"
-                  fill="accent2_dark"
-                  height="9px"
-                  css={css`
-                    ${instructionBoxButtonIconStyle}
-                    margin-left: 5px;
-                  `}
-                />
-              </span>
-            </DropdownButton>
+            <TsvDownloadButton
+              allFilesSelected={allRowsSelected}
+              selectedFilesObjectIds={selectedRows}
+              unSelectedFilesObjectIds={unselectedRows}
+              selectedFilesCount={selectedRowsCount}
+            />
             {/* disabled for initial File Repo release */}
             {/* <DropdownButton
               variant="secondary"

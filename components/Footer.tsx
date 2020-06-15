@@ -31,6 +31,7 @@ import {
   ARGO_TERMS_PAGE,
   ARGO_PUBLICATION_PAGE,
 } from 'global/constants/argoPages';
+import { STATUS_PATH } from 'global/constants/gatewayApiPaths';
 
 export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();
@@ -38,7 +39,7 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
   const [apiVersion, setApiVersion] = React.useState(null);
 
   React.useEffect(() => {
-    fetch(urlJoin(GATEWAY_API_ROOT, 'status'))
+    fetch(urlJoin(GATEWAY_API_ROOT, STATUS_PATH))
       .then(res => res.json())
       .then(version => {
         setApiVersion(version);

@@ -186,6 +186,70 @@ const SelectTableCheckbox: React.ComponentType<
 
 const TableWithSelect = selectTable(Table);
 
+export function useSelectTableSelectionState<TableEntry = {}>({
+  selectionKeyField,
+  totalEntriesCount,
+}: {
+  totalEntriesCount: number;
+  selectionKeyField: keyof TableEntry;
+}) {
+  const [allRowsSelected, setAllRowsSelected] = React.useState(false);
+  const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
+  const [unselectedRows, setUnselectedRows] = React.useState<string[]>([]);
+
+  const selectionStringToRowId = (selectionString: string) =>
+    // react table prepends the word `select-` to the selected objectIds
+    selectionString.replace('select-', '');
+
+  const setSelectedRowIds = (selectionString: string[]) =>
+    setSelectedRows(selectionString.map(selectionStringToRowId));
+
+  const setUnselectedRowIds = (selectionString: string[]) =>
+    setUnselectedRows(selectionString.map(selectionStringToRowId));
+
+  const toggleHandler: React.ComponentProps<
+    typeof SelectTable
+  >['toggleSelection'] = selectionString => {
+    const rowId = selectionStringToRowId(selectionString);
+    const notMatchesSelectionString = (id: string) => id !== rowId;
+    if (allRowsSelected) {
+      setUnselectedRowIds(
+        unselectedRows.includes(rowId)
+          ? unselectedRows.filter(notMatchesSelectionString)
+          : [...unselectedRows, rowId],
+      );
+    } else {
+      setSelectedRowIds(
+        selectedRows.includes(rowId)
+          ? selectedRows.filter(notMatchesSelectionString)
+          : [...selectedRows, rowId],
+      );
+    }
+  };
+  const toggleAllHandler: React.ComponentProps<typeof SelectTable>['toggleAll'] = () => {
+    setSelectedRowIds([]);
+    setUnselectedRowIds([]);
+    setAllRowsSelected(!allRowsSelected);
+  };
+  const isSelected: React.ComponentProps<typeof SelectTable>['isSelected'] = objectId =>
+    allRowsSelected ? !unselectedRows.includes(objectId) : selectedRows.includes(objectId);
+
+  const selectedRowsCount = allRowsSelected
+    ? totalEntriesCount - unselectedRows.length
+    : selectedRows.length;
+
+  return {
+    selectionKeyField,
+    selectedRows,
+    unselectedRows,
+    allRowsSelected,
+    toggleHandler,
+    toggleAllHandler,
+    isSelected,
+    selectedRowsCount,
+  };
+}
+
 export function SelectTable<Data extends TableDataBase>(
   props: Partial<TableProps<Data>> &
     Partial<SelectTableAdditionalProps> & {
