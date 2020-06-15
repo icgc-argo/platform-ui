@@ -33,7 +33,6 @@ import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
-import { useQuery } from '@apollo/react-hooks';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 export default ({

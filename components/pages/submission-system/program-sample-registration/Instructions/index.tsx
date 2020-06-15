@@ -27,7 +27,7 @@ import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
