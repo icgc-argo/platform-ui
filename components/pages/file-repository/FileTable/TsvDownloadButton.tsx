@@ -30,8 +30,8 @@ import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
-import { FileCentricDocumentField } from './types';
 import { RecursiveFilter } from '../utils/types';
+import { FileCentricDocumentField } from '../types';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -114,7 +114,7 @@ export default ({
         : defaultFilters,
     ],
   };
-  const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = item => {
+  const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = (item) => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
         const downloadUrl = urlJoin(
