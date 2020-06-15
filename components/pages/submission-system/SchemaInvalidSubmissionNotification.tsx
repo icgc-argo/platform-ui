@@ -26,10 +26,10 @@ import Link from 'uikit/Link';
 import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
-import CLINICAL_SCHEMA_VERSION from './CLINICAL_SCHEMA_VERSION.gql';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 export const SchemaInvalidSubmissionNotification = ({
   marginTop,
@@ -53,9 +53,7 @@ export const SchemaInvalidSubmissionNotification = ({
   });
 
   const { DOCS_URL_ROOT } = getConfig();
-  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
-    clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION);
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
   const hasSchemaErrorsAfterMigration =
     clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
@@ -67,9 +65,12 @@ export const SchemaInvalidSubmissionNotification = ({
         padding: 8px 8px 8px 0px;
       `}
     >
-      <Link href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} target="_blank">
-        Version {clinicalSubmissionSchemaVersion} of the data dictionary
-      </Link>
+      {!latestDictionaryResponse.loading && (
+        <Link href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} target="_blank">
+          Version {latestDictionaryResponse.data.clinicalSubmissionSchemaVersion} of the data
+          dictionary
+        </Link>
+      )}
       {` was released and has made your clinical submission invalid. `}
       {submissionPage ? `See the details below.` : `See the details in your clinical workspace.`}
     </div>
