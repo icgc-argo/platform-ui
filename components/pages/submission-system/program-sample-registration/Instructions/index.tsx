@@ -98,7 +98,7 @@ function Instructions({
             <Typography variant="data" component="span">
               1. Download the registration template and format it using{' '}
               <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} bold>
-                Data&nbsp;Dictionary&nbsp;{' '}
+                Data&nbsp;Dictionary&nbsp;
                 {!latestDictionaryResponse.loading &&
                   `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
               </Link>
