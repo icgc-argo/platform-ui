@@ -28,7 +28,6 @@ import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import CLINICAL_SCHEMA_VERSION from '../../CLINICAL_SCHEMA_VERSION.gql';
 
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
@@ -42,6 +41,7 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
 import useCommonToasters from 'components/useCommonToasters';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 function Instructions({
   uploadEnabled,
@@ -83,9 +83,7 @@ function Instructions({
     },
   });
 
-  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
-    clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION);
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
   const handleUpload = file =>
     uploadFile({
@@ -100,7 +98,9 @@ function Instructions({
             <Typography variant="data" component="span">
               1. Download the registration template and format it using{' '}
               <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} bold>
-                Data&nbsp;Dictionary&nbsp;v{clinicalSubmissionSchemaVersion}
+                Data&nbsp;Dictionary&nbsp;{' '}
+                {!latestDictionaryResponse.loading &&
+                  `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
               </Link>
               .
             </Typography>

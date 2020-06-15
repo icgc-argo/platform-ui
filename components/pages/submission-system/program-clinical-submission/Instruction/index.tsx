@@ -34,7 +34,7 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
 import { useQuery } from '@apollo/react-hooks';
-import CLINICAL_SCHEMA_VERSION from '../../CLINICAL_SCHEMA_VERSION.gql';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 export default ({
   validationEnabled,
@@ -76,11 +76,7 @@ export default ({
     await onSignOffClick();
     setIsSigningOff(false);
   };
-
-  const { data: { clinicalSubmissionSchemaVersion = undefined } = {} } = useQuery<{
-    clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION);
-
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   return (
     <InstructionBox
       steps={[
@@ -88,7 +84,9 @@ export default ({
           <Typography variant="data" component="span">
             1. Download the clinical file templates and format them using{' '}
             <Link target="_blank" bold href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
-              Data&nbsp;Dictionary&nbsp;v{clinicalSubmissionSchemaVersion}
+              Data&nbsp;Dictionary&nbsp;
+              {!latestDictionaryResponse.loading &&
+                `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
             </Link>
           </Typography>
           <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
