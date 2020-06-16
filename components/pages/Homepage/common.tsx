@@ -77,14 +77,16 @@ export const DataReleaseBar: React.ComponentType<{
     </Col>
   ));
   return loading ? (
-    <DnaLoader
+    <div
       css={css`
         display: flex;
         flex-direction: column;
         justify-content: center;
         height: 100px;
       `}
-    />
+    >
+      <DnaLoader />
+    </div>
   ) : (
     <div
       css={css`
