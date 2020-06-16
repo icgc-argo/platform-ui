@@ -31,7 +31,7 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
-      variant_class {
+      analysis__variant_class {
         buckets {
           key
           doc_count

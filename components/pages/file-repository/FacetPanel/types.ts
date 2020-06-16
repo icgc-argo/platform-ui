@@ -8,7 +8,7 @@ export enum FileFacetPath {
   analysis__experiment__experimental_strategy = 'analysis__experiment__experimental_strategy',
   data_type = 'data_type',
   file_type = 'file_type',
-  variant_class = 'variant_class',
+  analysis__variant_class = 'analysis__variant_class',
   file_access = 'file_access',
   data_category = 'data_category',
   analysis_tools = 'analysis_tools',
@@ -48,7 +48,7 @@ export type FileRepoFacetsQueryData = {
       [FileFacetPath.file_type]: {
         buckets: BucketAggregation[];
       };
-      [FileFacetPath.variant_class]: {
+      [FileFacetPath.analysis__variant_class]: {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.file_access]: {
