@@ -48,7 +48,7 @@ export const DataReleaseBar: React.ComponentType<{
 }> = ({ stats, version, loading }) => {
   const theme = useTheme();
   const formattedStats = stats.map((stat) => (
-    <Col md={3} sm={6} key={stat.description}>
+    <Col md={4} sm={4} xs={4} key={stat.description}>
       <div
         css={css`
           display: flex;
