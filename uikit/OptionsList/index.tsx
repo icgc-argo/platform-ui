@@ -28,6 +28,7 @@ import orderBy from 'lodash/orderBy';
 import concat from 'lodash/concat';
 
 import ViewAmountController from '../OptionsList/ViewAmountController';
+import Tooltip from 'uikit/Tooltip';
 
 export type FilterOption = {
   key: string;
@@ -36,6 +37,8 @@ export type FilterOption = {
 };
 
 type SelectableFilterOption = FilterOption & { isChecked: boolean };
+
+const MAX_CHAR_LENGTH = 28;
 
 const OptionsList: React.ComponentType<{
   options: Array<FilterOption>;
@@ -52,7 +55,7 @@ const OptionsList: React.ComponentType<{
   countUnit,
   onOptionToggle,
   onSelectAllOptions,
-  parseDisplayValue = value => value,
+  parseDisplayValue = (value) => value,
 }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
@@ -61,7 +64,7 @@ const OptionsList: React.ComponentType<{
     () =>
       options
         .filter(({ key }) => !searchQuery.length || key.search(new RegExp(searchQuery, 'i')) > -1)
-        .map(option => option.key),
+        .map((option) => option.key),
     [searchQuery],
   );
 
@@ -81,7 +84,7 @@ const OptionsList: React.ComponentType<{
         cursor: pointer;
       `}
       key={option.key}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onOptionToggle(option.key);
       }}
@@ -95,20 +98,32 @@ const OptionsList: React.ComponentType<{
         <Checkbox
           checked={option.isChecked}
           value={option.key}
-          onChange={e => null}
+          onChange={(e) => null}
           aria-label={`${option.key}-facet`}
           size="sm"
         />
-        <Typography
-          variant={'data'}
-          css={css`
-            margin: 0px 0px 0px 7px;
-            list-style-type: none;
-          `}
-          as={'li'}
+        <Tooltip
+          html={parseDisplayValue(option.key)}
+          disabled={parseDisplayValue(option.key).length <= MAX_CHAR_LENGTH}
         >
-          {parseDisplayValue(option.key)}
-        </Typography>
+          <Typography
+            variant={'data'}
+            css={css`
+              margin: 0px 0px 0px 7px;
+              list-style-type: none;
+              display: inline-block;
+              max-width: 185px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              vertical-align: middle;
+              line-height: 20px;
+            `}
+            as={'li'}
+          >
+            {parseDisplayValue(option.key)}
+          </Typography>
+        </Tooltip>
       </div>
 
       <Tag
@@ -128,24 +143,24 @@ const OptionsList: React.ComponentType<{
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   const sortedOptions = React.useMemo(() => orderBy(options, ['isChecked'], ['desc']), [options]);
 
-  const selectedOptions = React.useMemo(() => options.filter(option => option.isChecked), [
+  const selectedOptions = React.useMemo(() => options.filter((option) => option.isChecked), [
     options,
   ]);
 
   const queriedOptions = React.useMemo(
     () =>
       sortedOptions.filter(
-        option => queriedOptionKeys.includes(option.key) && !selectedOptions.includes(option),
+        (option) => queriedOptionKeys.includes(option.key) && !selectedOptions.includes(option),
       ),
     [searchQuery, sortedOptions],
   );
 
   const allOptionsSelected: boolean = (searchQuery ? queriedOptions : options).every(
-    opt => opt.isChecked,
+    (opt) => opt.isChecked,
   );
 
   const defaultNonSelectedOptions = React.useMemo(
-    () => sortedOptions.slice(0, defaultRenderLimit).filter(option => !option.isChecked),
+    () => sortedOptions.slice(0, defaultRenderLimit).filter((option) => !option.isChecked),
     [sortedOptions],
   );
 
@@ -188,7 +203,7 @@ const OptionsList: React.ComponentType<{
               </Typography>
             </div>
           )}
-          {optionsToShow.map(option => (
+          {optionsToShow.map((option) => (
             <StyledOption key={option.key} option={option} />
           ))}
         </div>

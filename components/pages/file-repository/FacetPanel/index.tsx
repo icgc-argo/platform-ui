@@ -106,16 +106,28 @@ const createPresetFacets = (
     esDocumentField: FileCentricDocumentField.file_type,
   },
   {
-    name: displayNames['variant_class'],
-    facetPath: FileFacetPath.variant_class,
+    name: displayNames['analysis.variant_class'],
+    facetPath: FileFacetPath.analysis__variant_class,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.variant_class,
+    esDocumentField: FileCentricDocumentField['analysis.variant_class'],
   },
   {
     name: displayNames['file_access'],
     facetPath: FileFacetPath.file_access,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_access,
+  },
+  {
+    name: displayNames['data_category'],
+    facetPath: FileFacetPath.data_category,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['data_category'],
+  },
+  {
+    name: displayNames['analysis_tools'],
+    facetPath: FileFacetPath.analysis_tools,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis_tools'],
   },
 ];
 
@@ -454,6 +466,7 @@ export default () => {
                 {facetDetails.variant === 'Basic' && (
                   <Facet
                     {...facetProps}
+                    key={facetDetails.name}
                     options={getOptions(facetDetails)}
                     countUnit={'files'}
                     onOptionToggle={onFacetOptionToggle(facetDetails)}

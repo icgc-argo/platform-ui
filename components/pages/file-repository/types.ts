@@ -7,6 +7,8 @@ export enum FileCentricDocumentField {
   'analysis.experiment.experimental_strategy' = 'analysis.experiment.experimental_strategy',
   'file.size' = 'file.size',
   'donors.gender' = 'donors.gender',
-  variant_class = 'variant_class',
+  'analysis.variant_class' = 'analysis.variant_class',
   file_access = 'file_access',
+  data_category = 'data_category',
+  analysis_tools = 'analysis_tools',
 }
