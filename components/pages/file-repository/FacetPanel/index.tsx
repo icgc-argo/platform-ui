@@ -63,6 +63,7 @@ import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
+import SelectedIds from './SelectedIds';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -205,7 +206,10 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const useIdSearchQuery = (searchValue, excludedIds) => {
+const useIdSearchQuery = (
+  searchValue: string,
+  excludedIds: string[],
+): { data: IdSearchQueryData; loading: boolean } => {
   return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
     skip: !searchValue,
     variables: {
@@ -388,6 +392,11 @@ export default () => {
     ).toString();
   };
 
+  const onRemoveSelectedId = (id: string) => {
+    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
+    replaceAllFilters(toggleFilter(idFilterToRemove, filters));
+  };
+
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -427,52 +436,7 @@ export default () => {
               `}
             >
               {excludedIds.length > 0 && (
-                <ul
-                  css={css`
-                    padding-inline-start: 0px;
-                  `}
-                >
-                  {excludedIds.map((id) => (
-                    <li
-                      key={id}
-                      css={css`
-                        list-style-type: none;
-                      `}
-                    >
-                      <Typography
-                        color={theme.colors.secondary}
-                        css={css`
-                          font-size: 11px;
-                          display: flex;
-                          justify-content: flex-start;
-                          align-items: center;
-                          margin: 2px 0;
-                        `}
-                      >
-                        <Icon
-                          name="times"
-                          fill={theme.colors.secondary}
-                          title="Remove"
-                          css={css`
-                            padding-right: 5px;
-                            padding-bottom: 1px;
-                            width: 8px;
-                            height: 8px;
-                            cursor: pointer;
-                          `}
-                          onClick={() => {
-                            const idFilterToRemove = SqonBuilder.has(
-                              FileCentricDocumentField['object_id'],
-                              id,
-                            ).build();
-                            replaceAllFilters(toggleFilter(idFilterToRemove, filters));
-                          }}
-                        />
-                        {id}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
+                <SelectedIds ids={excludedIds} onRemove={onRemoveSelectedId} />
               )}
               <div
                 css={css`

@@ -17,13 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
+import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { IdSearchQueryData } from './types';
 import { useTheme } from 'uikit/ThemeProvider';
+import theme from 'uikit/theme/defaultTheme';
 
-const getDropdownStyle = (theme) => `
+const ResultsDropdown = styled('div')`
   position: absolute;
   top: 36px;
   left: 0px;
@@ -34,6 +35,22 @@ const getDropdownStyle = (theme) => `
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
   padding-top: 2px;
+`;
+
+const NoResultsContainer = styled(Typography)`
+  color: ${theme.colors.primary_2};
+  font-size: 14px;
+  font-style: italic;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 8px 0 8px 10px;
+`;
+
+const ListItem = styled(Typography)`
+  word-break: break-all;
+  margin: 0;
+  padding: 2px 3px;
 `;
 
 const SearchResultsMenu = ({
@@ -48,64 +65,30 @@ const SearchResultsMenu = ({
   const theme = useTheme();
   if (isLoading || !searchData) {
     return (
-      <div
-        css={css`
-          ${getDropdownStyle(theme)}
-        `}
-      >
-        <Typography
-          css={css`
-            color: ${theme.colors.primary_1};
-            font-size: 14px;
-            font-style: italic;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            padding: 8px 0 8px 10px;
-          `}
-        >
+      <ResultsDropdown>
+        <NoResultsContainer>
           <Icon
             name="spinner"
-            fill={theme.colors.primary_1}
+            fill={theme.colors.primary_2}
             css={css`
               margin-right: 10px;
             `}
           />
           Loading results...
-        </Typography>
-      </div>
+        </NoResultsContainer>
+      </ResultsDropdown>
     );
   } else {
     if (searchData.file.hits.total === 0) {
       return (
-        <div
-          css={css`
-            ${getDropdownStyle(theme)}
-          `}
-        >
-          <Typography
-            css={css`
-              color: ${theme.colors.primary_1};
-              font-size: 14px;
-              font-style: italic;
-              margin: 0;
-              display: flex;
-              align-items: center;
-              padding: 8px 0 8px 10px;
-            `}
-          >
-            No results found
-          </Typography>
-        </div>
+        <ResultsDropdown>
+          <NoResultsContainer>No results found</NoResultsContainer>
+        </ResultsDropdown>
       );
     }
     return (
       <>
-        <div
-          css={css`
-            ${getDropdownStyle(theme)}
-          `}
-        >
+        <ResultsDropdown>
           {searchData.file.hits.edges.slice(0, 5).map(({ node }) => {
             return (
               <div
@@ -123,32 +106,26 @@ const SearchResultsMenu = ({
                 onClick={() => onSelect(node.object_id)}
                 key={node.object_id}
               >
-                <Typography
+                <ListItem
                   css={css`
                     font-size: 11px;
                     font-weight: 500;
-                    padding: 2px 3px;
-                    margin: 0;
-                    word-break: break-all;
                   `}
                 >
                   {node.object_id}
-                </Typography>
-                <Typography
+                </ListItem>
+                <ListItem
                   css={css`
                     font-size: 9px;
                     font-weight: 300;
-                    word-break: break-all;
-                    margin: 0;
-                    padding: 2px 3px;
                   `}
                 >
                   {node.file.name}
-                </Typography>
+                </ListItem>
               </div>
             );
           })}
-        </div>
+        </ResultsDropdown>
       </>
     );
   }
