@@ -40,7 +40,6 @@ import {
   replaceFilter,
   currentFieldValue,
   toDisplayValue,
-  getFiltersValue,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
@@ -57,7 +56,6 @@ import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
 import { trim } from 'lodash';
-import { Gap, OptionsWrapper } from 'uikit/form/MultiSelect';
 
 const FacetRow = styled('div')`
   display: flex;
