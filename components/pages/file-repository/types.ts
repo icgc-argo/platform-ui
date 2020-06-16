@@ -11,4 +11,7 @@ export enum FileCentricDocumentField {
   file_access = 'file_access',
   data_category = 'data_category',
   analysis_tools = 'analysis_tools',
+  'donors.specimens.specimen_type' = 'donors.specimens.specimen_type',
+  'donors.specimens.specimen_tissue_source' = 'donors.specimens.specimen_tissue_source',
+  'analysis.workflow.workflow_name' = 'analysis.workflow.workflow_name',
 }
