@@ -29,6 +29,7 @@ import Button from 'uikit/Button';
 import Container from 'uikit/Container';
 import overtureLogo from 'uikit/assets/overture-logo.svg';
 import scientistImage from 'static/icgc-data-scientist-wide.jpg';
+import DnaLoader from 'uikit/DnaLoader';
 
 type DataReleaseStatistic = {
   quantity: number;
@@ -43,10 +44,11 @@ type DataReleaseVersion = {
 export const DataReleaseBar: React.ComponentType<{
   stats: Array<DataReleaseStatistic>;
   version: DataReleaseVersion;
-}> = ({ stats, version }) => {
+  loading: boolean;
+}> = ({ stats, version, loading }) => {
   const theme = useTheme();
-  const formattedStats = stats.map(stat => (
-    <Col md={3} sm={6} key={stat.description}>
+  const formattedStats = stats.map((stat) => (
+    <Col md={4} sm={4} xs={4} key={stat.description}>
       <div
         css={css`
           display: flex;
@@ -74,7 +76,18 @@ export const DataReleaseBar: React.ComponentType<{
       </div>
     </Col>
   ));
-  return (
+  return loading ? (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100px;
+      `}
+    >
+      <DnaLoader />
+    </div>
+  ) : (
     <div
       css={css`
         margin: 20px 0px 40px;
@@ -95,7 +108,9 @@ export const DataReleaseBar: React.ComponentType<{
           border-top: 4px solid ${theme.colors.accent3_2};
         `}
       >
-        <Row nogutter>{formattedStats}</Row>
+        <Row nogutter justify={'center'}>
+          {formattedStats}
+        </Row>
       </div>
     </div>
   );
@@ -195,9 +210,7 @@ export const DataCallout: React.ComponentType<{
 };
 const GradientBar = styled('div')`
   background-image: ${({ theme }) =>
-    `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${
-      theme.colors.accent3_dark
-    } 100%)`};
+    `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${theme.colors.accent3_dark} 100%)`};
 
   width: 40%;
   height: 3px;

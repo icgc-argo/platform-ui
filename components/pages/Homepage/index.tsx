@@ -51,6 +51,7 @@ import {
   DOCS_SUBMISSION_OVERVIEW_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
 } from 'global/constants/docSitePaths';
+import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -96,6 +97,8 @@ const HeroDiv = styled('div')`
 export default function Homepage() {
   const theme = useTheme();
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
+
+  const { data: stats, loading } = useFileRepoStatsBarQuery();
 
   return (
     <DefaultLayout>
@@ -194,11 +197,13 @@ export default function Homepage() {
 
           {FEATURE_LANDING_PAGE_STATS_ENABLED && (
             <DataReleaseBar
+              loading={loading}
               stats={[
-                { quantity: 2, description: 'PROGRAMS' },
-                { quantity: 4600, description: 'DONORS' },
-                { quantity: 2, description: 'CANCER PRIMARY SITES' },
-                { quantity: 400, description: 'FILES' },
+                { quantity: stats.programsCount, description: 'PROGRAMS' },
+                { quantity: stats.donorsCount, description: 'DONORS' },
+                { quantity: stats.filesCount, description: 'FILES' },
+                // primary sites is hidden for initial release
+                // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
               version={{ date: 'July 2, 2020', releaseIteration: 1 }}
             />
