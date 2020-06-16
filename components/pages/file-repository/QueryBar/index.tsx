@@ -29,22 +29,6 @@ import Typography from 'uikit/Typography';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 
-// type AndOp = 'and';
-
-// type FilterOp = AndOp | 'in' | 'is' | '>=' | '<=' | '>' | '<' | 'not' | 'filter';
-// type FilterObj = {
-//   op: FilterOp;
-//   content: {
-//     field: string;
-//     value: string[];
-//   };
-// };
-
-// type Filters = {
-//   op: AndOp;
-//   content: FilterObj[];
-// };
-
 type ValueNode = React.FunctionComponent<{
   onClick?: () => void;
 }>;

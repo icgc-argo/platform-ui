@@ -42,7 +42,7 @@ import clsx from 'clsx';
 import FormControlContext from '../FormControl/FormControlContext';
 import { StyledInputWrapper, INPUT_SIZES, INPUT_STATES, InputSize } from '../common';
 
-export const Container = styled<'div', { focus: boolean }>('div')`
+const Container = styled<'div', { focus: boolean }>('div')`
   position: relative;
   transform: scale(1); /* this creates a stacking context so z-index is local */
   ${({ focus }) =>
@@ -52,7 +52,7 @@ export const Container = styled<'div', { focus: boolean }>('div')`
     `}
 `;
 
-export const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
+const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
   box-sizing: border-box;
   position: absolute;
   width: 100%;
@@ -66,7 +66,7 @@ export const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
     props.focused ? '0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08)' : 'none'};
 `;
 
-export const OptionsContainer = styled('div')`
+const OptionsContainer = styled('div')`
   box-sizing: border-box;
   position: relative;
   max-height: 200px;
@@ -74,12 +74,12 @@ export const OptionsContainer = styled('div')`
   width: 100%;
 `;
 
-export const OptionList = styled('ul')`
+const OptionList = styled('ul')`
   margin: 0;
   padding: 0;
 `;
 
-export const Gap = styled('div')`
+const Gap = styled('div')`
   position: absolute;
   left: -1px;
   border: solid 1px;
@@ -93,7 +93,7 @@ export const Gap = styled('div')`
   background-color: white;
 `;
 
-export const InputBox = styled(StyledInputWrapper)`
+const InputBox = styled(StyledInputWrapper)`
   ${({ theme }) => css(theme.typography.default)};
   flex-wrap: wrap;
   align-items: center;
@@ -103,7 +103,7 @@ export const InputBox = styled(StyledInputWrapper)`
   padding: 2px;
 `;
 
-export const Input = styled<'input', { autoComplete: string }>('input')`
+const Input = styled<'input', { autoComplete: string }>('input')`
   ${({ theme }) => css(theme.typography.paragraph)};
   border: none;
   display: block;
