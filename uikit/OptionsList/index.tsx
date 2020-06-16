@@ -28,7 +28,6 @@ import orderBy from 'lodash/orderBy';
 import concat from 'lodash/concat';
 
 import ViewAmountController from '../OptionsList/ViewAmountController';
-import { truncate } from 'lodash';
 import Tooltip from 'uikit/Tooltip';
 
 export type FilterOption = {
@@ -112,10 +111,17 @@ const OptionsList: React.ComponentType<{
             css={css`
               margin: 0px 0px 0px 7px;
               list-style-type: none;
+              display: inline-block;
+              max-width: 185px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              vertical-align: middle;
+              line-height: 20px;
             `}
             as={'li'}
           >
-            {truncate(parseDisplayValue(option.key), { length: MAX_CHAR_LENGTH })}
+            {parseDisplayValue(option.key)}
           </Typography>
         </Tooltip>
       </div>
