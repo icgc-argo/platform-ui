@@ -55,37 +55,29 @@ type StatsBarQueryResponseData = {
   };
 };
 
+// TODO - type filters
 export const useFileRepoStatsBarQuery = (filters?: any) => {
-  // type filters
-  const { data, loading } = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
+  const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
     variables: {
       filters,
     },
   });
 
-  return {
-    filesCount: data ? data.file.hits.total : 0,
-    donorsCount: data ? data.file.aggregations.donors__donor_id.buckets.length : 0,
+  const stats = {
+    filesCount: hook?.data ? hook.data.file.hits.total : 0,
+    donorsCount: hook?.data ? hook.data.file.aggregations.donors__donor_id.buckets.length : 0,
     primarySites: 0,
-    programsCount: data ? data.file.aggregations.study_id.buckets.length : 0,
-    totalFileSize: data ? data.file.aggregations.file__size.stats.sum : 0,
+    programsCount: hook?.data ? hook.data.file.aggregations.study_id.buckets.length : 0,
+    totalFileSize: hook?.data ? hook.data.file.aggregations.file__size.stats.sum : 0,
   };
+
+  return { ...hook, data: stats };
 };
 
 const StatsCard = () => {
   const { filters } = useFiltersContext();
 
-  const { data, loading } = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
-    variables: {
-      filters,
-    },
-  });
-
-  const filesCount = data ? data.file.hits.total : 0;
-  const donorsCount = data ? data.file.aggregations.donors__donor_id.buckets.length : 0;
-  const primarySites = 0;
-  const programsCount = data ? data.file.aggregations.study_id.buckets.length : 0;
-  const totalFileSize = data ? data.file.aggregations.file__size.stats.sum : 0;
+  const { data, loading } = useFileRepoStatsBarQuery(filters);
 
   return (
     <Container
@@ -99,10 +91,10 @@ const StatsCard = () => {
         `}
       >
         <Col md={3} sm={6}>
-          <StatItem iconName="file" statType="file" count={filesCount} loading={loading} />
+          <StatItem iconName="file" statType="file" count={data.filesCount} loading={loading} />
         </Col>
         <Col md={3} sm={6}>
-          <StatItem iconName="user" statType="donor" count={donorsCount} loading={loading} />
+          <StatItem iconName="user" statType="donor" count={data.donorsCount} loading={loading} />
         </Col>
         {/* <Col md={3} sm={6}></Col><StatItem
           iconName="crosshairs"
@@ -114,7 +106,7 @@ const StatsCard = () => {
           <StatItem
             iconName="programs"
             statType="program"
-            count={programsCount}
+            count={data.programsCount}
             loading={loading}
           />
         </Col>
@@ -122,7 +114,7 @@ const StatsCard = () => {
           <StatItem
             iconName="filesize"
             statType="fileSize"
-            count={totalFileSize}
+            count={data.totalFileSize}
             loading={loading}
           />
         </Col>

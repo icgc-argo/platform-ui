@@ -98,7 +98,7 @@ export default function Homepage() {
   const theme = useTheme();
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
-  const stats = useFileRepoStatsBarQuery();
+  const { data: stats, loading } = useFileRepoStatsBarQuery();
 
   return (
     <DefaultLayout>
@@ -197,6 +197,7 @@ export default function Homepage() {
 
           {FEATURE_LANDING_PAGE_STATS_ENABLED && (
             <DataReleaseBar
+              loading={loading}
               stats={[
                 { quantity: stats.programsCount, description: 'PROGRAMS' },
                 { quantity: stats.donorsCount, description: 'DONORS' },

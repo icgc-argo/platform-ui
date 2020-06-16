@@ -29,6 +29,7 @@ import Button from 'uikit/Button';
 import Container from 'uikit/Container';
 import overtureLogo from 'uikit/assets/overture-logo.svg';
 import scientistImage from 'static/icgc-data-scientist-wide.jpg';
+import DnaLoader from 'uikit/DnaLoader';
 
 type DataReleaseStatistic = {
   quantity: number;
@@ -43,7 +44,8 @@ type DataReleaseVersion = {
 export const DataReleaseBar: React.ComponentType<{
   stats: Array<DataReleaseStatistic>;
   version: DataReleaseVersion;
-}> = ({ stats, version }) => {
+  loading: boolean;
+}> = ({ stats, version, loading }) => {
   const theme = useTheme();
   const formattedStats = stats.map((stat) => (
     <Col md={3} sm={6} key={stat.description}>
@@ -74,7 +76,16 @@ export const DataReleaseBar: React.ComponentType<{
       </div>
     </Col>
   ));
-  return (
+  return loading ? (
+    <DnaLoader
+      css={css`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100px;
+      `}
+    />
+  ) : (
     <div
       css={css`
         margin: 20px 0px 40px;
