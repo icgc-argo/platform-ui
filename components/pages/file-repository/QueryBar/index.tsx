@@ -25,6 +25,9 @@ import { FileRepoFiltersType } from '../utils/types';
 import Button from 'uikit/Button';
 import isEmpty from 'lodash/isEmpty';
 import { toDisplayValue } from '../utils';
+import Typography from 'uikit/Typography';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import { FileCentricDocumentField } from '../types';
 
 // type AndOp = 'and';
 
@@ -60,7 +63,7 @@ type Filter = React.FunctionComponent<{
 
 const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Filter;
 const Value = dynamic(() =>
-  import('@arranger/components/dist/SQONView').then(comp => comp.Value),
+  import('@arranger/components/dist/SQONView').then((comp) => comp.Value),
 ) as ValueNode;
 
 const content = css`
@@ -122,12 +125,6 @@ const content = css`
       cursor: pointer;
       text-transform: capitalize;
     }
-    & .sqon-field {
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-right: 0.3rem;
-      font-size: 12px;
-    }
     & .sqon-less,
     .sqon-more {
       background-color: ${theme.colors.secondary_1};
@@ -179,6 +176,23 @@ const content = css`
   }
 `;
 
+const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
+  const { data: fieldDisplayName } = useFileCentricFieldDisplayName();
+  return (
+    <Typography
+      bold
+      css={css`
+        margin: 0px;
+        margin-right: 0.3rem;
+        text-transform: uppercase;
+        font-size: 12px;
+      `}
+    >
+      {fieldDisplayName[field] || field}
+    </Typography>
+  );
+};
+
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
   const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
@@ -192,6 +206,8 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
             Clear
           </Button>
         )}
+        // @ts-ignore types from arranger is just wrong here, it isn't even ts
+        FieldCrumb={({ field }) => <FieldCrumb field={field} />}
         ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
           <Value
             onClick={() => {

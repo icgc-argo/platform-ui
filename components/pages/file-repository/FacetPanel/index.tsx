@@ -20,7 +20,6 @@
 import React, { useState, useEffect } from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
-import { capitalize } from 'global/utils/stringUtils';
 import { Input } from 'uikit/form';
 import FileSelectButton from 'uikit/FileSelectButton';
 import { SubMenu } from 'uikit/SubMenu';
@@ -52,11 +51,13 @@ import {
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
 } from './types';
-import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
 import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import DnaLoader from 'uikit/DnaLoader';
+import { FileCentricDocumentField } from '../types';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -64,45 +65,47 @@ const FacetRow = styled('div')`
   justify-content: space-between;
 `;
 
-const presetFacets: Array<FacetDetails> = [
+const createPresetFacets = (
+  displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
+): Array<FacetDetails> => [
   {
-    name: 'program id',
+    name: displayNames['study_id'],
     facetPath: FileFacetPath.study_id,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.study_id,
   },
   {
-    name: 'gender',
+    name: displayNames['donors.gender'],
     facetPath: FileFacetPath.donors__gender,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['donors.gender'],
   },
   {
-    name: 'experimental strategy',
+    name: displayNames['analysis.experiment.experimental_strategy'],
     facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
   },
   {
-    name: 'data type',
+    name: displayNames['data_type'],
     facetPath: FileFacetPath.data_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.data_type,
   },
   {
-    name: 'file type',
+    name: displayNames['file_type'],
     facetPath: FileFacetPath.file_type,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_type,
   },
   {
-    name: 'variant class',
+    name: displayNames['variant_class'],
     facetPath: FileFacetPath.variant_class,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.variant_class,
   },
   {
-    name: 'file access',
+    name: displayNames['file_access'],
     facetPath: FileFacetPath.file_access,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_access,
@@ -219,7 +222,14 @@ const useIdSearchQuery = (searchValue, excludedIds) => {
 };
 
 export default () => {
-  const [expandedFacets, setExpandedFacets] = React.useState(concat(presetFacets, fileIDSearch));
+  const {
+    data: fieldDisplayNames,
+    loading: loadingFieldDisplayNames,
+  } = useFileCentricFieldDisplayName();
+  const presetFacets = createPresetFacets(fieldDisplayNames);
+  const [expandedFacets, setExpandedFacets] = React.useState(
+    [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
+  );
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -228,10 +238,11 @@ export default () => {
   const aggregations = data ? data.file.aggregations : {};
 
   const clickHandler = (targetFacet: FacetDetails) => {
-    if (expandedFacets.includes(targetFacet)) {
-      setExpandedFacets(expandedFacets.filter((facet) => facet !== targetFacet));
+    const targetFacetPath = targetFacet.facetPath;
+    if (expandedFacets.includes(targetFacetPath)) {
+      setExpandedFacets(expandedFacets.filter((facet) => facet !== targetFacetPath));
     } else {
-      setExpandedFacets(expandedFacets.concat(targetFacet));
+      setExpandedFacets(expandedFacets.concat(targetFacetPath));
     }
   };
 
@@ -290,6 +301,77 @@ export default () => {
     };
   };
 
+  const commonFacetProps = (facetDetails: FacetDetails) => ({
+    onClick: (e) => {
+      clickHandler(facetDetails);
+    },
+    isExpanded: expandedFacets.includes(facetDetails.facetPath),
+    subMenuName: facetDetails.name,
+  });
+
+  const onFacetOptionToggle: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
+    return (facetValue) => {
+      const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
+      replaceAllFilters(toggleFilter(currentValue, filters));
+    };
+  };
+  const onFacetSelectAllOptionsToggle: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
+    return (allOptionsSelected) => {
+      if (allOptionsSelected) {
+        const updatedFilters = removeFilter(
+          facetDetails.esDocumentField,
+          filters,
+        ) as FileRepoFiltersType;
+        replaceAllFilters(updatedFilters);
+      } else {
+        setFilterFromFieldAndValue({
+          field: facetDetails.esDocumentField,
+          value: aggregations[facetDetails.facetPath].buckets.map((v) => v.key),
+        });
+      }
+    };
+  };
+
+  const onNumberRangeFacetSubmit: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
+    return (min, max) => {
+      const newFilters = getRangeFilters(facetDetails.name, min, max);
+      // remove any existing fields for this facetDetails first
+      const withPreviousFieldRemoved = removeFilter(
+        facetDetails.name,
+        filters,
+      ) as FileRepoFiltersType;
+      replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
+    };
+  };
+  const numberRangeFacetMin: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
+    return (
+      currentFieldValue({
+        filters,
+        dotField: facetDetails.name,
+        op: '>=',
+      }) || ''
+    ).toString();
+  };
+  const numberRangeFacetMax: (
+    facetDetails: FacetDetails,
+  ) => React.ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
+    return (
+      currentFieldValue({
+        filters,
+        dotField: facetDetails.name,
+        op: '<=',
+      }) || ''
+    ).toString();
+  };
+
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -312,7 +394,7 @@ export default () => {
         >
           <MenuItem
             onClick={(e) => clickHandler(fileIDSearch)}
-            selected={expandedFacets.includes(fileIDSearch)}
+            selected={expandedFacets.includes(fileIDSearch.facetPath)}
             className="FacetMenu"
             content={fileIDSearch.name}
             chevronOnLeftSide={true}
@@ -374,74 +456,33 @@ export default () => {
             </div>
           </MenuItem>
         </FacetRow>
-        {presetFacets.map((type) => {
-          const props = {
-            onClick: (e) => {
-              clickHandler(type);
-            },
-            isExpanded: expandedFacets.includes(type),
-            subMenuName: capitalize(type.name),
-          };
+        {!loadingFieldDisplayNames &&
+          presetFacets.map((facetDetails) => {
+            const facetProps = commonFacetProps(facetDetails);
 
-          return (
-            <FacetRow key={type.name}>
-              {type.variant === 'Basic' && (
-                <Facet
-                  {...props}
-                  options={getOptions(type)}
-                  countUnit={'files'}
-                  onOptionToggle={(facetValue) => {
-                    const currentValue = SqonBuilder.has(type.esDocumentField, facetValue).build();
-                    replaceAllFilters(toggleFilter(currentValue, filters));
-                  }}
-                  onSelectAllOptions={(allOptionsSelected) => {
-                    if (allOptionsSelected) {
-                      const updatedFilters = removeFilter(
-                        type.esDocumentField,
-                        filters,
-                      ) as FileRepoFiltersType;
-                      replaceAllFilters(updatedFilters);
-                    } else {
-                      setFilterFromFieldAndValue({
-                        field: type.esDocumentField,
-                        value: aggregations[type.facetPath].buckets.map((v) => v.key),
-                      });
-                    }
-                  }}
-                  parseDisplayValue={toDisplayValue}
-                />
-              )}
-              {type.variant === 'Number' && (
-                <NumberRangeFacet
-                  {...props}
-                  onSubmit={(min, max) => {
-                    const newFilters = getRangeFilters(type.name, min, max);
-                    // remove any existing fields for this type first
-                    const withPreviousFieldRemoved = removeFilter(
-                      type.name,
-                      filters,
-                    ) as FileRepoFiltersType;
-                    replaceAllFilters(replaceFilter(newFilters, withPreviousFieldRemoved));
-                  }}
-                  min={(
-                    currentFieldValue({
-                      filters,
-                      dotField: type.name,
-                      op: '>=',
-                    }) || ''
-                  ).toString()}
-                  max={(
-                    currentFieldValue({
-                      filters,
-                      dotField: type.name,
-                      op: '<=',
-                    }) || ''
-                  ).toString()}
-                />
-              )}
-            </FacetRow>
-          );
-        })}
+            return (
+              <FacetRow key={facetDetails.name}>
+                {facetDetails.variant === 'Basic' && (
+                  <Facet
+                    {...facetProps}
+                    options={getOptions(facetDetails)}
+                    countUnit={'files'}
+                    onOptionToggle={onFacetOptionToggle(facetDetails)}
+                    onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                    parseDisplayValue={toDisplayValue}
+                  />
+                )}
+                {facetDetails.variant === 'Number' && (
+                  <NumberRangeFacet
+                    {...facetProps}
+                    onSubmit={onNumberRangeFacetSubmit(facetDetails)}
+                    min={numberRangeFacetMin(facetDetails)}
+                    max={numberRangeFacetMax(facetDetails)}
+                  />
+                )}
+              </FacetRow>
+            );
+          })}
       </SubMenu>
       <Collapsible />
     </FacetContainer>

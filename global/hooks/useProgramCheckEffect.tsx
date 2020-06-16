@@ -21,7 +21,7 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { ERROR_STATUS_KEY } from 'pages/_error';
-import PROGRAM_SHORTNAME from './PROGRAM_SHORTNAME.gql';
+import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
