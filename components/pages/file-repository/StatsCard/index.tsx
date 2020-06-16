@@ -56,7 +56,7 @@ type StatsBarQueryResponseData = {
 };
 
 // TODO - type filters
-export const useFileRepoStatsBarQuery = (filters?: any) => {
+export const useFileRepoStatsBarQuery = (filters?: FileRepoFiltersType) => {
   const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
     variables: {
       filters,
