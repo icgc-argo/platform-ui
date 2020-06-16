@@ -31,13 +31,25 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
-      variant_class {
+      analysis__variant_class {
         buckets {
           key
           doc_count
         }
       }
       file_access {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      analysis_tools {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      data_category {
         buckets {
           key
           doc_count
