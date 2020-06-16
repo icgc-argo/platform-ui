@@ -55,6 +55,23 @@ type StatsBarQueryResponseData = {
   };
 };
 
+export const useFileRepoStatsBarQuery = (filters?: any) => {
+  // type filters
+  const { data, loading } = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
+    variables: {
+      filters,
+    },
+  });
+
+  return {
+    filesCount: data ? data.file.hits.total : 0,
+    donorsCount: data ? data.file.aggregations.donors__donor_id.buckets.length : 0,
+    primarySites: 0,
+    programsCount: data ? data.file.aggregations.study_id.buckets.length : 0,
+    totalFileSize: data ? data.file.aggregations.file__size.stats.sum : 0,
+  };
+};
+
 const StatsCard = () => {
   const { filters } = useFiltersContext();
 

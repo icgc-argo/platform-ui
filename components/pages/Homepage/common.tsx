@@ -45,7 +45,7 @@ export const DataReleaseBar: React.ComponentType<{
   version: DataReleaseVersion;
 }> = ({ stats, version }) => {
   const theme = useTheme();
-  const formattedStats = stats.map(stat => (
+  const formattedStats = stats.map((stat) => (
     <Col md={3} sm={6} key={stat.description}>
       <div
         css={css`
@@ -95,7 +95,9 @@ export const DataReleaseBar: React.ComponentType<{
           border-top: 4px solid ${theme.colors.accent3_2};
         `}
       >
-        <Row nogutter>{formattedStats}</Row>
+        <Row nogutter justify={'center'}>
+          {formattedStats}
+        </Row>
       </div>
     </div>
   );
@@ -195,9 +197,7 @@ export const DataCallout: React.ComponentType<{
 };
 const GradientBar = styled('div')`
   background-image: ${({ theme }) =>
-    `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${
-      theme.colors.accent3_dark
-    } 100%)`};
+    `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${theme.colors.accent3_dark} 100%)`};
 
   width: 40%;
   height: 3px;
