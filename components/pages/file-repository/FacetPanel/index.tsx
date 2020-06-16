@@ -129,7 +129,6 @@ const createPresetFacets = (
   },
 ];
 
-// TODO: implement correctly. probably need extended/different type to account for multiple search fields
 const fileIDSearch: FacetDetails = {
   name: 'Search Files by ID',
   facetPath: FileFacetPath.object_id,
@@ -371,17 +370,6 @@ export default () => {
     ).toString();
   };
 
-  const Gap = styled('div')`
-    position: absolute;
-    left: -1px;
-    border-top: none;
-    border-bottom: none;
-    height: 5px;
-    transform: translateY(-5px);
-    width: 100%;
-    z-index: 2;
-    background-color: white;
-  `;
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -418,9 +406,6 @@ export default () => {
               css={css`
                 padding: 6px 12px;
                 border-bottom: 1px solid ${theme.colors.grey_2};
-                &:hover {
-                  background-color: ${theme.colors.grey_3};
-                }
               `}
             >
               {excludedIds.length > 0 && (
@@ -439,13 +424,32 @@ export default () => {
                       <Typography
                         color={theme.colors.secondary}
                         css={css`
-                          font-size: 10px;
+                          font-size: 11px;
                           display: flex;
                           justify-content: flex-start;
                           align-items: center;
+                          margin: 2px 0;
                         `}
                       >
-                        <Icon name="times" width="8px" height="8px" fill={theme.colors.secondary} />
+                        <Icon
+                          name="times"
+                          fill={theme.colors.secondary}
+                          title="Remove"
+                          css={css`
+                            padding-right: 5px;
+                            padding-bottom: 1px;
+                            width: 8px;
+                            height: 8px;
+                            cursor: pointer;
+                          `}
+                          onClick={() => {
+                            const idFilterToRemove = SqonBuilder.has(
+                              FileCentricDocumentField['object_id'],
+                              id,
+                            ).build();
+                            replaceAllFilters(toggleFilter(idFilterToRemove, filters));
+                          }}
+                        />
                         {id}
                       </Typography>
                     </li>
@@ -472,19 +476,35 @@ export default () => {
                     &:hover {
                       background-color: white;
                     }
+                    border-radius: 8px;
                   `}
                 />
                 {searchQuery && searchQuery.length >= 1 ? (
-                  <SearchResultsMenu
-                    searchData={idSearchData}
-                    isLoading={idSearchLoading}
-                    onSelect={(value) =>
-                      setFilterFromFieldAndValue({
-                        field: FileCentricDocumentField['object_id'],
-                        value,
-                      })
-                    }
-                  />
+                  <>
+                    <div
+                      css={css`
+                        background: transparent;
+                        border-right: 1px solid ${theme.colors.primary_4};
+                        border-left: 1px solid ${theme.colors.primary_4};
+                        height: 18px;
+                        width: 254px;
+                        z-index: 0;
+                        position: absolute;
+                        top: 28px;
+                      `}
+                    />
+                    <SearchResultsMenu
+                      searchData={idSearchData}
+                      isLoading={idSearchLoading}
+                      onSelect={(value) => {
+                        setFilterFromFieldAndValue({
+                          field: FileCentricDocumentField['object_id'],
+                          value,
+                        });
+                        setSearchQuery('');
+                      }}
+                    />
+                  </>
                 ) : null}
               </div>
 

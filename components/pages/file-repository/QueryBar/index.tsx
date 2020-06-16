@@ -107,7 +107,6 @@ const content = css`
       margin-right: 6px;
       font-weight: bold;
       cursor: pointer;
-      text-transform: capitalize;
     }
     & .sqon-less,
     .sqon-more {
