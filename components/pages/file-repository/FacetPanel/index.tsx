@@ -41,7 +41,12 @@ import {
   toDisplayValue,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
-import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
+import {
+  FileRepoFiltersType,
+  ScalarFieldKeys,
+  ArrayFieldKeys,
+  CombinationKeys,
+} from '../utils/types';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
 import {
@@ -50,6 +55,8 @@ import {
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
+  IdSearchQueryVariables,
+  IdSearchQueryData,
 } from './types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
@@ -171,24 +178,6 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-type IdSearchQueryDataNode = {
-  node: {
-    object_id: string;
-    file: {
-      name: string;
-    };
-  };
-};
-type IdSearchQueryData = {
-  file: {
-    hits: {
-      total: number;
-      edges: IdSearchQueryDataNode[];
-    };
-  };
-};
-
-type IdSearchQueryVariables = any;
 const useIdSearchQuery = (searchValue, excludedIds) => {
   return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
     skip: !searchValue,
@@ -197,17 +186,17 @@ const useIdSearchQuery = (searchValue, excludedIds) => {
         op: 'and',
         content: [
           {
-            op: 'filter',
+            op: 'filter' as ArrayFieldKeys,
             content: {
               value: `*${searchValue}*`,
               fields: ['file_autocomplete'],
             },
           },
           {
-            op: 'not',
+            op: 'not' as CombinationKeys,
             content: [
               {
-                op: 'in',
+                op: 'in' as ArrayFieldKeys,
                 content: {
                   field: FileCentricDocumentField['object_id'],
                   value: excludedIds,

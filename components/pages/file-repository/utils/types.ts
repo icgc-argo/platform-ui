@@ -2,10 +2,20 @@ export type ArrayFieldKeys = 'in' | 'is' | 'filter';
 
 export type ScalarFieldKeys = '>=' | '<=' | '>' | '<';
 
-type CombinationKeys = 'and' | 'or' | 'not';
+export type CombinationKeys = 'and' | 'or' | 'not';
 
 export type ArrayFieldValue = Array<string | number> | string;
 export type ScalarFieldValue = number;
+
+interface FilterField {
+  fields: string[];
+  value: ArrayFieldValue;
+}
+
+interface FilterFieldOperator {
+  op: ArrayFieldKeys;
+  content: FilterField;
+}
 
 export interface ArrayField {
   field: string;
@@ -27,10 +37,10 @@ export interface ScalarFieldOperator {
   content: ScalarField;
 }
 
-export type FieldOperator = ArrayFieldOperator | ScalarFieldOperator;
+export type FieldOperator = ArrayFieldOperator | ScalarFieldOperator | FilterFieldOperator;
 
 export type FileRepoFiltersType = {
-  op: 'and' | 'or';
+  op: 'and';
   content: FieldOperator[];
 };
 

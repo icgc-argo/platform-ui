@@ -1,4 +1,4 @@
-import { FileRepoFiltersType } from '../utils/types';
+import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
 import { FileCentricDocumentField } from '../types';
 
@@ -58,4 +58,26 @@ export type FileRepoFacetsQueryData = {
 
 export type FileRepoFacetsQueryVariables = {
   filters: FileRepoFiltersType;
+};
+
+type IdSearchQueryDataNode = {
+  node: {
+    object_id: string;
+    file: {
+      name: string;
+    };
+  };
+};
+
+export type IdSearchQueryData = {
+  file: {
+    hits: {
+      total: number;
+      edges: IdSearchQueryDataNode[];
+    };
+  };
+};
+
+export type IdSearchQueryVariables = {
+  filters: RecursiveFilter;
 };
