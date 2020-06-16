@@ -56,6 +56,7 @@ import { FileCentricDocumentField } from '../FileTable/types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
 import { trim } from 'lodash';
+import SearchResultsMenu from './SearchResultsMenu';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -167,9 +168,27 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
+type IdSearchQueryDataNode = {
+  node: {
+    object_id: string;
+    file: {
+      name: string;
+    };
+  };
+};
+type IdSearchQueryData = {
+  file: {
+    hits: {
+      total: number;
+      edges: IdSearchQueryDataNode[];
+    };
+  };
+};
+
+type IdSearchQueryVariables = any;
 const useIdSearchQuery = (searchValue, excludedIds) => {
-  return useQuery<any, any>(SEARCH_BY_QUERY, {
-    skip: searchValue.length <= 1,
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+    skip: !searchValue,
     variables: {
       filters: {
         op: 'and',
@@ -271,105 +290,6 @@ export default () => {
     };
   };
 
-  const ResultsMenu = () => {
-    if (idSearchLoading) {
-      return (
-        <div
-          css={css`
-            position: absolute;
-            top: 37px;
-            left: 12px;
-            background-color: white;
-            width: 215px;
-            padding: 5px 5px;
-            border: 1px solid lightgray;
-            border-radius: 8px;
-          `}
-        >
-          <Typography
-            css={css`
-              font-style: italic;
-              display: flex;
-              align-items: center;
-              margin: 0;
-            `}
-          >
-            <Icon
-              name="spinner"
-              css={css`
-                margin-right: 10px;
-              `}
-            />
-            Loading results...
-          </Typography>
-        </div>
-      );
-    } else {
-      if (idSearchData && idSearchData.file.hits.total === 0) {
-        return (
-          <div>
-            <Typography
-              css={css`
-                font-style: italic;
-              `}
-            >
-              No results found
-            </Typography>
-          </div>
-        );
-      } else {
-        return (
-          <div
-            css={css`
-              position: absolute;
-              top: 40px;
-              left: 15px;
-              z-index: 10;
-              background-color: white;
-              width: 225px;
-              padding: 5px 5px;
-            `}
-          >
-            {idSearchData &&
-              idSearchData.file.hits.edges.slice(0, 5).map(({ node }) => {
-                return (
-                  <div
-                    onClick={() =>
-                      setFilterFromFieldAndValue({
-                        field: FileCentricDocumentField['object_id'],
-                        value: node.object_id,
-                      })
-                    }
-                    key={node.object_id}
-                  >
-                    <Typography
-                      bold
-                      css={css`
-                        font-size: 12px;
-                        padding: 2px 3px;
-                        margin: 0;
-                      `}
-                    >
-                      {node.object_id}
-                    </Typography>
-                    <Typography
-                      css={css`
-                        font-size: 9px;
-                        word-break: break-word;
-                        margin: 0;
-                      `}
-                    >
-                      {node.file.name}
-                    </Typography>
-                  </div>
-                );
-              })}
-          </div>
-        );
-      }
-    }
-  };
-
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -426,7 +346,18 @@ export default () => {
                 `}
               />
 
-              {searchQuery && searchQuery.length >= 2 ? <ResultsMenu /> : null}
+              {searchQuery && searchQuery.length >= 1 ? (
+                <SearchResultsMenu
+                  searchData={idSearchData}
+                  isLoading={idSearchLoading}
+                  onSelect={(value) =>
+                    setFilterFromFieldAndValue({
+                      field: FileCentricDocumentField['object_id'],
+                      value,
+                    })
+                  }
+                />
+              ) : null}
               {/* disabled for initial File Repo release */}
               {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action
