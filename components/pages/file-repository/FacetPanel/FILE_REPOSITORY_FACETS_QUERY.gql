@@ -43,6 +43,18 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
+      analysis_tools {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      data_category {
+        buckets {
+          key
+          doc_count
+        }
+      }
     }
   }
 }

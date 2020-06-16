@@ -10,6 +10,8 @@ export enum FileFacetPath {
   file_type = 'file_type',
   variant_class = 'variant_class',
   file_access = 'file_access',
+  data_category = 'data_category',
+  analysis_tools = 'analysis_tools',
 }
 
 type BucketAggregation = {

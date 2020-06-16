@@ -107,6 +107,18 @@ const createPresetFacets = (
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.file_access,
   },
+  {
+    name: displayNames['data_category'],
+    facetPath: FileFacetPath.data_category,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['data_category'],
+  },
+  {
+    name: displayNames['analysis_tools'],
+    facetPath: FileFacetPath.analysis_tools,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis_tools'],
+  },
 ];
 
 // TODO: implement correctly. probably need extended/different type to account for multiple search fields

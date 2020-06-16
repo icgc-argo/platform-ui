@@ -9,4 +9,6 @@ export enum FileCentricDocumentField {
   'donors.gender' = 'donors.gender',
   variant_class = 'variant_class',
   file_access = 'file_access',
+  data_category = 'data_category',
+  analysis_tools = 'analysis_tools',
 }
