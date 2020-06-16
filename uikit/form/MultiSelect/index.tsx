@@ -42,7 +42,7 @@ import clsx from 'clsx';
 import FormControlContext from '../FormControl/FormControlContext';
 import { StyledInputWrapper, INPUT_SIZES, INPUT_STATES, InputSize } from '../common';
 
-const Container = styled<'div', { focus: boolean }>('div')`
+export const Container = styled<'div', { focus: boolean }>('div')`
   position: relative;
   transform: scale(1); /* this creates a stacking context so z-index is local */
   ${({ focus }) =>
@@ -52,7 +52,7 @@ const Container = styled<'div', { focus: boolean }>('div')`
     `}
 `;
 
-const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
+export const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
   box-sizing: border-box;
   position: absolute;
   width: 100%;
@@ -62,11 +62,11 @@ const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
   border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
   border-radius: 0 0 4px 4px;
 
-  box-shadow: ${props =>
+  box-shadow: ${(props) =>
     props.focused ? '0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08)' : 'none'};
 `;
 
-const OptionsContainer = styled('div')`
+export const OptionsContainer = styled('div')`
   box-sizing: border-box;
   position: relative;
   max-height: 200px;
@@ -74,12 +74,12 @@ const OptionsContainer = styled('div')`
   width: 100%;
 `;
 
-const OptionList = styled('ul')`
+export const OptionList = styled('ul')`
   margin: 0;
   padding: 0;
 `;
 
-const Gap = styled('div')`
+export const Gap = styled('div')`
   position: absolute;
   left: -1px;
   border: solid 1px;
@@ -93,7 +93,7 @@ const Gap = styled('div')`
   background-color: white;
 `;
 
-const InputBox = styled(StyledInputWrapper)`
+export const InputBox = styled(StyledInputWrapper)`
   ${({ theme }) => css(theme.typography.default)};
   flex-wrap: wrap;
   align-items: center;
@@ -103,7 +103,7 @@ const InputBox = styled(StyledInputWrapper)`
   padding: 2px;
 `;
 
-const Input = styled<'input', { autoComplete: string }>('input')`
+export const Input = styled<'input', { autoComplete: string }>('input')`
   ${({ theme }) => css(theme.typography.paragraph)};
   border: none;
   display: block;
@@ -231,7 +231,7 @@ const MultiSelect: React.ComponentType<{
   value = [],
   children,
   onChange,
-  onBlur = e => {},
+  onBlur = (e) => {},
   single,
   placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
@@ -252,7 +252,7 @@ const MultiSelect: React.ComponentType<{
     error = contextValue.error;
   }
 
-  const handleItemClick = child => event => {
+  const handleItemClick = (child) => (event) => {
     event.persist();
 
     const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
@@ -290,7 +290,7 @@ const MultiSelect: React.ComponentType<{
     });
   });
 
-  const handleNewItemClick = event => {
+  const handleNewItemClick = (event) => {
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
     event.target = {
@@ -302,11 +302,11 @@ const MultiSelect: React.ComponentType<{
     onChange(event, null);
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setSearchString(e.target.value);
   };
 
-  const handleInputKeyDown = e => {
+  const handleInputKeyDown = (e) => {
     if (e.key === 'Backspace') {
       if (searchString.length === 0) {
         e.persist();
@@ -357,12 +357,12 @@ const MultiSelect: React.ComponentType<{
     setFocusState(true);
   };
 
-  const handleInputBlur = event => {
+  const handleInputBlur = (event) => {
     setFocusState(false);
     onBlur(event);
   };
 
-  const handleSelectedItemClick = item => event => {
+  const handleSelectedItemClick = (item) => (event) => {
     event.persist();
     event.target = {
       value: without([...value], item.value),
@@ -371,7 +371,7 @@ const MultiSelect: React.ComponentType<{
     onChange(event, item);
   };
 
-  const selectedItems = map(value, v => {
+  const selectedItems = map(value, (v) => {
     const c: any = find(React.Children.toArray(children), { props: { value: v } });
 
     if (typeof c === 'undefined') {
@@ -410,7 +410,7 @@ const MultiSelect: React.ComponentType<{
             {get(head(selectedItems), 'displayName')}
           </SingleValue>
         ) : (
-          selectedItems.map(item => (
+          selectedItems.map((item) => (
             <SelectedItem
               key={item.value}
               onClick={handleSelectedItemClick(item)}

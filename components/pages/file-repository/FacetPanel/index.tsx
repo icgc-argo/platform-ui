@@ -30,7 +30,6 @@ import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
-import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -63,7 +62,6 @@ import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
 import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import DnaLoader from 'uikit/DnaLoader';
 import { FileCentricDocumentField } from '../types';
 
 const FacetRow = styled('div')`
@@ -134,9 +132,9 @@ const createPresetFacets = (
 // TODO: implement correctly. probably need extended/different type to account for multiple search fields
 const fileIDSearch: FacetDetails = {
   name: 'Search Files by ID',
-  facetPath: FileFacetPath.study_id,
+  facetPath: FileFacetPath.object_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.study_id,
+  esDocumentField: FileCentricDocumentField.object_id,
 };
 
 const FacetContainer = styled(Container)`
@@ -249,11 +247,11 @@ export default () => {
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
-  const excludedIds = currentFieldValue({
+  const excludedIds = (currentFieldValue({
     filters,
     dotField: FileCentricDocumentField['object_id'],
     op: 'in',
-  });
+  }) || []) as Array<string>;
 
   const debouncedSearchTerm = useDebounce(searchQuery, 500);
   const getOptions: GetAggregationResult = (facet) => {
@@ -373,6 +371,17 @@ export default () => {
     ).toString();
   };
 
+  const Gap = styled('div')`
+    position: absolute;
+    left: -1px;
+    border-top: none;
+    border-bottom: none;
+    height: 5px;
+    transform: translateY(-5px);
+    width: 100%;
+    z-index: 2;
+    background-color: white;
+  `;
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -412,35 +421,73 @@ export default () => {
                 &:hover {
                   background-color: ${theme.colors.grey_3};
                 }
-                position: relative;
               `}
             >
-              <Input
-                size="sm"
-                aria-label="search-for-files"
-                placeholder="e.g. FL9998, DO9898…"
-                preset="search"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(trim(e.target.value));
-                }}
+              {excludedIds.length > 0 && (
+                <ul
+                  css={css`
+                    padding-inline-start: 0px;
+                  `}
+                >
+                  {excludedIds.map((id) => (
+                    <li
+                      key={id}
+                      css={css`
+                        list-style-type: none;
+                      `}
+                    >
+                      <Typography
+                        color={theme.colors.secondary}
+                        css={css`
+                          font-size: 10px;
+                          display: flex;
+                          justify-content: flex-start;
+                          align-items: center;
+                        `}
+                      >
+                        <Icon name="times" width="8px" height="8px" fill={theme.colors.secondary} />
+                        {id}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <div
                 css={css`
-                  z-index: 5;
+                  position: relative;
                 `}
-              />
-
-              {searchQuery && searchQuery.length >= 1 ? (
-                <SearchResultsMenu
-                  searchData={idSearchData}
-                  isLoading={idSearchLoading}
-                  onSelect={(value) =>
-                    setFilterFromFieldAndValue({
-                      field: FileCentricDocumentField['object_id'],
-                      value,
-                    })
-                  }
+              >
+                <Input
+                  size="sm"
+                  aria-label="search-for-files"
+                  placeholder="e.g. FL9998, DO9898…"
+                  preset="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(trim(e.target.value));
+                  }}
+                  css={css`
+                    z-index: 5;
+                    transform: scale(1);
+                    &:hover {
+                      background-color: white;
+                    }
+                  `}
                 />
-              ) : null}
+                {searchQuery && searchQuery.length >= 1 ? (
+                  <SearchResultsMenu
+                    searchData={idSearchData}
+                    isLoading={idSearchLoading}
+                    onSelect={(value) =>
+                      setFilterFromFieldAndValue({
+                        field: FileCentricDocumentField['object_id'],
+                        value,
+                      })
+                    }
+                  />
+                ) : null}
+              </div>
+
               {/* disabled for initial File Repo release */}
               {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action

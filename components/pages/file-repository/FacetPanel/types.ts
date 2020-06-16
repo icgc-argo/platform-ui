@@ -12,6 +12,7 @@ export enum FileFacetPath {
   file_access = 'file_access',
   data_category = 'data_category',
   analysis_tools = 'analysis_tools',
+  object_id = 'object_id',
 }
 
 type BucketAggregation = {
