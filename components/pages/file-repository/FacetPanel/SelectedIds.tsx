@@ -34,7 +34,7 @@ const SelectedIds = ({
     <ul
       css={css`
         padding-inline-start: 0px;
-        margin: 0 0 5px;
+        margin: 0 0 5px 5px;
       `}
     >
       {ids.map((id) => (
