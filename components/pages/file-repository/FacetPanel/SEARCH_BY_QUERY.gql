@@ -1,0 +1,15 @@
+query SEARCH_BY_QUERY($filters: JSON) {
+  file {
+    hits(filters: $filters, first: 5) {
+      total
+      edges {
+        node {
+          object_id
+          file {
+            name
+          }
+        }
+      }
+    }
+  }
+}
