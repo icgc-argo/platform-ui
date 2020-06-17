@@ -198,8 +198,12 @@ const useIdSearchQuery = (
           {
             op: 'filter' as ArrayFieldKeys,
             content: {
-              value: `*${searchValue}*`,
-              fields: ['file_autocomplete'],
+              value: `*${searchValue.toLowerCase()}*`,
+              fields: [
+                'file_autocomplete.analyzed',
+                'file_autocomplete.lowercase',
+                'file_autocomplete.prefix',
+              ],
             },
           },
           {
@@ -412,6 +416,9 @@ export default () => {
               css={css`
                 padding: 6px 12px;
                 border-bottom: 1px solid ${theme.colors.grey_2};
+                display: flex;
+                justify-content: center;
+                align-items: center;
               `}
             >
               {excludedIds.length > 0 && (
@@ -420,6 +427,7 @@ export default () => {
               <div
                 css={css`
                   position: relative;
+                  width: 250px;
                 `}
               >
                 <Input
@@ -448,7 +456,7 @@ export default () => {
                         border-right: 1px solid ${theme.colors.primary_4};
                         border-left: 1px solid ${theme.colors.primary_4};
                         height: 18px;
-                        width: 254px;
+                        width: 248px;
                         z-index: 0;
                         position: absolute;
                         top: 28px;
