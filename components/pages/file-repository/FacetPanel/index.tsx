@@ -233,8 +233,13 @@ export default () => {
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
-  const { data, loading } = useFileFacetQuery(filters);
-  const aggregations = data ? data.file.aggregations : {};
+  const [aggregations, setAggregations] = React.useState({});
+
+  const { data, loading } = useFileFacetQuery(filters, {
+    onCompleted: (data) => {
+      setAggregations(data ? data.file.aggregations : {});
+    },
+  });
 
   const clickHandler = (targetFacet: FacetDetails) => {
     const targetFacetPath = targetFacet.facetPath;
@@ -371,13 +376,26 @@ export default () => {
     ).toString();
   };
 
+  const facetContianerLoadingStyle = css`
+    opacity: 0.5;
+    pointer-events: 'none';
+  `;
+
+  const facetContainerDefaultStyle = css`
+    opacity: 1;
+    pointer-events: 'auto';
+  `;
   const onRemoveSelectedId = (id: string) => {
     const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
   return (
-    <FacetContainer loading={loading} theme={theme}>
+    <FacetContainer
+      // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
+      css={loading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
+      theme={theme}
+    >
       <SubMenu>
         <FacetRow>
           <Typography
