@@ -119,6 +119,24 @@ const createPresetFacets = (
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['analysis_tools'],
   },
+  {
+    name: displayNames['donors.specimens.specimen_type'],
+    facetPath: FileFacetPath.donors__specimens__specimen_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_type'],
+  },
+  {
+    name: displayNames['donors.specimens.specimen_tissue_source'],
+    facetPath: FileFacetPath.donors__specimens__specimen_tissue_source,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_tissue_source'],
+  },
+  {
+    name: displayNames['analysis.workflow.workflow_name'],
+    facetPath: FileFacetPath.analysis__workflow__workflow_name,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis.workflow.workflow_name'],
+  },
 ];
 
 // TODO: implement correctly. probably need extended/different type to account for multiple search fields

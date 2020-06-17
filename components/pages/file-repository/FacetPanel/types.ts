@@ -12,6 +12,9 @@ export enum FileFacetPath {
   file_access = 'file_access',
   data_category = 'data_category',
   analysis_tools = 'analysis_tools',
+  donors__specimens__specimen_type = 'donors__specimens__specimen_type',
+  donors__specimens__specimen_tissue_source = 'donors__specimens__specimen_tissue_source',
+  analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',
 }
 
 type BucketAggregation = {
