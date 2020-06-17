@@ -189,7 +189,20 @@ export default () => {
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
   const { data, loading } = useFileFacetQuery(filters);
-  const aggregations = data ? data.file.aggregations : {};
+
+  const [aggregations, setAggregations] = React.useState(data ? data.file.aggregations : {});
+
+  const [isFacetLoading, setIsFacetLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (loading) {
+      setIsFacetLoading(true);
+      return;
+    }
+
+    setAggregations(data ? data.file.aggregations : aggregations);
+    setIsFacetLoading(false);
+  }, [loading]);
 
   const clickHandler = (targetFacet: FacetDetails) => {
     const targetFacetPath = targetFacet.facetPath;
@@ -313,8 +326,21 @@ export default () => {
     ).toString();
   };
 
+  const facetContianerLoadingStyle = css`
+    opacity: 0.5;
+    pointer-events: 'none';
+  `;
+
+  const facetContainerDefaultStyle = css`
+    opacity: 1;
+    pointer-events: 'auto';
+  `;
   return (
-    <FacetContainer loading={loading} theme={theme}>
+    <FacetContainer
+      // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to scroll and not cover all facets
+      css={isFacetLoading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
+      theme={theme}
+    >
       <SubMenu>
         <FacetRow>
           <Typography
