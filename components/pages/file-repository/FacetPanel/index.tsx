@@ -235,7 +235,7 @@ export default () => {
 
   const [aggregations, setAggregations] = React.useState({});
 
-  const { data, loading = true } = useFileFacetQuery(filters, {
+  const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
       setAggregations(data ? data.file.aggregations : {});
     },
