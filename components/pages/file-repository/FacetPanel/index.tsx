@@ -150,7 +150,7 @@ const createPresetFacets = (
 ];
 
 const fileIDSearch: FacetDetails = {
-  name: 'Search Files by ID',
+  name: 'Search Files',
   facetPath: FileFacetPath.object_id,
   variant: 'Other',
   esDocumentField: FileCentricDocumentField.object_id,
@@ -425,7 +425,7 @@ export default () => {
                 <Input
                   size="sm"
                   aria-label="search-for-files"
-                  placeholder="e.g. FL9998, DO9898…"
+                  placeholder="e.g. DO9182, Sa1246.bam..."
                   preset="search"
                   value={searchQuery}
                   onChange={(e) => {
