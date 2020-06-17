@@ -22,13 +22,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 
-const SelectedIds = ({
-  ids = [],
-  onRemove,
-}: {
-  ids: string[];
-  onRemove?: (id: string) => void;
-}) => {
+const SelectedIds = ({ ids = [], onRemove }: { ids: string[]; onRemove: (id: string) => void }) => {
   const theme = useTheme();
   return (
     <ul
@@ -54,22 +48,19 @@ const SelectedIds = ({
               margin: 2px 0;
             `}
           >
-            {onRemove && (
-              <Icon
-                name="times"
-                fill={theme.colors.secondary}
-                title="Remove"
-                css={css`
-                  padding-right: 5px;
-                  padding-bottom: 1px;
-                  width: 8px;
-                  height: 8px;
-                  cursor: pointer;
-                `}
-                onClick={() => onRemove(id)}
-              />
-            )}
-
+            <Icon
+              name="times"
+              fill={theme.colors.secondary}
+              title="Remove"
+              css={css`
+                padding-right: 5px;
+                padding-bottom: 1px;
+                width: 8px;
+                height: 8px;
+                cursor: pointer;
+              `}
+              onClick={() => onRemove(id)}
+            />
             {id}
           </Typography>
         </li>

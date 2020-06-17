@@ -89,7 +89,7 @@ const SearchResultsMenu = ({
     return (
       <>
         <ResultsDropdown>
-          {searchData.file.hits.edges.slice(0, 5).map(({ node }) => {
+          {searchData.file.hits.edges.map(({ node }) => {
             return (
               <div
                 css={css`
