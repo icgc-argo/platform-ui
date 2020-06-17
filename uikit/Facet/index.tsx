@@ -57,7 +57,7 @@ const Facet = ({
         searchBar={true}
         searchStateParams={{ query: searchQueryState, querySetter: setSearchQueryState }}
         css={css`
-          width: 300px;
+          width: 100%;
         `}
       >
         <OptionsList

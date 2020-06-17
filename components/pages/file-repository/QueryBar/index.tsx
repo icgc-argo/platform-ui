@@ -29,22 +29,6 @@ import Typography from 'uikit/Typography';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 
-type AndOp = 'and';
-
-type FilterOp = AndOp | 'in' | 'is' | '>=' | '<=' | '>' | '<' | 'not' | 'filter';
-type FilterObj = {
-  op: FilterOp;
-  content: {
-    field: string;
-    value: string[];
-  };
-};
-
-type Filters = {
-  op: AndOp;
-  content: FilterObj[];
-};
-
 type ValueNode = React.FunctionComponent<{
   onClick?: () => void;
 }>;
@@ -53,7 +37,7 @@ type FieldNode = React.FunctionComponent<{
   onClick?: () => void;
 }>;
 type Filter = React.FunctionComponent<{
-  sqon: Filters | {};
+  sqon: FileRepoFiltersType | {};
   setSQON: ({ field, value }: { field: string; value: string }) => void;
   onClear?: () => void;
   Clear?: React.FunctionComponent<{}>;
@@ -123,7 +107,6 @@ const content = css`
       margin-right: 6px;
       font-weight: bold;
       cursor: pointer;
-      text-transform: capitalize;
     }
     & .sqon-less,
     .sqon-more {

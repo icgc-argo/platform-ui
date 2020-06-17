@@ -62,7 +62,7 @@ const OptionsWrapper = styled<'div', { focused: boolean }>('div')`
   border-color: ${({ theme }) => theme.multiSelect.listBorderColor};
   border-radius: 0 0 4px 4px;
 
-  box-shadow: ${props =>
+  box-shadow: ${(props) =>
     props.focused ? '0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08)' : 'none'};
 `;
 
@@ -231,7 +231,7 @@ const MultiSelect: React.ComponentType<{
   value = [],
   children,
   onChange,
-  onBlur = e => {},
+  onBlur = (e) => {},
   single,
   placeholder = single ? 'Select one' : 'Add one or more...',
   inputProps,
@@ -252,7 +252,7 @@ const MultiSelect: React.ComponentType<{
     error = contextValue.error;
   }
 
-  const handleItemClick = child => event => {
+  const handleItemClick = (child) => (event) => {
     event.persist();
 
     const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
@@ -290,7 +290,7 @@ const MultiSelect: React.ComponentType<{
     });
   });
 
-  const handleNewItemClick = event => {
+  const handleNewItemClick = (event) => {
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
     event.target = {
@@ -302,11 +302,11 @@ const MultiSelect: React.ComponentType<{
     onChange(event, null);
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setSearchString(e.target.value);
   };
 
-  const handleInputKeyDown = e => {
+  const handleInputKeyDown = (e) => {
     if (e.key === 'Backspace') {
       if (searchString.length === 0) {
         e.persist();
@@ -357,12 +357,12 @@ const MultiSelect: React.ComponentType<{
     setFocusState(true);
   };
 
-  const handleInputBlur = event => {
+  const handleInputBlur = (event) => {
     setFocusState(false);
     onBlur(event);
   };
 
-  const handleSelectedItemClick = item => event => {
+  const handleSelectedItemClick = (item) => (event) => {
     event.persist();
     event.target = {
       value: without([...value], item.value),
@@ -371,7 +371,7 @@ const MultiSelect: React.ComponentType<{
     onChange(event, item);
   };
 
-  const selectedItems = map(value, v => {
+  const selectedItems = map(value, (v) => {
     const c: any = find(React.Children.toArray(children), { props: { value: v } });
 
     if (typeof c === 'undefined') {
@@ -410,7 +410,7 @@ const MultiSelect: React.ComponentType<{
             {get(head(selectedItems), 'displayName')}
           </SingleValue>
         ) : (
-          selectedItems.map(item => (
+          selectedItems.map((item) => (
             <SelectedItem
               key={item.value}
               onClick={handleSelectedItemClick(item)}

@@ -2,10 +2,20 @@ export type ArrayFieldKeys = 'in' | 'is' | 'filter';
 
 export type ScalarFieldKeys = '>=' | '<=' | '>' | '<';
 
-type CombinationKeys = 'and' | 'or' | 'not';
+export type CombinationKeys = 'and' | 'or' | 'not';
 
 export type ArrayFieldValue = Array<string | number> | string;
 export type ScalarFieldValue = number;
+
+export interface FilterField {
+  fields: string[];
+  value: ArrayFieldValue;
+}
+
+export interface FilterFieldOperator {
+  op: ArrayFieldKeys;
+  content: FilterField;
+}
 
 export interface ArrayField {
   field: string;
@@ -36,7 +46,7 @@ export type FileRepoFiltersType = {
 
 export type RecursiveFilter = {
   op: CombinationKeys;
-  content: Array<RecursiveFilter | FieldOperator>;
+  content: Array<RecursiveFilter | FieldOperator | FilterFieldOperator>;
 };
 
 export type TCombineValues = (
