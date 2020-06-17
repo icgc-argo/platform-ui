@@ -233,21 +233,13 @@ export default () => {
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
-  const { data, loading } = useFileFacetQuery(filters);
+  const [aggregations, setAggregations] = React.useState({});
 
-  const [aggregations, setAggregations] = React.useState(data ? data.file.aggregations : {});
-
-  const [isFacetLoading, setIsFacetLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    if (loading) {
-      setIsFacetLoading(true);
-      return;
-    }
-
-    setAggregations(data ? data.file.aggregations : aggregations);
-    setIsFacetLoading(false);
-  }, [loading]);
+  const { data, loading = true } = useFileFacetQuery(filters, {
+    onCompleted: (data) => {
+      setAggregations(data ? data.file.aggregations : {});
+    },
+  });
 
   const clickHandler = (targetFacet: FacetDetails) => {
     const targetFacetPath = targetFacet.facetPath;
@@ -400,8 +392,8 @@ export default () => {
 
   return (
     <FacetContainer
-      // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to scroll and not cover all facets
-      css={isFacetLoading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
+      // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
+      css={loading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
       theme={theme}
     >
       <SubMenu>
