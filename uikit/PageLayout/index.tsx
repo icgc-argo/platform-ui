@@ -74,7 +74,7 @@ export const PageBody = styled.div<PageBodyProps>`
 
   & ${PageContent} {
     grid-column: 2;
-    max-width: calc(100vw - 230px);
+    max-width: ${({ sidebarColSize }) => `calc(100vw - ${sidebarColSize || '230px'})`};
   }
 
   &.noSidebar {

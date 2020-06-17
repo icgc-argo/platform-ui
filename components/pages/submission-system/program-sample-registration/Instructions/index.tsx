@@ -85,7 +85,7 @@ function Instructions({
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
-  const handleUpload = file =>
+  const handleUpload = (file) =>
     uploadFile({
       variables: { shortName, registrationFile: file },
     });
@@ -131,7 +131,7 @@ function Instructions({
               css={instructionBoxButtonStyle}
               variant={BUTTON_VARIANTS.SECONDARY}
               size={BUTTON_SIZES.SM}
-              onFilesSelect={async files => {
+              onFilesSelect={async (files) => {
                 if (files[0]) await handleUpload(files[0]);
               }}
               id="button-register-file-select" // For Selenium

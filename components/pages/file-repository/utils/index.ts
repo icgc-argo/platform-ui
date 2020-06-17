@@ -12,6 +12,7 @@ import {
   ScalarFieldOperator,
   ArrayFieldValue,
   ScalarFieldValue,
+  FilterField,
 } from './types';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 
@@ -48,7 +49,7 @@ export const combineValues: TCombineValues = (operatorA, operatorB) => {
       field: operatorA.content.field,
       value: operatorAValue
         .reduce((acc, v) => {
-          if (acc.includes(v)) return acc.filter(f => f !== v);
+          if (acc.includes(v)) return acc.filter((f) => f !== v);
           return [...acc, v];
         }, operatorBValue)
         .sort(),
@@ -90,10 +91,10 @@ export const toggleFilter: TMergeFilters = (newFilter, currentFilters) => {
     op: 'and',
     content: currentFilters.content
       .reduce((acc, operator) => {
-        const foundOperator = acc.find(a => compareTerms(a, operator));
+        const foundOperator = acc.find((a) => compareTerms(a, operator));
         if (!foundOperator) return [...acc, operator];
         return [
-          ...acc.filter(f => !compareTerms(f, foundOperator)),
+          ...acc.filter((f) => !compareTerms(f, foundOperator)),
           combineValues(foundOperator, operator),
         ].filter(Boolean);
       }, newFilter.content)
@@ -112,7 +113,7 @@ export const replaceFilter: TMergeFilters = (newFilter, currentFilters) => {
     op: 'and',
     content: currentFilters.content
       .reduce((acc, filter) => {
-        const found = acc.find(a => compareTerms(a, filter));
+        const found = acc.find((a) => compareTerms(a, filter));
         if (!found) return [...acc, filter];
         return acc;
       }, newFilter.content)
@@ -131,10 +132,10 @@ export const addInFilters: TMergeFilters = (newFilter, currentFilter) => {
     op: 'and',
     content: currentFilter.content
       .reduce((acc, filter) => {
-        const found = acc.find(a => compareTerms(a, filter));
+        const found = acc.find((a) => compareTerms(a, filter));
         if (!found) return [...acc, filter];
         return [
-          ...acc.filter(y => y.content.field !== found.content.field),
+          ...acc.filter((y) => y.content.field !== found.content.field),
           addInValue(found, filter),
         ].filter(Boolean);
       }, newFilter.content)
@@ -149,7 +150,7 @@ export const currentFilterValue = (filters, entity = null) =>
     ({ op, content }) => op === 'filter' && (!entity || entity === content.entity),
   ).content.value || '';
 
-// returns current value for a given field / operation
+// returns current value as Array for a given field / operation
 export const currentFieldValue = ({
   filters,
   dotField,
@@ -160,9 +161,13 @@ export const currentFieldValue = ({
   op: string;
 }): ArrayFieldValue | ScalarFieldValue | undefined => {
   const foundField = filters.content.find(
-    content => content.content.field === dotField && content.op === op,
+    (content) => content.content.field === dotField && content.op === op,
   );
-  return foundField ? foundField.content.value : undefined;
+  return foundField
+    ? Array.isArray(foundField.content.value)
+      ? foundField.content.value
+      : [foundField.content.value]
+    : undefined;
 };
 
 // true if field and value in
@@ -177,7 +182,7 @@ export const inCurrentFilters = ({
 }): boolean => {
   const content = currentFilters.content;
   return (Array.isArray(content) ? content : [].concat(currentFilters || [])).some(
-    f => f.content.field === dotField && [].concat(f.content.value || []).includes(value),
+    (f) => f.content.field === dotField && [].concat(f.content.value || []).includes(value),
   );
 };
 
@@ -188,7 +193,7 @@ export const fieldInCurrentFilters = ({
 }: {
   currentFilters: FieldOperator[];
   field: string;
-}): boolean => currentFilters.some(f => f.content.field === field);
+}): boolean => currentFilters.some((f) => f.content.field === field);
 
 export const getFiltersValue = ({
   currentFilters,
@@ -196,7 +201,7 @@ export const getFiltersValue = ({
 }: {
   currentFilters: FieldOperator[];
   dotField: string;
-}) => currentFilters.find(f => f.content.field === dotField);
+}) => currentFilters.find((f) => f.content.field === dotField);
 
 export const removeFilter: TRemoveFilter = (field, filters) => {
   if (!filters) return null;
@@ -204,12 +209,12 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
   if (Object.keys(filters).length === 0) return filters;
 
   if (!Array.isArray(filters.content)) {
-    const fieldFilter = typeof field === 'function' ? field : f => f === field;
+    const fieldFilter = typeof field === 'function' ? field : (f) => f === field;
     return fieldFilter(filters.content.field) ? null : filters;
   }
 
   const filteredContent = filters.content
-    .map(filter => removeFilter(field, filter))
+    .map((filter) => removeFilter(field, filter))
     .filter(Boolean);
 
   return filteredContent.length
@@ -220,5 +225,5 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
     : defaultEmptyFilters;
 };
 
-export const toDisplayValue: (value: string) => string = value =>
+export const toDisplayValue: (value: string) => string = (value) =>
   value === IS_MISSING ? 'No Data' : value;

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -30,7 +30,6 @@ import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
-import concat from 'lodash/concat';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -41,7 +40,12 @@ import {
   toDisplayValue,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
-import { FileRepoFiltersType, ScalarFieldKeys } from '../utils/types';
+import {
+  FileRepoFiltersType,
+  ScalarFieldKeys,
+  ArrayFieldKeys,
+  CombinationKeys,
+} from '../utils/types';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
 import {
@@ -50,11 +54,17 @@ import {
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
+  IdSearchQueryVariables,
+  IdSearchQueryData,
 } from './types';
 import Container from 'uikit/Container';
+import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
+import { trim } from 'lodash';
+import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import DnaLoader from 'uikit/DnaLoader';
 import { FileCentricDocumentField } from '../types';
+import SelectedIds from './SelectedIds';
+import useDebounce from '../hooks/useDebounce';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -139,12 +149,11 @@ const createPresetFacets = (
   },
 ];
 
-// TODO: implement correctly. probably need extended/different type to account for multiple search fields
 const fileIDSearch: FacetDetails = {
-  name: 'Search Files by ID',
-  facetPath: FileFacetPath.study_id,
+  name: 'Search Files',
+  facetPath: FileFacetPath.object_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.study_id,
+  esDocumentField: FileCentricDocumentField.object_id,
 };
 
 const FacetContainer = styled(Container)`
@@ -158,6 +167,7 @@ const FacetContainer = styled(Container)`
   height: calc(100vh - 58px);
   max-height: calc(100vh - 58px);
   overflow-y: auto;
+  border-radius: 0;
 `;
 
 const useFileFacetQuery = (
@@ -173,6 +183,41 @@ const useFileFacetQuery = (
       },
     },
   );
+};
+
+const useIdSearchQuery = (
+  searchValue: string,
+  excludedIds: string[],
+): { data: IdSearchQueryData; loading: boolean } => {
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+    skip: !searchValue,
+    variables: {
+      filters: {
+        op: 'and',
+        content: [
+          {
+            op: 'filter' as ArrayFieldKeys,
+            content: {
+              value: `*${searchValue}*`,
+              fields: ['file_autocomplete'],
+            },
+          },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['object_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  });
 };
 
 export default () => {
@@ -199,8 +244,16 @@ export default () => {
       setExpandedFacets(expandedFacets.concat(targetFacetPath));
     }
   };
-  const [queriedFileIDs, setQueriedFileIDs] = React.useState('');
 
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const excludedIds = (currentFieldValue({
+    filters,
+    dotField: FileCentricDocumentField['object_id'],
+    op: 'in',
+  }) || []) as Array<string>;
+
+  const debouncedSearchTerm = useDebounce(searchQuery, 500);
   const getOptions: GetAggregationResult = (facet) => {
     return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
       ...bucket,
@@ -211,6 +264,11 @@ export default () => {
       }),
     }));
   };
+
+  const { data: idSearchData, loading: idSearchLoading } = useIdSearchQuery(
+    debouncedSearchTerm,
+    excludedIds,
+  );
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
@@ -313,6 +371,11 @@ export default () => {
     ).toString();
   };
 
+  const onRemoveSelectedId = (id: string) => {
+    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
+    replaceAllFilters(toggleFilter(idFilterToRemove, filters));
+  };
+
   return (
     <FacetContainer loading={loading} theme={theme}>
       <SubMenu>
@@ -349,25 +412,63 @@ export default () => {
               css={css`
                 padding: 6px 12px;
                 border-bottom: 1px solid ${theme.colors.grey_2};
-                &:hover {
-                  background-color: ${theme.colors.grey_3};
-                }
               `}
             >
-              <Input
-                size="sm"
-                aria-label="search-for-files"
+              {excludedIds.length > 0 && (
+                <SelectedIds ids={excludedIds} onRemove={onRemoveSelectedId} />
+              )}
+              <div
                 css={css`
-                  ${css(theme.typography.data as any)}
-                  margin-bottom: 6px;
+                  position: relative;
                 `}
-                placeholder="e.g. FL9998, DO9898…"
-                preset="search"
-                value={queriedFileIDs}
-                onChange={(e) => {
-                  setQueriedFileIDs(e.target.value);
-                }}
-              />
+              >
+                <Input
+                  size="sm"
+                  aria-label="search-for-files"
+                  placeholder="e.g. DO9182, Sa1246.bam..."
+                  preset="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(trim(e.target.value));
+                  }}
+                  css={css`
+                    z-index: 5;
+                    transform: scale(1);
+                    &:hover {
+                      background-color: white;
+                    }
+                    border-radius: 8px;
+                  `}
+                />
+                {searchQuery && searchQuery.length >= 1 ? (
+                  <>
+                    <div
+                      css={css`
+                        background: transparent;
+                        border-right: 1px solid ${theme.colors.primary_4};
+                        border-left: 1px solid ${theme.colors.primary_4};
+                        height: 18px;
+                        width: 254px;
+                        z-index: 0;
+                        position: absolute;
+                        top: 28px;
+                      `}
+                    />
+                    <SearchResultsMenu
+                      searchData={idSearchData}
+                      isLoading={idSearchLoading}
+                      onSelect={(value) => {
+                        setFilterFromFieldAndValue({
+                          field: FileCentricDocumentField['object_id'],
+                          value,
+                        });
+                        setSearchQuery('');
+                      }}
+                    />
+                  </>
+                ) : null}
+              </div>
+
               {/* disabled for initial File Repo release */}
               {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action

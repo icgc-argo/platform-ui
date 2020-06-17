@@ -50,7 +50,7 @@ const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
       <PageContainer>
         <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
         <NavBar />
-        <PageBody sidebarColSize="250px">
+        <PageBody sidebarColSize="280px">
           <FacetPanel />
           <PageContent>
             <ContentBody>

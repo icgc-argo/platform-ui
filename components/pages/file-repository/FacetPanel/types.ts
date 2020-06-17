@@ -1,4 +1,4 @@
-import { FileRepoFiltersType } from '../utils/types';
+import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
 import { FileCentricDocumentField } from '../types';
 
@@ -12,6 +12,7 @@ export enum FileFacetPath {
   file_access = 'file_access',
   data_category = 'data_category',
   analysis_tools = 'analysis_tools',
+  object_id = 'object_id',
   donors__specimens__specimen_type = 'donors__specimens__specimen_type',
   donors__specimens__specimen_tissue_source = 'donors__specimens__specimen_tissue_source',
   analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',
@@ -63,4 +64,26 @@ export type FileRepoFacetsQueryData = {
 
 export type FileRepoFacetsQueryVariables = {
   filters: FileRepoFiltersType;
+};
+
+type IdSearchQueryDataNode = {
+  node: {
+    object_id: string;
+    file: {
+      name: string;
+    };
+  };
+};
+
+export type IdSearchQueryData = {
+  file: {
+    hits: {
+      total: number;
+      edges: IdSearchQueryDataNode[];
+    };
+  };
+};
+
+export type IdSearchQueryVariables = {
+  filters: RecursiveFilter;
 };
