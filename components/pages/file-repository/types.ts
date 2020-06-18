@@ -14,4 +14,5 @@ export enum FileCentricDocumentField {
   'donors.specimens.specimen_type' = 'donors.specimens.specimen_type',
   'donors.specimens.specimen_tissue_source' = 'donors.specimens.specimen_tissue_source',
   'analysis.workflow.workflow_name' = 'analysis.workflow.workflow_name',
+  'donors.submitter_donor_id' = 'donors.submitter_donor_id',
 }
