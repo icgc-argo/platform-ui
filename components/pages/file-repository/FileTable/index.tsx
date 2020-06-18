@@ -182,12 +182,17 @@ export default () => {
       Header: fieldDisplayNames['object_id'],
       id: FileCentricDocumentField['object_id'],
       accessor: 'objectId',
-      width: 275,
+      width: 260,
     },
     {
       Header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
+    },
+    {
+      Header: fieldDisplayNames['donors.submitter_donor_id'],
+      id: FileCentricDocumentField['donors.submitter_donor_id'],
+      accessor: 'submitterDonorId',
     },
     {
       Header: fieldDisplayNames['study_id'],
@@ -204,6 +209,7 @@ export default () => {
       Header: fieldDisplayNames['file_type'],
       id: FileCentricDocumentField['file_type'],
       accessor: 'fileType',
+      width: 80,
     },
     {
       Header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
@@ -261,6 +267,9 @@ export default () => {
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
         donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
+        submitterDonorId: node.donors.hits.edges
+          .map((edge) => edge.node.submitter_donor_id)
+          .join(', '),
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,
