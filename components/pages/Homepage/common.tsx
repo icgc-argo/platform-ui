@@ -292,7 +292,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
               </Typography>
             ))}
             <Typography variant="paragraph">
-              If you have feature suggestions, feedback, or want to report a bug, please{' '}
+              If you have feature suggestions or feedback, please{' '}
               <Link href="/contact">contact us</Link>.
             </Typography>
           </div>

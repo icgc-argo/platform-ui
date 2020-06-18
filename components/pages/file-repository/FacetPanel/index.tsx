@@ -82,54 +82,6 @@ const createPresetFacets = (
     esDocumentField: FileCentricDocumentField.study_id,
   },
   {
-    name: displayNames['donors.gender'],
-    facetPath: FileFacetPath.donors__gender,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['donors.gender'],
-  },
-  {
-    name: displayNames['analysis.experiment.experimental_strategy'],
-    facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
-  },
-  {
-    name: displayNames['data_type'],
-    facetPath: FileFacetPath.data_type,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.data_type,
-  },
-  {
-    name: displayNames['file_type'],
-    facetPath: FileFacetPath.file_type,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_type,
-  },
-  {
-    name: displayNames['analysis.variant_class'],
-    facetPath: FileFacetPath.analysis__variant_class,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.variant_class'],
-  },
-  {
-    name: displayNames['file_access'],
-    facetPath: FileFacetPath.file_access,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_access,
-  },
-  {
-    name: displayNames['data_category'],
-    facetPath: FileFacetPath.data_category,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['data_category'],
-  },
-  {
-    name: displayNames['analysis_tools'],
-    facetPath: FileFacetPath.analysis_tools,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis_tools'],
-  },
-  {
     name: displayNames['donors.specimens.specimen_type'],
     facetPath: FileFacetPath.donors__specimens__specimen_type,
     variant: 'Basic',
@@ -142,10 +94,40 @@ const createPresetFacets = (
     esDocumentField: FileCentricDocumentField['donors.specimens.specimen_tissue_source'],
   },
   {
+    name: displayNames['analysis.experiment.experimental_strategy'],
+    facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+  },
+  {
+    name: displayNames['data_category'],
+    facetPath: FileFacetPath.data_category,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['data_category'],
+  },
+  {
+    name: displayNames['file_type'],
+    facetPath: FileFacetPath.file_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_type,
+  },
+  {
+    name: displayNames['file_access'],
+    facetPath: FileFacetPath.file_access,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.file_access,
+  },
+  {
     name: displayNames['analysis.workflow.workflow_name'],
     facetPath: FileFacetPath.analysis__workflow__workflow_name,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField['analysis.workflow.workflow_name'],
+  },
+  {
+    name: displayNames['analysis_tools'],
+    facetPath: FileFacetPath.analysis_tools,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['analysis_tools'],
   },
 ];
 
@@ -233,8 +215,13 @@ export default () => {
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
-  const { data, loading } = useFileFacetQuery(filters);
-  const aggregations = data ? data.file.aggregations : {};
+  const [aggregations, setAggregations] = React.useState({});
+
+  const { data, loading } = useFileFacetQuery(filters, {
+    onCompleted: (data) => {
+      setAggregations(data ? data.file.aggregations : {});
+    },
+  });
 
   const clickHandler = (targetFacet: FacetDetails) => {
     const targetFacetPath = targetFacet.facetPath;
@@ -371,13 +358,26 @@ export default () => {
     ).toString();
   };
 
+  const facetContianerLoadingStyle = css`
+    opacity: 0.5;
+    pointer-events: 'none';
+  `;
+
+  const facetContainerDefaultStyle = css`
+    opacity: 1;
+    pointer-events: 'auto';
+  `;
   const onRemoveSelectedId = (id: string) => {
     const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
   return (
-    <FacetContainer loading={loading} theme={theme}>
+    <FacetContainer
+      // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
+      css={loading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
+      theme={theme}
+    >
       <SubMenu>
         <FacetRow>
           <Typography
