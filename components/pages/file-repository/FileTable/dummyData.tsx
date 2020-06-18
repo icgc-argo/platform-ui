@@ -25,6 +25,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
   {
     objectId: 'FL9951',
     donorId: 'DO9980',
+    submitterDonorId: 'SDI9980',
     programId: 'BRCA-MX',
     dataType: 'Aligned Reads',
     experimentalStrategy: 'WXS',
@@ -35,6 +36,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
   {
     objectId: 'FL9981',
     donorId: 'DO9981',
+    submitterDonorId: 'SDI9981',
     programId: 'BRCA-US',
     dataType: 'SSM',
     experimentalStrategy: 'WGS',
@@ -45,6 +47,7 @@ export const dummyExamples: Array<FileRepositoryRecord> = [
   {
     objectId: 'FL9980',
     donorId: 'DO9982',
+    submitterDonorId: 'SDI9982',
     programId: 'CESC-US',
     dataType: 'Aligned Reads',
     experimentalStrategy: 'WXS',
