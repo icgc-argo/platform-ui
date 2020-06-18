@@ -35,6 +35,7 @@ import { useTimeout } from './common';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
+import { InvalidDonorsNotification } from './InvalidDonorsNotification';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -79,7 +80,7 @@ export default () => {
 
   // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryStats = undefined } = {},
+    data: { programDonorSummaryStats = undefined, programDonorSummaryEntries = [] } = {},
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
     programShortName,
@@ -93,6 +94,12 @@ export default () => {
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
+
+  const numInvalidDonors = programDonorSummaryEntries.filter(
+    (donor) => !donor.validWithCurrentDictionary,
+  ).length;
+
+  // todo: instead programDonorSummaryStats.invalidDonorsCount instead, once ready
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -123,6 +130,13 @@ export default () => {
           <DownloadButtons />
         </Col>
       </Row>
+      {numInvalidDonors > 0 && (
+        <Row>
+          <Col>
+            <InvalidDonorsNotification numInvalidDonors={numInvalidDonors} />
+          </Col>
+        </Row>
+      )}
       <DonorSummaryTable
         programShortName={programShortName}
         initialPages={initialPages}

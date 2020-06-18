@@ -22,12 +22,15 @@ import Icon from 'uikit/Icon';
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { StatArea as StatAreaDisplay } from '../../common';
+import { useTheme } from 'uikit/ThemeProvider';
+import { css } from '@emotion/core';
 
 const emptyProgramDonorSummaryStats: ProgramDonorReleaseStats = {
   registeredDonorsCount: 0,
   fullyReleasedDonorsCount: 0,
   noReleaseDonorsCount: 0,
   partiallyReleasedDonorsCount: 0,
+  invalidDonorsCount: 0,
 };
 
 const DonorStatsArea = ({
@@ -37,6 +40,7 @@ const DonorStatsArea = ({
   programDonorSummaryStats: ProgramDonorReleaseStats;
   className?: string;
 }) => {
+  const theme = useTheme();
   return (
     <StatAreaDisplay.Container className={className}>
       <StatAreaDisplay.Section>
@@ -70,6 +74,28 @@ const DonorStatsArea = ({
           {programDonorSummaryStats.noReleaseDonorsCount} with no released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
+      {programDonorSummaryStats.invalidDonorsCount > 0 && (
+        <StatAreaDisplay.Section>
+          <StatAreaDisplay.StatEntryContainer>
+            <Icon
+              name="warning"
+              fill={theme.colors.error}
+              width="16px"
+              height="15px"
+              css={css`
+                padding-right: 6px;
+              `}
+            />
+            <span
+              css={css`
+                color: ${theme.colors.error_dark};
+              `}
+            >
+              {programDonorSummaryStats.invalidDonorsCount} Invalid donors
+            </span>
+          </StatAreaDisplay.StatEntryContainer>
+        </StatAreaDisplay.Section>
+      )}
     </StatAreaDisplay.Container>
   );
 };
