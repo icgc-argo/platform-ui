@@ -24,6 +24,7 @@ import { FileCentricDocumentField } from '../types';
 export type FileRepositoryRecord = {
   objectId: string;
   donorId: string;
+  submitterDonorId: string;
   programId: string;
   dataType: string;
   experimentalStrategy: string;
@@ -36,6 +37,7 @@ type FileSize = { size: number };
 type Donor = {
   node: {
     donor_id: string;
+    submitter_donor_id: string;
   };
 };
 type Strategy = {
