@@ -279,18 +279,21 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
               padding: 20px;
             `}
           >
-            {newsItems.map((item, index) => (
-              <Typography
-                key={`newsText-${index}`}
-                variant="paragraph"
-                css={css`
-                  padding-bottom: 15px;
-                  border-bottom: 1px solid ${theme.colors.grey_2};
-                `}
-              >
-                {item}
-              </Typography>
-            ))}
+            <div>
+              {/** @Note DO NOT REMOVE div. Magic fix needed here to enforce style  */}
+              {newsItems.map((item, index) => (
+                <Typography
+                  key={`newsText-${index}`}
+                  variant="paragraph"
+                  css={css`
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid ${theme.colors.grey_2};
+                  `}
+                >
+                  {item}
+                </Typography>
+              ))}
+            </div>
             <Typography variant="paragraph">
               If you have feature suggestions or feedback, please{' '}
               <Link href="/contact">contact us</Link>.
