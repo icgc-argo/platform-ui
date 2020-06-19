@@ -65,6 +65,7 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
+import useClickAway from 'uikit/utils/useClickAway';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -180,8 +181,12 @@ const useIdSearchQuery = (
           {
             op: 'filter' as ArrayFieldKeys,
             content: {
-              value: `*${searchValue}*`,
-              fields: ['file_autocomplete'],
+              value: `*${searchValue.toLowerCase()}*`,
+              fields: [
+                'file_autocomplete.analyzed',
+                'file_autocomplete.lowercase',
+                'file_autocomplete.prefix',
+              ],
             },
           },
           {
@@ -211,6 +216,7 @@ export default () => {
   const [expandedFacets, setExpandedFacets] = React.useState(
     [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
   );
+  const [searchOpen, setSearchOpen] = React.useState(false);
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -372,6 +378,15 @@ export default () => {
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
+  const searchRef = React.createRef<HTMLDivElement>();
+  useClickAway({
+    domElementRef: searchRef,
+    onClickAway: () => setSearchOpen(false),
+    onElementClick: () => {
+      setSearchOpen(false);
+    },
+  });
+
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -412,6 +427,10 @@ export default () => {
               css={css`
                 padding: 6px 12px;
                 border-bottom: 1px solid ${theme.colors.grey_2};
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
               `}
             >
               {excludedIds.length > 0 && (
@@ -420,27 +439,29 @@ export default () => {
               <div
                 css={css`
                   position: relative;
+                  width: 250px;
                 `}
+                ref={searchRef}
               >
-                <Input
-                  size="sm"
-                  aria-label="search-for-files"
-                  placeholder="e.g. DO9182, Sa1246.bam..."
-                  preset="search"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(trim(e.target.value));
-                  }}
-                  css={css`
-                    z-index: 5;
-                    transform: scale(1);
-                    &:hover {
-                      background-color: white;
-                    }
-                    border-radius: 8px;
-                  `}
-                />
-                {searchQuery && searchQuery.length >= 1 ? (
+                <div onClick={() => setSearchOpen(true)}>
+                  <Input
+                    size="sm"
+                    aria-label="search-for-files"
+                    placeholder="e.g. DO9182, Sa1246.bam..."
+                    preset="search"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(trim(e.target.value));
+                    }}
+                    css={css`
+                      &:hover {
+                        background-color: white;
+                      }
+                      border-radius: 8px;
+                    `}
+                  />
+                </div>
+                {searchQuery && searchQuery.length >= 1 && searchOpen ? (
                   <>
                     <div
                       css={css`
@@ -448,7 +469,7 @@ export default () => {
                         border-right: 1px solid ${theme.colors.primary_4};
                         border-left: 1px solid ${theme.colors.primary_4};
                         height: 18px;
-                        width: 254px;
+                        width: 248px;
                         z-index: 0;
                         position: absolute;
                         top: 28px;
@@ -463,12 +484,12 @@ export default () => {
                           value,
                         });
                         setSearchQuery('');
+                        setSearchOpen(false);
                       }}
                     />
                   </>
                 ) : null}
               </div>
-
               {/* disabled for initial File Repo release */}
               {/* <FileSelectButton
                 onFilesSelect={() => null} // TODO: implement upload action

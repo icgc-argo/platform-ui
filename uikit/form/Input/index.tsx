@@ -73,7 +73,7 @@ const Input: React.ComponentType<
   size: inputSize,
   dataSize,
   placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
-  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={'search'} /> : null,
+  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={'search'} height="14px" /> : null,
   size = INPUT_SIZES.SM,
   className,
   error,
@@ -87,7 +87,7 @@ const Input: React.ComponentType<
   const { disabled: calcDisabled = disabled, error: calcError = !!error } =
     useContext(FormControlContext) || {};
 
-  const onClearClick = e => {
+  const onClearClick = (e) => {
     e.target.value = '';
     onChange(e);
   };
