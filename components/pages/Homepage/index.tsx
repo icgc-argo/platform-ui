@@ -30,6 +30,7 @@ import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
 import globeBackground from 'static/icgc-globe-bg.svg';
 
 import Link from 'uikit/Link';
+import NextLink from 'next/link';
 
 import Icon from 'uikit/Icon';
 import {
@@ -152,25 +153,26 @@ export default function Homepage() {
             `}
           >
             {FEATURE_REPOSITORY_ENABLED && (
-              <Link
-                href={FILE_REPOSITORY_PATH}
-                underline={false}
-                css={css`
-                  margin: 0 15px;
-                `}
-              >
-                <Button variant="secondary">
-                  <Icon
-                    css={css`
-                      padding-right: 2px;
-                    `}
-                    name="file"
-                    fill="accent2"
-                    height="12px"
-                  />
-                  Browse the Data
-                </Button>
-              </Link>
+              <NextLink href={FILE_REPOSITORY_PATH}>
+                <Link
+                  underline={false}
+                  css={css`
+                    margin: 0 15px;
+                  `}
+                >
+                  <Button variant="secondary">
+                    <Icon
+                      css={css`
+                        padding-right: 2px;
+                      `}
+                      name="file"
+                      fill="accent2"
+                      height="12px"
+                    />
+                    Browse the Data
+                  </Button>
+                </Link>
+              </NextLink>
             )}
 
             <Link
