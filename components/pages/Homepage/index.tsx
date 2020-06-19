@@ -50,6 +50,8 @@ import {
   DOCS_PROGRAMMATIC_APIS_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
+  DOCS_SOFTWARE_RELEASES_PAGE,
+  DOCS_DICTIONARY_RELEASES_PAGE,
 } from 'global/constants/docSitePaths';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 
@@ -296,24 +298,15 @@ export default function Homepage() {
                 </li>
                 <li>
                   ARGO{' '}
-                  <Link
-                    href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
-                    target="_blank"
-                  >
+                  <Link href={DOCS_DICTIONARY_RELEASES_PAGE} target="_blank">
                     Data Dictionary 1.0
                   </Link>
                   ,{' '}
-                  <Link
-                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-                    target="_blank"
-                  >
+                  <Link href={DOCS_DATA_RELEASES_PAGE} target="_blank">
                     Data Release 1.0
                   </Link>
                   , and{' '}
-                  <Link
-                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
-                    target="_blank"
-                  >
+                  <Link href={DOCS_SOFTWARE_RELEASES_PAGE} target="_blank">
                     Software Release 1.54.0/3.2.0
                   </Link>{' '}
                   are now available.

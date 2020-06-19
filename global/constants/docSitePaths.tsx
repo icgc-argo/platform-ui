@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -42,7 +41,17 @@ export const DOCS_API_TOKEN_PAGE = urljoin(
   DOCS_URL_ROOT,
   '/docs/data-access/user-profile-and-api-token',
 );
+
 export const DOCS_DATA_RELEASES_PAGE = urljoin(DOCS_URL_ROOT, '/docs/release-notes/data-releases');
+export const DOCS_DICTIONARY_RELEASES_PAGE = urljoin(
+  DOCS_URL_ROOT,
+  '/docs/release-notes/dictionary-releases',
+);
+export const DOCS_SOFTWARE_RELEASES_PAGE = urljoin(
+  DOCS_URL_ROOT,
+  '/docs/release-notes/software-releases',
+);
+
 export const DOCS_CLINICAL_VALIDATION_RULES_PAGE = urljoin(
   DOCS_URL_ROOT,
   '/docs/submission/clinical-data-validation-rules',
