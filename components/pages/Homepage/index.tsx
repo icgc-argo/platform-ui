@@ -273,30 +273,52 @@ export default function Homepage() {
         <NewsContainer
           newsItems={[
             <>
-              <b>Announcement:</b> We are excited to announce the soft launch of the ARGO Data
-              Platform, the next major phase following the{' '}
+              <b>Announcement: June 19, 2020</b> - We are excited to announce the launch of the ICGC
+              ARGO Data Platform, a major milestone following the{' '}
               <Link target="_blank" href="https://dcc.icgc.org/">
                 ICGC 25K Data Portal
               </Link>
-              . This release represents an international effort to advance cancer genomics through
+              . ARGO represents an international effort to advance cancer genomics through
               high-quality clinical and molecular data for international researchers.
-              <br />
-              <br />
-              Our team is working hard to roll out the first release, which includes the ability:
               <ul
                 css={css`
                   list-style-position: outside;
                   padding-left: 20px;
                 `}
               >
-                <li>for ARGO programs to submit clinical data</li>
+                <li>Clinical data submission is now open for registered programs.</li>
                 <li>
-                  to browse newly processed files from the ICGC 25K projects against the GRCh38
-                  Human Reference Genome in the file repository
+                  Data analyzed against GRCh38 is now available in the{' '}
+                  <Link href={FILE_REPOSITORY_PATH} target="_blank">
+                    File Repository
+                  </Link>
+                  .
                 </li>
-                <li>to download newly analyzed molecular data files.</li>
+                <li>
+                  ARGO{' '}
+                  <Link
+                    href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
+                    target="_blank"
+                  >
+                    Data Dictionary 1.0
+                  </Link>
+                  ,{' '}
+                  <Link
+                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+                    target="_blank"
+                  >
+                    Data Release 1.0
+                  </Link>
+                  , and{' '}
+                  <Link
+                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
+                    target="_blank"
+                  >
+                    Software Release 1.54.0/3.2.0
+                  </Link>{' '}
+                  are now available.
+                </li>
               </ul>
-              <b>Check back soon for updates!</b>
             </>,
           ]}
         />
