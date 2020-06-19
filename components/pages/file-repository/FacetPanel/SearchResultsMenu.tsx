@@ -29,7 +29,7 @@ const ResultsDropdown = styled('div')`
   top: 36px;
   left: 0px;
   background-color: white;
-  width: 254px;
+  width: 248px;
   border: 1px solid ${theme.colors.primary_4};
   border-top: 0px;
   border-radius: 0px 0px 8px 8px;
