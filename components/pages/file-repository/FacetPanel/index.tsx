@@ -383,7 +383,7 @@ export default () => {
     domElementRef: searchRef,
     onClickAway: () => setSearchOpen(false),
     onElementClick: () => {
-      setSearchOpen(false);
+      setSearchOpen(true);
     },
   });
 
@@ -443,24 +443,22 @@ export default () => {
                 `}
                 ref={searchRef}
               >
-                <div onClick={() => setSearchOpen(true)}>
-                  <Input
-                    size="sm"
-                    aria-label="search-for-files"
-                    placeholder="e.g. DO9182, Sa1246.bam..."
-                    preset="search"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(trim(e.target.value));
-                    }}
-                    css={css`
-                      &:hover {
-                        background-color: white;
-                      }
-                      border-radius: 8px;
-                    `}
-                  />
-                </div>
+                <Input
+                  size="sm"
+                  aria-label="search-for-files"
+                  placeholder="e.g. DO9182, Sa1246.bam..."
+                  preset="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(trim(e.target.value));
+                  }}
+                  css={css`
+                    &:hover {
+                      background-color: white;
+                    }
+                    border-radius: 8px;
+                  `}
+                />
                 {searchQuery && searchQuery.length >= 1 && searchOpen ? (
                   <>
                     <div
