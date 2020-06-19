@@ -209,7 +209,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'July 2, 2020', releaseIteration: 1 }}
+              version={{ date: 'June 19, 2020', releaseIteration: 1 }}
             />
           )}
         </div>
@@ -309,7 +309,7 @@ export default function Homepage() {
                   </Link>
                   , and{' '}
                   <Link href={DOCS_SOFTWARE_RELEASES_PAGE} target="_blank">
-                    Software Release 1.54.0/3.2.0
+                    Software Release 1.55.0/3.2.0
                   </Link>{' '}
                   are now available.
                 </li>
