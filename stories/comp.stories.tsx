@@ -33,6 +33,7 @@ function loadStories() {
 }
 
 addDecorator((Story) => {
+  console.log('process.env.GATEWAY_API_ROOT: ', process.env.GATEWAY_API_ROOT);
   const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
   // const apolloLink = new HttpLink({
   //   uri: GRAPHQL_URL,
