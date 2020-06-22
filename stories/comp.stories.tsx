@@ -25,7 +25,7 @@ import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { HttpLink } from 'apollo-link-http';
-import { STORYBOOK_GATEWAY_API_ROOT } from './config';
+import { STORYBOOK_GATEWAY_API_ROOT } from './comp.config';
 
 const req = require.context('../components', true, /.stories\.tsx$/);
 
@@ -34,25 +34,24 @@ function loadStories() {
 }
 
 addDecorator((Story) => {
-  console.log('process.env.GATEWAY_API_ROOT: ', STORYBOOK_GATEWAY_API_ROOT);
-  const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
-  // const apolloLink = new HttpLink({
-  //   uri: GRAPHQL_URL,
-  //   fetch,
-  // });
-  // const client = new ApolloClient({
-  //   link: apolloLink,
-  //   connectToDevTools: true,
-  //   cache: new InMemoryCache(),
-  // });
-
-  console.log('GRAPHQL_URL: ', GRAPHQL_URL);
+  const GRAPHQL_URL = urlJoin(STORYBOOK_GATEWAY_API_ROOT, 'graphql');
+  const apolloLink = new HttpLink({
+    uri: GRAPHQL_URL,
+    fetch,
+  });
+  const client = new ApolloClient({
+    link: apolloLink,
+    connectToDevTools: true,
+    cache: new InMemoryCache(),
+  });
 
   const StoryComponent = Story as React.ComponentType;
   return (
-    <ThemeProvider>
-      <StoryComponent />
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider>
+        <StoryComponent />
+      </ThemeProvider>
+    </ApolloProvider>
   );
 });
 
