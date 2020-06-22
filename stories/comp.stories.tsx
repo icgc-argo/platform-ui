@@ -33,7 +33,7 @@ function loadStories() {
 }
 
 addDecorator((Story) => {
-  // const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
+  const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
   // const apolloLink = new HttpLink({
   //   uri: GRAPHQL_URL,
   //   fetch,
@@ -43,6 +43,8 @@ addDecorator((Story) => {
   //   connectToDevTools: true,
   //   cache: new InMemoryCache(),
   // });
+
+  console.log('GRAPHQL_URL: ', GRAPHQL_URL);
 
   const StoryComponent = Story as React.ComponentType;
   return (
