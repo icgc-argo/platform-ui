@@ -28,7 +28,7 @@ const displayTypes = Object.keys(chartTypeMeta);
 
 const SimpleBarChartStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = (index = 0, state = 'program', title = 'By Program') => ({
-    state: select(`state`, displayTypes, state),
+    state: select(`state`, displayTypes, state) as keyof typeof chartTypeMeta,
   });
 
   const currentDisplay = knobs().state;

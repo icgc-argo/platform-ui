@@ -33,7 +33,7 @@ const defaultTags = {
   span: 'span',
 };
 
-const createTypographyComponentMapFromTheme = memoize(themeObj =>
+const createTypographyComponentMapFromTheme = memoize((themeObj) =>
   Object.entries(themeObj.typography).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -51,7 +51,7 @@ const createDomComponent = memoize(
 );
 
 const createStyledDomComponent = memoize(
-  Component => styled<'div', { bold?: boolean; color?: string }>(Component)`
+  (Component) => styled<'div', { bold?: boolean; color?: string }>(Component)`
     font-weight: ${({ bold }) => (bold ? `bold` : `normal`)};
     color: ${({ theme, color }) => (color ? theme.colors[color] || color : 'inherit')};
   `,

@@ -24,7 +24,7 @@ import Pipe from '.';
 import { text, select } from '@storybook/addon-knobs';
 
 import defaultTheme from '../theme/defaultTheme';
-const themeColors = Object.keys(defaultTheme.colors);
+const themeColors = Object.keys(defaultTheme.colors) as Array<keyof typeof defaultTheme.colors>;
 
 const PipeStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const colourKnobs = [

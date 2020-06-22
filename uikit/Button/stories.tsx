@@ -28,8 +28,8 @@ import { asyncDummyFunc, placeholderImageURLRoot } from '../testUtil';
 const dummyClick = action('Clicked!');
 
 export const createKnobs = () => {
-  const variant = radios('variant', BUTTON_VARIANTS);
-  const size = radios('size', BUTTON_SIZES);
+  const variant = radios('variant', BUTTON_VARIANTS, BUTTON_VARIANTS.PRIMARY);
+  const size = radios('size', BUTTON_SIZES, BUTTON_SIZES.MD);
   const disabled = boolean('disabled', false);
   const isAsync = boolean('isAsync', false);
   const children = text('children', 'some button');

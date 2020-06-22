@@ -45,7 +45,8 @@ const TooltipStories = storiesOf(`${__dirname}`, module).add(
       duration: number('duration', undefined),
       distance: number('distance', undefined),
       offset: number('offset', undefined),
-      hideOnClick: select('hideOnClick', [true, false, 'persistent'], undefined),
+      // @ts-ignore tricky typing by libraries
+      hideOnClick: select('hideOnClick', [true, false, 'persistent'], undefined) as any,
       multiple: boolean('multiple', undefined),
       followCursor: boolean('followCursor', undefined),
       inertia: boolean('inertia', undefined),

@@ -26,10 +26,11 @@ import Toast, { TOAST_VARIANTS, TOAST_INTERACTION } from '.';
 
 const ToastStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const variant = select('variant', [undefined, ...Object.values(TOAST_VARIANTS)], undefined);
-  const interactionType = select('interactionType', [
-    undefined,
-    ...Object.values(TOAST_INTERACTION),
-  ]);
+  const interactionType = select(
+    'interactionType',
+    [undefined, ...Object.values(TOAST_INTERACTION)],
+    TOAST_INTERACTION.NONE,
+  );
   const title = text('title', 'Hipster Ipsum');
   const content = text(
     'content',
