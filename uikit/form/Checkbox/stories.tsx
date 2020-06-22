@@ -26,7 +26,7 @@ import { action } from '@storybook/addon-actions';
 const createKnobs = () => {
   const checked = boolean('checked', false);
   const disabled = boolean('disabled', false);
-  const size = radios('size', STYLEDCHECKBOX_SIZES);
+  const size = radios('size', STYLEDCHECKBOX_SIZES, STYLEDCHECKBOX_SIZES.MD);
 
   return {
     checked,

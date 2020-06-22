@@ -26,9 +26,10 @@ import { StyledInput, IconWrapper } from './styledComponents';
 import FormControlContext from '../FormControl/FormControlContext';
 import css from '@emotion/css';
 
+type InputPreset = 'default' | 'search';
 export const INPUT_PRESETS = {
-  DEFAULT: 'default',
-  SEARCH: 'search',
+  DEFAULT: 'default' as InputPreset,
+  SEARCH: 'search' as InputPreset,
 };
 
 const Input: React.ComponentType<
@@ -37,7 +38,7 @@ const Input: React.ComponentType<
     /**
      * commonly used configuration aliases
      */
-    preset?: 'default' | 'search';
+    preset?: InputPreset;
     /**
      * Placeholder
      */

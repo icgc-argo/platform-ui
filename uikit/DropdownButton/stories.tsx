@@ -20,18 +20,14 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import DropdownButton from '.';
-import { select } from '@storybook/addon-knobs';
+import { select, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { createKnobs as createButtonKnobs } from 'uikit/Button/stories';
 import Button from 'uikit/Button';
 
 const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = createButtonKnobs();
-  const menuShown = select('menuShown', {
-    undefined: 'undefined',
-    true: true,
-    false: false,
-  });
+  const menuShown = boolean('menuShown', false);
   return (
     <DropdownButton
       onItemClick={action('onItemClick')}

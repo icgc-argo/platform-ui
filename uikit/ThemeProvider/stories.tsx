@@ -59,7 +59,7 @@ const ColorViewer = () => {
 };
 
 const createThemeKnobs = () => {
-  theme: radios('theme', { default: 'default' });
+  theme: radios('theme', { default: 'default' }, 'default');
 };
 
 const ThemeProviderStories = storiesOf(`${__dirname}`, module)

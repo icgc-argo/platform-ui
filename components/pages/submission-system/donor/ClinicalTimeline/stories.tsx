@@ -61,7 +61,10 @@ const mock = [
       'Clinical Tumour Staging System': 'Binet',
       'Clinical Stage Group': '',
     },
-    samples: [{ id: 'SAB5353', type: 'Amplified DNA' }, { id: 'SAD3053', type: 'Total DNA' }],
+    samples: [
+      { id: 'SAB5353', type: 'Amplified DNA' },
+      { id: 'SAD3053', type: 'Total DNA' },
+    ],
   },
   {
     type: EntityType.SPECIMEN,
@@ -114,6 +117,7 @@ const ClinicalTimelineStories = storiesOf(`${__dirname}`, module).add('Basic', (
       full: mock,
       noData: [],
     };
+    // @ts-ignore revisit later
     return { data: select('Data', options, options.full) };
   };
 
