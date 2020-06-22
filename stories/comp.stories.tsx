@@ -33,24 +33,22 @@ function loadStories() {
 }
 
 addDecorator((Story) => {
-  const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
-  const apolloLink = new HttpLink({
-    uri: GRAPHQL_URL,
-    fetch,
-  });
-  const client = new ApolloClient({
-    link: apolloLink,
-    connectToDevTools: true,
-    cache: new InMemoryCache(),
-  });
+  // const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
+  // const apolloLink = new HttpLink({
+  //   uri: GRAPHQL_URL,
+  //   fetch,
+  // });
+  // const client = new ApolloClient({
+  //   link: apolloLink,
+  //   connectToDevTools: true,
+  //   cache: new InMemoryCache(),
+  // });
 
   const StoryComponent = Story as React.ComponentType;
   return (
-    <ApolloProvider client={client}>
-      <ThemeProvider>
-        <StoryComponent />
-      </ThemeProvider>
-    </ApolloProvider>
+    <ThemeProvider>
+      <StoryComponent />
+    </ThemeProvider>
   );
 });
 
