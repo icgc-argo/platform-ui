@@ -16,21 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-import React from 'react';
-import get from 'lodash/get';
+import React, { RefObject } from 'react';
 
 export default function useClickAway({
   domElementRef,
-  onClickAway = e => {},
-  onElementClick = e => {},
+  onClickAway = (event) => {},
+  onElementClick = (event) => {},
+}: {
+  domElementRef: RefObject<HTMLElement>;
+  onClickAway: (event: MouseEvent) => void;
+  onElementClick: (event: MouseEvent) => void;
 }) {
   React.useEffect(() => {
-    const onGlobalClick = event => {
+    const onGlobalClick = (event: MouseEvent) => {
       if (!domElementRef.current) {
         return;
       }
-      const isClickaway = !domElementRef.current.contains(event.target);
+      const isClickaway = !domElementRef.current.contains(event.target as Node);
 
       if (isClickaway) {
         onClickAway(event);

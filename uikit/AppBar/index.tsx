@@ -83,7 +83,7 @@ UserBadge.propTypes = {
     .isRequired,
 };
 
-export const Logo = ({ DomComponent = props => <span {...props} /> }) => {
+export const Logo = ({ DomComponent = (props) => <span {...props} /> }) => {
   const ContainerComponent = LogoContainer.withComponent(DomComponent);
   return (
     <ContainerComponent>
@@ -96,9 +96,9 @@ Logo.propTypes = {
   DomComponent: PropTypes.func,
 };
 
-export const Section = props => <SectionDisplay {...props} />;
+export const Section = (props) => <SectionDisplay {...props} />;
 
-export const MenuGroup = props => <MenuGroupDisplay {...props} />;
+export const MenuGroup = (props) => <MenuGroupDisplay {...props} />;
 
 export const MenuItem = React.forwardRef<
   HTMLDivElement,
@@ -122,7 +122,7 @@ export const MenuItem = React.forwardRef<
     },
     forwardedRef,
   ) => {
-    const ref = forwardedRef || React.createRef();
+    const ref = (forwardedRef || React.createRef()) as React.RefObject<HTMLDivElement>;
     const [isDropdownOpen, setDropdownOpen] = React.useState(false);
 
     useClickAway({
