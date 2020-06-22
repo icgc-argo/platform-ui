@@ -25,7 +25,7 @@ import { select, number } from '@storybook/addon-knobs';
 import TitleBorder from '.';
 import Typography from '../Typography';
 
-const themeColors = Object.keys(defaultTheme.colors);
+const themeColors = Object.keys(defaultTheme.colors) as Array<keyof typeof defaultTheme.colors>;
 
 const TitleBorderStories = storiesOf(`${__dirname}`, module)
   .add('Full width', () => {
@@ -42,7 +42,7 @@ const TitleBorderStories = storiesOf(`${__dirname}`, module)
   .add('Fixed width', () => {
     const knobs = {
       color: select('color', themeColors, 'primary', null),
-      width: number('Width', 45),
+      width: String(number('Width', 45)),
     };
     return (
       <>

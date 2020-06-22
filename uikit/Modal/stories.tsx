@@ -25,6 +25,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 import Modal from '.';
 import { ICON_NAMES, BUILT_IN_ICON_COLORS } from '../Icon';
 import { BUTTON_SIZES } from '../Button';
+import Icons from 'uikit/Icon/icons';
 
 const ModalStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
@@ -40,7 +41,11 @@ const ModalStories = storiesOf(`${__dirname}`, module)
       const actionDisabled = boolean('actionDisabled', false);
       const actionVisible = boolean('actionVisible', true);
       const titleIconConfig = {
-        name: select('titleIconConfig.name', [null, ...Object.values(ICON_NAMES)], null),
+        name: select(
+          'titleIconConfig.name',
+          [null, ...Object.keys(Icons)],
+          null,
+        ) as keyof typeof Icons,
         fill: select(
           'titleIconConfig.fill',
           [null, 'green', ...Object.values(Object.values(BUILT_IN_ICON_COLORS))],

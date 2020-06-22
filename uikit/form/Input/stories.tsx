@@ -54,8 +54,8 @@ const InputStories = storiesOf(`${__dirname}`, module)
         <Input
           aria-label="demo-input"
           value={value}
-          onChange={e => setValue(e.target.value)}
-          onBlur={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={(e) => setValue(e.target.value)}
           {...props}
         />
       </div>
@@ -69,8 +69,8 @@ const InputStories = storiesOf(`${__dirname}`, module)
         <Input
           aria-label="demo-input"
           value={value}
-          onChange={e => setValue(e.target.value)}
-          onBlur={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={(e) => setValue(e.target.value)}
           preset={preset}
         />
       </div>
@@ -84,8 +84,8 @@ const InputStories = storiesOf(`${__dirname}`, module)
         <Input
           aria-label="demo-input"
           value={value}
-          onChange={e => setValue(e.target.value)}
-          onBlur={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={(e) => setValue(e.target.value)}
           {...props}
           icon={<Icon name="search" />}
         />

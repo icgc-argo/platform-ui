@@ -24,7 +24,7 @@ import { Container, Row, Col } from 'react-grid-system';
 import defaultTheme from '../theme/defaultTheme';
 
 import Typography from '../Typography';
-import icons from './icons';
+import icons, { UikitIconNames } from './icons';
 import Icon from '.';
 
 const createKnobs = () => {
@@ -36,7 +36,7 @@ const createKnobs = () => {
 
 const IconStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
-    const name = select('name', Object.keys(icons), 'spinner');
+    const name = select('name', Object.keys(icons) as UikitIconNames[], 'spinner');
     const { fill } = createKnobs();
     return (
       <div>
@@ -69,7 +69,7 @@ const IconStories = storiesOf(`${__dirname}`, module)
     );
     return (
       <Row nogutter>
-        {Object.keys(icons).map(iconName => (
+        {Object.keys(icons).map((iconName) => (
           <IconStoryDisplay iconName={iconName} />
         ))}
       </Row>
