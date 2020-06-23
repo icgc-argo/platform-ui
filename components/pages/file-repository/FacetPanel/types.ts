@@ -8,6 +8,7 @@ export enum FileFacetPath {
   file_type = 'file_type',
   file_access = 'file_access',
   data_category = 'data_category',
+  data_type = 'data_type',
   analysis_tools = 'analysis_tools',
   object_id = 'object_id',
   donors__specimens__specimen_type = 'donors__specimens__specimen_type',
@@ -47,6 +48,9 @@ export type FileRepoFacetsQueryData = {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.data_category]: {
+        buckets: BucketAggregation[];
+      };
+      [FileFacetPath.data_type]: {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.analysis_tools]: {
