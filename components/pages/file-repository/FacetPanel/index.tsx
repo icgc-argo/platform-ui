@@ -107,6 +107,12 @@ const createPresetFacets = (
     esDocumentField: FileCentricDocumentField['data_category'],
   },
   {
+    name: displayNames['data_type'],
+    facetPath: FileFacetPath.data_type,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField['data_type'],
+  },
+  {
     name: displayNames['file_type'],
     facetPath: FileFacetPath.file_type,
     variant: 'Basic',
