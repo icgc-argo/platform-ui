@@ -128,12 +128,12 @@ export function AuthProvider({
       method: 'GET',
       mode: 'cors',
     })
-      .then(res => res.text())
-      .then(egoToken => {
+      .then((res) => res.text())
+      .then((egoToken) => {
         Cookies.set(EGO_JWT_KEY, egoToken);
         return egoToken;
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn('err: ', err);
         throw err;
       });

@@ -52,6 +52,9 @@ import {
   DOCS_DATA_DOWNLOAD_PAGE,
 } from 'global/constants/docSitePaths';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
+import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { sleep } from 'global/utils/common';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -99,7 +102,12 @@ export default function Homepage() {
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
   const { data: stats, loading } = useFileRepoStatsBarQuery();
+  const { isLoading: isLoaderShown, setLoading: setIsLoaderShown } = useGlobalLoadingState();
 
+  const { isLoggingOut } = useAuthContext();
+  if (isLoggingOut && isLoaderShown) {
+    sleep(1000).then(() => setIsLoaderShown(false));
+  }
   return (
     <DefaultLayout>
       <HeroDiv>
