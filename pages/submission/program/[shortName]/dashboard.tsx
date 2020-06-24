@@ -35,7 +35,7 @@ export default createPage({
     );
   },
   startWithGlobalLoader: true,
-})(props => {
+})((props) => {
   useProgramCheckEffect();
   return <ProgramDashboard {...props} />;
 });
