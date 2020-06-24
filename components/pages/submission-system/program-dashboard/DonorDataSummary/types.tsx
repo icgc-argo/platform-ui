@@ -43,7 +43,7 @@ export type ProgramDonorReleaseStats = {
   fullyReleasedDonorsCount: number;
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
-  invalidDonorsCount: number;
+  donorsInvalidWithCurrentDictionaryCount: number;
 };
 
 export enum DonorDataReleaseState {

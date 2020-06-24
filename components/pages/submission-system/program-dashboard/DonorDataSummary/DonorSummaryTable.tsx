@@ -74,7 +74,7 @@ export default ({
     fullyReleasedDonorsCount: 0,
     partiallyReleasedDonorsCount: 0,
     noReleaseDonorsCount: 0,
-    invalidDonorsCount: 0,
+    donorsInvalidWithCurrentDictionaryCount: 0,
   };
 
   const containerRef = createRef<HTMLDivElement>();
@@ -385,12 +385,7 @@ export default ({
             css={css`
               opacity: ${isTableLoading ? 0.5 : 1};
             `}
-            programDonorSummaryStats={{
-              ...programDonorSummaryStats,
-              invalidDonorsCount: programDonorSummaryEntries.filter(
-                (donor) => !donor.validWithCurrentDictionary,
-              ).length,
-            }}
+            programDonorSummaryStats={programDonorSummaryStats}
           />
         }
         noMargin={true}

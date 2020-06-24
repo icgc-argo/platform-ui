@@ -30,7 +30,7 @@ const emptyProgramDonorSummaryStats: ProgramDonorReleaseStats = {
   fullyReleasedDonorsCount: 0,
   noReleaseDonorsCount: 0,
   partiallyReleasedDonorsCount: 0,
-  invalidDonorsCount: 0,
+  donorsInvalidWithCurrentDictionaryCount: 0,
 };
 
 const DonorStatsArea = ({
@@ -74,7 +74,7 @@ const DonorStatsArea = ({
           {programDonorSummaryStats.noReleaseDonorsCount} with no released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
-      {programDonorSummaryStats.invalidDonorsCount > 0 && (
+      {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
         <StatAreaDisplay.Section>
           <StatAreaDisplay.StatEntryContainer>
             <Icon
@@ -91,7 +91,7 @@ const DonorStatsArea = ({
                 color: ${theme.colors.error_dark};
               `}
             >
-              {programDonorSummaryStats.invalidDonorsCount} Invalid donors
+              {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount} Invalid donors
             </span>
           </StatAreaDisplay.StatEntryContainer>
         </StatAreaDisplay.Section>

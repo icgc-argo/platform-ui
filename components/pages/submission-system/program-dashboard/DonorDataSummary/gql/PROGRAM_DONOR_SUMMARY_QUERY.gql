@@ -36,5 +36,6 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
     fullyReleasedDonorsCount
     partiallyReleasedDonorsCount
     noReleaseDonorsCount
+    donorsInvalidWithCurrentDictionaryCount
   }
 }

@@ -80,7 +80,7 @@ export default () => {
 
   // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryStats = undefined, programDonorSummaryEntries = [] } = {},
+    data: { programDonorSummaryStats = undefined } = {},
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
     programShortName,
@@ -94,12 +94,6 @@ export default () => {
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
-
-  const numInvalidDonors = programDonorSummaryEntries.filter(
-    (donor) => !donor.validWithCurrentDictionary,
-  ).length;
-
-  // todo: instead programDonorSummaryStats.invalidDonorsCount instead, once ready
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -130,10 +124,12 @@ export default () => {
           <DownloadButtons />
         </Col>
       </Row>
-      {numInvalidDonors > 0 && (
+      {!isCardLoading && (
         <Row>
           <Col>
-            <InvalidDonorsNotification numInvalidDonors={numInvalidDonors} />
+            <InvalidDonorsNotification
+              numInvalidDonors={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
+            />
           </Col>
         </Row>
       )}

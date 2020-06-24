@@ -48,7 +48,7 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
     </div>
   );
 
-  return (
+  return numInvalidDonors > 0 ? (
     <Notification
       css={css`
         margin-top: 10px;
@@ -62,5 +62,5 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
       content={errorBody}
       interactionType={'NONE'}
     />
-  );
+  ) : null;
 };
