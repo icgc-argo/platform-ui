@@ -58,45 +58,40 @@ export const useHook = <T>(
 ) => {
   const router = useRouter();
   const currentQuery = getParams(router);
-  const [state, setState] = React.useState({ [key]: serialize(initialValue), ...currentQuery });
+  const [firstRender, setFirstRender] = React.useState(true);
 
-  // whether next-router is in sync with this local state
-  const isInSync = currentQuery[key] === state[key];
+  React.useEffect(() => {
+    setFirstRender(false);
+  }, []);
+
+  React.useEffect(() => {
+    const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
+      [key]: serialize(initialValue),
+      ...currentQuery,
+    }).toString()}`;
+    router.replace(router.pathname, newPath);
+  }, []);
 
   const setUrlState = (value: T) => {
-    setState({
-      ...state,
+    const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
+      ...currentQuery,
       [key]: serialize(value),
-    });
+    }).toString()}`;
+    if (pushNavigation) {
+      router.push(router.pathname, newPath);
+    } else {
+      router.replace(router.pathname, newPath);
+    }
   };
-
-  // syncs state -> Next router
-  React.useEffect(() => {
-    if (!isInSync) {
-      const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams(
-        state,
-      ).toString()}`;
-      if (pushNavigation) {
-        router.push(router.pathname, newPath);
-      } else {
-        router.replace(router.pathname, newPath);
-      }
-    }
-  }, [state]);
-
-  // syncs Next router -> state
-  React.useEffect(() => {
-    if (!isInSync) {
-      setState({ [key]: serialize(initialValue), ...currentQuery });
-    }
-  }, [router.asPath]);
 
   const deserializeValue = (v: string) => {
     const sanitized = getSanitizedValue(v);
     return deSerialize(sanitized);
   };
-
-  return [deserializeValue(state[key]), setUrlState] as [T, typeof setUrlState];
+  return [firstRender ? initialValue : deserializeValue(currentQuery[key]), setUrlState] as [
+    T,
+    typeof setUrlState,
+  ];
 };
 
 export default useHook;
