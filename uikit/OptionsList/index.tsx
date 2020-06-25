@@ -121,21 +121,29 @@ const OptionsList: React.ComponentType<{
               min-width: 0;
             `}
           >
-            <div
-              ref={optionRef}
+            <Typography
+              variant="data"
+              as="li"
               css={css`
                 margin: 0px 0px 0px 7px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
                 line-height: 20px;
-                font-family: Work Sans, sans-serif;
-                font-size: 12px;
-                font-weight: normal;
+                display: flex;
+                flex: 1;
+                min-width: 0;
+                list-style-type: none;
               `}
             >
-              {parseDisplayValue(option.key)}
-            </div>
+              <div
+                ref={optionRef}
+                css={css`
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                `}
+              >
+                {parseDisplayValue(option.key)}
+              </div>
+            </Typography>
           </Tooltip>
         </div>
 
