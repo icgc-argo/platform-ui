@@ -149,7 +149,7 @@ const OptionsList: React.ComponentType<{
             margin-left: 5px;
           `}
         >
-          {option.doc_count * 1000}
+          {option.doc_count}
         </Tag>
       </div>
     );
