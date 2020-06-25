@@ -61,15 +61,11 @@ export const useHook = <T>(
   const [firstRender, setFirstRender] = React.useState(true);
 
   React.useEffect(() => {
-    setFirstRender(false);
-  }, []);
-
-  React.useEffect(() => {
     const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
       [key]: serialize(initialValue),
       ...currentQuery,
     }).toString()}`;
-    router.replace(router.pathname, newPath);
+    router.replace(router.pathname, newPath).then(() => setFirstRender(false));
   }, []);
 
   const setUrlState = (value: T) => {
@@ -88,6 +84,7 @@ export const useHook = <T>(
     const sanitized = getSanitizedValue(v);
     return deSerialize(sanitized);
   };
+
   return [firstRender ? initialValue : deserializeValue(currentQuery[key]), setUrlState] as [
     T,
     typeof setUrlState,
