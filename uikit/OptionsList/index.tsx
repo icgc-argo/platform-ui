@@ -18,7 +18,6 @@
  */
 
 import React from 'react';
-import { MenuItem } from '../SubMenu';
 import Checkbox from 'uikit/form/Checkbox';
 import { css } from '@emotion/core';
 import Tag from 'uikit/Tag';
@@ -37,8 +36,6 @@ export type FilterOption = {
 };
 
 type SelectableFilterOption = FilterOption & { isChecked: boolean };
-
-const MAX_CHAR_LENGTH = 28;
 
 const OptionsList: React.ComponentType<{
   options: Array<FilterOption>;
@@ -70,75 +67,93 @@ const OptionsList: React.ComponentType<{
 
   const StyledOption: React.ComponentType<{
     option: SelectableFilterOption;
-  }> = ({ option }) => (
-    <div
-      css={css`
-        display: flex;
-        justify-content: space-between;
-        height: 25px;
-        padding: 2px 12px;
-        width: calc(100% - (2 * 12px));
-        &:hover {
-          background: ${theme.colors.grey_3};
-        }
-        cursor: pointer;
-      `}
-      key={option.key}
-      onClick={(e) => {
-        e.stopPropagation();
-        onOptionToggle(option.key);
-      }}
-    >
+  }> = ({ option }) => {
+    const optionRef = React.useRef<HTMLDivElement>(null);
+    const [disableTooltip, setDisableTooltip] = React.useState(true);
+    React.useEffect(() => {
+      if (optionRef.current && optionRef.current.scrollWidth > optionRef.current.clientWidth) {
+        setDisableTooltip(false);
+      } else {
+        setDisableTooltip(true);
+      }
+    }, []);
+    return (
       <div
         css={css`
           display: flex;
           align-items: center;
+          justify-content: space-between;
+          height: 25px;
+          padding: 2px 12px;
+          width: calc(100% - (2 * 12px));
+          &:hover {
+            background: ${theme.colors.grey_3};
+          }
+          cursor: pointer;
         `}
+        key={option.key}
+        onClick={(e) => {
+          e.stopPropagation();
+          onOptionToggle(option.key);
+        }}
       >
-        <Checkbox
-          checked={option.isChecked}
-          value={option.key}
-          onChange={(e) => null}
-          aria-label={`${option.key}-facet`}
-          size="sm"
-        />
-        <Tooltip
-          html={parseDisplayValue(option.key)}
-          disabled={parseDisplayValue(option.key).length <= MAX_CHAR_LENGTH}
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+          `}
         >
-          <Typography
-            variant={'data'}
+          <Checkbox
+            checked={option.isChecked}
+            value={option.key}
+            onChange={(e) => null}
+            aria-label={`${option.key}-facet`}
+            size="sm"
+          />
+          <Tooltip
+            html={parseDisplayValue(option.key)}
+            disabled={disableTooltip}
             css={css`
-              margin: 0px 0px 0px 7px;
-              list-style-type: none;
-              display: inline-block;
-              max-width: 185px;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              vertical-align: middle;
-              line-height: 20px;
+              display: flex;
+              flex: 1;
+              min-width: 0;
             `}
-            as={'li'}
           >
-            {parseDisplayValue(option.key)}
-          </Typography>
-        </Tooltip>
+            <div
+              ref={optionRef}
+              css={css`
+                margin: 0px 0px 0px 7px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 20px;
+                font-family: Work Sans, sans-serif;
+                font-size: 12px;
+                font-weight: normal;
+              `}
+            >
+              {parseDisplayValue(option.key)}
+            </div>
+          </Tooltip>
+        </div>
+
+        <Tag
+          variant={'NEUTRAL'}
+          css={css`
+            height: 18px;
+            font-size: 10px;
+            align-self: center;
+            white-space: nowrap;
+            margin-left: 5px;
+          `}
+        >
+          {option.doc_count * 1000}
+        </Tag>
       </div>
-
-      <Tag
-        variant={'NEUTRAL'}
-        css={css`
-          height: 18px;
-
-          font-size: 10px;
-          align-self: center;
-        `}
-      >
-        {option.doc_count}
-      </Tag>
-    </div>
-  );
+    );
+  };
 
   /* %%%%%%%%%%%%%%%%%% ~ Option Rendering Logic ~ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   const sortedOptions = React.useMemo(() => orderBy(options, ['isChecked'], ['desc']), [options]);
