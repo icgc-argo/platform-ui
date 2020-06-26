@@ -74,20 +74,23 @@ export default ({
     fullyReleasedDonorsCount: 0,
     partiallyReleasedDonorsCount: 0,
     noReleaseDonorsCount: 0,
+    donorsInvalidWithCurrentDictionaryCount: 0,
   };
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
-    return (
-      <CellContentCenter>
-        <StarIcon
-          fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
-          outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
-        />
-      </CellContentCenter>
+    const theme = useTheme();
+    const displayIcon = original.validWithCurrentDictionary ? (
+      <StarIcon
+        fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
+        outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
+      />
+    ) : (
+      <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />
     );
+    return <CellContentCenter>{displayIcon}</CellContentCenter>;
   };
 
   const PercentageCell = ({
@@ -356,7 +359,7 @@ export default ({
         const fields = sortRule.id.split(ID_SEPARATOR);
         const order = sortRule.desc ? 'desc' : 'asc';
         return accSorts.concat(
-          fields.map(field => ({
+          fields.map((field) => ({
             field: field as DonorSummaryEntrySortField,
             order: order as DonorSummaryEntrySortOrder,
           })),
