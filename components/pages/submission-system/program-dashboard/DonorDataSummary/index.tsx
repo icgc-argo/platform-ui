@@ -35,6 +35,7 @@ import { useTimeout } from './common';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
+import { InvalidDonorsNotification } from './InvalidDonorsNotification';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -123,6 +124,15 @@ export default () => {
           <DownloadButtons />
         </Col>
       </Row>
+      {!isCardLoading && (
+        <Row>
+          <Col>
+            <InvalidDonorsNotification
+              numInvalidDonors={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
+            />
+          </Col>
+        </Row>
+      )}
       <DonorSummaryTable
         programShortName={programShortName}
         initialPages={initialPages}

@@ -35,6 +35,7 @@ export type DonorSummaryRecord = {
   sangerVcsFailed: number;
   processingStatus: MolecularProcessingStatus;
   updatedAt: Date | String;
+  validWithCurrentDictionary: boolean;
 };
 
 export type ProgramDonorReleaseStats = {
@@ -42,6 +43,7 @@ export type ProgramDonorReleaseStats = {
   fullyReleasedDonorsCount: number;
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
+  donorsInvalidWithCurrentDictionaryCount: number;
 };
 
 export enum DonorDataReleaseState {
