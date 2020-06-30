@@ -35,7 +35,7 @@ import {
   getPermissionsFromToken,
   getAuthorizedProgramScopes,
 } from 'global/utils/egoJwt';
-import DacoAccessStatusDisplay from './DacoAccessStatusDisplay';
+import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
 import Link from 'next/link';
 import {
   PROGRAMS_LIST_PATH,
@@ -72,6 +72,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       ref={containerRef}
     >
       <Table
+        withOutsideBorder
         parentRef={containerRef}
         sortable={false}
         showPagination={false}
@@ -86,6 +87,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           { Header: 'Role', accessor: 'role', maxWidth: 170 },
           { Header: 'Permissions', accessor: 'permissions' },
         ]}
+        getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
       />
     </div>
   );
@@ -119,25 +121,27 @@ const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTable
 
     const readableProgramShortNames = getReadableProgramShortNames(scopes);
     const readableProgramDataShortNames = getReadableProgramDataNames(permissions);
-    return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(shortName => {
-      let role: string = '';
-      let displayPermissions: string = '';
-      if (canWriteProgram({ permissions, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-      } else if (canWriteProgramData({ permissions, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-      } else if (canReadProgramData({ permissions, programId: shortName })) {
-        role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
-      }
-      return {
-        shortName,
-        role,
-        permissions: displayPermissions,
-      };
-    });
+    return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(
+      (shortName) => {
+        let role: string = '';
+        let displayPermissions: string = '';
+        if (canWriteProgram({ permissions, programId: shortName })) {
+          role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+        } else if (canWriteProgramData({ permissions, programId: shortName })) {
+          role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+        } else if (canReadProgramData({ permissions, programId: shortName })) {
+          role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+        }
+        return {
+          shortName,
+          role,
+          permissions: displayPermissions,
+        };
+      },
+    );
   }
 };
 
@@ -187,9 +191,7 @@ const ProgramAccessBox = ({
                   margin-top: 10px;
                 `}
               >
-                <Typography variant="label" component="div">
-                  No program memberships. You are not submitting data to any programs.
-                </Typography>
+                <NoMemberAccess />
               </div>
             )}
           </div>
