@@ -23,7 +23,7 @@ import Table from 'uikit/Table';
 type MappedTableData = Array<{ key: string; val: any }>;
 
 export default ({ data }) => {
-  const tableData: MappedTableData = Object.keys(data).map(k => ({ key: k, val: data[k] }));
+  const tableData: MappedTableData = Object.keys(data).map((k) => ({ key: k, val: data[k] }));
 
   return (
     <div
@@ -32,7 +32,7 @@ export default ({ data }) => {
       `}
     >
       <Table
-        TheadComponent={props => null}
+        TheadComponent={(props) => null}
         parentRef={{ current: null }}
         showPagination={false}
         withOutsideBorder
