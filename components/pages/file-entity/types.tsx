@@ -48,3 +48,10 @@ export type FileRecord = {
   fileSize: number;
   actions: FileAccessState;
 };
+
+export type FileEntityData = {
+  summary: FileSummaryInfo;
+  dataAnalysis: DataAnalysisInfo;
+  donorRecords: Array<DonorRecord>;
+  fileRecords: Array<FileRecord>;
+};

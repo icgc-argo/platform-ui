@@ -1,4 +1,4 @@
-import { FileCard, getAccessIcon } from '../common';
+import { FileCard, getAccessIcon, DownloadIcon } from '../common';
 
 import { css } from '@emotion/core';
 import Button from 'uikit/Button';
@@ -8,7 +8,6 @@ import fileSize from 'filesize';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import React from 'react';
 import Typography from 'uikit/Typography';
-import { DownloadIcon } from '..';
 import Link from 'uikit/Link';
 
 export default ({ data }: { data: Array<FileRecord> }) => {

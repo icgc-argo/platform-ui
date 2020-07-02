@@ -1,5 +1,6 @@
-import Container from '../../../../uikit/Container';
-import Typography from '../../../../uikit/Typography';
+import Typography from '../../../uikit/Typography';
+import Container from '../../../uikit/Container';
+
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { FileAccessState } from './types';
@@ -60,3 +61,14 @@ export const getAccessIcon = (state: FileAccessState) =>
       />
     ),
   }[state]);
+
+export const DownloadIcon = () => (
+  <Icon
+    css={css`
+      padding-right: 4px;
+    `}
+    fill="white"
+    name="download"
+    height="12px"
+  />
+);
