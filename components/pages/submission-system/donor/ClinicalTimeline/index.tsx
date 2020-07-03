@@ -24,7 +24,8 @@ import Header from './header';
 import Timeline from './timeline';
 import { EntityType, Entity } from './types';
 import Typography from 'uikit/Typography';
-import DonorDataTable from './table';
+import SimpleTable from 'uikit/Table/SimpleTable';
+
 import get from 'lodash/get';
 import Samples from './samples';
 import { Row, Col } from 'react-grid-system';
@@ -78,7 +79,7 @@ const ClinicalTimeline = ({ data }) => {
       <Header
         entities={data}
         activeEntities={activeEntities}
-        onFiltersChange={activeEntities => {
+        onFiltersChange={(activeEntities) => {
           setActiveTab(0);
           setActiveEntity(filteredData[0]);
           setActiveEntities(activeEntities);
@@ -129,7 +130,7 @@ const ClinicalTimeline = ({ data }) => {
                     margin-top: 10px;
                   `}
                 >
-                  <DonorDataTable data={activeEntityData} />
+                  <SimpleTable data={activeEntityData} />
                 </div>
               </Col>
               {activeEntitySamples.length > 0 ? (
