@@ -64,6 +64,7 @@ import crosshairs from './collection/crosshairs';
 import person_admin from './collection/person_admin';
 import person_collaborator from './collection/person_collaborator';
 import person_submitter from './collection/person_submitter';
+import reset from './collection/reset';
 
 /**
  * Icon path and property lookup object
@@ -117,6 +118,7 @@ const Icons = {
   person_admin,
   person_collaborator,
   person_submitter,
+  reset,
 };
 
 export type UikitIconNames = keyof typeof Icons;
