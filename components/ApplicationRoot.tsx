@@ -62,8 +62,6 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
           id="modalContainer"
           css={css`
             transition: all 0.2s;
-            height: 100vh;
-            width: 100vw;
             opacity: ${mounted ? 1 : 0};
           `}
         >
@@ -233,6 +231,7 @@ export default function ApplicationRoot({
                     left: 0px;
                     top: 0px;
                     z-index: 9999;
+                    width: -webkit-fill-available;
                   `}
                   ref={modalPortalRef}
                 />
@@ -242,6 +241,7 @@ export default function ApplicationRoot({
                     left: 0px;
                     top: 0px;
                     z-index: 9999;
+                    width: -webkit-fill-available;
                   `}
                   ref={loaderPortalRef}
                 />

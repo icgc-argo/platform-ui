@@ -38,6 +38,8 @@ export const ModalContainer = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: space-between;
+  margin 0 1rem;
+  width: inherit;
 `;
 
 const ModalTitle = styled('div')`
@@ -66,11 +68,14 @@ const ModalOverlay = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) =>
-    Color(theme.colors.primary_dark)
-      .alpha(0.8)
-      .hsl()
-      .string()};
+  background: ${({ theme }) => Color(theme.colors.primary_dark).alpha(0.8).hsl().string()};
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  min-height: -webkit-fill-available;
+  @media (min-width: 768px) {
+    width: 100vw;
+    height: 100vh;
+  }
 `;
 
 /**
@@ -200,7 +205,7 @@ const ModalComponent: React.ComponentType<{
   );
 };
 
-const Overlay = props => <ModalOverlay {...props} />;
+const Overlay = (props) => <ModalOverlay {...props} />;
 const Modal: typeof ModalComponent & { Overlay: typeof Overlay } = (() => {
   const output = ModalComponent as any;
   output.Overlay = Overlay;
