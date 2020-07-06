@@ -19,7 +19,7 @@ export default ({ donors }: { donors: Array<DonorRecord> }) => {
   const formatDonorInfo = (donorInfo: DonorRecord) => {
     return {
       'Donor ID': <Link href="">{donorInfo.donorId}</Link>,
-      'Submitted Donor ID': donorInfo.submitterDonorId,
+      'Submitter Donor ID': donorInfo.submitterDonorId,
       'Primary Site': donorInfo.primarySite,
       'Cancer Type': donorInfo.cancerType,
       'Age at Diagnosis': donorInfo.ageAtDiagnosis,
