@@ -35,6 +35,7 @@ const ResultsDropdown = styled('div')`
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
   padding-top: 2px;
+  box-shadow: ${({ theme }) => theme.shadows.pageElement};
 `;
 
 const NoResultsContainer = styled(Typography)`
