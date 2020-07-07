@@ -140,16 +140,29 @@ export default () => {
     },
   });
 
+  const CLINICAL_FILE_ORDER = [
+    'donor',
+    'specimen',
+    'primary_diagnosis',
+    'treatment',
+    'chemotherapy',
+    'hormone_therapy',
+    'radiation',
+    'follow_up',
+  ];
+
   const fileNavigatorFiles = map(
-    orderBy(data.clinicalSubmissions.clinicalEntities, e => e.clinicalType),
+    orderBy(data.clinicalSubmissions.clinicalEntities, (e) =>
+      CLINICAL_FILE_ORDER.indexOf(e.clinicalType),
+    ),
     gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
   );
 
   const defaultClinicalEntityType = React.useMemo((): string | null => {
     const fileToClinicalEntityType = (file: File): string =>
       data.clinicalSubmissions.clinicalEntities
-        .map(e => e.clinicalType)
-        .find(entityType => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`, 'i')));
+        .map((e) => e.clinicalType)
+        .find((entityType) => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`, 'i')));
 
     // currentfileList state can persist when the program changes
     // ensure currentfileList is specific to the current program, so sorting does not get affected by different program
@@ -160,7 +173,7 @@ export default () => {
         : [];
 
     const fileToFocusOn = head(
-      orderBy(fileNavigatorFiles, file => {
+      orderBy(fileNavigatorFiles, (file) => {
         const wereFilesUploaded = lastUploadedEntityTypes.length > 0;
         const applyPriorityRule = wereFilesUploaded
           ? lastUploadedEntityTypes.includes(file.clinicalType)
@@ -188,8 +201,8 @@ export default () => {
     'tab',
     defaultClinicalEntityType,
     {
-      serialize: v => v,
-      deSerialize: v => v,
+      serialize: (v) => v,
+      deSerialize: (v) => v,
     },
   );
 
@@ -228,7 +241,7 @@ export default () => {
       >(
         (acc, entity) => [
           ...acc,
-          ...entity.dataErrors.map(err => ({
+          ...entity.dataErrors.map((err) => ({
             ...err,
             fileName: entity.batchName,
           })),
@@ -250,7 +263,7 @@ export default () => {
   const isReadyForSignoff = isReadyForValidation && data.clinicalSubmissions.state === 'VALID';
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
   const hasUpdate = data.clinicalSubmissions.clinicalEntities.some(
-    clinicalEntity => !!clinicalEntity.dataUpdates.length,
+    (clinicalEntity) => !!clinicalEntity.dataUpdates.length,
   );
   const isValidated = data.clinicalSubmissions.state !== 'OPEN';
 
@@ -258,9 +271,9 @@ export default () => {
 
   const onErrorClose: (
     index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] = (index) => ({ type }) => {
     if (type === 'CLOSE') {
-      updateClinicalSubmissionQuery(previous => ({
+      updateClinicalSubmissionQuery((previous) => ({
         ...previous,
         clinicalSubmissions: {
           ...previous.clinicalSubmissions,
@@ -311,12 +324,12 @@ export default () => {
 
   const handleClearSchemaError: React.ComponentProps<
     typeof FilesNavigator
-  >['clearDataError'] = async file => {
-    await updateClinicalSubmissionQuery(previous => ({
+  >['clearDataError'] = async (file) => {
+    await updateClinicalSubmissionQuery((previous) => ({
       ...previous,
       clinicalSubmissions: {
         ...previous.clinicalSubmissions,
-        clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(entity => ({
+        clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map((entity) => ({
           ...entity,
           schemaErrors: file.clinicalType === entity.clinicalType ? [] : entity.schemaErrors,
         })),
@@ -386,7 +399,7 @@ export default () => {
             uploadEnabled={!isSubmissionSystemDisabled}
             signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
             validationEnabled={
-              !isSubmissionSystemDisabled && (isReadyForValidation && !hasDataError && !isValidated)
+              !isSubmissionSystemDisabled && isReadyForValidation && !hasDataError && !isValidated
             }
             onUploadFileSelect={handleSubmissionFilesUpload}
             onValidateClick={handleSubmissionValidation}
