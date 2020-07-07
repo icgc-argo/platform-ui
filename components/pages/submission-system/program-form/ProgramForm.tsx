@@ -47,7 +47,7 @@ import { isEqual, xor } from 'lodash';
 /* ********************************* *
  * Repeated Component Styles/Layouts
  * ********************************* */
-const SectionTitle = props => (
+const SectionTitle = (props) => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
@@ -62,7 +62,7 @@ const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperTex
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-const createUpdateProgramInput = formData => ({
+const createUpdateProgramInput = (formData) => ({
   name: formData.programName,
   description: formData.description,
   commitmentDonors: parseInt(formData.commitmentLevel),
@@ -158,25 +158,25 @@ export default function CreateProgramForm({
   /* ****************** *
    * On Change Handlers
    * ****************** */
-  const handleInputChange = (fieldName: keyof typeof seedFormData) => event =>
+  const handleInputChange = (fieldName: keyof typeof seedFormData) => (event) =>
     setData({ key: fieldName, val: event.target.value });
 
-  const handleInputBlur = fieldKey => event => {
+  const handleInputBlur = (fieldKey) => (event) => {
     validateField({ key: fieldKey });
   };
 
   const handleCheckboxGroupChange = (
     selectedItems: any[],
     fieldName: keyof typeof seedFormData,
-  ) => value => {
+  ) => (value) => {
     if (selectedItems.includes(value)) {
-      setData({ key: fieldName, val: filter(selectedItems, item => item !== value) });
+      setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
     } else {
       setData({ key: fieldName, val: [...selectedItems, value] });
     }
   };
 
-  const submitForm = async formData => {
+  const submitForm = async (formData) => {
     try {
       const validData = await validateForm();
       onSubmit(validData);
@@ -190,6 +190,8 @@ export default function CreateProgramForm({
       const formVal = form[fieldName];
       if (Array.isArray(seedVal) || Array.isArray(formVal)) {
         return xor(formVal, seedVal).length === 0;
+      } else if (typeof seedVal === 'number') {
+        return seedVal === Number(formVal);
       }
       return seedVal === formVal;
     });
@@ -255,7 +257,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('countries')}
                   onBlur={handleInputBlur('countries')}
                 >
-                  {get(programOptions, 'countries', []).map(country => (
+                  {get(programOptions, 'countries', []).map((country) => (
                     <Option value={country} key={country.replace(/\s/g, '')}>
                       {country}
                     </Option>
@@ -279,7 +281,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('cancerTypes')}
                   onBlur={handleInputBlur('cancerTypes')}
                 >
-                  {get(programOptions, 'cancerTypes', []).map(cancerType => (
+                  {get(programOptions, 'cancerTypes', []).map((cancerType) => (
                     <Option value={cancerType} key={cancerType.replace(/\s/g, '')}>
                       {cancerType}
                     </Option>
@@ -303,7 +305,7 @@ export default function CreateProgramForm({
                   onChange={handleInputChange('primarySites')}
                   onBlur={handleInputBlur('primarySites')}
                 >
-                  {get(programOptions, 'primarySites', []).map(site => (
+                  {get(programOptions, 'primarySites', []).map((site) => (
                     <Option value={site} key={site.replace(/\s/g, '')}>
                       {site}
                     </Option>
@@ -353,7 +355,7 @@ export default function CreateProgramForm({
                   aria-label="Membership Type"
                   id="membership-type"
                   options={PROGRAM_MEMBERSHIP_TYPES}
-                  onChange={val => setData({ key: 'membershipType', val })}
+                  onChange={(val) => setData({ key: 'membershipType', val })}
                   onBlur={handleInputBlur('membershipType')}
                   value={form.membershipType}
                   size="lg"
@@ -418,7 +420,7 @@ export default function CreateProgramForm({
                   onBlur={handleInputBlur('institutions')}
                   allowNew={true}
                 >
-                  {get(programOptions, 'institutions', []).map(institution => (
+                  {get(programOptions, 'institutions', []).map((institution) => (
                     <Option value={institution} key={institution.replace(/\s/g, '')}>
                       {institution}
                     </Option>
@@ -448,11 +450,11 @@ export default function CreateProgramForm({
                     form.processingRegions as any[],
                     'processingRegions',
                   )}
-                  isChecked={item => form.processingRegions.includes(item)}
+                  isChecked={(item) => form.processingRegions.includes(item)}
                 >
                   <Row>
                     <Col>
-                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map(name => (
+                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map((name) => (
                         <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
                           {name}
                         </FormCheckbox>
@@ -461,7 +463,7 @@ export default function CreateProgramForm({
                     <Col>
                       {regionOptions
                         .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
-                        .map(name => (
+                        .map((name) => (
                           <FormCheckbox value={name} key={name}>
                             {name}
                           </FormCheckbox>
