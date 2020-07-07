@@ -28,7 +28,7 @@ import { Global } from '@emotion/core';
 import { merge } from 'lodash';
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
-type TooltipProps = {
+export type TooltipProps = {
   disabled?: boolean;
   open?: boolean;
   useContext?: boolean;
@@ -74,6 +74,7 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
       border-right: 5px solid transparent;
       border-left: 5px solid transparent;
       margin-right: -5px;
+      pointer-events: none;
     `,
     left: `
       bottom: 50%;
@@ -82,6 +83,7 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
       border-bottom: 5px solid transparent;
       border-top: 5px solid transparent;
       margin-bottom: -5px;
+      pointer-events: none;
     `,
     bottom: `
       left: 50%;
@@ -90,6 +92,7 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       margin-left: -5px;
+      pointer-events: none;
     `,
     right: `
       top: 50%;
@@ -97,7 +100,8 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
       border-right-color: ${theme.colors.primary_1};
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
-      margin-top: -5px
+      margin-top: -5px;
+      pointer-events: none;
     `,
   };
 

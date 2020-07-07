@@ -18,25 +18,34 @@
  */
 
 import React from 'react';
-import { css } from '..';
-import Icon from 'uikit/Icon';
+import { storiesOf } from '@storybook/react';
 
-type IconProps = React.ComponentProps<typeof Icon>;
-const InteractiveIcon = ({ disabled, onClick, ...props }: IconProps & { disabled?: boolean }) => {
-  const [hovered, setHovered] = React.useState(false);
+import { select, boolean, text } from '@storybook/addon-knobs';
+
+import InteractiveIcon from '.';
+import icons, { UikitIconNames } from '../icons';
+import defaultTheme from 'uikit/theme/defaultTheme';
+import { css } from '@emotion/core';
+
+const InteractiveIconStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  const knobs = {
+    text: text('value', 'confused?'),
+    fill: select('fill', [null, '#00f', ...Object.keys(defaultTheme.colors)], null),
+    name: select('name', Object.keys(icons) as UikitIconNames[], 'question'),
+    disabled: boolean('disabled', false),
+    position: select('position', ['top', 'bottom', 'left', 'right'], 'bottom'),
+  };
   return (
-    <Icon
+    <div
       css={css`
-        ${disabled ? '' : 'cursor: pointer'};
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
       `}
-      onMouseOver={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={e => (!disabled ? onClick(e) : false)}
-      fill={disabled ? '#cecfd3' : hovered ? 'accent2_1' : 'accent2'}
-      {...props}
-    />
+    >
+      <InteractiveIcon html={<span>{knobs.text}</span>} {...knobs}></InteractiveIcon>
+    </div>
   );
-};
-InteractiveIcon.propTypes = Icon.propTypes;
+});
 
-export default InteractiveIcon;
+export default InteractiveIconStories;
