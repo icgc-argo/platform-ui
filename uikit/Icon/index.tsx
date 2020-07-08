@@ -65,7 +65,6 @@ const Icon: React.ComponentType<
       height={height}
       viewBox={svg.viewBox}
       xmlns="http://www.w3.org/2000/svg"
-      aria-labelledby={title || svg.title}
       {...rest}
     >
       <g>

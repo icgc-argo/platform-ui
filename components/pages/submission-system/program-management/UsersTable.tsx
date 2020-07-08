@@ -23,8 +23,7 @@ import React from 'react';
 import { css } from 'uikit';
 import MailTo from 'uikit/MailTo';
 import Table, { TableColumnConfig } from 'uikit/Table';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
-import Tooltip from 'uikit/Tooltip';
+import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 
@@ -110,32 +109,33 @@ const UsersTable = (tableProps: {
             justify-content: space-around;
           `}
         >
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Resend invitation</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="mail"
-              onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
-              disabled={
-                // Disable if:
-                // already accepted
-                props.original.inviteStatus === 'ACCEPTED' ||
-                // OR added without invitation (shows as Accepted)
-                props.original.inviteStatus === null ||
-                // OR the site user is the user in this row
-                isUserThemselves(props.original)
-              }
-            />
-          </Tooltip>
-          <Tooltip unmountHTMLWhenHide position="left" html={<span>Edit user</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="edit"
-              onClick={() => tableProps.onUserEditClick({ user: props.original })}
-            />
-          </Tooltip>
-          <Tooltip
+          <InteractiveIcon
+            position="left"
+            html={<span>Resend invitation</span>}
+            height="20px"
+            width="20px"
+            name="mail"
+            onClick={() => tableProps.onUserResendInviteClick({ user: props.original })}
+            disabled={
+              // Disable if:
+              // already accepted
+              props.original.inviteStatus === 'ACCEPTED' ||
+              // OR added without invitation (shows as Accepted)
+              props.original.inviteStatus === null ||
+              // OR the site user is the user in this row
+              isUserThemselves(props.original)
+            }
+          ></InteractiveIcon>
+          <InteractiveIcon
+            disabled={false}
+            html={<span>Edit User</span>}
+            position="left"
+            height="20px"
+            width="20px"
+            name="edit"
+            onClick={() => tableProps.onUserEditClick({ user: props.original })}
+          />
+          <InteractiveIcon
             unmountHTMLWhenHide
             position="left"
             html={
@@ -143,15 +143,12 @@ const UsersTable = (tableProps: {
                 {isUserTheLastAdmin(props.original) ? adminRestrictionText : 'Remove User'}
               </span>
             }
-          >
-            <InteractiveIcon
-              disabled={isUserTheLastAdmin(props.original) || isUserThemselves(props.original)}
-              height="20px"
-              width="20px"
-              name="trash"
-              onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
-            />
-          </Tooltip>
+            disabled={isUserTheLastAdmin(props.original) || isUserThemselves(props.original)}
+            height="20px"
+            width="20px"
+            name="trash"
+            onClick={() => tableProps.onUserDeleteClick({ user: props.original })}
+          />
         </div>
       ),
     },

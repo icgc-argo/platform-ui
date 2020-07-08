@@ -22,7 +22,7 @@ import React from 'react';
 import { css } from 'uikit';
 import PercentageBar from 'uikit/PercentageBar';
 import Table from 'uikit/Table';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
+import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
 import Tooltip from 'uikit/Tooltip';
 import A from 'uikit/Link';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
@@ -57,7 +57,7 @@ export default function ProgramsTable(tableProps: {
   loadingUser: boolean;
   LoadingComponent: React.ReactType;
 }) {
-  const data: Array<TableProgramInternal> = tableProps.programs.map(p => ({
+  const data: Array<TableProgramInternal> = tableProps.programs.map((p) => ({
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
@@ -157,22 +157,22 @@ export default function ProgramsTable(tableProps: {
             flex: 1;
           `}
         >
-          <Tooltip interactive position="bottom" html={<span>Manage users</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="users"
-              onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
-            />
-          </Tooltip>
-          <Tooltip interactive position="bottom" html={<span>Edit program</span>}>
-            <InteractiveIcon
-              height="20px"
-              width="20px"
-              name="edit"
-              onClick={() => tableProps.onProgramEditClick({ program: props.original })}
-            />
-          </Tooltip>
+          <InteractiveIcon
+            position="bottom"
+            html={<span>Manage users</span>}
+            height="20px"
+            width="20px"
+            name="users"
+            onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
+          />
+          <InteractiveIcon
+            position="bottom"
+            html={<span>Edit program</span>}
+            height="20px"
+            width="20px"
+            name="edit"
+            onClick={() => tableProps.onProgramEditClick({ program: props.original })}
+          />
         </div>
       ),
     },
