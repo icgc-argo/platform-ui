@@ -21,7 +21,7 @@ import React from 'react';
 import Icon from 'uikit/Icon';
 import Tooltip, { TooltipProps } from 'uikit/Tooltip';
 import { useTheme } from 'uikit/ThemeProvider';
-import { css } from '@emotion/core';
+import { css } from 'uikit';
 
 // dims corresponding hex code for a 25% dim
 const dimColour = (hex: string) => `${hex}BF`;
