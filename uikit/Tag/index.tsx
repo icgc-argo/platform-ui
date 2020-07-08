@@ -22,7 +22,7 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
 
-type TagVariant = 'INFO' | 'WARNING' | 'ERROR' | 'SUCCESS' | 'UPDATE' | 'NEUTRAL';
+type TagVariant = 'INFO' | 'WARNING' | 'ERROR' | 'SUCCESS' | 'UPDATE' | 'NEUTRAL' | 'HIGHLIGHT';
 export const TAG_VARIANTS: { [k in TagVariant]: k } = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -30,7 +30,12 @@ export const TAG_VARIANTS: { [k in TagVariant]: k } = {
   SUCCESS: 'SUCCESS',
   UPDATE: 'UPDATE',
   NEUTRAL: 'NEUTRAL',
+  HIGHLIGHT: 'HIGHLIGHT',
 };
+const blackTextVariants: Array<keyof typeof TAG_VARIANTS> = [
+  TAG_VARIANTS.NEUTRAL,
+  TAG_VARIANTS.HIGHLIGHT,
+];
 
 const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
   ${({ theme }) => css(theme.typography.paragraph as any)};
@@ -50,8 +55,10 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
       [TAG_VARIANTS.SUCCESS]: theme.colors.accent1_dimmed,
       [TAG_VARIANTS.UPDATE]: theme.colors.accent3_dark,
       [TAG_VARIANTS.NEUTRAL]: theme.colors.grey_2,
+      [TAG_VARIANTS.HIGHLIGHT]: theme.colors.secondary_2,
     }[variant])};
-  color: ${({ theme, variant = 'INFO' }) => (variant === TAG_VARIANTS.NEUTRAL ? 'black' : 'white')};
+  color: ${({ variant = 'INFO' }) =>
+    blackTextVariants.includes(variant as keyof typeof TAG_VARIANTS) ? 'black' : 'white'};
 `;
 
 export default Tag;
