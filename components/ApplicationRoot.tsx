@@ -27,7 +27,7 @@ import createInMemoryCache from 'global/utils/createInMemoryCache';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css, ThemeProvider } from 'uikit';
-import Modal from 'uikit/Modal';
+import Modal, { fillAvailableWidth } from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
@@ -231,7 +231,7 @@ export default function ApplicationRoot({
                     left: 0px;
                     top: 0px;
                     z-index: 9999;
-                    width: -webkit-fill-available;
+                    ${fillAvailableWidth}
                   `}
                   ref={modalPortalRef}
                 />
@@ -241,7 +241,7 @@ export default function ApplicationRoot({
                     left: 0px;
                     top: 0px;
                     z-index: 9999;
-                    width: -webkit-fill-available;
+                    ${fillAvailableWidth}
                   `}
                   ref={loaderPortalRef}
                 />
