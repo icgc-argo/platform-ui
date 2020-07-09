@@ -18,23 +18,50 @@
  */
 
 import React from 'react';
-import { css } from '..';
 import Icon from 'uikit/Icon';
+import Tooltip, { TooltipProps } from 'uikit/Tooltip';
+import { useTheme } from 'uikit/ThemeProvider';
+import { css } from 'uikit';
+
+// dims corresponding hex code for a 25% dim
+const dimColour = (hex: string) => `${hex}BF`;
 
 type IconProps = React.ComponentProps<typeof Icon>;
-const InteractiveIcon = ({ disabled, onClick, ...props }: IconProps & { disabled?: boolean }) => {
+const InteractiveIcon = ({
+  disabled,
+  onClick,
+  name,
+  className,
+  title,
+  width,
+  height,
+  fill,
+  outline,
+  ...props
+}: IconProps & TooltipProps & { disabled?: boolean }) => {
   const [hovered, setHovered] = React.useState(false);
+  const theme = useTheme();
+
+  const fillColour = (fill && theme.colors[fill]) || fill || theme.colors.accent2;
+
   return (
-    <Icon
-      css={css`
-        ${disabled ? '' : 'cursor: pointer'};
-      `}
-      onMouseOver={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={e => (!disabled ? onClick(e) : false)}
-      fill={disabled ? '#cecfd3' : hovered ? 'accent2_1' : 'accent2'}
-      {...props}
-    />
+    <Tooltip hideOnClick={false} {...props} unmountHTMLWhenHide>
+      <Icon
+        css={css`
+          ${disabled ? '' : 'cursor: pointer'};
+        `}
+        onMouseOver={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={(e) => (!disabled ? onClick(e) : false)}
+        fill={disabled ? 'grey_2' : hovered ? `${dimColour(fillColour)}` : `${fillColour}`}
+        name={name}
+        className={className}
+        title={title}
+        width={width}
+        height={height}
+        outline={outline}
+      />
+    </Tooltip>
   );
 };
 InteractiveIcon.propTypes = Icon.propTypes;

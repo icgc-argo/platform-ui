@@ -19,7 +19,6 @@
 
 import React from 'react';
 import { SelectTable, TableColumnConfig, useSelectTableSelectionState } from 'uikit/Table';
-import Tooltip from 'uikit/Tooltip';
 import {
   FileRepositoryRecord,
   FileRepositoryTableQueryData,
@@ -29,7 +28,7 @@ import {
   FileRepositorySortingRule,
 } from './types';
 import filesize from 'filesize';
-import InteractiveIcon from 'uikit/Table/InteractiveIcon';
+import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
 import { css } from '@emotion/core';
 import DropdownButton from 'uikit/DropdownButton';
 import Container from 'uikit/Container';
@@ -231,14 +230,6 @@ export default () => {
     //     const downloadStatus = getDownloadStatus(original.isDownloadable);
 
     //     return (
-    //       <Tooltip
-    //         unmountHTMLWhenHide
-    //         position="left"
-    //         html={<span>{downloadStatus.toolTipText}</span>}
-    //         css={css`
-    //           width: 100%;
-    //         `}
-    //       >
     //         <div
     //           css={css`
     //             display: flex;
@@ -248,6 +239,8 @@ export default () => {
     //           `}
     //         >
     //           <InteractiveIcon
+    //             position="left"
+    //             html={<span>{downloadStatus.toolTipText}</span>}
     //             disabled={!downloadStatus.canUserDownload}
     //             height="16px"
     //             width="16px"
@@ -256,7 +249,6 @@ export default () => {
     //             onClick={e => fileDownloader(original.fileID)}
     //           />
     //         </div>
-    //       </Tooltip>
     //     );
     //   },
     // },
