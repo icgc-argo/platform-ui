@@ -31,7 +31,7 @@ const SystemAlertStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
   return currentAlert ? (
     <SystemAlert alert={currentAlert} onClose={() => setCurrentAlert(null)} />
   ) : (
-    <div>No alerts</div>
+    <div />
   );
 });
 
