@@ -1,11 +1,11 @@
 import React from 'react';
 import { ThemeColorNames } from '../theme/types';
-import theme from 'uikit/theme/defaultTheme';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { UikitIconNames } from 'uikit/Icon/icons';
 import { css } from 'uikit';
 import { Col, Row } from 'react-grid-system';
+import { useTheme } from 'uikit/ThemeProvider';
 
 type AlertLevel = 'error' | 'warning' | 'info';
 
@@ -16,25 +16,24 @@ type AlertVariant = {
     fill: keyof ThemeColorNames;
   };
 };
+
 const ALERT_VARIANTS: AlertVariant = {
   error: {
-    color: theme.colors.error as keyof ThemeColorNames,
+    color: 'error',
     icon: 'warning',
-    fill: theme.colors.white as keyof ThemeColorNames,
+    fill: 'white',
   },
   warning: {
-    color: theme.colors.warning_1 as keyof ThemeColorNames,
+    color: 'warning_1',
     icon: 'warning',
-    fill: theme.colors.primary_dark as keyof ThemeColorNames,
+    fill: 'primary_dark',
   },
   info: {
-    color: theme.colors.secondary as keyof ThemeColorNames,
+    color: 'secondary',
     icon: 'info',
-    fill: theme.colors.white as keyof ThemeColorNames,
+    fill: 'white',
   },
 };
-
-// variants have different icon, text color and background color
 
 export type Alert = {
   level: AlertLevel;
@@ -49,11 +48,12 @@ type AlertProps = {
 };
 
 const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
+  const theme = useTheme();
   const icon = ALERT_VARIANTS[alert.level].icon;
   return (
     <Row
       css={css`
-        background-color: ${ALERT_VARIANTS[alert.level].color};
+        background-color: ${theme.colors[ALERT_VARIANTS[alert.level].color]};
         padding: 10px 0;
       `}
     >
@@ -79,7 +79,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
           css={css`
             font-size: 16px;
             font-weight: 500;
-            color: ${ALERT_VARIANTS[alert.level].fill};
+            color: ${theme.colors[ALERT_VARIANTS[alert.level].fill]};
             margin: 0;
           `}
         >
@@ -89,7 +89,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
           <Typography
             css={css`
               margin: 0;
-              color: ${ALERT_VARIANTS[alert.level].fill};
+              color: ${theme.colors[ALERT_VARIANTS[alert.level].fill]};
               font-weight: 300;
             `}
           >
@@ -110,7 +110,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
             name="times"
             width="15px"
             height="15px"
-            fill={ALERT_VARIANTS[alert.level].fill}
+            fill={theme.colors[ALERT_VARIANTS[alert.level].fill]}
             onClick={onClose}
             title="Close"
             css={css`
