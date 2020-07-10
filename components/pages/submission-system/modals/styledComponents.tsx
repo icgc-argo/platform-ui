@@ -66,21 +66,20 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
     role: roleError,
   } = errors;
   const isDisabledField = (fieldName: keyof typeof UserModel) =>
-    disabledFields.some(field => field.fieldName === fieldName);
-  const fieldsWithExplanations = disabledFields.filter(entry => entry.explanationText);
+    disabledFields.some((field) => field.fieldName === fieldName);
+  const fieldsWithExplanations = disabledFields.filter((entry) => entry.explanationText);
   const explanations = Object.fromEntries(
-    fieldsWithExplanations.map(field => [field.fieldName, field.explanationText]),
+    fieldsWithExplanations.map((field) => [field.fieldName, field.explanationText]),
   );
   return (
     <Section>
       <div
         css={css`
           flex: 1;
-          min-width: 700px;
         `}
       >
         <Row nogutter>
-          <Col sm={6} style={{ paddingRight: '10px' }}>
+          <Col sm={12} md={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!firstNameError} disabled={isDisabledField('firstName')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
@@ -90,7 +89,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
                   <Input
                     aria-label="First name"
                     value={user.firstName}
-                    onChange={e => onChange('firstName', e.target.value)}
+                    onChange={(e) => onChange('firstName', e.target.value)}
                     onBlur={() => validateField('firstName')}
                   />
                   {!!firstNameError ? <FormHelperText>{firstNameError}</FormHelperText> : null}{' '}
@@ -98,7 +97,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
               </Row>
             </FormControl>
           </Col>
-          <Col sm={6} style={{ paddingRight: '10px' }}>
+          <Col sm={12} md={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!lastNameError} disabled={isDisabledField('lastName')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
@@ -108,7 +107,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
                   <Input
                     aria-label="Last name"
                     value={user.lastName}
-                    onChange={e => onChange('lastName', e.target.value)}
+                    onChange={(e) => onChange('lastName', e.target.value)}
                     onBlur={() => validateField('lastName')}
                   />
                   {!!lastNameError ? <FormHelperText>{lastNameError}</FormHelperText> : null}
@@ -118,7 +117,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
           </Col>
         </Row>
         <Row nogutter>
-          <Col sm={6} style={{ paddingRight: '10px' }}>
+          <Col sm={12} md={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!emailError} disabled={isDisabledField('email')} required>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
@@ -128,7 +127,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
                   <Input
                     aria-label="Email"
                     value={user.email}
-                    onChange={e => onChange('email', e.target.value)}
+                    onChange={(e) => onChange('email', e.target.value)}
                     onBlur={() => validateField('email')}
                   />
                   {!!emailError ? <FormHelperText>{emailError}</FormHelperText> : null}
@@ -136,7 +135,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
               </Row>
             </FormControl>
           </Col>
-          <Col sm={6} style={{ paddingRight: '10px' }}>
+          <Col sm={12} md={6} style={{ paddingRight: '10px' }}>
             <FormControl error={!!roleError} required disabled={isDisabledField('role')}>
               <Row nogutter>
                 <Col sm={4} style={{ paddingTop: 6 }}>
@@ -148,7 +147,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
                     disabled={isDisabledField('role')}
                     value={user.role}
                     options={PROGRAM_USER_ROLES}
-                    onChange={val => onChange('role', val)}
+                    onChange={(val) => onChange('role', val)}
                     onBlur={() => validateField('role')}
                     hintText={isDisabledField('role') ? explanations.role : null}
                   />

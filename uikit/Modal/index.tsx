@@ -32,12 +32,14 @@ export const ModalContainer = styled('div')`
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
   max-width: 776px;
+  width: inherit;
   padding: 24px;
   padding-bottom: 0px;
   max-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: space-between;
+  margin 0 1rem;
 `;
 
 const ModalTitle = styled('div')`
@@ -66,11 +68,7 @@ const ModalOverlay = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) =>
-    Color(theme.colors.primary_dark)
-      .alpha(0.8)
-      .hsl()
-      .string()};
+  background: ${({ theme }) => Color(theme.colors.primary_dark).alpha(0.8).hsl().string()};
 `;
 
 /**
@@ -200,7 +198,7 @@ const ModalComponent: React.ComponentType<{
   );
 };
 
-const Overlay = props => <ModalOverlay {...props} />;
+const Overlay = (props) => <ModalOverlay {...props} />;
 const Modal: typeof ModalComponent & { Overlay: typeof Overlay } = (() => {
   const output = ModalComponent as any;
   output.Overlay = Overlay;
