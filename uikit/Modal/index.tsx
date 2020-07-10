@@ -26,20 +26,6 @@ import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 import { UikitIconNames } from 'uikit/Icon/icons';
 
-export const fillAvailableWidth = css`
-  width: -webkit-fill-available;
-  width: -moz-available;
-  min-width: -webkit-fill-available;
-  min-width: -moz-available;
-`;
-
-export const fillAvailableHeight = css`
-  height: -webkit-fill-available;
-  height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: -moz-available;
-`;
-
 export const ModalContainer = styled('div')`
   position: relative;
   border-radius: 20px;
@@ -83,12 +69,6 @@ const ModalOverlay = styled('div')`
   justify-content: center;
   align-items: center;
   background: ${({ theme }) => Color(theme.colors.primary_dark).alpha(0.8).hsl().string()};
-  ${fillAvailableWidth}
-  ${fillAvailableHeight}
-  @media (min-width: 768px) {
-    width: 100vw;
-    height: 100vh;
-  }
 `;
 
 /**
