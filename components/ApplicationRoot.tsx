@@ -45,6 +45,21 @@ import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 /**
  * The global portal where modals will show up
  */
+
+const fillAvailableWidth = css`
+  width: -webkit-fill-available;
+  width: -moz-available;
+  min-width: -webkit-fill-available;
+  min-width: -moz-available;
+`;
+
+const fillAvailableHeight = css`
+  height: -webkit-fill-available;
+  height: -moz-available;
+  min-height: -webkit-fill-available;
+  min-height: -moz-available;
+`;
+
 const modalPortalRef = React.createRef<HTMLDivElement>();
 const useMounted = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -62,12 +77,21 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
           id="modalContainer"
           css={css`
             transition: all 0.2s;
-            height: 100vh;
-            width: 100vw;
             opacity: ${mounted ? 1 : 0};
           `}
         >
-          <Modal.Overlay>{children}</Modal.Overlay>
+          <Modal.Overlay
+            css={css`
+              ${fillAvailableWidth}
+              ${fillAvailableHeight}
+              @media (min-width: 768px) {
+                width: 100vw;
+                height: 100vh;
+              }
+            `}
+          >
+            {children}
+          </Modal.Overlay>
         </div>,
         ref,
       )
@@ -84,7 +108,16 @@ export const GlobalLoaderView = ({ isLoading }: { isLoading: boolean }) => {
         <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
           {() => (
             <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
-              <Modal.Overlay>
+              <Modal.Overlay
+                css={css`
+                  ${fillAvailableWidth}
+                  ${fillAvailableHeight}
+                  @media (min-width: 768px) {
+                    width: 100vw;
+                    height: 100vh;
+                  }
+                `}
+              >
                 <DnaLoader />
               </Modal.Overlay>
             </FadingDiv>
@@ -233,6 +266,7 @@ export default function ApplicationRoot({
                     left: 0px;
                     top: 0px;
                     z-index: 9999;
+                    ${fillAvailableWidth}
                   `}
                   ref={modalPortalRef}
                 />

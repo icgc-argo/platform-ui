@@ -65,7 +65,7 @@ const Users = ({
   useModalViewAnalyticsEffect(`USER_REMOVE_MODAL`, !!currentDeletingUser);
   useModalViewAnalyticsEffect(`USER_EMAIL_RESEND_MODAL`, !!currentResendEmailUser);
 
-  const isOnlyOneAdminLeft = users.filter(user => user.role === 'ADMIN').length <= 1;
+  const isOnlyOneAdminLeft = users.filter((user) => user.role === 'ADMIN').length <= 1;
 
   return (
     <div>
