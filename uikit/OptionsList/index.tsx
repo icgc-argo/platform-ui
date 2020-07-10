@@ -80,6 +80,7 @@ const OptionsList: React.ComponentType<{
     return (
       <div
         css={css`
+          background-color: ${option.isChecked ? theme.colors.secondary_4 : ''};
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -87,7 +88,7 @@ const OptionsList: React.ComponentType<{
           padding: 2px 12px;
           width: calc(100% - (2 * 12px));
           &:hover {
-            background: ${theme.colors.grey_3};
+            background: ${option.isChecked ? theme.colors.secondary_3 : theme.colors.grey_3};
           }
           cursor: pointer;
         `}
@@ -148,7 +149,7 @@ const OptionsList: React.ComponentType<{
         </div>
 
         <Tag
-          variant={'NEUTRAL'}
+          variant={option.isChecked ? 'HIGHLIGHT' : 'NEUTRAL'}
           css={css`
             height: 18px;
             font-size: 10px;
