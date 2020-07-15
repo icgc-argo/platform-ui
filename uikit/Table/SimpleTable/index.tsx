@@ -32,6 +32,7 @@ export default ({ data }) => {
       `}
     >
       <Table
+        highlight={false}
         TheadComponent={(props) => null}
         parentRef={{ current: null }}
         showPagination={false}
