@@ -65,6 +65,8 @@ import person_admin from './collection/person_admin';
 import person_collaborator from './collection/person_collaborator';
 import person_submitter from './collection/person_submitter';
 import reset from './collection/reset';
+import hamburger from './collection/hamburger';
+import hamburger_close from './collection/hamburger_close';
 
 /**
  * Icon path and property lookup object
@@ -119,6 +121,8 @@ const Icons = {
   person_collaborator,
   person_submitter,
   reset,
+  hamburger,
+  hamburger_close,
 };
 
 export type UikitIconNames = keyof typeof Icons;

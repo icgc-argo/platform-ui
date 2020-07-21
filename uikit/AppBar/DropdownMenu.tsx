@@ -47,6 +47,9 @@ const Li = styled('li')`
   list-style: none;
   padding: 12px 16px;
   position: relative;
+  border-bottom: 1px solid;
+  border-color: ${({ theme }) => theme.colors.grey_2};
+  cursor: pointer;
 
   a {
     color: inherit;

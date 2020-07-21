@@ -24,6 +24,8 @@ import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
 import useClickAway from '../utils/useClickAway';
+import Link, { LinkProps } from 'next/link';
+
 import {
   AppBarContainer,
   LogoContainer,
@@ -34,10 +36,38 @@ import {
   SectionDisplay,
   UserBadgeContainer,
 } from './styledComponents';
+import { DropdownMenuItem } from './DropdownMenu';
 
-export const UserBadge = ({ firstName = '', lastName = '', title = null, ...otherProps }) => {
+export const UserBadge = ({
+  firstName = '',
+  lastName = '',
+  title = null,
+  showGreeting = true,
+  ...otherProps
+}) => {
   const theme = useTheme();
-  return (
+
+  const UserNameIcon = (
+    <Typography
+      variant="subtitle2"
+      color="primary"
+      component="div"
+      css={css`
+        width: 40px;
+        height: 40px;
+        margin-left: ${showGreeting ? '20px' : ''};
+        border-radius: 1000px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: ${theme.colors.accent1_3};
+      `}
+    >
+      {(firstName[0] || '').toUpperCase()}
+      {(lastName[0] || '').toUpperCase()}
+    </Typography>
+  );
+  return showGreeting ? (
     <UserBadgeContainer {...otherProps}>
       <div>
         <Typography variant="navigation" component="div" bold>
@@ -54,25 +84,10 @@ export const UserBadge = ({ firstName = '', lastName = '', title = null, ...othe
           )}
         </Typography>
       </div>
-      <Typography
-        variant="subtitle2"
-        color="primary"
-        component="div"
-        css={css`
-          width: 40px;
-          height: 40px;
-          margin-left: 20px;
-          border-radius: 1000px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: ${theme.colors.accent1_3};
-        `}
-      >
-        {(firstName[0] || '').toUpperCase()}
-        {(lastName[0] || '').toUpperCase()}
-      </Typography>
+      {UserNameIcon}
     </UserBadgeContainer>
+  ) : (
+    <div>{UserNameIcon}</div>
   );
 };
 
@@ -147,3 +162,57 @@ AppBar.propTypes = {};
 export default AppBar;
 
 export { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
+
+export type NavElement = LinkProps & {
+  name: string;
+  active: boolean;
+  isLink?: boolean;
+  shouldRender?: boolean;
+  onClick?: () => any;
+  isDropdown?: boolean;
+};
+
+export const NavBarElement = ({
+  isLink = true,
+  shouldRender = true,
+  name,
+  onClick = () => null,
+  active,
+  isDropdown = false,
+  ...props
+}: NavElement) => {
+  const navItem = isDropdown ? (
+    <DropdownMenuItem ref={React.createRef()} active={active}>
+      {name}
+    </DropdownMenuItem>
+  ) : (
+    <MenuItem ref={React.createRef()} active={active}>
+      <Typography variant={'default'}>{name}</Typography>
+    </MenuItem>
+  );
+
+  const result = shouldRender ? (
+    isLink ? (
+      <Link
+        {...props}
+        css={css`
+          cursor: pointer;
+        `}
+      >
+        <a
+          css={css`
+            height: 100%;
+          `}
+        >
+          {navItem}
+        </a>
+      </Link>
+    ) : (
+      <div onClick={onClick}> {navItem} </div>
+    )
+  ) : (
+    <></>
+  );
+
+  return result;
+};

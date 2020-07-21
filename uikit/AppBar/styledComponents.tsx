@@ -40,13 +40,12 @@ export const MenuItemContainer = styled<
     active: boolean;
   }
 >('div', {
-  shouldForwardProp: propName => propName !== 'active',
+  shouldForwardProp: (propName) => propName !== 'active',
 })`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 148px;
   cursor: pointer;
   text-decoration: none;
   height: 100%;
@@ -88,6 +87,7 @@ export const LogoContainer = styled('span')`
   align-items: center;
 `;
 export const LogoImage = styled('img')`
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
