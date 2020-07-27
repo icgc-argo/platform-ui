@@ -64,7 +64,7 @@ const Li = styled('li')`
   }
 
   &:hover {
-    color: ${({ theme }) => theme.colors.accent1};
+    color: ${({ theme }) => theme.colors.secondary};
   }
 
   &:not(:last-child):after {

@@ -43,13 +43,14 @@ import AppBar, {
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
-import { createRedirectURL, reactGridBreakpoints } from 'global/utils/common';
+import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from 'uikit/utils/useClickAway';
+import { useScreenClass } from 'react-grid-system';
 
 const NavBarLoginButton = () => {
   return (
@@ -88,6 +89,7 @@ const getUserRole = (egoJwt, permissions) => {
 };
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
+  const screenClass = useScreenClass();
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
   const canAccessSubmission = React.useMemo(() => {
@@ -99,7 +101,6 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const [loginPath, setLoginPath] = React.useState('');
   const [isModalVisible, setModalVisibility] = React.useState(false);
 
-  const [isMobileLayout, setMobileLayout] = React.useState(false);
   const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -129,13 +130,11 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     }
   }, [path, query]);
 
+  const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
+
   React.useEffect(() => {
-    // required for inital page load, window object accessible in useffect only
-    setMobileLayout(window.innerWidth <= reactGridBreakpoints.md);
-    window.addEventListener('resize', () => {
-      setMobileLayout(window.innerWidth <= reactGridBreakpoints.md);
-    });
-  }, []);
+    if (isMobileDropdownOpen && !isMobileLayout) setMobileDropdownOpen(false);
+  }, [isMobileLayout, isMobileDropdownOpen]);
 
   const onProfilePage = path.search(USER_PAGE_PATH) === 0;
 
