@@ -32,10 +32,11 @@ import {
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
+import { isDccMember, isDataSubmitter } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import React from 'react';
+import { usePageQuery } from 'global/hooks/usePageContext';
 
 const StarIcon = DataTableStarIcon;
 
@@ -49,7 +50,7 @@ type FileStat = {
 };
 
 export const FILE_STATE_COLORS: {
-  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill']
+  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'];
 } = {
   ERROR: 'error',
   NEW: 'accent2',
@@ -116,11 +117,14 @@ export default ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { token, permissions } = useAuthContext();
-  const isDccPreview = React.useMemo(() => isDccMember(permissions) && isPendingApproval, [
-    token,
-    isPendingApproval,
-  ]);
+  const isDiffPreview = React.useMemo(
+    () =>
+      (isDccMember(permissions) || isDataSubmitter({ permissions, programId: programShortName })) &&
+      isPendingApproval,
+    [token, isPendingApproval],
+  );
   const theme = useTheme();
   const { records, stats } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
@@ -128,14 +132,14 @@ export default ({
     : [];
   const sortedRecords = orderBy(
     records,
-    !isDccPreview
+    !(isDccMember(permissions) && isPendingApproval)
       ? REQUIRED_FILE_ENTRY_FIELDS.ROW
-      : r => {
+      : (r) => {
           const priority = (() => {
             switch (true) {
-              case file.stats.updated.some(i => i === r.row):
+              case file.stats.updated.some((i) => i === r.row):
                 return 0;
-              case file.stats.new.some(i => i === r.row):
+              case file.stats.new.some((i) => i === r.row):
                 return 1;
               default:
                 return records.length;
@@ -146,16 +150,16 @@ export default ({
   );
   const containerRef = createRef<HTMLDivElement>();
 
-  const tableData = sortedRecords.map(record =>
+  const tableData = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       row: record.row,
       status: (() => {
         switch (true) {
-          case stats.updated.some(i => i === record.row):
+          case stats.updated.some((i) => i === record.row):
             return 'UPDATE';
-          case stats.errorsFound.some(i => i === record.row):
+          case stats.errorsFound.some((i) => i === record.row):
             return 'ERROR';
-          case stats.new.some(i => i === record.row):
+          case stats.new.some((i) => i === record.row):
             return 'NEW';
           default:
             return 'NONE';
@@ -165,16 +169,16 @@ export default ({
   );
 
   const recordHasError = (record: typeof tableData[0]) =>
-    stats.errorsFound.some(row => row === record.row);
+    stats.errorsFound.some((row) => row === record.row);
   const rowHasUpdate = (record: typeof tableData[0]) =>
-    stats.updated.some(row => row === record.row);
+    stats.updated.some((row) => row === record.row);
   const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
-    file.dataUpdates.some(update => update.field === cell.field && update.row === cell.row.row);
+    file.dataUpdates.some((update) => update.field === cell.field && update.row === cell.row.row);
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
-    const isNew = stats.new.some(row => row === original.row);
+    const isNew = stats.new.some((row) => row === original.row);
     return (
       isSubmissionValidated && (
         <CellContentCenter
@@ -194,7 +198,7 @@ export default ({
                 : FILE_STATE_COLORS.NONE
             }
           />
-          {isDccPreview && hasUpdate && <div>old</div>}
+          {isDiffPreview && hasUpdate && <div>old</div>}
         </CellContentCenter>
       )
     );
@@ -206,7 +210,7 @@ export default ({
     original: typeof tableData[0];
     fieldName: string;
   }) =>
-    isDccPreview && rowHasUpdate(original) ? (
+    isDiffPreview && rowHasUpdate(original) ? (
       <div
         css={css`
           height: 100%;
@@ -222,7 +226,7 @@ export default ({
         <div>{original[fieldName]}</div>
         <div>
           {get(
-            file.dataUpdates.find(u => u.field === fieldName && u.row === original.row),
+            file.dataUpdates.find((u) => u.field === fieldName && u.row === original.row),
             'oldValue',
             original[fieldName],
           )}
