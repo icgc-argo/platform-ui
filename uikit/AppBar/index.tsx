@@ -47,7 +47,7 @@ export const UserBadge = ({
 }) => {
   const theme = useTheme();
 
-  const UserNameIcon = (
+  const UserNameIcon = () => (
     <Typography
       variant="subtitle2"
       color="primary"
@@ -67,27 +67,26 @@ export const UserBadge = ({
       {(lastName[0] || '').toUpperCase()}
     </Typography>
   );
+
   return showGreeting ? (
     <UserBadgeContainer {...otherProps}>
-      <div>
-        <Typography variant="navigation" component="div" bold>
-          Hello, {firstName}
-          {title && (
-            <div
-              css={css`
-                font-size: 12px;
-                font-weight: normal;
-              `}
-            >
-              {title}
-            </div>
-          )}
-        </Typography>
-      </div>
-      {UserNameIcon}
+      <Typography variant="navigation" component="div" bold>
+        Hello, {firstName}
+        {title && (
+          <div
+            css={css`
+              font-size: 12px;
+              font-weight: normal;
+            `}
+          >
+            {title}
+          </div>
+        )}
+      </Typography>
+      <UserNameIcon />
     </UserBadgeContainer>
   ) : (
-    <div>{UserNameIcon}</div>
+    <UserNameIcon />
   );
 };
 

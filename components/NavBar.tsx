@@ -219,6 +219,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       </div>
     );
   };
+
   return (
     <AppBar
       css={css`
