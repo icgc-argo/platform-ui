@@ -30,6 +30,7 @@ import Container from 'uikit/Container';
 import overtureLogo from 'uikit/assets/overture-logo.svg';
 import scientistImage from 'static/icgc-data-scientist-wide.jpg';
 import DnaLoader from 'uikit/DnaLoader';
+import { reactGridBreakpoints } from 'global/utils/common';
 
 type DataReleaseStatistic = {
   quantity: number;
@@ -314,17 +315,8 @@ const BoxLinkContainer = styled('div')`
   min-height: 100px;
 `;
 
-// source: https://www.npmjs.com/package/react-grid-system#configuration
-export const reactGridBreakpoints = {
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-};
-
 export const ResponsiveGridLayout = styled('div')`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
   @media (min-width: ${reactGridBreakpoints.lg}px) {
     grid-template-columns: repeat(3, 1fr);
   }

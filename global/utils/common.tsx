@@ -45,14 +45,14 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
   });
 
 const standardDate = 'YYYY-MM-DD';
-export const displayDate = date => formatDate(date, standardDate);
+export const displayDate = (date) => formatDate(date, standardDate);
 
 const dateTimeFormat = 'MMMM D, YYYY [at] h:mm A';
 export const displayDateAndTime = (date: string | number | Date) =>
   formatDate(date, dateTimeFormat);
 
 export const sleep = (time: number = 2000) =>
-  new Promise(resolve => {
+  new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, time);
@@ -85,26 +85,24 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
       {},
     ),
   } = options;
-  const orderedKeys = orderBy(allKeys, key => order.indexOf(key));
+  const orderedKeys = orderBy(allKeys, (key) => order.indexOf(key));
 
   /**
    * construct the tsv data
    */
 
   const filteredKeys = orderedKeys
-    .filter(key => !excludeKeys.includes(key))
-    .filter(key => includeKeys.includes(key));
+    .filter((key) => !excludeKeys.includes(key))
+    .filter((key) => includeKeys.includes(key));
 
-  const dataRows: string[][] = data.map(entry => filteredKeys.map(key => String(entry[key])));
-  const headerRow = filteredKeys.map(key => headerDisplays[key]);
-  const tsvString = [headerRow, ...dataRows].map(row => row.join('\t')).join('\n');
+  const dataRows: string[][] = data.map((entry) => filteredKeys.map((key) => String(entry[key])));
+  const headerRow = filteredKeys.map((key) => headerDisplays[key]);
+  const tsvString = [headerRow, ...dataRows].map((row) => row.join('\t')).join('\n');
 
   /**
    * export data to tsv
    */
-  const fileContent = `data:text/tsv;charset=utf-8,${encodeURI(tsvString)
-    .split('#')
-    .join('%23')}`; // needs to do this after as encodeURI doesn't handle # properly
+  const fileContent = `data:text/tsv;charset=utf-8,${encodeURI(tsvString).split('#').join('%23')}`; // needs to do this after as encodeURI doesn't handle # properly
   const link = document.createElement('a');
   link.setAttribute('href', fileContent);
   link.setAttribute('download', fileName);
@@ -129,4 +127,12 @@ export const createRedirectURL = ({
   }
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
   return `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
+};
+
+// source: https://www.npmjs.com/package/react-grid-system#configuration
+export const reactGridBreakpoints = {
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
 };
