@@ -67,6 +67,8 @@ import person_submitter from './collection/person_submitter';
 import reset from './collection/reset';
 import hamburger from './collection/hamburger';
 import hamburger_close from './collection/hamburger_close';
+import warning_transparent from './collection/warning_transparent';
+import info_transparent from './collection/info_transparent';
 
 /**
  * Icon path and property lookup object
@@ -90,8 +92,10 @@ const Icons = {
   edit,
   checkmark,
   info,
+  info_transparent,
   success,
   warning,
+  warning_transparent,
   mail,
   trash,
   google,

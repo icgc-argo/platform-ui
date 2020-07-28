@@ -20,17 +20,17 @@ type AlertVariant = {
 const ALERT_VARIANTS: AlertVariant = {
   error: {
     color: 'error',
-    icon: 'warning',
+    icon: 'warning_transparent',
     fill: 'white',
   },
   warning: {
     color: 'warning_1',
-    icon: 'warning',
+    icon: 'warning_transparent',
     fill: 'primary_dark',
   },
   info: {
     color: 'secondary',
-    icon: 'info',
+    icon: 'info_transparent',
     fill: 'white',
   },
 };
@@ -50,6 +50,7 @@ type AlertProps = {
 const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
   const theme = useTheme();
   const icon = ALERT_VARIANTS[alert.level].icon;
+  const fill = ALERT_VARIANTS[alert.level].fill;
   return (
     <div
       css={css`
@@ -68,6 +69,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
         <div>
           <Icon
             name={icon}
+            fill={fill}
             width="30px"
             height="30px"
             css={css`
