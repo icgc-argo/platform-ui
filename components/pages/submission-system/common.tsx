@@ -93,7 +93,7 @@ export const StatArea: {
     display: flex;
     align-items: center;
   `;
-  const StarIcon: typeof DataTableStarIcon = props => (
+  const StarIcon: typeof DataTableStarIcon = (props) => (
     <div
       css={css`
         margin-right: 5px;
@@ -177,7 +177,7 @@ export const TableInfoHeaderContainer = ({
     >
       <Row nogutter>
         {left}
-        <Col align="end">{right}</Col>
+        <Col>{right}</Col>
       </Row>
     </div>
   );
@@ -212,9 +212,9 @@ export const Pipeline = (stats: PipelineStats) => {
 
   const shouldRender = (num: number) => num > 0;
 
-  const renderableStats = Object.keys(stats).filter(key => shouldRender(stats[key]));
+  const renderableStats = Object.keys(stats).filter((key) => shouldRender(stats[key]));
 
-  const pipeStats = renderableStats.map(stat => (
+  const pipeStats = renderableStats.map((stat) => (
     <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
       {stats[stat]}
     </Pipe.Item>

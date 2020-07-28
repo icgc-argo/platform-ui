@@ -32,16 +32,16 @@ import * as React from 'react';
 import { css } from 'uikit';
 import AppBar, {
   DropdownMenu,
-  DropdownMenuItem,
   Logo,
   MenuGroup,
   MenuItem,
   Section,
   UserBadge,
+  NavElement,
+  NavBarElement,
 } from 'uikit/AppBar';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
-import Typography from 'uikit/Typography';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
@@ -49,6 +49,8 @@ import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
+import useClickAway from 'uikit/utils/useClickAway';
+import { useScreenClass } from 'react-grid-system';
 
 const NavBarLoginButton = () => {
   return (
@@ -87,9 +89,9 @@ const getUserRole = (egoJwt, permissions) => {
 };
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
+  const screenClass = useScreenClass();
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { token: egoJwt, logOut, data: userModel, permissions } = useAuthContext();
-
   const canAccessSubmission = React.useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
@@ -98,6 +100,8 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
 
   const [loginPath, setLoginPath] = React.useState('');
   const [isModalVisible, setModalVisibility] = React.useState(false);
+
+  const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
 
   React.useEffect(() => {
     const redirect = get(query, 'redirect') as string;
@@ -126,11 +130,95 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     }
   }, [path, query]);
 
-  const programServices = (
-    <MenuItem ref={React.createRef()} active={path.search(SUBMISSION_PATH) === 0 || isModalVisible}>
-      <Typography variant={'default'}>Program Services</Typography>
-    </MenuItem>
+  const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
+
+  React.useEffect(() => {
+    if (isMobileDropdownOpen && !isMobileLayout) setMobileDropdownOpen(false);
+  }, [isMobileLayout, isMobileDropdownOpen]);
+
+  const onProfilePage = path.search(USER_PAGE_PATH) === 0;
+
+  const mainNavDetails: Array<NavElement> = [
+    {
+      name: 'File Repository',
+      href: FILE_REPOSITORY_PATH,
+      as: FILE_REPOSITORY_PATH,
+      shouldRender: FEATURE_REPOSITORY_ENABLED,
+      active: path.search(FILE_REPOSITORY_PATH) === 0,
+    },
+    {
+      isLink: userModel && egoJwt && canAccessSubmission,
+      name: 'Program Services',
+      href: getDefaultRedirectPathForUser(permissions, true),
+      as: getDefaultRedirectPathForUser(permissions),
+      active: path.search(SUBMISSION_PATH) === 0 || isModalVisible,
+      onClick: () => setModalVisibility(!isModalVisible),
+    },
+  ];
+
+  const profileNavDetails: Array<NavElement> = [
+    {
+      href: USER_PAGE_PATH,
+      active: onProfilePage,
+      name: 'Profile & Token',
+    },
+    {
+      isLink: false,
+      onClick: () => {
+        logOut();
+        setMobileDropdownOpen(false);
+      },
+      name: 'Logout',
+      active: false,
+      href: '',
+    },
+  ];
+
+  const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
+  const [usingProfileOptions, setUsingProfileOptions] = React.useState(true);
+
+  const loginButton = (
+    <a
+      id="link-login"
+      href={loginPath}
+      css={css`
+        align-self: center;
+        text-decoration: none;
+        padding: 0 16px;
+      `}
+    >
+      <NavBarLoginButton />
+    </a>
   );
+
+  const mobileDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  useClickAway({
+    domElementRef: mobileDropdownRef,
+    onClickAway: () => setMobileDropdownOpen(false),
+    onElementClick: () => setMobileDropdownOpen(!isMobileDropdownOpen),
+  });
+
+  const MobileDropdown = () => {
+    const mobileDropDownOptions = usingProfileOptions ? profileNavDetails : mainNavDetails;
+    return (
+      <div
+        css={css`
+          max-width: 100%;
+        `}
+        ref={mobileDropdownRef}
+      >
+        <DropdownMenu>
+          {mobileDropDownOptions.map((element, idx) => (
+            <NavBarElement
+              isDropdown={true}
+              key={`hamburgerElement_${idx}`}
+              {...element}
+            ></NavBarElement>
+          ))}
+        </DropdownMenu>
+      </div>
+    );
+  };
 
   return (
     <AppBar
@@ -142,7 +230,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     >
       <Section>
         <Logo
-          DomComponent={props =>
+          DomComponent={(props) =>
             disableLogoLink ? (
               <div {...props} />
             ) : (
@@ -152,77 +240,89 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             )
           }
         />
-        <MenuGroup>
-          {FEATURE_REPOSITORY_ENABLED && !hideLinks && (
-            <Link href={FILE_REPOSITORY_PATH} as={FILE_REPOSITORY_PATH}>
-              <a
-                css={css`
-                  height: 100%;
-                `}
-              >
-                <MenuItem ref={React.createRef()} active={path.search(FILE_REPOSITORY_PATH) === 0}>
-                  <Typography variant={'default'}>File Repository</Typography>
-                </MenuItem>
-              </a>
-            </Link>
-          )}
-        </MenuGroup>
+
+        {isMobileDropdownOpen && <MobileDropdown />}
+
+        {!hideLinks && !isMobileLayout && (
+          <MenuGroup>
+            {mainNavDetails.slice(0, NUM_ELEMENTS_IN_FIRST_SECTION).map((element, idx) => (
+              <NavBarElement key={`navbarElement_1${idx}`} {...element} />
+            ))}
+          </MenuGroup>
+        )}
       </Section>
-      <Section />
+
       {!hideLinks && (
         <Section>
           <MenuGroup>
-            {egoJwt && canAccessSubmission ? (
-              <Link
-                href={getDefaultRedirectPathForUser(permissions, true)}
-                as={getDefaultRedirectPathForUser(permissions)}
-              >
-                <a
-                  css={css`
-                    height: 100%;
-                  `}
-                >
-                  {' '}
-                  {programServices}
-                </a>
-              </Link>
-            ) : (
-              <div onClick={() => setModalVisibility(!isModalVisible)}> {programServices}</div>
-            )}
-            {!userModel && (
-              <a
-                id="link-login"
-                href={loginPath}
-                css={css`
-                  align-self: center;
-                  text-decoration: none;
-                  padding: 0 16px;
-                `}
-              >
-                <NavBarLoginButton />
-              </a>
-            )}
+            {!isMobileLayout &&
+              mainNavDetails
+                .slice(NUM_ELEMENTS_IN_FIRST_SECTION, mainNavDetails.length)
+                .map((element, idx) => (
+                  <NavBarElement key={`navbarElement_2${idx}`} {...element} />
+                ))}
+
+            {!userModel && loginButton}
+
             {userModel && (
-              <MenuItem
-                active={path.search(USER_PAGE_PATH) === 0}
-                ref={React.createRef()}
-                dropdownMenu={
-                  <DropdownMenu>
-                    <Link href={USER_PAGE_PATH}>
-                      <DropdownMenuItem active={path.search(USER_PAGE_PATH) === 0}>
-                        Profile & Token
-                      </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem onClick={() => logOut()}>Logout</DropdownMenuItem>
-                  </DropdownMenu>
-                }
+              <div
+                onClick={() => {
+                  if (isMobileLayout) {
+                    setUsingProfileOptions(true);
+                    setMobileDropdownOpen(!isMobileDropdownOpen);
+                  }
+                }}
               >
-                <UserBadge
-                  firstName={userModel.context.user.firstName}
-                  lastName={userModel.context.user.lastName}
-                  title={getUserRole(egoJwt, permissions)}
-                />
-              </MenuItem>
+                <MenuItem
+                  active={onProfilePage}
+                  ref={React.createRef()}
+                  dropdownMenu={
+                    !isMobileLayout ? (
+                      <DropdownMenu>
+                        {profileNavDetails.map((element, idx) => (
+                          <NavBarElement
+                            key={`profileNavDetail_${idx}`}
+                            {...element}
+                            isDropdown={true}
+                          ></NavBarElement>
+                        ))}
+                      </DropdownMenu>
+                    ) : (
+                      <></>
+                    )
+                  }
+                >
+                  {usingProfileOptions && isMobileDropdownOpen ? (
+                    <Icon name={'hamburger_close'} fill="accent1_dimmed"></Icon>
+                  ) : (
+                    <UserBadge
+                      showGreeting={!isMobileLayout}
+                      firstName={userModel.context.user.firstName}
+                      lastName={userModel.context.user.lastName}
+                      title={getUserRole(egoJwt, permissions)}
+                    />
+                  )}
+                </MenuItem>
+              </div>
+            )}
+            {isMobileLayout && (
+              <div
+                onClick={() => {
+                  setUsingProfileOptions(false);
+                  setMobileDropdownOpen(!isMobileDropdownOpen);
+                }}
+              >
+                <MenuItem>
+                  <Icon
+                    name={
+                      isMobileDropdownOpen && !usingProfileOptions ? 'hamburger_close' : 'hamburger'
+                    }
+                    fill={
+                      isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
+                    }
+                  ></Icon>
+                </MenuItem>
+              </div>
             )}
           </MenuGroup>
         </Section>

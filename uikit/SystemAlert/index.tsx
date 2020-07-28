@@ -20,17 +20,17 @@ type AlertVariant = {
 const ALERT_VARIANTS: AlertVariant = {
   error: {
     color: 'error',
-    icon: 'warning',
+    icon: 'warning_transparent',
     fill: 'white',
   },
   warning: {
     color: 'warning_1',
-    icon: 'warning',
+    icon: 'warning_transparent',
     fill: 'primary_dark',
   },
   info: {
     color: 'secondary',
-    icon: 'info',
+    icon: 'info_transparent',
     fill: 'white',
   },
 };
@@ -50,61 +50,59 @@ type AlertProps = {
 const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
   const theme = useTheme();
   const icon = ALERT_VARIANTS[alert.level].icon;
+  const fill = ALERT_VARIANTS[alert.level].fill;
   return (
-    <Row
+    <div
       css={css`
         background-color: ${theme.colors[ALERT_VARIANTS[alert.level].color]};
-        padding: 10px 0;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
       `}
     >
-      <Col
-        sm={1}
+      <div
         css={css`
           display: flex;
-          justify-content: center;
-          align-items: center;
         `}
       >
-        <Icon name={icon} width="30px" height="30px" />
-      </Col>
-      <Col
-        sm={10}
-        css={css`
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        `}
-      >
-        <Typography
-          css={css`
-            font-size: 16px;
-            font-weight: 500;
-            color: ${theme.colors[ALERT_VARIANTS[alert.level].fill]};
-            margin: 0;
-          `}
-        >
-          {alert.title}
-        </Typography>
-        {alert.message && (
+        <div>
+          <Icon
+            name={icon}
+            fill={fill}
+            width="30px"
+            height="30px"
+            css={css`
+              margin-right: 15px;
+            `}
+          />
+        </div>
+        <div>
           <Typography
             css={css`
-              margin: 0;
+              font-size: 16px;
+              font-weight: 500;
               color: ${theme.colors[ALERT_VARIANTS[alert.level].fill]};
-              font-weight: 300;
+              margin: 0;
             `}
           >
-            {alert.message}
+            {alert.title}
           </Typography>
-        )}
-      </Col>
-      <Col
-        sm={1}
-        css={css`
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        `}
-      >
+          {alert.message && (
+            <Typography
+              css={css`
+                margin: 0;
+                color: ${theme.colors[ALERT_VARIANTS[alert.level].fill]};
+                font-weight: 300;
+              `}
+            >
+              {alert.message}
+            </Typography>
+          )}
+        </div>
+      </div>
+
+      <div>
         {alert.dismissable ? (
           <Icon
             name="times"
@@ -114,12 +112,13 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
             onClick={onClose}
             title="Close"
             css={css`
+              padding-left: 5px;
               cursor: pointer;
             `}
           />
         ) : null}
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 
