@@ -49,6 +49,26 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
   ASSOCIATE: 'ASSOCIATE',
 };
 
+const FormattedCell: React.ComponentType<{ cellInfo: TableProgramInternal }> = ({
+  children,
+  cellInfo,
+}) => {
+  const isRenderingOnMultipleRows = React.useMemo(() => {
+    return cellInfo.countries.length > 1 || cellInfo.cancerTypes.length > 1;
+  }, [cellInfo]);
+
+  return (
+    <div
+      css={css`
+        width: 100%;
+        align-self: ${isRenderingOnMultipleRows ? `flex-start` : `center`};
+      `}
+    >
+      {children}
+    </div>
+  );
+};
+
 export default function ProgramsTable(tableProps: {
   programs: Array<ProgramsTableProgram>;
   onProgramUsersClick: ({ program: ProgramsTableProgram }) => void;
@@ -66,63 +86,66 @@ export default function ProgramsTable(tableProps: {
       Header: 'Short Name',
       accessor: 'shortName',
       Cell: ({ original }) => (
-        <Link
-          href={PROGRAM_DASHBOARD_PATH}
-          as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
-        >
-          <A>{original.shortName}</A>
-        </Link>
+        <FormattedCell cellInfo={original}>
+          <Link
+            href={PROGRAM_DASHBOARD_PATH}
+            as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
+          >
+            <A>{original.shortName}</A>
+          </Link>
+        </FormattedCell>
       ),
     },
     {
       Header: 'Program Name',
       accessor: 'name',
+      Cell: ({ original }) => <FormattedCell cellInfo={original}>{original.name}</FormattedCell>,
     },
     {
       Header: 'Cancer Types',
       accessor: 'cancerTypes',
-      Cell: ({ original: { cancerTypes } }) => (
-        <div>
-          {cancerTypes.map((cancerType, i) => (
+      Cell: ({ original }) => (
+        <FormattedCell cellInfo={original}>
+          {original.cancerTypes.map((cancerType, i) => (
             <div key={cancerType}>
               {cancerType}
-              {i < cancerTypes.length - 1 && ','}
+              {i < original.cancerTypes.length - 1 && ','}
             </div>
           ))}
-        </div>
+        </FormattedCell>
       ),
     },
     {
       Header: 'Countries',
       accessor: 'countries',
-      Cell: ({ original: { countries } }) => {
-        const list = countries || [];
+      Cell: ({ original }) => {
+        const list = original.countries || [];
         return (
-          <div>
+          <FormattedCell cellInfo={original}>
             {list.map((country, i) => (
               <div key={country}>
                 {country}
                 {i < list.length - 1 && ','}
               </div>
             ))}
-          </div>
+          </FormattedCell>
         );
       },
     },
     {
       Header: 'Membership',
       accessor: 'membershipType',
-      Cell: ({ original }) =>
-        original.membershipType ? MembershipDisplayName[original.membershipType] : '',
+      Cell: ({ original }) => (
+        <FormattedCell cellInfo={original}>
+          {original.membershipType ? MembershipDisplayName[original.membershipType] : ''}
+        </FormattedCell>
+      ),
     },
     {
       Header: 'Administrators',
       accessor: 'administrators',
       Cell: ({ original }) => {
-        if (tableProps.loadingUser) {
-          return <>Loading</>;
-        }
-        return get(original, 'administrators', []).map((admin, idx) => (
+        const adminLinks = get(original, 'administrators', []).map((admin, idx) => (
           <A
             key={admin.email}
             href={`mailto: ${admin.email}`}
@@ -134,6 +157,10 @@ export default function ProgramsTable(tableProps: {
             {idx != original.administrators.length - 1 && ','}
           </A>
         ));
+
+        const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;
+
+        return <FormattedCell cellInfo={original}>{cellContent}</FormattedCell>;
       },
     },
     {
@@ -141,39 +168,56 @@ export default function ProgramsTable(tableProps: {
       accessor: 'donorPercentage',
       width: 200,
       Cell: ({ original }) => (
-        <PercentageBar nom={original.submittedDonors} denom={original.commitmentDonors} />
+        <FormattedCell cellInfo={original}>
+          <PercentageBar
+            nom={original.submittedDonors}
+            denom={original.commitmentDonors}
+            css={css`
+              display: flex;
+              justify-content: flex-start;
+            `}
+          />
+        </FormattedCell>
       ),
     },
     {
       Header: 'Actions',
       sortable: false,
       width: 100,
-      Cell: (props: CellProps) => (
-        <div
+      Cell: ({ original }) => (
+        <FormattedCell
+          cellInfo={original}
           css={css`
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex: 1;
+            width: 100%;
           `}
         >
-          <InteractiveIcon
-            position="bottom"
-            html={<span>Manage users</span>}
-            height="20px"
-            width="20px"
-            name="users"
-            onClick={() => tableProps.onProgramUsersClick({ program: props.original })}
-          />
-          <InteractiveIcon
-            position="bottom"
-            html={<span>Edit program</span>}
-            height="20px"
-            width="20px"
-            name="edit"
-            onClick={() => tableProps.onProgramEditClick({ program: props.original })}
-          />
-        </div>
+          <div
+            css={css`
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              flex: 1;
+            `}
+          >
+            <InteractiveIcon
+              position="bottom"
+              html={<span>Manage users</span>}
+              height="20px"
+              width="20px"
+              name="users"
+              onClick={() => tableProps.onProgramUsersClick({ program: original })}
+            />
+            <InteractiveIcon
+              position="bottom"
+              html={<span>Edit program</span>}
+              height="20px"
+              width="20px"
+              name="edit"
+              onClick={() => tableProps.onProgramEditClick({ program: original })}
+            />
+          </div>
+        </FormattedCell>
       ),
     },
   ];
