@@ -38,9 +38,9 @@ import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification, { defaultColumns } from '../ErrorNotification';
+import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
-import Notification from 'uikit/notifications/Notification';
+import Notification, { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import {
   SubmissionSystemLockedNotification,
@@ -54,7 +54,7 @@ const recordsToFileTable = (
   records: ClinicalRegistrationData[],
   newRows: Array<number>,
 ): Array<FileEntry> =>
-  records.map(record => {
+  records.map((record) => {
     const fields = get(record, 'fields', []);
     const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
     return { ...data, row: record.row, isNew: newRows.includes(record.row) };
@@ -148,9 +148,9 @@ export default function ProgramIDRegistration() {
 
   const onErrorClose: (
     index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] = index => ({ type }) => {
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] = (index) => ({ type }) => {
     if (type === 'CLOSE') {
-      updateClinicalRegistrationQuery(previous => ({
+      updateClinicalRegistrationQuery((previous) => ({
         ...previous,
         clinicalRegistration: {
           ...previous.clinicalRegistration,
@@ -273,13 +273,14 @@ export default function ProgramIDRegistration() {
           </>
         ) : schemaOrValidationErrors.length > 0 ? (
           <ErrorNotification
+            level={NOTIFICATION_VARIANTS.ERROR}
             onClearClick={handleClearClick}
             title={`${schemaOrValidationErrors.length} error(s) found in uploaded file`}
             errors={schemaOrValidationErrors.map(toDisplayError)}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'
             }
-            columnConfig={defaultColumns}
+            columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
             tsvExcludeCols={['type', 'specimenId', 'sampleId']}
           />
         ) : (
