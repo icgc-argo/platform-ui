@@ -29,6 +29,13 @@ fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
       oldValue
       donorId
     }
+    dataWarnings {
+      message
+      row
+      field
+      value
+      donorId
+    }
     dataErrors {
       message
       row

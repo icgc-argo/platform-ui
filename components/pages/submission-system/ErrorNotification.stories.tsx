@@ -22,10 +22,12 @@ import { storiesOf } from '@storybook/react';
 import { boolean, select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import ErrorNotification from './ErrorNotification';
+import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 
 const TableStories = storiesOf(`${__dirname}`, module).add('ErrorNotification', () => {
   return (
     <ErrorNotification
+      level={NOTIFICATION_VARIANTS.ERROR}
       title="Error title"
       subtitle="Some error subtitle"
       columnConfig={[

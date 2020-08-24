@@ -40,7 +40,7 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 
 const StarIcon = DataTableStarIcon;
 
-type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR';
+type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR' | 'WARNING';
 
 type FileStat = {
   newCount: number;
@@ -53,6 +53,7 @@ export const FILE_STATE_COLORS: {
   [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'];
 } = {
   ERROR: 'error',
+  WARNING: 'warning',
   NEW: 'accent2',
   NONE: 'grey_1',
   UPDATED: 'accent3_dark',
@@ -126,7 +127,7 @@ export default ({
     [token, isPendingApproval],
   );
   const theme = useTheme();
-  const { records, stats } = file;
+  const { records, stats, dataWarnings } = file;
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
@@ -170,10 +171,15 @@ export default ({
 
   const recordHasError = (record: typeof tableData[0]) =>
     stats.errorsFound.some((row) => row === record.row);
+
   const rowHasUpdate = (record: typeof tableData[0]) =>
     stats.updated.some((row) => row === record.row);
+
   const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
     file.dataUpdates.some((update) => update.field === cell.field && update.row === cell.row.row);
+
+  const recordHasWarning = (record: typeof tableData[0]) =>
+    dataWarnings.some((dw) => dw.row === record.row);
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
     const hasError = recordHasError(original);
@@ -330,6 +336,10 @@ export default ({
             style: recordHasError(original)
               ? {
                   background: theme.colors.error_4,
+                }
+              : recordHasWarning(original)
+              ? {
+                  background: theme.colors.warning_4,
                 }
               : isPendingApproval && rowHasUpdate(original)
               ? {

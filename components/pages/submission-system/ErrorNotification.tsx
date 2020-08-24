@@ -20,7 +20,10 @@
 import React from 'react';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
-import Notification from 'uikit/notifications/Notification';
+import Notification, {
+  NotificationVariant,
+  NOTIFICATION_VARIANTS,
+} from 'uikit/notifications/Notification';
 import Table, { TableColumnConfig } from 'uikit/Table';
 import { exportToTsv } from 'global/utils/common';
 import Icon from 'uikit/Icon';
@@ -28,34 +31,38 @@ import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from 
 import union from 'lodash/union';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
-export const defaultColumns = [
-  {
-    accessor: 'row' as 'row',
-    Header: 'Line #',
-    maxWidth: 70,
-  },
-  {
-    accessor: 'donorId' as 'donorId',
-    Header: 'Submitter Donor ID',
-    maxWidth: 160,
-  },
-  {
-    accessor: 'field' as 'field',
-    Header: 'Field with Error',
-    maxWidth: 200,
-  },
-  {
-    accessor: 'value' as 'value',
-    Header: 'Error Value',
-    maxWidth: 130,
-  },
-  {
-    accessor: 'message' as 'message',
-    Header: 'Error Description',
-  },
-];
+export const getDefaultColumns = (level: NotificationVariant) => {
+  const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
+  return [
+    {
+      accessor: 'row' as 'row',
+      Header: 'Line #',
+      maxWidth: 70,
+    },
+    {
+      accessor: 'donorId' as 'donorId',
+      Header: 'Submitter Donor ID',
+      maxWidth: 160,
+    },
+    {
+      accessor: 'field' as 'field',
+      Header: `Field with ${variant}`,
+      maxWidth: 200,
+    },
+    {
+      accessor: 'value' as 'value',
+      Header: `${variant} Value`,
+      maxWidth: 130,
+    },
+    {
+      accessor: 'message' as 'message',
+      Header: `${variant} Description`,
+    },
+  ];
+};
 
 export default <Error extends { [k: string]: any }>({
+  level,
   title,
   errors,
   subtitle,
@@ -63,6 +70,7 @@ export default <Error extends { [k: string]: any }>({
   onClearClick,
   tsvExcludeCols = [],
 }: {
+  level: NotificationVariant;
   title: string;
   subtitle: string;
   columnConfig: Array<
@@ -77,8 +85,8 @@ export default <Error extends { [k: string]: any }>({
   const onDownloadClick = () => {
     exportToTsv(errors, {
       exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
-      order: columnConfig.map(entry => entry.accessor),
-      fileName: 'error_report.tsv',
+      order: columnConfig.map((entry) => entry.accessor),
+      fileName: `${level}_report.tsv`,
       headerDisplays: columnConfig.reduce<{}>(
         (acc, { accessor, Header }) => ({
           ...acc,
@@ -91,7 +99,7 @@ export default <Error extends { [k: string]: any }>({
 
   return (
     <Notification
-      variant="ERROR"
+      variant={level}
       interactionType="NONE"
       title={
         <div
@@ -114,7 +122,7 @@ export default <Error extends { [k: string]: any }>({
                   height="12px"
                   css={instructionBoxButtonIconStyle}
                 />
-                Error Report
+                {level === NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`} Report
               </span>
             </Button>
             {!!onClearClick && (
@@ -150,7 +158,7 @@ export default <Error extends { [k: string]: any }>({
             <Table
               parentRef={containerRef}
               NoDataComponent={() => null}
-              columns={columnConfig.map(col => ({
+              columns={columnConfig.map((col) => ({
                 ...col,
                 style: {
                   whiteSpace: 'pre-line',

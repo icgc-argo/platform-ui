@@ -33,7 +33,7 @@ import {
   SignOffSubmissionMutationVariables,
   ClinicalSubmissionError,
 } from './types';
-import Notification from 'uikit/notifications/Notification';
+import Notification, { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
@@ -42,7 +42,7 @@ import DnaLoader from 'uikit/DnaLoader';
 import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification, { defaultColumns } from '../ErrorNotification';
+import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
@@ -91,6 +91,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
     schemaErrors: gqlFile.schemaErrors,
     dataErrors: gqlFile.dataErrors,
     dataUpdates: gqlFile.dataUpdates,
+    dataWarnings: gqlFile.dataWarnings,
     displayName: capitalize((gqlFile.clinicalType || '').split('_').join(' ')),
     clinicalType: gqlFile.clinicalType,
     records: gqlFile.records,
@@ -251,6 +252,28 @@ export default () => {
     [data],
   );
 
+  const allDataWarnings = React.useMemo(
+    () =>
+      data.clinicalSubmissions.clinicalEntities.reduce<
+        Array<
+          ClinicalSubmissionError & {
+            fileName: string;
+          }
+        >
+      >(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataWarnings.map((err) => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [data],
+  );
+
+  const hasDataWarning = !!allDataWarnings.length;
   const hasDataError = !!allDataErrors.length;
   const hasSchemaErrorsAfterMigration = data.clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
   const hasSchemaError =
@@ -473,6 +496,7 @@ export default () => {
           `}
         >
           <ErrorNotification
+            level={NOTIFICATION_VARIANTS.ERROR}
             title={`${allDataErrors.length} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors.map(toDisplayError)}
@@ -482,7 +506,30 @@ export default () => {
                 Header: 'File',
                 maxWidth: 150,
               },
-              ...defaultColumns,
+              ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
+            ]}
+          />
+        </div>
+      )}
+      {hasDataWarning && (
+        <div
+          id="warning-submission-workspace"
+          css={css`
+            margin-top: 20px;
+          `}
+        >
+          <ErrorNotification
+            level={NOTIFICATION_VARIANTS.WARNING}
+            title={`${allDataWarnings.length} warning(s) found in submission workspace`}
+            subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
+            errors={allDataWarnings.map(toDisplayError)}
+            columnConfig={[
+              {
+                accessor: 'fileName',
+                Header: 'File',
+                maxWidth: 150,
+              },
+              ...getDefaultColumns(NOTIFICATION_VARIANTS.WARNING),
             ]}
           />
         </div>

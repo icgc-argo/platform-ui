@@ -26,7 +26,7 @@ import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
 import NoData from 'uikit/NoData';
-import ErrorNotification, { defaultColumns } from '../../ErrorNotification';
+import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import noDataSvg from 'static/illustration_heart.svg';
 import Icon from 'uikit/Icon';
@@ -37,6 +37,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
+import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 
 export default ({
   fileStates,
@@ -66,12 +67,12 @@ export default ({
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const toaster = useToaster();
-  const onFileClick = (clinicalType: string) => e => {
-    onFileSelect(fileStates.find(file => clinicalType === file.clinicalType).clinicalType);
+  const onFileClick = (clinicalType: string) => (e) => {
+    onFileSelect(fileStates.find((file) => clinicalType === file.clinicalType).clinicalType);
   };
-  const selectedFile = fileStates.find(file => file.clinicalType === selectedClinicalEntityType);
-  const onClearClick = (clinicalType: string) => async e => {
-    const fileType: string = fileStates.find(file => clinicalType === file.clinicalType)
+  const selectedFile = fileStates.find((file) => file.clinicalType === selectedClinicalEntityType);
+  const onClearClick = (clinicalType: string) => async (e) => {
+    const fileType: string = fileStates.find((file) => clinicalType === file.clinicalType)
       .clinicalType;
 
     try {
@@ -130,7 +131,7 @@ export default ({
             height: 100%;
           `}
         >
-          {fileStates.map(fileState => (
+          {fileStates.map((fileState) => (
             <VerticalTabs.Item
               key={fileState.clinicalType}
               active={selectedFile.clinicalType === fileState.clinicalType}
@@ -144,11 +145,12 @@ export default ({
                 {fileState.displayName}
               </div>
               {!!fileState.recordsCount &&
-                (fileState.status !== 'NONE' && fileState.status !== 'ERROR' && (
+                fileState.status !== 'NONE' &&
+                fileState.status !== 'ERROR' && (
                   <VerticalTabs.Tag variant={fileState.status}>
                     {fileState.recordsCount}
                   </VerticalTabs.Tag>
-                ))}
+                )}
               {fileState.status === 'ERROR' && (
                 <VerticalTabs.Tag variant="ERROR">
                   <Icon name="exclamation" fill="#fff" height="10px" width="10px" />
@@ -167,6 +169,7 @@ export default ({
             `}
           >
             <ErrorNotification
+              level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}
               title={`${
                 selectedFile.schemaErrors.length
@@ -175,7 +178,7 @@ export default ({
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              columnConfig={defaultColumns}
+              columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
             />
           </div>
         ) : !!selectedFile.records.length ? (
