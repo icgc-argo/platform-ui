@@ -179,11 +179,10 @@ export default ({
     file.dataUpdates.some((update) => update.field === cell.field && update.row === cell.row.row);
 
   const recordHasWarning = (record: typeof tableData[0]) =>
-    dataWarnings.find((dw) => dw.row === record.row);
+    dataWarnings.some((dw) => dw.row === record.row);
 
   const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
     const hasError = recordHasError(original);
-    const hasWarning = recordHasWarning(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.row);
     return (

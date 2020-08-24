@@ -122,7 +122,7 @@ export default <Error extends { [k: string]: any }>({
                   height="12px"
                   css={instructionBoxButtonIconStyle}
                 />
-                {level == NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`} Report
+                {level === NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`} Report
               </span>
             </Button>
             {!!onClearClick && (
