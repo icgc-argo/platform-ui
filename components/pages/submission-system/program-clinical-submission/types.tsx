@@ -62,6 +62,7 @@ export type ClinicalSubmissionEntityFile = {
   fileName: string;
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
+  dataWarnings: ClinicalSubmissionError[];
   schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
   stats: GqlClinicalEntity['stats'];
@@ -73,6 +74,7 @@ export type GqlClinicalEntity = {
   creator: string;
   records: ClinicalSubmissionRecord[];
   dataErrors: ClinicalSubmissionError[];
+  dataWarnings: ClinicalSubmissionError[];
   schemaErrors: ClinicalSubmissionError[];
   dataUpdates: ClinicalSubmissionUpdate[];
   createdAt: string;
@@ -83,6 +85,7 @@ export type GqlClinicalEntity = {
     errorsFound: Array<ClinicalSubmissionRecord['row']>;
   };
 };
+
 export type GqlClinicalSubmissionData = {
   id: string;
   version: string;
