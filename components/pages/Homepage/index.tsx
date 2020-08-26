@@ -55,6 +55,7 @@ import {
   DOCS_DICTIONARY_RELEASES_PAGE,
 } from 'global/constants/docSitePaths';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
+import Head from 'components/pages/head';
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -105,6 +106,7 @@ export default function Homepage() {
 
   return (
     <DefaultLayout>
+      <Head subtitle="Homepage"></Head>
       <HeroDiv>
         <div
           css={css`
