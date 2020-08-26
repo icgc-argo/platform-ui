@@ -25,10 +25,12 @@ const defaultDescription = '';
 const defaultOGURL = '';
 const defaultOGImage = '';
 
-const Head = props => (
+const Head = (props) => (
   <NextHead>
     <meta charSet="UTF-8" />
-    <title>{props.title || 'ICGC ARGO'}</title>
+    <title>
+      {(props.subtitle && `ICGC ARGO | ${props.subtitle}`) || props.title || 'ICGC ARGO'}
+    </title>
     <meta name="description" content={props.description || defaultDescription} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:url" content={props.url || defaultOGURL} />
@@ -45,6 +47,7 @@ const Head = props => (
 
 Head.propTypes = {
   title: string,
+  subtitle: string,
   description: string,
   url: string,
   ogImage: string,

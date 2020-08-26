@@ -44,6 +44,7 @@ import {
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
 } from 'global/constants/docSitePaths';
+import Head from 'components/pages/head';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -118,6 +119,7 @@ export default function ProgramDashboard() {
         </div>
       }
     >
+      <Head subtitle={`${programShortName} Dashboard`}></Head>
       {justJoined && (
         <Banner
           title={`Welcome to ${programShortName}!`}
@@ -171,7 +173,7 @@ export default function ProgramDashboard() {
           </PaddedRow>
           <Row>
             <ScreenClassRender
-              render={screenClass => (
+              render={(screenClass) => (
                 <Col xs={12} css={applyStackedStyle(screenClass)}>
                   <ProgramWorkspaceStatus />
                 </Col>
@@ -180,7 +182,7 @@ export default function ProgramDashboard() {
           </Row>
         </Col>
         <ScreenClassRender
-          render={screenClass => (
+          render={(screenClass) => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
               <CompletedClinicalData />
             </Col>

@@ -26,6 +26,7 @@ import ManageProgramTabs from './ManageProgramTabs';
 import Link from 'uikit/Link';
 import { Row } from 'react-grid-system';
 import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
+import Head from 'components/pages/head';
 
 export default () => {
   const router = useRouter();
@@ -70,6 +71,7 @@ export default () => {
         </div>
       }
     >
+      <Head subtitle={`${programShortName} Manage Program`}></Head>
       <ManageProgramTabs />
     </SubmissionLayout>
   );

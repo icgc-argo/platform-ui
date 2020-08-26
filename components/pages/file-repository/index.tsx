@@ -48,7 +48,7 @@ const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
   return (
     <FiltersProvider>
       <PageContainer>
-        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+        <Head subtitle={subtitle} />
         <NavBar />
         <PageBody sidebarColSize="280px">
           <FacetPanel />

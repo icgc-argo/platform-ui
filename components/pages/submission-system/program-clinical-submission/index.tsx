@@ -28,6 +28,7 @@ import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
+import Head from 'components/pages/head';
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
 ): ClinicalSubmissionQueryData => ({
@@ -95,6 +96,7 @@ export default function ProgramClinicalSubmission() {
           />
         }
       >
+        <Head subtitle={`${programShortName} Clinical Submission`}></Head>
         <PageContent />
       </SubmissionLayout>
     </>
