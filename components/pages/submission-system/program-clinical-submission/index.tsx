@@ -28,6 +28,7 @@ import { ContentHeader } from 'uikit/PageLayout';
 import { useTheme } from 'uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
+import Head from 'components/pages/head';
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
 ): ClinicalSubmissionQueryData => ({
@@ -83,6 +84,7 @@ export default function ProgramClinicalSubmission() {
   return (
     <>
       <SubmissionLayout
+        subtitle={`${programShortName} Clinical Submission`}
         ContentHeaderComponent={styled(ContentHeader)`
           background: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
         `}

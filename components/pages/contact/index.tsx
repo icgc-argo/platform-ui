@@ -52,6 +52,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';
+import Head from 'components/pages/head';
 
 const Ul = styled('ul')`
   ${({ theme }) => css(theme.typography.paragraph)};
@@ -157,6 +158,8 @@ export default function ContactPage() {
   };
   return (
     <DefaultLayout>
+      <Head subtitle="Contact"></Head>
+
       <Row
         nogutter
         css={css`
@@ -354,7 +357,7 @@ export default function ContactPage() {
                           aria-label="First Name"
                           id="first-name"
                           value={data.firstName}
-                          onChange={e => setData({ key: 'firstName', val: e.target.value })}
+                          onChange={(e) => setData({ key: 'firstName', val: e.target.value })}
                           onBlur={() => validateField({ key: 'firstName' })}
                           size="lg"
                         />
@@ -391,7 +394,7 @@ export default function ContactPage() {
                           id="last-name"
                           size="lg"
                           value={data.lastName}
-                          onChange={e => setData({ key: 'lastName', val: e.target.value })}
+                          onChange={(e) => setData({ key: 'lastName', val: e.target.value })}
                           onBlur={() => validateField({ key: 'lastName' })}
                         />
                         {!!lastNameError && <FormHelperText>{lastNameError}</FormHelperText>}
@@ -424,7 +427,7 @@ export default function ContactPage() {
                           id="email-address"
                           size="lg"
                           value={data.email}
-                          onChange={e => {
+                          onChange={(e) => {
                             setData({ key: 'email', val: e.target.value });
                           }}
                           onBlur={() => validateField({ key: 'email' })}
@@ -451,7 +454,7 @@ export default function ContactPage() {
                         margin-bottom: 16px;
                       `}
                       options={CONTACT_CATEGORY_OPTIONS}
-                      onChange={val => setData({ key: 'messageCategory', val })}
+                      onChange={(val) => setData({ key: 'messageCategory', val })}
                       onBlur={() => validateField({ key: 'messageCategory' })}
                     />
                     {!!messageCategoryError && (
@@ -473,7 +476,7 @@ export default function ContactPage() {
                         height: 115px;
                       `}
                       value={data.messageDescription}
-                      onChange={e => setData({ key: 'messageDescription', val: e.target.value })}
+                      onChange={(e) => setData({ key: 'messageDescription', val: e.target.value })}
                       onBlur={() => validateField({ key: 'messageDescription' })}
                     />
                     {!!messageDescriptionError && (

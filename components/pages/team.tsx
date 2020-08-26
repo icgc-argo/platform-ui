@@ -28,6 +28,7 @@ import chunk from 'lodash/chunk';
 import get from 'lodash/get';
 import { useTheme } from 'uikit/ThemeProvider';
 import banner from 'static/icgc-galaxy-bg.jpg';
+import Head from 'components/pages/head';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };
@@ -94,7 +95,7 @@ const teamData: Array<Team> = [
   },
 ];
 
-const SectionTitle = props => (
+const SectionTitle = (props) => (
   <Typography
     css={css`
       font-size: 20px;
@@ -110,6 +111,7 @@ export default function TeamPage() {
   const theme = useTheme();
   return (
     <DefaultLayout>
+      <Head subtitle="The Team"></Head>
       <div
         css={css`
           background: ${theme.colors.white};
