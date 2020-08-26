@@ -177,6 +177,7 @@ export default function ProgramIDRegistration() {
 
   return (
     <SubmissionLayout
+      subtitle={`${programShortName} Sample Registration`}
       contentHeader={
         <div css={pageHeaderStyle}>
           <TitleBar>
@@ -207,7 +208,6 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      <Head subtitle={`${programShortName} Sample Registration`}></Head>
       {<SubmissionSystemLockedNotification />}
       <Container
         css={css`

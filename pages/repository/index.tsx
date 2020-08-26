@@ -33,5 +33,5 @@ export default createPage<{ egoJwt: string }>({
     }
   },
 })(() => {
-  return <FileRepositoryPage subtitle="File Repository" />;
+  return <FileRepositoryPage />;
 });

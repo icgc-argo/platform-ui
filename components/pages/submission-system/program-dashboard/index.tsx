@@ -82,6 +82,7 @@ export default function ProgramDashboard() {
 
   return (
     <SubmissionLayout
+      subtitle={`${programShortName} Dashboard`}
       contentHeader={
         <div
           css={css`
@@ -119,7 +120,6 @@ export default function ProgramDashboard() {
         </div>
       }
     >
-      <Head subtitle={`${programShortName} Dashboard`}></Head>
       {justJoined && (
         <Banner
           title={`Welcome to ${programShortName}!`}

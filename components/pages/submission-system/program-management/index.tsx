@@ -34,6 +34,7 @@ export default () => {
 
   return (
     <SubmissionLayout
+      subtitle={`${programShortName} Manage Program`}
       contentHeader={
         <div
           css={css`
@@ -71,7 +72,6 @@ export default () => {
         </div>
       }
     >
-      <Head subtitle={`${programShortName} Manage Program`}></Head>
       <ManageProgramTabs />
     </SubmissionLayout>
   );

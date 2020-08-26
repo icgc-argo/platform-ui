@@ -84,6 +84,7 @@ export default function ProgramClinicalSubmission() {
   return (
     <>
       <SubmissionLayout
+        subtitle={`${programShortName} Clinical Submission`}
         ContentHeaderComponent={styled(ContentHeader)`
           background: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
         `}
@@ -96,7 +97,6 @@ export default function ProgramClinicalSubmission() {
           />
         }
       >
-        <Head subtitle={`${programShortName} Clinical Submission`}></Head>
         <PageContent />
       </SubmissionLayout>
     </>
