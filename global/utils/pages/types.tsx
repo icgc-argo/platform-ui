@@ -43,7 +43,12 @@ export type PageConfigProps = {
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
   getGqlQueriesToPrefetch: (
     args: GetInitialPropsContextWithEgo,
-  ) => Promise<Array<{ query: any; variables?: { [key: string]: any } }>>;
+  ) => Promise<
+    Array<{
+      query: string; // The gql query string
+      variables?: { [key: string]: any };
+    }>
+  >;
   startWithGlobalLoader: boolean;
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
