@@ -49,6 +49,7 @@ import {
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import { getConfig } from 'global/config';
 import { DOCS_REGISTERING_SAMPLES_PAGE } from 'global/constants/docSitePaths';
+import Head from 'components/pages/head';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -176,6 +177,7 @@ export default function ProgramIDRegistration() {
 
   return (
     <SubmissionLayout
+      subtitle={`${programShortName} Sample Registration`}
       contentHeader={
         <div css={pageHeaderStyle}>
           <TitleBar>

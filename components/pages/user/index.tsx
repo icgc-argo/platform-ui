@@ -30,9 +30,10 @@ import PROFILE from './gql/PROFILE.gql';
 import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
+import Head from 'components/pages/head';
 
 export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
-  const Column = props => (
+  const Column = (props) => (
     <Col
       style={{
         padding: 10,
@@ -48,6 +49,7 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
 
   return (
     <DefaultLayout>
+      <Head subtitle="Profile"></Head>
       <ContentHeader>
         <Typography variant="title" color="primary" as="h1">
           Profile & Tokens

@@ -44,11 +44,11 @@ const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
 `;
 
-const RepositoryPage = ({ subtitle }: { subtitle?: string }) => {
+const RepositoryPage = () => {
   return (
     <FiltersProvider>
       <PageContainer>
-        <Head title={subtitle ? `ICGC ARGO - ${subtitle}` : 'ICGC ARGO'} />
+        <Head subtitle={'File Repository'} />
         <NavBar />
         <PageBody sidebarColSize="280px">
           <FacetPanel />
