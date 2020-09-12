@@ -78,7 +78,7 @@
     "next": "^9.3.2",
     "next-cookies": "^1.1.2",
     "next-images": "^1.1.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "npm": "^6.13.1",
     "pluralize": "^8.0.0",
     "promise-queue": "^2.2.5",
