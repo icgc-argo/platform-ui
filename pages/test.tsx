@@ -17,27 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/// <reference types="next" />
-/// <reference types="next/types/global" />
+import Page from '../components/pages/testPage';
+import { createPage } from 'global/utils/pages';
 
-declare module '*.svg' {
-  const content: string;
-  export default content;
-}
-
-declare module '*.jpg' {
-  const content: string;
-  export default content;
-}
-declare module '*.md' {
-  const content: string;
-  export default content;
-}
-declare module '*.gql' {
-  const content: string;
-  export default content;
-}
-declare module '*.svelte' {
-  const content: any;
-  export default content;
-}
+export default createPage({
+  isPublic: true,
+  getInitialProps: async () => ({}),
+})((props) => {
+  return <Page {...props} />;
+});
