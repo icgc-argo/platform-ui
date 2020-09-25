@@ -30,6 +30,7 @@ const baseValidations = yup.object().shape({
       const providedCode = value.slice ? value.slice(-2) : null;
       return !!COUNTRIES.find((country) => country.code === providedCode);
     })
+    // check for inclusion of dash before country code
     .matches(
       /-([A-Z][A-Z]|INTL)$/,
       '${label} must end with a 2 character country code: "-XX", or end with "-INTL" for international programs.',
