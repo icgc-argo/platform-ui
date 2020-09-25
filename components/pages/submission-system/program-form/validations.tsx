@@ -30,7 +30,10 @@ const baseValidations = yup.object().shape({
       const providedCode = value.slice ? value.slice(-2) : null;
       return !!COUNTRIES.find((country) => country.code === providedCode);
     })
-    .matches(/-([A-Z][A-Z])$/, '${label} must end with a 2 character country code: "-XX"')
+    .matches(
+      /-([A-Z][A-Z]|INTL)$/,
+      '${label} must end with a 2 character country code: "-XX", or end with "-INTL" for international programs.',
+    )
     .matches(/^[A-Z0-9]/, '${label} must begin with an uppercase letter or a number')
     .matches(
       /^[A-Z0-9_-]+$/,
