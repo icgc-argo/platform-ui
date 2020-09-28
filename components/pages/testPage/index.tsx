@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactApp from './react/index';
+import ReactApp from './reactApp/index';
 import SvelteWrapper from './svelte';
+import VanillaDomComponent from './vanilla';
 
 export default () => {
-  const [version, setVersion] = React.useState<'SVELTE' | 'REACT' | 'VANILLA'>('VANILLA');
+  const [version, setVersion] = React.useState<'SVELTE' | 'REACT' | 'VANILLA'>('SVELTE');
 
   const onVersionSelect = (v: typeof version) => () => setVersion(v);
 
@@ -35,12 +36,11 @@ export default () => {
           vanilla
         </button>
       </div>
-      <ReactApp />
       {
         ({
           SVELTE: <SvelteWrapper />,
           REACT: <ReactApp />,
-          VANILLA: <div>not implemented</div>,
+          VANILLA: <VanillaDomComponent />,
         } as { [k in typeof version]: any })[version]
       }
     </div>

@@ -1,14 +1,28 @@
 <script lang="typescript">
   import range from 'lodash/range';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import Item from './item.svelte';
+  import logger from '../logger';
 
-  let count: number = 1000;
+  let count: number = 100;
 
   $: things = range(0, count);
-  onMount(() => {
-    console.log('yoo!!!');
-  });
+  $: logger.log('count: ', count);
+  $: logger.log('hi');
+
+  const onInterval = (func, time) => {
+    let interval;
+    onMount(() => {
+      interval = setInterval(func, time);
+    });
+    onDestroy(() => {
+      clearInterval(interval);
+    });
+  };
+
+  // onInterval(() => {
+  //   console.log('interval!!!');
+  // }, 1000);
 </script>
 
 <style>

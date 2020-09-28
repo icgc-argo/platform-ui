@@ -1,5 +1,6 @@
 import React from 'react';
 import range from 'lodash/range';
+import logger from '../logger';
 
 const Item = ({ content }) => (
   <span
@@ -13,8 +14,9 @@ const Item = ({ content }) => (
 );
 
 export default () => {
-  let [count, setCount] = React.useState(1000);
+  let [count, setCount] = React.useState(100);
   const things = range(0, count);
+  logger.log('hello');
 
   return (
     <div>

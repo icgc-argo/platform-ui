@@ -1,15 +1,17 @@
 import React from 'react';
-import SvelteComponent from './app.svelte';
+import { SvelteComponent } from 'svelte/internal';
+import SvelteDemo from './app.svelte';
 
 export default () => {
-  const [svelteComponent, setSvelteComponent] = React.useState<any>(null);
+  const [svelteComponent, setSvelteComponent] = React.useState<SvelteComponent>(null);
   const svelteDomNode = React.useRef();
   React.useEffect(() => {
     setSvelteComponent(
-      new SvelteComponent({
+      new SvelteDemo({
         target: svelteDomNode.current,
       }),
     );
   }, []);
+  console.log(svelteComponent);
   return <div ref={svelteDomNode} />;
 };

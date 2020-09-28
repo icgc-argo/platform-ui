@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Page from '../components/pages/testPage';
+import HomePage from '../components/pages/TestPage';
 import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: true,
   getInitialProps: async () => ({}),
-})((props) => {
-  return <Page {...props} />;
+})(() => {
+  return <HomePage />;
 });
