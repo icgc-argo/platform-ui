@@ -28,20 +28,7 @@ export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: 
     : {};
 };
 
-const getSanitizedValue = (v: string): null | undefined | string => {
-  return (() => {
-    switch (v) {
-      case 'null':
-        return null;
-      case 'undefined':
-        return undefined;
-      case '':
-        return undefined;
-      default:
-        return v;
-    }
-  })();
-};
+const getSanitizedValue = (v: string): null | undefined | string => (v ? v : null);
 
 export const useHook = <T>(
   key: string,
