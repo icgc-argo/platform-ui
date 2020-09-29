@@ -45,8 +45,8 @@ export const useHook = <T>(
 ) => {
   const router = useRouter();
   const currentQuery = getParams(router);
-  const [firstRender, setFirstRender] = React.useState(true);
-  const [previousQuery, setPreviousQuery] = React.useState(null);
+  const [firstRender, setFirstRender] = React.useState<boolean>(true);
+  const [previousQuery, setPreviousQuery] = React.useState<{ [key: string]: string }>(null);
 
   const hasQueryParms = !!router.asPath.split('?')[1];
   const previousValue = !hasQueryParms && previousQuery;
@@ -97,5 +97,3 @@ export const useHook = <T>(
 };
 
 export default useHook;
-
-// render then useEffect,
