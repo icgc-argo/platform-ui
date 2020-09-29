@@ -47,20 +47,11 @@ export const useHook = <T>(
   const currentQuery = getParams(router);
   const [firstRender, setFirstRender] = React.useState(true);
   const [previousQuery, setPreviousQuery] = React.useState(null);
-  console.log('router', router.asPath);
+
+  const hasQueryParms = !!router.asPath.split('?')[1];
+  const previousValue = !hasQueryParms && previousQuery;
 
   React.useEffect(() => {
-    const hasQueryParms = !!router.asPath.split('?')[1];
-    const previousValue = !hasQueryParms && previousQuery;
-    console.log(
-      'has q params',
-      hasQueryParms,
-      'prev val',
-      previousValue,
-      'pv query params',
-      previousQuery,
-    );
-
     const query = {
       [key]: serialize(initialValue),
       ...currentQuery,
@@ -70,11 +61,10 @@ export const useHook = <T>(
 
     const urlParams = new window.URLSearchParams(previousValue ? previousValue : query).toString();
     const newPath = `${router.asPath.split('?')[0]}?${urlParams}`;
-    console.log('current query', currentQuery, 'url params', urlParams);
 
     if (firstRender) {
       router.replace(router.pathname, newPath).then(() => setFirstRender(false));
-    } else if (!hasQueryParms) {
+    } else if (previousValue) {
       router.replace(router.pathname, newPath);
     }
   }, [router.asPath]);
@@ -96,10 +86,16 @@ export const useHook = <T>(
     return deSerialize(sanitized);
   };
 
-  return [firstRender ? initialValue : deserializeValue(currentQuery[key]), setUrlState] as [
-    T,
-    typeof setUrlState,
-  ];
+  return [
+    firstRender
+      ? initialValue
+      : previousValue
+      ? deserializeValue(previousValue[key])
+      : deserializeValue(currentQuery[key]),
+    setUrlState,
+  ] as [T, typeof setUrlState];
 };
 
 export default useHook;
+
+// render then useEffect,
