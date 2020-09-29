@@ -28,20 +28,7 @@ export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: 
     : {};
 };
 
-const getSanitizedValue = (v: string): null | undefined | string => {
-  return (() => {
-    switch (v) {
-      case 'null':
-        return null;
-      case 'undefined':
-        return undefined;
-      case '':
-        return undefined;
-      default:
-        return v;
-    }
-  })();
-};
+const getSanitizedValue = (v: string): null | undefined | string => (v ? v : null);
 
 export const useHook = <T>(
   key: string,
@@ -58,15 +45,29 @@ export const useHook = <T>(
 ) => {
   const router = useRouter();
   const currentQuery = getParams(router);
-  const [firstRender, setFirstRender] = React.useState(true);
+  const [firstRender, setFirstRender] = React.useState<boolean>(true);
+  const [previousQuery, setPreviousQuery] = React.useState<{ [key: string]: string }>(null);
+
+  const hasQueryParms = !!router.asPath.split('?')[1];
+  const previousValue = !hasQueryParms && previousQuery;
 
   React.useEffect(() => {
-    const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
+    const query = {
       [key]: serialize(initialValue),
       ...currentQuery,
-    }).toString()}`;
-    router.replace(router.pathname, newPath).then(() => setFirstRender(false));
-  }, []);
+    };
+
+    setPreviousQuery(query);
+
+    const urlParams = new window.URLSearchParams(previousValue ? previousValue : query).toString();
+    const newPath = `${router.asPath.split('?')[0]}?${urlParams}`;
+
+    if (firstRender) {
+      router.replace(router.pathname, newPath).then(() => setFirstRender(false));
+    } else if (previousValue) {
+      router.replace(router.pathname, newPath);
+    }
+  }, [router.asPath]);
 
   const setUrlState = (value: T) => {
     const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
@@ -85,10 +86,14 @@ export const useHook = <T>(
     return deSerialize(sanitized);
   };
 
-  return [firstRender ? initialValue : deserializeValue(currentQuery[key]), setUrlState] as [
-    T,
-    typeof setUrlState,
-  ];
+  return [
+    firstRender
+      ? initialValue
+      : previousValue
+      ? deserializeValue(previousValue[key])
+      : deserializeValue(currentQuery[key]),
+    setUrlState,
+  ] as [T, typeof setUrlState];
 };
 
 export default useHook;
