@@ -66,7 +66,7 @@ export const useHook = <T>(
       ...currentQuery,
     }).toString()}`;
     router.replace(router.pathname, newPath).then(() => setFirstRender(false));
-  }, []);
+  }, [router.asPath]);
 
   const setUrlState = (value: T) => {
     const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
