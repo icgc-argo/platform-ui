@@ -18,49 +18,61 @@
  */
 
 import * as React from 'react';
-import { css, styled } from 'uikit';
+import { css } from 'uikit';
 import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { UikitIconNames } from 'uikit/Icon/icons';
+import Tag from 'uikit/Tag';
 
-export const Box = (props: {
+export const Box = ({
+  children,
+  title,
+  iconName,
+  tag,
+}: {
   children: React.ReactNode | React.ReactNodeArray;
-  title: React.ReactNode | React.ReactNodeArray;
+  title: string;
   iconName: UikitIconNames;
-}) => {
-  return (
-    <ContentBox
+  tag?: string;
+}) => (
+  <ContentBox
+    css={css`
+      width: 100%;
+      box-sizing: border-box;
+      padding: 24px;
+      min-height: 150px;
+      height: 100%;
+    `}
+  >
+    <div
       css={css`
-        width: 100%;
-        box-sizing: border-box;
-        padding: 24px;
-        min-height: 150px;
-        height: 100%;
+        display: flex;
+        justify-content: space-between;
       `}
     >
-      <div>
-        <Typography variant="subtitle" color="primary" component="span">
-          <span
-            css={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <Icon
-              name={props.iconName}
-              color="primary"
-              height="20px"
-              width="20px"
-              css={css`
-                margin-right: 5px;
-              `}
-            />
-            {props.title}
-          </span>
-        </Typography>
-      </div>
-      <Typography variant="default">{props.children}</Typography>
-    </ContentBox>
-  );
-};
+      <Typography
+        variant="subtitle"
+        color="primary"
+        component="span"
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <Icon
+          name={iconName}
+          color="primary"
+          height="20px"
+          width="20px"
+          css={css`
+            margin-right: 5px;
+          `}
+        />
+        {title}
+      </Typography>
+      {tag && <Tag>{tag}</Tag>}
+    </div>
+    <Typography variant="default">{children}</Typography>
+  </ContentBox>
+);

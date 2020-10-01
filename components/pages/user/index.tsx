@@ -32,16 +32,16 @@ import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
 
-export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
-  const Column = (props) => (
-    <Col
-      style={{
-        padding: 10,
-      }}
-      {...props}
-    />
-  );
+const Column = (props) => (
+  <Col
+    style={{
+      padding: 10,
+    }}
+    {...props}
+  />
+);
 
+export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
 
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
