@@ -19,7 +19,6 @@
 
 import * as React from 'react';
 import Typography from 'uikit/Typography';
-import uniq from 'lodash/uniq';
 import { css } from 'uikit';
 import UikitLink from 'uikit/Link';
 import { Box } from '../common';
@@ -27,12 +26,9 @@ import Table from 'uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
 import {
   isDccMember,
-  getReadableProgramShortNames,
-  getReadableProgramDataNames,
   canWriteProgram,
   canWriteProgramData,
   canReadProgramData,
-  getAuthorizedProgramScopes,
   getProgramMembershipAccessLevel,
 } from 'global/utils/egoJwt';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
@@ -85,6 +81,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
             maxWidth: 150,
             Cell: ProgramNameCell,
           },
+          { Header: 'Membership Type', accessor: 'membershipType' },
           { Header: 'Role', accessor: 'role', maxWidth: 170 },
           { Header: 'Permissions', accessor: 'permissions' },
         ]}
@@ -114,7 +111,10 @@ const MEMBERSHIP_DISPLAY_NAME = {
   DCC_MEMBER: 'Full Membership',
 };
 
-const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTableProgram[] => {
+const getProgramTableProgramFromEgoJwt = (
+  permissions: string[],
+  readablePrograms,
+): T_ProgramTableProgram[] => {
   if (isDccMember(permissions)) {
     return [
       {
@@ -124,50 +124,48 @@ const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTable
       },
     ];
   } else {
-    const scopes = getAuthorizedProgramScopes(permissions);
+    return readablePrograms.map(({ shortName, membershipType }) => {
+      let role: string = '';
+      let displayPermissions: string = '';
 
-    const readableProgramShortNames = getReadableProgramShortNames(scopes);
-    const readableProgramDataShortNames = getReadableProgramDataNames(permissions);
-    return uniq([...readableProgramShortNames, ...readableProgramDataShortNames]).map(
-      (shortName) => {
-        let role: string = '';
-        let displayPermissions: string = '';
-
-        if (canWriteProgram({ permissions, programId: shortName })) {
-          role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
-          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
-        } else if (canWriteProgramData({ permissions, programId: shortName })) {
-          role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
-          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
-        } else if (canReadProgramData({ permissions, programId: shortName })) {
-          role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
-          displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
-        }
-        return {
-          shortName,
-          role,
-          permissions: displayPermissions,
-        };
-      },
-    );
+      if (canWriteProgram({ permissions, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
+      } else if (canWriteProgramData({ permissions, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.SUBMITTER;
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.SUBMITTER;
+      } else if (canReadProgramData({ permissions, programId: shortName })) {
+        role = PROGRAM_USER_ROLES_DISPLAY.COLLABORATOR;
+        displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.COLLABORATOR;
+      }
+      return {
+        shortName,
+        role,
+        permissions: displayPermissions,
+        membershipType,
+      };
+    });
   }
 };
 
 const ProgramAccessBox = ({
   isDacoApproved,
+  readablePrograms,
   loading,
 }: {
   isDacoApproved: boolean;
+  readablePrograms: Array<{ shortName: string; membershipType: string }>;
   loading: boolean;
 }) => {
-  const { token, permissions } = useAuthContext();
-  const programs = getProgramTableProgramFromEgoJwt(permissions || []);
+  const { permissions } = useAuthContext();
+  const programs =
+    !loading && getProgramTableProgramFromEgoJwt(permissions || [], readablePrograms);
 
   return (
     <Box
       title="Program Access"
       iconName="programs"
-      tag={MEMBERSHIP_DISPLAY_NAME[getProgramMembershipAccessLevel(permissions)]}
+      tag={!loading && MEMBERSHIP_DISPLAY_NAME[getProgramMembershipAccessLevel(permissions)]}
     >
       {loading ? (
         <div

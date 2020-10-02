@@ -31,6 +31,13 @@ import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
+import useAuthContext from 'global/hooks/useAuthContext';
+import {
+  getAuthorizedProgramScopes,
+  getReadableProgramShortNames,
+  getReadableProgramDataNames,
+} from 'global/utils/egoJwt';
+import { uniq } from 'lodash';
 
 const Column = (props) => (
   <Col
@@ -42,10 +49,16 @@ const Column = (props) => (
 );
 
 export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
+  const { permissions } = useAuthContext();
+  const scopes = getAuthorizedProgramScopes(permissions);
+  const readableProgramShortNames = getReadableProgramShortNames(scopes);
+  const readableProgramDataShortNames = getReadableProgramDataNames(permissions);
+  const readablePrograms = uniq([...readableProgramShortNames, ...readableProgramDataShortNames]);
 
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
+  const programs = get(data, 'programs');
 
   return (
     <DefaultLayout>
@@ -70,7 +83,11 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
             <ApiTokenBox apiToken={apiToken} loading={loading} />
           </Column>
           <Column sm={12} md={6}>
-            <ProgramAccessBox isDacoApproved={isDacoApproved} loading={loading} />
+            <ProgramAccessBox
+              isDacoApproved={isDacoApproved}
+              readablePrograms={programs}
+              loading={loading}
+            />
           </Column>
         </Row>
       </ContentBody>
