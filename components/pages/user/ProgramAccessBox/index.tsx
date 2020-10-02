@@ -32,8 +32,8 @@ import {
   canWriteProgram,
   canWriteProgramData,
   canReadProgramData,
-  getPermissionsFromToken,
   getAuthorizedProgramScopes,
+  getProgramMembershipAccessLevel,
 } from 'global/utils/egoJwt';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
 import Link from 'next/link';
@@ -49,6 +49,7 @@ type T_ProgramTableProgram = {
   role: string;
   permissions: string;
 };
+
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
@@ -107,6 +108,12 @@ const PROGRAM_USER_PERMISSIONS_DISPLAY = {
   COLLABORATOR: 'Download Data',
 };
 
+const MEMBERSHIP_DISPLAY_NAME = {
+  ASSOCIATE_PROGRAM_MEMBER: 'Associate Membership',
+  FULL_PROGRAM_MEMBER: 'Full Membership',
+  DCC_MEMBER: 'Full Membership',
+};
+
 const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTableProgram[] => {
   if (isDccMember(permissions)) {
     return [
@@ -125,6 +132,7 @@ const getProgramTableProgramFromEgoJwt = (permissions: string[]): T_ProgramTable
       (shortName) => {
         let role: string = '';
         let displayPermissions: string = '';
+
         if (canWriteProgram({ permissions, programId: shortName })) {
           role = PROGRAM_USER_ROLES_DISPLAY.PROGRAM_ADMIN;
           displayPermissions = PROGRAM_USER_PERMISSIONS_DISPLAY.PROGRAM_ADMIN;
@@ -156,7 +164,11 @@ const ProgramAccessBox = ({
   const programs = getProgramTableProgramFromEgoJwt(permissions || []);
 
   return (
-    <Box title="Program Access" iconName="programs">
+    <Box
+      title="Program Access"
+      iconName="programs"
+      tag={MEMBERSHIP_DISPLAY_NAME[getProgramMembershipAccessLevel(permissions)]}
+    >
       {loading ? (
         <div
           css={css`
@@ -177,24 +189,20 @@ const ProgramAccessBox = ({
           >
             <DacoAccessStatusDisplay approved={isDacoApproved} />
           </div>
-          <div>
-            <Typography variant="subtitle2" color="secondary">
-              My Memberships
-            </Typography>
-          </div>
-          <div>
-            {programs.length > 0 ? (
-              <ProgramTable programs={programs} />
-            ) : (
-              <div
-                css={css`
-                  margin-top: 10px;
-                `}
-              >
-                <NoMemberAccess />
-              </div>
-            )}
-          </div>
+          <Typography variant="subtitle2" color="secondary">
+            My Memberships
+          </Typography>
+          {programs.length > 0 ? (
+            <ProgramTable programs={programs} />
+          ) : (
+            <div
+              css={css`
+                margin-top: 10px;
+              `}
+            >
+              <NoMemberAccess />
+            </div>
+          )}
         </div>
       )}
     </Box>
