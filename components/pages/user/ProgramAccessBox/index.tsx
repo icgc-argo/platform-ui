@@ -39,6 +39,7 @@ import {
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import Icon from 'uikit/Icon';
+import { capitalize } from 'lodash';
 
 type T_ProgramTableProgram = {
   shortName: string;
@@ -81,7 +82,11 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
             maxWidth: 150,
             Cell: ProgramNameCell,
           },
-          { Header: 'Membership Type', accessor: 'membershipType' },
+          {
+            Header: 'Membership Type',
+            accessor: 'membershipType',
+            Cell: (props) => capitalize(props.value),
+          },
           { Header: 'Role', accessor: 'role', maxWidth: 170 },
           { Header: 'Permissions', accessor: 'permissions' },
         ]}
