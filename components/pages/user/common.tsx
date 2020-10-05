@@ -48,6 +48,7 @@ export const Box = ({
     <div
       css={css`
         display: flex;
+        align-items: flex-start;
         justify-content: space-between;
       `}
     >
@@ -71,7 +72,15 @@ export const Box = ({
         />
         {title}
       </Typography>
-      {tag && <Tag>{tag}</Tag>}
+      {tag && (
+        <Tag
+          css={css`
+            line-height: normal;
+          `}
+        >
+          {tag}
+        </Tag>
+      )}
     </div>
     <Typography variant="default">{children}</Typography>
   </ContentBox>
