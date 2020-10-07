@@ -30,7 +30,6 @@ import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
-import urljoin from 'url-join';
 import { DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
 
 const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
@@ -64,7 +63,7 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
     }
   };
 
-  const getDayValue = exp => {
+  const getDayValue = (exp) => {
     if (exp <= 0) return '';
     const days = Math.floor(exp / 60 / 60 / 24);
     return `Expires in: ${days} days`;

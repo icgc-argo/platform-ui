@@ -32,20 +32,20 @@ import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
 
-export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
-  const Column = (props) => (
-    <Col
-      style={{
-        padding: 10,
-      }}
-      {...props}
-    />
-  );
+const Column = (props) => (
+  <Col
+    style={{
+      padding: 10,
+    }}
+    {...props}
+  />
+);
 
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE);
-
+export function UserPage() {
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
+  const programs = get(data, 'programs');
 
   return (
     <DefaultLayout>
@@ -70,7 +70,11 @@ export function UserPage({ firstName, lastName }: { firstName: string; lastName:
             <ApiTokenBox apiToken={apiToken} loading={loading} />
           </Column>
           <Column sm={12} md={6}>
-            <ProgramAccessBox isDacoApproved={isDacoApproved} loading={loading} />
+            <ProgramAccessBox
+              isDacoApproved={isDacoApproved}
+              readablePrograms={programs}
+              loading={loading}
+            />
           </Column>
         </Row>
       </ContentBody>

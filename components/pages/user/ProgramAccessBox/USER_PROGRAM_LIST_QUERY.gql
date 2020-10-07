@@ -1,5 +1,0 @@
-query USER_PROGRAM_LIST_QUERY {
-  programs {
-    shortName
-  }
-}
