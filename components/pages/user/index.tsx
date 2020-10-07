@@ -31,13 +31,6 @@ import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
-import useAuthContext from 'global/hooks/useAuthContext';
-import {
-  getAuthorizedProgramScopes,
-  getReadableProgramShortNames,
-  getReadableProgramDataNames,
-} from 'global/utils/egoJwt';
-import { uniq } from 'lodash';
 
 const Column = (props) => (
   <Col
@@ -48,13 +41,7 @@ const Column = (props) => (
   />
 );
 
-export function UserPage({ firstName, lastName }: { firstName: string; lastName: string }) {
-  const { permissions } = useAuthContext();
-  const scopes = getAuthorizedProgramScopes(permissions);
-  const readableProgramShortNames = getReadableProgramShortNames(scopes);
-  const readableProgramDataShortNames = getReadableProgramDataNames(permissions);
-  const readablePrograms = uniq([...readableProgramShortNames, ...readableProgramDataShortNames]);
-
+export function UserPage() {
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);

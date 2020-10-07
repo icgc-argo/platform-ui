@@ -45,7 +45,15 @@ type T_ProgramTableProgram = {
   shortName: string;
   role: string;
   permissions: string;
+  membershipType?: string;
 };
+
+interface Column {
+  Header: string;
+  accessor: string;
+  maxWidth?: number;
+  Cell?: any;
+}
 
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
