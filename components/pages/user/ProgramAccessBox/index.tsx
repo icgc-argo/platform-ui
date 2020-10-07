@@ -70,6 +70,29 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   );
   const containerRef = React.createRef<HTMLDivElement>();
 
+  const baseCols: Column[] = [
+    {
+      Header: 'Program Name',
+      accessor: 'shortName',
+      maxWidth: 150,
+      Cell: ProgramNameCell,
+    },
+    { Header: 'Role', accessor: 'role', maxWidth: 170 },
+    { Header: 'Permissions', accessor: 'permissions' },
+  ];
+
+  const allCols = !isDccMember(permissions)
+    ? [
+        ...baseCols.slice(0, 1),
+        {
+          Header: 'Membership Type',
+          accessor: 'membershipType',
+          Cell: (props) => capitalize(props.value),
+        },
+        ...baseCols.slice(1),
+      ]
+    : baseCols;
+
   return (
     <div
       css={css`
@@ -83,21 +106,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
         sortable={false}
         showPagination={false}
         data={props.programs}
-        columns={[
-          {
-            Header: 'Program Name',
-            accessor: 'shortName',
-            maxWidth: 150,
-            Cell: ProgramNameCell,
-          },
-          {
-            Header: 'Membership Type',
-            accessor: 'membershipType',
-            Cell: (props) => capitalize(props.value),
-          },
-          { Header: 'Role', accessor: 'role', maxWidth: 170 },
-          { Header: 'Permissions', accessor: 'permissions' },
-        ]}
+        columns={allCols}
         getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
       />
     </div>
@@ -178,7 +187,11 @@ const ProgramAccessBox = ({
     <Box
       title="Program Access"
       iconName="programs"
-      tag={!loading && MEMBERSHIP_DISPLAY_NAME[getProgramMembershipAccessLevel(permissions)]}
+      tag={
+        !loading &&
+        !isDccMember(permissions) &&
+        MEMBERSHIP_DISPLAY_NAME[getProgramMembershipAccessLevel(permissions)]
+      }
     >
       {loading ? (
         <div
