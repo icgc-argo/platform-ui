@@ -35,7 +35,7 @@ export const decodeToken = memoize((egoJwt?: string) =>
 
 export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
-export const getPermissionsFromToken: (egoJwt: string) => string[] = egoJwt =>
+export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
   isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
 
 export const isDccMember = (permissions: string[]): boolean => TokenUtils.isDccMember(permissions);
@@ -63,42 +63,40 @@ export const canReadProgram = (args: { permissions: string[]; programId: string 
 export const canWriteProgram = (args: { permissions: string[]; programId: string }): boolean =>
   TokenUtils.canWriteProgram(args);
 
-export const isProgramAdmin: (args: {
-  permissions: string[];
-  programId: string;
-}) => boolean = args => TokenUtils.isProgramAdmin(args);
+export const isProgramAdmin: (args: { permissions: string[]; programId: string }) => boolean = (
+  args,
+) => TokenUtils.isProgramAdmin(args);
 
 export const getReadableProgramShortNames = (scopes: PermissionScopeObj[]): Array<string> =>
   TokenUtils.getReadableProgramShortNames(scopes);
 
-export const canReadProgramData: (args: {
-  permissions: string[];
-  programId: string;
-}) => boolean = args => TokenUtils.canReadProgramData(args);
+export const canReadProgramData: (args: { permissions: string[]; programId: string }) => boolean = (
+  args,
+) => TokenUtils.canReadProgramData(args);
 
 export const canWriteProgramData: (args: {
   permissions: string[];
   programId: string;
-}) => boolean = args => TokenUtils.canWriteProgramData(args);
+}) => boolean = (args) => TokenUtils.canWriteProgramData(args);
 
-export const canReadSomeProgramData: (permissions: string[]) => boolean = permissions =>
+export const canReadSomeProgramData: (permissions: string[]) => boolean = (permissions) =>
   TokenUtils.canReadSomeProgramData(permissions);
 
-export const canWriteSomeProgramData: (permissions: string[]) => boolean = permissions =>
+export const canWriteSomeProgramData: (permissions: string[]) => boolean = (permissions) =>
   TokenUtils.canWriteSomeProgramData(permissions);
 
-export const getReadableProgramDataScopes: (
-  permissions: string[],
-) => PermissionScopeObj[] = permissions => TokenUtils.getReadableProgramDataScopes(permissions);
+export const getReadableProgramDataScopes: (permissions: string[]) => PermissionScopeObj[] = (
+  permissions,
+) => TokenUtils.getReadableProgramDataScopes(permissions);
 
-export const getWritableProgramDataScopes: (
-  permissions: string[],
-) => PermissionScopeObj[] = permissions => TokenUtils.getWritableProgramDataScopes(permissions);
+export const getWritableProgramDataScopes: (permissions: string[]) => PermissionScopeObj[] = (
+  permissions,
+) => TokenUtils.getWritableProgramDataScopes(permissions);
 
-export const getReadableProgramDataNames: (permissions: string[]) => string[] = permissions =>
+export const getReadableProgramDataNames: (permissions: string[]) => string[] = (permissions) =>
   TokenUtils.getReadableProgramDataNames(permissions);
 
-export const getWritableProgramDataNames: (permissions: string[]) => string[] = permissions =>
+export const getWritableProgramDataNames: (permissions: string[]) => string[] = (permissions) =>
   TokenUtils.getWritableProgramDataNames(permissions);
 
 export const isDataSubmitter: (args: { permissions: string[]; programId: string }) => boolean = ({
@@ -113,3 +111,6 @@ export const isCollaborator: (args: { permissions: string[]; programId: string }
   canReadProgramData({ permissions, programId }) &&
   canReadProgram({ permissions, programId }) &&
   !canWriteProgramData({ permissions, programId });
+
+export const getProgramMembershipAccessLevel = (permissions: string[]): any =>
+  TokenUtils.getProgramMembershipAccessLevel({ permissions });
