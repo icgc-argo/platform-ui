@@ -22,8 +22,7 @@ import { css } from '@emotion/core';
 import Link from 'uikit/Link';
 import Notification from 'uikit/notifications/Notification';
 import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import pluralize from 'pluralize';
 
@@ -38,7 +37,7 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
       `}
     >
       {!latestDictionaryResponse.loading && (
-        <Link href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} target="_blank">
+        <Link href={DOCS_DICTIONARY_PAGE} target="_blank">
           Version {latestDictionaryResponse.data.clinicalSubmissionSchemaVersion} of the data
           dictionary
         </Link>

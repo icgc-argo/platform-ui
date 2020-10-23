@@ -38,8 +38,7 @@ import {
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
@@ -97,7 +96,7 @@ function Instructions({
           <>
             <Typography variant="data" component="span">
               1. Download the registration template and format it using{' '}
-              <Link target="_blank" href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} bold>
+              <Link target="_blank" href={DOCS_DICTIONARY_PAGE} bold>
                 Data&nbsp;Dictionary&nbsp;
                 {!latestDictionaryResponse.loading &&
                   `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}

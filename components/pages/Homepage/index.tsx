@@ -53,6 +53,7 @@ import {
   DOCS_DATA_DOWNLOAD_PAGE,
   DOCS_SOFTWARE_RELEASES_PAGE,
   DOCS_DICTIONARY_RELEASES_PAGE,
+  DOCS_DICTIONARY_PAGE,
 } from 'global/constants/docSitePaths';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 import Head from 'components/pages/head';
@@ -281,10 +282,7 @@ export default function Homepage() {
             <>
               <div>
                 <b>Announcement: October 23, 2020</b> - We are excited to announce{' '}
-                <Link
-                  target="_blank"
-                  href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#dictionary-release-2"
-                >
+                <Link target="_blank" href={DOCS_DATA_RELEASES_PAGE}>
                   Data Release 2.0
                 </Link>{' '}
                 on the ICGC ARGO Data Platform, including additonal data for PACA-CA, OCCAMS-GB, and
@@ -297,7 +295,7 @@ export default function Homepage() {
               >
                 <b>New Feature:</b> You can now compare changes in released ARGO Data Dictionary
                 versions in the{' '}
-                <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+                <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
                   Dictionary Viewer
                 </Link>
                 . Data Dictionary version 1.2 has been released. Click the “Compare With” button to

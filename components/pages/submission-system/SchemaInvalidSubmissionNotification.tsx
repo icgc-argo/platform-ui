@@ -27,8 +27,7 @@ import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notificatio
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 export const SchemaInvalidSubmissionNotification = ({
@@ -66,7 +65,7 @@ export const SchemaInvalidSubmissionNotification = ({
       `}
     >
       {!latestDictionaryResponse.loading && (
-        <Link href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)} target="_blank">
+        <Link href={DOCS_DICTIONARY_PAGE} target="_blank">
           Version {latestDictionaryResponse.data.clinicalSubmissionSchemaVersion} of the data
           dictionary
         </Link>
