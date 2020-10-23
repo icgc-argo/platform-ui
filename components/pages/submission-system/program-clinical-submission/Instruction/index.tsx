@@ -31,8 +31,7 @@ import FileSelectButton from 'uikit/FileSelectButton';
 import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
 import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
-import urljoin from 'url-join';
-import { DOCS_DICTIONARY_PATH } from 'global/constants/docSitePaths';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
 export default ({
@@ -82,7 +81,7 @@ export default ({
         <>
           <Typography variant="data" component="span">
             1. Download the clinical file templates and format them using{' '}
-            <Link target="_blank" bold href={urljoin(DOCS_URL_ROOT, DOCS_DICTIONARY_PATH)}>
+            <Link target="_blank" bold href={DOCS_DICTIONARY_PAGE}>
               Data&nbsp;Dictionary&nbsp;
               {!latestDictionaryResponse.loading &&
                 `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}

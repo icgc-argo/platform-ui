@@ -21,7 +21,7 @@ import { getConfig } from 'global/config';
 
 const { DOCS_URL_ROOT } = getConfig();
 
-export const DOCS_DICTIONARY_PATH = `/dictionary/`;
+export const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, `/dictionary/`);
 
 export const DOCS_DNA_PIPELINE_PAGE = urljoin(
   DOCS_URL_ROOT,
