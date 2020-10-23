@@ -211,7 +211,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'June 19, 2020', releaseIteration: 1 }}
+              version={{ date: 'October 23, 2020', releaseIteration: 2 }}
             />
           )}
         </div>
@@ -279,43 +279,36 @@ export default function Homepage() {
         <NewsContainer
           newsItems={[
             <>
-              <b>Announcement: June 19, 2020</b> - We are excited to announce the launch of the ICGC
-              ARGO Data Platform, a major milestone following the{' '}
-              <Link target="_blank" href="https://dcc.icgc.org/">
-                ICGC 25K Data Portal
-              </Link>
-              . ARGO represents an international effort to advance cancer genomics through
-              high-quality clinical and molecular data for international researchers.
-              <ul
+              <div>
+                <b>Announcement: October 23, 2020</b> - We are excited to announce{' '}
+                <Link
+                  target="_blank"
+                  href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#dictionary-release-2"
+                >
+                  Data Release 2.0
+                </Link>{' '}
+                on the ICGC ARGO Data Platform, including additonal data for PACA-CA, OCCAMS-GB, and
+                two newly released programs LUCA-KR and PTC-SA.
+              </div>
+              <div
                 css={css`
-                  list-style-position: outside;
-                  padding-left: 20px;
+                  margin-top: 10px;
                 `}
               >
-                <li>Clinical data submission is now open for registered programs.</li>
-                <li>
-                  Data analyzed against GRCh38 is now available in the{' '}
-                  <Link href={FILE_REPOSITORY_PATH} target="_blank">
-                    File Repository
-                  </Link>
-                  .
-                </li>
-                <li>
-                  ARGO{' '}
-                  <Link href={DOCS_DICTIONARY_RELEASES_PAGE} target="_blank">
-                    Data Dictionary 1.0
-                  </Link>
-                  ,{' '}
-                  <Link href={DOCS_DATA_RELEASES_PAGE} target="_blank">
-                    Data Release 1.0
-                  </Link>
-                  , and{' '}
-                  <Link href={DOCS_SOFTWARE_RELEASES_PAGE} target="_blank">
-                    Software Release 1.55.0/3.2.0
-                  </Link>{' '}
-                  are now available.
-                </li>
-              </ul>
+                <b>New Feature:</b> You can now compare changes in released ARGO Data Dictionary
+                versions in the{' '}
+                <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+                  Dictionary Viewer
+                </Link>
+                . Data Dictionary version 1.2 has been released. Click the “Compare With” button to
+                see the latest updates.
+                <ul>
+                  <li>
+                    ARGO <b>Data Dictionary 1.2</b>, <b>Data Release 2.0</b> and{' '}
+                    <b>Software Release 1.78.0/3.10.0</b> are now available.
+                  </li>
+                </ul>
+              </div>
             </>,
           ]}
         />
