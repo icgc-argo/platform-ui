@@ -74,7 +74,7 @@ const Typography: React.ComponentType<
      */
     color?: string;
     as?: keyof HTMLElementTagNameMap;
-  } & React.ComponentProps<ReturnType<typeof createStyledDomComponent>>
+  } & Partial<React.ComponentProps<ReturnType<typeof createStyledDomComponent>>>
 > = ({ variant = 'paragraph', component: domComponentName, bold = false, color, ...rest }) => {
   const theme = useTheme();
   const componentMap: {

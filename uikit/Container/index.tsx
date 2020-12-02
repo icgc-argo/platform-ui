@@ -26,7 +26,7 @@ import DnaLoader from '../DnaLoader';
 const ContainerBackground = styled<'div', { loading?: boolean }>('div')`
   border-radius: 8px;
   position: relative;
-  overflow: ${props => (props.loading ? 'hidden' : 'visible')};
+  overflow: ${(props) => (props.loading ? 'hidden' : 'visible')};
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   background-color: ${({ theme }) => theme.colors.white};
 `;
@@ -41,10 +41,7 @@ const LoadingOverlay = () => {
         right: 0px;
         top: 0px;
         bottom: 0px;
-        background: ${color(theme.colors.white)
-          .alpha(0.7)
-          .hsl()
-          .string()};
+        background: ${color(theme.colors.white).alpha(0.7).hsl().string()};
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,7 +55,7 @@ const LoadingOverlay = () => {
 const Container: React.ComponentType<
   {
     loading?: boolean;
-  } & React.ComponentProps<typeof ContainerBackground>
+  } & Partial<React.ComponentProps<typeof ContainerBackground>>
 > = ({ children, loading = false, ...props }) => (
   <ContainerBackground loading={loading} {...props}>
     {children}
