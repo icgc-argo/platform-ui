@@ -26,14 +26,14 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = withImages({
-  exportPathMap: defaultPathMap =>
+  exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
           '/': { page: process.env.EXPORT_PATH },
           '/404': { page: process.env.EXPORT_PATH },
         }
       : defaultPathMap,
-  webpack: config => {
+  webpack: (config) => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
       fs: 'empty',
@@ -68,5 +68,6 @@ module.exports = withImages({
     FEATURE_REPOSITORY_ENABLED: process.env.FEATURE_REPOSITORY_ENABLED,
     FEATURE_LANDING_PAGE_STATS_ENABLED: process.env.FEATURE_LANDING_PAGE_STATS_ENABLED,
     MAINTENANCE_MODE_ON: process.env.MAINTENANCE_MODE_ON,
+    COLLAB_MAINTENANCE_BANNER_ON: process.env.COLLAB_MAINTENANCE_BANNER_ON,
   },
 });
