@@ -30,12 +30,10 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return (
-      !isRdpcMember(permissions) && isProgramAdmin({ permissions, programId: String(shortName) })
-    );
+    return isProgramAdmin({ permissions, programId: String(shortName) });
   },
   startWithGlobalLoader: true,
-})(props => {
+})((props) => {
   useProgramCheckEffect();
   return <ProgramManagement {...props} />;
 });
