@@ -31,13 +31,12 @@ export default createPage({
       query: { shortName },
     } = ctx;
     return (
-      !isRdpcMember(permissions) &&
       canReadProgram({ permissions, programId: String(shortName) }) &&
       canWriteProgramData({ permissions, programId: String(shortName) })
     );
   },
   startWithGlobalLoader: true,
-})(props => {
+})((props) => {
   useProgramCheckEffect();
   return <ProgramSampleRegistration {...props} />;
 });

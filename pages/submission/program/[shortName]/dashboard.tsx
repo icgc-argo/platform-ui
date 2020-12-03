@@ -21,7 +21,7 @@ import React from 'react';
 
 import { createPage } from 'global/utils/pages';
 import ProgramDashboard from 'components/pages/submission-system/program-dashboard';
-import { isRdpcMember, canReadProgram } from 'global/utils/egoJwt';
+import { canReadProgram } from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
@@ -30,9 +30,7 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return (
-      !isRdpcMember(permissions) && canReadProgram({ permissions, programId: String(shortName) })
-    );
+    return canReadProgram({ permissions, programId: String(shortName) });
   },
   startWithGlobalLoader: true,
 })((props) => {
