@@ -21,7 +21,7 @@ import React from 'react';
 
 import { createPage } from 'global/utils/pages';
 import ProgramClinicalSubmission from 'components/pages/submission-system/program-clinical-submission';
-import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
@@ -31,13 +31,12 @@ export default createPage({
       query: { shortName },
     } = ctx;
     return (
-      !isRdpcMember(permissions) &&
       canReadProgram({ permissions, programId: String(shortName) }) &&
       canWriteProgramData({ permissions, programId: String(shortName) })
     );
   },
   startWithGlobalLoader: true,
-})(props => {
+})((props) => {
   useProgramCheckEffect();
   return <ProgramClinicalSubmission {...props} />;
 });
