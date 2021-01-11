@@ -77,6 +77,12 @@ const createPresetFacets = (
   displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
 ): Array<FacetDetails> => [
   {
+    name: displayNames['release_stage'],
+    facetPath: FileFacetPath.release_stage,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.release_stage,
+  },
+  {
     name: displayNames['study_id'],
     facetPath: FileFacetPath.study_id,
     variant: 'Basic',
