@@ -184,6 +184,12 @@ export default () => {
       width: 260,
     },
     {
+      Header: fieldDisplayNames['release_stage'],
+      id: FileCentricDocumentField['release_stage'],
+      accessor: 'releaseStage',
+      width: 100,
+    },
+    {
       Header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
@@ -258,6 +264,7 @@ export default () => {
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
+        releaseStage: node.release_stage,
         donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
         submitterDonorId: node.donors.hits.edges
           .map((edge) => edge.node.submitter_donor_id)

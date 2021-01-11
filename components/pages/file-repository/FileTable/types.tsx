@@ -23,6 +23,7 @@ import { FileCentricDocumentField } from '../types';
 
 export type FileRepositoryRecord = {
   objectId: string;
+  releaseStage: string;
   donorId: string;
   submitterDonorId: string;
   programId: string;

@@ -7,6 +7,7 @@ query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON, $so
           object_id
           data_type
           file_type
+          release_stage
           analysis {
             experiment {
               experimental_strategy
