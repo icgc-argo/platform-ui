@@ -27,7 +27,7 @@ const PipeContainer = styled('div')`
   color: white;
   font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 1.27;
   letter-spacing: normal;
   text-align: center;

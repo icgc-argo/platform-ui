@@ -57,7 +57,7 @@ const GoogleLogin: React.ComponentType<{
             align-items: center;
             text-transform: none;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 600;
           `}
         >
           <Icon width="20px" height="20px" name="google" fill="none" />

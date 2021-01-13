@@ -105,7 +105,7 @@ const content = css`
       cursor: pointer;
       padding: 0 7px;
       margin-right: 6px;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
     }
     & .sqon-less,

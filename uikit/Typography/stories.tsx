@@ -34,6 +34,7 @@ const TypographyStories = storiesOf(`${__dirname}`, module)
         'hero',
       ),
       component: select('tag', [null, 'h1', 'h2', 'h3', 'h4', 'h5', 'div', 'span', 'p'], null),
+      // TODO: does this need to be changed to 600?
       bold: boolean('bold', false),
       color: select('color', [null, '#00f', ...Object.keys(defaultTheme.colors)], null),
     };

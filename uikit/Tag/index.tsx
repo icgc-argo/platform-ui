@@ -44,7 +44,7 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
   min-height: 14px;
   font-size: 11px;
   line-height: 14px;
-  font-weight: bold;
+  font-weight: 600;
   padding: 3px 8px;
   border-radius: 8px;
   background-color: ${({ theme, variant = 'INFO' }) =>
