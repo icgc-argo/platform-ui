@@ -52,7 +52,7 @@ const createDomComponent = memoize(
 
 const createStyledDomComponent = memoize(
   (Component) => styled<'div', { bold?: boolean; color?: string }>(Component)`
-    font-weight: ${({ bold }) => (bold ? 600 : `normal`)};
+    font-weight: ${({ bold }) => (bold ? 'bold' : `normal`)};
     color: ${({ theme, color }) => (color ? theme.colors[color] || color : 'inherit')};
   `,
 );

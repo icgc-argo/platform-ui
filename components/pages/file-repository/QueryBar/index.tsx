@@ -72,6 +72,7 @@ const content = css`
       align-items: center;
       height: 22px;
       border-radius: 8px;
+      font-family: Work Sans, sans-serif;
       font-size: 11px;
       font-weight: 300;
       letter-spacing: 0.2px;
@@ -104,7 +105,7 @@ const content = css`
       cursor: pointer;
       padding: 0 7px;
       margin-right: 6px;
-      font-weight: 600;
+      font-weight: bold;
       cursor: pointer;
     }
     & .sqon-less,
@@ -125,6 +126,7 @@ const content = css`
       letter-spacing: 0.2px;
       flex: none;
       font-weight: 500;
+      font-family: Work Sans, sans-serif;
     }
     & .sqon-more {
       width: 20px;

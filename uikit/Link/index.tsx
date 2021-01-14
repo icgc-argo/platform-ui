@@ -37,7 +37,7 @@ const StyledLink = styled<'a', HyperLinkProps>('a')`
   cursor: pointer;
   color: ${({ theme, invert }) => (invert ? theme.colors.white : theme.colors.accent2_dark)};
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
-  font-weight: ${({ bold }) => (bold ? 600 : 'inherit')};
+  font-weight: ${({ bold }) => (bold ? 'bold' : 'inherit')};
   text-transform: ${({ uppercase }) => (uppercase ? 'uppercase' : 'default')};
 
   :hover {

@@ -86,7 +86,7 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
     ${({ theme }) => css(theme.typography.data)};
     min-height: 28px;
     line-height: 1.33;
-    font-weight: 600;
+    font-weight: bold;
     align-items: center;
     background: ${({ theme }) => theme.colors.white};
     &:not(:last-of-type) {
