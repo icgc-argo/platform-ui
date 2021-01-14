@@ -45,6 +45,8 @@ const OptionsList: React.ComponentType<{
   onOptionToggle: (facetValue: string[] | string) => void;
   onSelectAllOptions: (allOptionsSelected: boolean) => void;
   parseDisplayValue: (inputValue: string) => string;
+  selectAllVisible?: boolean;
+  className?: string;
 }> = ({
   options,
   searchQuery = '',
@@ -53,6 +55,8 @@ const OptionsList: React.ComponentType<{
   onOptionToggle,
   onSelectAllOptions,
   parseDisplayValue = (value) => value,
+  selectAllVisible = true,
+  className,
 }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
@@ -213,6 +217,7 @@ const OptionsList: React.ComponentType<{
             border-top: 1px solid;
             border-color: ${theme.colors.grey_2};
           `}
+          className={className}
         >
           {countUnit && (
             <div
@@ -250,6 +255,7 @@ const OptionsList: React.ComponentType<{
           }
           toggleText={allOptionsVisible ? `Less` : `${numberOfMoreOptions} More`}
           moreOptionsAvailable={!allOptionsVisible}
+          selectAllVisible={selectAllVisible}
         />
       )}
     </>

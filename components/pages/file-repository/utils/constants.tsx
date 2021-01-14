@@ -1,8 +1,19 @@
+import { css } from 'uikit';
+
 export const tooltipContent: { [key: string]: React.ReactNode } = {
   'Release Stage': (
-    <div>
+    <div
+      css={css`
+        margin: 5px;
+      `}
+    >
       Indicates what stage a file is in during the release cycle:
-      <ul>
+      <ul
+        css={css`
+          padding-left: 14px;
+          margin: 0;
+        `}
+      >
         <li>A file is first accessible to its program members.</li>
         <li>After 12 months: accessible to full membership programs. </li>
         <li>After 6 months: accessible to associate membership programs. </li>

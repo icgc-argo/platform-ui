@@ -27,6 +27,8 @@ const ViewAmountController: React.ComponentType<{
   selectAllHander: () => any;
   /** Function to handle what happens when more/less toggle is clicked */
   moreToggleHandler: () => any;
+  /** if select all option is visible */
+  selectAllVisible?: boolean;
   /** whether or not selectAll has been triggered */
   selectAllState: boolean;
   /** whether or not there are more hidden options available to view */
@@ -38,9 +40,9 @@ const ViewAmountController: React.ComponentType<{
 }> = ({
   selectAllHander,
   moreToggleHandler,
+  selectAllVisible = true,
   selectAllState,
   moreOptionsAvailable,
-
   toggleVisiblityCss = 'visible',
   toggleText = 'More / Collapse',
 }) => {
@@ -55,13 +57,13 @@ const ViewAmountController: React.ComponentType<{
         border-bottom: 1px solid;
         border-color: ${theme.colors.grey_2};
       `}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     >
       <HyperLink
         css={css`
           font-size: 11px;
         `}
-        onClick={e => {
+        onClick={(e) => {
           selectAllHander();
         }}
       >
@@ -83,7 +85,7 @@ const ViewAmountController: React.ComponentType<{
             align-items: center;
             font-size: 11px;
           `}
-          onClick={e => {
+          onClick={(e) => {
             moreToggleHandler();
           }}
         >
