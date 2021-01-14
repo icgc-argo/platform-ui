@@ -58,7 +58,7 @@ export default {
   subtitle2: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '16px',
-    fontWeight: 600,
+    fontWeight: 'bold',
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
