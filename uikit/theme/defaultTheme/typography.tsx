@@ -58,7 +58,7 @@ export default {
   subtitle2: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '16px',
-    fontWeight: 'bold',
+    fontWeight: 600,
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
@@ -67,7 +67,7 @@ export default {
   sectionHeader: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '16px',
-    fontWeight: 'bold',
+    fontWeight: 600,
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: 'normal',
@@ -94,7 +94,7 @@ export default {
   paragraph2: {
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '14px',
-    fontWeight: 600,
+    fontWeight: 'bold',
     fontStyle: 'normal',
     fontStretch: 'normal',
     lineHeight: '1.71',
