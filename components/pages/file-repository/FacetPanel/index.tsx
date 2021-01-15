@@ -70,6 +70,7 @@ import useDebounce from '../hooks/useDebounce';
 import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from 'uikit/Facet/TooltipFacet';
 import { getConfig } from 'global/config';
+import useAuthContext from 'global/hooks/useAuthContext';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -81,9 +82,10 @@ const createPresetFacets = (
   displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
 ): Array<FacetDetails> => {
   const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+  const { token: egoJwt } = useAuthContext();
 
   return concat(
-    FEATURE_ACCESS_FACET_ENABLED
+    FEATURE_ACCESS_FACET_ENABLED && !!egoJwt
       ? [
           {
             name: displayNames['release_stage'],
@@ -333,7 +335,6 @@ export default () => {
   ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
     return (facetValue) => {
       const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
-      console.log('current value', currentValue, filters);
       replaceAllFilters(toggleFilter(currentValue, filters));
     };
   };
