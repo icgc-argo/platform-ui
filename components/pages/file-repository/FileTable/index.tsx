@@ -258,7 +258,6 @@ export default () => {
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
-        releaseStage: node.release_stage,
         donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
         submitterDonorId: node.donors.hits.edges
           .map((edge) => edge.node.submitter_donor_id)
