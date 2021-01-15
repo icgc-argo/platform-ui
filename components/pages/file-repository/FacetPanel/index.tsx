@@ -83,14 +83,16 @@ const createPresetFacets = (
   const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
 
   return concat(
-    [
-      {
-        name: displayNames['release_stage'],
-        facetPath: FileFacetPath.release_stage,
-        variant: 'Tooltip',
-        esDocumentField: FileCentricDocumentField.release_stage,
-      },
-    ],
+    FEATURE_ACCESS_FACET_ENABLED
+      ? [
+          {
+            name: displayNames['release_stage'],
+            facetPath: FileFacetPath.release_stage,
+            variant: 'Tooltip',
+            esDocumentField: FileCentricDocumentField.release_stage,
+          },
+        ]
+      : [],
     [
       {
         name: displayNames['study_id'],
