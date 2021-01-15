@@ -90,7 +90,7 @@ const createPresetFacets = (
             facetPath: FileFacetPath.release_stage,
             variant: 'Tooltip',
             esDocumentField: FileCentricDocumentField.release_stage,
-          },
+          } as FacetDetails,
         ]
       : [],
     [
