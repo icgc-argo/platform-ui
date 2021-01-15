@@ -61,7 +61,7 @@ import {
 } from './types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
-import { trim } from 'lodash';
+import { concat, trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
@@ -69,6 +69,7 @@ import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
 import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from 'uikit/Facet/TooltipFacet';
+import { getConfig } from 'global/config';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -78,74 +79,82 @@ const FacetRow = styled('div')`
 
 const createPresetFacets = (
   displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
-): Array<FacetDetails> => [
-  {
-    name: displayNames['release_stage'],
-    facetPath: FileFacetPath.release_stage,
-    variant: 'Tooltip',
-    esDocumentField: FileCentricDocumentField.release_stage,
-  },
-  {
-    name: displayNames['study_id'],
-    facetPath: FileFacetPath.study_id,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.study_id,
-  },
-  {
-    name: displayNames['donors.specimens.specimen_type'],
-    facetPath: FileFacetPath.donors__specimens__specimen_type,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_type'],
-  },
-  {
-    name: displayNames['donors.specimens.specimen_tissue_source'],
-    facetPath: FileFacetPath.donors__specimens__specimen_tissue_source,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_tissue_source'],
-  },
-  {
-    name: displayNames['analysis.experiment.experimental_strategy'],
-    facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
-  },
-  {
-    name: displayNames['data_category'],
-    facetPath: FileFacetPath.data_category,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['data_category'],
-  },
-  {
-    name: displayNames['data_type'],
-    facetPath: FileFacetPath.data_type,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['data_type'],
-  },
-  {
-    name: displayNames['file_type'],
-    facetPath: FileFacetPath.file_type,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_type,
-  },
-  {
-    name: displayNames['file_access'],
-    facetPath: FileFacetPath.file_access,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_access,
-  },
-  {
-    name: displayNames['analysis.workflow.workflow_name'],
-    facetPath: FileFacetPath.analysis__workflow__workflow_name,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.workflow.workflow_name'],
-  },
-  {
-    name: displayNames['analysis_tools'],
-    facetPath: FileFacetPath.analysis_tools,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis_tools'],
-  },
-];
+): Array<FacetDetails> => {
+  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+
+  return concat(
+    [
+      {
+        name: displayNames['release_stage'],
+        facetPath: FileFacetPath.release_stage,
+        variant: 'Tooltip',
+        esDocumentField: FileCentricDocumentField.release_stage,
+      },
+    ],
+    [
+      {
+        name: displayNames['study_id'],
+        facetPath: FileFacetPath.study_id,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField.study_id,
+      },
+      {
+        name: displayNames['donors.specimens.specimen_type'],
+        facetPath: FileFacetPath.donors__specimens__specimen_type,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['donors.specimens.specimen_type'],
+      },
+      {
+        name: displayNames['donors.specimens.specimen_tissue_source'],
+        facetPath: FileFacetPath.donors__specimens__specimen_tissue_source,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['donors.specimens.specimen_tissue_source'],
+      },
+      {
+        name: displayNames['analysis.experiment.experimental_strategy'],
+        facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+      },
+      {
+        name: displayNames['data_category'],
+        facetPath: FileFacetPath.data_category,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['data_category'],
+      },
+      {
+        name: displayNames['data_type'],
+        facetPath: FileFacetPath.data_type,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['data_type'],
+      },
+      {
+        name: displayNames['file_type'],
+        facetPath: FileFacetPath.file_type,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField.file_type,
+      },
+      {
+        name: displayNames['file_access'],
+        facetPath: FileFacetPath.file_access,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField.file_access,
+      },
+      {
+        name: displayNames['analysis.workflow.workflow_name'],
+        facetPath: FileFacetPath.analysis__workflow__workflow_name,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['analysis.workflow.workflow_name'],
+      },
+      {
+        name: displayNames['analysis_tools'],
+        facetPath: FileFacetPath.analysis_tools,
+        variant: 'Basic',
+        esDocumentField: FileCentricDocumentField['analysis_tools'],
+      },
+    ],
+  );
+};
 
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
