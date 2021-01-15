@@ -48,61 +48,64 @@ const ViewAmountController: React.ComponentType<{
 }) => {
   const theme = useTheme();
   return (
-    <div
-      className=""
-      css={css`
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 12px;
-        border-bottom: 1px solid;
-        border-color: ${theme.colors.grey_2};
-      `}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <HyperLink
-        css={css`
-          font-size: 11px;
-        `}
-        onClick={(e) => {
-          selectAllHander();
-        }}
-      >
-        {selectAllState ? 'Deselect all' : 'Select all'}
-      </HyperLink>
-
-      {/* The div containing the show more / show less toggler */}
+    selectAllVisible &&
+    moreOptionsAvailable && (
       <div
+        className=""
         css={css`
           display: flex;
-          align-content: center;
-          align-items: center;
-          visibility: ${toggleVisiblityCss};
+          justify-content: space-between;
+          padding: 6px 12px;
+          border-bottom: 1px solid;
+          border-color: ${theme.colors.grey_2};
         `}
+        onClick={(e) => e.stopPropagation()}
       >
         <HyperLink
           css={css`
-            display: flex;
-            align-items: center;
             font-size: 11px;
           `}
           onClick={(e) => {
-            moreToggleHandler();
+            selectAllHander();
           }}
         >
-          <Icon
-            name={moreOptionsAvailable ? 'plus_circle' : 'minus_circle'}
-            css={css`
-              margin-right: 6px;
-              --iconSize: 12px;
-              width: var(--iconSize);
-              height: var(--iconSize);
-            `}
-            fill={theme.colors.accent2}
-          />
-          {toggleText}
+          {selectAllState ? 'Deselect all' : 'Select all'}
         </HyperLink>
+
+        {/* The div containing the show more / show less toggler */}
+        <div
+          css={css`
+            display: flex;
+            align-content: center;
+            align-items: center;
+            visibility: ${toggleVisiblityCss};
+          `}
+        >
+          <HyperLink
+            css={css`
+              display: flex;
+              align-items: center;
+              font-size: 11px;
+            `}
+            onClick={(e) => {
+              moreToggleHandler();
+            }}
+          >
+            <Icon
+              name={moreOptionsAvailable ? 'plus_circle' : 'minus_circle'}
+              css={css`
+                margin-right: 6px;
+                --iconSize: 12px;
+                width: var(--iconSize);
+                height: var(--iconSize);
+              `}
+              fill={theme.colors.accent2}
+            />
+            {toggleText}
+          </HyperLink>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
