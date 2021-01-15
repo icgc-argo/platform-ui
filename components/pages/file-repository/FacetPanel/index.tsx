@@ -38,6 +38,8 @@ import {
   replaceFilter,
   currentFieldValue,
   toDisplayValue,
+  getDisplayName,
+  getTooltipContent,
 } from '../utils';
 import SqonBuilder from 'sqon-builder';
 import {
@@ -66,6 +68,7 @@ import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
 import useClickAway from 'uikit/utils/useClickAway';
+import TooltipFacet from 'uikit/Facet/TooltipFacet';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -79,7 +82,7 @@ const createPresetFacets = (
   {
     name: displayNames['release_stage'],
     facetPath: FileFacetPath.release_stage,
-    variant: 'Basic',
+    variant: 'Tooltip',
     esDocumentField: FileCentricDocumentField.release_stage,
   },
   {
@@ -311,6 +314,7 @@ export default () => {
     },
     isExpanded: expandedFacets.includes(facetDetails.facetPath),
     subMenuName: facetDetails.name,
+    facetPath: facetDetails.facetPath,
   });
 
   const onFacetOptionToggle: (
@@ -318,6 +322,7 @@ export default () => {
   ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
     return (facetValue) => {
       const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
+      console.log('current value', currentValue, filters);
       replaceAllFilters(toggleFilter(currentValue, filters));
     };
   };
@@ -539,6 +544,18 @@ export default () => {
                     onSubmit={onNumberRangeFacetSubmit(facetDetails)}
                     min={numberRangeFacetMin(facetDetails)}
                     max={numberRangeFacetMax(facetDetails)}
+                  />
+                )}
+                {facetDetails.variant === 'Tooltip' && (
+                  <TooltipFacet
+                    {...facetProps}
+                    key={facetDetails.name}
+                    options={getOptions(facetDetails)}
+                    countUnit={'files'}
+                    onOptionToggle={onFacetOptionToggle(facetDetails)}
+                    onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                    parseDisplayValue={(key) => getDisplayName(facetDetails.name, key)}
+                    tooltipContent={getTooltipContent(facetDetails.name)}
                   />
                 )}
               </FacetRow>

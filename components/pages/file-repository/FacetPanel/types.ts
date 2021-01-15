@@ -27,7 +27,7 @@ type NumericAggregation = any;
 export type FacetDetails = {
   name: string;
   facetPath: FileFacetPath;
-  variant: 'Basic' | 'Number' | 'Other';
+  variant: 'Basic' | 'Number' | 'Tooltip' | 'Other';
   esDocumentField: FileCentricDocumentField;
 };
 
