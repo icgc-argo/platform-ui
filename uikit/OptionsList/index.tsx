@@ -25,7 +25,6 @@ import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import orderBy from 'lodash/orderBy';
 import concat from 'lodash/concat';
-
 import ViewAmountController from '../OptionsList/ViewAmountController';
 import Tooltip from 'uikit/Tooltip';
 
@@ -47,6 +46,7 @@ const OptionsList: React.ComponentType<{
   parseDisplayValue: (inputValue: string) => string;
   selectAllVisible?: boolean;
   className?: string;
+  sortOptions?: boolean;
 }> = ({
   options,
   searchQuery = '',
@@ -57,6 +57,7 @@ const OptionsList: React.ComponentType<{
   parseDisplayValue = (value) => value,
   selectAllVisible = true,
   className,
+  sortOptions = true,
 }) => {
   const theme = useTheme();
   const [allOptionsVisible, setAllOptionsVisible] = React.useState(false);
@@ -196,8 +197,9 @@ const OptionsList: React.ComponentType<{
     ? concat(selectedOptions, queriedOptions)
     : allOptionsVisible
     ? sortedOptions
-    : concat(selectedOptions, defaultNonSelectedOptions);
-
+    : sortOptions
+    ? concat(selectedOptions, defaultNonSelectedOptions)
+    : options;
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 
   const onSelectAll = () => {
