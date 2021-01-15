@@ -96,6 +96,7 @@ const TooltipFacet = ({
         onSelectAllOptions={onSelectAllOptions}
         parseDisplayValue={parseDisplayValue}
         selectAllVisible={false}
+        sortOptions={false}
       />
     </MenuItem>
   );
