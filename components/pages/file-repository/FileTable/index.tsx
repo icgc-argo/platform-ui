@@ -184,12 +184,6 @@ export default () => {
       width: 260,
     },
     {
-      Header: fieldDisplayNames['release_stage'],
-      id: FileCentricDocumentField['release_stage'],
-      accessor: 'releaseStage',
-      width: 100,
-    },
-    {
       Header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
