@@ -43,8 +43,6 @@ export const getDefaultRedirectPathForUser = (
 ): string => {
   if (isDccMember(permissions)) {
     return PROGRAMS_LIST_PATH;
-  } else if (isRdpcMember(permissions)) {
-    return RDPC_PATH;
   } else if (canReadSomeProgram(permissions)) {
     const readableProgramShortNames = getReadableProgramShortNames(
       getAuthorizedProgramScopes(permissions),

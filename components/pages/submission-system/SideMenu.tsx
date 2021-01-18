@@ -79,7 +79,7 @@ const StatusMenuItem = styled('div')`
 
 const useToggledSelectState = (initialIndex = -1) => {
   const [activeItem, setActiveItem] = React.useState(initialIndex);
-  const toggleItem = itemIndex =>
+  const toggleItem = (itemIndex) =>
     itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
   return { activeItem, toggleItem };
 };
@@ -134,7 +134,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
 
   const clinicalSubmissionHasSchemaErrors = data
-    ? data.clinicalSubmissions.clinicalEntities.some(entity => !!entity.schemaErrors.length)
+    ? data.clinicalSubmissions.clinicalEntities.some((entity) => !!entity.schemaErrors.length)
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
@@ -289,7 +289,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         content={
           <Input
             aria-label="programs search"
-            onChange={e => {
+            onChange={(e) => {
               setProgramNameSearch(e.target.value);
             }}
             value={programNameSearch}
@@ -366,11 +366,7 @@ export default function SideMenu() {
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
             </Link>
           )}
-          {canSeeRdpcs && (
-            <MenuItem icon={<Icon name="rdpc" />} content={'RDPCs'} onClick={() => toggleItem(0)}>
-              <MenuItem content="what goes here?" />
-            </MenuItem>
-          )}
+
           <MenuItem
             icon={<Icon name="programs" />}
             content={'My Programs'}
