@@ -23,11 +23,21 @@ import React from 'react';
 
 import SubMenu from '.';
 import Button from '../Button';
-import Typography from '../Typography';
 import Hook from '../utils/Hook';
 import Icon from '../Icon';
 
 import readme from './readme.md';
+
+const RightComp = () => (
+  <div
+    onClick={(e) => {
+      e.stopPropagation();
+      action('clicked right component')();
+    }}
+  >
+    Right
+  </div>
+);
 
 const SubMenuStories = storiesOf(`${__dirname}`, module).add(
   'Basic',
@@ -44,6 +54,13 @@ const SubMenuStories = storiesOf(`${__dirname}`, module).add(
         content="RDPCs"
         selected={false}
         onClick={action('clicked')}
+      />
+      <SubMenu.Item
+        icon={<Icon name="rdpc" />}
+        content="With Right Aligned Custom Component"
+        selected={false}
+        onClick={action('clicked')}
+        RightSideComp={<RightComp />}
       />
       <SubMenu.Item icon={<Icon name="programs" />} content="Programs" selected>
         <SubMenu.Item

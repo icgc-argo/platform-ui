@@ -18,10 +18,8 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
-
 import Icon from '../Icon';
 import Input from '../form/Input';
 import useTheme from '../utils/useTheme';
@@ -57,6 +55,7 @@ const MenuItemComponent = React.forwardRef<
       query: string;
       querySetter: React.Dispatch<React.SetStateAction<string>>;
     };
+    RightSideComp?: React.ReactNode;
   } & React.ComponentProps<typeof MenuItemContainer>
 >(
   (
@@ -66,7 +65,7 @@ const MenuItemComponent = React.forwardRef<
       level,
       children,
       content,
-      onClick = e => {},
+      onClick = (e) => {},
       icon,
       noChevron = false,
       contentAs = 'button',
@@ -74,6 +73,7 @@ const MenuItemComponent = React.forwardRef<
       isFacetVariant = false,
       searchBar = false,
       searchStateParams,
+      RightSideComp = null,
       ...otherProps
     },
     ref,
@@ -97,13 +97,12 @@ const MenuItemComponent = React.forwardRef<
       ) : (
         <></>
       );
-
     return (
       <MenuItemContainer
         ref={ref}
         level={level}
         selected={isSelected}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           if (contentContainerRef.current) contentContainerRef.current.blur();
           setLocalSelectedState(!isSelected);
@@ -124,6 +123,15 @@ const MenuItemComponent = React.forwardRef<
                 </IconContainer>
               )}
               {content}
+              {RightSideComp && !searchBar && (
+                <div
+                  css={css`
+                    margin-left: auto;
+                  `}
+                >
+                  {RightSideComp}
+                </div>
+              )}
             </ContentContainer>
             {!chevronOnLeftSide && chevronIcon}
             {isSelected && searchBar && (
@@ -134,7 +142,7 @@ const MenuItemComponent = React.forwardRef<
                 `}
               >
                 <Icon
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     setSearchbarState(!searchbarState);
                   }}
@@ -166,7 +174,7 @@ const MenuItemComponent = React.forwardRef<
                 `}
                 preset="search"
                 value={searchStateParams.query}
-                onChange={e => {
+                onChange={(e) => {
                   searchStateParams.querySetter(e.target.value);
                 }}
                 showClear={true}
