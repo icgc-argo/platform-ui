@@ -68,7 +68,7 @@ import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
 import useClickAway from 'uikit/utils/useClickAway';
-import TooltipFacet from 'uikit/Facet/TooltipFacet';
+import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 

@@ -26,7 +26,7 @@
  */
 
 import React from 'react';
-import { MenuItem as MenuItemComp } from '../../SubMenu';
+import { MenuItem as MenuItemComp } from 'uikit/SubMenu';
 import { css } from '@emotion/core';
 import OptionsListComp, { FilterOption } from 'uikit/OptionsList';
 import Icon from 'uikit/Icon';
