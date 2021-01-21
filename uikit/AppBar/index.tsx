@@ -164,6 +164,8 @@ export { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
 export type NavElement = {
   name: string;
   active: boolean;
+  href: string;
+  as?: string;
   isLink?: boolean;
   shouldRender?: boolean;
   onClick?: () => any;
