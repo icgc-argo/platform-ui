@@ -24,7 +24,6 @@ import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
 import useClickAway from '../utils/useClickAway';
-import Link, { LinkProps } from 'next/link';
 
 import {
   AppBarContainer,
@@ -162,13 +161,14 @@ export default AppBar;
 
 export { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
 
-export type NavElement = LinkProps & {
+export type NavElement = {
   name: string;
   active: boolean;
   isLink?: boolean;
   shouldRender?: boolean;
   onClick?: () => any;
   isDropdown?: boolean;
+  LinkComp?: React.ReactNode;
 };
 
 export const NavBarElement = ({
@@ -178,6 +178,7 @@ export const NavBarElement = ({
   onClick = () => null,
   active,
   isDropdown = false,
+  LinkComp,
   ...props
 }: NavElement) => {
   const navItem = isDropdown ? (
@@ -189,27 +190,37 @@ export const NavBarElement = ({
       <Typography variant={'default'}>{name}</Typography>
     </MenuItem>
   );
+  console.log('type', typeof LinkComp);
+  const createLink = ({ LinkComp, navItem }: { LinkComp: any; navItem: React.ReactNode }) => {
+    const link = (
+      <a
+        css={css`
+          height: 100%;
+        `}
+      >
+        {navItem}
+      </a>
+    );
 
-  const result = shouldRender ? (
-    isLink ? (
-      <Link
+    return LinkComp ? (
+      <LinkComp
         {...props}
         css={css`
           cursor: pointer;
         `}
       >
-        <a
-          css={css`
-            height: 100%;
-          `}
-        >
-          {navItem}
-        </a>
-      </Link>
+        {link}
+      </LinkComp>
+    ) : (
+      link
+    );
+  };
+
+  return shouldRender ? (
+    isLink ? (
+      createLink({ LinkComp, navItem })
     ) : (
       <div onClick={onClick}> {navItem} </div>
     )
   ) : null;
-
-  return result;
 };

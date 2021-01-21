@@ -246,7 +246,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
         {!hideLinks && !isMobileLayout && (
           <MenuGroup>
             {mainNavDetails.slice(0, NUM_ELEMENTS_IN_FIRST_SECTION).map((element, idx) => (
-              <NavBarElement key={`navbarElement_1${idx}`} {...element} />
+              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={Link} />
             ))}
           </MenuGroup>
         )}
@@ -259,7 +259,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
               mainNavDetails
                 .slice(NUM_ELEMENTS_IN_FIRST_SECTION, mainNavDetails.length)
                 .map((element, idx) => (
-                  <NavBarElement key={`navbarElement_2${idx}`} {...element} />
+                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={Link} />
                 ))}
 
             {!userModel && loginButton}
@@ -284,6 +284,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             key={`profileNavDetail_${idx}`}
                             {...element}
                             isDropdown={true}
+                            LinkComp={Link}
                           ></NavBarElement>
                         ))}
                       </DropdownMenu>
