@@ -170,7 +170,7 @@ export type NavElement = {
   shouldRender?: boolean;
   onClick?: () => any;
   isDropdown?: boolean;
-  LinkComp?: React.ReactNode;
+  LinkComp: React.ComponentType;
 };
 
 export const NavBarElement = ({
@@ -192,35 +192,23 @@ export const NavBarElement = ({
       <Typography variant={'default'}>{name}</Typography>
     </MenuItem>
   );
-  console.log('type', typeof LinkComp);
-  const createLink = ({ LinkComp, navItem }: { LinkComp: any; navItem: React.ReactNode }) => {
-    const link = (
-      <a
-        css={css`
-          height: 100%;
-        `}
-      >
-        {navItem}
-      </a>
-    );
 
-    return LinkComp ? (
+  return shouldRender ? (
+    isLink ? (
       <LinkComp
         {...props}
         css={css`
           cursor: pointer;
         `}
       >
-        {link}
+        <a
+          css={css`
+            height: 100%;
+          `}
+        >
+          {navItem}
+        </a>
       </LinkComp>
-    ) : (
-      link
-    );
-  };
-
-  return shouldRender ? (
-    isLink ? (
-      createLink({ LinkComp, navItem })
     ) : (
       <div onClick={onClick}> {navItem} </div>
     )

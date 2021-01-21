@@ -94,10 +94,7 @@ const AppBarStories = storiesOf(`${__dirname}`, module)
     );
   })
   .add('NavBarElement', () => (
-    <div>
-      <NavBarElement name="regular href" href="www.google.ca" active />
-      <NavBarElement name="custom link comp" href="www.google.ca" LinkComp={CustomLink} active />
-    </div>
+    <NavBarElement name="custom link comp" href="www.google.ca" LinkComp={CustomLink} active />
   ));
 
 export default AppBarStories;
