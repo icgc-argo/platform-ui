@@ -209,9 +209,7 @@ export const NavBarElement = ({
     ) : (
       <div onClick={onClick}> {navItem} </div>
     )
-  ) : (
-    <></>
-  );
+  ) : null;
 
   return result;
 };
