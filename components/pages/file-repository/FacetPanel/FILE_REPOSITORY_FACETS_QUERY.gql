@@ -7,6 +7,12 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
+      release_stage {
+        buckets {
+          doc_count
+          key
+        }
+      }
       analysis__experiment__experimental_strategy {
         buckets {
           key

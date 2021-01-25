@@ -41,6 +41,7 @@ export const getConfig = () => {
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     FEATURE_REPOSITORY_ENABLED: publicConfig.FEATURE_REPOSITORY_ENABLED === 'true',
     FEATURE_LANDING_PAGE_STATS_ENABLED: publicConfig.FEATURE_LANDING_PAGE_STATS_ENABLED === 'true',
+    FEATURE_ACCESS_FACET_ENABLED: publicConfig.FEATURE_ACCESS_FACET_ENABLED === 'true',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
     COLLAB_MAINTENANCE_BANNER_ON: publicConfig.COLLAB_MAINTENANCE_BANNER_ON === 'true',
   } as {
@@ -56,6 +57,7 @@ export const getConfig = () => {
     RECAPTCHA_SITE_KEY: string;
     FEATURE_REPOSITORY_ENABLED: boolean;
     FEATURE_LANDING_PAGE_STATS_ENABLED: boolean;
+    FEATURE_ACCESS_FACET_ENABLED: boolean;
     MAINTENANCE_MODE_ON: boolean;
     COLLAB_MAINTENANCE_BANNER_ON: boolean;
   };

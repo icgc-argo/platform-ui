@@ -69,6 +69,7 @@ import hamburger from './collection/hamburger';
 import hamburger_close from './collection/hamburger_close';
 import warning_transparent from './collection/warning_transparent';
 import info_transparent from './collection/info_transparent';
+import question_circle from './collection/question_circle';
 
 /**
  * Icon path and property lookup object
@@ -127,6 +128,7 @@ const Icons = {
   reset,
   hamburger,
   hamburger_close,
+  question_circle,
 };
 
 export type UikitIconNames = keyof typeof Icons;

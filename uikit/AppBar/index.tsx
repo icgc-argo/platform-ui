@@ -24,7 +24,6 @@ import logo from '../assets/logo_white.svg';
 import Typography from '../Typography';
 import useTheme from '../utils/useTheme';
 import useClickAway from '../utils/useClickAway';
-import Link, { LinkProps } from 'next/link';
 
 import {
   AppBarContainer,
@@ -162,13 +161,16 @@ export default AppBar;
 
 export { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
 
-export type NavElement = LinkProps & {
+export type NavElement = {
   name: string;
   active: boolean;
+  href: string;
+  as?: string;
   isLink?: boolean;
   shouldRender?: boolean;
   onClick?: () => any;
   isDropdown?: boolean;
+  LinkComp: React.ComponentType;
 };
 
 export const NavBarElement = ({
@@ -178,6 +180,7 @@ export const NavBarElement = ({
   onClick = () => null,
   active,
   isDropdown = false,
+  LinkComp,
   ...props
 }: NavElement) => {
   const navItem = isDropdown ? (
@@ -190,9 +193,9 @@ export const NavBarElement = ({
     </MenuItem>
   );
 
-  const result = shouldRender ? (
+  return shouldRender ? (
     isLink ? (
-      <Link
+      <LinkComp
         {...props}
         css={css`
           cursor: pointer;
@@ -205,13 +208,9 @@ export const NavBarElement = ({
         >
           {navItem}
         </a>
-      </Link>
+      </LinkComp>
     ) : (
       <div onClick={onClick}> {navItem} </div>
     )
-  ) : (
-    <></>
-  );
-
-  return result;
+  ) : null;
 };

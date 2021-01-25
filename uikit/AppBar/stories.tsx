@@ -29,64 +29,72 @@ import AppBar, {
   UserBadge,
   DropdownMenu,
   DropdownMenuItem,
+  NavBarElement,
 } from '.';
 
-const AppBarStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  const LinkToHome = props => (
-    <a style={{ cursor: 'pointer' }} {...props} onClick={() => action('fake navigate')('/')} />
-  );
+// to simulate nextjs link or any other framework that needs to wrap href
+const CustomLink = ({ children, ...props }) => <div {...props}>{children}</div>;
 
-  const LinkToExploration = props => (
-    <a {...props} onClick={() => action('fake navigate')('/exploration')} />
-  );
+const AppBarStories = storiesOf(`${__dirname}`, module)
+  .add('Basic', () => {
+    const LinkToHome = (props) => (
+      <a style={{ cursor: 'pointer' }} {...props} onClick={() => action('fake navigate')('/')} />
+    );
 
-  const LinkToAnalysis = props => (
-    <a {...props} onClick={() => action('fake navigate')('/analysis')} />
-  );
+    const LinkToExploration = (props) => (
+      <a {...props} onClick={() => action('fake navigate')('/exploration')} />
+    );
 
-  const LinkToFileRepo = props => (
-    <a {...props} onClick={() => action('fake navigate')('/file_repo')} />
-  );
+    const LinkToAnalysis = (props) => (
+      <a {...props} onClick={() => action('fake navigate')('/analysis')} />
+    );
 
-  const LinkToSubmission = props => (
-    <a {...props} onClick={() => action('fake navigate')('/submission')} />
-  );
+    const LinkToFileRepo = (props) => (
+      <a {...props} onClick={() => action('fake navigate')('/file_repo')} />
+    );
 
-  const UserBadgeDom = props => <a {...props} onClick={action('user badge clicked')} />;
+    const LinkToSubmission = (props) => (
+      <a {...props} onClick={() => action('fake navigate')('/submission')} />
+    );
 
-  return (
-    <AppBar>
-      <Section>
-        <Logo DomComponent={LinkToHome} />
-        <MenuGroup>
-          <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
-          <MenuItem DomComponent={LinkToAnalysis}>Analysis</MenuItem>
-          <MenuItem DomComponent={LinkToFileRepo} active>
-            File Repository
-          </MenuItem>
-        </MenuGroup>
-      </Section>
-      <Section />
-      <Section>
-        <MenuGroup>
-          <MenuItem DomComponent={LinkToSubmission} active>
-            Submission System
-          </MenuItem>
-          <MenuItem
-            DomComponent={UserBadgeDom}
-            dropdownMenu={
-              <DropdownMenu>
-                <DropdownMenuItem active>Profile & Tokens</DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenu>
-            }
-          >
-            <UserBadge firstName="Harvey" lastName="Specter" title="DCC Member" />
-          </MenuItem>
-        </MenuGroup>
-      </Section>
-    </AppBar>
-  );
-});
+    const UserBadgeDom = (props) => <a {...props} onClick={action('user badge clicked')} />;
+
+    return (
+      <AppBar>
+        <Section>
+          <Logo DomComponent={LinkToHome} />
+          <MenuGroup>
+            <MenuItem DomComponent={LinkToExploration}>Exploration</MenuItem>
+            <MenuItem DomComponent={LinkToAnalysis}>Analysis</MenuItem>
+            <MenuItem DomComponent={LinkToFileRepo} active>
+              File Repository
+            </MenuItem>
+          </MenuGroup>
+        </Section>
+        <Section />
+        <Section>
+          <MenuGroup>
+            <MenuItem DomComponent={LinkToSubmission} active>
+              Submission System
+            </MenuItem>
+            <MenuItem
+              DomComponent={UserBadgeDom}
+              dropdownMenu={
+                <DropdownMenu>
+                  <DropdownMenuItem active>Profile & Tokens</DropdownMenuItem>
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenu>
+              }
+            >
+              <UserBadge firstName="Harvey" lastName="Specter" title="DCC Member" />
+            </MenuItem>
+          </MenuGroup>
+        </Section>
+      </AppBar>
+    );
+  })
+  .add('NavBarElement', () => (
+    <NavBarElement name="custom link comp" href="www.google.ca" LinkComp={CustomLink} active />
+  ));
 
 export default AppBarStories;

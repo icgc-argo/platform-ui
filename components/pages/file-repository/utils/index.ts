@@ -15,6 +15,7 @@ import {
   FilterField,
 } from './types';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
+import { facetDisplayNames, tooltipContent } from './constants';
 
 const IS_MISSING = '__missing__';
 
@@ -227,3 +228,8 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
 
 export const toDisplayValue: (value: string) => string = (value) =>
   value === IS_MISSING ? 'No Data' : value;
+
+export const getTooltipContent = (name: string): React.ReactNode => tooltipContent[name];
+
+export const getDisplayName = (facetName: string, fieldName: string): string =>
+  facetDisplayNames[facetName][fieldName];
