@@ -54,6 +54,7 @@ const StyledButton = styled<
     disabled: boolean;
   }
 >(FocusWrapper)`
+  ${({ theme }) => css(theme.typography.default)};
   transition: all 0.25s;
   display: flex;
   align-items: center;

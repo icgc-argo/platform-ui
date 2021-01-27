@@ -144,6 +144,7 @@ export const IconContainer = styled('span')`
 `;
 
 export const ContentContainer = styled('button')<{ as?: keyof JSX.IntrinsicElements }>`
+  ${({ theme }) => css(theme.typography.default)};
   border: none;
   width: 100%;
   padding: 0px 2px 0px 0px;
