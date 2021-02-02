@@ -46,8 +46,6 @@ const SystemAlerts = () => {
     ),
   });
 
-  console.log({ alerts })
-
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
   return data && !loading
