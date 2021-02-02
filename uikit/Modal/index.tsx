@@ -32,7 +32,7 @@ export const ModalContainer = styled('div')`
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
   max-width: 776px;
-  width: inherit;
+  width: auto;
   padding: 24px;
   padding-bottom: 0px;
   max-height: 95vh;
@@ -122,6 +122,22 @@ const ModalComponent: React.ComponentType<{
         `}
       >
         <ModalTitle>
+          {titleIconConfig.name && (
+            <div
+              css={css`
+                flex: 1;
+                padding-right: 10px;
+                padding-top: 3px;
+              `}
+            >
+              <Icon
+                name={titleIconConfig.name}
+                width="20px"
+                height="20px"
+                fill={titleIconConfig.fill}
+              />
+            </div>
+          )}
           <Typography
             css={css`
               margin: 0px;
@@ -142,22 +158,6 @@ const ModalComponent: React.ComponentType<{
           overflow-y: auto;
         `}
       >
-        {titleIconConfig.name && (
-          <div
-            css={css`
-              flex: 1;
-              padding-right: 10px;
-              padding-top: 3px;
-            `}
-          >
-            <Icon
-              name={titleIconConfig.name}
-              width="20px"
-              height="20px"
-              fill={titleIconConfig.fill}
-            />
-          </div>
-        )}
         <div
           css={css`
             width: 100%;

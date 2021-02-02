@@ -145,6 +145,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: FILE_REPOSITORY_PATH,
       shouldRender: FEATURE_REPOSITORY_ENABLED,
       active: path.search(FILE_REPOSITORY_PATH) === 0,
+      LinkComp: Link,
     },
     {
       isLink: userModel && egoJwt && canAccessSubmission,
@@ -153,6 +154,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: getDefaultRedirectPathForUser(permissions),
       active: path.search(SUBMISSION_PATH) === 0 || isModalVisible,
       onClick: () => setModalVisibility(!isModalVisible),
+      LinkComp: Link,
     },
   ];
 
@@ -161,6 +163,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       href: USER_PAGE_PATH,
       active: onProfilePage,
       name: 'Profile & Token',
+      LinkComp: Link,
     },
     {
       isLink: false,
@@ -171,6 +174,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       name: 'Logout',
       active: false,
       href: '',
+      LinkComp: Link,
     },
   ];
 
@@ -246,7 +250,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
         {!hideLinks && !isMobileLayout && (
           <MenuGroup>
             {mainNavDetails.slice(0, NUM_ELEMENTS_IN_FIRST_SECTION).map((element, idx) => (
-              <NavBarElement key={`navbarElement_1${idx}`} {...element} />
+              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={Link} />
             ))}
           </MenuGroup>
         )}
@@ -259,7 +263,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
               mainNavDetails
                 .slice(NUM_ELEMENTS_IN_FIRST_SECTION, mainNavDetails.length)
                 .map((element, idx) => (
-                  <NavBarElement key={`navbarElement_2${idx}`} {...element} />
+                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={Link} />
                 ))}
 
             {!userModel && loginButton}
@@ -284,6 +288,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             key={`profileNavDetail_${idx}`}
                             {...element}
                             isDropdown={true}
+                            LinkComp={Link}
                           ></NavBarElement>
                         ))}
                       </DropdownMenu>
