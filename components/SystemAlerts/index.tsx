@@ -33,9 +33,9 @@ const SystemAlerts = () => {
   }, []);
 
   const handleClose = (id: string) => {
-    const nextDismissedAlerts = dismissedAlerts.concat(id);
-    setDismissedAlerts(nextDismissedAlerts);
-    setLocalStorage(nextDismissedAlerts);
+    const ids = dismissedAlerts.concat(id);
+    setDismissedAlerts(ids);
+    setLocalStorage(ids);
   };
 
   const { data = null, loading = true } = useSystemAlertsQuery({
