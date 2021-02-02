@@ -23,7 +23,7 @@ export const APP_VERSION = packageJson.version;
 
 export const EGO_JWT_KEY = 'EGO_JWT';
 export const LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY = 'GDPR_ACCEPTED';
-export const LOCAL_STORAGE_BANNERS_KEY = 'BANNER_IDS';
+export const LOCAL_STORAGE_SYSTEM_ALERTS_KEY = 'SYSTEM_ALERTS_DISMISSED_IDS';
 
 // Program Membership Types
 export const PROGRAM_MEMBERSHIP_TYPES = [

@@ -41,8 +41,7 @@ import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
-import SystemAlert from 'uikit/SystemAlert';
-import Banners from './Banners';
+import SystemAlerts from './SystemAlerts';
 
 /**
  * The global portal where modals will show up
@@ -284,7 +283,7 @@ export default function ApplicationRoot({
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
-                    <Banners />
+                    <SystemAlerts />
                     {children}
                   </GlobalLoaderProvider>
                 </PersistentStateProvider>
