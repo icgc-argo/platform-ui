@@ -235,8 +235,6 @@ export default function ApplicationRoot({
   startWithGlobalLoader: boolean;
   initialPermissions: string[];
 }) {
-  const [maintenanceMessageShown, setMaintenanceMessageShown] = React.useState(true);
-  const { COLLAB_MAINTENANCE_BANNER_ON } = getConfig();
   return (
     <>
       <style>
@@ -286,17 +284,6 @@ export default function ApplicationRoot({
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
-                    {COLLAB_MAINTENANCE_BANNER_ON && maintenanceMessageShown && (
-                      <SystemAlert
-                        alert={{
-                          level: 'warning',
-                          dismissable: true,
-                          title: '',
-                          message: `Beginning Friday, December 4th at 5:30PM EST until Sunday, December 6th 11:55PM the ability to download ARGO data  will be unavailable due to the authentication systems being unavailable during planned maintenance.`,
-                        }}
-                        onClose={() => setMaintenanceMessageShown(false)}
-                      />
-                    )}
                     <Banners />
                     {children}
                   </GlobalLoaderProvider>

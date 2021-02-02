@@ -43,7 +43,6 @@ export const getConfig = () => {
     FEATURE_LANDING_PAGE_STATS_ENABLED: publicConfig.FEATURE_LANDING_PAGE_STATS_ENABLED === 'true',
     FEATURE_ACCESS_FACET_ENABLED: publicConfig.FEATURE_ACCESS_FACET_ENABLED === 'true',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
-    COLLAB_MAINTENANCE_BANNER_ON: publicConfig.COLLAB_MAINTENANCE_BANNER_ON === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -59,6 +58,5 @@ export const getConfig = () => {
     FEATURE_LANDING_PAGE_STATS_ENABLED: boolean;
     FEATURE_ACCESS_FACET_ENABLED: boolean;
     MAINTENANCE_MODE_ON: boolean;
-    COLLAB_MAINTENANCE_BANNER_ON: boolean;
   };
 };
