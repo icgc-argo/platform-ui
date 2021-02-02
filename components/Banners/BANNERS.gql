@@ -1,0 +1,9 @@
+query BANNERS {
+  banners {
+    dismissable
+    id
+    level
+    message
+    title
+  }
+}

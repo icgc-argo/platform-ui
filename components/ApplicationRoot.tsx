@@ -42,6 +42,7 @@ import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import SystemAlert from 'uikit/SystemAlert';
+import Banners from './Banners';
 
 /**
  * The global portal where modals will show up
@@ -296,6 +297,7 @@ export default function ApplicationRoot({
                         onClose={() => setMaintenanceMessageShown(false)}
                       />
                     )}
+                    <Banners />
                     {children}
                   </GlobalLoaderProvider>
                 </PersistentStateProvider>
