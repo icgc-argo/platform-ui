@@ -48,7 +48,7 @@ const SystemAlerts = () => {
 
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
-  return data && !loading
+  return alerts.length > 0 && !loading
     ? (
       <>
         {alertsDisplay.map((alert: SystemAlert) => (
