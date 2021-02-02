@@ -275,6 +275,24 @@ export default () => {
   }) || []) as Array<string>;
 
   const debouncedSearchTerm = useDebounce(searchQuery, 500);
+
+  //mapper <====>
+
+  /**
+   * Order release stage options
+   * Removes invalid keys eg. '__missing__'
+   */
+  const orderReleaseStage = (options: FilterOption[]) => {
+    const order = ['OWN_PROGRAM', 'FULL_PROGRAMS', 'ASSOCIATE_PROGRAMS', 'PUBLIC_QUEUE', 'PUBLIC'];
+    return order.map((order) => options.find((option) => option.key === order));
+  };
+
+  // function to manipulate options values eg. to preserve order
+  const prepareOptions = (
+    options: FilterOption[],
+    prepare: (options: FilterOption[]) => FilterOption[],
+  ) => prepare(options);
+
   const getOptions: GetAggregationResult = (facet) => {
     return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
       ...bucket,
