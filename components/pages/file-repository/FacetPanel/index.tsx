@@ -434,6 +434,12 @@ export default () => {
     },
   });
 
+  // pull out release stage facet to show before search bar
+  const releaseStageDetails = presetFacets.filter(
+    (f) => f.facetPath === FileFacetPath.release_stage,
+  )[0];
+  const releaseStageCommonProps = commonFacetProps(releaseStageDetails);
+  //console.log('a', releaseStageCommonProps, releaseStageDetails);
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -452,6 +458,22 @@ export default () => {
           >
             Filters
           </Typography>
+        </FacetRow>
+        <FacetRow
+          css={css`
+            border-top: 1px solid ${theme.colors.grey_2};
+          `}
+        >
+          <TooltipFacet
+            {...releaseStageCommonProps}
+            key={releaseStageDetails.name}
+            options={prepareOptions(getOptions(releaseStageDetails), orderReleaseStage)}
+            countUnit={'files'}
+            onOptionToggle={onFacetOptionToggle(releaseStageDetails)}
+            onSelectAllOptions={onFacetSelectAllOptionsToggle(releaseStageDetails)}
+            parseDisplayValue={(key) => getDisplayName(releaseStageDetails.name, key)}
+            tooltipContent={getTooltipContent(releaseStageDetails.name)}
+          />
         </FacetRow>
         <FacetRow
           css={css`
@@ -552,45 +574,35 @@ export default () => {
           </MenuItem>
         </FacetRow>
         {!loadingFieldDisplayNames &&
-          presetFacets.map((facetDetails) => {
-            const facetProps = commonFacetProps(facetDetails);
+          presetFacets
+            .filter((f) => f.facetPath !== FileFacetPath.release_stage)
+            .map((facetDetails) => {
+              const facetProps = commonFacetProps(facetDetails);
 
-            return (
-              <FacetRow key={facetDetails.name}>
-                {facetDetails.variant === 'Basic' && (
-                  <Facet
-                    {...facetProps}
-                    key={facetDetails.name}
-                    options={getOptions(facetDetails)}
-                    countUnit={'files'}
-                    onOptionToggle={onFacetOptionToggle(facetDetails)}
-                    onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
-                    parseDisplayValue={toDisplayValue}
-                  />
-                )}
-                {facetDetails.variant === 'Number' && (
-                  <NumberRangeFacet
-                    {...facetProps}
-                    onSubmit={onNumberRangeFacetSubmit(facetDetails)}
-                    min={numberRangeFacetMin(facetDetails)}
-                    max={numberRangeFacetMax(facetDetails)}
-                  />
-                )}
-                {facetDetails.variant === 'Tooltip' && (
-                  <TooltipFacet
-                    {...facetProps}
-                    key={facetDetails.name}
-                    options={getOptions(facetDetails)}
-                    countUnit={'files'}
-                    onOptionToggle={onFacetOptionToggle(facetDetails)}
-                    onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
-                    parseDisplayValue={(key) => getDisplayName(facetDetails.name, key)}
-                    tooltipContent={getTooltipContent(facetDetails.name)}
-                  />
-                )}
-              </FacetRow>
-            );
-          })}
+              return (
+                <FacetRow key={facetDetails.name}>
+                  {facetDetails.variant === 'Basic' && (
+                    <Facet
+                      {...facetProps}
+                      key={facetDetails.name}
+                      options={getOptions(facetDetails)}
+                      countUnit={'files'}
+                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      parseDisplayValue={toDisplayValue}
+                    />
+                  )}
+                  {facetDetails.variant === 'Number' && (
+                    <NumberRangeFacet
+                      {...facetProps}
+                      onSubmit={onNumberRangeFacetSubmit(facetDetails)}
+                      min={numberRangeFacetMin(facetDetails)}
+                      max={numberRangeFacetMax(facetDetails)}
+                    />
+                  )}
+                </FacetRow>
+              );
+            })}
       </SubMenu>
       <Collapsible />
     </FacetContainer>
