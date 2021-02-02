@@ -125,7 +125,9 @@ const ModalStories = storiesOf(`${__dirname}`, module)
         )}
       >
         <div style={{ width: '300px' }}>
-          Setting a fixed width of the children will make the modal shrink down to fit
+          Passing a custom container is also an option
+          <br />
+          Here it's expanding to content size of children
         </div>
       </Modal>
     </Modal.Overlay>
