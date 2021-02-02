@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { LOCAL_STORAGE_BANNERS_KEY } from 'global/constants';
+import SystemAlert from 'uikit/SystemAlert';
 import BANNERS_QUERY from './BANNERS.gql';
 
 type Banner = {
@@ -61,7 +62,12 @@ const Banners = () => {
   return data && !loading
     ? (
       <div>
-        {visibleBanners.map(banner => <Banner banner={banner} handleClose={handleClose} />)}
+        {visibleBanners.map((banner: Banner) => (
+          <SystemAlert
+            alert={banner}
+            onClose={() => handleClose(banner.id)}
+          />
+        ))}
       </div>
     )
     : null;
