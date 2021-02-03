@@ -18,7 +18,7 @@ const setLocalStorage = (ids: string[]) => {
   localStorage.setItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY, JSON.stringify(ids));
 }
 
-const useSystemAlertsQuery = (options = {}) => useQuery(
+const useSystemAlertsQuery = (options: {} = {}) => useQuery(
   SYSTEM_ALERTS_QUERY,
   { ...options }
 );
@@ -48,7 +48,7 @@ const SystemAlerts = () => {
 
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
-  return alerts.length > 0 && !loading
+  return alertsDisplay.length > 0 && !loading
     ? (
       <>
         {alertsDisplay.map((alert: SystemAlert) => (
