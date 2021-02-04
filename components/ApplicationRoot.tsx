@@ -41,7 +41,7 @@ import DnaLoader from 'uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
-import SystemAlert from 'uikit/SystemAlert';
+import SystemAlerts from './SystemAlerts';
 
 /**
  * The global portal where modals will show up
@@ -234,8 +234,6 @@ export default function ApplicationRoot({
   startWithGlobalLoader: boolean;
   initialPermissions: string[];
 }) {
-  const [maintenanceMessageShown, setMaintenanceMessageShown] = React.useState(true);
-  const { COLLAB_MAINTENANCE_BANNER_ON } = getConfig();
   return (
     <>
       <style>
@@ -285,17 +283,7 @@ export default function ApplicationRoot({
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
-                    {COLLAB_MAINTENANCE_BANNER_ON && maintenanceMessageShown && (
-                      <SystemAlert
-                        alert={{
-                          level: 'warning',
-                          dismissable: true,
-                          title: '',
-                          message: `Beginning Friday, December 4th at 5:30PM EST until Sunday, December 6th 11:55PM the ability to download ARGO data  will be unavailable due to the authentication systems being unavailable during planned maintenance.`,
-                        }}
-                        onClose={() => setMaintenanceMessageShown(false)}
-                      />
-                    )}
+                    <SystemAlerts />
                     {children}
                   </GlobalLoaderProvider>
                 </PersistentStateProvider>
