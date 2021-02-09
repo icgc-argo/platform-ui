@@ -27,6 +27,8 @@ import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 
+const { DASHBOARD_CHARTS_ENABLED } = getConfig();
+
 const getStartedLink = (
   <Typography variant="data" component="span">
     <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
@@ -35,6 +37,8 @@ const getStartedLink = (
     </Link>
   </Typography>
 );
+
+console.log({DASHBOARD_CHARTS_ENABLED})
 
 export default () => (
   <DashboardCard>
