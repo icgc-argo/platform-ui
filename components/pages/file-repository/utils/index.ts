@@ -226,7 +226,7 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
     : defaultEmptyFilters;
 };
 
-export const toDisplayValue: (field: string, value: string) => string = (field, value) => {
+export const toDisplayValue: (value: string, field?: string) => string = (value, field) => {
   if (value === IS_MISSING) {
     return 'No Data';
   }
