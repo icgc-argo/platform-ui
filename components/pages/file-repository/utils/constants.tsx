@@ -1,4 +1,5 @@
 import { css } from 'uikit';
+import { FileCentricDocumentField } from '../types';
 
 export const tooltipContent: { [key: string]: React.ReactNode } = {
   'Release Stage': (
@@ -33,5 +34,5 @@ enum ReleaseStageDisplayNames {
 
 // enums are real objects at runtime
 export const facetDisplayNames: { [key: string]: {} } = {
-  'Release Stage': ReleaseStageDisplayNames,
+  [FileCentricDocumentField.release_stage]: ReleaseStageDisplayNames,
 };

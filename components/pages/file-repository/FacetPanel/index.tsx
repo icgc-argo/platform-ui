@@ -71,6 +71,7 @@ import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { FilterOption } from 'uikit/dist/OptionsList';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -276,8 +277,6 @@ export default () => {
 
   const debouncedSearchTerm = useDebounce(searchQuery, 500);
 
-  //mapper <====>
-
   /**
    * Order release stage options
    * Removes invalid keys eg. '__missing__'
@@ -353,6 +352,7 @@ export default () => {
   ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
     return (facetValue) => {
       const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
+
       replaceAllFilters(toggleFilter(currentValue, filters));
     };
   };
@@ -439,7 +439,7 @@ export default () => {
     (f) => f.facetPath === FileFacetPath.release_stage,
   )[0];
   const releaseStageCommonProps = commonFacetProps(releaseStageDetails);
-  //console.log('a', releaseStageCommonProps, releaseStageDetails);
+
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -471,7 +471,7 @@ export default () => {
             countUnit={'files'}
             onOptionToggle={onFacetOptionToggle(releaseStageDetails)}
             onSelectAllOptions={onFacetSelectAllOptionsToggle(releaseStageDetails)}
-            parseDisplayValue={(key) => getDisplayName(releaseStageDetails.name, key)}
+            parseDisplayValue={(key) => getDisplayName(releaseStageDetails.esDocumentField, key)}
             tooltipContent={getTooltipContent(releaseStageDetails.name)}
           />
         </FacetRow>

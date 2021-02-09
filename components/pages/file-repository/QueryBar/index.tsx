@@ -203,7 +203,7 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
             }}
             {...props}
           >
-            {toDisplayValue(value)}
+            {toDisplayValue(field, value)}
           </Value>
         )}
       />
