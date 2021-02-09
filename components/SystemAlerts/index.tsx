@@ -54,6 +54,7 @@ const SystemAlerts = () => {
         {alertsDisplay.map((alert: SystemAlert) => (
           <SystemAlert
             alert={alert}
+            key={alert.id}
             onClose={() => handleClose(alert.id)}
           />
         ))}
