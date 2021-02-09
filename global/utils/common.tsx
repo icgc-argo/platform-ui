@@ -44,10 +44,10 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
     },
   });
 
-const standardDate = 'YYYY-MM-DD';
-export const displayDate = (date) => formatDate(date, standardDate);
+const standardDate = 'yyyy-MM-dd';
+export const displayDate = (date: string | number | Date) => formatDate(new Date(date), standardDate);
 
-const dateTimeFormat = 'MMMM D, YYYY [at] h:mm A';
+const dateTimeFormat = 'MMMM D, yyyy [at] h:mm A';
 export const displayDateAndTime = (date: string | number | Date) =>
   formatDate(date, dateTimeFormat);
 
