@@ -26,6 +26,7 @@ import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
+import LineGraph from '../LineGraph';
 
 const { DASHBOARD_CHARTS_ENABLED } = getConfig();
 
@@ -37,8 +38,6 @@ const getStartedLink = (
     </Link>
   </Typography>
 );
-
-console.log({DASHBOARD_CHARTS_ENABLED})
 
 export default () => (
   <DashboardCard>
@@ -54,9 +53,14 @@ export default () => (
         align-items: center;
       `}
     >
-      <NoData title="Coming Soon." link={getStartedLink}>
-        <img alt="Coming Soon." src={PicClipboard} />
-      </NoData>
+      {DASHBOARD_CHARTS_ENABLED
+        ? <LineGraph />
+        : (
+          <NoData title="Coming Soon." link={getStartedLink}>
+            <img alt="Coming Soon." src={PicClipboard} />
+          </NoData>
+        )
+      }
     </div>
   </DashboardCard>
 );
