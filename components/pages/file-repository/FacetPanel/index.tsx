@@ -286,12 +286,6 @@ export default () => {
     return order.map((order) => options.find((option) => option.key === order)).filter(Boolean);
   };
 
-  // function to manipulate options values eg. to preserve order
-  const prepareOptions = (
-    options: FilterOption[],
-    prepare: (options: FilterOption[]) => FilterOption[],
-  ) => prepare(options);
-
   const getOptions: GetAggregationResult = (facet) => {
     return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
       ...bucket,
@@ -465,7 +459,7 @@ export default () => {
           <TooltipFacet
             {...releaseStageCommonProps}
             key={releaseStageDetails.name}
-            options={prepareOptions(getOptions(releaseStageDetails), orderReleaseStage)}
+            options={orderReleaseStage(getOptions(releaseStageDetails))}
             countUnit={'files'}
             onOptionToggle={onFacetOptionToggle(releaseStageDetails)}
             onSelectAllOptions={onFacetSelectAllOptionsToggle(releaseStageDetails)}
