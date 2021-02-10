@@ -1,8 +1,11 @@
 import React from 'react';
+import d3 from 'd3'
 import { makeMockData } from './mockData';
 
+const data = makeMockData('week');
+const linearScale = d3.scale ? d3.scale.linear : d3.scaleLinear
+
 const LineGraph = () => {
-  const data = makeMockData({ days: 30, intervals: 7 });
 
   return (
     <div>I'm a line graph</div>
