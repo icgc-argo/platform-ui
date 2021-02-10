@@ -573,6 +573,7 @@ export default () => {
         </FacetRow>
         {!loadingFieldDisplayNames &&
           presetFacets
+            // filter out facets that are shown before search bar
             .filter((f) => f.facetPath !== FileFacetPath.release_stage)
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
