@@ -234,9 +234,9 @@ export const toDisplayValue: (value: string, field?: string) => string = (value,
   if (!!field && !!value) {
     const displayName = getDisplayName(field, value);
     return displayName ? displayName : value;
-  } else {
-    return value;
   }
+
+  return value;
 };
 
 export const getTooltipContent = (name: string): React.ReactNode => tooltipContent[name];
