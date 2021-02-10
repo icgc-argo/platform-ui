@@ -435,9 +435,7 @@ export default () => {
   });
 
   // pull out release stage facet to show before search bar
-  const releaseStageDetails = presetFacets.filter(
-    (f) => f.facetPath === FileFacetPath.release_stage,
-  )[0];
+  const releaseStageDetails = presetFacets.find((f) => f.facetPath === FileFacetPath.release_stage);
   const releaseStageCommonProps = commonFacetProps(releaseStageDetails);
 
   return (
