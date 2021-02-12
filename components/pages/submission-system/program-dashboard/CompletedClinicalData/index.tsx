@@ -61,7 +61,7 @@ export default () => (
     <div
       css={css`
         height: 260px;
-        padding-top: 12px;
+        padding: 12px 0;
         /* display: flex;
         flex-direction: column;
         justify-content: center;

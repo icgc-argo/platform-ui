@@ -5,16 +5,16 @@ import { da } from "date-fns/esm/locale";
 const getMax = (data, coord) => Math.max(...data.map(d => d[coord]));
 const getMin = (data, coord) => Math.min(...data.map(d => d[coord]));
 
-const STROKE = 1;
+const STROKE_WIDTH = 1;
 const FONT_SIZE = 10;
 const FONT_FAMILY = 'Work Sans, sans-serif';
-const COLOR = '#525767';
+const COLOR = '#555';
 const axisLabelStyle = {
   color: COLOR,
   fontFamily: FONT_FAMILY,
   fontSize: FONT_SIZE,
 };
-const BORDER_COLOR = '#dcdde1';
+const BORDER_COLOR = '#bbb';
 const QUARTERS_LINE_COLOR= '#c0dcf3';
 const COMMITTED_LINE_COLOR = '#0774d3';
 
@@ -49,12 +49,12 @@ const LineChart = ({
     .join(" ");
 
   const Axis = ({ points }) => (
-    <polyline fill="none" stroke="#ccc" strokeWidth=".5" points={points} />
+    <polyline fill="none" stroke={"magenta"} strokeWidth={STROKE_WIDTH} points={points} />
   );
 
   const XAxis = () => (
     <Axis
-      points={`${padding},${height - padding} ${width - padding},${height -
+      points={`${padding},${height - padding} ${width - padding / 2},${height -
         padding}`}
     />
   );
@@ -64,7 +64,9 @@ const LineChart = ({
   );
 
   const VerticalGuides = () => {
-    const guideCount = numberOfVerticalGuides || data.length - 1;
+    // TODO: change this to quarter lines
+    // const guideCount = numberOfVerticalGuides || data.length - 1;
+    const guideCount = data.length - 1;
 
     const startY = padding;
     const endY = height - padding;
@@ -72,13 +74,13 @@ const LineChart = ({
     return new Array(guideCount).fill(0).map((_, index) => {
       const ratio = (index + 1) / guideCount;
 
-      const xCoordinate = padding + ratio * (width - padding * 2);
+      const xCoordinate = padding + ratio * (width - padding * 1.5);
 
       return (
         <React.Fragment key={index}>
           <polyline
             fill="none"
-            stroke="#ccc"
+            stroke={BORDER_COLOR}
             strokeWidth=".5"
             points={`${xCoordinate},${startY} ${xCoordinate},${endY}`}
           />
@@ -89,7 +91,7 @@ const LineChart = ({
 
   const HorizontalGuides = () => {
     const startX = padding;
-    const endX = width - padding;
+    const endX = width - padding / 2;
 
     return new Array(numberOfHorizontalGuides).fill(0).map((_, index) => {
       const ratio = (index + 1) / numberOfHorizontalGuides;
@@ -100,7 +102,7 @@ const LineChart = ({
         <React.Fragment key={index}>
           <polyline
             fill="none"
-            stroke={"#ccc"}
+            stroke={BORDER_COLOR}
             strokeWidth=".5"
             points={`${startX},${yCoordinate} ${endX},${yCoordinate}`}
           />
@@ -112,22 +114,27 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const y = height - padding;
 
-    return data.map((element, index) => {
-      const x = (index / (data.length - 1)) * chartWidth + padding;
-      return (
-        <text
-          key={index}
-          x={x}
-          y={y}
-          style={axisLabelStyle}
-          textAnchor="middle"
-        >
-          {element.label.split(' ').map(line => (
-            <tspan x={x} dy={FONT_SIZE + 2}>{line}</tspan>
-          ))}
-        </text>
-      );
-    });
+    const xAxisWidth = chartWidth - padding * 3;
+    return (
+      <svg x={-padding * 1.25} y={y} viewBox={`0 0 ${xAxisWidth} ${y}`}>
+        {data.map((element, index) => {
+          const x = (index / (data.length - 1)) * xAxisWidth + padding * 2;
+          return (
+            <text
+              key={index}
+              style={axisLabelStyle}
+              textAnchor="middle"
+              x={x}
+              y={0}
+            >
+              {element.label.split(' ').map(line => (
+                <tspan x={x} dy={FONT_SIZE + 2}>{line}</tspan>
+              ))}
+            </text>
+          );
+        })}
+      </svg>
+    );
   };
 
   const LabelsYAxis = () => {
@@ -154,7 +161,6 @@ const LineChart = ({
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
-      //style={{ border: "0.5px solid #ccc" }}
     >
       <XAxis />
       <LabelsXAxis />
@@ -165,8 +171,8 @@ const LineChart = ({
 
       <polyline
         fill="none"
-        stroke="#0074d9"
-        strokeWidth={STROKE}
+        stroke={COMMITTED_LINE_COLOR}
+        strokeWidth={STROKE_WIDTH}
         points={points}
       />
     </svg>
