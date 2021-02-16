@@ -47,7 +47,7 @@ const LineChart = ({
     .join(" ");
 
   const Axis = ({ points }) => (
-    <polyline fill="none" stroke={"magenta"} strokeWidth={STROKE_WIDTH} points={points} />
+    <polyline fill="none" stroke={BORDER_COLOR} strokeWidth={STROKE_WIDTH} points={points} />
   );
 
   const XAxis = () => (
@@ -87,15 +87,38 @@ const LineChart = ({
     });
   };
 
+  const TicksXAxis = () => {
+    const tickDistance = chartWidth / data.length;
+    const tickYStart = height - padding;
+    const tickYEnd = tickYStart + FONT_SIZE * 0.75;
+    const tickXStart = padding;
+
+    return (
+      <g
+        fill="none"
+        stroke={BORDER_COLOR}
+        strokeWidth={STROKE_WIDTH}
+        >
+        {new Array(data.length).fill(0).map((_, index) => {
+          const tickX = Math.floor(tickXStart + (tickDistance / 2) + (tickDistance * index));
+          return (
+            <polyline
+              key={_}
+              points={`${tickX},${tickYStart} ${tickX},${tickYEnd}`}
+              />
+          );
+        })}
+      </g>
+    );
+  };
+
   const HorizontalGuides = () => {
     const startX = padding;
     const endX = width - padding / 2;
 
     return new Array(numberOfHorizontalGuides).fill(0).map((_, index) => {
       const ratio = (index + 1) / numberOfHorizontalGuides;
-
       const yCoordinate = chartHeight - chartHeight * ratio + padding;
-
       return (
         <React.Fragment key={index}>
           <polyline
@@ -155,6 +178,7 @@ const LineChart = ({
       viewBox={`0 0 ${width} ${height}`}
     >
       <XAxis />
+      <TicksXAxis />
       <LabelsXAxis />
       <YAxis />
       <LabelsYAxis />
