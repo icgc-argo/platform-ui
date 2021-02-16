@@ -37,6 +37,11 @@ const LineChart = ({
   const chartWidth = width - padding * 1.5;
   const chartHeight = height - padding * 2;
 
+  // X axis ticks, labels, and line/point positions
+  // are 1/2 distance from the left and right
+  const xDistance = chartWidth / data.length;
+  const xStart = padding + (xDistance / 2);
+
   const points = data
     .map((element, i) => {
       const x = (i / (data.length - 1)) * chartWidth + padding;
@@ -88,11 +93,8 @@ const LineChart = ({
   };
 
   const TicksXAxis = () => {
-    const tickDistance = chartWidth / data.length;
-    const tickYStart = height - padding;
-    const tickYEnd = tickYStart + FONT_SIZE * 0.5;
-    const tickXStart = padding;
-
+    const yStart = height - padding;
+    const yEnd = yStart + (FONT_SIZE * 0.5);
     return (
       <g
         fill="none"
@@ -100,11 +102,11 @@ const LineChart = ({
         strokeWidth={STROKE_WIDTH}
         >
         {new Array(data.length).fill(0).map((_, index) => {
-          const tickX = Math.floor(tickXStart + (tickDistance / 2) + (tickDistance * index));
+          const tickX = Math.floor(xStart + (xDistance * index));
           return (
             <polyline
               key={_}
-              points={`${tickX},${tickYStart} ${tickX},${tickYEnd}`}
+              points={`${tickX},${yStart} ${tickX},${yEnd}`}
               />
           );
         })}
@@ -134,9 +136,6 @@ const LineChart = ({
 
   const LabelsXAxis = () => {
     const yStart = height - padding + (FONT_SIZE * 1.75);
-    const xDistance = chartWidth / data.length;
-    const xStart = padding + (xDistance / 2);
-
     return data.map((element, index) => {
       const x = xStart + (xDistance * index);
       return (
