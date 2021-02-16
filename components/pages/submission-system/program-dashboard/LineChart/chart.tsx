@@ -41,15 +41,16 @@ const LineChart = ({
   // are 1/2 distance from the left and right
   const xDistance = chartWidth / data.length;
   const xStart = padding + (xDistance / 2);
+  const getX = (index: number) => xStart + (xDistance * index);
 
   const points = data
     .map((element, i) => {
-      const x = (i / (data.length - 1)) * chartWidth + padding;
+      const x = getX(i);
       const y =
         chartHeight - (element.y / maxY) * chartHeight + padding;
       return `${x},${y}`;
     })
-    .join(" ");
+    .join(' ');
 
   const Axis = ({ points }) => (
     <polyline fill="none" stroke={BORDER_COLOR} strokeWidth={STROKE_WIDTH} points={points} />
@@ -84,7 +85,7 @@ const LineChart = ({
           <polyline
             fill="none"
             stroke={BORDER_COLOR}
-            strokeWidth=".5"
+            strokeWidth={STROKE_WIDTH}
             points={`${xCoordinate},${startY} ${xCoordinate},${endY}`}
           />
         </React.Fragment>
@@ -102,7 +103,7 @@ const LineChart = ({
         strokeWidth={STROKE_WIDTH}
         >
         {new Array(data.length).fill(0).map((_, index) => {
-          const tickX = Math.floor(xStart + (xDistance * index));
+          const tickX = getX(index);
           return (
             <polyline
               key={_}
@@ -137,7 +138,7 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const yStart = height - padding + (FONT_SIZE * 1.75);
     return data.map((element, index) => {
-      const x = xStart + (xDistance * index);
+      const x = getX(index);
       return (
         <text
           style={axisLabelStyle}
