@@ -67,7 +67,7 @@ const RangeButton = ({
       onClick={buttonClick}
       style={{...styles.button, ...(isActive ? styles.buttonActive : {})}}
       >
-      {children} {isActive}
+      {children}
     </button>
   )
 }

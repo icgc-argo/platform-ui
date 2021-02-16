@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { da } from "date-fns/esm/locale";
 
 const getMax = (data, coord) => Math.max(...data.map(d => d[coord]));
 const getMin = (data, coord) => Math.min(...data.map(d => d[coord]));
@@ -112,29 +110,23 @@ const LineChart = ({
   };
 
   const LabelsXAxis = () => {
-    const y = height - padding;
-
-    const xAxisWidth = chartWidth - padding * 3;
-    return (
-      <svg x={-padding * 1.25} y={y} viewBox={`0 0 ${xAxisWidth} ${y}`}>
-        {data.map((element, index) => {
-          const x = (index / (data.length - 1)) * xAxisWidth + padding * 2;
-          return (
-            <text
-              key={index}
-              style={axisLabelStyle}
-              textAnchor="middle"
-              x={x}
-              y={0}
-            >
-              {element.label.split(' ').map(line => (
-                <tspan x={x} dy={FONT_SIZE + 2}>{line}</tspan>
-              ))}
-            </text>
-          );
-        })}
-      </svg>
-    );
+    const y = height - padding + FONT_SIZE * 3;
+    return data.map((element, index) => {
+      const x =
+        (index / (data.length - 1)) * chartWidth + padding - FONT_SIZE / 2;
+      return (
+        <text
+          style={axisLabelStyle}
+          textAnchor="middle"
+          x={x}
+          y={y}
+        >
+          {element.label.split(' ').map((word: string, wordIndex: number) => (
+            <tspan x={x} y={FONT_SIZE * wordIndex}>{word}</tspan>
+          ))}
+        </text>
+      );
+    });
   };
 
   const LabelsYAxis = () => {
