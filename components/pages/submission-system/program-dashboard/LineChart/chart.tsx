@@ -90,7 +90,7 @@ const LineChart = ({
   const TicksXAxis = () => {
     const tickDistance = chartWidth / data.length;
     const tickYStart = height - padding;
-    const tickYEnd = tickYStart + FONT_SIZE * 0.75;
+    const tickYEnd = tickYStart + FONT_SIZE * 0.5;
     const tickXStart = padding;
 
     return (
@@ -133,19 +133,19 @@ const LineChart = ({
   };
 
   const LabelsXAxis = () => {
-    const y = height - padding + FONT_SIZE * 3;
+    const yStart = height - padding + (FONT_SIZE * 1.75);
+    const xDistance = chartWidth / data.length;
+    const xStart = padding + (xDistance / 2);
+
     return data.map((element, index) => {
-      const x =
-        (index / (data.length - 1)) * chartWidth + padding - FONT_SIZE / 2;
+      const x = xStart + (xDistance * index);
       return (
         <text
           style={axisLabelStyle}
           textAnchor="middle"
-          x={x}
-          y={y}
-        >
+          >
           {element.label.split(' ').map((word: string, wordIndex: number) => (
-            <tspan x={x} y={FONT_SIZE * wordIndex}>{word}</tspan>
+            <tspan x={x} y={yStart + wordIndex * (FONT_SIZE + 1)}>{word}</tspan>
           ))}
         </text>
       );
