@@ -32,7 +32,7 @@ const rangeControlBarOptions = {
 };
 
 // replace with data import from API
-const mockData = makeMockData('month');
+const mockData = makeMockData('week');
 
 const data = mockData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,

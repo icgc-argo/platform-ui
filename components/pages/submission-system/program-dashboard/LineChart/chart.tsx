@@ -1,12 +1,11 @@
 import React from 'react';
-import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays, fromUnixTime } from 'date-fns';
+import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays, fromUnixTime, compareAsc } from 'date-fns';
 import * as u from './utils';
 
 const options = {
   colors: {
     text: '#555',
-    axisBorder: '#bbb',
-    // quarterBorder: '#c0dcf3',
+    axisBorder: '#888',
     quarterBorder: 'green',
     committedBorder: '#0774d3'
   },
@@ -33,13 +32,11 @@ const LineChart = ({
   width,
 }) => {
   const maxY = u.getMax(data, 'y');
-
   const yAxisDigits =
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   const padding = (options.fontSize + yAxisDigits) * 3;
   const chartWidth = width - padding * 1.5;
-  // left side: 1 padding. right side: 0.5 padding.
   const chartHeight = height - padding * 2;
 
   // X axis ticks, labels, and line/point positions
@@ -51,18 +48,14 @@ const LineChart = ({
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
-  const day1 = u.makeJSEpoch(data[0].x);
-  const day2 = u.makeJSEpoch(data[1].x);
+  const dates = data.map(d => new Date(u.makeJSEpoch(d.x)));
+  const day0 = u.makeJSEpoch(data[0].x);
   const dayLast = u.makeJSEpoch(data[data.length-1].x);
-  const daysDistance = differenceInDays(day2, day1);
-  const daysInData = differenceInDays(dayLast, day1);
-  // days for all of chart width, which may fall outside the data range
-  const daysPadding = daysDistance / 2;
-  const visualDayRange = {
-    start: subDays(day1, daysPadding),
-    end: addDays(dayLast, daysPadding)
+  const daysInData = differenceInDays(dayLast, day0);
+  const dataDayRange = {
+    start: day0,
+    end: dayLast,
   };
-  const dayWidth = xWidthAllTicks / daysInData;
 
   const points = data
     .map((element, i) => {
@@ -92,19 +85,21 @@ const LineChart = ({
     const startY = padding;
     const endY = height - padding;
 
-    const allQuarters = eachQuarterOfInterval(visualDayRange);
-    const quartersInVisualRange = allQuarters
-      .filter(quarter => isAfter(quarter, visualDayRange.start) &&
-        isBefore(quarter, visualDayRange.end));
+    const quartersInRange = eachQuarterOfInterval(dataDayRange)
+      .filter(quarter => isAfter(quarter, dataDayRange.start) &&
+        isBefore(quarter, dataDayRange.end));
+    
+    const quartersLines = quartersInRange.reduce((acc, curr) => {
+      // perfectly position quarters that are on the same day as a tick.
+      const quarterTickIndex = dates
+        .filter((d: Date) => compareAsc(d, curr) === 0)
+        .map((d: Date) => dates.indexOf(d))[0];
 
-    const quartersLines = quartersInVisualRange.reduce((acc, curr) => {
-      const daysToQuarter = differenceInDays(curr, day1);
-      // console.log(curr, day1, daysToQuarter, daysPadding)
-      const quarterPercentage = daysToQuarter / daysInData;
-      const x = xTicksStart + (dayWidth * 12);
-      console.log(daysToQuarter * dayWidth)
-
-      console.log({daysToQuarter, quarterPercentage, x})
+      const x = quarterTickIndex >= 0
+        ? getX(quarterTickIndex)
+        : xTicksStart + (
+            differenceInDays(curr, day0) / daysInData * xWidthAllTicks
+          );
 
       return ([
         ...acc,

@@ -19,7 +19,7 @@ const mockDataArgs = {
 const getDates = ({ days, intervals }: { days: number, intervals: number }) => {
   // const startDate = startOfToday();
   // use this to fake quarters on weekly/monthly view
-  const startDate = new Date('2022-04-13T00:00:00');
+  const startDate = new Date('2022-04-05T00:00:00');
   return [...Array(intervals).keys()]
     .sort((a, b) => b - a)
     .map((x: number) => subDate(startDate, { days: Math.floor(days / intervals * x) }))
