@@ -42,11 +42,13 @@ const LineChart = ({
   const chartHeight = height - padding * 2;
 
   // X axis ticks, labels, and line/point positions
-  // are 1/2 distance from the left and right
-  const xDistance = chartWidth / data.length;
-  const xChartPadding = xDistance / 2;
-  const xStart = padding + xChartPadding;
-  const getX = (index: number) => xStart + (xDistance * index);
+  // are 1/2 tick distance from the left and right
+  const xTickDistance = chartWidth / data.length;
+  // distance between farthest left & right ticks
+  const xWidthAllTicks = (data.length - 1) * xTickDistance;
+  const xChartPadding = Math.floor(xTickDistance / 2);
+  const xTicksStart = padding + xChartPadding;
+  const getX = (index: number) => xTicksStart + (xTickDistance * index);
 
   const points = data
     .map((element, i) => {
@@ -73,31 +75,36 @@ const LineChart = ({
   );
 
   const QuarterLines = () => {
-    const startY = padding ;
+    const startY = padding;
     const endY = height - padding;
     const day1 = u.makeJSEpoch(data[0].x);
     const day2 = u.makeJSEpoch(data[1].x);
     const dayLast = u.makeJSEpoch(data[data.length-1].x);
     const daysDistance = differenceInDays(day2, day1);
 
-    // won't show quarter lines on the far left/right
-    // if X axis points are 1 day apart (i.e. week view)
-    // TODO handle quarter line placement differently for week view!
-    const daysDistanceHalf = Math.floor(daysDistance / 2);
+    // days for all of chart width, which may fall outside the data range
+    const daysPadding = Math.floor(daysDistance / 2);
+    const hasMoreDaysThanPoints = !!daysPadding;
     const visualDayRange = {
-      start: subDays(day1, daysDistanceHalf),
-      end: addDays(dayLast, daysDistanceHalf)
+      start: subDays(day1, daysPadding),
+      end: addDays(dayLast, daysPadding)
     };
 
-    const allQuarters = eachQuarterOfInterval(visualDayRange);
-    const quartersInRange = allQuarters
+    const allQuarters = eachQuarterOfInterval(visualDayRange)
+      // add a day so they'll be positioned properly.
+      .map(quarter => addDays(quarter, 1));
+    const quartersInVisualRange = allQuarters
       .filter(quarter => isAfter(quarter, visualDayRange.start) &&
         isBefore(quarter, visualDayRange.end));
     const daysInVisualRange = differenceInDays(visualDayRange.end, visualDayRange.start);
 
-    const quartersLines = quartersInRange.reduce((acc, curr) => {
+    const quartersLines = quartersInVisualRange.reduce((acc, curr) => {
       const daysToQuarter = differenceInDays(curr, visualDayRange.start);
-      const x = padding + Math.floor(daysToQuarter / daysInVisualRange * chartWidth);
+      const quarterPercentage = daysToQuarter / daysInVisualRange;
+      const x = hasMoreDaysThanPoints
+        ? padding + (quarterPercentage * chartWidth)
+        : xTicksStart + (quarterPercentage * xWidthAllTicks);
+
       return ([
         ...acc,
         {
