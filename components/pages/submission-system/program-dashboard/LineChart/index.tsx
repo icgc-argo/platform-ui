@@ -32,7 +32,7 @@ const rangeControlBarOptions = {
 };
 
 // replace with data import from API
-const mockData = makeMockData('year');
+const mockData = makeMockData('week');
 
 const data = mockData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,
@@ -68,11 +68,12 @@ const LineGraphWrapper = () => {
         style={{ border: '1px solid pink', width: '100%', filter: `blur(${resizing ? 8 : 0}px)`}}
         >
         <LineChart
-          width={width}
-          height={240}
           data={data}
+          hasQuarterLines
+          height={240}
           horizontalGuides={4}
           precision={0}
+          width={width}
           />
       </div>
     </>

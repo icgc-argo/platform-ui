@@ -72,10 +72,10 @@ export default () => (
         ? (
           <LineChart
             data={lineChartData}
+            hasQuarterLines
             height={300}
             horizontalGuides={5}
             precision={0}
-            verticalGuides={1}
             width={500}
             />
           )

@@ -1,5 +1,5 @@
 import React from 'react';
-import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, subDays } from 'date-fns';
+import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays } from 'date-fns';
 import * as u from './utils';
 
 const options = {
@@ -12,10 +12,8 @@ const options = {
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
   strokeWidth: 1,
-  tickHeight: 10,
+  xTickHeight: 5,
 };
-
-options.tickHeight = options.fontSize * 0.5;
 
 const styles = {
   axisLabel: {
@@ -27,20 +25,16 @@ const styles = {
 
 const LineChart = ({
   data,
+  hasQuarterLines = false,
   height,
-  width,
   horizontalGuides: numberOfHorizontalGuides,
-  precision
+  precision,
+  width,
 }) => {
-  // X is only used for positioning, should be 0 - {nPoints}
-  const minX = u.getMin(data, 'x');
-  const maxX = u.getMax(data, 'x');
-  const minY = u.getMin(data, 'y');
   const maxY = u.getMax(data, 'y');
 
   const yAxisDigits =
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
-  console.log({ yAxisDigits })
 
   const padding = (options.fontSize + yAxisDigits) * 3;
   const chartWidth = width - padding * 1.5;
@@ -79,7 +73,6 @@ const LineChart = ({
   );
 
   const QuarterLines = () => {
-    // use if X = unix epoch time
     const startY = padding ;
     const endY = height - padding;
     const day1 = u.makeJSEpoch(data[0].x);
@@ -118,12 +111,13 @@ const LineChart = ({
       <g
         stroke={options.colors.quarterBorder}
         strokeWidth={options.strokeWidth}
-        stroke-dasharray="5, 5"
+        strokeDasharray="5, 5"
         >
-          {quartersLines.map(qL => (
+          {quartersLines.map(line => (
             <polyline
-            points={`${qL.x},${startY} ${qL.x},${endY}`}
-            />
+              key={line.x}
+              points={`${line.x},${startY} ${line.x},${endY}`}
+              />
           ))}
       </g>
     );
@@ -131,7 +125,7 @@ const LineChart = ({
 
   const TicksXAxis = () => {
     const yStart = height - padding;
-    const yEnd = yStart + options.tickHeight;
+    const yEnd = yStart + options.xTickHeight;
     return (
       <g
         fill="none"
@@ -218,7 +212,7 @@ const LineChart = ({
       <LabelsXAxis />
       <YAxis />
       <LabelsYAxis />
-      <QuarterLines />
+      {hasQuarterLines && <QuarterLines />}
       <HorizontalGuides />
 
       <polyline

@@ -1,5 +1,7 @@
 import { startOfToday, format as formatDate, sub as subDate } from 'date-fns';
 
+type MockDataArg = keyof typeof mockDataArgs;
+
 const mockDataStub = {
   clinical: [''],
   molecular: ['DNA Raw Reads', 'Alignment', 'Sanger VC', 'Mutect2', 'RNA Raw Reads', 'RNA-Seq1', 'RNA-Seq2'],
@@ -12,11 +14,13 @@ const mockDataArgs = {
   month: { days: 30, intervals: 7 },
   week: { days: 7, intervals: 7 },
 };
-type MockDataArg = keyof typeof mockDataArgs;
 
 // move this to backend probably
 const getDates = ({ days, intervals }: { days: number, intervals: number }) => {
-  const today = startOfToday();
+  // const today = startOfToday();
+  // use this to fake quarters on weekly/monthly view
+  const today = new Date('Sat Apr 3 2021 00:00:00 GMT-0500 (Eastern Standard Time)');
+  console.log({ today })
   return [...Array(intervals).keys()]
     .sort((a, b) => b - a)
     .map((x: number) => subDate(today, { days: Math.floor(days / intervals * x) }))
