@@ -74,7 +74,7 @@ const RangeButton = ({
 
 const RangeControlBar = ({ handleClick, options }) => {
   const [activeButton, setActiveButton] = useState(options.buttons[0].title);
-  console.log({activeButton})
+
   return (
     <div style={styles.bar}>
       <div>

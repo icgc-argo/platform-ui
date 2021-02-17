@@ -1,5 +1,5 @@
 import React from 'react';
-import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays } from 'date-fns';
+import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays, fromUnixTime } from 'date-fns';
 import * as u from './utils';
 
 const options = {
@@ -37,7 +37,7 @@ const LineChart = ({
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   const padding = (options.fontSize + yAxisDigits) * 3;
-  const chartWidth = width - padding * 1.5;
+  const chartWidth = Math.floor(width - padding * 1.5);
   // left side: 1 padding. right side: 0.5 padding.
   const chartHeight = height - padding * 2;
 
@@ -45,10 +45,10 @@ const LineChart = ({
   // are 1/2 tick distance from the left and right
   const xTickDistance = chartWidth / data.length;
   // distance between farthest left & right ticks
-  const xWidthAllTicks = (data.length - 1) * xTickDistance;
-  const xChartPadding = Math.floor(xTickDistance / 2);
+  const xWidthAllTicks = Math.floor((data.length - 1) * xTickDistance);
+  const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
-  const getX = (index: number) => xTicksStart + (xTickDistance * index);
+  const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
   const points = data
     .map((element, i) => {
@@ -83,27 +83,32 @@ const LineChart = ({
     const daysDistance = differenceInDays(day2, day1);
 
     // days for all of chart width, which may fall outside the data range
-    const daysPadding = Math.floor(daysDistance / 2);
+    const daysPadding = daysDistance / 2;
     const hasMoreDaysThanPoints = !!daysPadding;
     const visualDayRange = {
       start: subDays(day1, daysPadding),
       end: addDays(dayLast, daysPadding)
     };
 
-    const allQuarters = eachQuarterOfInterval(visualDayRange)
-      // add a day so they'll be positioned properly.
-      .map(quarter => addDays(quarter, 1));
+    const allQuarters = eachQuarterOfInterval(visualDayRange);
     const quartersInVisualRange = allQuarters
       .filter(quarter => isAfter(quarter, visualDayRange.start) &&
         isBefore(quarter, visualDayRange.end));
     const daysInVisualRange = differenceInDays(visualDayRange.end, visualDayRange.start);
 
+    const dates = data.map(d => fromUnixTime(d.x));
+
+    // console.log({ dates, quartersInVisualRange });
+
     const quartersLines = quartersInVisualRange.reduce((acc, curr) => {
       const daysToQuarter = differenceInDays(curr, visualDayRange.start);
-      const quarterPercentage = daysToQuarter / daysInVisualRange;
-      const x = hasMoreDaysThanPoints
-        ? padding + (quarterPercentage * chartWidth)
-        : xTicksStart + (quarterPercentage * xWidthAllTicks);
+      console.log(curr, visualDayRange.start, daysToQuarter, daysPadding)
+      const quarterPercentage = Number((daysToQuarter / daysInVisualRange).toFixed(2));
+      const x = Math.floor(hasMoreDaysThanPoints
+        ? padding + (quarterPercentage * xWidthAllTicks)
+        : xTicksStart + (quarterPercentage * xWidthAllTicks));
+
+      console.log({quarterPercentage, x, chartWidth, xWidthAllTicks})
 
       return ([
         ...acc,
