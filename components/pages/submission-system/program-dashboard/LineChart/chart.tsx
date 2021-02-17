@@ -6,12 +6,13 @@ const options = {
   colors: {
     text: '#555',
     axisBorder: '#bbb',
-    quarterBorder: '#c0dcf3',
+    // quarterBorder: '#c0dcf3',
+    quarterBorder: 'green',
     committedBorder: '#0774d3'
   },
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
-  strokeWidth: 1,
+  strokeWidth: 0.5,
   xTickHeight: 5,
 };
 
@@ -37,7 +38,7 @@ const LineChart = ({
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   const padding = (options.fontSize + yAxisDigits) * 3;
-  const chartWidth = Math.floor(width - padding * 1.5);
+  const chartWidth = width - padding * 1.5;
   // left side: 1 padding. right side: 0.5 padding.
   const chartHeight = height - padding * 2;
 
@@ -45,10 +46,23 @@ const LineChart = ({
   // are 1/2 tick distance from the left and right
   const xTickDistance = chartWidth / data.length;
   // distance between farthest left & right ticks
-  const xWidthAllTicks = Math.floor((data.length - 1) * xTickDistance);
+  const xWidthAllTicks = (data.length - 1) * xTickDistance;
   const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
+
+  const day1 = u.makeJSEpoch(data[0].x);
+  const day2 = u.makeJSEpoch(data[1].x);
+  const dayLast = u.makeJSEpoch(data[data.length-1].x);
+  const daysDistance = differenceInDays(day2, day1);
+  const daysInData = differenceInDays(dayLast, day1);
+  // days for all of chart width, which may fall outside the data range
+  const daysPadding = daysDistance / 2;
+  const visualDayRange = {
+    start: subDays(day1, daysPadding),
+    end: addDays(dayLast, daysPadding)
+  };
+  const dayWidth = xWidthAllTicks / daysInData;
 
   const points = data
     .map((element, i) => {
@@ -77,38 +91,20 @@ const LineChart = ({
   const QuarterLines = () => {
     const startY = padding;
     const endY = height - padding;
-    const day1 = u.makeJSEpoch(data[0].x);
-    const day2 = u.makeJSEpoch(data[1].x);
-    const dayLast = u.makeJSEpoch(data[data.length-1].x);
-    const daysDistance = differenceInDays(day2, day1);
-
-    // days for all of chart width, which may fall outside the data range
-    const daysPadding = daysDistance / 2;
-    const hasMoreDaysThanPoints = !!daysPadding;
-    const visualDayRange = {
-      start: subDays(day1, daysPadding),
-      end: addDays(dayLast, daysPadding)
-    };
 
     const allQuarters = eachQuarterOfInterval(visualDayRange);
     const quartersInVisualRange = allQuarters
       .filter(quarter => isAfter(quarter, visualDayRange.start) &&
         isBefore(quarter, visualDayRange.end));
-    const daysInVisualRange = differenceInDays(visualDayRange.end, visualDayRange.start);
-
-    const dates = data.map(d => fromUnixTime(d.x));
-
-    // console.log({ dates, quartersInVisualRange });
 
     const quartersLines = quartersInVisualRange.reduce((acc, curr) => {
-      const daysToQuarter = differenceInDays(curr, visualDayRange.start);
-      console.log(curr, visualDayRange.start, daysToQuarter, daysPadding)
-      const quarterPercentage = Number((daysToQuarter / daysInVisualRange).toFixed(2));
-      const x = Math.floor(hasMoreDaysThanPoints
-        ? padding + (quarterPercentage * xWidthAllTicks)
-        : xTicksStart + (quarterPercentage * xWidthAllTicks));
+      const daysToQuarter = differenceInDays(curr, day1);
+      // console.log(curr, day1, daysToQuarter, daysPadding)
+      const quarterPercentage = daysToQuarter / daysInData;
+      const x = xTicksStart + (dayWidth * 12);
+      console.log(daysToQuarter * dayWidth)
 
-      console.log({quarterPercentage, x, chartWidth, xWidthAllTicks})
+      console.log({daysToQuarter, quarterPercentage, x})
 
       return ([
         ...acc,
