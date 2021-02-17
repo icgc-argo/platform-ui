@@ -32,7 +32,7 @@ const rangeControlBarOptions = {
 };
 
 // replace with data import from API
-const mockData = makeMockData('week');
+const mockData = makeMockData('year');
 
 const data = mockData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,
@@ -48,7 +48,7 @@ const LineGraphWrapper = () => {
   const { resizing, width } = useElementDimension(lineChartRef);
   const [lineChartData, setLineChartData] = useState(data);
 
-  console.log({ width })
+  // console.log({ width })
 
   // 1. click buttons to set active button
   // 2. on click, change which data is live
@@ -71,9 +71,8 @@ const LineGraphWrapper = () => {
           width={width}
           height={240}
           data={data}
-          horizontalGuides={5}
+          horizontalGuides={4}
           precision={0}
-          verticalGuides={1}
           />
       </div>
     </>

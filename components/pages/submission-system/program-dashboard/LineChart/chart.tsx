@@ -1,46 +1,57 @@
-import React from "react";
+import React from 'react';
+import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, subDays } from 'date-fns';
+import * as u from './utils';
 
-const getMax = (data, coord) => Math.max(...data.map(d => d[coord]));
-const getMin = (data, coord) => Math.min(...data.map(d => d[coord]));
-
-const STROKE_WIDTH = 1;
-const FONT_SIZE = 10;
-const FONT_FAMILY = 'Work Sans, sans-serif';
-const COLOR = '#555';
-const axisLabelStyle = {
-  color: COLOR,
-  fontFamily: FONT_FAMILY,
-  fontSize: FONT_SIZE,
+const options = {
+  colors: {
+    text: '#555',
+    axisBorder: '#bbb',
+    quarterBorder: '#c0dcf3',
+    committedBorder: '#0774d3'
+  },
+  fontFamily: 'Work Sans, sans-serif',
+  fontSize: 10,
+  strokeWidth: 1,
+  tickHeight: 10,
 };
-const BORDER_COLOR = '#bbb';
-const QUARTERS_LINE_COLOR= '#c0dcf3';
-const COMMITTED_LINE_COLOR = '#0774d3';
+
+options.tickHeight = options.fontSize * 0.5;
+
+const styles = {
+  axisLabel: {
+    color: options.colors.text,
+    fontFamily: options.fontFamily,
+    fontSize: options.fontSize,
+  }
+};
 
 const LineChart = ({
   data,
   height,
   width,
   horizontalGuides: numberOfHorizontalGuides,
-  verticalGuides: numberOfVerticalGuides,
   precision
 }) => {
   // X is only used for positioning, should be 0 - {nPoints}
-  const minX = getMin(data, 'x');
-  const maxX = getMax(data, 'x');
-  const minY = getMin(data, 'y');
-  const maxY = getMax(data, 'y');
+  const minX = u.getMin(data, 'x');
+  const maxX = u.getMax(data, 'x');
+  const minY = u.getMin(data, 'y');
+  const maxY = u.getMax(data, 'y');
 
-  const digits =
+  const yAxisDigits =
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
+  console.log({ yAxisDigits })
 
-  const padding = (FONT_SIZE + digits) * 3;
+  const padding = (options.fontSize + yAxisDigits) * 3;
   const chartWidth = width - padding * 1.5;
+  // left side: 1 padding. right side: 0.5 padding.
   const chartHeight = height - padding * 2;
 
   // X axis ticks, labels, and line/point positions
   // are 1/2 distance from the left and right
   const xDistance = chartWidth / data.length;
-  const xStart = padding + (xDistance / 2);
+  const xChartPadding = xDistance / 2;
+  const xStart = padding + xChartPadding;
   const getX = (index: number) => xStart + (xDistance * index);
 
   const points = data
@@ -53,7 +64,7 @@ const LineChart = ({
     .join(' ');
 
   const Axis = ({ points }) => (
-    <polyline fill="none" stroke={BORDER_COLOR} strokeWidth={STROKE_WIDTH} points={points} />
+    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={points} />
   );
 
   const XAxis = () => (
@@ -67,40 +78,65 @@ const LineChart = ({
     <Axis points={`${padding},${padding} ${padding},${height - padding}`} />
   );
 
-  const VerticalGuides = () => {
-    // TODO: change this to quarter lines
-    // const guideCount = numberOfVerticalGuides || data.length - 1;
-    const guideCount = data.length - 1;
-
-    const startY = padding;
+  const QuarterLines = () => {
+    // use if X = unix epoch time
+    const startY = padding ;
     const endY = height - padding;
+    const day1 = u.makeJSEpoch(data[0].x);
+    const day2 = u.makeJSEpoch(data[1].x);
+    const dayLast = u.makeJSEpoch(data[data.length-1].x);
+    const daysDistance = differenceInDays(day2, day1);
 
-    return new Array(guideCount).fill(0).map((_, index) => {
-      const ratio = (index + 1) / guideCount;
+    // won't show quarter lines on the far left/right
+    // if X axis points are 1 day apart (i.e. week view)
+    // TODO handle quarter line placement differently for week view!
+    const daysDistanceHalf = Math.floor(daysDistance / 2);
+    const visualDayRange = {
+      start: subDays(day1, daysDistanceHalf),
+      end: addDays(dayLast, daysDistanceHalf)
+    };
 
-      const xCoordinate = padding + ratio * (width - padding * 1.5);
+    const allQuarters = eachQuarterOfInterval(visualDayRange);
+    const quartersInRange = allQuarters
+      .filter(quarter => isAfter(quarter, visualDayRange.start) &&
+        isBefore(quarter, visualDayRange.end));
+    const daysInVisualRange = differenceInDays(visualDayRange.end, visualDayRange.start);
 
-      return (
-        <React.Fragment key={index}>
-          <polyline
-            fill="none"
-            stroke={BORDER_COLOR}
-            strokeWidth={STROKE_WIDTH}
-            points={`${xCoordinate},${startY} ${xCoordinate},${endY}`}
-          />
-        </React.Fragment>
-      );
-    });
+    const quartersLines = quartersInRange.reduce((acc, curr) => {
+      const daysToQuarter = differenceInDays(curr, visualDayRange.start);
+      const x = padding + Math.floor(daysToQuarter / daysInVisualRange * chartWidth);
+      return ([
+        ...acc,
+        {
+          x,
+          tooltip: `${getYear(curr)} Q${getQuarter(curr)}`,
+        }
+      ])
+    },[]);
+
+    return (
+      <g
+        stroke={options.colors.quarterBorder}
+        strokeWidth={options.strokeWidth}
+        stroke-dasharray="5, 5"
+        >
+          {quartersLines.map(qL => (
+            <polyline
+            points={`${qL.x},${startY} ${qL.x},${endY}`}
+            />
+          ))}
+      </g>
+    );
   };
 
   const TicksXAxis = () => {
     const yStart = height - padding;
-    const yEnd = yStart + (FONT_SIZE * 0.5);
+    const yEnd = yStart + options.tickHeight;
     return (
       <g
         fill="none"
-        stroke={BORDER_COLOR}
-        strokeWidth={STROKE_WIDTH}
+        stroke={options.colors.axisBorder}
+        strokeWidth={options.strokeWidth}
         >
         {new Array(data.length).fill(0).map((_, index) => {
           const tickX = getX(index);
@@ -126,7 +162,7 @@ const LineChart = ({
         <React.Fragment key={index}>
           <polyline
             fill="none"
-            stroke={BORDER_COLOR}
+            stroke={options.colors.axisBorder}
             strokeWidth=".5"
             points={`${startX},${yCoordinate} ${endX},${yCoordinate}`}
           />
@@ -136,16 +172,16 @@ const LineChart = ({
   };
 
   const LabelsXAxis = () => {
-    const yStart = height - padding + (FONT_SIZE * 1.75);
+    const yStart = height - padding + (options.fontSize * 1.75);
     return data.map((element, index) => {
       const x = getX(index);
       return (
         <text
-          style={axisLabelStyle}
+          style={styles.axisLabel}
           textAnchor="middle"
           >
           {element.label.split(' ').map((word: string, wordIndex: number) => (
-            <tspan x={x} y={yStart + wordIndex * (FONT_SIZE + 1)}>{word}</tspan>
+            <tspan x={x} y={yStart + wordIndex * (options.fontSize + 1)}>{word}</tspan>
           ))}
         </text>
       );
@@ -155,17 +191,17 @@ const LineChart = ({
   const LabelsYAxis = () => {
     const PARTS = numberOfHorizontalGuides;
     return new Array(PARTS + 1).fill(0).map((_, index) => {
-      const x = FONT_SIZE;
+      const x = options.fontSize;
       const ratio = index / numberOfHorizontalGuides;
 
       const yCoordinate =
-        chartHeight - chartHeight * ratio + padding + FONT_SIZE / 2;
+        chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
       return (
         <text
           key={index}
           x={x}
           y={yCoordinate}
-          style={axisLabelStyle}
+          style={styles.axisLabel}
         >
           {parseFloat(maxY * (index / PARTS)).toFixed(precision)}
         </text>
@@ -182,13 +218,13 @@ const LineChart = ({
       <LabelsXAxis />
       <YAxis />
       <LabelsYAxis />
-      {numberOfVerticalGuides && <VerticalGuides />}
+      <QuarterLines />
       <HorizontalGuides />
 
       <polyline
         fill="none"
-        stroke={COMMITTED_LINE_COLOR}
-        strokeWidth={STROKE_WIDTH}
+        stroke={options.colors.committedBorder}
+        strokeWidth={options.strokeWidth}
         points={points}
       />
     </svg>
