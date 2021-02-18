@@ -277,20 +277,11 @@ export default ({
       ],
     },
     {
-      columns: [
-        {
-          Header: 'Processing Status',
-          accessor: 'processingStatus',
-          Cell: ProcessingCell,
-        },
-        {
-          Header: 'Last Updated',
-          accessor: 'updatedAt',
-          Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return <div>{displayDate(original.updatedAt)}</div>;
-          },
-        },
-      ],
+      Header: 'Last Updated',
+      accessor: 'updatedAt',
+      Cell: ({ original }: { original: DonorSummaryRecord }) => {
+        return <div>{displayDate(original.updatedAt)}</div>;
+      },
     },
   ];
 
