@@ -1,5 +1,5 @@
 import React from 'react';
-import { addDays, differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, isDate, subDays, fromUnixTime, compareAsc } from 'date-fns';
+import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import * as u from './utils';
 
 const options = {
@@ -40,30 +40,34 @@ const LineChartEl = ({
 
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const xTickDistance = chartWidth / data.length;
+  const dataDates = data.lines[0].points;
+  const xTicks = dataDates.length;
+  const xTickDistance = chartWidth / xTicks;
   // distance between farthest left & right ticks
-  const xWidthAllTicks = (data.length - 1) * xTickDistance;
+  const xWidthAllTicks = (xTicks - 1) * xTickDistance;
   const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
-  const dates = data.map(d => new Date(u.makeJSEpoch(d.x)));
-  const day0 = u.makeJSEpoch(data[0].x);
-  const dayLast = u.makeJSEpoch(data[data.length-1].x);
+  const datesEpoch = dataDates.map(p => p.x);
+  const dates = datesEpoch.map(d => new Date(u.makeJSEpoch(d)));
+  const day0 = u.makeJSEpoch(datesEpoch[0]);
+  const dayLast = u.makeJSEpoch(datesEpoch[datesEpoch.length-1]);
   const daysInData = differenceInDays(dayLast, day0);
   const dataDayRange = {
     start: day0,
     end: dayLast,
   };
 
-  const points = data
-    .map((element, i) => {
-      const x = getX(i);
-      const y =
-        chartHeight - (element.y / maxY) * chartHeight + padding;
-      return `${x},${y}`;
-    })
-    .join(' ');
+  const polylineCoords = data.lines
+    .map(line => line.points
+      .map((point, i) => {
+        const x = getX(i);
+        const y = Math.floor(chartHeight - (point.y / maxY) * chartHeight + padding);
+        return `${x},${y}`;
+      })
+      .join(' ')
+    );
 
   const Axis = ({ points }) => (
     <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={points} />
@@ -134,7 +138,7 @@ const LineChartEl = ({
         stroke={options.colors.axisBorder}
         strokeWidth={options.strokeWidth}
         >
-        {new Array(data.length).fill(0).map((_, index) => {
+        {new Array(xTicks).fill(0).map((_, index) => {
           const tickX = getX(index);
           return (
             <polyline
@@ -169,7 +173,7 @@ const LineChartEl = ({
 
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
-    return data.map((element, index) => {
+    return dataDates.map((element, index) => {
       const x = getX(index);
       return (
         <text
@@ -217,12 +221,14 @@ const LineChartEl = ({
       {hasQuarterLines && <QuarterLines />}
       <HorizontalGuides />
 
-      <polyline
+      {polylineCoords.map((points: string) => (
+        <polyline
         fill="none"
         stroke={options.colors.committedBorder}
         strokeWidth={options.strokeWidth}
         points={points}
-      />
+        />
+      ))}
     </svg>
   );
 };

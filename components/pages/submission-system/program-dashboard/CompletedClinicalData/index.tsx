@@ -50,11 +50,8 @@ export default () => {
   useEffect(() => {
     const days = find(u.rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
-    console.log({ mockData })
     const adjustedData = adjustData(mockData);
-    console.log({ adjustedData })
     const clinicalData = find(adjustedData, { chartType: 'molecular'});
-    console.log({ clinicalData })
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
