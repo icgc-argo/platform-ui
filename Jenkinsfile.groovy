@@ -107,26 +107,6 @@ spec:
             }
         }
 
-// THE NEXT BLOCK OF CODE IS DESIGNATED FOR TESTING PIPELINE CHANGES ONLY
-// MAKE SURE TO DELETE EVERYTHING BETWEEN THIS LINE AND THE NEXT COMMENT LINE STARTING WITH // END-OF-TESTING-BLOCK
-
-        stage('Validate things still work') {
-            when {
-                branch "Docker-registry-change"
-            }
-            steps {
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
-                    }
-                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
-                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
-                }
-            }
-        }
-
-// END-OF-TESTING-BLOCK
-        
         stage('Publish uikit') {
             when {
                 branch "develop"
