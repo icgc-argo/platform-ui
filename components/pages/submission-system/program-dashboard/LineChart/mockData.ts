@@ -6,7 +6,12 @@ const mockDataStub = {
 };
 const committedDonors = 2000;
 const intervals = 7;
-const getRandomDonors = (count: number) => [...Array(count).keys()].map(k => Math.floor(Math.random() * committedDonors)).sort((a,b) => a - b);
+const getRandomDonors = (count: number) => (
+  [...Array(mockDataStub.molecular.length).keys()]
+    .map(_ => ([...Array(count).keys()]
+      .map(k => Math.floor(Math.random() * committedDonors)).sort((a,b) => a - b)
+    ))
+);
 
 // move this to backend probably
 const getDates = (days: number) => {
@@ -24,14 +29,15 @@ const getDates = (days: number) => {
 export const makeMockData = (days: number) => {
   const dates = getDates(days);
   const donors = getRandomDonors(dates.length);
+  console.log({ donors })
   return Object.keys(mockDataStub).map(chartType => ({
     chartType,
     committedDonors,
-    lines: mockDataStub[chartType].map((title: string) => ({
+    lines: mockDataStub[chartType].map((title: string, n: number) => ({
       title,
-      points: dates.map((date, i) => ({
+      points: dates.map((date, i: number) => ({
         date,
-        donors: donors[i]
+        donors: donors[n][i]
       }))
     }))
   }));
