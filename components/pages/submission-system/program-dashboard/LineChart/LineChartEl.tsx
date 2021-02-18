@@ -23,7 +23,7 @@ const styles = {
   }
 };
 
-const LineChart = ({
+const LineChartEl = ({
   data,
   hasQuarterLines = false,
   height,
@@ -228,4 +228,4 @@ const LineChart = ({
   );
 };
 
-export default LineChart;
+export default LineChartEl;

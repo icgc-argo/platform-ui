@@ -23,26 +23,12 @@ import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
-import { format as formatDate } from 'date-fns';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import LineChart from '../LineChart';
-import { makeMockData } from '../LineChart/mockData';
 
 const { DASHBOARD_CHARTS_ENABLED } = getConfig();
-
-// DASHBOARD_CHARTS_ENABLED
-// TODO: when the API is ready, this will probably not stay here.
-const mockLineChartData = makeMockData(365);
-const lineChartData = mockLineChartData[0].lines[0].points.map(({ date, donors }) => ({
-  x: date,
-  y: donors,
-  // TODO: only show year for first instance
-  label: formatDate(date*1000, 'd MMM yyyy'),
-  // TODO: add line name to tooltip for molecular, e.g. "Raw Reads"
-  tooltip: [formatDate(date*1000, 'MMM d, yyyy'), `${donors} donors`],
-}));
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -70,14 +56,7 @@ export default () => (
     >
       {DASHBOARD_CHARTS_ENABLED
         ? (
-          <LineChart
-            data={lineChartData}
-            hasQuarterLines
-            height={300}
-            horizontalGuides={5}
-            precision={0}
-            width={500}
-            />
+          <LineChart />
           )
         : (
           <NoData title="Coming Soon." link={getStartedLink}>
