@@ -31,7 +31,6 @@ const LineChartEl = ({
   precision,
   width,
 }) => {
-  if (!data) return;
   const maxY = u.getMax(data, 'y');
   const yAxisDigits =
     parseFloat(maxY.toString()).toFixed(precision).length + 1;

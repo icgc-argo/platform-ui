@@ -37,11 +37,19 @@ export const makeMockData = (days: number) => {
   }));
 };
 
-export const adjustData = mockData => mockData[0].lines[0].points.map(({ date, donors }) => ({
-  x: date,
-  y: donors,
-  // TODO: only show year for first instance
-  label: formatDate(date*1000, 'd MMM yyyy'),
-  // TODO: add line name to tooltip for molecular, e.g. "Raw Reads"
-  tooltip: [formatDate(date*1000, 'MMM d, yyyy'), `${donors} donors`],
-}));
+export const adjustData = mockData => mockData
+  .map(d => ({
+    ...d,
+    lines: d.lines.map(line => ({
+      ...line,
+      points: line.points.map(({ date, donors }) => ({
+        x: date,
+        y: donors,
+        // TODO: only show year for first instance
+        label: formatDate(date*1000, 'd MMM yyyy'),
+        // TODO: add line name to tooltip for molecular, e.g. "Raw Reads"
+        tooltip: [formatDate(date*1000, 'MMM d, yyyy'), `${donors} donors`],
+      }))
+    }))
+  })
+);
