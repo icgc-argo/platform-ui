@@ -46,8 +46,6 @@ const LineGraphWrapper = () => {
   const [lineChartData, setLineChartData] = useState(data);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
-  console.log({ activeRangeBtn })
-  
   // 1. set state: which button is active 
   // 2. click buttons to set active button
   // 3. on click, change which data is live

@@ -66,7 +66,6 @@ const RangeButton = ({
 }
 
 const RangeControlBar = ({ activeBtn, buttons, handleBtnClick, rangeArray }) => {
-  console.log({ activeBtn })
   return (
     <div style={styles.bar}>
       <div>
