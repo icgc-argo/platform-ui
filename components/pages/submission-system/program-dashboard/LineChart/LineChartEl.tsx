@@ -31,9 +31,8 @@ const LineChartEl = ({
   precision,
   width,
 }) => {
-  const maxY = u.getMax(data, 'y');
-  const yAxisDigits =
-    parseFloat(maxY.toString()).toFixed(precision).length + 1;
+  const maxY = u.getMinMax(data, 'max', 'y');
+  const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   const padding = (options.fontSize + yAxisDigits) * 3;
   const chartWidth = width - padding * 1.5;

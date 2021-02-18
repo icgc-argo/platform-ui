@@ -53,7 +53,7 @@ export default () => {
     console.log({ mockData })
     const adjustedData = adjustData(mockData);
     console.log({ adjustedData })
-    const clinicalData = find(adjustedData, { chartType: 'clinical'});
+    const clinicalData = find(adjustedData, { chartType: 'molecular'});
     console.log({ clinicalData })
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
