@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 type RangeButtonProps = {
   children: any;
-  data: any;
+  handleClick: () => void;
   isActive: boolean;
-  handleClick: any;
-  setActiveButton: any;
-  title: string;
+  label: string;
 };
 
 const styles = {
@@ -24,6 +22,7 @@ const styles = {
     background: 'transparent',
     border: '0 none',
     color: '#525767',
+    cursor: 'pointer',
     display: 'inline-block',
     fontFamily: 'Work Sans, sans-serif',
     fontSize: '12px',
@@ -49,22 +48,16 @@ const styles = {
 
 const RangeButton = ({
   children,
-  data,
   handleClick,
   isActive,
-  setActiveButton,
-  title
+  label,
 }: RangeButtonProps) => {
-  const buttonClick = () => {
-    handleClick(data);
-    setActiveButton(title)
-  };
   return (
     <button
-      aria-label={title}
-      title={title}
+      aria-label={label}
+      title={label}
       type="button"
-      onClick={buttonClick}
+      onClick={handleClick}
       style={{...styles.button, ...(isActive ? styles.buttonActive : {})}}
       >
       {children}
@@ -72,26 +65,23 @@ const RangeButton = ({
   )
 }
 
-const RangeControlBar = ({ handleClick, options }) => {
-  const [activeButton, setActiveButton] = useState(options.buttons[0].title);
-
+const RangeControlBar = ({ activeBtn, buttons, handleBtnClick, rangeArray }) => {
+  console.log({ activeBtn })
   return (
     <div style={styles.bar}>
       <div>
-        {options.buttons.map(button => (
+        {buttons.map(btn => (
           <RangeButton
-            data={button.data}
-            isActive={activeButton === button.title}
-            key={button.label}
-            title={button.title}
-            handleClick={handleClick}
-            setActiveButton={setActiveButton}
+            handleClick={() => handleBtnClick(btn.title)}
+            isActive={activeBtn === btn.title}
+            key={btn.label}
+            label={btn.label}
             >
-            {button.label}
+            {btn.title}
           </RangeButton>
         ))}
       </div>
-      <div style={styles.dateRange}>02/22/2022 <span style={styles.dateRange.span}>to</span> 02/29/2022</div>
+      <div style={styles.dateRange}>{rangeArray[0]} <span style={styles.dateRange.span}>to</span> {rangeArray[1]}</div>
     </div>
   );
 }

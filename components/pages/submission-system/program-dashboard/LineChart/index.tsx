@@ -5,34 +5,31 @@ import { makeMockData } from './mockData';
 import LineChart from './chart';
 import RangeControlBar from './RangeControlBar';
 
-const rangeControlBarOptions = {
-  buttons: [
-    {
-      title: 'All',
-      label: 'All',
-      data: null,
-    },
-    {
-      title: 'One year',
-      label: '1Y',
-      data: 365,
-    },
-    {
-      title: 'One month',
-      label: '1M',
-      data: 30,
-    },
-    {
-      title: 'One week',
-      label: '1W',
-      data: 7,
-    }
-  ],
-  range: { from: '02/22/2022', to: '02/29/2022' },
-};
+const rangeButtons = [
+  {
+    data: null,
+    title: 'All',
+    label: 'All',
+  },
+  {
+    data: 365,
+    title: '1Y',
+    label: 'One year',
+  },
+  {
+    data: 30,
+    title: '1M',
+    label: 'One month',
+  },
+  {
+    data: 7,
+    title: '1W',
+    label: 'One week',
+  }
+];
 
 // replace with data import from API
-const mockData = makeMockData('week');
+const mockData = makeMockData('year');
 
 const data = mockData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,
@@ -47,21 +44,21 @@ const LineGraphWrapper = () => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
   const [lineChartData, setLineChartData] = useState(data);
+  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
-  // console.log({ width })
-
-  // 1. click buttons to set active button
-  // 2. on click, change which data is live
-
-  // useEffect(() => {
-
-  // },[]);
+  console.log({ activeRangeBtn })
+  
+  // 1. set state: which button is active 
+  // 2. click buttons to set active button
+  // 3. on click, change which data is live
 
   return (
     <>
       <RangeControlBar
-        handleClick={() => {}}
-        options={rangeControlBarOptions}
+        activeBtn={activeRangeBtn}
+        buttons={rangeButtons}
+        handleBtnClick={setActiveRangeBtn}
+        rangeArray={[0, 1]}
         />
       <div
         ref={lineChartRef}
