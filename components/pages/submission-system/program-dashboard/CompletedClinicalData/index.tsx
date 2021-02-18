@@ -17,8 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Container from 'uikit/Container';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/core';
+import { find } from 'lodash';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import NoData from 'uikit/NoData';
@@ -27,6 +28,8 @@ import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import LineChart from '../LineChart';
+import { adjustData, makeMockData } from '../LineChart/mockData';
+import * as u from '../LineChart/utils';
 
 const { DASHBOARD_CHARTS_ENABLED } = getConfig();
 
@@ -39,31 +42,48 @@ const getStartedLink = (
   </Typography>
 );
 
-export default () => (
-  <DashboardCard>
-    <Typography variant="default" component="span">
-      Completed Core Clinical Data
-    </Typography>
-    <div
-      css={css`
-        height: 260px;
-        padding: 12px 0;
-        /* display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center; */
-      `}
-    >
-      {DASHBOARD_CHARTS_ENABLED
-        ? (
-          <LineChart />
+export default () => {
+  const [lineChartData, setLineChartData] = useState(null);
+  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+
+  // TODO: when API is ready, this should be a reusable hook or component
+  useEffect(() => {
+    const days = find(u.rangeButtons, { title: activeRangeBtn }).data;
+    const mockData = makeMockData(days);
+    const adjustedData = adjustData(mockData)
+    setLineChartData(adjustedData);
+  }, [activeRangeBtn]);
+
+  return (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        Completed Core Clinical Data
+      </Typography>
+      <div
+        css={css`
+          height: 260px;
+          padding: 12px 0;
+          /* display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center; */
+        `}
+      >
+        {DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+          ? (
+            <LineChart
+              data={lineChartData}
+              activeRangeBtn={activeRangeBtn}
+              setActiveRangeBtn={setActiveRangeBtn}
+              />
+            )
+          : (
+            <NoData title="Coming Soon." link={getStartedLink}>
+              <img alt="Coming Soon." src={PicClipboard} />
+            </NoData>
           )
-        : (
-          <NoData title="Coming Soon." link={getStartedLink}>
-            <img alt="Coming Soon." src={PicClipboard} />
-          </NoData>
-        )
-      }
-    </div>
-  </DashboardCard>
-);
+        }
+      </div>
+    </DashboardCard>
+  );
+};

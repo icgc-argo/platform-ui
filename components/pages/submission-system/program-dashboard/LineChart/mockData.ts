@@ -13,10 +13,12 @@ const getDates = (days: number) => {
   // const startDate = startOfToday();
   // use this to fake quarters on weekly/monthly view
   const startDate = new Date('2022-04-05T00:00:00');
-  return [...Array(intervals).keys()]
+  console.log('👾👾👾👾👾👾👾👾', days)
+  const dates = [...Array(intervals).keys()]
     .sort((a, b) => b - a)
     .map((x: number) => subDate(startDate, { days: Math.floor(days / intervals * x) }))
     .map((x: Date) => Number(formatDate(x, 't')));
+  return dates;
 };
 
 export const makeMockData = (days: number) => {
@@ -34,3 +36,12 @@ export const makeMockData = (days: number) => {
     }))
   }));
 };
+
+export const adjustData = mockData => mockData[0].lines[0].points.map(({ date, donors }) => ({
+  x: date,
+  y: donors,
+  // TODO: only show year for first instance
+  label: formatDate(date*1000, 'd MMM yyyy'),
+  // TODO: add line name to tooltip for molecular, e.g. "Raw Reads"
+  tooltip: [formatDate(date*1000, 'MMM d, yyyy'), `${donors} donors`],
+}));
