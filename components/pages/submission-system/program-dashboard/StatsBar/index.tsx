@@ -173,6 +173,7 @@ export default () => {
               </Statistic>
             )}
           </Col>
+          {/* 
           <Col>
             {!loading ? (
               <Statistic
@@ -269,6 +270,7 @@ export default () => {
               </Statistic>
             )}
           </Col>
+ */}{' '}
         </Row>
       </Container>
     </div>
