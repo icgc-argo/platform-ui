@@ -80,7 +80,7 @@ spec:
             steps {
                 container('docker') {
                     // DNS error if --network is default
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerRegistry}/${dockerHubRepo}:${commit}"
+                    sh "docker build --network=host -f Dockerfile . -t ${dockerRegistry}/${githubRepo}:${commit}"
                 }
             }
         }
