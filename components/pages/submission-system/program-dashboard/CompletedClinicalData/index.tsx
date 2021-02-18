@@ -34,7 +34,7 @@ const { DASHBOARD_CHARTS_ENABLED } = getConfig();
 
 // DASHBOARD_CHARTS_ENABLED
 // TODO: when the API is ready, this will probably not stay here.
-const mockLineChartData = makeMockData('week');
+const mockLineChartData = makeMockData(365);
 const lineChartData = mockLineChartData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,
   y: donors,

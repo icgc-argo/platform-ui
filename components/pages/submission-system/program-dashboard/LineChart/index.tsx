@@ -1,7 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { format as formatDate } from 'date-fns';
+import React, { useEffect, useRef, useState } from 'react';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
-import { makeMockData } from './mockData';
 import LineChart from './chart';
 import RangeControlBar from './RangeControlBar';
 
@@ -28,27 +26,18 @@ const rangeButtons = [
   }
 ];
 
-// replace with data import from API
-const mockData = makeMockData('year');
-
-const data = mockData[0].lines[0].points.map(({ date, donors }) => ({
-  x: date,
-  y: donors,
-  // TODO: only show year for first instance
-  label: formatDate(date*1000, 'd MMM yyyy'),
-  // TODO: add line name to tooltip for molecular
-  tooltip: [formatDate(date*1000, 'MMM d, yyyy'), `${donors} donors`],
-}));
-
-const LineGraphWrapper = () => {
+const LineGraphWrapper = ({ data }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
-  const [lineChartData, setLineChartData] = useState(data);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
   // 1. set state: which button is active 
   // 2. click buttons to set active button
   // 3. on click, change which data is live
+
+  // useEffect(() => {
+
+  // },[activeRangeBtn]);
 
   return (
     <>
