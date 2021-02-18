@@ -31,6 +31,7 @@ const LineChartEl = ({
   precision,
   width,
 }) => {
+  if (!data) return;
   const maxY = u.getMax(data, 'y');
   const yAxisDigits =
     parseFloat(maxY.toString()).toFixed(precision).length + 1;
@@ -206,7 +207,7 @@ const LineChartEl = ({
     });
   };
 
-  return (
+  return width && (
     <svg
       viewBox={`0 0 ${width} ${height}`}
     >

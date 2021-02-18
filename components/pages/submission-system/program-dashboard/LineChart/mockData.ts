@@ -12,7 +12,6 @@ const getRandomDonors = (count: number) => [...Array(count).keys()].map(k => Mat
 const getDates = (days: number) => {
   // const startDate = startOfToday();
   // use this to fake quarters on weekly/monthly view
-  console.log(days)
   const startDate = new Date('2022-04-05T00:00:00');
   return [...Array(intervals).keys()]
     .sort((a, b) => b - a)

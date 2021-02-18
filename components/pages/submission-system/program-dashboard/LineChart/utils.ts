@@ -4,7 +4,7 @@ export const makeJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [
   {
-    data: null,
+    data: 700,
     title: 'All',
     label: 'All',
   },

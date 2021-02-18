@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { format as formatDate } from 'date-fns';
+import { find } from 'lodash';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import LineChartEl from './LineChartEl';
 import RangeControlBar from './RangeControlBar';
 import { makeMockData } from './mockData';
+import * as u from './utils';
 
 // TODO: when API is available, receive data from parent component as a prop.
 
-const mockLineChartData = makeMockData(365);
-const lineChartData = mockLineChartData[0].lines[0].points.map(({ date, donors }) => ({
+const adjustData = mockData => mockData[0].lines[0].points.map(({ date, donors }) => ({
   x: date,
   y: donors,
   // TODO: only show year for first instance
@@ -21,6 +22,7 @@ const LineChart = () => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+  const [data, setData] = useState(false);
   // console.log({ activeRangeBtn })
 
   // 1. set state: which button is active 
@@ -28,10 +30,16 @@ const LineChart = () => {
   // 3. on click, change which data is live
 
   useEffect(() => {
-
+    const days = find(u.rangeButtons, { title: activeRangeBtn }).data;
+    const mockData = makeMockData(days);
+    const adjustedData = adjustData(mockData)
+    console.log({ days, mockData, adjustedData });
+    setData(adjustedData);
   },[activeRangeBtn]);
 
-  return (
+  console.log({ data })
+
+  return data && (
     <>
       <RangeControlBar
         activeBtn={activeRangeBtn}
@@ -40,10 +48,10 @@ const LineChart = () => {
         />
       <div
         ref={lineChartRef}
-        style={{ border: '1px solid pink', width: '100%', filter: `blur(${resizing ? 8 : 0}px)`}}
+        style={{ border: '1px solid pink', width: '100%', filter: `blur(${resizing || !data ? 8 : 0}px)`}}
         >
         <LineChartEl
-          data={lineChartData}
+          data={data}
           hasQuarterLines
           height={240}
           horizontalGuides={4}
