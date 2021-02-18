@@ -3,33 +3,11 @@ import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import LineChart from './chart';
 import RangeControlBar from './RangeControlBar';
 
-const rangeButtons = [
-  {
-    data: null,
-    title: 'All',
-    label: 'All',
-  },
-  {
-    data: 365,
-    title: '1Y',
-    label: 'One year',
-  },
-  {
-    data: 30,
-    title: '1M',
-    label: 'One month',
-  },
-  {
-    data: 7,
-    title: '1W',
-    label: 'One week',
-  }
-];
-
 const LineGraphWrapper = ({ data }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+  console.log({ activeRangeBtn })
 
   // 1. set state: which button is active 
   // 2. click buttons to set active button
@@ -43,7 +21,6 @@ const LineGraphWrapper = ({ data }) => {
     <>
       <RangeControlBar
         activeBtn={activeRangeBtn}
-        buttons={rangeButtons}
         handleBtnClick={setActiveRangeBtn}
         rangeArray={[0, 1]}
         />

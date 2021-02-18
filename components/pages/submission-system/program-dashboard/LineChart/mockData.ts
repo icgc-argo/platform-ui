@@ -21,7 +21,6 @@ const getDates = (days: number) => {
 };
 
 export const makeMockData = (days: number) => {
-  console.log(days)
   const dates = getDates(days);
   const donors = getRandomDonors(dates.length);
   return Object.keys(mockDataStub).map(chartType => ({

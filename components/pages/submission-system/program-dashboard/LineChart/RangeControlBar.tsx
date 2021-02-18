@@ -1,4 +1,5 @@
 import React from 'react';
+import * as u from './utils';
 
 type RangeButtonProps = {
   children: any;
@@ -62,14 +63,14 @@ const RangeButton = ({
       >
       {children}
     </button>
-  )
-}
+  );
+};
 
-const RangeControlBar = ({ activeBtn, buttons, handleBtnClick, rangeArray }) => {
+const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
   return (
     <div style={styles.bar}>
       <div>
-        {buttons.map(btn => (
+        {u.rangeButtons.map(btn => (
           <RangeButton
             handleClick={() => handleBtnClick(btn.title)}
             isActive={activeBtn === btn.title}
