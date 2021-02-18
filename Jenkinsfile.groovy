@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-def dockerHubRepo = "icgcargo/platform-ui"
+def dockerRegistry = "ghcr.io"
 def githubRepo = "icgc-argo/platform-ui"
 def commit = "UNKNOWN"
 def version = "UNKNOWN"
@@ -80,7 +80,7 @@ spec:
             steps {
                 container('docker') {
                     // DNS error if --network is default
-                    sh "docker build --network=host -f Dockerfile . -t ${dockerHubRepo}:${commit}"
+                    sh "docker build --network=host -f Dockerfile . -t ${dockerRegistry}/${dockerHubRepo}:${commit}"
                 }
             }
         }
@@ -94,11 +94,11 @@ spec:
                     sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
                 }
                 container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
                     }
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}-${commit}"
-                    sh "docker push ${dockerHubRepo}:${version}-${commit}"
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
                 }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
@@ -106,6 +106,26 @@ spec:
                 ])
             }
         }
+
+// THE NEXT BLOCK OF CODE IS DESIGNATED FOR TESTING PIPELINE CHANGES ONLY
+// MAKE SURE TO DELETE EVERYTHING BETWEEN THIS LINE AND THE NEXT COMMENT LINE STARTING WITH // END-OF-TESTING-BLOCK
+
+        stage('Validate things still work') {
+            when {
+                branch "Docker-registry-change"
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
+                    }
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
+                }
+            }
+        }
+
+// END-OF-TESTING-BLOCK
         
         stage('Publish uikit') {
             when {
@@ -147,13 +167,13 @@ spec:
                         sh "git tag ${version}"
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
                     }
-                    withCredentials([usernamePassword(credentialsId:'argoDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
                     }
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:${version}"
-                    sh "docker tag ${dockerHubRepo}:${commit} ${dockerHubRepo}:latest"
-                    sh "docker push ${dockerHubRepo}:${version}"
-                    sh "docker push ${dockerHubRepo}:latest"
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}"
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:latest"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:latest"
                 }
                 build(job: "/ARGO/provision/platform-ui", parameters: [
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa' ],
