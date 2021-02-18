@@ -221,13 +221,7 @@ export default ({
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
         },
-        {
-          Header: 'Extended Fields',
-          accessor: 'submittedExtendedDataPercent',
-          Cell: ({ original }) => (
-            <PercentageCell original={original} fieldName="submittedExtendedDataPercent" />
-          ),
-        },
+
         {
           Header: 'Samples',
           id: REGISTERD_SAMPLE_COLUMN_ID,
