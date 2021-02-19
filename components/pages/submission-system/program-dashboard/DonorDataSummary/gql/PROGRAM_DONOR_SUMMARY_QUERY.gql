@@ -17,7 +17,6 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
     releaseStatus
     submitterDonorId
     submittedCoreDataPercent
-    submittedExtendedDataPercent
     registeredNormalSamples
     registeredTumourSamples
     publishedNormalAnalysis
