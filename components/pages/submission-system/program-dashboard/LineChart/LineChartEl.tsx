@@ -1,9 +1,32 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import * as u from './utils';
+import * as t from './types';
 
 const options = {
   colors: {
+    // TODO: improve colours
+    // they won't match the hex codes in the mockup.
+    // SVG renders colours darker/lighter due to line thickness/aliasing/etc.
     text: '#555',
     axisBorder: '#888',
     quarterBorder: 'green',
@@ -30,46 +53,62 @@ const LineChartEl = ({
   horizontalGuides: numberOfHorizontalGuides,
   precision,
   width,
+}: { 
+  data: t.DataObj;
+  hasQuarterLines: boolean;
+  height: number;
+  horizontalGuides: number;
+  precision: number;
+  width: number;
 }) => {
+  // setup Y axis
+  // TODO: maxY is this OR committed donors, whichever is more
   const maxY = u.getMinMax(data, 'max', 'y');
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
+  // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
   const chartWidth = width - padding * 1.5;
   const chartHeight = height - padding * 2;
 
+  // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataDates = data.lines[0].points;
-  const xTicks = dataDates.length;
-  const xTickDistance = chartWidth / xTicks;
+  const dataPoints = data.lines[0].points;
+  const xTicksCount = dataPoints.length;
+  // distance between 2 ticks
+  const xTickDistance = chartWidth / xTicksCount;
   // distance between farthest left & right ticks
-  const xWidthAllTicks = (xTicks - 1) * xTickDistance;
+  const xWidthAllTicks = (xTicksCount - 1) * xTickDistance;
   const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
-  const datesEpoch = dataDates.map(p => p.x);
-  const dates = datesEpoch.map(d => new Date(u.makeJSEpoch(d)));
-  const day0 = u.makeJSEpoch(datesEpoch[0]);
-  const dayLast = u.makeJSEpoch(datesEpoch[datesEpoch.length-1]);
+  // setup dates
+  const datesUnixEpoch = dataPoints.map((p: t.DataPoint) => p.x);
+  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(u.makeJSEpoch(d)));
+  const day0 = datesJSEpoch[0];
+  const dayLast = datesJSEpoch[datesJSEpoch.length-1];
   const daysInData = differenceInDays(dayLast, day0);
   const dataDayRange = {
     start: day0,
     end: dayLast,
   };
 
+  // TODO: change colour based on line title, for molecular chart
+  // will have to return coords & colour in an object
   const polylineCoords = data.lines
-    .map(line => line.points
-      .map((point, i) => {
+    .map((line: t.DataLines) => line.points
+      .map((point: t.DataPoint, i: number) => {
         const x = getX(i);
-        const y = Math.floor(chartHeight - (point.y / maxY) * chartHeight + padding);
+        const y = Math.floor(chartHeight - (Number(point.y) / maxY) * chartHeight + padding);
         return `${x},${y}`;
       })
       .join(' ')
     );
 
-  const Axis = ({ points }) => (
+  // setup axis elements
+  const Axis = ({ points }: { points: string }) => (
     <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={points} />
   );
 
@@ -89,14 +128,16 @@ const LineChartEl = ({
     const endY = height - padding;
 
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
-      .filter(quarter => isAfter(quarter, dataDayRange.start) &&
+      .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
         isBefore(quarter, dataDayRange.end));
     
-    const quartersLines = quartersInRange.reduce((acc, curr) => {
-      // perfectly position quarters that are on the same day as a tick.
-      const quarterTickIndex = dates
+    const quartersLines = quartersInRange.reduce((acc, curr: Date) => {
+      // check if quarters fall on the same day as a tick.
+      // this is to help with positioning - otherwise they'll be
+      // ~2 pixels off due to SVG rendering.
+      const quarterTickIndex = datesJSEpoch
         .filter((d: Date) => compareAsc(d, curr) === 0)
-        .map((d: Date) => dates.indexOf(d))[0];
+        .map((d: Date) => datesJSEpoch.indexOf(d))[0];
 
       const x = quarterTickIndex >= 0
         ? getX(quarterTickIndex)
@@ -119,10 +160,11 @@ const LineChartEl = ({
         strokeWidth={options.strokeWidth}
         strokeDasharray="5, 5"
         >
-          {quartersLines.map(line => (
+          {quartersLines.map(({ x }: { x: string }) => (
+            // TODO: tooltips
             <polyline
-              key={line.x}
-              points={`${line.x},${startY} ${line.x},${endY}`}
+              key={x}
+              points={`${x},${startY} ${x},${endY}`}
               />
           ))}
       </g>
@@ -138,7 +180,7 @@ const LineChartEl = ({
         stroke={options.colors.axisBorder}
         strokeWidth={options.strokeWidth}
         >
-        {new Array(xTicks).fill(0).map((_, index) => {
+        {new Array(xTicksCount).fill(0).map((_, index) => {
           const tickX = getX(index);
           return (
             <polyline
@@ -154,65 +196,70 @@ const LineChartEl = ({
   const HorizontalGuides = () => {
     const startX = padding;
     const endX = width - padding / 2;
-
-    return new Array(numberOfHorizontalGuides).fill(0).map((_, index) => {
-      const ratio = (index + 1) / numberOfHorizontalGuides;
-      const yCoordinate = chartHeight - chartHeight * ratio + padding;
-      return (
-        <React.Fragment key={index}>
-          <polyline
-            fill="none"
-            stroke={options.colors.axisBorder}
-            strokeWidth=".5"
-            points={`${startX},${yCoordinate} ${endX},${yCoordinate}`}
-          />
-        </React.Fragment>
-      );
-    });
+    return (
+      <g
+        fill="none"
+        stroke={options.colors.axisBorder}
+        strokeWidth=".5"
+        >
+        {new Array(numberOfHorizontalGuides).fill(0).map((_, index) => {
+          const ratio = (index + 1) / numberOfHorizontalGuides;
+          const yCoordinate = chartHeight - chartHeight * ratio + padding;
+          return (
+            <polyline key={_} points={`${startX},${yCoordinate} ${endX},${yCoordinate}`} />
+          );
+        })}
+      </g>
+    );
   };
 
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
-    return dataDates.map((element, index) => {
-      const x = getX(index);
-      return (
-        <text
-          style={styles.axisLabel}
-          textAnchor="middle"
-          >
-          {element.label.split(' ').map((word: string, wordIndex: number) => (
-            <tspan x={x} y={yStart + wordIndex * (options.fontSize + 1)}>{word}</tspan>
-          ))}
-        </text>
-      );
-    });
+    return (
+      <g
+        style={styles.axisLabel}
+        textAnchor="middle"
+        >
+        {dataPoints.map((point: t.DataPoint, index: number) => {
+          const x = getX(index);
+          return (
+            <text key={point.label}>
+              {point.label.split(' ').map((word: string, wordIndex: number) => (
+                <tspan x={x} y={yStart + wordIndex * (options.fontSize + 1)}>{word}</tspan>
+              ))}
+            </text>
+          );
+        })}
+      </g>
+    );
   };
 
   const LabelsYAxis = () => {
     const PARTS = numberOfHorizontalGuides;
-    return new Array(PARTS + 1).fill(0).map((_, index) => {
-      const x = options.fontSize;
-      const ratio = index / numberOfHorizontalGuides;
-
-      const yCoordinate =
-        chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
-      return (
-        <text
-          key={index}
-          x={x}
-          y={yCoordinate}
-          style={styles.axisLabel}
-        >
-          {parseFloat(maxY * (index / PARTS)).toFixed(precision)}
-        </text>
-      );
-    });
+    return (
+      <g style={styles.axisLabel}>
+        {new Array(PARTS + 1).fill(0).map((_, index) => {
+          const x = options.fontSize;
+          const ratio = index / numberOfHorizontalGuides;
+          const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
+          return (
+            <text
+              key={index}
+              x={x}
+              y={yCoordinate}
+              >
+              {parseFloat(maxY * (index / PARTS)).toFixed(precision)}
+            </text>
+          );
+        })}
+      </g>
+    );
   };
 
   return width && (
     <svg
       viewBox={`0 0 ${width} ${height}`}
-    >
+      >
       <XAxis />
       <TicksXAxis />
       <LabelsXAxis />
@@ -222,12 +269,13 @@ const LineChartEl = ({
       <HorizontalGuides />
 
       {polylineCoords.map((points: string) => (
+        // TODO: change colour based on line title
         <polyline
-        fill="none"
-        stroke={options.colors.committedBorder}
-        strokeWidth={options.strokeWidth}
-        points={points}
-        />
+          fill="none"
+          stroke={options.colors.committedBorder}
+          strokeWidth={options.strokeWidth}
+          points={points}
+          />
       ))}
     </svg>
   );
