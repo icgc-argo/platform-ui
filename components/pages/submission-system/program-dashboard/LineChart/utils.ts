@@ -16,12 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import * as t from './types';
 
-export const getMinMax = (data, minMax, coord) => Math[minMax](...data.lines
-  .map(line => line.points
-    .map(point => point[coord])
-  )
-  .reduce((acc, curr) => ([...acc, ...curr]), []));
+export const getMinMax = (
+  { data, minMax, coord }: {
+    data: t.DataObj;
+    minMax: 'min' | 'max';
+    coord: 'x' | 'y';
+  }) => {
+  const allCoord = [
+    ...data.lines
+    .map((line: t.DataLine) => line.points
+      .map((point: t.DataPoint) => Number(point[coord]))
+    )
+    .reduce((acc, curr) => ([...acc, ...curr]), [])
+  ];
+  return Math[minMax](...allCoord);
+};
 export const makeJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [

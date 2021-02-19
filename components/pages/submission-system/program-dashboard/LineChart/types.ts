@@ -24,7 +24,7 @@ export type DataPoint = {
   y: string;
 };
 
-export type DataLines = {
+export type DataLine = {
   points: DataPoint[];
   title: null | string;
 };
@@ -32,5 +32,5 @@ export type DataLines = {
 export type DataObj = {
   chartType: 'clinical' | 'molecular';
   committed: number;
-  lines: DataLines[];
+  lines: DataLine[];
 };

@@ -63,7 +63,7 @@ const LineChartEl = ({
 }) => {
   // setup Y axis
   // TODO: maxY is this OR committed donors, whichever is more
-  const maxY = u.getMinMax(data, 'max', 'y');
+  const maxY = u.getMinMax({ data, minMax: 'max', coord: 'y' });
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -98,7 +98,7 @@ const LineChartEl = ({
   // TODO: change colour based on line title, for molecular chart
   // will have to return coords & colour in an object
   const polylineCoords = data.lines
-    .map((line: t.DataLines) => line.points
+    .map((line: t.DataLine) => line.points
       .map((point: t.DataPoint, i: number) => {
         const x = getX(i);
         const y = Math.floor(chartHeight - (Number(point.y) / maxY) * chartHeight + padding);
