@@ -226,10 +226,20 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
     : defaultEmptyFilters;
 };
 
-export const toDisplayValue: (value: string) => string = (value) =>
-  value === IS_MISSING ? 'No Data' : value;
+export const toDisplayValue: (value: string, field?: string) => string = (value, field) => {
+  if (value === IS_MISSING) {
+    return 'No Data';
+  }
+
+  if (!!field && !!value) {
+    const displayName = getDisplayName(field, value);
+    return displayName ? displayName : value;
+  }
+
+  return value;
+};
 
 export const getTooltipContent = (name: string): React.ReactNode => tooltipContent[name];
 
 export const getDisplayName = (facetName: string, fieldName: string): string =>
-  facetDisplayNames[facetName][fieldName];
+  facetDisplayNames[facetName]?.[fieldName];
