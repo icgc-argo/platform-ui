@@ -242,13 +242,14 @@ const LineChartEl = ({
           const x = options.fontSize;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
+          const labelStr = (maxY * (index / PARTS)).toString();
           return (
             <text
               key={index}
               x={x}
               y={yCoordinate}
               >
-              {parseFloat(maxY * (index / PARTS)).toFixed(precision)}
+              {parseFloat(labelStr).toFixed(precision)}
             </text>
           );
         })}
