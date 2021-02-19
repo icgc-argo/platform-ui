@@ -221,13 +221,7 @@ export default ({
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
         },
-        {
-          Header: 'Extended Fields',
-          accessor: 'submittedExtendedDataPercent',
-          Cell: ({ original }) => (
-            <PercentageCell original={original} fieldName="submittedExtendedDataPercent" />
-          ),
-        },
+
         {
           Header: 'Samples',
           id: REGISTERD_SAMPLE_COLUMN_ID,
@@ -283,20 +277,11 @@ export default ({
       ],
     },
     {
-      columns: [
-        {
-          Header: 'Processing Status',
-          accessor: 'processingStatus',
-          Cell: ProcessingCell,
-        },
-        {
-          Header: 'Last Updated',
-          accessor: 'updatedAt',
-          Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return <div>{displayDate(original.updatedAt)}</div>;
-          },
-        },
-      ],
+      Header: 'Last Updated',
+      accessor: 'updatedAt',
+      Cell: ({ original }: { original: DonorSummaryRecord }) => {
+        return <div>{displayDate(original.updatedAt)}</div>;
+      },
     },
   ];
 
