@@ -86,7 +86,7 @@ const RangeButton = ({
 const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
   return (
     <div style={styles.bar}>
-      <div> vdsewbtg nrdf
+      <div>
         {u.rangeButtons.map(btn => (
           <RangeButton
             handleClick={() => handleBtnClick(btn.title)}

@@ -24,13 +24,13 @@ import * as t from './types';
 
 const options = {
   colors: {
-    // TODO: improve colours
-    // they won't match the hex codes in the mockup.
-    // SVG renders colours darker/lighter due to line thickness/aliasing/etc.
-    text: '#555',
-    axisBorder: '#888',
-    quarterBorder: 'green',
-    committedBorder: '#0774d3'
+    // colours are changed slightly from theme.
+    // svg rendering made the colours darker/lighter.
+    axisBorder: '#ccc',
+    chartLine: '#523785',
+    committedBorder: '#0774d3',
+    quarterBorder: '#7abad4',
+    text: '#787878',
   },
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
@@ -40,7 +40,7 @@ const options = {
 
 const styles = {
   axisLabel: {
-    color: options.colors.text,
+    fill: options.colors.text,
     fontFamily: options.fontFamily,
     fontSize: options.fontSize,
   }
@@ -158,7 +158,7 @@ const LineChartEl = ({
       <g
         stroke={options.colors.quarterBorder}
         strokeWidth={options.strokeWidth}
-        strokeDasharray="5, 5"
+        strokeDasharray="3, 2"
         >
           {quartersLines.map(({ x }: { x: string }) => (
             // TODO: tooltips
@@ -225,7 +225,7 @@ const LineChartEl = ({
           return (
             <text key={point.label}>
               {point.label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan x={x} y={yStart + wordIndex * (options.fontSize + 1)}>{word}</tspan>
+                <tspan x={x} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
               ))}
             </text>
           );
@@ -272,7 +272,7 @@ const LineChartEl = ({
         // TODO: change colour based on line title
         <polyline
           fill="none"
-          stroke={options.colors.committedBorder}
+          stroke={options.colors.chartLine}
           strokeWidth={options.strokeWidth}
           points={points}
           />
