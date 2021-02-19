@@ -28,7 +28,7 @@ import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import LineChart from '../LineChart';
-import { adjustData, makeMockData, adjustData2 } from '../LineChart/mockData';
+import { adjustData, makeMockData } from '../LineChart/mockData';
 import * as u from '../LineChart/utils';
 
 const { DASHBOARD_CHARTS_ENABLED } = getConfig();
