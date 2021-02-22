@@ -45,11 +45,11 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
   });
 
 const standardDate = 'yyyy-MM-dd';
-export const displayDate = (date: number | Date) => formatDate(new Date(date), standardDate);
+export const displayDate = (date) => formatDate(date, standardDate);
 
 const dateTimeFormat = 'MMMM D, yyyy [at] h:mm A';
 export const displayDateAndTime = (date: number | Date | string) =>
-  formatDate(new Date(date), dateTimeFormat);
+  formatDate(date, dateTimeFormat);
 
 export const sleep = (time: number = 2000) =>
   new Promise((resolve) => {

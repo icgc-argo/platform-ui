@@ -51,7 +51,7 @@ const FileTableStories = storiesOf(`${__dirname}`, module)
         submissionInfo={{
           fileName: 'registration_schrodinger.tsv',
           creator: 'Schrodinger Submitter',
-          createdAt: new Date('May 20, 2020'),
+          createdAt: 'May 20, 2020',
         }}
         stats={{
           newCount: 2,

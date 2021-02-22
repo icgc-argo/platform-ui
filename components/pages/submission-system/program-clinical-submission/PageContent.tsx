@@ -458,7 +458,7 @@ export default () => {
             </Typography>
             <Typography variant="data" color="black" as="div">
               Signed off on{' '}
-              <strong>{displayDateAndTime(new Date(data.clinicalSubmissions.updatedAt))}</strong> by{' '}
+              <strong>{displayDateAndTime(data.clinicalSubmissions.updatedAt)}</strong> by{' '}
               <strong>{data.clinicalSubmissions.updatedBy}</strong>
             </Typography>
           </div>

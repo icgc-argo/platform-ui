@@ -142,7 +142,7 @@ export const SubmissionInfoArea = ({
         font-weight: 600;
       `}
     >
-      {displayDateAndTime(new Date(createdAt))}{' '}
+      {displayDateAndTime(createdAt)}{' '}
     </Typography>
     by{' '}
     <Typography
