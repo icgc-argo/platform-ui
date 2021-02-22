@@ -221,7 +221,7 @@ export default ({
               submissionData={{
                 fileName: selectedFile.fileName,
                 creator: selectedFile.creator,
-                createdAt: selectedFile.createdAt,
+                createdAt: new Date(selectedFile.createdAt),
               }}
             />
           </>
