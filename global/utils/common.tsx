@@ -45,10 +45,10 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
   });
 
 const standardDate = 'yyyy-MM-dd';
-export const displayDate = (date: string | number | Date) => formatDate(new Date(date), standardDate);
+export const displayDate = (date: number | Date) => formatDate(new Date(date), standardDate);
 
 const dateTimeFormat = 'MMMM D, yyyy [at] h:mm A';
-export const displayDateAndTime = (date: string | number | Date) =>
+export const displayDateAndTime = (date: number | Date) =>
   formatDate(date, dateTimeFormat);
 
 export const sleep = (time: number = 2000) =>
