@@ -280,7 +280,7 @@ export default ({
       Header: 'Last Updated',
       accessor: 'updatedAt',
       Cell: ({ original }: { original: DonorSummaryRecord }) => {
-        return <div>{displayDate(original.updatedAt)}</div>;
+        return <div>{displayDate(new Date(original.updatedAt))}</div>;
       },
     },
   ];
