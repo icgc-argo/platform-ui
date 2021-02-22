@@ -31,7 +31,7 @@ import LineChart from '../LineChart';
 import { adjustData, makeMockData } from '../LineChart/mockData';
 import { rangeButtons } from '../LineChart/utils';
 
-const { DASHBOARD_CHARTS_ENABLED } = getConfig();
+const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -70,7 +70,7 @@ export default () => {
           align-items: center; */
         `}
       >
-        {DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+        {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
           ? (
             <LineChart
               data={lineChartData}
