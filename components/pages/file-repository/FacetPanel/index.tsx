@@ -414,7 +414,7 @@ export default () => {
     ).toString();
   };
 
-  const facetContianerLoadingStyle = css`
+  const facetContainerLoadingStyle = css`
     opacity: 0.5;
     pointer-events: 'none';
   `;
@@ -446,7 +446,7 @@ export default () => {
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
-      css={loading ? facetContianerLoadingStyle : facetContainerDefaultStyle}
+      css={loading ? facetContainerLoadingStyle : facetContainerDefaultStyle}
       theme={theme}
     >
       <SubMenu>
