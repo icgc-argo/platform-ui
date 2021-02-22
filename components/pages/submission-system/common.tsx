@@ -118,7 +118,7 @@ export const SubmissionInfoArea = ({
 }: {
   fileName: string;
   creator: string;
-  createdAt: number | Date;
+  createdAt: string;
 }) => (
   <Typography
     variant="data"
