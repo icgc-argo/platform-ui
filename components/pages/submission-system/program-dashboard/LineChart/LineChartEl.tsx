@@ -180,11 +180,11 @@ const LineChartEl = ({
         stroke={options.colors.axisBorder}
         strokeWidth={options.strokeWidth}
         >
-        {new Array(xTicksCount).fill(0).map((_, index) => {
+        {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
           return (
             <polyline
-              key={_}
+              key={ticksValue}
               points={`${tickX},${yStart} ${tickX},${yEnd}`}
               />
           );
@@ -202,11 +202,11 @@ const LineChartEl = ({
         stroke={options.colors.axisBorder}
         strokeWidth=".5"
         >
-        {new Array(numberOfHorizontalGuides).fill(0).map((_, index) => {
+        {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding;
           return (
-            <polyline key={_} points={`${startX},${yCoordinate} ${endX},${yCoordinate}`} />
+            <polyline key={guidesValue} points={`${startX},${yCoordinate} ${endX},${yCoordinate}`} />
           );
         })}
       </g>
@@ -238,7 +238,7 @@ const LineChartEl = ({
     const PARTS = numberOfHorizontalGuides;
     return (
       <g style={styles.axisLabel}>
-        {new Array(PARTS + 1).fill(0).map((_, index) => {
+        {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
           const x = options.fontSize;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
