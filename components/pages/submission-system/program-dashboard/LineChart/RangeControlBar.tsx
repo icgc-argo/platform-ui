@@ -20,8 +20,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
-
-import * as u from './utils';
+import { rangeButtons } from './utils';
 
 const RangeButton = ({
   children,
@@ -90,7 +89,7 @@ const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
   return (
     <div css={barStyle}>
       <div>
-        {u.rangeButtons.map(btn => (
+        {rangeButtons.map(btn => (
           <RangeButton
             handleClick={() => handleBtnClick(btn.title)}
             isActive={activeBtn === btn.title}

@@ -29,7 +29,7 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import LineChart from '../LineChart';
 import { adjustData, makeMockData } from '../LineChart/mockData';
-import * as u from '../LineChart/utils';
+import { rangeButtons } from '../LineChart/utils';
 
 const { DASHBOARD_CHARTS_ENABLED } = getConfig();
 
@@ -48,7 +48,7 @@ export default () => {
 
   // TODO: when API is ready, this should be a reusable hook or component
   useEffect(() => {
-    const days = find(u.rangeButtons, { title: activeRangeBtn }).data;
+    const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
     const adjustedData = adjustData(mockData);
     const clinicalData = find(adjustedData, { chartType: 'molecular'});

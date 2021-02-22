@@ -19,8 +19,8 @@
 
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
-import * as u from './utils';
-import * as t from './types';
+import { getMinMax, makeJSEpoch } from './utils';
+import { DataLine, DataObj, DataPoint } from './types';
 
 const options = {
   colors: {
@@ -54,7 +54,7 @@ const LineChartEl = ({
   precision,
   width,
 }: { 
-  data: t.DataObj;
+  data: DataObj;
   hasQuarterLines: boolean;
   height: number;
   horizontalGuides: number;
@@ -63,7 +63,7 @@ const LineChartEl = ({
 }) => {
   // setup Y axis
   // TODO: maxY is this OR committed donors, whichever is more
-  const maxY = u.getMinMax({ data, minMax: 'max', coord: 'y' });
+  const maxY = getMinMax({ data, minMax: 'max', coord: 'y' });
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -85,8 +85,8 @@ const LineChartEl = ({
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
   // setup dates
-  const datesUnixEpoch = dataPoints.map((p: t.DataPoint) => p.x);
-  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(u.makeJSEpoch(d)));
+  const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
+  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(makeJSEpoch(d)));
   const day0 = datesJSEpoch[0];
   const dayLast = datesJSEpoch[datesJSEpoch.length-1];
   const daysInData = differenceInDays(dayLast, day0);
@@ -98,8 +98,8 @@ const LineChartEl = ({
   // TODO: change colour based on line title, for molecular chart
   // will have to return coords & colour in an object
   const polylineCoords = data.lines
-    .map((line: t.DataLine) => line.points
-      .map((point: t.DataPoint, i: number) => {
+    .map((line: DataLine) => line.points
+      .map((point: DataPoint, i: number) => {
         const x = getX(i);
         const y = Math.floor(chartHeight - (Number(point.y) / maxY) * chartHeight + padding);
         return `${x},${y}`;
@@ -220,7 +220,7 @@ const LineChartEl = ({
         style={styles.axisLabel}
         textAnchor="middle"
         >
-        {dataPoints.map((point: t.DataPoint, index: number) => {
+        {dataPoints.map((point: DataPoint, index: number) => {
           const x = getX(index);
           return (
             <text key={point.label}>
