@@ -18,46 +18,10 @@
  */
 
 import React from 'react';
-import * as u from './utils';
+import { css } from '@emotion/core';
+import { useTheme } from 'uikit/ThemeProvider';
 
-const styles = {
-  bar: {
-    alignItems: 'center',
-    background: '#f2f2f8',
-    display: 'flex',
-    height: 30,
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: '0 10px 0 5px',
-    boxSizing: 'border-box'
-  },
-  button: {
-    background: 'transparent',
-    border: '0 none',
-    color: '#525767',
-    cursor: 'pointer',
-    display: 'inline-block',
-    fontFamily: 'Work Sans, sans-serif',
-    fontSize: '12px',
-    padding: 4,
-    width: '25px',
-  },
-  buttonActive: {
-    color: '#045093',
-    fontFamily: 'Work Sans, sans-serif',
-    fontWeight: 600,
-  },
-  dateRange: { 
-    color: '#000',
-    fontFamily: 'Work Sans, sans-serif',
-    fontSize: '11px',
-    lineHeight: '14px',
-    span: {
-      color: '#525767',
-      fontSize: '12px',
-    }
-  }
-};
+import * as u from './utils';
 
 const RangeButton = ({
   children,
@@ -70,13 +34,30 @@ const RangeButton = ({
   isActive: boolean;
   label: string;
 }) => {
+  const theme = useTheme();
+
+  const buttonStyle = css`
+    background: transparent;
+    border: 0 none;
+    color: ${theme.colors.grey};
+    cursor: pointer;
+    display: inline-block;
+    padding: 4;
+    width: 25px;
+  `;
+
+  const buttonActiveStyle = css`
+    color: ${theme.colors.secondary_dark};
+    font-weight: 600;
+  `;
+
   return (
     <button
       aria-label={label}
       title={label}
       type="button"
       onClick={handleClick}
-      style={{...styles.button, ...(isActive ? styles.buttonActive : {})}}
+      css={{...buttonStyle, ...(isActive ? buttonActiveStyle : {})}}
       >
       {children}
     </button>
@@ -84,8 +65,30 @@ const RangeButton = ({
 };
 
 const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
+  const theme = useTheme();
+  const barStyle = css`
+    align-items: center;
+    background: ${theme.colors.grey_3};
+    box-sizing: border-box;
+    display: flex;
+    font-family: 'Work Sans, sans-serif';
+    font-size: 12px;
+    height: 30;
+    justify-content: space-between;
+    padding: 0 10px 0 5px;
+    width: 100%;
+  `;
+
+  const rangeStyle = css`
+    color: ${theme.colors.black};
+  `;
+
+  const rangeToStyle = css`
+    color: ${theme.colors.grey};
+  `;
+
   return (
-    <div style={styles.bar}>
+    <div css={barStyle}>
       <div>
         {u.rangeButtons.map(btn => (
           <RangeButton
@@ -98,7 +101,7 @@ const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
           </RangeButton>
         ))}
       </div>
-      <div style={styles.dateRange}>{rangeArray[0]} <span style={styles.dateRange.span}>to</span> {rangeArray[1]}</div>
+      <div css={rangeStyle}>{rangeArray[0]} <span css={rangeToStyle}>to</span> {rangeArray[1]}</div>
     </div>
   );
 }
