@@ -118,7 +118,7 @@ export const SubmissionInfoArea = ({
 }: {
   fileName: string;
   creator: string;
-  createdAt: string;
+  createdAt: number | Date;
 }) => (
   <Typography
     variant="data"
@@ -142,7 +142,7 @@ export const SubmissionInfoArea = ({
         font-weight: 600;
       `}
     >
-      {displayDateAndTime(createdAt)}{' '}
+      {displayDateAndTime(new Date(createdAt))}{' '}
     </Typography>
     by{' '}
     <Typography
