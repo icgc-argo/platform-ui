@@ -259,7 +259,8 @@ export default () => {
 
   const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
-      setAggregations(data ? data.file.aggregations : {});
+      const aggregations = { ...data?.file?.aggregations, ...data?.selfFiltered?.aggregations };
+      setAggregations(aggregations ? aggregations : {});
     },
   });
 

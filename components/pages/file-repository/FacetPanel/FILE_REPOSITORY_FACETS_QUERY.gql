@@ -1,16 +1,20 @@
 query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
+  selfFiltered: file {
+    aggregations(filters: $filters, include_missing: false, aggregations_filter_themselves: true) {
+      release_stage {
+        buckets {
+          doc_count
+          key
+        }
+      }
+    }
+  }
   file {
     aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: false) {
       study_id {
         buckets {
           key
           doc_count
-        }
-      }
-      release_stage {
-        buckets {
-          doc_count
-          key
         }
       }
       analysis__experiment__experimental_strategy {
