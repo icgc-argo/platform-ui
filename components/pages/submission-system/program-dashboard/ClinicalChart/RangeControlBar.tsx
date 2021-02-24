@@ -36,28 +36,23 @@ const RangeButton = ({
 }) => {
   const theme = useTheme();
 
-  const buttonStyle = css`
-    background: transparent;
-    border: 0 none;
-    color: ${theme.colors.grey};
-    cursor: pointer;
-    display: inline-block;
-    padding: 4;
-    width: 25px;
-  `;
-
-  const buttonActiveStyle = css`
-    color: ${theme.colors.secondary_dark};
-    font-weight: 600;
-  `;
-
   return (
     <button
       aria-label={label}
       title={label}
       type="button"
       onClick={handleClick}
-      css={{...buttonStyle, ...(isActive ? buttonActiveStyle : {})}}
+      css={css`
+        background: transparent;
+        border: 0 none;
+        color: ${isActive? theme.colors.secondary_dark : theme.colors.grey};
+        cursor: pointer;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: ${isActive? 600 : 'normal'};
+        padding: 4px;
+        width: 25px;
+      `}
       >
       {children}
     </button>
@@ -66,29 +61,20 @@ const RangeButton = ({
 
 const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
   const theme = useTheme();
-  const barStyle = css`
-    align-items: center;
-    background: ${theme.colors.grey_3};
-    box-sizing: border-box;
-    display: flex;
-    font-family: 'Work Sans, sans-serif';
-    font-size: 12px;
-    height: 30;
-    justify-content: space-between;
-    padding: 0 10px 0 5px;
-    width: 100%;
-  `;
-
-  const rangeStyle = css`
-    color: ${theme.colors.black};
-  `;
-
-  const rangeToStyle = css`
-    color: ${theme.colors.grey};
-  `;
 
   return (
-    <div css={barStyle}>
+    <div
+      css={css`
+        align-items: center;
+        background: ${theme.colors.grey_3};
+        box-sizing: border-box;
+        display: flex;
+        height: 30;
+        justify-content: space-between;
+        padding: 0 10px 0 5px;
+        width: 100%;
+      `}
+      >
       <div>
         {rangeButtons.map(btn => (
           <RangeButton
