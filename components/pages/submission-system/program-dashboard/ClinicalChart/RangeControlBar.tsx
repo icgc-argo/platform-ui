@@ -20,6 +20,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
+import Typography from 'uikit/Typography';
 import { rangeButtons } from './utils';
 
 const RangeButton = ({
@@ -100,7 +101,11 @@ const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
           </RangeButton>
         ))}
       </div>
-      <div css={rangeStyle}>{rangeArray[0]} <span css={rangeToStyle}>to</span> {rangeArray[1]}</div>
+      <Typography as="div" color="primary" variant="data">
+        <strong>{rangeArray[0]}</strong>
+        <Typography as="span" color="grey" variant="data"> to </Typography>
+        <strong>{rangeArray[1]}</strong>
+      </Typography>
     </div>
   );
 }
