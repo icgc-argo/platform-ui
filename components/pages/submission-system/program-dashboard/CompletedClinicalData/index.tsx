@@ -64,10 +64,6 @@ export default () => {
         css={css`
           height: 260px;
           padding: 12px 0;
-          /* display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center; */
         `}
       >
         {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
