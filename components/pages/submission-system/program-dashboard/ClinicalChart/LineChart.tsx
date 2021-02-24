@@ -19,6 +19,7 @@
 
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
+import { styled } from 'uikit';
 import { getMinMax, makeJSEpoch } from './utils';
 import { DataLine, DataObj, DataPoint } from './types';
 
@@ -38,13 +39,11 @@ const options = {
   xTickHeight: 5,
 };
 
-const styles = {
-  axisLabel: {
-    fill: options.colors.text,
-    fontFamily: options.fontFamily,
-    fontSize: options.fontSize,
-  }
-};
+const AxisLabel = styled.g`
+  fill: ${options.colors.text};
+  font-family: ${options.fontFamily};
+  font-size: ${options.fontSize}px;
+`;
 
 const LineChart = ({
   data,
@@ -216,8 +215,7 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
     return (
-      <g
-        style={styles.axisLabel}
+      <AxisLabel
         textAnchor="middle"
         >
         {dataPoints.map((point: DataPoint, index: number) => {
@@ -230,14 +228,14 @@ const LineChart = ({
             </text>
           );
         })}
-      </g>
+      </AxisLabel>
     );
   };
 
   const LabelsYAxis = () => {
     const PARTS = numberOfHorizontalGuides;
     return (
-      <g style={styles.axisLabel}>
+      <AxisLabel>
         {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
           const x = options.fontSize;
           const ratio = index / numberOfHorizontalGuides;
@@ -253,7 +251,7 @@ const LineChart = ({
             </text>
           );
         })}
-      </g>
+      </AxisLabel>
     );
   };
 
