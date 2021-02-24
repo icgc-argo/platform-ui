@@ -19,10 +19,10 @@
 
 import React, { useRef } from 'react';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
-import LineChartEl from './LineChartEl';
+import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 
-const LineChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
+const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
 
@@ -41,7 +41,7 @@ const LineChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
           filter: `blur(${resizing ? 8 : 0}px)`
         }}
         >
-        <LineChartEl
+        <LineChart
           data={data}
           hasQuarterLines
           height={240}
@@ -54,4 +54,4 @@ const LineChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
   ): null;
 };
 
-export default LineChart;
+export default ClinicalChart;

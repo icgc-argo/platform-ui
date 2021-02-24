@@ -27,9 +27,9 @@ import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
-import LineChart from '../LineChart';
-import { adjustData, makeMockData } from '../LineChart/mockData';
-import { rangeButtons } from '../LineChart/utils';
+import ClinicalChart from '../ClinicalChart';
+import { adjustData, makeMockData } from '../ClinicalChart/mockData';
+import { rangeButtons } from '../ClinicalChart/utils';
 
 const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
@@ -68,7 +68,7 @@ export default () => {
       >
         {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
           ? (
-            <LineChart
+            <ClinicalChart
               data={lineChartData}
               activeRangeBtn={activeRangeBtn}
               setActiveRangeBtn={setActiveRangeBtn}
