@@ -85,6 +85,11 @@ const LineChart = ({
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
+  const horizontalLineStart = padding;
+  const horizontalLineEnd = width - padding / 2;
+  const verticalLineStart = height - padding;
+  const verticalLineEnd = height - padding;
+
   // setup dates
   const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
   const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(makeJSEpoch(d)));
@@ -115,13 +120,12 @@ const LineChart = ({
 
   const XAxis = () => (
     <Axis
-      points={`${padding},${height - padding} ${width - padding / 2},${height -
-        padding}`}
+      points={`${horizontalLineStart},${verticalLineEnd} ${horizontalLineEnd},${verticalLineEnd}`}
     />
   );
 
   const YAxis = () => (
-    <Axis points={`${padding},${padding} ${padding},${height - padding}`} />
+    <Axis points={`${padding},${padding} ${padding},${verticalLineEnd}`} />
   );
 
   const QuarterLines = () => {
@@ -195,8 +199,6 @@ const LineChart = ({
   };
 
   const HorizontalGuides = () => {
-    const startX = padding;
-    const endX = width - padding / 2;
     return (
       <g
         fill="none"
@@ -207,7 +209,7 @@ const LineChart = ({
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding;
           return (
-            <polyline key={guidesValue} points={`${startX},${yCoordinate} ${endX},${yCoordinate}`} />
+            <polyline key={guidesValue} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
           );
         })}
       </g>

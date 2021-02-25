@@ -48,6 +48,7 @@ const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
           horizontalGuides={4}
           precision={0}
           width={width}
+          yAxisTitle="donors"
           />
       </div>
     </>
