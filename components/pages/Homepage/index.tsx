@@ -318,7 +318,7 @@ export default function Homepage() {
                   <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
                     Dictionary Viewer
                   </Link>
-                  . Data Dictionary version 1.2 has been released. Click the “Compare With” button
+                  . Data Dictionary version 1.5 has been released. Click the “Compare With” button
                   to see the latest updates.
                 </div>
               </div>
