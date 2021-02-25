@@ -52,6 +52,7 @@ const LineChart = ({
   horizontalGuides: numberOfHorizontalGuides,
   precision,
   width,
+  yAxisTitle,
 }: { 
   data: DataObj;
   hasQuarterLines: boolean;
@@ -59,6 +60,7 @@ const LineChart = ({
   horizontalGuides: number;
   precision: number;
   width: number;
+  yAxisTitle: string;
 }) => {
   // setup Y axis
   // TODO: maxY is this OR committed donors, whichever is more
@@ -236,8 +238,16 @@ const LineChart = ({
     const PARTS = numberOfHorizontalGuides;
     return (
       <AxisLabel>
+        <text
+          textAnchor="middle"
+          transform={`translate(${options.fontSize - 2},${height/2}) rotate(-90)`}
+          x={0}
+          y={0}
+          >
+          # {yAxisTitle}
+        </text>
         {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
-          const x = padding - options.fontSize;
+          const x = padding - options.fontSize + 6;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
           const labelStr = (maxY * (index / PARTS)).toString();

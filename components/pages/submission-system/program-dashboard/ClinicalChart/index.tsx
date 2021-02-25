@@ -36,7 +36,7 @@ const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
       <div
         ref={lineChartRef}
         style={{
-          // border: '1px solid pink',
+          border: '1px solid pink',
           width: '100%',
           filter: `blur(${resizing ? 8 : 0}px)`
         }}
