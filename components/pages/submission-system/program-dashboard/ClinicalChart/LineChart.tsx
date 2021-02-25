@@ -237,13 +237,14 @@ const LineChart = ({
     return (
       <AxisLabel>
         {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
-          const x = options.fontSize;
+          const x = padding - options.fontSize;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
           const labelStr = (maxY * (index / PARTS)).toString();
           return (
             <text
               key={index}
+              textAnchor="end"
               x={x}
               y={yCoordinate}
               >
