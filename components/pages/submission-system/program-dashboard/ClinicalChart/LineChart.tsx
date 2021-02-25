@@ -69,7 +69,7 @@ const LineChart = ({
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
-  const chartWidth = width - padding * 1.5;
+  const chartWidth = width - padding;
   const chartHeight = height - padding * 2;
 
   // setup X axis
@@ -86,8 +86,8 @@ const LineChart = ({
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
   const horizontalLineStart = padding;
-  const horizontalLineEnd = width - padding / 2;
-  const verticalLineStart = height - padding;
+  const horizontalLineEnd = chartWidth + padding;
+  const verticalLineStart = padding;
   const verticalLineEnd = height - padding;
 
   // setup dates
@@ -125,13 +125,10 @@ const LineChart = ({
   );
 
   const YAxis = () => (
-    <Axis points={`${padding},${padding} ${padding},${verticalLineEnd}`} />
+    <Axis points={`${horizontalLineStart},${verticalLineStart} ${horizontalLineStart},${verticalLineEnd}`} />
   );
 
   const QuarterLines = () => {
-    const startY = padding;
-    const endY = height - padding;
-
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
       .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
         isBefore(quarter, dataDayRange.end));
@@ -169,7 +166,7 @@ const LineChart = ({
             // TODO: tooltips
             <polyline
               key={x}
-              points={`${x},${startY} ${x},${endY}`}
+              points={`${x},${verticalLineStart} ${x},${verticalLineEnd}`}
               />
           ))}
       </g>
