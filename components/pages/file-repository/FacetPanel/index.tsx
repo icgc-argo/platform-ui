@@ -71,7 +71,7 @@ import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { FilterOption } from 'uikit/dist/OptionsList';
+import { FilterOption } from 'uikit/OptionsList';
 
 const FacetRow = styled('div')`
   display: flex;

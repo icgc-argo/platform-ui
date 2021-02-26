@@ -280,32 +280,55 @@ export default function Homepage() {
         <NewsContainer
           newsItems={[
             <>
+              <b>Announcements:</b>
               <div>
-                <b>Announcement: October 23, 2020</b> - We are excited to announce{' '}
+                <b>March 01, 2021:</b> The 17th Scientific Workshop & 4th ARGO Virtual Meeting
+                Plenary Session is open to the public for{' '}
+                <Link
+                  target="_blank"
+                  href="https://www.icgc-argo.org/page/128/17th-icgc-scientific-workshop"
+                >
+                  registration
+                </Link>
+                . ARGO updates from the Data Coordination Centre and the Secretariat will be
+                presented, as well as oral and poster presentations from participating ARGO programs
+                and technology development teams.
+              </div>
+
+              <div
+                css={css`
+                  margin-top: 10px;
+                `}
+              >
+                <b>October 23, 2020:</b> We are excited to announce{' '}
                 <Link target="_blank" href={DOCS_DATA_RELEASES_PAGE}>
                   Data Release 2.0
                 </Link>{' '}
-                on the ICGC ARGO Data Platform, including additonal data for PACA-CA, OCCAMS-GB, and
-                two newly released programs LUCA-KR and PTC-SA.
+                on the ICGC ARGO Data Platform, including additional data for PACA-CA, OCCAMS-GB,
+                and two newly released programs LUCA-KR and PTC-SA.
               </div>
               <div
                 css={css`
                   margin-top: 10px;
                 `}
               >
-                <b>New Feature:</b> You can now compare changes in released ARGO Data Dictionary
-                versions in the{' '}
-                <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
-                  Dictionary Viewer
-                </Link>
-                . Data Dictionary version 1.2 has been released. Click the “Compare With” button to
-                see the latest updates.
-                <ul>
-                  <li>
-                    ARGO <b>Data Dictionary 1.2</b>, <b>Data Release 2.0</b> and{' '}
-                    <b>Software Release 1.78.0/3.10.0</b> are now available.
-                  </li>
-                </ul>
+                <b>New Features:</b>{' '}
+                <div>
+                  You can now compare changes in released ARGO Data Dictionary versions in the{' '}
+                  <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+                    Dictionary Viewer
+                  </Link>
+                  . Data Dictionary version 1.5 has been released. Click the “Compare With” button
+                  to compare different versions of the dictionary.
+                </div>
+              </div>
+              <div
+                css={css`
+                  margin-top: 10px;
+                `}
+              >
+                ARGO <b>Data Dictionary 1.5</b>, <b>Data Release 2.0</b> and{' '}
+                <b>Software Release 1.86.1 - API 3.13.2</b> are now available.
               </div>
             </>,
           ]}
