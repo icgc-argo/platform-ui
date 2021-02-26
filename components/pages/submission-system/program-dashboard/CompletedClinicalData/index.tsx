@@ -55,8 +55,8 @@ export default () => {
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
-  const chartHeight = 230;
-  const chartPadding = 12;
+  const CHART_HEIGHT = 230;
+  const CHART_PADDING = 12;
 
   return (
     <DashboardCard>
@@ -65,15 +65,15 @@ export default () => {
       </Typography>
       <div
         css={css`
-          height: ${chartHeight + chartPadding}px;
-          padding: ${chartPadding}px 0 0;
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0 0;
         `}
       >
         {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
           ? (
             <ClinicalChart
               data={lineChartData}
-              height={chartHeight}
+              height={CHART_HEIGHT}
               activeRangeBtn={activeRangeBtn}
               setActiveRangeBtn={setActiveRangeBtn}
               />

@@ -184,9 +184,10 @@ const LineChart = ({
         >
         {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
+          console.log({ tickX })
           return (
             <polyline
-              key={ticksValue}
+              key={tickX}
               points={`${tickX},${yStart} ${tickX},${yEnd}`}
               />
           );
@@ -206,7 +207,7 @@ const LineChart = ({
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + padding;
           return (
-            <polyline key={guidesValue} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
+            <polyline key={yCoordinate} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
           );
         })}
       </g>
@@ -222,9 +223,9 @@ const LineChart = ({
         {dataPoints.map((point: DataPoint, index: number) => {
           const x = getX(index);
           return (
-            <text key={point.label}>
+            <text key={x}>
               {point.label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan x={x} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
+                <tspan key={word+wordIndex} x={x} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
               ))}
             </text>
           );
@@ -281,6 +282,7 @@ const LineChart = ({
         // TODO: change colour based on line title
         <polyline
           fill="none"
+          key={points}
           stroke={options.colors.chartLine}
           strokeWidth={options.strokeWidth}
           points={points}

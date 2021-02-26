@@ -23,6 +23,9 @@ import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
 
+const CHART_HEIGHT = 230;
+const CHART_PADDING = 12;
+
 const ClinicalChart = ({
   activeRangeBtn,
   data,
@@ -55,7 +58,7 @@ const ClinicalChart = ({
         <LineChart
           data={data}
           hasQuarterLines
-          height={height}
+          height={CHART_HEIGHT}
           horizontalGuides={4}
           precision={0}
           width={width}
