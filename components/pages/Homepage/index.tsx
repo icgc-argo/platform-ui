@@ -283,7 +283,7 @@ export default function Homepage() {
               <b>Announcements:</b>
               <div>
                 <b>March 01, 2021:</b> The 17th Scientific Workshop & 4th ARGO Virtual Meeting
-                Plenary Session is open to public for{' '}
+                Plenary Session is open to the public for{' '}
                 <Link
                   target="_blank"
                   href="https://www.icgc-argo.org/page/128/17th-icgc-scientific-workshop"
@@ -292,7 +292,7 @@ export default function Homepage() {
                 </Link>
                 . ARGO updates from the Data Coordination Centre and the Secretariat will be
                 presented, as well as oral and poster presentations from participating ARGO programs
-                and technological development teams.
+                and technology development teams.
               </div>
 
               <div
@@ -304,8 +304,8 @@ export default function Homepage() {
                 <Link target="_blank" href={DOCS_DATA_RELEASES_PAGE}>
                   Data Release 2.0
                 </Link>{' '}
-                on the ICGC ARGO Data Platform, including additonal data for PACA-CA, OCCAMS-GB, and
-                two newly released programs LUCA-KR and PTC-SA.
+                on the ICGC ARGO Data Platform, including additional data for PACA-CA, OCCAMS-GB,
+                and two newly released programs LUCA-KR and PTC-SA.
               </div>
               <div
                 css={css`
@@ -319,7 +319,7 @@ export default function Homepage() {
                     Dictionary Viewer
                   </Link>
                   . Data Dictionary version 1.5 has been released. Click the “Compare With” button
-                  to see the latest updates.
+                  to compare different versions of the dictionary.
                 </div>
               </div>
               <div
