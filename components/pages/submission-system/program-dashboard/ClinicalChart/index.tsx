@@ -18,7 +18,10 @@
  */
 
 import React, { useRef } from 'react';
+import { css } from '@emotion/core';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
+import Typography from 'uikit/Typography';
+import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
@@ -29,43 +32,53 @@ const CHART_PADDING = 12;
 const ClinicalChart = ({
   activeRangeBtn,
   data,
-  height,
-  setActiveRangeBtn
+  setActiveRangeBtn,
+  title,
 }: {
   activeRangeBtn: string;
   data: DataObj;
-  height: number;
   setActiveRangeBtn: any; // type?
+  title: string;
 }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
 
   return data ? (
-    <>
-      <RangeControlBar
-        activeBtn={activeRangeBtn}
-        handleBtnClick={setActiveRangeBtn}
-        rangeArray={[0, 1]}
-        />
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        {title}
+      </Typography>
       <div
-        ref={lineChartRef}
-        style={{
-          // border: '1px solid pink',
-          width: '100%',
-          filter: `blur(${resizing ? 8 : 0}px)`
-        }}
+        css={css`
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0 0;
+        `}
         >
-        <LineChart
-          data={data}
-          hasQuarterLines
-          height={CHART_HEIGHT}
-          horizontalGuides={4}
-          precision={0}
-          width={width}
-          yAxisTitle="donors"
+        <RangeControlBar
+          activeBtn={activeRangeBtn}
+          handleBtnClick={setActiveRangeBtn}
+          rangeArray={[0, 1]}
           />
+        <div
+          ref={lineChartRef}
+          style={{
+            // border: '1px solid pink',
+            width: '100%',
+            filter: `blur(${resizing ? 8 : 0}px)`
+          }}
+          >
+          <LineChart
+            data={data}
+            hasQuarterLines
+            height={CHART_HEIGHT}
+            horizontalGuides={4}
+            precision={0}
+            width={width}
+            yAxisTitle="donors"
+            />
+        </div>
       </div>
-    </>
+    </DashboardCard>
   ): null;
 };
 

@@ -184,7 +184,6 @@ const LineChart = ({
         >
         {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
-          console.log({ tickX })
           return (
             <polyline
               key={tickX}

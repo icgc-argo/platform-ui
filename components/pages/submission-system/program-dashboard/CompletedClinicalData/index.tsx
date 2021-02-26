@@ -33,6 +33,9 @@ import { rangeButtons } from '../ClinicalChart/utils';
 
 const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
+const CHART_HEIGHT = 230;
+const CHART_PADDING = 12;
+
 const getStartedLink = (
   <Typography variant="data" component="span">
     <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
@@ -46,7 +49,8 @@ export default () => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
-  // TODO: when API is ready, this should be a reusable hook or component
+  // TODO: when API is ready, this should be a reusable hook,
+  // or data requests should be made at the page level.
   useEffect(() => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
@@ -55,36 +59,29 @@ export default () => {
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
-  const CHART_HEIGHT = 230;
-  const CHART_PADDING = 12;
-
-  return (
-    <DashboardCard>
-      <Typography variant="default" component="span">
-        Completed Core Clinical Data
-      </Typography>
-      <div
-        css={css`
-          height: ${CHART_HEIGHT + CHART_PADDING}px;
-          padding: ${CHART_PADDING}px 0 0;
-        `}
-      >
-        {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
-          ? (
-            <ClinicalChart
-              data={lineChartData}
-              height={CHART_HEIGHT}
-              activeRangeBtn={activeRangeBtn}
-              setActiveRangeBtn={setActiveRangeBtn}
-              />
-            )
-          : (
-            <NoData title="Coming Soon." link={getStartedLink}>
-              <img alt="Coming Soon." src={PicClipboard} />
-            </NoData>
-          )
-        }
-      </div>
-    </DashboardCard>
-  );
+  return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+    ? (
+      <ClinicalChart
+        data={lineChartData}
+        activeRangeBtn={activeRangeBtn}
+        setActiveRangeBtn={setActiveRangeBtn}
+        title="Completed Core Clinical Data"
+        />
+    ) : (
+      <DashboardCard>
+        <Typography variant="default" component="span">
+          Completed Core Clinical Data
+        </Typography>
+        <div
+          css={css`
+            height: ${CHART_HEIGHT + CHART_PADDING}px;
+            padding: ${CHART_PADDING}px 0 0;
+          `}
+        >
+          <NoData title="Coming Soon." link={getStartedLink}>
+            <img alt="Coming Soon." src={PicClipboard} />
+          </NoData>
+        </div>
+      </DashboardCard>
+    );
 };
