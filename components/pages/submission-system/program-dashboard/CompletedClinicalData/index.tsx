@@ -35,6 +35,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
+const CHART_TITLE = 'Completed Core Clinical Data';
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -65,19 +66,19 @@ export default () => {
         data={lineChartData}
         activeRangeBtn={activeRangeBtn}
         setActiveRangeBtn={setActiveRangeBtn}
-        title="Completed Core Clinical Data"
+        title={CHART_TITLE}
         />
     ) : (
       <DashboardCard>
         <Typography variant="default" component="span">
-          Completed Core Clinical Data
+          {CHART_TITLE}
         </Typography>
         <div
           css={css`
             height: ${CHART_HEIGHT + CHART_PADDING}px;
             padding: ${CHART_PADDING}px 0 0;
           `}
-        >
+          >
           <NoData title="Coming Soon." link={getStartedLink}>
             <img alt="Coming Soon." src={PicClipboard} />
           </NoData>

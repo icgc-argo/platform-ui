@@ -43,7 +43,7 @@ const ClinicalChart = ({
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
 
-  return data ? (
+  return (
     <DashboardCard>
       <Typography variant="default" component="span">
         {title}
@@ -79,7 +79,7 @@ const ClinicalChart = ({
         </div>
       </div>
     </DashboardCard>
-  ): null;
+  );
 };
 
 export default ClinicalChart;
