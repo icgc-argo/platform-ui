@@ -87,7 +87,7 @@ const LineChart = ({
 
   const horizontalLineStart = padding;
   const horizontalLineEnd = chartWidth + padding;
-  const verticalLineStart = padding;
+  const verticalLineStart = Math.floor(padding / 2);
   const verticalLineEnd = height - padding;
 
   // setup dates

@@ -21,8 +21,19 @@ import React, { useRef } from 'react';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
+import { DataObj } from './types';
 
-const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
+const ClinicalChart = ({
+  activeRangeBtn,
+  data,
+  height,
+  setActiveRangeBtn
+}: {
+  activeRangeBtn: string;
+  data: DataObj;
+  height: number;
+  setActiveRangeBtn: any; // type?
+}) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
 
@@ -36,7 +47,7 @@ const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
       <div
         ref={lineChartRef}
         style={{
-          border: '1px solid pink',
+          // border: '1px solid pink',
           width: '100%',
           filter: `blur(${resizing ? 8 : 0}px)`
         }}
@@ -44,7 +55,7 @@ const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
         <LineChart
           data={data}
           hasQuarterLines
-          height={240}
+          height={height}
           horizontalGuides={4}
           precision={0}
           width={width}
