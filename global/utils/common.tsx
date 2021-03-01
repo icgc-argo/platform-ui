@@ -44,12 +44,19 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
     },
   });
 
-const standardDate = 'YYYY-MM-DD';
-export const displayDate = (date) => formatDate(date, standardDate);
+const dateFormat = 'yyyy-MM-dd';
+export const displayDate = (date: string | Date) => {
+  const jsDate = typeof date === 'string' ? new Date(date) : date;
+  return formatDate(jsDate, dateFormat);
+}
 
-const dateTimeFormat = 'MMMM D, YYYY [at] h:mm A';
-export const displayDateAndTime = (date: string | number | Date) =>
-  formatDate(date, dateTimeFormat);
+const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
+export const displayDateAndTime = (date: string | Date) => {
+  const jsDate = typeof date === 'string' ? new Date(date) : date;
+  const formattedDate = formatDate(jsDate, dateTimeFormat.date);
+  const formattedTime = formatDate(jsDate, dateTimeFormat.time);
+  return `${formattedDate} at ${formattedTime}`;
+};
 
 export const sleep = (time: number = 2000) =>
   new Promise((resolve) => {

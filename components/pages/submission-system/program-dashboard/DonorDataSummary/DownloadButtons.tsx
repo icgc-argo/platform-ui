@@ -106,7 +106,7 @@ const DownloadButtons = () => {
       .then(checkResponseIs200)
       .then(res => res.blob())
       .then(blob => {
-        const now = formatDate(Date.now(), 'YYYYMMDD');
+        const now = formatDate(Date.now(), 'yyyyMMdd');
         const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 
         setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
