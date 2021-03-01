@@ -56,7 +56,7 @@ export default () => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
     const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType: 'molecular'});
+    const clinicalData = find(adjustedData, { chartType: 'clinical'});
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 

@@ -17,14 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Container from 'uikit/Container';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/core';
+import { find } from 'lodash';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
+import { getConfig } from 'global/config';
 import { DashboardCard } from '../common';
 import { DOCS_SUBMITTING_MOLECULAR_DATA_PAGE } from 'global/constants/docSitePaths';
+import ClinicalChart from '../ClinicalChart';
+import { adjustData, makeMockData } from '../ClinicalChart/mockData';
+import { rangeButtons } from '../ClinicalChart/utils';
+
+const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
+
+const CHART_HEIGHT = 230;
+const CHART_PADDING = 12;
+const CHART_TITLE = 'Molecular Data Summary';
 
 const getStartedLink = (
   <Typography variant="data" component="span">
@@ -34,23 +45,43 @@ const getStartedLink = (
   </Typography>
 );
 
-export default () => (
-  <DashboardCard>
-    <Typography variant="default" component="span">
-      Molecular Data Summary
-    </Typography>
-    <div
-      css={css`
-        height: 260px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      `}
-    >
-      <NoData title="Coming Soon." link={getStartedLink}>
-        <img alt="Coming Soon." src={PicClipboard} />
-      </NoData>
-    </div>
-  </DashboardCard>
-);
+export default () => {
+  const [lineChartData, setLineChartData] = useState(null);
+  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+
+  // TODO: when API is ready, this should be a reusable hook,
+  // or data requests should be made at the page level. TBD
+  useEffect(() => {
+    const days = find(rangeButtons, { title: activeRangeBtn }).data;
+    const mockData = makeMockData(days);
+    const adjustedData = adjustData(mockData);
+    const clinicalData = find(adjustedData, { chartType: 'molecular'});
+    setLineChartData(clinicalData);
+  }, [activeRangeBtn]);
+
+  return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+    ? (
+      <ClinicalChart
+        data={lineChartData}
+        activeRangeBtn={activeRangeBtn}
+        setActiveRangeBtn={setActiveRangeBtn}
+        title={CHART_TITLE}
+        />
+    ) : (
+      <DashboardCard>
+        <Typography variant="default" component="span">
+          {CHART_TITLE}
+        </Typography>
+        <div
+          css={css`
+            height: ${CHART_HEIGHT + CHART_PADDING}px;
+            padding: ${CHART_PADDING}px 0 0;
+          `}
+          >
+          <NoData title="Coming Soon." link={getStartedLink}>
+            <img alt="Coming Soon." src={PicClipboard} />
+          </NoData>
+        </div>
+      </DashboardCard>
+    );
+}
