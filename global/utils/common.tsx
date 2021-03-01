@@ -44,7 +44,7 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
     },
   });
 
-const dateFormat = 'yyyy-MM-d';
+const dateFormat = 'yyyy-MM-dd';
 export const displayDate = (date: string | Date) => {
   const jsDate = typeof date === 'string' ? new Date(date) : date;
   return formatDate(jsDate, dateFormat);
