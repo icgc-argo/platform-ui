@@ -30,7 +30,6 @@ import { Row, Col, ScreenClassRender } from 'react-grid-system';
 import StatsBar from './StatsBar';
 import DonorReleaseSummary from './DonorReleaseSummary';
 import ClinicalChartCard from './ClinicalChartCard';
-import MolecularDataSummary from './MolecularDataSummary';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
 import DonorDataSummary from './DonorDataSummary';
 import { setConfiguration } from 'react-grid-system';
@@ -39,10 +38,12 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import Typography from 'uikit/Typography';
 import {
-  DOCS_SUBMITTED_DATA_PAGE,
   DOCS_DATA_ACCESS_PAGE,
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
+  DOCS_SUBMITTED_DATA_PAGE,
+  DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
+  DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';
 
@@ -184,13 +185,21 @@ export default function ProgramDashboard() {
         <ScreenClassRender
           render={(screenClass) => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-              <ClinicalChartCard cardType="clinical" />
+              <ClinicalChartCard
+                comingSoonLink={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
+                title="Completed Core Clinical Data"
+                type="clinical"
+                />
             </Col>
           )}
         />
 
         <Col xl={4} lg={12}>
-          <ClinicalChartCard cardType="molecular" />
+          <ClinicalChartCard
+            comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
+            title="Molecular Data Summary"
+            type="molecular"
+            />
         </Col>
       </PaddedRow>
       <PaddedRow>

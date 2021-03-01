@@ -26,23 +26,14 @@ import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE, DOCS_SUBMITTING_MOLECULAR_DATA_PAGE } from 'global/constants/docSitePaths';
 import ClinicalChart from '../ClinicalChart';
 import { adjustData, makeMockData } from '../ClinicalChart/mockData';
 import { rangeButtons } from '../ClinicalChart/utils';
 
-type CardType = {
-  cardType: 'clinical' | 'molecular'
-};
-
-const dataPages = {
-  clinical: DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
-  molecular: DOCS_SUBMITTING_MOLECULAR_DATA_PAGE
-};
-
-const cardTitles = {
-  clinical: 'Completed Core Clinical Data',
-  molecular: 'Molecular Data Summary',
+type CardProps = {
+  type: 'clinical' | 'molecular',
+  comingSoonLink: string;
+  title: string;
 };
 
 const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
@@ -50,7 +41,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default ({ cardType }: CardType) => {
+export default ({ comingSoonLink, title, type}: CardProps) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
@@ -60,13 +51,13 @@ export default ({ cardType }: CardType) => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
     const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType: cardType});
+    const clinicalData = find(adjustedData, { chartType: type});
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
   const getStartedLink = (
     <Typography variant="data" component="span">
-      <Link target="_blank" href={dataPages[cardType]}>
+      <Link target="_blank" href={comingSoonLink}>
         {' '}
         Get started with boop data submission &raquo;{' '}
       </Link>
@@ -79,12 +70,12 @@ export default ({ cardType }: CardType) => {
         data={lineChartData}
         activeRangeBtn={activeRangeBtn}
         setActiveRangeBtn={setActiveRangeBtn}
-        title={cardTitles[cardType]}
+        title={title}
         />
     ) : (
       <DashboardCard>
         <Typography variant="default" component="span">
-          {cardTitles[cardType]}
+          {title}
         </Typography>
         <div
           css={css`
