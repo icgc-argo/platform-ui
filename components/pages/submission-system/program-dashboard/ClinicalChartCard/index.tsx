@@ -31,7 +31,9 @@ import ClinicalChart from '../ClinicalChart';
 import { adjustData, makeMockData } from '../ClinicalChart/mockData';
 import { rangeButtons } from '../ClinicalChart/utils';
 
-type CardType = 'clinical' | 'molecular';
+type CardType = {
+  cardType: 'clinical' | 'molecular'
+};
 
 const dataPages = {
   clinical: DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
@@ -43,14 +45,12 @@ const cardTitles = {
   molecular: 'Molecular Data Summary',
 };
 
-// NOTE: temp component 
-
 const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default (cardType: CardType) => {
+export default ({ cardType }: CardType) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
@@ -68,7 +68,7 @@ export default (cardType: CardType) => {
     <Typography variant="data" component="span">
       <Link target="_blank" href={dataPages[cardType]}>
         {' '}
-        Get started with {cardType} data submission &raquo;{' '}
+        Get started with boop data submission &raquo;{' '}
       </Link>
     </Typography>
   );

@@ -184,13 +184,13 @@ export default function ProgramDashboard() {
         <ScreenClassRender
           render={(screenClass) => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-              <ClinicalChartCard />
+              <ClinicalChartCard cardType="clinical" />
             </Col>
           )}
         />
 
         <Col xl={4} lg={12}>
-          <MolecularDataSummary />
+          <ClinicalChartCard cardType="molecular" />
         </Col>
       </PaddedRow>
       <PaddedRow>
