@@ -29,7 +29,7 @@ import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNot
 import { Row, Col, ScreenClassRender } from 'react-grid-system';
 import StatsBar from './StatsBar';
 import DonorReleaseSummary from './DonorReleaseSummary';
-import CompletedClinicalData from './CompletedClinicalData';
+import ClinicalChartCard from './ClinicalChartCard';
 import MolecularDataSummary from './MolecularDataSummary';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
 import DonorDataSummary from './DonorDataSummary';
@@ -184,7 +184,7 @@ export default function ProgramDashboard() {
         <ScreenClassRender
           render={(screenClass) => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-              <CompletedClinicalData />
+              <ClinicalChartCard />
             </Col>
           )}
         />
