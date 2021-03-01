@@ -51,7 +51,7 @@ export default () => {
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
   // TODO: when API is ready, this should be a reusable hook,
-  // or data requests should be made at the page level.
+  // or data requests should be made at the page level. TBD
   useEffect(() => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
