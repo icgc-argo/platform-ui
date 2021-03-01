@@ -43,8 +43,8 @@ export const Button = styled<'button', { as?: keyof HTMLElementTagNameMap }>('bu
   }
 
   &.active {
-    border-bottom-color: ${({ theme }) => theme.colors.accent1};
-    color: ${({ theme }) => theme.colors.accent1_dark};
+    border-bottom-color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
   }
 `;
 
@@ -78,7 +78,7 @@ export const Tab: React.ComponentType<
   ) : (
     <Button
       className={clsx({ active: currentValue === value }, className)}
-      onClick={e => onChange(e, value)}
+      onClick={(e) => onChange(e, value)}
       {...otherProps}
     >
       {label}
@@ -95,7 +95,7 @@ const Tabs: React.ComponentType<{
   onChange?: (...any) => void;
   children: React.ReactElement[];
 }> = ({ value, onChange, children: childrenProp }) => {
-  const children = React.Children.map(childrenProp, child => {
+  const children = React.Children.map(childrenProp, (child) => {
     return React.cloneElement(child, {
       active: child.props.value == value,
     });
