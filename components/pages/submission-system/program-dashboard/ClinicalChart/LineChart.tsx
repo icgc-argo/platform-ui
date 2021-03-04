@@ -268,7 +268,6 @@ const LineChart = ({
   };
 
   const LabelsYAxis = () => {
-    const PARTS = numberOfHorizontalGuides;
     return (
       <TextStyleGroup>
         <text
@@ -279,11 +278,11 @@ const LineChart = ({
           >
           # {yAxisTitle}
         </text>
-        {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
+        {new Array(numberOfHorizontalGuides + 1).fill(0).map((axisValue: number, index: number) => {
           const xCoordinate = padding - options.fontSize + 6;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + topPadding + options.fontSize / 2;
-          const labelStr = (maxY * (index / PARTS)).toString();
+          const labelStr = (maxY * (index / numberOfHorizontalGuides)).toString();
           return (
             <text
               key={index}
