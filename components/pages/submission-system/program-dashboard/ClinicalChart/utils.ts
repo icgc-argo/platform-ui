@@ -33,7 +33,7 @@ export const getMinMax = (
   ];
   return Math[minMax](...allCoord);
 };
-export const makeJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
+export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [
   {

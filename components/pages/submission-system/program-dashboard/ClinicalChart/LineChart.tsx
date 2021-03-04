@@ -20,7 +20,7 @@
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { getMinMax, makeJSEpoch } from './utils';
+import { getMinMax, convertUnixEpochToJSEpoch } from './utils';
 import { DataLine, DataObj, DataPoint } from './types';
 
 const options = {
@@ -71,13 +71,13 @@ const LineChart = ({
   yAxisTitle: string;
 }) => {
   // setup Y axis
-  // TODO: maxY is this OR committed donors, whichever is more
   const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
-  const topPadding = padding * 0.25;
+  const topPadding = options.fontSize * 1.5;
+  // topPadding leaves room for yAxisThresholdLabel
   const chartWidth = width - padding;
   const chartHeight = height - padding - topPadding;
 
@@ -101,7 +101,7 @@ const LineChart = ({
 
   // setup dates
   const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
-  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(makeJSEpoch(d)));
+  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(convertUnixEpochToJSEpoch(d)));
   const day0 = datesJSEpoch[0];
   const dayLast = datesJSEpoch[datesJSEpoch.length-1];
   const daysInData = differenceInDays(dayLast, day0);
@@ -116,7 +116,7 @@ const LineChart = ({
     .map((line: DataLine) => line.points
       .map((point: DataPoint, i: number) => {
         const x = getX(i);
-        const y = Math.floor(chartHeight - topPadding - (Number(point.y) / maxY) * chartHeight + padding * 0.5);
+        const y = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
         return `${x},${y}`;
       })
       .join(' ')
@@ -139,15 +139,6 @@ const LineChart = ({
 
   const YAxisThresholdLine = () => {
     const yCoordinate = Math.floor(topPadding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight);
-
-    // // match the first horizontal guide
-    // const ratio = 1 / (numberOfHorizontalGuides + 1);
-    // const yCoordinate = chartHeight - chartHeight * ratio + padding;
-    // const linesHeight = verticalLineEnd - yCoordinate;
-
-    // console.log({ maxY, y, yCoordinate, verticalLineEnd, linesHeight })
-
-    // const y = maxY === yAxisThreshold ? verticalLineStart : verticalLineStart;
 
     return (
       <TextStyleGroup>

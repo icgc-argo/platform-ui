@@ -26,7 +26,7 @@ import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
 
-const CHART_HEIGHT = 200;
+const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
 
 const ClinicalChart = ({
