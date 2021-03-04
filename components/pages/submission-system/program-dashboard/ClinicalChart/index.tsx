@@ -26,7 +26,7 @@ import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
 
-const CHART_HEIGHT = 230;
+const CHART_HEIGHT = 200;
 const CHART_PADDING = 12;
 
 const ClinicalChart = ({
@@ -51,7 +51,7 @@ const ClinicalChart = ({
       <div
         css={css`
           height: ${CHART_HEIGHT + CHART_PADDING}px;
-          padding: ${CHART_PADDING}px 0 0;
+          padding: ${CHART_PADDING}px 0;
         `}
         >
         <RangeControlBar
@@ -64,6 +64,7 @@ const ClinicalChart = ({
           style={{
             // border: '1px solid pink',
             width: '100%',
+            paddingTop: CHART_PADDING,
             filter: `blur(${resizing ? 8 : 0}px)`
           }}
           >

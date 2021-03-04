@@ -77,8 +77,9 @@ const LineChart = ({
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
+  const topPadding = padding * 0.25;
   const chartWidth = width - padding;
-  const chartHeight = height - padding * 2;
+  const chartHeight = height - padding - topPadding;
 
   // setup X axis
   // X axis ticks, labels, and line/point positions
@@ -95,7 +96,7 @@ const LineChart = ({
 
   const horizontalLineStart = padding;
   const horizontalLineEnd = chartWidth + padding;
-  const verticalLineStart = Math.floor(padding / 2);
+  const verticalLineStart = 0;
   const verticalLineEnd = height - padding;
 
   // setup dates
@@ -115,7 +116,7 @@ const LineChart = ({
     .map((line: DataLine) => line.points
       .map((point: DataPoint, i: number) => {
         const x = getX(i);
-        const y = Math.floor(chartHeight - (Number(point.y) / maxY) * chartHeight + padding);
+        const y = Math.floor(chartHeight - topPadding - (Number(point.y) / maxY) * chartHeight + padding * 0.5);
         return `${x},${y}`;
       })
       .join(' ')
@@ -137,7 +138,7 @@ const LineChart = ({
   );
 
   const YAxisThresholdLine = () => {
-    const yCoordinate = Math.floor(padding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight);
+    const yCoordinate = Math.floor(topPadding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight);
 
     // // match the first horizontal guide
     // const ratio = 1 / (numberOfHorizontalGuides + 1);
@@ -207,7 +208,7 @@ const LineChart = ({
             // TODO: tooltips
             <polyline
               key={x}
-              points={`${x},${padding} ${x},${verticalLineEnd}`}
+              points={`${x},${verticalLineStart} ${x},${verticalLineEnd}`}
               />
           ))}
       </g>
@@ -245,7 +246,7 @@ const LineChart = ({
         >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
-          const yCoordinate = chartHeight - chartHeight * ratio + padding;
+          const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
           return (
             <polyline key={yCoordinate} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
           );
@@ -289,7 +290,7 @@ const LineChart = ({
         {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
           const x = padding - options.fontSize + 6;
           const ratio = index / numberOfHorizontalGuides;
-          const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
+          const yCoordinate = chartHeight - chartHeight * ratio + topPadding + options.fontSize / 2;
           const labelStr = (maxY * (index / PARTS)).toString();
           return (
             <text
