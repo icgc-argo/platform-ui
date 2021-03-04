@@ -29,17 +29,19 @@ const options = {
     // svg rendering made the colours darker/lighter.
     axisBorder: '#ccc',
     chartLine: '#523785',
-    committedBorder: '#0774d3',
     quarterBorder: '#7abad4',
+    yAxisThresholdBorder: '#3485cc',
     text: '#787878',
   },
+  quarterLineStrokeDashArray: '3, 2',
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
   strokeWidth: 0.5,
   xTickHeight: 5,
+  yAxisThresholdDashArray: '9, 3',
 };
 
-const AxisLabel = styled.g`
+const TextStyleGroup = styled.g`
   fill: ${options.colors.text};
   font-family: ${options.fontFamily};
   font-size: ${options.fontSize}px;
@@ -48,23 +50,29 @@ const AxisLabel = styled.g`
 const LineChart = ({
   data,
   hasQuarterLines = false,
+  hasYAxisThresholdLine = false,
   height,
   horizontalGuides: numberOfHorizontalGuides,
   precision,
   width,
+  yAxisThreshold,
+  yAxisThresholdLabel,
   yAxisTitle,
 }: { 
   data: DataObj;
-  hasQuarterLines: boolean;
+  hasQuarterLines?: boolean;
+  hasYAxisThresholdLine?: boolean;
   height: number;
   horizontalGuides: number;
   precision: number;
   width: number;
+  yAxisThreshold?: number;
+  yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
   // setup Y axis
   // TODO: maxY is this OR committed donors, whichever is more
-  const maxY = getMinMax({ data, minMax: 'max', coord: 'y' });
+  const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -128,6 +136,39 @@ const LineChart = ({
     <Axis points={`${horizontalLineStart},${verticalLineStart} ${horizontalLineStart},${verticalLineEnd}`} />
   );
 
+  const YAxisThresholdLine = () => {
+    const yCoordinate = Math.floor(padding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight);
+
+    // // match the first horizontal guide
+    // const ratio = 1 / (numberOfHorizontalGuides + 1);
+    // const yCoordinate = chartHeight - chartHeight * ratio + padding;
+    // const linesHeight = verticalLineEnd - yCoordinate;
+
+    // console.log({ maxY, y, yCoordinate, verticalLineEnd, linesHeight })
+
+    // const y = maxY === yAxisThreshold ? verticalLineStart : verticalLineStart;
+
+    return (
+      <TextStyleGroup>
+        {yAxisThresholdLabel && (
+          <text
+            x={horizontalLineStart + options.fontSize}
+            y={yCoordinate - options.fontSize * 0.5}
+            >
+            {yAxisThresholdLabel}
+          </text>
+        )}
+      <polyline
+        fill="none"
+        points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`}
+        stroke={options.colors.yAxisThresholdBorder}
+        strokeDasharray={options.yAxisThresholdDashArray}
+        strokeWidth={options.strokeWidth * 3}
+        />
+      </TextStyleGroup>
+    );
+  };
+
   const QuarterLines = () => {
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
       .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
@@ -159,14 +200,14 @@ const LineChart = ({
     return (
       <g
         stroke={options.colors.quarterBorder}
+        strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
-        strokeDasharray="3, 2"
         >
           {quartersLines.map(({ x }: { x: string }) => (
             // TODO: tooltips
             <polyline
               key={x}
-              points={`${x},${verticalLineStart} ${x},${verticalLineEnd}`}
+              points={`${x},${padding} ${x},${verticalLineEnd}`}
               />
           ))}
       </g>
@@ -216,7 +257,7 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
     return (
-      <AxisLabel
+      <TextStyleGroup
         textAnchor="middle"
         >
         {dataPoints.map((point: DataPoint, index: number) => {
@@ -229,14 +270,14 @@ const LineChart = ({
             </text>
           );
         })}
-      </AxisLabel>
+      </TextStyleGroup>
     );
   };
 
   const LabelsYAxis = () => {
     const PARTS = numberOfHorizontalGuides;
     return (
-      <AxisLabel>
+      <TextStyleGroup>
         <text
           textAnchor="middle"
           transform={`translate(${options.fontSize - 2},${height/2}) rotate(-90)`}
@@ -261,7 +302,7 @@ const LineChart = ({
             </text>
           );
         })}
-      </AxisLabel>
+      </TextStyleGroup>
     );
   };
 
@@ -275,6 +316,7 @@ const LineChart = ({
       <YAxis />
       <LabelsYAxis />
       {hasQuarterLines && <QuarterLines />}
+      {hasYAxisThresholdLine && <YAxisThresholdLine />}
       <HorizontalGuides />
 
       {polylineCoords.map((points: string) => (

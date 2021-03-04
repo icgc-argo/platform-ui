@@ -70,10 +70,13 @@ const ClinicalChart = ({
           <LineChart
             data={data}
             hasQuarterLines
+            hasYAxisThresholdLine
             height={CHART_HEIGHT}
             horizontalGuides={4}
             precision={0}
             width={width}
+            yAxisThreshold={1700} // this should be committed donors
+            yAxisThresholdLabel="Committed"
             yAxisTitle="donors"
             />
         </div>
