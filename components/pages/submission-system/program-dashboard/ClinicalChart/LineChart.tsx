@@ -55,7 +55,7 @@ const LineChart = ({
   horizontalGuides: numberOfHorizontalGuides,
   precision,
   width,
-  yAxisThreshold,
+  yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
 }: { 
@@ -76,6 +76,7 @@ const LineChart = ({
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
+  // padding applies to left, right, bottom
   const topPadding = options.fontSize * 1.5;
   // topPadding leaves room for yAxisThresholdLabel
   const chartWidth = width - padding;
@@ -115,9 +116,9 @@ const LineChart = ({
   const polylineCoords = data.lines
     .map((line: DataLine) => line.points
       .map((point: DataPoint, i: number) => {
-        const x = getX(i);
-        const y = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
-        return `${x},${y}`;
+        const xCoordinate = getX(i);
+        const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+        return `${xCoordinate},${yCoordinate}`;
       })
       .join(' ')
     );
@@ -174,7 +175,7 @@ const LineChart = ({
         .filter((d: Date) => compareAsc(d, curr) === 0)
         .map((d: Date) => datesJSEpoch.indexOf(d))[0];
 
-      const x = quarterTickIndex >= 0
+      const xCoordinate = quarterTickIndex >= 0
         ? getX(quarterTickIndex)
         : xTicksStart + (
             differenceInDays(curr, day0) / daysInData * xWidthAllTicks
@@ -183,7 +184,7 @@ const LineChart = ({
       return ([
         ...acc,
         {
-          x,
+          xCoordinate,
           tooltip: `${getYear(curr)} Q${getQuarter(curr)}`,
         }
       ])
@@ -195,11 +196,11 @@ const LineChart = ({
         strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
         >
-          {quartersLines.map(({ x }: { x: string }) => (
+          {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
             // TODO: tooltips
             <polyline
-              key={x}
-              points={`${x},${verticalLineStart} ${x},${verticalLineEnd}`}
+              key={xCoordinate}
+              points={`${xCoordinate},${verticalLineStart} ${xCoordinate},${verticalLineEnd}`}
               />
           ))}
       </g>
@@ -253,11 +254,11 @@ const LineChart = ({
         textAnchor="middle"
         >
         {dataPoints.map((point: DataPoint, index: number) => {
-          const x = getX(index);
+          const xCoordinate = getX(index);
           return (
-            <text key={x}>
+            <text key={xCoordinate}>
               {point.label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan key={word+wordIndex} x={x} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
+                <tspan key={word+wordIndex} x={xCoordinate} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
               ))}
             </text>
           );
@@ -279,7 +280,7 @@ const LineChart = ({
           # {yAxisTitle}
         </text>
         {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
-          const x = padding - options.fontSize + 6;
+          const xCoordinate = padding - options.fontSize + 6;
           const ratio = index / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + topPadding + options.fontSize / 2;
           const labelStr = (maxY * (index / PARTS)).toString();
@@ -287,7 +288,7 @@ const LineChart = ({
             <text
               key={index}
               textAnchor="end"
-              x={x}
+              x={xCoordinate}
               y={yCoordinate}
               >
               {parseFloat(labelStr).toFixed(precision)}
