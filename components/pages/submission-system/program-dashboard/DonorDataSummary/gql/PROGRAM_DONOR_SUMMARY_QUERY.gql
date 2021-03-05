@@ -27,6 +27,9 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
     sangerVcsCompleted
     sangerVcsRunning
     sangerVcsFailed
+    mutectFailed
+    mutectRunning
+    mutectCompleted
     processingStatus
     updatedAt
   }

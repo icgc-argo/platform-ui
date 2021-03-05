@@ -33,6 +33,9 @@ export type DonorSummaryRecord = {
   sangerVcsCompleted: number;
   sangerVcsRunning: number;
   sangerVcsFailed: number;
+  mutectFailed: number;
+  mutectRunning: number;
+  mutectCompleted: number;
   processingStatus: MolecularProcessingStatus;
   updatedAt: Date | string;
   validWithCurrentDictionary: boolean;
