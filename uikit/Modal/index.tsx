@@ -32,14 +32,14 @@ export const ModalContainer = styled('div')`
   box-shadow: 0 8px 21px 0 rgba(0, 0, 0, 0.1), 0 6px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: ${({ theme }) => theme.colors.white};
   max-width: 776px;
-  width: auto;
+  width: 100%;
   padding: 24px;
   padding-bottom: 0px;
   max-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: space-between;
-  margin 0 1rem;
+  margin: 0 1rem;
 `;
 
 const ModalTitle = styled('div')`
