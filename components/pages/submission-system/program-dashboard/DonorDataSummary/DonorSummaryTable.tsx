@@ -280,9 +280,9 @@ export default ({
           id: MUTECT2_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
-              complete={original.mutect2sCompleted}
-              inProgress={original.mutect2VcsRunning}
-              error={original.mutect2VcsFailed}
+              complete={original.mutectCompleted}
+              inProgress={original.mutectRunning}
+              error={original.mutectFailed}
             />
           ),
         },
