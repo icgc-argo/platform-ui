@@ -62,7 +62,7 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>
         {' '}
-        Get started with boop data submission &raquo;{' '}
+        Get started with {type} data submission &raquo;{' '}
       </Link>
     </Typography>
   );
