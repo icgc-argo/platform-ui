@@ -24,21 +24,24 @@ import { getMinMax, convertUnixEpochToJSEpoch } from './utils';
 import { DataLine, DataObj, DataPoint } from './types';
 
 const options = {
+  axisStrokeWidth: 0.5,
   colors: {
     // colours are changed slightly from theme.
     // svg rendering made the colours darker/lighter.
     axisBorder: '#ccc',
     chartLine: '#523785',
     quarterBorder: '#7abad4',
-    yAxisThresholdBorder: '#3485cc',
     text: '#787878',
+    yAxisThresholdBorder: '#3485cc',
   },
-  quarterLineStrokeDashArray: '3, 2',
+  chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
-  strokeWidth: 0.5,
+  guidesStrokeWidth: 0.5,
+  quarterLineStrokeDashArray: '3, 2',
   xTickHeight: 5,
   yAxisThresholdDashArray: '9, 3',
+  yAxisThresholdStrokeWidth: 1,
 };
 
 const TextStyleGroup = styled.g`
@@ -125,7 +128,7 @@ const LineChart = ({
 
   // setup axis elements
   const Axis = ({ points }: { points: string }) => (
-    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={points} />
+    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.axisStrokeWidth} points={points} />
   );
 
   const XAxis = () => (
@@ -156,7 +159,7 @@ const LineChart = ({
         points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`}
         stroke={options.colors.yAxisThresholdBorder}
         strokeDasharray={options.yAxisThresholdDashArray}
-        strokeWidth={options.strokeWidth * 3}
+        strokeWidth={options.yAxisThresholdStrokeWidth}
         />
       </TextStyleGroup>
     );
@@ -194,7 +197,7 @@ const LineChart = ({
       <g
         stroke={options.colors.quarterBorder}
         strokeDasharray={options.quarterLineStrokeDashArray}
-        strokeWidth={options.strokeWidth}
+        strokeWidth={options.yAxisThresholdStrokeWidth}
         >
           {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
             // TODO: tooltips
@@ -214,7 +217,7 @@ const LineChart = ({
       <g
         fill="none"
         stroke={options.colors.axisBorder}
-        strokeWidth={options.strokeWidth}
+        strokeWidth={options.axisStrokeWidth}
         >
         {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
@@ -234,7 +237,7 @@ const LineChart = ({
       <g
         fill="none"
         stroke={options.colors.axisBorder}
-        strokeWidth=".5"
+        strokeWidth={options.guidesStrokeWidth}
         >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
@@ -311,16 +314,18 @@ const LineChart = ({
       {hasYAxisThresholdLine && <YAxisThresholdLine />}
       <HorizontalGuides />
 
-      {polylineCoords.map((points: string) => (
-        // TODO: change colour based on line title
-        <polyline
-          fill="none"
-          key={points}
-          stroke={options.colors.chartLine}
-          strokeWidth={options.strokeWidth}
-          points={points}
-          />
-      ))}
+      <g
+        fill="none"
+        stroke={options.colors.chartLine}
+        strokeWidth={options.chartStrokeWidth}
+        >
+        {polylineCoords.map((points: string) => (
+          <polyline
+            key={points}
+            points={points}
+            />
+        ))}
+      </g>
     </svg>
   );
 };
