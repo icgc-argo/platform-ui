@@ -57,3 +57,13 @@ export const rangeButtons = [
     label: 'One week',
   }
 ];
+
+export const chartLineColors = {
+  'Alignment': '#15846C',
+  'DNA Raw Reads': '#EF4110',
+  'Mutect2': '#BC0025',
+  'RNA Raw Reads': '#00b3d3',
+  'RNA-Seq1': '#045093',
+  'RNA-Seq2': '#523785',
+  'Sanger VC': '#EC8F17',
+};

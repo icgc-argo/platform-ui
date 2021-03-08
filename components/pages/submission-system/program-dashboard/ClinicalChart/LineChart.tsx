@@ -20,8 +20,8 @@
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { getMinMax, convertUnixEpochToJSEpoch } from './utils';
-import { DataLine, DataObj, DataPoint } from './types';
+import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
+import { ChartLine, DataLine, DataObj, DataPoint } from './types';
 
 const options = {
   axisStrokeWidth: 0.5,
@@ -29,7 +29,7 @@ const options = {
     // colours are changed slightly from theme.
     // svg rendering made the colours darker/lighter.
     axisBorder: '#ccc',
-    chartLine: '#523785',
+    chartLineDefault: '#523785',
     quarterBorder: '#7abad4',
     text: '#787878',
     yAxisThresholdBorder: '#3485cc',
@@ -117,15 +117,17 @@ const LineChart = ({
 
   // TODO: change colour based on line title, for molecular chart
   // will have to return coords & colour in an object
-  const polylineCoords = data.lines
-    .map((line: DataLine) => line.points
-      .map((point: DataPoint, i: number) => {
-        const xCoordinate = getX(i);
-        const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
-        return `${xCoordinate},${yCoordinate}`;
-      })
-      .join(' ')
-    );
+  const chartLines = data.lines
+    .map((line: DataLine) => ({
+      ...line,
+      points: line.points
+        .map((point: DataPoint, i: number) => {
+          const xCoordinate = getX(i);
+          const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+          return `${xCoordinate},${yCoordinate}`;
+        })
+        .join(' ')
+    }));
 
   // setup axis elements
   const Axis = ({ points }: { points: string }) => (
@@ -317,13 +319,13 @@ const LineChart = ({
 
       <g
         fill="none"
-        stroke={options.colors.chartLine}
         strokeWidth={options.chartStrokeWidth}
         >
-        {polylineCoords.map((points: string) => (
+        {chartLines.map((chartLine: ChartLine) => (
           <polyline
-            key={points}
-            points={points}
+            key={chartLine.title}
+            points={chartLine.points}
+            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
             />
         ))}
       </g>
