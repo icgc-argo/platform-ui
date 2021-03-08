@@ -22,17 +22,18 @@ import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, 
 import { styled } from 'uikit';
 import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
 import { ChartLine, DataLine, DataObj, DataPoint } from './types';
+import themeColors from 'uikit/theme/defaultTheme/colors';
 
 const options = {
   axisStrokeWidth: 0.5,
   colors: {
     // colours are changed slightly from theme.
     // svg rendering made the colours darker/lighter.
-    axisBorder: '#ccc',
-    chartLineDefault: '#523785',
-    quarterBorder: '#7abad4',
-    text: '#787878',
-    yAxisThresholdBorder: '#3485cc',
+    axisBorder: themeColors.grey_1,
+    chartLineDefault: themeColors.accent2_dark,
+    quarterBorder: themeColors.secondary_2,
+    text: themeColors.primary_1,
+    yAxisThresholdBorder: themeColors.secondary,
   },
   chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
@@ -42,7 +43,7 @@ const options = {
   quarterStrokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
-  yAxisThresholdStrokeWidth: 1.5,
+  yAxisThresholdStrokeWidth: 0.5,
 };
 
 const TextStyleGroup = styled.g`
@@ -50,6 +51,12 @@ const TextStyleGroup = styled.g`
   font-family: ${options.fontFamily};
   font-size: ${options.fontSize}px;
 `;
+
+const makePointsString = (points: number[]) => {
+  // add 0.5 to sharpen straight, thin (0.5 strokeWidth) SVG lines
+  const adjustedPoints = points.map((point: number) => point + 0.5);
+  return `${adjustedPoints[0]},${adjustedPoints[1]} ${adjustedPoints[2]},${adjustedPoints[3]}`;
+}
 
 const LineChart = ({
   data,
@@ -130,18 +137,29 @@ const LineChart = ({
     }));
 
   // setup axis elements
-  const Axis = ({ points }: { points: string }) => (
-    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.axisStrokeWidth} points={points} />
+  const Axis = ({ points }: { points: number[] }) => (
+    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.axisStrokeWidth} points={makePointsString(points)} />
   );
 
   const XAxis = () => (
     <Axis
-      points={`${horizontalLineStart},${verticalLineEnd} ${horizontalLineEnd},${verticalLineEnd}`}
+      points={[
+        horizontalLineStart,
+        verticalLineEnd,
+        horizontalLineEnd,
+        verticalLineEnd
+      ]}
     />
   );
 
   const YAxis = () => (
-    <Axis points={`${horizontalLineStart},${verticalLineStart} ${horizontalLineStart},${verticalLineEnd}`} />
+    <Axis points={[
+      horizontalLineStart,
+      verticalLineStart,
+      horizontalLineStart,
+      verticalLineEnd
+    ]}
+    />
   );
 
   const YAxisThresholdLine = () => {
@@ -159,7 +177,12 @@ const LineChart = ({
         )}
       <polyline
         fill="none"
-        points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`}
+        points={makePointsString([
+          horizontalLineStart,
+          yCoordinate,
+          horizontalLineEnd,
+          yCoordinate
+        ])}
         stroke={options.colors.yAxisThresholdBorder}
         strokeDasharray={options.yAxisThresholdDashArray}
         strokeWidth={options.yAxisThresholdStrokeWidth}
@@ -181,11 +204,11 @@ const LineChart = ({
         .filter((d: Date) => compareAsc(d, curr) === 0)
         .map((d: Date) => datesJSEpoch.indexOf(d))[0];
 
-      const xCoordinate = quarterTickIndex >= 0
+      const xCoordinate = Number(quarterTickIndex >= 0
         ? getX(quarterTickIndex)
         : xTicksStart + (
             differenceInDays(curr, day0) / daysInData * xWidthAllTicks
-          );
+          ));
 
       return ([
         ...acc,
@@ -206,7 +229,12 @@ const LineChart = ({
             // TODO: tooltips
             <polyline
               key={xCoordinate}
-              points={`${xCoordinate},${verticalLineStart} ${xCoordinate},${verticalLineEnd}`}
+              points={makePointsString([
+                xCoordinate,
+                verticalLineStart,
+                xCoordinate,
+                verticalLineEnd
+              ])}
               />
           ))}
       </g>
@@ -227,7 +255,12 @@ const LineChart = ({
           return (
             <polyline
               key={tickX}
-              points={`${tickX},${yStart} ${tickX},${yEnd}`}
+              points={makePointsString([
+                tickX,
+                yStart,
+                tickX,
+                yEnd
+              ])}
               />
           );
         })}
@@ -246,7 +279,12 @@ const LineChart = ({
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
           return (
-            <polyline key={yCoordinate} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
+            <polyline key={yCoordinate} points={makePointsString([
+              horizontalLineStart,
+              yCoordinate,
+              horizontalLineEnd,
+              yCoordinate
+            ])} />
           );
         })}
       </g>

@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { DataLine, DataObj, DataPoint } from './types';
+import themeColors from 'uikit/theme/defaultTheme/colors';
 
 export const getMinMax = (
   { data, minMax, coord }: {
@@ -59,11 +60,11 @@ export const rangeButtons = [
 ];
 
 export const chartLineColors = {
-  'Alignment': '#15846C',
-  'DNA Raw Reads': '#EF4110',
-  'Mutect2': '#BC0025',
-  'RNA Raw Reads': '#00b3d3',
-  'RNA-Seq1': '#045093',
-  'RNA-Seq2': '#523785',
-  'Sanger VC': '#EC8F17',
+  'Alignment': themeColors.accent1_dark,
+  'DNA Raw Reads': themeColors.accent4_dark,
+  'Mutect2': themeColors.error_dark,
+  'RNA Raw Reads': themeColors.accent3_dark,
+  'RNA-Seq1': themeColors.secondary_dark,
+  'RNA-Seq2': themeColors.accent2_dark,
+  'Sanger VC': themeColors.warning_dark,
 };
