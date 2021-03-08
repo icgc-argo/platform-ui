@@ -39,9 +39,10 @@ const options = {
   fontSize: 10,
   guidesStrokeWidth: 0.5,
   quarterLineStrokeDashArray: '3, 2',
+  quarterStrokeWidth: 0.5,
   xTickHeight: 5,
-  yAxisThresholdDashArray: '9, 3',
-  yAxisThresholdStrokeWidth: 1,
+  yAxisThresholdDashArray: '8, 3',
+  yAxisThresholdStrokeWidth: 1.5,
 };
 
 const TextStyleGroup = styled.g`
@@ -149,7 +150,7 @@ const LineChart = ({
         {yAxisThresholdLabel && (
           <text
             x={horizontalLineStart + options.fontSize}
-            y={yCoordinate - options.fontSize * 0.5}
+            y={Math.floor(yCoordinate - options.fontSize * 0.5)}
             >
             {yAxisThresholdLabel}
           </text>
@@ -197,7 +198,7 @@ const LineChart = ({
       <g
         stroke={options.colors.quarterBorder}
         strokeDasharray={options.quarterLineStrokeDashArray}
-        strokeWidth={options.yAxisThresholdStrokeWidth}
+        strokeWidth={options.quarterStrokeWidth}
         >
           {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
             // TODO: tooltips
