@@ -224,7 +224,7 @@ const LineChart = ({
       if (isHover) {
         window.addEventListener('mousemove', handleTooltipPosition)
       } else {
-        // setTooltipText(null);
+        setTooltipText(null);
       }
       return () => window.removeEventListener('mousemove', handleTooltipPosition);
     },[isHover]);
