@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
+import { css } from '@emotion/core';
 import styled from '@emotion/styled';
+import Icon from 'uikit/Icon';
 import Button from 'uikit/Button';
 import { chartLineColors } from './utils';
 
 const StyledLegend = styled('div')`
-  position: relative;
-`;
-
-const StyledLegendBox = styled('div')`
   position: absolute;
   top: -140px;
   left: -195px;
@@ -18,7 +16,7 @@ const StyledLegendBox = styled('div')`
   border-radius: 4px;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   padding: 5px 3px;
-  > div {
+  .legend-column {
     width: 50%;
     padding: 0 2px;
   }
@@ -39,18 +37,18 @@ const StyledLegendBox = styled('div')`
       background: #d1f2f8;
     }
   }
-  label {
-    display: flex;
-    align-items: center;
-  }
-  .title {
+`;
+
+const StyledLegendLabel = styled('label')`
+  display: flex;
+  align-items: center;
+  .legend-input-title {
     font-family: 'Work Sans', 'sans-serif';
     font-size: 12px;
     line-height: 20px;
     padding: 2px;
-    /* margin-bottom: 3px; */
   }
-  .color {
+  .legend-input-color {
     width: 7px;
     height: 7px;
     border-radius: 25px;
@@ -73,43 +71,82 @@ const rna = [
   'RNA-Seq2'
 ];
 
-const Legend = ({ activeLines, handleLegend }) => {
+const LegendButton = (
+  { isOpen, setIsOpen }:
+  { isOpen: boolean, setIsOpen: any }
+) => (
+  <Button
+    variant="secondary"
+    onClick={() => setIsOpen(!isOpen)}
+    >
+    Legend
+    <Icon
+      css={css`
+        padding-left: 4px;
+      `}
+      name={isOpen ? 'times' : 'chevron_right'}
+      fill="accent2_dark"
+      height={'9px'}
+      />
+  </Button>
+);
+
+const LegendInput = (
+  { activeLines, handleLegendInput, title }:
+  { activeLines: string[], handleLegendInput: any, title: string }
+) => (
+  <StyledLegendLabel>
+    <input
+      checked={activeLines.includes(title)}
+      onClick={() => handleLegendInput(title)}
+      type="checkbox"
+      value={title}
+      />
+    <span className="legend-input-color" style={{background: chartLineColors[title]}}/>
+    <span className="legend-input-title">{title.includes('Raw Reads') ? 'Raw Reads' : title}</span>
+  </StyledLegendLabel>
+);
+
+const Legend = (
+  { activeLines, handleLegendInput }:
+  { activeLines: string[], handleLegendInput: any }
+) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <StyledLegend>
-      <Button
-      variant="secondary"
-      onClick={() => setIsOpen(!isOpen)}
-      >
-      Legend
-      {' '}
-      {isOpen ? '𝘅' : '❭'}
-      </Button>
+    <div css={css`
+      position: relative;
+    `}>
+      <LegendButton
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        />
       {isOpen && (
-      <StyledLegendBox>
-        <div>
-          <div className="legend-title yellow">DNA-SEQ PIPELINE</div>
-          {dna.map(x => (
-            <label>
-              <input type="checkbox" value={x} checked={activeLines.includes(x)} onClick={() => handleLegend(x)} />
-              <span className="color" style={{background: chartLineColors[x]}}/>
-              <span className="title">{x.includes('Raw Reads') ? 'Raw Reads' : x}</span>
-            </label>
-          ))}
-        </div>
-        <div>
-          <div className="legend-title blue">RNA-SEQ PIPELINE</div>
-          {rna.map(x => (
-            <label>
-              <input type="checkbox" value={x} checked={activeLines.includes(x)} onClick={() => handleLegend(x)} />
-              <span className="color" style={{background: chartLineColors[x]}}/>
-              <span className="title">{x.includes('Raw Reads') ? 'Raw Reads' : x}</span>
-            </label>
-          ))}
-        </div>
-      </StyledLegendBox>
+        <StyledLegend>
+          <div className="legend-column">
+            <div className="legend-title yellow">DNA-SEQ PIPELINE</div>
+            {dna.map((title: string) => (
+              <LegendInput
+                activeLines={activeLines}
+                handleLegendInput={handleLegendInput}
+                key={title}
+                title={title}
+                />
+            ))}
+          </div>
+          <div className="legend-column">
+            <div className="legend-title blue">RNA-SEQ PIPELINE</div>
+            {rna.map((title: string) => (
+              <LegendInput
+                activeLines={activeLines}
+                handleLegendInput={handleLegendInput}
+                key={title}
+                title={title}
+                />
+            ))}
+          </div>
+        </StyledLegend>
       )}
-    </StyledLegend>
+    </div>
   );
 };
 

@@ -48,7 +48,7 @@ const ClinicalChart = ({
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
   const [activeLines, setActiveLines] = useState(Object.keys(chartLineColors));
-  const handleLegend = (line: string) => {
+  const handleLegendInput = (line: string) => {
     const nextLines = activeLines.includes(line)
       ? activeLines.filter(activeLine => activeLine !== line)
       : activeLines.concat(line);
@@ -70,7 +70,7 @@ const ClinicalChart = ({
         {type === 'molecular' && (
           <Legend
             activeLines={activeLines}
-            handleLegend={handleLegend}
+            handleLegendInput={handleLegendInput}
             />
         )}
       </div>
