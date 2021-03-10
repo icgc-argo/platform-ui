@@ -9,8 +9,8 @@ const StyledLegend = styled('div')`
 
 const StyledLegendBox = styled('div')`
   position: absolute;
-  top: -100px;
-  left: -200px;
+  top: -140px;
+  left: -195px;
   display: flex;
   width: 270px;
   background: #fff;
@@ -31,6 +31,7 @@ const StyledLegendBox = styled('div')`
     font-family: 'Work Sans', 'sans-serif';
     line-height: 20px;
     text-align: center;
+    margin-bottom: 3px;
     &.yellow {
       background: #fef6ea;
     }
@@ -45,14 +46,17 @@ const StyledLegendBox = styled('div')`
   .title {
     font-family: 'Work Sans', 'sans-serif';
     font-size: 12px;
-    line-height: 16px;
+    line-height: 20px;
     padding: 2px;
+    /* margin-bottom: 3px; */
   }
   .color {
     width: 7px;
     height: 7px;
     border-radius: 25px;
     display: block;
+    margin: 0 3px 0 6px;
+    line-height: 20px;
   }
 `;
 
@@ -81,6 +85,7 @@ const Legend = ({ activeLines, handleLegend }) => {
       {' '}
       {isOpen ? '𝘅' : '❭'}
       </Button>
+      {isOpen && (
       <StyledLegendBox>
         <div>
           <div className="legend-title yellow">DNA-SEQ PIPELINE</div>
@@ -103,6 +108,7 @@ const Legend = ({ activeLines, handleLegend }) => {
           ))}
         </div>
       </StyledLegendBox>
+      )}
     </StyledLegend>
   );
 };
