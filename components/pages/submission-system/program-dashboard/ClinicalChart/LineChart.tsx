@@ -194,7 +194,12 @@ const LineChart = ({
     );
   };
 
-  const TooltipHoverBox = ({ children, text }: { children: React.ReactNode, text: string | string[] }) => {
+  const TooltipHoverBox = ({ children, height, text, width, x, y }: 
+    { 
+      children: React.ReactNode,
+      text: string | string[],
+      y: number, x: number, height: number, width: number,
+    }) => {
     // TODO: expand this box
     // because the lines are 1px wide/tall
     // and it's hard to hover on things.
@@ -207,7 +212,7 @@ const LineChart = ({
         setTooltipY(e.offsetY);
         setTooltipX(e.offsetX);
       }
-      setTooltipText('boo[]');
+      setTooltipText(text);
     };
 
     useEffect(() => {
@@ -217,8 +222,12 @@ const LineChart = ({
 
     return (
       <g
+        height={height}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
+        width={width}
+        x={x}
+        y={y}
         >
         {children}
       </g>
@@ -298,8 +307,12 @@ const LineChart = ({
         >
           {quartersLines.map(({ tooltip, xCoordinate }: { tooltip: string, xCoordinate: number }) => (
             <TooltipHoverBox
+              height={verticalLineEnd - verticalLineStart + 10}
               key={xCoordinate}
               text={tooltip}
+              width={10}
+              x={xCoordinate - 5}
+              y={verticalLineStart - 5}
               >
               <polyline
                 points={makePointsString([
