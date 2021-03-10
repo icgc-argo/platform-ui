@@ -476,7 +476,6 @@ const LineChart = ({
     );
   };
 
-  console.log({ tooltipText })
   return width && (
     <>
       <svg
@@ -493,7 +492,7 @@ const LineChart = ({
         <ChartLines />
         <ChartPoints />
       </svg>
-      {tooltipText !== null && <TooltipHTML />}
+      {/* {tooltipText !== null && <TooltipHTML />} */}
     </>
   );
 };
