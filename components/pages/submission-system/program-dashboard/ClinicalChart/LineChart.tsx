@@ -17,17 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
-import { styled } from 'uikit';
+import { css, styled } from 'uikit';
 import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
 import { ChartLine, DataLine, DataObj, DataPoint } from './types';
 import themeColors from 'uikit/theme/defaultTheme/colors';
+import typography from 'uikit/theme/defaultTheme/typography';
 
 const options = {
   colors: {
-    // colours are changed slightly from theme.
-    // svg rendering made the colours darker/lighter.
     axisBorder: themeColors.grey_1,
     chartLineDefault: themeColors.accent2_dark,
     quarterBorder: themeColors.secondary_2,
@@ -78,6 +77,10 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
+  const [tooltipText, setTooltipText] = useState(null);
+  const [tooltipX, setTooltipX] = useState(null);
+  const [tooltipY, setTooltipY] = useState(null);
+
   // setup Y axis
   const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
@@ -119,8 +122,6 @@ const LineChart = ({
     end: dayLast,
   };
 
-  // TODO: change colour based on line title, for molecular chart
-  // will have to return coords & colour in an object
   const chartLines = data.lines
     .map((line: DataLine) => ({
       ...line,
@@ -203,58 +204,70 @@ const LineChart = ({
     }
   `;
 
-  const Tooltip = ({
-    children,
-    text,
-    x,
-    y,
-  }: {
-    children: React.ReactNode,
-    text: string | string[],
-    x: number,
-    y: number,
-  }) => {
-    // using HTML to make tooltips
-    // because they're tied to cursor position
-    const [isHover, setIsHover] = useState(false);
-    const [tooltipX, setTooltipX] = useState(x);
-    const [tooltipY, setTooltipY] = useState(y);
+  const TooltipHoverBox = ({ children, text }: { children: React.ReactNode, text: string | string[] }) => {
+    // TODO: expand this box
+    // because the lines are 1px wide/tall
+    // and it's hard to hover on things.
+    // (add X, Y coordinates)
 
-  const handleTooltipPosition = (e: any) => {
-    setTooltipY(e.offsetY);
-    setTooltipX(e.offsetX);
-  };
-    
-   useEffect(() => {
-     if (isHover) window.addEventListener('mousemove', handleTooltipPosition);
-     return () => window.removeEventListener('mousemove', handleTooltipPosition);
-   })
-    
+    const [isHover, setIsHover] = useState(false);
+
+    const handleTooltipPosition = (e: any) => {
+      setTooltipY(e.offsetY);
+      setTooltipX(e.offsetX);
+      setTooltipText(text);
+    };
+
+    useEffect(() => {
+      // can't get page X/Y coordinates from SVG elements
+      // so get X/Y from the window instead.
+      if (isHover) {
+        window.addEventListener('mousemove', handleTooltipPosition)
+      } else {
+        // setTooltipText(null);
+      }
+      return () => window.removeEventListener('mousemove', handleTooltipPosition);
+    },[isHover]);
+
     return (
-      <TooltipWrapper
-        onMouseOver={() => setIsHover(true)}
+      <g
+        onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
         >
-        <rect
-          fill={themeColors.primary_1}
-          />
-        <text
-          className="tooltip"
-          x={tooltipX}
-          y={tooltipY}
-          >
-          {[].concat(text).map((textLine: string, textIndex: number) => (
-            <tspan
-              key={textLine+x}
-              x={tooltipX}
-              y={tooltipY + textIndex * (options.fontSize + 2)}
-              >
-              {textLine}
-            </tspan>
-          ))}
-        </text>
         {children}
-      </TooltipWrapper>
+      </g>
+    );
+  };
+
+  const StyledTooltip = styled('div')`
+    ${css(typography.caption as any)}
+    background: ${themeColors.primary_1};
+    border-radius: 2px;
+    color: ${themeColors.white};
+    left: ${tooltipX}px;
+    padding: 2px 4px;
+    position: absolute;
+    text-align: center;
+    top: ${tooltipY}px;
+    transform: translateX(-50%);
+    width: auto;
+    &:after {
+      content:'';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      width: 0;
+      height: 0;
+      border-top: solid 5px ${themeColors.primary_1};
+      border-left: solid 5px transparent;
+      border-right: solid 5px transparent;
+    }
+  `;
+
+  const TooltipHTML = () => {
+    return (
+      <StyledTooltip>{tooltipText}</StyledTooltip>
     );
   };
 
@@ -293,11 +306,8 @@ const LineChart = ({
         strokeWidth={options.strokeWidth}
         >
           {quartersLines.map(({ tooltip, xCoordinate }: { tooltip: string, xCoordinate: number }) => (
-            // TODO: tooltips
-            <Tooltip
+            <TooltipHoverBox
               text={tooltip}
-              x={xCoordinate}
-              y={50}
               >
               <polyline
                 key={xCoordinate}
@@ -308,7 +318,7 @@ const LineChart = ({
                   verticalLineEnd
                 ])}
                 />
-            </Tooltip>
+            </TooltipHoverBox>
           ))}
       </g>
     );
@@ -416,31 +426,34 @@ const LineChart = ({
   };
 
   return width && (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      >
-      <XAxis />
-      <TicksXAxis />
-      <LabelsXAxis />
-      <YAxis />
-      <LabelsYAxis />
-      {hasQuarterLines && <QuarterLines />}
-      {hasYAxisThresholdLine && <YAxisThresholdLine />}
-      <HorizontalGuides />
-
-      <g
-        fill="none"
-        strokeWidth={options.chartStrokeWidth}
+    <>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
         >
-        {chartLines.map((chartLine: ChartLine) => (
-          <polyline
-            key={chartLine.title}
-            points={chartLine.points}
-            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
-            />
-        ))}
-      </g>
-    </svg>
+        <XAxis />
+        <TicksXAxis />
+        <LabelsXAxis />
+        <YAxis />
+        <LabelsYAxis />
+        {hasQuarterLines && <QuarterLines />}
+        {hasYAxisThresholdLine && <YAxisThresholdLine />}
+        <HorizontalGuides />
+
+        <g
+          fill="none"
+          strokeWidth={options.chartStrokeWidth}
+          >
+          {chartLines.map((chartLine: ChartLine) => (
+            <polyline
+              key={chartLine.title}
+              points={chartLine.points}
+              stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+              />
+          ))}
+        </g>
+      </svg>
+      {tooltipText !== null && <TooltipHTML />}
+    </>
   );
 };
 
