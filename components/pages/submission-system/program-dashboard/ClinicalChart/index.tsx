@@ -26,7 +26,8 @@ import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
 import Legend from './Legend';
-import { chartLineColors } from './utils';
+import { chartLineColors, convertUnixEpochToJSEpoch } from './utils';
+import { format as formatDate} from 'date-fns';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
@@ -54,6 +55,12 @@ const ClinicalChart = ({
     setActiveLines(nextLines);
   };
 
+  const dateRange =  data.lines[0].points.map(point => Number(point.x)).sort();
+  const dateRangeFrom = convertUnixEpochToJSEpoch(dateRange[0]);
+  const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);
+  const dateRangeFormat = 'Y/MM/dd';
+
+
   return (
     <DashboardCard>
       <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
@@ -76,7 +83,7 @@ const ClinicalChart = ({
         <RangeControlBar
           activeBtn={activeRangeBtn}
           handleBtnClick={setActiveRangeBtn}
-          rangeArray={[0, 1]}
+          rangeArray={[formatDate(dateRangeFrom, dateRangeFormat), formatDate(dateRangeTo, dateRangeFormat)]}
           />
         <div
           ref={lineChartRef}
@@ -99,6 +106,7 @@ const ClinicalChart = ({
             yAxisThreshold={1700} // this should be committed donors
             yAxisThresholdLabel="Committed"
             yAxisTitle="donors"
+            type={type}
             />
         </div>
       </div>

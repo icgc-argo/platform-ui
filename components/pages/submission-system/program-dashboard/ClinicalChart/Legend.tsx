@@ -74,7 +74,7 @@ const rna = [
 ];
 
 const Legend = ({ activeLines, handleLegend }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <StyledLegend>
       <Button

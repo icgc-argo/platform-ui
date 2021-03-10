@@ -67,6 +67,7 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
+  type,
 }: { 
   data: DataObj;
   hasQuarterLines?: boolean;
@@ -125,7 +126,7 @@ const LineChart = ({
   };
 
   const chartLines = data.lines
-    .filter((line) => activeLines.includes(line.title))
+    .filter((line) => activeLines.includes(line.title) || type === 'clinical')
     .map((line: DataLine) => ({
       ...line,
       points: line.points
