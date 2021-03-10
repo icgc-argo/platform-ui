@@ -36,6 +36,7 @@ const options = {
   chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
+  pointRadius: 2.5,
   quarterLineStrokeDashArray: '3, 2',
   strokeWidth: 0.5,
   xTickHeight: 5,
@@ -425,6 +426,51 @@ const LineChart = ({
     );
   };
 
+  const ChartLines = () => {
+    return (
+      <g
+        fill="none"
+        strokeWidth={options.chartStrokeWidth}
+        >
+        {chartLines.map((chartLine: ChartLine) => (
+          <polyline
+            key={chartLine.title}
+            points={chartLine.points}
+            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+            />
+        ))}
+      </g>
+    );
+  };
+
+  const ChartPoints = () => {
+
+    return (
+      <g>
+        {chartLines.map((chartLine: ChartLine) => {
+          const pointsCoordinates = chartLine.points.split(' ').map((point: string) => {
+            const [x, y] = point.split(',').map((xyString: string) => Number(xyString));
+            return { x, y }
+          });
+          console.log({ pointsCoordinates })
+          return (
+            <g
+              fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+              >
+              {pointsCoordinates.map(point => (
+                <circle
+                  cx={point.x}
+                  cy={point.y}
+                  r={options.pointRadius}
+                  />
+                ))}
+            </g>
+          )
+        })}
+      </g>
+    )
+  }
+
   return width && (
     <>
       <svg
@@ -438,19 +484,8 @@ const LineChart = ({
         {hasQuarterLines && <QuarterLines />}
         {hasYAxisThresholdLine && <YAxisThresholdLine />}
         <HorizontalGuides />
-
-        <g
-          fill="none"
-          strokeWidth={options.chartStrokeWidth}
-          >
-          {chartLines.map((chartLine: ChartLine) => (
-            <polyline
-              key={chartLine.title}
-              points={chartLine.points}
-              stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
-              />
-          ))}
-        </g>
+        <ChartLines />
+        <ChartPoints />
       </svg>
       {tooltipText !== null && <TooltipHTML />}
     </>
