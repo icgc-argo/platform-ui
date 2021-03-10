@@ -74,6 +74,7 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
         activeRangeBtn={activeRangeBtn}
         setActiveRangeBtn={setActiveRangeBtn}
         title={title}
+        type={type}
         />
     ) : (
       <DashboardCard>

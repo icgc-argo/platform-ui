@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { css } from '@emotion/core';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
@@ -25,6 +25,8 @@ import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import { DataObj } from './types';
+import Legend from './Legend';
+import { chartLineColors } from './utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
@@ -34,20 +36,31 @@ const ClinicalChart = ({
   data,
   setActiveRangeBtn,
   title,
+  type,
 }: {
   activeRangeBtn: string;
   data: DataObj;
   setActiveRangeBtn: any; // type?
   title: string;
+  type: 'clinical' | 'molecular'
 }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
+  const [activeLines, setActiveLines] = useState(Object.keys(chartLineColors));
 
   return (
     <DashboardCard>
-      <Typography variant="default" component="span">
-        {title}
-      </Typography>
+      <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="default" component="span">
+          {title}
+        </Typography>
+        {type === 'molecular' && (
+          <Legend
+            activeLines={activeLines}
+            setActiveLines={setActiveLines}
+            />
+        )}
+      </div>
       <div
         css={css`
           height: ${CHART_HEIGHT + CHART_PADDING}px;
