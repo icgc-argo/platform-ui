@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
 import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
@@ -25,7 +25,6 @@ import { ChartLine, DataLine, DataObj, DataPoint } from './types';
 import themeColors from 'uikit/theme/defaultTheme/colors';
 
 const options = {
-  axisStrokeWidth: 0.5,
   colors: {
     // colours are changed slightly from theme.
     // svg rendering made the colours darker/lighter.
@@ -38,12 +37,10 @@ const options = {
   chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
-  guidesStrokeWidth: 0.5,
   quarterLineStrokeDashArray: '3, 2',
-  quarterStrokeWidth: 0.5,
+  strokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
-  yAxisThresholdStrokeWidth: 0.5,
 };
 
 const TextStyleGroup = styled.g`
@@ -138,7 +135,7 @@ const LineChart = ({
 
   // setup axis elements
   const Axis = ({ points }: { points: number[] }) => (
-    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.axisStrokeWidth} points={makePointsString(points)} />
+    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={makePointsString(points)} />
   );
 
   const XAxis = () => (
@@ -185,9 +182,79 @@ const LineChart = ({
         ])}
         stroke={options.colors.yAxisThresholdBorder}
         strokeDasharray={options.yAxisThresholdDashArray}
-        strokeWidth={options.yAxisThresholdStrokeWidth}
+        strokeWidth={options.strokeWidth}
         />
       </TextStyleGroup>
+    );
+  };
+
+  const TooltipWrapper = styled('g')`
+    .tooltip {
+      background: ${({ theme }) => theme.colors.primary_1};
+      color: ${({ theme }) => theme.colors.white};
+      display: none;
+      font-family: ${options.fontFamily};
+      font-size: ${options.fontSize}px;
+    }
+    &:hover {
+      .tooltip {
+        display: block;
+      }
+    }
+  `;
+
+  const Tooltip = ({
+    children,
+    text,
+    x,
+    y,
+  }: {
+    children: React.ReactNode,
+    text: string | string[],
+    x: number,
+    y: number,
+  }) => {
+    // using HTML to make tooltips
+    // because they're tied to cursor position
+    const [isHover, setIsHover] = useState(false);
+    const [tooltipX, setTooltipX] = useState(x);
+    const [tooltipY, setTooltipY] = useState(y);
+
+  const handleTooltipPosition = (e: any) => {
+    setTooltipY(e.offsetY);
+    setTooltipX(e.offsetX);
+  };
+    
+   useEffect(() => {
+     if (isHover) window.addEventListener('mousemove', handleTooltipPosition);
+     return () => window.removeEventListener('mousemove', handleTooltipPosition);
+   })
+    
+    return (
+      <TooltipWrapper
+        onMouseOver={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        >
+        <rect
+          fill={themeColors.primary_1}
+          />
+        <text
+          className="tooltip"
+          x={tooltipX}
+          y={tooltipY}
+          >
+          {[].concat(text).map((textLine: string, textIndex: number) => (
+            <tspan
+              key={textLine+x}
+              x={tooltipX}
+              y={tooltipY + textIndex * (options.fontSize + 2)}
+              >
+              {textLine}
+            </tspan>
+          ))}
+        </text>
+        {children}
+      </TooltipWrapper>
     );
   };
 
@@ -223,19 +290,25 @@ const LineChart = ({
       <g
         stroke={options.colors.quarterBorder}
         strokeDasharray={options.quarterLineStrokeDashArray}
-        strokeWidth={options.quarterStrokeWidth}
+        strokeWidth={options.strokeWidth}
         >
-          {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
+          {quartersLines.map(({ tooltip, xCoordinate }: { tooltip: string, xCoordinate: number }) => (
             // TODO: tooltips
-            <polyline
-              key={xCoordinate}
-              points={makePointsString([
-                xCoordinate,
-                verticalLineStart,
-                xCoordinate,
-                verticalLineEnd
-              ])}
-              />
+            <Tooltip
+              text={tooltip}
+              x={xCoordinate}
+              y={50}
+              >
+              <polyline
+                key={xCoordinate}
+                points={makePointsString([
+                  xCoordinate,
+                  verticalLineStart,
+                  xCoordinate,
+                  verticalLineEnd
+                ])}
+                />
+            </Tooltip>
           ))}
       </g>
     );
@@ -248,7 +321,7 @@ const LineChart = ({
       <g
         fill="none"
         stroke={options.colors.axisBorder}
-        strokeWidth={options.axisStrokeWidth}
+        strokeWidth={options.strokeWidth}
         >
         {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
@@ -273,7 +346,7 @@ const LineChart = ({
       <g
         fill="none"
         stroke={options.colors.axisBorder}
-        strokeWidth={options.guidesStrokeWidth}
+        strokeWidth={options.strokeWidth}
         >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
