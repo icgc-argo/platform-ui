@@ -78,7 +78,7 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
-  const [tooltipText, setTooltipText] = useState([]);
+  const [tooltipText, setTooltipText] = useState(null);
   const [tooltipX, setTooltipX] = useState(null);
   const [tooltipY, setTooltipY] = useState(null);
 
@@ -194,21 +194,6 @@ const LineChart = ({
     );
   };
 
-  const TooltipWrapper = styled('g')`
-    .tooltip {
-      background: ${({ theme }) => theme.colors.primary_1};
-      color: ${({ theme }) => theme.colors.white};
-      display: none;
-      font-family: ${options.fontFamily};
-      font-size: ${options.fontSize}px;
-    }
-    &:hover {
-      .tooltip {
-        display: block;
-      }
-    }
-  `;
-
   const TooltipHoverBox = ({ children, text }: { children: React.ReactNode, text: string | string[] }) => {
     // TODO: expand this box
     // because the lines are 1px wide/tall
@@ -218,24 +203,17 @@ const LineChart = ({
     const [isHover, setIsHover] = useState(false);
 
     const handleTooltipPosition = (e: any) => {
-      const test = [].concat(text);
-      console.log({test})
-      setTooltipY(e.offsetY);
-      setTooltipX(e.offsetX);
-      setTooltipText(test);
+      if (isHover) {
+        setTooltipY(e.offsetY);
+        setTooltipX(e.offsetX);
+      }
+      setTooltipText('boo[]');
     };
 
     useEffect(() => {
-      // can't get page X/Y coordinates from SVG elements
-      // so get X/Y from the window instead.
-      if (isHover) {
-        console.log('boop!')
-        window.addEventListener('mousemove', handleTooltipPosition)
-      } else {
-        setTooltipText([]);
-      }
+      window.addEventListener('mousemove', handleTooltipPosition);
       return () => window.removeEventListener('mousemove', handleTooltipPosition);
-    },[isHover]);
+    },[]);
 
     return (
       <g
@@ -257,7 +235,7 @@ const LineChart = ({
     position: absolute;
     text-align: center;
     top: ${tooltipY}px;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-100%);
     width: auto;
     &:after {
       content:'';
@@ -276,7 +254,10 @@ const LineChart = ({
   const TooltipHTML = () => {
     return (
       <StyledTooltip>
-        {tooltipText.map((tooltipString: string) => <div>{tooltipString}</div>)}
+        {[].concat(tooltipText)
+        .map((tooltipString: string, tooltipIndex: number) => (
+          <div key={tooltipString+tooltipIndex}>{tooltipString}</div>
+        ))}
       </StyledTooltip>
     );
   };
@@ -479,9 +460,10 @@ const LineChart = ({
           )
         })}
       </g>
-    )
-  }
+    );
+  };
 
+  console.log({ tooltipText })
   return width && (
     <>
       <svg
@@ -498,7 +480,7 @@ const LineChart = ({
         <ChartLines />
         <ChartPoints />
       </svg>
-      {tooltipText.length > 0 && <TooltipHTML />}
+      {tooltipText !== null && <TooltipHTML />}
     </>
   );
 };
