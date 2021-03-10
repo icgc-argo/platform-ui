@@ -78,7 +78,7 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
-  const [tooltipText, setTooltipText] = useState(null);
+  const [tooltipText, setTooltipText] = useState([]);
   const [tooltipX, setTooltipX] = useState(null);
   const [tooltipY, setTooltipY] = useState(null);
 
@@ -134,6 +134,10 @@ const LineChart = ({
         })
         .join(' ')
     }));
+  
+  const tooltipsData = data.lines
+    .map((line: DataLine) => line.points
+      .map((point: DataPoint) => point.tooltip));
 
   // setup axis elements
   const Axis = ({ points }: { points: number[] }) => (
@@ -214,18 +218,21 @@ const LineChart = ({
     const [isHover, setIsHover] = useState(false);
 
     const handleTooltipPosition = (e: any) => {
+      const test = [].concat(text);
+      console.log({test})
       setTooltipY(e.offsetY);
       setTooltipX(e.offsetX);
-      setTooltipText(text);
+      setTooltipText(test);
     };
 
     useEffect(() => {
       // can't get page X/Y coordinates from SVG elements
       // so get X/Y from the window instead.
       if (isHover) {
+        console.log('boop!')
         window.addEventListener('mousemove', handleTooltipPosition)
       } else {
-        setTooltipText(null);
+        setTooltipText([]);
       }
       return () => window.removeEventListener('mousemove', handleTooltipPosition);
     },[isHover]);
@@ -268,7 +275,9 @@ const LineChart = ({
 
   const TooltipHTML = () => {
     return (
-      <StyledTooltip>{tooltipText}</StyledTooltip>
+      <StyledTooltip>
+        {tooltipText.map((tooltipString: string) => <div>{tooltipString}</div>)}
+      </StyledTooltip>
     );
   };
 
@@ -308,10 +317,10 @@ const LineChart = ({
         >
           {quartersLines.map(({ tooltip, xCoordinate }: { tooltip: string, xCoordinate: number }) => (
             <TooltipHoverBox
+              key={xCoordinate}
               text={tooltip}
               >
               <polyline
-                key={xCoordinate}
                 points={makePointsString([
                   xCoordinate,
                   verticalLineStart,
@@ -444,26 +453,28 @@ const LineChart = ({
   };
 
   const ChartPoints = () => {
-
     return (
       <g>
-        {chartLines.map((chartLine: ChartLine) => {
+        {chartLines.map((chartLine: ChartLine, chartLineIndex: number) => {
           const pointsCoordinates = chartLine.points.split(' ').map((point: string) => {
             const [x, y] = point.split(',').map((xyString: string) => Number(xyString));
-            return { x, y }
+            return { x, y };
           });
-          console.log({ pointsCoordinates })
           return (
             <g
               fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
               >
-              {pointsCoordinates.map(point => (
-                <circle
-                  cx={point.x}
-                  cy={point.y}
-                  r={options.pointRadius}
-                  />
-                ))}
+              {pointsCoordinates.map((point, pointIndex: number) => (
+                <TooltipHoverBox
+                  text={[chartLine.title, ...tooltipsData[chartLineIndex][pointIndex]]}
+                  >
+                  <circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={options.pointRadius}
+                    />
+                </TooltipHoverBox>
+              ))}
             </g>
           )
         })}
@@ -487,7 +498,7 @@ const LineChart = ({
         <ChartLines />
         <ChartPoints />
       </svg>
-      {tooltipText !== null && <TooltipHTML />}
+      {tooltipText.length > 0 && <TooltipHTML />}
     </>
   );
 };
