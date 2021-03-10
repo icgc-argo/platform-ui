@@ -88,6 +88,7 @@ const ClinicalChart = ({
           }}
           >
           <LineChart
+            activeLines={activeLines}
             data={data}
             hasQuarterLines
             hasYAxisThresholdLine

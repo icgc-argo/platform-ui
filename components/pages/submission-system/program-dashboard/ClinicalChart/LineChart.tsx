@@ -56,6 +56,7 @@ const makePointsString = (points: number[]) => {
 }
 
 const LineChart = ({
+  activeLines,
   data,
   hasQuarterLines = false,
   hasYAxisThresholdLine = false,
@@ -124,6 +125,7 @@ const LineChart = ({
   };
 
   const chartLines = data.lines
+    .filter((line) => activeLines.includes(line.title))
     .map((line: DataLine) => ({
       ...line,
       points: line.points
@@ -135,9 +137,9 @@ const LineChart = ({
         .join(' ')
     }));
   
-  const tooltipsData = data.lines
-    .map((line: DataLine) => line.points
-      .map((point: DataPoint) => point.tooltip));
+  // const tooltipsData = data.lines
+  //   .map((line: DataLine) => line.points
+  //     .map((point: DataPoint) => point.tooltip));
 
   // setup axis elements
   const Axis = ({ points }: { points: number[] }) => (

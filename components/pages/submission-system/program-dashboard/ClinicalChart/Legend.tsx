@@ -94,6 +94,13 @@ const Legend = ({ activeLines, handleLegend }) => {
         </div>
         <div>
           <div className="legend-title blue">RNA-SEQ PIPELINE</div>
+          {rna.map(x => (
+            <label>
+              <input type="checkbox" value={x} checked={activeLines.includes(x)} onClick={() => handleLegend(x)} />
+              <span className="color" style={{background: chartLineColors[x]}}/>
+              <span className="title">{x.includes('Raw Reads') ? 'Raw Reads' : x}</span>
+            </label>
+          ))}
         </div>
       </StyledLegendBox>
     </StyledLegend>
