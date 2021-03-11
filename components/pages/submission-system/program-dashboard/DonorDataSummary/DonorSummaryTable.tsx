@@ -68,7 +68,7 @@ export default ({
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
-  const MUTECT2_VC_COLUMN_ID = 'mutect2VcsCompleted-mutect2Running-mutect2VcsFailed';
+  const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
 
   const emptyProgramSummaryStats: ProgramDonorReleaseStats = {
     registeredDonorsCount: 0,
