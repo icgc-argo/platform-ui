@@ -3,6 +3,7 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Button from 'uikit/Button';
+import theme from 'uikit/theme/defaultTheme';
 import { chartLineColors } from './utils';
 
 const StyledLegend = styled('div')`
@@ -11,8 +12,8 @@ const StyledLegend = styled('div')`
   left: -195px;
   display: flex;
   width: 270px;
-  background: #fff;
-  border: 1px solid #babcc2;
+  background: ${theme.colors.white};
+  border: 1px solid ${theme.colors.grey_1};
   border-radius: 4px;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   padding: 5px 3px;
@@ -21,7 +22,7 @@ const StyledLegend = styled('div')`
     padding: 0 2px;
   }
   .legend-title {
-    color: #000;
+    color: ${theme.colors.black};
     font-size: 11px;
     line-height: 14px;
     text-transform: uppercase;
@@ -31,10 +32,10 @@ const StyledLegend = styled('div')`
     text-align: center;
     margin-bottom: 3px;
     &.yellow {
-      background: #fef6ea;
+      background: ${theme.colors.warning_4};
     }
     &.blue {
-      background: #d1f2f8;
+      background: ${theme.colors.accent3_3};
     }
   }
 `;

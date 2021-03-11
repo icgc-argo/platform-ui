@@ -17,21 +17,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
-import { css, styled } from 'uikit';
+import { styled } from 'uikit';
 import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
-import { ChartLine, DataLine, DataObj, DataPoint } from './types';
-import themeColors from 'uikit/theme/defaultTheme/colors';
-import typography from 'uikit/theme/defaultTheme/typography';
+import { ChartLine, ChartType, DataLine, DataObj, DataPoint } from './types';
+import theme from 'uikit/theme/defaultTheme';
 
 const options = {
   colors: {
-    axisBorder: themeColors.grey_1,
-    chartLineDefault: themeColors.accent2_dark,
-    quarterBorder: themeColors.secondary_2,
-    text: themeColors.primary_1,
-    yAxisThresholdBorder: themeColors.secondary,
+    axisBorder: theme.colors.grey_1,
+    chartLineDefault: theme.colors.accent2_dark,
+    quarterBorder: theme.colors.secondary_2,
+    text: theme.colors.primary_1,
+    yAxisThresholdBorder: theme.colors.secondary,
   },
   chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
@@ -68,7 +67,8 @@ const LineChart = ({
   yAxisThresholdLabel,
   yAxisTitle,
   type,
-}: { 
+}: {
+  activeLines: string[];
   data: DataObj;
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
@@ -79,11 +79,8 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
+  type: ChartType;
 }) => {
-  // const [tooltipText, setTooltipText] = useState(null);
-  // const [tooltipX, setTooltipX] = useState(null);
-  // const [tooltipY, setTooltipY] = useState(null);
-
   // setup Y axis
   const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
@@ -138,10 +135,6 @@ const LineChart = ({
         .join(' ')
     }));
   
-  // const tooltipsData = data.lines
-  //   .map((line: DataLine) => line.points
-  //     .map((point: DataPoint) => point.tooltip));
-
   // setup axis elements
   const Axis = ({ points }: { points: number[] }) => (
     <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={makePointsString(points)} />
@@ -197,83 +190,6 @@ const LineChart = ({
     );
   };
 
-  // const TooltipHoverBox = ({ children, height, text, width, x, y }: 
-  //   { 
-  //     children: React.ReactNode,
-  //     text: string | string[],
-  //     y: number, x: number, height: number, width: number,
-  //   }) => {
-  //   // TODO: expand this box
-  //   // because the lines are 1px wide/tall
-  //   // and it's hard to hover on things.
-  //   // (add X, Y coordinates)
-
-  //   const [isHover, setIsHover] = useState(false);
-
-  //   const handleTooltipPosition = (e: any) => {
-  //     if (isHover) {
-  //       setTooltipY(e.offsetY);
-  //       setTooltipX(e.offsetX);
-  //     }
-  //     setTooltipText(text);
-  //   };
-
-  //   useEffect(() => {
-  //     window.addEventListener('mousemove', handleTooltipPosition);
-  //     return () => window.removeEventListener('mousemove', handleTooltipPosition);
-  //   },[]);
-
-  //   return (
-  //     <g
-  //       height={height}
-  //       onMouseEnter={() => setIsHover(true)}
-  //       onMouseLeave={() => setIsHover(false)}
-  //       width={width}
-  //       x={x}
-  //       y={y}
-  //       >
-  //       {children}
-  //     </g>
-  //   );
-  // };
-
-  // const StyledTooltip = styled('div')`
-  //   ${css(typography.caption as any)}
-  //   background: ${themeColors.primary_1};
-  //   border-radius: 2px;
-  //   color: ${themeColors.white};
-  //   left: ${tooltipX}px;
-  //   padding: 2px 4px;
-  //   position: absolute;
-  //   text-align: center;
-  //   top: ${tooltipY}px;
-  //   transform: translateX(-50%) translateY(-100%);
-  //   width: auto;
-  //   &:after {
-  //     content:'';
-  //     position: absolute;
-  //     top: 100%;
-  //     left: 50%;
-  //     margin-left: -5px;
-  //     width: 0;
-  //     height: 0;
-  //     border-top: solid 5px ${themeColors.primary_1};
-  //     border-left: solid 5px transparent;
-  //     border-right: solid 5px transparent;
-  //   }
-  // `;
-
-  // const TooltipHTML = () => {
-  //   return (
-  //     <StyledTooltip>
-  //       {[].concat(tooltipText)
-  //       .map((tooltipString: string, tooltipIndex: number) => (
-  //         <div key={tooltipString+tooltipIndex}>{tooltipString}</div>
-  //       ))}
-  //     </StyledTooltip>
-  //   );
-  // };
-
   const QuarterLines = () => {
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
       .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
@@ -308,25 +224,16 @@ const LineChart = ({
         strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
         >
-          {quartersLines.map(({ tooltip, xCoordinate }: { tooltip: string, xCoordinate: number }) => (
-            // <TooltipHoverBox
-            //   height={verticalLineEnd - verticalLineStart + 10}
-            //   key={xCoordinate}
-            //   text={tooltip}
-            //   width={10}
-            //   x={xCoordinate - 5}
-            //   y={verticalLineStart - 5}
-            //   >
-              <polyline
-                key={xCoordinate}
-                points={makePointsString([
-                  xCoordinate,
-                  verticalLineStart,
-                  xCoordinate,
-                  verticalLineEnd
-                ])}
-                />
-            // </TooltipHoverBox>
+          {quartersLines.map(({ xCoordinate }: { xCoordinate: number }) => (
+            <polyline
+              key={xCoordinate}
+              points={makePointsString([
+                xCoordinate,
+                verticalLineStart,
+                xCoordinate,
+                verticalLineEnd
+              ])}
+              />
           ))}
       </g>
     );
@@ -462,17 +369,13 @@ const LineChart = ({
             <g
               fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
               >
-              {pointsCoordinates.map((point, pointIndex: number) => (
-                // <TooltipHoverBox
-                //   text={[chartLine.title, ...tooltipsData[chartLineIndex][pointIndex]]}
-                //   >
-                  <circle
-                    cx={point.x}
-                    cy={point.y}
-                    key={point.x}
-                    r={options.pointRadius}
-                    />
-                // </TooltipHoverBox>
+              {pointsCoordinates.map((point) => (
+                <circle
+                  cx={point.x}
+                  cy={point.y}
+                  key={point.x}
+                  r={options.pointRadius}
+                  />
               ))}
             </g>
           )
@@ -497,7 +400,6 @@ const LineChart = ({
         <ChartLines />
         <ChartPoints />
       </svg>
-      {/* {tooltipText !== null && <TooltipHTML />} */}
     </>
   );
 };

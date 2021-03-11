@@ -29,9 +29,10 @@ import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';
 import { adjustData, makeMockData } from '../ClinicalChart/mockData';
 import { rangeButtons } from '../ClinicalChart/utils';
+import { ChartType } from '../ClinicalChart/types';
 
 type CardProps = {
-  type: 'clinical' | 'molecular',
+  type: ChartType;
   comingSoonLink: string;
   title: string;
 };

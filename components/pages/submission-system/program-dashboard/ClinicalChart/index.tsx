@@ -24,7 +24,7 @@ import Typography from 'uikit/Typography';
 import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
-import { DataObj } from './types';
+import { ChartType, DataObj } from './types';
 import Legend from './Legend';
 import { chartLineColors, convertUnixEpochToJSEpoch } from './utils';
 import { format as formatDate} from 'date-fns';
@@ -43,7 +43,7 @@ const ClinicalChart = ({
   data: DataObj;
   setActiveRangeBtn: any; // type?
   title: string;
-  type: 'clinical' | 'molecular'
+  type: ChartType;
 }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
