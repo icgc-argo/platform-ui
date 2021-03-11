@@ -41,3 +41,5 @@ export type DataObj = {
   committed: number;
   lines: DataLine[];
 };
+
+export type ChartType = 'clinical' | 'molecular';
