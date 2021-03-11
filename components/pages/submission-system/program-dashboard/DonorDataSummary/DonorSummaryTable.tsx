@@ -68,6 +68,7 @@ export default ({
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
+  const MUTECT2_VC_COLUMN_ID = 'mutect2VcsCompleted-mutect2Running-mutect2VcsFailed';
 
   const emptyProgramSummaryStats: ProgramDonorReleaseStats = {
     registeredDonorsCount: 0,
@@ -271,6 +272,17 @@ export default ({
               complete={original.sangerVcsCompleted}
               inProgress={original.sangerVcsRunning}
               error={original.sangerVcsFailed}
+            />
+          ),
+        },
+        {
+          Header: 'Mutect2 VC',
+          id: MUTECT2_VC_COLUMN_ID,
+          Cell: ({ original }) => (
+            <Pipeline
+              complete={original.mutectCompleted}
+              inProgress={original.mutectRunning}
+              error={original.mutectFailed}
             />
           ),
         },
