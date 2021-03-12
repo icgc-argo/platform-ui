@@ -18,40 +18,72 @@
  */
 
 import React, { useRef } from 'react';
+import { css } from '@emotion/core';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
+import Typography from 'uikit/Typography';
+import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
+import { DataObj } from './types';
 
-const ClinicalChart = ({ activeRangeBtn, data, setActiveRangeBtn }) => {
+const CHART_HEIGHT = 220;
+const CHART_PADDING = 12;
+
+const ClinicalChart = ({
+  activeRangeBtn,
+  data,
+  setActiveRangeBtn,
+  title,
+}: {
+  activeRangeBtn: string;
+  data: DataObj;
+  setActiveRangeBtn: any; // type?
+  title: string;
+}) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
 
-  return data ? (
-    <>
-      <RangeControlBar
-        activeBtn={activeRangeBtn}
-        handleBtnClick={setActiveRangeBtn}
-        rangeArray={[0, 1]}
-        />
+  return (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        {title}
+      </Typography>
       <div
-        ref={lineChartRef}
-        style={{
-          // border: '1px solid pink',
-          width: '100%',
-          filter: `blur(${resizing ? 8 : 0}px)`
-        }}
+        css={css`
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0;
+        `}
         >
-        <LineChart
-          data={data}
-          hasQuarterLines
-          height={240}
-          horizontalGuides={4}
-          precision={0}
-          width={width}
+        <RangeControlBar
+          activeBtn={activeRangeBtn}
+          handleBtnClick={setActiveRangeBtn}
+          rangeArray={[0, 1]}
           />
+        <div
+          ref={lineChartRef}
+          style={{
+            // border: '1px solid pink',
+            width: '100%',
+            paddingTop: CHART_PADDING,
+            filter: `blur(${resizing ? 8 : 0}px)`
+          }}
+          >
+          <LineChart
+            data={data}
+            hasQuarterLines
+            hasYAxisThresholdLine
+            height={CHART_HEIGHT}
+            horizontalGuides={4}
+            precision={0}
+            width={width}
+            yAxisThreshold={1700} // this should be committed donors
+            yAxisThresholdLabel="Committed"
+            yAxisTitle="donors"
+            />
+        </div>
       </div>
-    </>
-  ): null;
+    </DashboardCard>
+  );
 };
 
 export default ClinicalChart;

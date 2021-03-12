@@ -20,7 +20,7 @@
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { getMinMax, makeJSEpoch } from './utils';
+import { getMinMax, convertUnixEpochToJSEpoch } from './utils';
 import { DataLine, DataObj, DataPoint } from './types';
 
 const options = {
@@ -29,17 +29,19 @@ const options = {
     // svg rendering made the colours darker/lighter.
     axisBorder: '#ccc',
     chartLine: '#523785',
-    committedBorder: '#0774d3',
     quarterBorder: '#7abad4',
+    yAxisThresholdBorder: '#3485cc',
     text: '#787878',
   },
+  quarterLineStrokeDashArray: '3, 2',
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
   strokeWidth: 0.5,
   xTickHeight: 5,
+  yAxisThresholdDashArray: '9, 3',
 };
 
-const AxisLabel = styled.g`
+const TextStyleGroup = styled.g`
   fill: ${options.colors.text};
   font-family: ${options.fontFamily};
   font-size: ${options.fontSize}px;
@@ -48,27 +50,37 @@ const AxisLabel = styled.g`
 const LineChart = ({
   data,
   hasQuarterLines = false,
+  hasYAxisThresholdLine = false,
   height,
   horizontalGuides: numberOfHorizontalGuides,
   precision,
   width,
+  yAxisThreshold = 0,
+  yAxisThresholdLabel,
+  yAxisTitle,
 }: { 
   data: DataObj;
-  hasQuarterLines: boolean;
+  hasQuarterLines?: boolean;
+  hasYAxisThresholdLine?: boolean;
   height: number;
   horizontalGuides: number;
   precision: number;
   width: number;
+  yAxisThreshold?: number;
+  yAxisThresholdLabel?: string;
+  yAxisTitle: string;
 }) => {
   // setup Y axis
-  // TODO: maxY is this OR committed donors, whichever is more
-  const maxY = getMinMax({ data, minMax: 'max', coord: 'y' });
+  const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
-  const chartWidth = width - padding * 1.5;
-  const chartHeight = height - padding * 2;
+  // padding applies to left, right, bottom
+  const topPadding = options.fontSize * 1.5;
+  // topPadding leaves room for yAxisThresholdLabel
+  const chartWidth = width - padding;
+  const chartHeight = height - padding - topPadding;
 
   // setup X axis
   // X axis ticks, labels, and line/point positions
@@ -83,9 +95,14 @@ const LineChart = ({
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + (xTickDistance * index));
 
+  const horizontalLineStart = padding;
+  const horizontalLineEnd = chartWidth + padding;
+  const verticalLineStart = 0;
+  const verticalLineEnd = height - padding;
+
   // setup dates
   const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
-  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(makeJSEpoch(d)));
+  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(convertUnixEpochToJSEpoch(d)));
   const day0 = datesJSEpoch[0];
   const dayLast = datesJSEpoch[datesJSEpoch.length-1];
   const daysInData = differenceInDays(dayLast, day0);
@@ -99,9 +116,9 @@ const LineChart = ({
   const polylineCoords = data.lines
     .map((line: DataLine) => line.points
       .map((point: DataPoint, i: number) => {
-        const x = getX(i);
-        const y = Math.floor(chartHeight - (Number(point.y) / maxY) * chartHeight + padding);
-        return `${x},${y}`;
+        const xCoordinate = getX(i);
+        const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+        return `${xCoordinate},${yCoordinate}`;
       })
       .join(' ')
     );
@@ -113,19 +130,39 @@ const LineChart = ({
 
   const XAxis = () => (
     <Axis
-      points={`${padding},${height - padding} ${width - padding / 2},${height -
-        padding}`}
+      points={`${horizontalLineStart},${verticalLineEnd} ${horizontalLineEnd},${verticalLineEnd}`}
     />
   );
 
   const YAxis = () => (
-    <Axis points={`${padding},${padding} ${padding},${height - padding}`} />
+    <Axis points={`${horizontalLineStart},${verticalLineStart} ${horizontalLineStart},${verticalLineEnd}`} />
   );
 
-  const QuarterLines = () => {
-    const startY = padding;
-    const endY = height - padding;
+  const YAxisThresholdLine = () => {
+    const yCoordinate = Math.floor(topPadding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight);
 
+    return (
+      <TextStyleGroup>
+        {yAxisThresholdLabel && (
+          <text
+            x={horizontalLineStart + options.fontSize}
+            y={yCoordinate - options.fontSize * 0.5}
+            >
+            {yAxisThresholdLabel}
+          </text>
+        )}
+      <polyline
+        fill="none"
+        points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`}
+        stroke={options.colors.yAxisThresholdBorder}
+        strokeDasharray={options.yAxisThresholdDashArray}
+        strokeWidth={options.strokeWidth * 3}
+        />
+      </TextStyleGroup>
+    );
+  };
+
+  const QuarterLines = () => {
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
       .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
         isBefore(quarter, dataDayRange.end));
@@ -138,7 +175,7 @@ const LineChart = ({
         .filter((d: Date) => compareAsc(d, curr) === 0)
         .map((d: Date) => datesJSEpoch.indexOf(d))[0];
 
-      const x = quarterTickIndex >= 0
+      const xCoordinate = quarterTickIndex >= 0
         ? getX(quarterTickIndex)
         : xTicksStart + (
             differenceInDays(curr, day0) / daysInData * xWidthAllTicks
@@ -147,7 +184,7 @@ const LineChart = ({
       return ([
         ...acc,
         {
-          x,
+          xCoordinate,
           tooltip: `${getYear(curr)} Q${getQuarter(curr)}`,
         }
       ])
@@ -156,14 +193,14 @@ const LineChart = ({
     return (
       <g
         stroke={options.colors.quarterBorder}
+        strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
-        strokeDasharray="3, 2"
         >
-          {quartersLines.map(({ x }: { x: string }) => (
+          {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
             // TODO: tooltips
             <polyline
-              key={x}
-              points={`${x},${startY} ${x},${endY}`}
+              key={xCoordinate}
+              points={`${xCoordinate},${verticalLineStart} ${xCoordinate},${verticalLineEnd}`}
               />
           ))}
       </g>
@@ -183,7 +220,7 @@ const LineChart = ({
           const tickX = getX(index);
           return (
             <polyline
-              key={ticksValue}
+              key={tickX}
               points={`${tickX},${yStart} ${tickX},${yEnd}`}
               />
           );
@@ -193,8 +230,6 @@ const LineChart = ({
   };
 
   const HorizontalGuides = () => {
-    const startX = padding;
-    const endX = width - padding / 2;
     return (
       <g
         fill="none"
@@ -203,9 +238,9 @@ const LineChart = ({
         >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
-          const yCoordinate = chartHeight - chartHeight * ratio + padding;
+          const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
           return (
-            <polyline key={guidesValue} points={`${startX},${yCoordinate} ${endX},${yCoordinate}`} />
+            <polyline key={yCoordinate} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
           );
         })}
       </g>
@@ -215,43 +250,51 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
     return (
-      <AxisLabel
+      <TextStyleGroup
         textAnchor="middle"
         >
         {dataPoints.map((point: DataPoint, index: number) => {
-          const x = getX(index);
+          const xCoordinate = getX(index);
           return (
-            <text key={point.label}>
+            <text key={xCoordinate}>
               {point.label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan x={x} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
+                <tspan key={word+wordIndex} x={xCoordinate} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
               ))}
             </text>
           );
         })}
-      </AxisLabel>
+      </TextStyleGroup>
     );
   };
 
   const LabelsYAxis = () => {
-    const PARTS = numberOfHorizontalGuides;
     return (
-      <AxisLabel>
-        {new Array(PARTS + 1).fill(0).map((axisValue: number, index: number) => {
-          const x = options.fontSize;
+      <TextStyleGroup>
+        <text
+          textAnchor="middle"
+          transform={`translate(${options.fontSize - 2},${height/2}) rotate(-90)`}
+          x={0}
+          y={0}
+          >
+          # {yAxisTitle}
+        </text>
+        {new Array(numberOfHorizontalGuides + 1).fill(0).map((axisValue: number, index: number) => {
+          const xCoordinate = padding - options.fontSize + 6;
           const ratio = index / numberOfHorizontalGuides;
-          const yCoordinate = chartHeight - chartHeight * ratio + padding + options.fontSize / 2;
-          const labelStr = (maxY * (index / PARTS)).toString();
+          const yCoordinate = chartHeight - chartHeight * ratio + topPadding + options.fontSize / 2;
+          const labelStr = (maxY * (index / numberOfHorizontalGuides)).toString();
           return (
             <text
               key={index}
-              x={x}
+              textAnchor="end"
+              x={xCoordinate}
               y={yCoordinate}
               >
               {parseFloat(labelStr).toFixed(precision)}
             </text>
           );
         })}
-      </AxisLabel>
+      </TextStyleGroup>
     );
   };
 
@@ -265,12 +308,14 @@ const LineChart = ({
       <YAxis />
       <LabelsYAxis />
       {hasQuarterLines && <QuarterLines />}
+      {hasYAxisThresholdLine && <YAxisThresholdLine />}
       <HorizontalGuides />
 
       {polylineCoords.map((points: string) => (
         // TODO: change colour based on line title
         <polyline
           fill="none"
+          key={points}
           stroke={options.colors.chartLine}
           strokeWidth={options.strokeWidth}
           points={points}

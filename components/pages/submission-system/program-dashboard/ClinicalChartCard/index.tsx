@@ -26,61 +26,70 @@ import NoData from 'uikit/NoData';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import ClinicalChart from '../ClinicalChart';
 import { adjustData, makeMockData } from '../ClinicalChart/mockData';
 import { rangeButtons } from '../ClinicalChart/utils';
 
+type CardProps = {
+  type: 'clinical' | 'molecular',
+  comingSoonLink: string;
+  title: string;
+};
+
 const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 
-const getStartedLink = (
-  <Typography variant="data" component="span">
-    <Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
-      {' '}
-      Get started with clinical data submission »{' '}
-    </Link>
-  </Typography>
-);
+const CHART_HEIGHT = 230;
+const CHART_PADDING = 12;
 
-export default () => {
+// TODO, could change: combine this with the ClinicalChart component
+// and add a query (See )
+
+export default ({ comingSoonLink, title, type}: CardProps) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
-  // TODO: when API is ready, this should be a reusable hook or component
+  // TODO: when API is ready, this should be a reusable hook,
+  // or data requests should be made at the page level. TBD
   useEffect(() => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
     const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType: 'molecular'});
+    const clinicalData = find(adjustedData, { chartType: type});
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
-  return (
-    <DashboardCard>
-      <Typography variant="default" component="span">
-        Completed Core Clinical Data
-      </Typography>
-      <div
-        css={css`
-          height: 260px;
-          padding: 12px 0;
-        `}
-      >
-        {FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
-          ? (
-            <ClinicalChart
-              data={lineChartData}
-              activeRangeBtn={activeRangeBtn}
-              setActiveRangeBtn={setActiveRangeBtn}
-              />
-            )
-          : (
-            <NoData title="Coming Soon." link={getStartedLink}>
-              <img alt="Coming Soon." src={PicClipboard} />
-            </NoData>
-          )
-        }
-      </div>
-    </DashboardCard>
+  const getStartedLink = (
+    <Typography variant="data" component="span">
+      <Link target="_blank" href={comingSoonLink}>
+        {' '}
+        Get started with {type} data submission &raquo;{' '}
+      </Link>
+    </Typography>
   );
+
+  return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+    ? (
+      <ClinicalChart
+        data={lineChartData}
+        activeRangeBtn={activeRangeBtn}
+        setActiveRangeBtn={setActiveRangeBtn}
+        title={title}
+        />
+    ) : (
+      <DashboardCard>
+        <Typography variant="default" component="span">
+          {title}
+        </Typography>
+        <div
+          css={css`
+            height: ${CHART_HEIGHT + CHART_PADDING}px;
+            padding: ${CHART_PADDING}px 0 0;
+          `}
+          >
+          <NoData title="Coming Soon." link={getStartedLink}>
+            <img alt="Coming Soon." src={PicClipboard} />
+          </NoData>
+        </div>
+      </DashboardCard>
+    );
 };
