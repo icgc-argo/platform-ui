@@ -34,16 +34,16 @@ const CHART_PADDING = 12;
 
 const ClinicalChart = ({
   activeRangeBtn,
+  chartType,
   data,
   setActiveRangeBtn,
   title,
-  type,
 }: {
   activeRangeBtn: string;
+  chartType: ChartType;
   data: DataObj;
   setActiveRangeBtn: any; // type?
   title: string;
-  type: ChartType;
 }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
@@ -66,7 +66,7 @@ const ClinicalChart = ({
         <Typography variant="default" component="span">
           {title}
         </Typography>
-        {type === 'molecular' && (
+        {chartType === 'molecular' && (
           <Legend
             activeLines={activeLines}
             handleLegendInput={handleLegendInput}
@@ -94,13 +94,13 @@ const ClinicalChart = ({
           >
           <LineChart
             activeLines={activeLines}
+            chartType={chartType}
             data={data}
             hasQuarterLines
             hasYAxisThresholdLine
             height={CHART_HEIGHT}
             horizontalGuides={4}
             precision={0}
-            type={type}
             width={width}
             yAxisThreshold={1700} // TODO committed donors
             yAxisThresholdLabel="Committed"

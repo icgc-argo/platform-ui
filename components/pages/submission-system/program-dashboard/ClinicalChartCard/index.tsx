@@ -32,7 +32,7 @@ import { rangeButtons } from '../ClinicalChart/utils';
 import { ChartType } from '../ClinicalChart/types';
 
 type CardProps = {
-  type: ChartType;
+  chartType: ChartType;
   comingSoonLink: string;
   title: string;
 };
@@ -42,7 +42,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default ({ comingSoonLink, title, type}: CardProps) => {
+export default ({ chartType, comingSoonLink, title }: CardProps) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
@@ -52,7 +52,7 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
     const days = find(rangeButtons, { title: activeRangeBtn }).data;
     const mockData = makeMockData(days);
     const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType: type});
+    const clinicalData = find(adjustedData, { chartType });
     setLineChartData(clinicalData);
   }, [activeRangeBtn]);
 
@@ -60,7 +60,7 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>
         {' '}
-        Get started with {type} data submission &raquo;{' '}
+        Get started with {chartType} data submission &raquo;{' '}
       </Link>
     </Typography>
   );
@@ -68,11 +68,11 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
   return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
     ? (
       <ClinicalChart
-        data={lineChartData}
         activeRangeBtn={activeRangeBtn}
+        chartType={chartType}
+        data={lineChartData}
         setActiveRangeBtn={setActiveRangeBtn}
         title={title}
-        type={type}
         />
     ) : (
       <DashboardCard>
