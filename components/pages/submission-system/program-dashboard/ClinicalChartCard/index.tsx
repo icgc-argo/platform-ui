@@ -42,9 +42,6 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-// TODO, could change: combine this with the ClinicalChart component
-// and add a query (See )
-
 export default ({ comingSoonLink, title, type}: CardProps) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');

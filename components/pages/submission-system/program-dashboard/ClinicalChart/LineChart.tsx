@@ -360,10 +360,10 @@ const LineChart = ({
   const ChartPoints = () => {
     return (
       <g>
-        {chartLines.map((chartLine: ChartLine, chartLineIndex: number) => {
+        {chartLines.map((chartLine: ChartLine) => {
           const pointsCoordinates = chartLine.points.split(' ').map((point: string) => {
-            const [x, y] = point.split(',').map((xyString: string) => Number(xyString));
-            return { x, y };
+            const [xCoordinate, yCoordinate] = point.split(',').map((xyString: string) => Number(xyString));
+            return { xCoordinate, yCoordinate };
           });
           return (
             <g
@@ -371,9 +371,9 @@ const LineChart = ({
               >
               {pointsCoordinates.map((point) => (
                 <circle
-                  cx={point.x}
-                  cy={point.y}
-                  key={point.x}
+                  cx={point.xCoordinate}
+                  cy={point.yCoordinate}
+                  key={point.xCoordinate}
                   r={options.pointRadius}
                   />
               ))}

@@ -60,7 +60,6 @@ const ClinicalChart = ({
   const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);
   const dateRangeFormat = 'Y/MM/dd';
 
-
   return (
     <DashboardCard>
       <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
@@ -88,7 +87,6 @@ const ClinicalChart = ({
         <div
           ref={lineChartRef}
           style={{
-            // border: '1px solid pink',
             width: '100%',
             paddingTop: CHART_PADDING,
             filter: `blur(${resizing ? 8 : 0}px)`
@@ -102,11 +100,11 @@ const ClinicalChart = ({
             height={CHART_HEIGHT}
             horizontalGuides={4}
             precision={0}
+            type={type}
             width={width}
-            yAxisThreshold={1700} // this should be committed donors
+            yAxisThreshold={1700} // TODO committed donors
             yAxisThresholdLabel="Committed"
             yAxisTitle="donors"
-            type={type}
             />
         </div>
       </div>
