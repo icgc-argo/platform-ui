@@ -3,34 +3,28 @@ import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Button from 'uikit/Button';
 import theme from 'uikit/theme/defaultTheme';
+import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { chartLineColors } from './utils';
 
 const StyledLegend = styled('div')`
+  background: ${theme.colors.white};
+  border-radius: 4px;
+  border: 1px solid ${theme.colors.grey_1};
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
+  display: flex;
+  left: -195px;
+  padding: 5px 3px;
   position: absolute;
   top: -140px;
-  left: -195px;
-  display: flex;
   width: 270px;
-  background: ${theme.colors.white};
-  border: 1px solid ${theme.colors.grey_1};
-  border-radius: 4px;
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  padding: 5px 3px;
   .legend-column {
-    width: 50%;
     padding: 0 2px;
+    width: 50%;
   }
   .legend-title {
-    color: ${theme.colors.black};
-    font-size: 11px;
-    line-height: 14px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family: 'Work Sans', 'sans-serif';
-    line-height: 20px;
-    text-align: center;
     margin-bottom: 3px;
+    text-align: center;
     &.yellow {
       background: ${theme.colors.warning_4};
     }
@@ -41,21 +35,20 @@ const StyledLegend = styled('div')`
 `;
 
 const StyledLegendLabel = styled('label')`
-  display: flex;
   align-items: center;
+  display: flex;
   .legend-input-title {
-    font-family: 'Work Sans', 'sans-serif';
-    font-size: 12px;
+    ${({ theme }) => css(theme.typography.data)};
     line-height: 20px;
     padding: 2px;
   }
   .legend-input-color {
-    width: 7px;
-    height: 7px;
     border-radius: 25px;
     display: block;
-    margin: 0 3px 0 6px;
+    height: 7px;
     line-height: 20px;
+    margin: 0 3px 0 6px;
+    width: 7px;
   }
 `;
 
@@ -131,7 +124,9 @@ const Legend = (
       {isOpen && (
         <StyledLegend>
           <div className="legend-column">
-            <div className="legend-title yellow">DNA-SEQ PIPELINE</div>
+            <div className="legend-title blue">
+              <Typography color="black" variant="caption" bold>DNA PIPELINE</Typography>
+            </div>
             {dnaTitles.map((title: string) => (
               <LegendInput
                 activeLines={activeLines}
@@ -142,7 +137,9 @@ const Legend = (
             ))}
           </div>
           <div className="legend-column">
-            <div className="legend-title blue">RNA-SEQ PIPELINE</div>
+            <div className="legend-title blue">
+              <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
+            </div>
             {rnaTitles.map((title: string) => (
               <LegendInput
                 activeLines={activeLines}
