@@ -59,6 +59,7 @@ const makePointsString = (points: PointsCoordinates) => {
 
 const LineChart = ({
   activeLines,
+  chartType,
   data,
   hasQuarterLines = false,
   hasYAxisThresholdLine = false,
@@ -69,9 +70,9 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
-  type,
 }: {
   activeLines: string[];
+  chartType: ChartType;
   data: DataObj;
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
@@ -82,7 +83,6 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
-  type: ChartType;
 }) => {
   // setup Y axis
   const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
