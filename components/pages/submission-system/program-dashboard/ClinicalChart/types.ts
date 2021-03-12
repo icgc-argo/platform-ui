@@ -43,3 +43,10 @@ export type DataObj = {
 };
 
 export type ChartType = 'clinical' | 'molecular';
+
+export type PointsCoordinates = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+};

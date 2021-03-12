@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Button from 'uikit/Button';
 import theme from 'uikit/theme/defaultTheme';
+import { css } from 'uikit';
 import { chartLineColors } from './utils';
 
 const StyledLegend = styled('div')`
@@ -59,14 +59,14 @@ const StyledLegendLabel = styled('label')`
   }
 `;
 
-const dna = [
+const dnaTitles = [
   'DNA Raw Reads',
   'Alignment',
   'Sanger VC',
   'Mutect2',
 ];
 
-const rna = [
+const rnaTitles = [
   'RNA Raw Reads',
   'RNA-Seq1',
   'RNA-Seq2'
@@ -103,8 +103,15 @@ const LegendInput = (
       type="checkbox"
       value={title}
       />
-    <span className="legend-input-color" style={{background: chartLineColors[title]}}/>
-    <span className="legend-input-title">{title.includes('Raw Reads') ? 'Raw Reads' : title}</span>
+    <span
+      className="legend-input-color"
+      css={css`
+        background: ${chartLineColors[title]};
+      `}
+      />
+    <span className="legend-input-title">
+      {title.includes('Raw Reads') ? 'Raw Reads' : title}
+    </span>
   </StyledLegendLabel>
 );
 
@@ -125,7 +132,7 @@ const Legend = (
         <StyledLegend>
           <div className="legend-column">
             <div className="legend-title yellow">DNA-SEQ PIPELINE</div>
-            {dna.map((title: string) => (
+            {dnaTitles.map((title: string) => (
               <LegendInput
                 activeLines={activeLines}
                 handleLegendInput={handleLegendInput}
@@ -136,7 +143,7 @@ const Legend = (
           </div>
           <div className="legend-column">
             <div className="legend-title blue">RNA-SEQ PIPELINE</div>
-            {rna.map((title: string) => (
+            {rnaTitles.map((title: string) => (
               <LegendInput
                 activeLines={activeLines}
                 handleLegendInput={handleLegendInput}
