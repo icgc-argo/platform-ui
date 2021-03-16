@@ -22,7 +22,7 @@ import React from 'react';
 import ContentPlaceholder from '.';
 import { text } from '@storybook/addon-knobs';
 
-const NoDataStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
+const ContentPlaceholderStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
   <ContentPlaceholder
     title={text('title', 'You do not have any registration data uploaded.')}
     subtitle={text('subtitle', 'Follow the instructions above to get started.')}
@@ -31,4 +31,4 @@ const NoDataStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
   </ContentPlaceholder>
 ));
 
-export default NoDataStories;
+export default ContentPlaceholderStories;
