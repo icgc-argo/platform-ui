@@ -62,11 +62,7 @@ export const useProgramDonorsSummaryQuery = (
       pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
-  return {
-    ...hook,
-    data: hook.data,
-    error: hook.error,
-  };
+  return hook;
 };
 
 export default () => {
@@ -105,54 +101,51 @@ export default () => {
     </Typography>
   );
 
-  return !isCardLoading && programDonorsSummaryQueryError
-    ? (
-      <DashboardCard>
-        <CardTitle />
-        <ContentError />
-      </DashboardCard>
-    )
-    : !isCardLoading && isDonorSummaryEntriesEmpty
-      ? (
-        <DashboardCard>
+  const isDataValid = !isCardLoading && !programDonorsSummaryQueryError && !isDonorSummaryEntriesEmpty;
+
+  return (    
+    <DashboardCard>
+      <Row>
+        <Col md={3.5} sm={12}>
           <CardTitle />
-          <EmptyDonorSummaryState />
-        </DashboardCard>
-      )
-      : (    
-        <DashboardCard>
-          <Row>
-            <Col md={3.5} sm={12}>
-              <CardTitle />
-            </Col>
-            <Col
-              md={8.5}
-              sm={12}
-              css={css`
-                display: flex;
-                align-self: center;
-                justify-content: flex-end;
-              `}
+        </Col>
+        {isDataValid && (
+          <Col
+            md={8.5}
+            sm={12}
+            css={css`
+              display: flex;
+              align-self: center;
+              justify-content: flex-end;
+            `}
             >
-              <DownloadButtons />
-            </Col>
-          </Row>
-          {!isCardLoading && (
-            <Row>
-              <Col>
-                <InvalidDonorsNotification
-                  numInvalidDonors={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
-                />
-              </Col>
-            </Row>
-          )}
-          <DonorSummaryTable
-            programShortName={programShortName}
-            initialPages={initialPages}
-            initialPageSize={DEFAULT_PAGE_SIZE}
-            initialSorts={DEFAULT_SORTS}
-            isCardLoading={isCardLoading}
-          />
-        </DashboardCard>
-      );
+            <DownloadButtons />
+          </Col>
+        )}
+      </Row>
+      {isDataValid && (
+        <Row>
+          <Col>
+            <InvalidDonorsNotification
+              numInvalidDonors={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
+            />
+          </Col>
+        </Row>
+      )}
+      {!isCardLoading && programDonorsSummaryQueryError
+        ? <ContentError />
+        : !isCardLoading && isDonorSummaryEntriesEmpty
+          ? <EmptyDonorSummaryState />
+          : (
+            <DonorSummaryTable
+              programShortName={programShortName}
+              initialPages={initialPages}
+              initialPageSize={DEFAULT_PAGE_SIZE}
+              initialSorts={DEFAULT_SORTS}
+              isCardLoading={isCardLoading}
+              />
+          )
+      }
+    </DashboardCard>
+  );
 };
