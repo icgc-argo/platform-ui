@@ -72,6 +72,7 @@ export default () => {
             <Link href={ARGO_PRIVACY_PAGE} target="_blank">
               <HyperLink invert>Privacy Policy</HyperLink>
             </Link>
+            .
           </Typography>
           <div
             css={css`
