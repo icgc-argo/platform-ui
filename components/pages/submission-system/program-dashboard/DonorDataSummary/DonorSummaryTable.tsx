@@ -407,4 +407,4 @@ export default ({
 };
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
-  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' ? true : false }));
+  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
