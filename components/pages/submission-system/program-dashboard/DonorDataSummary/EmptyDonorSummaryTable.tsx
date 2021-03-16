@@ -20,7 +20,7 @@
 import Typography from 'uikit/Typography';
 import Link from 'uikit/Link';
 import styled from '@emotion/styled';
-import NoData from 'uikit/NoData';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
@@ -41,7 +41,7 @@ export default () => {
     max-width: 100vw;
   `;
   return (
-    <NoData title="You do not have any donor data submitted." link={getStartedLink}>
+    <ContentPlaceholder title="You do not have any donor data submitted." link={getStartedLink}>
       <div
         css={css`
           display: flex;
@@ -54,6 +54,6 @@ export default () => {
         <NoDataIcon alt="no data found" src={PicHeart} />
         <NoDataIcon alt="no data found" src={PicDna} />
       </div>
-    </NoData>
+    </ContentPlaceholder>
   );
 };

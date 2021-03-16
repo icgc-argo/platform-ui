@@ -22,7 +22,7 @@ import { css } from '@emotion/core';
 import { find } from 'lodash';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
-import NoData from 'uikit/NoData';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
@@ -86,9 +86,9 @@ export default ({ comingSoonLink, title, type}: CardProps) => {
             padding: ${CHART_PADDING}px 0 0;
           `}
           >
-          <NoData title="Coming Soon." link={getStartedLink}>
+          <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
             <img alt="Coming Soon." src={PicClipboard} />
-          </NoData>
+          </ContentPlaceholder>
         </div>
       </DashboardCard>
     );

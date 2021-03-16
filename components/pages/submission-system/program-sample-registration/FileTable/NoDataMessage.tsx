@@ -20,7 +20,7 @@
 import * as React from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
-import NoData from 'uikit/NoData';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 
 export default function NoDataMessage(props: { loading: boolean }) {
   return (
@@ -36,12 +36,12 @@ export default function NoDataMessage(props: { loading: boolean }) {
       {props.loading ? (
         <DnaLoader />
       ) : (
-        <NoData
+        <ContentPlaceholder
           title="You do not have any registration data uploaded."
           subtitle="Follow the instructions above to get started."
         >
           <img alt="Chemistry beakers" src="/static/beakers.svg" />
-        </NoData>
+        </ContentPlaceholder>
       )}
     </div>
   );

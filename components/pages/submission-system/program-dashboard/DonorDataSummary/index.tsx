@@ -36,6 +36,7 @@ import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
 import { InvalidDonorsNotification } from './InvalidDonorsNotification';
+import ContentError from '../../../../placeholders/ContentError';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -108,7 +109,7 @@ export default () => {
     ? (
       <DashboardCard>
         <CardTitle />
-        <p>There was an error.</p>
+        <ContentError />
       </DashboardCard>
     )
     : !isCardLoading && isDonorSummaryEntriesEmpty

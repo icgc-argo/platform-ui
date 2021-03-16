@@ -17,24 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { storiesOf } from '@storybook/react';
 import React from 'react';
-import css from '@emotion/css';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import ContentPlaceholder from '.';
+import { text } from '@storybook/addon-knobs';
 
-export default function ContentPlaceholderComponent(props) {
-  return (
-    <div
-      css={css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        padding: 32px 0;
-      `}
-    >
-      {props.loading ? null : (
-        <ContentPlaceholder />
-      )}
-    </div>
-  );
-}
+const NoDataStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
+  <ContentPlaceholder
+    title={text('title', 'You do not have any registration data uploaded.')}
+    subtitle={text('subtitle', 'Follow the instructions above to get started.')}
+  >
+    <img alt="Chemistry beakers" src="/static/beakers.svg" />
+  </ContentPlaceholder>
+));
+
+export default NoDataStories;
