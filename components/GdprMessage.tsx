@@ -49,7 +49,7 @@ export default () => {
             background: ${theme.colors.primary_dark};
             color: ${theme.colors.white};
             display: flex;
-            padding: 8px;
+            padding: 8px 4px;
           `}
         >
           <div
