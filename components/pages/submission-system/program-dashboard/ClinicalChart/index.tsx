@@ -17,37 +17,62 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { css } from '@emotion/core';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
 import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
-import { DataObj } from './types';
+import { ChartType, DataObj } from './types';
+import Legend from './Legend';
+import { chartLineColors, convertUnixEpochToJSEpoch } from './utils';
+import { format as formatDate} from 'date-fns';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
 
 const ClinicalChart = ({
   activeRangeBtn,
+  chartType,
   data,
   setActiveRangeBtn,
   title,
 }: {
   activeRangeBtn: string;
+  chartType: ChartType;
   data: DataObj;
   setActiveRangeBtn: any; // type?
   title: string;
 }) => {
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
+  const [activeLines, setActiveLines] = useState(Object.keys(chartLineColors));
+  const handleLegendInput = (line: string) => {
+    const nextLines = activeLines.includes(line)
+      ? activeLines.filter(activeLine => activeLine !== line)
+      : activeLines.concat(line);
+    setActiveLines(nextLines);
+  };
+
+  const dateRange =  data.lines[0].points.map(point => Number(point.x)).sort();
+  const dateRangeFrom = convertUnixEpochToJSEpoch(dateRange[0]);
+  const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);
+  const dateRangeFormat = 'Y/MM/dd';
 
   return (
     <DashboardCard>
-      <Typography variant="default" component="span">
-        {title}
-      </Typography>
+      <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="default" component="span">
+          {title}
+        </Typography>
+        {chartType === 'molecular' && (
+          <Legend
+            activeLines={activeLines}
+            handleLegendInput={handleLegendInput}
+            />
+        )}
+      </div>
       <div
         css={css`
           height: ${CHART_HEIGHT + CHART_PADDING}px;
@@ -57,18 +82,19 @@ const ClinicalChart = ({
         <RangeControlBar
           activeBtn={activeRangeBtn}
           handleBtnClick={setActiveRangeBtn}
-          rangeArray={[0, 1]}
+          rangeArray={[formatDate(dateRangeFrom, dateRangeFormat), formatDate(dateRangeTo, dateRangeFormat)]}
           />
         <div
           ref={lineChartRef}
           style={{
-            // border: '1px solid pink',
             width: '100%',
             paddingTop: CHART_PADDING,
             filter: `blur(${resizing ? 8 : 0}px)`
           }}
           >
           <LineChart
+            activeLines={activeLines}
+            chartType={chartType}
             data={data}
             hasQuarterLines
             hasYAxisThresholdLine
@@ -76,7 +102,7 @@ const ClinicalChart = ({
             horizontalGuides={4}
             precision={0}
             width={width}
-            yAxisThreshold={1700} // this should be committed donors
+            yAxisThreshold={1700} // TODO committed donors
             yAxisThresholdLabel="Committed"
             yAxisTitle="donors"
             />

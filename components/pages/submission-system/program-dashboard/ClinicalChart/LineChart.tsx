@@ -20,25 +20,26 @@
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { getMinMax, convertUnixEpochToJSEpoch } from './utils';
-import { DataLine, DataObj, DataPoint } from './types';
+import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
+import { ChartLine, ChartType, DataLine, DataObj, DataPoint, PointsCoordinates } from './types';
+import theme from 'uikit/theme/defaultTheme';
 
 const options = {
   colors: {
-    // colours are changed slightly from theme.
-    // svg rendering made the colours darker/lighter.
-    axisBorder: '#ccc',
-    chartLine: '#523785',
-    quarterBorder: '#7abad4',
-    yAxisThresholdBorder: '#3485cc',
-    text: '#787878',
+    axisBorder: theme.colors.grey_1,
+    chartLineDefault: theme.colors.accent2_dark,
+    quarterBorder: theme.colors.secondary_2,
+    text: theme.colors.primary_1,
+    yAxisThresholdBorder: theme.colors.secondary,
   },
-  quarterLineStrokeDashArray: '3, 2',
+  chartStrokeWidth: 1,
   fontFamily: 'Work Sans, sans-serif',
   fontSize: 10,
+  pointRadius: 2.5,
+  quarterLineStrokeDashArray: '3, 2',
   strokeWidth: 0.5,
   xTickHeight: 5,
-  yAxisThresholdDashArray: '9, 3',
+  yAxisThresholdDashArray: '8, 3',
 };
 
 const TextStyleGroup = styled.g`
@@ -47,7 +48,18 @@ const TextStyleGroup = styled.g`
   font-size: ${options.fontSize}px;
 `;
 
+const makePointsString = (points: PointsCoordinates) => {
+  // offset positioning by 0.5 to sharpen straight, thin (0.5 strokeWidth) SVG lines
+  const adjustedPoints = Object.entries(points).reduce((acc, [key, value]) => ({
+    ...acc,
+    [key]: value + 0.5,
+  }), {} as PointsCoordinates);
+  return `${adjustedPoints.x1},${adjustedPoints.y1} ${adjustedPoints.x2},${adjustedPoints.y2}`;
+}
+
 const LineChart = ({
+  activeLines,
+  chartType,
   data,
   hasQuarterLines = false,
   hasYAxisThresholdLine = false,
@@ -58,7 +70,9 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
-}: { 
+}: {
+  activeLines: string[];
+  chartType: ChartType;
   data: DataObj;
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
@@ -111,31 +125,49 @@ const LineChart = ({
     end: dayLast,
   };
 
-  // TODO: change colour based on line title, for molecular chart
-  // will have to return coords & colour in an object
-  const polylineCoords = data.lines
-    .map((line: DataLine) => line.points
-      .map((point: DataPoint, i: number) => {
-        const xCoordinate = getX(i);
-        const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
-        return `${xCoordinate},${yCoordinate}`;
-      })
-      .join(' ')
-    );
-
+  const chartLines = data.lines
+    .filter((line: DataLine) => activeLines.includes(line.title) || data.lines.length === 1)
+    .map((line: DataLine) => ({
+      ...line,
+      points: line.points
+        .map((point: DataPoint, i: number) => {
+          const xCoordinate = getX(i);
+          const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+          return `${xCoordinate},${yCoordinate}`;
+        })
+        .join(' ')
+    }));
+  
   // setup axis elements
-  const Axis = ({ points }: { points: string }) => (
-    <polyline fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth} points={points} />
+  const Axis = ({ points }: { points: PointsCoordinates }) => (
+    <polyline
+      fill="none"
+      stroke={options.colors.axisBorder}
+      strokeWidth={options.strokeWidth}
+      points={makePointsString(points)}
+      />
   );
 
   const XAxis = () => (
     <Axis
-      points={`${horizontalLineStart},${verticalLineEnd} ${horizontalLineEnd},${verticalLineEnd}`}
-    />
+      points={{
+        x1: horizontalLineStart,
+        x2: horizontalLineEnd,
+        y1: verticalLineEnd,
+        y2: verticalLineEnd,
+      }}
+      />
   );
 
   const YAxis = () => (
-    <Axis points={`${horizontalLineStart},${verticalLineStart} ${horizontalLineStart},${verticalLineEnd}`} />
+    <Axis
+      points={{
+        x1: horizontalLineStart,
+        x2: horizontalLineStart,
+        y1: verticalLineStart,
+        y2: verticalLineEnd,
+      }}
+      />
   );
 
   const YAxisThresholdLine = () => {
@@ -146,17 +178,22 @@ const LineChart = ({
         {yAxisThresholdLabel && (
           <text
             x={horizontalLineStart + options.fontSize}
-            y={yCoordinate - options.fontSize * 0.5}
+            y={Math.floor(yCoordinate - options.fontSize * 0.5)}
             >
             {yAxisThresholdLabel}
           </text>
         )}
       <polyline
         fill="none"
-        points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`}
+        points={makePointsString({
+          x1: horizontalLineStart,
+          x2: horizontalLineEnd,
+          y1: yCoordinate,
+          y2: yCoordinate,
+        })}
         stroke={options.colors.yAxisThresholdBorder}
         strokeDasharray={options.yAxisThresholdDashArray}
-        strokeWidth={options.strokeWidth * 3}
+        strokeWidth={options.strokeWidth}
         />
       </TextStyleGroup>
     );
@@ -175,11 +212,11 @@ const LineChart = ({
         .filter((d: Date) => compareAsc(d, curr) === 0)
         .map((d: Date) => datesJSEpoch.indexOf(d))[0];
 
-      const xCoordinate = quarterTickIndex >= 0
+      const xCoordinate = Number(quarterTickIndex >= 0
         ? getX(quarterTickIndex)
         : xTicksStart + (
             differenceInDays(curr, day0) / daysInData * xWidthAllTicks
-          );
+          ));
 
       return ([
         ...acc,
@@ -196,11 +233,15 @@ const LineChart = ({
         strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
         >
-          {quartersLines.map(({ xCoordinate }: { xCoordinate: string }) => (
-            // TODO: tooltips
+          {quartersLines.map(({ xCoordinate }: { xCoordinate: number }) => (
             <polyline
               key={xCoordinate}
-              points={`${xCoordinate},${verticalLineStart} ${xCoordinate},${verticalLineEnd}`}
+              points={makePointsString({
+                x1: xCoordinate,
+                x2: xCoordinate,
+                y1: verticalLineStart,
+                y2: verticalLineEnd,
+              })}
               />
           ))}
       </g>
@@ -221,7 +262,12 @@ const LineChart = ({
           return (
             <polyline
               key={tickX}
-              points={`${tickX},${yStart} ${tickX},${yEnd}`}
+              points={makePointsString({
+                x1: tickX,
+                x2: tickX,
+                y1: yStart,
+                y2: yEnd,
+              })}
               />
           );
         })}
@@ -234,13 +280,18 @@ const LineChart = ({
       <g
         fill="none"
         stroke={options.colors.axisBorder}
-        strokeWidth=".5"
+        strokeWidth={options.strokeWidth}
         >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
           return (
-            <polyline key={yCoordinate} points={`${horizontalLineStart},${yCoordinate} ${horizontalLineEnd},${yCoordinate}`} />
+            <polyline key={yCoordinate} points={makePointsString({
+              x1: horizontalLineStart,
+              x2: horizontalLineEnd,
+              y1: yCoordinate,
+              y2: yCoordinate,
+            })} />
           );
         })}
       </g>
@@ -298,30 +349,67 @@ const LineChart = ({
     );
   };
 
-  return width && (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      >
-      <XAxis />
-      <TicksXAxis />
-      <LabelsXAxis />
-      <YAxis />
-      <LabelsYAxis />
-      {hasQuarterLines && <QuarterLines />}
-      {hasYAxisThresholdLine && <YAxisThresholdLine />}
-      <HorizontalGuides />
+  const ChartLines = () => {
+    return (
+      <g
+        fill="none"
+        strokeWidth={options.chartStrokeWidth}
+        >
+        {chartLines.map((chartLine: ChartLine) => (
+          <polyline
+            key={chartLine.title}
+            points={chartLine.points}
+            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+            />
+        ))}
+      </g>
+    );
+  };
 
-      {polylineCoords.map((points: string) => (
-        // TODO: change colour based on line title
-        <polyline
-          fill="none"
-          key={points}
-          stroke={options.colors.chartLine}
-          strokeWidth={options.strokeWidth}
-          points={points}
-          />
-      ))}
-    </svg>
+  const ChartPoints = () => {
+    return (
+      <g>
+        {chartLines.map((chartLine: ChartLine) => {
+          const pointsCoordinates = chartLine.points.split(' ').map((point: string) => {
+            const [xCoordinate, yCoordinate] = point.split(',').map((xyString: string) => Number(xyString));
+            return { xCoordinate, yCoordinate };
+          });
+          return (
+            <g
+              fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+              >
+              {pointsCoordinates.map((point) => (
+                <circle
+                  cx={point.xCoordinate}
+                  cy={point.yCoordinate}
+                  key={point.xCoordinate}
+                  r={options.pointRadius}
+                  />
+              ))}
+            </g>
+          )
+        })}
+      </g>
+    );
+  };
+
+  return width && (
+    <>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        >
+        <XAxis />
+        <TicksXAxis />
+        <LabelsXAxis />
+        <YAxis />
+        <LabelsYAxis />
+        {hasQuarterLines && <QuarterLines />}
+        {hasYAxisThresholdLine && <YAxisThresholdLine />}
+        <HorizontalGuides />
+        <ChartLines />
+        <ChartPoints />
+      </svg>
+    </>
   );
 };
 
