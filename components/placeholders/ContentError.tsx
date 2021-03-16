@@ -25,8 +25,8 @@ const ContentError = ({
   title = 'Something went wrong.',
   subtitle = 'Refresh or try again later.'
 }: {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
 }) => {
   return (
     <ContentPlaceholder
