@@ -80,7 +80,7 @@ export default () => {
 
   // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryStats = undefined } = {},
+    data: { programDonorSummaryStats } = {},
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
     programShortName,
@@ -88,9 +88,10 @@ export default () => {
     DEFAULT_OFFSET,
     DEFAULT_SORTS,
   );
-  const initialPages = !isCardLoading
-    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-    : 1;
+  const initialPages =
+    !isCardLoading && programDonorSummaryStats
+      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+      : 1;
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
