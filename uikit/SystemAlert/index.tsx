@@ -113,6 +113,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
             title="Close"
             css={css`
               padding-left: 5px;
+              padding-right: 18px;
               cursor: pointer;
             `}
           />
