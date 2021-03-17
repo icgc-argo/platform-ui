@@ -78,7 +78,7 @@ export default () => {
             css={css`
               display: flex;
               align-items: center;
-              padding: 16px;
+              padding: 15px;
             `}
           >
             <Button variant="secondary" onClick={() => persistAcceptedState(true)}>
