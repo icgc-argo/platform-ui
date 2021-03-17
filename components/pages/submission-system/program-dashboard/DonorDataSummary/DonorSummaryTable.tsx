@@ -47,6 +47,7 @@ import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
 import React from 'react';
 import { SortedChangeFunction, SortingRule } from 'react-table';
+import ContentError from 'components/placeholders/ContentError';
 
 export default ({
   programShortName,
@@ -313,6 +314,7 @@ export default ({
       programDonorSummaryEntries = [],
       programDonorSummaryStats = emptyProgramSummaryStats,
     } = {},
+    error: programDonorsSummaryQueryError,
     loading,
   } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
     onCompleted: () => {
@@ -376,31 +378,38 @@ export default ({
         padding-top: 10px;
       `}
     >
-      <TableInfoHeaderContainer
-        left={
-          <DonorStatsArea
-            css={css`
-              opacity: ${isTableLoading ? 0.5 : 1};
-            `}
-            programDonorSummaryStats={programDonorSummaryStats}
-          />
-        }
-        noMargin={true}
-      />
-      <Table
-        loading={isTableLoading}
-        parentRef={containerRef}
-        columns={tableColumns}
-        data={programDonorSummaryEntries}
-        showPagination={true}
-        manual={true}
-        pages={pagingState.pages}
-        pageSize={pagingState.pageSize}
-        page={pagingState.page}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-        onSortedChange={onSortedChange}
-      />
+      {programDonorsSummaryQueryError 
+        ? <ContentError />
+        : (
+          <>
+            <TableInfoHeaderContainer
+              left={
+                <DonorStatsArea
+                  css={css`
+                    opacity: ${isTableLoading ? 0.5 : 1};
+                  `}
+                  programDonorSummaryStats={programDonorSummaryStats}
+                />
+              }
+              noMargin={true}
+              />
+            <Table
+              loading={isTableLoading}
+              parentRef={containerRef}
+              columns={tableColumns}
+              data={programDonorSummaryEntries}
+              showPagination={true}
+              manual={true}
+              pages={pagingState.pages}
+              pageSize={pagingState.pageSize}
+              page={pagingState.page}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+              onSortedChange={onSortedChange}
+              />
+          </>
+        )
+      }
     </div>
   );
 };
