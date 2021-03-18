@@ -392,7 +392,7 @@ export default ({
                 />
               }
               noMargin={true}
-              />
+            />
             <Table
               loading={isTableLoading}
               parentRef={containerRef}
@@ -406,10 +406,14 @@ export default ({
               onPageChange={onPageChange}
               onPageSizeChange={onPageSizeChange}
               onSortedChange={onSortedChange}
-              />
+              defaultSorted={getDefaultSort(initialSorts)}
+            />
           </>
         )
       }
     </div>
   );
 };
+
+const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
+  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));

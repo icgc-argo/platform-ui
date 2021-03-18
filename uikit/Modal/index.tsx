@@ -39,7 +39,7 @@ export const ModalContainer = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: space-between;
-  margin 0 1rem;
+  margin: 0 1rem;
 `;
 
 const ModalTitle = styled('div')`

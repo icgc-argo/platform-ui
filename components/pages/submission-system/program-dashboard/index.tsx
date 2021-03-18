@@ -186,9 +186,9 @@ export default function ProgramDashboard() {
           render={(screenClass) => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
               <ClinicalChartCard
+                chartType="clinical"
                 comingSoonLink={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
                 title="Completed Core Clinical Data"
-                type="clinical"
                 />
             </Col>
           )}
@@ -196,9 +196,9 @@ export default function ProgramDashboard() {
 
         <Col xl={4} lg={12}>
           <ClinicalChartCard
+            chartType="molecular"
             comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
             title="Molecular Data Summary"
-            type="molecular"
             />
         </Col>
       </PaddedRow>

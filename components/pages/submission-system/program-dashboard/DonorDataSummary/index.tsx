@@ -78,7 +78,7 @@ export default () => {
 
   // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryStats = undefined } = {},
+    data: { programDonorSummaryStats } = {},
     error: programDonorsSummaryQueryError,
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
@@ -91,9 +91,10 @@ export default () => {
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
-  const initialPages = !isCardLoading && !isDonorSummaryEntriesEmpty
-    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-    : 1;
+    const initialPages =
+    !isCardLoading && programDonorSummaryStats
+      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+      : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
