@@ -91,10 +91,10 @@ export default () => {
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
-    const initialPages =
-    !isCardLoading && programDonorSummaryStats
-      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-      : 1;
+  const initialPages =
+  !isCardLoading && programDonorSummaryStats
+    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+    : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -102,7 +102,9 @@ export default () => {
     </Typography>
   );
 
-  const isDataValid = !isCardLoading && !programDonorsSummaryQueryError && !isDonorSummaryEntriesEmpty;
+  const isDataValid = !isCardLoading &&
+    !programDonorsSummaryQueryError &&
+    !isDonorSummaryEntriesEmpty;
 
   return (    
     <DashboardCard>
