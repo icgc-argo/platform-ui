@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { DataLine, DataObj, DataPoint } from './types';
+import theme from 'uikit/theme/defaultTheme';
 
 export const getMinMax = (
   { data, minMax, coord }: {
@@ -33,7 +34,7 @@ export const getMinMax = (
   ];
   return Math[minMax](...allCoord);
 };
-export const makeJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
+export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [
   {
@@ -57,3 +58,13 @@ export const rangeButtons = [
     label: 'One week',
   }
 ];
+
+export const chartLineColors = {
+  'Alignment': theme.colors.accent1_dark,
+  'DNA Raw Reads': theme.colors.accent4_dark,
+  'Mutect2': theme.colors.error_dark,
+  'RNA Raw Reads': theme.colors.accent3_dark,
+  'RNA-Seq1': theme.colors.secondary_dark,
+  'RNA-Seq2': theme.colors.accent2_dark,
+  'Sanger VC': theme.colors.warning_dark,
+};

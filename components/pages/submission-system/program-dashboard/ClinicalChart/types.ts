@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { chartLineColors } from './utils';
+
 export type DataPoint = {
   label: string;
   tooltip: string[];
@@ -26,11 +28,25 @@ export type DataPoint = {
 
 export type DataLine = {
   points: DataPoint[];
-  title: null | string;
+  title: null | keyof typeof chartLineColors;
+};
+
+export type ChartLine = {
+  points: string;
+  title: null | keyof typeof chartLineColors;
 };
 
 export type DataObj = {
   chartType: 'clinical' | 'molecular';
   committed: number;
   lines: DataLine[];
+};
+
+export type ChartType = 'clinical' | 'molecular';
+
+export type PointsCoordinates = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
 };

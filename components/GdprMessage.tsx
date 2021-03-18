@@ -49,7 +49,7 @@ export default () => {
             background: ${theme.colors.primary_dark};
             color: ${theme.colors.white};
             display: flex;
-            padding: 8px;
+            padding: 8px 4px;
           `}
         >
           <div
@@ -72,12 +72,13 @@ export default () => {
             <Link href={ARGO_PRIVACY_PAGE} target="_blank">
               <HyperLink invert>Privacy Policy</HyperLink>
             </Link>
+            .
           </Typography>
           <div
             css={css`
               display: flex;
               align-items: center;
-              padding: 16px;
+              padding: 15px;
             `}
           >
             <Button variant="secondary" onClick={() => persistAcceptedState(true)}>
