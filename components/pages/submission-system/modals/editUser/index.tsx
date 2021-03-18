@@ -18,11 +18,16 @@
  */
 
 import React from 'react';
-import Modal from 'uikit/Modal';
+import Modal, { ModalContainer } from 'uikit/Modal';
+import styled from '@emotion/styled';
 import { UserSection, UserSectionProps, UserField } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
 import useFormHook from 'global/hooks/useFormHook';
 import { adminRestrictionText } from '../../program-management/Users';
+
+const EditUserModalContainer = styled(ModalContainer)`
+  width: 100%;
+`;
 
 const EditUserModal = ({
   user,
@@ -72,6 +77,7 @@ const EditUserModal = ({
       actionDisabled={!touched || hasErrors}
       onCancelClick={dismissModal}
       onCloseClick={dismissModal}
+      ContainerEl={EditUserModalContainer}
     >
       {/* added extra margin at bottom to prevent scrolling from modal body, give role dropdown display room */}
       <div style={{ marginBottom: 40 }}>

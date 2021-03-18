@@ -17,43 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Typography from 'uikit/Typography';
-import Link from 'uikit/Link';
-import styled from '@emotion/styled';
+import React from 'react';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import PicBeakers from 'static/register.svg';
-import PicHeart from 'static/clinical.svg';
-import PicDna from 'static/dna.svg';
-import { css } from '@emotion/core';
-import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
+import Icon from 'uikit/Icon';
 
-export default () => {
-  const getStartedLink = (
-    <Typography variant="data" component="span">
-      <Link target="_blank" href={DOCS_SUBMITTED_DATA_PAGE}>
-        Read more about the donor data summary »
-      </Link>
-    </Typography>
-  );
-
-  const NoDataIcon = styled('img')`
-    padding: 0px 16px;
-    max-width: 100vw;
-  `;
+const ContentError = ({
+  title = 'Something went wrong.',
+  subtitle = 'Refresh or try again later.'
+}: {
+  title?: string;
+  subtitle?: string;
+}) => {
   return (
-    <ContentPlaceholder title="You do not have any donor data submitted." link={getStartedLink}>
-      <div
-        css={css`
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          max-height: 100%;
-        `}
+    <ContentPlaceholder
+      title={title}
+      subtitle={subtitle}
       >
-        <NoDataIcon alt="no data found" src={PicBeakers} />
-        <NoDataIcon alt="no data found" src={PicHeart} />
-        <NoDataIcon alt="no data found" src={PicDna} />
-      </div>
+      <Icon name={'bug'} />
     </ContentPlaceholder>
   );
 };
+
+export default ContentError;

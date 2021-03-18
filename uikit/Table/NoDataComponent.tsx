@@ -18,11 +18,10 @@
  */
 
 import React from 'react';
-import noDataSvg from 'uikit/assets/noData.svg';
 import css from '@emotion/css';
-import NoData from 'uikit/NoData';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 
-export default function NoDataComponent(props) {
+export default function ContentPlaceholderComponent(props) {
   return (
     <div
       css={css`
@@ -34,9 +33,7 @@ export default function NoDataComponent(props) {
       `}
     >
       {props.loading ? null : (
-        <NoData>
-          <img alt="no data found." src={noDataSvg} />
-        </NoData>
+        <ContentPlaceholder />
       )}
     </div>
   );

@@ -36,6 +36,7 @@ import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
 import { InvalidDonorsNotification } from './InvalidDonorsNotification';
+import ContentError from '../../../../placeholders/ContentError';
 
 export const useProgramDonorsSummaryQuery = (
   programShortName: string,
@@ -61,10 +62,7 @@ export const useProgramDonorsSummaryQuery = (
       pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
-  return {
-    ...hook,
-    data: hook.data,
-  };
+  return hook;
 };
 
 export default () => {
@@ -81,6 +79,7 @@ export default () => {
   // using the default query variables will get us all registered donors
   const {
     data: { programDonorSummaryStats } = {},
+    error: programDonorsSummaryQueryError,
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery(
     programShortName,
@@ -88,13 +87,14 @@ export default () => {
     DEFAULT_OFFSET,
     DEFAULT_SORTS,
   );
-  const initialPages =
-    !isCardLoading && programDonorSummaryStats
-      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-      : 1;
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
+
+  const initialPages =
+  !isCardLoading && programDonorSummaryStats
+    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+    : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -102,30 +102,31 @@ export default () => {
     </Typography>
   );
 
-  return !isCardLoading && isDonorSummaryEntriesEmpty ? (
-    <DashboardCard>
-      <CardTitle />
-      <EmptyDonorSummaryState />
-    </DashboardCard>
-  ) : (
+  const isDataValid = !isCardLoading &&
+    !programDonorsSummaryQueryError &&
+    !isDonorSummaryEntriesEmpty;
+
+  return (    
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
           <CardTitle />
         </Col>
-        <Col
-          md={8.5}
-          sm={12}
-          css={css`
-            display: flex;
-            align-self: center;
-            justify-content: flex-end;
-          `}
-        >
-          <DownloadButtons />
-        </Col>
+        {isDataValid && (
+          <Col
+            md={8.5}
+            sm={12}
+            css={css`
+              display: flex;
+              align-self: center;
+              justify-content: flex-end;
+            `}
+            >
+            <DownloadButtons />
+          </Col>
+        )}
       </Row>
-      {!isCardLoading && (
+      {isDataValid && (
         <Row>
           <Col>
             <InvalidDonorsNotification
@@ -134,13 +135,20 @@ export default () => {
           </Col>
         </Row>
       )}
-      <DonorSummaryTable
-        programShortName={programShortName}
-        initialPages={initialPages}
-        initialPageSize={DEFAULT_PAGE_SIZE}
-        initialSorts={DEFAULT_SORTS}
-        isCardLoading={isCardLoading}
-      />
+      {!isCardLoading && programDonorsSummaryQueryError
+        ? <ContentError />
+        : !isCardLoading && isDonorSummaryEntriesEmpty
+          ? <EmptyDonorSummaryState />
+          : (
+            <DonorSummaryTable
+              programShortName={programShortName}
+              initialPages={initialPages}
+              initialPageSize={DEFAULT_PAGE_SIZE}
+              initialSorts={DEFAULT_SORTS}
+              isCardLoading={isCardLoading}
+              />
+          )
+      }
     </DashboardCard>
   );
 };
