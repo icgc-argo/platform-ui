@@ -25,10 +25,9 @@ import { ClinicalSubmissionEntityFile, ClinicalSubmissionQueryData } from '../ty
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
-import NoData from 'uikit/NoData';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
-import noDataSvg from 'static/illustration_heart.svg';
 import Icon from 'uikit/Icon';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
@@ -105,7 +104,7 @@ export default ({
     'PENDING_APPROVAL',
   ] as typeof submissionState[]).includes(submissionState);
   return !selectedFile ? (
-    <NoData
+    <ContentPlaceholder
       css={css`
         width: 100%;
       `}
@@ -234,12 +233,10 @@ export default ({
               height: 100%;
             `}
           >
-            <NoData
+            <ContentPlaceholder
               title="You do not have any data uploaded."
               subtitle="Follow the instructions above to get started."
-            >
-              <img alt="no data found" src={noDataSvg} />
-            </NoData>
+              />
           </div>
         )}
       </Col>

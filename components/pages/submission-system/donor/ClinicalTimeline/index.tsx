@@ -30,8 +30,7 @@ import get from 'lodash/get';
 import Samples from './samples';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
-import NoData from 'uikit/NoData';
-import noDataSvg from '../../../../../static/illustration_heart.svg';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -144,15 +143,12 @@ const ClinicalTimeline = ({ data }) => {
             </Row>
           </>
         ) : (
-          <NoData
+          <ContentPlaceholder
             css={css`
               flex: 1;
             `}
             title="There is no clinical timeline data for this donor."
-          >
-            {' '}
-            <img alt="no data found." src={noDataSvg} />
-          </NoData>
+            />
         )}
       </div>
     </Container>
