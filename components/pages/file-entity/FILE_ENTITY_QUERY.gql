@@ -1,0 +1,59 @@
+query FILE_ENTITY_QUERY($filters: JSON) {
+  file {
+    hits(filters: $filters) {
+      total
+      edges {
+        node {
+          object_id
+          data_type
+          file_type
+          file_access
+          study_id
+
+          file {
+            size
+            md5sum
+            name
+          }
+
+          repositories {
+            hits {
+              edges {
+                node {
+                  country
+                  name
+                }
+              }
+            }
+          }
+
+          analysis {
+            experiment {
+              experimental_strategy
+              platform
+            }
+
+            workflow {
+              workflow_name
+              workflow_version
+            }
+            analysis_type
+            analysis_version
+            variant_class
+          }
+
+          donors {
+            hits {
+              edges {
+                node {
+                  donor_id
+                  submitter_donor_id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
