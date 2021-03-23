@@ -45,6 +45,9 @@ import { useTheme } from 'uikit/ThemeProvider';
 import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
+import A from 'uikit/Link';
+import Link from 'next/link';
+import { FILE_ENTITY_ID_PATH, FILE_ENTITY_PATH } from 'global/constants/pages';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -182,6 +185,15 @@ export default () => {
       id: FileCentricDocumentField['object_id'],
       accessor: 'objectId',
       width: 260,
+      Cell: ({ original }: { original: FileRepositoryRecord }) => (
+        <Link
+          href={FILE_ENTITY_PATH}
+          as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.objectId)}
+          passHref
+        >
+          <A>{original.objectId}</A>
+        </Link>
+      ),
     },
     {
       Header: fieldDisplayNames['donors.donor_id'],
