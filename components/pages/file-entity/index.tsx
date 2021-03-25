@@ -7,6 +7,9 @@ import FileCardsLayout from './FileCardsLayout';
 import useEntityData from './useEntityData';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Footer from '../../Footer';
+import React from 'react';
+import DnaLoader from 'uikit/DnaLoader';
+import { css } from '@emotion/core';
 
 const FileEntity = () => {
   const { fileId } = usePageQuery<{ fileId: string }>();
@@ -21,7 +24,16 @@ const FileEntity = () => {
       <PageBody className={clsx({ noSidebar: true })}>
         <PageContent>
           {loading ? (
-            <div>loading</div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+              }}
+            >
+              <DnaLoader />
+            </div>
           ) : (
             <>
               <ContentHeader>
