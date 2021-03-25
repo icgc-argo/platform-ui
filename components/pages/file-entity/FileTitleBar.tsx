@@ -4,6 +4,11 @@ import TitleBar from 'uikit/TitleBar';
 import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
 import { DownloadIcon } from './common';
+import urlJoin from 'url-join';
+import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import { getConfig } from 'global/config';
+import { FileCentricDocumentField } from '../file-repository/types';
+import sqonBuilder from 'sqon-builder';
 
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
@@ -11,6 +16,8 @@ export const FileTitleBar: React.ComponentType<{
   isUserLoggedIn: boolean;
 }> = ({ programShortName, fileId, isUserLoggedIn }) => {
   const theme = useTheme();
+  const { GATEWAY_API_ROOT } = getConfig();
+  const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
 
   return (
     <div
@@ -56,7 +63,16 @@ export const FileTitleBar: React.ComponentType<{
           </Button>
         </Tooltip>
 
-        <Button>
+        <Button
+          onClick={() => {
+            const downloadUrl = urlJoin(
+              GATEWAY_API_ROOT,
+              MANIFEST_DOWNLOAD_PATH,
+              `?filter=${encodeURIComponent(JSON.stringify(filter))}`,
+            );
+            window.location.assign(downloadUrl);
+          }}
+        >
           <DownloadIcon />
           MANIFEST
         </Button>
