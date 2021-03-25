@@ -1,12 +1,12 @@
 import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from 'uikit/PageLayout';
 import Head from '../head';
 import NavBar from '../../NavBar';
-import Footer from 'uikit/Footer';
 import clsx from 'clsx';
 import { FileTitleBar } from './FileTitleBar';
 import FileCardsLayout from './FileCardsLayout';
 import useEntityData from './useEntityData';
 import { usePageQuery } from 'global/hooks/usePageContext';
+import Footer from '../../Footer';
 
 const FileEntity = () => {
   const { fileId } = usePageQuery<{ fileId: string }>();
