@@ -48,6 +48,31 @@ query FILE_ENTITY_QUERY($filters: JSON) {
                 node {
                   donor_id
                   submitter_donor_id
+                  specimens {
+                    hits {
+                      edges {
+                        node {
+                          specimen_tissue_source
+                          specimen_type
+                          tumour_normal_designation
+                          submitter_specimen_id
+                          specimen_id
+                          samples {
+                            hits {
+                              edges {
+                                node {
+                                  matched_normal_submitter_sample_id
+                                  sample_id
+                                  sample_type
+                                  submitter_sample_id
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

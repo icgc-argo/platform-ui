@@ -1,19 +1,20 @@
 import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
-import { FileSummaryInfo, FileAccessState, DataAnalysisInfo, FileEntityData } from './types';
+import {
+  FileSummaryInfo,
+  FileAccessState,
+  DataAnalysisInfo,
+  FileEntityData,
+  DonorRecord,
+} from './types';
 import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
-import {
-  dummyFileSummaryInfo,
-  dummyDataAnalysisInfo,
-  dummyAssociatedDonorsInfo,
-  dummyFileRecords,
-} from './dummyData';
+import { dummyAssociatedDonorsInfo, dummyFileRecords } from './dummyData';
 
 const useFileEntityData = ({ fileId }: { fileId: string }) => {
   console.log('file id', fileId);
-  const filters = sqonBuilder.has('object_id', '4684e526-fbb6-532b-a2de-e3562e51cbcb').build();
-  console.log('filters', filters);
+
+  const filters = sqonBuilder.has('object_id', fileId).build();
   const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,
@@ -25,7 +26,7 @@ const useFileEntityData = ({ fileId }: { fileId: string }) => {
   } else if (!loading && data) {
     console.log('entity data', data);
 
-    const entity = data.file.hits.edges[0].node;
+    const entity = get(data, 'file.hits.edges[0].node');
 
     const programShortName = entity.study_id;
 
@@ -50,11 +51,33 @@ const useFileEntityData = ({ fileId }: { fileId: string }) => {
       workflowType: get(entity, 'analysis.workflow'),
     };
 
+    const donorRecords: DonorRecord[] = get(entity, 'donors.hits.edges', []).map((edge) => {
+      const donor = edge.node;
+      console.log('d', donor);
+      const specimen = get(donor, 'specimens.hits.edges[0].node');
+      console.log(specimen);
+      const sample = get(specimen, 'samples.hits.edges[0].node');
+      return {
+        donorId: donor.donor_id,
+        submitterDonorId: donor.submitter_id,
+        primarySite: null,
+        cancerType: null,
+        ageAtDiagnosis: null,
+        associations: {
+          specimenId: specimen.specimen_id,
+          tumourNormalDesignation: specimen.tumour_normal_designation,
+          sampleId: sample.sample_id,
+          sampleType: sample.sample_type,
+          matchedNormalSampleId: sample.matched_normal_submitter_sample_id,
+        },
+      };
+    });
+
     const entityData: FileEntityData = {
       summary,
       dataAnalysis,
-      donorRecords: dummyAssociatedDonorsInfo,
-      fileRecords: dummyFileRecords,
+      donorRecords,
+      // fileRecords: dummyFileRecords,
     };
 
     return { programShortName, entityData, loading };
