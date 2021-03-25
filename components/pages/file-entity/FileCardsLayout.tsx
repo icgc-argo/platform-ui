@@ -38,11 +38,13 @@ const FileCardsLayout: React.ComponentType<{
           <AssociatedDonors donors={fileData.donorRecords} />
         </PaddedColumn>
       </PaddedRow>
+      {/*
       <PaddedRow>
         <PaddedColumn>
           <DownstreamAnalysis data={fileData.fileRecords} />
         </PaddedColumn>
       </PaddedRow>
+      */}
     </div>
   );
 };
