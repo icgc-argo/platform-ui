@@ -16,44 +16,33 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { useQuery } from '@apollo/react-hooks';
-import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+import { Container as GridContainer, Row, Col } from 'react-grid-system';
+import DonorAggregationIndexTable from './DonorAggregationIndexTable';
 
-import SubmissionLayout from '../layout';
 import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
-import { containerStyle } from '../common';
 
-import DonorAggregationSummary from './DonorAggregationSummary';
+// GQL Data Fetching
+import { useQuery } from '@apollo/react-hooks';
+import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
 
-import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
+const Card = styled(Container)`
+  padding: 16px;
+`;
 
 export default () => {
+  // const { loading, data } = useDonorAggregationIndexData();
+  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
+
+  const programs = data ? data.programs : [];
   return (
-    <SubmissionLayout
-      subtitle="DCC Dashboard"
-      contentHeader={
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-          `}
-        >
-          <Typography
-            as="h1"
-            variant="title"
-            color="primary"
-            css={css`
-              margin: 0px;
-            `}
-          >
-            DCC Dashboard
-          </Typography>
-        </div>
-      }
-    >
-      <DonorAggregationSummary />
-    </SubmissionLayout>
+    <Card>
+      <Typography variant="default" component="span">
+        Donor Aggregation Indices
+      </Typography>
+
+      <DonorAggregationIndexTable programs={programs} loading={loading} />
+    </Card>
   );
 };
