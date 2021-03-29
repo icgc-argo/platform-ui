@@ -33,7 +33,11 @@ const TypographyStories = storiesOf(`${__dirname}`, module)
         Object.keys(defaultTheme.typography) as Array<TypographyVariant>,
         'hero',
       ),
-      component: select('tag', [null, 'h1', 'h2', 'h3', 'h4', 'h5', 'div', 'span', 'p'], null),
+      component: select(
+        'component',
+        [null, 'h1', 'h2', 'h3', 'h4', 'h5', 'div', 'span', 'p'],
+        null,
+      ),
       bold: boolean('bold', false),
       color: select('color', [null, '#00f', ...Object.keys(defaultTheme.colors)], null),
     };
