@@ -16,8 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 import styled from '@emotion/styled';
-import { Container as GridContainer, Row, Col } from 'react-grid-system';
 import DonorAggregationIndexTable from './DonorAggregationIndexTable';
 
 import Typography from 'uikit/Typography';

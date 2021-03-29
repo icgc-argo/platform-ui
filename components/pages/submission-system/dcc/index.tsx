@@ -16,17 +16,13 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { useQuery } from '@apollo/react-hooks';
+
 import { css } from '@emotion/core';
 
 import SubmissionLayout from '../layout';
 import Typography from 'uikit/Typography';
-import Container from 'uikit/Container';
-import { containerStyle } from '../common';
 
 import DonorAggregationSummary from './DonorAggregationSummary';
-
-import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 
 export default () => {
   return (
