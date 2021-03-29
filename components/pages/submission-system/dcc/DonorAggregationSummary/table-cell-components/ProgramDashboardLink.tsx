@@ -18,6 +18,7 @@
  */
 
 import Link from 'next/link';
+import A from 'uikit/Link';
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
 export default ({ program }: { program: string }) => {
   return (
@@ -25,7 +26,7 @@ export default ({ program }: { program: string }) => {
       as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}
       href={PROGRAM_DASHBOARD_PATH}
     >
-      {program}
+      <A>{program}</A>
     </Link>
   );
 };
