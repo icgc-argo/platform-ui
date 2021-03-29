@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import urlJoin from 'url-join';
+import { isEmpty } from 'lodash';
 
 import useTheme from 'uikit/utils/useTheme';
 import Button from 'uikit/Button';
@@ -25,7 +26,23 @@ export default ({ program }: { program: string }) => {
         programId: program,
       }),
     })
-      .then((response) => setRequestResult('SUCCESS'))
+      .then((response) => {
+        console.log('status', response.status);
+        switch (response.status) {
+          case 200:
+            setRequestResult('SUCCESS');
+            return;
+          default:
+            setRequestResult('ERROR');
+            response
+              .json()
+              .then((data) =>
+                data?.error && !isEmpty(data.error)
+                  ? setErrorMessage(data.error)
+                  : setErrorMessage('Unknown error occurred.'),
+              );
+        }
+      })
       .catch((error) => {
         console.log(`Error sending sync request for ${program}:`, error);
         setRequestResult('ERROR');
@@ -42,7 +59,7 @@ export default ({ program }: { program: string }) => {
       );
     case 'ERROR':
       return (
-        <div style={{ flexDirection: 'column' }}>
+        <div style={{ flexDirection: 'column', whiteSpace: 'pre-line' }}>
           <Typography component="div" bold color="error">
             Error:
           </Typography>
