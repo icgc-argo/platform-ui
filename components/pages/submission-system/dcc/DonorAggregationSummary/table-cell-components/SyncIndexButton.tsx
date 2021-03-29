@@ -27,7 +27,6 @@ export default ({ program }: { program: string }) => {
       }),
     })
       .then((response) => {
-        console.log('status', response.status);
         switch (response.status) {
           case 200:
             setRequestResult('SUCCESS');
