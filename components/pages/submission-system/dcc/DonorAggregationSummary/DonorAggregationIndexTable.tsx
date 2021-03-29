@@ -66,7 +66,7 @@ const columns = [
   },
 ];
 
-export default ({
+const DonorAggregationIndexTable = ({
   loading,
   programs,
 }: {
@@ -112,3 +112,4 @@ export default ({
     </div>
   );
 };
+export default DonorAggregationIndexTable;

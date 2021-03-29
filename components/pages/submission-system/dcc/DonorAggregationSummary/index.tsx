@@ -31,7 +31,7 @@ const Card = styled(Container)`
   padding: 16px;
 `;
 
-export default () => {
+const DonorAggregationSummary = () => {
   // const { loading, data } = useDonorAggregationIndexData();
   const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
@@ -46,3 +46,4 @@ export default () => {
     </Card>
   );
 };
+export default DonorAggregationSummary;

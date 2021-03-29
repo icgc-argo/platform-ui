@@ -30,7 +30,7 @@ import { getConfig } from 'global/config';
 const { GATEWAY_API_ROOT } = getConfig();
 import { DONOR_AGGREGATOR_SYNC_PROGRAM } from 'global/constants/gatewayApiPaths';
 
-export default ({ program }: { program: string }) => {
+const SyncIndexButton = ({ program }: { program: string }) => {
   const theme = useTheme();
   const [requestResult, setRequestResult] = useState<'SUCCESS' | 'ERROR' | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
@@ -99,3 +99,4 @@ export default ({ program }: { program: string }) => {
       );
   }
 };
+export default SyncIndexButton;
