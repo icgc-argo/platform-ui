@@ -62,8 +62,6 @@ export default ({
   }));
 
   const data = (queries || []).map(({ shortName, query: { loading, data } }) => ({
-    // loading,
-    // shortName: data?.programDonorSummaryStats.programShortName,
     loading: '' + loading,
     shortName,
     donors: data?.programDonorSummaryStats.registeredDonorsCount,
@@ -71,7 +69,7 @@ export default ({
     lastUpdate: data?.programDonorSummaryStats.lastUpdate,
   }));
 
-  console.log({ data });
+  const someQueriesLoading = queries.some((query) => query.query.loading);
 
   const containerRef = React.createRef<HTMLDivElement>();
   return (
@@ -82,7 +80,7 @@ export default ({
       `}
     >
       <Table
-        loading={loading}
+        loading={loading || someQueriesLoading}
         highlight={false}
         parentRef={containerRef}
         showPagination={false}
