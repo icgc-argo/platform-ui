@@ -27,7 +27,6 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import pluralize from 'pluralize';
 
 export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDonors: number }) => {
-  const { DOCS_URL_ROOT } = getConfig();
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
   const errorBody = (
