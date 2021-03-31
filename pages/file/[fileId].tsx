@@ -31,6 +31,14 @@ import { useGlobalLoadingState } from 'components/ApplicationRoot';
 export default createPage({
   isPublic: false,
   isAccessible: async ({ initialPermissions }) => true,
+  getInitialProps: async () => {
+    const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
+    if (!FEATURE_FILE_ENTITY_ENABLED) {
+      const err = new Error('Page Not Found') as Error & { statusCode?: number };
+      err[ERROR_STATUS_KEY] = 404;
+      throw err;
+    }
+  },
 })((props) => {
   const { fileId } = usePageQuery<{ fileId: string }>();
   const filters = sqonBuilder.has('object_id', fileId).build();
