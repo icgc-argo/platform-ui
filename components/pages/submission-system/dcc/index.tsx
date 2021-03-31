@@ -17,9 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import SubmissionLayout from '../layout';
 import { css } from '@emotion/core';
+
+import SubmissionLayout from '../layout';
 import Typography from 'uikit/Typography';
+
+import DonorAggregationSummary from './DonorAggregationSummary';
 
 export default () => {
   return (
@@ -46,7 +49,7 @@ export default () => {
         </div>
       }
     >
-      <div />
+      <DonorAggregationSummary />
     </SubmissionLayout>
   );
 };
