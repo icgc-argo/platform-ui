@@ -32,7 +32,6 @@ const Card = styled(Container)`
 `;
 
 const DonorAggregationSummary = () => {
-  // const { loading, data } = useDonorAggregationIndexData();
   const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
   const programs = data ? data.programs : [];
