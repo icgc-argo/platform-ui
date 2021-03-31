@@ -19,10 +19,64 @@
 
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import FileEntity from './index';
+
+import {
+  dummyAssociatedDonorsInfo,
+  dummyDataAnalysisInfo,
+  dummyFileRecords,
+  dummyFileSummaryInfo,
+} from './dummyData';
+import clsx from 'clsx';
+import Head from '../head';
+import DnaLoader from 'uikit/DnaLoader';
+import Footer from 'uikit/Footer';
+import { PageContainer, PageBody, PageContent, ContentHeader, ContentBody } from 'uikit/PageLayout';
+import FileCardsLayout from './FileCardsLayout';
+import { FileTitleBar } from './FileTitleBar';
+import NavBar from '../../NavBar';
 
 const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  return <FileEntity />;
+  const loading = false;
+  const data = {
+    summary: dummyFileSummaryInfo,
+    dataAnalysis: dummyDataAnalysisInfo,
+    donorRecords: dummyAssociatedDonorsInfo,
+    fileRecords: dummyFileRecords,
+  };
+
+  return (
+    <PageContainer>
+      <Head title={'ICGC ARGO'} />
+      <NavBar />
+      <PageBody className={clsx({ noSidebar: true })}>
+        <PageContent>
+          {loading ? (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+              }}
+            >
+              <DnaLoader />
+            </div>
+          ) : (
+            <>
+              <ContentHeader>
+                <FileTitleBar programShortName={'TEST-CA'} fileId="123" isUserLoggedIn={true} />
+              </ContentHeader>
+
+              <ContentBody>
+                <FileCardsLayout fileData={data} />
+              </ContentBody>
+            </>
+          )}
+          <Footer />
+        </PageContent>
+      </PageBody>
+    </PageContainer>
+  );
 });
 
 export default FileRepositoryTableStories;
