@@ -19,19 +19,44 @@
 
 import { createPage } from 'global/utils/pages';
 import FileEntityPage from 'components/pages/file-entity';
-import { ERROR_STATUS_KEY } from 'pages/_error';
+import Error, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import sqonBuilder from 'sqon-builder';
+import { useQuery } from '@apollo/react-hooks';
+import VALID_ENTITY_CHECK from './VALID_ENTITY_CHECK.gql';
+import get from 'lodash/get';
+import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
 export default createPage({
   isPublic: false,
   isAccessible: async ({ initialPermissions }) => true,
-  getInitialProps: async () => {
-    return true;
-    const { FEATURE_REPOSITORY_ENABLED } = getConfig();
-    if (!FEATURE_REPOSITORY_ENABLED) {
-      const err = new Error('Page Not Found') as Error & { statusCode?: number };
-      err[ERROR_STATUS_KEY] = 404;
-      throw err;
-    }
-  },
-})((props) => <FileEntityPage {...props} />);
+})((props) => {
+  const { fileId } = usePageQuery<{ fileId: string }>();
+  const filters = sqonBuilder.has('object_id', fileId).build();
+
+  // small query to ensure the fileId is valid
+  const { loading, data } = useQuery<{
+    file: { hits: { total: number } };
+  }>(VALID_ENTITY_CHECK, {
+    variables: {
+      filters,
+    },
+  });
+  const isValidEntity = !!get(data, 'file.hits.total', false);
+
+  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+
+  if (!loading && !isValidEntity) {
+    setLoaderShown(false);
+    const err = new Error('Page Not Found') as Error & { statusCode?: number };
+    err[ERROR_STATUS_KEY] = 404;
+    return <Error />;
+  } else if (loading) {
+    setLoaderShown(true);
+    return <div></div>;
+  }
+  setLoaderShown(false);
+
+  return <FileEntityPage {...props} fileId={fileId} />;
+});
