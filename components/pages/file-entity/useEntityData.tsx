@@ -9,11 +9,14 @@ import {
 } from './types';
 import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
-import { dummyAssociatedDonorsInfo, dummyFileRecords } from './dummyData';
 
-const useFileEntityData = ({ fileId }: { fileId: string }) => {
-  console.log('file id', fileId);
+type EntityData = {
+  programShortName: string;
+  loading: boolean;
+  data: FileEntityData;
+};
 
+const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   const filters = sqonBuilder.has('object_id', fileId).build();
   const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
@@ -22,9 +25,11 @@ const useFileEntityData = ({ fileId }: { fileId: string }) => {
   });
 
   if (loading) {
-    return { data: null, loading: true };
-  } else if (!loading && data) {
-    console.log('entity data', data);
+    return { programShortName: null, data: null, loading: true };
+  } else {
+    if (!data) {
+      return { programShortName: null, data: null, loading: false };
+    }
 
     const entity = get(data, 'file.hits.edges[0].node');
 
@@ -53,10 +58,10 @@ const useFileEntityData = ({ fileId }: { fileId: string }) => {
 
     const donorRecords: DonorRecord[] = get(entity, 'donors.hits.edges', []).map((edge) => {
       const donor = edge.node;
-      console.log('d', donor);
+
       const specimen = get(donor, 'specimens.hits.edges[0].node');
-      console.log(specimen);
       const sample = get(specimen, 'samples.hits.edges[0].node');
+
       return {
         donorId: donor.donor_id,
         submitterDonorId: donor.submitter_id,
@@ -80,8 +85,8 @@ const useFileEntityData = ({ fileId }: { fileId: string }) => {
       // fileRecords: dummyFileRecords,
     };
 
-    return { programShortName, entityData, loading };
+    return { programShortName, data: entityData, loading };
   }
 };
 
-export default useFileEntityData;
+export default useEntityData;

@@ -5,15 +5,12 @@ import clsx from 'clsx';
 import { FileTitleBar } from './FileTitleBar';
 import FileCardsLayout from './FileCardsLayout';
 import useEntityData from './useEntityData';
-import { usePageQuery } from 'global/hooks/usePageContext';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
-import { css } from '@emotion/core';
 
-const FileEntity = () => {
-  const { fileId } = usePageQuery<{ fileId: string }>();
-  const { programShortName, entityData: data, loading } = useEntityData({ fileId });
+const FileEntity = ({ fileId }) => {
+  const { programShortName, data, loading } = useEntityData({ fileId });
 
   const isUserLoggedIn = false;
 
