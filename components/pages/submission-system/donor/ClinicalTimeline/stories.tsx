@@ -101,11 +101,52 @@ const mock = [
   {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
-    description: 'Loco-regional progression',
+    description: 'Chemotherapy, Radiation therapy, Surgery',
     interval: 88664,
     data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
       'Clinical Stage Group': '',
+      'Primary Diagnosis IDs': 'PD1',
+      'Age at Diagnosiss': '28 years',
+      'Cancer Type Codee': 'C25.3',
     },
+    treatments: [
+      {
+        type: 'Chemotherapy',
+        data: [
+          {
+            'Drug Rxnormcui': 242525,
+            'Drug Name': 'Abraxane',
+            'Cumulative Drug Dose': 100,
+            'Chemotherapy Dosage Units': 'mg/m2',
+          },
+          {
+            'Drug Rxnormcui': 242525,
+            'Drug Name': 'Abraxane',
+            'Cumulative Drug Dose': 100,
+            'Chemotherapy Dosage Units': 'mg/m2',
+          },
+        ],
+      },
+      {
+        type: 'Radiation',
+        data: [
+          {
+            'Radiation Therapy Modality': 'Electron',
+            'Radiation Treatment Type': 'Internal',
+            'Radiation Therapy Fractions': 3,
+            'Radiation Therapy Dosage': 3,
+            'Anatomical Site Irradiated': 'Abdomen',
+          },
+        ],
+      },
+    ],
   },
   { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
   { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },

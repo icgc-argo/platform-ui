@@ -41,7 +41,7 @@ export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
   const entityCounts: EntityCounts = entities
-    .filter(entity => entity.type !== EntityType.DECEASED)
+    .filter((entity) => entity.type !== EntityType.DECEASED)
     .reduce(
       (acc, entity) => {
         const { type } = entity;
@@ -77,7 +77,7 @@ export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
         `}
       >
         Show:
-        {(Object.keys(entityCounts) as Array<Filters>).map(entityKey => {
+        {(Object.keys(entityCounts) as Array<Filters>).map((entityKey) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
@@ -87,7 +87,7 @@ export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
             !isDisabled &&
             onFiltersChange(
               activeEntities.includes(entityKey)
-                ? activeEntities.filter(e => e !== entityKey)
+                ? activeEntities.filter((e) => e !== entityKey)
                 : [...activeEntities, entityKey],
             );
 

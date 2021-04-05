@@ -1,3 +1,4 @@
+import { isEmpty, chunk } from 'lodash';
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -49,3 +50,35 @@ export const getTimelineStyles = (theme: typeof defaultTheme) => {
     },
   };
 };
+
+export const splitIntoColumns = (
+  data: { [key: string]: any },
+  numberOfColumns: number,
+): any[][] => {
+  if (isEmpty(data)) {
+    return [];
+  } else {
+    const chunks = chunk(
+      Object.entries(data).map(([key, value]) => ({
+        [key]: value,
+      })),
+      // account for data size being smaller than numberOfColumns
+      Math.ceil(Object.entries(data).length / numberOfColumns),
+    );
+
+    while (chunks.length < numberOfColumns) {
+      chunks.push([]);
+    }
+
+    return chunks;
+  }
+};
+
+// format for display
+export const tableFormat = (data) =>
+  data.length > 0 &&
+  data.reduce((acc, val) => {
+    const [key, value] = Object.entries(val)[0];
+    acc[key] = value;
+    return acc;
+  }, {});
