@@ -50,7 +50,11 @@ export const ENTITY_DISPLAY = Object.freeze({
   },
 });
 
-const Treatment = ({ treatment }) => {
+interface ITreatment {
+  type: string;
+  data: { [key: string]: any }[];
+}
+const Treatment = ({ treatment }: { treatment: ITreatment }) => {
   const title = treatment.type;
   const tableCols = Object.keys(treatment.data[0]).map((k) => ({ Header: k, accessor: k }));
   const tableData = treatment.data;
@@ -87,7 +91,7 @@ const Treatment = ({ treatment }) => {
 };
 
 // chunk object to show as 2 cols
-const chunkObject = (data, size: number): Array<any> =>
+const chunkObject = (data, size: number): any[][] =>
   isEmpty(data)
     ? [[], []]
     : chunk(
@@ -123,7 +127,7 @@ const ClinicalTimeline = ({ data }) => {
 
   const selectedClinical = filteredData[activeTab];
   const selectedSamples = get(selectedClinical, 'samples', []);
-  const selectedTreatments = get(selectedClinical, 'treatments', []);
+  const selectedTreatments: ITreatment[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
   const [dataCol0 = [], dataCol1 = []] = chunkObject(
