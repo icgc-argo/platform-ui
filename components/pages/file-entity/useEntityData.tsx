@@ -28,6 +28,7 @@ import {
 } from './types';
 import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
+import { FileCentricDocumentField } from '../file-repository/types';
 
 type EntityData = {
   programShortName: string;
@@ -36,7 +37,7 @@ type EntityData = {
 };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
-  const filters = sqonBuilder.has('object_id', fileId).build();
+  const filters = sqonBuilder.has(FileCentricDocumentField.object_id, fileId).build();
   const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,
