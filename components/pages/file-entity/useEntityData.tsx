@@ -47,11 +47,11 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   if (loading) {
     return { programShortName: null, data: null, loading: true };
   } else {
-    if (!data) {
+    const entity = get(data, 'file.hits.edges[0].node', null);
+
+    if (!entity) {
       return { programShortName: null, data: null, loading: false };
     }
-
-    const entity = get(data, 'file.hits.edges[0].node');
 
     const programShortName = entity.study_id;
 
