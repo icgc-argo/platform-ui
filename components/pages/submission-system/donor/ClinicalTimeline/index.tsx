@@ -20,20 +20,19 @@
 import React from 'react';
 import Container from 'uikit/Container';
 import { css } from 'uikit';
-import Header from './header';
-import Timeline from './timeline';
+import Header from './Header';
+import Timeline from './Timeline';
 import { EntityType } from './types';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import get from 'lodash/get';
-import Samples from './samples';
+import Samples from './Samples';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import Table from 'uikit/Table';
-import { createRef } from 'react';
 import chunk from 'lodash/chunk';
 import { isEmpty } from 'lodash';
+import Treatment, { ITreatment } from './Treatment';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -49,46 +48,6 @@ export const ENTITY_DISPLAY = Object.freeze({
     title: 'Follow Up',
   },
 });
-
-interface ITreatment {
-  type: string;
-  data: { [key: string]: any }[];
-}
-const Treatment = ({ treatment }: { treatment: ITreatment }) => {
-  const title = treatment.type;
-  const tableCols = Object.keys(treatment.data[0]).map((k) => ({ Header: k, accessor: k }));
-  const tableData = treatment.data;
-  const containerRef = createRef<HTMLDivElement>();
-
-  return (
-    <div
-      css={css`
-        margin: 14px 0 4px 0;
-      `}
-    >
-      <Typography
-        variant="navigation"
-        as="div"
-        css={css`
-          margin-bottom: 4px;
-        `}
-      >
-        {title}
-      </Typography>
-      <div ref={containerRef}>
-        <Table
-          parentRef={containerRef}
-          columns={tableCols}
-          data={tableData}
-          withOutsideBorder
-          stripped
-          showPagination={false}
-          sortable={false}
-        />
-      </div>
-    </div>
-  );
-};
 
 // chunk object to show as 2 cols
 const chunkObject = (data, size: number): any[][] =>
