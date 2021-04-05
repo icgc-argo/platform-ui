@@ -114,11 +114,6 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: ITreatment[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
-  const [dataCol0 = [], dataCol1 = []] = splitIntoColumns(
-    selectedData,
-    selectedSamples.length > 0 ? Object.entries(selectedData).length : 9,
-  );
-
   return (
     <Container
       css={css`
