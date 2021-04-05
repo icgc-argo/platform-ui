@@ -30,9 +30,9 @@ import Samples from './Samples';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import chunk from 'lodash/chunk';
-import { isEmpty } from 'lodash';
 import Treatment, { ITreatment } from './Treatment';
+import { splitIntoColumns, tableFormat } from './util';
+import isEmpty from 'lodash/isEmpty';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -49,25 +49,50 @@ export const ENTITY_DISPLAY = Object.freeze({
   },
 });
 
-// chunk object to show as 2 cols
-const chunkObject = (data, size: number): any[][] =>
-  isEmpty(data)
-    ? [[], []]
-    : chunk(
-        Object.entries(data).map(([key, value]) => ({
-          [key]: value,
-        })),
-        size,
-      );
+const renderSelectedDataRow = (selectedData, selectedSamples) => {
+  if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
+    const dataCols = splitIntoColumns(selectedData, 1);
 
-// format for display
-const tableFormat = (data) =>
-  data.length > 0 &&
-  data.reduce((acc, val) => {
-    const [key, value] = Object.entries(val)[0];
-    acc[key] = value;
-    return acc;
-  }, {});
+    return (
+      <Row>
+        <Col>
+          <SimpleTable data={tableFormat(dataCols[0])} />
+        </Col>
+        <Col>
+          <Typography variant="navigation">
+            Samples from this Specimen ({selectedSamples.length})
+          </Typography>
+          <Samples samples={selectedSamples} />
+        </Col>
+      </Row>
+    );
+  } else if (!isEmpty(selectedData)) {
+    const dataCols = splitIntoColumns(selectedData, 2);
+
+    return (
+      <Row>
+        <Col>
+          <SimpleTable data={tableFormat(dataCols[0])} />
+        </Col>
+        {/* always display column for row formatting */}
+        <Col>
+          {
+            // may only have enough data for 1 column
+            !isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />
+          }
+        </Col>
+      </Row>
+    );
+  } else {
+    return (
+      <Row>
+        <Col>
+          <SimpleTable data={[]} />
+        </Col>
+      </Row>
+    );
+  }
+};
 
 const ClinicalTimeline = ({ data }) => {
   const theme = useTheme();
@@ -89,7 +114,7 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: ITreatment[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
-  const [dataCol0 = [], dataCol1 = []] = chunkObject(
+  const [dataCol0 = [], dataCol1 = []] = splitIntoColumns(
     selectedData,
     selectedSamples.length > 0 ? Object.entries(selectedData).length : 9,
   );
@@ -156,26 +181,7 @@ const ClinicalTimeline = ({ data }) => {
                     flex-direction: column;
                   `}
                 >
-                  {
-                    <Row>
-                      <Col>
-                        <SimpleTable data={tableFormat(dataCol0)} />
-                      </Col>
-                      {selectedSamples.length === 0 && !isEmpty(selectedData) && (
-                        <Col>
-                          {dataCol1.length > 0 && <SimpleTable data={tableFormat(dataCol1)} />}
-                        </Col>
-                      )}
-                      {selectedSamples.length > 0 && (
-                        <Col>
-                          <Typography variant="navigation">
-                            Samples from this Specimen ({selectedSamples.length})
-                          </Typography>
-                          <Samples samples={selectedSamples} />
-                        </Col>
-                      )}
-                    </Row>
-                  }
+                  {renderSelectedDataRow(selectedData, selectedSamples)}
                 </div>
 
                 {selectedTreatments.length > 0 && (
