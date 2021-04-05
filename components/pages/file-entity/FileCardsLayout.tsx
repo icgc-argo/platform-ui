@@ -21,10 +21,8 @@ import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import FileSummary from './FileSummary';
-
 import DataAndAnalysis from './DataAndAnalysis';
 import AssociatedDonors from './AssociatedDonors';
-import DownstreamAnalysis from './DownstreamAnalysis';
 import { FileEntityData } from './types';
 
 const PaddedRow = styled(Row)`
@@ -57,13 +55,6 @@ const FileCardsLayout: React.ComponentType<{
           <AssociatedDonors donors={fileData.donorRecords} />
         </PaddedColumn>
       </PaddedRow>
-      {/*
-      <PaddedRow>
-        <PaddedColumn>
-          <DownstreamAnalysis data={fileData.fileRecords} />
-        </PaddedColumn>
-      </PaddedRow>
-      */}
     </div>
   );
 };

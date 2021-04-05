@@ -102,7 +102,6 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       summary,
       dataAnalysis,
       donorRecords,
-      // fileRecords: dummyFileRecords,
     };
 
     return { programShortName, data: entityData, loading };
