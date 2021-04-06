@@ -17,25 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileCard, TableDiv } from '../common';
-import SimpleTable from 'uikit/Table/SimpleTable';
-import { DataAnalysisInfo } from '../types';
+import styled from '@emotion/styled';
+import DonorAggregationIndexTable from './DonorAggregationIndexTable';
 
-export default ({ data }: { data: DataAnalysisInfo }) => {
-  const tableData = {
-    'Experimental Strategy': data.experimentalStrategy,
-    'Data Type': data.dataType,
-    Platform: data.platform,
-    'Genome Build': data.genomeBuild,
-    'Workflow Type': data.workflowType,
-    Software: data.software,
-  };
+import Typography from 'uikit/Typography';
+import Container from 'uikit/Container';
 
+// GQL Data Fetching
+import { useQuery } from '@apollo/react-hooks';
+import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
+
+const Card = styled(Container)`
+  padding: 16px;
+`;
+
+const DonorAggregationSummary = () => {
+  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
+
+  const programs = data ? data.programs : [];
   return (
-    <FileCard cardTitle="Data & Analysis Information">
-      <TableDiv>
-        <SimpleTable data={tableData} />
-      </TableDiv>
-    </FileCard>
+    <Card>
+      <Typography variant="default" component="span">
+        Donor Aggregation Indices
+      </Typography>
+
+      <DonorAggregationIndexTable programs={programs} loading={loading} />
+    </Card>
   );
 };
+export default DonorAggregationSummary;

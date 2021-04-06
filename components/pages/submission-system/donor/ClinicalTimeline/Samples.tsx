@@ -30,7 +30,7 @@ const SampleList = styled('div')`
 
 const Samples = ({ samples }: { samples: Entity['samples'] }) => (
   <SampleList>
-    {samples.map(sample => (
+    {samples.map((sample) => (
       <div
         css={css`
           padding: 5px 0;

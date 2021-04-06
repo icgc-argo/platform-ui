@@ -27,7 +27,6 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import pluralize from 'pluralize';
 
 export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDonors: number }) => {
-  const { DOCS_URL_ROOT } = getConfig();
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
   const errorBody = (
@@ -42,10 +41,15 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
           dictionary
         </Link>
       )}{' '}
-      was released and has made some donors invalid. All invalid donors, along with their released
-      files, will be revoked in the next release.
+      was released and has made some donors invalid against the latest dictionary. Please correct
+      the clinical data for the highlighted donors.
     </div>
   );
+
+  const errorTitle = `${pluralize('donor', numInvalidDonors, true)} ${pluralize(
+    'is',
+    numInvalidDonors,
+  )} invalid and will be revoked if not corrected.`;
 
   return numInvalidDonors > 0 ? (
     <Notification
@@ -54,10 +58,7 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
       `}
       size="MD"
       variant="ERROR"
-      title={`${pluralize('donor', numInvalidDonors, true)} ${pluralize(
-        'is',
-        numInvalidDonors,
-      )} invalid and will be revoked if not corrected.`}
+      title={errorTitle}
       content={errorBody}
       interactionType={'NONE'}
     />

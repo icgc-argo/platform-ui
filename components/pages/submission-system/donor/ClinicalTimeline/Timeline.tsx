@@ -28,7 +28,7 @@ import { InvalidIcon } from './common';
 
 const DayCount = ({
   days,
-  format = days => days.toLocaleString(),
+  format = (days) => days.toLocaleString(),
 }: {
   days: number;
   format?: (number) => string;

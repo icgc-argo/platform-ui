@@ -46,6 +46,10 @@ export const INVITE_ID = `[inviteId]`;
 export const PROGRAM_JOIN_DETAILS_PATH = `${SUBMISSION_PATH}/program/join/details/${INVITE_ID}`;
 export const PROGRAM_JOIN_LOGIN_PATH = `${SUBMISSION_PATH}/program/join/login/${INVITE_ID}`;
 
+// file entity
+export const FILE_ENTITY_ID_PATH = '[fileId]';
+export const FILE_ENTITY_PATH = `file/${FILE_ENTITY_ID_PATH}`;
+
 // rdpc path
 export const RDPC_PATH = '/rdpc';
 

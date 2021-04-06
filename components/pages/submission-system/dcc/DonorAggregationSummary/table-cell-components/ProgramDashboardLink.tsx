@@ -17,25 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileCard, TableDiv } from '../common';
-import SimpleTable from 'uikit/Table/SimpleTable';
-import { DataAnalysisInfo } from '../types';
-
-export default ({ data }: { data: DataAnalysisInfo }) => {
-  const tableData = {
-    'Experimental Strategy': data.experimentalStrategy,
-    'Data Type': data.dataType,
-    Platform: data.platform,
-    'Genome Build': data.genomeBuild,
-    'Workflow Type': data.workflowType,
-    Software: data.software,
-  };
-
+import Link from 'next/link';
+import A from 'uikit/Link';
+import { PROGRAM_SHORT_NAME_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+const ProgramDashboardLink = ({ program }: { program: string }) => {
   return (
-    <FileCard cardTitle="Data & Analysis Information">
-      <TableDiv>
-        <SimpleTable data={tableData} />
-      </TableDiv>
-    </FileCard>
+    <Link
+      as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}
+      href={PROGRAM_DASHBOARD_PATH}
+    >
+      <A>{program}</A>
+    </Link>
   );
 };
+export default ProgramDashboardLink;

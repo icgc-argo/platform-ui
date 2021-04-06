@@ -1,0 +1,8 @@
+query PROGRAM_DONOR_INDEX_STATS($programShortName: String!) {
+  programDonorSummaryStats(programShortName: $programShortName) {
+    programShortName
+    lastUpdate
+    allFilesCount
+    registeredDonorsCount
+  }
+}
