@@ -34,6 +34,7 @@ import { ChartType } from '../ClinicalChart/types';
 type CardProps = {
   chartType: ChartType;
   comingSoonLink: string;
+  programShortName: string;
   title: string;
 };
 
@@ -42,7 +43,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default ({ chartType, comingSoonLink, title }: CardProps) => {
+export default ({ chartType, comingSoonLink, programShortName, title }: CardProps) => {
   const [lineChartData, setLineChartData] = useState(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState('All');
 
@@ -71,6 +72,7 @@ export default ({ chartType, comingSoonLink, title }: CardProps) => {
         activeRangeBtn={activeRangeBtn}
         chartType={chartType}
         data={lineChartData}
+        programShortName={programShortName}
         setActiveRangeBtn={setActiveRangeBtn}
         title={title}
         />

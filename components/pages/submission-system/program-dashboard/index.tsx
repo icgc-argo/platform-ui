@@ -188,6 +188,7 @@ export default function ProgramDashboard() {
               <ClinicalChartCard
                 chartType="clinical"
                 comingSoonLink={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
+                programShortName={programShortName as string}
                 title="Completed Core Clinical Data"
                 />
             </Col>
@@ -198,6 +199,7 @@ export default function ProgramDashboard() {
           <ClinicalChartCard
             chartType="molecular"
             comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
+            programShortName={programShortName as string}
             title="Molecular Data Summary"
             />
         </Col>

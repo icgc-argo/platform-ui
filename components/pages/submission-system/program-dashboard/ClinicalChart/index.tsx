@@ -19,32 +19,99 @@
 
 import React, { useRef, useState } from 'react';
 import { css } from '@emotion/core';
+import { format as formatDate} from 'date-fns';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
 import { DashboardCard } from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
-import { ChartType, DataObj } from './types';
+import {
+  ChartType,
+  DataObj,
+  DonorField,
+  ProgramDonorPublishedAnalysisByDateRangeQueryData,
+  ProgramDonorPublishedAnalysisByDateRangeQueryVariables
+} from './types';
 import Legend from './Legend';
 import { chartLineColors, convertUnixEpochToJSEpoch } from './utils';
-import { format as formatDate} from 'date-fns';
+import PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY.gql';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
+
+const donorFields = [
+  'createdAt',
+  'mutectFirstPublishedDate',
+  'alignmentFirstPublishedDate',
+  'rawReadsFirstPublishedDate',
+  'sangerVcsFirstPublishedDate'
+];
+
+export const useProgramDonorPublishedAnalysisByDateRangeQuery = (
+  bucketCount: number,
+  dateRangeFrom: string,
+  dateRangeTo: string,
+  donorFields: DonorField[],
+  programShortName: string,
+  options: Omit<
+    QueryHookOptions<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>,
+    'variables'
+  > = {},
+) => {
+  const hook = useQuery<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>(
+    PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY,
+    {
+      ...options,
+      variables: {
+        bucketCount,
+        dateRangeFrom,
+        dateRangeTo,
+        donorFields,
+        programShortName,
+      },
+    },
+  );
+  return hook;
+};
 
 const ClinicalChart = ({
   activeRangeBtn,
   chartType,
   data,
+  programShortName,
   setActiveRangeBtn,
   title,
 }: {
   activeRangeBtn: string;
   chartType: ChartType;
   data: DataObj;
+  programShortName: string;
   setActiveRangeBtn: any; // type?
   title: string;
 }) => {
+// TODO:
+// - improve how i get the dates - i need ISO strings
+// - determine the donor fields by clinical or molecular
+// - handle error & loading
+// - remove mock data
+  const {
+    data: { programDonorPublishedAnalysisByDateRange } = {},
+    error: programDonorPublishedAnalysisByDateRangeQueryError,
+    loading: isCardLoading = true,
+  } = useProgramDonorPublishedAnalysisByDateRangeQuery(
+    7,
+    '2020-11-09T21:25:17.717Z',
+    '2020-11-21T21:25:17.717Z',
+    donorFields as DonorField[],
+    programShortName
+  );
+
+  console.log({
+    programDonorPublishedAnalysisByDateRange,
+    programDonorPublishedAnalysisByDateRangeQueryError
+  });
+
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
   const [activeLines, setActiveLines] = useState(Object.keys(chartLineColors));
@@ -55,6 +122,7 @@ const ClinicalChart = ({
     setActiveLines(nextLines);
   };
 
+  // TODO: make date array from data, sort, get first & last
   const dateRange =  data.lines[0].points.map(point => Number(point.x)).sort();
   const dateRangeFrom = convertUnixEpochToJSEpoch(dateRange[0]);
   const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);

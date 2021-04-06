@@ -50,3 +50,33 @@ export type PointsCoordinates = {
   y1: number;
   y2: number;
 };
+
+export type DonorField =
+  'createdAt' |
+  // TODO replace with clinical date
+  'mutectFirstPublishedDate' |
+  'alignmentFirstPublishedDate' |
+  'rawReadsFirstPublishedDate' |
+  'sangerVcsFirstPublishedDate';
+
+export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = {
+  bucketCount: number;
+  dateRangeFrom: string;
+  dateRangeTo: string;
+  donorFields: DonorField[];
+  programShortName: string;
+};
+
+export type ProgramDonorPublishedAnalysisByDateRangeBucket = {
+  date: string;
+  donors: number;
+}
+
+export type ProgramDonorPublishedAnalysisByDateRange = {
+  title: DonorField;
+  buckets: ProgramDonorPublishedAnalysisByDateRangeBucket[];
+}
+
+export type ProgramDonorPublishedAnalysisByDateRangeQueryData = {
+  programDonorPublishedAnalysisByDateRange: ProgramDonorPublishedAnalysisByDateRange[];
+};

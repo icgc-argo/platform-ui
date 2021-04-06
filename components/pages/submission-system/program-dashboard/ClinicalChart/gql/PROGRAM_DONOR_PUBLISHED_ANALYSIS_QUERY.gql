@@ -1,0 +1,20 @@
+query PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY(
+  $programShortName: String!,
+  $bucketCount: Int!,
+  $dateRangeFrom: DateTime!,
+  $dateRangeTo: DateTime!,
+  $donorFields: [DonorField]!) {
+  programDonorPublishedAnalysisByDateRange(
+    programShortName: $programShortName,
+    bucketCount: $bucketCount,
+    dateRangeFrom: $dateRangeFrom,
+    dateRangeTo: $dateRangeTo,
+    donorFields: $donorFields
+  ) {
+    title
+    buckets {
+      date
+      donors
+    }
+  }
+}
