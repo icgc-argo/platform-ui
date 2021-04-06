@@ -39,14 +39,20 @@ import PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY from './gql/PROGRAM_DONOR_PUBLISHE
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
+const CHART_BUCKETS = 7;
+const DATE_RANGE_FORMAT = 'Y/MM/dd';
 
-const donorFields = [
-  'createdAt',
+const donorFields = {
+  clinical: [
+    'createdAt'
+  ],
+  molecular: [
   'mutectFirstPublishedDate',
   'alignmentFirstPublishedDate',
   'rawReadsFirstPublishedDate',
   'sangerVcsFirstPublishedDate'
-];
+  ]
+};
 
 export const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   bucketCount: number,
@@ -96,14 +102,14 @@ const ClinicalChart = ({
 // - handle error & loading
 // - remove mock data
   const {
-    data: { programDonorPublishedAnalysisByDateRange } = {},
+    data: { programDonorPublishedAnalysisByDateRange = [] } = {},
     error: programDonorPublishedAnalysisByDateRangeQueryError,
     loading: isCardLoading = true,
   } = useProgramDonorPublishedAnalysisByDateRangeQuery(
-    7,
+    CHART_BUCKETS,
     '2020-11-09T21:25:17.717Z',
     '2020-11-21T21:25:17.717Z',
-    donorFields as DonorField[],
+    donorFields[chartType] as DonorField[],
     programShortName
   );
 
@@ -126,7 +132,6 @@ const ClinicalChart = ({
   const dateRange =  data.lines[0].points.map(point => Number(point.x)).sort();
   const dateRangeFrom = convertUnixEpochToJSEpoch(dateRange[0]);
   const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);
-  const dateRangeFormat = 'Y/MM/dd';
 
   return (
     <DashboardCard>
@@ -150,7 +155,7 @@ const ClinicalChart = ({
         <RangeControlBar
           activeBtn={activeRangeBtn}
           handleBtnClick={setActiveRangeBtn}
-          rangeArray={[formatDate(dateRangeFrom, dateRangeFormat), formatDate(dateRangeTo, dateRangeFormat)]}
+          rangeArray={[formatDate(dateRangeFrom, DATE_RANGE_FORMAT), formatDate(dateRangeTo, DATE_RANGE_FORMAT)]}
           />
         <div
           ref={lineChartRef}
