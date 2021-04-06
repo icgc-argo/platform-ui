@@ -20,8 +20,8 @@
 import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
-import { ChartLine, ChartType, DataLine, DataObj, DataPoint, PointsCoordinates } from './types';
+import { chartLineColors, convertUnixEpochToJSEpoch, getMaxY } from './utils';
+import { ChartLine, ChartType, DataBucket, DataObj, DataPoint, PointsCoordinates } from './types';
 import theme from 'uikit/theme/defaultTheme';
 
 const options = {
@@ -73,7 +73,7 @@ const LineChart = ({
 }: {
   activeLines: string[];
   chartType: ChartType;
-  data: DataObj;
+  data: DataObj[];
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
   height: number;
@@ -85,7 +85,7 @@ const LineChart = ({
   yAxisTitle: string;
 }) => {
   // setup Y axis
-  const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
+  const maxY = Math.max(yAxisThreshold, getMaxY(data));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -99,7 +99,7 @@ const LineChart = ({
   // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataPoints = data.lines[0].points;
+  const dataPoints = data[0].buckets;
   const xTicksCount = dataPoints.length;
   // distance between 2 ticks
   const xTickDistance = chartWidth / xTicksCount;
@@ -125,9 +125,9 @@ const LineChart = ({
     end: dayLast,
   };
 
-  const chartLines = data.lines
-    .filter((line: DataLine) => activeLines.includes(line.title) || data.lines.length === 1)
-    .map((line: DataLine) => ({
+  const chartLines = data[0].lines
+    .filter((line: DataBucket) => activeLines.includes(line.title) || data.lines.length === 1)
+    .map((line: DataBucket) => ({
       ...line,
       points: line.points
         .map((point: DataPoint, i: number) => {

@@ -17,9 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { find } from 'lodash';
 import { css } from '@emotion/core';
-import { format as formatDate} from 'date-fns';
+import { format as formatDate, subDays } from 'date-fns';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
@@ -34,7 +35,7 @@ import {
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables
 } from './types';
 import Legend from './Legend';
-import { chartLineColors, convertUnixEpochToJSEpoch } from './utils';
+import { chartLineColors, convertUnixEpochToJSEpoch, rangeButtons } from './utils';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY.gql';
 
 const CHART_HEIGHT = 220;
@@ -82,20 +83,26 @@ export const useProgramDonorPublishedAnalysisByDateRangeQuery = (
 };
 
 const ClinicalChart = ({
-  activeRangeBtn,
   chartType,
-  data,
   programShortName,
-  setActiveRangeBtn,
   title,
 }: {
-  activeRangeBtn: string;
   chartType: ChartType;
-  data: DataObj;
   programShortName: string;
-  setActiveRangeBtn: any; // type?
   title: string;
 }) => {
+  const [dateRangeFrom, setDateRangeFrom] = useState(null);
+  const [dateRangeTo, setDateRangeTo] = useState(null);
+  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+
+  useEffect(() => {
+    const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
+    const today = new Date();
+    const dateRangeStart = subDays(today, daysInRange);
+    setDateRangeFrom(dateRangeStart);
+    setDateRangeTo(today);
+  }, [activeRangeBtn]);
+
 // TODO:
 // - improve how i get the dates - i need ISO strings
 // - determine the donor fields by clinical or molecular
@@ -107,16 +114,11 @@ const ClinicalChart = ({
     loading: isCardLoading = true,
   } = useProgramDonorPublishedAnalysisByDateRangeQuery(
     CHART_BUCKETS,
-    '2020-11-09T21:25:17.717Z',
-    '2020-11-21T21:25:17.717Z',
+    dateRangeFrom,
+    dateRangeTo,
     donorFields[chartType] as DonorField[],
     programShortName
   );
-
-  console.log({
-    programDonorPublishedAnalysisByDateRange,
-    programDonorPublishedAnalysisByDateRangeQueryError
-  });
 
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
@@ -128,12 +130,7 @@ const ClinicalChart = ({
     setActiveLines(nextLines);
   };
 
-  // TODO: make date array from data, sort, get first & last
-  const dateRange =  data.lines[0].points.map(point => Number(point.x)).sort();
-  const dateRangeFrom = convertUnixEpochToJSEpoch(dateRange[0]);
-  const dateRangeTo = convertUnixEpochToJSEpoch(dateRange[dateRange.length - 1]);
-
-  return (
+  return dateRangeFrom && dateRangeTo && (
     <DashboardCard>
       <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="default" component="span">
@@ -155,7 +152,10 @@ const ClinicalChart = ({
         <RangeControlBar
           activeBtn={activeRangeBtn}
           handleBtnClick={setActiveRangeBtn}
-          rangeArray={[formatDate(dateRangeFrom, DATE_RANGE_FORMAT), formatDate(dateRangeTo, DATE_RANGE_FORMAT)]}
+          rangeArray={[
+            formatDate(dateRangeFrom, DATE_RANGE_FORMAT),
+            formatDate(dateRangeTo, DATE_RANGE_FORMAT)
+          ]}
           />
         <div
           ref={lineChartRef}
@@ -165,20 +165,22 @@ const ClinicalChart = ({
             filter: `blur(${resizing ? 8 : 0}px)`
           }}
           >
-          <LineChart
-            activeLines={activeLines}
-            chartType={chartType}
-            data={data}
-            hasQuarterLines
-            hasYAxisThresholdLine
-            height={CHART_HEIGHT}
-            horizontalGuides={4}
-            precision={0}
-            width={width}
-            yAxisThreshold={1700} // TODO committed donors
-            yAxisThresholdLabel="Committed"
-            yAxisTitle="donors"
-            />
+            {programDonorPublishedAnalysisByDateRange.length > 0 ? (
+              <LineChart
+                activeLines={activeLines}
+                chartType={chartType}
+                data={programDonorPublishedAnalysisByDateRange}
+                hasQuarterLines
+                hasYAxisThresholdLine
+                height={CHART_HEIGHT}
+                horizontalGuides={4}
+                precision={0}
+                width={width}
+                yAxisThreshold={1700} // TODO committed donors
+                yAxisThresholdLabel="Committed"
+                yAxisTitle="donors"
+                />
+            ): <p>loading</p>}
         </div>
       </div>
     </DashboardCard>

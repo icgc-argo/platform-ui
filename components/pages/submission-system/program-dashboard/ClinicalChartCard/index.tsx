@@ -44,19 +44,9 @@ const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
 export default ({ chartType, comingSoonLink, programShortName, title }: CardProps) => {
-  const [lineChartData, setLineChartData] = useState(null);
-  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
-
-  // TODO: when API is ready, this should be a reusable hook,
-  // or data requests should be made at the page level. TBD
-  useEffect(() => {
-    const days = find(rangeButtons, { title: activeRangeBtn }).data;
-    const mockData = makeMockData(days);
-    const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType });
-    setLineChartData(clinicalData);
-  }, [activeRangeBtn]);
-
+  // TODO: make a program summary query to get
+  // program creation date
+  // committed donors
   const getStartedLink = (
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>
@@ -66,14 +56,11 @@ export default ({ chartType, comingSoonLink, programShortName, title }: CardProp
     </Typography>
   );
 
-  return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+  return FEATURE_DASHBOARD_CHARTS_ENABLED
     ? (
       <ClinicalChart
-        activeRangeBtn={activeRangeBtn}
         chartType={chartType}
-        data={lineChartData}
         programShortName={programShortName}
-        setActiveRangeBtn={setActiveRangeBtn}
         title={title}
         />
     ) : (

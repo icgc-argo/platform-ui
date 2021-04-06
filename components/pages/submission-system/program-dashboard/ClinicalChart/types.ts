@@ -26,9 +26,9 @@ export type DataPoint = {
   y: string;
 };
 
-export type DataLine = {
-  points: DataPoint[];
-  title: null | keyof typeof chartLineColors;
+export type DataBucket = {
+  date: string;
+  donors: number;
 };
 
 export type ChartLine = {
@@ -37,9 +37,8 @@ export type ChartLine = {
 };
 
 export type DataObj = {
-  chartType: 'clinical' | 'molecular';
-  committed: number;
-  lines: DataLine[];
+  title: DonorField;
+  buckets: DataBucket[];
 };
 
 export type ChartType = 'clinical' | 'molecular';

@@ -16,44 +16,39 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { DataLine, DataObj, DataPoint } from './types';
+import { DataBucket, DataObj, DataPoint } from './types';
 import theme from 'uikit/theme/defaultTheme';
 
-export const getMinMax = (
-  { data, minMax, coord }: {
-    data: DataObj;
-    minMax: 'min' | 'max';
-    coord: 'x' | 'y';
-  }) => {
-  const allCoord = [
-    ...data.lines
-    .map((line: DataLine) => line.points
-      .map((point: DataPoint) => Number(point[coord]))
+export const getMaxY = (data: DataObj[]) => {
+  const yValues = data
+    .map((dataObj: DataObj) => dataObj.buckets
+      .map((bucket: DataBucket) => bucket.donors)
     )
-    .reduce((acc, curr) => ([...acc, ...curr]), [])
-  ];
-  return Math[minMax](...allCoord);
+    .reduce((acc, curr) => acc.concat(curr), [])
+
+    return Math.max(...yValues)
 };
+
 export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [
   {
-    data: 700,
+    days: 700,
     title: 'All',
     label: 'All',
   },
   {
-    data: 365,
+    days: 365,
     title: '1Y',
     label: 'One year',
   },
   {
-    data: 30,
+    days: 30,
     title: '1M',
     label: 'One month',
   },
   {
-    data: 7,
+    days: 7,
     title: '1W',
     label: 'One week',
   }

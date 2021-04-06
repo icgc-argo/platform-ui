@@ -52,8 +52,10 @@ setConfiguration({ gutterWidth: 9 });
 export default function ProgramDashboard() {
   const { DOCS_URL_ROOT } = getConfig();
   const {
-    query: { shortName: programShortName },
+    query: { shortName: programShortName, createdAt },
   } = usePageContext();
+
+  console.log({ createdAt })
 
   const [justJoined, setJustJoined] = React.useState(null);
 
