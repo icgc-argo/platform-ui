@@ -21,7 +21,15 @@ import React from 'react';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
 import { chartLineColors, convertUnixEpochToJSEpoch, getMaxY } from './utils';
-import { ChartLine, ChartType, DataBucket, DataObj, DataPoint, PointsCoordinates } from './types';
+import {
+  ChartLine,
+  ChartType,
+  DataItem,
+  DataBucket,
+  DataPoint,
+  DonorField,
+  PointsCoordinates
+} from './types';
 import theme from 'uikit/theme/defaultTheme';
 
 const options = {
@@ -125,14 +133,18 @@ const LineChart = ({
     end: dayLast,
   };
 
-  const chartLines = data[0].lines
-    .filter((line: DataBucket) => activeLines.includes(line.title) || data.lines.length === 1)
-    .map((line: DataBucket) => ({
-      ...line,
-      points: line.points
-        .map((point: DataPoint, i: number) => {
+  const chartLines = data
+    .filter((dataItem: DataItem) =>
+      activeLines.includes(dataItem.title) || dataItem.buckets.length === 1
+    )
+    .map((dataItem: DataItem) => ({
+      title: dataItem.title as DonorField,
+      points: dataItem.buckets
+        .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
-          const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+          const yCoordinate = Math.floor(
+            chartHeight - topPadding / 2 - (dataBucket.donors / maxY) * chartHeight + padding / 2
+          );
           return `${xCoordinate},${yCoordinate}`;
         })
         .join(' ')

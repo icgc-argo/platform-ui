@@ -24,18 +24,25 @@ import { format as formatDate, subDays } from 'date-fns';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
-import { DashboardCard } from '../common';
+import ContentError from 'components/placeholders/ContentError';
+import DnaLoader from 'uikit/DnaLoader';
+import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import {
+  DashboardCard,
+  DashboardSummaryData,
+  DashboardSummaryDataVariables
+} from '../common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
-  DataObj,
   DonorField,
   ProgramDonorPublishedAnalysisByDateRangeQueryData,
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables
 } from './types';
 import Legend from './Legend';
-import { chartLineColors, convertUnixEpochToJSEpoch, rangeButtons } from './utils';
+import { chartLineColors, rangeButtons } from './utils';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY.gql';
 
 const CHART_HEIGHT = 220;
@@ -48,14 +55,14 @@ const donorFields = {
     'createdAt'
   ],
   molecular: [
-  'mutectFirstPublishedDate',
-  'alignmentFirstPublishedDate',
-  'rawReadsFirstPublishedDate',
-  'sangerVcsFirstPublishedDate'
+    'mutectFirstPublishedDate',
+    'alignmentFirstPublishedDate',
+    'rawReadsFirstPublishedDate',
+    'sangerVcsFirstPublishedDate'
   ]
 };
 
-export const useProgramDonorPublishedAnalysisByDateRangeQuery = (
+const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   bucketCount: number,
   dateRangeFrom: string,
   dateRangeTo: string,
@@ -84,11 +91,9 @@ export const useProgramDonorPublishedAnalysisByDateRangeQuery = (
 
 const ClinicalChart = ({
   chartType,
-  programShortName,
   title,
 }: {
   chartType: ChartType;
-  programShortName: string;
   title: string;
 }) => {
   const [dateRangeFrom, setDateRangeFrom] = useState(null);
@@ -103,15 +108,24 @@ const ClinicalChart = ({
     setDateRangeTo(today);
   }, [activeRangeBtn]);
 
-// TODO:
-// - improve how i get the dates - i need ISO strings
-// - determine the donor fields by clinical or molecular
-// - handle error & loading
-// - remove mock data
+  // get commitmentDonors & programShortName
+  const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { data, loading: isCommitmentDonorsLoading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
+    DASHBOARD_SUMMARY_QUERY,
+    {
+      variables: { programShortName: programShortName },
+    },
+  );
+  const { program: { commitmentDonors = 0 } } = {} = data;
+
+  // TODO:
+  // - improve how i get the dates - i need ISO strings
+  // - determine the donor fields by clinical or molecular
+  // - handle error & loading
   const {
     data: { programDonorPublishedAnalysisByDateRange = [] } = {},
     error: programDonorPublishedAnalysisByDateRangeQueryError,
-    loading: isCardLoading = true,
+    loading: isQueryLoading = true,
   } = useProgramDonorPublishedAnalysisByDateRangeQuery(
     CHART_BUCKETS,
     dateRangeFrom,
@@ -130,61 +144,70 @@ const ClinicalChart = ({
     setActiveLines(nextLines);
   };
 
-  return dateRangeFrom && dateRangeTo && (
-    <DashboardCard>
-      <div style={{ display: 'flex', height: 26, justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="default" component="span">
-          {title}
-        </Typography>
-        {chartType === 'molecular' && (
-          <Legend
-            activeLines={activeLines}
-            handleLegendInput={handleLegendInput}
-            />
-        )}
-      </div>
-      <div
-        css={css`
-          height: ${CHART_HEIGHT + CHART_PADDING}px;
-          padding: ${CHART_PADDING}px 0;
-        `}
-        >
-        <RangeControlBar
-          activeBtn={activeRangeBtn}
-          handleBtnClick={setActiveRangeBtn}
-          rangeArray={[
-            formatDate(dateRangeFrom, DATE_RANGE_FORMAT),
-            formatDate(dateRangeTo, DATE_RANGE_FORMAT)
-          ]}
-          />
-        <div
-          ref={lineChartRef}
-          style={{
-            width: '100%',
-            paddingTop: CHART_PADDING,
-            filter: `blur(${resizing ? 8 : 0}px)`
-          }}
-          >
-            {programDonorPublishedAnalysisByDateRange.length > 0 ? (
-              <LineChart
+  return programDonorPublishedAnalysisByDateRangeQueryError
+    ? <ContentError />
+    : !dateRangeFrom || !dateRangeTo || isQueryLoading || isCommitmentDonorsLoading
+      ? <DnaLoader />
+      : (
+        <DashboardCard>
+          <div style={{
+            display: 'flex',
+            height: 26,
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <Typography variant="default" component="span">
+              {title}
+            </Typography>
+            {chartType === 'molecular' && (
+              <Legend
                 activeLines={activeLines}
-                chartType={chartType}
-                data={programDonorPublishedAnalysisByDateRange}
-                hasQuarterLines
-                hasYAxisThresholdLine
-                height={CHART_HEIGHT}
-                horizontalGuides={4}
-                precision={0}
-                width={width}
-                yAxisThreshold={1700} // TODO committed donors
-                yAxisThresholdLabel="Committed"
-                yAxisTitle="donors"
+                handleLegendInput={handleLegendInput}
+              />
+            )}
+          </div>
+          <div
+            css={css`
+              height: ${CHART_HEIGHT + CHART_PADDING}px;
+              padding: ${CHART_PADDING}px 0;
+            `}
+          >
+            <RangeControlBar
+              activeBtn={activeRangeBtn}
+              handleBtnClick={setActiveRangeBtn}
+              rangeArray={[
+                formatDate(dateRangeFrom, DATE_RANGE_FORMAT),
+                formatDate(dateRangeTo, DATE_RANGE_FORMAT)
+              ]}
+            />
+            <div
+              ref={lineChartRef}
+              style={{
+                width: '100%',
+                paddingTop: CHART_PADDING,
+                filter: `blur(${resizing ? 8 : 0}px)`
+              }}
+            >
+              {programDonorPublishedAnalysisByDateRange.length > 0 ? (
+                <LineChart
+                  activeLines={activeLines}
+                  chartType={chartType}
+                  data={programDonorPublishedAnalysisByDateRange}
+                  hasQuarterLines
+                  hasYAxisThresholdLine
+                  height={CHART_HEIGHT}
+                  horizontalGuides={4}
+                  precision={0}
+                  width={width}
+                  yAxisThreshold={commitmentDonors}
+                  yAxisThresholdLabel="Committed"
+                  yAxisTitle="donors"
                 />
-            ): <p>loading</p>}
-        </div>
-      </div>
-    </DashboardCard>
-  );
+              ) : <p>loading</p>}
+            </div>
+          </div>
+        </DashboardCard>
+      );
 };
 
 export default ClinicalChart;

@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { css } from '@emotion/core';
-import { find } from 'lodash';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
@@ -27,14 +26,14 @@ import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';
-import { adjustData, makeMockData } from '../ClinicalChart/mockData';
-import { rangeButtons } from '../ClinicalChart/utils';
 import { ChartType } from '../ClinicalChart/types';
+
+// TODO: retire this component when we don't need the feature flag anymore.
+// include <ClinicalChart /> directly in the program dashboard.
 
 type CardProps = {
   chartType: ChartType;
   comingSoonLink: string;
-  programShortName: string;
   title: string;
 };
 
@@ -43,7 +42,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default ({ chartType, comingSoonLink, programShortName, title }: CardProps) => {
+export default ({ chartType, comingSoonLink, title }: CardProps) => {
   // TODO: make a program summary query to get
   // program creation date
   // committed donors
@@ -60,7 +59,6 @@ export default ({ chartType, comingSoonLink, programShortName, title }: CardProp
     ? (
       <ClinicalChart
         chartType={chartType}
-        programShortName={programShortName}
         title={title}
         />
     ) : (

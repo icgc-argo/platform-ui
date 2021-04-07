@@ -33,10 +33,10 @@ export type DataBucket = {
 
 export type ChartLine = {
   points: string;
-  title: null | keyof typeof chartLineColors;
+  title: DonorField;
 };
 
-export type DataObj = {
+export type DataItem = {
   title: DonorField;
   buckets: DataBucket[];
 };

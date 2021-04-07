@@ -16,24 +16,21 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { DataBucket, DataObj, DataPoint } from './types';
+import { DataBucket, DataItem } from './types';
 import theme from 'uikit/theme/defaultTheme';
 
-export const getMaxY = (data: DataObj[]) => {
+export const getMaxY = (data: DataItem[]) => {
   const yValues = data
-    .map((dataObj: DataObj) => dataObj.buckets
-      .map((bucket: DataBucket) => bucket.donors)
-    )
-    .reduce((acc, curr) => acc.concat(curr), [])
-
-    return Math.max(...yValues)
+    .map((dataItem: DataItem) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
+    .reduce((acc, curr) => acc.concat(curr), []);
+  return Math.max(...yValues);
 };
 
 export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
 
 export const rangeButtons = [
   {
-    days: 700,
+    days: null,
     title: 'All',
     label: 'All',
   },
@@ -51,15 +48,34 @@ export const rangeButtons = [
     days: 7,
     title: '1W',
     label: 'One week',
-  }
+  },
 ];
 
-export const chartLineColors = {
-  'Alignment': theme.colors.accent1_dark,
-  'DNA Raw Reads': theme.colors.accent4_dark,
-  'Mutect2': theme.colors.error_dark,
-  'RNA Raw Reads': theme.colors.accent3_dark,
-  'RNA-Seq1': theme.colors.secondary_dark,
-  'RNA-Seq2': theme.colors.accent2_dark,
-  'Sanger VC': theme.colors.warning_dark,
-};
+export const chartLineDict = [
+  // DNA
+  {
+    color: theme.colors.accent1_dark,
+    field: 'alignmentFirstPublishedDate',
+    title: 'Alignment',
+  },
+  {
+    color: theme.colors.accent4_dark,
+    field: 'rawReadsFirstPublishedDate',
+    title: 'DNA Raw Reads',
+  },
+  {
+    color: theme.colors.error_dark,
+    field: 'mutectFirstPublishedDate',
+    title: 'Mutect2',
+  },
+  {
+    color: theme.colors.warning_dark,
+    field: 'sangerVcsFirstPublishedDate',
+    title: 'Sanger VC',
+  },
+  // RNA
+  // not used right now
+  // { title: 'RNA Raw Reads', color: theme.colors.accent3_dark },
+  // { title: 'RNA-Seq1', color: theme.colors.secondary_dark },
+  // { title: 'RNA-Seq2', color: theme.colors.accent2_dark },
+];
