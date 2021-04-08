@@ -28,7 +28,6 @@ export const PageContext = React.createContext<ClientSideGetInitialPropsContext>
 
 export default function usePageContext(): ClientSideGetInitialPropsContext {
   const pageContext = React.useContext(PageContext);
-  console.log({ pageContext })
   return pageContext;
 }
 

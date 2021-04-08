@@ -108,8 +108,8 @@ const LineChart = ({
   // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataPoints = data[0].buckets;
-  const xTicksCount = dataPoints.length;
+  const dataBuckets = data[0].buckets;
+  const xTicksCount = dataBuckets.length;
   // distance between 2 ticks
   const xTickDistance = chartWidth / xTicksCount;
   // distance between farthest left & right ticks
@@ -124,13 +124,12 @@ const LineChart = ({
   const verticalLineEnd = height - padding;
 
   // setup dates
-  const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
-  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(convertUnixEpochToJSEpoch(d)));
-  const day0 = datesJSEpoch[0];
-  const dayLast = datesJSEpoch[datesJSEpoch.length-1];
-  const daysInData = differenceInDays(dayLast, day0);
+  const dataDates = dataBuckets.map((bucket: DataBucket) => bucket.date);
+  const dayFirst = new Date(dataDates[0]);
+  const dayLast = new Date(dataDates[dataDates.length-1]);
+  const daysInData = differenceInDays(dayLast, dayFirst);
   const dataDayRange = {
-    start: day0,
+    start: dayFirst,
     end: dayLast,
   };
 
@@ -317,7 +316,7 @@ const LineChart = ({
       <TextStyleGroup
         textAnchor="middle"
         >
-        {dataPoints.map((point: DataPoint, index: number) => {
+        {dataBuckets.map((point: DataPoint, index: number) => {
           const xCoordinate = getX(index);
           return (
             <text key={xCoordinate}>
