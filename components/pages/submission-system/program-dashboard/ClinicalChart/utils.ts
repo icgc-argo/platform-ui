@@ -26,56 +26,76 @@ export const getMaxY = (data: DataItem[]) => {
   return Math.max(...yValues);
 };
 
-export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
-
 export const rangeButtons = [
   {
     days: null,
-    title: 'All',
     label: 'All',
+    title: 'All',
   },
   {
     days: 365,
-    title: '1Y',
     label: 'One year',
+    title: '1Y',
   },
   {
     days: 30,
-    title: '1M',
     label: 'One month',
+    title: '1M',
   },
   {
     days: 7,
-    title: '1W',
     label: 'One week',
+    title: '1W',
   },
 ];
 
 export const chartLineDict = [
-  // DNA
   {
+    chartType: 'molecular',
     color: theme.colors.accent1_dark,
+    dataType: 'DNA',
     field: 'alignmentFirstPublishedDate',
     title: 'Alignment',
   },
   {
+    chartType: 'molecular',
     color: theme.colors.accent4_dark,
+    dataType: 'DNA',
     field: 'rawReadsFirstPublishedDate',
     title: 'DNA Raw Reads',
   },
   {
+    chartType: 'molecular',
     color: theme.colors.error_dark,
+    dataType: 'DNA',
     field: 'mutectFirstPublishedDate',
     title: 'Mutect2',
   },
   {
+    chartType: 'molecular',
     color: theme.colors.warning_dark,
+    dataType: 'DNA',
     field: 'sangerVcsFirstPublishedDate',
     title: 'Sanger VC',
   },
   // RNA
   // not used right now
-  // { title: 'RNA Raw Reads', color: theme.colors.accent3_dark },
-  // { title: 'RNA-Seq1', color: theme.colors.secondary_dark },
-  // { title: 'RNA-Seq2', color: theme.colors.accent2_dark },
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.accent3_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA Raw Reads',
+  // },
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.secondary_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA-Seq1',
+  // },
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.accent2_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA-Seq2',
+  // },
 ];
