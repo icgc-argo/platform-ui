@@ -100,14 +100,14 @@ const LegendInput = (
   <StyledLegendLabel>
     <input
       checked={isActive}
-      onClick={() => handleLegendInput(field)}
+      onChange={() => handleLegendInput(field)}
       type="checkbox"
       value={field}
     />
     <span
       className="legend-input-color"
       css={css`
-        background: ${find(chartLineDict, field).color};
+        background: ${find(chartLineDict, { field: field }).color};
       `}
     />
     <span className="legend-input-title">

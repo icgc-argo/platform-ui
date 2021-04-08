@@ -16,12 +16,12 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { DataBucket, DataItem } from './types';
+import { DataBucket, DataItem, DataObj } from './types';
 import theme from 'uikit/theme/defaultTheme';
 
-export const getMaxY = (data: DataItem[]) => {
+export const getMaxY = (data: DataObj[]) => {
   const yValues = data
-    .map((dataItem: DataItem) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
+    .map((dataItem: DataObj) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
     .reduce((acc, curr) => acc.concat(curr), []);
   return Math.max(...yValues);
 };

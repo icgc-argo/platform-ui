@@ -36,6 +36,7 @@ import {
   ChartType,
   DataBucket,
   DataItem,
+  DataObj,
   DonorField,
   ChartLineTitle,
   PointsCoordinates
@@ -103,7 +104,7 @@ const LineChart = ({
   yAxisTitle: string;
 }) => {
   // setup Y axis
-  const maxY = Math.max(yAxisThreshold, getMaxY(data));
+  const maxY = Math.max(yAxisThreshold, getMaxY(data)); // fine
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -141,13 +142,13 @@ const LineChart = ({
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
   const chartLines = data
-    .filter((dataItem: DataItem) =>
-      activeLines.includes(dataItem.title) || dataItem.buckets.length === 1
+    .filter((dataObj: DataObj) =>
+      activeLines.includes(dataObj.title) || dataObj.buckets.length === 1
     )
-    .map((dataItem: DataItem) => ({
-      field: dataItem.field as DonorField,
-      title: dataItem.title as ChartLineTitle,
-      points: dataItem.buckets
+    .map((dataObj: DataObj) => ({
+      field: dataObj.title as DonorField,
+      title: find(chartLineDict, { field: dataObj.title }).title,
+      points: dataObj.buckets
         .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
           const yCoordinate = Math.floor(
@@ -158,6 +159,7 @@ const LineChart = ({
         .join(' ')
     }));
 
+  console.log({ chartLines })
   // setup axis elements
   const Axis = ({ points }: { points: PointsCoordinates }) => (
     <polyline
@@ -321,7 +323,9 @@ const LineChart = ({
   const LabelsXAxis = () => {
     const yStart = height - padding + (options.fontSize * 1.75);
     const dateLabels = dataDates
-      .map((date: Date) => formatDate(date, 'MMM DD YYYY'));
+      .map((date: Date) => formatDate(date, 'MMM dd yyyy'));
+
+    console.log({dateLabels})
 
     return (
       <TextStyleGroup

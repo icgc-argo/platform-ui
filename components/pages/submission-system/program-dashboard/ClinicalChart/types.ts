@@ -35,6 +35,11 @@ export type ChartLine = {
   title: ChartLineTitle;
 };
 
+export type DataObj = {
+  title: DonorField;
+  buckets: DataBucket[];
+}
+
 export type DataItem = {
   buckets: DataBucket[];
   field: DonorField;
