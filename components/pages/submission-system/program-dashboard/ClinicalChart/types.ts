@@ -30,13 +30,15 @@ export type DataBucket = {
 };
 
 export type ChartLine = {
+  field: DonorField,
   points: string;
-  title: DonorField;
+  title: ChartLineTitle;
 };
 
 export type DataItem = {
-  title: DonorField;
   buckets: DataBucket[];
+  field: DonorField;
+  title: ChartLineTitle;
 };
 
 export type ChartType = 'clinical' | 'molecular';
@@ -47,6 +49,8 @@ export type PointsCoordinates = {
   y1: number;
   y2: number;
 };
+
+export type ChartLineTitle = null | string;
 
 export type DonorField =
   'createdAt' |

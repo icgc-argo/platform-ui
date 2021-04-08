@@ -34,10 +34,10 @@ import { chartLineDict, getMaxY } from './utils';
 import {
   ChartLine,
   ChartType,
-  DataItem,
   DataBucket,
-  DataPoint,
+  DataItem,
   DonorField,
+  ChartLineTitle,
   PointsCoordinates
 } from './types';
 import theme from 'uikit/theme/defaultTheme';
@@ -145,7 +145,8 @@ const LineChart = ({
       activeLines.includes(dataItem.title) || dataItem.buckets.length === 1
     )
     .map((dataItem: DataItem) => ({
-      title: dataItem.title as DonorField,
+      field: dataItem.field as DonorField,
+      title: dataItem.title as ChartLineTitle,
       points: dataItem.buckets
         .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
@@ -321,7 +322,7 @@ const LineChart = ({
     const yStart = height - padding + (options.fontSize * 1.75);
     const dateLabels = dataDates
       .map((date: Date) => formatDate(date, 'MMM DD YYYY'));
-      
+
     return (
       <TextStyleGroup
         textAnchor="middle"
@@ -381,7 +382,7 @@ const LineChart = ({
           <polyline
             key={chartLine.title}
             points={chartLine.points}
-            stroke={find(chartLineDict, { title: chartLine.title }).color || options.colors.chartLineDefault}
+            stroke={find(chartLineDict, { field: chartLine.field }).color || options.colors.chartLineDefault}
           />
         ))}
       </g>
@@ -398,7 +399,7 @@ const LineChart = ({
           });
           return (
             <g
-              fill={find(chartLineDict, { title: chartLine.title }).color || options.colors.chartLineDefault}
+              fill={find(chartLineDict, { field: chartLine.field }).color || options.colors.chartLineDefault}
             >
               {pointsCoordinates.map((point) => (
                 <circle

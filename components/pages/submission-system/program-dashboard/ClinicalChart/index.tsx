@@ -132,6 +132,8 @@ const ClinicalChart = ({
     programShortName
   );
 
+  console.log({programDonorPublishedAnalysisByDateRange})
+
   // make the chart responsive
   const lineChartRef = useRef(null);
   const { resizing, width } = useElementDimension(lineChartRef);
@@ -152,7 +154,7 @@ const ClinicalChart = ({
     isProgramQueryLoading ||
     programDonorPublishedAnalysisByDateRange.length === 0;
 
-    console.log(!isLoading && programQueryData.program.commitmentDonors)
+  console.log({ chartType, isLoading, hasError})
 
   return (
     <DashboardCard>
@@ -180,9 +182,9 @@ const ClinicalChart = ({
             `}
       >
         {hasError
-          ? <ContentError />
+          ? <ContentError title="beep boop error" />
           : isLoading
-            ? <ContentLoader />
+            ? <ContentLoader title="beep boop loading" />
             : (<>
               <RangeControlBar
                 activeBtn={activeRangeBtn}
