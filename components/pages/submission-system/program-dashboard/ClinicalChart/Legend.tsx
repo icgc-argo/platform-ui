@@ -34,14 +34,14 @@ const StyledLegend = styled('div')`
   border: 1px solid ${theme.colors.grey_1};
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   display: flex;
-  left: -195px;
+  left: -60px;
   padding: 5px 3px;
   position: absolute;
   top: -140px;
-  width: 270px;
+  width: 135px;
   .legend-column {
     padding: 0 2px;
-    width: 50%;
+    width: 100%;
   }
   .legend-title {
     margin-bottom: 3px;
@@ -139,7 +139,7 @@ const Legend = (
               .filter(line => line.dataType === 'DNA' && line.chartType === chartType)
               .map((line => (
                 <LegendInput
-                  field={line.field}
+                  field={line.field as DonorField}
                   handleLegendInput={handleLegendInput}
                   isActive={activeLines.includes(line.field)}
                   key={line.title}

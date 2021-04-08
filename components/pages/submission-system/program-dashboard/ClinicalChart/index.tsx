@@ -36,9 +36,11 @@ import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
+  DataItem,
   DonorField,
   ProgramDonorPublishedAnalysisByDateRangeQueryData,
-  ProgramDonorPublishedAnalysisByDateRangeQueryVariables
+  ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
+  RangeButtons,
 } from './types';
 import Legend from './Legend';
 import { chartLineDict, rangeButtons } from './utils';
@@ -50,7 +52,7 @@ const CHART_BUCKETS = 7;
 const DATE_RANGE_DISPLAY_FORMAT = 'Y/MM/dd';
 
 // TODO: replace with program first published date
-const TEMP_ALL_START_DATE = new Date('2021-01-01T00:00:00.000Z');
+const TEMP_ALL_START_DATE = new Date('2020-06-01T00:00:00.000Z');
 
 const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   bucketCount: number,
@@ -67,6 +69,7 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
     PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY,
     {
       ...options,
+      skip: !dateRangeFrom || !dateRangeTo,
       variables: {
         bucketCount,
         dateRangeFrom,
@@ -87,9 +90,9 @@ const ClinicalChart = ({
   title: string;
 }) => {
   // handle date range selection
-  const [dateRangeFrom, setDateRangeFrom] = useState(null);
-  const [dateRangeTo, setDateRangeTo] = useState(null);
-  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
+  const [dateRangeFrom, setDateRangeFrom] = useState<string | null>(null);
+  const [dateRangeTo, setDateRangeTo] = useState<string | null>(null);
+  const [activeRangeBtn, setActiveRangeBtn] = useState<RangeButtons>('All');
 
   useEffect(() => {
     const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
@@ -97,18 +100,18 @@ const ClinicalChart = ({
     const dateRangeStart = activeRangeBtn === 'All'
       ? TEMP_ALL_START_DATE // TODO: change to program first published date
       : subDays(today, daysInRange);
-    setDateRangeFrom(dateRangeStart);
-    setDateRangeTo(today);
+    setDateRangeFrom(dateRangeStart.toString());
+    setDateRangeTo(today.toString());
   }, [activeRangeBtn]);
 
   // get programShortName
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
 
-  // get committed donors & program first published date
+  // get committed donors & TODO program first published date
   const {
     data: programQueryData,
     error: programQueryError,
-    loading: isProgramQueryLoading
+    loading: programQueryLoading
   } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
     DASHBOARD_SUMMARY_QUERY,
     {
@@ -116,14 +119,16 @@ const ClinicalChart = ({
     },
   );
 
+  // get data for chart lines - program donor published analyses
+  // aggregated by date range
   const donorFieldsByChartType = chartLineDict
     .filter(line => line.chartType === chartType)
     .map(line => line.field);
 
   const {
-    data: { programDonorPublishedAnalysisByDateRange = [] } = {},
+    data: { programDonorPublishedAnalysisByDateRange: rangeQueryData = [] } = {},
     error: rangeQueryError,
-    loading: isRangeQueryLoading = true,
+    loading: rangeQueryLoading = true,
   } = useProgramDonorPublishedAnalysisByDateRangeQuery(
     CHART_BUCKETS,
     dateRangeFrom,
@@ -131,8 +136,6 @@ const ClinicalChart = ({
     donorFieldsByChartType as DonorField[],
     programShortName
   );
-
-  console.log({chartType, programQueryData, programDonorPublishedAnalysisByDateRange})
 
   // make the chart responsive
   const lineChartRef = useRef<HTMLDivElement>(null);
@@ -154,11 +157,10 @@ const ClinicalChart = ({
   };
 
   const hasError = rangeQueryError || programQueryError;
-  const isLoading = !dateRangeFrom ||
-    !dateRangeTo ||
-    isRangeQueryLoading ||
-    isProgramQueryLoading ||
-    programDonorPublishedAnalysisByDateRange.length === 0;
+  const isLoading = rangeQueryData.length === 0 ||
+    rangeQueryLoading ||
+    programQueryLoading;
+  const showLegend = chartType === 'molecular' && !isLoading && !hasError;
 
   return (
     <DashboardCard>
@@ -171,7 +173,7 @@ const ClinicalChart = ({
         <Typography variant="default" component="span">
           {title}
         </Typography>
-        {chartType === 'molecular' && !isLoading && !hasError && (
+        {showLegend && (
           <Legend
             activeLines={activeLines}
             chartType={chartType}
@@ -194,8 +196,8 @@ const ClinicalChart = ({
                 activeBtn={activeRangeBtn}
                 handleBtnClick={setActiveRangeBtn}
                 rangeArray={[
-                  formatDate(dateRangeFrom, DATE_RANGE_DISPLAY_FORMAT),
-                  formatDate(dateRangeTo, DATE_RANGE_DISPLAY_FORMAT)
+                  formatDate(new Date(dateRangeFrom), DATE_RANGE_DISPLAY_FORMAT),
+                  formatDate(new Date(dateRangeTo), DATE_RANGE_DISPLAY_FORMAT)
                 ]}
               />
               <div
@@ -209,7 +211,7 @@ const ClinicalChart = ({
                 <LineChart
                   activeLines={activeLines}
                   chartType={chartType}
-                  data={programDonorPublishedAnalysisByDateRange}
+                  data={rangeQueryData}
                   hasQuarterLines
                   hasYAxisThresholdLine
                   height={CHART_HEIGHT}

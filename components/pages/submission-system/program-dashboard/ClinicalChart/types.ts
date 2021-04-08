@@ -35,16 +35,10 @@ export type ChartLine = {
   title: ChartLineTitle;
 };
 
-export type DataObj = {
+export type DataItem = {
   title: DonorField;
   buckets: DataBucket[];
 }
-
-export type DataItem = {
-  buckets: DataBucket[];
-  field: DonorField;
-  title: ChartLineTitle;
-};
 
 export type ChartType = 'clinical' | 'molecular';
 
@@ -86,3 +80,9 @@ export type ProgramDonorPublishedAnalysisByDateRange = {
 export type ProgramDonorPublishedAnalysisByDateRangeQueryData = {
   programDonorPublishedAnalysisByDateRange: ProgramDonorPublishedAnalysisByDateRange[];
 };
+
+export type RangeButtons =
+  'All' |
+  '1Y' |
+  '1M' |
+  '1W';

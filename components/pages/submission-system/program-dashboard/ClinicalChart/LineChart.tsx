@@ -36,9 +36,7 @@ import {
   ChartType,
   DataBucket,
   DataItem,
-  DataObj,
   DonorField,
-  ChartLineTitle,
   PointsCoordinates
 } from './types';
 import theme from 'uikit/theme/defaultTheme';
@@ -78,7 +76,6 @@ const makePointsString = (points: PointsCoordinates) => {
 
 const LineChart = ({
   activeLines,
-  chartType,
   data,
   hasQuarterLines = false,
   hasYAxisThresholdLine = false,
@@ -92,7 +89,7 @@ const LineChart = ({
 }: {
   activeLines: string[];
   chartType: ChartType;
-  data: DataObj[];
+  data: DataItem[];
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
   height: number;
@@ -104,7 +101,7 @@ const LineChart = ({
   yAxisTitle: string;
 }) => {
   // setup Y axis
-  const maxY = Math.max(yAxisThreshold, getMaxY(data)); // fine
+  const maxY = Math.max(yAxisThreshold, getMaxY(data));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -134,6 +131,7 @@ const LineChart = ({
   const verticalLineEnd = height - padding;
 
   // setup dates
+  // each data item has the same number of bucket
   const dataDates = dataBuckets.map((bucket: DataBucket) => new Date(bucket.date));
   const dataDayRange = {
     start: dataDates[0],
@@ -142,13 +140,13 @@ const LineChart = ({
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
   const chartLines = data
-    .filter((dataObj: DataObj) =>
-      activeLines.includes(dataObj.title) || dataObj.buckets.length === 1
+    .filter((dataItem: DataItem) =>
+      activeLines.includes(dataItem.title) || data.length === 1
     )
-    .map((dataObj: DataObj) => ({
-      field: dataObj.title as DonorField,
-      title: find(chartLineDict, { field: dataObj.title }).title,
-      points: dataObj.buckets
+    .map((dataItem: DataItem) => ({
+      field: dataItem.title as DonorField,
+      title: find(chartLineDict, { field: dataItem.title }).title,
+      points: dataItem.buckets
         .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
           const yCoordinate = Math.floor(
@@ -163,9 +161,9 @@ const LineChart = ({
   const Axis = ({ points }: { points: PointsCoordinates }) => (
     <polyline
       fill="none"
+      points={makePointsString(points)}
       stroke={options.colors.axisBorder}
       strokeWidth={options.strokeWidth}
-      points={makePointsString(points)}
     />
   );
 
@@ -320,9 +318,9 @@ const LineChart = ({
   };
 
   const LabelsXAxis = () => {
-    const yStart = height - padding + (options.fontSize * 1.75);
+    const yStart = height - padding + (options.fontSize * 1.6);
     const dateLabels = dataDates
-      .map((date: Date) => formatDate(date, 'MMM dd yyyy'));
+      .map((date: Date) => formatDate(date, 'dd MMM yyyy'));
 
     return (
       <TextStyleGroup
@@ -336,7 +334,7 @@ const LineChart = ({
                 <tspan
                   key={word + wordIndex}
                   x={xCoordinate}
-                  y={yStart + wordIndex * (options.fontSize + 2)}
+                  y={yStart + wordIndex * (options.fontSize + 1)}
                 >
                   {word}
                 </tspan>
@@ -407,6 +405,7 @@ const LineChart = ({
           return (
             <g
               fill={find(chartLineDict, { field: chartLine.field }).color || options.colors.chartLineDefault}
+              key={chartLine.field}
             >
               {pointsCoordinates.map((point) => (
                 <circle
