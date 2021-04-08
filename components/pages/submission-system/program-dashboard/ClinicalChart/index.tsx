@@ -51,7 +51,7 @@ const CHART_BUCKETS = 7;
 const DATE_RANGE_DISPLAY_FORMAT = 'Y/MM/dd';
 
 // TODO: replace with program first published date
-const TEMP_ALL_START_DATE = '2021-01-01T00:00:00.000Z';
+const TEMP_ALL_START_DATE = new Date('2021-01-01T00:00:00.000Z');
 
 const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   bucketCount: number,
@@ -107,12 +107,7 @@ const ClinicalChart = ({
 
   // get committed donors & program first published date
   const {
-    data: {
-      program: {
-        commitmentDonors = 0,
-        // TODO program first published date
-      }
-    } = {},
+    data: programQueryData,
     error: programQueryError,
     loading: isProgramQueryLoading
   } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
@@ -209,7 +204,7 @@ const ClinicalChart = ({
                     horizontalGuides={4}
                     precision={0}
                     width={width}
-                    yAxisThreshold={commitmentDonors}
+                    yAxisThreshold={programQueryData.program.commitmentDonors}
                     yAxisThresholdLabel="Committed"
                     yAxisTitle="donors"
                   />

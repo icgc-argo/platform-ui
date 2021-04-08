@@ -18,9 +18,10 @@
  */
 
 import React from 'react';
+import { find } from 'lodash';
 import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
 import { styled } from 'uikit';
-import { chartLineColors, convertUnixEpochToJSEpoch, getMaxY } from './utils';
+import { chartLineDict, getMaxY } from './utils';
 import {
   ChartLine,
   ChartType,
@@ -371,7 +372,7 @@ const LineChart = ({
           <polyline
             key={chartLine.title}
             points={chartLine.points}
-            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+            stroke={find(chartLineDict, { title: chartLine.title}).color || options.colors.chartLineDefault}
             />
         ))}
       </g>
@@ -388,7 +389,7 @@ const LineChart = ({
           });
           return (
             <g
-              fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
+              fill={find(chartLineDict, { title: chartLine.title}).color || options.colors.chartLineDefault}
               >
               {pointsCoordinates.map((point) => (
                 <circle

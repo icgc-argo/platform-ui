@@ -26,7 +26,7 @@ import theme from 'uikit/theme/defaultTheme';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
 import { chartLineDict } from './utils';
-import { ChartType } from './types';
+import { ChartType, DonorField } from './types';
 
 const StyledLegend = styled('div')`
   background: ${theme.colors.white};
@@ -94,20 +94,20 @@ const LegendButton = (
 );
 
 const LegendInput = (
-  { handleLegendInput, isActive, title }:
-    { handleLegendInput: any, isActive: boolean, title: string }
+  { field, handleLegendInput, isActive, title }:
+    { field: DonorField, handleLegendInput: any, isActive: boolean, title: string }
 ) => (
   <StyledLegendLabel>
     <input
       checked={isActive}
-      onClick={() => handleLegendInput(title)}
+      onClick={() => handleLegendInput(field)}
       type="checkbox"
-      value={title}
+      value={field}
     />
     <span
       className="legend-input-color"
       css={css`
-        background: ${find(chartLineDict, title).color};
+        background: ${find(chartLineDict, field).color};
       `}
     />
     <span className="legend-input-title">
@@ -139,14 +139,17 @@ const Legend = (
               .filter(line => line.dataType === 'DNA' && line.chartType === chartType)
               .map((line => (
                 <LegendInput
+                  field={line.field}
                   handleLegendInput={handleLegendInput}
-                  isActive={activeLines.includes(line.title)}
+                  isActive={activeLines.includes(line.field)}
                   key={line.title}
                   title={line.title}
                 />
               )))}
           </div>
-          {/* <div className="legend-column">
+          {/*
+          // not using RNA yet
+           <div className="legend-column">
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
             </div>
