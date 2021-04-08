@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { find } from 'lodash';
 import { css } from '@emotion/core';
 import { format as formatDate, subDays } from 'date-fns';
@@ -132,11 +132,17 @@ const ClinicalChart = ({
     programShortName
   );
 
-  console.log({programDonorPublishedAnalysisByDateRange})
+  console.log({chartType, programQueryData, programDonorPublishedAnalysisByDateRange})
 
   // make the chart responsive
-  const lineChartRef = useRef(null);
-  const { resizing, width } = useElementDimension(lineChartRef);
+  const lineChartRef = useRef<HTMLDivElement>(null);
+  const { resizing, width: responsiveWidth } = useElementDimension(lineChartRef);
+  const [initialWidth, setInitialWidth] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    if (lineChartRef.current) {
+      setInitialWidth(lineChartRef.current.getBoundingClientRect().width);
+    }
+  });
 
   // handle the legend
   const [activeLines, setActiveLines] = useState(donorFieldsByChartType);
@@ -153,8 +159,6 @@ const ClinicalChart = ({
     isRangeQueryLoading ||
     isProgramQueryLoading ||
     programDonorPublishedAnalysisByDateRange.length === 0;
-
-  console.log({ chartType, isLoading, hasError})
 
   return (
     <DashboardCard>
@@ -182,9 +186,9 @@ const ClinicalChart = ({
             `}
       >
         {hasError
-          ? <ContentError title="beep boop error" />
+          ? <ContentError />
           : isLoading
-            ? <ContentLoader title="beep boop loading" />
+            ? <ContentLoader />
             : (<>
               <RangeControlBar
                 activeBtn={activeRangeBtn}
@@ -211,7 +215,7 @@ const ClinicalChart = ({
                   height={CHART_HEIGHT}
                   horizontalGuides={4}
                   precision={0}
-                  width={width}
+                  width={responsiveWidth || initialWidth}
                   yAxisThreshold={programQueryData.program.commitmentDonors}
                   yAxisThresholdLabel="Committed"
                   yAxisTitle="donors"

@@ -159,7 +159,6 @@ const LineChart = ({
         .join(' ')
     }));
 
-  console.log({ chartLines })
   // setup axis elements
   const Axis = ({ points }: { points: PointsCoordinates }) => (
     <polyline
@@ -325,8 +324,6 @@ const LineChart = ({
     const dateLabels = dataDates
       .map((date: Date) => formatDate(date, 'MMM dd yyyy'));
 
-    console.log({dateLabels})
-
     return (
       <TextStyleGroup
         textAnchor="middle"
@@ -336,7 +333,13 @@ const LineChart = ({
           return (
             <text key={xCoordinate}>
               {label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan key={word + wordIndex} x={xCoordinate} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
+                <tspan
+                  key={word + wordIndex}
+                  x={xCoordinate}
+                  y={yStart + wordIndex * (options.fontSize + 2)}
+                >
+                  {word}
+                </tspan>
               ))}
             </text>
           );

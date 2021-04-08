@@ -54,7 +54,7 @@ export const chartLineDict = [
     chartType: 'clinical',
     color: theme.colors.accent2_dark,
     dataType: null,
-    field: 'createdAt', // TODO: updated with clinical published date
+    field: 'createdAt', // TODO: update with clinical published date
     title: null,
   },
   {
