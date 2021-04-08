@@ -152,6 +152,8 @@ const ClinicalChart = ({
     isProgramQueryLoading ||
     programDonorPublishedAnalysisByDateRange.length === 0;
 
+    console.log(!isLoading && programQueryData.program.commitmentDonors)
+
   return (
     <DashboardCard>
       <div style={{
