@@ -1,4 +1,4 @@
-query PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY(
+query PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY(
   $programShortName: String!,
   $bucketCount: Int!,
   $dateRangeFrom: DateTime!,

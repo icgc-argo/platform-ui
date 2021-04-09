@@ -17,5 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export { default as ContentError } from './ContentError';
-export { default as ContentLoader } from './ContentLoader';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
+import mockData from './mockData';
+import LineChart from '.';
+import { DataItem } from '../types';
+
+const activeLines = mockData.map(dataItem => dataItem.title);
+
+const LineChartStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  return (
+    <div style={{ width: 500, height: 300 }}>
+    <LineChart
+      activeLines={activeLines}
+      chartType="molecular"
+      data={mockData as DataItem[]}
+      hasQuarterLines
+      hasYAxisThresholdLine
+      height={300}
+      horizontalGuides={4}
+      precision={0}
+      width={500}
+      yAxisThreshold={200}
+      yAxisThresholdLabel="Y Axis Threshold"
+      yAxisTitle="Y Axis"
+    />
+    </div>
+  );
+});
+
+export default LineChartStories;

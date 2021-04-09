@@ -30,7 +30,8 @@ import {
   isBefore,
 } from 'date-fns';
 import { styled } from 'uikit';
-import { chartLineDict, getMaxY } from './utils';
+import { chartLineMeta } from '../utils';
+import { getMaxY } from './utils';
 import {
   ChartLine,
   ChartType,
@@ -38,7 +39,7 @@ import {
   DataItem,
   DonorField,
   PointsCoordinates
-} from './types';
+} from '../types';
 import theme from 'uikit/theme/defaultTheme';
 
 const options = {
@@ -131,7 +132,8 @@ const LineChart = ({
   const verticalLineEnd = height - padding;
 
   // setup dates
-  // each data item has the same number of bucket
+  // each data item has the same number of buckets
+  // with the same dates
   const dataDates = dataBuckets.map((bucket: DataBucket) => new Date(bucket.date));
   const dataDayRange = {
     start: dataDates[0],
@@ -145,7 +147,7 @@ const LineChart = ({
     )
     .map((dataItem: DataItem) => ({
       field: dataItem.title as DonorField,
-      title: find(chartLineDict, { field: dataItem.title }).title,
+      title: find(chartLineMeta, { field: dataItem.title }).title,
       points: dataItem.buckets
         .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
@@ -387,7 +389,7 @@ const LineChart = ({
           <polyline
             key={chartLine.title}
             points={chartLine.points}
-            stroke={find(chartLineDict, { field: chartLine.field }).color || options.colors.chartLineDefault}
+            stroke={find(chartLineMeta, { field: chartLine.field }).color || options.colors.chartLineDefault}
           />
         ))}
       </g>
@@ -404,7 +406,7 @@ const LineChart = ({
           });
           return (
             <g
-              fill={find(chartLineDict, { field: chartLine.field }).color || options.colors.chartLineDefault}
+              fill={find(chartLineMeta, { field: chartLine.field }).color || options.colors.chartLineDefault}
               key={chartLine.field}
             >
               {pointsCoordinates.map((point) => (

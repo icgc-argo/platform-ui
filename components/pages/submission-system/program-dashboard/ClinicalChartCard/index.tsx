@@ -28,7 +28,8 @@ import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';
 import { ChartType } from '../ClinicalChart/types';
 
-// TODO: retire this component when we don't need the feature flag anymore.
+// TODO: retire this component when we don't need the "coming soon"
+// component and the feature flag anymore.
 // include <ClinicalChart /> directly in the program dashboard.
 
 type CardProps = {
@@ -43,9 +44,6 @@ const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
 export default ({ chartType, comingSoonLink, title }: CardProps) => {
-  // TODO: make a program summary query to get
-  // program creation date
-  // committed donors
   const getStartedLink = (
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>

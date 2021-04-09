@@ -16,15 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { DataBucket, DataItem } from './types';
-import theme from 'uikit/theme/defaultTheme';
 
-export const getMaxY = (data: DataItem[]) => {
-  const yValues = data
-    .map((dataItem: DataItem) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
-    .reduce((acc, curr) => acc.concat(curr), []);
-  return Math.max(...yValues);
-};
+import theme from 'uikit/theme/defaultTheme';
 
 export const rangeButtons = [
   {
@@ -49,7 +42,7 @@ export const rangeButtons = [
   },
 ];
 
-export const chartLineDict = [
+export const chartLineMeta = [
   { 
     chartType: 'clinical',
     color: theme.colors.accent2_dark,

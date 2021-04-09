@@ -17,5 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export { default as ContentError } from './ContentError';
-export { default as ContentLoader } from './ContentLoader';
+import { DataBucket, DataItem } from '../types';
+
+export const getMaxY = (data: DataItem[]) => {
+  const yValues = data
+    .map((dataItem: DataItem) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
+    .reduce((acc, curr) => acc.concat(curr), []);
+  return Math.max(...yValues);
+};

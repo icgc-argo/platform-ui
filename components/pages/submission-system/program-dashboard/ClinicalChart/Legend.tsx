@@ -25,7 +25,7 @@ import Button from 'uikit/Button';
 import theme from 'uikit/theme/defaultTheme';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import { chartLineDict } from './utils';
+import { chartLineMeta } from './utils';
 import { ChartType, DonorField } from './types';
 
 const StyledLegend = styled('div')`
@@ -107,7 +107,7 @@ const LegendInput = (
     <span
       className="legend-input-color"
       css={css`
-        background: ${find(chartLineDict, { field: field }).color};
+        background: ${find(chartLineMeta, { field: field }).color};
       `}
     />
     <span className="legend-input-title">
@@ -135,7 +135,7 @@ const Legend = (
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>DNA PIPELINE</Typography>
             </div>
-            {chartLineDict
+            {chartLineMeta
               .filter(line => line.dataType === 'DNA' && line.chartType === chartType)
               .map((line => (
                 <LegendInput
@@ -153,7 +153,7 @@ const Legend = (
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
             </div>
-            {chartLineDict
+            {chartLineMeta
               .filter(line => line.dataType === 'RNA' && line.chartType === chartType)
               .map((line => (
                 <LegendInput

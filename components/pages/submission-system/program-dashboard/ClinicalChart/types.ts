@@ -30,7 +30,7 @@ export type DataBucket = {
 };
 
 export type ChartLine = {
-  field: DonorField,
+  field: DonorField;
   points: string;
   title: ChartLineTitle;
 };
@@ -38,7 +38,7 @@ export type ChartLine = {
 export type DataItem = {
   title: DonorField;
   buckets: DataBucket[];
-}
+};
 
 export type ChartType = 'clinical' | 'molecular';
 
@@ -52,12 +52,12 @@ export type PointsCoordinates = {
 export type ChartLineTitle = null | string;
 
 export type DonorField =
-  'createdAt' |
+  | 'createdAt'
   // TODO replace with clinical date
-  'mutectFirstPublishedDate' |
-  'alignmentFirstPublishedDate' |
-  'rawReadsFirstPublishedDate' |
-  'sangerVcsFirstPublishedDate';
+  | 'mutectFirstPublishedDate'
+  | 'alignmentFirstPublishedDate'
+  | 'rawReadsFirstPublishedDate'
+  | 'sangerVcsFirstPublishedDate';
 
 export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = {
   bucketCount: number;
@@ -70,19 +70,15 @@ export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = {
 export type ProgramDonorPublishedAnalysisByDateRangeBucket = {
   date: string;
   donors: number;
-}
+};
 
 export type ProgramDonorPublishedAnalysisByDateRange = {
   title: DonorField;
   buckets: ProgramDonorPublishedAnalysisByDateRangeBucket[];
-}
+};
 
 export type ProgramDonorPublishedAnalysisByDateRangeQueryData = {
   programDonorPublishedAnalysisByDateRange: ProgramDonorPublishedAnalysisByDateRange[];
 };
 
-export type RangeButtons =
-  'All' |
-  '1Y' |
-  '1M' |
-  '1W';
+export type RangeButtons = 'All' | '1Y' | '1M' | '1W';

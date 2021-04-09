@@ -43,8 +43,8 @@ import {
   RangeButtons,
 } from './types';
 import Legend from './Legend';
-import { chartLineDict, rangeButtons } from './utils';
-import PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY.gql';
+import { chartLineMeta, rangeButtons } from './utils';
+import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY.gql';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
@@ -66,7 +66,7 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   > = {},
 ) => {
   const hook = useQuery<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>(
-    PROGRAM_DONOR_PUBLISHED_ANALYSIS_QUERY,
+    PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY,
     {
       ...options,
       skip: !dateRangeFrom || !dateRangeTo,
@@ -121,7 +121,7 @@ const ClinicalChart = ({
 
   // get data for chart lines - program donor published analyses
   // aggregated by date range
-  const donorFieldsByChartType = chartLineDict
+  const donorFieldsByChartType = chartLineMeta
     .filter(line => line.chartType === chartType)
     .map(line => line.field);
 
