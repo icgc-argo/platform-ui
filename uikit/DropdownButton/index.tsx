@@ -19,14 +19,13 @@
 
 import * as React from 'react';
 import Typography from 'uikit/Typography';
-import Button, { BUTTON_SIZES } from 'uikit/Button';
-import Icon from 'uikit/Icon';
+import Button from 'uikit/Button';
 import { css } from 'uikit';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useTheme } from 'uikit/ThemeProvider';
 import { SerializedStyles } from '@emotion/core';
 
-const MenuItem: typeof Typography = props => {
+const MenuItem: typeof Typography = (props) => {
   const theme = useTheme();
   return (
     <Typography
@@ -75,7 +74,7 @@ function DropdownButton<ValueType = string>({
 
   return (
     <Button
-      onClick={e => {
+      onClick={(e) => {
         setMenuShown(true);
         if (onClick) {
           onClick(e);
@@ -106,7 +105,7 @@ function DropdownButton<ValueType = string>({
             color: ${theme.colors.black};
           `}
         >
-          {menuItems.map(item => (
+          {menuItems.map((item) => (
             <MenuItem key={String(item.value)} onClick={() => onItemClick(item)} {...item}>
               {item.display}
             </MenuItem>

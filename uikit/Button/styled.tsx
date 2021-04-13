@@ -2,13 +2,42 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import FocusWrapper from 'uikit/FocusWrapper';
 
+const base = ({ theme, size, variant, disabled }) => css`
+  color: ${theme.button.textColors[variant].default};
+  background-color: ${theme.button.colors[variant].default};
+  border-color: ${theme.button.borderColors[variant].default};
+  border-width: ${theme.button.borderWeights[size]};
+  padding: ${theme.button.paddings[size]};
+  cursor: ${disabled ? 'not-allowed' : 'pointer'};
+  font-size: ${theme.button.fontSizes[size]};
+
+  &:focus {
+    background-color: ${theme.button.colors[variant].focus};
+  }
+
+  &:hover {
+    background-color: ${theme.button.colors[variant].hover};
+    border-color: ${theme.button.borderColors[variant].hover};
+  }
+
+  &:active {
+    background-color: ${theme.button.colors[variant].active};
+    border-color: ${theme.button.borderColors[variant].active};
+  }
+`;
+
+const disabled = ({ theme, variant }) => css`
+  background-color: ${theme.button.colors[variant].disabled};
+  border-color: ${theme.button.borderColors[variant].disabled};
+  color: ${theme.button.textColors[variant].disabled};
+`;
+
 const StyledButton = styled<
   typeof FocusWrapper,
   {
     size: 'sm' | 'md';
     variant: 'primary' | 'secondary' | 'text';
     disabled: boolean;
-    loading: boolean;
   }
 >(FocusWrapper)`
   ${({ theme }) => css(theme.typography.default)};
@@ -24,32 +53,10 @@ const StyledButton = styled<
   text-transform: uppercase;
   border-style: solid;
 
-  border-width: ${({ theme, size }) => theme.button.borderWeights[size]};
-  padding: ${({ theme, size }) => theme.button.paddings[size]};
-  color: ${({ theme, variant }) => theme.button.textColors[variant].default};
-  cursor: ${({ disabled, loading }) => (disabled || loading ? 'not-allowed' : 'pointer')};
-  font-size: ${({ theme, size }) => theme.button.fontSizes[size]};
-  background-color: ${({ theme, variant }) => theme.button.colors[variant].default};
-  border-color: ${({ theme, variant }) => theme.button.borderColors[variant].default};
-
-  &:focus {
-    background-color: ${({ theme, variant }) => theme.button.colors[variant].focus};
-  }
-
-  &:hover {
-    background-color: ${({ theme, variant }) => theme.button.colors[variant].hover};
-    border-color: ${({ theme, variant }) => theme.button.borderColors[variant].hover};
-  }
-
-  &:active {
-    background-color: ${({ theme, variant }) => theme.button.colors[variant].active};
-    border-color: ${({ theme, variant }) => theme.button.borderColors[variant].active};
-  }
+  ${base}
 
   &:disabled {
-    background-color: ${({ theme, variant }) => theme.button.colors[variant].disabled};
-    border-color: ${({ theme, variant }) => theme.button.borderColors[variant].disabled};
-    color: ${({ theme, variant }) => theme.button.textColors[variant].disabled};
+    ${disabled}
   }
 `;
 export default StyledButton;

@@ -25,7 +25,6 @@ import FileSelectButton from 'uikit/FileSelectButton';
 import { SubMenu } from 'uikit/SubMenu';
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
-import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 import { Collapsible } from 'uikit/PageLayout';

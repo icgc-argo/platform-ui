@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled-base';
 
 const FocusWrapper = styled('button')`
@@ -33,11 +31,5 @@ const FocusWrapper = styled('button')`
     box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
   }
 `;
-
-FocusWrapper.propTypes = {
-  /*
-   * Don't forget about little old prop types!
-   */
-};
 
 export default FocusWrapper;
