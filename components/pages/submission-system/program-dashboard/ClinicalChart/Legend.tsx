@@ -18,13 +18,15 @@
  */
 
 import React, { useState } from 'react';
+import { find } from 'lodash';
 import styled from '@emotion/styled';
 import Icon from 'uikit/Icon';
 import Button from 'uikit/Button';
 import theme from 'uikit/theme/defaultTheme';
 import Typography from 'uikit/Typography';
 import { css } from 'uikit';
-import { chartLineColors } from './utils';
+import { chartLineMeta } from './utils';
+import { ChartType, DonorField } from './types';
 
 const StyledLegend = styled('div')`
   background: ${theme.colors.white};
@@ -32,14 +34,14 @@ const StyledLegend = styled('div')`
   border: 1px solid ${theme.colors.grey_1};
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   display: flex;
-  left: -195px;
+  left: -60px;
   padding: 5px 3px;
   position: absolute;
   top: -140px;
-  width: 270px;
+  width: 135px;
   .legend-column {
     padding: 0 2px;
-    width: 50%;
+    width: 100%;
   }
   .legend-title {
     margin-bottom: 3px;
@@ -71,27 +73,14 @@ const StyledLegendLabel = styled('label')`
   }
 `;
 
-const dnaTitles = [
-  'DNA Raw Reads',
-  'Alignment',
-  'Sanger VC',
-  'Mutect2',
-];
-
-const rnaTitles = [
-  'RNA Raw Reads',
-  'RNA-Seq1',
-  'RNA-Seq2'
-];
-
 const LegendButton = (
   { isOpen, setIsOpen }:
-  { isOpen: boolean, setIsOpen: any }
+    { isOpen: boolean, setIsOpen: any }
 ) => (
   <Button
     variant="secondary"
     onClick={() => setIsOpen(!isOpen)}
-    >
+  >
     Legend
     <Icon
       css={css`
@@ -100,27 +89,27 @@ const LegendButton = (
       name={isOpen ? 'times' : 'chevron_right'}
       fill="accent2_dark"
       height={'9px'}
-      />
+    />
   </Button>
 );
 
 const LegendInput = (
-  { activeLines, handleLegendInput, title }:
-  { activeLines: string[], handleLegendInput: any, title: string }
+  { field, handleLegendInput, isActive, title }:
+    { field: DonorField, handleLegendInput: any, isActive: boolean, title: string }
 ) => (
   <StyledLegendLabel>
     <input
-      checked={activeLines.includes(title)}
-      onClick={() => handleLegendInput(title)}
+      checked={isActive}
+      onChange={() => handleLegendInput(field)}
       type="checkbox"
-      value={title}
-      />
+      value={field}
+    />
     <span
       className="legend-input-color"
       css={css`
-        background: ${chartLineColors[title]};
+        background: ${find(chartLineMeta, { field: field }).color};
       `}
-      />
+    />
     <span className="legend-input-title">
       {title.includes('Raw Reads') ? 'Raw Reads' : title}
     </span>
@@ -128,8 +117,8 @@ const LegendInput = (
 );
 
 const Legend = (
-  { activeLines, handleLegendInput }:
-  { activeLines: string[], handleLegendInput: any }
+  { chartType, activeLines, handleLegendInput }:
+    { chartType: ChartType, activeLines: string[], handleLegendInput: any }
 ) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -139,35 +128,42 @@ const Legend = (
       <LegendButton
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        />
+      />
       {isOpen && (
         <StyledLegend>
           <div className="legend-column">
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>DNA PIPELINE</Typography>
             </div>
-            {dnaTitles.map((title: string) => (
-              <LegendInput
-                activeLines={activeLines}
-                handleLegendInput={handleLegendInput}
-                key={title}
-                title={title}
+            {chartLineMeta
+              .filter(line => line.dataType === 'DNA' && line.chartType === chartType)
+              .map((line => (
+                <LegendInput
+                  field={line.field as DonorField}
+                  handleLegendInput={handleLegendInput}
+                  isActive={activeLines.includes(line.field)}
+                  key={line.title}
+                  title={line.title}
                 />
-            ))}
+              )))}
           </div>
-          <div className="legend-column">
+          {/*
+          // not using RNA yet
+           <div className="legend-column">
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
             </div>
-            {rnaTitles.map((title: string) => (
-              <LegendInput
-                activeLines={activeLines}
-                handleLegendInput={handleLegendInput}
-                key={title}
-                title={title}
+            {chartLineMeta
+              .filter(line => line.dataType === 'RNA' && line.chartType === chartType)
+              .map((line => (
+                <LegendInput
+                  handleLegendInput={handleLegendInput}
+                  isActive={activeLines.includes(line.title)}
+                  key={line.title}
+                  title={line.title}
                 />
-            ))}
-          </div>
+              )))}
+          </div> */}
         </StyledLegend>
       )}
     </div>

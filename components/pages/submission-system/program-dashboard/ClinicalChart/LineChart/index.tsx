@@ -18,10 +18,28 @@
  */
 
 import React from 'react';
-import { differenceInDays, eachQuarterOfInterval, getQuarter, getYear, isAfter, isBefore, compareAsc } from 'date-fns';
+import { find } from 'lodash';
+import {
+  compareAsc,
+  differenceInDays,
+  eachQuarterOfInterval,
+  format as formatDate,
+  getQuarter,
+  getYear,
+  isAfter,
+  isBefore,
+} from 'date-fns';
 import { styled } from 'uikit';
-import { chartLineColors, convertUnixEpochToJSEpoch, getMinMax } from './utils';
-import { ChartLine, ChartType, DataLine, DataObj, DataPoint, PointsCoordinates } from './types';
+import { chartLineMeta } from '../utils';
+import { getMaxY } from './utils';
+import {
+  ChartLine,
+  ChartType,
+  DataBucket,
+  DataItem,
+  DonorField,
+  PointsCoordinates
+} from '../types';
 import theme from 'uikit/theme/defaultTheme';
 
 const options = {
@@ -59,7 +77,6 @@ const makePointsString = (points: PointsCoordinates) => {
 
 const LineChart = ({
   activeLines,
-  chartType,
   data,
   hasQuarterLines = false,
   hasYAxisThresholdLine = false,
@@ -73,7 +90,7 @@ const LineChart = ({
 }: {
   activeLines: string[];
   chartType: ChartType;
-  data: DataObj;
+  data: DataItem[];
   hasQuarterLines?: boolean;
   hasYAxisThresholdLine?: boolean;
   height: number;
@@ -85,7 +102,7 @@ const LineChart = ({
   yAxisTitle: string;
 }) => {
   // setup Y axis
-  const maxY = Math.max(yAxisThreshold, getMinMax({ data, minMax: 'max', coord: 'y' }));
+  const maxY = Math.max(yAxisThreshold, getMaxY(data));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
@@ -99,8 +116,8 @@ const LineChart = ({
   // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataPoints = data.lines[0].points;
-  const xTicksCount = dataPoints.length;
+  const dataBuckets = data[0].buckets;
+  const xTicksCount = dataBuckets.length;
   // distance between 2 ticks
   const xTickDistance = chartWidth / xTicksCount;
   // distance between farthest left & right ticks
@@ -115,37 +132,41 @@ const LineChart = ({
   const verticalLineEnd = height - padding;
 
   // setup dates
-  const datesUnixEpoch = dataPoints.map((p: DataPoint) => p.x);
-  const datesJSEpoch = datesUnixEpoch.map((d: any) => new Date(convertUnixEpochToJSEpoch(d)));
-  const day0 = datesJSEpoch[0];
-  const dayLast = datesJSEpoch[datesJSEpoch.length-1];
-  const daysInData = differenceInDays(dayLast, day0);
+  // each data item has the same number of buckets
+  // with the same dates
+  const dataDates = dataBuckets.map((bucket: DataBucket) => new Date(bucket.date));
   const dataDayRange = {
-    start: day0,
-    end: dayLast,
+    start: dataDates[0],
+    end: dataDates[dataDates.length - 1],
   };
+  const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
-  const chartLines = data.lines
-    .filter((line: DataLine) => activeLines.includes(line.title) || data.lines.length === 1)
-    .map((line: DataLine) => ({
-      ...line,
-      points: line.points
-        .map((point: DataPoint, i: number) => {
+  const chartLines = data
+    .filter((dataItem: DataItem) =>
+      activeLines.includes(dataItem.title) || data.length === 1
+    )
+    .map((dataItem: DataItem) => ({
+      field: dataItem.title as DonorField,
+      title: find(chartLineMeta, { field: dataItem.title }).title,
+      points: dataItem.buckets
+        .map((dataBucket: DataBucket, i: number) => {
           const xCoordinate = getX(i);
-          const yCoordinate = Math.floor(chartHeight - topPadding / 2 - (Number(point.y) / maxY) * chartHeight + padding / 2);
+          const yCoordinate = Math.floor(
+            chartHeight - topPadding / 2 - (dataBucket.donors / maxY) * chartHeight + padding / 2
+          );
           return `${xCoordinate},${yCoordinate}`;
         })
         .join(' ')
     }));
-  
+
   // setup axis elements
   const Axis = ({ points }: { points: PointsCoordinates }) => (
     <polyline
       fill="none"
+      points={makePointsString(points)}
       stroke={options.colors.axisBorder}
       strokeWidth={options.strokeWidth}
-      points={makePointsString(points)}
-      />
+    />
   );
 
   const XAxis = () => (
@@ -156,7 +177,7 @@ const LineChart = ({
         y1: verticalLineEnd,
         y2: verticalLineEnd,
       }}
-      />
+    />
   );
 
   const YAxis = () => (
@@ -167,7 +188,7 @@ const LineChart = ({
         y1: verticalLineStart,
         y2: verticalLineEnd,
       }}
-      />
+    />
   );
 
   const YAxisThresholdLine = () => {
@@ -179,21 +200,21 @@ const LineChart = ({
           <text
             x={horizontalLineStart + options.fontSize}
             y={Math.floor(yCoordinate - options.fontSize * 0.5)}
-            >
+          >
             {yAxisThresholdLabel}
           </text>
         )}
-      <polyline
-        fill="none"
-        points={makePointsString({
-          x1: horizontalLineStart,
-          x2: horizontalLineEnd,
-          y1: yCoordinate,
-          y2: yCoordinate,
-        })}
-        stroke={options.colors.yAxisThresholdBorder}
-        strokeDasharray={options.yAxisThresholdDashArray}
-        strokeWidth={options.strokeWidth}
+        <polyline
+          fill="none"
+          points={makePointsString({
+            x1: horizontalLineStart,
+            x2: horizontalLineEnd,
+            y1: yCoordinate,
+            y2: yCoordinate,
+          })}
+          stroke={options.colors.yAxisThresholdBorder}
+          strokeDasharray={options.yAxisThresholdDashArray}
+          strokeWidth={options.strokeWidth}
         />
       </TextStyleGroup>
     );
@@ -203,20 +224,20 @@ const LineChart = ({
     const quartersInRange = eachQuarterOfInterval(dataDayRange)
       .filter((quarter: Date) => isAfter(quarter, dataDayRange.start) &&
         isBefore(quarter, dataDayRange.end));
-    
+
     const quartersLines = quartersInRange.reduce((acc, curr: Date) => {
       // check if quarters fall on the same day as a tick.
       // this is to help with positioning - otherwise they'll be
       // ~2 pixels off due to SVG rendering.
-      const quarterTickIndex = datesJSEpoch
+      const quarterTickIndex = dataDates
         .filter((d: Date) => compareAsc(d, curr) === 0)
-        .map((d: Date) => datesJSEpoch.indexOf(d))[0];
+        .map((d: Date) => dataDates.indexOf(d))[0];
 
       const xCoordinate = Number(quarterTickIndex >= 0
         ? getX(quarterTickIndex)
         : xTicksStart + (
-            differenceInDays(curr, day0) / daysInData * xWidthAllTicks
-          ));
+          differenceInDays(curr, dataDayRange.start) / daysInData * xWidthAllTicks
+        ));
 
       return ([
         ...acc,
@@ -225,25 +246,25 @@ const LineChart = ({
           tooltip: `${getYear(curr)} Q${getQuarter(curr)}`,
         }
       ])
-    },[]);
+    }, []);
 
     return (
       <g
         stroke={options.colors.quarterBorder}
         strokeDasharray={options.quarterLineStrokeDashArray}
         strokeWidth={options.strokeWidth}
-        >
-          {quartersLines.map(({ xCoordinate }: { xCoordinate: number }) => (
-            <polyline
-              key={xCoordinate}
-              points={makePointsString({
-                x1: xCoordinate,
-                x2: xCoordinate,
-                y1: verticalLineStart,
-                y2: verticalLineEnd,
-              })}
-              />
-          ))}
+      >
+        {quartersLines.map(({ xCoordinate }: { xCoordinate: number }) => (
+          <polyline
+            key={xCoordinate}
+            points={makePointsString({
+              x1: xCoordinate,
+              x2: xCoordinate,
+              y1: verticalLineStart,
+              y2: verticalLineEnd,
+            })}
+          />
+        ))}
       </g>
     );
   };
@@ -256,7 +277,7 @@ const LineChart = ({
         fill="none"
         stroke={options.colors.axisBorder}
         strokeWidth={options.strokeWidth}
-        >
+      >
         {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
           const tickX = getX(index);
           return (
@@ -268,7 +289,7 @@ const LineChart = ({
                 y1: yStart,
                 y2: yEnd,
               })}
-              />
+            />
           );
         })}
       </g>
@@ -281,7 +302,7 @@ const LineChart = ({
         fill="none"
         stroke={options.colors.axisBorder}
         strokeWidth={options.strokeWidth}
-        >
+      >
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
           const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
@@ -299,17 +320,26 @@ const LineChart = ({
   };
 
   const LabelsXAxis = () => {
-    const yStart = height - padding + (options.fontSize * 1.75);
+    const yStart = height - padding + (options.fontSize * 1.6);
+    const dateLabels = dataDates
+      .map((date: Date) => formatDate(date, 'dd MMM yyyy'));
+
     return (
       <TextStyleGroup
         textAnchor="middle"
-        >
-        {dataPoints.map((point: DataPoint, index: number) => {
+      >
+        {dateLabels.map((label: string, index: number) => {
           const xCoordinate = getX(index);
           return (
             <text key={xCoordinate}>
-              {point.label.split(' ').map((word: string, wordIndex: number) => (
-                <tspan key={word+wordIndex} x={xCoordinate} y={yStart + wordIndex * (options.fontSize + 2)}>{word}</tspan>
+              {label.split(' ').map((word: string, wordIndex: number) => (
+                <tspan
+                  key={word + wordIndex}
+                  x={xCoordinate}
+                  y={yStart + wordIndex * (options.fontSize + 1)}
+                >
+                  {word}
+                </tspan>
               ))}
             </text>
           );
@@ -323,10 +353,10 @@ const LineChart = ({
       <TextStyleGroup>
         <text
           textAnchor="middle"
-          transform={`translate(${options.fontSize - 2},${height/2}) rotate(-90)`}
+          transform={`translate(${options.fontSize - 2},${height / 2}) rotate(-90)`}
           x={0}
           y={0}
-          >
+        >
           # {yAxisTitle}
         </text>
         {new Array(numberOfHorizontalGuides + 1).fill(0).map((axisValue: number, index: number) => {
@@ -340,7 +370,7 @@ const LineChart = ({
               textAnchor="end"
               x={xCoordinate}
               y={yCoordinate}
-              >
+            >
               {parseFloat(labelStr).toFixed(precision)}
             </text>
           );
@@ -354,13 +384,13 @@ const LineChart = ({
       <g
         fill="none"
         strokeWidth={options.chartStrokeWidth}
-        >
+      >
         {chartLines.map((chartLine: ChartLine) => (
           <polyline
             key={chartLine.title}
             points={chartLine.points}
-            stroke={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
-            />
+            stroke={find(chartLineMeta, { field: chartLine.field }).color || options.colors.chartLineDefault}
+          />
         ))}
       </g>
     );
@@ -376,15 +406,16 @@ const LineChart = ({
           });
           return (
             <g
-              fill={chartLineColors[chartLine.title] || options.colors.chartLineDefault}
-              >
+              fill={find(chartLineMeta, { field: chartLine.field }).color || options.colors.chartLineDefault}
+              key={chartLine.field}
+            >
               {pointsCoordinates.map((point) => (
                 <circle
                   cx={point.xCoordinate}
                   cy={point.yCoordinate}
                   key={point.xCoordinate}
                   r={options.pointRadius}
-                  />
+                />
               ))}
             </g>
           )
@@ -397,7 +428,7 @@ const LineChart = ({
     <>
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        >
+      >
         <XAxis />
         <TicksXAxis />
         <LabelsXAxis />

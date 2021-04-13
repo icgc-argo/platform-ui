@@ -359,3 +359,7 @@ export const COUNTRIES = [
   { code: 'ZM', name: 'Zambia' },
   { code: 'ZW', name: 'Zimbabwe' },
 ];
+
+// first published date of clinical/molecular program donor data in song
+// e.g. rawReadsFirstPublishedDate, mutectFirstPublishedDate
+export const FIRST_PUBLISHED_DATE_DONOR_DATA = new Date('2021-01-01T00:00:00.000Z');

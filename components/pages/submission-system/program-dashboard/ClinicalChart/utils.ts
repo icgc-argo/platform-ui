@@ -16,55 +16,86 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { DataLine, DataObj, DataPoint } from './types';
-import theme from 'uikit/theme/defaultTheme';
 
-export const getMinMax = (
-  { data, minMax, coord }: {
-    data: DataObj;
-    minMax: 'min' | 'max';
-    coord: 'x' | 'y';
-  }) => {
-  const allCoord = [
-    ...data.lines
-    .map((line: DataLine) => line.points
-      .map((point: DataPoint) => Number(point[coord]))
-    )
-    .reduce((acc, curr) => ([...acc, ...curr]), [])
-  ];
-  return Math[minMax](...allCoord);
-};
-export const convertUnixEpochToJSEpoch = (unixEpoch: number) => unixEpoch * 1000;
+import theme from 'uikit/theme/defaultTheme';
 
 export const rangeButtons = [
   {
-    data: 700,
-    title: 'All',
+    days: null,
     label: 'All',
+    title: 'All',
   },
   {
-    data: 365,
-    title: '1Y',
+    days: 365,
     label: 'One year',
+    title: '1Y',
   },
   {
-    data: 30,
-    title: '1M',
+    days: 30,
     label: 'One month',
+    title: '1M',
   },
   {
-    data: 7,
-    title: '1W',
+    days: 7,
     label: 'One week',
-  }
+    title: '1W',
+  },
 ];
 
-export const chartLineColors = {
-  'Alignment': theme.colors.accent1_dark,
-  'DNA Raw Reads': theme.colors.accent4_dark,
-  'Mutect2': theme.colors.error_dark,
-  'RNA Raw Reads': theme.colors.accent3_dark,
-  'RNA-Seq1': theme.colors.secondary_dark,
-  'RNA-Seq2': theme.colors.accent2_dark,
-  'Sanger VC': theme.colors.warning_dark,
-};
+export const chartLineMeta = [
+  { 
+    chartType: 'clinical',
+    color: theme.colors.accent2_dark,
+    dataType: null,
+    field: 'createdAt', // TODO: update with clinical published date
+    title: null,
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.accent1_dark,
+    dataType: 'DNA',
+    field: 'alignmentFirstPublishedDate',
+    title: 'Alignment',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.accent4_dark,
+    dataType: 'DNA',
+    field: 'rawReadsFirstPublishedDate',
+    title: 'DNA Raw Reads',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.error_dark,
+    dataType: 'DNA',
+    field: 'mutectFirstPublishedDate',
+    title: 'Mutect2',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.warning_dark,
+    dataType: 'DNA',
+    field: 'sangerVcsFirstPublishedDate',
+    title: 'Sanger VC',
+  },
+  // RNA
+  // not used right now
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.accent3_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA Raw Reads',
+  // },
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.secondary_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA-Seq1',
+  // },
+  // {
+  //   chartType: 'molecular',
+  //   color: theme.colors.accent2_dark,
+  //   dataType: 'RNA',
+  //   title: 'RNA-Seq2',
+  // },
+];
