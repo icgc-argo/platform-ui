@@ -18,6 +18,7 @@
  */
 
 import * as React from 'react';
+import { css } from 'uikit';
 import Icon from '../Icon';
 import useTheme from '../utils/useTheme';
 import { BUTTON_VARIANTS, BUTTON_SIZES } from './constants';
@@ -54,12 +55,13 @@ const Button = React.forwardRef<
      */
     id?: string;
     isLoading?: boolean;
+    Loader?: any;
   }
 >(
   (
     {
       children,
-      onClick = e => {},
+      onClick = (e) => {},
       disabled = false,
       variant = BUTTON_VARIANTS.PRIMARY,
       size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
@@ -67,6 +69,7 @@ const Button = React.forwardRef<
       className,
       id,
       isLoading: controlledLoadingState,
+      Loader,
     },
     ref = React.createRef(),
   ) => {
@@ -79,38 +82,50 @@ const Button = React.forwardRef<
      */
     const shouldShowLoading = controlledLoadingState === true || (isLoading && isAsync);
 
-    const onClickFn = async event => {
+    const onClickFn = async (event) => {
       setLoading(true);
       await onClick(event);
       setLoading(false);
     };
+
+    const LoaderComp = (props) => (Loader ? <Loader {...props} /> : <DefaultLoader {...props} />);
+
     return (
       <StyledButton
         ref={ref}
         onClick={isAsync ? onClickFn : onClick}
-        disabled={disabled || shouldShowLoading}
+        disabled={disabled}
         size={size}
         variant={variant}
         className={className}
         id={id}
       >
-        <span style={{ visibility: shouldShowLoading ? 'hidden' : 'visible' }}>{children}</span>
-        <span
-          style={{
-            position: 'absolute',
-            visibility: shouldShowLoading ? 'visible' : 'hidden',
-          }}
+        <div
+          css={css`
+            display: ${shouldShowLoading ? 'block' : 'none'};
+          `}
         >
-          <Icon
-            name="spinner"
-            width={'20px'}
-            height={'20px'}
-            fill={theme.button.textColors[variant].default}
-          />
-        </span>
+          <LoaderComp variant={variant} theme={theme} />
+        </div>
+        <div
+          css={css`
+            display: ${shouldShowLoading ? 'none' : 'block'};
+          `}
+        >
+          {children}
+        </div>
       </StyledButton>
     );
   },
+);
+
+const DefaultLoader = ({ variant, theme }) => (
+  <Icon
+    name="spinner"
+    width={'20px'}
+    height={'20px'}
+    fill={theme.button.textColors[variant].default}
+  />
 );
 
 export default Button;
