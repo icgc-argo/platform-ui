@@ -47,6 +47,18 @@ export const instructionBoxButtonContentStyle = css`
 export const instructionBoxButtonStyle = css`
   margin-top: 10px;
 `;
+export const instructionBoxLoadingButtonStyle = (theme) => css`
+  ${instructionBoxButtonStyle}
+  background-color: ${theme.colors.grey_2} ;
+  border-color: ${theme.colors.grey_2};
+  &:hover,
+  &:disabled,
+  &:focus {
+    background-color: ${theme.colors.grey_2};
+    border-color: ${theme.colors.grey_2};
+    cursor: not-allowed;
+  }
+`;
 
 export const CellContentCenter = styled('div')`
   width: 100%;
