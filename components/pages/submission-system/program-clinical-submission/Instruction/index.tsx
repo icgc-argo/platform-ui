@@ -125,7 +125,7 @@ export default ({
           <FileSelectButton
             id="button-submission-file-select" // For Selenium
             isAsync
-            css={instructionBoxButtonStyle}
+            css={isUploading ? instructionBoxLoadingButtonStyle : instructionBoxButtonStyle}
             variant="secondary"
             size={BUTTON_SIZES.SM}
             inputProps={{
@@ -135,6 +135,7 @@ export default ({
             onFilesSelect={handleFileUploadClick}
             isLoading={isUploading}
             disabled={!uploadEnabled}
+            Loader={(props) => <InstructionLoader text="VALIDATING FILES" {...props} />}
           >
             <span css={instructionBoxButtonContentStyle}>
               <Icon
@@ -153,13 +154,14 @@ export default ({
           </Typography>
           <Button
             id="button-validate-submission" // For Selenium
-            css={instructionBoxButtonStyle}
+            css={isValidating ? instructionBoxLoadingButtonStyle : instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
             onClick={handleValidationClick}
             isLoading={isValidating}
             isAsync
+            Loader={(props) => <InstructionLoader text="VALIDATING SUBMISSION" {...props} />}
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>
