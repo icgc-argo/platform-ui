@@ -18,12 +18,14 @@
  */
 
 import { storiesOf } from '@storybook/react';
-import { renderToString } from 'react-dom/server';
 import { action } from '@storybook/addon-actions';
 import { radios, boolean, text } from '@storybook/addon-knobs';
 import React from 'react';
-import Button, { BUTTON_VARIANTS, BUTTON_SIZES } from '.';
+import Button from '.';
 import { asyncDummyFunc, placeholderImageURLRoot } from '../testUtil';
+import Icon from 'uikit/Icon';
+import { css } from 'uikit';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from './constants';
 
 const dummyClick = action('Clicked!');
 
@@ -61,6 +63,42 @@ const ButtonStories = storiesOf(`${__dirname}`, module)
         <span style={{ color: '#64D518' }}>Red Span</span>
         <img src={`${placeholderImageURLRoot}/20/20`} />
         <img src={`${placeholderImageURLRoot}/7/7`} />
+      </Button>
+    );
+  })
+  .add('Loader on click', () => {
+    const props = createKnobs();
+
+    return (
+      <Button onClick={async () => new Promise((resolve) => setTimeout(resolve, 1500))} isAsync>
+        Click me!
+      </Button>
+    );
+  })
+  .add('Custom Loader', () => {
+    const props = createKnobs();
+    const CustomLoader = ({ theme, variant }) => (
+      <div>
+        <Icon
+          name="spinner"
+          width={'12px'}
+          height={'12px'}
+          fill={theme.button.textColors[variant].default}
+          css={css`
+            margin-right: 4px;
+          `}
+        />
+        VALIDATING FILES
+      </div>
+    );
+
+    return (
+      <Button
+        Loader={CustomLoader}
+        onClick={async () => new Promise((resolve) => setTimeout(resolve, 1500))}
+        isAsync
+      >
+        Upload files...
       </Button>
     );
   });

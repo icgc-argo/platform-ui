@@ -1,7 +1,7 @@
 export type ButtonVariant = 'primary' | 'secondary' | 'text';
 export type ButtonSize = 'sm' | 'md';
 export type ButtonLoader = {
-  shouldShowLoading: boolean;
+  text?: string;
   variant: string;
   theme: any;
 };
