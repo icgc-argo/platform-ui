@@ -19,13 +19,14 @@
 
 import * as React from 'react';
 import Typography from 'uikit/Typography';
-import Button, { BUTTON_SIZES } from 'uikit/Button';
+import Button from 'uikit/Button';
 import InstructionBox from 'uikit/InstructionBox';
 import Icon from 'uikit/Icon';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
+  instructionBoxLoadingButtonStyle,
 } from '../../common';
 import FileSelectButton from 'uikit/FileSelectButton';
 import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
@@ -33,6 +34,34 @@ import Link from 'uikit/Link';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { css } from 'uikit';
+import { BUTTON_SIZES } from 'uikit/Button/constants';
+import { ButtonLoader } from 'uikit/Button/types';
+
+const InstructionLoader = ({ theme, text }: ButtonLoader) => {
+  const disabledColor = theme.colors.accent2_dark;
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        color: ${disabledColor};
+      `}
+    >
+      <Icon
+        name="spinner"
+        width={'12px'}
+        height={'12px'}
+        fill={disabledColor}
+        css={css`
+          margin-right: 4px;
+        `}
+      />
+      {text}
+    </div>
+  );
+};
 
 export default ({
   validationEnabled,
@@ -96,7 +125,7 @@ export default ({
           <FileSelectButton
             id="button-submission-file-select" // For Selenium
             isAsync
-            css={instructionBoxButtonStyle}
+            css={isUploading ? instructionBoxLoadingButtonStyle : instructionBoxButtonStyle}
             variant="secondary"
             size={BUTTON_SIZES.SM}
             inputProps={{
@@ -106,6 +135,7 @@ export default ({
             onFilesSelect={handleFileUploadClick}
             isLoading={isUploading}
             disabled={!uploadEnabled}
+            Loader={(props) => <InstructionLoader text="VALIDATING FILES" {...props} />}
           >
             <span css={instructionBoxButtonContentStyle}>
               <Icon
@@ -124,13 +154,14 @@ export default ({
           </Typography>
           <Button
             id="button-validate-submission" // For Selenium
-            css={instructionBoxButtonStyle}
+            css={isValidating ? instructionBoxLoadingButtonStyle : instructionBoxButtonStyle}
             variant="primary"
             size={BUTTON_SIZES.SM}
             disabled={!validationEnabled}
             onClick={handleValidationClick}
             isLoading={isValidating}
             isAsync
+            Loader={(props) => <InstructionLoader text="VALIDATING SUBMISSION" {...props} />}
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>

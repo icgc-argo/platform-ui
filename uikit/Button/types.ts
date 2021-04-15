@@ -17,19 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled-base';
-
-const FocusWrapper = styled('button')`
-  border: none;
-  background: none;
-  padding: 0px;
-  cursor: pointer;
-  box-shadow: none;
-  outline: none;
-  transition: box-shadow 0.1s ease-in;
-  &:focus {
-    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
-  }
-`;
-
-export default FocusWrapper;
+export type ButtonVariant = 'primary' | 'secondary' | 'text';
+export type ButtonSize = 'sm' | 'md';
+export type ButtonLoader = {
+  text?: string;
+  variant: string;
+  theme: any;
+};
