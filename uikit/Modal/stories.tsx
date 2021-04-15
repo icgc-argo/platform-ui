@@ -24,8 +24,8 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 
 import Modal from '.';
 import { ICON_NAMES, BUILT_IN_ICON_COLORS } from '../Icon';
-import { BUTTON_SIZES } from '../Button';
 import Icons from 'uikit/Icon/icons';
+import { BUTTON_SIZES } from 'uikit/Button/constants';
 
 const ModalStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {

@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { chartLineColors } from './utils';
-
 export type DataPoint = {
   label: string;
   tooltip: string[];
@@ -26,20 +24,20 @@ export type DataPoint = {
   y: string;
 };
 
-export type DataLine = {
-  points: DataPoint[];
-  title: null | keyof typeof chartLineColors;
+export type DataBucket = {
+  date: string;
+  donors: number;
 };
 
 export type ChartLine = {
+  field: DonorField;
   points: string;
-  title: null | keyof typeof chartLineColors;
+  title: ChartLineTitle;
 };
 
-export type DataObj = {
-  chartType: 'clinical' | 'molecular';
-  committed: number;
-  lines: DataLine[];
+export type DataItem = {
+  title: DonorField;
+  buckets: DataBucket[];
 };
 
 export type ChartType = 'clinical' | 'molecular';
@@ -50,3 +48,37 @@ export type PointsCoordinates = {
   y1: number;
   y2: number;
 };
+
+export type ChartLineTitle = null | string;
+
+export type DonorField =
+  | 'createdAt'
+  // TODO replace with clinical date
+  | 'mutectFirstPublishedDate'
+  | 'alignmentFirstPublishedDate'
+  | 'rawReadsFirstPublishedDate'
+  | 'sangerVcsFirstPublishedDate';
+
+export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = {
+  bucketCount: number;
+  dateRangeFrom: string;
+  dateRangeTo: string;
+  donorFields: DonorField[];
+  programShortName: string;
+};
+
+export type ProgramDonorPublishedAnalysisByDateRangeBucket = {
+  date: string;
+  donors: number;
+};
+
+export type ProgramDonorPublishedAnalysisByDateRange = {
+  title: DonorField;
+  buckets: ProgramDonorPublishedAnalysisByDateRangeBucket[];
+};
+
+export type ProgramDonorPublishedAnalysisByDateRangeQueryData = {
+  programDonorPublishedAnalysisByDateRange: ProgramDonorPublishedAnalysisByDateRange[];
+};
+
+export type RangeButtons = 'All' | '1Y' | '1M' | '1W';

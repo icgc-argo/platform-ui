@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { css } from '@emotion/core';
-import { find } from 'lodash';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
@@ -27,9 +26,11 @@ import Link from 'uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';
-import { adjustData, makeMockData } from '../ClinicalChart/mockData';
-import { rangeButtons } from '../ClinicalChart/utils';
 import { ChartType } from '../ClinicalChart/types';
+
+// TODO: retire this component when we don't need the "coming soon"
+// component and the feature flag anymore.
+// include <ClinicalChart /> directly in the program dashboard.
 
 type CardProps = {
   chartType: ChartType;
@@ -43,19 +44,6 @@ const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
 export default ({ chartType, comingSoonLink, title }: CardProps) => {
-  const [lineChartData, setLineChartData] = useState(null);
-  const [activeRangeBtn, setActiveRangeBtn] = useState('All');
-
-  // TODO: when API is ready, this should be a reusable hook,
-  // or data requests should be made at the page level. TBD
-  useEffect(() => {
-    const days = find(rangeButtons, { title: activeRangeBtn }).data;
-    const mockData = makeMockData(days);
-    const adjustedData = adjustData(mockData);
-    const clinicalData = find(adjustedData, { chartType });
-    setLineChartData(clinicalData);
-  }, [activeRangeBtn]);
-
   const getStartedLink = (
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>
@@ -65,13 +53,10 @@ export default ({ chartType, comingSoonLink, title }: CardProps) => {
     </Typography>
   );
 
-  return FEATURE_DASHBOARD_CHARTS_ENABLED && lineChartData !== null
+  return FEATURE_DASHBOARD_CHARTS_ENABLED
     ? (
       <ClinicalChart
-        activeRangeBtn={activeRangeBtn}
         chartType={chartType}
-        data={lineChartData}
-        setActiveRangeBtn={setActiveRangeBtn}
         title={title}
         />
     ) : (

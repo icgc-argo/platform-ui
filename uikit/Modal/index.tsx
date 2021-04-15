@@ -21,10 +21,12 @@ import React from 'react';
 import Color from 'color';
 import { styled, css } from '..';
 import Typography from '../Typography';
-import Button, { BUTTON_SIZES, BUTTON_VARIANTS, ButtonSize } from '../Button';
+import Button from '../Button';
 import Icon from '../Icon';
 import FocusWrapper from '../FocusWrapper';
 import { UikitIconNames } from 'uikit/Icon/icons';
+import { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button/constants';
+import { ButtonSize } from 'uikit/Button/types';
 
 export const ModalContainer = styled('div')`
   position: relative;

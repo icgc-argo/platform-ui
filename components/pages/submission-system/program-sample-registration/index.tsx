@@ -24,7 +24,7 @@ import union from 'lodash/union';
 import * as React from 'react';
 import { Row } from 'react-grid-system';
 import { css } from 'uikit';
-import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
+import Button from 'uikit/Button';
 import Container from 'uikit/Container';
 import Link from 'uikit/Link';
 import TitleBar from 'uikit/TitleBar';
@@ -50,6 +50,7 @@ import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import { getConfig } from 'global/config';
 import { DOCS_REGISTERING_SAMPLES_PAGE } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button/constants';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],

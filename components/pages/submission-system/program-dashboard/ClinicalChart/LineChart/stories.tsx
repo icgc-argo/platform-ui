@@ -17,19 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled-base';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
+import mockData from './mockData';
+import LineChart from '.';
+import { DataItem } from '../types';
 
-const FocusWrapper = styled('button')`
-  border: none;
-  background: none;
-  padding: 0px;
-  cursor: pointer;
-  box-shadow: none;
-  outline: none;
-  transition: box-shadow 0.1s ease-in;
-  &:focus {
-    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
-  }
-`;
+const activeLines = mockData.map(dataItem => dataItem.title);
 
-export default FocusWrapper;
+const LineChartStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
+  return (
+    <div style={{ width: 500, height: 300 }}>
+    <LineChart
+      activeLines={activeLines}
+      chartType="molecular"
+      data={mockData as DataItem[]}
+      hasQuarterLines
+      hasYAxisThresholdLine
+      height={300}
+      horizontalGuides={4}
+      precision={0}
+      width={500}
+      yAxisThreshold={200}
+      yAxisThresholdLabel="Y Axis Threshold"
+      yAxisTitle="Y Axis"
+    />
+    </div>
+  );
+});
+
+export default LineChartStories;

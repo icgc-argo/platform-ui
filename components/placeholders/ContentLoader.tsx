@@ -17,19 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled-base';
+import React from 'react';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import DnaLoader from 'uikit/DnaLoader';
 
-const FocusWrapper = styled('button')`
-  border: none;
-  background: none;
-  padding: 0px;
-  cursor: pointer;
-  box-shadow: none;
-  outline: none;
-  transition: box-shadow 0.1s ease-in;
-  &:focus {
-    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
-  }
-`;
+const ContentLoader = ({
+  title = '',
+  subtitle = ''
+}: {
+  title?: string;
+  subtitle?: string;
+}) => {
+  return (
+    <ContentPlaceholder
+      title={title}
+      subtitle={subtitle}
+      >
+      <DnaLoader />
+    </ContentPlaceholder>
+  );
+};
 
-export default FocusWrapper;
+export default ContentLoader;

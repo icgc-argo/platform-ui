@@ -17,19 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled-base';
+import { DataBucket, DataItem } from '../types';
 
-const FocusWrapper = styled('button')`
-  border: none;
-  background: none;
-  padding: 0px;
-  cursor: pointer;
-  box-shadow: none;
-  outline: none;
-  transition: box-shadow 0.1s ease-in;
-  &:focus {
-    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
-  }
-`;
-
-export default FocusWrapper;
+export const getMaxY = (data: DataItem[]) => {
+  const yValues = data
+    .map((dataItem: DataItem) => dataItem.buckets.map((bucket: DataBucket) => bucket.donors))
+    .reduce((acc, curr) => acc.concat(curr), []);
+  return Math.max(...yValues);
+};

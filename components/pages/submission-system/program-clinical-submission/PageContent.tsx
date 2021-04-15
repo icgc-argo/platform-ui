@@ -148,6 +148,7 @@ export default () => {
     'treatment',
     'chemotherapy',
     'hormone_therapy',
+    'immunotherapy',
     'radiation',
     'follow_up',
   ];

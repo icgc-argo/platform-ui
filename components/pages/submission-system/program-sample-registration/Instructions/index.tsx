@@ -21,7 +21,7 @@ import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import Link from 'uikit/Link';
 import * as React from 'react';
 import { css } from 'uikit';
-import Button, { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button';
+import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
@@ -41,6 +41,7 @@ import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button/constants';
 
 function Instructions({
   uploadEnabled,
