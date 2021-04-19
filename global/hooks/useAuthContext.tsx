@@ -50,7 +50,6 @@ const AuthContext = React.createContext<T_AuthContext>({
 export function AuthProvider({
   egoJwt,
   children,
-  initialPermissions,
 }: {
   egoJwt?: string;
   children: React.ReactElement;
@@ -62,21 +61,22 @@ export function AuthProvider({
     `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
   );
 
-  const [token, setTokenState] = React.useState<string>(egoJwt);
-  const [permissions, setPermissions] = React.useState<Array<string>>(initialPermissions);
+  const token = egoJwt;
+
+  const permissions = getPermissionsFromToken(egoJwt);
+
   const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
   const router = useRouter();
+
   const setToken = (token: string) => {
     Cookies.set(EGO_JWT_KEY, token);
-    setTokenState(token);
-    setPermissions(getPermissionsFromToken(token));
   };
+
   const removeToken = () => {
     Cookies.remove(EGO_JWT_KEY);
-    setTokenState(null);
-    setPermissions([]);
   };
+
   const logOut: T_AuthContext['logOut'] = (
     config = {
       toRoot: true,
@@ -93,7 +93,7 @@ export function AuthProvider({
   const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
     const modifiedOption = {
       ...(options || {}),
-      headers: { ...((options && options.headers) || {}), authorization: `Bearer ${token || ''}` },
+      headers: { ...((options && options.headers) || {}), authorization: `Bearer ${egoJwt || ''}` },
     };
 
     if (token && !isValidJwt(token)) {
@@ -112,18 +112,14 @@ export function AuthProvider({
     }
   };
 
-  if (token && !isValidJwt(token)) {
-    if (token !== egoJwt && isValidJwt(egoJwt)) {
-      setToken(egoJwt);
-    } else {
-      logOut();
-    }
+  if (egoJwt && !isValidJwt(egoJwt)) {
+    logOut();
   }
 
   const updateToken = () => {
     return fetch(updateTokenUrl, {
       credentials: 'include',
-      headers: { Authorization: `Bearer ${token || ''}` },
+      headers: { Authorization: `Bearer ${egoJwt || ''}` },
       body: null,
       method: 'GET',
       mode: 'cors',
@@ -140,9 +136,9 @@ export function AuthProvider({
   };
 
   const authData = {
-    token,
+    token: egoJwt,
     logOut,
-    data: token ? decodeToken(token || '') : null,
+    data: egoJwt ? decodeToken(egoJwt || '') : null,
     updateToken,
     fetchWithEgoToken,
     permissions,
