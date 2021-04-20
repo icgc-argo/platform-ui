@@ -151,6 +151,7 @@ export default () => {
     'immunotherapy',
     'radiation',
     'follow_up',
+    'family_history',
   ];
 
   const fileNavigatorFiles = map(
