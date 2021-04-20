@@ -25,7 +25,6 @@ import {
   DataAnalysisInfo,
   FileEntityData,
   DonorRecord,
-  FileAccess,
 } from './types';
 import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
@@ -35,7 +34,7 @@ type EntityData = {
   programShortName: string;
   loading: boolean;
   data: FileEntityData;
-  access: FileAccess;
+  access: FileAccessState;
   size: number;
 };
 
@@ -70,8 +69,8 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       access: entity.file_access === 'controlled' && FileAccessState.CONTROLLED,
       program: entity.study_id,
       checksum: get(entity, 'file.md5sum'),
-      repoName: get(entity, 'repositories.hits.edges[0].node.country'),
-      repoCountry: get(entity, 'repositories.hits.edges[0].node.name'),
+      repoName: get(entity, 'repositories.hits.edges[0].node.name'),
+      repoCountry: get(entity, 'repositories.hits.edges[0].node.country'),
     };
 
     const dataAnalysis: DataAnalysisInfo = {
