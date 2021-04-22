@@ -27,11 +27,24 @@ import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { useQuery } from '@apollo/react-hooks';
+import { get } from 'lodash';
+import USER_PROFILE from './USER_PROFILE.gql';
+import { FileAccessState } from './types';
 
 const FileEntity = ({ fileId }) => {
-  const { programShortName, data, loading } = useEntityData({ fileId });
+  const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
+  const { token: egoJwt } = useAuthContext();
+  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
-  const isUserLoggedIn = false;
+  const loading = profileLoading || fileLoading;
+
+  const isDacoApproved = get(userProfile, 'self.isDacoApproved');
+
+  const isUserLoggedIn = !!egoJwt;
+  const isDownloadEnabled =
+    access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
   return (
     <PageContainer>
@@ -56,7 +69,7 @@ const FileEntity = ({ fileId }) => {
                 <FileTitleBar
                   programShortName={programShortName}
                   fileId={fileId}
-                  isUserLoggedIn={isUserLoggedIn}
+                  isDownloadEnabled={isDownloadEnabled}
                 />
               </ContentHeader>
 

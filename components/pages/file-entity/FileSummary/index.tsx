@@ -21,8 +21,9 @@ import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
 import SimpleTable from 'uikit/Table/SimpleTable';
 
-import { FileSummaryInfo, FileAccessState } from '../types';
+import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
+import { startCase } from 'lodash';
 
 export default ({ data }: { data: FileSummaryInfo }) => {
   const tableData = {
@@ -38,7 +39,7 @@ export default ({ data }: { data: FileSummaryInfo }) => {
         `}
       >
         <>{getAccessIcon(data.access)}</>
-        <>{data.access}</>
+        <> {startCase(data.access)}</>
       </div>
     ),
     Program: data.program,

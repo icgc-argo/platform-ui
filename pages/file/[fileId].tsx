@@ -19,7 +19,7 @@
 
 import { createPage } from 'global/utils/pages';
 import FileEntityPage from 'components/pages/file-entity';
-import Error, { ERROR_STATUS_KEY } from 'pages/_error';
+import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
@@ -29,7 +29,7 @@ import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
 export default createPage({
-  isPublic: false,
+  isPublic: true,
   isAccessible: async ({ initialPermissions }) => true,
   getInitialProps: async () => {
     const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
@@ -43,7 +43,7 @@ export default createPage({
   const { fileId } = usePageQuery<{ fileId: string }>();
   const filters = sqonBuilder.has('object_id', fileId).build();
 
-  // small query to ensure the fileId is valid
+  // small query to ensure the fileId is valid and user has access
   const { loading, data } = useQuery<{
     file: { hits: { total: number } };
   }>(VALID_ENTITY_CHECK, {
@@ -59,7 +59,7 @@ export default createPage({
     setLoaderShown(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
-    return <Error />;
+    return <ErrorPage statusCode={404} />;
   } else if (loading) {
     setLoaderShown(true);
     return <div></div>;

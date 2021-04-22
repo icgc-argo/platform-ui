@@ -26,7 +26,7 @@ import ClientError from 'components/pages/ClientError';
 
 export const ERROR_STATUS_KEY = 'statusCode';
 
-class Error extends React.Component {
+class Error extends React.Component<{ statusCode: number }> {
   static getInitialProps({ res, err }) {
     if (get(err, ERROR_STATUS_KEY) === 403) {
       if (res) {

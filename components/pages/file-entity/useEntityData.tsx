@@ -34,7 +34,11 @@ type EntityData = {
   programShortName: string;
   loading: boolean;
   data: FileEntityData;
+  access: FileAccessState;
+  size: number;
 };
+
+const noData = { programShortName: null, access: null, size: null, data: null };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   const filters = sqonBuilder.has(FileCentricDocumentField.object_id, fileId).build();
@@ -45,26 +49,28 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   });
 
   if (loading) {
-    return { programShortName: null, data: null, loading: true };
+    return { ...noData, loading: true };
   } else {
     const entity = get(data, 'file.hits.edges[0].node', null);
 
     if (!entity) {
-      return { programShortName: null, data: null, loading: false };
+      return { ...noData, loading: false };
     }
 
     const programShortName = entity.study_id;
+    const size = get(entity, 'file.size', 0);
+    const access = entity.file_access;
 
     const summary: FileSummaryInfo = {
       fileId: entity.file_id,
       objectId: entity.object_id,
       fileFormat: entity.file_type,
-      size: get(entity, 'file.size'),
-      access: entity.file_access === 'controlled' && FileAccessState.CONTROLLED,
+      size,
+      access,
       program: entity.study_id,
       checksum: get(entity, 'file.md5sum'),
-      repoName: get(entity, 'repositories.hits.edges[0].node.country'),
-      repoCountry: get(entity, 'repositories.hits.edges[0].node.name'),
+      repoName: get(entity, 'repositories.hits.edges[0].node.name'),
+      repoCountry: get(entity, 'repositories.hits.edges[0].node.country'),
     };
 
     const dataAnalysis: DataAnalysisInfo = {
@@ -104,7 +110,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       donorRecords,
     };
 
-    return { programShortName, data: entityData, loading };
+    return { programShortName, access, size, data: entityData, loading };
   }
 };
 

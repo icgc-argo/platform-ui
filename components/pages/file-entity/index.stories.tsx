@@ -64,7 +64,7 @@ const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic'
           ) : (
             <>
               <ContentHeader>
-                <FileTitleBar programShortName={'TEST-CA'} fileId="123" isUserLoggedIn={true} />
+                <FileTitleBar programShortName={'TEST-CA'} fileId="123" isDownloadEnabled={true} />
               </ContentHeader>
 
               <ContentBody>
