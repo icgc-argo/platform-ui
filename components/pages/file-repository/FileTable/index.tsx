@@ -140,7 +140,7 @@ const useFileRepoPaginationState = () => {
 export default () => {
   const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
 
-  const { token } = useAuthContext();
+  const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
   const theme = useTheme();
 
@@ -173,8 +173,8 @@ export default () => {
   };
 
   const getDownloadStatus = (isDownloadable: boolean) => {
-    const canUserDownload = token && isDownloadable;
-    const toolTipText = token
+    const canUserDownload = egoJwt && isDownloadable;
+    const toolTipText = egoJwt
       ? isDownloadable
         ? 'Download file'
         : 'You do not have permission to download this file'

@@ -28,7 +28,7 @@ import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 
 type T_AuthContext = {
-  token?: string;
+  egoJwt?: string;
   logOut: (config?: { toRoot?: boolean }) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
@@ -38,7 +38,7 @@ type T_AuthContext = {
 };
 
 const AuthContext = React.createContext<T_AuthContext>({
-  token: undefined,
+  egoJwt: undefined,
   logOut: () => {},
   updateToken: async () => {},
   data: null,
@@ -60,8 +60,6 @@ export function AuthProvider({
     EGO_API_ROOT,
     `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
   );
-
-  const token = egoJwt;
 
   const permissions = getPermissionsFromToken(egoJwt);
 
@@ -96,7 +94,7 @@ export function AuthProvider({
       headers: { ...((options && options.headers) || {}), authorization: `Bearer ${egoJwt || ''}` },
     };
 
-    if (token && !isValidJwt(token)) {
+    if (egoJwt && !isValidJwt(egoJwt)) {
       const newJwt = (await refreshJwt()) as string;
       if (isValidJwt(newJwt)) {
         setToken(newJwt);
@@ -136,7 +134,7 @@ export function AuthProvider({
   };
 
   const authData = {
-    token: egoJwt,
+    egoJwt,
     logOut,
     data: egoJwt ? decodeToken(egoJwt || '') : null,
     updateToken,
