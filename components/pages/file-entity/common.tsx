@@ -65,7 +65,7 @@ export const TableDiv = styled('div')`
   margin-top: 15px;
 `;
 
-export const getAccessIcon = (state: FileAccessState) =>
+export const getAccessIcon = (state: string) =>
   ({
     [FileAccessState.CONTROLLED]: (
       <Icon

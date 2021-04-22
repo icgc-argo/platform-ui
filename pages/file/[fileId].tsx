@@ -19,7 +19,7 @@
 
 import { createPage } from 'global/utils/pages';
 import FileEntityPage from 'components/pages/file-entity';
-import Error, { ERROR_STATUS_KEY } from 'pages/_error';
+import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
@@ -60,7 +60,7 @@ export default createPage({
     setLoaderShown(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
-    return <Error statusCode={404} />;
+    return <ErrorPage statusCode={404} />;
   } else if (loading) {
     setLoaderShown(true);
     return <div></div>;
