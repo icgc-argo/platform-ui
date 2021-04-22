@@ -66,7 +66,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       objectId: entity.object_id,
       fileFormat: entity.file_type,
       size: size,
-      access: entity.file_access === 'controlled' && FileAccessState.CONTROLLED,
+      access: entity.file_access,
       program: entity.study_id,
       checksum: get(entity, 'file.md5sum'),
       repoName: get(entity, 'repositories.hits.edges[0].node.name'),

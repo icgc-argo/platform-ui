@@ -31,20 +31,20 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
+import { FileAccessState } from './types';
 
 const FileEntity = ({ fileId }) => {
   const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
-  const { token: egoJwt, permissions } = useAuthContext();
+  const { token: egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
   const loading = profileLoading || fileLoading;
 
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
 
-  console.log('ego', egoJwt, permissions, access, isDacoApproved);
-
   const isUserLoggedIn = !!egoJwt;
-  const isDownloadEnabled = access === 'controlled' ? isUserLoggedIn && isDacoApproved : true;
+  const isDownloadEnabled =
+    access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
   return (
     <PageContainer>
