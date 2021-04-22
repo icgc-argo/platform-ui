@@ -35,7 +35,7 @@ import { FileAccessState } from './types';
 
 const FileEntity = ({ fileId }) => {
   const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
-  const { token: egoJwt } = useAuthContext();
+  const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
   const loading = profileLoading || fileLoading;
