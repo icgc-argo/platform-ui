@@ -51,7 +51,6 @@ export default createPage({
       filters,
     },
   });
-  console.log('data', data);
   const isValidEntity = !!get(data, 'file.hits.total', false);
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
