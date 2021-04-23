@@ -19,7 +19,7 @@
 
 const mockData = [
   {
-    "title": "createdAt",
+    "title": "coreCompletionDate",
     "buckets": [
       {
         "date": "2020-11-11T21:25:17.000Z",

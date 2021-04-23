@@ -55,8 +55,8 @@ export default ({
   isPendingApproval: boolean;
   submissionVersion: string;
 }) => {
-  const { token, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [token]);
+  const { egoJwt, permissions } = useAuthContext();
+  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
   const {
@@ -138,7 +138,7 @@ export default ({
       try {
         await approveClinicalSubmission();
 
-        updateClinicalSubmissionQuery(previous => ({
+        updateClinicalSubmissionQuery((previous) => ({
           ...previous,
           clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
             .clinicalSubmissions,

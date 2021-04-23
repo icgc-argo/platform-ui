@@ -52,8 +52,7 @@ export type PointsCoordinates = {
 export type ChartLineTitle = null | string;
 
 export type DonorField =
-  | 'createdAt'
-  // TODO replace with clinical date
+  | 'coreCompletionDate'
   | 'mutectFirstPublishedDate'
   | 'alignmentFirstPublishedDate'
   | 'rawReadsFirstPublishedDate'

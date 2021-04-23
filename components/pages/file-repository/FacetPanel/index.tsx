@@ -228,7 +228,7 @@ const useIdSearchQuery = (
 // encapsulate conditional release stage facet logic
 const getReleaseStageFacet = (presetFacets: FacetDetails[], commonFacetProps) => {
   const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
-  const { token: egoJwt } = useAuthContext();
+  const { egoJwt } = useAuthContext();
 
   if (FEATURE_ACCESS_FACET_ENABLED && !!egoJwt) {
     const facet = presetFacets.find((f) => f.facetPath === FileFacetPath.release_stage);

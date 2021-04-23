@@ -50,14 +50,14 @@ const ConditionalLink: React.ComponentType<{
 
 export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { token, permissions } = useAuthContext();
+  const { egoJwt, permissions } = useAuthContext();
 
   const canViewLinks = React.useMemo(() => {
     return !isCollaborator({
       permissions,
       programId: programShortName,
     });
-  }, [token]);
+  }, [egoJwt]);
 
   return (
     <DashboardCard cardHeight="170px">

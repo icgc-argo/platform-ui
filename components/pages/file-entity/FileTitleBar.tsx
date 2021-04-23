@@ -32,8 +32,8 @@ import sqonBuilder from 'sqon-builder';
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
-  isUserLoggedIn: boolean;
-}> = ({ programShortName, fileId, isUserLoggedIn }) => {
+  isDownloadEnabled: boolean;
+}> = ({ programShortName, fileId, isDownloadEnabled }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
@@ -61,7 +61,7 @@ export const FileTitleBar: React.ComponentType<{
         `}
       >
         <Tooltip
-          disabled={isUserLoggedIn}
+          disabled={isDownloadEnabled}
           unmountHTMLWhenHide
           position="left"
           interactive
@@ -75,7 +75,7 @@ export const FileTitleBar: React.ComponentType<{
             css={css`
               margin-right: 8px;
             `}
-            disabled={!isUserLoggedIn}
+            disabled={!isDownloadEnabled}
           >
             <DownloadIcon />
             FILE

@@ -111,7 +111,7 @@ type SampleRegistrationQueryResponse = {
 
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
-  const { token, permissions } = useAuthContext();
+  const { egoJwt, permissions } = useAuthContext();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -141,22 +141,22 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
-      token &&
+      egoJwt &&
       !isCollaborator({
         permissions,
         programId: props.program.shortName,
       })
     );
-  }, [token]);
+  }, [egoJwt]);
   const canWriteToProgram = React.useMemo(() => {
     return (
-      token &&
+      egoJwt &&
       canWriteProgram({
         permissions,
         programId: props.program.shortName,
       })
     );
-  }, [token]);
+  }, [egoJwt]);
 
   return (
     <div>
@@ -275,10 +275,10 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
     currentViewingProgramIndex,
   );
-  const { token, permissions } = useAuthContext();
+  const { egoJwt, permissions } = useAuthContext();
   const canSeeAllPrograms = React.useMemo(() => {
-    return token && isDccMember(permissions);
-  }, [token]);
+    return egoJwt && isDccMember(permissions);
+  }, [egoJwt]);
 
   return (
     <>
@@ -332,10 +332,10 @@ export default function SideMenu() {
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
   const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
 
-  const { data: egoTokenData, token, permissions } = useAuthContext();
+  const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 
-  const isDcc = React.useMemo(() => (token ? isDccMember(permissions) : false), [token]);
-  const isRdpc = React.useMemo(() => (token ? isRdpcMember(permissions) : false), [token]);
+  const isDcc = React.useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
+  const isRdpc = React.useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeRdpcs = isDcc;

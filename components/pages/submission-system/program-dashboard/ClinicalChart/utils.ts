@@ -47,7 +47,7 @@ export const chartLineMeta = [
     chartType: 'clinical',
     color: theme.colors.accent2_dark,
     dataType: null,
-    field: 'createdAt', // TODO: update with clinical published date
+    field: 'coreCompletionDate',
     title: null,
   },
   {
