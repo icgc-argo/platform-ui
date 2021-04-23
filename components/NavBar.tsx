@@ -17,12 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  SUBMISSION_PATH,
-  USER_PAGE_PATH,
-  FILE_REPOSITORY_PATH,
-  LOGIN_PAGE_PATH,
-} from 'global/constants/pages';
+import { SUBMISSION_PATH, USER_PAGE_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
@@ -43,14 +38,11 @@ import AppBar, {
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
-import { createRedirectURL } from 'global/utils/common';
-import { get } from 'lodash';
-import queryString from 'query-string';
-import urlJoin from 'url-join';
 import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
+import useAuthRedirect from 'global/hooks/useAuthRedirect';
 
 const NavBarLoginButton = () => {
   return (
@@ -90,46 +82,16 @@ const getUserRole = (egoJwt, permissions) => {
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
-  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
+  const { FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
   const canAccessSubmission = React.useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
-  const { asPath: path, query } = usePageContext();
-
-  const [loginPath, setLoginPath] = React.useState('');
+  const { asPath: path } = usePageContext();
   const [isModalVisible, setModalVisibility] = React.useState(false);
-
   const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    const redirect = get(query, 'redirect') as string;
-    if (redirect) {
-      const parsedRedirect = queryString.parseUrl(redirect);
-      const existingQuery = queryString.stringify(parsedRedirect.query);
-
-      const queryRedirect = createRedirectURL({
-        origin: location.origin,
-        path: parsedRedirect.url,
-        query: existingQuery,
-      });
-      setLoginPath(urlJoin(EGO_URL, queryRedirect));
-    } else if (path === '/' || path === LOGIN_PAGE_PATH) {
-      setLoginPath(EGO_URL);
-    } else {
-      const queryString = path.split('?')[1] || '';
-      const pathRoot = path.split('?')[0];
-
-      const redirect = createRedirectURL({
-        origin: location.origin,
-        path: pathRoot,
-        query: queryString,
-      });
-      setLoginPath(urlJoin(EGO_URL, redirect));
-    }
-  }, [path, query]);
-
+  const loginPath = useAuthRedirect();
   const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
 
   React.useEffect(() => {
