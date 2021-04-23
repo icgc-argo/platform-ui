@@ -59,7 +59,7 @@ const createUserInput = ({
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-const createUpdateProgramInput = formData => ({
+const createUpdateProgramInput = (formData) => ({
   name: formData.programName,
   description: formData.description,
   commitmentDonors: parseInt(formData.commitmentLevel),
@@ -90,8 +90,8 @@ const useTabState = () => {
     USERS: 'users' as TabValue,
   };
   const [activeTab, setActiveTab] = useUrlParamState('activeTab', TABS.USERS, {
-    serialize: v => v,
-    deSerialize: v => v as TabValue,
+    serialize: (v) => v,
+    deSerialize: (v) => v as TabValue,
   });
 
   return { activeTab, setActiveTab, TABS } as {
@@ -102,8 +102,8 @@ const useTabState = () => {
 };
 
 export default () => {
-  const { token, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [token]);
+  const { egoJwt, permissions } = useAuthContext();
+  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
 
   const { shortName: programShortName } = usePageQuery();
 
@@ -124,7 +124,7 @@ export default () => {
   const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
 
   const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       await sendUpdateProgram({
         variables: {
@@ -139,7 +139,7 @@ export default () => {
     }
   };
 
-  const onAddUserSubmit = async validData => {
+  const onAddUserSubmit = async (validData) => {
     // Close modal on submit. Toasts after completion and refetch will indicate completion.
     // TODO: Some sort of indicator that data is being sent
     setShowModal(false);

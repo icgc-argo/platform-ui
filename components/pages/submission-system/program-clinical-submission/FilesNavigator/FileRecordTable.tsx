@@ -119,12 +119,12 @@ export default ({
   submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { token, permissions } = useAuthContext();
+  const { egoJwt, permissions } = useAuthContext();
   const isDiffPreview = React.useMemo(
     () =>
       (isDccMember(permissions) || isDataSubmitter({ permissions, programId: programShortName })) &&
       isPendingApproval,
-    [token, isPendingApproval],
+    [egoJwt, isPendingApproval],
   );
   const theme = useTheme();
   const { records, stats, dataWarnings } = file;
