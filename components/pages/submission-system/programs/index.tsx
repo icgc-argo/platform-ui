@@ -45,7 +45,7 @@ import PROGRAMS_USERS_QUERY from './PROGRAMS_USERS_QUERY.gql';
 import DnaLoader from 'uikit/DnaLoader';
 import get from 'lodash/get';
 
-const TableFilterInput = props => (
+const TableFilterInput = (props) => (
   <Input
     aria-label="tableFilter"
     preset={INPUT_PRESETS.SEARCH}
@@ -67,14 +67,18 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   );
 
   if (programsWithUsers.length > 0) {
-    programs.forEach(p => {
-      const users = get(programsWithUsers.find(pp => p.shortName == pp.shortName), 'users', []);
+    programs.forEach((p) => {
+      const users = get(
+        programsWithUsers.find((pp) => p.shortName == pp.shortName),
+        'users',
+        [],
+      );
       p.administrators = filter(users, { role: 'ADMIN' });
     });
   }
 
-  const { token, permissions } = useAuthContext();
-  const canCreate = React.useMemo(() => token && isDccMember(permissions), [token]);
+  const { egoJwt, permissions } = useAuthContext();
+  const canCreate = React.useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
   const sortedPrograms = orderBy(programs, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {

@@ -18,7 +18,8 @@
  */
 
 export enum FileAccessState {
-  CONTROLLED = 'Controlled',
+  CONTROLLED = 'controlled',
+  OPEN = 'open',
 }
 
 export type FileSummaryInfo = {
@@ -65,7 +66,7 @@ export type FileRecord = {
   analysisWorkflow: string;
   fileFormat: string;
   fileSize: number;
-  actions: FileAccessState;
+  actions: string;
 };
 
 export type FileEntityData = {
