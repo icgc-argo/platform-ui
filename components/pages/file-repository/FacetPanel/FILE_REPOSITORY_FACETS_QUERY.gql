@@ -61,6 +61,12 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
+      clinical__donor__primary_site {
+        buckets {
+          key
+          doc_count
+        }
+      }
       analysis__workflow__workflow_name {
         buckets {
           key
