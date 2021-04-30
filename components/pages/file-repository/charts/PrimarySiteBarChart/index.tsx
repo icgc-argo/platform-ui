@@ -18,8 +18,41 @@
  */
 
 import SimpleBarChart from '../SimpleBarChart';
-import { primarySiteData } from '../SimpleBarChart/mockData';
+import PRIMARY_SITE_CHART from './PRIMARY_SITE_CHART.gql';
+import { FileRepoFiltersType } from '../../utils/types';
+import useFiltersContext from '../../hooks/useFiltersContext';
+import { useQuery } from '@apollo/react-hooks';
+
+type PrimarySiteChartData = {
+  file: {
+    aggregations: {
+      clinical__donor__primary_site: {
+        buckets: {
+          doc_count: number;
+          key: string;
+        }[];
+      };
+    };
+  };
+};
+type ChartQueryInput = {
+  filters: FileRepoFiltersType;
+};
 
 export default () => {
-  return <SimpleBarChart data={primarySiteData} type={'primary site'} />;
+  const { filters } = useFiltersContext();
+  const { data, loading } = useQuery<PrimarySiteChartData, ChartQueryInput>(PRIMARY_SITE_CHART, {
+    variables: {
+      filters,
+    },
+  });
+
+  const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
+    ? data.file.aggregations.clinical__donor__primary_site.buckets.map(bucket => ({
+        category: bucket.key,
+        count: bucket.doc_count,
+      }))
+    : [];
+
+  return <SimpleBarChart loading={loading} data={chartData} type={'primary site'} />;
 };
