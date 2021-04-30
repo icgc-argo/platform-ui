@@ -152,6 +152,7 @@ export default () => {
     'radiation',
     'follow_up',
     'family_history',
+    'exposure',
   ];
 
   const fileNavigatorFiles = map(
