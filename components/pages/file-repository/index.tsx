@@ -57,13 +57,13 @@ const RepositoryPage = () => {
               <QueryBarContainer />
               <StatsCard />
               <PaddedRow justify="between">
-                <PaddedColumn lg={6} md={12}>
+                <PaddedColumn xl={4} lg={4} md={12}>
                   <FileBarChart />
                 </PaddedColumn>
-                {/* <PaddedColumn xl={4} lg={6} md={12}>
+                <PaddedColumn xl={4} lg={4} md={12}>
                   <PrimarySiteBarChart />
-                </PaddedColumn> */}
-                <PaddedColumn lg={6} md={12}>
+                </PaddedColumn>
+                <PaddedColumn xl={4} lg={4} md={12}>
                   <ProgramBarChart />
                 </PaddedColumn>
               </PaddedRow>
