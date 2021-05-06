@@ -95,12 +95,6 @@ const createPresetFacets = (
     esDocumentField: FileCentricDocumentField.study_id,
   },
   {
-    name: displayNames['clinical.donor.primary_site'],
-    facetPath: FileFacetPath.clinical__donor__primary_site,
-    variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['clinical.donor.primary_site'],
-  },
-  {
     name: displayNames['donors.specimens.specimen_type'],
     facetPath: FileFacetPath.donors__specimens__specimen_type,
     variant: 'Basic',

@@ -11,7 +11,6 @@ export enum FileFacetPath {
   data_type = 'data_type',
   analysis_tools = 'analysis_tools',
   object_id = 'object_id',
-  clinical__donor__primary_site = 'clinical__donor__primary_site',
   donors__specimens__specimen_type = 'donors__specimens__specimen_type',
   donors__specimens__specimen_tissue_source = 'donors__specimens__specimen_tissue_source',
   analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',
@@ -62,9 +61,6 @@ export type FileRepoFacetsQueryData = {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.donors__specimens__specimen_tissue_source]: {
-        buckets: BucketAggregation[];
-      };
-      [FileFacetPath.clinical__donor__primary_site]: {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.analysis__workflow__workflow_name]: {
