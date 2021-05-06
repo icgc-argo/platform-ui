@@ -3,6 +3,7 @@ export enum FileCentricDocumentField {
   analysis_tools = 'analysis_tools',
   'analysis.variant_class' = 'analysis.variant_class',
   'analysis.workflow.workflow_name' = 'analysis.workflow.workflow_name',
+  'clinical.donor.primary_site' = 'clinical.donor.primary_site',
   data_category = 'data_category',
   data_type = 'data_type',
   'donors.donor_id' = 'donors.donor_id',
