@@ -58,7 +58,9 @@ export default ({
     ...(!!selectedFilesCount
       ? [
           {
-            display: `${pluralize('file', selectedFilesCount, true)} selected`,
+            display: `${selectedFilesCount.toLocaleString()} ${
+              pluralize('file', selectedFilesCount)
+            } selected`,
             value: DownloadOptionValues.ALL_FILES,
             css: css`
               color: ${theme.colors.secondary_dark};

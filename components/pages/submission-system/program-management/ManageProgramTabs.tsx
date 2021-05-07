@@ -169,8 +169,11 @@ export default () => {
         title: '',
         content: (
           <span>
-            {successNames.length.toLocaleString()} {pluralize('user', successNames.length)} {successNames.length === 1 ? ' was' : 'were'} added to the
-            program: <br />
+            {`${successNames.length.toLocaleString()} ${
+            pluralize('user', successNames.length)
+            } ${
+              successNames.length === 1 ? ' was' : 'were'
+            } added to the program: `} <br />
             <strong>{successNames.join(', ')}</strong>
           </span>
         ),
@@ -182,7 +185,9 @@ export default () => {
         title: '',
         content: (
           <span>
-            {failNames.length.toLocaleString()} {pluralize('user', failNames.length)} could not be added to the program:{' '}
+            {`${failNames.length.toLocaleString()} ${
+              pluralize('user', failNames.length)
+            } could not be added to the program: `}
             <br />
             <strong>{failNames.join(', ')}</strong>
           </span>

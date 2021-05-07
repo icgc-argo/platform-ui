@@ -363,7 +363,9 @@ export default () => {
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
                 {!!selectedRowsCount &&
-                  ` (${selectedRowsCount} ${pluralize('file', selectedRowsCount)} selected)`}
+                  ` (${selectedRowsCount.toLocaleString()} ${
+                    pluralize('file', selectedRowsCount)
+                  } selected)`}
               </Typography>
             </div>
           </div>
