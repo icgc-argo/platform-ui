@@ -122,7 +122,7 @@ const YAxis = ({ max, theme }) => {
           `}
           color={theme.colors.primary}
         >
-          {max}
+          {max.toLocaleString()}
         </AxisText>
         <br />
         <AxisText color={theme.colors.primary}>0</AxisText>
