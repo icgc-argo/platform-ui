@@ -163,7 +163,7 @@ const OptionsList: React.ComponentType<{
             margin-left: 5px;
           `}
         >
-          {option.doc_count}
+          {option.doc_count.toLocaleString()}
         </Tag>
       </div>
     );
