@@ -485,7 +485,7 @@ export default () => {
           variant="ERROR"
           interactionType="CLOSE"
           title={`${fileNames.length} of ${
-            (currentFileList.fileList || []).length
+            (currentFileList.fileList || []).length.toLocaleString()
           } files failed to upload: ${fileNames.join(', ')}`}
           content={message}
           onInteraction={onErrorClose(i)}
