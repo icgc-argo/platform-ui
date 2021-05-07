@@ -20,6 +20,7 @@
 import React from 'react';
 import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
+import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { css } from 'uikit';
@@ -168,7 +169,7 @@ export default () => {
         title: '',
         content: (
           <span>
-            {successNames.length} user{successNames.length === 1 ? ' was' : 's were'} added to the
+            {successNames.length.toLocaleString()} {pluralize('user', successNames.length)} {successNames.length === 1 ? ' was' : 'were'} added to the
             program: <br />
             <strong>{successNames.join(', ')}</strong>
           </span>
@@ -181,7 +182,7 @@ export default () => {
         title: '',
         content: (
           <span>
-            {failNames.length} user{failNames.length > 1 && 's'} could not be added to the program:{' '}
+            {failNames.length.toLocaleString()} {pluralize('user', failNames.length)} could not be added to the program:{' '}
             <br />
             <strong>{failNames.join(', ')}</strong>
           </span>
