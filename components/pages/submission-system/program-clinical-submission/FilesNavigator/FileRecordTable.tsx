@@ -22,6 +22,7 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 import orderBy from 'lodash/orderBy';
 import { css } from 'uikit';
 import Icon from 'uikit/Icon';
+import pluralize from 'pluralize';
 import {
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
@@ -70,15 +71,15 @@ const StatsArea = ({
 }) => {
   return (
     <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>{total} Total</StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>{total.toLocaleString()} Total</StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.ERROR} />
-          {isSubmissionValidated && fileStat.errorCount}{' '}
-          {fileStat.errorCount > 1 ? 'Errors' : 'Error'}
+          {isSubmissionValidated && fileStat.errorCount.toLocaleString()}{' '}
+          {pluralize('Error', fileStat.errorCount)}
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
