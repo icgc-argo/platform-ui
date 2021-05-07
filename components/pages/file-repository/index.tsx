@@ -28,7 +28,6 @@ import { Row, Col, setConfiguration } from 'react-grid-system';
 import { styled } from 'uikit';
 import FacetPanel from './FacetPanel';
 import FileBarChart from './charts/DataTypesChart';
-import PrimarySiteBarChart from './charts/PrimarySiteBarChart';
 import ProgramBarChart from './charts/ProgramBarChart';
 import StatsCard from './StatsCard';
 
@@ -57,13 +56,10 @@ const RepositoryPage = () => {
               <QueryBarContainer />
               <StatsCard />
               <PaddedRow justify="between">
-                <PaddedColumn lg={6} md={12}>
+                <PaddedColumn xl={6} lg={6} md={12}>
                   <FileBarChart />
                 </PaddedColumn>
-                {/* <PaddedColumn xl={4} lg={6} md={12}>
-                  <PrimarySiteBarChart />
-                </PaddedColumn> */}
-                <PaddedColumn lg={6} md={12}>
+                <PaddedColumn xl={6} lg={6} md={12}>
                   <ProgramBarChart />
                 </PaddedColumn>
               </PaddedRow>
