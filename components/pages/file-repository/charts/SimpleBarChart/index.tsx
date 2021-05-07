@@ -204,7 +204,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                   <div>
                     <span>{capitalize(category)}</span>
                     <br />
-                    <span>{`${count} ${pluralize('file', count)}`}</span>
+                    <span>{`${count.toLocaleString()} ${pluralize('file', count)}`}</span>
                   </div>
                 }
               >
