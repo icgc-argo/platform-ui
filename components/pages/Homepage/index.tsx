@@ -289,9 +289,9 @@ export default function Homepage() {
               >
                 Data Release 3.0
               </Link>{' '}
-              on the ICGC ARGO Data Platform, including a new addition of GATK Mutect2 variant
-              calling data, as well as additional donors released for PACA-CA, OCCAMS-GB, LUCA-KR
-              and PTC-SA.
+              on the ICGC ARGO Data Platform, including a <b>new</b> addition of GATK Mutect2
+              variant calling data, as well as additional donors released for PACA-CA, OCCAMS-GB,
+              LUCA-KR and PTC-SA.
               <div
                 css={css`
                   margin-top: 10px;
