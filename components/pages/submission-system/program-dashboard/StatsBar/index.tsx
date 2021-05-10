@@ -105,7 +105,7 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${data.programDonorSummaryStats.registeredDonorsCount}`}
+                quantity={data.programDonorSummaryStats.registeredDonorsCount.toLocaleString()}
                 description="Registered Donors"
               >
                 <PercentBar

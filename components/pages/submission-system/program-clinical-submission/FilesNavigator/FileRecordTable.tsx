@@ -85,19 +85,19 @@ const StatsArea = ({
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-          {isSubmissionValidated && fileStat.updateCount} Updated
+          {isSubmissionValidated && fileStat.updateCount.toLocaleString()} Updated
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NEW} />
-          {isSubmissionValidated && fileStat.newCount} New
+          {isSubmissionValidated && fileStat.newCount.toLocaleString()} New
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section faded={!isSubmissionValidated}>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill={FILE_STATE_COLORS.NONE} />
-          {isSubmissionValidated && fileStat.noUpdateCount} No Update
+          {isSubmissionValidated && fileStat.noUpdateCount.toLocaleString()} No Update
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>

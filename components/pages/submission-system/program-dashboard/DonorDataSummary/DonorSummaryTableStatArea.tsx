@@ -44,7 +44,7 @@ const DonorStatsArea = ({
   return (
     <StatAreaDisplay.Container className={className}>
       <StatAreaDisplay.Section>
-        {programDonorSummaryStats.registeredDonorsCount} donors
+        {programDonorSummaryStats.registeredDonorsCount.toLocaleString()} donors
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
@@ -54,7 +54,7 @@ const DonorStatsArea = ({
           <StatAreaDisplay.StarIcon
             fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.FULLY]}
           />
-          {programDonorSummaryStats.fullyReleasedDonorsCount} with fully released files
+          {programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()} with fully released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
@@ -62,7 +62,7 @@ const DonorStatsArea = ({
           <StatAreaDisplay.StarIcon
             fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.PARTIALLY]}
           />
-          {programDonorSummaryStats.partiallyReleasedDonorsCount} with partially released files
+          {programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()} with partially released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
@@ -71,7 +71,7 @@ const DonorStatsArea = ({
             fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.NO]}
             outline={RELEASED_STATE_STROKE_COLOURS[DonorDataReleaseState.NO]}
           />
-          {programDonorSummaryStats.noReleaseDonorsCount} with no released files
+          {programDonorSummaryStats.noReleaseDonorsCount.toLocaleString()} with no released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
@@ -91,7 +91,7 @@ const DonorStatsArea = ({
                 color: ${theme.colors.error_dark};
               `}
             >
-              {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount} Invalid donors
+              {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()} Invalid donors
             </span>
           </StatAreaDisplay.StatEntryContainer>
         </StatAreaDisplay.Section>
