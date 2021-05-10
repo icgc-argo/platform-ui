@@ -281,31 +281,35 @@ export default function Homepage() {
           newsItems={[
             <>
               <b>Announcements:</b>
-              <div>
-                <b>March 01, 2021:</b> The 17th Scientific Workshop & 4th ARGO Virtual Meeting
-                Plenary Session is open to the public for{' '}
-                <Link
-                  target="_blank"
-                  href="https://www.icgc-argo.org/page/128/17th-icgc-scientific-workshop"
-                >
-                  registration
-                </Link>
-                . ARGO updates from the Data Coordination Centre and the Secretariat will be
-                presented, as well as oral and poster presentations from participating ARGO programs
-                and technology development teams.
-              </div>
-
+              <br />
+              <b>May 10, 2021:</b> We are excited to announce{' '}
+              <Link
+                target="_blank"
+                href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-30"
+              >
+                Data Release 3.0
+              </Link>{' '}
+              on the ICGC ARGO Data Platform, including a <b>new</b> addition of GATK Mutect2
+              variant calling data, as well as additional donors released for PACA-CA, OCCAMS-GB,
+              LUCA-KR and PTC-SA.
               <div
                 css={css`
                   margin-top: 10px;
                 `}
               >
-                <b>October 23, 2020:</b> We are excited to announce{' '}
-                <Link target="_blank" href={DOCS_DATA_RELEASES_PAGE}>
-                  Data Release 2.0
-                </Link>{' '}
-                on the ICGC ARGO Data Platform, including additional data for PACA-CA, OCCAMS-GB,
-                and two newly released programs LUCA-KR and PTC-SA.
+                <div>
+                  <b>March 01, 2021:</b> The 17th Scientific Workshop & 4th ARGO Virtual Meeting
+                  Plenary Session is open to the public for{' '}
+                  <Link
+                    target="_blank"
+                    href="https://www.icgc-argo.org/page/128/17th-icgc-scientific-workshop"
+                  >
+                    registration
+                  </Link>
+                  . ARGO updates from the Data Coordination Centre and the Secretariat will be
+                  presented, as well as oral and poster presentations from participating ARGO
+                  programs and technology development teams.
+                </div>
               </div>
               <div
                 css={css`
@@ -314,21 +318,35 @@ export default function Homepage() {
               >
                 <b>New Features:</b>{' '}
                 <div>
-                  You can now compare changes in released ARGO Data Dictionary versions in the{' '}
-                  <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
-                    Dictionary Viewer
+                  Program data submission dashboards have been updated with new features to{' '}
+                  <Link
+                    target="_blank"
+                    href="https://docs.icgc-argo.org/docs/submission/submitted-data"
+                  >
+                    visualize progression of data submission.
+                  </Link>{' '}
+                  Also, 2 new clinical entities, Immunotherapy and Family History, have been added
+                  for clinical data submission. <br />
+                  <br />
+                  <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+                    ARGO Data Dictionary 1.9
                   </Link>
-                  . Data Dictionary version 1.5 has been released. Click the “Compare With” button
-                  to compare different versions of the dictionary.
+                  ,{' '}
+                  <Link
+                    target="_blank"
+                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-30"
+                  >
+                    Data Release 3.0
+                  </Link>{' '}
+                  and{' '}
+                  <Link
+                    target="_blank"
+                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases#april-27-2021-clinical-submission-and-program-dashboard-updates"
+                  >
+                    Software Release 1.93.0 - API 3.16.0
+                  </Link>{' '}
+                  are now available.
                 </div>
-              </div>
-              <div
-                css={css`
-                  margin-top: 10px;
-                `}
-              >
-                ARGO <b>Data Dictionary 1.5</b>, <b>Data Release 2.0</b> and{' '}
-                <b>Software Release 1.86.1 - API 3.13.2</b> are now available.
               </div>
             </>,
           ]}
