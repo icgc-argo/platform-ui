@@ -212,7 +212,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'October 23, 2020', releaseIteration: 2 }}
+              version={{ date: 'May 10, 2021', releaseIteration: 3 }}
             />
           )}
         </div>
