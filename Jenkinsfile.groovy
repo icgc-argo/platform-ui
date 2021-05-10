@@ -85,31 +85,9 @@ spec:
             }
         }
 
-        stage('Deploy to argo-dev') {
-            when {
-                branch "develop"
-            }
-            steps {
-                container('node') {
-                    sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
-                }
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
-                    }
-                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
-                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
-                }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
-                     [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
-                     [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
-                ])
-            }
-        }
-
         stage('Publish uikit') {
             when {
-                branch "develop"
+                branch "release/1.93.1"
             }
             steps {
                 container('node') {
@@ -134,9 +112,9 @@ spec:
             }
         }
 
-        stage('Deploy to argo-qa') {
+        stage('Deploy to QA and Publish Image') {
             when {
-                branch "master"
+                branch "release/1.93.1"
             }
             steps {
                 container('node') {
