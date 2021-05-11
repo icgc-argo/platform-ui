@@ -43,6 +43,7 @@ import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
 import MaintenancePage from 'components/pages/MaintenancePage';
 
+// if SSR send resp, if client side use Router
 const redirect = (res, url: string) => {
   if (res) {
     res.writeHead(302, {
@@ -147,7 +148,6 @@ class Root extends App<
     if (unauthorized && !AUTH_DISABLED) {
       const err = new Error('Forbidden') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 403;
-      throw err;
     }
 
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
@@ -184,7 +184,7 @@ class Root extends App<
     };
   }
 
-  isInOauthMode = props => {
+  isInOauthMode = (props) => {
     if (get(props.ctx.query, 'redirect')) {
       const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
       return get(parsed.query, 'isOauth') === 'true';
@@ -212,18 +212,18 @@ class Root extends App<
       method: 'GET',
       mode: 'cors',
     })
-      .then(res => {
+      .then((res) => {
         if (res.status !== 200) {
           enforceLogin({ ctx });
         }
         return res.text();
       })
-      .then(egoToken => {
+      .then((egoToken) => {
         if (isValidJwt(egoToken)) {
           return egoToken;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn(err);
         enforceLogin({ ctx });
         return err;
