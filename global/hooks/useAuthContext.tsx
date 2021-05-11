@@ -29,7 +29,7 @@ import refreshJwt from 'global/utils/refreshJwt';
 
 type T_AuthContext = {
   egoJwt?: string;
-  logOut: (config?: { toRoot?: boolean }) => void;
+  logOut: () => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
   fetchWithEgoToken: typeof fetch;
@@ -75,17 +75,12 @@ export function AuthProvider({
     Cookies.remove(EGO_JWT_KEY);
   };
 
-  const logOut: T_AuthContext['logOut'] = (
-    config = {
-      toRoot: true,
-    },
-  ) => {
+  const logOut: T_AuthContext['logOut'] = () => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
-    if (config.toRoot) {
-      router.push('/');
-    }
+    // let _app deal with Page.isAccessible or not
+    router.reload();
   };
 
   const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {

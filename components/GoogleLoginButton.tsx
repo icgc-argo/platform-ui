@@ -29,11 +29,11 @@ const GoogleLoginButton: React.ComponentType<
   return (
     <GoogleLogin
       {...props}
-      onClick={e => {
+      onClick={(e) => {
         if (props.onClick) {
           props.onClick(e);
         }
-        logOut({ toRoot: logoutToRoot });
+        logOut();
       }}
     />
   );
