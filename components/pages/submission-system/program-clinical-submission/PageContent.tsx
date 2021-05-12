@@ -153,6 +153,7 @@ export default () => {
     'follow_up',
     'family_history',
     'exposure',
+    'comorbidity',
   ];
 
   const fileNavigatorFiles = map(
