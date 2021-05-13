@@ -50,7 +50,6 @@ export default createPage({ isPublic: true })(() => {
     })
       .then((res) => res.text())
       .then((egoToken) => {
-        console.log('logged-in', egoToken);
         Cookies.set(EGO_JWT_KEY, egoToken);
         redirect(egoToken);
       })
