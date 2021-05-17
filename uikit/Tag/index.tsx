@@ -22,8 +22,18 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
 
-type TagVariant = 'INFO' | 'WARNING' | 'ERROR' | 'SUCCESS' | 'UPDATE' | 'NEUTRAL' | 'HIGHLIGHT';
+type TagVariant =
+  | 'EDITABLE'
+  | 'ERROR'
+  | 'HIGHLIGHT'
+  | 'INFO'
+  | 'NEUTRAL'
+  | 'SUCCESS'
+  | 'UPDATE'
+  | 'WARNING';
+
 export const TAG_VARIANTS: { [k in TagVariant]: k } = {
+  EDITABLE: 'EDITABLE',
   INFO: 'INFO',
   WARNING: 'WARNING',
   ERROR: 'ERROR',
@@ -49,6 +59,7 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
   border-radius: 8px;
   background-color: ${({ theme, variant = 'INFO' }) =>
     ({
+      [TAG_VARIANTS.EDITABLE]: theme.colors.accent2,
       [TAG_VARIANTS.ERROR]: theme.colors.error,
       [TAG_VARIANTS.WARNING]: theme.colors.warning,
       [TAG_VARIANTS.INFO]: theme.colors.secondary,
