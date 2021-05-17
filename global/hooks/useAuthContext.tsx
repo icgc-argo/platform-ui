@@ -26,10 +26,11 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
+import queryString from 'query-string';
 
 type T_AuthContext = {
   egoJwt?: string;
-  logOut: (config?: { toRoot?: boolean }) => void;
+  logOut: (path?: string) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
   fetchWithEgoToken: typeof fetch;
@@ -75,15 +76,14 @@ export function AuthProvider({
     Cookies.remove(EGO_JWT_KEY);
   };
 
-  const logOut: T_AuthContext['logOut'] = (
-    config = {
-      toRoot: true,
-    },
-  ) => {
+  const logOut: T_AuthContext['logOut'] = (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
-    if (config.toRoot) {
+    if (path) {
+      const { url, query } = queryString.parseUrl(path);
+      router.push({ pathname: url, query: { ...query, loggingOut: true } });
+    } else {
       router.push('/');
     }
   };
