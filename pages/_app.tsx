@@ -111,10 +111,20 @@ class Root extends App<
     }
 
     const egoJwt: string | undefined = nextCookies(ctx)[EGO_JWT_KEY];
-    const { res } = ctx;
+    const { res, query } = ctx;
     let refreshedJwt = null;
     let initialPermissions = getPermissionsFromToken(egoJwt);
-    if (egoJwt) {
+
+    const loggingOut = query.loggingOut || false;
+
+    if (loggingOut) {
+      if (Component.isPublic) {
+        const strippedPath = queryString.exclude(ctx.asPath, ['loggingOut']);
+        redirect(res, strippedPath);
+      } else {
+        redirect(res, '/');
+      }
+    } else if (egoJwt) {
       if (!isValidJwt(egoJwt)) {
         if (res) {
           removeCookie(res, EGO_JWT_KEY);
@@ -144,7 +154,7 @@ class Root extends App<
       ? !(await Component.isAccessible({ egoJwt, ctx, initialPermissions }))
       : false;
 
-    if (unauthorized && !AUTH_DISABLED) {
+    if (unauthorized && !AUTH_DISABLED && !loggingOut) {
       const err = new Error('Forbidden') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 403;
       throw err;
@@ -184,7 +194,7 @@ class Root extends App<
     };
   }
 
-  isInOauthMode = props => {
+  isInOauthMode = (props) => {
     if (get(props.ctx.query, 'redirect')) {
       const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
       return get(parsed.query, 'isOauth') === 'true';
@@ -212,18 +222,18 @@ class Root extends App<
       method: 'GET',
       mode: 'cors',
     })
-      .then(res => {
+      .then((res) => {
         if (res.status !== 200) {
           enforceLogin({ ctx });
         }
         return res.text();
       })
-      .then(egoToken => {
+      .then((egoToken) => {
         if (isValidJwt(egoToken)) {
           return egoToken;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn(err);
         enforceLogin({ ctx });
         return err;
