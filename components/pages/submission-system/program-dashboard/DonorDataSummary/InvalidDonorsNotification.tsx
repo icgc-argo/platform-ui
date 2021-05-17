@@ -46,10 +46,11 @@ export const InvalidDonorsNotification = ({ numInvalidDonors }: { numInvalidDono
     </div>
   );
 
-  const errorTitle = `${pluralize('donor', numInvalidDonors, true)} ${pluralize(
-    'is',
-    numInvalidDonors,
-  )} invalid and will be revoked if not corrected.`;
+  const errorTitle = `${numInvalidDonors.toLocaleString()} ${
+    pluralize('donor', numInvalidDonors)
+  } ${
+    pluralize('is', numInvalidDonors)
+  } invalid and will be revoked if not corrected.`;
 
   return numInvalidDonors > 0 ? (
     <Notification

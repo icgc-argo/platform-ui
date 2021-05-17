@@ -359,11 +359,13 @@ export default () => {
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay}-${endRowDisplay} of ${pluralize('file', totalEntries, true)}`}
+                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize('file', totalEntries)}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
                 {!!selectedRowsCount &&
-                  ` (${selectedRowsCount} ${pluralize('file', selectedRowsCount)} selected)`}
+                  ` (${selectedRowsCount.toLocaleString()} ${
+                    pluralize('file', selectedRowsCount)
+                  } selected)`}
               </Typography>
             </div>
           </div>

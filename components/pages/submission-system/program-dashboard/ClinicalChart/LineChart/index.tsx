@@ -371,7 +371,7 @@ const LineChart = ({
               x={xCoordinate}
               y={yCoordinate}
             >
-              {parseFloat(labelStr).toFixed(precision)}
+              {parseFloat(labelStr).toFixed(precision).toLocaleString()}
             </text>
           );
         })}

@@ -61,7 +61,7 @@ const StatsArea = (props: { stats?: FileStats }) => {
   return (
     <StatAreaDisplay.Container>
       <StatAreaDisplay.Section>
-        {stats ? stats.existingCount + stats.newCount : 0} Total
+        {stats ? (stats.existingCount + stats.newCount).toLocaleString() : 0} Total
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <Icon name="chevron_right" fill="grey_1" width="8px" />
@@ -69,13 +69,13 @@ const StatsArea = (props: { stats?: FileStats }) => {
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill="accent2" />
-          {stats && stats.newCount} New
+          {stats && stats.newCount.toLocaleString()} New
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
         <StatAreaDisplay.StatEntryContainer>
           <StatAreaDisplay.StarIcon fill="grey_1" />
-          {stats && stats.existingCount} Already Registered
+          {stats && stats.existingCount.toLocaleString()} Already Registered
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
     </StatAreaDisplay.Container>

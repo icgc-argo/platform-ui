@@ -228,7 +228,7 @@ export const Pipeline = (stats: PipelineStats) => {
 
   const pipeStats = renderableStats.map((stat) => (
     <Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
-      {stats[stat]}
+      {stats[stat].toLocaleString()}
     </Pipe.Item>
   ));
   return <Pipe>{pipeStats}</Pipe>;

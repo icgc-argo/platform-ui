@@ -69,7 +69,7 @@ const Users = ({
 
   return (
     <div>
-      <TableActionBar>{users.length} results</TableActionBar>
+      <TableActionBar>{users.length.toLocaleString()} results</TableActionBar>
       <UsersTable
         loading={loading}
         users={users}

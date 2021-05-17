@@ -40,7 +40,7 @@ const StatItem = ({ iconName, statType, count, loading = false }: StatItemProps)
   const displayStat =
     statType === 'fileSize'
       ? `${filesize(count)}`
-      : `${count} ${capitalize(pluralize(statType, count))}`;
+      : `${count.toLocaleString()} ${capitalize(pluralize(statType, count))}`;
 
   return (
     <Typography
