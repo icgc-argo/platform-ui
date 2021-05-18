@@ -486,7 +486,7 @@ export default () => {
           variant="ERROR"
           interactionType="CLOSE"
           title={`${fileNames.length} of ${
-            (currentFileList.fileList || []).length
+            (currentFileList.fileList || []).length.toLocaleString()
           } files failed to upload: ${fileNames.join(', ')}`}
           content={message}
           onInteraction={onErrorClose(i)}
@@ -501,7 +501,7 @@ export default () => {
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${allDataErrors.length} error(s) found in submission workspace`}
+            title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors.map(toDisplayError)}
             columnConfig={[
@@ -524,7 +524,7 @@ export default () => {
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.WARNING}
-            title={`${allDataWarnings.length} warning(s) found in submission workspace`}
+            title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
             errors={allDataWarnings.map(toDisplayError)}
             columnConfig={[

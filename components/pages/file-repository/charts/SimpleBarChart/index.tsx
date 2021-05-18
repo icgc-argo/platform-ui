@@ -122,7 +122,7 @@ const YAxis = ({ max, theme }) => {
           `}
           color={theme.colors.primary}
         >
-          {max}
+          {max.toLocaleString()}
         </AxisText>
         <br />
         <AxisText color={theme.colors.primary}>0</AxisText>
@@ -204,7 +204,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                   <div>
                     <span>{capitalize(category)}</span>
                     <br />
-                    <span>{`${count} ${pluralize('file', count)}`}</span>
+                    <span>{`${count.toLocaleString()} ${pluralize('file', count)}`}</span>
                   </div>
                 }
               >

@@ -60,7 +60,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
         </Col>
         <Col>
           <Typography variant="navigation">
-            Samples from this Specimen ({selectedSamples.length})
+            Samples from this Specimen ({selectedSamples.length.toLocaleString()})
           </Typography>
           <Samples samples={selectedSamples} />
         </Col>

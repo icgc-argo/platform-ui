@@ -66,7 +66,7 @@ const PercentageBar = ({
       `}
     >
       <VAlignedText>
-        {nom} <Icon name="slash" height="15px" fill="grey_2" /> {denom}
+        {nom.toLocaleString()} <Icon name="slash" height="15px" fill="grey_2" /> {denom.toLocaleString()}
       </VAlignedText>
       <VAlignedText
         css={css`

@@ -71,7 +71,7 @@ export default () => {
               margin-right: 5px;
             `}
           >
-            {loading ? '...' : data.program.commitmentDonors}
+            {loading ? '...' : data.program.commitmentDonors.toLocaleString()}
           </Typography>
           <Typography variant="caption" color="grey">
             Committed

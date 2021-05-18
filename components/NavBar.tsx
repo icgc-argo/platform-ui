@@ -53,55 +53,9 @@ import useClickAway from 'uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
 
 const NavBarLoginButton = () => {
-  return (
-    <Button>
-      <span
-        css={css`
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        `}
-      >
-        <Icon
-          name="google"
-          css={css`
-            margin-right: 5px;
-          `}
-        />
-        Login
-      </span>
-    </Button>
-  );
-};
-
-const getUserRole = (egoJwt, permissions) => {
-  if (!egoJwt) {
-    return null;
-  } else if (isDccMember(permissions)) {
-    return 'DCC Member';
-  } else if (isRdpcMember(permissions)) {
-    return 'RDPC User';
-  } else if (canReadSomeProgram(permissions)) {
-    return 'Program Member';
-  } else {
-    return null;
-  }
-};
-
-export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
-  const screenClass = useScreenClass();
-  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
-  const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
-  const canAccessSubmission = React.useMemo(() => {
-    return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
-  }, [egoJwt]);
-
   const { asPath: path, query } = usePageContext();
-
+  const { EGO_URL } = getConfig();
   const [loginPath, setLoginPath] = React.useState('');
-  const [isModalVisible, setModalVisibility] = React.useState(false);
-
-  const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
 
   React.useEffect(() => {
     const redirect = get(query, 'redirect') as string;
@@ -130,6 +84,64 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     }
   }, [path, query]);
 
+  return (
+    <a
+      id="link-login"
+      href={loginPath}
+      css={css`
+        align-self: center;
+        text-decoration: none;
+        padding: 0 16px;
+      `}
+    >
+      <Button>
+        <span
+          css={css`
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          `}
+        >
+          <Icon
+            name="google"
+            css={css`
+              margin-right: 5px;
+            `}
+          />
+          Login
+        </span>
+      </Button>
+    </a>
+  );
+};
+
+const getUserRole = (egoJwt, permissions) => {
+  if (!egoJwt) {
+    return null;
+  } else if (isDccMember(permissions)) {
+    return 'DCC Member';
+  } else if (isRdpcMember(permissions)) {
+    return 'RDPC User';
+  } else if (canReadSomeProgram(permissions)) {
+    return 'Program Member';
+  } else {
+    return null;
+  }
+};
+
+export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
+  const screenClass = useScreenClass();
+  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
+  const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
+  const canAccessSubmission = React.useMemo(() => {
+    return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
+  }, [egoJwt]);
+
+  const { asPath: path, query } = usePageContext();
+
+  const [isModalVisible, setModalVisibility] = React.useState(false);
+
+  const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
   const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
 
   React.useEffect(() => {
@@ -168,7 +180,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     {
       isLink: false,
       onClick: () => {
-        logOut();
+        logOut(path);
         setMobileDropdownOpen(false);
       },
       name: 'Logout',
@@ -180,20 +192,6 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
 
   const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
   const [usingProfileOptions, setUsingProfileOptions] = React.useState(true);
-
-  const loginButton = (
-    <a
-      id="link-login"
-      href={loginPath}
-      css={css`
-        align-self: center;
-        text-decoration: none;
-        padding: 0 16px;
-      `}
-    >
-      <NavBarLoginButton />
-    </a>
-  );
 
   const mobileDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
   useClickAway({
@@ -266,7 +264,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={Link} />
                 ))}
 
-            {!userModel && loginButton}
+            {!userModel && <NavBarLoginButton />}
 
             {userModel && (
               <div

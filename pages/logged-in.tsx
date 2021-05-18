@@ -19,7 +19,6 @@
 
 import { getConfig } from 'global/config';
 import { EGO_JWT_KEY } from 'global/constants';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
 import React from 'react';
@@ -28,13 +27,16 @@ import DnaLoader from 'uikit/DnaLoader';
 import useTheme from 'uikit/utils/useTheme';
 import urlJoin from 'url-join';
 import { getPermissionsFromToken } from 'global/utils/egoJwt';
+import { useRouter } from 'next/router';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
+  const router = useRouter();
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
 
   const redirect = (token: string) => {
-    location.assign(getDefaultRedirectPathForUser(getPermissionsFromToken(token)));
+    const redirect = getDefaultRedirectPathForUser(getPermissionsFromToken(token));
+    router.push(redirect);
   };
 
   React.useEffect(() => {
@@ -46,12 +48,12 @@ export default createPage({ isPublic: true })(() => {
       method: 'GET',
       mode: 'cors',
     })
-      .then(res => res.text())
-      .then(egoToken => {
+      .then((res) => res.text())
+      .then((egoToken) => {
         Cookies.set(EGO_JWT_KEY, egoToken);
         redirect(egoToken);
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn('err: ', err);
         redirect(null);
       });

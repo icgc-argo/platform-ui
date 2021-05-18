@@ -278,7 +278,7 @@ export default function ProgramIDRegistration() {
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             onClearClick={handleClearClick}
-            title={`${schemaOrValidationErrors.length} error(s) found in uploaded file`}
+            title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
             errors={schemaOrValidationErrors.map(toDisplayError)}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'

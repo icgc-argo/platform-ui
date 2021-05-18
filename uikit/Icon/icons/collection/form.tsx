@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2021 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,26 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import GoogleLogin from 'uikit/Button/GoogleLogin';
-import useAuthContext from 'global/hooks/useAuthContext';
+import { css } from '@emotion/core';
 
-const GoogleLoginButton: React.ComponentType<
-  React.ComponentProps<typeof GoogleLogin> & {
-    logoutToRoot?: boolean;
-  }
-> = ({ logoutToRoot = false, ...props }) => {
-  const { logOut } = useAuthContext();
-  return (
-    <GoogleLogin
-      {...props}
-      onClick={(e) => {
-        if (props.onClick) {
-          props.onClick(e);
-        }
-        logOut();
-      }}
-    />
-  );
+export default {
+  title: 'Form',
+  viewBox: '0 0 25 25',
+  path:
+    'M18.357 23.214v-2.607l1.835-3.2v5.878c0 1.012-.726 1.715-1.765 1.715H1.76C.72 25 0 24.296 0 23.285V1.826C0 .815.72 0 1.76 0h16.667c1.04 0 1.765.815 1.765 1.826v6.57l-1.835 3.2v-9.81H1.836v21.428h16.521zM3.847 3.846h10.576v.962H3.846v-.962zm0 6.73h10.576v.962H3.846v-.961zm0-2.884h13.46v.962H3.848v-.962zm0 5.77h13.46v.961H3.848v-.961zm0 2.884h10.576v.962H3.846v-.962zM22.918 5.77L25 6.655l-.561.725-.242.312-2.082-.885.243-.313.561-.725zm-7.534 13.186l6.759-11.263 1.894 1.056-6.706 11.262-1.947 1.144v-2.2zm-8.654-.022l-.778.777.778.78-.664.664-.779-.779-.778.779-.664-.665.779-.779-.779-.777.664-.664.778.777.779-.777.664.664zm0 1.26h6.73v.96h-6.73v-.96z',
+  css: css`
+    width: 25px;
+    height: 25px;
+  `,
 };
-
-export default GoogleLoginButton;

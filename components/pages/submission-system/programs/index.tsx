@@ -131,7 +131,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
         loading={loading}
       >
         <TableActionBar>
-          {programs.length} results
+          {programs.length.toLocaleString()} results
           {/*   <TableFilterInput /> */}
         </TableActionBar>
         <ProgramsTable

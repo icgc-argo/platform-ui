@@ -50,6 +50,7 @@ import upload from './collection/upload';
 import lock from './collection/lock';
 import dash from './collection/dash';
 import file from './collection/file';
+import form from './collection/form';
 import minus_circle from './collection/minus_circle';
 import arrow_left from './collection/arrow_left';
 import dna_locked from './collection/dna_locked';
@@ -113,6 +114,7 @@ const Icons = {
   lock,
   dash,
   file,
+  form,
   arrow_left,
   dna_locked,
   workflow,
