@@ -20,6 +20,7 @@
 import { FileCard, TableDiv } from '../common';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import { DataAnalysisInfo } from '../types';
+import get from 'lodash/get';
 
 export default ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
@@ -27,7 +28,7 @@ export default ({ data }: { data: DataAnalysisInfo }) => {
     'Data Type': data.dataType,
     Platform: data.platform,
     'Genome Build': data.genomeBuild,
-    'Workflow Type': data.workflowType,
+    'Workflow Type': get(data, ['workflowType', 'workflow_name'], ''),
     Software: data.software,
   };
 
