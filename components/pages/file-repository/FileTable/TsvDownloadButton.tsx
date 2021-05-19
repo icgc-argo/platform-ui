@@ -28,7 +28,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Icon from 'uikit/Icon';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
 import { RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
@@ -82,10 +82,10 @@ export default ({
       display: 'File Manifest',
       value: DownloadOptionValues.SCORE_MANIFEST,
     },
-    // {
-    //   display: 'File Table',
-    //   value: DownloadOptionValues.FILE_TABLE,
-    // },
+    {
+      display: 'Table (TSV)',
+      value: DownloadOptionValues.FILE_TABLE,
+    },
   ];
 
   const downloadFilter: RecursiveFilter = {
@@ -125,6 +125,14 @@ export default ({
           `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
         window.location.assign(downloadUrl);
+        break;
+      case DownloadOptionValues.FILE_TABLE:
+        const tsvdownloadUrl = urlJoin(
+          GATEWAY_API_ROOT,
+          FILE_TABLE_DOWNLOAD_PATH,
+          `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
+        );
+        window.location.assign(tsvdownloadUrl);
         break;
       default:
         console.log(`${item.value} was selected`);
