@@ -23,6 +23,7 @@ import css from '@emotion/css';
 import defaultTheme from 'uikit/theme/defaultTheme';
 
 type TagVariant =
+  | 'DISABLED'
   | 'EDITABLE'
   | 'ERROR'
   | 'HIGHLIGHT'
@@ -33,6 +34,7 @@ type TagVariant =
   | 'WARNING';
 
 export const TAG_VARIANTS: { [k in TagVariant]: k } = {
+  DISABLED: 'DISABLED',
   EDITABLE: 'EDITABLE',
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -59,13 +61,14 @@ const Tag = styled<'div', { variant?: keyof typeof TAG_VARIANTS }>('div')`
   border-radius: 8px;
   background-color: ${({ theme, variant = 'INFO' }) =>
     ({
+      [TAG_VARIANTS.DISABLED]: theme.colors.grey_2,
       [TAG_VARIANTS.EDITABLE]: theme.colors.accent2,
       [TAG_VARIANTS.ERROR]: theme.colors.error,
       [TAG_VARIANTS.WARNING]: theme.colors.warning,
       [TAG_VARIANTS.INFO]: theme.colors.secondary,
       [TAG_VARIANTS.SUCCESS]: theme.colors.accent1_dimmed,
       [TAG_VARIANTS.UPDATE]: theme.colors.accent3_dark,
-      [TAG_VARIANTS.NEUTRAL]: theme.colors.grey_2,
+      [TAG_VARIANTS.NEUTRAL]: theme.colors.primary_2,
       [TAG_VARIANTS.HIGHLIGHT]: theme.colors.secondary_2,
     }[variant])};
   color: ${({ variant = 'INFO' }) =>

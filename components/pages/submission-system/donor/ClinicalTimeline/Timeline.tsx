@@ -86,28 +86,13 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       `}
     >
       <VerticalTabs.Item
+        disabled
         tabStyle={{ border: borderColor, background: backgroundColor }}
         css={css`
           height: 100%;
           width: 100%;
           border: 0;
           color: black;
-
-          &:focus {
-            ${disabled
-              ? css`
-                  box-shadow: none;
-                `
-              : null};
-          }
-          &:hover {
-            ${disabled
-              ? css`
-                  background: white;
-                  cursor: default;
-                `
-              : null}
-          }
         `}
         active={active}
       >
