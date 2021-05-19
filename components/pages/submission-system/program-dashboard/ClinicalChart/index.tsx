@@ -30,13 +30,14 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import {
   DashboardCard,
   DashboardSummaryData,
-  DashboardSummaryDataVariables
+  DashboardSummaryDataVariables,
+  POLL_INTERVAL_MILLISECONDS
 } from '../common';
+import { useTimeout } from '../DonorDataSummary/common';
 import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
-  DataItem,
   DonorField,
   ProgramDonorPublishedAnalysisByDateRangeQueryData,
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
@@ -65,6 +66,7 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
     'variables'
   > = {},
 ) => {
+  const pollingTimeout = useTimeout(30000);
   const hook = useQuery<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>(
     PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY,
     {
@@ -77,6 +79,7 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
         donorFields,
         programShortName,
       },
+      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
   return hook;
