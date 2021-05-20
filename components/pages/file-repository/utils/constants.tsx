@@ -1,5 +1,5 @@
 import { css } from 'uikit';
-import { FileCentricDocumentField } from '../types';
+import { FileCentricDocumentField, FileRepositoryTSVColumn } from '../types';
 
 export const tooltipContent: { [key: string]: React.ReactNode } = {
   'Release Stage': (
@@ -36,3 +36,44 @@ enum ReleaseStageDisplayNames {
 export const facetDisplayNames: { [key: string]: {} } = {
   [FileCentricDocumentField.release_stage]: ReleaseStageDisplayNames,
 };
+
+export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
+  {
+    header: 'Object ID',
+    getter: 'object_id',
+  },
+  {
+    // an analysis in song can have multiple donors,
+    // but that's not a use case in argo, so
+    // use the first donor
+    header: 'Donor ID',
+    getter: 'donors[0].donor_id',
+  },
+  {
+    // an analysis in song can have multiple donors,
+    // but that's not a use case in argo, so
+    // use the first donor
+    header: 'Submitter Donor ID',
+    getter: 'donors[0].submitter_donor_id',
+  },
+  {
+    header: 'Program ID',
+    getter: 'study_id',
+  },
+  {
+    header: 'Data Type',
+    getter: 'data_type',
+  },
+  {
+    header: 'Experimental Strategy',
+    getter: 'analysis.experiment.experimental_strategy',
+  },
+  {
+    header: 'File Type',
+    getter: 'file_type',
+  },
+  {
+    header: 'Size',
+    getter: 'file.size',
+  },
+];

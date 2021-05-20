@@ -32,6 +32,7 @@ import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constan
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
 import { RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
+import { fileRepoTableTSVColumns } from '../utils/constants';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -130,7 +131,11 @@ export default ({
         const tsvdownloadUrl = urlJoin(
           GATEWAY_API_ROOT,
           FILE_TABLE_DOWNLOAD_PATH,
-          `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
+          `?filter=${
+            encodeURIComponent(JSON.stringify(downloadFilter))
+          }&columns=${
+            encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))
+          }`,
         );
         window.location.assign(tsvdownloadUrl);
         break;
