@@ -17,14 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from 'uikit/PageLayout';
-import Head from '../head';
-import NavBar from '../../NavBar';
-import clsx from 'clsx';
+import { ContentHeader, ContentBody } from 'uikit/PageLayout';
 import { FileTitleBar } from './FileTitleBar';
 import FileCardsLayout from './FileCardsLayout';
 import useEntityData from './useEntityData';
-import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
@@ -33,8 +29,10 @@ import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
 
-const FileEntity = ({ fileId }) => {
-  const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
+type FileEntityProps = { fileId: string };
+
+const FileEntity = ({ fileId }: FileEntityProps) => {
+  const { programShortName, access, data, loading: fileLoading } = useEntityData({ fileId });
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
@@ -46,42 +44,31 @@ const FileEntity = ({ fileId }) => {
   const isDownloadEnabled =
     access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
-  return (
-    <PageContainer>
-      <Head title={'ICGC ARGO'} />
-      <NavBar />
-      <PageBody className={clsx({ noSidebar: true })}>
-        <PageContent>
-          {loading ? (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-              }}
-            >
-              <DnaLoader />
-            </div>
-          ) : (
-            <>
-              <ContentHeader>
-                <FileTitleBar
-                  programShortName={programShortName}
-                  fileId={fileId}
-                  isDownloadEnabled={isDownloadEnabled}
-                />
-              </ContentHeader>
+  return loading ? (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+      }}
+    >
+      <DnaLoader />
+    </div>
+  ) : (
+    <>
+      <ContentHeader>
+        <FileTitleBar
+          programShortName={programShortName}
+          fileId={fileId}
+          isDownloadEnabled={isDownloadEnabled}
+        />
+      </ContentHeader>
 
-              <ContentBody>
-                <FileCardsLayout fileData={data} />
-              </ContentBody>
-            </>
-          )}
-          <Footer />
-        </PageContent>
-      </PageBody>
-    </PageContainer>
+      <ContentBody>
+        <FileCardsLayout fileData={data} />
+      </ContentBody>
+    </>
   );
 };
 

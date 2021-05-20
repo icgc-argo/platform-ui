@@ -21,26 +21,32 @@ import { createPage } from 'global/utils/pages';
 import FileEntityPage from 'components/pages/file-entity';
 import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
-import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
 import VALID_ENTITY_CHECK from './VALID_ENTITY_CHECK.gql';
 import get from 'lodash/get';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import { css } from 'uikit';
+import clsx from 'clsx';
+import React from 'react';
+import Head from '../../components/pages/head';
+import Footer from 'uikit/Footer';
+import { PageContainer, PageBody, PageContent } from 'uikit/PageLayout';
+import NavBar from '../../components/NavBar';
+import DnaLoader from 'uikit/DnaLoader';
 
 export default createPage({
   isPublic: true,
   isAccessible: async ({ initialPermissions }) => true,
-  getInitialProps: async () => {
+  getInitialProps: async (ctx) => {
     const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
     if (!FEATURE_FILE_ENTITY_ENABLED) {
       const err = new Error('Page Not Found') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 404;
       throw err;
     }
+    return { fileId: ctx.query.fileId };
   },
-})((props) => {
-  const { fileId } = usePageQuery<{ fileId: string }>();
+})(({ fileId, ...props }) => {
   const filters = sqonBuilder.has('object_id', fileId).build();
 
   // small query to ensure the fileId is valid and user has access
@@ -53,18 +59,35 @@ export default createPage({
   });
   const isValidEntity = !!get(data, 'file.hits.total', false);
 
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
-
   if (!loading && !isValidEntity) {
-    setLoaderShown(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
     return <ErrorPage statusCode={404} />;
-  } else if (loading) {
-    setLoaderShown(true);
-    return <div></div>;
   }
-  setLoaderShown(false);
 
-  return <FileEntityPage {...props} fileId={fileId} />;
+  return (
+    <PageContainer>
+      <Head title={'ICGC ARGO'} />
+      <NavBar />
+      <PageBody className={clsx({ noSidebar: true })}>
+        <PageContent>
+          {loading ? (
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              `}
+            >
+              <DnaLoader />
+            </div>
+          ) : (
+            <FileEntityPage {...props} fileId={fileId} />
+          )}
+        </PageContent>
+      </PageBody>
+
+      <Footer />
+    </PageContainer>
+  );
 });
