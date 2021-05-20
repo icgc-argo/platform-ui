@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -24,3 +23,4 @@ export type UikitTheme = typeof defaultTheme;
 export { default as ThemeProvider } from './ThemeProvider';
 export { default as styled } from '@emotion/styled';
 export { default as css } from '@emotion/css';
+export { default as isPropValid } from '@emotion/is-prop-valid';
