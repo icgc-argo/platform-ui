@@ -38,6 +38,7 @@ export const facetDisplayNames: { [key: string]: {} } = {
 };
 
 export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
+  // 'getter' is used as the path in a lodash get()
   {
     header: 'Object ID',
     getter: 'object_id',
