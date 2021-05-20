@@ -24,7 +24,7 @@ import { action } from '@storybook/addon-actions';
 
 const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const [activeItem, setActiveItem] = React.useState(0);
-  const onClick = (num: number) => e => {
+  const onClick = (num: number) => (e) => {
     setActiveItem(num);
     action('VerticalTabs.Item onClick')(e);
   };
@@ -47,7 +47,7 @@ const VerticalTabsStories = storiesOf(`${__dirname}`, module).add('Basic', () =>
           Donor
           <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
         </VerticalTabs.Item>
-        <VerticalTabs.Item onClick={onClick(3)} active={activeItem === 3}>
+        <VerticalTabs.Item disabled onClick={onClick(3)} active={activeItem === 3}>
           Donor
           <VerticalTabs.Tag variant="SUCCESS">45</VerticalTabs.Tag>
         </VerticalTabs.Item>

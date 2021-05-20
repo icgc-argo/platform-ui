@@ -17,13 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { HtmlHTMLAttributes, HTMLAttributes } from 'react';
+import React, { HtmlHTMLAttributes, HTMLAttributes, MouseEventHandler } from 'react';
 import { useTheme } from '../ThemeProvider';
 import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
+
+type TabStyleType = {
+  background: string;
+  border: string;
+};
 
 const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
   transition: all 0.25s;
@@ -56,7 +61,7 @@ const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
   }
 `;
 
-const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
+const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disabled?: boolean }>`
   width: 100%;
   position: relative;
   transition: all 0.25s;
@@ -69,10 +74,23 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType }>`
   border-left: solid 3px;
   border-right: none;
   border-color: rgba(0, 0, 0, 0);
-  cursor: pointer;
-  &:hover {
-    background: ${({ theme }) => theme.colors.grey_3};
-  }
+  ${({ disabled, theme }) =>
+    disabled
+      ? `
+          &:focus {
+            box-shadow: none;
+          }
+
+          &:hover {
+            cursor: default;
+          }
+        `
+      : `
+          &:hover {
+            cursor: pointer;
+            background: ${theme.colors.grey_3};
+          }
+        `}
 `;
 const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }>`
   border-color: ${({ theme }) => theme.colors.secondary};
@@ -92,18 +110,29 @@ const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }
   }
 `;
 
-type TabStyleType = { border: string; background: string };
-
 const VerticalTabsItem: React.ComponentType<
-  { active?: boolean; tabStyle?: TabStyleType } & HTMLAttributes<HTMLButtonElement>
-> = ({ active = false, children, tabStyle, ...rest }) => {
+  {
+    active?: boolean;
+    disabled?: boolean;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+    tabStyle?: TabStyleType;
+  } & HTMLAttributes<HTMLButtonElement>
+> = ({ active = false, children, disabled = false, onClick = () => {}, tabStyle, ...rest }) => {
   const ContainerComponent = active ? ActiveItemContainer : BaseItemContainer;
   const containerRef = React.useRef(null);
 
   const { height: contHeight } = useElementDimension(containerRef);
 
+  const clickHandler = (event) => disabled || onClick(event);
+
   return (
-    <ContainerComponent tabStyle={tabStyle} {...rest} ref={containerRef}>
+    <ContainerComponent
+      tabStyle={tabStyle}
+      disabled={disabled}
+      onClick={clickHandler}
+      {...rest}
+      ref={containerRef}
+    >
       <Typography
         variant="data"
         as="div"
