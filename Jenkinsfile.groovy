@@ -87,7 +87,7 @@ spec:
 
         stage('Publish uikit') {
             when {
-                branch "release/1.93.2"
+                branch "hotfix/1.93.3"
             }
             steps {
                 container('node') {
@@ -114,7 +114,7 @@ spec:
 
         stage('Deploy to QA and Publish Image') {
             when {
-                branch "release/1.93.2"
+                branch "hotfix/1.93.3"
             }
             steps {
                 container('node') {
