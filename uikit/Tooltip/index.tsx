@@ -64,7 +64,12 @@ export type TooltipProps = {
   style?: {};
 };
 
-const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ...rest }) => {
+const Tooltip: React.ComponentType<TooltipProps> = ({
+  className,
+  html,
+  position = 'top',
+  ...rest
+}) => {
   const theme = useTheme();
   const arrowStyles = {
     top: `
@@ -146,7 +151,11 @@ const Tooltip: React.ComponentType<TooltipProps> = ({ html, position = 'top', ..
             rest.popperOptions,
           ),
         }}
-        html={<TooltipContainer id="tooltip">{html}</TooltipContainer>}
+        html={
+          <TooltipContainer className={className} id="tooltip">
+            {html}
+          </TooltipContainer>
+        }
         position={position}
         {...rest}
       />
