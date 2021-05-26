@@ -17,23 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { RadioCheckboxWrapper, StyledGroup } from '../common';
+import React, { ReactNode, useContext } from 'react';
+import { RadioCheckboxWrapper } from '../common';
 import Checkbox from '../Checkbox';
 import css from '@emotion/css';
 import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
-/**
- * Checkbox for Form
- * To be used with RadioCheckboxGroup
- */
-const FormCheckbox = props => {
-  const { id, name, value, label, children, disabled, type, checked } = props;
+const FormCheckbox = ({
+  checked,
+  children,
+  disabled,
+  value,
+  ...props
+}: {
+  checked?: boolean;
+  children: ReactNode;
+  disabled?: boolean;
+  onChange?: (any) => any;
+  value?: string;
+}) => {
+  const { onChange = props.onChange, isChecked } = useContext(RadioCheckContext);
 
-  const { onChange, isChecked = props.isChecked } = useContext(RadioCheckContext) || props;
   const onClick = () => onChange(value);
-  const calcChecked = isChecked ? isChecked(value) : checked;
+  const calcChecked = typeof isChecked === 'function' ? isChecked(value) : isChecked || checked;
 
   return (
     <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
@@ -53,16 +59,6 @@ const FormCheckbox = props => {
       </label>
     </RadioCheckboxWrapper>
   );
-};
-
-FormCheckbox.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.any,
-  label: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func,
 };
 
 export default FormCheckbox;

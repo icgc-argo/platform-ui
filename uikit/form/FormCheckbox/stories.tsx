@@ -20,17 +20,27 @@
 import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
 import FormCheckbox from '.';
-import { boolean, button } from '@storybook/addon-knobs';
+import { boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import RadioCheckboxGroup from '../RadioCheckboxGroup';
 
 const createKnobs = () => {
-  const checked = boolean('checked', false);
+  const [checked, setChecked] = useState(false);
   const disabled = boolean('disabled', false);
+  const value = 'myCheckbox';
 
   return {
     checked,
     disabled,
+    onChange: () => {
+      if (disabled) {
+        action('checkbox clicked while disabled')(value, checked);
+      } else {
+        action('checkbox clicked')(value, !checked);
+        setChecked(!checked);
+      }
+    },
+    value,
   };
 };
 
@@ -46,9 +56,9 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
     </FormCheckbox>
   ))
   .add('Checkbox Group', () => {
-    const [selectedItems, setSelected] = React.useState(new Set([]));
-    const isChecked = item => selectedItems.has(item);
-    const onChange = value => {
+    const [selectedItems, setSelected] = useState(new Set([]));
+    const isChecked = (item) => selectedItems.has(item);
+    const onChange = (value) => {
       selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
       const newSelectedItems = new Set(selectedItems);
       action('checkbox clicked')(value, Array.from(newSelectedItems));
