@@ -84,6 +84,7 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 `;
 
 type RadioCheckboxWrapperProps = {
+  error?: boolean | string;
   disabled?: boolean;
   checked?: boolean;
 };
@@ -94,7 +95,8 @@ export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('di
   margin-bottom: 2px;
   border-width: 1px;
   border-style: solid;
-  border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
+  border-color: ${({ error, theme }) =>
+    error ? theme.radiocheckbox.borderColors.error : theme.radiocheckbox.borderColors.default};
 
   background-color: ${({ theme, disabled, checked }) =>
     theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : checked ? 'checked' : 'default']};
