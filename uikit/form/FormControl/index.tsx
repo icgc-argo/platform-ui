@@ -49,8 +49,8 @@ const FormControl = React.forwardRef<
 >(function FormControl(
   {
     component: Component = 'div' as any,
-    error = false,
     disabled = false,
+    error = false,
     required = false,
     ...other
   },

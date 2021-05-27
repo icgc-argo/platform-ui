@@ -18,15 +18,18 @@
  */
 
 import React, { ReactNode, useContext } from 'react';
-import { RadioCheckboxWrapper } from '../common';
+
+import { css, UikitTheme } from '../../';
+import Icon from '../../Icon';
+import { useTheme } from '../../ThemeProvider';
 import Checkbox from '../Checkbox';
-import css from '@emotion/css';
+import { RadioCheckboxWrapper } from '../common';
+import FormControlContext from '../FormControl/FormControlContext';
 import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
 const FormCheckbox = ({
   checked,
   children,
-  disabled,
   value,
   ...props
 }: {
@@ -34,15 +37,23 @@ const FormCheckbox = ({
   children: ReactNode;
   disabled?: boolean;
   onChange?: (any) => any;
+  error?: boolean;
+  required?: boolean;
   value?: string;
 }) => {
+  const theme: UikitTheme = useTheme();
   const { onChange = props.onChange, isChecked } = useContext(RadioCheckContext);
+  const {
+    disabled = props.disabled,
+    error = props.error,
+    required = props.required,
+  } = React.useContext(FormControlContext);
 
   const onClick = () => onChange(value);
   const calcChecked = typeof isChecked === 'function' ? isChecked(value) : isChecked || checked;
 
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
+    <RadioCheckboxWrapper checked={calcChecked} disabled={disabled} error={error} onClick={onClick}>
       <Checkbox
         value={value}
         checked={calcChecked}
@@ -50,12 +61,28 @@ const FormCheckbox = ({
         onChange={onChange}
         aria-label={props['aria-label']}
       />
+
       <label
         css={css`
           margin-left: 8px;
         `}
       >
         {children}
+
+        {required && (
+          <span>
+            <Icon
+              css={css`
+                margin-bottom: 5px;
+                margin-left: 5px;
+              `}
+              width="6px"
+              height="6px"
+              name="asterisk"
+              fill={theme.colors.error}
+            />
+          </span>
+        )}
       </label>
     </RadioCheckboxWrapper>
   );
