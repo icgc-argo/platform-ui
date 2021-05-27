@@ -61,7 +61,7 @@ const FormHelperText = React.forwardRef<
     }
 
     &.disabled {
-      display: none;
+      ${!onErrorOnly && `display: none;`}
     }
   `;
 
