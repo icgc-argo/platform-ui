@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -36,6 +35,7 @@ export default {
   borderColors: {
     default: colors.grey_2,
     disabled: '#d0d1d8',
+    error: colors.error,
   },
   radio: {
     default: colors.grey_1,

@@ -27,11 +27,14 @@ import RadioCheckboxGroup from '../RadioCheckboxGroup';
 const createKnobs = () => {
   const [checked, setChecked] = useState(false);
   const disabled = boolean('disabled', false);
+  const error = boolean('error', false);
+  const required = boolean('required', false);
   const value = 'myCheckbox';
 
   return {
     checked,
     disabled,
+    error,
     onChange: () => {
       if (disabled) {
         action('checkbox clicked while disabled')(value, checked);
@@ -40,6 +43,7 @@ const createKnobs = () => {
         setChecked(!checked);
       }
     },
+    required,
     value,
   };
 };

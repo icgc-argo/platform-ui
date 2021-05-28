@@ -17,16 +17,60 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import React from 'react';
+import { action } from '@storybook/addon-actions';
+import { boolean } from '@storybook/addon-knobs';
+
 import FormControl from '.';
 import FormHelperText from '../FormHelperText';
 import InputLabel from '../InputLabel';
 import MultiSelect, { Option } from '../../form/MultiSelect';
-import { boolean } from '@storybook/addon-knobs';
 import Input from '../../form/Input';
+import FormCheckbox from '../FormCheckbox';
+import Typography from '../../Typography';
 
 const FormControlStories = storiesOf(`${__dirname}`, module)
+  .add(
+    'FormCheckbox',
+    () => {
+      const [checked, setChecked] = useState(false);
+      const disabled = boolean('disabled', false);
+      const error = boolean('error', false);
+      const required = boolean('required', true);
+      const value = 'myCheckbox';
+
+      return (
+        <FormControl disabled={disabled} error={error} required={required}>
+          <FormCheckbox
+            aria-label="I agree with the terms and conditions"
+            checked={checked}
+            onChange={() => {
+              if (disabled) {
+                action('checkbox clicked while disabled')(value, checked);
+              } else {
+                action('checkbox clicked')(value, !checked);
+                setChecked(!checked);
+              }
+            }}
+            value={value}
+          >
+            <Typography bold component="span">
+              I agree
+            </Typography>{' '}
+            with the terms and conditions.
+          </FormCheckbox>
+
+          <FormHelperText onErrorOnly>This field is required!</FormHelperText>
+        </FormControl>
+      );
+    },
+    {
+      info: {
+        propTablesExclude: [FormCheckbox, Typography],
+      },
+    },
+  )
   .add(
     'MultiSelect',
     () => {
