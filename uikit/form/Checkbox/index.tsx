@@ -150,11 +150,6 @@ const Checkbox = ({
   const checkboxRef = forwardedRefs?.[0] || React.createRef<HTMLInputElement>();
   const HiddenCheckboxRef = forwardedRefs?.[1] || React.createRef<HTMLInputElement>();
 
-  const eventHandler = (fn) => (event) => {
-    fn?.(event);
-    fn?.(value);
-  };
-
   return (
     <StyledCheckbox
       data-value={value}
@@ -169,9 +164,9 @@ const Checkbox = ({
         checked={checked}
         disabled={disabled}
         id={id}
-        onBlur={eventHandler(onBlur)}
-        onChange={eventHandler(onChange)}
-        onFocus={eventHandler(onFocus)}
+        onBlur={onBlur}
+        onChange={onChange}
+        onFocus={onFocus}
         aria-label={ariaLabel}
         value={value}
       />

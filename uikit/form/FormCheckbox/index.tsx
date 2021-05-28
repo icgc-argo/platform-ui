@@ -59,7 +59,7 @@ const FormCheckbox = ({
   } = React.useContext(FormControlContext);
 
   const onBlur = (event) => {
-    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+    if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
       setIsFocused(false);
       handleBlur?.(event);
     }
@@ -72,7 +72,7 @@ const FormCheckbox = ({
   };
 
   const onFocus = (event) => {
-    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+    if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
       setIsFocused(true);
       handleFocus?.(event);
     }
