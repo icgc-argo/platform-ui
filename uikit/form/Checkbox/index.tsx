@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { RefObject } from 'react';
 import styled from '@emotion/styled';
 
 /**
@@ -42,6 +41,7 @@ export const StyledCheckbox = styled<
 >('div')`
   position: relative;
   cursor: pointer;
+  width: min-content;
 
   input {
     margin: 0;
@@ -122,9 +122,13 @@ export const StyledCheckbox = styled<
  * Basic checkbox input
  */
 const Checkbox = ({
-  checked,
+  checked = false,
   disabled = false,
+  forwardedRef,
+  id,
+  onBlur,
   onChange,
+  onFocus,
   'aria-label': ariaLabel,
   value,
   color,
@@ -133,20 +137,28 @@ const Checkbox = ({
 }: {
   checked: boolean;
   disabled?: boolean;
+  forwardedRef?: RefObject<HTMLInputElement>;
+  id?: string;
   size?: StyledCheckboxStyles;
+  onBlur?: (e: any | void) => any | void;
   onChange: (e: any | void) => any | void;
+  onFocus?: (e: any | void) => any | void;
   'aria-label': string;
   value: string | number;
   color?: string;
 }) => {
-  const HiddenCheckboxRef = React.createRef<HTMLInputElement>();
+  const HiddenCheckboxRef = forwardedRef || React.createRef<HTMLInputElement>();
+
+  const eventHandler = (fn) => (event) => {
+    event.stopPropagation();
+    fn?.(event);
+  };
 
   return (
     <StyledCheckbox
       data-value={value}
       checked={checked}
       disabled={disabled}
-      onClick={onChange}
       color={color}
       size={size}
     >
@@ -155,14 +167,19 @@ const Checkbox = ({
         ref={HiddenCheckboxRef}
         checked={checked}
         disabled={disabled}
-        onChange={onChange}
+        id={id}
+        onBlur={eventHandler(onBlur)}
+        onChange={eventHandler(onChange)}
+        onFocus={eventHandler(onFocus)}
         aria-label={ariaLabel}
+        value={value}
       />
       <div
         className="checkbox"
-        onClick={e => {
+        onClick={(event) => {
+          event.stopPropagation();
           if (document.activeElement !== HiddenCheckboxRef.current && HiddenCheckboxRef.current) {
-            HiddenCheckboxRef.current.focus();
+            HiddenCheckboxRef.current.click();
           }
         }}
       />

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext, useRef } from 'react';
 
 import { css, UikitTheme } from '../../';
 import Icon from '../../Icon';
@@ -36,29 +36,50 @@ const FormCheckbox = ({
   checked?: boolean;
   children: ReactNode;
   disabled?: boolean;
-  onChange?: (any) => any;
   error?: boolean;
+  onBlur?: (e: any) => any;
+  onChange?: (e: any) => any;
+  onFocus?: (e: any) => any;
   required?: boolean;
   value?: string;
 }) => {
   const theme: UikitTheme = useTheme();
+  const checkboxRef = useRef<HTMLInputElement>();
   const { onChange = props.onChange, isChecked } = useContext(RadioCheckContext);
   const {
     disabled = props.disabled,
     error = props.error,
+    focused,
+    handleBlur = props.onBlur,
+    handleFocus = props.onFocus,
     required = props.required,
   } = React.useContext(FormControlContext);
 
-  const onClick = () => onChange(value);
+  const onClick = (event) => {
+    event.stopPropagation();
+    if (document.activeElement !== checkboxRef.current && checkboxRef.current) {
+      checkboxRef.current.click();
+    }
+    onChange(value);
+  };
   const calcChecked = typeof isChecked === 'function' ? isChecked(value) : isChecked || checked;
 
   return (
-    <RadioCheckboxWrapper checked={calcChecked} disabled={disabled} error={error} onClick={onClick}>
+    <RadioCheckboxWrapper
+      checked={calcChecked}
+      disabled={disabled}
+      error={error}
+      focused={focused}
+      onClick={onClick}
+    >
       <Checkbox
         value={value}
         checked={calcChecked}
         disabled={disabled}
+        forwardedRef={checkboxRef}
+        onBlur={handleBlur}
         onChange={onChange}
+        onFocus={handleFocus}
         aria-label={props['aria-label']}
       />
 

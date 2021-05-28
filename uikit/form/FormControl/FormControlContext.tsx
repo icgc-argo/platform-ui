@@ -23,8 +23,8 @@ const FormControlContext = React.createContext<{
   disabled?: boolean;
   error?: string | boolean;
   focused?: boolean;
-  handleFocus?: () => void;
-  handleBlur?: () => any;
+  handleFocus?: (e?: any) => any;
+  handleBlur?: (e?: any) => any;
   required?: boolean;
 }>({});
 

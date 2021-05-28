@@ -45,12 +45,16 @@ const FormControl = React.forwardRef<
      * If `true`, the label, input and helper text should be displayed in a disabled state.
      */
     disabled?: boolean;
+    handleBlur?: (e?: any) => any;
+    handleFocus?: (e?: any) => any;
   }
 >(function FormControl(
   {
     component: Component = 'div' as any,
     disabled = false,
     error = false,
+    handleBlur,
+    handleFocus,
     required = false,
     ...other
   },
@@ -63,10 +67,14 @@ const FormControl = React.forwardRef<
     error,
     required,
     focused,
-    handleFocus: () => {
+    handleFocus: (e) => {
+      handleFocus?.(e);
       setFocused(true);
     },
-    handleBlur: () => setFocused(false),
+    handleBlur: (e) => {
+      handleBlur?.(e);
+      setFocused(false);
+    },
   };
 
   return (

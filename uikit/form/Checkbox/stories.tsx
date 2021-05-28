@@ -18,30 +18,49 @@
  */
 
 import { storiesOf } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 import Checkbox, { STYLEDCHECKBOX_SIZES } from '.';
 import { boolean, radios } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
 const createKnobs = () => {
-  const checked = boolean('checked', false);
+  const [checked, setChecked] = useState(false);
   const disabled = boolean('disabled', false);
   const size = radios('size', STYLEDCHECKBOX_SIZES, STYLEDCHECKBOX_SIZES.MD);
+  const value = 'myCheckbox';
 
   return {
     checked,
     disabled,
+    onBlur: () => {
+      if (disabled) {
+        action('checkbox blurred while disabled')(value, checked);
+      } else {
+        action('checkbox blurred')(value, checked);
+      }
+    },
+    onChange: () => {
+      if (disabled) {
+        action('checkbox clicked while disabled')(value, checked);
+      } else {
+        action('checkbox clicked')(value, !checked);
+        setChecked(!checked);
+      }
+    },
+    onFocus: () => {
+      if (disabled) {
+        action('checkbox focused while disabled')(value, checked);
+      } else {
+        action('checkbox focused')(value, checked);
+      }
+    },
     size,
+    value,
   };
 };
 
 const CheckboxStories = storiesOf(`${__dirname}`, module).add('Basic', () => (
-  <Checkbox
-    value="example"
-    {...createKnobs()}
-    onChange={action('onchange')}
-    aria-label="checkbox"
-  />
+  <Checkbox value="example" {...createKnobs()} aria-label="checkbox" />
 ));
 
 export default CheckboxStories;

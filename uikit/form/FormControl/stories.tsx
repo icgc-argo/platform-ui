@@ -41,7 +41,25 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
       const value = 'myCheckbox';
 
       return (
-        <FormControl disabled={disabled} error={error} required={required}>
+        <FormControl
+          disabled={disabled}
+          error={error}
+          handleBlur={() => {
+            if (disabled) {
+              action('checkbox blurred while disabled')(value, checked);
+            } else {
+              action('checkbox blurred')(value, checked);
+            }
+          }}
+          handleFocus={() => {
+            if (disabled) {
+              action('checkbox focused while disabled')(value, checked);
+            } else {
+              action('checkbox focused')(value, checked);
+            }
+          }}
+          required={required}
+        >
           <FormCheckbox
             aria-label="I agree with the terms and conditions"
             checked={checked}

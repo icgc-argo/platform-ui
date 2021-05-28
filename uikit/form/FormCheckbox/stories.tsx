@@ -35,12 +35,26 @@ const createKnobs = () => {
     checked,
     disabled,
     error,
+    onBlur: () => {
+      if (disabled) {
+        action('checkbox blurred while disabled')(value, checked);
+      } else {
+        action('checkbox blurred')(value, checked);
+      }
+    },
     onChange: () => {
       if (disabled) {
         action('checkbox clicked while disabled')(value, checked);
       } else {
         action('checkbox clicked')(value, !checked);
         setChecked(!checked);
+      }
+    },
+    onFocus: () => {
+      if (disabled) {
+        action('checkbox focused while disabled')(value, checked);
+      } else {
+        action('checkbox focused')(value, checked);
       }
     },
     required,
@@ -63,10 +77,14 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
     const [selectedItems, setSelected] = useState(new Set([]));
     const isChecked = (item) => selectedItems.has(item);
     const onChange = (value) => {
-      selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
-      const newSelectedItems = new Set(selectedItems);
-      action('checkbox clicked')(value, Array.from(newSelectedItems));
-      setSelected(newSelectedItems);
+      if (typeof value === 'string') {
+        selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
+        const newSelectedItems = new Set(selectedItems);
+        action('checkbox clicked')(value, Array.from(newSelectedItems));
+        setSelected(newSelectedItems);
+      } else {
+        action('unhandled value')(value);
+      }
     };
     return (
       <RadioCheckboxGroup {...createGroupKnobs()} onChange={onChange} isChecked={isChecked}>
