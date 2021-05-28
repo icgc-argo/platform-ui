@@ -53,15 +53,16 @@ const FormCheckbox = ({
     disabled = props.disabled,
     error = props.error,
     focused,
-    handleBlur = props.onBlur,
-    handleFocus = props.onFocus,
+    handleBlur,
+    handleFocus,
     required = props.required,
   } = React.useContext(FormControlContext);
 
   const onBlur = (event) => {
     if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
       setIsFocused(false);
-      handleBlur?.(event);
+      handleBlur?.();
+      props.onBlur?.(event);
     }
   };
 
@@ -74,7 +75,8 @@ const FormCheckbox = ({
   const onFocus = (event) => {
     if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
       setIsFocused(true);
-      handleFocus?.(event);
+      handleFocus?.();
+      props.onFocus?.(event);
     }
   };
 
