@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext, useRef, useState } from 'react';
 
 import { css, UikitTheme } from '../../';
 import Icon from '../../Icon';
@@ -36,29 +36,66 @@ const FormCheckbox = ({
   checked?: boolean;
   children: ReactNode;
   disabled?: boolean;
-  onChange?: (any) => any;
   error?: boolean;
+  onBlur?: (e: any) => any;
+  onChange?: (e: any) => any;
+  onFocus?: (e: any) => any;
   required?: boolean;
   value?: string;
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
   const theme: UikitTheme = useTheme();
+  const checkboxRef = useRef<HTMLInputElement>();
+  const hiddenCheckboxRef = useRef<HTMLInputElement>();
   const { onChange = props.onChange, isChecked } = useContext(RadioCheckContext);
+
   const {
     disabled = props.disabled,
     error = props.error,
+    focused,
+    handleBlur = props.onBlur,
+    handleFocus = props.onFocus,
     required = props.required,
   } = React.useContext(FormControlContext);
 
-  const onClick = () => onChange(value);
+  const onBlur = (event) => {
+    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+      setIsFocused(false);
+      handleBlur?.(event);
+    }
+  };
+
+  const onClick = (event) => {
+    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+      checkboxRef.current.click();
+    }
+  };
+
+  const onFocus = (event) => {
+    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+      setIsFocused(true);
+      handleFocus?.(event);
+    }
+  };
+
   const calcChecked = typeof isChecked === 'function' ? isChecked(value) : isChecked || checked;
 
   return (
-    <RadioCheckboxWrapper checked={calcChecked} disabled={disabled} error={error} onClick={onClick}>
+    <RadioCheckboxWrapper
+      checked={calcChecked}
+      disabled={disabled}
+      error={error}
+      focused={focused || isFocused}
+      onClick={onClick}
+    >
       <Checkbox
         value={value}
         checked={calcChecked}
         disabled={disabled}
+        forwardedRefs={[checkboxRef, hiddenCheckboxRef]}
+        onBlur={onBlur}
         onChange={onChange}
+        onFocus={onFocus}
         aria-label={props['aria-label']}
       />
 

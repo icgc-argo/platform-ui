@@ -84,9 +84,10 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 `;
 
 type RadioCheckboxWrapperProps = {
-  error?: boolean | string;
-  disabled?: boolean;
   checked?: boolean;
+  disabled?: boolean;
+  error?: boolean | string;
+  focused?: boolean;
 };
 export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('div')`
   display: flex;
@@ -116,6 +117,11 @@ export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('di
 
   &:hover {
     cursor: pointer;
+  }
+
+  ${({ focused, theme }) => focused && `box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};`}
+  &:focus {
+    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
   }
 `;
 
