@@ -42,7 +42,7 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
             aria-label="multi-select"
             inputProps={{ id: 'country' }}
             value={value}
-            onChange={event => setValue(event.target.value)}
+            onChange={(event) => setValue(event.target.value)}
             placeholder="Add one or more..."
           >
             <Option value="Australia">Australia</Option>
@@ -72,6 +72,7 @@ const FormControlStories = storiesOf(`${__dirname}`, module)
         <InputLabel htmlFor="text-input">text input</InputLabel>
         <Input aria-label="text input" id="text-input" placeholder="put some text" />
         <FormHelperText>Some helper text</FormHelperText>
+        <FormHelperText onErrorOnly>This field has an error!</FormHelperText>
       </FormControl>
     ),
     {

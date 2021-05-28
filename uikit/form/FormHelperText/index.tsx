@@ -18,7 +18,6 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import FormControlContext from '../FormControl/FormControlContext';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
@@ -38,9 +37,19 @@ const FormHelperText = React.forwardRef<
      */
     className?: string;
     children?: React.ReactNode | React.ReactNodeArray;
+    /**
+     * Allows turning this component into an error-dependent message.
+     * Hides it when no errors are present. Else,
+     */
+    onErrorOnly?: boolean;
   }
 >(function FormHelperText(props, ref) {
-  const { component: Component = 'p', className: classNameProp, children } = props;
+  const {
+    component: Component = 'p',
+    className: classNameProp,
+    children,
+    onErrorOnly = false,
+  } = props;
 
   const StyledComponent = styled<any, any>(Component)`
     ${({ theme }) => css(theme.typography.caption)};
@@ -52,19 +61,21 @@ const FormHelperText = React.forwardRef<
     }
 
     &.disabled {
-      display: none;
+      ${!onErrorOnly && `display: none;`}
     }
   `;
 
   const contextValue = React.useContext(FormControlContext);
 
-  return (
+  return !onErrorOnly || contextValue.error ? (
     <StyledComponent
       ref={ref}
       className={clsx(pick(contextValue, ['error', 'disabled']), classNameProp)}
     >
       {children}
     </StyledComponent>
+  ) : (
+    <></>
   );
 });
 
