@@ -67,9 +67,8 @@ const Input: React.ComponentType<
   } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
 > = ({
   preset = INPUT_PRESETS.DEFAULT,
-  value,
+  value = '',
   onChange,
-  onBlur = () => {},
   type,
   size: inputSize,
   dataSize,
@@ -83,14 +82,29 @@ const Input: React.ComponentType<
   getOverrideCss,
   ...props
 }) => {
-  const [activeState, setActive] = useState('default');
-
-  const { disabled: calcDisabled = disabled, error: calcError = !!error } =
+  const { disabled: calcDisabled, focused, error: calcError, handleBlur, handleFocus } =
     useContext(FormControlContext) || {};
+
+  const [activeState, setActive] = useState(focused ? 'focus' : 'default');
+
+  const hasError = calcError || !!error;
+  const isDisabled = calcDisabled || disabled;
+
+  const onBlur = (event) => {
+    setActive('default');
+    handleBlur?.();
+    props.onBlur?.(event);
+  };
 
   const onClearClick = (e) => {
     e.target.value = '';
     onChange(e);
+  };
+
+  const onFocus = (event) => {
+    setActive('focus');
+    handleFocus?.();
+    props.onFocus?.(event);
   };
 
   const inputRef = React.createRef<HTMLInputElement>();
@@ -99,28 +113,30 @@ const Input: React.ComponentType<
     <div className={className}>
       <StyledInputWrapper
         size={size as StyledInputWrapperProps['size']}
-        onFocus={() => setActive('focus')}
-        onBlur={() => setActive('default')}
         onClick={() => {
           if (inputRef.current) inputRef.current.focus();
         }}
+        onFocus={() => {
+          if (inputRef.current) inputRef.current.focus();
+        }}
         style={{ cursor: 'text' }}
-        error={calcError}
-        disabled={calcDisabled}
+        error={hasError}
+        disabled={isDisabled}
         inputState={activeState as StyledInputWrapperProps['inputState']}
         getOverrideCss={getOverrideCss}
       >
         {icon && <IconWrapper>{icon}</IconWrapper>}
         <StyledInput
           aria-label={props['aria-label']}
-          placeholder={calcDisabled ? '' : placeholder}
+          placeholder={isDisabled ? '' : placeholder}
           value={value}
           type={type}
-          onChange={onChange}
           onBlur={onBlur}
+          onChange={onChange}
+          onFocus={onFocus}
           inputSize={inputSize}
           size={dataSize}
-          disabled={calcDisabled}
+          disabled={isDisabled}
           id={props.id}
           ref={inputRef}
         />
