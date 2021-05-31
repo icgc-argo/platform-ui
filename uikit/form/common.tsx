@@ -75,11 +75,14 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 
   &:hover {
     border-color: ${({ theme, disabled, error }) => {
-      if (disabled) return 'initial';
-      else if (error) return theme.colors.error;
+      if (error) return theme.colors.error;
+      else if (disabled) return 'initial';
       else return theme.colors.secondary_1;
     }};
   }
+
+  ${({ inputState, theme }) =>
+    inputState === 'focus' && `box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};`}
   ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
 
