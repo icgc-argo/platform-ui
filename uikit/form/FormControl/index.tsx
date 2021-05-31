@@ -66,7 +66,9 @@ const FormControl = React.forwardRef<
     handleFocus: () => {
       setFocused(true);
     },
-    handleBlur: () => setFocused(false),
+    handleBlur: () => {
+      setFocused(false);
+    },
   };
 
   return (
