@@ -49,8 +49,8 @@ const FormControl = React.forwardRef<
 >(function FormControl(
   {
     component: Component = 'div' as any,
-    error = false,
     disabled = false,
+    error = false,
     required = false,
     ...other
   },
@@ -66,7 +66,9 @@ const FormControl = React.forwardRef<
     handleFocus: () => {
       setFocused(true);
     },
-    handleBlur: () => setFocused(false),
+    handleBlur: () => {
+      setFocused(false);
+    },
   };
 
   return (

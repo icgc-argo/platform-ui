@@ -17,52 +17,114 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { RadioCheckboxWrapper, StyledGroup } from '../common';
+import React, { ReactNode, useContext, useRef, useState } from 'react';
+
+import { css, UikitTheme } from '../../';
+import Icon from '../../Icon';
+import { useTheme } from '../../ThemeProvider';
 import Checkbox from '../Checkbox';
-import css from '@emotion/css';
+import { RadioCheckboxWrapper } from '../common';
+import FormControlContext from '../FormControl/FormControlContext';
 import RadioCheckContext from '../RadioCheckboxGroup/RadioCheckContext';
 
-/**
- * Checkbox for Form
- * To be used with RadioCheckboxGroup
- */
-const FormCheckbox = props => {
-  const { id, name, value, label, children, disabled, type, checked } = props;
+const FormCheckbox = ({
+  checked,
+  children,
+  value,
+  ...props
+}: {
+  checked?: boolean;
+  children: ReactNode;
+  disabled?: boolean;
+  error?: boolean;
+  onBlur?: (e: any) => any;
+  onChange?: (e: any) => any;
+  onFocus?: (e: any) => any;
+  required?: boolean;
+  value?: string;
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const theme: UikitTheme = useTheme();
+  const checkboxRef = useRef<HTMLInputElement>();
+  const hiddenCheckboxRef = useRef<HTMLInputElement>();
+  const { onChange = props.onChange, isChecked } = useContext(RadioCheckContext);
 
-  const { onChange, isChecked = props.isChecked } = useContext(RadioCheckContext) || props;
-  const onClick = () => onChange(value);
-  const calcChecked = isChecked ? isChecked(value) : checked;
+  const {
+    disabled = props.disabled,
+    error = props.error,
+    focused,
+    handleBlur,
+    handleFocus,
+    required = props.required,
+  } = React.useContext(FormControlContext);
+
+  const onBlur = (event) => {
+    if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
+      setIsFocused(false);
+      handleBlur?.();
+      props.onBlur?.(event);
+    }
+  };
+
+  const onClick = (event) => {
+    if (!(checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target)) {
+      checkboxRef.current.click();
+    }
+  };
+
+  const onFocus = (event) => {
+    if (checkboxRef.current === event.target || hiddenCheckboxRef.current === event.target) {
+      setIsFocused(true);
+      handleFocus?.();
+      props.onFocus?.(event);
+    }
+  };
+
+  const calcChecked = typeof isChecked === 'function' ? isChecked(value) : isChecked || checked;
 
   return (
-    <RadioCheckboxWrapper disabled={disabled} checked={calcChecked} onClick={onClick}>
+    <RadioCheckboxWrapper
+      checked={calcChecked}
+      disabled={disabled}
+      error={error}
+      focused={focused || isFocused}
+      onClick={onClick}
+    >
       <Checkbox
         value={value}
         checked={calcChecked}
         disabled={disabled}
+        forwardedRefs={[checkboxRef, hiddenCheckboxRef]}
+        onBlur={onBlur}
         onChange={onChange}
+        onFocus={onFocus}
         aria-label={props['aria-label']}
       />
+
       <label
         css={css`
           margin-left: 8px;
         `}
       >
         {children}
+
+        {required && (
+          <span>
+            <Icon
+              css={css`
+                margin-bottom: 5px;
+                margin-left: 5px;
+              `}
+              width="6px"
+              height="6px"
+              name="asterisk"
+              fill={theme.colors.error}
+            />
+          </span>
+        )}
       </label>
     </RadioCheckboxWrapper>
   );
-};
-
-FormCheckbox.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.any,
-  label: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func,
 };
 
 export default FormCheckbox;

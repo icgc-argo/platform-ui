@@ -17,3 +17,8 @@ export enum FileCentricDocumentField {
   study_id = 'study_id',
   release_stage = 'release_stage',
 }
+
+export type FileRepositoryTSVColumn = {
+  header: string;
+  getter: string;
+};

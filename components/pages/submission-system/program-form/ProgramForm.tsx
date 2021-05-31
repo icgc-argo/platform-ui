@@ -168,7 +168,9 @@ export default function CreateProgramForm({
   const handleCheckboxGroupChange = (
     selectedItems: any[],
     fieldName: keyof typeof seedFormData,
-  ) => (value) => {
+  ) => (event) => {
+    const value = event.target?.defaultValue;
+
     if (selectedItems.includes(value)) {
       setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
     } else {

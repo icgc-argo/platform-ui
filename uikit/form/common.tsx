@@ -75,17 +75,22 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 
   &:hover {
     border-color: ${({ theme, disabled, error }) => {
-      if (disabled) return 'initial';
-      else if (error) return theme.colors.error;
+      if (error) return theme.colors.error;
+      else if (disabled) return 'initial';
       else return theme.colors.secondary_1;
     }};
   }
+
+  ${({ inputState, theme }) =>
+    inputState === 'focus' && `box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};`}
   ${({ getOverrideCss, ...rest }) => (getOverrideCss ? getOverrideCss(rest) : '')}
 `;
 
 type RadioCheckboxWrapperProps = {
-  disabled?: boolean;
   checked?: boolean;
+  disabled?: boolean;
+  error?: boolean | string;
+  focused?: boolean;
 };
 export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('div')`
   display: flex;
@@ -94,7 +99,8 @@ export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('di
   margin-bottom: 2px;
   border-width: 1px;
   border-style: solid;
-  border-color: ${({ theme }) => theme.radiocheckbox.borderColors.default};
+  border-color: ${({ error, theme }) =>
+    error ? theme.radiocheckbox.borderColors.error : theme.radiocheckbox.borderColors.default};
 
   background-color: ${({ theme, disabled, checked }) =>
     theme.radiocheckbox.backgroundColors[disabled ? 'disabled' : checked ? 'checked' : 'default']};
@@ -114,6 +120,11 @@ export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('di
 
   &:hover {
     cursor: pointer;
+  }
+
+  ${({ focused, theme }) => focused && `box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};`}
+  &:focus {
+    box-shadow: 0px 0px 4px 0px ${({ theme }) => theme.colors.secondary_1};
   }
 `;
 

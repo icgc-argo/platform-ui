@@ -18,19 +18,47 @@
  */
 
 import { storiesOf } from '@storybook/react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import FormCheckbox from '.';
-import { boolean, button } from '@storybook/addon-knobs';
+import { boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import RadioCheckboxGroup from '../RadioCheckboxGroup';
 
 const createKnobs = () => {
-  const checked = boolean('checked', false);
+  const [checked, setChecked] = useState(false);
   const disabled = boolean('disabled', false);
+  const error = boolean('error', false);
+  const required = boolean('required', false);
+  const value = 'myCheckbox';
 
   return {
     checked,
     disabled,
+    error,
+    onBlur: () => {
+      if (disabled) {
+        action('checkbox blurred while disabled')(value, checked);
+      } else {
+        action('checkbox blurred, is it checked')(value, checked);
+      }
+    },
+    onChange: () => {
+      if (disabled) {
+        action('checkbox clicked while disabled')(value, checked);
+      } else {
+        action('checkbox clicked, is it checked')(value, !checked);
+        setChecked(!checked);
+      }
+    },
+    onFocus: () => {
+      if (disabled) {
+        action('checkbox focused while disabled')(value, checked);
+      } else {
+        action('checkbox focused, is it checked')(value, checked);
+      }
+    },
+    required,
+    value,
   };
 };
 
@@ -46,11 +74,14 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
     </FormCheckbox>
   ))
   .add('Checkbox Group', () => {
-    const [selectedItems, setSelected] = React.useState(new Set([]));
-    const isChecked = item => selectedItems.has(item);
-    const onChange = value => {
+    const [selectedItems, setSelected] = useState(new Set([]));
+    const isChecked = useCallback((item) => selectedItems.has(item), [selectedItems]);
+    const onChange = (event) => {
+      const value = event.target.defaultValue;
+
       selectedItems.has(value) ? selectedItems.delete(value) : selectedItems.add(value);
       const newSelectedItems = new Set(selectedItems);
+
       action('checkbox clicked')(value, Array.from(newSelectedItems));
       setSelected(newSelectedItems);
     };

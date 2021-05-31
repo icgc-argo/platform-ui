@@ -19,11 +19,13 @@
 
 import * as React from 'react';
 import color from 'color';
-import { css, styled } from '..';
+import { css, isPropValid, styled } from '..';
 import useTheme from '../utils/useTheme';
 import DnaLoader from '../DnaLoader';
 
-const ContainerBackground = styled<'div', { loading?: boolean }>('div')`
+const ContainerBackground = styled<'div', { loading?: boolean }>('div', {
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== 'loading',
+})`
   border-radius: 8px;
   position: relative;
   overflow: ${(props) => (props.loading ? 'hidden' : 'visible')};

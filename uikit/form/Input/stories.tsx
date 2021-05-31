@@ -26,7 +26,32 @@ import Icon from '../../Icon';
 import { action } from '@storybook/addon-actions';
 
 const createKnobs = () => {
+  const [value, setValue] = React.useState('');
   const disabled = boolean('disabled', false);
+  const error = boolean('error', false);
+  const onBlur = () => {
+    if (disabled) {
+      action('blurred while disabled')(value);
+    } else {
+      action('blurred')(value);
+    }
+  };
+  const onChange = (e) => {
+    const eventValue = e.target.value;
+    if (disabled) {
+      action('clicked while disabled')(eventValue);
+    } else {
+      action('clicked')(eventValue);
+      setValue(eventValue);
+    }
+  };
+  const onFocus = () => {
+    if (disabled) {
+      action('focused while disabled')(value);
+    } else {
+      action('focused')(value);
+    }
+  };
   const placeholder = text('Placeholder', 'Start typing here..');
   const showClear = boolean('showClear', false);
   const size = radios(
@@ -38,57 +63,38 @@ const createKnobs = () => {
     'sm',
   );
   return {
-    showClear,
     disabled,
+    error,
+    onBlur,
+    onChange,
+    onFocus,
     placeholder,
+    showClear,
     size,
+    value,
   };
 };
 
 const InputStories = storiesOf(`${__dirname}`, module)
   .add('Basic', () => {
-    const props = createKnobs();
-    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <Input
-          aria-label="demo-input"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => setValue(e.target.value)}
-          {...props}
-        />
+        <Input aria-label="demo-input" {...createKnobs()} />
       </div>
     );
   })
   .add('With preset', () => {
     const preset = select('preset', [null, ...Object.values(INPUT_PRESETS)], null);
-    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <Input
-          aria-label="demo-input"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => setValue(e.target.value)}
-          preset={preset}
-        />
+        <Input aria-label="demo-input" preset={preset} {...createKnobs()} />
       </div>
     );
   })
   .add('With icon', () => {
-    const props = createKnobs();
-    const [value, setValue] = React.useState('');
     return (
       <div style={{ width: '200px' }}>
-        <Input
-          aria-label="demo-input"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => setValue(e.target.value)}
-          {...props}
-          icon={<Icon name="search" />}
-        />
+        <Input aria-label="demo-input" icon={<Icon name="search" />} {...createKnobs()} />
       </div>
     );
   });
