@@ -194,6 +194,7 @@ function Highlight({ string, searchText }) {
 
 const MultiSelect: React.ComponentType<{
   ['aria-label']: string;
+  id?: string;
   /* Name of the Input */
   name?: string;
 
@@ -227,6 +228,7 @@ const MultiSelect: React.ComponentType<{
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
   error?: boolean | string;
 }> = ({
+  id,
   name,
   value = [],
   children,
@@ -258,9 +260,13 @@ const MultiSelect: React.ComponentType<{
     const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
 
     event.target = {
-      value: newValue,
+      id,
       name,
+      tagName: 'MULTISELECT',
+      type: `select-${single ? 'one' : 'multiple'}`,
+      value: newValue,
     };
+
     setSearchString('');
     onChange(event, child);
   };
@@ -294,8 +300,11 @@ const MultiSelect: React.ComponentType<{
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
     event.target = {
-      value: newValue,
+      id,
       name,
+      tagName: 'MULTISELECT',
+      type: `select-${single ? 'one' : 'multiple'}`,
+      value: newValue,
     };
 
     setSearchString('');
@@ -365,9 +374,13 @@ const MultiSelect: React.ComponentType<{
   const handleSelectedItemClick = (item) => (event) => {
     event.persist();
     event.target = {
-      value: without([...value], item.value),
+      id,
       name,
+      tagName: 'MULTISELECT',
+      type: `select-${single ? 'one' : 'multiple'}`,
+      value: without([...value], item.value),
     };
+
     onChange(event, item);
   };
 
@@ -424,7 +437,7 @@ const MultiSelect: React.ComponentType<{
         <Input
           autoComplete="off"
           aria-label={ariaLabel}
-          id={`${name}-multiselect`}
+          id={id || `${name}-multiselect`}
           value={searchString}
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}

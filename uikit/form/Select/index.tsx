@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { css } from '@emotion/core';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
@@ -32,19 +32,24 @@ import {
 } from './styledComponents';
 import useTheme from '../../utils/useTheme';
 import Tooltip from 'uikit/Tooltip';
+import FormControlContext from '../FormControl/FormControlContext';
+
+type OptionsType = {
+  content: any;
+  disabled?: boolean;
+  value: any;
+};
 
 const Select: React.ComponentType<{
   ['aria-label']: string;
-  options?: {
-    value: any;
-    content: any;
-  }[];
+  options?: OptionsType[];
   size?: InputSize;
   error?: boolean;
-  errorMessage?: string;
   disabled?: boolean;
+  eventOnChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onChange?: (value: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLSelectElement>) => void;
   popupPosition?: PopupPosition;
   placeholder?: string;
   id?: string;
@@ -55,36 +60,68 @@ const Select: React.ComponentType<{
 }> = ({
   placeholder = '- Select an option -',
   id,
-  value,
-  onChange,
-  onBlur = () => {},
+  value = '',
   disabled = false,
   size = INPUT_SIZES.SM,
   options = [],
   error = false,
-  errorMessage = '',
   popupPosition = POPUP_POSITIONS.DOWN,
   ...props
 }) => {
   const [activeState, setActive] = useState('default');
+  const [selectedValue, setSelectedValue] = useState(value);
   const [isExpanded, setExpanded] = useState(false);
+
+  const { disabled: calcDisabled, error: calcError, handleBlur, handleFocus } =
+    useContext(FormControlContext) || {};
+
+  const onBlur = (event) => {
+    handleBlur?.();
+    props.onBlur?.(event);
+
+    setActive('default');
+    setExpanded(false);
+  };
+
+  // custom event function for backwards compatibility
+  const onChange = (event, customSelectValue) => {
+    const eventValue = customSelectValue || event.target.value;
+
+    props.eventOnChange?.(event);
+    props.onChange?.(eventValue);
+
+    setActive('default');
+    setExpanded(false);
+    setSelectedValue(eventValue);
+  };
+
+  const onFocus = (event) => {
+    handleFocus?.();
+    props.onFocus?.(event);
+
+    setActive('focus');
+    setExpanded(true);
+  };
+
+  const hasError = calcError || !!error;
+  const isDisabled = calcDisabled || disabled;
 
   const HiddenSelectRef = React.createRef<HTMLSelectElement>();
   const ariaLabel = props['aria-label'];
 
   const selectedOption = options.find(
-    ({ value: optionValue }) => String(optionValue) === String(value),
+    ({ value: optionValue }) => String(optionValue) === String(selectedValue),
   );
 
-  const isSomethingSelected = !!(value && selectedOption);
+  const isSomethingSelected = !!(selectedValue && selectedOption);
 
   const theme = useTheme();
 
   const wrapperRef = React.createRef<HTMLDivElement>();
 
   useEffect(() => {
-    const documentClickHandler = e => {
-      const target = e.target;
+    const documentClickHandler = (event) => {
+      const target = event.target;
       const wrapperNode = wrapperRef.current;
 
       if (wrapperNode && !wrapperNode.contains(target as Node)) {
@@ -103,18 +140,18 @@ const Select: React.ComponentType<{
 
   const styledInputWrapper = (
     <StyledInputWrapper
+      error={hasError}
       ref={wrapperRef}
-      id={id}
       size={size}
       style={{ zIndex: 1 }}
-      disabled={disabled}
+      disabled={isDisabled}
       inputState={activeState as StyledInputWrapperProps['inputState']}
       role="button"
     >
       <Typography
         variant="paragraph"
         color={
-          disabled
+          isDisabled
             ? theme.input.textColors.disabled
             : isSomethingSelected || isExpanded
             ? 'black'
@@ -126,9 +163,9 @@ const Select: React.ComponentType<{
           line-height: 0;
         `}
       >
-        {(value && selectedOption ? selectedOption.content : false) || placeholder}
+        {(selectedValue && selectedOption ? selectedOption.content : false) || placeholder}
       </Typography>
-      <DropdownIcon disabled={disabled} theme={theme} />
+      <DropdownIcon disabled={isDisabled} theme={theme} />
     </StyledInputWrapper>
   );
 
@@ -136,9 +173,9 @@ const Select: React.ComponentType<{
     <div
       className={props.className}
       style={{ position: 'relative', ...(props.style || {}) }}
-      onClick={e => {
+      onClick={(event) => {
         const wrapperNode = wrapperRef.current;
-        const target = e.target;
+        const target = event.target;
         if (wrapperNode && wrapperNode.contains(target as Node) && isExpanded) {
           setExpanded(false);
         } else if (document.activeElement !== HiddenSelectRef.current) {
@@ -152,29 +189,24 @@ const Select: React.ComponentType<{
        **/}
       <HiddenSelect
         aria-label={ariaLabel}
+        disabled={isDisabled}
+        id={id}
         ref={HiddenSelectRef}
-        value={value}
-        onChange={e => {
-          setActive('default');
-          setExpanded(false);
-          onChange(e.target.value);
-        }}
-        onFocus={() => {
-          setActive('focus');
-          setExpanded(true);
-        }}
-        onBlur={event => {
-          onBlur(event);
-          setExpanded(false);
-        }}
-        disabled={disabled}
+        onBlur={onBlur}
+        onChange={onChange as React.ChangeEventHandler<HTMLSelectElement>}
+        onFocus={onFocus}
+        value={selectedValue}
       >
-        {options.map(({ content, value: optionValue }) => (
-          <option key={optionValue} value={optionValue}>
-            {content}
-          </option>
-        ))}
+        {/* Start with a disabled '- Select an option -' placeholder, for accessibility users  */}
+        {([{ content: placeholder, disabled: true, value: '' }] as OptionsType[])
+          .concat(options)
+          .map(({ content, disabled, value: optionValue }) => (
+            <option disabled={disabled} key={optionValue} value={optionValue}>
+              {content}
+            </option>
+          ))}
       </HiddenSelect>
+
       {props.hintText ? (
         <Tooltip unmountHTMLWhenHide position="bottom" html={<span>{props.hintText}</span>}>
           {styledInputWrapper}
@@ -182,16 +214,15 @@ const Select: React.ComponentType<{
       ) : (
         styledInputWrapper
       )}
+
       {isExpanded && (
         <OptionsList role="listbox" id={`${id}-options`} className={popupPosition}>
           {options.map(({ content, value: optionValue }) => (
             <Option
               key={optionValue}
               value={optionValue}
-              onMouseDown={() => {
-                onChange(optionValue);
-                setExpanded(false);
-                setActive('default');
+              onMouseDown={(event) => {
+                onChange(event, optionValue);
               }}
             >
               {content}
