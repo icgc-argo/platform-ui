@@ -297,25 +297,6 @@ export default function Homepage() {
                   margin-top: 10px;
                 `}
               >
-                <div>
-                  <b>March 01, 2021:</b> The 17th Scientific Workshop & 4th ARGO Virtual Meeting
-                  Plenary Session is open to the public for{' '}
-                  <Link
-                    target="_blank"
-                    href="https://www.icgc-argo.org/page/128/17th-icgc-scientific-workshop"
-                  >
-                    registration
-                  </Link>
-                  . ARGO updates from the Data Coordination Centre and the Secretariat will be
-                  presented, as well as oral and poster presentations from participating ARGO
-                  programs and technology development teams.
-                </div>
-              </div>
-              <div
-                css={css`
-                  margin-top: 10px;
-                `}
-              >
                 <b>New Features:</b>{' '}
                 <div>
                   Program data submission dashboards have been updated with new features to{' '}
