@@ -75,6 +75,7 @@ const FormControl = React.forwardRef<
     <FormControlContext.Provider value={childContext}>
       <Component
         ref={ref}
+        className="FormControl"
         css={css`
           margin-bottom: 10px;
         `}
