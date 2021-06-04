@@ -19,8 +19,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { css } from '@emotion/core';
 
-import { styled, css } from '../../';
 import Typography, { TypographyVariant } from '../../Typography';
 import Icon from '../../Icon';
 import FocusWrapper from '../../FocusWrapper';
@@ -40,7 +40,7 @@ export type NotificationInteractionEvent = 'CLOSE' | 'ACTION' | 'DISMISS';
 export type NotificationInteraction = 'CLOSE' | 'ACTION_DISMISS' | 'NONE';
 export type NotificationSize = 'MD' | 'SM';
 
-const getDefaultInteractionType = variant =>
+const getDefaultInteractionType = (variant) =>
   ({
     [NOTIFICATION_VARIANTS.INFO]: NOTIFICATION_INTERACTION.CLOSE,
     [NOTIFICATION_VARIANTS.SUCCESS]: NOTIFICATION_INTERACTION.ACTION_DISMISS,
@@ -102,7 +102,7 @@ const Notification = ({
   contentProps?: React.ComponentProps<typeof NotificationBodyContainer>;
 }) => {
   const theme = useTheme();
-  const dispatchEvent = eventType => e => onInteraction({ type: eventType, event: e });
+  const dispatchEvent = (eventType) => (e) => onInteraction({ type: eventType, event: e });
   const titleTypographyVariant = {
     [NOTIFICATION_SIZES.MD]: 'subtitle2' as TypographyVariant,
     [NOTIFICATION_SIZES.SM]: 'paragraph' as TypographyVariant,

@@ -17,11 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
+import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import { StyledInputWrapper, INPUT_STATES, INPUT_SIZES } from 'uikit/form/common';
 import Button from 'uikit/Button';
 import Typography from 'uikit/Typography';
-import { css, styled } from '..';
 import Tag, { TAG_VARIANTS } from 'uikit/Tag';
 import Icon from 'uikit/Icon';
 

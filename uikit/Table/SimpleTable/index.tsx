@@ -17,7 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
+import { css } from '@emotion/core';
+
 import Table from 'uikit/Table';
 
 type MappedTableData = Array<{ key: string; val: any }>;

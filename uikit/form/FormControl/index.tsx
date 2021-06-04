@@ -18,8 +18,9 @@
  */
 
 import React from 'react';
+import { css } from '@emotion/core';
+
 import FormControlContext from './FormControlContext';
-import { styled, css } from 'uikit';
 
 const FormControl = React.forwardRef<
   HTMLElement,

@@ -17,7 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, css } from '../..';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import { NOTIFICATION_VARIANTS, NotificationVariant } from '.';
 import FocusWrapper from '../../FocusWrapper';
 
