@@ -17,10 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { styled } from '../';
+import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import Icon from '../Icon';
-import { css } from '..';
 import { HtmlAttributes } from 'csstype';
 
 export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked';
@@ -39,7 +40,7 @@ export const PROGRESS_STATUS: {
   LOCKED: 'locked',
 };
 
-const Triangle = props => css`
+const Triangle = (props) => css`
   content: ' ';
   display: block;
   position: relative;

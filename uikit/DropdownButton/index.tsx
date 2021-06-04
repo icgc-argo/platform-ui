@@ -18,12 +18,12 @@
  */
 
 import * as React from 'react';
+import { css, SerializedStyles } from '@emotion/core';
+
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';
-import { css } from 'uikit';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useTheme } from 'uikit/ThemeProvider';
-import { SerializedStyles } from '@emotion/core';
 
 const MenuItem: typeof Typography = (props) => {
   const theme = useTheme();

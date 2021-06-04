@@ -1,9 +1,10 @@
 import React from 'react';
+import { css } from '@emotion/core';
+
 import { ThemeColorNames } from '../theme/types';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { UikitIconNames } from 'uikit/Icon/icons';
-import { css } from 'uikit';
 import { Col, Row } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 

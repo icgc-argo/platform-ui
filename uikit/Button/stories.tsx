@@ -17,14 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { radios, boolean, text } from '@storybook/addon-knobs';
-import React from 'react';
+import { css } from '@emotion/core';
+
 import Button from '.';
 import { asyncDummyFunc, placeholderImageURLRoot } from '../testUtil';
 import Icon from 'uikit/Icon';
-import { css } from 'uikit';
+
 import { BUTTON_VARIANTS, BUTTON_SIZES } from './constants';
 
 const dummyClick = action('Clicked!');

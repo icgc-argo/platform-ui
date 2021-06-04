@@ -18,13 +18,13 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { css } from '@emotion/core';
+
 import useTheme from '../utils/useTheme';
 import Typography from '../Typography';
 import Icon from '../Icon';
-import { css } from '../';
 
-const VAlignedText = props => (
+const VAlignedText = (props) => (
   <Typography
     variant="data"
     component="span"
@@ -66,7 +66,8 @@ const PercentageBar = ({
       `}
     >
       <VAlignedText>
-        {nom.toLocaleString()} <Icon name="slash" height="15px" fill="grey_2" /> {denom.toLocaleString()}
+        {nom.toLocaleString()} <Icon name="slash" height="15px" fill="grey_2" />{' '}
+        {denom.toLocaleString()}
       </VAlignedText>
       <VAlignedText
         css={css`

@@ -18,8 +18,9 @@
  */
 
 import React from 'react';
+import { css } from '@emotion/core';
+
 import Button from 'uikit/Button';
-import { css } from 'uikit';
 
 type FileSelectButtonProps = Omit<React.ComponentProps<typeof Button>, 'onClick'> & {
   inputProps?: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
@@ -46,7 +47,7 @@ const FileSelectButton: React.ComponentType<FileSelectButtonProps> = ({
         type="file"
         ref={fileInputRef}
         accept=".tsv"
-        onChange={e => {
+        onChange={(e) => {
           onFilesSelect(e.target.files);
         }}
         css={css`

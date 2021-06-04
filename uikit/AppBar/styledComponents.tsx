@@ -17,10 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
 import { withProps } from 'recompose';
 
 import Typography from '../Typography';
