@@ -25,6 +25,7 @@ import FormControlContext from './FormControlContext';
 const FormControl = React.forwardRef<
   HTMLElement,
   {
+    className?: string;
     /**
      * The contents of the form control.
      */

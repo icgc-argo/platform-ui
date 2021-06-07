@@ -23,6 +23,7 @@ import memoize from 'lodash/memoize';
 
 import defaultTheme from '../theme/defaultTheme';
 import { useTheme } from '../ThemeProvider';
+import { css } from '@emotion/core';
 
 const defaultTags = {
   hero: 'h1',
@@ -84,7 +85,7 @@ const Typography: React.ComponentType<
     ? createDomComponent(domComponentName, componentMap, variant)
     : componentMap[variant];
   const StyledText = createStyledDomComponent(Component);
-  return <StyledText {...rest} bold={bold} color={color} />;
+  return <StyledText css={css``} {...rest} bold={bold} color={color} />;
 };
 
 export default Typography;

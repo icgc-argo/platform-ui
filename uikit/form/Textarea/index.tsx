@@ -17,63 +17,188 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState, useContext, TextareaHTMLAttributes } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-
-import useTheme from '../../utils/useTheme';
-
+import React, { useState, useContext, TextareaHTMLAttributes, useCallback } from 'react';
 import css from '@emotion/css';
-import FormControlContext from '../FormControl/FormControlContext';
+import clsx from 'clsx';
+import { useTheme } from 'uikit/ThemeProvider';
+import Typography from 'uikit/Typography';
 
-const Textarea: React.ComponentType<
-  {
-    ['aria-label']: string;
-    error?: boolean;
-  } & TextareaHTMLAttributes<HTMLTextAreaElement>
-> = ({ error, disabled, className, ...props }) => {
+import FormControlContext from '../FormControl/FormControlContext';
+import { CountLabels, CountPositions, TextareaProps } from './types';
+
+const LINE_JUMP_PLACEHOLDER = ' øö ';
+
+const Textarea = ({
+  className,
+  countDirection = 'asc',
+  countLimit = 0,
+  countPosition = 'right',
+  countType = 'chars',
+  focused: propsFocused, // so it's not passed to the html element
+  onChange: propsOnChange,
+  truncate,
+  value = '',
+  ...props
+}: TextareaProps & TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+  const [currentCount, setCurrentCount] = useState(0);
+  const [internalValue, setInternalValue] = useState(value);
+  const { disabled, error, focused, handleBlur, handleFocus } =
+    useContext(FormControlContext) || {};
   const theme = useTheme();
 
-  const { disabled: calcDisabled = disabled, error: calcError = error } =
-    useContext(FormControlContext) || {};
+  const hasOverflowed = countLimit && countLimit - currentCount < 0;
+
+  const hasError = error || !!props.error || hasOverflowed;
+  const isDisabled = disabled || props.disabled;
+  const isFocused = focused || propsFocused;
+  const countAlignment = countPosition.replace('absolute', '').trim() || 'right';
+
+  const isAscending = countDirection === 'asc';
+
+  const onBlur = (event) => {
+    handleBlur?.();
+    props.onBlur?.(event);
+  };
+
+  const onFocus = (event) => {
+    handleFocus?.();
+    props.onFocus?.(event);
+  };
+
+  const getCount = useCallback(
+    (newCount) => (isAscending ? newCount : countLimit - newCount),
+    [countLimit, isAscending],
+  );
+
+  const onChange = useCallback(
+    (event) => {
+      // normalise line breaks
+      let targetValue = event.target.value.replace(/(\r\n|\r|\n)/g, '\n');
+
+      if (countLimit === 0) {
+        // without count limit, we don't care: just update the value as is
+        setInternalValue(targetValue);
+      } else {
+        switch (countType) {
+          case 'words': {
+            // use a placeholder for line breaks, so we can respect white space on display
+            const wordArray = targetValue.replace(/\n/g, LINE_JUMP_PLACEHOLDER).split(/\s/g);
+            // discount the following exceptions as non-words:
+            const empties = wordArray.filter(
+              (x: any) =>
+                !x || // empty spaces
+                x === LINE_JUMP_PLACEHOLDER.trim() || // line breaks (placeholder)
+                !x.match(/[a-zA-Z0-9]+/g), // chains of symbols without letters/numbers
+            ).length;
+
+            const newWordArray = truncate ? wordArray.slice(0, countLimit + empties) : wordArray;
+            const wordCount = getCount(newWordArray.length - empties);
+
+            const newValue = newWordArray.join(' ').replaceAll(LINE_JUMP_PLACEHOLDER, '\n');
+
+            if (truncate && wordCount === countLimit) {
+              setInternalValue(newValue.trim());
+              setCurrentCount(countLimit);
+            } else {
+              setInternalValue(newValue);
+              setCurrentCount(wordCount);
+            }
+            break;
+          }
+
+          default: {
+            // Characters as default
+            const newValue = truncate ? targetValue.slice(0, countLimit) : targetValue;
+
+            setInternalValue(newValue);
+            setCurrentCount(getCount(newValue.length));
+            break;
+          }
+        }
+      }
+
+      propsOnChange?.(event);
+    },
+    [countLimit, propsOnChange, truncate],
+  );
 
   return (
-    <textarea
-      className={clsx({ error: calcError, disabled: calcDisabled }, className)}
+    <div
+      className="TextareaWrapper"
       css={css`
-        ${css(theme.typography.paragraph as any)};
-        resize: vertical;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 8px 10px;
-        border: 1px solid;
-        border-radius: 8px;
-        border-color: ${theme.input.borderColors.default};
-        background-color: ${theme.input.colors.default};
-
-        &:hover {
-          border-color: ${theme.input.borderColors.hover} !important;
-        }
-
-        &:focus {
-          outline: 0;
-          border-color: ${theme.input.borderColors.focus};
-        }
-
-        &.error {
-          border-color: ${theme.input.borderColors.error};
-        }
-
-        &.disabled {
-          background-color: ${theme.input.colors.disabled};
-        }
+        position: relative;
       `}
-      aria-label={props['aria-label']}
-      disabled={calcDisabled}
-      id={props.id}
-      {...props}
-    />
+    >
+      <textarea
+        {...props}
+        className={clsx({ error: hasError, disabled: isDisabled, focused: isFocused }, className)}
+        css={css`
+          ${css(theme.typography.paragraph as any)};
+          resize: vertical;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 8px 10px;
+          border: 1px solid;
+          border-radius: 8px;
+          border-color: ${theme.input.borderColors.default};
+          background-color: ${theme.input.colors.default};
+
+          &:hover {
+            border-color: ${theme.input.borderColors.hover} !important;
+          }
+
+          &.focused,
+          &:focus {
+            outline: 0;
+            border-color: ${theme.input.borderColors.focus};
+            box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};
+          }
+
+          &.error {
+            border-color: ${theme.input.borderColors.error};
+          }
+
+          &.disabled {
+            background-color: ${theme.input.colors.disabled};
+          }
+        `}
+        disabled={isDisabled}
+        id={props.id}
+        onBlur={onBlur}
+        onChange={onChange}
+        onFocus={onFocus}
+        value={internalValue}
+      />
+
+      {countLimit > 0 && Object.keys(CountLabels).includes(countType) && (
+        <Typography
+          color={hasOverflowed ? 'error' : 'grey'}
+          css={css`
+            margin: 0;
+            ${countPosition.includes('absolute')
+              ? `
+                position: absolute;
+                ${countAlignment}: 6px;
+              `
+              : `text-align: ${countAlignment};`}
+
+            .currentCount {
+              margin-right: 2px;
+            }
+            .countLimit {
+              margin-left: 2px;
+            }
+          `}
+        >
+          <span className="currentCount">{currentCount}</span>/
+          <span className="countLimit">{countLimit}</span>{' '}
+          <span className="countLabel">{CountLabels[countType]}</span>
+        </Typography>
+      )}
+    </div>
   );
 };
+
+Textarea.displayName = 'Textarea';
 
 export default Textarea;
