@@ -22,9 +22,8 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 
 import Icon from '../Icon';
-import { HtmlAttributes } from 'csstype';
 
-export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked';
+export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked' | 'closed';
 
 export const PROGRESS_STATUS: {
   SUCCESS: ProgressStatus;
@@ -32,12 +31,14 @@ export const PROGRESS_STATUS: {
   PENDING: ProgressStatus;
   DISABLED: ProgressStatus;
   LOCKED: ProgressStatus;
+  CLOSED: ProgressStatus;
 } = {
   SUCCESS: 'success',
   ERROR: 'error',
   PENDING: 'pending',
   DISABLED: 'disabled',
   LOCKED: 'locked',
+  CLOSED: 'closed',
 };
 
 const Triangle = (props) => css`
@@ -85,6 +86,15 @@ const ProgressSection = styled('div')`
     ${Triangle};
     z-index: 1;
   }
+
+  /* centre offset due to pseudo elements */
+  & .progress-item:first-child svg {
+    margin-left: 7px;
+  }
+
+  & .progress-item:last-child svg {
+    margin-left: -7px;
+  }
 `;
 
 /* Separator colors - based on state*/
@@ -114,6 +124,7 @@ const getIcon = (state: ProgressStatus) =>
     [PROGRESS_STATUS.PENDING]: <Icon width="14px" height="14px" fill="white" name="ellipses" />,
     [PROGRESS_STATUS.LOCKED]: <Icon width="10px" height="10px" fill="white" name="lock" />,
     [PROGRESS_STATUS.DISABLED]: null,
+    [PROGRESS_STATUS.CLOSED]: <Icon width="8px" height="8px" fill="white" name="times" />,
   }[state]);
 
 export const ProgressItem = ({
@@ -128,7 +139,7 @@ export const ProgressItem = ({
   completed?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={`${className || ''}`}
+    className={`progress-item ${className || ''}`}
     css={css`
       width: 64px;
       text-align: center;
