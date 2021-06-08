@@ -154,6 +154,7 @@ export default () => {
     'family_history',
     'exposure',
     'comorbidity',
+    'biomarker',
   ];
 
   const fileNavigatorFiles = map(
@@ -485,9 +486,9 @@ export default () => {
           size="SM"
           variant="ERROR"
           interactionType="CLOSE"
-          title={`${fileNames.length} of ${
-            (currentFileList.fileList || []).length.toLocaleString()
-          } files failed to upload: ${fileNames.join(', ')}`}
+          title={`${fileNames.length} of ${(
+            currentFileList.fileList || []
+          ).length.toLocaleString()} files failed to upload: ${fileNames.join(', ')}`}
           content={message}
           onInteraction={onErrorClose(i)}
         />
