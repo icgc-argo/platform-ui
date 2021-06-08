@@ -162,7 +162,7 @@ export const UserSection: React.ComponentType<UserSectionProps> = ({
         height="20px"
         width="18px"
         name="trash"
-        fill={showDelete ? 'accent2' : '#cecfd3'}
+        fill={showDelete ? 'accent2' : 'grey_disabled'}
         onClick={() => (showDelete ? onClickDelete() : null)}
         css={css`
           margin-left: 6px;
