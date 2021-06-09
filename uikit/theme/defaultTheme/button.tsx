@@ -18,6 +18,7 @@
  */
 
 import colors from './colors';
+
 export default {
   fontSizes: {
     sm: '12px',
@@ -32,16 +33,21 @@ export default {
     md: '6px 20px',
   },
   textColors: {
+    link: {
+      default: colors.accent2_dark,
+      disabled: colors.grey_1,
+      hover: colors.accent2,
+    },
     primary: {
       default: colors.white,
       disabled: colors.white,
     },
     secondary: {
-      default: '#523785',
+      default: colors.accent2_dark,
       disabled: colors.white,
     },
     text: {
-      default: '#523785',
+      default: colors.accent2_dark,
       disabled: '#d0d1d8',
     },
   },
@@ -50,8 +56,8 @@ export default {
       default: '#8258d0',
       hover: '#9e78e1',
       active: '#6d41bd',
-      focus: '#523785',
       disabled: colors.grey_disabled,
+      focus: colors.accent2_dark,
     },
     secondary: {
       default: colors.grey_1,
