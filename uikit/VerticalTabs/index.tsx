@@ -24,8 +24,9 @@ import React, {
   ReactElement,
   MouseEventHandler,
 } from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 import { useTheme } from '../ThemeProvider';
-import { css, styled } from '..';
 import Typography from 'uikit/Typography';
 import Tag from 'uikit/Tag';
 import FocusWrapper from 'uikit/FocusWrapper';

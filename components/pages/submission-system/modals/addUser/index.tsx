@@ -211,7 +211,7 @@ const AddUserModal = ({
         >
           <Icon
             name="plus_circle"
-            fill={isLastSectionTouched && !hasErrors ? 'accent2' : '#cecfd3'}
+            fill={isLastSectionTouched && !hasErrors ? 'accent2' : 'grey_disabled'}
             css={css`
               margin-right: 3px;
             `}

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -52,14 +51,14 @@ export default {
       hover: '#9e78e1',
       active: '#6d41bd',
       focus: '#523785',
-      disabled: '#cecfd3',
+      disabled: colors.grey_disabled,
     },
     secondary: {
       default: colors.grey_1,
       hover: colors.grey_1,
       active: colors.grey_1,
       focus: '#8a8d9f',
-      disabled: '#cecfd3',
+      disabled: colors.grey_disabled,
     },
     text: {
       default: 'transparent',
@@ -75,14 +74,14 @@ export default {
       hover: '#9e78e1',
       active: '#6d41bd',
       focus: '#8258d0',
-      disabled: '#cecfd3',
+      disabled: colors.grey_disabled,
     },
     secondary: {
       default: colors.white,
       hover: '#f2ecfd',
       active: '#e6def6',
       focus: colors.white,
-      disabled: '#cecfd3',
+      disabled: colors.grey_disabled,
     },
     text: {
       default: 'transparent',

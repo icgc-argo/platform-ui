@@ -18,8 +18,8 @@
  */
 
 import React, { AnchorHTMLAttributes } from 'react';
-import PropTypes from 'prop-types';
-import { styled, css } from '..';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 
 type LinkVariant = 'INLINE' | 'BLOCK';
 export type HyperLinkProps = {

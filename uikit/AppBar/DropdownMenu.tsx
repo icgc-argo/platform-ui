@@ -18,8 +18,8 @@
  */
 
 import React, { LiHTMLAttributes } from 'react';
+import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import css from '@emotion/css';
 import clsx from 'clsx';
 
 const Ul = styled('ul')`

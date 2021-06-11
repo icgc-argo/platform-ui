@@ -19,7 +19,9 @@
 
 import React from 'react';
 import Color from 'color';
-import { styled, css } from '..';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import Typography from '../Typography';
 import Button from '../Button';
 import Icon from '../Icon';

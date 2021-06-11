@@ -17,9 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
+import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+import isPropValid from '@emotion/is-prop-valid';
+
 import color from 'color';
-import { css, isPropValid, styled } from '..';
 import useTheme from '../utils/useTheme';
 import DnaLoader from '../DnaLoader';
 

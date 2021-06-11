@@ -17,11 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
+import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import { css } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
-import styled from '@emotion/styled-base';
 
 const InstructionBox = ({
   steps,
@@ -57,7 +58,7 @@ const InstructionBox = ({
         `;
   return (
     <ScreenClassRender
-      render={size => (
+      render={(size) => (
         <Col>
           <Row nogutter>
             {steps.map((step, i) => (

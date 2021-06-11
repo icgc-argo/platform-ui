@@ -18,9 +18,11 @@
  */
 
 import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+
 import noDataSvg from 'uikit/assets/noData.svg';
 import Typography from '../Typography';
-import { css, styled } from '..';
 
 const Container = styled('div')`
   display: flex;

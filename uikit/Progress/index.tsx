@@ -17,13 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { styled } from '../';
-import Icon from '../Icon';
-import { css } from '..';
-import { HtmlAttributes } from 'csstype';
+import React from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 
-export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked';
+import Icon from '../Icon';
+
+export type ProgressStatus = 'success' | 'error' | 'pending' | 'disabled' | 'locked' | 'closed';
 
 export const PROGRESS_STATUS: {
   SUCCESS: ProgressStatus;
@@ -31,15 +31,17 @@ export const PROGRESS_STATUS: {
   PENDING: ProgressStatus;
   DISABLED: ProgressStatus;
   LOCKED: ProgressStatus;
+  CLOSED: ProgressStatus;
 } = {
   SUCCESS: 'success',
   ERROR: 'error',
   PENDING: 'pending',
   DISABLED: 'disabled',
   LOCKED: 'locked',
+  CLOSED: 'closed',
 };
 
-const Triangle = props => css`
+const Triangle = (props) => css`
   content: ' ';
   display: block;
   position: relative;
@@ -84,6 +86,15 @@ const ProgressSection = styled('div')`
     ${Triangle};
     z-index: 1;
   }
+
+  /* centre offset due to pseudo elements */
+  & .progress-item:first-child svg {
+    margin-left: 7px;
+  }
+
+  & .progress-item:last-child svg {
+    margin-left: -7px;
+  }
 `;
 
 /* Separator colors - based on state*/
@@ -113,6 +124,7 @@ const getIcon = (state: ProgressStatus) =>
     [PROGRESS_STATUS.PENDING]: <Icon width="14px" height="14px" fill="white" name="ellipses" />,
     [PROGRESS_STATUS.LOCKED]: <Icon width="10px" height="10px" fill="white" name="lock" />,
     [PROGRESS_STATUS.DISABLED]: null,
+    [PROGRESS_STATUS.CLOSED]: <Icon width="8px" height="8px" fill="white" name="times" />,
   }[state]);
 
 export const ProgressItem = ({
@@ -127,7 +139,7 @@ export const ProgressItem = ({
   completed?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={`${className || ''}`}
+    className={`progress-item ${className || ''}`}
     css={css`
       width: 64px;
       text-align: center;

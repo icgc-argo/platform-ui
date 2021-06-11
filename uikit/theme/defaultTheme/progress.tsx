@@ -24,8 +24,9 @@ const color: { [key in ProgressStatus]: string } = {
   success: colors.success,
   error: colors.error,
   pending: colors.warning,
-  disabled: '#cecfd3',
+  disabled: colors.grey_disabled,
   locked: colors.accent3_dark,
+  closed: colors.grey,
 };
 
 export default { color };

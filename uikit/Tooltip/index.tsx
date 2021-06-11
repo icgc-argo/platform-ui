@@ -19,10 +19,10 @@
 
 // @flow
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 import { Tooltip as ReactTippy } from 'react-tippy';
 
-import { css, styled } from '..';
 import useTheme from '../utils/useTheme';
 import { Global } from '@emotion/core';
 import { merge } from 'lodash';
