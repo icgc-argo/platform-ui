@@ -24,7 +24,7 @@ import ReactTableContainer from './ReactTableContainer';
 export default ({ propDefinitions }) => (
   <ReactTableContainer>
     <ReactTable
-      minRows={0}
+      minRows={1}
       showPagination={false}
       data={propDefinitions}
       columns={[

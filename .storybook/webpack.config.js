@@ -50,6 +50,7 @@ module.exports = async ({ config }) => {
                 '@emotion/babel-preset-css-prop',
                 {
                   autoLabel: true,
+                  labelFormat: 'Uikit-[local]',
                 },
               ],
             ],
