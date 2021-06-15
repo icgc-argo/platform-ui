@@ -20,12 +20,10 @@
 import { ButtonVariant, ButtonSize } from './types';
 
 export const BUTTON_VARIANTS: {
-  LINK: ButtonVariant;
   PRIMARY: ButtonVariant;
   SECONDARY: ButtonVariant;
   TEXT: ButtonVariant;
 } = Object.freeze({
-  LINK: 'link',
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
   TEXT: 'text',

@@ -101,7 +101,20 @@ const Button = React.forwardRef<
         className={className}
         id={id}
       >
-        {shouldShowLoading ? <LoaderComp variant={variant} theme={theme} /> : children}
+        <div
+          css={css`
+            display: ${shouldShowLoading ? 'block' : 'none'};
+          `}
+        >
+          <LoaderComp variant={variant} theme={theme} />
+        </div>
+        <div
+          css={css`
+            display: ${shouldShowLoading ? 'none' : 'block'};
+          `}
+        >
+          {children}
+        </div>
       </StyledButton>
     );
   },
