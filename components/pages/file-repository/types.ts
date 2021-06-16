@@ -15,7 +15,8 @@ export enum FileCentricDocumentField {
   file_type = 'file_type',
   object_id = 'object_id',
   study_id = 'study_id',
-  release_stage = 'release_stage',
+  embargo_stage = 'embargo_stage',
+  release_state = 'release_state',
 }
 
 export type FileRepositoryTSVColumn = {

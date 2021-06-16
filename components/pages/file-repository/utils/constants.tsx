@@ -2,7 +2,7 @@ import { css } from 'uikit';
 import { FileCentricDocumentField, FileRepositoryTSVColumn } from '../types';
 
 export const tooltipContent: { [key: string]: React.ReactNode } = {
-  'Release Stage': (
+  embargo_stage: (
     <div
       css={css`
         margin: 5px;
@@ -24,17 +24,16 @@ export const tooltipContent: { [key: string]: React.ReactNode } = {
   ),
 };
 
-enum ReleaseStageDisplayNames {
-  OWN_PROGRAM = 'My Program Access',
-  FULL_PROGRAMS = 'Full Member Access',
-  ASSOCIATE_PROGRAMS = 'Associate Member Access',
-  PUBLIC_QUEUE = 'Queued for Release',
+enum EmbargoStageDisplayNames {
+  PROGRAM_ONLY = 'My Program Access',
+  MEMBER_ACCESS = 'Full Member Access',
+  ASSOCIATE_ACCESS = 'Associate Member Access',
   PUBLIC = 'Released to the Public',
 }
 
 // enums are real objects at runtime
 export const facetDisplayNames: { [key: string]: {} } = {
-  [FileCentricDocumentField.release_stage]: ReleaseStageDisplayNames,
+  [FileCentricDocumentField.embargo_stage]: EmbargoStageDisplayNames,
 };
 
 export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
