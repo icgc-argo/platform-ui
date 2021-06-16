@@ -20,7 +20,7 @@
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 
-import { NOTIFICATION_VARIANTS, NotificationVariant } from '.';
+import { NOTIFICATION_VARIANTS, NotificationVariant } from './';
 import FocusWrapper from '../../FocusWrapper';
 
 const getBackgroundColor = ({ theme, variant }: { theme?: any; variant: NotificationVariant }) =>
