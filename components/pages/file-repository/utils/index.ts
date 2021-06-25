@@ -239,7 +239,7 @@ export const toDisplayValue: (value: string, field?: string) => string = (value,
   return value;
 };
 
-export const getTooltipContent = (name: string): React.ReactNode => tooltipContent[name];
+export const getTooltipContent = (facetPath: string): React.ReactNode => tooltipContent[facetPath];
 
 export const getDisplayName = (facetName: string, fieldName: string): string =>
   facetDisplayNames[facetName]?.[fieldName];

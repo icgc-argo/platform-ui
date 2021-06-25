@@ -61,6 +61,18 @@ query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
           doc_count
         }
       }
+      embargo_stage {
+        buckets {
+          key
+          doc_count
+        }
+      }
+      release_state {
+        buckets {
+          key
+          doc_count
+        }
+      }
     }
   }
 }
