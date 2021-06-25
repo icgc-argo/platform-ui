@@ -16,8 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 import React, { useState, useEffect } from 'react';
+import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import Facet from 'uikit/Facet';
 import { MenuItem } from 'uikit/SubMenu';
 import { Input } from 'uikit/form';
@@ -82,12 +82,19 @@ const createPresetFacets = (
   displayNames: ReturnType<typeof useFileCentricFieldDisplayName>['data'],
 ): Array<FacetDetails> => [
   {
-    name: displayNames['release_stage'],
-    facetPath: FileFacetPath.release_stage,
+    name: displayNames['embargo_stage'],
+    facetPath: FileFacetPath.embargo_stage,
     variant: 'Tooltip',
-    esDocumentField: FileCentricDocumentField.release_stage,
-  } as FacetDetails,
-
+    esDocumentField: FileCentricDocumentField.embargo_stage,
+    highlight: true,
+  },
+  {
+    name: displayNames['release_state'],
+    facetPath: FileFacetPath.release_state,
+    variant: 'Basic',
+    esDocumentField: FileCentricDocumentField.release_state,
+    highlight: true,
+  },
   {
     name: displayNames['study_id'],
     facetPath: FileFacetPath.study_id,
@@ -225,25 +232,18 @@ const useIdSearchQuery = (
   });
 };
 
-// encapsulate conditional release stage facet logic
-const getReleaseStageFacet = (presetFacets: FacetDetails[], commonFacetProps) => {
-  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
-  const { egoJwt } = useAuthContext();
-
-  if (FEATURE_ACCESS_FACET_ENABLED && !!egoJwt) {
-    const facet = presetFacets.find((f) => f.facetPath === FileFacetPath.release_stage);
-    const commonProps = commonFacetProps(facet);
-    return { releaseStageDetails: facet, releaseStageCommonProps: commonProps };
-  } else {
-    return { releaseStageDetails: null, releaseStageCommonProps: null };
-  }
-};
-
-export default () => {
+const FacetPanel = () => {
   const {
     data: fieldDisplayNames,
     loading: loadingFieldDisplayNames,
   } = useFileCentricFieldDisplayName();
+
+  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+  const { egoJwt, permissions } = useAuthContext();
+  const embargoStageEnabled =
+    FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && canReadSomeProgram(permissions);
+
+  const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
   const [expandedFacets, setExpandedFacets] = React.useState(
@@ -281,17 +281,8 @@ export default () => {
 
   const debouncedSearchTerm = useDebounce(searchQuery, 500);
 
-  /**
-   * Order release stage options
-   * Removes invalid keys eg. '__missing__'
-   */
-  const orderReleaseStage = (options: FilterOption[]) => {
-    const order = ['OWN_PROGRAM', 'FULL_PROGRAMS', 'ASSOCIATE_PROGRAMS', 'PUBLIC_QUEUE', 'PUBLIC'];
-    return order.map((order) => options.find((option) => option.key === order)).filter(Boolean);
-  };
-
   const getOptions: GetAggregationResult = (facet) => {
-    return (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
+    const options = (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
       ...bucket,
       isChecked: inCurrentFilters({
         currentFilters: filters,
@@ -299,6 +290,15 @@ export default () => {
         dotField: facet.esDocumentField,
       }),
     }));
+
+    // Control ordering of options for specific facets
+    switch (facet.name) {
+      case 'embargo_stage':
+        const order = ['PROGRAM_ONLY', 'MEMBER_ACCESS', 'ASSOCIATE_ACCESS', 'PUBLIC'];
+        return order.map((order) => options.find((option) => option.key === order)).filter(Boolean);
+      default:
+        return options;
+    }
   };
 
   const { data: idSearchData, loading: idSearchLoading } = useIdSearchQuery(
@@ -436,12 +436,6 @@ export default () => {
     },
   });
 
-  // get release stage facet to show before search bar
-  const { releaseStageDetails, releaseStageCommonProps } = getReleaseStageFacet(
-    presetFacets,
-    commonFacetProps,
-  );
-
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -460,24 +454,6 @@ export default () => {
           >
             Filters
           </Typography>
-        </FacetRow>
-        <FacetRow
-          css={css`
-            border-top: 1px solid ${theme.colors.grey_2};
-          `}
-        >
-          {releaseStageDetails && releaseStageCommonProps && (
-            <TooltipFacet
-              {...releaseStageCommonProps}
-              key={releaseStageDetails.name}
-              options={orderReleaseStage(getOptions(releaseStageDetails))}
-              countUnit={'files'}
-              onOptionToggle={onFacetOptionToggle(releaseStageDetails)}
-              onSelectAllOptions={onFacetSelectAllOptionsToggle(releaseStageDetails)}
-              parseDisplayValue={(key) => getDisplayName(releaseStageDetails.esDocumentField, key)}
-              tooltipContent={getTooltipContent(releaseStageDetails.name)}
-            />
-          )}
         </FacetRow>
         <FacetRow
           css={css`
@@ -579,13 +555,37 @@ export default () => {
         </FacetRow>
         {!loadingFieldDisplayNames &&
           presetFacets
-            // filter out facets that are shown before search bar
-            .filter((f) => f.facetPath !== FileFacetPath.release_stage)
+            // Conditionally filter embargo_stage facet
+            .filter((f) => {
+              return embargoStageEnabled || f.facetPath !== FileFacetPath.embargo_stage;
+            })
+            //Conditionally filter release_state facet
+            .filter((f) => {
+              return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
+            })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
+              const highlightCss = facetDetails.highlight
+                ? css`
+                    .FacetRow {
+                      background-color: ${theme.colors.warning_4};
+                    }
+                    .FacetMenu {
+                      background-color: ${theme.colors.warning_4};
+
+                      .MenuItemContent:hover {
+                        background-color: ${theme.colors.warning_3};
+                      }
+
+                      .StyledOption:hover {
+                        background-color: ${theme.colors.warning_3};
+                      }
+                    }
+                  `
+                : css``;
 
               return (
-                <FacetRow key={facetDetails.name}>
+                <FacetRow key={facetDetails.name} className={'FacetRow'} css={highlightCss}>
                   {facetDetails.variant === 'Basic' && (
                     <Facet
                       {...facetProps}
@@ -605,6 +605,18 @@ export default () => {
                       max={numberRangeFacetMax(facetDetails)}
                     />
                   )}
+                  {facetDetails.variant === 'Tooltip' && (
+                    <TooltipFacet
+                      {...facetProps}
+                      key={facetDetails.name}
+                      options={getOptions(facetDetails)}
+                      countUnit={'files'}
+                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      parseDisplayValue={(key) => getDisplayName(facetDetails.esDocumentField, key)}
+                      tooltipContent={getTooltipContent(facetDetails.facetPath)}
+                    />
+                  )}
                 </FacetRow>
               );
             })}
@@ -613,3 +625,5 @@ export default () => {
     </FacetContainer>
   );
 };
+
+export default FacetPanel;

@@ -84,6 +84,7 @@ const OptionsList: React.ComponentType<{
     }, []);
     return (
       <div
+        className={'StyledOption'}
         css={css`
           background-color: ${option.isChecked ? theme.colors.secondary_4 : ''};
           display: flex;

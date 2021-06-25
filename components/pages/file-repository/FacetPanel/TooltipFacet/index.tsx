@@ -26,7 +26,7 @@
  */
 
 import React from 'react';
-import { MenuItem as MenuItemComp } from 'uikit/SubMenu';
+import { MenuItem } from 'uikit/SubMenu';
 import { css } from '@emotion/core';
 import OptionsListComp, { FilterOption } from 'uikit/OptionsList';
 import Icon from 'uikit/Icon';
@@ -54,20 +54,13 @@ const TooltipFacet = ({
   parseDisplayValue?: (inputValue: string) => string;
   tooltipContent: React.ReactNode;
 }) => {
-  const MenuItem = styled(MenuItemComp)`
-    background-color: ${({ theme }) => theme.colors.warning_4};
-
-    .FacetMenu {
-      background-color: ${({ theme }) => theme.colors.warning_4};
-      &:hover {
-        background-color: ${({ theme }) => theme.colors.warning_3};
-      }
-    }
-  `;
-
   const OptionsList = styled(OptionsListComp)`
     > div:not(:first-of-type):hover {
       background-color: ${({ theme }) => theme.colors.warning_3};
+    }
+    > div:last-child {
+      border-bottom: 1px solid;
+      border-color: ${({ theme }) => theme.colors.grey_2};
     }
   `;
 

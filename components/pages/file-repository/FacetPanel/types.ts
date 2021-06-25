@@ -14,7 +14,8 @@ export enum FileFacetPath {
   donors__specimens__specimen_type = 'donors__specimens__specimen_type',
   donors__specimens__specimen_tissue_source = 'donors__specimens__specimen_tissue_source',
   analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',
-  release_stage = 'release_stage',
+  release_state = 'release_state',
+  embargo_stage = 'embargo_stage',
 }
 
 type BucketAggregation = {
@@ -29,6 +30,7 @@ export type FacetDetails = {
   facetPath: FileFacetPath;
   variant: 'Basic' | 'Number' | 'Tooltip' | 'Other';
   esDocumentField: FileCentricDocumentField;
+  highlight?: boolean;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
@@ -64,6 +66,12 @@ export type FileRepoFacetsQueryData = {
         buckets: BucketAggregation[];
       };
       [FileFacetPath.analysis__workflow__workflow_name]: {
+        buckets: BucketAggregation[];
+      };
+      [FileFacetPath.release_state]: {
+        buckets: BucketAggregation[];
+      };
+      [FileFacetPath.embargo_stage]: {
         buckets: BucketAggregation[];
       };
     };
