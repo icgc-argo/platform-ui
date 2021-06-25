@@ -86,12 +86,14 @@ const createPresetFacets = (
     facetPath: FileFacetPath.embargo_stage,
     variant: 'Tooltip',
     esDocumentField: FileCentricDocumentField.embargo_stage,
+    highlight: true,
   },
   {
     name: displayNames['release_state'],
     facetPath: FileFacetPath.release_state,
     variant: 'Basic',
     esDocumentField: FileCentricDocumentField.release_state,
+    highlight: true,
   },
   {
     name: displayNames['study_id'],
@@ -563,9 +565,27 @@ const FacetPanel = () => {
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
+              const highlightCss = facetDetails.highlight
+                ? css`
+                    .FacetRow {
+                      background-color: ${theme.colors.warning_4};
+                    }
+                    .FacetMenu {
+                      background-color: ${theme.colors.warning_4};
+
+                      .MenuItemContent:hover {
+                        background-color: ${theme.colors.warning_3};
+                      }
+
+                      .StyledOption:hover {
+                        background-color: ${theme.colors.warning_3};
+                      }
+                    }
+                  `
+                : css``;
 
               return (
-                <FacetRow key={facetDetails.name}>
+                <FacetRow key={facetDetails.name} className={'FacetRow'} css={highlightCss}>
                   {facetDetails.variant === 'Basic' && (
                     <Facet
                       {...facetProps}

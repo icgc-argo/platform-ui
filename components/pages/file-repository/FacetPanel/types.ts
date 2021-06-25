@@ -30,6 +30,7 @@ export type FacetDetails = {
   facetPath: FileFacetPath;
   variant: 'Basic' | 'Number' | 'Tooltip' | 'Other';
   esDocumentField: FileCentricDocumentField;
+  highlight?: boolean;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
