@@ -72,6 +72,7 @@ import warning_transparent from './collection/warning_transparent';
 import info_transparent from './collection/info_transparent';
 import question_circle from './collection/question_circle';
 import bug from './collection/bug';
+import filter from './collection/filter';
 
 /**
  * Icon path and property lookup object
@@ -133,6 +134,7 @@ const Icons = {
   hamburger_close,
   question_circle,
   bug,
+  filter,
 };
 
 export type UikitIconNames = keyof typeof Icons;
