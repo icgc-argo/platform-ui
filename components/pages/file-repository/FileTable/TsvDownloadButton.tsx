@@ -30,6 +30,7 @@ import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 import { fileRepoTableTSVColumns } from '../utils/constants';
@@ -54,14 +55,16 @@ export default ({
 }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
+  const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
       ? [
           {
-            display: `${selectedFilesCount.toLocaleString()} ${
-              pluralize('file', selectedFilesCount)
-            } selected`,
+            display: `${selectedFilesCount.toLocaleString()} ${pluralize(
+              'file',
+              selectedFilesCount,
+            )} selected`,
             value: DownloadOptionValues.ALL_FILES,
             css: css`
               color: ${theme.colors.secondary_dark};
@@ -117,6 +120,7 @@ export default ({
         : defaultFilters,
     ],
   };
+
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = (item) => {
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
@@ -131,16 +135,15 @@ export default ({
         const tsvdownloadUrl = urlJoin(
           GATEWAY_API_ROOT,
           FILE_TABLE_DOWNLOAD_PATH,
-          `?filter=${
-            encodeURIComponent(JSON.stringify(downloadFilter))
-          }&columns=${
-            encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))
-          }`,
+          `?filter=${encodeURIComponent(
+            JSON.stringify(downloadFilter),
+          )}&columns=${encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))}`,
         );
-        window.location.assign(tsvdownloadUrl);
+        // window.location.assign(tsvdownloadUrl);
+        downloadFileWithEgoToken(tsvdownloadUrl);
         break;
       default:
-        console.log(`${item.value} was selected`);
+        console.log(`Selection from download dropdown '${item.value}' has no action defined.`);
         break;
     }
   };
