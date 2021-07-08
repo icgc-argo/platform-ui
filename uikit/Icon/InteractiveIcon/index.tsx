@@ -20,6 +20,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 
+import { ThemeColorNames } from 'uikit/theme/types';
 import Icon from 'uikit/Icon';
 import Tooltip, { TooltipProps } from 'uikit/Tooltip';
 import { useTheme } from 'uikit/ThemeProvider';
@@ -27,7 +28,11 @@ import { useTheme } from 'uikit/ThemeProvider';
 // dims corresponding hex code for a 25% dim
 const dimColour = (hex: string) => `${hex}BF`;
 
-type IconProps = React.ComponentProps<typeof Icon>;
+type InteractiveIconProps = React.ComponentProps<typeof Icon> &
+  TooltipProps & {
+    disabled?: boolean;
+    hoverFill?: keyof ThemeColorNames | string;
+  };
 const InteractiveIcon = ({
   disabled,
   onClick,
@@ -37,13 +42,15 @@ const InteractiveIcon = ({
   width,
   height,
   fill,
+  hoverFill,
   outline,
   ...props
-}: IconProps & TooltipProps & { disabled?: boolean }) => {
+}: InteractiveIconProps) => {
   const [hovered, setHovered] = React.useState(false);
   const theme = useTheme();
 
   const fillColour = (fill && theme.colors[fill]) || fill || theme.colors.accent2;
+  const hoverColour = hoverFill || dimColour(fillColour);
 
   return (
     <Tooltip hideOnClick={false} {...props} unmountHTMLWhenHide>
@@ -54,7 +61,7 @@ const InteractiveIcon = ({
         onMouseOver={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={(e) => (!disabled ? onClick(e) : false)}
-        fill={disabled ? 'grey_2' : hovered ? `${dimColour(fillColour)}` : `${fillColour}`}
+        fill={disabled ? 'grey_2' : hovered ? `${hoverColour}` : `${fillColour}`}
         name={name}
         className={className}
         title={title}
