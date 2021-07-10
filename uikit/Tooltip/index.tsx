@@ -62,18 +62,20 @@ export type TooltipProps = {
   onHidden?: (d: any) => any;
   className?: string;
   style?: {};
+  arrow?: boolean;
 };
 
 const Tooltip: React.ComponentType<TooltipProps> = ({
   className,
   html,
   position = 'top',
+  arrow = true,
   ...rest
 }) => {
   const theme = useTheme();
   const arrowStyles = {
     top: `
-    right: 50%;
+      right: 50%;
       top: 100%;
       border-top-color: ${theme.colors.primary_1};
       border-right: 5px solid transparent;
@@ -113,15 +115,20 @@ const Tooltip: React.ComponentType<TooltipProps> = ({
     padding: 2px 4px;
     color: white;
     font-weight: normal;
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      width: 0;
-      height: 0;
-      border: 5px solid transparent;
-      pointer-events: none;
-      ${arrowStyles[position]}
+    ${
+      arrow &&
+      `
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: 5px solid transparent;
+        pointer-events: none;
+        ${arrowStyles[position]}
+      }
+    `
     }
   `;
 
@@ -151,11 +158,7 @@ const Tooltip: React.ComponentType<TooltipProps> = ({
             rest.popperOptions,
           ),
         }}
-        html={
-          <TooltipContainer className={className} id="tooltip">
-            {html}
-          </TooltipContainer>
-        }
+        html={<TooltipContainer className={className}>{html}</TooltipContainer>}
         position={position}
         {...rest}
       />
