@@ -22,7 +22,8 @@ import { css } from '@emotion/core';
 
 import { ThemeColorNames } from 'uikit/theme/types';
 import Icon from 'uikit/Icon';
-import Tooltip, { TooltipProps } from 'uikit/Tooltip';
+import Tooltip from 'uikit/Tooltip';
+import { TooltipProps } from 'react-tippy';
 import { useTheme } from 'uikit/ThemeProvider';
 
 // dims corresponding hex code for a 25% dim

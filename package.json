@@ -85,7 +85,7 @@
     "react-grid-system": "^6.4.1",
     "react-json-view": "^1.19.1",
     "react-table": "6.10.0",
-    "react-tippy": "^1.2.3",
+    "react-tippy": "^1.4.0",
     "react-transition-group": "^4.3.0",
     "recompose": "^0.30.0",
     "resize-sensor": "0.0.6",
