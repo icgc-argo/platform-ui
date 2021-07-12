@@ -115,6 +115,8 @@ class Root extends App<
     let refreshedJwt = null;
     let initialPermissions = getPermissionsFromToken(egoJwt);
 
+    console.log({ res, query })
+
     const loggingOut = query.loggingOut || false;
 
     if (loggingOut) {
