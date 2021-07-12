@@ -19,7 +19,11 @@
 
 import { FileCard, TableDiv } from '../common';
 import SimpleTable from 'uikit/Table/SimpleTable';
-import { DataAnalysisInfo } from '../types';
+import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
+
+function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {
+  return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';
+}
 
 export default ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
@@ -27,7 +31,7 @@ export default ({ data }: { data: DataAnalysisInfo }) => {
     'Data Type': data.dataType,
     Platform: data.platform,
     'Genome Build': data.genomeBuild,
-    'Workflow Type': data.workflowType,
+    'Workflow Type': getWorkflowTypeDisplay(data.workflowType),
     Software: data.software,
   };
 
