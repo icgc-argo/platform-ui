@@ -149,6 +149,7 @@ export default () => {
     'chemotherapy',
     'hormone_therapy',
     'immunotherapy',
+    'surgery',
     'radiation',
     'follow_up',
     'family_history',
