@@ -42,7 +42,7 @@ export const dummyDataAnalysisInfo: DataAnalysisInfo = {
   dataType: 'Aligned Reads',
   platform: 'Illumina',
   genomeBuild: 'GRCh38',
-  workflowType: 'DNA seq alignment',
+  workflowType: { workflow_name: 'DNA seq alignment', workflow_version: '1.0.0' },
   software: 'BWA MEM',
 };
 
