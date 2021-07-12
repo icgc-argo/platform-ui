@@ -34,12 +34,17 @@ export type FileSummaryInfo = {
   repoCountry: string;
 };
 
+export type DataAnalysisWorkflowType = {
+  workflow_name: string;
+  workflow_version: string;
+};
+
 export type DataAnalysisInfo = {
   experimentalStrategy: string;
   dataType: string;
   platform: string;
   genomeBuild: string;
-  workflowType: string;
+  workflowType?: DataAnalysisWorkflowType;
   software: string;
 };
 

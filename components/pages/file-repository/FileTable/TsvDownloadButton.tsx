@@ -129,7 +129,7 @@ export default ({
           MANIFEST_DOWNLOAD_PATH,
           `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
-        window.location.assign(downloadUrl);
+        downloadFileWithEgoToken(downloadUrl);
         break;
       case DownloadOptionValues.FILE_TABLE:
         const tsvdownloadUrl = urlJoin(
