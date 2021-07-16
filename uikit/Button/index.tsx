@@ -42,6 +42,9 @@ const Button = React.forwardRef<
     onClick?: (
       e: React.SyntheticEvent<HTMLButtonElement>,
     ) => any | ((e: React.SyntheticEvent<HTMLButtonElement>) => Promise<any>);
+    onBlur?: (
+      e: React.SyntheticEvent<HTMLButtonElement>,
+    ) => any | ((e: React.SyntheticEvent<HTMLButtonElement>) => Promise<any>);
     /**
      * Use with async onClick handlers to set loading indicator
      */
@@ -63,6 +66,7 @@ const Button = React.forwardRef<
     {
       children,
       onClick = (e) => {},
+      onBlur = (e) => {},
       disabled = false,
       variant = BUTTON_VARIANTS.PRIMARY,
       size = variant === BUTTON_VARIANTS.SECONDARY ? BUTTON_SIZES.SM : BUTTON_SIZES.MD,
@@ -95,6 +99,7 @@ const Button = React.forwardRef<
       <StyledButton
         ref={ref}
         onClick={isAsync ? onClickFn : onClick}
+        onBlur={onBlur}
         disabled={disabled}
         size={size}
         variant={variant}
