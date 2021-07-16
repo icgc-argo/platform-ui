@@ -32,140 +32,145 @@ export const INPUT_PRESETS = {
   SEARCH: 'search' as InputPreset,
 };
 
-const Input: React.ComponentType<
-  {
-    ['aria-label']: string;
-    /**
-     * commonly used configuration aliases
-     */
-    preset?: InputPreset;
-    /**
-     * Placeholder
-     */
-    size?: 'sm' | 'lg';
-    /**
-     * Show an error?
-     */
-    error?: boolean;
-    /**
-     * Error message to show
-     */
-    errorMessage?: string;
-    /**
-     * Used for providing css override of the container with access to the internal state
-     */
-    getOverrideCss?: (a: any) => any;
-    /**
-     * Whether to show the clear button
-     */
-    showClear?: boolean;
+type InputProps = {
+  ['aria-label']: string;
+  /**
+   * commonly used configuration aliases
+   */
+  preset?: InputPreset;
+  /**
+   * Placeholder
+   */
+  size?: 'sm' | 'lg';
+  /**
+   * Show an error?
+   */
+  error?: boolean;
+  /**
+   * Error message to show
+   */
+  errorMessage?: string;
+  /**
+   * Used for providing css override of the container with access to the internal state
+   */
+  getOverrideCss?: (a: any) => any;
+  /**
+   * Whether to show the clear button
+   */
+  showClear?: boolean;
 
-    icon?: React.ReactElement;
-    className?: string;
-    id?: string;
-    dataSize?: number;
-  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
-> = ({
-  preset = INPUT_PRESETS.DEFAULT,
-  value = '',
-  onChange,
-  type,
-  size: inputSize,
-  dataSize,
-  placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
-  icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={'search'} height="14px" /> : null,
-  size = INPUT_SIZES.SM,
-  className,
-  error,
-  disabled,
-  showClear = preset === INPUT_PRESETS.SEARCH || false,
-  getOverrideCss,
-  ...props
-}) => {
-  const { disabled: calcDisabled, focused, error: calcError, handleBlur, handleFocus } =
-    useContext(FormControlContext) || {};
+  icon?: React.ReactElement;
+  className?: string;
+  id?: string;
+  dataSize?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>;
 
-  const [activeState, setActive] = useState(focused ? 'focus' : 'default');
+const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      preset = INPUT_PRESETS.DEFAULT,
+      value = '',
+      onChange,
+      type,
+      size: inputSize,
+      dataSize,
+      placeholder = preset === INPUT_PRESETS.SEARCH ? 'Search...' : null,
+      icon = preset === INPUT_PRESETS.SEARCH ? <Icon name={'search'} height="14px" /> : null,
+      size = INPUT_SIZES.SM,
+      className,
+      error,
+      disabled,
+      showClear = preset === INPUT_PRESETS.SEARCH || false,
+      getOverrideCss,
+      ...props
+    },
+    ref,
+  ) => {
+    const { disabled: calcDisabled, focused, error: calcError, handleBlur, handleFocus } =
+      useContext(FormControlContext) || {};
 
-  const hasError = calcError || !!error;
-  const isDisabled = calcDisabled || disabled;
+    const [activeState, setActive] = useState(focused ? 'focus' : 'default');
 
-  const onBlur = (event) => {
-    setActive('default');
-    handleBlur?.();
-    props.onBlur?.(event);
-  };
+    const hasError = calcError || !!error;
+    const isDisabled = calcDisabled || disabled;
 
-  const onClearClick = (e) => {
-    e.target.value = '';
-    onChange(e);
-  };
+    const onBlur = (event) => {
+      setActive('default');
+      handleBlur?.();
+      props.onBlur?.(event);
+    };
 
-  const onFocus = (event) => {
-    setActive('focus');
-    handleFocus?.();
-    props.onFocus?.(event);
-  };
+    const onClearClick = (e) => {
+      e.target.value = '';
+      onChange(e);
+    };
 
-  const inputRef = React.createRef<HTMLInputElement>();
+    const onFocus = (event) => {
+      setActive('focus');
+      handleFocus?.();
+      props.onFocus?.(event);
+    };
 
-  return (
-    <div className={className}>
-      <StyledInputWrapper
-        size={size as StyledInputWrapperProps['size']}
-        onClick={() => {
-          if (inputRef.current) inputRef.current.focus();
-        }}
-        onFocus={() => {
-          if (inputRef.current) inputRef.current.focus();
-        }}
-        style={{ cursor: 'text' }}
-        error={hasError}
-        disabled={isDisabled}
-        inputState={activeState as StyledInputWrapperProps['inputState']}
-        getOverrideCss={getOverrideCss}
-      >
-        {icon && <IconWrapper>{icon}</IconWrapper>}
-        <StyledInput
-          aria-label={props['aria-label']}
-          placeholder={isDisabled ? '' : placeholder}
-          value={value}
-          type={type}
-          onBlur={onBlur}
-          onChange={onChange}
-          onFocus={onFocus}
-          inputSize={inputSize}
-          size={dataSize}
+    const inputRef = (ref || React.createRef()) as React.RefObject<HTMLInputElement>;
+
+    return (
+      <div className={className}>
+        <StyledInputWrapper
+          size={size as StyledInputWrapperProps['size']}
+          onClick={() => {
+            if (inputRef.current) inputRef.current.focus();
+          }}
+          onFocus={() => {
+            if (inputRef.current) inputRef.current.focus();
+          }}
+          style={{ cursor: 'text' }}
+          error={hasError}
           disabled={isDisabled}
-          id={props.id}
-          ref={inputRef}
-        />
-        {showClear && value && String(value).length && (
-          <div
-            css={css`
-              margin-right: 5px;
-              height: 100%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              &:hover {
-                cursor: pointer;
-              }
-            `}
-          >
-            <Icon
-              title="Clear"
-              name="times_circle"
-              width="20px"
-              height="20px"
-              fill="grey_1"
-              onClick={onClearClick}
-            />
-          </div>
-        )}
-      </StyledInputWrapper>
-    </div>
-  );
-};
+          inputState={activeState as StyledInputWrapperProps['inputState']}
+          getOverrideCss={getOverrideCss}
+        >
+          {icon && <IconWrapper>{icon}</IconWrapper>}
+          <StyledInput
+            aria-label={props['aria-label']}
+            placeholder={isDisabled ? '' : placeholder}
+            value={value}
+            type={type}
+            onBlur={onBlur}
+            onChange={onChange}
+            onFocus={onFocus}
+            inputSize={inputSize}
+            size={dataSize}
+            disabled={isDisabled}
+            id={props.id}
+            ref={inputRef}
+          />
+          {showClear && value && String(value).length && (
+            <div
+              css={css`
+                margin-right: 5px;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &:hover {
+                  cursor: pointer;
+                }
+              `}
+            >
+              <Icon
+                title="Clear"
+                name="times_circle"
+                width="20px"
+                height="20px"
+                fill="grey_1"
+                onClick={onClearClick}
+              />
+            </div>
+          )}
+        </StyledInputWrapper>
+      </div>
+    );
+  },
+);
 
 export default Input;
