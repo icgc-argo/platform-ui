@@ -53,7 +53,7 @@ const TooltipStories = storiesOf(`${__dirname}`, module).add(
       transitionFlip: boolean('transitionFlip', undefined),
       unmountHTMLWhenHide: boolean('unmountHTMLWhenHide', undefined),
       sticky: boolean('sticky', undefined),
-      stickyDuration: number('stickyDuration', undefined),
+      stickyDuration: boolean('stickyDuration', undefined),
       touchHold: boolean('touchHold', undefined),
     };
     return (
@@ -62,10 +62,10 @@ const TooltipStories = storiesOf(`${__dirname}`, module).add(
         <Tooltip
           html={<span>Doge~~~!!!!</span>}
           onRequestClose={action('onRequestClose')}
-          onShow={action('onShow')}
-          onShown={action('onShown')}
-          onHide={action('onHide')}
-          onHidden={action('onHidden')}
+          beforeShown={action('beforeShown')}
+          shown={action('shown')}
+          beforeHidden={action('beforeHidden')}
+          hidden={action('hidden')}
           {...knobs}
         >
           <img
