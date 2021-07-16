@@ -21,48 +21,16 @@
 import * as React from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { Tooltip as ReactTippy } from 'react-tippy';
+import { Tooltip as ReactTippy, TooltipProps as TippyProps } from 'react-tippy';
 
 import useTheme from '../utils/useTheme';
 import { Global } from '@emotion/core';
 import { merge } from 'lodash';
 
-// exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy, leaving out some style specific stuff
-export type TooltipProps = {
-  disabled?: boolean;
-  open?: boolean;
-  useContext?: boolean;
-  onRequestClose?: (e: any) => any;
-  position?: 'top' | 'bottom' | 'left' | 'right';
-  trigger?: 'mouseenter' | 'focus' | 'click' | 'manual';
-  tabIndex?: number;
-  interactive?: boolean;
-  interactiveBorder?: number;
-  delay?: number;
-  hideDelay?: number;
-  animation?: 'shift' | 'perspective' | 'fade' | 'scale' | 'none';
-  animateFill?: boolean;
-  duration?: number;
-  distance?: number;
-  offset?: number;
-  hideOnClick?: true | false | 'persistent';
-  multiple?: boolean;
-  followCursor?: boolean;
-  inertia?: boolean;
-  transitionFlip?: boolean;
-  popperOptions?: {};
-  html?: React.ReactNode;
-  unmountHTMLWhenHide?: boolean;
-  sticky?: boolean;
-  stickyDuration?: number;
-  touchHold?: boolean;
-  onShow?: (d: any) => any;
-  onShown?: (d: any) => any;
-  onHide?: (d: any) => any;
-  onHidden?: (d: any) => any;
-  className?: string;
-  style?: {};
-  arrow?: boolean;
+// exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy
+// extending the html prop to support our previous implementation which also accepted strings
+export type TooltipProps = Omit<TippyProps, 'html'> & {
+  html?: React.ReactElement<any> | React.ReactNode | string;
 };
 
 const Tooltip: React.ComponentType<TooltipProps> = ({
