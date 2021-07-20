@@ -138,6 +138,10 @@ const Select: React.ComponentType<{
     return () => document.removeEventListener('mouseup', documentClickHandler);
   }, [isExpanded]);
 
+  useEffect(() => {
+    value === selectedValue || setSelectedValue(value);
+  }, [value]);
+
   const styledInputWrapper = (
     <StyledInputWrapper
       error={hasError}
