@@ -29,7 +29,15 @@ import {
 import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
+import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
+import DropdownPanel, {
+  DropdownPanelFieldset,
+  DropdownPanelLegend,
+  DropdownPanelInputSection,
+  ForwardedDropdownInput as DropdownPanelInput,
+  DropdownPanelButtonSection,
+} from 'uikit/DropdownPanel';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
@@ -37,7 +45,7 @@ import {
   Pipeline,
 } from '../../common';
 
-import { createRef } from 'react';
+import React, { createRef, useRef, useState } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
@@ -45,9 +53,9 @@ import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import React from 'react';
 import { SortedChangeFunction, SortingRule } from 'react-table';
 import ContentError from 'components/placeholders/ContentError';
+import { Row } from 'react-grid-system';
 
 export default ({
   programShortName,
@@ -183,6 +191,157 @@ export default ({
     );
   };
 
+  const TextInputFilter = ({
+    cancelLabel = 'Cancel',
+    confirmLabel = 'Apply',
+    inputLabel = 'Filter',
+    inputPlaceholder = 'Filter...',
+    onCancelClick = () => {},
+    onConfirmClick = () => {},
+    onInputChange = () => {},
+    panelLegend = 'Filter',
+    inputRef,
+    setOpen,
+    handleBlur,
+  }: {
+    cancelLabel?: string;
+    confirmLabel?: string;
+    inputLabel?: string;
+    inputPlaceholder?: string;
+    onCancelClick?: (any?) => void;
+    onConfirmClick?: (any?) => void;
+    onInputChange?: (any?) => void;
+    panelLegend?: string;
+    inputRef?: React.Ref<HTMLInputElement>;
+    setOpen?: (boolean) => void;
+    handleBlur?: (any?) => void;
+  }) => {
+    const [text, setText] = useState('');
+    const _inputRef = inputRef || useRef<HTMLInputElement>(null);
+
+    return (
+      <form>
+        <DropdownPanelFieldset>
+          <DropdownPanelLegend>
+            <legend>{panelLegend}</legend>
+          </DropdownPanelLegend>
+          <DropdownPanelInputSection>
+            <DropdownPanelInput
+              aria-label={inputLabel}
+              icon={<Icon name="search" />}
+              placeholder={inputPlaceholder}
+              size="sm"
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+                onInputChange(e.target.value);
+              }}
+              ref={_inputRef}
+            />
+          </DropdownPanelInputSection>
+          <DropdownPanelButtonSection>
+            <Button
+              variant="text"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen(false);
+                onCancelClick();
+              }}
+              onBlur={handleBlur}
+              type="button"
+            >
+              {cancelLabel}
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={!text.length}
+              onClick={(e) => {
+                e.preventDefault();
+                onConfirmClick(text.trim());
+              }}
+              onBlur={handleBlur}
+              type="submit"
+            >
+              {confirmLabel}
+            </Button>
+          </DropdownPanelButtonSection>
+        </DropdownPanelFieldset>
+      </form>
+    );
+  };
+
+  const FilterableHeader = ({
+    header,
+    onFilter = () => {},
+  }: {
+    header: string;
+    onFilter: (text?: string) => void;
+  }) => {
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
+
+    // Focus on the input when the panel opens
+    const focusInput = () => {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    // Close dropdown panel when tabbing out of it
+    const handleBlur = (e: React.FocusEvent) => {
+      const nextTarget = e.relatedTarget as Node;
+
+      if (open && !panelRef?.current?.contains(nextTarget)) {
+        setOpen(false);
+      }
+    };
+
+    return (
+      <Row
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          margin: unset !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          padding: 2px 6px;
+          width: 100%;
+          height: 100%;
+          ${open ? `background: ${theme.colors.grey_3};` : ''}
+        `}
+      >
+        {header}
+        <DropdownPanel
+          inputLabel={`Filter by ${header}`}
+          triggerIcon="filter"
+          triggerTooltip={`Filter by ${header}`}
+          open={open}
+          setOpen={setOpen}
+          focusFirst={focusInput}
+          buttonRef={buttonRef}
+          panelRef={panelRef}
+          handleBlur={handleBlur}
+        >
+          <TextInputFilter
+            onConfirmClick={onFilter}
+            inputLabel={`Filter by ${header}`}
+            inputPlaceholder={`Search for ${header}...`}
+            panelLegend={header}
+            inputRef={inputRef}
+            setOpen={setOpen}
+            handleBlur={handleBlur}
+          />
+        </DropdownPanel>
+      </Row>
+    );
+  };
+
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -210,7 +369,12 @@ export default ({
           },
         },
         {
-          Header: 'Donor ID',
+          Header: (
+            <FilterableHeader
+              header={'Donor ID'}
+              onFilter={(text) => console.log('filtering for ', text)}
+            />
+          ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return `${original.donorId} (${original.submitterDonorId})`;
@@ -378,39 +542,38 @@ export default ({
         padding-top: 10px;
       `}
     >
-      {programDonorsSummaryQueryError 
-        ? <ContentError />
-        : (
-          <>
-            <TableInfoHeaderContainer
-              left={
-                <DonorStatsArea
-                  css={css`
-                    opacity: ${isTableLoading ? 0.5 : 1};
-                  `}
-                  programDonorSummaryStats={programDonorSummaryStats}
-                />
-              }
-              noMargin={true}
-            />
-            <Table
-              loading={isTableLoading}
-              parentRef={containerRef}
-              columns={tableColumns}
-              data={programDonorSummaryEntries}
-              showPagination={true}
-              manual={true}
-              pages={pagingState.pages}
-              pageSize={pagingState.pageSize}
-              page={pagingState.page}
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-              onSortedChange={onSortedChange}
-              defaultSorted={getDefaultSort(initialSorts)}
-            />
-          </>
-        )
-      }
+      {programDonorsSummaryQueryError ? (
+        <ContentError />
+      ) : (
+        <>
+          <TableInfoHeaderContainer
+            left={
+              <DonorStatsArea
+                css={css`
+                  opacity: ${isTableLoading ? 0.5 : 1};
+                `}
+                programDonorSummaryStats={programDonorSummaryStats}
+              />
+            }
+            noMargin={true}
+          />
+          <Table
+            loading={isTableLoading}
+            parentRef={containerRef}
+            columns={tableColumns}
+            data={programDonorSummaryEntries}
+            showPagination={true}
+            manual={true}
+            pages={pagingState.pages}
+            pageSize={pagingState.pageSize}
+            page={pagingState.page}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            onSortedChange={onSortedChange}
+            defaultSorted={getDefaultSort(initialSorts)}
+          />
+        </>
+      )}
     </div>
   );
 };
