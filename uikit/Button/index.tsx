@@ -60,6 +60,7 @@ const Button = React.forwardRef<
     id?: string;
     isLoading?: boolean;
     Loader?: any;
+    type?: 'button' | 'submit' | 'reset';
   }
 >(
   (
@@ -75,6 +76,7 @@ const Button = React.forwardRef<
       id,
       isLoading: controlledLoadingState,
       Loader,
+      type,
     },
     ref = React.createRef(),
   ) => {
@@ -105,6 +107,7 @@ const Button = React.forwardRef<
         variant={variant}
         className={className}
         id={id}
+        type={type}
       >
         <div
           css={css`
