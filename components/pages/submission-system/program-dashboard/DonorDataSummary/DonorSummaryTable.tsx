@@ -29,15 +29,8 @@ import {
 import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
-import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
-import DropdownPanel, {
-  DropdownPanelFieldset,
-  DropdownPanelLegend,
-  DropdownPanelInputSection,
-  ForwardedDropdownInput as DropdownPanelInput,
-  DropdownPanelButtonSection,
-} from 'uikit/DropdownPanel';
+import DropdownPanel, { TextInputFilter } from 'uikit/DropdownPanel';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
@@ -188,87 +181,6 @@ export default ({
         </div>
         <div>{startCase(original.processingStatus.toLowerCase())}</div>
       </div>
-    );
-  };
-
-  const TextInputFilter = ({
-    cancelLabel = 'Cancel',
-    confirmLabel = 'Apply',
-    inputLabel = 'Filter',
-    inputPlaceholder = 'Filter...',
-    onCancelClick = () => {},
-    onConfirmClick = () => {},
-    onInputChange = () => {},
-    panelLegend = 'Filter',
-    inputRef,
-    setOpen,
-    handleBlur,
-  }: {
-    cancelLabel?: string;
-    confirmLabel?: string;
-    inputLabel?: string;
-    inputPlaceholder?: string;
-    onCancelClick?: (any?) => void;
-    onConfirmClick?: (any?) => void;
-    onInputChange?: (any?) => void;
-    panelLegend?: string;
-    inputRef?: React.Ref<HTMLInputElement>;
-    setOpen?: (boolean) => void;
-    handleBlur?: (any?) => void;
-  }) => {
-    const [text, setText] = useState('');
-    const _inputRef = inputRef || useRef<HTMLInputElement>(null);
-
-    return (
-      <form>
-        <DropdownPanelFieldset>
-          <DropdownPanelLegend>
-            <legend>{panelLegend}</legend>
-          </DropdownPanelLegend>
-          <DropdownPanelInputSection>
-            <DropdownPanelInput
-              aria-label={inputLabel}
-              icon={<Icon name="search" />}
-              placeholder={inputPlaceholder}
-              size="sm"
-              value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-                onInputChange(e.target.value);
-              }}
-              ref={_inputRef}
-            />
-          </DropdownPanelInputSection>
-          <DropdownPanelButtonSection>
-            <Button
-              variant="text"
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                setOpen(false);
-                onCancelClick();
-              }}
-              onBlur={handleBlur}
-              type="button"
-            >
-              {cancelLabel}
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              disabled={!text.length}
-              onClick={(e) => {
-                e.preventDefault();
-                onConfirmClick(text.trim());
-              }}
-              onBlur={handleBlur}
-              type="submit"
-            >
-              {confirmLabel}
-            </Button>
-          </DropdownPanelButtonSection>
-        </DropdownPanelFieldset>
-      </form>
     );
   };
 
