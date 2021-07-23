@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState, useContext, TextareaHTMLAttributes, useCallback } from 'react';
+import React, { useState, useContext, TextareaHTMLAttributes, useCallback, useEffect } from 'react';
 import css from '@emotion/css';
 import clsx from 'clsx';
 import { useTheme } from 'uikit/ThemeProvider';
@@ -65,16 +65,13 @@ const Textarea = ({
     props.onFocus?.(event);
   };
 
-  const getCount = useCallback(
-    (newCount) => (isAscending ? newCount : countLimit - newCount),
-    [countLimit, isAscending],
-  );
+  const getCount = useCallback((newCount) => (isAscending ? newCount : countLimit - newCount), [
+    countLimit,
+    isAscending,
+  ]);
 
-  const onChange = useCallback(
-    (event) => {
-      // normalise line breaks
-      let targetValue = event.target.value.replace(/(\r\n|\r|\n)/g, '\n');
-
+  const applyChanges = useCallback(
+    (targetValue) => {
       if (countLimit === 0) {
         // without count limit, we don't care: just update the value as is
         setInternalValue(targetValue);
@@ -116,11 +113,21 @@ const Textarea = ({
           }
         }
       }
-
-      propsOnChange?.(event);
     },
     [countLimit, propsOnChange, truncate],
   );
+
+  const handleChange = (event) => {
+    // normalise line breaks
+    let targetValue = event.target.value.replace(/(\r\n|\r|\n)/g, '\n');
+
+    applyChanges(targetValue);
+    propsOnChange?.(event);
+  };
+
+  useEffect(() => {
+    value && applyChanges(value);
+  }, []);
 
   return (
     <div
@@ -165,7 +172,7 @@ const Textarea = ({
         disabled={isDisabled}
         id={props.id}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={handleChange}
         onFocus={onFocus}
         value={internalValue}
       />
