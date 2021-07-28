@@ -257,6 +257,7 @@ export default ({
           buttonRef={buttonRef}
           panelRef={panelRef}
           handleBlur={handleBlur}
+          active={filterValue?.length > 0}
         >
           <TextInputFilter
             onConfirmClick={onFilter}

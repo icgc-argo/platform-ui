@@ -19,7 +19,7 @@
 
 import React, { useRef, useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import { select, text } from '@storybook/addon-knobs';
+import { boolean, select, text } from '@storybook/addon-knobs';
 
 import DropdownPanel, {
   DropdownPanelFieldset,
@@ -60,6 +60,7 @@ const DropdownPanelStories = storiesOf(`${__dirname}`, module).add('Basic', () =
     inputLabel: text('inputLabel', 'Filter'),
     triggerIcon: select('triggerIcon', Object.keys(icons) as UikitIconNames[], 'filter'),
     triggerTooltip: text('triggerTooltip', 'Filter'),
+    active: boolean('active', false),
   };
 
   return (

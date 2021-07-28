@@ -188,6 +188,7 @@ const DropdownPanel = ({
   handleBlur,
   handleClickOutside,
   children,
+  active,
 }: {
   customTrigger?: any;
   inputLabel?: string;
@@ -202,6 +203,7 @@ const DropdownPanel = ({
   handleBlur?: (any?) => void;
   handleClickOutside?: (any?) => void;
   children?: any;
+  active?: boolean;
 }) => {
   const [_open, _setOpen] =
     typeof open === 'boolean' && setOpen ? [open, setOpen] : useState(false);
@@ -299,7 +301,7 @@ const DropdownPanel = ({
           >
             <Icon
               name={triggerIcon}
-              fill={_open ? FILL_COLOUR : triggerHovered ? FILL_COLOUR : 'grey_1'}
+              fill={_open || active ? FILL_COLOUR : triggerHovered ? FILL_COLOUR : 'grey_1'}
             />
           </Tooltip>
         ) : (
