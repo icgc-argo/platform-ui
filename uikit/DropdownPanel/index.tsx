@@ -98,6 +98,7 @@ export const TextInputFilter = ({
   inputRef,
   setOpen,
   handleBlur,
+  initialValue,
 }: {
   cancelLabel?: string;
   confirmLabel?: string;
@@ -110,9 +111,14 @@ export const TextInputFilter = ({
   inputRef?: React.Ref<HTMLInputElement>;
   setOpen?: (boolean) => void;
   handleBlur?: (any?) => void;
+  initialValue?: string;
 }) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(initialValue);
   const _inputRef = inputRef || useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setText(initialValue);
+  }, [initialValue]);
 
   return (
     <form>
@@ -132,6 +138,7 @@ export const TextInputFilter = ({
               onInputChange(e.target.value);
             }}
             ref={_inputRef}
+            showClear={true}
           />
         </DropdownPanelInputSection>
         <DropdownPanelButtonSection>

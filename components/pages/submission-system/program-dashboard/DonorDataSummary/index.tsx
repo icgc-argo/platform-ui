@@ -29,6 +29,7 @@ import {
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  ProgramDonorSummaryFilter,
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import { useTimeout } from './common';
@@ -38,27 +39,45 @@ import DownloadButtons from './DownloadButtons';
 import { InvalidDonorsNotification } from './InvalidDonorsNotification';
 import ContentError from '../../../../placeholders/ContentError';
 
-export const useProgramDonorsSummaryQuery = (
-  programShortName: string,
-  first: number,
-  offset: number,
-  sorts: DonorSummaryEntrySort[],
-  options: Omit<
+export const useProgramDonorsSummaryQuery = ({
+  programShortName,
+  first,
+  offset,
+  sorts,
+  filters,
+  options = {},
+}: {
+  programShortName: string;
+  first: number;
+  offset: number;
+  sorts?: DonorSummaryEntrySort[];
+  filters?: ProgramDonorSummaryFilter[];
+  options?: Omit<
     QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
     'variables'
-  > = {},
-) => {
+  >;
+}) => {
   const pollingTimeout = useTimeout(30000);
+  const variables =
+    filters && Object.keys(filters).length > 0
+      ? {
+          programShortName,
+          first,
+          offset,
+          sorts,
+          filters,
+        }
+      : {
+          programShortName,
+          first,
+          offset,
+          sorts,
+        };
   const hook = useQuery<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>(
     PROGRAM_DONOR_SUMMARY_QUERY,
     {
       ...options,
-      variables: {
-        programShortName,
-        first,
-        offset,
-        sorts,
-      },
+      variables,
       pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
   );
@@ -81,20 +100,20 @@ export default () => {
     data: { programDonorSummaryStats } = {},
     error: programDonorsSummaryQueryError,
     loading: isCardLoading = true,
-  } = useProgramDonorsSummaryQuery(
+  } = useProgramDonorsSummaryQuery({
     programShortName,
-    DEFAULT_PAGE_SIZE,
-    DEFAULT_OFFSET,
-    DEFAULT_SORTS,
-  );
+    first: DEFAULT_PAGE_SIZE,
+    offset: DEFAULT_OFFSET,
+    sorts: DEFAULT_SORTS,
+  });
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
 
   const initialPages =
-  !isCardLoading && programDonorSummaryStats
-    ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-    : 1;
+    !isCardLoading && programDonorSummaryStats
+      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
+      : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -102,11 +121,10 @@ export default () => {
     </Typography>
   );
 
-  const isDataValid = !isCardLoading &&
-    !programDonorsSummaryQueryError &&
-    !isDonorSummaryEntriesEmpty;
+  const isDataValid =
+    !isCardLoading && !programDonorsSummaryQueryError && !isDonorSummaryEntriesEmpty;
 
-  return (    
+  return (
     <DashboardCard>
       <Row>
         <Col md={3.5} sm={12}>
@@ -121,7 +139,7 @@ export default () => {
               align-self: center;
               justify-content: flex-end;
             `}
-            >
+          >
             <DownloadButtons />
           </Col>
         )}
@@ -135,20 +153,19 @@ export default () => {
           </Col>
         </Row>
       )}
-      {!isCardLoading && programDonorsSummaryQueryError
-        ? <ContentError />
-        : !isCardLoading && isDonorSummaryEntriesEmpty
-          ? <EmptyDonorSummaryState />
-          : (
-            <DonorSummaryTable
-              programShortName={programShortName}
-              initialPages={initialPages}
-              initialPageSize={DEFAULT_PAGE_SIZE}
-              initialSorts={DEFAULT_SORTS}
-              isCardLoading={isCardLoading}
-              />
-          )
-      }
+      {!isCardLoading && programDonorsSummaryQueryError ? (
+        <ContentError />
+      ) : !isCardLoading && isDonorSummaryEntriesEmpty ? (
+        <EmptyDonorSummaryState />
+      ) : (
+        <DonorSummaryTable
+          programShortName={programShortName}
+          initialPages={initialPages}
+          initialPageSize={DEFAULT_PAGE_SIZE}
+          initialSorts={DEFAULT_SORTS}
+          isCardLoading={isCardLoading}
+        />
+      )}
     </DashboardCard>
   );
 };

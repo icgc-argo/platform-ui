@@ -25,6 +25,7 @@ import {
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  ProgramDonorSummaryEntryField,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
@@ -82,6 +83,19 @@ export default ({
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
+
+  const [filterState, setFilterState] = React.useState([]);
+  const updateFilter = (field: ProgramDonorSummaryEntryField, value: string) => {
+    const newFilters = filterState.filter((x) => x.field !== field);
+    newFilters.push({ field: field, values: [value] });
+    setFilterState(newFilters);
+  };
+  const clearFilter = (field: ProgramDonorSummaryEntryField) => {
+    const newFilters = filterState.filter((x) => x.field !== field);
+    setFilterState(newFilters);
+  };
+  const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
+    filterState.find((x) => x.field === field)?.values[0];
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
     const theme = useTheme();
@@ -186,10 +200,14 @@ export default ({
 
   const FilterableHeader = ({
     header,
+    filterValue = '',
     onFilter = () => {},
+    onClear = () => {},
   }: {
     header: string;
-    onFilter: (text?: string) => void;
+    filterValue?: string;
+    onFilter?: (text?: string) => void;
+    onClear?: () => void;
   }) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -248,6 +266,12 @@ export default ({
             inputRef={inputRef}
             setOpen={setOpen}
             handleBlur={handleBlur}
+            onInputChange={(text: string) => {
+              if (text?.length === 0) {
+                onClear();
+              }
+            }}
+            initialValue={filterValue}
           />
         </DropdownPanel>
       </Row>
@@ -284,7 +308,9 @@ export default ({
           Header: (
             <FilterableHeader
               header={'Donor ID'}
-              onFilter={(text) => console.log('filtering for ', text)}
+              onFilter={(text) => updateFilter('combinedDonorId', text)}
+              onClear={() => clearFilter('combinedDonorId')}
+              filterValue={getFilterValue('combinedDonorId')}
             />
           ),
           accessor: 'donorId',
@@ -392,14 +418,21 @@ export default ({
     } = {},
     error: programDonorsSummaryQueryError,
     loading,
-  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
-    onCompleted: () => {
-      clearTimeout(loaderTimeout);
-      setLoaderTimeout(
-        setTimeout(() => {
-          setIsTableLoading(false);
-        }, 500),
-      );
+  } = useProgramDonorsSummaryQuery({
+    programShortName,
+    first,
+    offset,
+    sorts,
+    filters: filterState,
+    options: {
+      onCompleted: () => {
+        clearTimeout(loaderTimeout);
+        setLoaderTimeout(
+          setTimeout(() => {
+            setIsTableLoading(false);
+          }, 500),
+        );
+      },
     },
   });
 
