@@ -20,6 +20,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'uikit/Button';
 import Icon from '../../Icon';
 import { INPUT_SIZES, StyledInputWrapper, StyledInputWrapperProps } from '../common';
 import { StyledInput, IconWrapper } from './styledComponents';
@@ -101,6 +102,8 @@ const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement
     };
 
     const onClearClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       e.target.value = '';
       onChange(e);
     };
@@ -112,16 +115,18 @@ const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement
     };
 
     const inputRef = (ref || React.createRef()) as React.RefObject<HTMLInputElement>;
+    const clearButtonRef = React.createRef() as React.RefObject<HTMLButtonElement>;
 
     return (
       <div className={className}>
         <StyledInputWrapper
           size={size as StyledInputWrapperProps['size']}
-          onClick={() => {
-            if (inputRef.current) inputRef.current.focus();
+          onClick={(e) => {
+            if (inputRef.current && e.target !== clearButtonRef?.current) inputRef.current.focus();
           }}
-          onFocus={() => {
-            if (inputRef.current) inputRef.current.focus();
+          onFocus={(e) => {
+            // @ts-ignore: TypeScript wrongly throws error because the wrapper is a div, but it contains a button
+            if (inputRef.current && e.target !== clearButtonRef?.current) inputRef.current.focus();
           }}
           style={{ cursor: 'text' }}
           error={hasError}
@@ -145,27 +150,30 @@ const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement
             ref={inputRef}
           />
           {showClear && value && String(value).length && (
-            <div
+            <Button
               css={css`
+                display: block;
+                height: 20px;
+                width: 20px;
+                border: none;
+                background-color: unset;
+                padding: 0;
                 margin-right: 5px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
                 &:hover {
                   cursor: pointer;
                 }
+                &:hover,
+                &:focus {
+                  background-color: unset;
+                }
               `}
+              onClick={onClearClick}
+              type="button"
+              ref={clearButtonRef}
+              aria-label="Clear text"
             >
-              <Icon
-                title="Clear"
-                name="times_circle"
-                width="20px"
-                height="20px"
-                fill="grey_1"
-                onClick={onClearClick}
-              />
-            </div>
+              <Icon title="Clear" name="times_circle" width="20px" height="20px" fill="grey_1" />
+            </Button>
           )}
         </StyledInputWrapper>
       </div>
