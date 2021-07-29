@@ -86,7 +86,12 @@ const CheckboxStories = storiesOf(`${__dirname}`, module)
       setSelected(newSelectedItems);
     };
     return (
-      <RadioCheckboxGroup {...createGroupKnobs()} onChange={onChange} isChecked={isChecked}>
+      <RadioCheckboxGroup
+        {...createGroupKnobs()}
+        onChange={onChange}
+        isChecked={isChecked}
+        disabled
+      >
         <FormCheckbox aria-label="Sausage" value="sausage">
           Sausage
         </FormCheckbox>
