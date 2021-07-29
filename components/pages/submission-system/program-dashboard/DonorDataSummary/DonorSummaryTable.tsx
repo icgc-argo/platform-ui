@@ -517,6 +517,8 @@ export default ({
             onPageSizeChange={onPageSizeChange}
             onSortedChange={onSortedChange}
             defaultSorted={getDefaultSort(initialSorts)}
+            // filter panel style workarounds
+            className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
           />
         </>
       )}

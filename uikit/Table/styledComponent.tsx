@@ -43,6 +43,21 @@ export const StyledTable = styled<typeof ReactTable, StyledTableProps>(ReactTabl
 
   &.ReactTable {
     border: none;
+    &.has-filters {
+      .rt-table {
+        opacity: 1 !important;
+        min-height: 220px;
+        .rt-tbody .rt-tr-group {
+          max-height: 28px;
+        }
+      }
+      &.no-data {
+        .rt-table {
+          margin-bottom: -165px;
+          border-bottom: none;
+        }
+      }
+    }
     & .rt-table {
       ${({ theme, withOutsideBorder }) =>
         withOutsideBorder

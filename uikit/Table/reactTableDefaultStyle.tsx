@@ -48,6 +48,17 @@ export default css`
     border-collapse: collapse;
     overflow: auto;
   }
+  &.ReactTable.has-filters .rt-table {
+    opacity: 1 !important;
+    min-height: 220px;
+    .rt-tbody .rt-tr-group {
+      max-height: 28px;
+    }
+  }
+  &.ReactTable.has-filters.no-data .rt-table {
+    margin-bottom: -165px;
+    border-bottom: none;
+  }
   &.ReactTable .rt-thead {
     flex: 1 0 auto;
     display: flex;
