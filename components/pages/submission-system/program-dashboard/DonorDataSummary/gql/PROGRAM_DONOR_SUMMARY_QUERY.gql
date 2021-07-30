@@ -3,12 +3,14 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
   $first: Int!
   $offset: Int!
   $sorts: [DonorSummaryEntrySort]
+  $filters: [ProgramDonorSummaryFilter!]
 ) {
   programDonorSummaryEntries(
     programShortName: $programShortName
     first: $first
     offset: $offset
     sorts: $sorts
+    filters: $filters
   ) {
     id
     donorId
