@@ -66,7 +66,7 @@ type InputProps = {
   dataSize?: number;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>;
 
-const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       preset = INPUT_PRESETS.DEFAULT,
@@ -84,7 +84,7 @@ const Input: React.ComponentType<InputProps> = React.forwardRef<HTMLInputElement
       showClear = preset === INPUT_PRESETS.SEARCH || false,
       getOverrideCss,
       ...props
-    },
+    }: InputProps,
     ref,
   ) => {
     const { disabled: calcDisabled, focused, error: calcError, handleBlur, handleFocus } =
