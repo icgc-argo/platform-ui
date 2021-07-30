@@ -48,6 +48,17 @@ export default css`
     border-collapse: collapse;
     overflow: auto;
   }
+  &.ReactTable.has-filters .rt-table {
+    opacity: 1 !important;
+    min-height: 220px;
+    .rt-tbody .rt-tr-group {
+      max-height: 28px;
+    }
+  }
+  &.ReactTable.has-filters.no-data .rt-table {
+    margin-bottom: -165px;
+    border-bottom: none;
+  }
   &.ReactTable .rt-thead {
     flex: 1 0 auto;
     display: flex;
@@ -117,6 +128,7 @@ export default css`
   &.ReactTable .rt-thead .rt-resizable-header-content {
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
   }
   &.ReactTable .rt-thead .rt-header-pivot {
     border-right-color: #f7f7f7;
@@ -221,10 +233,10 @@ export default css`
   &.ReactTable .rt-resizer {
     display: inline-block;
     position: absolute;
-    width: 36px;
+    width: 12px;
     top: 0;
     bottom: 0;
-    right: -18px;
+    right: -6px;
     cursor: col-resize;
     z-index: 10;
   }

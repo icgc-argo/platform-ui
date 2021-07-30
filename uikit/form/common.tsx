@@ -119,7 +119,7 @@ export const RadioCheckboxWrapper = styled<'div', RadioCheckboxWrapperProps>('di
   }
 
   &:hover {
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   }
 
   ${({ focused, theme }) => focused && `box-shadow: 0px 0px 4px 0px ${theme.colors.secondary_1};`}

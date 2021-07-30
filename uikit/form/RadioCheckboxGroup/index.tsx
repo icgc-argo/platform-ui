@@ -28,10 +28,11 @@ const RadioCheckboxGroup: React.ComponentType<{
   isChecked?: boolean | ((a: any) => boolean);
   id?: string;
   className?: string;
-}> = ({ id, className, onChange, children, hasError, isChecked }) => {
+  disabled?: boolean;
+}> = ({ id, className, onChange, children, hasError, isChecked, disabled }) => {
   const ERROR_TEXT = 'Please fill out the required field.';
 
-  const context = { isChecked, onChange };
+  const context = { isChecked, onChange, disabled };
 
   return (
     <div id={id} className={className}>

@@ -25,11 +25,13 @@ import {
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  ProgramDonorSummaryEntryField,
 } from './types';
 import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
 import Icon from 'uikit/Icon';
+import DropdownPanel, { TextInputFilter } from 'uikit/DropdownPanel';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
@@ -37,7 +39,7 @@ import {
   Pipeline,
 } from '../../common';
 
-import { createRef } from 'react';
+import React, { createRef, useRef, useState } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
@@ -45,9 +47,9 @@ import DonorStatsArea from './DonorSummaryTableStatArea';
 import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import React from 'react';
 import { SortedChangeFunction, SortingRule } from 'react-table';
 import ContentError from 'components/placeholders/ContentError';
+import { Row } from 'react-grid-system';
 
 export default ({
   programShortName,
@@ -81,6 +83,19 @@ export default ({
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
+
+  const [filterState, setFilterState] = React.useState([]);
+  const updateFilter = (field: ProgramDonorSummaryEntryField, value: string) => {
+    const newFilters = filterState.filter((x) => x.field !== field);
+    newFilters.push({ field: field, values: [value] });
+    setFilterState(newFilters);
+  };
+  const clearFilter = (field: ProgramDonorSummaryEntryField) => {
+    const newFilters = filterState.filter((x) => x.field !== field);
+    setFilterState(newFilters);
+  };
+  const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
+    filterState.find((x) => x.field === field)?.values[0];
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
     const theme = useTheme();
@@ -183,6 +198,87 @@ export default ({
     );
   };
 
+  const FilterableHeader = ({
+    header,
+    filterValue = '',
+    onFilter = () => {},
+    onClear = () => {},
+  }: {
+    header: string;
+    filterValue?: string;
+    onFilter?: (text?: string) => void;
+    onClear?: () => void;
+  }) => {
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
+
+    // Focus on the input when the panel opens
+    const focusInput = () => {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    // Close dropdown panel when tabbing out of it
+    const handleBlur = (e: React.FocusEvent) => {
+      const nextTarget = e.relatedTarget as Node;
+
+      if (open && !panelRef?.current?.contains(nextTarget)) {
+        setOpen(false);
+      }
+    };
+
+    return (
+      <Row
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          margin: unset !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          padding: 2px 6px;
+          width: 100%;
+          height: 100%;
+          ${open ? `background: ${theme.colors.grey_3};` : ''}
+        `}
+      >
+        {header}
+        <DropdownPanel
+          inputLabel={`Filter by ${header}`}
+          triggerIcon="filter"
+          triggerTooltip={`Filter by ${header}`}
+          open={open}
+          setOpen={setOpen}
+          focusFirst={focusInput}
+          buttonRef={buttonRef}
+          panelRef={panelRef}
+          handleBlur={handleBlur}
+          active={filterValue?.length > 0}
+        >
+          <TextInputFilter
+            onConfirmClick={onFilter}
+            inputLabel={`Filter by ${header}`}
+            inputPlaceholder={`Search for ${header}...`}
+            panelLegend={header}
+            inputRef={inputRef}
+            setOpen={setOpen}
+            handleBlur={handleBlur}
+            onInputChange={(text: string) => {
+              if (text?.length === 0) {
+                onClear();
+              }
+            }}
+            initialValue={filterValue}
+          />
+        </DropdownPanel>
+      </Row>
+    );
+  };
+
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -210,7 +306,14 @@ export default ({
           },
         },
         {
-          Header: 'Donor ID',
+          Header: (
+            <FilterableHeader
+              header={'Donor ID'}
+              onFilter={(text) => updateFilter('combinedDonorId', text)}
+              onClear={() => clearFilter('combinedDonorId')}
+              filterValue={getFilterValue('combinedDonorId')}
+            />
+          ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return `${original.donorId} (${original.submitterDonorId})`;
@@ -316,14 +419,21 @@ export default ({
     } = {},
     error: programDonorsSummaryQueryError,
     loading,
-  } = useProgramDonorsSummaryQuery(programShortName, first, offset, sorts, {
-    onCompleted: () => {
-      clearTimeout(loaderTimeout);
-      setLoaderTimeout(
-        setTimeout(() => {
-          setIsTableLoading(false);
-        }, 500),
-      );
+  } = useProgramDonorsSummaryQuery({
+    programShortName,
+    first,
+    offset,
+    sorts,
+    filters: filterState,
+    options: {
+      onCompleted: () => {
+        clearTimeout(loaderTimeout);
+        setLoaderTimeout(
+          setTimeout(() => {
+            setIsTableLoading(false);
+          }, 500),
+        );
+      },
     },
   });
 
@@ -378,39 +488,40 @@ export default ({
         padding-top: 10px;
       `}
     >
-      {programDonorsSummaryQueryError 
-        ? <ContentError />
-        : (
-          <>
-            <TableInfoHeaderContainer
-              left={
-                <DonorStatsArea
-                  css={css`
-                    opacity: ${isTableLoading ? 0.5 : 1};
-                  `}
-                  programDonorSummaryStats={programDonorSummaryStats}
-                />
-              }
-              noMargin={true}
-            />
-            <Table
-              loading={isTableLoading}
-              parentRef={containerRef}
-              columns={tableColumns}
-              data={programDonorSummaryEntries}
-              showPagination={true}
-              manual={true}
-              pages={pagingState.pages}
-              pageSize={pagingState.pageSize}
-              page={pagingState.page}
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-              onSortedChange={onSortedChange}
-              defaultSorted={getDefaultSort(initialSorts)}
-            />
-          </>
-        )
-      }
+      {programDonorsSummaryQueryError ? (
+        <ContentError />
+      ) : (
+        <>
+          <TableInfoHeaderContainer
+            left={
+              <DonorStatsArea
+                css={css`
+                  opacity: ${isTableLoading ? 0.5 : 1};
+                `}
+                programDonorSummaryStats={programDonorSummaryStats}
+              />
+            }
+            noMargin={true}
+          />
+          <Table
+            loading={isTableLoading}
+            parentRef={containerRef}
+            columns={tableColumns}
+            data={programDonorSummaryEntries}
+            showPagination={true}
+            manual={true}
+            pages={pagingState.pages}
+            pageSize={pagingState.pageSize}
+            page={pagingState.page}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            onSortedChange={onSortedChange}
+            defaultSorted={getDefaultSort(initialSorts)}
+            // filter panel style workarounds
+            className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
+          />
+        </>
+      )}
     </div>
   );
 };

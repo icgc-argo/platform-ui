@@ -59,8 +59,17 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
   - creating a new component: `npm run create-component`
   - **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
 - ### Build and publish to npm:
-  1. Edit `version` under `uikit/package.release.json`
-  2. Run `npm run build-uikit` which performs the following:
-  3. Run `npm run publish-uikit` to publish latest version to npm
+
+  1. Increase `version` under `uikit/package.release.json`
+
+  - Automated process (recommended)
+
+    2. Merge that change to `develop`, and let the Jenkins pipeline handle it
+
+  - Manual process (discouraged, but available)
+
+    2. Run `npm run build-uikit` which performs the following:
+    3. Run `npm run publish-uikit` to publish latest version to npm
+
 - ### Restriction:
   - `uikit` components should not reference (`import`) anything outside of the `uikit` directory

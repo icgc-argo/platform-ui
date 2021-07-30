@@ -36,13 +36,13 @@ const FormRadio: React.ComponentType<{
   onChange?: (e: any) => void;
   disabled?: boolean;
   'aria-label'?: string;
-}> = props => {
-  const { ['aria-label']: ariaLabel, value, children, disabled, checked = false } = props;
-  const { onChange, isChecked } = useContext(RadioCheckContext) || {
+}> = (props) => {
+  const { ['aria-label']: ariaLabel, value, children, checked = false } = props;
+  const { onChange, isChecked, disabled } = useContext(RadioCheckContext) || {
     ...props,
     isChecked: props.checked,
   };
-  const onClick = () => onChange(value);
+  const onClick = () => !disabled && onChange(value);
   const calcChecked = isChecked
     ? isChecked instanceof Function
       ? isChecked(value)

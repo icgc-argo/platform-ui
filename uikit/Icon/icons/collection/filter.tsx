@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2021 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,13 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Checkbox from '../Checkbox';
+import { css } from '@emotion/core';
 
-const RadioCheckContext = React.createContext<{
-  isChecked?: boolean | ((e: any) => boolean);
-  onChange?: React.ComponentProps<typeof Checkbox>['onChange'];
-  disabled?: boolean;
-}>({});
-
-export default RadioCheckContext;
+export default {
+  title: 'Filter',
+  viewBox: '0 0 10 10',
+  path:
+    'm.227 0c-.125 0-.227.102-.227.227 0 .048.015.095.044.134l3.702 5.07v2.708c0 .069.032.134.086.177l2.051 1.634c.098.079.241.063.32-.035.032-.04.05-.09.05-.142v-4.343l3.702-5.07c.074-.1.052-.243-.05-.316-.036-.029-.083-.044-.131-.044z',
+  css: css`
+    width: 10px;
+    height: 10px;
+  `,
+  defaultFill: '#0774D3',
+};

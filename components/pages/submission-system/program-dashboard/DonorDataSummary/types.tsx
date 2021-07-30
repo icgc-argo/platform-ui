@@ -71,6 +71,7 @@ export type ProgramDonorsSummaryQueryVariables = {
   first: number;
   offset: number;
   sorts: DonorSummaryEntrySort[];
+  filters?: ProgramDonorSummaryFilter[];
 };
 
 export type DonorSummaryEntrySort = {
@@ -80,3 +81,37 @@ export type DonorSummaryEntrySort = {
 
 export type DonorSummaryEntrySortField = keyof DonorSummaryRecord;
 export type DonorSummaryEntrySortOrder = 'asc' | 'desc';
+
+export type ProgramDonorSummaryEntryField =
+  | 'donorId'
+  | 'combinedDonorId'
+  | 'coreDataPercentAggregation'
+  | 'registeredSamplePairs'
+  | 'rawReads'
+  | 'validWithCurrentDictionary'
+  | 'releaseStatus'
+  | 'submitterDonorId'
+  | 'programShortName'
+  | 'submittedCoreDataPercent'
+  | 'submittedExtendedDataPercent'
+  | 'registeredNormalSamples'
+  | 'registeredTumourSamples'
+  | 'publishedNormalAnalysis'
+  | 'publishedTumourAnalysis'
+  | 'alignmentsCompleted'
+  | 'alignmentsRunning'
+  | 'alignmentsFailed'
+  | 'sangerVcsCompleted'
+  | 'sangerVcsRunning'
+  | 'sangerVcsFailed'
+  | 'mutectCompleted'
+  | 'mutectRunning'
+  | 'mutectFailed'
+  | 'processingStatus'
+  | 'updatedAt'
+  | 'createdAt';
+
+export type ProgramDonorSummaryFilter = {
+  field: ProgramDonorSummaryEntryField;
+  values: [String];
+};
