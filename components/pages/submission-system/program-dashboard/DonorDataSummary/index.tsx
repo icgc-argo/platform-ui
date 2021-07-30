@@ -58,21 +58,13 @@ export const useProgramDonorsSummaryQuery = ({
   >;
 }) => {
   const pollingTimeout = useTimeout(30000);
-  const variables =
-    filters && Object.keys(filters).length > 0
-      ? {
-          programShortName,
-          first,
-          offset,
-          sorts,
-          filters,
-        }
-      : {
-          programShortName,
-          first,
-          offset,
-          sorts,
-        };
+  const variables = {
+    programShortName,
+    first,
+    offset,
+    sorts,
+    ...(filters && Object.keys(filters).length > 0 && { filters }),
+  };
   const hook = useQuery<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>(
     PROGRAM_DONOR_SUMMARY_QUERY,
     {

@@ -117,7 +117,7 @@ export const TextInputFilter = ({
   const _inputRef = inputRef || useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setText(initialValue);
+    text === initialValue || setText(initialValue);
   }, [initialValue]);
 
   return (
