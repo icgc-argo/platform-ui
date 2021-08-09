@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2021 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -18,7 +18,6 @@
  */
 
 import React, { InputHTMLAttributes } from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
 import isEmpty from 'lodash/isEmpty';
@@ -192,19 +191,41 @@ function Highlight({ string, searchText }) {
   }
 }
 
-const MultiSelect: React.ComponentType<{
+type MultiSelectProps = {
+  /**
+   * Aria Label
+   * @default 'search'
+   */
   ['aria-label']: string;
+
+  /**
+   * Whether to allow user to add new value
+   */
+  allowNew?: boolean;
+
+  children: JSX.Element | JSX.Element[];
+
+  disabled?: boolean;
+
+  error?: boolean | string;
+
   id?: string;
-  /* Name of the Input */
+
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+
+  /**
+   * Name of the Input
+   */
   name?: string;
 
-  /* Value of the input */
-  value: any;
+  /**
+   * Handler of onBlur event
+   */
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 
-  /* Placehoder of the input */
-  placeholder?: string;
-
-  /* Handler of onChange event */
+  /**
+   * Handler of onChange event
+   */
   onChange: (
     e: React.SyntheticEvent & {
       target: {
@@ -215,60 +236,77 @@ const MultiSelect: React.ComponentType<{
     child?: any,
   ) => void;
 
-  /* Handler of onBlur event */
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  /**
+   * Handler of onFocus event
+   */
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 
-  /* Whether to allow user to add new value */
-  allowNew?: boolean;
+  /**
+   * Placehoder of the input
+   * @default 'Select one' for single, else 'Add one or more...'
+   */
+  placeholder?: string;
 
-  disabled?: boolean;
-
-  size?: InputSize;
   single?: boolean;
-  inputProps?: InputHTMLAttributes<HTMLInputElement>;
-  error?: boolean | string;
-}> = ({
-  id,
-  name,
-  value = [],
-  children,
-  onChange,
-  onBlur = (e) => {},
-  single,
-  placeholder = single ? 'Select one' : 'Add one or more...',
-  inputProps,
-  allowNew,
-  disabled,
-  error,
+
+  /**
+   * Changes the height of the input field.
+   * Values:
+   * 'sm'=32px,
+   * 'lg'=38px.
+   */
+  size?: InputSize;
+
+  /**
+   * Value of the input
+   */
+  value: any;
+};
+
+const MultiSelect = ({
   'aria-label': ariaLabel = 'search',
+  allowNew = false,
+  children,
+  disabled = false,
+  error = false,
+  id = '',
+  inputProps,
+  name = '',
+  onBlur = (e) => {},
+  onChange,
+  onFocus = (e) => {},
+  placeholder,
+  single = false,
   size = INPUT_SIZES.LG,
-}) => {
-  const [focusState, setFocusState] = React.useState(false);
+  value = [],
+}: MultiSelectProps) => {
+  const contextValue = React.useContext(FormControlContext);
+
+  const [focusState, setFocusState] = React.useState(contextValue?.focused);
   const [searchString, setSearchString] = React.useState('');
 
-  // const options = children.map(child => child.props.value);
+  const hasError = contextValue?.error || !!error;
+  const isDisabled = contextValue?.disabled || disabled;
 
-  const contextValue = React.useContext(FormControlContext);
-  if (!isEmpty(contextValue)) {
-    disabled = contextValue.disabled;
-    error = contextValue.error;
-  }
+  const createCustomEvent = (event, value?) => ({
+    ...event,
+    target: {
+      ...event.target,
+      id,
+      name,
+      tagName: 'MULTISELECT',
+      type: `select-${single ? 'one' : 'multiple'}`,
+      ...(value && { value }),
+    },
+  });
 
   const handleItemClick = (child) => (event) => {
     event.persist();
 
     const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
 
-    event.target = {
-      id,
-      name,
-      tagName: 'MULTISELECT',
-      type: `select-${single ? 'one' : 'multiple'}`,
-      value: newValue,
-    };
-
     setSearchString('');
-    onChange(event, child);
+    onChange(createCustomEvent(event, newValue), child);
   };
 
   const items = React.Children.map(children, (child: any) => {
@@ -299,89 +337,62 @@ const MultiSelect: React.ComponentType<{
   const handleNewItemClick = (event) => {
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
-    event.target = {
-      id,
-      name,
-      tagName: 'MULTISELECT',
-      type: `select-${single ? 'one' : 'multiple'}`,
-      value: newValue,
-    };
-
     setSearchString('');
-    onChange(event, null);
+    onChange(createCustomEvent(event, newValue), null);
   };
 
-  const handleInputChange = (e) => {
-    setSearchString(e.target.value);
+  const handleInputChange = (event) => {
+    setSearchString(event.target.value);
   };
 
-  const handleInputKeyDown = (e) => {
-    if (e.key === 'Backspace') {
+  const handleInputKeyDown = (event) => {
+    if (event.key === 'Backspace') {
       if (searchString.length === 0) {
-        e.persist();
-        e.target = {
-          value: initial(value),
-          name,
-        };
-        onChange(e);
-      }
-    }
+        event.persist();
 
-    if (e.key === 'Enter' || e.key === 'Tab') {
+        onChange(createCustomEvent(event, initial(value)));
+      }
+    } else if (event.key === 'Enter' || event.key === 'Tab') {
       if (allowNew) {
         if (searchString.length !== 0) {
-          e.persist();
+          event.persist();
 
           const newValue = single ? [searchString] : uniq([...value, searchString]);
 
-          e.target = {
-            value: newValue,
-            name,
-          };
-
           setSearchString('');
-          onChange(e);
+          onChange(createCustomEvent(event, newValue));
         }
       } else {
         if (searchString.length !== 0 && items.length > 0) {
-          e.persist();
+          event.persist();
 
           const newValue = single
             ? [items[0].props['data-value']]
             : uniq([...value, items[0].props['data-value']]);
 
-          e.target = {
-            value: newValue,
-            name,
-          };
-
           setSearchString('');
-          onChange(e);
+          onChange(createCustomEvent(event, newValue));
         }
       }
     }
   };
 
-  const handleInputFocus = () => {
+  const handleInputFocus = (event) => {
+    contextValue?.handleFocus?.();
+    onFocus(createCustomEvent(event));
     setFocusState(true);
   };
 
   const handleInputBlur = (event) => {
+    contextValue?.handleBlur?.();
+    onBlur(createCustomEvent(event));
     setFocusState(false);
-    onBlur(event);
   };
 
   const handleSelectedItemClick = (item) => (event) => {
     event.persist();
-    event.target = {
-      id,
-      name,
-      tagName: 'MULTISELECT',
-      type: `select-${single ? 'one' : 'multiple'}`,
-      value: without([...value], item.value),
-    };
 
-    onChange(event, item);
+    onChange(createCustomEvent(event, without([...value], item.value)), item);
   };
 
   const selectedItems = map(value, (v) => {
@@ -411,15 +422,15 @@ const MultiSelect: React.ComponentType<{
       <InputBox
         inputState={focusState ? INPUT_STATES.focus : INPUT_STATES.default}
         size={size}
-        disabled={disabled}
-        error={error}
+        disabled={isDisabled}
+        error={hasError}
       >
         {showPlaceHolder ? (
-          <PlaceHolder className={clsx({ disabled, error, focused: focusState })}>
-            {placeholder}
+          <PlaceHolder className={clsx({ disabled: isDisabled, hasError, focused: focusState })}>
+            {placeholder || single ? 'Select one' : 'Add one or more...'}
           </PlaceHolder>
         ) : single ? (
-          <SingleValue className={clsx({ disabled, error, focused: focusState })}>
+          <SingleValue className={clsx({ disabled: isDisabled, hasError, focused: focusState })}>
             {get(head(selectedItems), 'displayName')}
           </SingleValue>
         ) : (
@@ -427,7 +438,7 @@ const MultiSelect: React.ComponentType<{
             <SelectedItem
               key={item.value}
               onClick={handleSelectedItemClick(item)}
-              className={clsx({ disabled, error, focused: focusState })}
+              className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
             >
               {item.displayName}&nbsp;&nbsp;
               <Icon width="8px" height="8px" name="times" fill="#fff" />
@@ -443,7 +454,7 @@ const MultiSelect: React.ComponentType<{
           onKeyDown={handleInputKeyDown}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          disabled={disabled}
+          disabled={isDisabled}
         />
       </InputBox>
       {showOptions && (
@@ -479,7 +490,7 @@ const MultiSelect: React.ComponentType<{
           </OptionsWrapper>
         </>
       )}
-      <input value={value} name={name} type="hidden" disabled={disabled} {...inputProps} />
+      <input value={value} name={name} type="hidden" disabled={isDisabled} {...inputProps} />
     </Container>
   );
 };
