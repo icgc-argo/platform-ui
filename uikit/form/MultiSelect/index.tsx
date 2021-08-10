@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import isEmpty from 'lodash/isEmpty';
@@ -28,8 +28,6 @@ import without from 'lodash/without';
 import includes from 'lodash/includes';
 import map from 'lodash/map';
 import compact from 'lodash/compact';
-import get from 'lodash/get';
-import head from 'lodash/head';
 import find from 'lodash/find';
 
 import Icon from '../../Icon';
@@ -93,7 +91,7 @@ const Gap = styled('div')`
 `;
 
 const InputBox = styled(StyledInputWrapper)`
-  ${({ theme }) => css(theme.typography.default)};
+  cursor: text;
   flex-wrap: wrap;
   align-items: center;
   position: relative;
@@ -102,13 +100,14 @@ const InputBox = styled(StyledInputWrapper)`
   padding: 2px;
 `;
 
-const Input = styled<'input', { autoComplete: string }>('input')`
-  ${({ theme }) => css(theme.typography.paragraph)};
+const Input = styled<'input', { autoComplete: string; single?: boolean }>('input')`
+  ${({ theme }) => css(theme.typography.default)};
+  background-color: transparent;
   border: none;
   display: block;
   flex-grow: 1;
-  background-color: transparent;
-  padding-left: 5px;
+  padding: 0 ${({ single }) => (single ? 10 : 5)}px;
+
   &:focus {
     outline: none;
   }
@@ -146,15 +145,6 @@ const SectionTitle = styled('li')`
   padding-left: 7px;
   font-family: ${({ theme }) => theme.typography.paragraph.fontFamily};
   color: ${({ theme }) => theme.colors.grey};
-`;
-
-const SingleValue = styled('span')`
-  ${({ theme }) => css(theme.typography.paragraph)};
-  margin-right: 0.3em;
-
-  &.disabled {
-    color: ${({ theme }) => theme.multiSelect.disabledTextColor};
-  }
 `;
 
 function Highlight({ string, searchText }) {
@@ -305,7 +295,7 @@ const MultiSelect = ({
 
     const newValue = single ? [child.props.value] : uniq([...value, child.props.value]);
 
-    setSearchString('');
+    setSearchString(single ? child.props.value : '');
     onChange(createCustomEvent(event, newValue), child);
   };
 
@@ -337,7 +327,7 @@ const MultiSelect = ({
   const handleNewItemClick = (event) => {
     const newValue = single ? [searchString] : uniq([...value, searchString]);
 
-    setSearchString('');
+    setSearchString(single ? searchString : '');
     onChange(createCustomEvent(event, newValue), null);
   };
 
@@ -359,18 +349,17 @@ const MultiSelect = ({
 
           const newValue = single ? [searchString] : uniq([...value, searchString]);
 
-          setSearchString('');
+          setSearchString(single ? searchString : '');
           onChange(createCustomEvent(event, newValue));
         }
       } else {
         if (searchString.length !== 0 && items.length > 0) {
           event.persist();
 
-          const newValue = single
-            ? [items[0].props['data-value']]
-            : uniq([...value, items[0].props['data-value']]);
+          const valueAttr = items[0].props['data-value'];
+          const newValue = single ? [valueAttr] : uniq([...value, valueAttr]);
 
-          setSearchString('');
+          setSearchString(single ? valueAttr : '');
           onChange(createCustomEvent(event, newValue));
         }
       }
@@ -417,6 +406,11 @@ const MultiSelect = ({
 
   const theme = useTheme();
 
+  useEffect(() => {
+    const newValue = single && !isEmpty(value) && value[0];
+    newValue && newValue !== searchString && setSearchString(newValue);
+  }, [single, value]);
+
   return (
     <Container focus={focusState}>
       <InputBox
@@ -429,11 +423,8 @@ const MultiSelect = ({
           <PlaceHolder className={clsx({ disabled: isDisabled, hasError, focused: focusState })}>
             {placeholder || single ? 'Select one' : 'Add one or more...'}
           </PlaceHolder>
-        ) : single ? (
-          <SingleValue className={clsx({ disabled: isDisabled, hasError, focused: focusState })}>
-            {get(head(selectedItems), 'displayName')}
-          </SingleValue>
         ) : (
+          !single &&
           selectedItems.map((item) => (
             <SelectedItem
               key={item.value}
@@ -446,15 +437,16 @@ const MultiSelect = ({
           ))
         )}
         <Input
-          autoComplete="off"
           aria-label={ariaLabel}
-          id={id || `${name}-multiselect`}
-          value={searchString}
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeyDown}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
+          autoComplete="off"
           disabled={isDisabled}
+          id={id || `${name}-multiselect`}
+          single={single}
+          onBlur={handleInputBlur}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          onKeyDown={handleInputKeyDown}
+          value={searchString}
         />
       </InputBox>
       {showOptions && (
