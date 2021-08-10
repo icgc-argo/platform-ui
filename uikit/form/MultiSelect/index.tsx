@@ -232,10 +232,11 @@ type MultiSelectProps = {
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 
   /**
-   * Placehoder of the input
+   * Placehoder of the input.
+   * If given `false` or empty string, no placeholder is shown.
    * @default 'Select one' for single, else 'Add one or more...'
    */
-  placeholder?: string;
+  placeholder?: string | false;
 
   single?: boolean;
 
@@ -419,23 +420,25 @@ const MultiSelect = ({
         disabled={isDisabled}
         error={hasError}
       >
-        {showPlaceHolder ? (
-          <PlaceHolder className={clsx({ disabled: isDisabled, hasError, focused: focusState })}>
-            {placeholder || single ? 'Select one' : 'Add one or more...'}
-          </PlaceHolder>
-        ) : (
-          !single &&
-          selectedItems.map((item) => (
-            <SelectedItem
-              key={item.value}
-              onClick={handleSelectedItemClick(item)}
-              className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
-            >
-              {item.displayName}&nbsp;&nbsp;
-              <Icon width="8px" height="8px" name="times" fill="#fff" />
-            </SelectedItem>
-          ))
-        )}
+        {showPlaceHolder
+          ? ![false, ''].includes(placeholder) && (
+              <PlaceHolder
+                className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
+              >
+                {placeholder || (single ? 'Select one' : 'Add one or more...')}
+              </PlaceHolder>
+            )
+          : !single &&
+            selectedItems.map((item) => (
+              <SelectedItem
+                key={item.value}
+                onClick={handleSelectedItemClick(item)}
+                className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
+              >
+                {item.displayName}&nbsp;&nbsp;
+                <Icon width="8px" height="8px" name="times" fill="#fff" />
+              </SelectedItem>
+            ))}
         <Input
           aria-label={ariaLabel}
           autoComplete="off"
