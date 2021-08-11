@@ -21,6 +21,7 @@ import React, { InputHTMLAttributes, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import toLower from 'lodash/toLower';
 import uniq from 'lodash/uniq';
 import initial from 'lodash/initial';
@@ -279,7 +280,7 @@ const MultiSelect = ({
   const hasError = contextValue?.error || !!error;
   const isDisabled = contextValue?.disabled || disabled;
 
-  const createCustomEvent = (event, value?) => ({
+  const createCustomEvent = (event, newValue?) => ({
     ...event,
     target: {
       ...event.target,
@@ -287,7 +288,7 @@ const MultiSelect = ({
       name,
       tagName: 'MULTISELECT',
       type: `select-${single ? 'one' : 'multiple'}`,
-      ...(value && { value }),
+      ...(newValue && { value: newValue }),
     },
   });
 
@@ -338,10 +339,12 @@ const MultiSelect = ({
 
   const handleInputKeyDown = (event) => {
     if (event.key === 'Backspace') {
-      if (searchString.length === 0) {
+      if (single ? searchString.length <= 1 : searchString.length === 0) {
         event.persist();
 
-        onChange(createCustomEvent(event, initial(value)));
+        const newValue = initial(value);
+
+        isEqual(value, newValue) || onChange(createCustomEvent(event, newValue));
       }
     } else if (event.key === 'Enter' || event.key === 'Tab') {
       if (allowNew) {
@@ -408,9 +411,11 @@ const MultiSelect = ({
   const theme = useTheme();
 
   useEffect(() => {
-    const newValue = single && !isEmpty(value) && value[0];
-    newValue && newValue !== searchString && setSearchString(newValue);
-  }, [single, value]);
+    if (single) {
+      const newValue = value[0] || '';
+      newValue === searchString || setSearchString(newValue);
+    }
+  }, [value]);
 
   return (
     <Container focus={focusState}>
@@ -452,6 +457,7 @@ const MultiSelect = ({
           value={searchString}
         />
       </InputBox>
+
       {showOptions && (
         <>
           <OptionsWrapper focused={focusState}>
