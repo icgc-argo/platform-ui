@@ -30,6 +30,40 @@ import { UikitIconNames } from 'uikit/Icon/icons';
 import { BUTTON_SIZES, BUTTON_VARIANTS } from 'uikit/Button/constants';
 import { ButtonSize } from 'uikit/Button/types';
 
+const DefaultFooter = ({
+  actionVisible,
+  actionButtonId,
+  actionDisabled,
+  onActionClick,
+  actionButtonText,
+  buttonSize,
+  onCancelClick,
+  cancelText,
+}) => (
+  <ButtonContainer>
+    {actionVisible && (
+      <Button
+        id={actionButtonId}
+        size={buttonSize || BUTTON_SIZES.MD}
+        disabled={actionDisabled}
+        onClick={onActionClick}
+      >
+        {actionButtonText}
+      </Button>
+    )}
+    <Button
+      variant={BUTTON_VARIANTS.TEXT}
+      css={css`
+        margin-left: 10px;
+      `}
+      size={buttonSize || BUTTON_SIZES.MD}
+      onClick={onCancelClick}
+    >
+      {cancelText}
+    </Button>
+  </ButtonContainer>
+);
+
 export const ModalContainer = styled('div')`
   position: relative;
   border-radius: 20px;
@@ -94,6 +128,7 @@ const ModalComponent: React.ComponentType<{
   onCancelClick?: React.ComponentProps<typeof Button>['onClick'];
   onCloseClick?: React.ComponentProps<typeof FocusWrapper>['onClick'];
   ContainerEl?: React.ReactType;
+  FooterEl?: React.FC;
 }> = ({
   title = 'Add Users',
   titleIconConfig = {
@@ -111,8 +146,10 @@ const ModalComponent: React.ComponentType<{
   actionDisabled = false,
   children,
   ContainerEl,
+  FooterEl,
 }) => {
   const Container = ContainerEl ? ContainerEl : ModalContainer;
+  const Footer = FooterEl ? FooterEl : DefaultFooter;
 
   return (
     <Container>
@@ -175,28 +212,16 @@ const ModalComponent: React.ComponentType<{
         </div>
       </div>
       <ModalFooter>
-        <ButtonContainer>
-          {actionVisible && (
-            <Button
-              id={actionButtonId}
-              size={buttonSize || BUTTON_SIZES.MD}
-              disabled={actionDisabled}
-              onClick={onActionClick}
-            >
-              {actionButtonText}
-            </Button>
-          )}
-          <Button
-            variant={BUTTON_VARIANTS.TEXT}
-            css={css`
-              margin-left: 10px;
-            `}
-            size={buttonSize || BUTTON_SIZES.MD}
-            onClick={onCancelClick}
-          >
-            {cancelText}
-          </Button>
-        </ButtonContainer>
+        <Footer
+          actionVisible={actionVisible}
+          actionButtonId={actionButtonId}
+          actionDisabled={actionDisabled}
+          onActionClick={onActionClick}
+          actionButtonText={actionButtonText}
+          buttonSize={buttonSize}
+          onCancelClick={onCancelClick}
+          cancelText={cancelText}
+        />
       </ModalFooter>
     </Container>
   );
