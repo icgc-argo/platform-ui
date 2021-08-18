@@ -98,6 +98,7 @@ export type ProgramDonorSummaryEntryField =
   | 'registeredTumourSamples'
   | 'publishedNormalAnalysis'
   | 'publishedTumourAnalysis'
+  | 'alignmentStatus'
   | 'alignmentsCompleted'
   | 'alignmentsRunning'
   | 'alignmentsFailed'
