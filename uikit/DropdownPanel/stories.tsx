@@ -21,104 +21,156 @@ import React, { useRef, useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import { boolean, select, text } from '@storybook/addon-knobs';
 
-import DropdownPanel, {
-  DropdownPanelFieldset,
-  DropdownPanelLegend,
-  DropdownPanelInputSection,
-  ForwardedDropdownInput as DropdownPanelInput,
-  DropdownPanelButtonSection,
-} from '.';
-import Icon from 'uikit/Icon';
+import DropdownPanel, { TextInputFilter, ListFilter, FilterOption } from '.';
 import icons, { UikitIconNames } from 'uikit/Icon/icons';
-import Button from 'uikit/Button';
 
-const DropdownPanelStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  const [filterText, setFilterText] = useState('');
-  const [open, setOpen] = useState(false);
-  const buttonRef = useRef<HTMLInputElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const panelRef = useRef<HTMLElement>(null);
+const DropdownPanelStories = storiesOf(`${__dirname}`, module)
+  .add('Basic', () => {
+    const [open, setOpen] = useState(false);
 
-  // Focus on the input when the panel opens
-  const focusInput = () => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+    const knobs = {
+      customTrigger: text('customTrigger', ''),
+      triggerIcon: select('triggerIcon', Object.keys(icons) as UikitIconNames[], 'filter'),
+      triggerTooltip: text('triggerTooltip', 'Basic Dropdown Panel'),
+      active: boolean('active', false),
+    };
 
-  // Close dropdown panel when tabbing out of it
-  const handleBlur = (e) => {
-    const nextTarget = e.relatedTarget as Node;
+    return (
+      <DropdownPanel open={open} setOpen={setOpen} {...knobs}>
+        <p>Content goes here!</p>
+      </DropdownPanel>
+    );
+  })
+  .add('With Text Input Filter', () => {
+    const [filterText, setFilterText] = useState('');
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
 
-    if (open && !panelRef?.current?.contains(nextTarget)) {
-      setOpen(false);
-    }
-  };
+    // Focus on the input when the panel opens
+    const focusInput = () => {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
 
-  const knobs = {
-    customTrigger: text('customTrigger', ''),
-    inputLabel: text('inputLabel', 'Filter'),
-    triggerIcon: select('triggerIcon', Object.keys(icons) as UikitIconNames[], 'filter'),
-    triggerTooltip: text('triggerTooltip', 'Filter'),
-    active: boolean('active', false),
-  };
+    // Close dropdown panel when tabbing out of it
+    const handleBlur = (e) => {
+      const nextTarget = e.relatedTarget as Node;
 
-  return (
-    <DropdownPanel
-      buttonRef={buttonRef}
-      panelRef={panelRef}
-      focusFirst={focusInput}
-      handleBlur={handleBlur}
-      open={open}
-      setOpen={setOpen}
-      {...knobs}
-    >
-      <form>
-        <DropdownPanelFieldset>
-          <DropdownPanelLegend>{knobs.inputLabel}</DropdownPanelLegend>
-          <DropdownPanelInputSection>
-            <DropdownPanelInput
-              aria-label="Filter"
-              icon={<Icon name="search" />}
-              placeholder="Search IDs..."
-              size="sm"
-              value={filterText}
-              onChange={(e) => {
-                setFilterText(e.target.value);
-              }}
-              ref={inputRef}
-            />
-          </DropdownPanelInputSection>
-          <DropdownPanelButtonSection>
-            <Button
-              variant="text"
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                setOpen(false);
-              }}
-              onBlur={handleBlur}
-              type="button"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              disabled={!filterText.length}
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              onBlur={handleBlur}
-              type="submit"
-            >
-              Apply
-            </Button>
-          </DropdownPanelButtonSection>
-        </DropdownPanelFieldset>
-      </form>
-    </DropdownPanel>
-  );
-});
+      if (open && !panelRef?.current?.contains(nextTarget)) {
+        setOpen(false);
+      }
+    };
+
+    const onFilter = (text: string) => setFilterText(text);
+
+    const knobs = {
+      customTrigger: text('customTrigger', ''),
+      inputLabel: text('inputLabel', 'Text Input Filter'),
+      inputPlaceholder: text('inputPlaceholder', 'Search...'),
+      panelLegend: text('panelLegend', 'Text Input Filter Panel'),
+      triggerIcon: select('triggerIcon', Object.keys(icons) as UikitIconNames[], 'filter'),
+      triggerTooltip: text('triggerTooltip', 'Text Filter Panel'),
+    };
+
+    return (
+      <DropdownPanel
+        buttonRef={buttonRef}
+        panelRef={panelRef}
+        focusFirst={focusInput}
+        handleBlur={handleBlur}
+        open={open}
+        setOpen={setOpen}
+        active={filterText?.length > 0}
+        customTrigger={knobs.customTrigger}
+        triggerIcon={knobs.triggerIcon}
+        triggerTooltip={knobs.triggerTooltip}
+      >
+        <TextInputFilter
+          onConfirmClick={onFilter}
+          inputLabel={knobs.inputLabel}
+          inputPlaceholder={knobs.inputPlaceholder}
+          panelLegend={knobs.panelLegend}
+          inputRef={inputRef}
+          setOpen={setOpen}
+          handleBlur={handleBlur}
+          initialValue={filterText}
+        />
+      </DropdownPanel>
+    );
+  })
+  .add('With List Filter', () => {
+    const filterOptions = [
+      {
+        key: 'COMPLETE',
+        value: 'Complete',
+      },
+      {
+        key: 'INCOMPLETE',
+        value: 'Incomplete',
+      },
+      {
+        key: 'NO_DATA',
+        value: 'No Data Submitted',
+      },
+    ];
+    const [activeFilters, setActiveFilters] = useState([]);
+    const options = React.useMemo(
+      () =>
+        filterOptions.map((option) => ({
+          ...option,
+          isChecked: activeFilters?.indexOf(option.key) > -1 ? true : false,
+        })),
+      [filterOptions, activeFilters],
+    );
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
+
+    // Close dropdown panel when tabbing out of it
+    const handleBlur = (e) => {
+      const nextTarget = e.relatedTarget as Node;
+
+      if (open && !panelRef?.current?.contains(nextTarget)) {
+        setOpen(false);
+      }
+    };
+
+    const onFilter = (options: Array<FilterOption>) =>
+      setActiveFilters(options.filter((option) => option.isChecked).map((option) => option.key));
+
+    const knobs = {
+      customTrigger: text('customTrigger', ''),
+      inputLabel: text('inputLabel', 'List Filter'),
+      panelLegend: text('panelLegend', 'List Filter Panel'),
+      triggerIcon: select('triggerIcon', Object.keys(icons) as UikitIconNames[], 'filter'),
+      triggerTooltip: text('triggerTooltip', 'List Filter Panel'),
+    };
+
+    return (
+      <DropdownPanel
+        buttonRef={buttonRef}
+        panelRef={panelRef}
+        handleBlur={handleBlur}
+        open={open}
+        setOpen={setOpen}
+        active={activeFilters?.length > 0}
+        customTrigger={knobs.customTrigger}
+        triggerIcon={knobs.triggerIcon}
+        triggerTooltip={knobs.triggerTooltip}
+      >
+        <ListFilter
+          filterOptions={options}
+          onConfirmClick={onFilter}
+          panelLegend={knobs.panelLegend}
+          open={open}
+          setOpen={setOpen}
+          handleBlur={handleBlur}
+        />
+      </DropdownPanel>
+    );
+  });
 
 export default DropdownPanelStories;
