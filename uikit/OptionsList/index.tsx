@@ -90,7 +90,7 @@ const OptionsList: React.ComponentType<{
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 25px;
+          min-height: 25px;
           padding: 2px 12px;
           width: calc(100% - (2 * 12px));
           &:hover {
@@ -143,9 +143,8 @@ const OptionsList: React.ComponentType<{
               <div
                 ref={optionRef}
                 css={css`
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
+                  word-break: break-word;
+                  line-height: normal;
                 `}
               >
                 {parseDisplayValue(option.key)}
