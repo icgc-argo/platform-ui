@@ -459,7 +459,29 @@ export default ({
         },
 
         {
-          Header: 'Samples',
+          Header: (
+            <ListFilterHeader
+              header={'Samples'}
+              panelLegend={'Sample Registration Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'registeredSamplePairs',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'VALID',
+                  value: 'Valid',
+                },
+                {
+                  key: 'INVALID',
+                  value: 'Invalid',
+                },
+              ]}
+              activeFilters={getFilterValue('registeredSamplePairs')}
+            />
+          ),
           id: REGISTERD_SAMPLE_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
@@ -478,7 +500,29 @@ export default ({
       },
       columns: [
         {
-          Header: 'Raw Reads',
+          Header: (
+            <ListFilterHeader
+              header={'Raw Reads'}
+              panelLegend={'Raw Reads Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'rawReads',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'VALID',
+                  value: 'Valid',
+                },
+                {
+                  key: 'INVALID',
+                  value: 'Invalid',
+                },
+              ]}
+              activeFilters={getFilterValue('rawReads')}
+            />
+          ),
           id: RAW_READS_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
