@@ -113,7 +113,7 @@ export const DropdownPanelList = styled('ul')`
   padding: 0;
   font-weight: normal;
   max-height: 80px;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 export const DropdownPanelListItemLabel = styled('label')`
