@@ -83,6 +83,22 @@ const ModalStories = storiesOf(`${__dirname}`, module)
       </Modal.Overlay>
     );
   })
+  .add('Custom Footer', () => (
+    <Modal.Overlay>
+      <Modal
+        title="A small modal"
+        titleIconConfig={{
+          name: ICON_NAMES.warning,
+          fill: BUILT_IN_ICON_COLORS.warning,
+        }}
+        FooterEl={() => <footer>Custom Footer</footer>}
+      >
+        <div style={{ width: '300px' }}>
+          Setting a fixed width of the children will make the modal shrink down to fit
+        </div>
+      </Modal>
+    </Modal.Overlay>
+  ))
   .add('Small configuation', () => (
     <Modal.Overlay>
       <Modal

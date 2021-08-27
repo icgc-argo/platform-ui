@@ -54,7 +54,7 @@ export default styled('div')`
   }
   .ReactTable.has-filters .rt-table {
     opacity: 1 !important;
-    min-height: 220px;
+    min-height: 230px;
     .rt-tbody .rt-tr-group {
       max-height: 28px;
     }

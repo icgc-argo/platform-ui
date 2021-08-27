@@ -31,7 +31,7 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
 import Icon from 'uikit/Icon';
-import DropdownPanel, { TextInputFilter } from 'uikit/DropdownPanel';
+import DropdownPanel, { FilterOption, ListFilter, TextInputFilter } from 'uikit/DropdownPanel';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
@@ -85,9 +85,9 @@ export default ({
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
   const [filterState, setFilterState] = React.useState([]);
-  const updateFilter = (field: ProgramDonorSummaryEntryField, value: string) => {
+  const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
-    newFilters.push({ field: field, values: [value] });
+    newFilters.push({ field: field, values: typeof value === 'string' ? [value] : value });
     setFilterState(newFilters);
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
@@ -95,7 +95,7 @@ export default ({
     setFilterState(newFilters);
   };
   const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
-    filterState.find((x) => x.field === field)?.values[0];
+    filterState.find((x) => x.field === field)?.values;
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
     const theme = useTheme();
@@ -200,16 +200,85 @@ export default ({
 
   const FilterableHeader = ({
     header,
-    filterValue = '',
-    onFilter = () => {},
-    onClear = () => {},
+    open,
+    setOpen,
+    focusFirst,
+    buttonRef,
+    panelRef,
+    handleBlur,
+    active,
+    children,
   }: {
     header: string;
-    filterValue?: string;
-    onFilter?: (text?: string) => void;
-    onClear?: () => void;
+    open: boolean;
+    setOpen?: (open?: boolean | any) => void;
+    focusFirst?: () => void;
+    buttonRef?: React.Ref<HTMLInputElement>;
+    panelRef?: React.Ref<HTMLElement>;
+    handleBlur?: (event?: any) => void;
+    active?: boolean;
+    children: React.ReactNode;
   }) => {
     const theme = useTheme();
+
+    return (
+      <Row
+        css={css`
+          margin: unset !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+        `}
+      >
+        <div
+          css={css`
+            white-space: normal;
+            max-width: calc(100% - 14px);
+            overflow: hidden;
+            z-index: 10;
+          `}
+        >
+          {header}
+        </div>
+        <DropdownPanel
+          inputLabel={`Filter by ${header}`}
+          triggerIcon="filter"
+          triggerTooltip={`Filter by ${header}`}
+          open={open}
+          setOpen={setOpen}
+          focusFirst={focusFirst}
+          buttonRef={buttonRef}
+          panelRef={panelRef}
+          handleBlur={handleBlur}
+          active={active}
+        >
+          {children}
+        </DropdownPanel>
+        <div
+          css={css`
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            ${open ? `background: ${theme.colors.grey_3};` : ''}
+          `}
+        />
+      </Row>
+    );
+  };
+
+  const TextFilterHeader = ({
+    header,
+    panelLegend,
+    filterValue = '',
+    onFilter = () => {},
+  }: {
+    header: string;
+    panelLegend?: string;
+    filterValue?: string;
+    onFilter?: (text?: string) => void;
+  }) => {
     const [open, setOpen] = useState(false);
     const buttonRef = useRef<HTMLInputElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -232,50 +301,83 @@ export default ({
     };
 
     return (
-      <Row
-        css={css`
-          position: absolute;
-          top: 0;
-          left: 0;
-          margin: unset !important;
-          justify-content: space-between !important;
-          align-items: center !important;
-          padding: 2px 6px;
-          width: 100%;
-          height: 100%;
-          ${open ? `background: ${theme.colors.grey_3};` : ''}
-        `}
+      <FilterableHeader
+        header={header}
+        open={open}
+        setOpen={setOpen}
+        focusFirst={focusInput}
+        buttonRef={buttonRef}
+        panelRef={panelRef}
+        handleBlur={handleBlur}
+        active={filterValue?.length > 0}
       >
-        {header}
-        <DropdownPanel
+        <TextInputFilter
+          onConfirmClick={onFilter}
           inputLabel={`Filter by ${header}`}
-          triggerIcon="filter"
-          triggerTooltip={`Filter by ${header}`}
+          inputPlaceholder={`Search for ${header}...`}
+          panelLegend={panelLegend || header}
+          inputRef={inputRef}
+          setOpen={setOpen}
+          handleBlur={handleBlur}
+          initialValue={filterValue}
+        />
+      </FilterableHeader>
+    );
+  };
+
+  const ListFilterHeader = ({
+    header,
+    panelLegend,
+    filterOptions = [],
+    activeFilters = [],
+    onFilter = () => {},
+  }: {
+    header: string;
+    panelLegend?: string;
+    filterOptions?: Array<FilterOption>;
+    activeFilters?: Array<string>;
+    onFilter?: (filters?: Array<FilterOption>) => void;
+  }) => {
+    const [open, setOpen] = useState(false);
+    const options = React.useMemo(
+      () =>
+        filterOptions.map((option) => ({
+          ...option,
+          isChecked: activeFilters?.indexOf(option.key) > -1 ? true : false,
+        })),
+      [filterOptions, activeFilters],
+    );
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
+
+    // Close dropdown panel when tabbing out of it
+    const handleBlur = (e: React.FocusEvent) => {
+      const nextTarget = e.relatedTarget as Node;
+
+      if (open && !panelRef?.current?.contains(nextTarget)) {
+        setOpen(false);
+      }
+    };
+
+    return (
+      <FilterableHeader
+        header={header}
+        open={open}
+        setOpen={setOpen}
+        buttonRef={buttonRef}
+        panelRef={panelRef}
+        handleBlur={handleBlur}
+        active={activeFilters.length > 0}
+      >
+        <ListFilter
+          filterOptions={options}
+          onConfirmClick={onFilter}
+          panelLegend={panelLegend || header}
           open={open}
           setOpen={setOpen}
-          focusFirst={focusInput}
-          buttonRef={buttonRef}
-          panelRef={panelRef}
           handleBlur={handleBlur}
-          active={filterValue?.length > 0}
-        >
-          <TextInputFilter
-            onConfirmClick={onFilter}
-            inputLabel={`Filter by ${header}`}
-            inputPlaceholder={`Search for ${header}...`}
-            panelLegend={header}
-            inputRef={inputRef}
-            setOpen={setOpen}
-            handleBlur={handleBlur}
-            onInputChange={(text: string) => {
-              if (text?.length === 0) {
-                onClear();
-              }
-            }}
-            initialValue={filterValue}
-          />
-        </DropdownPanel>
-      </Row>
+        />
+      </FilterableHeader>
     );
   };
 
@@ -307,10 +409,13 @@ export default ({
         },
         {
           Header: (
-            <FilterableHeader
+            <TextFilterHeader
               header={'Donor ID'}
-              onFilter={(text) => updateFilter('combinedDonorId', text)}
-              onClear={() => clearFilter('combinedDonorId')}
+              onFilter={(text) =>
+                text?.length
+                  ? updateFilter('combinedDonorId', text)
+                  : clearFilter('combinedDonorId')
+              }
               filterValue={getFilterValue('combinedDonorId')}
             />
           ),
@@ -320,7 +425,33 @@ export default ({
           },
         },
         {
-          Header: 'Core Completion',
+          Header: (
+            <ListFilterHeader
+              header={'Core Completion'}
+              panelLegend={'Core Completion Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'coreDataPercentAggregation',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'COMPLETE',
+                  value: 'Complete',
+                },
+                {
+                  key: 'INCOMPLETE',
+                  value: 'Incomplete',
+                },
+                {
+                  key: 'NO_DATA',
+                  value: 'No Data Submitted',
+                },
+              ]}
+              activeFilters={getFilterValue('coreDataPercentAggregation')}
+            />
+          ),
           accessor: 'submittedCoreDataPercent',
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
@@ -328,7 +459,29 @@ export default ({
         },
 
         {
-          Header: 'Samples',
+          Header: (
+            <ListFilterHeader
+              header={'Samples'}
+              panelLegend={'Sample Registration Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'registeredSamplePairs',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'VALID',
+                  value: 'Valid',
+                },
+                {
+                  key: 'INVALID',
+                  value: 'Invalid',
+                },
+              ]}
+              activeFilters={getFilterValue('registeredSamplePairs')}
+            />
+          ),
           id: REGISTERD_SAMPLE_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
@@ -347,7 +500,29 @@ export default ({
       },
       columns: [
         {
-          Header: 'Raw Reads',
+          Header: (
+            <ListFilterHeader
+              header={'Raw Reads'}
+              panelLegend={'Raw Reads Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'rawReads',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'VALID',
+                  value: 'Valid',
+                },
+                {
+                  key: 'INVALID',
+                  value: 'Invalid',
+                },
+              ]}
+              activeFilters={getFilterValue('rawReads')}
+            />
+          ),
           id: RAW_READS_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
@@ -358,7 +533,37 @@ export default ({
           width: 100,
         },
         {
-          Header: 'Alignment',
+          Header: (
+            <ListFilterHeader
+              header={'Alignment'}
+              panelLegend={'Alignment Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'alignmentStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'COMPLETED',
+                  value: 'Completed',
+                },
+                {
+                  key: 'IN_PROGRESS',
+                  value: 'In Progress',
+                },
+                {
+                  key: 'FAILED',
+                  value: 'Failed',
+                },
+                {
+                  key: 'NO_DATA',
+                  value: 'No Data',
+                },
+              ]}
+              activeFilters={getFilterValue('alignmentStatus')}
+            />
+          ),
           id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
