@@ -102,6 +102,7 @@ export type ProgramDonorSummaryEntryField =
   | 'alignmentsCompleted'
   | 'alignmentsRunning'
   | 'alignmentsFailed'
+  | 'sangerVCStatus'
   | 'sangerVcsCompleted'
   | 'sangerVcsRunning'
   | 'sangerVcsFailed'

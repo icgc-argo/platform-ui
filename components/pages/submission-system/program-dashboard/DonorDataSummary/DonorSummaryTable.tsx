@@ -574,7 +574,37 @@ export default ({
           ),
         },
         {
-          Header: 'Sanger VC',
+          Header: (
+            <ListFilterHeader
+              header={'Sanger VC'}
+              panelLegend={'Sanger VC Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'sangerVCStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'COMPLETED',
+                  value: 'Completed',
+                },
+                {
+                  key: 'IN_PROGRESS',
+                  value: 'In Progress',
+                },
+                {
+                  key: 'FAILED',
+                  value: 'Failed',
+                },
+                {
+                  key: 'NO_DATA',
+                  value: 'No Data',
+                },
+              ]}
+              activeFilters={getFilterValue('sangerVCStatus')}
+            />
+          ),
           id: SANGER_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
