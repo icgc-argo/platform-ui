@@ -106,6 +106,7 @@ export type ProgramDonorSummaryEntryField =
   | 'sangerVcsCompleted'
   | 'sangerVcsRunning'
   | 'sangerVcsFailed'
+  | 'mutectStatus'
   | 'mutectCompleted'
   | 'mutectRunning'
   | 'mutectFailed'

@@ -615,7 +615,37 @@ export default ({
           ),
         },
         {
-          Header: 'Mutect2 VC',
+          Header: (
+            <ListFilterHeader
+              header={'Mutect2 VC'}
+              panelLegend={'Mutect2 VC Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'mutectStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={[
+                {
+                  key: 'COMPLETED',
+                  value: 'Completed',
+                },
+                {
+                  key: 'IN_PROGRESS',
+                  value: 'In Progress',
+                },
+                {
+                  key: 'FAILED',
+                  value: 'Failed',
+                },
+                {
+                  key: 'NO_DATA',
+                  value: 'No Data',
+                },
+              ]}
+              activeFilters={getFilterValue('mutectStatus')}
+            />
+          ),
           id: MUTECT2_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
