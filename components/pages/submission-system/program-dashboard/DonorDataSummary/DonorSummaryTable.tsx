@@ -44,7 +44,11 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import DonorStatsArea from './DonorSummaryTableStatArea';
-import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
+import {
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+  FILTER_OPTIONS,
+} from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
 import { SortedChangeFunction, SortingRule } from 'react-table';
@@ -435,20 +439,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETE',
-                  value: 'Complete',
-                },
-                {
-                  key: 'INCOMPLETE',
-                  value: 'Incomplete',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data Submitted',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completeIncomplete}
               activeFilters={getFilterValue('coreDataPercentAggregation')}
             />
           ),
@@ -469,16 +460,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'VALID',
-                  value: 'Valid',
-                },
-                {
-                  key: 'INVALID',
-                  value: 'Invalid',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.validInvalid}
               activeFilters={getFilterValue('registeredSamplePairs')}
             />
           ),
@@ -510,16 +492,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'VALID',
-                  value: 'Valid',
-                },
-                {
-                  key: 'INVALID',
-                  value: 'Invalid',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.validInvalid}
               activeFilters={getFilterValue('rawReads')}
             />
           ),
@@ -543,24 +516,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETED',
-                  value: 'Completed',
-                },
-                {
-                  key: 'IN_PROGRESS',
-                  value: 'In Progress',
-                },
-                {
-                  key: 'FAILED',
-                  value: 'Failed',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
               activeFilters={getFilterValue('alignmentStatus')}
             />
           ),
@@ -584,24 +540,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETED',
-                  value: 'Completed',
-                },
-                {
-                  key: 'IN_PROGRESS',
-                  value: 'In Progress',
-                },
-                {
-                  key: 'FAILED',
-                  value: 'Failed',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
               activeFilters={getFilterValue('sangerVCStatus')}
             />
           ),
@@ -625,24 +564,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETED',
-                  value: 'Completed',
-                },
-                {
-                  key: 'IN_PROGRESS',
-                  value: 'In Progress',
-                },
-                {
-                  key: 'FAILED',
-                  value: 'Failed',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
               activeFilters={getFilterValue('mutectStatus')}
             />
           ),
