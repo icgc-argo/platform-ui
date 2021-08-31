@@ -50,13 +50,13 @@ export default css`
   }
   &.ReactTable.has-filters .rt-table {
     opacity: 1 !important;
-    min-height: 230px;
+    min-height: 250px;
     .rt-tbody .rt-tr-group {
       max-height: 28px;
     }
   }
   &.ReactTable.has-filters.no-data .rt-table {
-    margin-bottom: -165px;
+    margin-bottom: -185px;
     border-bottom: none;
   }
   &.ReactTable .rt-thead {

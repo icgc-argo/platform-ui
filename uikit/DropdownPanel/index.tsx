@@ -112,7 +112,7 @@ export const DropdownPanelList = styled('ul')`
   margin: 0;
   padding: 0;
   font-weight: normal;
-  max-height: 80px;
+  max-height: 100px;
   overflow: auto;
 `;
 
