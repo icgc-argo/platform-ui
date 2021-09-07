@@ -44,7 +44,11 @@ import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import DonorStatsArea from './DonorSummaryTableStatArea';
-import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
+import {
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+  FILTER_OPTIONS,
+} from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
 import { SortedChangeFunction, SortingRule } from 'react-table';
@@ -435,20 +439,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETE',
-                  value: 'Complete',
-                },
-                {
-                  key: 'INCOMPLETE',
-                  value: 'Incomplete',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data Submitted',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completeIncomplete}
               activeFilters={getFilterValue('coreDataPercentAggregation')}
             />
           ),
@@ -469,16 +460,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'VALID',
-                  value: 'Valid',
-                },
-                {
-                  key: 'INVALID',
-                  value: 'Invalid',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.validInvalid}
               activeFilters={getFilterValue('registeredSamplePairs')}
             />
           ),
@@ -510,16 +492,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'VALID',
-                  value: 'Valid',
-                },
-                {
-                  key: 'INVALID',
-                  value: 'Invalid',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.validInvalid}
               activeFilters={getFilterValue('rawReads')}
             />
           ),
@@ -543,24 +516,7 @@ export default ({
                   options.filter((option) => option.isChecked).map((option) => option.key),
                 )
               }
-              filterOptions={[
-                {
-                  key: 'COMPLETED',
-                  value: 'Completed',
-                },
-                {
-                  key: 'IN_PROGRESS',
-                  value: 'In Progress',
-                },
-                {
-                  key: 'FAILED',
-                  value: 'Failed',
-                },
-                {
-                  key: 'NO_DATA',
-                  value: 'No Data',
-                },
-              ]}
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
               activeFilters={getFilterValue('alignmentStatus')}
             />
           ),
@@ -574,7 +530,20 @@ export default ({
           ),
         },
         {
-          Header: 'Sanger VC',
+          Header: (
+            <ListFilterHeader
+              header={'Sanger VC'}
+              panelLegend={'Sanger VC Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'sangerVCStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              activeFilters={getFilterValue('sangerVCStatus')}
+            />
+          ),
           id: SANGER_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
@@ -585,7 +554,20 @@ export default ({
           ),
         },
         {
-          Header: 'Mutect2 VC',
+          Header: (
+            <ListFilterHeader
+              header={'Mutect2 VC'}
+              panelLegend={'Mutect2 VC Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'mutectStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              activeFilters={getFilterValue('mutectStatus')}
+            />
+          ),
           id: MUTECT2_VC_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline

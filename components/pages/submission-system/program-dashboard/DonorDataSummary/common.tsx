@@ -22,7 +22,7 @@ import { DonorDataReleaseState } from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
 
 export const RELEASED_STATE_FILL_COLOURS: {
-  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['fill']
+  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['fill'];
 } = {
   [DonorDataReleaseState.FULLY]: 'secondary',
   [DonorDataReleaseState.PARTIALLY]: 'secondary_2',
@@ -30,7 +30,7 @@ export const RELEASED_STATE_FILL_COLOURS: {
 };
 
 export const RELEASED_STATE_STROKE_COLOURS: {
-  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['outline']
+  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['outline'];
 } = {
   [DonorDataReleaseState.FULLY]: null,
   [DonorDataReleaseState.PARTIALLY]: null,
@@ -46,4 +46,49 @@ export const useTimeout = (msTimeout: number = 30000) => {
     return () => clearTimeout(timer);
   }, []);
   return isTimeOut;
+};
+
+export const FILTER_OPTIONS = {
+  completeIncomplete: [
+    {
+      key: 'COMPLETE',
+      value: 'Complete',
+    },
+    {
+      key: 'INCOMPLETE',
+      value: 'Incomplete',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No Data Submitted',
+    },
+  ],
+  validInvalid: [
+    {
+      key: 'VALID',
+      value: 'Valid',
+    },
+    {
+      key: 'INVALID',
+      value: 'Invalid',
+    },
+  ],
+  completedInProgressFailed: [
+    {
+      key: 'COMPLETED',
+      value: 'Completed',
+    },
+    {
+      key: 'IN_PROGRESS',
+      value: 'In Progress',
+    },
+    {
+      key: 'FAILED',
+      value: 'Failed',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No Data',
+    },
+  ],
 };
