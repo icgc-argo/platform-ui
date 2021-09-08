@@ -47,6 +47,8 @@ export type ProgramDonorReleaseStats = {
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
   donorsInvalidWithCurrentDictionaryCount: number;
+  percentageCoreClinical?: number;
+  percentageTumourAndNormal?: number;
 };
 
 export enum DonorDataReleaseState {
@@ -62,8 +64,10 @@ export enum MolecularProcessingStatus {
 
 // **** GQL types ****
 export type ProgramDonorsSummaryQueryData = {
-  programDonorSummaryEntries: DonorSummaryRecord[];
-  programDonorSummaryStats: ProgramDonorReleaseStats;
+  programDonorSummary: {
+    entries: DonorSummaryRecord[];
+    stats: ProgramDonorReleaseStats;
+  };
 };
 
 export type ProgramDonorsSummaryQueryVariables = {
