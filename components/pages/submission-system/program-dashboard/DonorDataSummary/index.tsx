@@ -32,7 +32,7 @@ import {
   ProgramDonorSummaryFilter,
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
-import { useTimeout } from './common';
+import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from './common';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
@@ -89,7 +89,9 @@ export default () => {
 
   // using the default query variables will get us all registered donors
   const {
-    data: { programDonorSummaryStats } = {},
+    data: { programDonorSummary: { stats: programDonorSummaryStats } } = {
+      programDonorSummary: { stats: EMPTY_PROGRAM_SUMMARY_STATS },
+    },
     error: programDonorsSummaryQueryError,
     loading: isCardLoading = true,
   } = useProgramDonorsSummaryQuery({

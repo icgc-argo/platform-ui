@@ -35,7 +35,7 @@ import {
   POLL_INTERVAL_MILLISECONDS,
 } from '../common';
 import PercentBar from 'uikit/PercentBar';
-import { useTimeout } from '../DonorDataSummary/common';
+import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from '../DonorDataSummary/common';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -91,13 +91,20 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
 export default () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const pollingTimeout = useTimeout(30000);
-  const { data, loading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
-    DASHBOARD_SUMMARY_QUERY,
-    {
-      variables: { programShortName: programShortName },
-      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+  const {
+    data: { programDonorSummary: { stats: programDonorSummaryStats }, program } = {
+      programDonorSummary: {
+        stats: EMPTY_PROGRAM_SUMMARY_STATS,
+      },
+      program: {
+        commitmentDonors: 0,
+      },
     },
-  );
+    loading,
+  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(DASHBOARD_SUMMARY_QUERY, {
+    variables: { programShortName: programShortName },
+    pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+  });
   return (
     <div>
       <Container>
@@ -105,15 +112,14 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={data.programDonorSummaryStats.registeredDonorsCount.toLocaleString()}
+                quantity={programDonorSummaryStats.registeredDonorsCount.toLocaleString()}
                 description="Registered Donors"
               >
                 <PercentBar
-                  num={data.programDonorSummaryStats.registeredDonorsCount}
-                  den={data.program.commitmentDonors}
+                  num={programDonorSummaryStats.registeredDonorsCount}
+                  den={program.commitmentDonors}
                   fillColor={
-                    data.programDonorSummaryStats.registeredDonorsCount >=
-                    data.program.commitmentDonors
+                    programDonorSummaryStats.registeredDonorsCount >= program.commitmentDonors
                       ? 'success'
                       : 'warning'
                   }
@@ -128,18 +134,14 @@ export default () => {
           <Col>
             {!loading ? (
               <Statistic
-                quantity={`${Math.round(
-                  data.programDonorSummaryStats.percentageCoreClinical * 100,
-                )}%`}
+                quantity={`${Math.round(programDonorSummaryStats.percentageCoreClinical * 100)}%`}
                 description="Donors with all Core Clinical Data"
               >
                 <PercentBar
-                  num={data.programDonorSummaryStats.percentageCoreClinical * 100}
+                  num={programDonorSummaryStats.percentageCoreClinical * 100}
                   den={100}
                   fillColor={
-                    data.programDonorSummaryStats.percentageCoreClinical >= 1
-                      ? 'success'
-                      : 'warning'
+                    programDonorSummaryStats.percentageCoreClinical >= 1 ? 'success' : 'warning'
                   }
                 />
               </Statistic>
@@ -153,17 +155,15 @@ export default () => {
             {!loading ? (
               <Statistic
                 quantity={`${Math.round(
-                  data.programDonorSummaryStats.percentageTumourAndNormal * 100,
+                  programDonorSummaryStats.percentageTumourAndNormal * 100,
                 )}%`}
                 description="Donors with Tumour & Normal"
               >
                 <PercentBar
-                  num={data.programDonorSummaryStats.percentageTumourAndNormal * 100}
+                  num={programDonorSummaryStats.percentageTumourAndNormal * 100}
                   den={100}
                   fillColor={
-                    data.programDonorSummaryStats.percentageTumourAndNormal >= 1
-                      ? 'success'
-                      : 'warning'
+                    programDonorSummaryStats.percentageTumourAndNormal >= 1 ? 'success' : 'warning'
                   }
                 />
               </Statistic>

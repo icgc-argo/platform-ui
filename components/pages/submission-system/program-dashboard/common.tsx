@@ -59,7 +59,9 @@ type Program = {
 };
 
 export type DashboardSummaryData = {
-  programDonorSummaryStats: ProgramDonorSummaryStats;
+  programDonorSummary: {
+    stats: ProgramDonorSummaryStats;
+  };
   program: Program;
 };
 
