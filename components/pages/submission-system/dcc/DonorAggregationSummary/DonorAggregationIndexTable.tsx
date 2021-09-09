@@ -83,9 +83,9 @@ const DonorAggregationIndexTable = ({
   const data = (queries || []).map(({ shortName, query: { loading, data } }) => ({
     loading: '' + loading,
     shortName,
-    donors: data?.programDonorSummaryStats.registeredDonorsCount,
-    files: data?.programDonorSummaryStats.allFilesCount,
-    lastUpdate: data?.programDonorSummaryStats.lastUpdate,
+    donors: data?.programDonorSummary?.stats?.registeredDonorsCount,
+    files: data?.programDonorSummary?.stats?.allFilesCount,
+    lastUpdate: data?.programDonorSummary?.stats?.lastUpdate,
   }));
 
   const someQueriesLoading = queries.some((query) => query.query.loading);

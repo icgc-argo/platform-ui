@@ -48,6 +48,7 @@ import {
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
   FILTER_OPTIONS,
+  EMPTY_PROGRAM_SUMMARY_STATS,
 } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
@@ -76,14 +77,6 @@ export default ({
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
-
-  const emptyProgramSummaryStats: ProgramDonorReleaseStats = {
-    registeredDonorsCount: 0,
-    fullyReleasedDonorsCount: 0,
-    partiallyReleasedDonorsCount: 0,
-    noReleaseDonorsCount: 0,
-    donorsInvalidWithCurrentDictionaryCount: 0,
-  };
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -601,9 +594,13 @@ export default ({
 
   const {
     data: {
-      programDonorSummaryEntries = [],
-      programDonorSummaryStats = emptyProgramSummaryStats,
-    } = {},
+      programDonorSummary: { entries: programDonorSummaryEntries, stats: programDonorSummaryStats },
+    } = {
+      programDonorSummary: {
+        entries: [],
+        stats: EMPTY_PROGRAM_SUMMARY_STATS,
+      },
+    },
     error: programDonorsSummaryQueryError,
     loading,
   } = useProgramDonorsSummaryQuery({

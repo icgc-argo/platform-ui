@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { DonorDataReleaseState } from './types';
+import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
 
 export const RELEASED_STATE_FILL_COLOURS: {
@@ -91,4 +91,14 @@ export const FILTER_OPTIONS = {
       value: 'No Data',
     },
   ],
+};
+
+export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
+  registeredDonorsCount: 0,
+  fullyReleasedDonorsCount: 0,
+  partiallyReleasedDonorsCount: 0,
+  noReleaseDonorsCount: 0,
+  donorsInvalidWithCurrentDictionaryCount: 0,
+  percentageCoreClinical: 0,
+  percentageTumourAndNormal: 0,
 };
