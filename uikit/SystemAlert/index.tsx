@@ -5,8 +5,8 @@ import { ThemeColorNames } from '../theme/types';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
 import { UikitIconNames } from 'uikit/Icon/icons';
-import { Col, Row } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
+import Link from 'uikit/Link';
 
 type AlertLevel = 'error' | 'warning' | 'info';
 
@@ -46,6 +46,34 @@ export type Alert = {
 type AlertProps = {
   alert: Alert;
   onClose: () => void;
+};
+
+/**
+ * Find markdown style links in the alert message and render them as Link
+ * @param message
+ * @param linkColor
+ * @returns
+ */
+const parseMessage = (message: string, linkColor: string) => {
+  // Split message into text and links
+  const messageParts = message.split(/(\[.+\]\(.*\))/);
+  return messageParts.map((part) => {
+    const matches = part.match(/\[(.*)\]\((.*)\)/);
+    // matches will either be null (not a markdown link) or an array with the content like:
+    // matches[0]: provided text
+    // matches[1]: first group match (Link Display Text)
+    // matches[2]: second group match (Link href)
+    // matches... more stuff we dont care about
+    if (matches) {
+      return (
+        <Link href={matches[2]} style={{ color: linkColor }} target="_blank">
+          {matches[1]}
+        </Link>
+      );
+    } else {
+      return part;
+    }
+  });
 };
 
 const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
@@ -97,7 +125,7 @@ const SystemAlert: React.ComponentType<AlertProps> = ({ alert, onClose }) => {
                 font-weight: 300;
               `}
             >
-              {alert.message}
+              {parseMessage(alert.message, theme.colors[ALERT_VARIANTS[alert.level].fill])}
             </Typography>
           )}
         </div>
