@@ -292,10 +292,12 @@ const FacetPanel = () => {
     }));
 
     // Control ordering of options for specific facets
-    switch (facet.name) {
+    switch (facet.facetPath) {
       case 'embargo_stage':
         const order = ['PROGRAM_ONLY', 'MEMBER_ACCESS', 'ASSOCIATE_ACCESS', 'PUBLIC'];
-        return order.map((order) => options.find((option) => option.key === order)).filter(Boolean);
+        return order
+          .map((embargoStage) => options.find((option) => option.key === embargoStage))
+          .filter(Boolean);
       default:
         return options;
     }
