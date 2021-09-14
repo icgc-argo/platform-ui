@@ -449,6 +449,7 @@ const MultiSelect = ({
           autoComplete="off"
           disabled={isDisabled}
           id={id || `${name}-multiselect`}
+          name={id || `${name}-multiselect`}
           single={single}
           onBlur={handleInputBlur}
           onChange={handleInputChange}
