@@ -336,7 +336,7 @@ const MultiSelect = ({
   const handleInputChange = (event) => {
     const newValue = event.target.value;
     setSearchString(newValue);
-    single && onChange(createCustomEvent(event, newValue), null);
+    single && onChange(createCustomEvent(event, [newValue]), null);
   };
 
   const handleInputKeyDown = (event) => {
