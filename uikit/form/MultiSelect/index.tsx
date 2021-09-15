@@ -264,9 +264,9 @@ const MultiSelect = ({
   id = '',
   inputProps,
   name = '',
-  onBlur = (e) => {},
+  onBlur = (e) => { },
   onChange,
-  onFocus = (e) => {},
+  onFocus = (e) => { },
   placeholder,
   single = false,
   size = INPUT_SIZES.LG,
@@ -334,7 +334,9 @@ const MultiSelect = ({
   };
 
   const handleInputChange = (event) => {
-    setSearchString(event.target.value);
+    const newValue = event.target.value;
+    setSearchString(newValue);
+    single && onChange(createCustomEvent(event, [newValue]), null);
   };
 
   const handleInputKeyDown = (event) => {
@@ -427,28 +429,29 @@ const MultiSelect = ({
       >
         {showPlaceHolder
           ? ![false, ''].includes(placeholder) && (
-              <PlaceHolder
-                className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
-              >
-                {placeholder || (single ? 'Select one' : 'Add one or more...')}
-              </PlaceHolder>
-            )
+            <PlaceHolder
+              className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
+            >
+              {placeholder || (single ? 'Select one' : 'Add one or more...')}
+            </PlaceHolder>
+          )
           : !single &&
-            selectedItems.map((item) => (
-              <SelectedItem
-                key={item.value}
-                onClick={handleSelectedItemClick(item)}
-                className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
-              >
-                {item.displayName}&nbsp;&nbsp;
-                <Icon width="8px" height="8px" name="times" fill="#fff" />
-              </SelectedItem>
-            ))}
+          selectedItems.map((item) => (
+            <SelectedItem
+              key={item.value}
+              onClick={handleSelectedItemClick(item)}
+              className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
+            >
+              {item.displayName}&nbsp;&nbsp;
+              <Icon width="8px" height="8px" name="times" fill="#fff" />
+            </SelectedItem>
+          ))}
         <Input
           aria-label={ariaLabel}
           autoComplete="off"
           disabled={isDisabled}
           id={id || `${name}-multiselect`}
+          name={id || `${name}-multiselect`}
           single={single}
           onBlur={handleInputBlur}
           onChange={handleInputChange}
