@@ -14,6 +14,8 @@ const mockNotifications: Array<ModifiedAlert> = [
   {
     level: 'warning',
     title: 'There is system maintenance occurring.',
+    message:
+      'To learn what system maintenance is you can visit this [example link](https://google.com)',
   },
   {
     level: 'info',
