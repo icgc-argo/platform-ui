@@ -440,7 +440,7 @@ export const ListFilter = ({
                       `}
                     />
                     {option.value}
-                    {option.doc_count && (
+                    {typeof option?.doc_count === 'number' && (
                       <Tag
                         variant={option.isChecked ? 'HIGHLIGHT' : 'NEUTRAL'}
                         css={css`

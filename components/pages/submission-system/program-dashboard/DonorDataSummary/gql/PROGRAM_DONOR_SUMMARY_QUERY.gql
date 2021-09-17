@@ -42,6 +42,37 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
       partiallyReleasedDonorsCount
       noReleaseDonorsCount
       donorsInvalidWithCurrentDictionaryCount
+      coreCompletion {
+        completed
+        incomplete
+        noData
+      }
+      sampleStatus {
+        valid
+        invalid
+      }
+      rawReadsStatus {
+        valid
+        invalid
+      }
+      alignmentStatusCount {
+        completed
+        inProgress
+        failed
+        noData
+      }
+      sangerStatusCount {
+        completed
+        inProgress
+        failed
+        noData
+      }
+      mutectStatusCount {
+        completed
+        inProgress
+        failed
+        noData
+      }
     }
   }
 }
