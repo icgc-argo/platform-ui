@@ -134,6 +134,7 @@ const SelectedItem: any = styled(Tag)`
   margin-bottom: 2px;
 
   &.disabled {
+    color: ${({ theme }) => theme.colors.grey};
     background-color: ${({ theme }) => theme.colors.grey_2};
   }
 `;
@@ -443,7 +444,7 @@ const MultiSelect = ({
               className={clsx({ disabled: isDisabled, hasError, focused: focusState })}
             >
               {item.displayName}&nbsp;&nbsp;
-              <Icon width="8px" height="8px" name="times" fill="#fff" />
+              <Icon width="8px" height="8px" name="times" fill={isDisabled ? theme.colors.grey : theme.colors.white} />
             </SelectedItem>
           ))}
         <Input

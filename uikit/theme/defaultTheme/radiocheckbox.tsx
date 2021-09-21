@@ -25,7 +25,7 @@ export default {
   },
   textColors: {
     default: colors.black,
-    disabled: '#d0d1d8',
+    disabled: colors.grey,
   },
   backgroundColors: {
     default: colors.white,

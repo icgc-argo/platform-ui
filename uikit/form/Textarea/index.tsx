@@ -166,7 +166,12 @@ const Textarea = ({
           }
 
           &.disabled {
+            border-color: ${theme.input.borderColors.disabled};
             background-color: ${theme.input.colors.disabled};
+            color: ${theme.input.colors.grey};
+            &:hover {
+              border-color: #d0d1d8 !important;
+            }
           }
         `}
         disabled={isDisabled}
