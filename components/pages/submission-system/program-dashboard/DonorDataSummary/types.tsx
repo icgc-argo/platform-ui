@@ -17,6 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+export type CompleteIncompleteFilterCounts = {
+  completed: number;
+  incomplete: number;
+  noData: number;
+};
+
+export type ValidInvalidFilterCounts = {
+  valid: number;
+  invalid: number;
+};
+
+export type CompletedInProgressFailedFilterCounts = {
+  completed: number;
+  inProgress: number;
+  failed: number;
+  noData: number;
+};
+
 export type DonorSummaryRecord = {
   releaseStatus: DonorDataReleaseState;
   donorId: string;
@@ -49,6 +67,12 @@ export type ProgramDonorReleaseStats = {
   donorsInvalidWithCurrentDictionaryCount: number;
   percentageCoreClinical?: number;
   percentageTumourAndNormal?: number;
+  coreCompletion?: CompleteIncompleteFilterCounts;
+  sampleStatus?: ValidInvalidFilterCounts;
+  rawReadsStatus?: ValidInvalidFilterCounts;
+  alignmentStatusCount?: CompletedInProgressFailedFilterCounts;
+  sangerStatusCount?: CompletedInProgressFailedFilterCounts;
+  mutectStatusCount?: CompletedInProgressFailedFilterCounts;
 };
 
 export enum DonorDataReleaseState {

@@ -326,12 +326,14 @@ export default ({
     header,
     panelLegend,
     filterOptions = [],
+    filterCounts,
     activeFilters = [],
     onFilter = () => {},
   }: {
     header: string;
     panelLegend?: string;
     filterOptions?: Array<FilterOption>;
+    filterCounts?: Record<string, number>;
     activeFilters?: Array<string>;
     onFilter?: (filters?: Array<FilterOption>) => void;
   }) => {
@@ -341,6 +343,7 @@ export default ({
         filterOptions.map((option) => ({
           ...option,
           isChecked: activeFilters?.indexOf(option.key) > -1 ? true : false,
+          doc_count: filterCounts?.[option.key],
         })),
       [filterOptions, activeFilters],
     );
@@ -377,6 +380,46 @@ export default ({
       </FilterableHeader>
     );
   };
+
+  const [pagingState, setPagingState] = React.useState({
+    pages: initialPages,
+    pageSize: initialPageSize,
+    page: 0,
+    sorts: initialSorts,
+  });
+
+  const offset = pagingState.pageSize * pagingState.page;
+  const first = pagingState.pageSize;
+  const sorts = pagingState.sorts;
+
+  const {
+    data: {
+      programDonorSummary: { entries: programDonorSummaryEntries, stats: programDonorSummaryStats },
+    } = {
+      programDonorSummary: {
+        entries: [],
+        stats: EMPTY_PROGRAM_SUMMARY_STATS,
+      },
+    },
+    error: programDonorsSummaryQueryError,
+    loading,
+  } = useProgramDonorsSummaryQuery({
+    programShortName,
+    first,
+    offset,
+    sorts,
+    filters: filterState,
+    options: {
+      onCompleted: () => {
+        clearTimeout(loaderTimeout);
+        setLoaderTimeout(
+          setTimeout(() => {
+            setIsTableLoading(false);
+          }, 500),
+        );
+      },
+    },
+  });
 
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
@@ -433,6 +476,14 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.completeIncomplete}
+              filterCounts={{
+                [FILTER_OPTIONS.completeIncomplete[0].key]:
+                  programDonorSummaryStats?.coreCompletion?.completed,
+                [FILTER_OPTIONS.completeIncomplete[1].key]:
+                  programDonorSummaryStats?.coreCompletion?.incomplete,
+                [FILTER_OPTIONS.completeIncomplete[2].key]:
+                  programDonorSummaryStats?.coreCompletion?.noData,
+              }}
               activeFilters={getFilterValue('coreDataPercentAggregation')}
             />
           ),
@@ -441,7 +492,6 @@ export default ({
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
         },
-
         {
           Header: (
             <ListFilterHeader
@@ -454,6 +504,11 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.validInvalid}
+              filterCounts={{
+                [FILTER_OPTIONS.validInvalid[0].key]: programDonorSummaryStats?.sampleStatus?.valid,
+                [FILTER_OPTIONS.validInvalid[1].key]:
+                  programDonorSummaryStats?.sampleStatus?.invalid,
+              }}
               activeFilters={getFilterValue('registeredSamplePairs')}
             />
           ),
@@ -486,6 +541,12 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.validInvalid}
+              filterCounts={{
+                [FILTER_OPTIONS.validInvalid[0].key]:
+                  programDonorSummaryStats?.rawReadsStatus?.valid,
+                [FILTER_OPTIONS.validInvalid[1].key]:
+                  programDonorSummaryStats?.rawReadsStatus?.invalid,
+              }}
               activeFilters={getFilterValue('rawReads')}
             />
           ),
@@ -510,6 +571,16 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              filterCounts={{
+                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                  programDonorSummaryStats?.alignmentStatusCount?.completed,
+                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                  programDonorSummaryStats?.alignmentStatusCount?.inProgress,
+                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                  programDonorSummaryStats?.alignmentStatusCount?.failed,
+                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                  programDonorSummaryStats?.alignmentStatusCount?.noData,
+              }}
               activeFilters={getFilterValue('alignmentStatus')}
             />
           ),
@@ -534,6 +605,16 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              filterCounts={{
+                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                  programDonorSummaryStats?.sangerStatusCount?.completed,
+                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                  programDonorSummaryStats?.sangerStatusCount?.inProgress,
+                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                  programDonorSummaryStats?.sangerStatusCount?.failed,
+                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                  programDonorSummaryStats?.sangerStatusCount?.noData,
+              }}
               activeFilters={getFilterValue('sangerVCStatus')}
             />
           ),
@@ -558,6 +639,16 @@ export default ({
                 )
               }
               filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              filterCounts={{
+                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                  programDonorSummaryStats?.mutectStatusCount?.completed,
+                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                  programDonorSummaryStats?.mutectStatusCount?.inProgress,
+                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                  programDonorSummaryStats?.mutectStatusCount?.failed,
+                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                  programDonorSummaryStats?.mutectStatusCount?.noData,
+              }}
               activeFilters={getFilterValue('mutectStatus')}
             />
           ),
@@ -580,46 +671,6 @@ export default ({
       },
     },
   ];
-
-  const [pagingState, setPagingState] = React.useState({
-    pages: initialPages,
-    pageSize: initialPageSize,
-    page: 0,
-    sorts: initialSorts,
-  });
-
-  const offset = pagingState.pageSize * pagingState.page;
-  const first = pagingState.pageSize;
-  const sorts = pagingState.sorts;
-
-  const {
-    data: {
-      programDonorSummary: { entries: programDonorSummaryEntries, stats: programDonorSummaryStats },
-    } = {
-      programDonorSummary: {
-        entries: [],
-        stats: EMPTY_PROGRAM_SUMMARY_STATS,
-      },
-    },
-    error: programDonorsSummaryQueryError,
-    loading,
-  } = useProgramDonorsSummaryQuery({
-    programShortName,
-    first,
-    offset,
-    sorts,
-    filters: filterState,
-    options: {
-      onCompleted: () => {
-        clearTimeout(loaderTimeout);
-        setLoaderTimeout(
-          setTimeout(() => {
-            setIsTableLoading(false);
-          }, 500),
-        );
-      },
-    },
-  });
 
   const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);

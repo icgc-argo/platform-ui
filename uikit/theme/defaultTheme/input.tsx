@@ -39,8 +39,8 @@ export default {
     [INPUT_STATES.default]: colors.black,
     [INPUT_STATES.active]: colors.black,
     [INPUT_STATES.focus]: colors.black,
-    [INPUT_STATES.disabled]: '#d0d1d8',
-    [INPUT_STATES.error]: '#d0d1d8',
+    [INPUT_STATES.disabled]: colors.grey,
+    [INPUT_STATES.error]: colors.grey,
   },
   borderColors: {
     [INPUT_STATES.default]: colors.grey_1,

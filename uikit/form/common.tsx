@@ -75,10 +75,10 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 
   &:hover {
     border-color: ${({ theme, disabled, error }) => {
-      if (error) return theme.colors.error;
-      else if (disabled) return 'initial';
-      else return theme.colors.secondary_1;
-    }};
+    if (error) return theme.colors.error;
+    else if (disabled) return theme.colors.grey_disabled;
+    else return theme.colors.secondary_1;
+  }};
   }
 
   ${({ inputState, theme }) =>
