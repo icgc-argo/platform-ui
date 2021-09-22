@@ -132,6 +132,13 @@ export const DropdownPanelButtonSection = styled('div')`
   justify-content: space-between;
 `;
 
+export const FilterClearButton = styled(DropdownPanelTextButton)`
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1.45;
+  margin-left: auto;
+`;
+
 export const FilterWrapper = ({
   panelLegend = 'Filter',
   cancelLabel = 'Cancel',
