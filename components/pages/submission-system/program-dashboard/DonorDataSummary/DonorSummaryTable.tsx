@@ -21,7 +21,6 @@ import {
   DonorSummaryRecord,
   DonorDataReleaseState,
   MolecularProcessingStatus,
-  ProgramDonorReleaseStats,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
@@ -37,18 +36,13 @@ import DropdownPanel, {
   TextInputFilter,
   FilterClearButton,
 } from 'uikit/DropdownPanel';
-import {
-  DataTableStarIcon as StarIcon,
-  TableInfoHeaderContainer,
-  CellContentCenter,
-  Pipeline,
-} from '../../common';
+import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
 
 import React, { createRef, useRef, useState } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import DonorStatsArea from './DonorSummaryTableStatArea';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import {
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
@@ -750,16 +744,11 @@ export default ({
         <ContentError />
       ) : (
         <>
-          <TableInfoHeaderContainer
-            left={
-              <DonorStatsArea
-                css={css`
-                  opacity: ${isTableLoading ? 0.5 : 1};
-                `}
-                programDonorSummaryStats={programDonorSummaryStats}
-              />
-            }
-            noMargin={true}
+          <DonorSummaryTableLegend
+            css={css`
+              opacity: ${isTableLoading ? 0.5 : 1};
+            `}
+            programDonorSummaryStats={programDonorSummaryStats}
           />
           <Table
             loading={isTableLoading}
