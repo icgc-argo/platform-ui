@@ -212,7 +212,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'May 10, 2021', releaseIteration: 3 }}
+              version={{ date: 'September 27, 2021', releaseIteration: 4 }}
             />
           )}
         </div>
@@ -282,12 +282,12 @@ export default function Homepage() {
             <>
               <b>Announcements:</b>
               <br />
-              <b>May 10, 2021:</b> We are excited to announce{' '}
+              <b>September 27, 2021:</b> We are excited to announce{' '}
               <Link
                 target="_blank"
-                href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-30"
+                href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
               >
-                Data Release 3.0
+                Data Release 4.0
               </Link>{' '}
               on the ICGC ARGO Data Platform, including a <b>new</b> addition of GATK Mutect2
               variant calling data, as well as additional donors released for PACA-CA, OCCAMS-GB,
@@ -310,21 +310,21 @@ export default function Homepage() {
                   for clinical data submission. <br />
                   <br />
                   <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-                    ARGO Data Dictionary 1.9
+                    ARGO Data Dictionary 1.12
                   </Link>
                   ,{' '}
                   <Link
                     target="_blank"
-                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-30"
+                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
                   >
-                    Data Release 3.0
+                    Data Release 4.0
                   </Link>{' '}
                   and{' '}
                   <Link
                     target="_blank"
-                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases#april-27-2021-clinical-submission-and-program-dashboard-updates"
+                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
                   >
-                    Software Release 1.93.0 - API 3.16.0
+                    Software Release 1.101.3 - API 3.26.1
                   </Link>{' '}
                   are now available.
                 </div>
