@@ -31,7 +31,12 @@ import Table, { TableColumnConfig } from 'uikit/Table';
 
 import { displayDate } from 'global/utils/common';
 import Icon from 'uikit/Icon';
-import DropdownPanel, { FilterOption, ListFilter, TextInputFilter } from 'uikit/DropdownPanel';
+import DropdownPanel, {
+  FilterOption,
+  ListFilter,
+  TextInputFilter,
+  FilterClearButton,
+} from 'uikit/DropdownPanel';
 import {
   DataTableStarIcon as StarIcon,
   TableInfoHeaderContainer,
@@ -84,7 +89,9 @@ export default ({
   const [filterState, setFilterState] = React.useState([]);
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
-    newFilters.push({ field: field, values: typeof value === 'string' ? [value] : value });
+    if (value.length) {
+      newFilters.push({ field: field, values: typeof value === 'string' ? [value] : value });
+    }
     setFilterState(newFilters);
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
@@ -664,11 +671,27 @@ export default ({
       ],
     },
     {
-      Header: 'Last Updated',
-      accessor: 'updatedAt',
-      Cell: ({ original }: { original: DonorSummaryRecord }) => {
-        return <div>{displayDate(original.updatedAt)}</div>;
-      },
+      Header: filterState.length ? (
+        <FilterClearButton
+          size="sm"
+          variant="text"
+          type="button"
+          onClick={() => setFilterState([])}
+        >
+          Clear Filters
+        </FilterClearButton>
+      ) : (
+        <></>
+      ),
+      columns: [
+        {
+          Header: 'Last Updated',
+          accessor: 'updatedAt',
+          Cell: ({ original }: { original: DonorSummaryRecord }) => {
+            return <div>{displayDate(original.updatedAt)}</div>;
+          },
+        },
+      ],
     },
   ];
 
