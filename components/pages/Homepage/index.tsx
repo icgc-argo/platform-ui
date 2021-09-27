@@ -289,9 +289,14 @@ export default function Homepage() {
               >
                 Data Release 4.0
               </Link>{' '}
-              on the ICGC ARGO Data Platform, including a <b>new</b> addition of GATK Mutect2
-              variant calling data, as well as additional donors released for PACA-CA, OCCAMS-GB,
-              LUCA-KR and PTC-SA.
+              on the ICGC ARGO Data Platform, including a new addition of the{' '}
+              <Link
+                target="_blank"
+                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
+              >
+                APGI-AU
+              </Link>{' '}
+              program as well as additional donors released for OCCAMS-GB and LUCA-KR.
               <div
                 css={css`
                   margin-top: 10px;
@@ -299,15 +304,14 @@ export default function Homepage() {
               >
                 <b>New Features:</b>{' '}
                 <div>
-                  Program data submission dashboards have been updated with new features to{' '}
+                  Program data submission dashboards have been updated with new features to
                   <Link
                     target="_blank"
-                    href="https://docs.icgc-argo.org/docs/submission/submitted-data"
+                    href="https://docs.icgc-argo.org/docs/submission/submitted-data#pre-release-data"
                   >
-                    visualize progression of data submission.
-                  </Link>{' '}
-                  Also, 2 new clinical entities, Immunotherapy and Family History, have been added
-                  for clinical data submission. <br />
+                    visualize pre-release data and filter dashboard table results
+                  </Link>
+                  .
                   <br />
                   <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
                     ARGO Data Dictionary 1.12
