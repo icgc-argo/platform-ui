@@ -146,7 +146,7 @@ spec:
 
         stage('Deploy to argo-qa') {
             when {
-                branch "master"
+                branch "hotfix/1.101.4-datarelease4"
             }
             steps {
                 container('node') {
@@ -177,7 +177,7 @@ spec:
             // i used node container since it has curl already
             container("node") {
                 script {
-                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
+                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "hotfix/1.101.4-datarelease4") {
                     withCredentials([string(credentialsId: 'JenkinsFailuresSlackChannelURL', variable: 'JenkinsFailuresSlackChannelURL')]) { 
                             sh "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"Build Failed: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (${env.BUILD_URL}) \"}' ${JenkinsFailuresSlackChannelURL}"
                         }
@@ -189,7 +189,7 @@ spec:
             // i used node container since it has curl already
             container("node") {
                 script {
-                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
+                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "hotfix/1.101.4-datarelease4") {
                     withCredentials([string(credentialsId: 'JenkinsFailuresSlackChannelURL', variable: 'JenkinsFailuresSlackChannelURL')]) { 
                             sh "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"Build Fixed: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (${env.BUILD_URL}) \"}' ${JenkinsFailuresSlackChannelURL}"
                         }
