@@ -304,7 +304,7 @@ export default function Homepage() {
               >
                 <b>New Features:</b>{' '}
                 <div>
-                  Program data submission dashboards have been updated with new features to
+                  Program data submission dashboards have been updated with new features to{' '}
                   <Link
                     target="_blank"
                     href="https://docs.icgc-argo.org/docs/submission/submitted-data#pre-release-data"
