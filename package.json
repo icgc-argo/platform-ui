@@ -10,8 +10,6 @@
     "create-component": "plop --plopfile ./uikit/plopfile.js",
     "gitmoji-config": "gitmoji -g",
     "commit": "gitmoji -c",
-    "generate-fragment-types": "ts-node ./scripts/tsconfig.json ./scripts/generateFragmentTypes.ts",
-    "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
     "type-check": "tsc -p ./tsconfig.json",
     "test-uikit": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx uikit/testSetup.tsx uikit/**/*.test.tsx",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
