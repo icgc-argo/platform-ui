@@ -1,9 +1,0 @@
-query QUERY_PROGRAM_VALUES {
-  programOptions {
-    cancerTypes
-    primarySites
-    institutions
-    regions
-    countries
-  }
-}
