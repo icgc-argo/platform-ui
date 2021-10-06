@@ -197,6 +197,16 @@ export const TableInfoHeaderContainer = ({
 
 export const downloadTsvFileTemplate = (fileName: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
+  if (fileName === 'all') {
+    window.location.assign(
+      urlJoin(
+        GATEWAY_API_ROOT,
+        CLINICAL_TEMPLATE_PATH,
+        fileName,
+        '?excludeSampleRegistration=true',
+      ),
+    );
+  }
   window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
 };
 
