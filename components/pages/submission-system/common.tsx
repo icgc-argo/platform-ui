@@ -206,8 +206,9 @@ export const downloadTsvFileTemplate = (fileName: string) => {
         '?excludeSampleRegistration=true',
       ),
     );
+  } else {
+    window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
   }
-  window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
 };
 
 enum PIPELINE_STATUS {
