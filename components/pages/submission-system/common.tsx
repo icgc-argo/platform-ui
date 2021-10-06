@@ -197,7 +197,18 @@ export const TableInfoHeaderContainer = ({
 
 export const downloadTsvFileTemplate = (fileName: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
+  if (fileName === 'all') {
+    window.location.assign(
+      urlJoin(
+        GATEWAY_API_ROOT,
+        CLINICAL_TEMPLATE_PATH,
+        fileName,
+        '?excludeSampleRegistration=true',
+      ),
+    );
+  } else {
+    window.location.assign(urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, fileName));
+  }
 };
 
 enum PIPELINE_STATUS {
