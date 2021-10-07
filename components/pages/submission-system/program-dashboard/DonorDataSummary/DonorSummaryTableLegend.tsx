@@ -25,7 +25,13 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
   EMPTY_PROGRAM_SUMMARY_STATS,
 } from './common';
-import { StatArea, TableLegendContainer, TableLegendStatusIcon } from '../../common';
+import {
+  StatArea,
+  TableLegendContainer,
+  TableLegendStatusIcon,
+  TableLegendSection,
+  TableLegendEntry,
+} from '../../common';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { css } from '@emotion/core';
@@ -39,78 +45,71 @@ const DonorSummaryTableLegend = ({
   const theme = useTheme();
   return (
     <TableLegendContainer>
-      <Typography
-        variant="data"
-        component="div"
-        color="grey"
-        css={css`
-          line-height: 2;
-        `}
-      >
+      <Typography variant="data" component="div" color="grey">
         <Row>
-          <Col sm={12} md={1}>
-            <StatArea.Section>
+          <Col sm={12} md={12} lg={1}>
+            <TableLegendSection>
               <b>{programDonorSummaryStats.registeredDonorsCount.toLocaleString()} donors</b>
-            </StatArea.Section>
+            </TableLegendSection>
           </Col>
-          <Col sm={12} md={3}>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+          <Col sm={12} md={6} lg={4}>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <StatArea.StarIcon
                   fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.FULLY]}
                 />
                 <b>{programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()}</b>
                 &nbsp;with fully released files
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <StatArea.StarIcon
                   fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.PARTIALLY]}
                 />
                 <b>{programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()}</b>
                 &nbsp;with partially released files
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <StatArea.StarIcon
                   fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.NO]}
                   outline={RELEASED_STATE_STROKE_COLOURS[DonorDataReleaseState.NO]}
                 />
                 <b>{programDonorSummaryStats.noReleaseDonorsCount.toLocaleString()}</b>&nbsp;with no
                 released files
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
+              </TableLegendEntry>
+            </TableLegendSection>
           </Col>
-          <Col sm={12} md={3}>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+          <Col sm={12} md={6} lg={4}>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <TableLegendStatusIcon fill={'accent1_dimmed'} />
                 <b>{programDonorSummaryStats.completedWorkflowRuns.toLocaleString()}</b>
                 &nbsp;with completed workflow runs
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <TableLegendStatusIcon fill={'warning_dark'} />
                 <b>{programDonorSummaryStats.inProgressWorkflowRuns.toLocaleString()}</b>
                 &nbsp;with in progress workflow runs
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
-            <StatArea.Section>
-              <StatArea.StatEntryContainer>
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
                 <TableLegendStatusIcon fill={'error'} />
                 <b>{programDonorSummaryStats.failedWorkflowRuns.toLocaleString()}</b>&nbsp;with
                 failed workflow runs
-              </StatArea.StatEntryContainer>
-            </StatArea.Section>
+              </TableLegendEntry>
+            </TableLegendSection>
           </Col>
-          <Col sm={12} md={3}>
+          <Col sm={12} md={12} lg={3}>
             {/* TODO: add stats for pending program QC and require updated clinical data */}
             {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
-              <StatArea.Section>
-                <StatArea.StatEntryContainer>
+              <TableLegendSection>
+                <TableLegendEntry>
                   <Icon
                     name="warning"
                     fill={theme.colors.error}
@@ -124,8 +123,8 @@ const DonorSummaryTableLegend = ({
                     {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
                   </b>
                   &nbsp;Invalid donors
-                </StatArea.StatEntryContainer>
-              </StatArea.Section>
+                </TableLegendEntry>
+              </TableLegendSection>
             )}
           </Col>
         </Row>

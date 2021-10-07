@@ -106,6 +106,19 @@ export const TableLegendStatusIcon = ({ fill }: { fill: keyof ThemeColorNames })
   );
 };
 
+export const TableLegendSection = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  margin-bottom: 10px;
+`;
+
+export const TableLegendEntry = styled('div')`
+  margin-right: 5px;
+  display: flex;
+  align-items: flex-start;
+`;
+
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (
   <Icon name="star" width="16px" height="16px" {...props} />
 );
