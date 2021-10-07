@@ -20,23 +20,19 @@
 import Icon from 'uikit/Icon';
 
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
-import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
+import {
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+  EMPTY_PROGRAM_SUMMARY_STATS,
+} from './common';
 import { StatArea, TableLegendContainer, TableLegendStatusIcon } from '../../common';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 
-const emptyProgramDonorSummaryStats: ProgramDonorReleaseStats = {
-  registeredDonorsCount: 0,
-  fullyReleasedDonorsCount: 0,
-  noReleaseDonorsCount: 0,
-  partiallyReleasedDonorsCount: 0,
-  donorsInvalidWithCurrentDictionaryCount: 0,
-};
-
 const DonorSummaryTableLegend = ({
-  programDonorSummaryStats = emptyProgramDonorSummaryStats,
+  programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,
 }: {
   programDonorSummaryStats: ProgramDonorReleaseStats;
 }) => {
@@ -91,24 +87,21 @@ const DonorSummaryTableLegend = ({
             <StatArea.Section>
               <StatArea.StatEntryContainer>
                 <TableLegendStatusIcon fill={'accent1_dimmed'} />
-                {/* TODO: update with correct stat */}
-                <b>{programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()}</b>
+                <b>{programDonorSummaryStats.completedWorkflowRuns.toLocaleString()}</b>
                 &nbsp;with completed workflow runs
               </StatArea.StatEntryContainer>
             </StatArea.Section>
             <StatArea.Section>
               <StatArea.StatEntryContainer>
                 <TableLegendStatusIcon fill={'warning_dark'} />
-                {/* TODO: update with correct stat */}
-                <b>{programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()}</b>
+                <b>{programDonorSummaryStats.inProgressWorkflowRuns.toLocaleString()}</b>
                 &nbsp;with in progress workflow runs
               </StatArea.StatEntryContainer>
             </StatArea.Section>
             <StatArea.Section>
               <StatArea.StatEntryContainer>
                 <TableLegendStatusIcon fill={'error'} />
-                {/* TODO: update with correct stat */}
-                <b>{programDonorSummaryStats.noReleaseDonorsCount.toLocaleString()}</b>&nbsp;with
+                <b>{programDonorSummaryStats.failedWorkflowRuns.toLocaleString()}</b>&nbsp;with
                 failed workflow runs
               </StatArea.StatEntryContainer>
             </StatArea.Section>
