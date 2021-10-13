@@ -42,6 +42,9 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
       partiallyReleasedDonorsCount
       noReleaseDonorsCount
       donorsInvalidWithCurrentDictionaryCount
+      completedWorkflowRuns
+      inProgressWorkflowRuns
+      failedWorkflowRuns
       coreCompletion {
         completed
         incomplete

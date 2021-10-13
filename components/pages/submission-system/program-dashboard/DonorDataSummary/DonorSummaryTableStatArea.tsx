@@ -20,21 +20,17 @@
 import Icon from 'uikit/Icon';
 
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
-import { RELEASED_STATE_FILL_COLOURS, RELEASED_STATE_STROKE_COLOURS } from './common';
+import {
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+  EMPTY_PROGRAM_SUMMARY_STATS,
+} from './common';
 import { StatArea as StatAreaDisplay } from '../../common';
 import { useTheme } from 'uikit/ThemeProvider';
 import { css } from '@emotion/core';
 
-const emptyProgramDonorSummaryStats: ProgramDonorReleaseStats = {
-  registeredDonorsCount: 0,
-  fullyReleasedDonorsCount: 0,
-  noReleaseDonorsCount: 0,
-  partiallyReleasedDonorsCount: 0,
-  donorsInvalidWithCurrentDictionaryCount: 0,
-};
-
 const DonorStatsArea = ({
-  programDonorSummaryStats = emptyProgramDonorSummaryStats,
+  programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,
   className,
 }: {
   programDonorSummaryStats: ProgramDonorReleaseStats;
@@ -54,7 +50,8 @@ const DonorStatsArea = ({
           <StatAreaDisplay.StarIcon
             fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.FULLY]}
           />
-          {programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()} with fully released files
+          {programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()} with fully released
+          files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
@@ -62,7 +59,8 @@ const DonorStatsArea = ({
           <StatAreaDisplay.StarIcon
             fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.PARTIALLY]}
           />
-          {programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()} with partially released files
+          {programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()} with partially
+          released files
         </StatAreaDisplay.StatEntryContainer>
       </StatAreaDisplay.Section>
       <StatAreaDisplay.Section>
@@ -91,7 +89,8 @@ const DonorStatsArea = ({
                 color: ${theme.colors.error_dark};
               `}
             >
-              {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()} Invalid donors
+              {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}{' '}
+              Invalid donors
             </span>
           </StatAreaDisplay.StatEntryContainer>
         </StatAreaDisplay.Section>

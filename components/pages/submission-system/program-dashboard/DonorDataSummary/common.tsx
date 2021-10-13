@@ -101,4 +101,38 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   donorsInvalidWithCurrentDictionaryCount: 0,
   percentageCoreClinical: 0,
   percentageTumourAndNormal: 0,
+  coreCompletion: {
+    completed: 0,
+    incomplete: 0,
+    noData: 0,
+  },
+  sampleStatus: {
+    valid: 0,
+    invalid: 0,
+  },
+  rawReadsStatus: {
+    valid: 0,
+    invalid: 0,
+  },
+  alignmentStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
+  sangerStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
+  mutectStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
+  completedWorkflowRuns: 0,
+  inProgressWorkflowRuns: 0,
+  failedWorkflowRuns: 0,
 };

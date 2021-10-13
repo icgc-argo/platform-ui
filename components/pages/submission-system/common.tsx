@@ -69,6 +69,56 @@ export const CellContentCenter = styled('div')`
   align-items: center;
 `;
 
+export const TableLegendContainer = ({ children }) => {
+  const theme = useTheme();
+
+  return (
+    <div
+      css={css`
+        margin-bottom: 8px;
+        padding: 10px;
+        background-color: ${theme.colors.grey_3};
+
+        b {
+          color: #000;
+        }
+      `}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const TableLegendStatusIcon = ({ fill }: { fill: keyof ThemeColorNames }) => {
+  const theme = useTheme();
+
+  return (
+    <span
+      css={css`
+        display: block;
+        width: 18px;
+        height: 12px;
+        border-radius: 7px;
+        margin-right: 5px;
+        background-color: ${theme.colors[fill]};
+      `}
+    />
+  );
+};
+
+export const TableLegendSection = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  margin-bottom: 10px;
+`;
+
+export const TableLegendEntry = styled('div')`
+  margin-right: 5px;
+  display: flex;
+  align-items: flex-start;
+`;
+
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (
   <Icon name="star" width="16px" height="16px" {...props} />
 );
