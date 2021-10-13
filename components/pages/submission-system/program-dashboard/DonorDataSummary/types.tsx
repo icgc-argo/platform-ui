@@ -73,6 +73,9 @@ export type ProgramDonorReleaseStats = {
   alignmentStatusCount?: CompletedInProgressFailedFilterCounts;
   sangerStatusCount?: CompletedInProgressFailedFilterCounts;
   mutectStatusCount?: CompletedInProgressFailedFilterCounts;
+  completedWorkflowRuns?: number;
+  inProgressWorkflowRuns?: number;
+  failedWorkflowRuns?: number;
 };
 
 export enum DonorDataReleaseState {
