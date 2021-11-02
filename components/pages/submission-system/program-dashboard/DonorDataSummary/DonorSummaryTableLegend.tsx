@@ -86,21 +86,18 @@ const DonorSummaryTableLegend = ({
             <TableLegendSection>
               <TableLegendEntry>
                 <TableLegendStatusIcon fill={'accent1_dimmed'} />
-                <b>{programDonorSummaryStats.completedWorkflowRuns.toLocaleString()}</b>
-                &nbsp;with completed workflow runs
+                completed workflow runs
               </TableLegendEntry>
             </TableLegendSection>
             <TableLegendSection>
               <TableLegendEntry>
                 <TableLegendStatusIcon fill={'warning_dark'} />
-                <b>{programDonorSummaryStats.inProgressWorkflowRuns.toLocaleString()}</b>
-                &nbsp;with in progress workflow runs
+                in progress workflow runs
               </TableLegendEntry>
             </TableLegendSection>
             <TableLegendSection>
               <TableLegendEntry>
                 <TableLegendStatusIcon fill={'error'} />
-                <b>{programDonorSummaryStats.failedWorkflowRuns.toLocaleString()}</b>&nbsp;with
                 failed workflow runs
               </TableLegendEntry>
             </TableLegendSection>
