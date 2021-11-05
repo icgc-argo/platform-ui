@@ -77,6 +77,7 @@ export const TableLegendContainer = ({ children }) => {
       css={css`
         margin-bottom: 8px;
         padding: 10px;
+        padding-bottom: 0;
         background-color: ${theme.colors.grey_3};
 
         b {
