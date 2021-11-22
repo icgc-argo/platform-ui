@@ -18,13 +18,12 @@
  */
 
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY } from 'global/constants';
+import { EGO_JWT_KEY, getLoginUrl } from 'global/constants';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';
 
@@ -59,10 +58,7 @@ export function AuthProvider({
   initialPermissions: string[];
 }) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const updateTokenUrl = urlJoin(
-    EGO_API_ROOT,
-    `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
-  );
+  const updateTokenUrl = getLoginUrl({ EGO_API_ROOT, EGO_CLIENT_ID });
 
   const permissions = getPermissionsFromToken(egoJwt);
 

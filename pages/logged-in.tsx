@@ -18,14 +18,13 @@
  */
 
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY } from 'global/constants';
+import { EGO_JWT_KEY, getLoginUrl } from 'global/constants';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
 import React from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import useTheme from 'uikit/utils/useTheme';
-import urlJoin from 'url-join';
 import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
 
@@ -40,7 +39,7 @@ export default createPage({ isPublic: true })(() => {
   };
 
   React.useEffect(() => {
-    const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+    const egoLoginUrl = getLoginUrl({ EGO_API_ROOT, EGO_CLIENT_ID });
     fetch(egoLoginUrl, {
       credentials: 'include',
       headers: { accept: '*/*' },
