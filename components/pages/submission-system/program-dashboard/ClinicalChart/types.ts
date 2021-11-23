@@ -56,7 +56,8 @@ export type DonorField =
   | 'mutectFirstPublishedDate'
   | 'alignmentFirstPublishedDate'
   | 'rawReadsFirstPublishedDate'
-  | 'sangerVcsFirstPublishedDate';
+  | 'sangerVcsFirstPublishedDate'
+  | 'openAccessFirstPublishedDate';
 
 export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = {
   bucketCount: number;

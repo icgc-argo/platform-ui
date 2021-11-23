@@ -76,6 +76,7 @@ export default ({
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
+  const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -659,6 +660,40 @@ export default ({
               complete={original.mutectCompleted}
               inProgress={original.mutectRunning}
               error={original.mutectFailed}
+            />
+          ),
+        },
+        {
+          Header: (
+            <ListFilterHeader
+              header={'Open Access VF'}
+              panelLegend={'Open Access VF Status'}
+              onFilter={(options) =>
+                updateFilter(
+                  'openAccessStatus',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+              filterCounts={{
+                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                  programDonorSummaryStats?.openAccessStatusCount?.completed,
+                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                  programDonorSummaryStats?.openAccessStatusCount?.inProgress,
+                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                  programDonorSummaryStats?.openAccessStatusCount?.failed,
+                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                  programDonorSummaryStats?.openAccessStatusCount?.noData,
+              }}
+              activeFilters={getFilterValue('openAccessStatus')}
+            />
+          ),
+          id: OPEN_ACCESS_VF_COLUMN_ID,
+          Cell: ({ original }) => (
+            <Pipeline
+              complete={original.openAccessCompleted}
+              inProgress={original.openAccessRunning}
+              error={original.openAccessFailed}
             />
           ),
         },
