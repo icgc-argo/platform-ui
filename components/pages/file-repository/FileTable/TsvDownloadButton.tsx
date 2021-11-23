@@ -160,16 +160,11 @@ export default ({
       size="sm"
       onItemClick={onItemClick}
       menuItems={menuItems}
+      isLoading={loading}
+      loadWithChildren={true}
     >
       <span css={instructionBoxButtonContentStyle}>
-        {loading ? (
-          <Icon
-            name="spinner"
-            fill="accent2_dark"
-            height="12px"
-            css={instructionBoxButtonIconStyle}
-          />
-        ) : (
+        {!loading && (
           <Icon
             name="download"
             fill="accent2_dark"
