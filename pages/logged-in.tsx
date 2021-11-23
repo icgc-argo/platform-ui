@@ -18,7 +18,7 @@
  */
 
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY, getLoginUrl } from 'global/constants';
+import { EGO_JWT_KEY } from 'global/constants';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
 import React from 'react';
@@ -31,7 +31,7 @@ import { useRouter } from 'next/router';
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
   const router = useRouter();
-  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
 
   const redirect = (token: string) => {
     const redirect = getDefaultRedirectPathForUser(getPermissionsFromToken(token));
@@ -39,8 +39,7 @@ export default createPage({ isPublic: true })(() => {
   };
 
   React.useEffect(() => {
-    const egoLoginUrl = getLoginUrl({ EGO_API_ROOT, EGO_CLIENT_ID });
-    fetch(egoLoginUrl, {
+    fetch(EGO_LOGIN_URL, {
       credentials: 'include',
       headers: { accept: '*/*' },
       body: null,

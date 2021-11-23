@@ -34,13 +34,13 @@ import {
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 
-const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
+const LinkToHome = (props) => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
-const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
+const LinkToDataRepo = (props) => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage({ redirect }: { redirect: string }) {
   const theme = useTheme();
-  const { EGO_URL } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
   const { DOCS_URL_ROOT } = getConfig();
   return (
     <DefaultLayout>
@@ -96,7 +96,11 @@ export default function LoginPage({ redirect }: { redirect: string }) {
             </Typography>
           </div>
           <div>
-            <GoogleLoginButton id="google-login" link={EGO_URL} redirectPath={redirect || ''} />
+            <GoogleLoginButton
+              id="google-login"
+              link={EGO_LOGIN_URL}
+              redirectPath={redirect || ''}
+            />
           </div>
           <Container
             css={css`

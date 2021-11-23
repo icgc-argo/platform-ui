@@ -54,7 +54,7 @@ import { useScreenClass } from 'react-grid-system';
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
-  const { EGO_URL } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
   const [loginPath, setLoginPath] = React.useState('');
 
   React.useEffect(() => {
@@ -68,9 +68,9 @@ const NavBarLoginButton = () => {
         path: parsedRedirect.url,
         query: existingQuery,
       });
-      setLoginPath(urlJoin(EGO_URL, queryRedirect));
+      setLoginPath(urlJoin(EGO_LOGIN_URL, queryRedirect));
     } else if (path === '/' || path === LOGIN_PAGE_PATH) {
-      setLoginPath(EGO_URL);
+      setLoginPath(EGO_LOGIN_URL);
     } else {
       const queryString = path.split('?')[1] || '';
       const pathRoot = path.split('?')[0];
@@ -80,7 +80,7 @@ const NavBarLoginButton = () => {
         path: pathRoot,
         query: queryString,
       });
-      setLoginPath(urlJoin(EGO_URL, redirect));
+      setLoginPath(urlJoin(EGO_LOGIN_URL, redirect));
     }
   }, [path, query]);
 
@@ -131,7 +131,7 @@ const getUserRole = (egoJwt, permissions) => {
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
-  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
+  const { FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
   const canAccessSubmission = React.useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));

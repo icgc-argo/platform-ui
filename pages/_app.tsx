@@ -18,7 +18,7 @@
  */
 
 import ApplicationRoot from 'components/ApplicationRoot';
-import { EGO_JWT_KEY, getLoginUrl } from 'global/constants';
+import { EGO_JWT_KEY } from 'global/constants';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
@@ -212,9 +212,8 @@ class Root extends App<
 
   static async getEgoToken(props) {
     const { ctx } = props;
-    const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-    const egoLoginUrl = getLoginUrl({ EGO_API_ROOT, EGO_CLIENT_ID });
-    return await fetch(egoLoginUrl, {
+    const { EGO_LOGIN_URL } = getConfig();
+    return await fetch(EGO_LOGIN_URL, {
       credentials: 'include',
       headers: { accept: '*/*' },
       body: null,

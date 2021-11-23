@@ -56,7 +56,7 @@ export default function JoinProgramLayout({
   loading: boolean;
   notFound: boolean;
 }) {
-  const { EGO_URL } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
   let inviteState: InviteState = InviteState.UnSet;
 
   if (notFound) {
@@ -182,7 +182,7 @@ export default function JoinProgramLayout({
                 `}
               >
                 <GoogleLoginButton
-                  link={EGO_URL}
+                  link={EGO_LOGIN_URL}
                   redirectPath={createRedirectURL({
                     origin: location.origin,
                     path: `${PROGRAM_DASHBOARD_PATH.replace(

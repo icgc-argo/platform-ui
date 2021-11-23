@@ -18,7 +18,7 @@
  */
 
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY, getLoginUrl } from 'global/constants';
+import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
@@ -57,8 +57,7 @@ export function AuthProvider({
   children: React.ReactElement;
   initialPermissions: string[];
 }) {
-  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const updateTokenUrl = getLoginUrl({ EGO_API_ROOT, EGO_CLIENT_ID });
+  const { EGO_UPDATE_URL } = getConfig();
 
   const permissions = getPermissionsFromToken(egoJwt);
 
@@ -156,7 +155,7 @@ export function AuthProvider({
   }
 
   const updateToken = () => {
-    return fetch(updateTokenUrl, {
+    return fetch(EGO_UPDATE_URL, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${egoJwt || ''}` },
       body: null,

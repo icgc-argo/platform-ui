@@ -31,7 +31,7 @@ import { createRedirectURL } from 'global/utils/common';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export default () => {
-  const { EGO_URL } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
 
   const router = useRouter();
   const { inviteId } = router.query;
@@ -42,7 +42,7 @@ export default () => {
     loading,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
-    onError: error => {
+    onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {
         setNotFound(true);
       }
@@ -82,7 +82,7 @@ export default () => {
         >
           <GoogleLoginButton
             id="google-login"
-            link={EGO_URL}
+            link={EGO_LOGIN_URL}
             redirectPath={fullJoinLoginRedirect}
           />
         </div>

@@ -56,7 +56,7 @@ const ProgramServicesModal = ({
   hasPrograms: boolean;
   isLoggedIn: boolean;
 }) => {
-  const { DOCS_URL_ROOT, EGO_URL } = getConfig();
+  const { EGO_LOGIN_URL } = getConfig();
   const theme = useTheme();
 
   return (
@@ -69,7 +69,7 @@ const ProgramServicesModal = ({
             text-decoration: none;
             color: ${theme.colors.white};
           `}
-          href={EGO_URL}
+          href={EGO_LOGIN_URL}
         >
           <div
             css={css`

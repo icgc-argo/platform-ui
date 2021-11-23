@@ -364,11 +364,3 @@ export const COUNTRIES = [
 // first published date of clinical/molecular program donor data in song
 // e.g. rawReadsFirstPublishedDate, mutectFirstPublishedDate
 export const FIRST_PUBLISHED_DATE_DONOR_DATA = new Date('2021-01-01T00:00:00.000Z');
-
-export const getLoginUrl = ({
-  EGO_API_ROOT,
-  EGO_CLIENT_ID,
-}: {
-  EGO_API_ROOT: string;
-  EGO_CLIENT_ID: string;
-}): string => urljoin(EGO_API_ROOT, `/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`);
