@@ -528,7 +528,7 @@ export default ({
     {
       Header: 'DNA-SEQ PIPELINE',
       headerStyle: {
-        background: useTheme().colors.accent3_3,
+        background: useTheme().colors.warning_4,
       },
       columns: [
         {
