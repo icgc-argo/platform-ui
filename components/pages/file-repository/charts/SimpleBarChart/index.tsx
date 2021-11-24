@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { css, styled } from 'uikit';
 import { orderBy, maxBy } from 'lodash';
 import Tooltip from 'uikit/Tooltip';
@@ -36,6 +36,7 @@ type SimpleBarChartProps = {
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
   loading?: boolean;
+  onClick?: MouseEventHandler;
 };
 
 const defaultChartHeight = 100;
@@ -49,21 +50,21 @@ export const chartTypeMeta: {
     title: string;
     getColor: (theme: any) => keyof ThemeColorNames;
     iconName: string;
-  }
+  };
 } = {
   program: {
     title: 'Programs',
-    getColor: theme => theme.colors.accent3_dark,
+    getColor: (theme) => theme.colors.accent3_dark,
     iconName: 'programs',
   },
   'data type': {
     title: 'Files',
-    getColor: theme => theme.colors.warning,
+    getColor: (theme) => theme.colors.warning,
     iconName: 'file',
   },
   'primary site': {
     title: 'Donors',
-    getColor: theme => theme.colors.accent1,
+    getColor: (theme) => theme.colors.accent1,
     iconName: 'user',
   },
 };
@@ -137,6 +138,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   containerStyle = {},
   chartHeight = defaultChartHeight,
   loading = false,
+  onClick = () => {},
 }) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
@@ -215,6 +217,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
                   }}
+                  onClick={onClick}
                 />
               </Tooltip>
             ))}
