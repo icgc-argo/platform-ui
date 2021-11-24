@@ -36,7 +36,7 @@ type SimpleBarChartProps = {
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
   loading?: boolean;
-  onClick?: MouseEventHandler;
+  onClick?: (value: string) => void;
 };
 
 const defaultChartHeight = 100;
@@ -217,7 +217,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
                   }}
-                  onClick={onClick}
+                  onClick={() => onClick(category)}
                 />
               </Tooltip>
             ))}

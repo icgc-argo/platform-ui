@@ -40,7 +40,7 @@ type ChartQueryInput = {
 };
 
 export default () => {
-  const { filters } = useFiltersContext();
+  const { filters, setFilterFromFieldAndValue } = useFiltersContext();
   const { data, loading } = useQuery<ProgramIdsChartData, ChartQueryInput>(PROGRAMS_CHART, {
     variables: {
       filters,
@@ -48,11 +48,20 @@ export default () => {
   });
 
   const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
-    ? data.file.aggregations.program_ids.buckets.map(bucket => ({
+    ? data.file.aggregations.program_ids.buckets.map((bucket) => ({
         category: bucket.key,
         count: bucket.doc_count,
       }))
     : [];
 
-  return <SimpleBarChart loading={loading} data={chartData} type={'program'} />;
+  return (
+    <SimpleBarChart
+      loading={loading}
+      data={chartData}
+      type={'program'}
+      onClick={(value) => {
+        setFilterFromFieldAndValue({ field: 'study_id', value });
+      }}
+    />
+  );
 };
