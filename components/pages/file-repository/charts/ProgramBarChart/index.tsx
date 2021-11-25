@@ -39,7 +39,7 @@ type ChartQueryInput = {
   filters: FileRepoFiltersType;
 };
 
-export default () => {
+const ProgramBarChart = () => {
   const { filters, setFilterFromFieldAndValue } = useFiltersContext();
   const { data, loading } = useQuery<ProgramIdsChartData, ChartQueryInput>(PROGRAMS_CHART, {
     variables: {
@@ -65,3 +65,5 @@ export default () => {
     />
   );
 };
+
+export default ProgramBarChart;

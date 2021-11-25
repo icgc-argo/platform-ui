@@ -39,7 +39,7 @@ type ChartQueryInput = {
   filters: FileRepoFiltersType;
 };
 
-export default () => {
+const DataTypesChart = () => {
   const { filters, setFilterFromFieldAndValue } = useFiltersContext();
   const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(DATA_TYPES_CHART, {
     variables: {
@@ -65,3 +65,5 @@ export default () => {
     />
   );
 };
+
+export default DataTypesChart;
