@@ -138,10 +138,11 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   containerStyle = {},
   chartHeight = defaultChartHeight,
   loading = false,
-  onClick = () => {},
+  onClick = (value, event) => {},
 }) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
+  const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
     <ContentBox
@@ -217,7 +218,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
                   }}
-                  onClick={() => onClick(category)}
+                  onClick={handleBarClick(category)}
                 />
               </Tooltip>
             ))}
