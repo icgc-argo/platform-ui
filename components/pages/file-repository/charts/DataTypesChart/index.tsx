@@ -46,6 +46,9 @@ const DataTypesChart = () => {
       filters,
     },
   });
+  const handleBarClick = (value) => {
+    setFilterFromFieldAndValue({ field: 'data_type', value });
+  };
 
   const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
     ? data.file.aggregations.data_type.buckets.map((bucket) => ({
@@ -59,9 +62,7 @@ const DataTypesChart = () => {
       loading={loading}
       data={chartData}
       type={'data type'}
-      onClick={(value) => {
-        setFilterFromFieldAndValue({ field: 'data_type', value });
-      }}
+      onClick={handleBarClick}
     />
   );
 };

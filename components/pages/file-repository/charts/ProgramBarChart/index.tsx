@@ -46,6 +46,9 @@ const ProgramBarChart = () => {
       filters,
     },
   });
+  const handleBarClick = (value) => {
+    setFilterFromFieldAndValue({ field: 'study_id', value });
+  };
 
   const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
     ? data.file.aggregations.program_ids.buckets.map((bucket) => ({
@@ -55,14 +58,7 @@ const ProgramBarChart = () => {
     : [];
 
   return (
-    <SimpleBarChart
-      loading={loading}
-      data={chartData}
-      type={'program'}
-      onClick={(value) => {
-        setFilterFromFieldAndValue({ field: 'study_id', value });
-      }}
-    />
+    <SimpleBarChart loading={loading} data={chartData} type={'program'} onClick={handleBarClick} />
   );
 };
 
