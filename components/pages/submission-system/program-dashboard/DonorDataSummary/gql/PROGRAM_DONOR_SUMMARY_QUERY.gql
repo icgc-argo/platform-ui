@@ -33,6 +33,9 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
       mutectFailed
       mutectRunning
       mutectCompleted
+      openAccessFailed
+      openAccessRunning
+      openAccessCompleted
       processingStatus
       updatedAt
     }
@@ -71,6 +74,12 @@ query PROGRAM_DONOR_SUMMARY_QUERY(
         noData
       }
       mutectStatusCount {
+        completed
+        inProgress
+        failed
+        noData
+      }
+      openAccessStatusCount {
         completed
         inProgress
         failed
