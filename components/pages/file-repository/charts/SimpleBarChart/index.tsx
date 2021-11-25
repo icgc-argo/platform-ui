@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import { css, styled } from 'uikit';
 import { orderBy, maxBy } from 'lodash';
 import Tooltip from 'uikit/Tooltip';
