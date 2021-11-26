@@ -217,6 +217,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                     margin: '0 4px',
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
+                    cursor: 'pointer',
                   }}
                   onClick={handleBarClick(category)}
                 />
