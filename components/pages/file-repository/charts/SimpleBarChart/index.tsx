@@ -36,6 +36,7 @@ type SimpleBarChartProps = {
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
   loading?: boolean;
+  onClick?: (value: string) => void;
 };
 
 const defaultChartHeight = 100;
@@ -49,21 +50,21 @@ export const chartTypeMeta: {
     title: string;
     getColor: (theme: any) => keyof ThemeColorNames;
     iconName: string;
-  }
+  };
 } = {
   program: {
     title: 'Programs',
-    getColor: theme => theme.colors.accent3_dark,
+    getColor: (theme) => theme.colors.accent3_dark,
     iconName: 'programs',
   },
   'data type': {
     title: 'Files',
-    getColor: theme => theme.colors.warning,
+    getColor: (theme) => theme.colors.warning,
     iconName: 'file',
   },
   'primary site': {
     title: 'Donors',
-    getColor: theme => theme.colors.accent1,
+    getColor: (theme) => theme.colors.accent1,
     iconName: 'user',
   },
 };
@@ -137,9 +138,11 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   containerStyle = {},
   chartHeight = defaultChartHeight,
   loading = false,
+  onClick = (value, event) => {},
 }) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
+  const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
     <ContentBox
@@ -214,7 +217,9 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
                     margin: '0 4px',
                     height: getBarHeight(count, maxValue),
                     backgroundColor: chartTypeMeta[type].getColor(theme),
+                    cursor: 'pointer',
                   }}
+                  onClick={handleBarClick(category)}
                 />
               </Tooltip>
             ))}
