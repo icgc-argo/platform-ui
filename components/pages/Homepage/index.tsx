@@ -314,7 +314,7 @@ export default function Homepage() {
                   .
                   <br />
                   <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-                    ARGO Data Dictionary 1.12
+                    ARGO Data Dictionary 1.13
                   </Link>
                   ,{' '}
                   <Link
