@@ -150,7 +150,6 @@ export default ({
         break;
     }
   };
-  console.log(theme);
   return (
     <DropdownButton
       css={css`
