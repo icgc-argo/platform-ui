@@ -197,7 +197,7 @@ class Root extends App<
   isInOauthMode = (props) => {
     if (get(props.ctx.query, 'redirect')) {
       const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
-      return get(parsed.query, 'isOauth') === 'true';
+      return get(parsed.query, OAUTH_QUERY_PARAM_NAME) === 'true';
     } else {
       return false;
     }
