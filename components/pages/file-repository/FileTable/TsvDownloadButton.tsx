@@ -158,7 +158,7 @@ export default ({
         width: 160px;
         :disabled {
           background-color: ${theme.button.colors.secondary.hover};
-          color: ${theme.button.textColors.text.default};
+          color: ${theme.button.textColors.secondary.default};
         }
       `}
       variant="secondary"
