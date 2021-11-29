@@ -71,7 +71,6 @@ function DropdownButton<ValueType = string>({
       setMenuShown(false);
     },
   });
-  console.log(rest);
   return (
     <Button
       onClick={(e) => {
