@@ -150,14 +150,15 @@ export default ({
         break;
     }
   };
+  console.log(theme);
   return (
     <DropdownButton
       css={css`
         margin-right: 8px;
         width: 160px;
         :disabled {
-          background-color: #f2ecfd;
-          color: #523785;
+          background-color: ${theme.button.colors.secondary.hover};
+          color: ${theme.button.textColors.text.default};
         }
       `}
       variant="secondary"
