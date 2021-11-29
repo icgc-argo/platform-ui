@@ -155,6 +155,10 @@ export default ({
       css={css`
         margin-right: 8px;
         width: 160px;
+        :disabled {
+          background-color: #f2ecfd;
+          color: #523785;
+        }
       `}
       variant="secondary"
       size="sm"
