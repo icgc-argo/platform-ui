@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import Footer from '@icgc-argo/uikit//Footer';
+import Footer from '@icgc-argo/uikit/Footer';
 import { css } from '@icgc-argo/uikit/';
 import { APP_VERSION } from 'global/constants';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
