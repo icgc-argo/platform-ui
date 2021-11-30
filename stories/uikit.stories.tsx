@@ -20,7 +20,7 @@
 import { configure, addDecorator } from '@storybook/react';
 import React from 'react';
 
-import ThemeProvider from '@icgc-argo/uikit';
+import ThemeProvider from '@icgc-argo/uikit/ThemeProvider';
 
 const req = require.context('../uikit', true, /.stories\.tsx$/);
 function loadStories() {
