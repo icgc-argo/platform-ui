@@ -58,7 +58,7 @@ const Footer = ({
           align-items: center;
         `}
       >
-        © 2020 ICGC ARGO. All rights reserved.
+        © {new Date().getFullYear()} ICGC ARGO. All rights reserved.
         <br />
         ICGC ARGO Data Platform {version} {apiVersion && `- API ${apiVersion}`}
       </Col>

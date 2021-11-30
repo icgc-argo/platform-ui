@@ -43,7 +43,7 @@ export const rangeButtons = [
 ];
 
 export const chartLineMeta = [
-  { 
+  {
     chartType: 'clinical',
     color: theme.colors.accent2_dark,
     dataType: null,
@@ -52,17 +52,17 @@ export const chartLineMeta = [
   },
   {
     chartType: 'molecular',
-    color: theme.colors.accent1_dark,
-    dataType: 'DNA',
-    field: 'alignmentFirstPublishedDate',
-    title: 'Alignment',
-  },
-  {
-    chartType: 'molecular',
     color: theme.colors.accent4_dark,
     dataType: 'DNA',
     field: 'rawReadsFirstPublishedDate',
     title: 'DNA Raw Reads',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.accent1_dark,
+    dataType: 'DNA',
+    field: 'alignmentFirstPublishedDate',
+    title: 'Alignment',
   },
   {
     chartType: 'molecular',
@@ -77,6 +77,13 @@ export const chartLineMeta = [
     dataType: 'DNA',
     field: 'sangerVcsFirstPublishedDate',
     title: 'Sanger VC',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.secondary_1,
+    dataType: 'DNA',
+    field: 'openAccessFirstPublishedDate',
+    title: 'Open Access VF',
   },
   // RNA
   // not used right now

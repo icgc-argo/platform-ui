@@ -27,7 +27,7 @@ import { PageContent, PageBody, ContentBody } from 'uikit/PageLayout';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 import { styled } from 'uikit';
 import FacetPanel from './FacetPanel';
-import FileBarChart from './charts/DataTypesChart';
+import DataTypesChart from './charts/DataTypesChart';
 import ProgramBarChart from './charts/ProgramBarChart';
 import StatsCard from './StatsCard';
 
@@ -57,7 +57,7 @@ const RepositoryPage = () => {
               <StatsCard />
               <PaddedRow justify="between">
                 <PaddedColumn xl={6} lg={6} md={12}>
-                  <FileBarChart />
+                  <DataTypesChart />
                 </PaddedColumn>
                 <PaddedColumn xl={6} lg={6} md={12}>
                   <ProgramBarChart />

@@ -48,7 +48,7 @@ const dateFormat = 'yyyy-MM-dd';
 export const displayDate = (date: string | Date) => {
   const jsDate = typeof date === 'string' ? new Date(date) : date;
   return formatDate(jsDate, dateFormat);
-}
+};
 
 const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
 export const displayDateAndTime = (date: string | Date) => {
@@ -132,8 +132,12 @@ export const createRedirectURL = ({
   if (['/', LOGIN_PAGE_PATH, 'undefined'].includes(path)) {
     return '';
   }
+  // first slash in path needs to be a slash.
+  // other slashes need to be encoded.
+  const pathRemoveLeadingSlash = path.charAt(0) === '/' ? path.slice(1) : path;
+  const pathEncoded = encodeURIComponent(pathRemoveLeadingSlash);
   const mergedQuery = `?${query ? `${query}&` : ''}${OAUTH_QUERY_PARAM_NAME}=true`;
-  return `&redirect_uri=${origin}${path}${encodeURIComponent(mergedQuery)}`;
+  return `&redirect_uri=${origin}/${pathEncoded}${encodeURIComponent(mergedQuery)}`;
 };
 
 // source: https://www.npmjs.com/package/react-grid-system#configuration

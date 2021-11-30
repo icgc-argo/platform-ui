@@ -54,6 +54,9 @@ export type DonorSummaryRecord = {
   mutectFailed: number;
   mutectRunning: number;
   mutectCompleted: number;
+  openAccessFailed: number;
+  openAccessRunning: number;
+  openAccessCompleted: number;
   processingStatus: MolecularProcessingStatus;
   updatedAt: Date | string;
   validWithCurrentDictionary: boolean;
@@ -73,6 +76,7 @@ export type ProgramDonorReleaseStats = {
   alignmentStatusCount?: CompletedInProgressFailedFilterCounts;
   sangerStatusCount?: CompletedInProgressFailedFilterCounts;
   mutectStatusCount?: CompletedInProgressFailedFilterCounts;
+  openAccessStatusCount?: CompletedInProgressFailedFilterCounts;
   completedWorkflowRuns?: number;
   inProgressWorkflowRuns?: number;
   failedWorkflowRuns?: number;
@@ -141,6 +145,10 @@ export type ProgramDonorSummaryEntryField =
   | 'mutectCompleted'
   | 'mutectRunning'
   | 'mutectFailed'
+  | 'openAccessStatus'
+  | 'openAccessCompleted'
+  | 'openAccessRunning'
+  | 'openAccessFailed'
   | 'processingStatus'
   | 'updatedAt'
   | 'createdAt';

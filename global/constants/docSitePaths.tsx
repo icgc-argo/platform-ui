@@ -25,7 +25,7 @@ export const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, `/dictionary/`);
 
 export const DOCS_DNA_PIPELINE_PAGE = urljoin(
   DOCS_URL_ROOT,
-  '/docs/analysis-workflows/dna-pipeline',
+  '/docs/analysis-workflows/analysis-overview',
 );
 export const DOCS_DATA_ACCESS_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-access');
 export const DOCS_DATA_DOWNLOAD_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-download');

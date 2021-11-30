@@ -132,6 +132,12 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
     failed: 0,
     noData: 0,
   },
+  openAccessStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
   completedWorkflowRuns: 0,
   inProgressWorkflowRuns: 0,
   failedWorkflowRuns: 0,
