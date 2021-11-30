@@ -69,8 +69,8 @@ export default () => {
             ARGO Data Platform. By continuing to use our website without changing your browser
             settings, you consent to our use of cookies in accordance with our Privacy Policy. To
             learn more about how we use cookies on this website, please review our{' '}
-            <Link href={ARGO_PRIVACY_PAGE} target="_blank">
-              <HyperLink invert>Privacy Policy</HyperLink>
+            <Link href={ARGO_PRIVACY_PAGE} target="_blank" invert>
+              Privacy Policy
             </Link>
             .
           </Typography>
