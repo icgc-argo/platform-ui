@@ -18,17 +18,17 @@
  */
 import React, { useState, useEffect } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import Facet from 'uikit/Facet';
-import { MenuItem } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import FileSelectButton from 'uikit/FileSelectButton';
-import { SubMenu } from 'uikit/SubMenu';
-import { css, styled } from 'uikit';
-import Typography from 'uikit/Typography';
-import Icon from 'uikit/Icon';
-import { useTheme } from 'uikit/ThemeProvider';
-import { Collapsible } from 'uikit/PageLayout';
-import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
+import Facet from '@icgc-argo/uikit/Facet';
+import { MenuItem } from '@icgc-argo/uikit/SubMenu';
+import { Input } from '@icgc-argo/uikit/form';
+import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
+import { SubMenu } from '@icgc-argo/uikit/SubMenu';
+import { css, styled } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import Icon from '@icgc-argo/uikit/Icon';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { Collapsible } from '@icgc-argo/uikit/PageLayout';
+import NumberRangeFacet from '@icgc-argo/uikit/Facet/NumberRangeFacet';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -58,7 +58,7 @@ import {
   IdSearchQueryVariables,
   IdSearchQueryData,
 } from './types';
-import Container from 'uikit/Container';
+import Container from '@icgc-argo/uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
 import { concat, trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
@@ -66,11 +66,11 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
-import useClickAway from 'uikit/utils/useClickAway';
+import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { FilterOption } from 'uikit/OptionsList';
+import { FilterOption } from '@icgc-argo/uikit/OptionsList';
 
 const FacetRow = styled('div')`
   display: flex;

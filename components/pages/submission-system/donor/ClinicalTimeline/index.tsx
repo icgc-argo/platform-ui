@@ -18,18 +18,18 @@
  */
 
 import React from 'react';
-import Container from 'uikit/Container';
-import { css } from 'uikit';
+import Container from '@icgc-argo/uikit/Container';
+import { css } from '@icgc-argo/uikit';
 import Header from './Header';
 import Timeline from './Timeline';
 import { EntityType } from './types';
-import Typography from 'uikit/Typography';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import Typography from '@icgc-argo/uikit/Typography';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 import get from 'lodash/get';
 import Samples from './Samples';
 import { Row, Col } from 'react-grid-system';
-import { useTheme } from 'uikit/ThemeProvider';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import Treatment, { ITreatment } from './Treatment';
 import { splitIntoColumns, tableFormat } from './util';
 import isEmpty from 'lodash/isEmpty';

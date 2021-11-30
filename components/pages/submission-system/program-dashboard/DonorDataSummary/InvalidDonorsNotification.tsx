@@ -19,8 +19,8 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import Link from 'uikit/Link';
-import Notification from 'uikit/notifications/Notification';
+import Link from '@icgc-argo/uikit/Link';
+import Notification from '@icgc-argo/uikit/notifications/Notification';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';

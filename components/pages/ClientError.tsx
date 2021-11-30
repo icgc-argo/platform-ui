@@ -19,9 +19,9 @@
 
 import ErrorLayout from 'components/pages/error';
 import React from 'react';
-import { css } from 'uikit';
-import A from 'uikit/Link';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import A from '@icgc-argo/uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
 
 export default function Error404Page() {
   const handleReloadClick = () => window.location.reload();

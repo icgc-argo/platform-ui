@@ -20,7 +20,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { LOCAL_STORAGE_SYSTEM_ALERTS_KEY } from 'global/constants';
-import SystemAlert from 'uikit/SystemAlert';
+import SystemAlert from '@icgc-argo/uikit/SystemAlert';
 import SYSTEM_ALERTS_QUERY from './SYSTEM_ALERTS.gql';
 
 type SystemAlert = {
@@ -29,18 +29,16 @@ type SystemAlert = {
   level: 'error' | 'info' | 'warning';
   message?: string;
   title: string;
-}
+};
 
-const getLocalStorage = () => JSON.parse(localStorage.getItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY)) || [];
+const getLocalStorage = () =>
+  JSON.parse(localStorage.getItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY)) || [];
 
 const setLocalStorage = (ids: string[]) => {
   localStorage.setItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY, JSON.stringify(ids));
-}
+};
 
-const useSystemAlertsQuery = (options: {} = {}) => useQuery(
-  SYSTEM_ALERTS_QUERY,
-  { ...options }
-);
+const useSystemAlertsQuery = (options: {} = {}) => useQuery(SYSTEM_ALERTS_QUERY, { ...options });
 
 const SystemAlerts = () => {
   const [alerts, setAlerts] = useState([]);
@@ -58,28 +56,18 @@ const SystemAlerts = () => {
   };
 
   const { data = null, loading = true } = useSystemAlertsQuery({
-    onCompleted: (data: any) => setAlerts(
-      data && data.systemAlerts
-        ? data.systemAlerts
-        : []
-    ),
+    onCompleted: (data: any) => setAlerts(data && data.systemAlerts ? data.systemAlerts : []),
   });
 
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
-  return alertsDisplay.length > 0 && !loading
-    ? (
-      <>
-        {alertsDisplay.map((alert: SystemAlert) => (
-          <SystemAlert
-            alert={alert}
-            key={alert.id}
-            onClose={() => handleClose(alert.id)}
-          />
-        ))}
-      </>
-    )
-    : null;
-}
+  return alertsDisplay.length > 0 && !loading ? (
+    <>
+      {alertsDisplay.map((alert: SystemAlert) => (
+        <SystemAlert alert={alert} key={alert.id} onClose={() => handleClose(alert.id)} />
+      ))}
+    </>
+  ) : null;
+};
 
 export default SystemAlerts;

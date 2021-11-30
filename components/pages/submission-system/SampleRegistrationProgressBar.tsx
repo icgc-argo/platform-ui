@@ -21,7 +21,7 @@ import { useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
 import * as React from 'react';
-import Progress from 'uikit/Progress';
+import Progress from '@icgc-argo/uikit/Progress';
 import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
 import { ClinicalRegistration } from './program-sample-registration/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';

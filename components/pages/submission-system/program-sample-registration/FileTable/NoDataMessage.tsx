@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import { css } from 'uikit';
-import DnaLoader from 'uikit/DnaLoader';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import { css } from '@icgc-argo/uikit';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 
 export default function NoDataMessage(props: { loading: boolean }) {
   return (

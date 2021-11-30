@@ -20,10 +20,10 @@
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import React from 'react';
-import { css } from 'uikit';
-import MailTo from 'uikit/MailTo';
-import Table, { TableColumnConfig } from 'uikit/Table';
-import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
+import { css } from '@icgc-argo/uikit';
+import MailTo from '@icgc-argo/uikit/MailTo';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 
@@ -110,6 +110,7 @@ const UsersTable = (tableProps: {
           `}
         >
           <InteractiveIcon
+            // @ts-ignore
             position="left"
             html={<span>Resend invitation</span>}
             height="20px"
@@ -127,6 +128,7 @@ const UsersTable = (tableProps: {
             }
           ></InteractiveIcon>
           <InteractiveIcon
+            // @ts-ignore
             disabled={false}
             html={<span>Edit User</span>}
             position="left"
@@ -136,6 +138,7 @@ const UsersTable = (tableProps: {
             onClick={() => tableProps.onUserEditClick({ user: props.original })}
           />
           <InteractiveIcon
+            // @ts-ignore
             unmountHTMLWhenHide
             position="left"
             html={

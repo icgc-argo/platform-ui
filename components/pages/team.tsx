@@ -18,15 +18,15 @@
  */
 
 import React from 'react';
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import DefaultLayout from './DefaultLayout';
-import Typography from 'uikit/Typography';
-import TitleBorder from 'uikit/TitleBorder';
-import { ThemeColorNames } from 'uikit/theme/types';
+import Typography from '@icgc-argo/uikit/Typography';
+import TitleBorder from '@icgc-argo/uikit/TitleBorder';
+import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
 import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
-import { useTheme } from 'uikit/ThemeProvider';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import banner from 'static/icgc-galaxy-bg.jpg';
 import Head from 'components/pages/head';
 

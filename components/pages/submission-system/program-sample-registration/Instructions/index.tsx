@@ -18,14 +18,14 @@
  */
 
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import * as React from 'react';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
-import InstructionBox from 'uikit/InstructionBox';
-import HyperLink from 'uikit/Link';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
+import InstructionBox from '@icgc-argo/uikit/InstructionBox';
+import HyperLink from '@icgc-argo/uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -36,12 +36,12 @@ import {
   instructionBoxButtonStyle,
   downloadTsvFileTemplate,
 } from '../../common';
-import FileSelectButton from 'uikit/FileSelectButton';
+import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import { BUTTON_VARIANTS, BUTTON_SIZES } from 'uikit/Button/constants';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from '@icgc-argo/uikit/Button/constants';
 
 function Instructions({
   uploadEnabled,

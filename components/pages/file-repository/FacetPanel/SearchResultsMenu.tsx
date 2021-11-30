@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled } from 'uikit';
-import Typography from 'uikit/Typography';
-import Icon from 'uikit/Icon';
+import { css, styled } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import Icon from '@icgc-argo/uikit/Icon';
 import { IdSearchQueryData } from './types';
-import { useTheme } from 'uikit/ThemeProvider';
-import theme from 'uikit/theme/defaultTheme';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import theme from '@icgc-argo/uikit/theme/defaultTheme';
 
 const ResultsDropdown = styled('div')`
   position: absolute;

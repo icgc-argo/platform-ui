@@ -18,8 +18,8 @@
  */
 
 import React from 'react';
-import Typography from 'uikit/Typography';
-import { css, styled } from 'uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css, styled } from '@icgc-argo/uikit';
 import { Entity } from './types';
 
 const SampleList = styled('div')`

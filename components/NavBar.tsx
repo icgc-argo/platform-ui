@@ -29,7 +29,7 @@ import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJ
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Link from 'next/link';
 import * as React from 'react';
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import AppBar, {
   DropdownMenu,
   Logo,
@@ -39,9 +39,9 @@ import AppBar, {
   UserBadge,
   NavElement,
   NavBarElement,
-} from 'uikit/AppBar';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
+} from '@icgc-argo/uikit/AppBar';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
@@ -49,7 +49,7 @@ import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
-import useClickAway from 'uikit/utils/useClickAway';
+import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
 
 const NavBarLoginButton = () => {

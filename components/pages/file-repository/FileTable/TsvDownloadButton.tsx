@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import DropdownButton, { DownloadButtonProps } from 'uikit/DropdownButton';
+import DropdownButton, { DownloadButtonProps } from '@icgc-argo/uikit/DropdownButton';
 import pluralize from 'pluralize';
 import { css } from '@emotion/core';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from '../../submission-system/common';
-import { useTheme } from 'uikit/ThemeProvider';
-import Icon from 'uikit/Icon';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import Icon from '@icgc-argo/uikit/Icon';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';

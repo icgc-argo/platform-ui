@@ -18,19 +18,19 @@
  */
 
 import * as React from 'react';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
   downloadTsvFileTemplate,
 } from '../../common';
-import { css } from 'uikit';
-import DropdownButton from 'uikit/DropdownButton';
+import { css } from '@icgc-argo/uikit';
+import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { capitalize } from 'global/utils/stringUtils';
 
 export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
-  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = item => {
+  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = (item) => {
     if (item.value === 'all') {
       downloadTsvFileTemplate(`all`);
     } else {
@@ -49,7 +49,7 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
           display: 'Download All',
           value: 'all',
         },
-        ...clinicalTypes.map(clinicalType => ({
+        ...clinicalTypes.map((clinicalType) => ({
           value: clinicalType,
           display: capitalize(clinicalType.split('_').join(' ')),
         })),

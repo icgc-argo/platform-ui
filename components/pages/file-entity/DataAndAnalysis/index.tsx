@@ -18,7 +18,7 @@
  */
 
 import { FileCard, TableDiv } from '../common';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
 
 function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {

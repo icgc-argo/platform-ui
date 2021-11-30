@@ -19,14 +19,14 @@
 
 import Link from 'next/link';
 import React from 'react';
-import { css } from 'uikit';
-import PercentageBar from 'uikit/PercentageBar';
-import Table from 'uikit/Table';
-import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
-import Tooltip from 'uikit/Tooltip';
-import A from 'uikit/Link';
+import { css } from '@icgc-argo/uikit';
+import PercentageBar from '@icgc-argo/uikit/PercentageBar';
+import Table from '@icgc-argo/uikit/Table';
+import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
+import Tooltip from '@icgc-argo/uikit/Tooltip';
+import A from '@icgc-argo/uikit/Link';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { TableColumnConfig } from 'uikit/Table';
+import { TableColumnConfig } from '@icgc-argo/uikit/Table';
 import get from 'lodash/get';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
@@ -201,6 +201,7 @@ export default function ProgramsTable(tableProps: {
             `}
           >
             <InteractiveIcon
+              // @ts-ignore
               position="bottom"
               html={<span>Manage users</span>}
               height="20px"
@@ -209,6 +210,7 @@ export default function ProgramsTable(tableProps: {
               onClick={() => tableProps.onProgramUsersClick({ program: original })}
             />
             <InteractiveIcon
+              // @ts-ignore
               position="bottom"
               html={<span>Edit program</span>}
               height="20px"

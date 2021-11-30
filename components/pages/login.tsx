@@ -18,25 +18,25 @@
  */
 
 import React from 'react';
-import { css } from 'uikit';
-import Container from 'uikit/Container';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import { css } from '@icgc-argo/uikit';
+import Container from '@icgc-argo/uikit/Container';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
-import Notification from 'uikit/notifications/Notification';
+import Notification from '@icgc-argo/uikit/notifications/Notification';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import urljoin from 'url-join';
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import {
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_REGISTERING_SAMPLES_PAGE,
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 
-const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
+const LinkToHome = (props) => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
-const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
+const LinkToDataRepo = (props) => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage({ redirect }: { redirect: string }) {
   const theme = useTheme();

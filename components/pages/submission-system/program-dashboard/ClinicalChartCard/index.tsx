@@ -19,10 +19,10 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import Link from 'uikit/Link';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import Link from '@icgc-argo/uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';
@@ -53,27 +53,23 @@ export default ({ chartType, comingSoonLink, title }: CardProps) => {
     </Typography>
   );
 
-  return FEATURE_DASHBOARD_CHARTS_ENABLED
-    ? (
-      <ClinicalChart
-        chartType={chartType}
-        title={title}
-        />
-    ) : (
-      <DashboardCard>
-        <Typography variant="default" component="span">
-          {title}
-        </Typography>
-        <div
-          css={css`
-            height: ${CHART_HEIGHT + CHART_PADDING}px;
-            padding: ${CHART_PADDING}px 0 0;
-          `}
-          >
-          <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
-            <img alt="Coming Soon." src={PicClipboard} />
-          </ContentPlaceholder>
-        </div>
-      </DashboardCard>
-    );
+  return FEATURE_DASHBOARD_CHARTS_ENABLED ? (
+    <ClinicalChart chartType={chartType} title={title} />
+  ) : (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        {title}
+      </Typography>
+      <div
+        css={css`
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0 0;
+        `}
+      >
+        <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
+          <img alt="Coming Soon." src={PicClipboard} />
+        </ContentPlaceholder>
+      </div>
+    </DashboardCard>
+  );
 };

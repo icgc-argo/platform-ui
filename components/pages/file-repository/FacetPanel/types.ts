@@ -1,5 +1,5 @@
 import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
-import { FilterOption } from 'uikit/OptionsList';
+import { FilterOption } from '@icgc-argo/uikit/OptionsList';
 import { FileCentricDocumentField } from '../types';
 
 export enum FileFacetPath {

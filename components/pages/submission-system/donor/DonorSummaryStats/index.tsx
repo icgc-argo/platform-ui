@@ -17,15 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Container from 'uikit/Container';
+import Container from '@icgc-argo/uikit/Container';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled-base';
-import { useTheme } from 'uikit/ThemeProvider';
-import Typography from 'uikit/Typography';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
-import PercentBar from 'uikit/PercentBar';
+import Typography from '@icgc-argo/uikit/Typography';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
+import PercentBar from '@icgc-argo/uikit/PercentBar';
 import _ from 'lodash';
 import { Pipeline } from '../../common';
 

@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import Footer from 'uikit/Footer';
-import { css } from 'uikit';
+import Footer from '@icgc-argo/uikit//Footer';
+import { css } from '@icgc-argo/uikit/';
 import { APP_VERSION } from 'global/constants';
-import useTheme from 'uikit/utils/useTheme';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
@@ -40,11 +40,11 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
 
   React.useEffect(() => {
     fetch(urlJoin(GATEWAY_API_ROOT, STATUS_PATH))
-      .then(res => res.json())
-      .then(version => {
+      .then((res) => res.json())
+      .then((version) => {
         setApiVersion(version);
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn(err);
       });
   }, []);

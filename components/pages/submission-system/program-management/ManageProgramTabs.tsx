@@ -23,10 +23,10 @@ import isEmpty from 'lodash/isEmpty';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
-import { ContentBox } from 'uikit/PageLayout';
-import Tabs, { Tab } from 'uikit/Tabs';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
+import { ContentBox } from '@icgc-argo/uikit/PageLayout';
+import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import ProgramForm from '../program-form/ProgramForm';
 import { ModalPortal } from 'components/ApplicationRoot';
@@ -38,7 +38,7 @@ import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
 import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notifications/Toast';
 import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
 import useCommonToasters from 'components/useCommonToasters';
 import useUrlParamState from 'global/hooks/useUrlParamState';
@@ -169,11 +169,10 @@ export default () => {
         title: '',
         content: (
           <span>
-            {`${successNames.length.toLocaleString()} ${
-            pluralize('user', successNames.length)
-            } ${
+            {`${successNames.length.toLocaleString()} ${pluralize('user', successNames.length)} ${
               successNames.length === 1 ? ' was' : 'were'
-            } added to the program: `} <br />
+            } added to the program: `}{' '}
+            <br />
             <strong>{successNames.join(', ')}</strong>
           </span>
         ),
@@ -185,9 +184,10 @@ export default () => {
         title: '',
         content: (
           <span>
-            {`${failNames.length.toLocaleString()} ${
-              pluralize('user', failNames.length)
-            } could not be added to the program: `}
+            {`${failNames.length.toLocaleString()} ${pluralize(
+              'user',
+              failNames.length,
+            )} could not be added to the program: `}
             <br />
             <strong>{failNames.join(', ')}</strong>
           </span>

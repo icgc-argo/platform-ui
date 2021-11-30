@@ -18,17 +18,16 @@
  */
 
 import React from 'react';
-import InputLabel from 'uikit/form/InputLabel';
-import MultiSelect from 'uikit/form/MultiSelect';
-import Input from 'uikit/form/Input';
-import FormControl from 'uikit/form/FormControl';
+import InputLabel from '@icgc-argo/uikit/form/InputLabel';
+import MultiSelect from '@icgc-argo/uikit/form/MultiSelect';
+import Input from '@icgc-argo/uikit/form/Input';
+import FormControl from '@icgc-argo/uikit/form/FormControl';
 import styled from '@emotion/styled';
-import Icon from 'uikit/Icon';
-import Select from 'uikit/form/Select';
-import FormHelperText from 'uikit/form/FormHelperText';
+import Icon from '@icgc-argo/uikit/Icon';
+import Select from '@icgc-argo/uikit/form/Select';
+import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
 import { PROGRAM_USER_ROLES } from 'global/constants';
 import css from '@emotion/css';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'react-grid-system';
 import { UserModel } from './common';
 

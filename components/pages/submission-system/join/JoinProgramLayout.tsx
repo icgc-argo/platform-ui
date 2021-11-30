@@ -18,19 +18,14 @@
  */
 
 import * as React from 'react';
-import { css } from 'uikit';
-import Container from 'uikit/Container';
-import Tabs, { Tab } from 'uikit/Tabs';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
-import Typography from 'uikit/Typography';
-import DnaLoader from 'uikit/DnaLoader';
-import get from 'lodash/get';
-import useAuthContext from 'global/hooks/useAuthContext';
+import { css } from '@icgc-argo/uikit';
+import Container from '@icgc-argo/uikit/Container';
+import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
+import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
+import Typography from '@icgc-argo/uikit/Typography';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { useRouter } from 'next/router';
 import { createRedirectURL } from 'global/utils/common';
-
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { getConfig } from 'global/config';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 

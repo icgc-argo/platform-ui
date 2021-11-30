@@ -18,7 +18,11 @@
  */
 
 import React from 'react';
-import { SelectTable, TableColumnConfig, useSelectTableSelectionState } from 'uikit/Table';
+import {
+  SelectTable,
+  TableColumnConfig,
+  useSelectTableSelectionState,
+} from '@icgc-argo/uikit/Table';
 import {
   FileRepositoryRecord,
   FileRepositoryTableQueryData,
@@ -28,12 +32,12 @@ import {
   FileRepositorySortingRule,
 } from './types';
 import filesize from 'filesize';
-import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
+import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
 import { css } from '@emotion/core';
-import DropdownButton from 'uikit/DropdownButton';
-import Container from 'uikit/Container';
-import Typography from 'uikit/Typography';
-import Icon from 'uikit/Icon';
+import DropdownButton from '@icgc-argo/uikit/DropdownButton';
+import Container from '@icgc-argo/uikit/Container';
+import Typography from '@icgc-argo/uikit/Typography';
+import Icon from '@icgc-argo/uikit/Icon';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
@@ -41,11 +45,11 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction } from 'react-table';
-import { useTheme } from 'uikit/ThemeProvider';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
-import A from 'uikit/Link';
+import A from '@icgc-argo/uikit/Link';
 import Link from 'next/link';
 import { FILE_ENTITY_ID_PATH, FILE_ENTITY_PATH } from 'global/constants/pages';
 import { config } from '@storybook/addon-actions';
@@ -359,13 +363,17 @@ export default () => {
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize('file', totalEntries)}`}
+                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize(
+                  'file',
+                  totalEntries,
+                )}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
                 {!!selectedRowsCount &&
-                  ` (${selectedRowsCount.toLocaleString()} ${
-                    pluralize('file', selectedRowsCount)
-                  } selected)`}
+                  ` (${selectedRowsCount.toLocaleString()} ${pluralize(
+                    'file',
+                    selectedRowsCount,
+                  )} selected)`}
               </Typography>
             </div>
           </div>

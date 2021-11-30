@@ -21,8 +21,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { css } from 'uikit';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
@@ -42,7 +42,7 @@ export default () => {
     loading,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
-    onError: error => {
+    onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {
         setNotFound(true);
       }

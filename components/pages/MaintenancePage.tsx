@@ -19,8 +19,8 @@
 
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import image from 'static/group-33.svg';
 

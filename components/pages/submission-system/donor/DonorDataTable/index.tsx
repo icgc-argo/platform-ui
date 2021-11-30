@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
-import Container from 'uikit/Container';
+import { css } from '@icgc-argo/uikit';
+import Container from '@icgc-argo/uikit/Container';
 import { Row, Col } from 'react-grid-system';
-import Table from 'uikit/Table';
-import Typography from 'uikit/Typography';
+import Table from '@icgc-argo/uikit/Table';
+import Typography from '@icgc-argo/uikit/Typography';
 
 export default () => {
   return (
@@ -53,7 +53,7 @@ export default () => {
             `}
           >
             <Table
-              TheadComponent={props => null}
+              TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder
@@ -77,7 +77,7 @@ export default () => {
           </Col>
           <Col xs={6}>
             <Table
-              TheadComponent={props => null}
+              TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder

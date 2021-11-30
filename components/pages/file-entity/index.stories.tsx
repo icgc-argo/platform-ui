@@ -28,9 +28,15 @@ import {
 } from './dummyData';
 import clsx from 'clsx';
 import Head from '../head';
-import DnaLoader from 'uikit/DnaLoader';
-import Footer from 'uikit/Footer';
-import { PageContainer, PageBody, PageContent, ContentHeader, ContentBody } from 'uikit/PageLayout';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import Footer from '@icgc-argo/uikit/Footer';
+import {
+  PageContainer,
+  PageBody,
+  PageContent,
+  ContentHeader,
+  ContentBody,
+} from '@icgc-argo/uikit/PageLayout';
 import FileCardsLayout from './FileCardsLayout';
 import { FileTitleBar } from './FileTitleBar';
 import NavBar from '../../NavBar';

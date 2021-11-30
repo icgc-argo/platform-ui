@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import {
@@ -26,7 +26,7 @@ import {
   EMPTY_PROGRAM_SUMMARY_STATS,
 } from './common';
 import { StatArea as StatAreaDisplay } from '../../common';
-import { useTheme } from 'uikit/ThemeProvider';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { css } from '@emotion/core';
 
 const DonorStatsArea = ({

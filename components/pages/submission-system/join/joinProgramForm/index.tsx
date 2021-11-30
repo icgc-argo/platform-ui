@@ -20,15 +20,15 @@
 import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
-import { Input } from 'uikit/form';
-import { INPUT_SIZES } from 'uikit/form/common';
-import FormControl from 'uikit/form/FormControl';
-import FormHelperText from 'uikit/form/FormHelperText';
-import InputLabel from 'uikit/form/InputLabel';
-import MultiSelect, { Option } from 'uikit/form/MultiSelect';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
+import { Input } from '@icgc-argo/uikit/form';
+import { INPUT_SIZES } from '@icgc-argo/uikit/form/common';
+import FormControl from '@icgc-argo/uikit/form/FormControl';
+import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
+import InputLabel from '@icgc-argo/uikit/form/InputLabel';
+import MultiSelect, { Option } from '@icgc-argo/uikit/form/MultiSelect';
+import Typography from '@icgc-argo/uikit/Typography';
 import schema from './validation';
 
 const initialFields = schema.cast({});
@@ -53,7 +53,7 @@ const JoinProgramForm = ({
 
   const handleBlur = (
     fieldKey: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => _ => validateField({ key: fieldKey });
+  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => (_) => validateField({ key: fieldKey });
 
   const handleChange = (
     fieldName: keyof typeof initialFields,
@@ -82,7 +82,7 @@ const JoinProgramForm = ({
         </Typography>
       </Row>
       <ScreenClassRender
-        render={screenSize => (
+        render={(screenSize) => (
           <div
             css={css`
               & .pt {
@@ -106,7 +106,7 @@ const JoinProgramForm = ({
                     value={data.institutions}
                     onChange={handleChange('institutions')}
                   >
-                    {availableInstitutions.map(institution => (
+                    {availableInstitutions.map((institution) => (
                       <Option value={institution} key={institution.replace(/\s/g, '')}>
                         {institution}
                       </Option>

@@ -19,9 +19,9 @@
 
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import HyperLink from 'uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import HyperLink from '@icgc-argo/uikit/Link';
 import Link from 'next/link';
 import { getConfig } from 'global/config';
 import { Row, Col } from 'react-grid-system';

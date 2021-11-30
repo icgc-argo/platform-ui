@@ -20,7 +20,7 @@
 import { css } from '@emotion/core';
 
 import SubmissionLayout from '../layout';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 
 import DonorAggregationSummary from './DonorAggregationSummary';
 

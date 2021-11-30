@@ -16,7 +16,7 @@
     "baseUrl": "./",
     "downlevelIteration": true
   },
-  "exclude": ["node_modules", "scripts/*", "**/*.test.ts"],
+  "exclude": ["node_modules", "scripts/*", "**/*.test.ts", "xuikit"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

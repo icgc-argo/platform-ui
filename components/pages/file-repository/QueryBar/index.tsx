@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
-import theme from 'uikit/theme/defaultTheme';
+import { css } from '@icgc-argo/uikit';
+import theme from '@icgc-argo/uikit/theme/defaultTheme';
 import dynamic from 'next/dynamic';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
-import Button from 'uikit/Button';
+import Button from '@icgc-argo/uikit/Button';
 import isEmpty from 'lodash/isEmpty';
 import { toDisplayValue } from '../utils';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 

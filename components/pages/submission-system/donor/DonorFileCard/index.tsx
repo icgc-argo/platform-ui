@@ -17,16 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
-import Container from 'uikit/Container';
+import { css } from '@icgc-argo/uikit';
+import Container from '@icgc-argo/uikit/Container';
 import { Row, Col } from 'react-grid-system';
-import Table from 'uikit/Table';
-import Typography from 'uikit/Typography';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
-import Link from 'uikit/Link';
-import { useTheme } from 'uikit/ThemeProvider';
-import typography from 'uikit/theme/defaultTheme/typography';
+import Table from '@icgc-argo/uikit/Table';
+import Typography from '@icgc-argo/uikit/Typography';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
+import Link from '@icgc-argo/uikit/Link';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 
 const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,

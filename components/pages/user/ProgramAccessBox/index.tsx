@@ -18,11 +18,11 @@
  */
 
 import * as React from 'react';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import UikitLink from 'uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import UikitLink from '@icgc-argo/uikit/Link';
 import { Box } from '../common';
-import Table from 'uikit/Table';
+import Table from '@icgc-argo/uikit/Table';
 import useAuthContext from 'global/hooks/useAuthContext';
 import {
   isDccMember,
@@ -38,7 +38,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import { capitalize } from 'lodash';
 
 type T_ProgramTableProgram = {

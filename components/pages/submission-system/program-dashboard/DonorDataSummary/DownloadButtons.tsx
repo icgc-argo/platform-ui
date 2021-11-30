@@ -20,8 +20,8 @@
 import { Row, Col } from 'react-grid-system';
 import urlJoin from 'url-join';
 import { css } from '@emotion/core';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from 'global/constants';
@@ -29,7 +29,7 @@ import { saveAs } from 'file-saver';
 import React from 'react';
 import { format as formatDate } from 'date-fns';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { getConfig } from 'global/config';
 
 const DownloadButton = ({
@@ -104,8 +104,8 @@ const DownloadButtons = () => {
       method: 'GET',
     })
       .then(checkResponseIs200)
-      .then(res => res.blob())
-      .then(blob => {
+      .then((res) => res.blob())
+      .then((blob) => {
         const now = formatDate(Date.now(), 'yyyyMMdd');
         const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 

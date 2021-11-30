@@ -19,11 +19,11 @@
 
 import React from 'react';
 import { useRouter } from 'next/router';
-import { css } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
+import { css } from '@icgc-argo/uikit';
+import TitleBar from '@icgc-argo/uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import { Row } from 'react-grid-system';
 import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';

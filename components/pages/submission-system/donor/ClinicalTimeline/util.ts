@@ -18,7 +18,7 @@ import { isEmpty, chunk } from 'lodash';
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import defaultTheme from 'uikit/theme/defaultTheme';
+import defaultTheme from '@icgc-argo/uikit/theme/defaultTheme';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;

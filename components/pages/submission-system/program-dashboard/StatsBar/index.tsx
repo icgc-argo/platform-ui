@@ -17,14 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Container from 'uikit/Container';
-import { css, keyframes } from '@emotion/core';
+import Container from '@icgc-argo/uikit/Container';
+import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled-base';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
+import Typography from '@icgc-argo/uikit/Typography';
+
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
@@ -34,7 +32,7 @@ import {
   DashboardSummaryDataVariables,
   POLL_INTERVAL_MILLISECONDS,
 } from '../common';
-import PercentBar from 'uikit/PercentBar';
+import PercentBar from '@icgc-argo/uikit/PercentBar';
 import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from '../DonorDataSummary/common';
 
 const StatDesc = styled('div')`

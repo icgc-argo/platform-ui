@@ -17,13 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Typography from '../../../uikit/Typography';
-import Container from '../../../uikit/Container';
+import Typography from '@icgc-argo/uikit/Typography';
+import Container from '@icgc-argo/uikit/Container';
 
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { FileAccessState } from './types';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 
 export const FileCard: React.ComponentType<{
   cardTitle?: string;

@@ -18,11 +18,11 @@
  */
 
 import React from 'react';
-import { css } from 'uikit';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
 import { getTimelineStyles } from './util';
-import useTheme from 'uikit/utils/useTheme';
-import VerticalTabs from 'uikit/VerticalTabs';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
 import { Entity, EntityType } from './types';
 import { InvalidIcon } from './common';
 

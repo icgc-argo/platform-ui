@@ -19,13 +19,13 @@
 
 import { FileCard, getAccessIcon, DownloadIcon } from '../common';
 import { css } from '@emotion/core';
-import Button from 'uikit/Button';
+import Button from '@icgc-argo/uikit/Button';
 import { FileRecord } from '../types';
 import fileSize from 'filesize';
-import Table, { TableColumnConfig } from 'uikit/Table';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
 import React from 'react';
-import Typography from 'uikit/Typography';
-import Link from 'uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
+import Link from '@icgc-argo/uikit/Link';
 
 export default ({ data }: { data: Array<FileRecord> }) => {
   const containerRef = React.createRef<HTMLDivElement>();

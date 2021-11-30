@@ -18,12 +18,12 @@
  */
 
 import React from 'react';
-import useTheme from 'uikit/utils/useTheme';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { Col, Row } from 'react-grid-system';
-import Typography from 'uikit/Typography';
-import InputLabel from 'uikit/form/InputLabel';
-import Icon from 'uikit/Icon';
-import { css } from 'uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import InputLabel from '@icgc-argo/uikit/form/InputLabel';
+import Icon from '@icgc-argo/uikit/Icon';
+import { css } from '@icgc-argo/uikit';
 import join from 'lodash/join';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -33,7 +33,7 @@ const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South 
 
 const MISSING_ENTRY_TEXT = '--';
 
-const arrayToText = array => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
+const arrayToText = (array) => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
 
 type Program = {
   name?: string;
@@ -49,7 +49,7 @@ type Program = {
 };
 function ProfileView({ program = {} as Program }) {
   const theme = useTheme();
-  const Left = props => (
+  const Left = (props) => (
     <Col
       lg={2}
       md={4}
@@ -77,7 +77,7 @@ function ProfileView({ program = {} as Program }) {
       </div>
     </Col>
   );
-  const SectionTitle = props => (
+  const SectionTitle = (props) => (
     <Typography
       component="h3"
       variant="sectionHeader"
@@ -210,7 +210,7 @@ function ProfileView({ program = {} as Program }) {
           &nbsp;
           {program.regions &&
             join(
-              filter(REGIONS, region => {
+              filter(REGIONS, (region) => {
                 return !program.regions.includes(region);
               }),
               ', ',

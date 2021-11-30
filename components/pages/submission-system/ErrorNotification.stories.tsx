@@ -22,7 +22,7 @@ import { storiesOf } from '@storybook/react';
 import { boolean, select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import ErrorNotification from './ErrorNotification';
-import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
+import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 
 const TableStories = storiesOf(`${__dirname}`, module).add('ErrorNotification', () => {
   return (

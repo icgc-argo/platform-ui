@@ -20,7 +20,7 @@
 import { configure, addDecorator } from '@storybook/react';
 import React from 'react';
 import urlJoin from 'url-join';
-import { ThemeProvider, css } from '../uikit';
+import ThemeProvider from '@icgc-argo/uikit/ThemeProvider';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';

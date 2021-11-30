@@ -20,14 +20,14 @@
 import { configure, addDecorator } from '@storybook/react';
 import React from 'react';
 
-import { ThemeProvider } from '../uikit';
+import { ThemeProvider } from '@icgc-argo/uikit';
 
 const req = require.context('../uikit', true, /.stories\.tsx$/);
 function loadStories() {
-  req.keys().forEach(filename => req(filename));
+  req.keys().forEach((filename) => req(filename));
 }
 
-addDecorator(Story => {
+addDecorator((Story) => {
   const StoryComponent = Story as React.ComponentType;
   return (
     <ThemeProvider>

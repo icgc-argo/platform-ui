@@ -19,13 +19,13 @@
 
 import * as React from 'react';
 import omit from 'lodash/omit';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import {
   NOTIFICATION_INTERACTION_EVENTS,
   NotificationVariant,
   NotificationInteractionEvent,
   NotificationInteraction,
-} from 'uikit/notifications/Notification';
+} from '@icgc-argo/uikit/notifications/Notification';
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {
@@ -45,10 +45,10 @@ export const useToastState = () => {
     const id = String(Math.random());
     const DEFAULT_TOAST_CONFIGS: Partial<ToastConfig> = {
       variant: TOAST_VARIANTS.INFO as ToastConfig['variant'],
-      onInteraction: e => e,
+      onInteraction: (e) => e,
       interactionType: undefined, // the Toast component internally has its default, no need to cover this
     };
-    setToastStack(toastStack => [
+    setToastStack((toastStack) => [
       ...toastStack,
       { ...DEFAULT_TOAST_CONFIGS, ...omit(toast, 'timeout'), id },
     ]);
@@ -61,7 +61,7 @@ export const useToastState = () => {
   };
 
   const removeToast = (_id: string) => {
-    setToastStack(toastStack => toastStack.filter(({ id }) => id !== _id));
+    setToastStack((toastStack) => toastStack.filter(({ id }) => id !== _id));
     return _id;
   };
 

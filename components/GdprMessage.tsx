@@ -18,14 +18,14 @@
  */
 
 import React from 'react';
-import { useTheme } from 'uikit/ThemeProvider';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { css } from '@emotion/core';
-import Icon from 'uikit/Icon';
-import Typography from 'uikit/Typography';
-import Button from 'uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
+import Typography from '@icgc-argo/uikit/Typography';
+import Button from '@icgc-argo/uikit/Button';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
-import Link from 'uikit/Link';
-import HyperLink from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
+import HyperLink from '@icgc-argo/uikit/Link';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 export default () => {

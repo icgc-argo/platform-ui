@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import Modal from 'uikit/Modal';
+import Modal from '@icgc-argo/uikit/Modal';
 
 type ModalProps = React.ComponentProps<typeof Modal>;
 
@@ -31,7 +31,7 @@ export default (initialModalProps: ModalProps = {}) => {
   });
 
   const getUserConfirmation = (modalProps: ModalProps = {}): Promise<boolean> =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       const onConfirmed = () => {
         setModalShown(false);
         resolve(true);
@@ -42,15 +42,15 @@ export default (initialModalProps: ModalProps = {}) => {
       };
       setModalProps({
         ...modalProps,
-        onCancelClick: e => {
+        onCancelClick: (e) => {
           if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
-        onCloseClick: e => {
+        onCloseClick: (e) => {
           if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
-        onActionClick: e => {
+        onActionClick: (e) => {
           if (!!modalProps.onActionClick) modalProps.onActionClick(e);
           onConfirmed();
         },

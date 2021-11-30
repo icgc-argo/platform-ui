@@ -17,19 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled } from 'uikit';
-import { useTheme } from 'uikit/ThemeProvider';
-import Typography from 'uikit/Typography';
+import { css, styled } from '@icgc-argo/uikit';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import Typography from '@icgc-argo/uikit/Typography';
 import { Col, Row } from 'react-grid-system';
-import { ThemeColorNames } from 'uikit/theme/types';
-import { UikitIconNames } from 'uikit/Icon/icons';
-import Icon from 'uikit/Icon';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
-import Container from 'uikit/Container';
-import overtureLogo from 'uikit/assets/overture-logo.svg';
+import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
+import Icon from '@icgc-argo/uikit/Icon';
+import Link from '@icgc-argo/uikit/Link';
+import Button from '@icgc-argo/uikit/Button';
+import Container from '@icgc-argo/uikit/Container';
+import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
 import scientistImage from 'static/icgc-data-scientist-wide.jpg';
-import DnaLoader from 'uikit/DnaLoader';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
 
 type DataReleaseStatistic = {

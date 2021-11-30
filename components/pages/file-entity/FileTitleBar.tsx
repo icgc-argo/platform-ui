@@ -18,10 +18,10 @@
  */
 
 import { css } from '@emotion/core';
-import { useTheme } from 'uikit/ThemeProvider';
-import TitleBar from 'uikit/TitleBar';
-import Tooltip from 'uikit/Tooltip';
-import Button from 'uikit/Button';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import TitleBar from '@icgc-argo/uikit/TitleBar';
+import Tooltip from '@icgc-argo/uikit/Tooltip';
+import Button from '@icgc-argo/uikit/Button';
 import { DownloadIcon } from './common';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';

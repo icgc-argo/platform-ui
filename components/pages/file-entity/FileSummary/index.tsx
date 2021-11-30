@@ -19,7 +19,7 @@
 
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 
 import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';

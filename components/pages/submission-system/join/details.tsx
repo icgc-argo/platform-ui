@@ -27,19 +27,17 @@ import { getConfig } from 'global/config';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
-import { css } from 'uikit';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import Typography from '@icgc-argo/uikit/Typography';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
-import queryString from 'query-string';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
@@ -61,12 +59,12 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     loading,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (!joinProgramInvite) {
         return;
       }
     },
-    onError: error => {
+    onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {
         setNotFound(true);
       } else {
@@ -79,9 +77,9 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
 
-  const handleSubmit: React.ComponentProps<
-    typeof JoinProgramForm
-  >['onSubmit'] = async validData => {
+  const handleSubmit: React.ComponentProps<typeof JoinProgramForm>['onSubmit'] = async (
+    validData,
+  ) => {
     try {
       await joinProgram({
         variables: {

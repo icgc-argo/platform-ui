@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Modal, { ModalContainer } from 'uikit/Modal';
+import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
 import styled from '@emotion/styled';
 import { UserSection, UserSectionProps, UserField } from '../styledComponents';
 import { UserModel, userSchema } from '../common';
@@ -84,7 +84,7 @@ const EditUserModal = ({
         <UserSection
           user={form}
           onChange={(key, val) => setData({ key, val })}
-          validateField={key => validateField({ key })}
+          validateField={(key) => validateField({ key })}
           errors={validationErrors}
           disabledFields={disabledFields}
           onClickDelete={null}
