@@ -24,8 +24,10 @@ const urlJoin = require('url-join');
 const withImages = require('next-images');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const withTranspileModules = require('next-transpile-modules')(['@icgc-argo/uikit']);
+const withPlugins = require('next-compose-plugins');
 
-module.exports = withImages({
+module.exports = withPlugins([withTranspileModules, [withImages]], {
   exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
