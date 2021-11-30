@@ -165,7 +165,7 @@ export default ({
       onItemClick={onItemClick}
       menuItems={menuItems}
       isLoading={loading}
-      loadWithChildren
+      showLoaderWithChildren
     >
       <span css={instructionBoxButtonContentStyle}>
         {!loading && (

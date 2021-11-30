@@ -61,7 +61,7 @@ const Button = React.forwardRef<
     isLoading?: boolean;
     Loader?: any;
     type?: 'button' | 'submit' | 'reset';
-    loadWithChildren?: boolean;
+    showLoaderWithChildren?: boolean;
   }
 >(
   (
@@ -78,7 +78,7 @@ const Button = React.forwardRef<
       isLoading: controlledLoadingState,
       Loader,
       type,
-      loadWithChildren,
+      showLoaderWithChildren,
     },
     ref = React.createRef(),
   ) => {
@@ -111,7 +111,7 @@ const Button = React.forwardRef<
         id={id}
         type={type}
       >
-        {loadWithChildren ? (
+        {showLoaderWithChildren ? (
           <>
             {shouldShowLoading && (
               <DefaultLoader
