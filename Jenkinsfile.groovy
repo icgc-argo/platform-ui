@@ -21,7 +21,6 @@ def dockerRegistry = "ghcr.io"
 def githubRepo = "icgc-argo/platform-ui"
 def commit = "UNKNOWN"
 def version = "UNKNOWN"
-def uikitVersion = "UNKNOWN"
 
 pipeline {
     agent {
@@ -68,9 +67,7 @@ spec:
                 script {
                     version = sh(returnStdout: true, script: 'cat ./package.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
                 }
-                script {
-                    uikitVersion = sh(returnStdout: true, script: 'cat ./uikit/package.release.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
-                }
+            
             }
         }
         stage('Test') {
@@ -78,7 +75,6 @@ spec:
                 container('node') {
                     sh "npm ci"
                     sh "npm run test"
-                    sh "npm run build-uikit"
                 }
                 container('node') {
                     sh "GATEWAY_API_ROOT=https://argo-gateway.dev.argo.cancercollaboratory.org/ npm run test-gql-validation"
@@ -114,33 +110,6 @@ spec:
                      [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev' ],
                      [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
                 ])
-            }
-        }
-
-        stage('Publish uikit') {
-            when {
-                branch "develop"
-            }
-            steps {
-                container('node') {
-                    withCredentials([
-                        string(credentialsId: "devops.argo-npm-token", variable: 'NPM_TOKEN')
-                    ]) {
-                        script {
-                            // we still want to run the platform deploy even if this fails, hence try-catch
-                            try {
-                                sh "export NPM_TOKEN=${NPM_TOKEN}"
-                                sh "npm run publish-uikit"
-                                withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                                    sh "git tag uikit-${uikitVersion}"
-                                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
-                                }
-                            } catch (err) {
-                                echo "could not publish @icgc-argo/uikit version ${uikitVersion}"
-                            }
-                        }
-                    }
-                }
             }
         }
 
