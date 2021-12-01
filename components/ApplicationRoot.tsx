@@ -28,7 +28,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { css } from '@icgc-argo/uikit';
 import ThemeProvider from '@icgc-argo/uikit/ThemeProvider';
-import Modal from '@icgc-argo/uikit//Modal';
+import Modal from '@icgc-argo/uikit/Modal';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
