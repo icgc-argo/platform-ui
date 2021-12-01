@@ -67,7 +67,6 @@ spec:
                 script {
                     version = sh(returnStdout: true, script: 'cat ./package.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
                 }
-            
             }
         }
         stage('Test') {
