@@ -18,6 +18,7 @@
  */
 
 import DropdownButton, { DownloadButtonProps } from 'uikit/DropdownButton';
+import { useState } from 'react';
 import pluralize from 'pluralize';
 import { css } from '@emotion/core';
 import {
@@ -57,6 +58,7 @@ export default ({
   const { GATEWAY_API_ROOT } = getConfig();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
+  const [loading, setLoading] = useState(false);
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
       ? [
@@ -122,6 +124,7 @@ export default ({
   };
 
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = (item) => {
+    setLoading(true);
     switch (item.value) {
       case DownloadOptionValues.SCORE_MANIFEST:
         const downloadUrl = urlJoin(
@@ -129,7 +132,7 @@ export default ({
           MANIFEST_DOWNLOAD_PATH,
           `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
-        downloadFileWithEgoToken(downloadUrl);
+        downloadFileWithEgoToken(downloadUrl).finally(() => setLoading(false));
         break;
       case DownloadOptionValues.FILE_TABLE:
         const tsvdownloadUrl = urlJoin(
@@ -140,7 +143,7 @@ export default ({
           )}&columns=${encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))}`,
         );
         // window.location.assign(tsvdownloadUrl);
-        downloadFileWithEgoToken(tsvdownloadUrl);
+        downloadFileWithEgoToken(tsvdownloadUrl).finally(() => setLoading(false));
         break;
       default:
         console.log(`Selection from download dropdown '${item.value}' has no action defined.`);
@@ -152,19 +155,27 @@ export default ({
       css={css`
         margin-right: 8px;
         width: 160px;
+        :disabled {
+          background-color: ${theme.button.colors.secondary.hover};
+          color: ${theme.button.textColors.secondary.default};
+        }
       `}
       variant="secondary"
       size="sm"
       onItemClick={onItemClick}
       menuItems={menuItems}
+      isLoading={loading}
+      showLoaderWithChildren
     >
       <span css={instructionBoxButtonContentStyle}>
-        <Icon
-          name="download"
-          fill="accent2_dark"
-          height="12px"
-          css={instructionBoxButtonIconStyle}
-        />
+        {!loading && (
+          <Icon
+            name="download"
+            fill="accent2_dark"
+            height="12px"
+            css={instructionBoxButtonIconStyle}
+          />
+        )}
         Download
         <Icon
           name="chevron_down"

@@ -61,6 +61,7 @@ const Button = React.forwardRef<
     isLoading?: boolean;
     Loader?: any;
     type?: 'button' | 'submit' | 'reset';
+    showLoaderWithChildren?: boolean;
   }
 >(
   (
@@ -77,6 +78,7 @@ const Button = React.forwardRef<
       isLoading: controlledLoadingState,
       Loader,
       type,
+      showLoaderWithChildren,
     },
     ref = React.createRef(),
   ) => {
@@ -102,38 +104,63 @@ const Button = React.forwardRef<
         ref={ref}
         onClick={isAsync ? onClickFn : onClick}
         onBlur={onBlur}
-        disabled={disabled}
+        disabled={disabled || shouldShowLoading}
         size={size}
         variant={variant}
         className={className}
         id={id}
         type={type}
       >
-        <div
-          css={css`
-            display: ${shouldShowLoading ? 'block' : 'none'};
-          `}
-        >
-          <LoaderComp variant={variant} theme={theme} />
-        </div>
-        <div
-          css={css`
-            display: ${shouldShowLoading ? 'none' : 'block'};
-          `}
-        >
-          {children}
-        </div>
+        {showLoaderWithChildren ? (
+          <>
+            {shouldShowLoading && (
+              <DefaultLoader
+                variant={variant}
+                theme={theme}
+                size={size}
+                css={css`
+                  margin-right: 5px;
+                `}
+              />
+            )}
+            {children}
+          </>
+        ) : (
+          <>
+            <div
+              css={css`
+                display: ${shouldShowLoading ? 'block' : 'none'};
+              `}
+            >
+              <LoaderComp variant={variant} theme={theme} />
+            </div>
+            <div
+              css={css`
+                display: ${shouldShowLoading ? 'none' : 'block'};
+              `}
+            >
+              {children}
+            </div>
+          </>
+        )}
       </StyledButton>
     );
   },
 );
 
-const DefaultLoader = ({ variant, theme }) => (
+const LoaderSizes = {
+  sm: '12px',
+  md: '13px',
+  default: '20px',
+};
+
+const DefaultLoader = ({ variant, theme, size = 'default', ...rest }) => (
   <Icon
     name="spinner"
-    width={'20px'}
-    height={'20px'}
+    width={LoaderSizes[size]}
+    height={LoaderSizes[size]}
     fill={theme.button.textColors[variant].default}
+    {...rest}
   />
 );
 

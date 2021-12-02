@@ -71,7 +71,6 @@ function DropdownButton<ValueType = string>({
       setMenuShown(false);
     },
   });
-
   return (
     <Button
       onClick={(e) => {
@@ -106,7 +105,11 @@ function DropdownButton<ValueType = string>({
           `}
         >
           {menuItems.map((item) => (
-            <MenuItem key={String(item.value)} onClick={() => onItemClick(item)} {...item}>
+            <MenuItem
+              key={String(item.value)}
+              onClick={() => (rest.isLoading ? null : onItemClick(item))}
+              {...item}
+            >
               {item.display}
             </MenuItem>
           ))}
