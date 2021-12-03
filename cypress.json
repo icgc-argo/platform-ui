@@ -1,0 +1,6 @@
+{
+  "env": {
+    "HOMEPAGE_URL": "/",
+    "LOGGED_IN_URL": "/logged-in"
+  }
+}

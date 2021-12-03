@@ -78,3 +78,9 @@ chromedriver.log
 uikit/dist
 
 **/.DS_STORE
+
+# cypress
+cypress.env.json
+cypress/downloads
+cypress/screenshots
+cypress/videos

@@ -22,7 +22,8 @@
     "build-uikit::babel": "cp ./uikit/.babelrc.json ./uikit/dist/.babelrc && babel ./uikit/dist --out-dir ./uikit/dist && rm ./uikit/dist/.babelrc",
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
     "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
-    "publish-uikit": "cd uikit/dist && npm publish --access public"
+    "publish-uikit": "cd uikit/dist && npm publish --access public",
+    "cypress": "CYPRESS_BASE_URL=http://localhost:8080 cypress open"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -125,6 +126,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "core-js": "^3.6.5",
+    "cypress": "^9.1.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.0.1",
