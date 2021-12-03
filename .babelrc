@@ -13,5 +13,13 @@
   "plugins": [
     "@babel/plugin-proposal-optional-chaining",
     "@babel/plugin-proposal-object-rest-spread"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": ["@babel/preset-env", "@babel/react", "next/babel"]
+    },
+    "development": {
+      "presets": ["next/babel"]
+    }
+  }
 }
