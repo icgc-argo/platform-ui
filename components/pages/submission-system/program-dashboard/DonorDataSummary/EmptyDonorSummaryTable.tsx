@@ -27,7 +27,7 @@ import PicDna from 'static/dna.svg';
 import { css } from '@emotion/core';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
-export default () => {
+const EmptyDonorSummaryState = () => {
   const getStartedLink = (
     <Typography variant="data" component="span">
       <Link target="_blank" href={DOCS_SUBMITTED_DATA_PAGE}>
@@ -57,3 +57,5 @@ export default () => {
     </ContentPlaceholder>
   );
 };
+
+export default EmptyDonorSummaryState;

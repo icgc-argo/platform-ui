@@ -28,7 +28,7 @@ import Link from 'uikit/Link';
 import HyperLink from 'uikit/Link';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
-export default () => {
+const GdprMessage = () => {
   const theme = useTheme();
   const [accepted, setAcceptedState] = React.useState(true);
   const sync = () => {
@@ -90,3 +90,5 @@ export default () => {
     </>
   );
 };
+
+export default GdprMessage;
