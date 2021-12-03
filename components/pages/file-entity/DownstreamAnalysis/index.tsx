@@ -27,7 +27,7 @@ import React from 'react';
 import Typography from 'uikit/Typography';
 import Link from 'uikit/Link';
 
-export default ({ data }: { data: Array<FileRecord> }) => {
+const DownstreamAnalysis = ({ data }: { data: Array<FileRecord> }) => {
   const containerRef = React.createRef<HTMLDivElement>();
 
   const tableColumns: Array<TableColumnConfig<FileRecord>> = [
@@ -111,3 +111,5 @@ export default ({ data }: { data: Array<FileRecord> }) => {
     </FileCard>
   );
 };
+
+export default DownstreamAnalysis;

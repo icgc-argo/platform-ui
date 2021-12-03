@@ -25,7 +25,7 @@ function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string 
   return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';
 }
 
-export default ({ data }: { data: DataAnalysisInfo }) => {
+const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
     'Experimental Strategy': data.experimentalStrategy,
     'Data Type': data.dataType,
@@ -43,3 +43,5 @@ export default ({ data }: { data: DataAnalysisInfo }) => {
     </FileCard>
   );
 };
+
+export default DataAndAnalysis;

@@ -43,7 +43,7 @@ enum DownloadOptionValues {
   FILE_TABLE = 'FILE_TABLE',
 }
 
-export default ({
+const TsvDownloadButton = ({
   allFilesSelected,
   selectedFilesCount,
   selectedFilesObjectIds,
@@ -191,3 +191,5 @@ export default ({
     </DropdownButton>
   );
 };
+
+export default TsvDownloadButton;
