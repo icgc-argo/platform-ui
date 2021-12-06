@@ -213,9 +213,8 @@ class Root extends App<
 
   static async getEgoToken(props) {
     const { ctx } = props;
-    const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-    const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-    return await fetch(egoLoginUrl, {
+    const { EGO_TOKEN_URL } = getConfig();
+    return await fetch(EGO_TOKEN_URL, {
       credentials: 'include',
       headers: { accept: '*/*' },
       body: null,

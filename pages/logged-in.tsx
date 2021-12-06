@@ -32,7 +32,7 @@ import { useRouter } from 'next/router';
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
   const router = useRouter();
-  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
+  const { EGO_TOKEN_URL } = getConfig();
 
   const redirect = (token: string) => {
     const redirect = getDefaultRedirectPathForUser(getPermissionsFromToken(token));
@@ -40,8 +40,7 @@ export default createPage({ isPublic: true })(() => {
   };
 
   React.useEffect(() => {
-    const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-    fetch(egoLoginUrl, {
+    fetch(EGO_TOKEN_URL, {
       credentials: 'include',
       headers: { accept: '*/*' },
       body: null,
