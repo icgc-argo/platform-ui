@@ -24,7 +24,7 @@ import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
 import image from 'static/group-33.svg';
 
-export default () => (
+const MaintenancePage = () => (
   <ErrorLayout hideApiVersion hideNavbarLinks hideInternalPaths>
     <Row
       nogutter
@@ -69,3 +69,5 @@ export default () => (
     </Row>
   </ErrorLayout>
 );
+
+export default MaintenancePage;

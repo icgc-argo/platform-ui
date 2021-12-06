@@ -137,7 +137,7 @@ const useFileRepoPaginationState = () => {
   };
 };
 
-export default () => {
+const FileTable = () => {
   const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
 
   const { egoJwt } = useAuthContext();
@@ -359,13 +359,17 @@ export default () => {
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize('file', totalEntries)}`}
+                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize(
+                  'file',
+                  totalEntries,
+                )}`}
               </Typography>
               <Typography variant="data" color={theme.colors.secondary_dark}>
                 {!!selectedRowsCount &&
-                  ` (${selectedRowsCount.toLocaleString()} ${
-                    pluralize('file', selectedRowsCount)
-                  } selected)`}
+                  ` (${selectedRowsCount.toLocaleString()} ${pluralize(
+                    'file',
+                    selectedRowsCount,
+                  )} selected)`}
               </Typography>
             </div>
           </div>
@@ -412,3 +416,5 @@ export default () => {
     </Container>
   );
 };
+
+export default FileTable;

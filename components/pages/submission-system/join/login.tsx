@@ -30,7 +30,7 @@ import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 
-export default () => {
+const JoinProgramLoginPage = () => {
   const { EGO_URL } = getConfig();
 
   const router = useRouter();
@@ -42,7 +42,7 @@ export default () => {
     loading,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
-    onError: error => {
+    onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {
         setNotFound(true);
       }
@@ -90,3 +90,5 @@ export default () => {
     </MinimalLayout>
   );
 };
+
+export default JoinProgramLoginPage;

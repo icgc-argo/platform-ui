@@ -33,7 +33,11 @@ const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = 
   updated: [],
 };
 
-export default ({ clinicalSubmissions }: { clinicalSubmissions: GqlClinicalSubmissionData }) => {
+const SubmissionSummaryTable = ({
+  clinicalSubmissions,
+}: {
+  clinicalSubmissions: GqlClinicalSubmissionData;
+}) => {
   const theme = useTheme();
 
   const FIRST_COLUMN_ACCESSOR = '__';
@@ -81,7 +85,7 @@ export default ({ clinicalSubmissions }: { clinicalSubmissions: GqlClinicalSubmi
       width: 100,
     },
     ...clinicalSubmissions.clinicalEntities.map(
-      entity =>
+      (entity) =>
         ({
           accessor: entity.clinicalType,
           Header: capitalize(entity.clinicalType.split('_').join(' ')),
@@ -120,3 +124,5 @@ export default ({ clinicalSubmissions }: { clinicalSubmissions: GqlClinicalSubmi
     </div>
   );
 };
+
+export default SubmissionSummaryTable;

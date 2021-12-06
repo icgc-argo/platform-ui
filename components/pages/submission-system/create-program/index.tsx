@@ -43,7 +43,7 @@ import { useGlobalLoadingState } from 'components/ApplicationRoot';
 /* *************************************** *
  * Reshape form data for gql input
  * *************************************** */
-const createProgramInput = formData => ({
+const createProgramInput = (formData) => ({
   name: formData.programName,
   shortName: formData.shortName,
   description: formData.description,
@@ -67,7 +67,8 @@ const createProgramInput = formData => ({
 
 type CreateProgramMutationResult = { newProgram: { shortName: string } };
 type CreateProgramMutationInput = ReturnType<typeof createProgramInput>;
-export default () => {
+
+const CreateProgramPage = () => {
   const toaster = useToaster();
   const router = useRouter();
   const commonToasters = useCommonToasters();
@@ -88,7 +89,7 @@ export default () => {
 
   const { setLoading: setFormDisabled } = useGlobalLoadingState();
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       setFormDisabled(true);
       await sendCreateProgram({
@@ -99,7 +100,7 @@ export default () => {
         title: '',
         variant: TOAST_VARIANTS.SUCCESS,
         content: <>The program: {<strong>{data.programName}</strong>} has been created</>,
-        onInteraction: event => {
+        onInteraction: (event) => {
           if (event.type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
             router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, data.shortName));
           }
@@ -157,3 +158,5 @@ export default () => {
     </SubmissionLayout>
   );
 };
+
+export default CreateProgramPage;

@@ -21,7 +21,7 @@ import ReactTable from 'react-table';
 import React from 'react';
 import ReactTableContainer from './ReactTableContainer';
 
-export default ({ propDefinitions }) => (
+const PropTypesTable = ({ propDefinitions }) => (
   <ReactTableContainer>
     <ReactTable
       minRows={1}
@@ -69,3 +69,5 @@ export default ({ propDefinitions }) => (
     />
   </ReactTableContainer>
 );
+
+export default PropTypesTable;

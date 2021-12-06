@@ -145,7 +145,7 @@ const Designation: React.ComponentType<{
   </div>
 );
 
-export default () => {
+const DonorSummaryStats = () => {
   return (
     <div>
       <Container
@@ -307,3 +307,5 @@ export default () => {
     </div>
   );
 };
+
+export default DonorSummaryStats;

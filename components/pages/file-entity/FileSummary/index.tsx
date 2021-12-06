@@ -25,7 +25,7 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
-export default ({ data }: { data: FileSummaryInfo }) => {
+const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const tableData = {
     'File ID': data.fileId,
     'Object ID': data.objectId,
@@ -56,3 +56,5 @@ export default ({ data }: { data: FileSummaryInfo }) => {
     </FileCard>
   );
 };
+
+export default FileSummary;

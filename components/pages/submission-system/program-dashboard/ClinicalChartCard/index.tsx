@@ -43,7 +43,7 @@ const { FEATURE_DASHBOARD_CHARTS_ENABLED } = getConfig();
 const CHART_HEIGHT = 230;
 const CHART_PADDING = 12;
 
-export default ({ chartType, comingSoonLink, title }: CardProps) => {
+const ClinicalChartCard = ({ chartType, comingSoonLink, title }: CardProps) => {
   const getStartedLink = (
     <Typography variant="data" component="span">
       <Link target="_blank" href={comingSoonLink}>
@@ -53,27 +53,25 @@ export default ({ chartType, comingSoonLink, title }: CardProps) => {
     </Typography>
   );
 
-  return FEATURE_DASHBOARD_CHARTS_ENABLED
-    ? (
-      <ClinicalChart
-        chartType={chartType}
-        title={title}
-        />
-    ) : (
-      <DashboardCard>
-        <Typography variant="default" component="span">
-          {title}
-        </Typography>
-        <div
-          css={css`
-            height: ${CHART_HEIGHT + CHART_PADDING}px;
-            padding: ${CHART_PADDING}px 0 0;
-          `}
-          >
-          <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
-            <img alt="Coming Soon." src={PicClipboard} />
-          </ContentPlaceholder>
-        </div>
-      </DashboardCard>
-    );
+  return FEATURE_DASHBOARD_CHARTS_ENABLED ? (
+    <ClinicalChart chartType={chartType} title={title} />
+  ) : (
+    <DashboardCard>
+      <Typography variant="default" component="span">
+        {title}
+      </Typography>
+      <div
+        css={css`
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0 0;
+        `}
+      >
+        <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
+          <img alt="Coming Soon." src={PicClipboard} />
+        </ContentPlaceholder>
+      </div>
+    </DashboardCard>
+  );
 };
+
+export default ClinicalChartCard;

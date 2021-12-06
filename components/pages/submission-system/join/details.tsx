@@ -44,7 +44,7 @@ import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
-export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
+const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const { EGO_URL } = getConfig();
 
   const router = useRouter();
@@ -61,12 +61,12 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     loading,
   } = useQuery(GET_JOIN_PROGRAM_INFO, {
     variables: { inviteId },
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (!joinProgramInvite) {
         return;
       }
     },
-    onError: error => {
+    onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {
         setNotFound(true);
       } else {
@@ -79,9 +79,9 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
 
-  const handleSubmit: React.ComponentProps<
-    typeof JoinProgramForm
-  >['onSubmit'] = async validData => {
+  const handleSubmit: React.ComponentProps<typeof JoinProgramForm>['onSubmit'] = async (
+    validData,
+  ) => {
     try {
       await joinProgram({
         variables: {
@@ -188,3 +188,5 @@ export default ({ firstName, lastName, authorizedPrograms = [] }: any) => {
     </MinimalLayout>
   );
 };
+
+export default JoinProgramDetailsPage;

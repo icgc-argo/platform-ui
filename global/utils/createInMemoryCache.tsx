@@ -19,9 +19,9 @@
 
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-export default () =>
+const createInMemoryCache = () =>
   new InMemoryCache({
-    dataIdFromObject: obj => {
+    dataIdFromObject: (obj) => {
       switch (obj.__typename) {
         case 'Program':
           return `Program::${(obj as { shortName: string }).shortName}`;
@@ -41,3 +41,5 @@ export default () =>
       }
     },
   });
+
+export default createInMemoryCache;

@@ -23,7 +23,7 @@ import Table from 'uikit/Table';
 
 type MappedTableData = Array<{ key: string; val: any }>;
 
-export default ({ data }) => {
+const SimpleTable = ({ data }) => {
   const tableData: MappedTableData = Object.keys(data).map((k) => ({ key: k, val: data[k] }));
 
   return (
@@ -47,3 +47,5 @@ export default ({ data }) => {
     </div>
   );
 };
+
+export default SimpleTable;
