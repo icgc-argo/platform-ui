@@ -33,7 +33,7 @@ var queue = new Queue(maxConcurrent, maxQueue);
 // pass client_id to get ego api to set correct response headers
 const refreshUrl = urlJoin(EGO_API_ROOT, `/api/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
 
-export default () =>
+const refreshJwt = () =>
   queue.add(() => {
     return fetch(refreshUrl, {
       credentials: 'include',
@@ -43,11 +43,13 @@ export default () =>
       },
       method: 'POST',
     })
-      .then(res => res.text())
-      .then(newJwt => {
+      .then((res) => res.text())
+      .then((newJwt) => {
         if (isValidJwt(newJwt)) {
           Cookies.set(EGO_JWT_KEY, newJwt);
         }
         return newJwt;
       });
   });
+
+export default refreshJwt;

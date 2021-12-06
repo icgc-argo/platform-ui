@@ -22,7 +22,7 @@ import Modal from 'uikit/Modal';
 
 type ModalProps = React.ComponentProps<typeof Modal>;
 
-export default (initialModalProps: ModalProps = {}) => {
+const useUserConfirmationModalState = (initialModalProps: ModalProps = {}) => {
   const [isModalShown, setModalShown] = React.useState(false);
   const [modalProps, setModalProps] = React.useState<ModalProps>(initialModalProps);
   const [{ onConfirmed, onCancel }, setSignOffFlow] = React.useState({
@@ -31,7 +31,7 @@ export default (initialModalProps: ModalProps = {}) => {
   });
 
   const getUserConfirmation = (modalProps: ModalProps = {}): Promise<boolean> =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       const onConfirmed = () => {
         setModalShown(false);
         resolve(true);
@@ -42,15 +42,15 @@ export default (initialModalProps: ModalProps = {}) => {
       };
       setModalProps({
         ...modalProps,
-        onCancelClick: e => {
+        onCancelClick: (e) => {
           if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
-        onCloseClick: e => {
+        onCloseClick: (e) => {
           if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
-        onActionClick: e => {
+        onActionClick: (e) => {
           if (!!modalProps.onActionClick) modalProps.onActionClick(e);
           onConfirmed();
         },
@@ -69,3 +69,5 @@ export default (initialModalProps: ModalProps = {}) => {
     modalProps,
   };
 };
+
+export default useUserConfirmationModalState;

@@ -21,7 +21,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import getElementResizeListener from 'uikit/utils/getElementResizeListener';
 
-export default (
+const useElementDimension = (
   parentRef: React.RefObject<HTMLElement>,
   _config: { resizeDebounce?: number } = {},
 ) => {
@@ -69,3 +69,5 @@ export default (
   }, [parentRef.current]);
   return { width, height, resizing };
 };
+
+export default useElementDimension;

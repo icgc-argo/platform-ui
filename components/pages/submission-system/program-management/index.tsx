@@ -28,7 +28,7 @@ import { Row } from 'react-grid-system';
 import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';
 
-export default () => {
+const ProgramManagement = () => {
   const router = useRouter();
   const { shortName: programShortName } = router.query;
 
@@ -76,3 +76,5 @@ export default () => {
     </SubmissionLayout>
   );
 };
+
+export default ProgramManagement;

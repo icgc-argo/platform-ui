@@ -55,7 +55,10 @@ import { SortedChangeFunction, SortingRule } from 'react-table';
 import ContentError from 'components/placeholders/ContentError';
 import { Row } from 'react-grid-system';
 
-export default ({
+const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
+  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
+
+const DonorSummaryTable = ({
   programShortName,
   initialPages,
   initialPageSize,
@@ -808,5 +811,4 @@ export default ({
   );
 };
 
-const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
-  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
+export default DonorSummaryTable;

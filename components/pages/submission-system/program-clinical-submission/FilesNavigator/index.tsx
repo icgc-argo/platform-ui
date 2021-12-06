@@ -38,7 +38,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
 import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 
-export default ({
+const FilesNavigator = ({
   fileStates,
   clearDataError,
   submissionState,
@@ -236,10 +236,12 @@ export default ({
             <ContentPlaceholder
               title="You do not have any data uploaded."
               subtitle="Follow the instructions above to get started."
-              />
+            />
           </div>
         )}
       </Col>
     </div>
   );
 };
+
+export default FilesNavigator;

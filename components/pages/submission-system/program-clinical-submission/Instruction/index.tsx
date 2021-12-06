@@ -63,7 +63,7 @@ const InstructionLoader = ({ theme, text }: ButtonLoader) => {
   );
 };
 
-export default ({
+const Instruction = ({
   validationEnabled,
   signOffEnabled,
   onUploadFileSelect,
@@ -187,3 +187,5 @@ export default ({
     />
   );
 };
+
+export default Instruction;
