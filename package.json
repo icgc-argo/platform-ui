@@ -22,7 +22,8 @@
     "build-uikit::babel": "cp ./uikit/.babelrc.json ./uikit/dist/.babelrc && babel ./uikit/dist --out-dir ./uikit/dist && rm ./uikit/dist/.babelrc",
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
     "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
-    "publish-uikit": "cd uikit/dist && npm publish --access public"
+    "publish-uikit": "cd uikit/dist && npm publish --access public",
+    "preinstall": "npx npm-force-resolutions"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -73,6 +74,7 @@
     "next-images": "^1.1.1",
     "node-fetch": "^2.6.1",
     "npm": "^6.13.1",
+    "npm-force-resolutions": "^0.0.10",
     "pluralize": "^8.0.0",
     "promise-queue": "^2.2.5",
     "prop-types": "^15.7.2",
@@ -145,5 +147,8 @@
     "printWidth": 100,
     "trailingComma": "all",
     "singleQuote": true
+  },
+  "resolutions": {
+    "tar": ">=4.4.18"
   }
 }
