@@ -149,6 +149,7 @@
     "singleQuote": true
   },
   "resolutions": {
+    "prismjs": "1.25.0",
     "tar": "4.4.18",
     "trim": "0.0.3"
   }
