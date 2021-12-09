@@ -20,7 +20,7 @@
 import { format as formatDate } from 'date-fns';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
-import { LOGIN_PAGE_PATH } from 'global/constants/pages';
+import { LOGIN_PAGE_PATH } from '../constants/pages';
 
 export const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
   ...arr.slice(0, i),

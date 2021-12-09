@@ -1,10 +1,17 @@
+// to avoid collision with other libraries:
+// - jest is configured to use the /jest/ folder
+// - test files are in /__tests__/ files
+
 module.exports = {
+  testEnvironment: 'jsdom',
   collectCoverageFrom: [
-    '**/*.{js,jsx}',
+    '**/*.[jt]s?(x)',
     '!**/node_modules/**',
     '!**/jest/**',
     '!**/coverage/**',
     '!jest.config.js',
+    '!**/.next/**',
+    '!**/uikit/**',
   ],
   coverageThreshold: {
     global: {
@@ -21,9 +28,11 @@ module.exports = {
   },
   setupFiles: ['<rootDir>/jest/setup.js'],
   setupFilesAfterEnv: ['<rootDir>/jest/setupAfterEnv.js'],
-  testMatch: ['**/?(*.)+(jest).[jt]s?(x)'],
-  testPathIgnorePatterns: ['/.next/', '/node_modules/', '/jest/', '/coverage/'],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
+  testPathIgnorePatterns: ['/.next/', '/node_modules/', '/jest/', '/coverage/', '/uikit/'],
   transform: {
-    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
+  preset: 'ts-jest',
 };

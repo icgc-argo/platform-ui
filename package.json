@@ -23,8 +23,9 @@
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
     "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
     "publish-uikit": "cd uikit/dist && npm publish --access public",
-    "test-cypress": "CYPRESS_BASE_URL=http://localhost:8080 cypress open",
-    "jest": "jest"
+    "cypress": "CYPRESS_BASE_URL=http://localhost:8080 cypress open",
+    "jest": "jest",
+    "jest:watch": "jest --watch"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -96,10 +97,10 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
-    "@babel/preset-typescript": "^7.6.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@storybook/addon-a11y": "^6.0.22",
     "@storybook/addon-actions": "^6.0.22",
     "@storybook/addon-info": "^5.3.21",
@@ -109,12 +110,14 @@
     "@storybook/addon-viewport": "^6.0.22",
     "@storybook/addons": "^6.0.22",
     "@storybook/react": "^6.0.22",
+    "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/file-saver": "^2.0.1",
     "@types/graphql": "^14.5.0",
     "@types/isomorphic-fetch": "0.0.35",
+    "@types/jest": "^27.0.3",
     "@types/js-cookie": "^2.2.6",
     "@types/lodash": "^4.14.161",
     "@types/mocha": "^5.2.7",
@@ -145,6 +148,7 @@
     "pretty-quick": "^2.0.1",
     "react-docgen-typescript-loader": "^3.2.1",
     "react-test-renderer": "^17.0.2",
+    "ts-jest": "^27.1.0",
     "ts-mocha": "^6.0.0",
     "ts-node": "^8.4.1",
     "typescript": "^3.9.5"
