@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import CreateProgramPage from 'components/pages/submission-system/create-program';
 import { isDccMember } from 'global/utils/egoJwt';
 

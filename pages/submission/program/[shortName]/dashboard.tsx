@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import ProgramDashboard from 'components/pages/submission-system/program-dashboard';
 import { canReadProgram } from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';

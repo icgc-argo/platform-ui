@@ -17,25 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import orderBy from 'lodash/orderBy';
 import {
-  LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   USER_PAGE_PATH,
-  PROGRAM_MANAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  RDPC_PATH,
   PROGRAM_DASHBOARD_PATH,
 } from 'global/constants/pages';
 import {
   isDccMember,
-  isRdpcMember,
   canReadSomeProgram,
   getReadableProgramShortNames,
   getAuthorizedProgramScopes,
 } from '../egoJwt';
-import { PageConfigProps, PageWithConfig } from './types';
 
 export const getDefaultRedirectPathForUser = (
   permissions: string[],
@@ -54,27 +48,4 @@ export const getDefaultRedirectPathForUser = (
   } else {
     return USER_PAGE_PATH;
   }
-};
-type CreatePageConfigs = {
-  isPublic?: PageConfigProps['isPublic'];
-  isAccessible?: PageConfigProps['isAccessible'];
-  getInitialProps?: PageConfigProps['getInitialProps'];
-  getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
-  startWithGlobalLoader?: PageConfigProps['startWithGlobalLoader'];
-};
-export const createPage = <P extends {} = any>({
-  isPublic,
-  isAccessible,
-  getInitialProps,
-  getGqlQueriesToPrefetch,
-  startWithGlobalLoader,
-}: CreatePageConfigs) => (
-  page: React.ComponentType<P> & CreatePageConfigs = () => <div>Here's a page</div>,
-): PageWithConfig => {
-  page.isPublic = isPublic || false;
-  page.isAccessible = isAccessible || (async () => true);
-  page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
-  page.getInitialProps = getInitialProps || (async () => []);
-  page.startWithGlobalLoader = startWithGlobalLoader || false;
-  return page as PageWithConfig;
 };

@@ -18,7 +18,7 @@
  */
 
 import ContactPage from 'components/pages/contact';
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import React from 'react';
 
 export default createPage({

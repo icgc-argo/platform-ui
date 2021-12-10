@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import JoinProgramDetailsPage from 'components/pages/submission-system/join/details';
 
 export default createPage({

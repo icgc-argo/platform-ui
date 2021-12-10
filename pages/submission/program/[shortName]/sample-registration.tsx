@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import ProgramSampleRegistration from 'components/pages/submission-system/program-sample-registration';
 import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';

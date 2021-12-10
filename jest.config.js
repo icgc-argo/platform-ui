@@ -28,11 +28,21 @@ module.exports = {
   },
   setupFiles: ['<rootDir>/jest/setup.js'],
   setupFilesAfterEnv: ['<rootDir>/jest/setupAfterEnv.js'],
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(test).[jt]s?(x)'],
   testPathIgnorePatterns: ['/.next/', '/node_modules/', '/jest/', '/coverage/', '/uikit/'],
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
   preset: 'ts-jest',
+  transformIgnorePatterns: ['node_modules/(?!variables/.*)'],
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.json',
+    },
+  },
+  moduleDirectories: ['node_modules'],
+  moduleNameMapper: {
+    '^global(.*)$': '<rootDir>/global$1',
+  },
 };

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import FileRepositoryPage from 'components/pages/file-repository';
 import { getConfig } from 'global/config';
 import { ERROR_STATUS_KEY } from 'pages/_error';

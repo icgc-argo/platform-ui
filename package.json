@@ -25,7 +25,8 @@
     "publish-uikit": "cd uikit/dist && npm publish --access public",
     "cypress": "CYPRESS_BASE_URL=http://localhost:8080 cypress open",
     "jest": "jest",
-    "jest:watch": "jest --watch"
+    "jest:watch": "jest --watch",
+    "jest:cache": "jest --clearCache"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",

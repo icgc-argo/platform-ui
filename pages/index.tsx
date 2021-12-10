@@ -18,7 +18,7 @@
  */
 
 import HomePage from '../components/pages/Homepage';
-import { createPage } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import STATS_BAR from '../components/pages/file-repository/StatsCard/STATS_BAR.gql';
 
 const landingPage = HomePage;

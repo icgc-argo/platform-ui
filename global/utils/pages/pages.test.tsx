@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
 import { getDefaultRedirectPathForUser } from './index';
 import { getPermissionsFromToken } from '../egoJwt';
 
@@ -53,25 +51,25 @@ const dataSubmitterPermissions = getPermissionsFromToken(DATA_SUBMITTER);
 
 describe('getDefaultRedirectPathForUser', () => {
   it('should return program list page for DCC', () => {
-    expect(getDefaultRedirectPathForUser(dccPermissions)).to.equal('/submission/program');
+    expect(getDefaultRedirectPathForUser(dccPermissions)).toBe('/submission/program');
   });
   it('should return the right program dashboard page for program admin', () => {
-    expect(getDefaultRedirectPathForUser(programAdminPermissions)).to.equal(
+    expect(getDefaultRedirectPathForUser(programAdminPermissions)).toBe(
       '/submission/program/PACA-AU/dashboard',
     );
   });
   it('should return the static program dashboard url for program admin', () => {
-    expect(getDefaultRedirectPathForUser(programAdminPermissions, true)).to.equal(
+    expect(getDefaultRedirectPathForUser(programAdminPermissions, true)).toBe(
       '/submission/program/[shortName]/dashboard',
     );
   });
   it('should return the right program dashboard page for data submitter', () => {
-    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions)).to.equal(
+    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions)).toBe(
       '/submission/program/PACA-AU/dashboard',
     );
   });
   it('should return the static program dashboard url for data submitter', () => {
-    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions, true)).to.equal(
+    expect(getDefaultRedirectPathForUser(dataSubmitterPermissions, true)).toBe(
       '/submission/program/[shortName]/dashboard',
     );
   });

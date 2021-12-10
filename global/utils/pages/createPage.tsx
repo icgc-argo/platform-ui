@@ -17,9 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import createPage from 'global/utils/pages/createPage';
-import MaintenancePage from 'components/pages/MaintenancePage';
+import * as React from 'react';
+import { PageConfigProps, PageWithConfig } from './types';
 
-export default createPage({
-  isPublic: true,
-})(MaintenancePage);
+type CreatePageConfigs = {
+  isPublic?: PageConfigProps['isPublic'];
+  isAccessible?: PageConfigProps['isAccessible'];
+  getInitialProps?: PageConfigProps['getInitialProps'];
+  getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
+  startWithGlobalLoader?: PageConfigProps['startWithGlobalLoader'];
+};
+
+const createPage = <P extends {} = any>({
+  isPublic,
+  isAccessible,
+  getInitialProps,
+  getGqlQueriesToPrefetch,
+  startWithGlobalLoader,
+}: CreatePageConfigs) => (
+  page: React.ComponentType<P> & CreatePageConfigs = () => <div>Here's a page</div>,
+): PageWithConfig => {
+  page.isPublic = isPublic || false;
+  page.isAccessible = isAccessible || (async () => true);
+  page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
+  page.getInitialProps = getInitialProps || (async () => []);
+  page.startWithGlobalLoader = startWithGlobalLoader || false;
+  return page as PageWithConfig;
+};
+
+export default createPage;
