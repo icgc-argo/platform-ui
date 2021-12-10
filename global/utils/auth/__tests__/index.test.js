@@ -1,10 +1,10 @@
-import { getConfig } from '../../../config';
+import { getConfig } from 'global/config';
 import { createLoginURL } from '..';
 
 const { EGO_URL } = getConfig();
 
 describe('create ego URLs', () => {
-  describe('create login URL with redirect param', () => {
+  describe('create login URL with redirect parameter', () => {
     // testing all of the URL patterns
     test('homepage', () => {
       const expected = EGO_URL;

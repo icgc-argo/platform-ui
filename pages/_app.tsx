@@ -19,7 +19,6 @@
 
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
-import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import nextCookies from 'next-cookies';
@@ -29,7 +28,6 @@ import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';
 import Cookies from 'js-cookie';
-import urlJoin from 'url-join';
 import queryString from 'query-string';
 import { get } from 'lodash';
 import DefaultLayout from '../components/pages/DefaultLayout';
