@@ -17,17 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
 import TitleBar from 'uikit/TitleBar';
 import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
+import DropdownButton, { DownloadButtonProps } from 'uikit/DropdownButton';
+import Icon from 'uikit/Icon';
 import { DownloadIcon } from './common';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
+
+enum DownloadOptionValues {
+  MEANS_NOT_APPLICABLE = 'MEANS_NOT_APPLICABLE',
+  MEANS_NOT_AVAILABLE = 'MEANS_NOT_AVAILABLE',
+}
 
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
@@ -37,6 +45,12 @@ export const FileTitleBar: React.ComponentType<{
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
+  const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
+    { value: DownloadOptionValues.MEANS_NOT_APPLICABLE, display: '' },
+    { value: DownloadOptionValues.MEANS_NOT_AVAILABLE, display: '' },
+  ];
+  const [isLegendOpen, setLegendOpen] = useState(false);
+  const onLegendClick = (e) => {};
 
   return (
     <div
@@ -60,6 +74,36 @@ export const FileTitleBar: React.ComponentType<{
           flex-direction: row;
         `}
       >
+        <DropdownButton
+          css={css`
+            margin-right: 8px;
+          `}
+          variant="secondary"
+          menuItems={menuItems}
+          onItemClick={onLegendClick}
+        >
+          <span>
+            <Icon
+              name={'legend'}
+              fill="accent2_dark"
+              height="9px"
+              css={css`
+                margin-left: 5px;
+                margin-right: 0px;
+              `}
+            />
+            Legend
+            <Icon
+              name={isLegendOpen ? 'chevron_down' : 'chevron_right'}
+              fill="accent2_dark"
+              height="9px"
+              css={css`
+                margin-left: 5px;
+                margin-right: 0px;
+              `}
+            />
+          </span>
+        </DropdownButton>
         <Tooltip
           disabled={isDownloadEnabled}
           unmountHTMLWhenHide
