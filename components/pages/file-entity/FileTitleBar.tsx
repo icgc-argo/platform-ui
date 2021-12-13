@@ -33,8 +33,8 @@ import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 
 enum DownloadOptionValues {
-  MEANS_NOT_APPLICABLE = 'MEANS_NOT_APPLICABLE',
-  MEANS_NOT_AVAILABLE = 'MEANS_NOT_AVAILABLE',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+  NOT_AVAILABLE = 'NOT_AVAILABLE',
 }
 
 export const FileTitleBar: React.ComponentType<{
@@ -46,8 +46,8 @@ export const FileTitleBar: React.ComponentType<{
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
-    { value: DownloadOptionValues.MEANS_NOT_APPLICABLE, display: '' },
-    { value: DownloadOptionValues.MEANS_NOT_AVAILABLE, display: '' },
+    { value: DownloadOptionValues.NOT_APPLICABLE, display: <div>Not Applicable</div> },
+    { value: DownloadOptionValues.NOT_AVAILABLE, display: <div>Not Available</div> },
   ];
   const [isLegendOpen, setLegendOpen] = useState(false);
   const onLegendClick = (e) => {};
@@ -77,32 +77,35 @@ export const FileTitleBar: React.ComponentType<{
         <DropdownButton
           css={css`
             margin-right: 8px;
+            border: none;
           `}
           variant="secondary"
           menuItems={menuItems}
           onItemClick={onLegendClick}
         >
-          <span>
-            <Icon
-              name={'legend'}
-              fill="accent2_dark"
-              height="9px"
-              css={css`
-                margin-left: 5px;
-                margin-right: 0px;
-              `}
-            />
-            Legend
-            <Icon
-              name={isLegendOpen ? 'chevron_down' : 'chevron_right'}
-              fill="accent2_dark"
-              height="9px"
-              css={css`
-                margin-left: 5px;
-                margin-right: 0px;
-              `}
-            />
-          </span>
+          {
+            <span>
+              <Icon
+                name={'legend'}
+                fill="accent2_dark"
+                height="9px"
+                css={css`
+                  margin-left: 5px;
+                  margin-right: 0px;
+                `}
+              />
+              Legend
+              <Icon
+                name={isLegendOpen ? 'chevron_down' : 'chevron_right'}
+                fill="accent2_dark"
+                height="9px"
+                css={css`
+                  margin-left: 5px;
+                  margin-right: 0px;
+                `}
+              />
+            </span>
+          }
         </DropdownButton>
         <Tooltip
           disabled={isDownloadEnabled}
