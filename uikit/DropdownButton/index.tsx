@@ -80,7 +80,7 @@ function DropdownButton<ValueType = string>({
         if (onClick) {
           const isMenuOpen =
             controlledMenuShowState !== undefined ? !controlledMenuShowState : !menuShown;
-          onClick(e, isMenuOpen);
+          onClick(e, { isMenuOpen });
           setMenuShown(isMenuOpen);
         } else setMenuShown(!menuShown);
       }}

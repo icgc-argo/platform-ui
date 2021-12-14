@@ -50,7 +50,7 @@ export const FileTitleBar: React.ComponentType<{
     { value: DownloadOptionValues.NOT_AVAILABLE, display: <div>Not Available</div> },
   ];
   const [isLegendOpen, setLegendOpen] = useState(false);
-  const onClick = (e, isMenuOpen) => {
+  const onClick = (e, { isMenuOpen }) => {
     setLegendOpen(isMenuOpen);
   };
 
