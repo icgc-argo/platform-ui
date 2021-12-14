@@ -50,17 +50,19 @@ type DropdownButtonItemConfig<ValueType = string> = {
 export type DownloadButtonProps<ValueType> = {
   onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
-  menuShown?: boolean;
+  controlledMenuShowState?: boolean;
 };
 function DropdownButton<ValueType = string>({
   children,
   onItemClick,
   menuItems,
-  menuShown: controlledMenuShowState,
+  controlledMenuShowState,
   onClick,
   ...rest
 }: DownloadButtonProps<ValueType> & React.ComponentProps<typeof Button>) {
-  const [menuShown, setMenuShown] = React.useState(false);
+  const [menuShown, setMenuShown] = React.useState(
+    controlledMenuShowState !== undefined ? controlledMenuShowState : false,
+  );
   const theme = useTheme();
 
   const menuRef = React.createRef<HTMLDivElement>();
@@ -71,13 +73,16 @@ function DropdownButton<ValueType = string>({
       setMenuShown(false);
     },
   });
+
   return (
     <Button
       onClick={(e) => {
-        setMenuShown(true);
         if (onClick) {
-          onClick(e);
-        }
+          const isMenuOpen =
+            controlledMenuShowState !== undefined ? !controlledMenuShowState : !menuShown;
+          onClick(e, isMenuOpen);
+          setMenuShown(isMenuOpen);
+        } else setMenuShown(!menuShown);
       }}
       css={css`
         position: relative;
