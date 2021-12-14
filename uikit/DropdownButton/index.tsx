@@ -82,7 +82,7 @@ function DropdownButton<ValueType = string>({
       setMenuOpen(false);
     },
   });
-  console.log(rest);
+
   return (
     <Button
       onClick={(e) => {
