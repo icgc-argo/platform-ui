@@ -46,8 +46,24 @@ export const FileTitleBar: React.ComponentType<{
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
-    { value: DownloadOptionValues.NOT_APPLICABLE, display: <div>Not Applicable</div> },
-    { value: DownloadOptionValues.NOT_AVAILABLE, display: <div>Not Available</div> },
+    {
+      value: DownloadOptionValues.NOT_APPLICABLE,
+      display: (
+        <div>
+          <div className="legend--symbol">N/A</div>
+          <div className="legend--text">Not Applicable</div>
+        </div>
+      ),
+    },
+    {
+      value: DownloadOptionValues.NOT_AVAILABLE,
+      display: (
+        <div>
+          <div className="legend--symbol">--</div>
+          <div className="legend--text">Not Available</div>
+        </div>
+      ),
+    },
   ];
   const [isLegendOpen, setLegendOpen] = useState(false);
   const onClick = (e, { toggleMenuOpen }) => {
@@ -90,7 +106,23 @@ export const FileTitleBar: React.ComponentType<{
           onClick={onClick}
           onItemClick={toggleMenuHandler}
           onMouseEnter={toggleMenuHandler}
-          onMouseLeave={toggleMenuHandler}
+          menuStyles={`
+            display: flex;
+            flex-direction: column;
+            flex-wrap: no-wrap;
+            left: -50px;
+            width: 130px;
+            padding: 13px;
+            .legend--symbol {
+              margin-right: 13px;
+              width: 20px;
+              color: ${theme.colors.grey};
+              font-style: italic;
+            }
+            .legend--text, .legend--symbol {
+              display: inline-block;
+            }
+          `}
         >
           <span>
             <Icon

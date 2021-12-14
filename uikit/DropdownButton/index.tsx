@@ -54,6 +54,7 @@ export type DownloadButtonProps<ValueType> = {
     | ((e: React.SyntheticEvent<HTMLButtonElement, Event>, {}) => any);
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
+  menuStyles?: string;
 };
 function DropdownButton<ValueType = string>({
   children,
@@ -61,6 +62,7 @@ function DropdownButton<ValueType = string>({
   menuItems,
   controlledMenuShowState,
   onClick,
+  menuStyles,
   ...rest
 }: DownloadButtonProps<ValueType> & React.ComponentProps<typeof Button>) {
   const [menuOpen, setMenuOpen] = React.useState(
@@ -114,6 +116,7 @@ function DropdownButton<ValueType = string>({
             text-transform: none;
             text-align: left;
             color: ${theme.colors.black};
+            ${menuStyles}
           `}
         >
           {menuItems.map((item) => (
