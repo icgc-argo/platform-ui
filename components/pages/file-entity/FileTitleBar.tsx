@@ -106,6 +106,7 @@ export const FileTitleBar: React.ComponentType<{
           onClick={onClick}
           onItemClick={toggleMenuHandler}
           onMouseEnter={toggleMenuHandler}
+          onMouseLeave={toggleMenuHandler}
           menuStyles={`
             display: flex;
             flex-direction: column;
