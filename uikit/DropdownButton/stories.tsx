@@ -27,7 +27,7 @@ import Button from 'uikit/Button';
 
 const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = createButtonKnobs();
-  const menuShown = boolean('menuShown', false);
+  const menuOpen = boolean('menuOpen', false);
   return (
     <DropdownButton
       onItemClick={action('onItemClick')}
@@ -36,7 +36,7 @@ const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () 
         { display: 'Some Text', value: '2' },
         { display: <Button size="sm">Some Text</Button>, value: '4' },
       ]}
-      menuShown={menuShown}
+      controlledMenuShowState={menuOpen}
       {...knobs}
     >
       Click me!

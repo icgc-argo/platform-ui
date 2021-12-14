@@ -63,29 +63,33 @@ function DropdownButton<ValueType = string>({
   onClick,
   ...rest
 }: DownloadButtonProps<ValueType> & React.ComponentProps<typeof Button>) {
-  const [menuShown, setMenuShown] = React.useState(
-    controlledMenuShowState !== undefined ? controlledMenuShowState : false,
+  const [menuOpen, setMenuOpen] = React.useState(
+    typeof controlledMenuShowState == 'boolean' ? controlledMenuShowState : false,
   );
-  const theme = useTheme();
 
+  React.useEffect(() => {
+    if (controlledMenuShowState !== menuOpen) {
+      setMenuOpen(controlledMenuShowState);
+    }
+  }, [controlledMenuShowState && typeof controlledMenuShowState == 'boolean']);
+
+  const theme = useTheme();
   const menuRef = React.createRef<HTMLDivElement>();
   useClickAway({
     domElementRef: menuRef,
-    onClickAway: () => setMenuShown(false),
+    onClickAway: () => setMenuOpen(false),
     onElementClick: () => {
-      setMenuShown(false);
+      setMenuOpen(false);
     },
   });
-
+  console.log(rest);
   return (
     <Button
       onClick={(e) => {
         if (onClick) {
-          const isMenuOpen =
-            controlledMenuShowState !== undefined ? !controlledMenuShowState : !menuShown;
-          onClick(e, { isMenuOpen });
-          setMenuShown(isMenuOpen);
-        } else setMenuShown(!menuShown);
+          onClick(e, { toggleMenuOpen: !menuOpen });
+        }
+        setMenuOpen(!menuOpen);
       }}
       css={css`
         position: relative;
@@ -93,7 +97,7 @@ function DropdownButton<ValueType = string>({
       {...rest}
     >
       {children}
-      {(menuShown || controlledMenuShowState === true) && ( // explicit check because undefined is falsy
+      {menuOpen && ( // explicit check because undefined is falsy
         <div
           ref={menuRef}
           css={css`

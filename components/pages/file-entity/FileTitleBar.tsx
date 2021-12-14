@@ -50,8 +50,11 @@ export const FileTitleBar: React.ComponentType<{
     { value: DownloadOptionValues.NOT_AVAILABLE, display: <div>Not Available</div> },
   ];
   const [isLegendOpen, setLegendOpen] = useState(false);
-  const onClick = (e, { isMenuOpen }) => {
-    setLegendOpen(isMenuOpen);
+  const onClick = (e, { toggleMenuOpen }) => {
+    setLegendOpen(toggleMenuOpen);
+  };
+  const toggleMenuHandler = () => {
+    setLegendOpen(!isLegendOpen);
   };
 
   return (
@@ -85,7 +88,9 @@ export const FileTitleBar: React.ComponentType<{
           menuItems={menuItems}
           controlledMenuShowState={isLegendOpen}
           onClick={onClick}
-          onItemClick={onClick}
+          onItemClick={toggleMenuHandler}
+          onMouseEnter={toggleMenuHandler}
+          onMouseLeave={toggleMenuHandler}
         >
           <span>
             <Icon
