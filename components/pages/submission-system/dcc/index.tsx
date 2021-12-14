@@ -24,7 +24,7 @@ import Typography from 'uikit/Typography';
 
 import DonorAggregationSummary from './DonorAggregationSummary';
 
-export default () => {
+const DccDashboard = () => {
   return (
     <SubmissionLayout
       subtitle="DCC Dashboard"
@@ -53,3 +53,5 @@ export default () => {
     </SubmissionLayout>
   );
 };
+
+export default DccDashboard;

@@ -102,7 +102,7 @@ const useTabState = () => {
   };
 };
 
-export default () => {
+const ProgramManagement = () => {
   const { egoJwt, permissions } = useAuthContext();
   const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
 
@@ -169,11 +169,10 @@ export default () => {
         title: '',
         content: (
           <span>
-            {`${successNames.length.toLocaleString()} ${
-            pluralize('user', successNames.length)
-            } ${
+            {`${successNames.length.toLocaleString()} ${pluralize('user', successNames.length)} ${
               successNames.length === 1 ? ' was' : 'were'
-            } added to the program: `} <br />
+            } added to the program: `}{' '}
+            <br />
             <strong>{successNames.join(', ')}</strong>
           </span>
         ),
@@ -185,9 +184,10 @@ export default () => {
         title: '',
         content: (
           <span>
-            {`${failNames.length.toLocaleString()} ${
-              pluralize('user', failNames.length)
-            } could not be added to the program: `}
+            {`${failNames.length.toLocaleString()} ${pluralize(
+              'user',
+              failNames.length,
+            )} could not be added to the program: `}
             <br />
             <strong>{failNames.join(', ')}</strong>
           </span>
@@ -274,3 +274,5 @@ export default () => {
     </ContentBox>
   );
 };
+
+export default ProgramManagement;

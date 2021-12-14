@@ -88,7 +88,7 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
   </StatDesc>
 );
 
-export default () => {
+const StatsBar = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const pollingTimeout = useTimeout(30000);
   const {
@@ -178,3 +178,5 @@ export default () => {
     </div>
   );
 };
+
+export default StatsBar;

@@ -23,7 +23,7 @@ import { Row, Col } from 'react-grid-system';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
-export default () => {
+const DonorDataTable = () => {
   return (
     <div>
       <Container
@@ -53,7 +53,7 @@ export default () => {
             `}
           >
             <Table
-              TheadComponent={props => null}
+              TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder
@@ -77,7 +77,7 @@ export default () => {
           </Col>
           <Col xs={6}>
             <Table
-              TheadComponent={props => null}
+              TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder
@@ -103,3 +103,5 @@ export default () => {
     </div>
   );
 };
+
+export default DonorDataTable;

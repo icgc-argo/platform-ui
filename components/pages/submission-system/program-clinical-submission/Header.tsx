@@ -44,7 +44,7 @@ import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotificati
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 
-export default ({
+const Header = ({
   programShortName,
   showProgress,
   isPendingApproval,
@@ -262,3 +262,5 @@ export default ({
     </>
   );
 };
+
+export default Header;

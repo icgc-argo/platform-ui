@@ -29,8 +29,8 @@ import { css } from 'uikit';
 import DropdownButton from 'uikit/DropdownButton';
 import { capitalize } from 'global/utils/stringUtils';
 
-export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
-  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = item => {
+const FileTemplatesDownloadButton = ({ clinicalTypes }: { clinicalTypes: string[] }) => {
+  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = (item) => {
     if (item.value === 'all') {
       downloadTsvFileTemplate(`all`);
     } else {
@@ -49,7 +49,7 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
           display: 'Download All',
           value: 'all',
         },
-        ...clinicalTypes.map(clinicalType => ({
+        ...clinicalTypes.map((clinicalType) => ({
           value: clinicalType,
           display: capitalize(clinicalType.split('_').join(' ')),
         })),
@@ -76,3 +76,5 @@ export default ({ clinicalTypes }: { clinicalTypes: string[] }) => {
     </DropdownButton>
   );
 };
+
+export default FileTemplatesDownloadButton;

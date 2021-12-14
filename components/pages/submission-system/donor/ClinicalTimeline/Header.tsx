@@ -35,7 +35,7 @@ type HeaderTypes = {
 type Filters = Exclude<EntityType, 'deceased'>;
 type EntityCounts = { [k in Filters]: number };
 
-export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
+const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const theme = useTheme();
 
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
@@ -128,3 +128,5 @@ export default ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
     </div>
   );
 };
+
+export default Header;

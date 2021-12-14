@@ -29,7 +29,7 @@ import styled from '@emotion/styled';
 import { useTheme } from 'uikit/ThemeProvider';
 import SimpleTable from 'uikit/Table/SimpleTable';
 
-export default ({ donors }: { donors: Array<DonorRecord> }) => {
+const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
   const theme = useTheme();
 
   const [selectedDonor, setSelectedDonor] = React.useState(donors[0]);
@@ -160,3 +160,5 @@ export default ({ donors }: { donors: Array<DonorRecord> }) => {
     </FileCard>
   );
 };
+
+export default AssociatedDonors;

@@ -132,7 +132,7 @@ const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ 
   );
 };
 
-export default () => {
+const DonorFileCard = () => {
   return (
     <Container
       css={css`
@@ -209,3 +209,5 @@ export default () => {
     </Container>
   );
 };
+
+export default DonorFileCard;

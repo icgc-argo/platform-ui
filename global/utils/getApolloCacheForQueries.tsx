@@ -28,9 +28,9 @@ import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 // if/when this is used, check how ApplicationRoot ApolloClient implements a
 // custom fetch with ego authorization headers, and verify the fetch call and
 // authorization headers are being properly updated when a jwt is refreshed.
-export default (queries: Array<{ query: any; variables?: { [key: string]: any } }>) => async (
-  egoJwt?: string,
-) => {
+const getApolloCacheForQueries = (
+  queries: Array<{ query: any; variables?: { [key: string]: any } }>,
+) => async (egoJwt?: string) => {
   const { GATEWAY_API_ROOT } = getConfig();
   const apolloClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
@@ -55,3 +55,5 @@ export default (queries: Array<{ query: any; variables?: { [key: string]: any } 
   );
   return apolloClient.extract();
 };
+
+export default getApolloCacheForQueries;
