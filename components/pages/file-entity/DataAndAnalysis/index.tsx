@@ -28,11 +28,13 @@ function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string 
 export default ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
     'Experimental Strategy': data.experimentalStrategy,
+    'Data Category': data.dataCategory,
     'Data Type': data.dataType,
     Platform: data.platform,
     'Genome Build': data.genomeBuild,
-    'Workflow Type': getWorkflowTypeDisplay(data.workflowType),
-    Software: data.software,
+    'Genome Annotation': 'N/A',
+    'Workflow Name': getWorkflowTypeDisplay(data.workflowType),
+    'Analysis Tools': data.software,
   };
 
   return (

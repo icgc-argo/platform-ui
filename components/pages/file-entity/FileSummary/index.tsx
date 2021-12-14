@@ -29,9 +29,9 @@ export default ({ data }: { data: FileSummaryInfo }) => {
   const tableData = {
     'File ID': data.fileId,
     'Object ID': data.objectId,
-    'File Format': data.fileFormat,
-    Size: fileSize(data.size),
-    Access: (
+    'File Type': data.fileFormat,
+    'File Size': fileSize(data.size),
+    'File Access': (
       <div
         css={css`
           display: flex;

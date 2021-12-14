@@ -41,6 +41,7 @@ export type DataAnalysisWorkflowType = {
 
 export type DataAnalysisInfo = {
   experimentalStrategy: string;
+  dataCategory: string;
   dataType: string;
   platform: string;
   genomeBuild: string;
@@ -59,6 +60,7 @@ export type DonorRecord = {
 
 export type Associations = {
   specimenId: string;
+  specimenType: string;
   tumourNormalDesignation: string;
   sampleId: string;
   sampleType: string;
