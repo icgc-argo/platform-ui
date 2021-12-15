@@ -57,6 +57,7 @@ export interface DownloadButtonProps<ValueType>
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
   menuStyles?: string;
+  menuItemStyles?: string;
 }
 
 function DropdownButton<ValueType = string>({
@@ -66,6 +67,7 @@ function DropdownButton<ValueType = string>({
   controlledMenuShowState,
   onClick,
   menuStyles,
+  menuItemStyles,
   ...rest
 }: DownloadButtonProps<ValueType>) {
   const [menuOpen, setMenuOpen] = React.useState(
@@ -126,6 +128,9 @@ function DropdownButton<ValueType = string>({
             <MenuItem
               key={String(item.value)}
               onClick={() => (rest.isLoading ? null : onItemClick(item))}
+              css={css`
+                ${menuItemStyles}
+              `}
               {...item}
             >
               {item.display}

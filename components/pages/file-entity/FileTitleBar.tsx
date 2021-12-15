@@ -123,6 +123,14 @@ export const FileTitleBar: React.ComponentType<{
             .legend--text, .legend--symbol {
               display: inline-block;
             }
+            :hover {
+              cursor: default
+            }
+          `}
+          menuItemStyles={`
+            :hover {
+              background: ${theme.colors.white};
+            }
           `}
         >
           <span>
