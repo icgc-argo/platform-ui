@@ -49,9 +49,7 @@ type DropdownButtonItemConfig<ValueType = string> = {
 };
 export type DownloadButtonProps<ValueType> = {
   onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
-  onClick?:
-    | ((e: React.SyntheticEvent<HTMLButtonElement, Event>) => any)
-    | ((e: React.SyntheticEvent<HTMLButtonElement, Event>, {}) => any);
+  onClick?: (e: React.SyntheticEvent<HTMLButtonElement, Event>, { toggleMenuOpen: boolean }) => any;
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
   menuStyles?: string;
