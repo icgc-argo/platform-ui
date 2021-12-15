@@ -31,6 +31,7 @@ import { firstName } from 'global/utils/form/validations';
 import { uniq } from 'lodash';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
+  // @ts-ignore
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
   const { errors, data, setData, validateField, touched } = form;
@@ -48,7 +49,7 @@ const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete })
       onChange={(key, val) => {
         setData({ key, val });
       }}
-      validateField={key => validateField({ key })}
+      validateField={(key) => validateField({ key })}
       errors={validationErrors}
       onClickDelete={() => removeSection(id)}
       disabledFields={[]}
@@ -82,7 +83,7 @@ const AddUserModal = ({
   const touchCheck = () => {
     const formSubKeys = Object.keys(formSubscriptions);
     const isTouched = formSubKeys
-      .map(key => formSubscriptions[key].touched)
+      .map((key) => formSubscriptions[key].touched)
       .reduce((acc, val) => acc || val, false);
     setIsFormTouched(isTouched);
   };
@@ -91,7 +92,7 @@ const AddUserModal = ({
   const errorCheck = () => {
     const formSubKeys = Object.keys(formSubscriptions);
     const invalidity = formSubKeys
-      .map(key => formSubscriptions[key].hasErrors)
+      .map((key) => formSubscriptions[key].hasErrors)
       .reduce((acc, val) => acc || val, false);
     setHasErrors(invalidity);
   };
@@ -104,22 +105,22 @@ const AddUserModal = ({
   };
 
   // Returns true if form has duplicate emails within Modal
-  const formHasDuplicateEmail = form => {
+  const formHasDuplicateEmail = (form) => {
     const formsWithThisEmail = Object.keys(formSubscriptions)
-      .map(key => formSubscriptions[key].data.email.toLowerCase())
-      .filter(email => email === form.data.email.toLowerCase());
+      .map((key) => formSubscriptions[key].data.email.toLowerCase())
+      .filter((email) => email === form.data.email.toLowerCase());
     return formsWithThisEmail.length > 1;
   };
 
   // Returns true if an form has email that already exists outside of Modal
-  const formHasExistingEmail = form => {
+  const formHasExistingEmail = (form) => {
     const existingEmails = users.map(({ email }) => email.toLowerCase());
     return existingEmails.includes(form.data.email.toLowerCase());
   };
 
   // validate each individual form and fire onSubmit for each
   const submitForm = async () => {
-    const allForms = Object.keys(formSubscriptions).map(async key => {
+    const allForms = Object.keys(formSubscriptions).map(async (key) => {
       const form = formSubscriptions[key];
       return form.validateForm();
     });
@@ -138,13 +139,13 @@ const AddUserModal = ({
       });
     });
     Promise.all(allForms)
-      .then(validData => {
+      .then((validData) => {
         if (!matchingEmails.length && !existingEmails.length) {
           console.log('Validation succeeded, submitting all forms');
           onSubmit(validData);
         }
       })
-      .catch(err => console.log('Validation Failed', err));
+      .catch((err) => console.log('Validation Failed', err));
   };
 
   // add user form
@@ -164,9 +165,9 @@ const AddUserModal = ({
   };
 
   // remove user form
-  const removeSection = removeId => {
+  const removeSection = (removeId) => {
     if (formIds.length > 1) {
-      setFormIds(formIds.filter(id => id !== removeId));
+      setFormIds(formIds.filter((id) => id !== removeId));
       delete formSubscriptions[removeId];
     }
   };
@@ -189,7 +190,7 @@ const AddUserModal = ({
             key={id}
             id={id}
             formSubscriptions={formSubscriptions}
-            removeSection={id => {
+            removeSection={(id) => {
               removeSection(id);
             }}
             onUpdate={() => {

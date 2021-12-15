@@ -46,6 +46,7 @@ const JoinProgramForm = ({
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
     initialFields,
+    // @ts-ignore
     schema: schema,
   });
 
@@ -53,7 +54,7 @@ const JoinProgramForm = ({
 
   const handleBlur = (
     fieldKey: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => _ => validateField({ key: fieldKey });
+  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => (_) => validateField({ key: fieldKey });
 
   const handleChange = (
     fieldName: keyof typeof initialFields,
@@ -82,7 +83,7 @@ const JoinProgramForm = ({
         </Typography>
       </Row>
       <ScreenClassRender
-        render={screenSize => (
+        render={(screenSize) => (
           <div
             css={css`
               & .pt {
@@ -106,7 +107,7 @@ const JoinProgramForm = ({
                     value={data.institutions}
                     onChange={handleChange('institutions')}
                   >
-                    {availableInstitutions.map(institution => (
+                    {availableInstitutions.map((institution) => (
                       <Option value={institution} key={institution.replace(/\s/g, '')}>
                         {institution}
                       </Option>
