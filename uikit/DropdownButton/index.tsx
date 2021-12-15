@@ -47,13 +47,16 @@ type DropdownButtonItemConfig<ValueType = string> = {
   display: React.ReactNode;
   css?: SerializedStyles;
 };
-export type DownloadButtonProps<ValueType> = {
+
+export interface DownloadButtonProps<ValueType>
+  extends Omit<React.ComponentProps<typeof Button>, 'onClick'> {
   onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
   onClick?: (e: React.SyntheticEvent<HTMLButtonElement, Event>, { toggleMenuOpen: boolean }) => any;
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
   menuStyles?: string;
-};
+}
+
 function DropdownButton<ValueType = string>({
   children,
   onItemClick,
@@ -62,7 +65,7 @@ function DropdownButton<ValueType = string>({
   onClick,
   menuStyles,
   ...rest
-}: DownloadButtonProps<ValueType> & React.ComponentProps<typeof Button>) {
+}: DownloadButtonProps<ValueType>) {
   const [menuOpen, setMenuOpen] = React.useState(
     typeof controlledMenuShowState == 'boolean' ? controlledMenuShowState : false,
   );
