@@ -52,6 +52,8 @@ export interface DownloadButtonProps<ValueType>
   extends Omit<React.ComponentProps<typeof Button>, 'onClick'> {
   onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
   onClick?: (e: React.SyntheticEvent<HTMLButtonElement, Event>, { toggleMenuOpen: boolean }) => any;
+  onMouseEnter?: () => any;
+  onMouseLeave?: () => any;
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
   menuStyles?: string;
