@@ -21,6 +21,7 @@
     "**/testUtil.*",
     "**/plopfile.js",
     "**/*.stories.*",
-    "**/stories.*"
+    "**/stories.*",
+    "./dist/**/*"
   ]
 }
