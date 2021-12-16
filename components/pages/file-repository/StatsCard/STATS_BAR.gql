@@ -5,14 +5,10 @@ query STATS($filters: JSON) {
     }
     aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
       donors__donor_id {
-        buckets {
-          key
-        }
+        bucket_count
       }
       study_id {
-        buckets {
-          key
-        }
+        bucket_count
       }
       file__size {
         stats {
