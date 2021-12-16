@@ -155,7 +155,7 @@ export const FileTitleBar: React.ComponentType<{
             />
           </span>
         </DropdownButton>
-        <Tooltip
+
         {/* TODO: Move download into Legend component once available: https://github.com/icgc-argo/platform-ui/issues/2108 */}
         {/* <Tooltip
           disabled={isDownloadEnabled}
