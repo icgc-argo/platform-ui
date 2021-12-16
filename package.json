@@ -42,6 +42,7 @@
     "@emotion/styled": "^11.6.0",
     "@emotion/styled-base": "^11.0.0",
     "@icgc-argo/ego-token-utils": "^8.1.1",
+    "@storybook/addon-controls": "^6.4.9",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
