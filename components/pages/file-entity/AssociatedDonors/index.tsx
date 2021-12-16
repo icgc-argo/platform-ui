@@ -36,11 +36,12 @@ const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
 
   const formatDonorInfo = (donorInfo: DonorRecord) => {
     return {
-      'Donor ID': <Link href="">{donorInfo.donorId}</Link>,
+      'Donor ID': donorInfo.donorId,
       'Submitter Donor ID': donorInfo.submitterDonorId,
-      'Primary Site': donorInfo.primarySite,
-      'Cancer Type': donorInfo.cancerType,
-      'Age at Diagnosis': donorInfo.ageAtDiagnosis,
+      // Hiding Clinical fields for now as per: https://github.com/icgc-argo/platform-ui/issues/2090
+      // 'Primary Site': donorInfo.primarySite,
+      // 'Cancer Type': donorInfo.cancerType,
+      // 'Age at Diagnosis': donorInfo.ageAtDiagnosis,
     };
   };
 
@@ -62,7 +63,8 @@ const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
             border: 1px solid ${theme.colors.grey_2};
           `}
         >
-          <div
+          {/* TODO: restore donor tabs once files are associated with multiple donors */}
+          {/* <div
             css={css`
               width: 170px;
               max-width: 170px;
@@ -85,7 +87,7 @@ const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
                 </VerticalTabs.Item>
               ))}
             </VerticalTabs>
-          </div>
+          </div> */}
           <Col style={{ position: 'relative', overflow: 'hidden' }}>
             <Row
               css={css`
@@ -117,40 +119,38 @@ const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
                     `}
                   >
                     <div>
-                      Submitter Specimen ID:{' '}
-                      <Link href="" bold>
-                        {selectedDonor.associations.specimenId}
-                      </Link>
+                      Submitter Specimen ID: <b>{selectedDonor.associations.specimenId}</b>
                     </div>
 
                     <div>
                       Tumour Normal Designation:{' '}
                       <b>{selectedDonor.associations.tumourNormalDesignation}</b>
                     </div>
-                  </PaddedDiv>
-                  <PaddedDiv
-                    css={css`
-                      border-bottom: 1px ${theme.colors.grey_2} solid;
-                    `}
-                  >
+
                     <div>
-                      Submitter Sample ID:{' '}
-                      <Link href="" bold>
-                        {selectedDonor.associations.sampleId}
-                      </Link>
+                      Specimen Type: <b>{selectedDonor.associations.specimenType}</b>
+                    </div>
+                  </PaddedDiv>
+                  <PaddedDiv>
+                    <div>
+                      Submitter Sample ID: <b>{selectedDonor.associations.sampleId}</b>
                     </div>
                     <div>
                       Sample Type: <b>{selectedDonor.associations.sampleType}</b>
                     </div>
                   </PaddedDiv>
-                  <PaddedDiv>
-                    <div>
-                      Matched Normal Submitter Sample ID:{' '}
-                      <Link bold href="">
-                        {selectedDonor.associations.matchedNormalSampleId}
-                      </Link>
-                    </div>
-                  </PaddedDiv>
+                  {selectedDonor.associations.tumourNormalDesignation !== 'Normal' && (
+                    <PaddedDiv
+                      css={css`
+                        border-top: 1px ${theme.colors.grey_2} solid;
+                      `}
+                    >
+                      <div>
+                        Matched Normal Submitter Sample ID:{' '}
+                        <b>{selectedDonor.associations.matchedNormalSampleId}</b>
+                      </div>
+                    </PaddedDiv>
+                  )}
                 </Typography>
               </PaddedCol>
             </Row>
