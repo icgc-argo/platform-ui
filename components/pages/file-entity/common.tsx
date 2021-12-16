@@ -20,7 +20,7 @@
 import Typography from '../../../uikit/Typography';
 import Container from '../../../uikit/Container';
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FileAccessState } from './types';
 import Icon from 'uikit/Icon';

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Typography from 'uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';

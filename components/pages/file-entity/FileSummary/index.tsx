@@ -18,7 +18,7 @@
  */
 
 import { FileCard, TableDiv, getAccessIcon } from '../common';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import SimpleTable from 'uikit/Table/SimpleTable';
 
 import { FileSummaryInfo } from '../types';

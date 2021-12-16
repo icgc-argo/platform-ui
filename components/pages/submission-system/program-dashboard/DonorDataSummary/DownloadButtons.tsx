@@ -19,7 +19,7 @@
 
 import { Row, Col } from 'react-grid-system';
 import urlJoin from 'url-join';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import { usePageQuery } from 'global/hooks/usePageContext';
@@ -104,8 +104,8 @@ const DownloadButtons = () => {
       method: 'GET',
     })
       .then(checkResponseIs200)
-      .then(res => res.blob())
-      .then(blob => {
+      .then((res) => res.blob())
+      .then((blob) => {
         const now = formatDate(Date.now(), 'yyyyMMdd');
         const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 

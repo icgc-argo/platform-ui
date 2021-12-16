@@ -21,7 +21,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { radios, boolean, text } from '@storybook/addon-knobs';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import Button from '.';
 import { asyncDummyFunc, placeholderImageURLRoot } from '../testUtil';

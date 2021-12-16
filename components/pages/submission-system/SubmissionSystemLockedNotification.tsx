@@ -19,7 +19,7 @@
 
 import { useQuery } from '@apollo/react-hooks';
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Notification from 'uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_SYSTEM_DISABLED from './CLINICAL_SUBMISSION_SYSTEM_DISABLED.gql';
 

@@ -18,7 +18,7 @@
  */
 
 import React, { ReactNode, useContext, useRef, useState } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { UikitTheme } from '../../';
 import Icon from '../../Icon';

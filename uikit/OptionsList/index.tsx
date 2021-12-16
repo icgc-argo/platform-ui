@@ -19,7 +19,7 @@
 
 import React from 'react';
 import Checkbox from 'uikit/form/Checkbox';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Tag from 'uikit/Tag';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';

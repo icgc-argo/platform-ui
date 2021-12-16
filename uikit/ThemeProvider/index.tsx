@@ -19,7 +19,7 @@
 
 import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming';
-import { ThemeContext } from '@emotion/core';
+import { ThemeContext } from '@emotion/react';
 import PropTypes from 'prop-types';
 
 import defaultTheme from '../theme/defaultTheme';

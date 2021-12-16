@@ -18,9 +18,9 @@
  */
 
 import Container from 'uikit/Container';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled-base';
+import styled from '@emotion/styled';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';

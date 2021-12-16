@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { css, SerializedStyles } from '@emotion/core';
+import { css, SerializedStyles } from '@emotion/react';
 
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';

@@ -24,7 +24,7 @@ import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
 const EmptyDonorSummaryState = () => {

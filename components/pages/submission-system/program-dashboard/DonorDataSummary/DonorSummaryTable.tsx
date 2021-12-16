@@ -40,7 +40,7 @@ import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../.
 
 import React, { createRef, useRef, useState } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import {

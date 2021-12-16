@@ -19,7 +19,7 @@
 
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import FileSummary from './FileSummary';
 import DataAndAnalysis from './DataAndAnalysis';
 import AssociatedDonors from './AssociatedDonors';

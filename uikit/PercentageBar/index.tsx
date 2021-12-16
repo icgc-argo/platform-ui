@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import useTheme from '../utils/useTheme';
 import Typography from '../Typography';

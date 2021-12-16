@@ -21,7 +21,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Link from 'uikit/Link';
 import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';

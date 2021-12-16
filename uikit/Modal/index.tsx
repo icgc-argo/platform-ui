@@ -19,7 +19,7 @@
 
 import React from 'react';
 import Color from 'color';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Typography from '../Typography';

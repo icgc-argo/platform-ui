@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { ThemeColorNames } from 'uikit/theme/types';
 import Icon from 'uikit/Icon';

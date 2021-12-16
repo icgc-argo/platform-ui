@@ -19,7 +19,7 @@
 
 import React from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Icon from 'uikit/Icon';
 import Typography from 'uikit/Typography';
 import Button from 'uikit/Button';

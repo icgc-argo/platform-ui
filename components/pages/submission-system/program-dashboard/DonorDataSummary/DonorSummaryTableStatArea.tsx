@@ -27,7 +27,7 @@ import {
 } from './common';
 import { StatArea as StatAreaDisplay } from '../../common';
 import { useTheme } from 'uikit/ThemeProvider';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 const DonorStatsArea = ({
   programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,

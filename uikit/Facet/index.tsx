@@ -20,7 +20,7 @@
 import React from 'react';
 import { MenuItem } from '../SubMenu';
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import OptionsList, { FilterOption } from 'uikit/OptionsList';
 

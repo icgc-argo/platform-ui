@@ -29,7 +29,7 @@ import {
 } from './types';
 import filesize from 'filesize';
 import InteractiveIcon from 'uikit/Icon/InteractiveIcon';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import DropdownButton from 'uikit/DropdownButton';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';

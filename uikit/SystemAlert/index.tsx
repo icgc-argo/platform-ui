@@ -1,5 +1,5 @@
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { ThemeColorNames } from '../theme/types';
 import Typography from 'uikit/Typography';

@@ -20,7 +20,7 @@
 import React from 'react';
 import Typography from 'uikit/Typography';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 const Cont = styled('div')`
   margin-top: 14px;

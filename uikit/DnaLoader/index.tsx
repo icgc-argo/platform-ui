@@ -19,7 +19,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled-base';
+import styled from '@emotion/styled';
 import css from '@emotion/css';
 
 import range from 'lodash/range';
@@ -47,7 +47,7 @@ const LoaderContainer = styled<'div', { dotsCount: number }>('div')`
 
   ${({ dotsCount }) =>
     range(1, dotsCount + 1).map(
-      i => css`
+      (i) => css`
         div:nth-of-type(odd) span:nth-of-type(${i}) {
           animation: animateFirstDots 0.8s ease-in-out infinite;
           animation-direction: alternate;
@@ -86,12 +86,12 @@ const LoaderContainer = styled<'div', { dotsCount: number }>('div')`
 const DnaLoader = ({ dotsCount = 5, ...rest }) => (
   <LoaderContainer className="dna-loader" dotsCount={dotsCount} {...rest}>
     <div>
-      {range(0, dotsCount).map(i => (
+      {range(0, dotsCount).map((i) => (
         <span key={i} />
       ))}
     </div>
     <div>
-      {range(0, dotsCount).map(i => (
+      {range(0, dotsCount).map((i) => (
         <span key={i} />
       ))}
     </div>

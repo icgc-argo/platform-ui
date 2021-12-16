@@ -18,7 +18,7 @@
  */
 
 import React, { useState, useEffect, useContext } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { StyledInputWrapper, INPUT_SIZES, InputSize, StyledInputWrapperProps } from '../common';
 import Typography from '../../Typography';
