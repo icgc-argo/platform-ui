@@ -32,9 +32,7 @@ type StatsBarQueryInput = {
 };
 
 type BucketAggregationData = {
-  buckets: {
-    key: string;
-  }[];
+  bucket_count: number;
 };
 type SumAggregationData = {
   stats: {
@@ -65,9 +63,9 @@ export const useFileRepoStatsBarQuery = (filters?: FileRepoFiltersType) => {
 
   const stats = {
     filesCount: hook?.data ? hook.data.file.hits.total : 0,
-    donorsCount: hook?.data ? hook.data.file.aggregations.donors__donor_id.buckets.length : 0,
+    donorsCount: hook?.data ? hook.data.file.aggregations.donors__donor_id.bucket_count : 0,
     primarySites: 0,
-    programsCount: hook?.data ? hook.data.file.aggregations.study_id.buckets.length : 0,
+    programsCount: hook?.data ? hook.data.file.aggregations.study_id.bucket_count : 0,
     totalFileSize: hook?.data ? hook.data.file.aggregations.file__size.stats.sum : 0,
   };
 
