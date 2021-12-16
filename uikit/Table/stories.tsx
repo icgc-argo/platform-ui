@@ -136,7 +136,7 @@ const TableStories = storiesOf(`${__dirname}`, module)
             //props to control selection
             keyField="idField"
             parentRef={containerRef}
-            isSelected={idField => idField === 'id_2'}
+            isSelected={(idField) => idField === 'id_2'}
             toggleSelection={action('toggle')}
             toggleAll={action('toggleAll')}
             //basic table props

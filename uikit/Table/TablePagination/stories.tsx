@@ -33,7 +33,7 @@ export default storiesOf(`${__dirname}`, module).add(
       <div ref={containerRef} style={{ width: '100%' }}>
         <Table
           parentRef={containerRef}
-          data={times(104, idx => ({
+          data={times(104, (idx) => ({
             id: idx,
             prop2: idx,
             prop3: 'some text of ' + idx,

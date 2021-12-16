@@ -53,19 +53,19 @@ const FacetStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
       <Facet
         subMenuName="Primary Site"
         options={options}
-        onOptionToggle={facetValue => {
-          const currentIndex = options.findIndex(val => val.key === facetValue);
+        onOptionToggle={(facetValue) => {
+          const currentIndex = options.findIndex((val) => val.key === facetValue);
           setOptions([
             ...options.slice(0, currentIndex),
             ...[{ ...options[currentIndex], isChecked: !options[currentIndex].isChecked }],
             ...options.slice(currentIndex + 1, Infinity),
           ]);
         }}
-        onSelectAllOptions={allOptionsSelected => {
+        onSelectAllOptions={(allOptionsSelected) => {
           if (allOptionsSelected) {
-            setOptions(options.map(opt => ({ ...opt, isChecked: false })));
+            setOptions(options.map((opt) => ({ ...opt, isChecked: false })));
           } else {
-            setOptions(options.map(opt => ({ ...opt, isChecked: true })));
+            setOptions(options.map((opt) => ({ ...opt, isChecked: true })));
           }
         }}
         {...knobs}

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *

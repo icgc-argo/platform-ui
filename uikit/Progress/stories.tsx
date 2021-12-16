@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -20,7 +19,6 @@
 
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import css from '@emotion/css';
 import Progress from '.';
 import { ProgressItem, PROGRESS_STATUS } from '.';
 import { text, select, boolean } from '@storybook/addon-knobs';

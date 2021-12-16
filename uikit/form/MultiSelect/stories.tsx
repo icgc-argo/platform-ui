@@ -31,7 +31,7 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module)
       <MultiSelect
         aria-label="multi-select"
         value={value}
-        onChange={event => {
+        onChange={(event) => {
           action('value change')(event);
           setValue(event.target.value);
         }}
@@ -70,7 +70,7 @@ const MultiSelectStories = storiesOf(`${__dirname}`, module)
       <MultiSelect
         aria-label="multi-select"
         value={value}
-        onChange={event => {
+        onChange={(event) => {
           action('value change')();
           setValue(event.target.value);
         }}

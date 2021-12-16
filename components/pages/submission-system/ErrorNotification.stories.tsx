@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { boolean, select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import ErrorNotification from './ErrorNotification';
 import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
