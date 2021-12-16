@@ -20,9 +20,9 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import DropdownButton from '.';
-import { select, boolean } from '@storybook/addon-knobs';
+import { boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import { createKnobs as createButtonKnobs } from 'uikit/Button/stories';
+import { createKnobs as createButtonKnobs } from './../Button/stories';
 import Button from 'uikit/Button';
 
 const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () => {

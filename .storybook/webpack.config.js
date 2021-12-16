@@ -19,6 +19,8 @@
 
 const path = require('path');
 
+const toPath = (_path) => path.join(process.cwd(), _path);
+
 module.exports = async ({ config }) => {
   config.node = {
     __dirname: true,
@@ -49,7 +51,7 @@ module.exports = async ({ config }) => {
               [
                 '@emotion/babel-preset-css-prop',
                 {
-                  autoLabel: true,
+                  autoLabel: "always",
                   labelFormat: 'Uikit-[local]',
                 },
               ],
@@ -60,6 +62,13 @@ module.exports = async ({ config }) => {
     },
   ];
   config.resolve.extensions = [...(config.resolve.extensions || []), '.ts', '.tsx'];
+
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    "@emotion/styled-base": toPath("node_modules/@emotion/styled"),
+    "@emotion/styled": toPath("node_modules/@emotion/styled"),
+    "emotion-theming": toPath("node_modules/@emotion/react"),
+  };
 
   // Return the altered config
   return config;
