@@ -99,7 +99,6 @@ export default function ContactPage() {
     reset,
   } = useFormHook({
     initialFields: contactFormSchema,
-    // @ts-ignore
     schema,
   });
 

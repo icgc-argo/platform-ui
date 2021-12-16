@@ -139,7 +139,6 @@ export default function CreateProgramForm({
 
   const formModel = useFormHook<typeof seedFormData>({
     initialFields: seedFormData,
-    // @ts-ignore
     schema: programSchema,
   });
   const {

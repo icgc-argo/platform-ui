@@ -35,7 +35,6 @@ type FormData<T extends DefaultDataShape> = {
  */
 interface T_FormHookInput<T extends DefaultDataShape> {
   initialFields: T;
-  // @ts-ignore
   schema: yup.ObjectSchema<T>;
 }
 function useFormHook<T extends DefaultDataShape>({
@@ -58,7 +57,7 @@ function useFormHook<T extends DefaultDataShape>({
 
   const { errors, data } = form;
 
-  const hasErrors = Object.values(errors).some((x) => x);
+  const hasErrors = Object.values(errors).some(x => x);
 
   // set form data
   const setData = ({ key, val }: FormData<T>) => {
