@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { rangeButtons } from './utils';
@@ -45,15 +45,15 @@ const RangeButton = ({
       css={css`
         background: transparent;
         border: 0 none;
-        color: ${isActive? theme.colors.secondary_dark : theme.colors.grey};
+        color: ${isActive ? theme.colors.secondary_dark : theme.colors.grey};
         cursor: pointer;
         display: inline-block;
         font-size: 12px;
-        font-weight: ${isActive? 600 : 'normal'};
+        font-weight: ${isActive ? 600 : 'normal'};
         padding: 4px;
         width: 25px;
       `}
-      >
+    >
       {children}
     </button>
   );
@@ -74,26 +74,29 @@ const RangeControlBar = ({ activeBtn, handleBtnClick, rangeArray }) => {
         padding: 0 10px 0 5px;
         width: 100%;
       `}
-      >
+    >
       <div>
-        {rangeButtons.map(btn => (
+        {rangeButtons.map((btn) => (
           <RangeButton
             handleClick={() => handleBtnClick(btn.title)}
             isActive={activeBtn === btn.title}
             key={btn.label}
             label={btn.label}
-            >
+          >
             {btn.title}
           </RangeButton>
         ))}
       </div>
       <Typography as="div" color="primary" variant="data">
         <strong>{rangeArray[0]}</strong>
-        <Typography as="span" color="grey" variant="data"> to </Typography>
+        <Typography as="span" color="grey" variant="data">
+          {' '}
+          to{' '}
+        </Typography>
         <strong>{rangeArray[1]}</strong>
       </Typography>
     </div>
   );
-}
+};
 
 export default RangeControlBar;

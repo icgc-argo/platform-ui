@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { StyledInputWrapper, INPUT_STATES, INPUT_SIZES } from 'uikit/form/common';

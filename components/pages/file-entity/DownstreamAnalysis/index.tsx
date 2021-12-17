@@ -18,7 +18,7 @@
  */
 
 import { FileCard, getAccessIcon, DownloadIcon } from '../common';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Button from 'uikit/Button';
 import { FileRecord } from '../types';
 import fileSize from 'filesize';

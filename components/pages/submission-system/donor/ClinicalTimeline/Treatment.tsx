@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import React, { createRef } from 'react';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';

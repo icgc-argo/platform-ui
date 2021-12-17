@@ -19,7 +19,7 @@
 
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Row, Col } from 'react-grid-system';
 import Typography from '../Typography';
 import React from 'react';
@@ -75,10 +75,10 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 
   &:hover {
     border-color: ${({ theme, disabled, error }) => {
-    if (error) return theme.colors.error;
-    else if (disabled) return theme.colors.grey_disabled;
-    else return theme.colors.secondary_1;
-  }};
+      if (error) return theme.colors.error;
+      else if (disabled) return theme.colors.grey_disabled;
+      else return theme.colors.secondary_1;
+    }};
   }
 
   ${({ inputState, theme }) =>

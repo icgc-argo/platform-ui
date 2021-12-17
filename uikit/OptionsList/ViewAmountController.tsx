@@ -18,7 +18,7 @@
  */
 
 import HyperLink from 'uikit/Link';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
 

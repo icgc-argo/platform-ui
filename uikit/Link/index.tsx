@@ -18,7 +18,7 @@
  */
 
 import React, { AnchorHTMLAttributes } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 type LinkVariant = 'INLINE' | 'BLOCK';

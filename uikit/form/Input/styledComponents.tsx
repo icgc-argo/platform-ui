@@ -18,7 +18,7 @@
  */
 
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 export { StyledInputWrapper } from '../common';
 
 export const StyledInput = styled<'input', { inputSize: string }>('input')`

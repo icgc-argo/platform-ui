@@ -33,7 +33,7 @@ import {
 } from './types';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from './common';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Row, Col } from 'react-grid-system';
 import DownloadButtons from './DownloadButtons';
 import { InvalidDonorsNotification } from './InvalidDonorsNotification';

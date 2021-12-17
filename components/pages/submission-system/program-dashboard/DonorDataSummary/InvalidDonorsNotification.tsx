@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Link from 'uikit/Link';
 import Notification from 'uikit/notifications/Notification';
 import { getConfig } from 'global/config';

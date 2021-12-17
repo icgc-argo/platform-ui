@@ -20,7 +20,7 @@
 import DropdownButton, { DownloadButtonProps } from 'uikit/DropdownButton';
 import { useState } from 'react';
 import pluralize from 'pluralize';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,

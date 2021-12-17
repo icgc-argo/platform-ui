@@ -20,7 +20,7 @@
 import React, { SVGAttributes } from 'react';
 import PropTypes, { string } from 'prop-types';
 import icons from './icons';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import useTheme from '../utils/useTheme';
 import defaultTheme from '../theme/defaultTheme';
 import { ThemeColorNames } from '../theme/types';

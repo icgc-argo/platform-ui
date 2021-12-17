@@ -24,7 +24,7 @@ import React, {
   ReactElement,
   MouseEventHandler,
 } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useTheme } from '../ThemeProvider';
 import Typography from 'uikit/Typography';

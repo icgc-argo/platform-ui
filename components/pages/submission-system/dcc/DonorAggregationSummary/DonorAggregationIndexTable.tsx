@@ -20,7 +20,7 @@
 import React from 'react';
 import Table from 'uikit/Table';
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
 import SyncIndexButton from './table-cell-components/SyncIndexButton';

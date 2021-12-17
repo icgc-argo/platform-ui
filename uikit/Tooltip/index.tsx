@@ -19,12 +19,12 @@
 
 // @flow
 import * as React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Tooltip as ReactTippy, TooltipProps as TippyProps } from 'react-tippy';
 
 import useTheme from '../utils/useTheme';
-import { Global } from '@emotion/core';
+import { Global } from '@emotion/react';
 import { merge } from 'lodash';
 
 // exposing full react-tippy API based on https://github.com/tvkhoa/react-tippy

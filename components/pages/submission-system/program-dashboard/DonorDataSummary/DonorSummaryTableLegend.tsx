@@ -34,7 +34,7 @@ import {
 } from '../../common';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Row, Col } from 'react-grid-system';
 
 const DonorSummaryTableLegend = ({

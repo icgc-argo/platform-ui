@@ -18,7 +18,7 @@
  */
 
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import debounce from 'lodash/debounce';
 

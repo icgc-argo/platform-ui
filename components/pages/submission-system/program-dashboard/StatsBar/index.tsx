@@ -18,13 +18,10 @@
  */
 
 import Container from 'uikit/Container';
-import { css, keyframes } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled';
 import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';

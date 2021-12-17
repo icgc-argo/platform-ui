@@ -20,7 +20,7 @@
 import React from 'react';
 import { MenuItem } from '../../SubMenu';
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import NumberRangeField from 'uikit/NumberRangeField';
 
 const NumberRangeFacet = ({
@@ -65,10 +65,10 @@ const NumberRangeFacet = ({
   React.useEffect(() => {
     const { min, max } = getRangeValues();
     const atLeastOneProvided = !(isNaN(min) && isNaN(max));
-    const validIfProvided = input => (input === '' ? true : validator(input));
+    const validIfProvided = (input) => (input === '' ? true : validator(input));
 
     setInputsValid(
-      atLeastOneProvided && (validIfProvided(minimumInput) && validIfProvided(maximumInput)),
+      atLeastOneProvided && validIfProvided(minimumInput) && validIfProvided(maximumInput),
     );
   }, [minimumInput, maximumInput]);
 

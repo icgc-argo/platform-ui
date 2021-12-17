@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { FieldDescriptionLabel, FieldInputWrapper } from './common';
 import React from 'react';
 import Input from 'uikit/form/Input';
@@ -40,7 +40,7 @@ const NumberRangeField: React.ComponentType<{
   onMaxChange,
   onGoClick,
   goButtonEnabled,
-  validation = i => true,
+  validation = (i) => true,
 }) => {
   const theme = useTheme();
   const [minErrorState, setMinErrorState] = React.useState(false);
@@ -74,10 +74,10 @@ const NumberRangeField: React.ComponentType<{
           placeholder="e.g. 0"
           size="sm"
           value={min}
-          onChange={e => {
+          onChange={(e) => {
             onMinChange(e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             setMinErrorState(isInputInvalid(e.target.value));
           }}
           getOverrideCss={() =>
@@ -99,10 +99,10 @@ const NumberRangeField: React.ComponentType<{
           placeholder="e.g. 85"
           size="sm"
           value={max}
-          onChange={e => {
+          onChange={(e) => {
             onMaxChange(e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             setMaxErrorState(isInputInvalid(e.target.value));
           }}
           getOverrideCss={() =>
@@ -120,7 +120,7 @@ const NumberRangeField: React.ComponentType<{
           margin: 2px 0px 0px 5px;
         `}
         variant="secondary"
-        onClick={e => onGoClick()}
+        onClick={(e) => onGoClick()}
         disabled={!goButtonEnabled}
       >
         GO

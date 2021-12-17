@@ -22,7 +22,7 @@ import Progress from 'uikit/Progress';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 const ClinicalSubmissionProgressBar: React.ComponentType<{
@@ -44,7 +44,7 @@ const ClinicalSubmissionProgressBar: React.ComponentType<{
       >(
         (acc, entity) => [
           ...acc,
-          ...entity.dataErrors.map(err => ({
+          ...entity.dataErrors.map((err) => ({
             ...err,
             fileName: entity.batchName,
           })),
