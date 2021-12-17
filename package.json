@@ -149,6 +149,7 @@
     "singleQuote": true
   },
   "resolutions": {
-    "immer": "9.0.6"
+    "immer": "9.0.6",
+    "tar": "6.1.11"
   }
 }
