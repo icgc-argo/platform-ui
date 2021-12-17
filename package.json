@@ -133,7 +133,7 @@
     "husky": "^2.2.0",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.15",
-    "plop": "^2.3.0",
+    "plop": "^3.0.5",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "react-docgen-typescript-loader": "^3.2.1",
