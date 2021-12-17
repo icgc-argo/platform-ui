@@ -64,9 +64,9 @@
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "i": "^0.3.6",
-    "isomorphic-fetch": "^2.2.1",
-    "js-cookie": "^2.2.0",
-    "jsdom": "^14.0.0",
+    "isomorphic-fetch": "^3.0.0",
+    "js-cookie": "^3.0.1",
+    "jsdom": "^19.0.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.21",
     "next": "^9.5.5",
@@ -140,7 +140,7 @@
     "pretty-quick": "^2.0.1",
     "react-docgen-typescript-loader": "^3.2.1",
     "ts-mocha": "^8.0.0",
-    "ts-node": "^8.4.1",
+    "ts-node": "^10.4.0",
     "typescript": "^3.9.5"
   },
   "prettier": {
