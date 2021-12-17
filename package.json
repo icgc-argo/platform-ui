@@ -121,7 +121,7 @@
     "@types/storybook__react": "^4.0.2",
     "@types/url-join": "^4.0.0",
     "@types/yup": "^0.26.24",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.2.3",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "core-js": "^3.6.5",
