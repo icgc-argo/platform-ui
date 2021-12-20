@@ -41,7 +41,7 @@ import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
 import MaintenancePage from 'components/pages/MaintenancePage';
 
-const redirect = (res, url: string) => {
+import { LOGGED_IN_PATH } from 'global/constants/pages';
   if (res) {
     res.writeHead(302, {
       Location: url,
@@ -192,9 +192,9 @@ class Root extends App<
     };
   }
 
-  isInOauthMode = (props) => {
-    if (get(props.ctx.query, 'redirect')) {
-      const parsed = queryString.parseUrl(decodeURIComponent(props.ctx.query.redirect));
+    if (props.ctx.asPath === LOGGED_IN_PATH) {
+      return true;
+    } else if (get(props.ctx.query, 'redirect')) {
       return get(parsed.query, OAUTH_QUERY_PARAM_NAME) === 'true';
     } else {
       return false;
@@ -256,13 +256,20 @@ class Root extends App<
         const egoToken = await Root.getEgoToken(this.props);
         if (isValidJwt(egoToken)) {
           Cookies.set(EGO_JWT_KEY, egoToken);
-          const redirectPath = decodeURIComponent(redirect as string);
-          const obj = queryString.parseUrl(redirectPath || '');
-          const target = queryString.stringifyUrl({
-            ...obj,
-            query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
-          });
-          location.assign(target);
+          if (redirect) {
+            const redirectFromURL = decodeURIComponent(redirect as string);
+            const obj = queryString.parseUrl(redirectFromURL || '');
+            const target = queryString.stringifyUrl({
+              ...obj,
+              query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
+            });
+            location.assign(target);
+          } else {
+            const redirectFromPermissions = getDefaultRedirectPathForUser(
+              getPermissionsFromToken(egoToken),
+            );
+            Router.push(redirectFromPermissions);
+          }
         } else {
           Cookies.set(EGO_JWT_KEY, null);
           location.assign(getRedirect(asPath));
