@@ -33,6 +33,10 @@ export type ClientSideGetInitialPropsContext = {
 type GetInitialPropsContextWithEgo = GetInitialPropsContext & {
   egoJwt?: string;
 };
+export type GqlQueriesToPrefetch = Array<{
+  query: string; // The gql query string
+  variables?: { [key: string]: any };
+}>;
 export type PageConfigProps = {
   isPublic: boolean;
   isAccessible: (args: {
@@ -41,14 +45,7 @@ export type PageConfigProps = {
     initialPermissions?: string[];
   }) => Promise<boolean>;
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
-  getGqlQueriesToPrefetch: (
-    args: GetInitialPropsContextWithEgo,
-  ) => Promise<
-    Array<{
-      query: string; // The gql query string
-      variables?: { [key: string]: any };
-    }>
-  >;
+  getGqlQueriesToPrefetch: (args: GetInitialPropsContextWithEgo) => Promise<GqlQueriesToPrefetch>;
   startWithGlobalLoader: boolean;
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
