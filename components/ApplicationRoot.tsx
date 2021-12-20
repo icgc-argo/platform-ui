@@ -20,7 +20,7 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
-import useAuthContext, { AuthProvider } from 'global/hooks/useAuthContext';
+import { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
@@ -42,6 +42,7 @@ import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import SystemAlerts from './SystemAlerts';
+import useDataContext, { DataProvider } from 'global/hooks/useDataContext';
 
 /**
  * The global portal where modals will show up
@@ -201,20 +202,20 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
-  const { fetchWithEgoToken } = useAuthContext();
+  const { fetchWithAuth } = useDataContext();
   const clientSideCache = React.useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
   const client = React.useMemo(() => {
     const uploadLink = createUploadLink({
       uri: urljoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
-      fetch: fetchWithEgoToken,
+      fetch: fetchWithAuth,
     });
     return new ApolloClient({
       link: ApolloLink.from([uploadLink]),
       connectToDevTools: true,
       cache: clientSideCache,
     });
-  }, [fetchWithEgoToken, clientSideCache]);
+  }, [fetchWithAuth, clientSideCache]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
@@ -225,72 +226,72 @@ export default function ApplicationRoot({
   pageContext,
   children,
   startWithGlobalLoader,
-  initialPermissions,
 }: {
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
   startWithGlobalLoader: boolean;
-  initialPermissions: string[];
 }) {
   return (
     <>
       <style>
         {`
-            body {
-              margin: 0;
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            } /* custom! */
-            #__next {
-              position: absolute;
-              top: 0px;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
-            }
-          `}
+          body {
+            margin: 0;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+          } /* custom! */
+          #__next {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+          }
+        `}
       </style>
       <Head />
-      <AuthProvider egoJwt={egoJwt} initialPermissions={initialPermissions}>
-        <ApolloClientProvider apolloCache={apolloCache}>
-          <PageContext.Provider value={pageContext}>
-            <ThemeProvider>
-              <ToastProvider>
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9999;
-                    ${fillAvailableWidth}
-                  `}
-                  ref={modalPortalRef}
-                />
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9999;
-                  `}
-                  ref={loaderPortalRef}
-                />
-                <PersistentStateProvider>
-                  <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
-                    <GdprMessage />
-                    <SystemAlerts />
-                    {children}
-                  </GlobalLoaderProvider>
-                </PersistentStateProvider>
-              </ToastProvider>
-            </ThemeProvider>
-          </PageContext.Provider>
-        </ApolloClientProvider>
+      <AuthProvider egoJwt={egoJwt}>
+        <DataProvider>
+          <ApolloClientProvider apolloCache={apolloCache}>
+            <PageContext.Provider value={pageContext}>
+              <ThemeProvider>
+                <ToastProvider>
+                  <div
+                    css={css`
+                      position: fixed;
+                      left: 0px;
+                      top: 0px;
+                      z-index: 9999;
+                      ${fillAvailableWidth}
+                    `}
+                    ref={modalPortalRef}
+                  />
+                  <div
+                    css={css`
+                      position: fixed;
+                      left: 0px;
+                      top: 0px;
+                      z-index: 9999;
+                    `}
+                    ref={loaderPortalRef}
+                  />
+                  <PersistentStateProvider>
+                    <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
+                      <GdprMessage />
+                      <SystemAlerts />
+                      {children}
+                    </GlobalLoaderProvider>
+                  </PersistentStateProvider>
+                </ToastProvider>
+              </ThemeProvider>
+            </PageContext.Provider>
+          </ApolloClientProvider>
+        </DataProvider>
       </AuthProvider>
     </>
   );
