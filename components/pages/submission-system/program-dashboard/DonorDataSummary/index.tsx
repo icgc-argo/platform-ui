@@ -76,7 +76,7 @@ export const useProgramDonorsSummaryQuery = ({
   return hook;
 };
 
-export default () => {
+const DonorDataSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const DEFAULT_PAGE_SIZE = 20;
   const DEFAULT_SORTS = [
@@ -163,3 +163,5 @@ export default () => {
     </DashboardCard>
   );
 };
+
+export default DonorDataSummary;

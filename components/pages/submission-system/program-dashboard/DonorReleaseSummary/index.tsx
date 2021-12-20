@@ -24,7 +24,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';
 
-export default () => {
+const DonorReleaseSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { data, loading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
     DASHBOARD_SUMMARY_QUERY,
@@ -81,3 +81,5 @@ export default () => {
     </DashboardCard>
   );
 };
+
+export default DonorReleaseSummary;

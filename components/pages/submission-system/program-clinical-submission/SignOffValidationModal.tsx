@@ -29,7 +29,7 @@ const SignOffModalCont = styled(ModalContainer)`
   max-width: 1120px;
 `;
 
-export default ({
+const SignOffValidationModal = ({
   clinicalSubmissions,
   onCloseClick,
   onActionClick,
@@ -78,3 +78,5 @@ export default ({
     </Modal>
   );
 };
+
+export default SignOffValidationModal;

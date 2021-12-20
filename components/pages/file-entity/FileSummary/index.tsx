@@ -25,13 +25,13 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
-export default ({ data }: { data: FileSummaryInfo }) => {
+const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const tableData = {
     'File ID': data.fileId,
     'Object ID': data.objectId,
-    'File Format': data.fileFormat,
-    Size: fileSize(data.size),
-    Access: (
+    'File Type': data.fileFormat,
+    'File Size': fileSize(data.size),
+    'File Access': (
       <div
         css={css`
           display: flex;
@@ -56,3 +56,5 @@ export default ({ data }: { data: FileSummaryInfo }) => {
     </FileCard>
   );
 };
+
+export default FileSummary;

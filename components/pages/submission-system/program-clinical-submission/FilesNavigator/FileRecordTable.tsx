@@ -108,7 +108,7 @@ const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
 };
 
-export default ({
+const FileRecordTable = ({
   file,
   submissionData,
   isPendingApproval,
@@ -363,3 +363,5 @@ export default ({
     </div>
   );
 };
+
+export default FileRecordTable;

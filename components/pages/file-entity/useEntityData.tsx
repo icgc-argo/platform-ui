@@ -75,10 +75,11 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
 
     const dataAnalysis: DataAnalysisInfo = {
       experimentalStrategy: get(entity, 'analysis.experiment.experimental_strategy'),
-      dataType: null,
+      dataCategory: entity.data_category,
+      dataType: entity.data_type,
       platform: get(entity, 'analysis.experiment.platform'),
       genomeBuild: null,
-      software: null,
+      software: entity.analysis_tools,
       workflowType: get(entity, 'analysis.workflow'),
     };
 
@@ -90,12 +91,13 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
 
       return {
         donorId: donor.donor_id,
-        submitterDonorId: donor.submitter_id,
+        submitterDonorId: donor.submitter_donor_id,
         primarySite: null,
         cancerType: null,
         ageAtDiagnosis: null,
         associations: {
           specimenId: specimen.specimen_id,
+          specimenType: specimen.specimen_type,
           tumourNormalDesignation: specimen.tumour_normal_designation,
           sampleId: sample.sample_id,
           sampleType: sample.sample_type,

@@ -24,10 +24,13 @@ query FILE_ENTITY_QUERY($filters: JSON) {
       edges {
         node {
           object_id
+          file_id
+          data_category
           data_type
           file_type
           file_access
           study_id
+          analysis_tools
 
           file {
             size

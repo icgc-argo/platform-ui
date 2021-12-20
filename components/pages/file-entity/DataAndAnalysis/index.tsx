@@ -25,14 +25,16 @@ function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string 
   return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';
 }
 
-export default ({ data }: { data: DataAnalysisInfo }) => {
+const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
     'Experimental Strategy': data.experimentalStrategy,
+    'Data Category': data.dataCategory,
     'Data Type': data.dataType,
     Platform: data.platform,
     'Genome Build': data.genomeBuild,
-    'Workflow Type': getWorkflowTypeDisplay(data.workflowType),
-    Software: data.software,
+    'Genome Annotation': 'N/A',
+    'Workflow Name': getWorkflowTypeDisplay(data.workflowType),
+    'Analysis Tools': data.software,
   };
 
   return (
@@ -43,3 +45,5 @@ export default ({ data }: { data: DataAnalysisInfo }) => {
     </FileCard>
   );
 };
+
+export default DataAndAnalysis;

@@ -110,7 +110,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile = (
   };
 };
 
-export default () => {
+const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
 
@@ -577,3 +577,5 @@ export default () => {
     </div>
   );
 };
+
+export default PageContent;

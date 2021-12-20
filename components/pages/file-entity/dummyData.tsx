@@ -39,6 +39,7 @@ export const dummyFileSummaryInfo: FileSummaryInfo = {
 
 export const dummyDataAnalysisInfo: DataAnalysisInfo = {
   experimentalStrategy: 'WGS',
+  dataCategory: 'Sequencing Reads',
   dataType: 'Aligned Reads',
   platform: 'Illumina',
   genomeBuild: 'GRCh38',
@@ -55,6 +56,7 @@ export const dummyAssociatedDonorsInfo: Array<DonorRecord> = [
     ageAtDiagnosis: '67 years',
     associations: {
       specimenId: 'SP9991',
+      specimenType: 'Primary tumour',
       tumourNormalDesignation: 'Tumour',
       sampleId: 'SA9991',
       sampleType: 'Total DNA',
@@ -69,6 +71,7 @@ export const dummyAssociatedDonorsInfo: Array<DonorRecord> = [
     ageAtDiagnosis: '58 years',
     associations: {
       specimenId: 'SP9996',
+      specimenType: 'Primary tumour',
       tumourNormalDesignation: 'Normal',
       sampleId: 'SA9996',
       sampleType: 'Total DNA',
