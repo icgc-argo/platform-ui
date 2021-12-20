@@ -41,6 +41,7 @@ import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
 import MaintenancePage from 'components/pages/MaintenancePage';
 
+import FullScreenLoader from 'components/placeholders/FullPageLoader';
 import { LOGGED_IN_PATH } from 'global/constants/pages';
   if (res) {
     res.writeHead(302, {
@@ -310,16 +311,7 @@ class Root extends App<
           <MaintenancePage />
         ) : isLoadingLoginRedirect ? (
           <DefaultLayout>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-              }}
-            >
-              <DnaLoader />
-            </div>
+            <FullScreenLoader />
           </DefaultLayout>
         ) : (
           <Component {...pageProps} />
