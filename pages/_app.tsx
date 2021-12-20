@@ -295,7 +295,6 @@ class Root extends App<
       apolloCache,
       egoJwt,
       startWithGlobalLoader,
-      initialPermissions,
       maintenanceModeOn,
     } = this.props;
     const { isLoadingLoginRedirect } = this.state;
@@ -305,7 +304,6 @@ class Root extends App<
         apolloCache={apolloCache}
         pageContext={ctx}
         startWithGlobalLoader={startWithGlobalLoader}
-        initialPermissions={initialPermissions}
       >
         {maintenanceModeOn ? (
           <MaintenancePage />
