@@ -41,6 +41,7 @@ import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
 import MaintenancePage from 'components/pages/MaintenancePage';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 
 const redirect = (res, url: string) => {
   if (res) {
@@ -257,13 +258,20 @@ class Root extends App<
         const egoToken = await Root.getEgoToken(this.props);
         if (isValidJwt(egoToken)) {
           Cookies.set(EGO_JWT_KEY, egoToken);
-          const redirectPath = decodeURIComponent(redirect as string);
-          const obj = queryString.parseUrl(redirectPath || '');
-          const target = queryString.stringifyUrl({
-            ...obj,
-            query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
-          });
-          location.assign(target);
+          if (redirect) {
+            const redirectFromURL = decodeURIComponent(redirect as string);
+            const obj = queryString.parseUrl(redirectFromURL || '');
+            const target = queryString.stringifyUrl({
+              ...obj,
+              query: omit(obj.query, OAUTH_QUERY_PARAM_NAME),
+            });
+            location.assign(target);
+          } else {
+            const redirectFromPermissions = getDefaultRedirectPathForUser(
+              getPermissionsFromToken(egoToken),
+            );
+            Router.push(redirectFromPermissions);
+          }
         } else {
           Cookies.set(EGO_JWT_KEY, null);
           location.assign(getRedirect(asPath));
