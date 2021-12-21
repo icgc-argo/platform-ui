@@ -17,6 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export { default as ContentError } from './ContentError';
-export { default as ContentLoader } from './ContentLoader';
-export { default as FullPageLoader } from './FullPageLoader';
+import { ReactElement } from 'react';
+import DnaLoader from 'uikit/DnaLoader';
+
+const FullScreenLoader = (): ReactElement => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+      }}
+    >
+      <DnaLoader />
+    </div>
+  );
+};
+
+export default FullScreenLoader;
