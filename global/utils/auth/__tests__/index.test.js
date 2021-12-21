@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@jest/globals';
 import { getConfig } from 'global/config';
 import { createLoginURL } from '..';
 

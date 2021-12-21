@@ -18,7 +18,8 @@
  */
 
 import LoginPage from 'components/pages/login';
-import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import createPage from 'global/utils/pages/createPage';
 import Router from 'next/router';
 import React from 'react';
 import queryString from 'query-string';
