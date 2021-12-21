@@ -35,7 +35,7 @@ export const UserModel = {
   role: null as RoleKey,
 };
 
-export const userSchema = yup.object().shape({
+export const userSchema: yup.ObjectSchema<any> = yup.object({
   firstName,
   lastName,
   email,
