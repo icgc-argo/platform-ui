@@ -79,7 +79,7 @@ export default function ContactPage() {
     messageDescription: '',
     reCaptcha: '',
   };
-  const schema = yup.object().shape({
+  const schema: yup.ObjectSchema<any> = yup.object({
     firstName,
     lastName,
     email,
