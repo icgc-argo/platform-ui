@@ -58,11 +58,7 @@ export function AuthProvider({
   children: React.ReactElement;
   initialPermissions: string[];
 }) {
-  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const updateTokenUrl = urlJoin(
-    EGO_API_ROOT,
-    `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
-  );
+  const { EGO_UPDATE_URL } = getConfig();
 
   const permissions = getPermissionsFromToken(egoJwt);
 
@@ -160,7 +156,7 @@ export function AuthProvider({
   }
 
   const updateToken = () => {
-    return fetch(updateTokenUrl, {
+    return fetch(EGO_UPDATE_URL, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${egoJwt || ''}` },
       body: null,
