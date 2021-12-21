@@ -48,7 +48,6 @@ const EditUserModal = ({
     validateForm,
     touched,
     hasErrors,
-    // @ts-ignore
   } = useFormHook({ initialFields: user, schema: userSchema });
   const validationErrors = errors as UserSectionProps['errors'];
   const submitForm = async () => {

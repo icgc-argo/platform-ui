@@ -88,20 +88,11 @@ export default function ContactPage() {
     reCaptcha,
   });
 
-  const {
-    errors,
-    data,
-    setData,
-    validateField,
-    validateForm,
-    touched,
-    hasErrors,
-    reset,
-  } = useFormHook({
-    initialFields: contactFormSchema,
-    // @ts-ignore
-    schema,
-  });
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors, reset } =
+    useFormHook({
+      initialFields: contactFormSchema,
+      schema,
+    });
 
   const {
     firstName: firstNameError,

@@ -29,7 +29,6 @@ import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
-  // @ts-ignore
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
 
   const { errors, data, setData, validateField, touched } = form;

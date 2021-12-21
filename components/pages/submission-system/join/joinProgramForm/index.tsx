@@ -46,20 +46,20 @@ const JoinProgramForm = ({
 }) => {
   const { errors, data, setData, validateField, validateForm, touched, hasErrors } = useFormHook({
     initialFields,
-    // @ts-ignore
     schema: schema,
   });
 
   const availableInstitutions = institutions || [];
 
-  const handleBlur = (
-    fieldKey: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => (_) => validateField({ key: fieldKey });
+  const handleBlur =
+    (fieldKey: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
+    (_) =>
+      validateField({ key: fieldKey });
 
-  const handleChange = (
-    fieldName: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onChange'] => ({ target }) =>
-    setData({ key: fieldName, val: target.value });
+  const handleChange =
+    (fieldName: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onChange'] =>
+    ({ target }) =>
+      setData({ key: fieldName, val: target.value });
 
   const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const validData = await validateForm();
