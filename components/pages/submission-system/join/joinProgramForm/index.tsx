@@ -52,7 +52,7 @@ const JoinProgramForm = ({
   const availableInstitutions = institutions || [];
 
   const handleBlur =
-    (fieldKey: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
+    (fieldKey: string): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
     (_) =>
       validateField({ key: fieldKey });
 
