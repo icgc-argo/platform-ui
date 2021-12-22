@@ -20,7 +20,7 @@
 import yup from 'global/utils/validations';
 import { CANCER_TYPES, COUNTRIES, PRIMARY_SITES, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 
-const baseValidations = yup.object().shape({
+const baseValidations: yup.ObjectSchema<any> = yup.object({
   programName: yup.string().label('Program Name').trim().required(),
   shortName: yup
     .string()
