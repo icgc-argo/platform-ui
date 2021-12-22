@@ -88,6 +88,7 @@ export function AuthProvider({
     } else {
       router.push('/');
     }
+    router.reload();
   };
 
   const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
