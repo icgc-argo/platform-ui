@@ -19,6 +19,7 @@
 
 import yup from 'global/utils/validations';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';
+import { DefaultDataShape } from 'global/hooks/useFormHook';
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER' | null;
 
@@ -28,7 +29,14 @@ export const RoleDisplayName: { [key in RoleKey]: string } = {
   SUBMITTER: 'Data Submitter',
 };
 
-export const UserModel = {
+interface T_UserModel extends DefaultDataShape {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: RoleKey;
+}
+
+export const UserModel: T_UserModel = {
   firstName: '',
   lastName: '',
   email: '',
