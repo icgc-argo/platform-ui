@@ -226,14 +226,12 @@ export default function ApplicationRoot({
   pageContext,
   children,
   startWithGlobalLoader,
-  initialPermissions,
 }: {
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
   startWithGlobalLoader: boolean;
-  initialPermissions: string[];
 }) {
   return (
     <>
