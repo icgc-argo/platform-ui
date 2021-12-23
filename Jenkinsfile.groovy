@@ -32,7 +32,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12.6.0
+    image: node:16.13.0
     tty: true
   - name: docker
     image: docker:18-git
