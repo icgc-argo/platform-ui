@@ -78,17 +78,20 @@ export function AuthProvider({
     Cookies.remove(EGO_JWT_KEY);
   };
 
-  const logOut: T_AuthContext['logOut'] = (path) => {
+  const logOut: T_AuthContext['logOut'] = async (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
     if (path) {
       const { url, query } = queryString.parseUrl(path);
-      router.push({ pathname: url, query: { ...query, loggingOut: true } });
+      console.log(query);
+      // router.push({ pathname: url, query: { ...query, loggingOut: true } });
+      console.log('router .push');
     } else {
-      router.push('/');
+      // router.push('/');
+      console.log('router .push');
     }
-    router.reload();
+    // router.reload();
   };
 
   const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {

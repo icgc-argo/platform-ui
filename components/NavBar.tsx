@@ -27,6 +27,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import Link from 'next/link';
 import * as React from 'react';
 import { css } from 'uikit';
@@ -138,6 +139,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   }, [egoJwt]);
 
   const { asPath: path, query } = usePageContext();
+  const { clearFilters } = useFiltersContext();
 
   const [isModalVisible, setModalVisibility] = React.useState(false);
 
@@ -180,6 +182,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     {
       isLink: false,
       onClick: () => {
+        clearFilters();
         logOut(path);
         setMobileDropdownOpen(false);
       },

@@ -51,8 +51,8 @@ const FiltersContext = React.createContext<FiltersContextType>({
 
 const useFilterState = () => {
   const [currentFilters, setCurrentFilters] = useUrlParamState('filters', defaultFilters, {
-    serialize: v => stringify(v),
-    deSerialize: v => JSON.parse(v),
+    serialize: (v) => stringify(v),
+    deSerialize: (v) => JSON.parse(v),
   });
 
   return { currentFilters, setCurrentFilters };
@@ -63,9 +63,11 @@ export function FiltersProvider({ children }) {
 
   const clearFilters = () => {
     setCurrentFilters(defaultFilters);
+    console.log('clear');
+    console.log(currentFilters);
   };
 
-  const replaceAllFilters = filters => setCurrentFilters(filters);
+  const replaceAllFilters = (filters) => setCurrentFilters(filters);
   const setFilterFromFieldAndValue = ({ field, value }) => {
     const operator = sqonBuilder.has(field, value).build();
     const newFilters = addInFilters(operator, currentFilters);
