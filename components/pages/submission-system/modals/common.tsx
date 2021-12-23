@@ -29,14 +29,7 @@ export const RoleDisplayName: { [key in RoleKey]: string } = {
   SUBMITTER: 'Data Submitter',
 };
 
-interface T_UserModel extends DefaultDataShape {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: RoleKey;
-}
-
-export const UserModel: T_UserModel = {
+export const UserModel = {
   firstName: '',
   lastName: '',
   email: '',
