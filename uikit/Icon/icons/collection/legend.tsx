@@ -17,31 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { storiesOf } from '@storybook/react';
-import React from 'react';
-import DropdownButton from '.';
-import { select, boolean } from '@storybook/addon-knobs';
-import { action } from '@storybook/addon-actions';
-import { createKnobs as createButtonKnobs } from 'uikit/Button/stories';
-import Button from 'uikit/Button';
+import { css } from '@emotion/core';
 
-const DropdownButtonStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  const knobs = createButtonKnobs();
-  const menuOpen = boolean('menuOpen', false);
-  return (
-    <DropdownButton
-      onItemClick={action('onItemClick')}
-      menuItems={[
-        { display: <strong>Some Text</strong>, value: '1' },
-        { display: 'Some Text', value: '2' },
-        { display: <Button size="sm">Some Text</Button>, value: '4' },
-      ]}
-      controlledMenuShowState={menuOpen}
-      {...knobs}
-    >
-      Click me!
-    </DropdownButton>
-  );
-});
-
-export default DropdownButtonStories;
+export default {
+  title: 'Legend',
+  viewBox: '0 0 12 12',
+  path: `M1.2.6a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm0 4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm0 4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm3.349-5.96c-.619 0-1.12-.403-1.12-.9s.501-.9 1.12-.9h6.16c.618 0 1.12.403 1.12.9s-.502.9-1.12.9h-6.16zm6.16 2.16c.619 0 1.12.403 1.12.9s-.5.9-1.12.9H4.55c-.618 0-1.12-.403-1.12-.9 0-.496.501-.9 1.12-.9h6.16zm0 4.08c.619 0 1.12.403 1.12.9 0 .496-.5.9-1.12.9H4.55c-.618 0-1.12-.403-1.12-.9s.501-.9 1.12-.9h6.16z`,
+  css: css`
+    width: 12px;
+    height: 12px;
+  `,
+  defaultFill: '#523785',
+};

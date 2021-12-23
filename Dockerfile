@@ -1,4 +1,4 @@
-FROM node:12.13.1-alpine
+FROM node:16.13.0-alpine
 
 ENV APP_UID=9999
 ENV APP_GID=9999
