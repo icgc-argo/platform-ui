@@ -178,8 +178,6 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
 
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
   const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
-  console.log('query filters');
-  console.log(filters);
   return (
     <div css={content}>
       <SQONView
