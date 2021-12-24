@@ -63,8 +63,6 @@ export function FiltersProvider({ children }) {
 
   const clearFilters = () => {
     setCurrentFilters(defaultFilters);
-    console.log('clear');
-    console.log(currentFilters);
   };
 
   const replaceAllFilters = (filters) => setCurrentFilters(filters);

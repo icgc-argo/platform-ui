@@ -182,8 +182,8 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     {
       isLink: false,
       onClick: () => {
-        clearFilters();
         logOut(path);
+        clearFilters();
         setMobileDropdownOpen(false);
       },
       name: 'Logout',

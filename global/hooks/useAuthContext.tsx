@@ -83,15 +83,13 @@ export function AuthProvider({
     setIsLoggingOut(true);
     removeToken();
     if (path) {
-      const { url, query } = queryString.parseUrl(path);
-      console.log(query);
-      // router.push({ pathname: url, query: { ...query, loggingOut: true } });
-      console.log('router .push');
+      let { url, query } = queryString.parseUrl(path);
+      // Temp until we can remove private filters
+      delete query.filters;
+      router.push({ pathname: url, query: { ...query, loggingOut: true } });
     } else {
-      // router.push('/');
-      console.log('router .push');
+      router.push('/');
     }
-    // router.reload();
   };
 
   const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
