@@ -79,6 +79,7 @@ const Button = React.forwardRef<
       Loader,
       type,
       showLoaderWithChildren,
+      ...rest
     },
     ref = React.createRef(),
   ) => {
@@ -110,6 +111,7 @@ const Button = React.forwardRef<
         className={className}
         id={id}
         type={type}
+        {...rest}
       >
         {showLoaderWithChildren ? (
           <>
