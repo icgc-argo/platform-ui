@@ -88,7 +88,7 @@ export function AuthProvider({
       delete query.filters;
       router.push({ pathname: url, query: { ...query, loggingOut: true } }).then(router.reload);
     } else {
-      router.push('/');
+      router.push('/').then(router.reload);
     }
   };
 
