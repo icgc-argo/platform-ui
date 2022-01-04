@@ -23,7 +23,7 @@
     "build-uikit::cleanup": "rm ./uikit/dist/**/*.jsx ./uikit/dist/*.jsx",
     "build-uikit": "rm -rf ./uikit/dist && npm run build-uikit::ts && npm run build-uikit::babel && npm run build-uikit::assets && npm run build-uikit::cleanup",
     "publish-uikit": "cd uikit/dist && npm publish --access public",
-    "preinstall": "npx npm-force-resolutions"
+    "force-resolutions": "npx npm-force-resolutions"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
