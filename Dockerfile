@@ -7,12 +7,12 @@ RUN groupmod -g $APP_GID node
 RUN usermod -u $APP_UID -g $APP_GID node
 RUN mkdir -p /appDir
 RUN chown -R node /appDir
+USER node
 WORKDIR /appDir
 
 COPY . .
 RUN npm ci
 RUN npx next build
 
-USER node
 EXPOSE 8080
 CMD ["npx", "next", "start", "--", "-p", "8080"]
