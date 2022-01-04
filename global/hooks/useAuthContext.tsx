@@ -86,7 +86,7 @@ export function AuthProvider({
       let { url, query } = queryString.parseUrl(path);
       // Temp until we can remove private filters
       delete query.filters;
-      router.push({ pathname: url, query: { ...query, loggingOut: true } });
+      router.push({ pathname: url, query: { ...query, loggingOut: true } }).then(router.reload);
     } else {
       router.push('/');
     }
