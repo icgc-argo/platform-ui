@@ -53,6 +53,8 @@ const EditUserModal = ({
   const submitForm = async () => {
     try {
       const validData = await validateForm();
+      // Todo: Update to yup@0.32.11 creates a very difficult type collision here between UserModel and useFormHook/validateForm
+      // @ts-ignore
       const result = onSubmit(validData);
     } catch (err) {
       console.log(err);
@@ -84,7 +86,7 @@ const EditUserModal = ({
         <UserSection
           user={form}
           onChange={(key, val) => setData({ key, val })}
-          validateField={key => validateField({ key })}
+          validateField={(key) => validateField({ key })}
           errors={validationErrors}
           disabledFields={disabledFields}
           onClickDelete={null}

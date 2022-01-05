@@ -19,6 +19,7 @@
 
 import yup from 'global/utils/validations';
 import { firstName, lastName, email, role } from 'global/utils/form/validations';
+import { DefaultDataShape } from 'global/hooks/useFormHook';
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER' | null;
 
@@ -35,7 +36,7 @@ export const UserModel = {
   role: null as RoleKey,
 };
 
-export const userSchema = yup.object().shape({
+export const userSchema: yup.ObjectSchema<any> = yup.object({
   firstName,
   lastName,
   email,
