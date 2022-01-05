@@ -23,7 +23,7 @@ import isEqual from 'lodash/isEqual';
 import isArray from 'lodash/isArray';
 import yup from 'global/utils/validations';
 
-type DefaultDataShape = { [k: string]: any };
+export type DefaultDataShape = { [k: string]: any };
 
 type FormData<T extends DefaultDataShape> = {
   key: keyof T;
@@ -51,13 +51,12 @@ function useFormHook<T extends DefaultDataShape>({
     data: initialFields,
   };
 
-  const [form, setForm] = useState<{ errors: typeof initErrors; data: typeof initialFields }>(
-    initialState,
-  );
+  const [form, setForm] =
+    useState<{ errors: typeof initErrors; data: typeof initialFields }>(initialState);
 
   const { errors, data } = form;
 
-  const hasErrors = Object.values(errors).some(x => x);
+  const hasErrors = Object.values(errors).some((x) => x);
 
   // set form data
   const setData = ({ key, val }: FormData<T>) => {

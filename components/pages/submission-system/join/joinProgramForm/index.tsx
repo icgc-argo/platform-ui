@@ -51,14 +51,15 @@ const JoinProgramForm = ({
 
   const availableInstitutions = institutions || [];
 
-  const handleBlur = (
-    fieldKey: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onBlur'] => _ => validateField({ key: fieldKey });
+  const handleBlur =
+    (fieldKey: string): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
+    (_) =>
+      validateField({ key: fieldKey });
 
-  const handleChange = (
-    fieldName: keyof typeof initialFields,
-  ): React.ComponentProps<typeof MultiSelect>['onChange'] => ({ target }) =>
-    setData({ key: fieldName, val: target.value });
+  const handleChange =
+    (fieldName: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onChange'] =>
+    ({ target }) =>
+      setData({ key: fieldName, val: target.value });
 
   const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const validData = await validateForm();
@@ -82,7 +83,7 @@ const JoinProgramForm = ({
         </Typography>
       </Row>
       <ScreenClassRender
-        render={screenSize => (
+        render={(screenSize) => (
           <div
             css={css`
               & .pt {
@@ -106,7 +107,7 @@ const JoinProgramForm = ({
                     value={data.institutions}
                     onChange={handleChange('institutions')}
                   >
-                    {availableInstitutions.map(institution => (
+                    {availableInstitutions.map((institution) => (
                       <Option value={institution} key={institution.replace(/\s/g, '')}>
                         {institution}
                       </Option>
