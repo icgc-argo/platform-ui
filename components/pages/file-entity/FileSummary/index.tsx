@@ -25,7 +25,29 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
+import { useQuery } from '@apollo/react-hooks';
+import PROGRAM_NAME_QUERY from './PROGRAM_NAME_QUERY.gql'
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import Link from 'next/link';
+import A from 'uikit/Link';
+
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
+  const { loading, data: { program = undefined } = {} } = useQuery<{
+    program: { name: string };
+  }>(PROGRAM_NAME_QUERY, {
+    variables: {
+      shortName: data.program,
+    },
+  });
+
+  const programFilter = sqonBuilder.has('study_id', data.program).build();
+  const programFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(programFilter))}`,
+  );
+
   const tableData = {
     'File ID': data.fileId,
     'Object ID': data.objectId,
@@ -42,7 +64,14 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
         <> {startCase(data.access)}</>
       </div>
     ),
-    Program: data.program,
+    'Program': loading ? data.program : (
+      <Link
+        href={programFilterUrl}
+        passHref
+      >
+        <A>{`${program.name} (${data.program})`}</A>
+      </Link>
+    ),
     'MD5 Checksum': data.checksum,
     'Repository Name': data.repoName,
     'Repository Country': data.repoCountry,
