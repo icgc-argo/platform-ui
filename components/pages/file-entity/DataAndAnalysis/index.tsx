@@ -20,18 +20,30 @@
 import { FileCard, TableDiv } from '../common';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
+import Link from 'uikit/Link';
 
 function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {
   return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';
 }
+
+// Hard-coded Genome Build as per: https://github.com/icgc-argo/platform-ui/issues/2105
+const GENOME_BUILD = 'GRCh38';
+const GENOME_BUILD_URL = 'https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.26/';
 
 const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
   const tableData = {
     'Experimental Strategy': data.experimentalStrategy,
     'Data Category': data.dataCategory,
     'Data Type': data.dataType,
-    Platform: data.platform,
-    'Genome Build': data.genomeBuild,
+    'Platform': data.platform,
+    'Genome Build': (
+      <Link
+        href={GENOME_BUILD_URL}
+        target='_blank'
+      >
+        {GENOME_BUILD}
+      </Link>
+    ),
     'Genome Annotation': 'N/A',
     'Workflow Name': getWorkflowTypeDisplay(data.workflowType),
     'Analysis Tools': data.software,
