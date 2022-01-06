@@ -38,6 +38,10 @@ query FILE_ENTITY_QUERY($filters: JSON) {
             name
           }
 
+          meta {
+            embargo_stage
+          }
+
           repositories {
             hits {
               edges {
