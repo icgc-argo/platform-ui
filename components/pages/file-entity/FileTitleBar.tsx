@@ -20,6 +20,7 @@
 import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
+import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
 import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
@@ -89,6 +90,7 @@ export const FileTitleBar: React.ComponentType<{
           <div>{programShortName}</div>
           <div>File: {fileId}</div>
         </TitleBar>
+        {accessTier && <Tag>{accessTier}</Tag>}
       </div>
       <div
         css={css`

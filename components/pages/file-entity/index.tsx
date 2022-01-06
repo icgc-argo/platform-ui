@@ -32,6 +32,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
+import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
 
 const FileEntity = ({ fileId }) => {
   const {
@@ -78,7 +79,7 @@ const FileEntity = ({ fileId }) => {
                   programShortName={programShortName}
                   fileId={data.summary.fileId}
                   isDownloadEnabled={isDownloadEnabled}
-                  accessTier={data.meta.embargo_stage}
+                  accessTier={EmbargoStageDisplayNames[data.meta.embargo_stage]}
                 />
               </ContentHeader>
 
