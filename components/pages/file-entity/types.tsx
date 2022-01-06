@@ -76,9 +76,14 @@ export type FileRecord = {
   actions: string;
 };
 
+export type EntityMetaData = {
+  embargo_stage: string;
+};
+
 export type FileEntityData = {
   summary: FileSummaryInfo;
   dataAnalysis: DataAnalysisInfo;
   donorRecords: Array<DonorRecord>;
+  meta: EntityMetaData;
   //fileRecords: Array<FileRecord>;
 };

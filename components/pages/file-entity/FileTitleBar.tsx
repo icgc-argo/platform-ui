@@ -41,7 +41,8 @@ export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
-}> = ({ programShortName, fileId, isDownloadEnabled }) => {
+  accessTier: string;
+}> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();

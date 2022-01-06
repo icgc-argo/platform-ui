@@ -34,7 +34,15 @@ import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
 
 const FileEntity = ({ fileId }) => {
-  const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
+  const {
+    programShortName,
+    access,
+    size,
+    data,
+    loading: fileLoading,
+  } = useEntityData({
+    fileId,
+  });
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
@@ -70,6 +78,7 @@ const FileEntity = ({ fileId }) => {
                   programShortName={programShortName}
                   fileId={data.summary.fileId}
                   isDownloadEnabled={isDownloadEnabled}
+                  accessTier={data.meta.embargo_stage}
                 />
               </ContentHeader>
 

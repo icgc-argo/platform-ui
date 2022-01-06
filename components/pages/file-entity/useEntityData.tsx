@@ -60,6 +60,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
     const programShortName = entity.study_id;
     const size = get(entity, 'file.size', 0);
     const access = entity.file_access;
+    const { meta } = entity;
 
     const summary: FileSummaryInfo = {
       fileId: entity.file_id,
@@ -107,6 +108,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
     });
 
     const entityData: FileEntityData = {
+      meta,
       summary,
       dataAnalysis,
       donorRecords,
