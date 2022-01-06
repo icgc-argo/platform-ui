@@ -84,6 +84,6 @@ export type FileEntityData = {
   summary: FileSummaryInfo;
   dataAnalysis: DataAnalysisInfo;
   donorRecords: Array<DonorRecord>;
-  meta: EntityMetaData;
+  meta?: EntityMetaData;
   //fileRecords: Array<FileRecord>;
 };

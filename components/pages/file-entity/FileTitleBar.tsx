@@ -41,7 +41,7 @@ export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
-  accessTier: string;
+  accessTier?: string;
 }> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
