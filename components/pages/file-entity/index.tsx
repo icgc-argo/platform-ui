@@ -55,6 +55,11 @@ const FileEntity = ({ fileId }) => {
   const isDownloadEnabled =
     access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
+  const { embargo_stage } = !!data && data.meta;
+  const accessTier =
+    embargo_stage && embargo_stage !== 'PUBLIC'
+      ? EmbargoStageDisplayNames[data.meta.embargo_stage]
+      : null;
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -79,7 +84,7 @@ const FileEntity = ({ fileId }) => {
                   programShortName={programShortName}
                   fileId={data.summary.fileId}
                   isDownloadEnabled={isDownloadEnabled}
-                  accessTier={EmbargoStageDisplayNames[data.meta.embargo_stage]}
+                  accessTier={accessTier}
                 />
               </ContentHeader>
 
