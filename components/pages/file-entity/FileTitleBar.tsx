@@ -85,8 +85,17 @@ export const FileTitleBar: React.ComponentType<{
         width: 100%;
       `}
     >
-      <div>
-        <TitleBar>
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <TitleBar
+          css={css`
+            display: inline-flex;
+          `}
+        >
           <div>{programShortName}</div>
           <div>File: {fileId}</div>
         </TitleBar>
