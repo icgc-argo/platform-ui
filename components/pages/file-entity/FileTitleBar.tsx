@@ -94,6 +94,7 @@ export const FileTitleBar: React.ComponentType<{
         <TitleBar
           css={css`
             display: inline-flex;
+            padding-right: 18px;
           `}
         >
           <div>{programShortName}</div>
