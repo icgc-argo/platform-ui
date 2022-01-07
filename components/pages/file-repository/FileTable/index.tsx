@@ -146,13 +146,8 @@ const FileTable = () => {
 
   const { data: fieldDisplayNames } = useFileCentricFieldDisplayName();
 
-  const {
-    pagingState,
-    onPageChange,
-    onPageSizeChange,
-    onSortedChange,
-    resetCurrentPage,
-  } = useFileRepoPaginationState();
+  const { pagingState, onPageChange, onPageSizeChange, onSortedChange, resetCurrentPage } =
+    useFileRepoPaginationState();
   React.useEffect(() => {
     resetCurrentPage();
   }, [filters]);
@@ -181,14 +176,14 @@ const FileTable = () => {
       : 'Please log in to access controlled files';
     return { canUserDownload, toolTipText };
   };
+
   const tableColumns: Array<
     TableColumnConfig<FileRepositoryRecord> & { id: FileCentricDocumentField }
   > = [
     {
-      Header: fieldDisplayNames['object_id'],
-      id: FileCentricDocumentField['object_id'],
-      accessor: 'objectId',
-      width: 260,
+      Header: fieldDisplayNames['file_id'],
+      id: FileCentricDocumentField['file_id'],
+      accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_FILE_ENTITY_ENABLED ? (
           <Link
@@ -196,7 +191,7 @@ const FileTable = () => {
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.objectId)}
             passHref
           >
-            <A>{original.objectId}</A>
+            <A>{original.fileId}</A>
           </Link>
         ) : (
           original.objectId
@@ -240,6 +235,12 @@ const FileTable = () => {
       id: FileCentricDocumentField['file.size'],
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
+    },
+    {
+      Header: fieldDisplayNames['object_id'],
+      id: FileCentricDocumentField['object_id'],
+      accessor: 'objectId',
+      width: 260,
     },
     // disabled for initial File Repo release
     // {
@@ -285,6 +286,7 @@ const FileTable = () => {
         programId: node.study_id,
         dataType: node.data_type,
         experimentalStrategy: node.analysis.experiment.experimental_strategy,
+        fileId: node.file_id,
         fileType: node.file_type,
         size: node.file.size,
         isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
