@@ -181,7 +181,7 @@ const FileTable = () => {
     TableColumnConfig<FileRepositoryRecord> & { id: FileCentricDocumentField }
   > = [
     {
-      Header: fieldDisplayNames['file_id'],
+      Header: fieldDisplayNames['file'],
       id: FileCentricDocumentField['file_id'],
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
