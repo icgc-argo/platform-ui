@@ -40,6 +40,7 @@ const FileEntity = ({ fileId }) => {
     access,
     size,
     data,
+    embargoStage,
     loading: fileLoading,
   } = useEntityData({
     fileId,
@@ -55,11 +56,7 @@ const FileEntity = ({ fileId }) => {
   const isDownloadEnabled =
     access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
-  const { embargo_stage } = !!data && data.meta;
-  const accessTier =
-    embargo_stage && embargo_stage !== 'PUBLIC'
-      ? EmbargoStageDisplayNames[data.meta.embargo_stage]
-      : null;
+  const accessTier = embargoStage !== 'PUBLIC' ? EmbargoStageDisplayNames[embargoStage] : null;
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />

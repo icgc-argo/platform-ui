@@ -31,15 +31,12 @@ query FILE_ENTITY_QUERY($filters: JSON) {
           file_access
           study_id
           analysis_tools
+          embargo_stage
 
           file {
             size
             md5sum
             name
-          }
-
-          meta {
-            embargo_stage
           }
 
           repositories {
