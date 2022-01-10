@@ -41,7 +41,7 @@ type EntityData = {
 const noData = { programShortName: null, access: null, size: null, data: null };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField.object_id, fileId).build();
+  const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
   const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,

@@ -188,7 +188,7 @@ const FileTable = () => {
         return FEATURE_FILE_ENTITY_ENABLED ? (
           <Link
             href={FILE_ENTITY_PATH}
-            as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.objectId)}
+            as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
             passHref
           >
             <A>{original.fileId}</A>
