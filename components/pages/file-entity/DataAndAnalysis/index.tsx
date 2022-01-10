@@ -22,6 +22,8 @@ import SimpleTable from 'uikit/Table/SimpleTable';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
 import Link from 'uikit/Link';
 import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
+import { useTheme } from 'uikit/ThemeProvider';
+import { css } from '@emotion/core';
 
 function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {
   return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';
@@ -90,6 +92,8 @@ const GENOME_BUILD = 'GRCh38';
 const GENOME_BUILD_URL = 'https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.26/';
 
 const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
+  const theme = useTheme();
+
   const tableData = {
     'Experimental Strategy': data.experimentalStrategy,
     'Data Category': data.dataCategory,
@@ -103,7 +107,14 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
         {GENOME_BUILD}
       </Link>
     ),
-    'Genome Annotation': 'N/A',
+    'Genome Annotation': (
+      <div css={css`
+        font-style: italic;
+        color: ${theme.colors.grey};
+      `}>
+        N/A
+      </div>
+    ),
     'Workflow Name': getWorkflowNameLink(data.workflowType),
     'Workflow Version': getWorkflowVersionLink(data.workflowType),
     'Analysis Tools': data.software,
