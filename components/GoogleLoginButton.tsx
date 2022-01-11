@@ -19,6 +19,7 @@
 
 import GoogleLogin from 'uikit/Button/GoogleLogin';
 import useAuthContext from 'global/hooks/useAuthContext';
+import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 
 const GoogleLoginButton: React.ComponentType<
   React.ComponentProps<typeof GoogleLogin> & {
@@ -26,6 +27,7 @@ const GoogleLoginButton: React.ComponentType<
   }
 > = ({ logoutToRoot = false, ...props }) => {
   const { logOut } = useAuthContext();
+  const { clearFilters } = useFiltersContext();
   return (
     <GoogleLogin
       {...props}
@@ -33,6 +35,7 @@ const GoogleLoginButton: React.ComponentType<
         if (props.onClick) {
           props.onClick(e);
         }
+        clearFilters();
         logOut();
       }}
     />
