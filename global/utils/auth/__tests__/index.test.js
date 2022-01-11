@@ -39,7 +39,7 @@ describe('create ego URLs', () => {
       expect(result).toEqual(expected);
     });
     test('entity page', () => {
-      const fakeUuid = '1fd44f4e-5797-11ec-bf63-0242ac130002';
+      const fakeUuid = 'a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1';
       const expected = `${EGO_URL}&redirect_uri=${location.origin}/file%2F${fakeUuid}%3FisOauth%3Dtrue`;
       const input = `/file/${fakeUuid}`;
       const result = createLoginURL(input);
