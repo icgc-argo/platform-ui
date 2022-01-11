@@ -20,6 +20,7 @@
 import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
+import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
 import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
@@ -41,7 +42,8 @@ export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
-}> = ({ programShortName, fileId, isDownloadEnabled }) => {
+  accessTier?: string;
+}> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
@@ -83,11 +85,22 @@ export const FileTitleBar: React.ComponentType<{
         width: 100%;
       `}
     >
-      <div>
-        <TitleBar>
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <TitleBar
+          css={css`
+            display: inline-flex;
+            padding-right: 18px;
+          `}
+        >
           <div>{programShortName}</div>
           <div>File: {fileId}</div>
         </TitleBar>
+        {accessTier && <Tag>{accessTier}</Tag>}
       </div>
       <div
         css={css`
