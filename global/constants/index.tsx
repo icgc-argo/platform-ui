@@ -363,3 +363,27 @@ export const COUNTRIES = [
 // first published date of clinical/molecular program donor data in song
 // e.g. rawReadsFirstPublishedDate, mutectFirstPublishedDate
 export const FIRST_PUBLISHED_DATE_DONOR_DATA = new Date('2021-01-01T00:00:00.000Z');
+
+export const WORKFLOW_NAMES = {
+  dnaSeq: 'DNA Seq Alignment',
+  sangerWgs: 'Sanger WGS Variant Calling',
+  sangerWxs: 'Sanger WXS Variant Calling',
+  mutect2: 'GATK Mutect2 Variant Calling',
+  openAccess: 'Open Access Variant Filtering',
+};
+
+export const WORKFLOW_NAME_URLS = {
+  dnaSeq: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-alignment',
+  sangerWgs: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-sanger-wgs-vc',
+  sangerWxs: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-sanger-wxs-vc',
+  mutect2: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-gatk-mutect2-vc',
+  openAccess: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering',
+};
+
+export const WORKFLOW_VERSION_URLS = {
+  dnaSeq: 'https://github.com/icgc-argo-workflows/dna-seq-processing-wfs/releases/tag/',
+  sangerWgs: 'https://github.com/icgc-argo-workflows/sanger-wgs-variant-calling/releases/tag/',
+  sangerWxs: 'https://github.com/icgc-argo-workflows/sanger-wxs-variant-calling/releases/tag/',
+  mutect2: 'https://github.com/icgc-argo-workflows/gatk-mutect2-variant-calling/releases/tag/',
+  openAccess: 'https://github.com/icgc-argo-workflows/open-access-variant-filtering/releases/tag/',
+};
