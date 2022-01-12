@@ -20,6 +20,7 @@
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
 import SimpleTable from 'uikit/Table/SimpleTable';
+import get from 'lodash/get';
 
 import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
@@ -64,12 +65,12 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
         <> {startCase(data.access)}</>
       </div>
     ),
-    'Program': loading ? data.program : (
+    'Program': loading && get(program, 'name', false) ? data.program : (
       <Link
         href={programFilterUrl}
         passHref
       >
-        <A>{`${program.name} (${data.program})`}</A>
+        <A>{`${get(program, 'name')} (${data.program})`}</A>
       </Link>
     ),
     'MD5 Checksum': data.checksum,
