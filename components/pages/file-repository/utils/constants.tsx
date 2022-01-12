@@ -24,7 +24,7 @@ export const tooltipContent: { [key: string]: React.ReactNode } = {
   ),
 };
 
-enum EmbargoStageDisplayNames {
+export enum EmbargoStageDisplayNames {
   PROGRAM_ONLY = 'My Program Access',
   MEMBER_ACCESS = 'Full Member Access',
   ASSOCIATE_ACCESS = 'Associate Member Access',
