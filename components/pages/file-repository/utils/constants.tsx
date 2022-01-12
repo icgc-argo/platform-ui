@@ -71,6 +71,10 @@ export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
     getter: 'analysis.experiment.experimental_strategy',
   },
   {
+    header: 'File ID',
+    getter: 'file_id',
+  },
+  {
     header: 'File Type',
     getter: 'file_type',
   },
