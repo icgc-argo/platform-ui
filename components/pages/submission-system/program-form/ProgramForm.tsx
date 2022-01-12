@@ -165,18 +165,16 @@ export default function CreateProgramForm({
     validateField({ key: fieldKey });
   };
 
-  const handleCheckboxGroupChange = (
-    selectedItems: any[],
-    fieldName: keyof typeof seedFormData,
-  ) => (event) => {
-    const value = event.target?.defaultValue;
+  const handleCheckboxGroupChange =
+    (selectedItems: any[], fieldName: keyof typeof seedFormData) => (event) => {
+      const value = event.target?.defaultValue;
 
-    if (selectedItems.includes(value)) {
-      setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
-    } else {
-      setData({ key: fieldName, val: [...selectedItems, value] });
-    }
-  };
+      if (selectedItems.includes(value)) {
+        setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
+      } else {
+        setData({ key: fieldName, val: [...selectedItems, value] });
+      }
+    };
 
   const submitForm = async (formData) => {
     try {
