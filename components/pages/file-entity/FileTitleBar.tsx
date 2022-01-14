@@ -46,7 +46,7 @@ export const FileTitleBar: React.ComponentType<{
 }> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
-  const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
+  const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     {
       value: DownloadOptionValues.NOT_APPLICABLE,
