@@ -79,7 +79,7 @@ export default function ContactPage() {
     messageDescription: '',
     reCaptcha: '',
   };
-  const schema = yup.object().shape({
+  const schema: yup.ObjectSchema<any> = yup.object({
     firstName,
     lastName,
     email,
@@ -88,19 +88,11 @@ export default function ContactPage() {
     reCaptcha,
   });
 
-  const {
-    errors,
-    data,
-    setData,
-    validateField,
-    validateForm,
-    touched,
-    hasErrors,
-    reset,
-  } = useFormHook({
-    initialFields: contactFormSchema,
-    schema,
-  });
+  const { errors, data, setData, validateField, validateForm, touched, hasErrors, reset } =
+    useFormHook({
+      initialFields: contactFormSchema,
+      schema,
+    });
 
   const {
     firstName: firstNameError,

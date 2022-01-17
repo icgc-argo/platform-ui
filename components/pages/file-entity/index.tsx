@@ -32,9 +32,19 @@ import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
+import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
 
 const FileEntity = ({ fileId }) => {
-  const { programShortName, access, size, data, loading: fileLoading } = useEntityData({ fileId });
+  const {
+    programShortName,
+    access,
+    size,
+    data,
+    embargoStage,
+    loading: fileLoading,
+  } = useEntityData({
+    fileId,
+  });
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
@@ -46,6 +56,7 @@ const FileEntity = ({ fileId }) => {
   const isDownloadEnabled =
     access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
+  const accessTier = embargoStage !== 'PUBLIC' ? EmbargoStageDisplayNames[embargoStage] : null;
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -70,6 +81,7 @@ const FileEntity = ({ fileId }) => {
                   programShortName={programShortName}
                   fileId={data.summary.fileId}
                   isDownloadEnabled={isDownloadEnabled}
+                  accessTier={accessTier}
                 />
               </ContentHeader>
 
