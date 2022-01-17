@@ -41,7 +41,7 @@ export default createPage({
   },
 })((props) => {
   const { fileId } = usePageQuery<{ fileId: string }>();
-  const filters = sqonBuilder.has('object_id', fileId).build();
+  const filters = sqonBuilder.has('file_id', fileId).build();
 
   // small query to ensure the fileId is valid and user has access
   const { loading, data } = useQuery<{

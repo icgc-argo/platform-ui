@@ -226,6 +226,18 @@ const useIdSearchQuery = (
               },
             ],
           },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['file_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
         ],
       },
     },
@@ -233,10 +245,8 @@ const useIdSearchQuery = (
 };
 
 const FacetPanel = () => {
-  const {
-    data: fieldDisplayNames,
-    loading: loadingFieldDisplayNames,
-  } = useFileCentricFieldDisplayName();
+  const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
+    useFileCentricFieldDisplayName();
 
   const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
   const { egoJwt, permissions } = useAuthContext();
@@ -338,11 +348,12 @@ const FacetPanel = () => {
     };
   };
 
-  const commonFacetProps: (
-    facetDetails: FacetDetails,
-  ) => { onClick: any; isExpanded: boolean; subMenuName: string; facetPath: string } = (
-    facetDetails,
-  ) => ({
+  const commonFacetProps: (facetDetails: FacetDetails) => {
+    onClick: any;
+    isExpanded: boolean;
+    subMenuName: string;
+    facetPath: string;
+  } = (facetDetails) => ({
     onClick: (e) => {
       clickHandler(facetDetails);
     },
