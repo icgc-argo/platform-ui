@@ -47,6 +47,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
     variables: {
       filters,
     },
+    errorPolicy: 'all',
   });
 
   if (loading) {
