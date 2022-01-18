@@ -84,7 +84,8 @@ export type FileRepoFacetsQueryVariables = {
 
 type IdSearchQueryDataNode = {
   node: {
-    object_id: string;
+    file_id: string;
+    data_category: string;
     file: {
       name: string;
     };
