@@ -71,6 +71,7 @@ import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { FilterOption } from 'uikit/OptionsList';
+import Tabs, { Tab } from 'uikit/Tabs';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -456,16 +457,24 @@ const FacetPanel = () => {
     >
       <SubMenu>
         <FacetRow>
-          <Typography
-            as="span"
-            css={css`
-              font-size: 16px;
-              padding: 8px 14px;
-            `}
-            color={theme.colors.primary}
-          >
-            Filters
-          </Typography>
+          <Tabs value="clinical">
+            <Tab
+              value="clinical"
+              label="Clinical Filters"
+              css={css`
+                justify-content: center;
+                padding: 5px 25px;
+              `}
+            />
+            <Tab
+              value="file"
+              label="File Filters"
+              css={css`
+                justify-content: center;
+                padding: 5px 25px;
+              `}
+            />
+          </Tabs>
         </FacetRow>
         <FacetRow
           css={css`

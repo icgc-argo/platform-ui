@@ -95,6 +95,7 @@ const Tabs: React.ComponentType<{
   onChange?: (...any) => void;
   children: React.ReactElement[];
 }> = ({ value, onChange, children: childrenProp }) => {
+  console.log(children);
   const children = React.Children.map(childrenProp, (child) => {
     return React.cloneElement(child, {
       active: child.props.value == value,
