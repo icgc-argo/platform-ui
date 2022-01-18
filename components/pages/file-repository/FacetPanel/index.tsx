@@ -158,21 +158,22 @@ const createPresetFacets = (
   },
 ];
 
-const clinicalFacets = [
-  FileFacetPath.study_id,
-  FileFacetPath.donors__specimens__specimen_type,
-  FileFacetPath.donors__specimens__specimen_tissue_source,
-];
-
-const fileFacets = [
-  FileFacetPath.analysis__experiment__experimental_strategy,
-  FileFacetPath.data_category,
-  FileFacetPath.data_type,
-  FileFacetPath.file_type,
-  FileFacetPath.file_access,
-  FileFacetPath.analysis__workflow__workflow_name,
-  FileCentricDocumentField['analysis_tools'],
-];
+const facetTabs = {
+  clinical: [
+    FileFacetPath.study_id,
+    FileFacetPath.donors__specimens__specimen_type,
+    FileFacetPath.donors__specimens__specimen_tissue_source,
+  ],
+  file: [
+    FileFacetPath.analysis__experiment__experimental_strategy,
+    FileFacetPath.data_category,
+    FileFacetPath.data_type,
+    FileFacetPath.file_type,
+    FileFacetPath.file_access,
+    FileFacetPath.analysis__workflow__workflow_name,
+    FileCentricDocumentField['analysis_tools'],
+  ],
+};
 
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
@@ -273,7 +274,7 @@ const FacetPanel = () => {
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
-  console.log(presetFacets);
+
   const [expandedFacets, setExpandedFacets] = React.useState(
     [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
   );
@@ -624,6 +625,9 @@ const FacetPanel = () => {
             //Conditionally filter release_state facet
             .filter((f) => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
+            })
+            .filter((f) => {
+              return facetTabs[currentTab].includes(f.facetPath);
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
