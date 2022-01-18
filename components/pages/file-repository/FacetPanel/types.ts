@@ -86,9 +86,7 @@ type IdSearchQueryDataNode = {
   node: {
     file_id: string;
     data_category: string;
-    file: {
-      name: string;
-    };
+    study_id: string;
   };
 };
 

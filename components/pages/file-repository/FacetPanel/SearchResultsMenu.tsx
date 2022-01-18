@@ -113,7 +113,10 @@ const SearchResultsMenu = ({
                     font-weight: 500;
                   `}
                 >
-                  {node.file_id}
+                  <>
+                    <span style={{ fontWeight: 700 }}>{node.file_id} </span>
+                    {`(${node.study_id})`}
+                  </>
                 </ListItem>
                 <ListItem
                   css={css`
