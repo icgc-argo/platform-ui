@@ -158,6 +158,22 @@ const createPresetFacets = (
   },
 ];
 
+const clinicalFacets = [
+  FileFacetPath.study_id,
+  FileFacetPath.donors__specimens__specimen_type,
+  FileFacetPath.donors__specimens__specimen_tissue_source,
+];
+
+const fileFacets = [
+  FileFacetPath.analysis__experiment__experimental_strategy,
+  FileFacetPath.data_category,
+  FileFacetPath.data_type,
+  FileFacetPath.file_type,
+  FileFacetPath.file_access,
+  FileFacetPath.analysis__workflow__workflow_name,
+  FileCentricDocumentField['analysis_tools'],
+];
+
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
   facetPath: FileFacetPath.file_id,
