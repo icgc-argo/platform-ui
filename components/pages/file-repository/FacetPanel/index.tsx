@@ -449,6 +449,8 @@ const FacetPanel = () => {
       setSearchOpen(true);
     },
   });
+  const [currentTab, setTabs] = useState('clinical');
+
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -457,13 +459,13 @@ const FacetPanel = () => {
     >
       <SubMenu>
         <FacetRow>
-          <Tabs value="clinical">
+          <Tabs value={currentTab} onChange={(e, value) => setTabs(value)}>
             <Tab
               value="clinical"
               label="Clinical Filters"
               css={css`
                 justify-content: center;
-                padding: 5px 25px;
+                padding: 9px 25px;
               `}
             />
             <Tab
@@ -471,7 +473,7 @@ const FacetPanel = () => {
               label="File Filters"
               css={css`
                 justify-content: center;
-                padding: 5px 25px;
+                padding: 9px 25px;
               `}
             />
           </Tabs>
