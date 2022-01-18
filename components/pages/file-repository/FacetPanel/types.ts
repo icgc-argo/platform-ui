@@ -5,6 +5,7 @@ import { FileCentricDocumentField } from '../types';
 export enum FileFacetPath {
   study_id = 'study_id',
   analysis__experiment__experimental_strategy = 'analysis__experiment__experimental_strategy',
+  file_id = 'file_id',
   file_type = 'file_type',
   file_access = 'file_access',
   data_category = 'data_category',

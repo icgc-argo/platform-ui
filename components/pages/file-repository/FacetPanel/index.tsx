@@ -159,9 +159,9 @@ const createPresetFacets = (
 
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
-  facetPath: FileFacetPath.object_id,
+  facetPath: FileFacetPath.file_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.object_id,
+  esDocumentField: FileCentricDocumentField.file_id,
 };
 
 const FacetContainer = styled(Container)`
