@@ -257,6 +257,7 @@ const FacetPanel = () => {
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
+  console.log(presetFacets);
   const [expandedFacets, setExpandedFacets] = React.useState(
     [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
   );
@@ -465,10 +466,19 @@ const FacetPanel = () => {
               label="Clinical Filters"
               css={css`
                 justify-content: center;
-                padding: 9px 20px;
+                padding: 5px 20px;
                 margin: 9px 5px 0px;
                 border: 1px solid ${theme.colors.grey_2};
+                border-bottom: ${currentTab === 'clinical' ? 'none' : null};
+                border-top: ${currentTab === 'clinical'
+                  ? `4px solid ${theme.colors.secondary}`
+                  : null};
                 border-radius: 3px 3px 0px 0px;
+                :hover {
+                  background-color: ${currentTab === 'clinical'
+                    ? theme.colors.white
+                    : theme.colors.grey_3};
+                }
               `}
             />
             <Tab
@@ -476,10 +486,17 @@ const FacetPanel = () => {
               label="File Filters"
               css={css`
                 justify-content: center;
-                padding: 9px 20px;
+                padding: 5px 20px;
                 margin: 9px 5px 0px;
                 border: 1px solid ${theme.colors.grey_2};
+                border-bottom: ${currentTab === 'file' ? 'none' : null};
+                border-top: ${currentTab === 'file' ? `4px solid ${theme.colors.secondary}` : null};
                 border-radius: 3px 3px 0px 0px;
+                :hover {
+                  background-color: ${currentTab === 'file'
+                    ? theme.colors.white
+                    : theme.colors.grey_3};
+                }
               `}
             />
           </Tabs>
