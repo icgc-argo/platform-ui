@@ -465,7 +465,10 @@ const FacetPanel = () => {
               label="Clinical Filters"
               css={css`
                 justify-content: center;
-                padding: 9px 25px;
+                padding: 9px 20px;
+                margin: 9px 5px 0px;
+                border: 1px solid ${theme.colors.grey_2};
+                border-radius: 3px 3px 0px 0px;
               `}
             />
             <Tab
@@ -473,7 +476,10 @@ const FacetPanel = () => {
               label="File Filters"
               css={css`
                 justify-content: center;
-                padding: 9px 25px;
+                padding: 9px 20px;
+                margin: 9px 5px 0px;
+                border: 1px solid ${theme.colors.grey_2};
+                border-radius: 3px 3px 0px 0px;
               `}
             />
           </Tabs>
