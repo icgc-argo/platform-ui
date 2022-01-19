@@ -79,7 +79,7 @@ const FileEntity = ({ fileId }) => {
               <ContentHeader>
                 <FileTitleBar
                   programShortName={programShortName}
-                  fileId={data?.summary?.fileId}
+                  fileId={fileId}
                   isDownloadEnabled={isDownloadEnabled}
                   accessTier={accessTier}
                 />
