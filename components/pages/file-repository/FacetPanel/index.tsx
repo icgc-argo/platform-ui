@@ -471,7 +471,7 @@ const FacetPanel = () => {
   });
 
   const [currentTab, setTabs] = useState('clinical');
-  const tabStyles = (tabValue) => `
+  const tabStyles = (tabValue) => css`
     align-items: center;
     justify-content: center;
     padding: 5px 20px;
@@ -497,20 +497,8 @@ const FacetPanel = () => {
       <SubMenu>
         <FacetRow>
           <Tabs value={currentTab} onChange={(e, value) => setTabs(value)}>
-            <Tab
-              value="clinical"
-              label="Clinical Filters"
-              css={css`
-                ${tabStyles('clinical')}
-              `}
-            />
-            <Tab
-              value="file"
-              label="File Filters"
-              css={css`
-                ${tabStyles('file')}
-              `}
-            />
+            <Tab value="clinical" label="Clinical Filters" css={tabStyles('clinical')} />
+            <Tab value="file" label="File Filters" css={tabStyles('file')} />
           </Tabs>
         </FacetRow>
         <FacetRow
