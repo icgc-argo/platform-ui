@@ -159,9 +159,9 @@ const createPresetFacets = (
 
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
-  facetPath: FileFacetPath.object_id,
+  facetPath: FileFacetPath.file_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.object_id,
+  esDocumentField: FileCentricDocumentField.file_id,
 };
 
 const FacetContainer = styled(Container)`
@@ -285,7 +285,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField['object_id'],
+    dotField: FileCentricDocumentField['file_id'],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -436,7 +436,7 @@ const FacetPanel = () => {
     pointer-events: 'auto';
   `;
   const onRemoveSelectedId = (id: string) => {
-    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
+    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['file_id'], id).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
@@ -448,7 +448,6 @@ const FacetPanel = () => {
       setSearchOpen(true);
     },
   });
-
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -492,7 +491,7 @@ const FacetPanel = () => {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+                align-items: left;
               `}
             >
               {excludedIds.length > 0 && (
@@ -540,7 +539,7 @@ const FacetPanel = () => {
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({
-                          field: FileCentricDocumentField['object_id'],
+                          field: FileCentricDocumentField['file_id'],
                           value,
                         });
                         setSearchQuery('');
