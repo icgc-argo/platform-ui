@@ -285,7 +285,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField['object_id'],
+    dotField: FileCentricDocumentField['file_id'],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -491,7 +491,7 @@ const FacetPanel = () => {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+                align-items: left;
               `}
             >
               {excludedIds.length > 0 && (
