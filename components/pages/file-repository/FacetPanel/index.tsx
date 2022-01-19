@@ -268,7 +268,7 @@ const FacetPanel = () => {
   const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
     useFileCentricFieldDisplayName();
 
-  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+  const { FEATURE_ACCESS_FACET_ENABLED, FEATURE_FACET_TABS_ENABLED } = getConfig();
   const { egoJwt, permissions } = useAuthContext();
   const embargoStageEnabled =
     FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && canReadSomeProgram(permissions);
@@ -495,12 +495,14 @@ const FacetPanel = () => {
       theme={theme}
     >
       <SubMenu>
-        <FacetRow>
-          <Tabs value={currentTab} onChange={(e, value) => setTabs(value)}>
-            <Tab value="clinical" label="Clinical Filters" css={tabStyles('clinical')} />
-            <Tab value="file" label="File Filters" css={tabStyles('file')} />
-          </Tabs>
-        </FacetRow>
+        {FEATURE_FACET_TABS_ENABLED && (
+          <FacetRow>
+            <Tabs value={currentTab} onChange={(e, value) => setTabs(value)}>
+              <Tab value="clinical" label="Clinical Filters" css={tabStyles('clinical')} />
+              <Tab value="file" label="File Filters" css={tabStyles('file')} />
+            </Tabs>
+          </FacetRow>
+        )}
         <FacetRow
           css={css`
             border-top: 1px solid ${theme.colors.grey_2};
@@ -610,7 +612,7 @@ const FacetPanel = () => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
             })
             .filter((f) => {
-              return facetTabs[currentTab].includes(f.facetPath);
+              return FEATURE_FACET_TABS_ENABLED ? facetTabs[currentTab].includes(f.facetPath) : f;
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
