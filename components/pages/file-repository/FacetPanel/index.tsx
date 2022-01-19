@@ -482,19 +482,24 @@ const FacetPanel = () => {
               value="clinical"
               label="Clinical Filters"
               css={css`
+                align-items: center;
                 justify-content: center;
+                box-sizing: content-box;
                 padding: 5px 20px;
                 margin: 9px 5px 0px;
                 border: 1px solid ${theme.colors.grey_2};
-                border-bottom: ${currentTab === 'clinical' ? 'none' : null};
                 border-top: ${currentTab === 'clinical'
                   ? `4px solid ${theme.colors.secondary}`
                   : null};
+                border-bottom: 1px none ${theme.colors.white};
                 border-radius: 3px 3px 0px 0px;
                 :hover {
                   background-color: ${currentTab === 'clinical'
                     ? theme.colors.white
                     : theme.colors.grey_3};
+                }
+                &.active {
+                  border-bottom: 0px none ${theme.colors.white};
                 }
               `}
             />
@@ -502,17 +507,21 @@ const FacetPanel = () => {
               value="file"
               label="File Filters"
               css={css`
+                align-items: center;
                 justify-content: center;
                 padding: 5px 20px;
                 margin: 9px 5px 0px;
                 border: 1px solid ${theme.colors.grey_2};
-                border-bottom: ${currentTab === 'file' ? 'none' : null};
                 border-top: ${currentTab === 'file' ? `4px solid ${theme.colors.secondary}` : null};
+                border-bottom: 1px none ${theme.colors.white};
                 border-radius: 3px 3px 0px 0px;
                 :hover {
                   background-color: ${currentTab === 'file'
                     ? theme.colors.white
                     : theme.colors.grey_3};
+                }
+                &.active {
+                  border-bottom: 0px none ${theme.colors.white};
                 }
               `}
             />
