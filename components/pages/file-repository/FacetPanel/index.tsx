@@ -501,7 +501,7 @@ const FacetPanel = () => {
               value="clinical"
               label="Clinical Filters"
               css={css`
-                ${tabStyles('file')}
+                ${tabStyles('clinical')}
               `}
             />
             <Tab
