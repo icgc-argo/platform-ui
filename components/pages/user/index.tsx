@@ -67,7 +67,7 @@ export function UserPage() {
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <ApiTokenBox apiToken={apiToken} loading={loading} />
+            <ApiTokenBox apiToken={apiToken} loading={loading} isDacoApproved={isDacoApproved} />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox

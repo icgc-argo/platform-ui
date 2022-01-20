@@ -32,7 +32,15 @@ import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
 import { DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
 
-const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
+const ApiTokenBox = ({
+  apiToken,
+  loading,
+  isDacoApproved,
+}: {
+  apiToken: ApiToken;
+  loading: boolean;
+  isDacoApproved: boolean;
+}) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
   const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
@@ -73,7 +81,7 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
 
   const isExpired = exp <= 0 && (apiToken || generatedApiToken);
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
-  const disableGenerate = loading || isGeneratingApiToken;
+  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved;
 
   return (
     <Box title="API Token" iconName="key">
