@@ -172,7 +172,7 @@ const facetTabs = {
     FileFacetPath.file_type,
     FileFacetPath.file_access,
     FileFacetPath.analysis__workflow__workflow_name,
-    FileCentricDocumentField['analysis_tools'],
+    FileCentricDocumentField.analysis_tools,
     FileFacetPath.embargo_stage,
   ],
 };
