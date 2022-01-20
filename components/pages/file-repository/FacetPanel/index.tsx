@@ -476,22 +476,23 @@ const FacetPanel = () => {
       flex-grow: 1;
     `,
   };
-  const tabStyles = (tabValue) => css`
+  const tabStyles = css`
     align-items: center;
     justify-content: center;
     padding: 5px 10px;
     margin: 9px 5px 0px;
     border: 1px solid ${theme.colors.grey_2};
-    ${currentTab === tabValue ? `border-top: 4px solid ${theme.colors.secondary}` : ''};
     border-bottom: 1px none ${theme.colors.white};
     border-radius: 3px 3px 0px 0px;
-    :hover {
-      background-color: ${currentTab === tabValue ? theme.colors.white : theme.colors.grey_3};
-    }
+    flex-grow: 1;
+
     &.active {
       border-bottom: 0px none ${theme.colors.white};
+      border-top: 4px solid ${theme.colors.secondary};
+      :hover {
+        background-color: ${theme.colors.grey_3};
+      }
     }
-    flex-grow: 1;
   `;
 
   return (
@@ -508,8 +509,8 @@ const FacetPanel = () => {
               onChange={(e, value) => setTabs(value)}
               containerProps={containerProps}
             >
-              <Tab value="clinical" label="Clinical Filters" css={tabStyles('clinical')} />
-              <Tab value="file" label="File Filters" css={tabStyles('file')} />
+              <Tab value="clinical" label="Clinical Filters" css={tabStyles} />
+              <Tab value="file" label="File Filters" css={tabStyles} />
             </Tabs>
           </FacetRow>
         )}
