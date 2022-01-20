@@ -30,7 +30,7 @@ import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
-import { DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
+import { DOCS_DATA_DOWNLOAD_PAGE, DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 const ApiTokenBox = ({
   apiToken,
@@ -178,7 +178,7 @@ const ApiTokenBox = ({
                 <span>
                   You do not have permission to generate an API token to download controlled data.
                   Learn more about{' '}
-                  <Link href={`${DOCS_URL_ROOT}/docs/data-access/data-access`} target="_blank">
+                  <Link href={DOCS_DATA_ACCESS_PAGE} target="_blank">
                     how to apply for access to ICGC Controlled Data.
                   </Link>
                 </span>
