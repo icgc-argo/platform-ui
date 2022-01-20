@@ -162,16 +162,28 @@ const ApiTokenBox = ({
           size={BANNER_SIZE.SM}
           variant={BANNER_VARIANTS.WARNING}
           content={
-            <>
-              <span />
-              &#8226; Your API token is associated with your user credentials and should{' '}
-              <strong>NEVER</strong> be shared with anyone.
-              <span />
-              <br />
-              <span>
-                &#8226; When you generate a new token, all previous tokens become invalid.
-              </span>
-            </>
+            isDacoApproved ? (
+              <>
+                <span>
+                  &#8226; Your API token is associated with your user credentials and should{' '}
+                  <strong>NEVER</strong> be shared with anyone.
+                </span>
+                <br />
+                <span>
+                  &#8226; When you generate a new token, all previous tokens become invalid.
+                </span>
+              </>
+            ) : (
+              <>
+                <span>
+                  You do not have permission to generate an API token to download controlled data.
+                  Learn more about{' '}
+                  <Link href={`${DOCS_URL_ROOT}/docs/data-access/data-access`} target="_blank">
+                    how to apply for access to ICGC Controlled Data.
+                  </Link>
+                </span>
+              </>
+            )
           }
         />
       </div>
