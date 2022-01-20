@@ -482,7 +482,7 @@ const FacetPanel = () => {
     padding: 5px 10px;
     margin: 9px 5px 0px;
     border: 1px solid ${theme.colors.grey_2};
-    border-top: ${currentTab === tabValue ? `4px solid ${theme.colors.secondary}` : null};
+    ${currentTab === tabValue ? `border-top: 4px solid ${theme.colors.secondary}` : ''};
     border-bottom: 1px none ${theme.colors.white};
     border-radius: 3px 3px 0px 0px;
     :hover {
