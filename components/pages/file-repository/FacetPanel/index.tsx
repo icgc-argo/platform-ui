@@ -163,6 +163,7 @@ const facetTabs = {
     FileFacetPath.study_id,
     FileFacetPath.donors__specimens__specimen_type,
     FileFacetPath.donors__specimens__specimen_tissue_source,
+    FileFacetPath.release_state,
     FileFacetPath.embargo_stage,
   ],
   file: [
@@ -173,6 +174,7 @@ const facetTabs = {
     FileFacetPath.file_access,
     FileFacetPath.analysis__workflow__workflow_name,
     FileCentricDocumentField.analysis_tools,
+    FileFacetPath.release_state,
     FileFacetPath.embargo_stage,
   ],
 };
