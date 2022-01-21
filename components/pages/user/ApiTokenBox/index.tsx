@@ -30,9 +30,17 @@ import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
-import { DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
+import { DOCS_DATA_DOWNLOAD_PAGE, DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
-const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boolean }) => {
+const ApiTokenBox = ({
+  apiToken,
+  loading,
+  isDacoApproved,
+}: {
+  apiToken: ApiToken;
+  loading: boolean;
+  isDacoApproved: boolean;
+}) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
   const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
@@ -73,7 +81,7 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
 
   const isExpired = exp <= 0 && (apiToken || generatedApiToken);
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
-  const disableGenerate = loading || isGeneratingApiToken;
+  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved;
 
   return (
     <Box title="API Token" iconName="key">
@@ -154,16 +162,28 @@ const ApiTokenBox = ({ apiToken, loading }: { apiToken: ApiToken; loading: boole
           size={BANNER_SIZE.SM}
           variant={BANNER_VARIANTS.WARNING}
           content={
-            <>
-              <span />
-              &#8226; Your API token is associated with your user credentials and should{' '}
-              <strong>NEVER</strong> be shared with anyone.
-              <span />
-              <br />
-              <span>
-                &#8226; When you generate a new token, all previous tokens become invalid.
-              </span>
-            </>
+            isDacoApproved ? (
+              <>
+                <span>
+                  &#8226; Your API token is associated with your user credentials and should{' '}
+                  <strong>NEVER</strong> be shared with anyone.
+                </span>
+                <br />
+                <span>
+                  &#8226; When you generate a new token, all previous tokens become invalid.
+                </span>
+              </>
+            ) : (
+              <>
+                <span>
+                  You do not have permission to generate an API token to download controlled data.
+                  Learn more about{' '}
+                  <Link href={DOCS_DATA_ACCESS_PAGE} target="_blank">
+                    how to apply for access to ICGC Controlled Data.
+                  </Link>
+                </span>
+              </>
+            )
           }
         />
       </div>

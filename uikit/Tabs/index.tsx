@@ -94,7 +94,8 @@ const Tabs: React.ComponentType<{
   value: any;
   onChange?: (...any) => void;
   children: React.ReactElement[];
-}> = ({ value, onChange, children: childrenProp }) => {
+  containerProps?: {};
+}> = ({ value, onChange, children: childrenProp, containerProps }) => {
   const children = React.Children.map(childrenProp, (child) => {
     return React.cloneElement(child, {
       active: child.props.value == value,
@@ -108,7 +109,7 @@ const Tabs: React.ComponentType<{
 
   return (
     <TabsContext.Provider value={context}>
-      <Container>{children}</Container>
+      <Container {...containerProps}>{children}</Container>
     </TabsContext.Provider>
   );
 };
