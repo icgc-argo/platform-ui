@@ -23,6 +23,7 @@ import { css } from '@emotion/react';
 import FileSummary from './FileSummary';
 import DataAndAnalysis from './DataAndAnalysis';
 import AssociatedDonors from './AssociatedDonors';
+import SequencingReadProperties from './SequencingReadProperties';
 import { FileEntityData } from './types';
 
 const PaddedRow = styled(Row)`
@@ -55,6 +56,14 @@ const FileCardsLayout: React.ComponentType<{
           <AssociatedDonors donors={fileData.donorRecords} />
         </PaddedColumn>
       </PaddedRow>
+      {/* TODO: un-comment once `metrics` object is available in API */}
+      {/* {fileData.dataAnalysis.dataType === 'aligned_reads' && (
+        <PaddedRow>
+          <PaddedColumn>
+            <SequencingReadProperties />
+          </PaddedColumn>
+        </PaddedRow>
+      )} */}
     </div>
   );
 };

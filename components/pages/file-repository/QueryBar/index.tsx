@@ -45,9 +45,11 @@ type Filter = React.FunctionComponent<{
   FieldCrumb?: FieldNode;
 }>;
 
-const SQONView = dynamic(() => import('@arranger/components/dist/SQONView')) as Filter;
+const SQONView = dynamic(
+  () => import('@overture-stack/arranger-components/dist/SQONView'),
+) as Filter;
 const Value = dynamic(() =>
-  import('@arranger/components/dist/SQONView').then((comp) => comp.Value),
+  import('@overture-stack/arranger-components/dist/SQONView').then((comp) => comp.Value),
 ) as ValueNode;
 
 const content = css`
@@ -178,7 +180,6 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
 
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
   const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
-
   return (
     <div css={content}>
       <SQONView

@@ -36,16 +36,18 @@ type EntityData = {
   data: FileEntityData;
   access: FileAccessState;
   size: number;
+  embargoStage: string;
 };
 
-const noData = { programShortName: null, access: null, size: null, data: null };
+const noData = { programShortName: null, access: null, size: null, data: null, embargoStage: null };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField.object_id, fileId).build();
-  const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
+  const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
+  const { data, loading, error } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,
     },
+    errorPolicy: 'all',
   });
 
   if (loading) {
@@ -57,9 +59,14 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       return { ...noData, loading: false };
     }
 
+    if (error) {
+      console.error(error.message);
+    }
+
     const programShortName = entity.study_id;
     const size = get(entity, 'file.size', 0);
     const access = entity.file_access;
+    const embargoStage = entity.embargo_stage;
 
     const summary: FileSummaryInfo = {
       fileId: entity.file_id,
@@ -112,7 +119,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       donorRecords,
     };
 
-    return { programShortName, access, size, data: entityData, loading };
+    return { programShortName, access, size, embargoStage, data: entityData, loading };
   }
 };
 

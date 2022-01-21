@@ -17,29 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import GoogleLogin from 'uikit/Button/GoogleLogin';
-import useAuthContext from 'global/hooks/useAuthContext';
-import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
+import { css } from '@emotion/core';
 
-const GoogleLoginButton: React.ComponentType<
-  React.ComponentProps<typeof GoogleLogin> & {
-    logoutToRoot?: boolean;
-  }
-> = ({ logoutToRoot = false, ...props }) => {
-  const { logOut } = useAuthContext();
-  const { clearFilters } = useFiltersContext();
-  return (
-    <GoogleLogin
-      {...props}
-      onClick={(e) => {
-        if (props.onClick) {
-          props.onClick(e);
-        }
-        clearFilters();
-        logOut();
-      }}
-    />
-  );
+export default {
+  title: 'Legend',
+  viewBox: '0 0 12 12',
+  path: `M1.2.6a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm0 4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm0 4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm3.349-5.96c-.619 0-1.12-.403-1.12-.9s.501-.9 1.12-.9h6.16c.618 0 1.12.403 1.12.9s-.502.9-1.12.9h-6.16zm6.16 2.16c.619 0 1.12.403 1.12.9s-.5.9-1.12.9H4.55c-.618 0-1.12-.403-1.12-.9 0-.496.501-.9 1.12-.9h6.16zm0 4.08c.619 0 1.12.403 1.12.9 0 .496-.5.9-1.12.9H4.55c-.618 0-1.12-.403-1.12-.9s.501-.9 1.12-.9h6.16z`,
+  css: css`
+    width: 12px;
+    height: 12px;
+  `,
+  defaultFill: '#523785',
 };
-
-export default GoogleLoginButton;

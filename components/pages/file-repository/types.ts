@@ -13,6 +13,7 @@ export enum FileCentricDocumentField {
   file_access = 'file_access',
   'file.size' = 'file.size',
   file_type = 'file_type',
+  file_id = 'file_id',
   object_id = 'object_id',
   study_id = 'study_id',
   embargo_stage = 'embargo_stage',

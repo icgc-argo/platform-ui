@@ -78,15 +78,17 @@ export function AuthProvider({
     Cookies.remove(EGO_JWT_KEY);
   };
 
-  const logOut: T_AuthContext['logOut'] = (path) => {
+  const logOut: T_AuthContext['logOut'] = async (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
     if (path) {
-      const { url, query } = queryString.parseUrl(path);
-      router.push({ pathname: url, query: { ...query, loggingOut: true } });
+      let { url, query } = queryString.parseUrl(path);
+      // Temp until we can remove private filters
+      delete query.filters;
+      router.push({ pathname: url, query: { ...query, loggingOut: true } }).then(router.reload);
     } else {
-      router.push('/');
+      router.push('/').then(router.reload);
     }
   };
 

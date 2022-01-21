@@ -16,15 +16,15 @@ export const tooltipContent: { [key: string]: React.ReactNode } = {
         `}
       >
         <li>A file is first accessible to its program members.</li>
-        <li>After 12 months: accessible to full membership programs. </li>
-        <li>After 6 months: accessible to associate membership programs. </li>
-        <li>After 6 months: queued for public release (~ every 4 months).</li>
+        <li>After 12 months: accessible to full membership programs.</li>
+        <li>After 6 more months: accessible to associate membership programs.</li>
+        <li>After 6 more months: queued for public release (~every 4 months).</li>
       </ul>
     </div>
   ),
 };
 
-enum EmbargoStageDisplayNames {
+export enum EmbargoStageDisplayNames {
   PROGRAM_ONLY = 'My Program Access',
   MEMBER_ACCESS = 'Full Member Access',
   ASSOCIATE_ACCESS = 'Associate Member Access',
@@ -69,6 +69,10 @@ export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
   {
     header: 'Experimental Strategy',
     getter: 'analysis.experiment.experimental_strategy',
+  },
+  {
+    header: 'File ID',
+    getter: 'file_id',
   },
   {
     header: 'File Type',
