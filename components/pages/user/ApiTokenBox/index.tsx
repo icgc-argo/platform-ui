@@ -83,7 +83,7 @@ const ApiTokenBox = ({
 
   const isExpired = (apiToken || generatedApiToken) && exp !== null && exp <= 0;
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
-  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved;
+  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved || !hasProgramAccess;
 
   return (
     <Box title="API Token" iconName="key">
