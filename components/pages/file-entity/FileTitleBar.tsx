@@ -70,8 +70,10 @@ export const FileTitleBar: React.ComponentType<{
     },
   ];
   const [isLegendOpen, setLegendOpen] = useState(false);
-  const onClick = (e, { toggleMenuOpen }) => {
-    setLegendOpen(toggleMenuOpen);
+  const onKeyPress = (e, { toggleMenuOpen }) => {
+    if (e.key === 'Enter') {
+      setLegendOpen(toggleMenuOpen);
+    }
   };
   const toggleMenuHandler = () => {
     setLegendOpen(!isLegendOpen);
@@ -118,7 +120,7 @@ export const FileTitleBar: React.ComponentType<{
           variant="secondary"
           menuItems={menuItems}
           controlledMenuShowState={isLegendOpen}
-          onClick={onClick}
+          onKeyPress={onKeyPress}
           onItemClick={toggleMenuHandler}
           onMouseEnter={toggleMenuHandler}
           onMouseLeave={toggleMenuHandler}
