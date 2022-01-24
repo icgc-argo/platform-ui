@@ -36,10 +36,12 @@ const ApiTokenBox = ({
   apiToken,
   loading,
   isDacoApproved,
+  hasProgramAccess,
 }: {
   apiToken: ApiToken;
   loading: boolean;
   isDacoApproved: boolean;
+  hasProgramAccess: boolean;
 }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
@@ -162,7 +164,7 @@ const ApiTokenBox = ({
           size={BANNER_SIZE.SM}
           variant={BANNER_VARIANTS.WARNING}
           content={
-            isDacoApproved ? (
+            isDacoApproved && hasProgramAccess ? (
               <>
                 <span>
                   &#8226; Your API token is associated with your user credentials and should{' '}
