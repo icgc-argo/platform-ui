@@ -79,7 +79,7 @@ const ApiTokenBox = ({
 
   const getTagValue = () => (apiToken || generatedApiToken ? getDayValue(exp) : '');
 
-  const isExpired = exp <= 0 && (apiToken || generatedApiToken);
+  const isExpired = (apiToken || generatedApiToken) && exp !== null && exp <= 0;
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
   const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved;
 
