@@ -31,7 +31,7 @@ import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useDataContext from 'global/hooks/useDataContext';
 import { RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 import { fileRepoTableTSVColumns } from '../utils/constants';
@@ -56,7 +56,7 @@ const TsvDownloadButton = ({
 }) => {
   const theme = useTheme();
   const { GATEWAY_API_ROOT } = getConfig();
-  const { downloadFileWithEgoToken } = useAuthContext();
+  const { downloadWithAuth } = useDataContext();
   const { filters: repoFilters } = useFiltersContext();
   const [loading, setLoading] = useState(false);
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
@@ -132,7 +132,7 @@ const TsvDownloadButton = ({
           MANIFEST_DOWNLOAD_PATH,
           `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
-        downloadFileWithEgoToken(downloadUrl).finally(() => setLoading(false));
+        downloadWithAuth(downloadUrl).finally(() => setLoading(false));
         break;
       case DownloadOptionValues.FILE_TABLE:
         const tsvdownloadUrl = urlJoin(
@@ -143,7 +143,7 @@ const TsvDownloadButton = ({
           )}&columns=${encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))}`,
         );
         // window.location.assign(tsvdownloadUrl);
-        downloadFileWithEgoToken(tsvdownloadUrl).finally(() => setLoading(false));
+        downloadWithAuth(tsvdownloadUrl).finally(() => setLoading(false));
         break;
       default:
         console.log(`Selection from download dropdown '${item.value}' has no action defined.`);

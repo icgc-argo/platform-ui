@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,36 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import urlJoin from 'url-join';
-import { getConfig } from 'global/config';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { isValidJwt } from './egoJwt';
-import Queue from 'promise-queue';
+import { ReactElement } from 'react';
+import DnaLoader from 'uikit/DnaLoader';
 
-const { EGO_REFRESH_URL } = getConfig();
+const FullScreenLoader = (): ReactElement => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+      }}
+    >
+      <DnaLoader />
+    </div>
+  );
+};
 
-var maxConcurrent = 1;
-var maxQueue = Infinity;
-var queue = new Queue(maxConcurrent, maxQueue);
-
-const refreshJwt = () =>
-  queue.add(() => {
-    return fetch(EGO_REFRESH_URL, {
-      credentials: 'include',
-      headers: {
-        accept: '*/*',
-        authorization: Cookies.get(EGO_JWT_KEY) || '',
-      },
-      method: 'POST',
-    })
-      .then((res) => res.text())
-      .then((newJwt) => {
-        if (isValidJwt(newJwt)) {
-          Cookies.set(EGO_JWT_KEY, newJwt);
-        }
-        return newJwt;
-      });
-  });
-
-export default refreshJwt;
+export default FullScreenLoader;

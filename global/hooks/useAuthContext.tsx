@@ -17,60 +17,48 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getConfig } from 'global/config';
-import { EGO_JWT_KEY } from 'global/constants';
-import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { createContext, ReactElement, useContext, useState } from 'react';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import * as React from 'react';
-import urlJoin from 'url-join';
-import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';
+import { getConfig } from 'global/config';
+import { EGO_JWT_KEY } from 'global/constants';
+import { decodeToken, getPermissionsFromToken, isValidJwt } from 'global/utils/egoJwt';
 
 type T_AuthContext = {
-  egoJwt?: string;
-  logOut: (path?: string) => void;
-  updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
-  fetchWithEgoToken: typeof fetch;
-  downloadFileWithEgoToken: (input: RequestInfo, init?: RequestInit) => Promise<void>;
-  permissions: string[];
+  egoJwt?: string;
   isLoggingOut: boolean;
+  logOut: (path?: string) => void;
+  permissions: string[];
+  setToken: (token: string) => void;
+  updateToken: () => Promise<string | void>;
 };
 
-const AuthContext = React.createContext<T_AuthContext>({
-  egoJwt: undefined,
-  logOut: () => {},
-  updateToken: async () => {},
+const AuthContext = createContext<T_AuthContext>({
   data: null,
-  fetchWithEgoToken: fetch,
-  downloadFileWithEgoToken: async () => {},
-  permissions: [],
+  egoJwt: undefined,
   isLoggingOut: false,
+  logOut: () => {},
+  permissions: [],
+  setToken: (token: string) => {},
+  updateToken: async () => {},
 });
 
 export function AuthProvider({
   egoJwt,
   children,
 }: {
-  egoJwt?: string;
-  children: React.ReactElement;
-  initialPermissions: string[];
+  egoJwt?: T_AuthContext['egoJwt'];
+  children: ReactElement;
 }) {
-  const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
-  const updateTokenUrl = urlJoin(
-    EGO_API_ROOT,
-    `/api/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
-  );
-
-  const permissions = getPermissionsFromToken(egoJwt);
-
-  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
-
+  const { EGO_UPDATE_URL } = getConfig();
   const router = useRouter();
+  const permissions: T_AuthContext['permissions'] = getPermissionsFromToken(egoJwt);
+  const [isLoggingOut, setIsLoggingOut] = useState<T_AuthContext['isLoggingOut']>(false);
 
-  const setToken = (token: string) => {
+  const setToken: T_AuthContext['setToken'] = (token: string) => {
     Cookies.set(EGO_JWT_KEY, token);
   };
 
@@ -92,77 +80,12 @@ export function AuthProvider({
     }
   };
 
-  const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
-    const modifiedOption = {
-      ...(options || {}),
-      headers: { ...((options && options.headers) || {}), authorization: `Bearer ${egoJwt || ''}` },
-    };
-
-    if (egoJwt && !isValidJwt(egoJwt)) {
-      const newJwt = (await refreshJwt()) as string;
-      if (isValidJwt(newJwt)) {
-        setToken(newJwt);
-      } else {
-        logOut();
-      }
-      return fetch(uri, {
-        ...modifiedOption,
-        headers: { ...modifiedOption.headers, authorization: `Bearer ${newJwt}` },
-      });
-    } else {
-      return fetch(uri, modifiedOption);
-    }
-  };
-
-  const downloadFileWithEgoToken: T_AuthContext['downloadFileWithEgoToken'] = async (
-    uri,
-    options,
-  ) => {
-    const response = await fetchWithEgoToken(uri, options);
-    const data = await response.blob();
-
-    const contentDispositionHeader = response.headers.get('content-disposition');
-    const filename = contentDispositionHeader ? contentDispositionHeader.split('filename=')[1] : '';
-
-    const blob = new Blob([data], { type: data.type || 'application/octet-stream' });
-    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-      // IE doesn't allow using a blob object directly as link href.
-      // Workaround for "HTML7007: One or more blob URLs were
-      // revoked by closing the blob for which they were created.
-      // These URLs will no longer resolve as the data backing
-      // the URL has been freed."
-      window.navigator.msSaveBlob(blob, filename);
-      return;
-    }
-    // Other browsers
-    // Create a link pointing to the ObjectURL containing the blob
-    const blobURL = window.URL.createObjectURL(blob);
-    const tempLink = document.createElement('a');
-    tempLink.style.display = 'none';
-    tempLink.href = blobURL;
-    tempLink.setAttribute('download', filename);
-    // Safari thinks _blank anchor are pop ups. We only want to set _blank
-    // target if the browser does not support the HTML5 download attribute.
-    // This allows you to download files in desktop safari if pop up blocking
-    // is enabled.
-    if (typeof tempLink.download === 'undefined') {
-      tempLink.setAttribute('target', '_blank');
-    }
-    document.body.appendChild(tempLink);
-    tempLink.click();
-    document.body.removeChild(tempLink);
-    setTimeout(() => {
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      window.URL.revokeObjectURL(blobURL);
-    }, 100);
-  };
-
   if (egoJwt && !isValidJwt(egoJwt)) {
     logOut();
   }
 
-  const updateToken = () => {
-    return fetch(updateTokenUrl, {
+  const updateToken: T_AuthContext['updateToken'] = () => {
+    return fetch(EGO_UPDATE_URL, {
       credentials: 'include',
       headers: { Authorization: `Bearer ${egoJwt || ''}` },
       body: null,
@@ -180,20 +103,19 @@ export function AuthProvider({
       });
   };
 
-  const authData = {
-    egoJwt,
-    logOut,
+  const authContextValue: T_AuthContext = {
     data: egoJwt ? decodeToken(egoJwt || '') : null,
-    updateToken,
-    fetchWithEgoToken,
-    downloadFileWithEgoToken,
-    permissions,
+    egoJwt,
     isLoggingOut,
+    logOut,
+    permissions,
+    setToken,
+    updateToken,
   };
 
-  return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 }
 
 export default function useAuthContext() {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 }

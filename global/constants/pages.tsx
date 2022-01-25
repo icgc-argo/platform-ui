@@ -58,3 +58,6 @@ export const FILE_REPOSITORY_PATH = `/repository`;
 
 // team page
 export const TEAM_PATH = '/team';
+
+// logging in page
+export const LOGGED_IN_PATH = '/logged-in';
