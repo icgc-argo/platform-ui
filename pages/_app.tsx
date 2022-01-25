@@ -26,7 +26,6 @@ import queryString from 'query-string';
 import { get, omit } from 'lodash';
 import ReactGA from 'react-ga';
 import { ServerResponse } from 'http';
-import { NormalizedCacheObject } from '@apollo/client';
 
 import { GqlQueriesToPrefetch, PageWithConfig } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
@@ -156,7 +155,7 @@ class Root extends App<CustomAppProps, {}, CustomAppState> {
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
     let graphqlQueriesToCache: GqlQueriesToPrefetch;
-    let apolloCache: NormalizedCacheObject = {};
+    let apolloCache = {};
     try {
       graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
         ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
