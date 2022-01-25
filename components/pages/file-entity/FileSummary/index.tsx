@@ -65,12 +65,18 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
         <> {startCase(data.access)}</>
       </div>
     ),
-    'Program': loading && get(program, 'name', false) ? data.program : (
+    'Program': (
       <Link
         href={programFilterUrl}
         passHref
       >
-        <A>{`${get(program, 'name')} (${data.program})`}</A>
+        <A>
+          {
+            get(program, 'name', false)
+              ? `${get(program, 'name')} (${data.program})`
+              : data.program
+          }
+        </A>
       </Link>
     ),
     'MD5 Checksum': data.checksum,

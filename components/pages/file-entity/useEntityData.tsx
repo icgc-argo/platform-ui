@@ -42,11 +42,12 @@ type EntityData = {
 const noData = { programShortName: null, access: null, size: null, data: null, embargoStage: null };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField.object_id, fileId).build();
-  const { data, loading } = useQuery(FILE_ENTITY_QUERY, {
+  const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
+  const { data, loading, error } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,
     },
+    errorPolicy: 'all',
   });
 
   if (loading) {
@@ -56,6 +57,10 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
 
     if (!entity) {
       return { ...noData, loading: false };
+    }
+
+    if (error) {
+      console.error(error.message);
     }
 
     const programShortName = entity.study_id;

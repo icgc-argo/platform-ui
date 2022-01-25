@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.105.1",
+  "version": "1.105.2",
   "scripts": {
     "dev": "next -p 8080",
     "build": "rm -rf .next && next build",
@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
-    "@arranger/components": "^2.16.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/polyfill": "^7.4.4",
@@ -41,6 +40,7 @@
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.11",
     "@icgc-argo/ego-token-utils": "^8.1.1",
+    "@overture-stack/arranger-components": "^3.0.0-beta.3",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",

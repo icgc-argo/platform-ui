@@ -71,6 +71,7 @@ import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { FilterOption } from 'uikit/OptionsList';
+import Tabs, { Tab } from 'uikit/Tabs';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -157,11 +158,32 @@ const createPresetFacets = (
   },
 ];
 
+const facetTabs = {
+  clinical: [
+    FileFacetPath.study_id,
+    FileFacetPath.donors__specimens__specimen_type,
+    FileFacetPath.donors__specimens__specimen_tissue_source,
+    FileFacetPath.release_state,
+    FileFacetPath.embargo_stage,
+  ],
+  file: [
+    FileFacetPath.analysis__experiment__experimental_strategy,
+    FileFacetPath.data_category,
+    FileFacetPath.data_type,
+    FileFacetPath.file_type,
+    FileFacetPath.file_access,
+    FileFacetPath.analysis__workflow__workflow_name,
+    FileCentricDocumentField.analysis_tools,
+    FileFacetPath.release_state,
+    FileFacetPath.embargo_stage,
+  ],
+};
+
 const fileIDSearch: FacetDetails = {
   name: 'Search Files',
-  facetPath: FileFacetPath.object_id,
+  facetPath: FileFacetPath.file_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.object_id,
+  esDocumentField: FileCentricDocumentField.file_id,
 };
 
 const FacetContainer = styled(Container)`
@@ -226,6 +248,18 @@ const useIdSearchQuery = (
               },
             ],
           },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['file_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
         ],
       },
     },
@@ -233,12 +267,10 @@ const useIdSearchQuery = (
 };
 
 const FacetPanel = () => {
-  const {
-    data: fieldDisplayNames,
-    loading: loadingFieldDisplayNames,
-  } = useFileCentricFieldDisplayName();
+  const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
+    useFileCentricFieldDisplayName();
 
-  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+  const { FEATURE_ACCESS_FACET_ENABLED, FEATURE_FACET_TABS_ENABLED } = getConfig();
   const { egoJwt, permissions } = useAuthContext();
   const embargoStageEnabled =
     FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && canReadSomeProgram(permissions);
@@ -246,6 +278,7 @@ const FacetPanel = () => {
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
+
   const [expandedFacets, setExpandedFacets] = React.useState(
     [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
   );
@@ -275,7 +308,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField['object_id'],
+    dotField: FileCentricDocumentField['file_id'],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -338,11 +371,12 @@ const FacetPanel = () => {
     };
   };
 
-  const commonFacetProps: (
-    facetDetails: FacetDetails,
-  ) => { onClick: any; isExpanded: boolean; subMenuName: string; facetPath: string } = (
-    facetDetails,
-  ) => ({
+  const commonFacetProps: (facetDetails: FacetDetails) => {
+    onClick: any;
+    isExpanded: boolean;
+    subMenuName: string;
+    facetPath: string;
+  } = (facetDetails) => ({
     onClick: (e) => {
       clickHandler(facetDetails);
     },
@@ -425,7 +459,7 @@ const FacetPanel = () => {
     pointer-events: 'auto';
   `;
   const onRemoveSelectedId = (id: string) => {
-    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['object_id'], id).build();
+    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['file_id'], id).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
@@ -438,6 +472,31 @@ const FacetPanel = () => {
     },
   });
 
+  const [currentTab, setTabs] = useState('clinical');
+  const containerProps = {
+    css: css`
+      flex-grow: 1;
+    `,
+  };
+  const tabStyles = css`
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    margin: 9px 5px 0px;
+    border: 1px solid ${theme.colors.grey_2};
+    border-bottom: 1px none ${theme.colors.white};
+    border-radius: 3px 3px 0px 0px;
+    flex-grow: 1;
+
+    &.active {
+      border-bottom: 0px none ${theme.colors.white};
+      border-top: 4px solid ${theme.colors.secondary};
+      :hover {
+        background-color: ${theme.colors.grey_3};
+      }
+    }
+  `;
+
   return (
     <FacetContainer
       // using css to fade and disable because FacetContainer uses over-flow which causes the DNAloader to move with scroll and not cover all facets
@@ -445,18 +504,18 @@ const FacetPanel = () => {
       theme={theme}
     >
       <SubMenu>
-        <FacetRow>
-          <Typography
-            as="span"
-            css={css`
-              font-size: 16px;
-              padding: 8px 14px;
-            `}
-            color={theme.colors.primary}
-          >
-            Filters
-          </Typography>
-        </FacetRow>
+        {FEATURE_FACET_TABS_ENABLED && (
+          <FacetRow>
+            <Tabs
+              value={currentTab}
+              onChange={(e, value) => setTabs(value)}
+              containerProps={containerProps}
+            >
+              <Tab value="clinical" label="Clinical Filters" css={tabStyles} />
+              <Tab value="file" label="File Filters" css={tabStyles} />
+            </Tabs>
+          </FacetRow>
+        )}
         <FacetRow
           css={css`
             border-top: 1px solid ${theme.colors.grey_2};
@@ -481,7 +540,7 @@ const FacetPanel = () => {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+                align-items: left;
               `}
             >
               {excludedIds.length > 0 && (
@@ -529,7 +588,7 @@ const FacetPanel = () => {
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({
-                          field: FileCentricDocumentField['object_id'],
+                          field: FileCentricDocumentField['file_id'],
                           value,
                         });
                         setSearchQuery('');
@@ -564,6 +623,9 @@ const FacetPanel = () => {
             //Conditionally filter release_state facet
             .filter((f) => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
+            })
+            .filter((f) => {
+              return FEATURE_FACET_TABS_ENABLED ? facetTabs[currentTab].includes(f.facetPath) : f;
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);

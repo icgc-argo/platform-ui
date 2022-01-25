@@ -104,8 +104,8 @@ const SearchResultsMenu = ({
                     border-bottom: 0px;
                   }
                 `}
-                onClick={() => onSelect(node.object_id)}
-                key={node.object_id}
+                onClick={() => onSelect(node.file_id)}
+                key={node.file_id}
               >
                 <ListItem
                   css={css`
@@ -113,7 +113,10 @@ const SearchResultsMenu = ({
                     font-weight: 500;
                   `}
                 >
-                  {node.object_id}
+                  <>
+                    <span style={{ fontWeight: 700 }}>{node.file_id} </span>
+                    {`(${node.study_id})`}
+                  </>
                 </ListItem>
                 <ListItem
                   css={css`
@@ -121,7 +124,7 @@ const SearchResultsMenu = ({
                     font-weight: 300;
                   `}
                 >
-                  {node.file.name}
+                  {node.data_category}
                 </ListItem>
               </div>
             );

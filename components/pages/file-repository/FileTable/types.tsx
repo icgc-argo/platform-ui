@@ -28,6 +28,7 @@ export type FileRepositoryRecord = {
   programId: string;
   dataType: string;
   experimentalStrategy: string;
+  fileId: string;
   fileType: string;
   size: number; //in bytes
   isDownloadable: boolean;
@@ -50,6 +51,7 @@ type FileRepoQueryNode = {
   node: {
     object_id: string;
     data_type: string;
+    file_id: string;
     file_type: string;
     study_id: string;
     file: FileSize;

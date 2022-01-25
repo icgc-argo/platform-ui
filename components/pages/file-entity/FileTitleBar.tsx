@@ -32,6 +32,7 @@ import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
+import useAuthContext from 'global/hooks/useAuthContext';
 
 enum DownloadOptionValues {
   NOT_APPLICABLE = 'NOT_APPLICABLE',
@@ -45,8 +46,9 @@ export const FileTitleBar: React.ComponentType<{
   accessTier?: string;
 }> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
   const theme = useTheme();
+  const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
-  const filter = sqonBuilder.has(FileCentricDocumentField['object_id'], fileId).build();
+  const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     {
       value: DownloadOptionValues.NOT_APPLICABLE,
@@ -199,7 +201,7 @@ export const FileTitleBar: React.ComponentType<{
               MANIFEST_DOWNLOAD_PATH,
               `?filter=${encodeURIComponent(JSON.stringify(filter))}`,
             );
-            window.location.assign(downloadUrl);
+            downloadFileWithEgoToken(downloadUrl);
           }}
         >
           <DownloadIcon />
