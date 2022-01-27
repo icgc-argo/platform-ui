@@ -46,6 +46,7 @@ export function UserPage() {
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
+  const hasProgramAccess = programs && programs.length > 0;
 
   return (
     <DefaultLayout>
@@ -67,7 +68,12 @@ export function UserPage() {
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <ApiTokenBox apiToken={apiToken} loading={loading} isDacoApproved={isDacoApproved} />
+            <ApiTokenBox
+              apiToken={apiToken}
+              loading={loading}
+              isDacoApproved={isDacoApproved}
+              hasProgramAccess={hasProgramAccess}
+            />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox
