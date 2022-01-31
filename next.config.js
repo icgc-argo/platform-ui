@@ -44,6 +44,13 @@ module.exports = withImages({
       // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly. It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
       'asn1.js': urlJoin(__dirname, '/node_modules/asn1.js/lib/asn1.js'),
     };
+    // ensure UIKit (local dev) uses platform-ui emotion, this is needed to properly resolve `theme` from ThemeProvider
+    config.resolve.alias['@emotion/core'] = path.resolve(
+      __dirname,
+      '.',
+      'node_modules',
+      '@emotion/core',
+    );
     config.module.rules = [
       ...config.module.rules,
       {
