@@ -277,20 +277,22 @@ const FileTable = () => {
   const containerRef = React.createRef<HTMLDivElement>();
 
   const fileRepoEntries: FileRepositoryRecord[] = records
-    ? records.file.hits.edges.map(({ node }) => ({
-        objectId: node.object_id,
-        donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
-        submitterDonorId: node.donors.hits.edges
-          .map((edge) => edge.node.submitter_donor_id)
-          .join(', '),
-        programId: node.study_id,
-        dataType: node.data_type,
-        experimentalStrategy: node.analysis.experiment.experimental_strategy,
-        fileId: node.file_id,
-        fileType: node.file_type,
-        size: node.file.size,
-        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
-      }))
+    ? records.file.hits.edges
+        .map(({ node }) => ({
+          objectId: node.object_id,
+          donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
+          submitterDonorId: node.donors.hits.edges
+            .map((edge) => edge.node.submitter_donor_id)
+            .join(', '),
+          programId: node.study_id,
+          dataType: node.data_type,
+          experimentalStrategy: node.analysis.experiment.experimental_strategy,
+          fileId: node.file_id,
+          fileType: node.file_type,
+          size: node.file.size,
+          isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+        }))
+        .sort((node, nextNode) => (node.fileId > nextNode.fileId ? 1 : -1))
     : [];
 
   const {
