@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -33,7 +33,7 @@ const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South 
 
 const MISSING_ENTRY_TEXT = '--';
 
-const arrayToText = array => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
+const arrayToText = (array) => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
 
 type Program = {
   name?: string;
@@ -49,7 +49,7 @@ type Program = {
 };
 function ProfileView({ program = {} as Program }) {
   const theme = useTheme();
-  const Left = props => (
+  const Left = (props) => (
     <Col
       lg={2}
       md={4}
@@ -77,7 +77,7 @@ function ProfileView({ program = {} as Program }) {
       </div>
     </Col>
   );
-  const SectionTitle = props => (
+  const SectionTitle = (props) => (
     <Typography
       component="h3"
       variant="sectionHeader"
@@ -210,7 +210,7 @@ function ProfileView({ program = {} as Program }) {
           &nbsp;
           {program.regions &&
             join(
-              filter(REGIONS, region => {
+              filter(REGIONS, (region) => {
                 return !program.regions.includes(region);
               }),
               ', ',

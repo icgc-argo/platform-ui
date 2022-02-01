@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -75,10 +75,10 @@ export const StyledInputWrapper = styled<'div', StyledInputWrapperProps>('div')`
 
   &:hover {
     border-color: ${({ theme, disabled, error }) => {
-    if (error) return theme.colors.error;
-    else if (disabled) return theme.colors.grey_disabled;
-    else return theme.colors.secondary_1;
-  }};
+      if (error) return theme.colors.error;
+      else if (disabled) return theme.colors.grey_disabled;
+      else return theme.colors.secondary_1;
+    }};
   }
 
   ${({ inputState, theme }) =>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -150,17 +150,19 @@ export default function ProgramIDRegistration() {
 
   const onErrorClose: (
     index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] = (index) => ({ type }) => {
-    if (type === 'CLOSE') {
-      updateClinicalRegistrationQuery((previous) => ({
-        ...previous,
-        clinicalRegistration: {
-          ...previous.clinicalRegistration,
-          fileErrors: previous.clinicalRegistration.fileErrors.filter((_, i) => i !== index),
-        },
-      }));
-    }
-  };
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] =
+    (index) =>
+    ({ type }) => {
+      if (type === 'CLOSE') {
+        updateClinicalRegistrationQuery((previous) => ({
+          ...previous,
+          clinicalRegistration: {
+            ...previous.clinicalRegistration,
+            fileErrors: previous.clinicalRegistration.fileErrors.filter((_, i) => i !== index),
+          },
+        }));
+      }
+    };
 
   const pageHeaderStyle = css`
     display: flex;

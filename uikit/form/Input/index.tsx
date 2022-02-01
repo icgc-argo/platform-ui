@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -87,8 +87,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     }: InputProps,
     ref,
   ) => {
-    const { disabled: calcDisabled, focused, error: calcError, handleBlur, handleFocus } =
-      useContext(FormControlContext) || {};
+    const {
+      disabled: calcDisabled,
+      focused,
+      error: calcError,
+      handleBlur,
+      handleFocus,
+    } = useContext(FormControlContext) || {};
 
     const [activeState, setActive] = useState(focused ? 'focus' : 'default');
 

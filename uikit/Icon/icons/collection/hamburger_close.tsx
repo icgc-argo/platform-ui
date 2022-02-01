@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -22,8 +22,7 @@ import { css } from '@emotion/core';
 export default {
   title: 'File',
   viewBox: '0 0 30 30',
-  path:
-    'M15 30C6.716 30 0 23.284 0 15 0 6.716 6.716 0 15 0c8.284 0 15 6.716 15 15 0 8.284-6.716 15-15 15zm-.003-12.897l3.46 3.444c1.369 1.384 3.474-.722 2.09-2.09l-3.444-3.46 3.444-3.445c1.384-1.384-.721-3.475-2.09-2.106l-3.46 3.46-3.445-3.46c-1.384-1.369-3.475.722-2.106 2.106l3.46 3.445-3.46 3.46c-1.369 1.368.722 3.474 2.106 2.09l3.445-3.444z',
+  path: 'M15 30C6.716 30 0 23.284 0 15 0 6.716 6.716 0 15 0c8.284 0 15 6.716 15 15 0 8.284-6.716 15-15 15zm-.003-12.897l3.46 3.444c1.369 1.384 3.474-.722 2.09-2.09l-3.444-3.46 3.444-3.445c1.384-1.384-.721-3.475-2.09-2.106l-3.46 3.46-3.445-3.46c-1.384-1.369-3.475.722-2.106 2.106l3.46 3.445-3.46 3.46c-1.369 1.368.722 3.474 2.106 2.09l3.445-3.444z',
   css: css`
     width: 40px;
     height: 40px;

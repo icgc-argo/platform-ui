@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -21,8 +21,7 @@ import { css } from '@emotion/core';
 export default {
   title: 'Chevron Right',
   viewBox: '0 0 12 12',
-  path:
-    'M3.342 9.952a1.224 1.224 0 0 0 0 1.697 1.147 1.147 0 0 0 1.65 0l4.666-4.8a1.224 1.224 0 0 0 0-1.697L4.992.352a1.143 1.143 0 0 0-1.65 0 1.224 1.224 0 0 0 0 1.696L7.184 6 3.342 9.952z',
+  path: 'M3.342 9.952a1.224 1.224 0 0 0 0 1.697 1.147 1.147 0 0 0 1.65 0l4.666-4.8a1.224 1.224 0 0 0 0-1.697L4.992.352a1.143 1.143 0 0 0-1.65 0 1.224 1.224 0 0 0 0 1.696L7.184 6 3.342 9.952z',
   css: css`
     height: 12px;
   `,

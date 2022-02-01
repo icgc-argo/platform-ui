@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -40,7 +40,7 @@ const NumberRangeField: React.ComponentType<{
   onMaxChange,
   onGoClick,
   goButtonEnabled,
-  validation = i => true,
+  validation = (i) => true,
 }) => {
   const theme = useTheme();
   const [minErrorState, setMinErrorState] = React.useState(false);
@@ -74,10 +74,10 @@ const NumberRangeField: React.ComponentType<{
           placeholder="e.g. 0"
           size="sm"
           value={min}
-          onChange={e => {
+          onChange={(e) => {
             onMinChange(e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             setMinErrorState(isInputInvalid(e.target.value));
           }}
           getOverrideCss={() =>
@@ -99,10 +99,10 @@ const NumberRangeField: React.ComponentType<{
           placeholder="e.g. 85"
           size="sm"
           value={max}
-          onChange={e => {
+          onChange={(e) => {
             onMaxChange(e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             setMaxErrorState(isInputInvalid(e.target.value));
           }}
           getOverrideCss={() =>
@@ -120,7 +120,7 @@ const NumberRangeField: React.ComponentType<{
           margin: 2px 0px 0px 5px;
         `}
         variant="secondary"
-        onClick={e => onGoClick()}
+        onClick={(e) => onGoClick()}
         disabled={!goButtonEnabled}
       >
         GO

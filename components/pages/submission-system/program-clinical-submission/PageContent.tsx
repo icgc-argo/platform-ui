@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -65,50 +65,50 @@ import {
   useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile = (
-  submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state'],
-) => (gqlFile: GqlClinicalEntity): ClinicalSubmissionEntityFile => {
-  const isSubmissionValidated =
-    submissionState === 'INVALID' ||
-    submissionState === 'VALID' ||
-    submissionState === 'PENDING_APPROVAL';
-  const isPendingApproval = submissionState === 'PENDING_APPROVAL';
-  const stats = {
-    errorsFound: [],
-    new: [],
-    noUpdate: [],
-    updated: [],
-    ...(gqlFile.stats || {}),
+const gqlClinicalEntityToClinicalSubmissionEntityFile =
+  (submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state']) =>
+  (gqlFile: GqlClinicalEntity): ClinicalSubmissionEntityFile => {
+    const isSubmissionValidated =
+      submissionState === 'INVALID' ||
+      submissionState === 'VALID' ||
+      submissionState === 'PENDING_APPROVAL';
+    const isPendingApproval = submissionState === 'PENDING_APPROVAL';
+    const stats = {
+      errorsFound: [],
+      new: [],
+      noUpdate: [],
+      updated: [],
+      ...(gqlFile.stats || {}),
+    };
+    const hasSchemaError = !!gqlFile.schemaErrors.length;
+    const hasDataError = !!gqlFile.dataErrors.length;
+    const hasUpdate = !!stats.updated.length;
+    return {
+      stats,
+      createdAt: gqlFile.createdAt,
+      creator: gqlFile.creator,
+      fileName: gqlFile.batchName,
+      schemaErrors: gqlFile.schemaErrors,
+      dataErrors: gqlFile.dataErrors,
+      dataUpdates: gqlFile.dataUpdates,
+      dataWarnings: gqlFile.dataWarnings,
+      displayName: capitalize((gqlFile.clinicalType || '').split('_').join(' ')),
+      clinicalType: gqlFile.clinicalType,
+      records: gqlFile.records,
+      recordsCount: gqlFile.records.length,
+      status: isPendingApproval
+        ? hasUpdate
+          ? 'UPDATE'
+          : 'SUCCESS'
+        : hasSchemaError || hasDataError
+        ? 'ERROR'
+        : gqlFile.records.length
+        ? isSubmissionValidated
+          ? 'SUCCESS'
+          : 'WARNING'
+        : 'NONE',
+    };
   };
-  const hasSchemaError = !!gqlFile.schemaErrors.length;
-  const hasDataError = !!gqlFile.dataErrors.length;
-  const hasUpdate = !!stats.updated.length;
-  return {
-    stats,
-    createdAt: gqlFile.createdAt,
-    creator: gqlFile.creator,
-    fileName: gqlFile.batchName,
-    schemaErrors: gqlFile.schemaErrors,
-    dataErrors: gqlFile.dataErrors,
-    dataUpdates: gqlFile.dataUpdates,
-    dataWarnings: gqlFile.dataWarnings,
-    displayName: capitalize((gqlFile.clinicalType || '').split('_').join(' ')),
-    clinicalType: gqlFile.clinicalType,
-    records: gqlFile.records,
-    recordsCount: gqlFile.records.length,
-    status: isPendingApproval
-      ? hasUpdate
-        ? 'UPDATE'
-        : 'SUCCESS'
-      : hasSchemaError || hasDataError
-      ? 'ERROR'
-      : gqlFile.records.length
-      ? isSubmissionValidated
-        ? 'SUCCESS'
-        : 'WARNING'
-      : 'NONE',
-  };
-};
 
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -300,17 +300,19 @@ const PageContent = () => {
 
   const onErrorClose: (
     index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] = (index) => ({ type }) => {
-    if (type === 'CLOSE') {
-      updateClinicalSubmissionQuery((previous) => ({
-        ...previous,
-        clinicalSubmissions: {
-          ...previous.clinicalSubmissions,
-          fileErrors: previous.clinicalSubmissions.fileErrors.filter((_, i) => i !== index),
-        },
-      }));
-    }
-  };
+  ) => React.ComponentProps<typeof Notification>['onInteraction'] =
+    (index) =>
+    ({ type }) => {
+      if (type === 'CLOSE') {
+        updateClinicalSubmissionQuery((previous) => ({
+          ...previous,
+          clinicalSubmissions: {
+            ...previous.clinicalSubmissions,
+            fileErrors: previous.clinicalSubmissions.fileErrors.filter((_, i) => i !== index),
+          },
+        }));
+      }
+    };
 
   const handleSubmissionFilesUpload = (files: FileList) => {
     setCurrentFileList({ fileList: files, shortName: programShortName });

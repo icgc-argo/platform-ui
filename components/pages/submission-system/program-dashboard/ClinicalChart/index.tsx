@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -31,7 +31,7 @@ import {
   DashboardCard,
   DashboardSummaryData,
   DashboardSummaryDataVariables,
-  POLL_INTERVAL_MILLISECONDS
+  POLL_INTERVAL_MILLISECONDS,
 } from '../common';
 import { useTimeout } from '../DonorDataSummary/common';
 import LineChart from './LineChart';
@@ -62,36 +62,33 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   donorFields: DonorField[],
   programShortName: string,
   options: Omit<
-    QueryHookOptions<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>,
+    QueryHookOptions<
+      ProgramDonorPublishedAnalysisByDateRangeQueryData,
+      ProgramDonorPublishedAnalysisByDateRangeQueryVariables
+    >,
     'variables'
   > = {},
 ) => {
   const pollingTimeout = useTimeout(30000);
-  const hook = useQuery<ProgramDonorPublishedAnalysisByDateRangeQueryData, ProgramDonorPublishedAnalysisByDateRangeQueryVariables>(
-    PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY,
-    {
-      ...options,
-      skip: !dateRangeFrom || !dateRangeTo,
-      variables: {
-        bucketCount,
-        dateRangeFrom,
-        dateRangeTo,
-        donorFields,
-        programShortName,
-      },
-      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+  const hook = useQuery<
+    ProgramDonorPublishedAnalysisByDateRangeQueryData,
+    ProgramDonorPublishedAnalysisByDateRangeQueryVariables
+  >(PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY, {
+    ...options,
+    skip: !dateRangeFrom || !dateRangeTo,
+    variables: {
+      bucketCount,
+      dateRangeFrom,
+      dateRangeTo,
+      donorFields,
+      programShortName,
     },
-  );
+    pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+  });
   return hook;
 };
 
-const ClinicalChart = ({
-  chartType,
-  title,
-}: {
-  chartType: ChartType;
-  title: string;
-}) => {
+const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: string }) => {
   // handle date range selection
   const [dateRangeFrom, setDateRangeFrom] = useState<string | null>(null);
   const [dateRangeTo, setDateRangeTo] = useState<string | null>(null);
@@ -100,9 +97,10 @@ const ClinicalChart = ({
   useEffect(() => {
     const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
     const today = new Date();
-    const dateRangeStart = activeRangeBtn === 'All'
-      ? TEMP_ALL_START_DATE // TODO: change to program first published date
-      : subDays(today, daysInRange);
+    const dateRangeStart =
+      activeRangeBtn === 'All'
+        ? TEMP_ALL_START_DATE // TODO: change to program first published date
+        : subDays(today, daysInRange);
     setDateRangeFrom(dateRangeStart.toString());
     setDateRangeTo(today.toString());
   }, [activeRangeBtn]);
@@ -114,19 +112,16 @@ const ClinicalChart = ({
   const {
     data: programQueryData,
     error: programQueryError,
-    loading: programQueryLoading
-  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
-    DASHBOARD_SUMMARY_QUERY,
-    {
-      variables: { programShortName: programShortName },
-    },
-  );
+    loading: programQueryLoading,
+  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(DASHBOARD_SUMMARY_QUERY, {
+    variables: { programShortName: programShortName },
+  });
 
   // get data for chart lines - program donor published analyses
   // aggregated by date range
   const donorFieldsByChartType = chartLineMeta
-    .filter(line => line.chartType === chartType)
-    .map(line => line.field);
+    .filter((line) => line.chartType === chartType)
+    .map((line) => line.field);
 
   const {
     data: { programDonorPublishedAnalysisByDateRange: rangeQueryData = [] } = {},
@@ -137,7 +132,7 @@ const ClinicalChart = ({
     dateRangeFrom,
     dateRangeTo,
     donorFieldsByChartType as DonorField[],
-    programShortName
+    programShortName,
   );
 
   // make the chart responsive
@@ -154,25 +149,25 @@ const ClinicalChart = ({
   const [activeLines, setActiveLines] = useState(donorFieldsByChartType);
   const handleLegendInput = (line: string) => {
     const nextLines = activeLines.includes(line)
-      ? activeLines.filter(activeLine => activeLine !== line)
+      ? activeLines.filter((activeLine) => activeLine !== line)
       : activeLines.concat(line);
     setActiveLines(nextLines);
   };
 
   const hasError = rangeQueryError || programQueryError;
-  const isLoading = rangeQueryData.length === 0 ||
-    rangeQueryLoading ||
-    programQueryLoading;
+  const isLoading = rangeQueryData.length === 0 || rangeQueryLoading || programQueryLoading;
   const showLegend = chartType === 'molecular' && !isLoading && !hasError;
 
   return (
     <DashboardCard>
-      <div style={{
-        display: 'flex',
-        height: 26,
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          height: 26,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="default" component="span">
           {title}
         </Typography>
@@ -186,47 +181,49 @@ const ClinicalChart = ({
       </div>
       <div
         css={css`
-              height: ${CHART_HEIGHT + CHART_PADDING}px;
-              padding: ${CHART_PADDING}px 0;
-            `}
+          height: ${CHART_HEIGHT + CHART_PADDING}px;
+          padding: ${CHART_PADDING}px 0;
+        `}
       >
-        {hasError
-          ? <ContentError />
-          : isLoading
-            ? <ContentLoader />
-            : (<>
-              <RangeControlBar
-                activeBtn={activeRangeBtn}
-                handleBtnClick={setActiveRangeBtn}
-                rangeArray={[
-                  formatDate(new Date(dateRangeFrom), DATE_RANGE_DISPLAY_FORMAT),
-                  formatDate(new Date(dateRangeTo), DATE_RANGE_DISPLAY_FORMAT)
-                ]}
+        {hasError ? (
+          <ContentError />
+        ) : isLoading ? (
+          <ContentLoader />
+        ) : (
+          <>
+            <RangeControlBar
+              activeBtn={activeRangeBtn}
+              handleBtnClick={setActiveRangeBtn}
+              rangeArray={[
+                formatDate(new Date(dateRangeFrom), DATE_RANGE_DISPLAY_FORMAT),
+                formatDate(new Date(dateRangeTo), DATE_RANGE_DISPLAY_FORMAT),
+              ]}
+            />
+            <div
+              ref={lineChartRef}
+              style={{
+                width: '100%',
+                paddingTop: CHART_PADDING,
+                filter: `blur(${resizing ? 8 : 0}px)`,
+              }}
+            >
+              <LineChart
+                activeLines={activeLines}
+                chartType={chartType}
+                data={rangeQueryData}
+                hasQuarterLines
+                hasYAxisThresholdLine
+                height={CHART_HEIGHT}
+                horizontalGuides={4}
+                precision={0}
+                width={responsiveWidth || initialWidth}
+                yAxisThreshold={programQueryData.program.commitmentDonors}
+                yAxisThresholdLabel="Committed"
+                yAxisTitle="donors"
               />
-              <div
-                ref={lineChartRef}
-                style={{
-                  width: '100%',
-                  paddingTop: CHART_PADDING,
-                  filter: `blur(${resizing ? 8 : 0}px)`
-                }}
-              >
-                <LineChart
-                  activeLines={activeLines}
-                  chartType={chartType}
-                  data={rangeQueryData}
-                  hasQuarterLines
-                  hasYAxisThresholdLine
-                  height={CHART_HEIGHT}
-                  horizontalGuides={4}
-                  precision={0}
-                  width={responsiveWidth || initialWidth}
-                  yAxisThreshold={programQueryData.program.commitmentDonors}
-                  yAxisThresholdLabel="Committed"
-                  yAxisTitle="donors"
-                />
-              </div>
-            </>)}
+            </div>
+          </>
+        )}
       </div>
     </DashboardCard>
   );
