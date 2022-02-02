@@ -55,7 +55,7 @@ const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
-    field: FileCentricDocumentField.object_id,
+    field: FileCentricDocumentField.file_id,
     order: 'asc' as FileRepositoryRecordSortOrder,
   },
 ];
