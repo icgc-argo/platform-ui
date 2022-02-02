@@ -35,23 +35,33 @@ const getWorkflowNameLink = (workflowType: DataAnalysisWorkflowType) => {
   switch (workflowType.workflow_name) {
     case WORKFLOW_NAMES.dnaSeq:
       return (
-        <Link href={WORKFLOW_NAME_URLS.dnaSeq} target='_blank'>{workflowType.workflow_name}</Link>
+        <Link href={WORKFLOW_NAME_URLS.dnaSeq} target="_blank">
+          {workflowType.workflow_name}
+        </Link>
       );
     case WORKFLOW_NAMES.sangerWgs:
       return (
-        <Link href={WORKFLOW_NAME_URLS.sangerWgs} target='_blank'>{workflowType.workflow_name}</Link>
+        <Link href={WORKFLOW_NAME_URLS.sangerWgs} target="_blank">
+          {workflowType.workflow_name}
+        </Link>
       );
     case WORKFLOW_NAMES.sangerWxs:
       return (
-        <Link href={WORKFLOW_NAME_URLS.sangerWxs} target='_blank'>{workflowType.workflow_name}</Link>
+        <Link href={WORKFLOW_NAME_URLS.sangerWxs} target="_blank">
+          {workflowType.workflow_name}
+        </Link>
       );
     case WORKFLOW_NAMES.mutect2:
       return (
-        <Link href={WORKFLOW_NAME_URLS.mutect2} target='_blank'>{workflowType.workflow_name}</Link>
+        <Link href={WORKFLOW_NAME_URLS.mutect2} target="_blank">
+          {workflowType.workflow_name}
+        </Link>
       );
     case WORKFLOW_NAMES.openAccess:
       return (
-        <Link href={WORKFLOW_NAME_URLS.openAccess} target='_blank'>{workflowType.workflow_name}</Link>
+        <Link href={WORKFLOW_NAME_URLS.openAccess} target="_blank">
+          {workflowType.workflow_name}
+        </Link>
       );
     default:
       return workflowType.workflow_name;
@@ -64,23 +74,48 @@ const getWorkflowVersionLink = (workflowType: DataAnalysisWorkflowType) => {
   switch (workflowType.workflow_name) {
     case WORKFLOW_NAMES.dnaSeq:
       return (
-        <Link href={`${WORKFLOW_VERSION_URLS.dnaSeq}${workflowType.workflow_version}`} target='_blank'>{workflowType.workflow_version}</Link>
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.dnaSeq}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
       );
     case WORKFLOW_NAMES.sangerWgs:
       return (
-        <Link href={`${WORKFLOW_VERSION_URLS.sangerWgs}${workflowType.workflow_version}`} target='_blank'>{workflowType.workflow_version}</Link>
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.sangerWgs}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
       );
     case WORKFLOW_NAMES.sangerWxs:
       return (
-        <Link href={`${WORKFLOW_VERSION_URLS.sangerWxs}${workflowType.workflow_version}`} target='_blank'>{workflowType.workflow_version}</Link>
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.sangerWxs}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
       );
     case WORKFLOW_NAMES.mutect2:
       return (
-        <Link href={`${WORKFLOW_VERSION_URLS.mutect2}${workflowType.workflow_version}`} target='_blank'>{workflowType.workflow_version}</Link>
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.mutect2}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
       );
     case WORKFLOW_NAMES.openAccess:
       return (
-        <Link href={`${WORKFLOW_VERSION_URLS.openAccess}${workflowType.workflow_version}`} target='_blank'>{workflowType.workflow_version}</Link>
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.openAccess}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
       );
     default:
       return workflowType.workflow_version;
@@ -98,20 +133,19 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
     'Experimental Strategy': data.experimentalStrategy,
     'Data Category': data.dataCategory,
     'Data Type': data.dataType,
-    'Platform': data.platform,
+    Platform: data.platform,
     'Genome Build': (
-      <Link
-        href={GENOME_BUILD_URL}
-        target='_blank'
-      >
+      <Link href={GENOME_BUILD_URL} target="_blank">
         {GENOME_BUILD}
       </Link>
     ),
     'Genome Annotation': (
-      <div css={css`
-        font-style: italic;
-        color: ${theme.colors.grey};
-      `}>
+      <div
+        css={css`
+          font-style: italic;
+          color: ${theme.colors.grey};
+        `}
+      >
         N/A
       </div>
     ),
@@ -119,6 +153,10 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
     'Workflow Version': getWorkflowVersionLink(data.workflowType),
     'Analysis Tools': data.software,
   };
+
+  for (const prop in tableData) {
+    if (tableData[prop] === null) tableData[prop] = '--';
+  }
 
   return (
     <FileCard cardTitle="Data &amp; Analysis Information">
