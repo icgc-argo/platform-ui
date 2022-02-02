@@ -46,7 +46,7 @@ export type DataAnalysisInfo = {
   platform: string;
   genomeBuild: string;
   workflowType?: DataAnalysisWorkflowType;
-  software: string;
+  software: [string];
 };
 
 export type DonorRecord = {
