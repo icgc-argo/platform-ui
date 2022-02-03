@@ -155,6 +155,10 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
       data.software && data.software.reduce((prev, current) => `${prev}, ${current}`),
   };
 
+  for (const prop in tableData) {
+    if (tableData[prop] === null) tableData[prop] = '--';
+  }
+
   return (
     <FileCard cardTitle="Data &amp; Analysis Information">
       <TableDiv>
