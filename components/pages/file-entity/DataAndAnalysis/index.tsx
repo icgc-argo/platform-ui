@@ -151,7 +151,8 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
     ),
     'Workflow Name': getWorkflowNameLink(data.workflowType),
     'Workflow Version': getWorkflowVersionLink(data.workflowType),
-    'Analysis Tools': data.software,
+    'Analysis Tools':
+      data.software && data.software.reduce((prev, current) => `${prev}, ${current}`),
   };
 
   return (

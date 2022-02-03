@@ -44,7 +44,7 @@ export const dummyDataAnalysisInfo: DataAnalysisInfo = {
   platform: 'Illumina',
   genomeBuild: 'GRCh38',
   workflowType: { workflow_name: 'DNA seq alignment', workflow_version: '1.0.0' },
-  software: 'BWA MEM',
+  software: ['BWA MEM'],
 };
 
 export const dummyAssociatedDonorsInfo: Array<DonorRecord> = [
