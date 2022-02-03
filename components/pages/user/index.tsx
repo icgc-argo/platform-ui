@@ -41,12 +41,12 @@ const Column = (props) => (
   />
 );
 
-export function UserPage() {
+export function UserPage({ scope }) {
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
-  const hasProgramAccess = programs && programs.length > 0;
+  const hasTokenAccess = scope && scope.length > 0;
 
   return (
     <DefaultLayout>
@@ -72,7 +72,7 @@ export function UserPage() {
               apiToken={apiToken}
               loading={loading}
               isDacoApproved={isDacoApproved}
-              hasProgramAccess={hasProgramAccess}
+              hasTokenAccess={hasTokenAccess}
             />
           </Column>
           <Column sm={12} md={6}>
