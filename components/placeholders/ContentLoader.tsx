@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -21,18 +21,9 @@ import React from 'react';
 import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import DnaLoader from 'uikit/DnaLoader';
 
-const ContentLoader = ({
-  title = '',
-  subtitle = ''
-}: {
-  title?: string;
-  subtitle?: string;
-}) => {
+const ContentLoader = ({ title = '', subtitle = '' }: { title?: string; subtitle?: string }) => {
   return (
-    <ContentPlaceholder
-      title={title}
-      subtitle={subtitle}
-      >
+    <ContentPlaceholder title={title} subtitle={subtitle}>
       <DnaLoader />
     </ContentPlaceholder>
   );

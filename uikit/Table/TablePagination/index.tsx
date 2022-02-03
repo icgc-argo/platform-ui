@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -31,7 +31,7 @@ import Select from '../../form/Select';
 import { POPUP_POSITIONS } from '../../form/Select/styledComponents';
 import Icon from '../../Icon';
 
-export const TableActionBar = props => {
+export const TableActionBar = (props) => {
   const { variant = 'label', color = 'grey', component = 'div' } = props;
 
   return (
@@ -160,7 +160,7 @@ function TablePagination(props) {
                 }
               `}
               aria-label="Select page size"
-              options={pageSizeOptions.map(v => ({ content: v.toString(), value: v }))}
+              options={pageSizeOptions.map((v) => ({ content: v.toString(), value: v }))}
               onChange={onPageSizeChange}
               value={pageSize}
               popupPosition={POPUP_POSITIONS.UP}
@@ -191,7 +191,7 @@ function TablePagination(props) {
             <Arrow transform="rotate(180)" />
           </A>
           {getPagesAround(page, 5, pages).map(
-            p =>
+            (p) =>
               p > -1 &&
               p < pages && (
                 <A

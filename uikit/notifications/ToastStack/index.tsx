@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -24,7 +24,7 @@ import differenceBy from 'lodash/differenceBy';
 import { styled } from '../..';
 import Toast from '../Toast';
 
-const usePrevious = value => {
+const usePrevious = (value) => {
   const ref = React.useRef();
   React.useEffect(() => {
     ref.current = value;
@@ -64,7 +64,8 @@ const AnimatedContainer = styled<'div', { unMounting?: boolean }>('div')`
 `;
 const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payload }) => {} }) => {
   // holds on to a local copy of toastConfigs for timing with animation
-  const convertToLocalStack = toastConfigs => toastConfigs.map(i => ({ ...i, unMounting: false }));
+  const convertToLocalStack = (toastConfigs) =>
+    toastConfigs.map((i) => ({ ...i, unMounting: false }));
   const [stack, setStack] = React.useState(convertToLocalStack(toastConfigs));
   const previousToastConfigs = usePrevious(toastConfigs);
 
@@ -80,7 +81,7 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
     const [itemToRemove] = differenceBy(previousToastConfigs, toastConfigs);
     if (itemToRemove) {
       setStack(
-        convertToLocalStack(previousToastConfigs).map(item => ({
+        convertToLocalStack(previousToastConfigs).map((item) => ({
           ...item,
           unMounting: item.id === itemToRemove.id,
         })),
@@ -101,7 +102,7 @@ const ToastStack = ({ toastConfigs = [], onInteraction = ({ id, toastIndex, payl
         <AnimatedContainer key={id} unMounting={unMounting}>
           <Toast
             {...rest}
-            onInteraction={payload => {
+            onInteraction={(payload) => {
               onInteraction({
                 toastIndex: i,
                 id,

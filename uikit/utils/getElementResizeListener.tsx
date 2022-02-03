@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -20,9 +20,11 @@
 import elementResizeDetectorMaker from 'element-resize-detector';
 import memoize from 'lodash/memoize';
 
-export default memoize(elementResizeDetectorMaker as () => {
-  listenTo: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
-  removeListener: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
-  removeAllListener: <T extends HTMLElement>(el: T) => void;
-  uninstall: <T extends HTMLElement>(el: T) => void;
-});
+export default memoize(
+  elementResizeDetectorMaker as () => {
+    listenTo: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
+    removeListener: <T extends HTMLElement>(el: T, cb: (el?: T) => void) => void;
+    removeAllListener: <T extends HTMLElement>(el: T) => void;
+    uninstall: <T extends HTMLElement>(el: T) => void;
+  },
+);

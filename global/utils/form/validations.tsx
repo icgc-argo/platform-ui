@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -22,28 +22,15 @@ import { PROGRAM_USER_ROLES, RoleKey } from 'global/constants/index';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants/index';
 import { requiredError, validEmail } from 'global/utils/form/error';
 
-export const firstName = yup
-  .string()
-  .label('First name')
-  .trim()
-  .required();
+export const firstName = yup.string().label('First name').trim().required();
 
-export const lastName = yup
-  .string()
-  .label('Last name')
-  .trim()
-  .required();
+export const lastName = yup.string().label('Last name').trim().required();
 
-export const email = yup
-  .string()
-  .email(validEmail)
-  .label('Email')
-  .trim()
-  .required();
+export const email = yup.string().email(validEmail).label('Email').trim().required();
 
 export const role = yup
   .string()
   .label('Role')
   // Drop down selector makes the value null if you do not select, the transform makes the null into a string to fix error messaging
   .transform((value, original) => (value === null ? '' : value))
-  .oneOf(PROGRAM_USER_ROLES.map(type => type.value)) as yup.StringSchema<RoleKey>;
+  .oneOf(PROGRAM_USER_ROLES.map((type) => type.value)) as yup.StringSchema<RoleKey>;

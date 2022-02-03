@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -22,11 +22,11 @@ import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 
-export const insertAt = <T extends any>(arr: T[]) => (i: number) => (element: T) => [
-  ...arr.slice(0, i),
-  element,
-  ...arr.slice(i, arr.length),
-];
+export const insertAt =
+  <T extends any>(arr: T[]) =>
+  (i: number) =>
+  (element: T) =>
+    [...arr.slice(0, i), element, ...arr.slice(i, arr.length)];
 
 export const asEnum = (obj, { name = 'enum' } = {}) =>
   new Proxy(obj, {

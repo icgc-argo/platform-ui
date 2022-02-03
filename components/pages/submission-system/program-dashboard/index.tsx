@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -189,7 +189,7 @@ export default function ProgramDashboard() {
                 chartType="clinical"
                 comingSoonLink={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
                 title="Completed Core Clinical Data"
-                />
+              />
             </Col>
           )}
         />
@@ -199,7 +199,7 @@ export default function ProgramDashboard() {
             chartType="molecular"
             comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
             title="Molecular Data Summary"
-            />
+          />
         </Col>
       </PaddedRow>
       <PaddedRow>
