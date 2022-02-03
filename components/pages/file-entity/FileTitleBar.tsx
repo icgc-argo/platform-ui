@@ -17,15 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
 import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
-import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
-import DropdownButton, { DownloadButtonProps } from 'uikit/DropdownButton';
-import Icon from 'uikit/Icon';
+import Legend from 'uikit/Legend';
 import { DownloadIcon } from './common';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
@@ -33,11 +30,6 @@ import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 import useAuthContext from 'global/hooks/useAuthContext';
-
-enum DownloadOptionValues {
-  NOT_APPLICABLE = 'NOT_APPLICABLE',
-  NOT_AVAILABLE = 'NOT_AVAILABLE',
-}
 
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
@@ -49,33 +41,6 @@ export const FileTitleBar: React.ComponentType<{
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
-  const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
-    {
-      value: DownloadOptionValues.NOT_APPLICABLE,
-      display: (
-        <div>
-          <div className="legend--symbol">N/A</div>
-          <div className="legend--text">Not Applicable</div>
-        </div>
-      ),
-    },
-    {
-      value: DownloadOptionValues.NOT_AVAILABLE,
-      display: (
-        <div>
-          <div className="legend--symbol">--</div>
-          <div className="legend--text">Not Available</div>
-        </div>
-      ),
-    },
-  ];
-  const [isLegendOpen, setLegendOpen] = useState(false);
-  const onClick = (e, { toggleMenuOpen }) => {
-    setLegendOpen(toggleMenuOpen);
-  };
-  const toggleMenuHandler = () => {
-    setLegendOpen(!isLegendOpen);
-  };
 
   return (
     <div
@@ -110,66 +75,7 @@ export const FileTitleBar: React.ComponentType<{
           flex-direction: row;
         `}
       >
-        <DropdownButton
-          css={css`
-            margin-right: 8px;
-            border: none;
-          `}
-          variant="secondary"
-          menuItems={menuItems}
-          controlledMenuShowState={isLegendOpen}
-          onClick={onClick}
-          onItemClick={toggleMenuHandler}
-          onMouseEnter={toggleMenuHandler}
-          onMouseLeave={toggleMenuHandler}
-          menuStyles={`
-            display: flex;
-            flex-direction: column;
-            flex-wrap: no-wrap;
-            left: -50px;
-            width: 130px;
-            padding: 13px;
-            .legend--symbol {
-              margin-right: 13px;
-              width: 20px;
-              color: ${theme.colors.grey};
-              font-style: italic;
-            }
-            .legend--text, .legend--symbol {
-              display: inline-block;
-            }
-            :hover {
-              cursor: default
-            }
-          `}
-          menuItemStyles={`
-            :hover {
-              background: ${theme.colors.white};
-            }
-          `}
-        >
-          <span>
-            <Icon
-              name={'legend'}
-              fill="accent2_dark"
-              height="9px"
-              css={css`
-                margin-left: 5px;
-                margin-right: 0px;
-              `}
-            />
-            Legend
-            <Icon
-              name={isLegendOpen ? 'chevron_down' : 'chevron_right'}
-              fill="accent2_dark"
-              height="9px"
-              css={css`
-                margin-left: 5px;
-                margin-right: 0px;
-              `}
-            />
-          </span>
-        </DropdownButton>
+        <Legend />
 
         {/* TODO: Move download into Legend component once available: https://github.com/icgc-argo/platform-ui/issues/2108 */}
         {/* <Tooltip

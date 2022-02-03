@@ -25,7 +25,7 @@ import Button from 'uikit/Button';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useTheme } from 'uikit/ThemeProvider';
 
-const MenuItem: typeof Typography = (props) => {
+export const MenuItem: typeof Typography = (props) => {
   const theme = useTheme();
   return (
     <Typography
@@ -52,8 +52,6 @@ export interface DownloadButtonProps<ValueType>
   extends Omit<React.ComponentProps<typeof Button>, 'onClick'> {
   onItemClick: (item: DropdownButtonItemConfig<ValueType>) => void;
   onClick?: (e: React.SyntheticEvent<HTMLButtonElement, Event>, { toggleMenuOpen: boolean }) => any;
-  onMouseEnter?: () => any;
-  onMouseLeave?: () => any;
   menuItems: Array<DropdownButtonItemConfig<ValueType>>;
   controlledMenuShowState?: boolean;
   menuStyles?: string;
@@ -66,6 +64,7 @@ function DropdownButton<ValueType = string>({
   menuItems,
   controlledMenuShowState,
   onClick,
+  onKeyPress,
   menuStyles,
   menuItemStyles,
   ...rest
