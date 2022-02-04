@@ -46,7 +46,7 @@ export function UserPage({ scope }) {
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
-  const hasTokenAccess = scope && scope.some((element) => element.match(/.READ|.WRITE/gm));
+  const hasTokenAccess = scope && scope.some((element) => element.match(/\.READ|\.WRITE/));
 
   return (
     <DefaultLayout>
