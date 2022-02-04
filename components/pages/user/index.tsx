@@ -46,7 +46,7 @@ export function UserPage({ scope }) {
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
-  const hasTokenAccess = scope && scope.length > 0;
+  const hasTokenAccess = scope && scope.some((element) => element.match(/.READ|.WRITE/gm));
 
   return (
     <DefaultLayout>
@@ -68,12 +68,7 @@ export function UserPage({ scope }) {
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <ApiTokenBox
-              apiToken={apiToken}
-              loading={loading}
-              isDacoApproved={isDacoApproved}
-              hasTokenAccess={hasTokenAccess}
-            />
+            <ApiTokenBox apiToken={apiToken} loading={loading} hasTokenAccess={hasTokenAccess} />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox
