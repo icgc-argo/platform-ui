@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -22,8 +22,7 @@ import { css } from '@emotion/core';
 export default {
   title: 'Circled + Sign',
   viewBox: '0 0 20 20',
-  path:
-    'M13.886 10.962H10.97v2.933a.97.97 0 0 1-.971.962.97.97 0 0 1-.971-.962v-2.933H6.114A.97.97 0 0 1 5.143 10a.97.97 0 0 1 .971-.962H9.03V6.105A.97.97 0 0 1 10 5.143a.97.97 0 0 1 .971.962v2.933h2.915a.97.97 0 0 1 .971.962.97.97 0 0 1-.971.962M10 0C4.476 0 0 4.476 0 10s4.476 10 10 10 10-4.476 10-10S15.524 0 10 0',
+  path: 'M13.886 10.962H10.97v2.933a.97.97 0 0 1-.971.962.97.97 0 0 1-.971-.962v-2.933H6.114A.97.97 0 0 1 5.143 10a.97.97 0 0 1 .971-.962H9.03V6.105A.97.97 0 0 1 10 5.143a.97.97 0 0 1 .971.962v2.933h2.915a.97.97 0 0 1 .971.962.97.97 0 0 1-.971.962M10 0C4.476 0 0 4.476 0 10s4.476 10 10 10 10-4.476 10-10S15.524 0 10 0',
   css: css`
     height: 14px;
   `,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -41,15 +41,15 @@ fetchReq(`${process.env.GATEWAY_API_ROOT}/graphql`, {
     `,
   }),
 })
-  .then(result => result.json())
-  .then(result => {
+  .then((result) => result.json())
+  .then((result) => {
     // here we're filtering out any type information unrelated to unions or interfaces
-    const filteredData = result.data.__schema.types.filter(type => type.possibleTypes !== null);
+    const filteredData = result.data.__schema.types.filter((type) => type.possibleTypes !== null);
     result.data.__schema.types = filteredData;
     fs.writeFile(
       `${__dirname}/../global/utils/fragmentTypes.json`,
       JSON.stringify(result.data),
-      err => {
+      (err) => {
         if (err) {
           console.error('Error writing fragmentTypes file', err);
         } else {

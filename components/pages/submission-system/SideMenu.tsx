@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -216,24 +216,24 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                   {isSubmissionSystemDisabled ? (
                     <Icon name="lock" fill="accent3_dark" width="15px" />
                   ) : (
-                    ({
-                      OPEN: clinicalSubmissionHasSchemaErrors ? (
-                        <Icon name="exclamation" fill="error" width="15px" />
-                      ) : (
-                        <Icon name="ellipses" fill="warning" width="15px" />
-                      ),
-                      VALID: <Icon name="ellipses" fill="warning" width="15px" />,
-                      INVALID: <Icon name="exclamation" fill="error" width="15px" />,
-                      INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
-                      PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
-                      // submission state remains as null and rejects creating open state with initial invalid upload
-                      // if errors exist, error icon should still show up despite the null state
-                      [null as any]: clinicalSubmissionHasSchemaErrors ? (
-                        <Icon name="exclamation" fill="error" width="15px" />
-                      ) : null,
-                    } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode })[
-                      data ? data.clinicalSubmissions.state : null
-                    ]
+                    (
+                      {
+                        OPEN: clinicalSubmissionHasSchemaErrors ? (
+                          <Icon name="exclamation" fill="error" width="15px" />
+                        ) : (
+                          <Icon name="ellipses" fill="warning" width="15px" />
+                        ),
+                        VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                        INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                        INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
+                        PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                        // submission state remains as null and rejects creating open state with initial invalid upload
+                        // if errors exist, error icon should still show up despite the null state
+                        [null as any]: clinicalSubmissionHasSchemaErrors ? (
+                          <Icon name="exclamation" fill="error" width="15px" />
+                        ) : null,
+                      } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode }
+                    )[data ? data.clinicalSubmissions.state : null]
                   )}
                 </StatusMenuItem>
               }

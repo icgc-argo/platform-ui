@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -44,7 +44,7 @@ export const dummyDataAnalysisInfo: DataAnalysisInfo = {
   platform: 'Illumina',
   genomeBuild: 'GRCh38',
   workflowType: { workflow_name: 'DNA seq alignment', workflow_version: '1.0.0' },
-  software: 'BWA MEM',
+  software: ['BWA MEM'],
 };
 
 export const dummyAssociatedDonorsInfo: Array<DonorRecord> = [

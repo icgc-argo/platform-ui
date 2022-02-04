@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -23,25 +23,25 @@ import mockData from './mockData';
 import LineChart from '.';
 import { DataItem } from '../types';
 
-const activeLines = mockData.map(dataItem => dataItem.title);
+const activeLines = mockData.map((dataItem) => dataItem.title);
 
 const LineChartStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   return (
     <div style={{ width: 500, height: 300 }}>
-    <LineChart
-      activeLines={activeLines}
-      chartType="molecular"
-      data={mockData as DataItem[]}
-      hasQuarterLines
-      hasYAxisThresholdLine
-      height={300}
-      horizontalGuides={4}
-      precision={0}
-      width={500}
-      yAxisThreshold={200}
-      yAxisThresholdLabel="Y Axis Threshold"
-      yAxisTitle="Y Axis"
-    />
+      <LineChart
+        activeLines={activeLines}
+        chartType="molecular"
+        data={mockData as DataItem[]}
+        hasQuarterLines
+        hasYAxisThresholdLine
+        height={300}
+        horizontalGuides={4}
+        precision={0}
+        width={500}
+        yAxisThreshold={200}
+        yAxisThresholdLabel="Y Axis Threshold"
+        yAxisTitle="Y Axis"
+      />
     </div>
   );
 });

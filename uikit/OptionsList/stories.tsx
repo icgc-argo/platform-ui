@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -48,22 +48,22 @@ const OptionsListStories = storiesOf(`${__dirname}`, module).add('Basic', () => 
     <div>
       <OptionsList
         options={options}
-        onOptionToggle={facetValue => {
-          const currentIndex = options.findIndex(val => val.key === facetValue);
+        onOptionToggle={(facetValue) => {
+          const currentIndex = options.findIndex((val) => val.key === facetValue);
           setOptions([
             ...options.slice(0, currentIndex),
             ...[{ ...options[currentIndex], isChecked: !options[currentIndex].isChecked }],
             ...options.slice(currentIndex + 1, Infinity),
           ]);
         }}
-        onSelectAllOptions={allOptionsSelected => {
+        onSelectAllOptions={(allOptionsSelected) => {
           if (allOptionsSelected) {
-            setOptions(options.map(opt => ({ ...opt, isChecked: false })));
+            setOptions(options.map((opt) => ({ ...opt, isChecked: false })));
           } else {
-            setOptions(options.map(opt => ({ ...opt, isChecked: true })));
+            setOptions(options.map((opt) => ({ ...opt, isChecked: true })));
           }
         }}
-        parseDisplayValue={value => value}
+        parseDisplayValue={(value) => value}
       />
     </div>
   );

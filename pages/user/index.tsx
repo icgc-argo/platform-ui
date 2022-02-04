@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -25,11 +25,13 @@ import { decodeToken } from 'global/utils/egoJwt';
 import { UserPage } from 'components/pages/user';
 
 export default createPage({
-  getInitialProps: async context => {
+  getInitialProps: async (context) => {
     const { egoJwt, asPath, query, res } = context;
     const data = decodeToken(egoJwt);
     const firstName = get(data, 'context.user.firstName', '');
     const lastName = get(data, 'context.user.lastName', '');
-    return { firstName, lastName };
+    const scope = get(data, 'context.scope', '');
+
+    return { firstName, lastName, scope };
   },
 })(UserPage);

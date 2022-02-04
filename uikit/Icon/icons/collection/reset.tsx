@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -23,8 +23,7 @@ export default {
   title: 'rdpc',
   viewBox: '0 0 12 12',
   fillRule: 'evenodd',
-  path:
-    'M11.961 5.98C11.963 2.68 9.29.004 5.99.003 4.322.003 2.731.698 1.6 1.92V.8c0-.442-.358-.8-.8-.8-.442 0-.8.358-.8.8v3.187c0 .442.358.8.8.8h3.192c.442 0 .8-.358.8-.8 0-.442-.358-.8-.8-.8h-1.39c1.543-1.867 4.306-2.13 6.173-.588 1.866 1.542 2.13 4.305.588 6.172-.833 1.008-2.072 1.591-3.379 1.592-.442 0-.8.358-.8.8 0 .442.358.8.8.8H6c3.297-.008 5.965-2.686 5.961-5.983',
+  path: 'M11.961 5.98C11.963 2.68 9.29.004 5.99.003 4.322.003 2.731.698 1.6 1.92V.8c0-.442-.358-.8-.8-.8-.442 0-.8.358-.8.8v3.187c0 .442.358.8.8.8h3.192c.442 0 .8-.358.8-.8 0-.442-.358-.8-.8-.8h-1.39c1.543-1.867 4.306-2.13 6.173-.588 1.866 1.542 2.13 4.305.588 6.172-.833 1.008-2.072 1.591-3.379 1.592-.442 0-.8.358-.8.8 0 .442.358.8.8.8H6c3.297-.008 5.965-2.686 5.961-5.983',
   css: css`
     width: 12px;
     height: 12px;

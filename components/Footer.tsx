@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -40,11 +40,11 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
 
   React.useEffect(() => {
     fetch(urlJoin(GATEWAY_API_ROOT, STATUS_PATH))
-      .then(res => res.json())
-      .then(version => {
+      .then((res) => res.json())
+      .then((version) => {
         setApiVersion(version);
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn(err);
       });
   }, []);

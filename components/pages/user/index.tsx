@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -41,11 +41,12 @@ const Column = (props) => (
   />
 );
 
-export function UserPage() {
+export function UserPage({ scope }) {
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
+  const hasTokenAccess = scope && scope.some((element) => element.match(/(\.READ|\.WRITE)$/));
 
   return (
     <DefaultLayout>
@@ -67,7 +68,7 @@ export function UserPage() {
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <ApiTokenBox apiToken={apiToken} loading={loading} isDacoApproved={isDacoApproved} />
+            <ApiTokenBox apiToken={apiToken} loading={loading} hasTokenAccess={hasTokenAccess} />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox

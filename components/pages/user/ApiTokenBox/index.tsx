@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -35,11 +35,11 @@ import { DOCS_DATA_DOWNLOAD_PAGE, DOCS_DATA_ACCESS_PAGE } from 'global/constants
 const ApiTokenBox = ({
   apiToken,
   loading,
-  isDacoApproved,
+  hasTokenAccess,
 }: {
   apiToken: ApiToken;
   loading: boolean;
-  isDacoApproved: boolean;
+  hasTokenAccess: boolean;
 }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
@@ -79,9 +79,9 @@ const ApiTokenBox = ({
 
   const getTagValue = () => (apiToken || generatedApiToken ? getDayValue(exp) : '');
 
-  const isExpired = exp <= 0 && (apiToken || generatedApiToken);
+  const isExpired = (apiToken || generatedApiToken) && exp !== null && exp <= 0;
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
-  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved;
+  const disableGenerate = loading || isGeneratingApiToken || !hasTokenAccess;
 
   return (
     <Box title="API Token" iconName="key">
@@ -162,7 +162,7 @@ const ApiTokenBox = ({
           size={BANNER_SIZE.SM}
           variant={BANNER_VARIANTS.WARNING}
           content={
-            isDacoApproved ? (
+            hasTokenAccess ? (
               <>
                 <span>
                   &#8226; Your API token is associated with your user credentials and should{' '}

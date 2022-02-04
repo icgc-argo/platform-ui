@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -34,7 +34,7 @@ if (!GATEWAY_API_ROOT) {
 }
 
 const GRAPHQL_URL = urlJoin(process.env.GATEWAY_API_ROOT, 'graphql');
-const validationRules = specifiedRules.filter(rule => rule !== NoUnusedFragmentsRule);
+const validationRules = specifiedRules.filter((rule) => rule !== NoUnusedFragmentsRule);
 
 describe('gql validations', async () => {
   let gqlFiles;
@@ -57,12 +57,14 @@ describe('gql validations', async () => {
   });
 });
 
-const validateGqlFileAgainstSchema = schema => ({ dir, file }) => {
-  const queryFilePath = path.resolve(dir, file);
-  const queryAst = compileGqlAst(queryFilePath);
-  const errors = validate(schema, queryAst, validationRules);
-  if (errors.length) {
-    throw new Error(errors);
-  }
-  expect(errors).to.be.empty;
-};
+const validateGqlFileAgainstSchema =
+  (schema) =>
+  ({ dir, file }) => {
+    const queryFilePath = path.resolve(dir, file);
+    const queryAst = compileGqlAst(queryFilePath);
+    const errors = validate(schema, queryAst, validationRules);
+    if (errors.length) {
+      throw new Error(errors);
+    }
+    expect(errors).to.be.empty;
+  };

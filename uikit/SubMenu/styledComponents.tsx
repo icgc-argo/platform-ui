@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -70,11 +70,11 @@ const level1Style = ({ selected, theme }: StyleCalculationInput) => css`
   & > .FacetContentSlim .MenuItemContent {
     padding: 6px;
     border-bottom: 1px solid;
-        border-color: ${theme.colors.grey_2};
+    border-color: ${theme.colors.grey_2};
   }
   & a {
     text-decoration: underline;
-    font-weight:normal;
+    font-weight: normal;
   }
 `;
 

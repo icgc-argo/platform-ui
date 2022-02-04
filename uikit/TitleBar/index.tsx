@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -68,7 +68,7 @@ const TitleBar: React.ComponentType<{
   const theme = useTheme();
 
   const allItems = interleave(
-    React.Children.toArray(children).filter(child => React.isValidElement(child)),
+    React.Children.toArray(children).filter((child) => React.isValidElement(child)),
     <Sep>
       <Icon width="12px" height="12px" name="chevron_right" fill={theme.titleBar.separatorColor} />
     </Sep>,

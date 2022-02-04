@@ -41,8 +41,8 @@ export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
   // when platform-api receives the request for a TSV
   // to get properties of the requested files
   {
-    header: 'Object ID',
-    getter: 'object_id',
+    header: 'File ID',
+    getter: 'file_id',
   },
   {
     // an analysis in song can have multiple donors,
@@ -67,19 +67,19 @@ export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
     getter: 'data_type',
   },
   {
-    header: 'Experimental Strategy',
-    getter: 'analysis.experiment.experimental_strategy',
-  },
-  {
-    header: 'File ID',
-    getter: 'file_id',
-  },
-  {
     header: 'File Type',
     getter: 'file_type',
   },
   {
+    header: 'Experimental Strategy',
+    getter: 'analysis.experiment.experimental_strategy',
+  },
+  {
     header: 'Size',
     getter: 'file.size',
+  },
+  {
+    header: 'Object ID',
+    getter: 'object_id',
   },
 ];
