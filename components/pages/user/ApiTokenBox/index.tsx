@@ -35,13 +35,11 @@ import { DOCS_DATA_DOWNLOAD_PAGE, DOCS_DATA_ACCESS_PAGE } from 'global/constants
 const ApiTokenBox = ({
   apiToken,
   loading,
-  isDacoApproved,
-  hasProgramAccess,
+  hasTokenAccess,
 }: {
   apiToken: ApiToken;
   loading: boolean;
-  isDacoApproved: boolean;
-  hasProgramAccess: boolean;
+  hasTokenAccess: boolean;
 }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
@@ -83,7 +81,7 @@ const ApiTokenBox = ({
 
   const isExpired = (apiToken || generatedApiToken) && exp !== null && exp <= 0;
   const disableCopy = loading || isExpired || isGeneratingApiToken || !key;
-  const disableGenerate = loading || isGeneratingApiToken || !isDacoApproved || !hasProgramAccess;
+  const disableGenerate = loading || isGeneratingApiToken || !hasTokenAccess;
 
   return (
     <Box title="API Token" iconName="key">
@@ -164,7 +162,7 @@ const ApiTokenBox = ({
           size={BANNER_SIZE.SM}
           variant={BANNER_VARIANTS.WARNING}
           content={
-            isDacoApproved && hasProgramAccess ? (
+            hasTokenAccess ? (
               <>
                 <span>
                   &#8226; Your API token is associated with your user credentials and should{' '}

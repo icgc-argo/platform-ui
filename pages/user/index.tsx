@@ -30,6 +30,8 @@ export default createPage({
     const data = decodeToken(egoJwt);
     const firstName = get(data, 'context.user.firstName', '');
     const lastName = get(data, 'context.user.lastName', '');
-    return { firstName, lastName };
+    const scope = get(data, 'context.scope', '');
+
+    return { firstName, lastName, scope };
   },
 })(UserPage);

@@ -41,12 +41,12 @@ const Column = (props) => (
   />
 );
 
-export function UserPage() {
+export function UserPage({ scope }) {
   const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
-  const hasProgramAccess = programs && programs.length > 0;
+  const hasTokenAccess = scope && scope.some((element) => element.match(/(\.READ|\.WRITE)$/));
 
   return (
     <DefaultLayout>
@@ -68,12 +68,7 @@ export function UserPage() {
         </Row>
         <Row nogutter>
           <Column sm={12} md={6}>
-            <ApiTokenBox
-              apiToken={apiToken}
-              loading={loading}
-              isDacoApproved={isDacoApproved}
-              hasProgramAccess={hasProgramAccess}
-            />
+            <ApiTokenBox apiToken={apiToken} loading={loading} hasTokenAccess={hasTokenAccess} />
           </Column>
           <Column sm={12} md={6}>
             <ProgramAccessBox
