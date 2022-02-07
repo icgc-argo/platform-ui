@@ -184,6 +184,7 @@ const fileIDSearch: FacetDetails = {
   facetPath: FileFacetPath.file_id,
   variant: 'Other',
   esDocumentField: FileCentricDocumentField.file_id,
+  placeholderText: 'e.g. FL13796, 009f4750-e167...',
 };
 
 const donorIDSearch: FacetDetails = {
@@ -191,6 +192,7 @@ const donorIDSearch: FacetDetails = {
   facetPath: FileFacetPath.donor_id,
   variant: 'Other',
   esDocumentField: FileCentricDocumentField['donors.donor_id'],
+  placeholderText: 'e.g. DO35083, PCSI_0103...',
 };
 
 const FacetContainer = styled(Container)`
@@ -287,10 +289,11 @@ const FacetPanel = () => {
   const presetFacets = createPresetFacets(fieldDisplayNames);
   const [currentTab, setTabs] = useState('clinical');
 
-  const selectedSearch =
+  const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
+
   const [expandedFacets, setExpandedFacets] = React.useState(
-    [...presetFacets, selectedSearch].map((facet) => facet.facetPath),
+    [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
   );
   const [searchOpen, setSearchOpen] = React.useState(false);
   const uploadDisabled = false; // TODO: implement correctly
@@ -531,10 +534,10 @@ const FacetPanel = () => {
           `}
         >
           <MenuItem
-            onClick={(e) => clickHandler(selectedSearch)}
-            selected={expandedFacets.includes(selectedSearch.facetPath)}
+            onClick={(e) => clickHandler(currentSearch)}
+            selected={expandedFacets.includes(currentSearch.facetPath)}
             className="FacetMenu"
-            content={selectedSearch.name}
+            content={currentSearch.name}
             chevronOnLeftSide={true}
             isFacetVariant={true}
             css={css`
@@ -565,7 +568,7 @@ const FacetPanel = () => {
                 <Input
                   size="sm"
                   aria-label="search-for-files"
-                  placeholder="e.g. DO9182, Sa1246.bam..."
+                  placeholder={currentSearch.placeholderText}
                   preset="search"
                   value={searchQuery}
                   onChange={(e) => {

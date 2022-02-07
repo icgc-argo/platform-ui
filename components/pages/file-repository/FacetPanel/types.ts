@@ -33,6 +33,7 @@ export type FacetDetails = {
   variant: 'Basic' | 'Number' | 'Tooltip' | 'Other';
   esDocumentField: FileCentricDocumentField;
   highlight?: boolean;
+  placeholderText?: string;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
