@@ -30,7 +30,7 @@ function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string 
 }
 
 const getWorkflowNameLink = (workflowType: DataAnalysisWorkflowType) => {
-  if (!workflowType || !workflowType.workflow_name) return '';
+  if (!workflowType || !workflowType.workflow_name) return null;
 
   switch (workflowType.workflow_name) {
     case WORKFLOW_NAMES.dnaSeq:
@@ -69,7 +69,7 @@ const getWorkflowNameLink = (workflowType: DataAnalysisWorkflowType) => {
 };
 
 const getWorkflowVersionLink = (workflowType: DataAnalysisWorkflowType) => {
-  if (!workflowType || !workflowType.workflow_name) return '';
+  if (!workflowType || !workflowType.workflow_name) return null;
 
   switch (workflowType.workflow_name) {
     case WORKFLOW_NAMES.dnaSeq:
