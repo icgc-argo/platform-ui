@@ -285,9 +285,12 @@ const FacetPanel = () => {
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
+  const [currentTab, setTabs] = useState('clinical');
 
+  const selectedSearch =
+    FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
   const [expandedFacets, setExpandedFacets] = React.useState(
-    [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
+    [...presetFacets, selectedSearch].map((facet) => facet.facetPath),
   );
   const [searchOpen, setSearchOpen] = React.useState(false);
   const uploadDisabled = false; // TODO: implement correctly
@@ -479,7 +482,6 @@ const FacetPanel = () => {
     },
   });
 
-  const [currentTab, setTabs] = useState('clinical');
   const containerProps = {
     css: css`
       flex-grow: 1;
@@ -529,10 +531,10 @@ const FacetPanel = () => {
           `}
         >
           <MenuItem
-            onClick={(e) => clickHandler(fileIDSearch)}
-            selected={expandedFacets.includes(fileIDSearch.facetPath)}
+            onClick={(e) => clickHandler(selectedSearch)}
+            selected={expandedFacets.includes(selectedSearch.facetPath)}
             className="FacetMenu"
-            content={fileIDSearch.name}
+            content={selectedSearch.name}
             chevronOnLeftSide={true}
             isFacetVariant={true}
             css={css`
