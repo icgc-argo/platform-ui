@@ -12,6 +12,7 @@ export enum FileFacetPath {
   data_type = 'data_type',
   analysis_tools = 'analysis_tools',
   object_id = 'object_id',
+  donor_id = 'donor_id',
   donors__specimens__specimen_type = 'donors__specimens__specimen_type',
   donors__specimens__specimen_tissue_source = 'donors__specimens__specimen_tissue_source',
   analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',

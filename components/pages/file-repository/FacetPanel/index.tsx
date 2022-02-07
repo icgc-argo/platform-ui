@@ -186,6 +186,13 @@ const fileIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField.file_id,
 };
 
+const donorIDSearch: FacetDetails = {
+  name: 'Search by Donor ID',
+  facetPath: FileFacetPath.donor_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField['donors.donor_id'],
+};
+
 const FacetContainer = styled(Container)`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
