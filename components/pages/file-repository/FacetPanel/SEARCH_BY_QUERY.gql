@@ -7,6 +7,16 @@ query SEARCH_BY_QUERY($filters: JSON) {
           file_id
           data_category
           study_id
+          donors {
+            hits {
+              edges {
+                node {
+                  donor_id
+                  submitter_donor_id
+                }
+              }
+            }
+          }
         }
       }
     }

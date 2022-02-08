@@ -359,7 +359,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField['file_id'],
+    dotField: FileCentricDocumentField[currentSearch.esDocumentField],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -510,7 +510,10 @@ const FacetPanel = () => {
     pointer-events: 'auto';
   `;
   const onRemoveSelectedId = (id: string) => {
-    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['file_id'], id).build();
+    const idFilterToRemove = SqonBuilder.has(
+      FileCentricDocumentField[currentSearch.esDocumentField],
+      id,
+    ).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
@@ -639,11 +642,12 @@ const FacetPanel = () => {
                       `}
                     />
                     <SearchResultsMenu
+                      currentSearch={currentSearch}
                       searchData={idSearchData}
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({
-                          field: FileCentricDocumentField['file_id'],
+                          field: FileCentricDocumentField[currentSearch.esDocumentField],
                           value,
                         });
                         setSearchQuery('');

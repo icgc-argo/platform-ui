@@ -20,7 +20,7 @@
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { IdSearchQueryData } from './types';
+import { FacetDetails, FileFacetPath, IdSearchQueryData } from './types';
 import { useTheme } from 'uikit/ThemeProvider';
 import theme from 'uikit/theme/defaultTheme';
 
@@ -55,10 +55,12 @@ const ListItem = styled(Typography)`
 `;
 
 const SearchResultsMenu = ({
+  currentSearch,
   isLoading,
   searchData,
   onSelect,
 }: {
+  currentSearch: FacetDetails;
   isLoading: boolean;
   searchData: IdSearchQueryData;
   onSelect: Function;
@@ -87,10 +89,16 @@ const SearchResultsMenu = ({
         </ResultsDropdown>
       );
     }
+
     return (
       <>
         <ResultsDropdown>
-          {searchData.file.hits.edges.map(({ node }) => {
+          {searchData.file.hits.edges.map(({ node }, i) => {
+            const nodeData =
+              currentSearch.facetPath === FileFacetPath.file_id
+                ? node.file_id
+                : node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', ');
+
             return (
               <div
                 css={css`
@@ -104,8 +112,8 @@ const SearchResultsMenu = ({
                     border-bottom: 0px;
                   }
                 `}
-                onClick={() => onSelect(node.file_id)}
-                key={node.file_id}
+                onClick={() => onSelect(nodeData)}
+                key={`${nodeData}-${i}`}
               >
                 <ListItem
                   css={css`
@@ -114,7 +122,7 @@ const SearchResultsMenu = ({
                   `}
                 >
                   <>
-                    <span style={{ fontWeight: 700 }}>{node.file_id} </span>
+                    <span style={{ fontWeight: 700 }}>{nodeData} </span>
                     {`(${node.study_id})`}
                   </>
                 </ListItem>

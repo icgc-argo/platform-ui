@@ -1,5 +1,6 @@
-import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FilterOption } from 'uikit/OptionsList';
+import { DonorRecord } from 'components/pages/file-entity/types';
+import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 
 export enum FileFacetPath {
@@ -91,6 +92,7 @@ type IdSearchQueryDataNode = {
     file_id: string;
     data_category: string;
     study_id: string;
+    donors: Array<DonorRecord>;
   };
 };
 
