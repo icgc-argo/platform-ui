@@ -223,7 +223,46 @@ const useFileFacetQuery = (
   );
 };
 
-const useIdSearchQuery = (
+const useDonorIdSearchQuery = (
+  searchValue: string,
+  excludedIds: string[],
+): { data: IdSearchQueryData; loading: boolean } => {
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+    skip: !searchValue,
+    variables: {
+      filters: {
+        op: 'and',
+        content: [
+          {
+            op: 'filter' as ArrayFieldKeys,
+            content: {
+              value: `*${searchValue.toLowerCase()}*`,
+              fields: [
+                'file_autocomplete.analyzed',
+                'file_autocomplete.lowercase',
+                'file_autocomplete.prefix',
+              ],
+            },
+          },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['donors.donor_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  });
+};
+
+const useFileIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
@@ -348,10 +387,10 @@ const FacetPanel = () => {
     }
   };
 
-  const { data: idSearchData, loading: idSearchLoading } = useIdSearchQuery(
-    debouncedSearchTerm,
-    excludedIds,
-  );
+  const { data: idSearchData, loading: idSearchLoading } =
+    currentTab === 'clinical'
+      ? useDonorIdSearchQuery(debouncedSearchTerm, excludedIds)
+      : useFileIdSearchQuery(debouncedSearchTerm, excludedIds);
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
