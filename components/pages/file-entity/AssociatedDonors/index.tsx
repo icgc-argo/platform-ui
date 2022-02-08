@@ -19,11 +19,10 @@
 
 import { FileCard, TableDiv } from '../common';
 import { css } from '@emotion/core';
-import VerticalTabs from 'uikit/VerticalTabs';
+// import VerticalTabs from 'uikit/VerticalTabs';
 import { Col, Row } from 'react-grid-system';
 import { DonorRecord } from '../types';
 import React from 'react';
-import Link from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import styled from '@emotion/styled';
 import { useTheme } from 'uikit/ThemeProvider';

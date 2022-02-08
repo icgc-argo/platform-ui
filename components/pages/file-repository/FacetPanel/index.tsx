@@ -16,19 +16,19 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import Facet from 'uikit/Facet';
-import { MenuItem } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import FileSelectButton from 'uikit/FileSelectButton';
-import { SubMenu } from 'uikit/SubMenu';
 import { css, styled } from 'uikit';
-import Typography from 'uikit/Typography';
+import Facet from 'uikit/Facet';
+import { MenuItem, SubMenu } from 'uikit/SubMenu';
+import { Input } from 'uikit/form';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
+import Tooltip from 'uikit/Tooltip';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
+import useClickAway from 'uikit/utils/useClickAway';
+import Tabs, { Tab } from 'uikit/Tabs';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -60,18 +60,15 @@ import {
 } from './types';
 import Container from 'uikit/Container';
 import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
-import { concat, trim } from 'lodash';
+import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
-import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { FilterOption } from 'uikit/OptionsList';
-import Tabs, { Tab } from 'uikit/Tabs';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -185,6 +182,7 @@ const fileIDSearch: FacetDetails = {
   variant: 'Other',
   esDocumentField: FileCentricDocumentField.file_id,
   placeholderText: 'e.g. FL13796, 009f4750-e167...',
+  tooltipContent: 'Enter a File ID or Object ID.',
 };
 
 const donorIDSearch: FacetDetails = {
@@ -193,6 +191,7 @@ const donorIDSearch: FacetDetails = {
   variant: 'Other',
   esDocumentField: FileCentricDocumentField['donors.donor_id'],
   placeholderText: 'e.g. DO35083, PCSI_0103...',
+  tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
 };
 
 const FacetContainer = styled(Container)`
@@ -540,6 +539,11 @@ const FacetPanel = () => {
             content={currentSearch.name}
             chevronOnLeftSide={true}
             isFacetVariant={true}
+            RightSideComp={
+              <Tooltip position={'right'} html={currentSearch.tooltipContent}>
+                <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+              </Tooltip>
+            }
             css={css`
               flex: 1;
             `}

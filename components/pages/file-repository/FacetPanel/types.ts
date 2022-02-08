@@ -34,6 +34,7 @@ export type FacetDetails = {
   esDocumentField: FileCentricDocumentField;
   highlight?: boolean;
   placeholderText?: string;
+  tooltipContent?: string;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
