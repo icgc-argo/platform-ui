@@ -256,6 +256,18 @@ const useDonorIdSearchQuery = (
               },
             ],
           },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['donors.submitter_donor_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
         ],
       },
     },
