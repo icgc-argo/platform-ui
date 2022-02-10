@@ -59,7 +59,8 @@ import {
   IdSearchQueryData,
 } from './types';
 import Container from 'uikit/Container';
-import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
+import SEARCH_BY_FILE_QUERY from './SEARCH_BY_FILE_QUERY.gql';
+import SEARCH_BY_DONOR_QUERY from './SEARCH_BY_DONOR_QUERY.gql';
 import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
@@ -227,7 +228,7 @@ const useDonorIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
-  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
     skip: !searchValue,
     variables: {
       filters: {
@@ -236,11 +237,10 @@ const useDonorIdSearchQuery = (
           {
             op: 'filter' as ArrayFieldKeys,
             content: {
-              value: `*${searchValue.toLowerCase()}*`,
+              value: `*${searchValue.toUpperCase()}*`,
               fields: [
-                'file_autocomplete.analyzed',
-                'file_autocomplete.lowercase',
-                'file_autocomplete.prefix',
+                FileCentricDocumentField['donors.donor_id'],
+                FileCentricDocumentField['donors.submitter_donor_id'],
               ],
             },
           },
@@ -278,7 +278,21 @@ const useFileIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
-  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
+  const fileIDQueryFilter = FEATURE_ACCESS_FACET_ENABLED
+    ? {
+        value: `*${searchValue.toUpperCase()}*`,
+        fields: [FileCentricDocumentField['object_id'], FileCentricDocumentField['file_id']],
+      }
+    : {
+        value: `*${searchValue.toLowerCase()}*`,
+        fields: [
+          'file_autocomplete.analyzed',
+          'file_autocomplete.lowercase',
+          'file_autocomplete.prefix',
+        ],
+      };
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
     skip: !searchValue,
     variables: {
       filters: {
@@ -286,14 +300,7 @@ const useFileIdSearchQuery = (
         content: [
           {
             op: 'filter' as ArrayFieldKeys,
-            content: {
-              value: `*${searchValue.toLowerCase()}*`,
-              fields: [
-                'file_autocomplete.analyzed',
-                'file_autocomplete.lowercase',
-                'file_autocomplete.prefix',
-              ],
-            },
+            content: fileIDQueryFilter,
           },
           {
             op: 'not' as CombinationKeys,
