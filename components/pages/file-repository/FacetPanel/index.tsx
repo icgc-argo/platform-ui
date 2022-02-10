@@ -278,8 +278,9 @@ const useFileIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
-  const { FEATURE_ACCESS_FACET_ENABLED } = getConfig();
-  const fileIDQueryFilter = FEATURE_ACCESS_FACET_ENABLED
+  const { FEATURE_FACET_TABS_ENABLED } = getConfig();
+
+  const fileIDQueryFilter = FEATURE_FACET_TABS_ENABLED
     ? {
         value: `*${searchValue.toUpperCase()}*`,
         fields: [FileCentricDocumentField['object_id'], FileCentricDocumentField['file_id']],
@@ -292,6 +293,7 @@ const useFileIdSearchQuery = (
           'file_autocomplete.prefix',
         ],
       };
+
   return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
     skip: !searchValue,
     variables: {
@@ -343,16 +345,15 @@ const FacetPanel = () => {
 
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
-  const presetFacets = createPresetFacets(fieldDisplayNames);
-  const [currentTab, setTabs] = useState('clinical');
-
+  const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
+  const [searchOpen, setSearchOpen] = React.useState(false);
 
+  const presetFacets = createPresetFacets(fieldDisplayNames);
   const [expandedFacets, setExpandedFacets] = React.useState(
     [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
   );
-  const [searchOpen, setSearchOpen] = React.useState(false);
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
