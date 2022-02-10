@@ -4,6 +4,7 @@ query SEARCH_BY_FILE_QUERY($filters: JSON) {
       total
       edges {
         node {
+          object_id
           file_id
           data_category
           study_id
