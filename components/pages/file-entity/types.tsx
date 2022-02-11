@@ -56,7 +56,6 @@ export type DonorRecord = {
   cancerType: string;
   ageAtDiagnosis: string;
   associations: Associations;
-  hits?: [];
 };
 
 export type Associations = {

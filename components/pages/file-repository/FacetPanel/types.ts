@@ -96,7 +96,11 @@ type IdSearchQueryDataNode = {
     file_id: string;
     data_category: string;
     study_id: string;
-    donors: Array<DonorRecord>;
+    donors: {
+      hits: {
+        edges: Array<{ node: fileDonorsNode }>;
+      };
+    };
   };
 };
 
@@ -111,4 +115,9 @@ export type IdSearchQueryData = {
 
 export type IdSearchQueryVariables = {
   filters: RecursiveFilter;
+};
+
+export type fileDonorsNode = {
+  donor_id: string;
+  submitter_donor_id: string;
 };
