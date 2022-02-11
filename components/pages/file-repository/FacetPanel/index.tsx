@@ -324,6 +324,12 @@ const fileIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField.file_id,
   placeholderText: 'e.g. FL13796, 009f4750-e167...',
   tooltipContent: 'Enter a File ID or Object ID.',
+  getNodeData: (nodes) =>
+    nodes.map(({ node }) => ({
+      primary: node.file_id,
+      secondary: node.study_id,
+      tertiary: node.data_category,
+    })),
 };
 
 const donorIDSearch: FacetDetails = {
@@ -334,6 +340,28 @@ const donorIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField['donors.donor_id'],
   placeholderText: 'e.g. DO35083, PCSI_0103...',
   tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
+  getNodeData: (nodes) => {
+    // Filters out duplicate Donor IDs
+    let filteredIds = [];
+    const searchResults = [];
+    nodes.forEach(({ node }) => {
+      node.donors.hits.edges.forEach((hit) => {
+        if (
+          !filteredIds.includes(hit.node.donor_id) ||
+          !filteredIds.includes(hit.node.submitter_donor_id)
+        ) {
+          filteredIds.push(hit.node.donor_id, hit.node.submitter_donor_id);
+
+          searchResults.push({
+            primary: hit.node.donor_id,
+            secondary: node.study_id,
+            tertiary: node.data_category,
+          });
+        } else return false;
+      });
+    });
+    return searchResults;
+  },
 };
 
 const FacetPanel = () => {

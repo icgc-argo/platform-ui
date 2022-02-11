@@ -82,7 +82,9 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    if (searchData.file.hits.total === 0) {
+    const nodeData = currentSearch.getNodeData(searchData.file.hits.edges);
+
+    if (searchData.file.hits.total === 0 || nodeData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
@@ -90,61 +92,46 @@ const SearchResultsMenu = ({
       );
     }
 
-    const donorIds = [];
     return (
       <>
         <ResultsDropdown>
-          {searchData.file.hits.edges.map(({ node }, i) => {
-            const nodeData =
-              currentSearch.facetPath === FileFacetPath.file_id
-                ? node.file_id
-                : node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', ');
-
-            // Filter out duplicate donor IDs
-            if (currentSearch.facetPath === FileFacetPath.donor_id && donorIds.includes(nodeData)) {
-              return false;
-            } else {
-              donorIds.push(nodeData);
-            }
-
-            return (
-              <div
+          {nodeData.map(({ primary, secondary, tertiary }, i) => (
+            <div
+              css={css`
+                cursor: pointer;
+                padding: 2px;
+                border-bottom: 1px solid ${theme.colors.primary_4};
+                &:hover {
+                  background-color: ${theme.colors.secondary_4};
+                }
+                &:last-child {
+                  border-bottom: 0px;
+                }
+              `}
+              onClick={() => onSelect(primary)}
+              key={`${primary}-${i}`}
+            >
+              <ListItem
                 css={css`
-                  cursor: pointer;
-                  padding: 2px;
-                  border-bottom: 1px solid ${theme.colors.primary_4};
-                  &:hover {
-                    background-color: ${theme.colors.secondary_4};
-                  }
-                  &:last-child {
-                    border-bottom: 0px;
-                  }
+                  font-size: 11px;
+                  font-weight: 500;
                 `}
-                onClick={() => onSelect(nodeData)}
-                key={`${nodeData}-${i}`}
               >
-                <ListItem
-                  css={css`
-                    font-size: 11px;
-                    font-weight: 500;
-                  `}
-                >
-                  <>
-                    <span style={{ fontWeight: 700 }}>{nodeData} </span>
-                    {`(${node.study_id})`}
-                  </>
-                </ListItem>
-                <ListItem
-                  css={css`
-                    font-size: 9px;
-                    font-weight: 300;
-                  `}
-                >
-                  {node.data_category}
-                </ListItem>
-              </div>
-            );
-          })}
+                <>
+                  <span style={{ fontWeight: 700 }}>{primary} </span>
+                  {secondary}
+                </>
+              </ListItem>
+              <ListItem
+                css={css`
+                  font-size: 9px;
+                  font-weight: 300;
+                `}
+              >
+                {tertiary}
+              </ListItem>
+            </div>
+          ))}
         </ResultsDropdown>
       </>
     );

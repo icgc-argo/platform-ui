@@ -28,6 +28,12 @@ type BucketAggregation = {
 
 type NumericAggregation = any;
 
+export type SearchMenuDataNode = {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+};
+
 export type FacetDetails = {
   name: string;
   facetPath: FileFacetPath;
@@ -40,6 +46,7 @@ export type FacetDetails = {
     searchValue: string,
     excludedIds: string[],
   ) => { data: IdSearchQueryData; loading: boolean };
+  getNodeData?: (nodes: Array<IdSearchQueryDataNode>) => Array<SearchMenuDataNode>;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
