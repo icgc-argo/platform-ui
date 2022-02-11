@@ -706,7 +706,7 @@ const FacetPanel = () => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
             })
             .filter((f) => {
-              return FEATURE_FACET_TABS_ENABLED ? facetTabs[currentTab].includes(f.facetPath) : f;
+              return facetTabs[currentTab].includes(f.facetPath);
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);
