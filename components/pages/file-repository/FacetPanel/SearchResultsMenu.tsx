@@ -20,7 +20,7 @@
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { FacetDetails, FileFacetPath, IdSearchQueryData } from './types';
+import { FacetDetails, IdSearchQueryData } from './types';
 import { useTheme } from 'uikit/ThemeProvider';
 import theme from 'uikit/theme/defaultTheme';
 
