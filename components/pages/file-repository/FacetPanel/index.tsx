@@ -177,24 +177,6 @@ const facetTabs = {
   ],
 };
 
-const fileIDSearch: FacetDetails = {
-  name: 'Search Files',
-  facetPath: FileFacetPath.file_id,
-  variant: 'Other',
-  esDocumentField: FileCentricDocumentField.file_id,
-  placeholderText: 'e.g. FL13796, 009f4750-e167...',
-  tooltipContent: 'Enter a File ID or Object ID.',
-};
-
-const donorIDSearch: FacetDetails = {
-  name: 'Search by Donor ID',
-  facetPath: FileFacetPath.donor_id,
-  variant: 'Other',
-  esDocumentField: FileCentricDocumentField['donors.donor_id'],
-  placeholderText: 'e.g. DO35083, PCSI_0103...',
-  tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
-};
-
 const FacetContainer = styled(Container)`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
@@ -334,6 +316,26 @@ const useFileIdSearchQuery = (
   });
 };
 
+const fileIDSearch: FacetDetails = {
+  name: 'Search Files',
+  searchQuery: useFileIdSearchQuery,
+  facetPath: FileFacetPath.file_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField.file_id,
+  placeholderText: 'e.g. FL13796, 009f4750-e167...',
+  tooltipContent: 'Enter a File ID or Object ID.',
+};
+
+const donorIDSearch: FacetDetails = {
+  name: 'Search by Donor ID',
+  searchQuery: useDonorIdSearchQuery,
+  facetPath: FileFacetPath.donor_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField['donors.donor_id'],
+  placeholderText: 'e.g. DO35083, PCSI_0103...',
+  tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
+};
+
 const FacetPanel = () => {
   const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
     useFileCentricFieldDisplayName();
@@ -407,10 +409,10 @@ const FacetPanel = () => {
     }
   };
 
-  const { data: idSearchData, loading: idSearchLoading } =
-    currentTab === 'clinical'
-      ? useDonorIdSearchQuery(debouncedSearchTerm, excludedIds)
-      : useFileIdSearchQuery(debouncedSearchTerm, excludedIds);
+  const { data: idSearchData, loading: idSearchLoading } = currentSearch.searchQuery(
+    debouncedSearchTerm,
+    excludedIds,
+  );
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {

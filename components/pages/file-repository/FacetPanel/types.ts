@@ -36,6 +36,10 @@ export type FacetDetails = {
   highlight?: boolean;
   placeholderText?: string;
   tooltipContent?: string;
+  searchQuery?: (
+    searchValue: string,
+    excludedIds: string[],
+  ) => { data: IdSearchQueryData; loading: boolean };
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
