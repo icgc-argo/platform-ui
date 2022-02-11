@@ -82,9 +82,9 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    const nodeData = currentSearch.getNodeData(searchData.file.hits.edges);
+    const menuData = currentSearch.getMenuData(searchData.file.hits.edges);
 
-    if (searchData.file.hits.total === 0 || nodeData.length === 0) {
+    if (searchData.file.hits.total === 0 || menuData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
@@ -95,7 +95,7 @@ const SearchResultsMenu = ({
     return (
       <>
         <ResultsDropdown>
-          {nodeData.map(({ primary, secondary, tertiary }, i) => (
+          {menuData.map(({ primary, secondary, tertiary }, i) => (
             <div
               css={css`
                 cursor: pointer;

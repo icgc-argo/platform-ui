@@ -46,7 +46,7 @@ export type FacetDetails = {
     searchValue: string,
     excludedIds: string[],
   ) => { data: IdSearchQueryData; loading: boolean };
-  getNodeData?: (nodes: Array<IdSearchQueryDataNode>) => Array<SearchMenuDataNode>;
+  getMenuData?: (nodes: Array<IdSearchQueryDataNode>) => Array<SearchMenuDataNode>;
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
