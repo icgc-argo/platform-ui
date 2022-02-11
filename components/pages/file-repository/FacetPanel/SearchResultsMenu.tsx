@@ -90,6 +90,7 @@ const SearchResultsMenu = ({
       );
     }
 
+    const donorIds = [];
     return (
       <>
         <ResultsDropdown>
@@ -98,6 +99,13 @@ const SearchResultsMenu = ({
               currentSearch.facetPath === FileFacetPath.file_id
                 ? node.file_id
                 : node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', ');
+
+            // Filter out duplicate donor IDs
+            if (currentSearch.facetPath === FileFacetPath.donor_id && donorIds.includes(nodeData)) {
+              return false;
+            } else {
+              donorIds.push(nodeData);
+            }
 
             return (
               <div
