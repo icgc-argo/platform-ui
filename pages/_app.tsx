@@ -191,28 +191,51 @@ const Root = ({
           await sleep();
           setLoadingLoginRedirect(false);
         }
-      }
-    }
-    handleAuth();
-  }, []);
+  const show403Error = !Component.isPublic && !isAuthorized && !AUTH_DISABLED && !maintenanceModeOn;
 
   return (
-    <ApplicationRoot
-      apolloCache={apolloCache}
-      egoJwt={egoJwt}
-      pageContext={ctx}
-      startWithGlobalLoader={startWithGlobalLoader}
-    >
-      {maintenanceModeOn ? (
-        <MaintenancePage />
-      ) : isLoadingLoginRedirect ? (
-        <DefaultLayout>
-          <FullScreenLoader />
-        </DefaultLayout>
-      ) : (
-        <Component {...pageProps} />
-      )}
-    </ApplicationRoot>
+    <>
+      <style>
+        {`
+          body {
+            margin: 0;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+          } /* custom! */
+          #__next {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+          }
+        `}
+      </style>
+      <Head />
+      <AuthProvider
+      >
+        <ApplicationRoot
+          apolloCache={apolloCache}
+          pageContext={ctx}
+          startWithGlobalLoader={startWithGlobalLoader && !show403Error}
+        >
+          {show403Error ? (
+            <Page403 />
+          ) : maintenanceModeOn ? (
+            <MaintenancePage />
+          ) : isLoadingLoginRedirect || isLoggingOut ? (
+            <DefaultLayout>
+              <FullScreenLoader />
+            </DefaultLayout>
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </ApplicationRoot>
+      </AuthProvider>
+    </>
   );
 };
 

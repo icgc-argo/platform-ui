@@ -20,7 +20,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
-import { AuthProvider } from 'global/hooks/useAuthContext';
 import useDataContext, { DataProvider } from 'global/hooks/useDataContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
@@ -31,7 +30,6 @@ import { css, ThemeProvider } from 'uikit';
 import Modal from 'uikit/Modal';
 import ToastStack from 'uikit/notifications/ToastStack';
 import urljoin from 'url-join';
-import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
@@ -221,78 +219,52 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
 };
 
 export default function ApplicationRoot({
-  egoJwt,
   apolloCache,
   pageContext,
   children,
   startWithGlobalLoader,
 }: {
-  egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
   children: React.ReactElement;
   startWithGlobalLoader: boolean;
 }) {
   return (
-    <>
-      <style>
-        {`
-          body {
-            margin: 0;
-            position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-          } /* custom! */
-          #__next {
-            position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-          }
-        `}
-      </style>
-      <Head />
-      <AuthProvider egoJwt={egoJwt}>
-        <DataProvider>
-          <ApolloClientProvider apolloCache={apolloCache}>
-            <PageContext.Provider value={pageContext}>
-              <ThemeProvider>
-                <ToastProvider>
-                  <div
-                    css={css`
-                      position: fixed;
-                      left: 0px;
-                      top: 0px;
-                      z-index: 9999;
-                      ${fillAvailableWidth}
-                    `}
-                    ref={modalPortalRef}
-                  />
-                  <div
-                    css={css`
-                      position: fixed;
-                      left: 0px;
-                      top: 0px;
-                      z-index: 9999;
-                    `}
-                    ref={loaderPortalRef}
-                  />
-                  <PersistentStateProvider>
-                    <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
-                      <GdprMessage />
-                      <SystemAlerts />
-                      {children}
-                    </GlobalLoaderProvider>
-                  </PersistentStateProvider>
-                </ToastProvider>
-              </ThemeProvider>
-            </PageContext.Provider>
-          </ApolloClientProvider>
-        </DataProvider>
-      </AuthProvider>
-    </>
+    <DataProvider>
+      <ApolloClientProvider apolloCache={apolloCache}>
+        <PageContext.Provider value={pageContext}>
+          <ThemeProvider>
+            <ToastProvider>
+              <div
+                css={css`
+                  position: fixed;
+                  left: 0px;
+                  top: 0px;
+                  z-index: 9999;
+                  ${fillAvailableWidth}
+                `}
+                ref={modalPortalRef}
+              />
+              <div
+                css={css`
+                  position: fixed;
+                  left: 0px;
+                  top: 0px;
+                  z-index: 9999;
+                `}
+                ref={loaderPortalRef}
+              />
+              <PersistentStateProvider>
+                <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
+                  <GdprMessage />
+                  <SystemAlerts />
+                  {children}
+                </GlobalLoaderProvider>
+              </PersistentStateProvider>
+            </ToastProvider>
+          </ThemeProvider>
+        </PageContext.Provider>
+      </ApolloClientProvider>
+    </DataProvider>
   );
 }
