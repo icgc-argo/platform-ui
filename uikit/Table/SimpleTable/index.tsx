@@ -40,8 +40,12 @@ const SimpleTable = ({ data }) => {
         withOutsideBorder
         data={tableData}
         columns={[
-          { sortable: false, accessor: 'key', style: { whiteSpace: 'unset' } },
-          { accessor: 'val', style: { whiteSpace: 'unset' } },
+          {
+            sortable: false,
+            accessor: 'key',
+            style: { whiteSpace: 'unset', wordBreak: 'break-word' },
+          },
+          { accessor: 'val', style: { whiteSpace: 'unset', wordBreak: 'break-word' } },
         ]}
       />
     </div>
