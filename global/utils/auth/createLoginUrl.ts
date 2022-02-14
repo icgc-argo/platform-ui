@@ -26,7 +26,7 @@ import { LOGIN_PAGE_PATH } from '../../constants/pages';
 
 const { EGO_URL } = getConfig();
 
-export const createLoginURL = (asPath: string): string => {
+const createLoginURL = (asPath: string): string => {
   // split URL into path & query.
   // there could be a second level of queries inside the first &
   // pageContext.query is unreliable.
@@ -58,3 +58,5 @@ export const createLoginURL = (asPath: string): string => {
     return urlJoin(EGO_URL, redirect);
   }
 };
+
+export default createLoginURL;

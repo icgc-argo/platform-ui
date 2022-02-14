@@ -43,7 +43,7 @@ import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
-import { createLoginURL } from 'global/utils/auth';
+import createLoginURL from 'global/utils/auth/createLoginUrl';
 
 const NavBarLoginButton = () => {
   const { asPath } = usePageContext();
@@ -101,7 +101,7 @@ const getUserRole = (egoJwt, permissions) => {
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
-  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
+  const { FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
   const canAccessSubmission = React.useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
