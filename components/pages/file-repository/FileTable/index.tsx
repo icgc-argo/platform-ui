@@ -47,7 +47,12 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import { FileCentricDocumentField } from '../types';
 import A from 'uikit/Link';
 import Link from 'next/link';
-import { FILE_ENTITY_ID_PATH, FILE_ENTITY_PATH } from 'global/constants/pages';
+import {
+  FILE_ENTITY_ID_PATH,
+  FILE_ENTITY_PATH,
+  DONOR_ENTITY_PATH,
+  DONOR_ENTITY_ID_PATH,
+} from 'global/constants/pages';
 import { config } from '@storybook/addon-actions';
 import { getConfig } from 'global/config';
 
@@ -138,7 +143,7 @@ const useFileRepoPaginationState = () => {
 };
 
 const FileTable = () => {
-  const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
+  const { FEATURE_FILE_ENTITY_ENABLED, FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
 
   const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
@@ -202,6 +207,19 @@ const FileTable = () => {
       Header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessor: 'donorId',
+      Cell: ({ original }: { original: FileRepositoryRecord }) => {
+        return FEATURE_DONOR_ENTITY_ENABLED ? (
+          <Link
+            href={DONOR_ENTITY_PATH}
+            as={DONOR_ENTITY_PATH.replace(DONOR_ENTITY_ID_PATH, original.donorId)}
+            passHref
+          >
+            <A>{original.donorId}</A>
+          </Link>
+        ) : (
+          original.donorId
+        );
+      },
     },
     {
       Header: fieldDisplayNames['donors.submitter_donor_id'],

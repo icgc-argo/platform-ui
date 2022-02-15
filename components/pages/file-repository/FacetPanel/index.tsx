@@ -491,9 +491,6 @@ const FacetPanel = () => {
     &.active {
       border-bottom: 0px none ${theme.colors.white};
       border-top: 4px solid ${theme.colors.secondary};
-      :hover {
-        background-color: ${theme.colors.grey_3};
-      }
     }
   `;
 
