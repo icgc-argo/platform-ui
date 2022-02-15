@@ -29,9 +29,9 @@ type BucketAggregation = {
 type NumericAggregation = any;
 
 export type SearchMenuDataNode = {
-  primary: string;
-  secondary: string;
-  tertiary: string;
+  resultId: string;
+  secondaryText: string;
+  subText: string;
 };
 
 export type FacetDetails = {

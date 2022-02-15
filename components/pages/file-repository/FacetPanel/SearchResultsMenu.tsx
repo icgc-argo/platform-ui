@@ -95,7 +95,7 @@ const SearchResultsMenu = ({
     return (
       <>
         <ResultsDropdown>
-          {menuData.map(({ primary, secondary, tertiary }, i) => (
+          {menuData.map(({ resultId, secondaryText, subText }, i) => (
             <div
               css={css`
                 cursor: pointer;
@@ -108,8 +108,8 @@ const SearchResultsMenu = ({
                   border-bottom: 0px;
                 }
               `}
-              onClick={() => onSelect(primary)}
-              key={`${primary}-${i}`}
+              onClick={() => onSelect(resultId)}
+              key={`${resultId}-${i}`}
             >
               <ListItem
                 css={css`
@@ -118,8 +118,8 @@ const SearchResultsMenu = ({
                 `}
               >
                 <>
-                  <span style={{ fontWeight: 700 }}>{primary} </span>
-                  {secondary}
+                  <span style={{ fontWeight: 700 }}>{resultId} </span>
+                  {`(${secondaryText})`}
                 </>
               </ListItem>
               <ListItem
@@ -128,7 +128,7 @@ const SearchResultsMenu = ({
                   font-weight: 300;
                 `}
               >
-                {tertiary}
+                {subText}
               </ListItem>
             </div>
           ))}

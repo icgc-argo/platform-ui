@@ -326,9 +326,9 @@ const fileIDSearch: FacetDetails = {
   tooltipContent: 'Enter a File ID or Object ID.',
   getMenuData: (nodes) =>
     nodes.map(({ node }) => ({
-      primary: node.file_id,
-      secondary: node.study_id,
-      tertiary: node.data_category,
+      resultId: node.file_id,
+      secondaryText: node.study_id,
+      subText: node.data_category,
     })),
 };
 
@@ -353,9 +353,9 @@ const donorIDSearch: FacetDetails = {
           filteredIds.push(hit.node.donor_id, hit.node.submitter_donor_id);
 
           searchResults.push({
-            primary: hit.node.donor_id,
-            secondary: node.study_id,
-            tertiary: node.data_category,
+            resultId: hit.node.donor_id,
+            secondaryText: hit.node.submitter_donor_id,
+            subText: '',
           });
         } else return false;
       });
