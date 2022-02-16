@@ -489,12 +489,15 @@ const FacetPanel = () => {
     border-radius: 3px 3px 0px 0px;
     flex-grow: 1;
     width: 50%;
+    :hover {
+      background-color: ${theme.colors.grey_3};
+    }
 
     &.active {
       border-bottom: 0px none ${theme.colors.white};
       border-top: 4px solid ${theme.colors.secondary};
       :hover {
-        background-color: ${theme.colors.grey_3};
+        background-color: ${theme.colors.white};
       }
     }
   `;
