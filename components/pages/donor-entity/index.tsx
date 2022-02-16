@@ -21,75 +21,79 @@ import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from
 import Head from '../head';
 import NavBar from '../../NavBar';
 import clsx from 'clsx';
-// import { FileTitleBar } from './FileTitleBar';
-// import FileCardsLayout from './FileCardsLayout';
-// import useEntityData from './useEntityData';
+import useEntityData from '../file-entity/useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
-import USER_PROFILE from './USER_PROFILE.gql';
-// import { FileAccessState } from './types';
-import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
+import { DonorTitleBar } from './DonorTitleBar';
+import DonorCardsLayout from './DonorCardsLayout';
+import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
+import { FileAccessState } from '../file-entity/types';
 
-const FileEntity = ({ fileId }) => {
+import { dummyAssociatedDonorsInfo, dummyClinicalTimelineData } from './dummyData';
+
+const DonorEntity = ({ donorId }) => {
   // const {
-  //   programShortName,
-  //   access,
-  //   size,
-  //   data,
-  //   embargoStage,
-  //   loading: fileLoading,
+  // programShortName,
+  // access,
+  // size,
+  // loading: donorLoading,
   // } = useEntityData({
-  //   fileId,
+  //   donorId,
   // });
+
+  // testing
+  const access = FileAccessState.CONTROLLED;
+  const programShortName = 'APGI-AU';
+  const data = dummyAssociatedDonorsInfo;
+  const donorLoading = false;
+
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
 
-  // const loading = profileLoading || fileLoading;
+  const loading = profileLoading || donorLoading;
 
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
 
   const isUserLoggedIn = !!egoJwt;
-  // const isDownloadEnabled =
-  // access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
+  const isDownloadEnabled =
+    access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
 
-  // const accessTier = embargoStage !== 'PUBLIC' ? EmbargoStageDisplayNames[embargoStage] : null;
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
       <NavBar />
       <PageBody className={clsx({ noSidebar: true })}>
         <PageContent>
-          {/* {loading ? ( */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: '100vh',
-            }}
-          >
-            <DnaLoader />
-          </div>
-          {/* ) : (
+          {loading ? (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+              }}
+            >
+              <DnaLoader />
+            </div>
+          ) : (
             <>
               <ContentHeader>
-                <FileTitleBar
+                <DonorTitleBar
                   programShortName={programShortName}
-                  fileId={fileId}
+                  donorId={donorId}
                   isDownloadEnabled={isDownloadEnabled}
-                  accessTier={accessTier}
                 />
               </ContentHeader>
 
               <ContentBody>
-                <FileCardsLayout fileData={data} />
+                <DonorCardsLayout donorData={dummyClinicalTimelineData} />
               </ContentBody>
             </>
-          )}*/}
+          )}
           <Footer />
         </PageContent>
       </PageBody>
@@ -97,4 +101,4 @@ const FileEntity = ({ fileId }) => {
   );
 };
 
-export default FileEntity;
+export default DonorEntity;

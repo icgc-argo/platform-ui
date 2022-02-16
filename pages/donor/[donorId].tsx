@@ -18,7 +18,7 @@
  */
 
 import { createPage } from 'global/utils/pages';
-import FileEntityPage from 'components/pages/file-entity';
+import DonorEntityPage from 'components/pages/donor-entity';
 import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
@@ -40,8 +40,8 @@ export default createPage({
     }
   },
 })((props) => {
-  const { fileId } = usePageQuery<{ fileId: string }>();
-  const filters = sqonBuilder.has('file_id', fileId).build();
+  const { donorId } = usePageQuery<{ donorId: string }>();
+  const filters = sqonBuilder.has('donor_id', donorId).build();
 
   // small query to ensure the fileId is valid and user has access
   // const { loading, data } = useQuery<{
@@ -65,6 +65,6 @@ export default createPage({
   // return <div></div>;
   // }
   // setLoaderShown(false);
-
-  return <FileEntityPage {...props} fileId={fileId} />;
+  console.log(donorId);
+  return <DonorEntityPage {...props} donorId={donorId} />;
 });
