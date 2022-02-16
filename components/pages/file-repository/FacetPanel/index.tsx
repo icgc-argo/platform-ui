@@ -351,13 +351,12 @@ const donorIDSearch: FacetDetails = {
           !filteredIds.includes(hit.node.submitter_donor_id)
         ) {
           filteredIds.push(hit.node.donor_id, hit.node.submitter_donor_id);
-
           searchResults.push({
             resultId: hit.node.donor_id,
             secondaryText: hit.node.submitter_donor_id,
             subText: '',
           });
-        } else return false;
+        }
       });
     });
     return searchResults;
