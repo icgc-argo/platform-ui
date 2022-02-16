@@ -111,7 +111,7 @@ export const DonorTitleBar: React.ComponentType<{
           }}
         >
           <DownloadIcon />
-          MANIFEST
+          ALL CLINICAL DATA
         </Button>
       </div>
     </div>
