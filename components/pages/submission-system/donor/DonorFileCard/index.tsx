@@ -132,7 +132,8 @@ const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ 
   );
 };
 
-const DonorFileCard = () => {
+const DonorFileCard = ({ data }) => {
+  const { files } = data;
   return (
     <Container
       css={css`

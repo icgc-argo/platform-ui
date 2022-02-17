@@ -48,7 +48,8 @@ const DonorEntity = ({ donorId }) => {
   // testing
   const access = FileAccessState.CONTROLLED;
   const programShortName = 'APGI-AU';
-  const data = dummyAssociatedDonorsInfo;
+  const donorData = dummyAssociatedDonorsInfo;
+  const timelineData = dummyClinicalTimelineData;
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();
@@ -90,7 +91,7 @@ const DonorEntity = ({ donorId }) => {
               </ContentHeader>
 
               <ContentBody>
-                <DonorCardsLayout donorData={dummyClinicalTimelineData} />
+                <DonorCardsLayout donorData={donorData} timelineData={timelineData} />
               </ContentBody>
             </>
           )}

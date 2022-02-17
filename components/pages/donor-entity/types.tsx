@@ -17,67 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export enum DonorAccessState {
-  CONTROLLED = 'controlled',
-  OPEN = 'open',
+import { DonorRecord, FileRecord, FileSummaryInfo, DataAnalysisInfo } from '../file-entity/types';
+import { Entity } from '../submission-system/donor/ClinicalTimeline/types';
+
+export interface DonorCentricRecord extends DonorRecord {
+  gender: string;
+  specimens: [{ samples }];
+  clinical: {};
+  files: Array<FileRecord>;
 }
 
-export type FileSummaryInfo = {
-  fileId: string;
-  objectId: string;
-  fileFormat: string;
-  size: number;
-  program: string;
-  checksum: string;
-  repoName: string;
-  repoCountry: string;
-};
-
-export type DataAnalysisWorkflowType = {
-  workflow_name: string;
-  workflow_version: string;
-};
-
-export type DataAnalysisInfo = {
-  experimentalStrategy: string;
-  dataCategory: string;
-  dataType: string;
-  platform: string;
-  genomeBuild: string;
-  workflowType?: DataAnalysisWorkflowType;
-  software: [string];
-};
-
-export type DonorRecord = {
-  donorId: string;
-  submitterDonorId: string;
-  primarySite: string;
-  cancerType: string;
-  ageAtDiagnosis: string;
-  associations: Associations;
-};
-
-export type Associations = {
-  specimenId: string;
-  specimenType: string;
-  tumourNormalDesignation: string;
-  sampleId: string;
-  sampleType: string;
-  matchedNormalSampleId: string;
-};
-
-export type FileRecord = {
-  fileId: string;
-  dataType: string;
-  analysisWorkflow: string;
-  fileFormat: string;
-  fileSize: number;
-  actions: string;
-};
-
-export type DonorEntityData = {
+export interface DonorEntityData extends Entity {
   summary: FileSummaryInfo;
   dataAnalysis: DataAnalysisInfo;
   donorRecords: Array<DonorRecord>;
   fileRecords: Array<FileRecord>;
-};
+}

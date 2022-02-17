@@ -24,8 +24,7 @@ import DonorDataTable from '../submission-system/donor/DonorDataTable';
 import DonorFileCard from '../submission-system/donor/DonorFileCard';
 import ClinicalTimeline from '../submission-system/donor/ClinicalTimeline';
 // import SequencingReadProperties from './SequencingReadProperties';
-// import { DonorEntityData } from './types';
-import { Entity } from '../submission-system/donor/ClinicalTimeline/types';
+import { DonorCentricRecord, DonorEntityData } from './types';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -36,8 +35,9 @@ const PaddedColumn = styled(Col)`
 `;
 
 const DonorCardsLayout: React.ComponentType<{
-  donorData: Entity;
-}> = ({ donorData }) => {
+  donorData: DonorCentricRecord;
+  timelineData: DonorEntityData;
+}> = ({ donorData, timelineData }) => {
   return (
     <div
       css={css`
@@ -46,15 +46,15 @@ const DonorCardsLayout: React.ComponentType<{
     >
       <PaddedRow>
         <PaddedColumn md={6} sm={12}>
-          <DonorDataTable />
+          <DonorDataTable data={donorData} />
         </PaddedColumn>
         <PaddedColumn md={6} sm={12}>
-          <DonorFileCard />
+          <DonorFileCard data={donorData} />
         </PaddedColumn>
       </PaddedRow>
       <PaddedRow>
         <PaddedColumn>
-          <ClinicalTimeline data={donorData} />
+          <ClinicalTimeline data={[timelineData]} />
         </PaddedColumn>
       </PaddedRow>
       {/* TODO: un-comment once `metrics` object is available in API */}

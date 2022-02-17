@@ -17,12 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorRecord } from './types';
-import { Entity, EntityType } from '../submission-system/donor/ClinicalTimeline/types';
+import { DonorCentricRecord, DonorEntityData } from './types';
+import { EntityType } from '../submission-system/donor/ClinicalTimeline/types';
 
-export const dummyAssociatedDonorsInfo: DonorRecord = {
+export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
   donorId: 'DO9991',
   submitterDonorId: 'ICGC_71',
+  gender: '',
+  specimens: [{ samples: [{}] }],
+  clinical: {
+    follow_ups: [{}],
+    primary_diagnosis: [{}],
+    treatments: [{}],
+  },
+  files: [
+    { fileId: '', dataType: '', analysisWorkflow: '', fileFormat: '', fileSize: 0, actions: '' },
+  ],
   primarySite: 'Pancreas',
   cancerType: 'Pancreatic Cancer',
   ageAtDiagnosis: '67 years',
@@ -36,14 +46,12 @@ export const dummyAssociatedDonorsInfo: DonorRecord = {
   },
 };
 
-export const dummyClinicalTimelineData: Array<Entity> = [
-  {
-    type: EntityType.PRIMARY_DIAGNOSIS,
-    id: '',
-    description: '',
-    interval: 0,
-    data: {},
-    samples: [],
-    invalid: true,
-  },
-];
+export const dummyClinicalTimelineData: DonorEntityData = {
+  type: EntityType.PRIMARY_DIAGNOSIS,
+  id: '',
+  description: '',
+  interval: 0,
+  data: {},
+  samples: [],
+  invalid: true,
+};

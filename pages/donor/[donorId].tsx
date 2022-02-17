@@ -24,7 +24,7 @@ import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
-// import VALID_ENTITY_CHECK from './VALID_ENTITY_CHECK.gql';
+import VALID_ENTITY_CHECK from '../file/VALID_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
@@ -44,27 +44,27 @@ export default createPage({
   const filters = sqonBuilder.has('donor_id', donorId).build();
 
   // small query to ensure the fileId is valid and user has access
-  // const { loading, data } = useQuery<{
-  //   file: { hits: { total: number } };
-  // }>(//VALID_ENTITY_CHECK, {
-  //   variables: {
-  //     filters,
-  //   },
-  // });
-  // const isValidEntity = !!get(data, 'file.hits.total', false);
+  const { loading, data } = useQuery<{
+    file: { hits: { total: number } };
+  }>(VALID_ENTITY_CHECK, {
+    variables: {
+      filters,
+    },
+  });
+  const isValidEntity = !!get(data, 'file.hits.total', false);
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
 
   // if (!loading && !isValidEntity) {
-  // setLoaderShown(false);
-  // const err = new Error('Page Not Found') as Error & { statusCode?: number };
-  // err[ERROR_STATUS_KEY] = 404;
-  // return <ErrorPage statusCode={404} />;
+  //   setLoaderShown(false);
+  //   const err = new Error('Page Not Found') as Error & { statusCode?: number };
+  //   err[ERROR_STATUS_KEY] = 404;
+  //   return <ErrorPage statusCode={404} />;
   // } else if (loading) {
-  // setLoaderShown(true);
-  // return <div></div>;
+  //   setLoaderShown(true);
+  //   return <div></div>;
   // }
   // setLoaderShown(false);
-  console.log(donorId);
+
   return <DonorEntityPage {...props} donorId={donorId} />;
 });

@@ -23,7 +23,8 @@ import { Row, Col } from 'react-grid-system';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
-const DonorDataTable = () => {
+const DonorDataTable = ({ data }) => {
+  const { submitter_donor_id, gender } = data;
   return (
     <div>
       <Container
@@ -58,8 +59,8 @@ const DonorDataTable = () => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'Submitter Donor ID', val: '...' },
-                { id: 'Gender', val: '...' },
+                { id: 'Submitter Donor ID', val: submitter_donor_id },
+                { id: 'Gender', val: gender },
                 { id: 'Vital Status', val: '...' },
                 { id: 'Cause of Death', val: '...' },
                 { id: 'Survival Time', val: '...' },
