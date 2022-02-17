@@ -457,7 +457,7 @@ const FacetPanel = () => {
   const facetContainerDefaultStyle = css`
     opacity: 1;
     pointer-events: 'auto';
-    overflow: hidden;
+    overflow-x: hidden;
   `;
   const onRemoveSelectedId = (id: string) => {
     const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['file_id'], id).build();
