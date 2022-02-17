@@ -25,7 +25,25 @@ export enum EntityType {
   DECEASED = 'deceased',
 }
 
-type Sample = { id: string; type: string };
+export type SampleNode = {
+  node: {
+    sample_id: string;
+    sample_type: string;
+    submitter_sample_id: string;
+    matched_normal_submitter_sample_id?: string;
+  };
+};
+
+export type SpecimenNode = {
+  node: {
+    specimen_id: string;
+    submitter_specimen_id: string;
+    tumour_normal_designation: string;
+    specimen_type: string;
+    specimen_tissue_source?: string;
+    samples: { hits: { edges: SampleNode[] } };
+  };
+};
 
 export type Entity = {
   type: EntityType;
@@ -33,6 +51,6 @@ export type Entity = {
   description: string;
   interval: number;
   data?: {};
-  samples?: Array<Sample>;
+  samples?: Array<SampleNode>;
   invalid?: Boolean;
 };

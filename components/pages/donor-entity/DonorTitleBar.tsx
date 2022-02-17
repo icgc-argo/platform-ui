@@ -18,29 +18,28 @@
  */
 
 import { css } from '@emotion/core';
+import sqonBuilder from 'sqon-builder';
 import { useTheme } from 'uikit/ThemeProvider';
-import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
 import Button from 'uikit/Button';
 import Legend from 'uikit/Legend';
-import { DownloadIcon } from '../file-entity/common';
 import urlJoin from 'url-join';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import { getConfig } from 'global/config';
-import { FileCentricDocumentField } from '../file-repository/types';
-import sqonBuilder from 'sqon-builder';
+import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { DownloadIcon } from '../file-entity/common';
+import { FileCentricDocumentField } from '../file-repository/types';
+import { DonorCentricRecord } from './types';
 
 export const DonorTitleBar: React.ComponentType<{
-  programShortName: string;
-  donorId: string;
+  data: DonorCentricRecord;
   isDownloadEnabled: boolean;
-  accessTier?: string;
-}> = ({ programShortName, donorId, isDownloadEnabled, accessTier }) => {
+}> = ({ data, isDownloadEnabled }) => {
   const theme = useTheme();
+  const { donorId, programId } = data;
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
-  const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], donorId).build();
+  const filter = sqonBuilder.has(FileCentricDocumentField['donor_id'], donorId).build();
 
   return (
     <div
@@ -64,10 +63,9 @@ export const DonorTitleBar: React.ComponentType<{
             padding-right: 18px;
           `}
         >
-          <div>{programShortName}</div>
+          <div>{programId}</div>
           <div>Donor: {donorId}</div>
         </TitleBar>
-        {accessTier && <Tag>{accessTier}</Tag>}
       </div>
       <div
         css={css`

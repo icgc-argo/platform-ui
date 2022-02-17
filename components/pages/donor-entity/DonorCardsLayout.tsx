@@ -35,9 +35,9 @@ const PaddedColumn = styled(Col)`
 `;
 
 const DonorCardsLayout: React.ComponentType<{
-  donorData: DonorCentricRecord;
+  data: DonorCentricRecord;
   timelineData: DonorEntityData;
-}> = ({ donorData, timelineData }) => {
+}> = ({ data, timelineData }) => {
   return (
     <div
       css={css`
@@ -46,10 +46,10 @@ const DonorCardsLayout: React.ComponentType<{
     >
       <PaddedRow>
         <PaddedColumn md={6} sm={12}>
-          <DonorDataTable data={donorData} />
+          <DonorDataTable data={data} />
         </PaddedColumn>
         <PaddedColumn md={6} sm={12}>
-          <DonorFileCard data={donorData} />
+          <DonorFileCard data={data} />
         </PaddedColumn>
       </PaddedRow>
       <PaddedRow>

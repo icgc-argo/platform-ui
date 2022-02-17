@@ -21,18 +21,10 @@ import { DonorCentricRecord, DonorEntityData } from './types';
 import { EntityType } from '../submission-system/donor/ClinicalTimeline/types';
 
 export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
-  donorId: 'DO9991',
-  submitterDonorId: 'ICGC_71',
-  gender: '',
-  specimens: [{ samples: [{}] }],
-  clinical: {
-    follow_ups: [{}],
-    primary_diagnosis: [{}],
-    treatments: [{}],
-  },
-  files: [
-    { fileId: '', dataType: '', analysisWorkflow: '', fileFormat: '', fileSize: 0, actions: '' },
-  ],
+  programId: 'TEST-PR',
+  donorId: 'DO252999',
+  submitterDonorId: 'HCC1143',
+  gender: 'Female',
   primarySite: 'Pancreas',
   cancerType: 'Pancreatic Cancer',
   ageAtDiagnosis: '67 years',
@@ -43,6 +35,64 @@ export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
     sampleId: 'SA9991',
     sampleType: 'Total DNA',
     matchedNormalSampleId: 'SP9934',
+  },
+  specimens: {
+    hits: {
+      edges: [
+        {
+          node: {
+            specimen_tissue_source: 'Blood derived',
+            specimen_type: 'Normal',
+            tumour_normal_designation: 'Normal',
+            submitter_specimen_id: 'HCC1143_BAM_INPUT',
+            specimen_id: 'SP212999',
+            samples: {
+              hits: {
+                edges: [
+                  {
+                    node: {
+                      matched_normal_submitter_sample_id: null,
+                      sample_id: 'SA613000',
+                      sample_type: 'Total DNA',
+                      submitter_sample_id: 'HCC1143_BAM_INPUT',
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+  follow_ups: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  primary_diagnosis: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  treatments: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  files: {
+    hits: {
+      edges: [
+        {
+          fileId: 'FL1203',
+          dataType: 'Alignment QC',
+          analysisWorkflow: '',
+          fileFormat: '',
+          fileSize: 23195,
+          actions: '',
+        },
+      ],
+    },
   },
 };
 

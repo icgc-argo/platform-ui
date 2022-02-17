@@ -24,7 +24,7 @@ import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
 const DonorDataTable = ({ data }) => {
-  const { submitter_donor_id, gender } = data;
+  const { programId, submitter_donor_id, gender, vitalStatus, cancerType, primarySite } = data;
   return (
     <div>
       <Container
@@ -61,12 +61,12 @@ const DonorDataTable = ({ data }) => {
               data={[
                 { id: 'Submitter Donor ID', val: submitter_donor_id },
                 { id: 'Gender', val: gender },
-                { id: 'Vital Status', val: '...' },
+                { id: 'Vital Status', val: vitalStatus },
                 { id: 'Cause of Death', val: '...' },
                 { id: 'Survival Time', val: '...' },
-                { id: 'Program Name', val: '...' },
-                { id: 'Cancer Type', val: '...' },
-                { id: 'Primary Site', val: '...' },
+                { id: 'Program Name', val: programId },
+                { id: 'Cancer Type', val: cancerType },
+                { id: 'Primary Site', val: primarySite },
                 { id: 'Height', val: '...' },
                 { id: 'Weight', val: '...' },
               ]}

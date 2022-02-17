@@ -47,7 +47,6 @@ const DonorEntity = ({ donorId }) => {
 
   // testing
   const access = FileAccessState.CONTROLLED;
-  const programShortName = 'APGI-AU';
   const donorData = dummyAssociatedDonorsInfo;
   const timelineData = dummyClinicalTimelineData;
   const donorLoading = false;
@@ -83,15 +82,11 @@ const DonorEntity = ({ donorId }) => {
           ) : (
             <>
               <ContentHeader>
-                <DonorTitleBar
-                  programShortName={programShortName}
-                  donorId={donorId}
-                  isDownloadEnabled={isDownloadEnabled}
-                />
+                <DonorTitleBar data={donorData} isDownloadEnabled={isDownloadEnabled} />
               </ContentHeader>
 
               <ContentBody>
-                <DonorCardsLayout donorData={donorData} timelineData={timelineData} />
+                <DonorCardsLayout data={donorData} timelineData={timelineData} />
               </ContentBody>
             </>
           )}

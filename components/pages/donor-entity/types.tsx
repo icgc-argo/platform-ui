@@ -18,13 +18,37 @@
  */
 
 import { DonorRecord, FileRecord, FileSummaryInfo, DataAnalysisInfo } from '../file-entity/types';
-import { Entity } from '../submission-system/donor/ClinicalTimeline/types';
+import { Entity, SpecimenNode } from '../submission-system/donor/ClinicalTimeline/types';
 
 export interface DonorCentricRecord extends DonorRecord {
+  donorId: string;
+  programId: string;
   gender: string;
-  specimens: [{ samples }];
-  clinical: {};
-  files: Array<FileRecord>;
+  specimens: {
+    hits: {
+      edges: SpecimenNode[];
+    };
+  };
+  follow_ups: {
+    hits: {
+      edges: [{}];
+    };
+  };
+  primary_diagnosis: {
+    hits: {
+      edges: [{}];
+    };
+  };
+  treatments: {
+    hits: {
+      edges: [{}];
+    };
+  };
+  files: {
+    hits: {
+      edges: FileRecord[];
+    };
+  };
 }
 
 export interface DonorEntityData extends Entity {
