@@ -74,30 +74,6 @@ export const DonorTitleBar: React.ComponentType<{
         `}
       >
         <Legend />
-
-        {/* TODO: Move download into Legend component once available: https://github.com/icgc-argo/platform-ui/issues/2108 */}
-        {/* <Tooltip
-          disabled={isDownloadEnabled}
-          unmountHTMLWhenHide
-          position="left"
-          interactive
-          html={
-            <div>
-              <span>Please log in to access controlled files</span>
-            </div>
-          }
-        >
-          <Button
-            css={css`
-              margin-right: 8px;
-            `}
-            disabled={!isDownloadEnabled}
-          >
-            <DownloadIcon />
-            FILE
-          </Button>
-        </Tooltip> */}
-
         <Button
           onClick={() => {
             const downloadUrl = urlJoin(

@@ -1,0 +1,7 @@
+query VALID_DONOR_ENTITY_CHECK($filters: JSON) {
+  donor {
+    hits(filters: $filters) {
+      total
+    }
+  }
+}

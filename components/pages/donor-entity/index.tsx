@@ -21,7 +21,7 @@ import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from
 import Head from '../head';
 import NavBar from '../../NavBar';
 import clsx from 'clsx';
-import useEntityData from '../file-entity/useEntityData';
+import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
@@ -31,22 +31,15 @@ import { get } from 'lodash';
 import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
-import { FileAccessState } from '../file-entity/types';
 
 import { dummyAssociatedDonorsInfo } from './dummyData';
 
 const DonorEntity = ({ donorId }) => {
-  // const {
-  // programShortName,
-  // access,
-  // size,
-  // loading: donorLoading,
-  // } = useEntityData({
+  // const { data: donorData, loading: donorLoading } = useEntityData({
   //   donorId,
   // });
 
-  // testing
-  const access = FileAccessState.CONTROLLED;
+  // TESTING
   const donorData = dummyAssociatedDonorsInfo;
   const donorLoading = false;
 
@@ -58,8 +51,7 @@ const DonorEntity = ({ donorId }) => {
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
 
   const isUserLoggedIn = !!egoJwt;
-  const isDownloadEnabled =
-    access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
+  const isDownloadEnabled = isUserLoggedIn && isDacoApproved;
 
   return (
     <PageContainer>

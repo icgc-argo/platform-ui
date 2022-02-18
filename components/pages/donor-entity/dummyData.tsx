@@ -228,3 +228,46 @@ export const mock: Array<DonorEntityData> = [
   { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
   { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },
 ];
+
+export const noData: DonorCentricRecord = {
+  programId: '',
+  donorId: '',
+  submitterDonorId: '',
+  gender: '',
+  primarySite: '',
+  cancerType: '',
+  ageAtDiagnosis: '',
+  associations: {
+    specimenId: '',
+    specimenType: '',
+    tumourNormalDesignation: '',
+    sampleId: '',
+    sampleType: '',
+    matchedNormalSampleId: '',
+  },
+  specimens: {
+    hits: {
+      edges: [],
+    },
+  },
+  follow_ups: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  primary_diagnosis: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  treatments: {
+    hits: {
+      edges: [{}],
+    },
+  },
+  files: {
+    hits: {
+      edges: [],
+    },
+  },
+};

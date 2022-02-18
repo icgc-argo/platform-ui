@@ -24,7 +24,7 @@ import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
-import VALID_ENTITY_CHECK from './VALID_ENTITY_CHECK.gql';
+import VALID_FILE_ENTITY_CHECK from './VALID_FILE_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
@@ -46,11 +46,12 @@ export default createPage({
   // small query to ensure the fileId is valid and user has access
   const { loading, data } = useQuery<{
     file: { hits: { total: number } };
-  }>(VALID_ENTITY_CHECK, {
+  }>(VALID_FILE_ENTITY_CHECK, {
     variables: {
       filters,
     },
   });
+
   const isValidEntity = !!get(data, 'file.hits.total', false);
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
