@@ -40,6 +40,10 @@ const DonorDataTable = ({ data }) => {
     age_at_menarche,
     number_of_pregnancies,
     number_of_children,
+    hrt_type,
+    hrt_duration,
+    contraception_type,
+    contraception_duration,
   } = data;
   return (
     <div>
@@ -104,10 +108,10 @@ const DonorDataTable = ({ data }) => {
                 { id: 'Age at Menarche', val: age_at_menarche },
                 { id: 'Number of Pregnancies', val: number_of_pregnancies },
                 { id: 'Number of Birthed Children', val: number_of_children },
-                { id: 'Prior Malignancy', val: '...' },
-                { id: 'Cancer Type Prior Malignancy', val: '...' },
-                { id: 'Age at Prior Malignancy', val: '...' },
-                { id: 'Laterality of Prior Malignancy', val: '...' },
+                { id: 'Hormone Replacement Therapy Type', val: hrt_type },
+                { id: 'Hormone Replacement Therapy Duration', val: hrt_duration },
+                { id: 'Contraception Type', val: contraception_type },
+                { id: 'Contraception Duration', val: contraception_duration },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },

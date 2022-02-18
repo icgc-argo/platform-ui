@@ -23,7 +23,6 @@ import { css } from '@emotion/core';
 import DonorDataTable from '../submission-system/donor/DonorDataTable';
 import DonorFileCard from '../submission-system/donor/DonorFileCard';
 import ClinicalTimeline from '../submission-system/donor/ClinicalTimeline';
-// import SequencingReadProperties from './SequencingReadProperties';
 import { DonorCentricRecord } from './types';
 import { mock } from './dummyData';
 
@@ -33,6 +32,8 @@ const PaddedRow = styled(Row)`
 
 const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
+  display: flex;
+  align-items: stretch;
 `;
 
 const DonorCardsLayout: React.ComponentType<{
@@ -66,14 +67,6 @@ const DonorCardsLayout: React.ComponentType<{
           <ClinicalTimeline data={mock} />
         </PaddedColumn>
       </PaddedRow>
-      {/* TODO: un-comment once `metrics` object is available in API */}
-      {/* {fileData.dataAnalysis.dataType === 'aligned_reads' && (
-        <PaddedRow>
-          <PaddedColumn>
-            <SequencingReadProperties />
-          </PaddedColumn>
-        </PaddedRow>
-      )} */}
     </div>
   );
 };
