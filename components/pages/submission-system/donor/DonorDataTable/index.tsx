@@ -24,7 +24,23 @@ import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
 const DonorDataTable = ({ data }) => {
-  const { programId, submitter_donor_id, gender, vitalStatus, cancerType, primarySite } = data;
+  const {
+    programId,
+    submitter_donor_id,
+    gender,
+    vitalStatus,
+    cancerType,
+    primarySite,
+    cause_of_death,
+    survival_time,
+    height,
+    weight,
+    bmi,
+    menopause_status,
+    age_at_menarche,
+    number_of_pregnancies,
+    number_of_children,
+  } = data;
   return (
     <div>
       <Container
@@ -62,13 +78,13 @@ const DonorDataTable = ({ data }) => {
                 { id: 'Submitter Donor ID', val: submitter_donor_id },
                 { id: 'Gender', val: gender },
                 { id: 'Vital Status', val: vitalStatus },
-                { id: 'Cause of Death', val: '...' },
-                { id: 'Survival Time', val: '...' },
+                { id: 'Cause of Death', val: cause_of_death },
+                { id: 'Survival Time', val: survival_time },
                 { id: 'Program Name', val: programId },
                 { id: 'Cancer Type', val: cancerType },
                 { id: 'Primary Site', val: primarySite },
-                { id: 'Height', val: '...' },
-                { id: 'Weight', val: '...' },
+                { id: 'Height', val: height },
+                { id: 'Weight', val: weight },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
@@ -83,11 +99,11 @@ const DonorDataTable = ({ data }) => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'BMI', val: '...' },
-                { id: 'Menopause Status', val: '...' },
-                { id: 'Age at Menarche', val: '...' },
-                { id: 'Number of Pregnancies', val: '...' },
-                { id: 'Number of Birthed Children', val: '...' },
+                { id: 'BMI', val: bmi },
+                { id: 'Menopause Status', val: menopause_status },
+                { id: 'Age at Menarche', val: age_at_menarche },
+                { id: 'Number of Pregnancies', val: number_of_pregnancies },
+                { id: 'Number of Birthed Children', val: number_of_children },
                 { id: 'Prior Malignancy', val: '...' },
                 { id: 'Cancer Type Prior Malignancy', val: '...' },
                 { id: 'Age at Prior Malignancy', val: '...' },

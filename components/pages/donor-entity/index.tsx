@@ -33,7 +33,7 @@ import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 import { FileAccessState } from '../file-entity/types';
 
-import { dummyAssociatedDonorsInfo, dummyClinicalTimelineData } from './dummyData';
+import { dummyAssociatedDonorsInfo } from './dummyData';
 
 const DonorEntity = ({ donorId }) => {
   // const {
@@ -48,7 +48,6 @@ const DonorEntity = ({ donorId }) => {
   // testing
   const access = FileAccessState.CONTROLLED;
   const donorData = dummyAssociatedDonorsInfo;
-  const timelineData = dummyClinicalTimelineData;
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();
@@ -86,7 +85,7 @@ const DonorEntity = ({ donorId }) => {
               </ContentHeader>
 
               <ContentBody>
-                <DonorCardsLayout data={donorData} timelineData={timelineData} />
+                <DonorCardsLayout data={donorData} />
               </ContentBody>
             </>
           )}

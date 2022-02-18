@@ -96,12 +96,141 @@ export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
   },
 };
 
-export const dummyClinicalTimelineData: DonorEntityData = {
-  type: EntityType.PRIMARY_DIAGNOSIS,
-  id: '',
-  description: '',
-  interval: 0,
-  data: {},
-  samples: [],
-  invalid: true,
-};
+// export const dummyClinicalTimelineData: DonorEntityData = {
+//   type: EntityType.PRIMARY_DIAGNOSIS,
+//   id: '',
+//   description: '',
+//   interval: 0,
+//   data: {},
+//   samples: [],
+//   invalid: true,
+// };
+
+export const mock = [
+  {
+    type: EntityType.PRIMARY_DIAGNOSIS,
+    id: 'PRIMARY DIAGNOSIS PD1',
+    description: 'Malignant neoplasm of pancreatic something something',
+    interval: 242222,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplasm of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
+      'Clinical Stage Group': '',
+      'Stage Suffix': 'A',
+      'Clinical T Category': '',
+      'Clinical N Category': '',
+      'Clinical M Category': '',
+      'Presenting Symptoms': 'Back Pain',
+      'Performance Status': '',
+    },
+  },
+  {
+    type: EntityType.SPECIMEN,
+    id: 'SPECIMEN SP0013',
+    description: 'Normal',
+    interval: 2,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
+      'Clinical Stage Group': '',
+    },
+    samples: [
+      { id: 'SAB5353', type: 'Amplified DNA' },
+      { id: 'SAD3053', type: 'Total DNA' },
+    ],
+  },
+  {
+    type: EntityType.SPECIMEN,
+    id: 'SPECIMEN SP0032',
+    description: 'Tumour',
+    interval: 353,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+    },
+  },
+  {
+    type: EntityType.SPECIMEN,
+    id: 'SPECIMEN SP2123',
+    description: 'Tumour',
+    interval: 36500,
+    data: {
+      'Age at Diagnosis': '28 years',
+    },
+    invalid: true,
+  },
+  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
+  {
+    type: EntityType.TREATMENT,
+    id: 'TREATMENT TR8982',
+    description: 'Chemotherapy',
+    interval: 33333,
+  },
+  {
+    type: EntityType.TREATMENT,
+    id: 'TREATMENT TR8982',
+    description: 'Ablation',
+    interval: 13525,
+  },
+  {
+    type: EntityType.TREATMENT,
+    id: 'TREATMENT TR8982',
+    description: 'Chemotherapy, Radiation therapy, Surgery',
+    interval: 88664,
+    data: {
+      'Primary Diagnosis ID': 'PD1',
+      'Age at Diagnosis': '28 years',
+      'Cancer Type Code': 'C25.3',
+      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Number of Positive Lymph Nodes': '2',
+      'Number of Examined Lymph Nodes': '',
+      'Clinical Tumour Staging System': 'Binet',
+      'Clinical Stage Group': '',
+      'Primary Diagnosis IDs': 'PD1',
+      'Age at Diagnosiss': '28 years',
+      'Cancer Type Codee': 'C25.3',
+    },
+    treatments: [
+      {
+        type: 'Chemotherapy',
+        data: [
+          {
+            'Drug Rxnormcui': 242525,
+            'Drug Name': 'Abraxane',
+            'Cumulative Drug Dose': 100,
+            'Chemotherapy Dosage Units': 'mg/m2',
+          },
+          {
+            'Drug Rxnormcui': 242525,
+            'Drug Name': 'Abraxane',
+            'Cumulative Drug Dose': 100,
+            'Chemotherapy Dosage Units': 'mg/m2',
+          },
+        ],
+      },
+      {
+        type: 'Radiation',
+        data: [
+          {
+            'Radiation Therapy Modality': 'Electron',
+            'Radiation Treatment Type': 'Internal',
+            'Radiation Therapy Fractions': 3,
+            'Radiation Therapy Dosage': 3,
+            'Anatomical Site Irradiated': 'Abdomen',
+          },
+        ],
+      },
+    ],
+  },
+  { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
+  { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },
+];
