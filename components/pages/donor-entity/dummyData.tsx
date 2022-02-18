@@ -86,8 +86,8 @@ export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
         {
           fileId: 'FL1203',
           dataType: 'Alignment QC',
-          analysisWorkflow: '',
-          fileFormat: '',
+          analysisWorkflow: 'DNA Seq Alignment',
+          fileFormat: 'TXT',
           fileSize: 23195,
           actions: '',
         },
@@ -96,17 +96,7 @@ export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
   },
 };
 
-// export const dummyClinicalTimelineData: DonorEntityData = {
-//   type: EntityType.PRIMARY_DIAGNOSIS,
-//   id: '',
-//   description: '',
-//   interval: 0,
-//   data: {},
-//   samples: [],
-//   invalid: true,
-// };
-
-export const mock = [
+export const mock: Array<DonorEntityData> = [
   {
     type: EntityType.PRIMARY_DIAGNOSIS,
     id: 'PRIMARY DIAGNOSIS PD1',
@@ -145,8 +135,8 @@ export const mock = [
       'Clinical Stage Group': '',
     },
     samples: [
-      { id: 'SAB5353', type: 'Amplified DNA' },
-      { id: 'SAD3053', type: 'Total DNA' },
+      { node: { sample_id: 'SAB5353', sample_type: 'Amplified DNA' } },
+      { node: { sample_id: 'SAD3053', sample_type: 'Total DNA' } },
     ],
   },
   {
@@ -201,33 +191,37 @@ export const mock = [
     },
     treatments: [
       {
-        type: 'Chemotherapy',
-        data: [
-          {
-            'Drug Rxnormcui': 242525,
-            'Drug Name': 'Abraxane',
-            'Cumulative Drug Dose': 100,
-            'Chemotherapy Dosage Units': 'mg/m2',
-          },
-          {
-            'Drug Rxnormcui': 242525,
-            'Drug Name': 'Abraxane',
-            'Cumulative Drug Dose': 100,
-            'Chemotherapy Dosage Units': 'mg/m2',
-          },
-        ],
+        node: {
+          treatment_type: 'Chemotherapy',
+          data: [
+            {
+              'Drug Rxnormcui': 242525,
+              'Drug Name': 'Abraxane',
+              'Cumulative Drug Dose': 100,
+              'Chemotherapy Dosage Units': 'mg/m2',
+            },
+            {
+              'Drug Rxnormcui': 242525,
+              'Drug Name': 'Abraxane',
+              'Cumulative Drug Dose': 100,
+              'Chemotherapy Dosage Units': 'mg/m2',
+            },
+          ],
+        },
       },
       {
-        type: 'Radiation',
-        data: [
-          {
-            'Radiation Therapy Modality': 'Electron',
-            'Radiation Treatment Type': 'Internal',
-            'Radiation Therapy Fractions': 3,
-            'Radiation Therapy Dosage': 3,
-            'Anatomical Site Irradiated': 'Abdomen',
-          },
-        ],
+        node: {
+          treatment_type: 'Radiation',
+          data: [
+            {
+              'Radiation Therapy Modality': 'Electron',
+              'Radiation Treatment Type': 'Internal',
+              'Radiation Therapy Fractions': 3,
+              'Radiation Therapy Dosage': 3,
+              'Anatomical Site Irradiated': 'Abdomen',
+            },
+          ],
+        },
       },
     ],
   },

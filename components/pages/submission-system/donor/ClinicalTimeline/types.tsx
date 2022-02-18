@@ -29,7 +29,7 @@ export type SampleNode = {
   node: {
     sample_id: string;
     sample_type: string;
-    submitter_sample_id: string;
+    submitter_sample_id?: string;
     matched_normal_submitter_sample_id?: string;
   };
 };
@@ -45,6 +45,13 @@ export type SpecimenNode = {
   };
 };
 
+export type TreatmentNode = {
+  node: {
+    treatment_type: string;
+    data: Array<{}>;
+  };
+};
+
 export type Entity = {
   type: EntityType;
   id: string;
@@ -53,4 +60,5 @@ export type Entity = {
   data?: {};
   samples?: Array<SampleNode>;
   invalid?: Boolean;
+  treatments?: Array<TreatmentNode>;
 };

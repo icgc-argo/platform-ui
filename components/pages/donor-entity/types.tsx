@@ -51,9 +51,4 @@ export interface DonorCentricRecord extends DonorRecord {
   };
 }
 
-export interface DonorEntityData extends Entity {
-  summary: FileSummaryInfo;
-  dataAnalysis: DataAnalysisInfo;
-  donorRecords: Array<DonorRecord>;
-  fileRecords: Array<FileRecord>;
-}
+export interface DonorEntityData extends Entity {}
