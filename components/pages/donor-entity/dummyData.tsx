@@ -96,7 +96,7 @@ export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
   },
 };
 
-export const mock: Array<DonorEntityData> = [
+export const mockTimelineData: Array<DonorEntityData> = [
   {
     type: EntityType.PRIMARY_DIAGNOSIS,
     id: 'PRIMARY DIAGNOSIS PD1',

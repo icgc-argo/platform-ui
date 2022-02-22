@@ -24,7 +24,7 @@ import DonorDataTable from '../submission-system/donor/DonorDataTable';
 import DonorFileCard from '../submission-system/donor/DonorFileCard';
 import ClinicalTimeline from '../submission-system/donor/ClinicalTimeline';
 import { DonorCentricRecord } from './types';
-import { mock } from './dummyData';
+import { mockTimelineData } from './dummyData';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -40,13 +40,6 @@ const DonorCardsLayout: React.ComponentType<{
   data: DonorCentricRecord;
 }> = ({ data }) => {
   const fileData = data.files;
-  const roughtimelineData = [
-    ...data.specimens.hits.edges,
-    ...data.follow_ups.hits.edges,
-    ...data.primary_diagnosis.hits.edges,
-    ...data.treatments.hits.edges,
-  ];
-  console.log(roughtimelineData);
 
   return (
     <div
@@ -64,7 +57,7 @@ const DonorCardsLayout: React.ComponentType<{
       </PaddedRow>
       <PaddedRow>
         <PaddedColumn>
-          <ClinicalTimeline data={mock} />
+          <ClinicalTimeline data={mockTimelineData} />
         </PaddedColumn>
       </PaddedRow>
     </div>

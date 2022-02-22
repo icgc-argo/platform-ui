@@ -21,12 +21,12 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import ClinicalTimeline from '.';
 import { select } from '@storybook/addon-knobs';
-import { mock } from 'components/pages/donor-entity/dummyData';
+import { mockTimelineData } from 'components/pages/donor-entity/dummyData';
 
 const ClinicalTimelineStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
   const knobs = () => {
     const options = {
-      full: mock,
+      full: mockTimelineData,
       noData: [],
     };
     // @ts-ignore revisit later
