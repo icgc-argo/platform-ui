@@ -41,6 +41,7 @@ const DonorEntity = ({ donorId }) => {
 
   // TESTING
   const donorData = dummyDonorEntity;
+  donorData.donorId = donorId;
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();
