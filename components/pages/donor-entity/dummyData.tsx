@@ -82,17 +82,17 @@ export const dummyDonorEntity: DonorCentricRecord = {
   },
   follow_ups: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   primary_diagnosis: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   treatments: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   files: {
@@ -282,17 +282,17 @@ export const noData: DonorCentricRecord = {
   },
   follow_ups: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   primary_diagnosis: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   treatments: {
     hits: {
-      edges: [{}],
+      edges: [],
     },
   },
   files: {
