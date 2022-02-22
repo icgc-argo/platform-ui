@@ -45,6 +45,37 @@ const useEntityData = ({ donorId }: { donorId: string }): DonorEntityData => {
   } else {
     const entity = get(data, 'donor.hits.edges[0].node', null);
 
+    const entityData: DonorCentricRecord = {
+      donorId: entity.donor_id,
+      programId: entity.program_id,
+      submitterDonorId: entity.submitter_donorid,
+      primarySite: entity.primary_site,
+      cancerType: entity.cancer_type,
+      ageAtDiagnosis: entity.age_at_diagnosis,
+      associations: entity.associations,
+      gender: entity.gender,
+      vitalStatus: entity.vital_status,
+      causeOfDeath: entity.cause_of_death,
+      survivalTime: entity.survival_time,
+      height: entity.height,
+      weight: entity.weight,
+      bmi: entity.bmi,
+      geneticDisorders: entity.genetic_disorders,
+      menopauseStatus: entity.menopause_status,
+      ageAtMenarche: entity.age_at_menarche,
+      numberOfPregnancies: entity.number_of_pregnancies,
+      numberOfChildren: entity.number_of_children,
+      hrtType: entity.hrt_type,
+      hrtDuration: entity.hrt_duration,
+      contraceptionType: entity.contraception_type,
+      contraceptionDuration: entity.contraception_duration,
+      specimens: entity.specimens,
+      follow_ups: entity.follow_ups,
+      primary_diagnosis: entity.primary_diagnosis,
+      treatments: entity.treatments,
+      files: entity.files,
+    };
+
     if (!entity) {
       return { data: noData, loading: false };
     }
@@ -53,7 +84,7 @@ const useEntityData = ({ donorId }: { donorId: string }): DonorEntityData => {
       console.error(error.message);
     }
 
-    return { data: entity, loading, error };
+    return { data: entityData, loading, error };
   }
 };
 

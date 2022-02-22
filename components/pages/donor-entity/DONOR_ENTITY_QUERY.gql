@@ -23,20 +23,20 @@ query DONOR_ENTITY_QUERY($filters: JSON) {
       total
       edges {
         node {
-          programId,
-          donorId,
-          submitterDonorId,
+          program_id,
+          donor_id,
+          submitterDonor_id,
           gender,
-          primarySite,
-          cancerType,
-          ageAtDiagnosis,
+          primary_site,
+          cancer_type,
+          age_at_diagnosis,
           associations: {
-            specimenId,
-            specimenType,
-            tumourNormalDesignation,
-            sampleId,
-            sampleType,
-            matchedNormalSampleId,
+            specimen_id,
+            specimen_type,
+            tumour_normal_designation,
+            sample_id,
+            sample_type,
+            matchedNormal_sample_id,
           },
           specimens: {
             hits: {

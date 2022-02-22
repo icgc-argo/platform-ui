@@ -39,7 +39,7 @@ const DonorEntity = ({ donorId }) => {
   //   donorId,
   // });
 
-  // TESTING
+  // TODO: Remove test values
   const donorData = dummyDonorEntity;
   donorData.donorId = donorId;
   const donorLoading = false;
@@ -50,7 +50,6 @@ const DonorEntity = ({ donorId }) => {
   const loading = profileLoading || donorLoading;
 
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
-
   const isUserLoggedIn = !!egoJwt;
   const isDownloadEnabled = isUserLoggedIn && isDacoApproved;
 
@@ -74,11 +73,15 @@ const DonorEntity = ({ donorId }) => {
           ) : (
             <>
               <ContentHeader>
-                <DonorTitleBar data={donorData} isDownloadEnabled={isDownloadEnabled} />
+                <DonorTitleBar
+                  programId={donorData.programId}
+                  donorId={donorData.donorId}
+                  isDownloadEnabled={isDownloadEnabled}
+                />
               </ContentHeader>
 
               <ContentBody>
-                <DonorCardsLayout data={donorData} />
+                <DonorCardsLayout donorData={donorData} />
               </ContentBody>
             </>
           )}

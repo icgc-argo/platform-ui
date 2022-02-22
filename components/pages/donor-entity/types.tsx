@@ -39,27 +39,27 @@ export interface DonorCentricRecord extends DonorRecord {
   hrtDuration?: number;
   contraceptionType?: string;
   contraceptionDuration?: number;
-  specimens: {
+  specimens?: {
     hits: {
       edges: SpecimenNode[];
     };
   };
-  follow_ups: {
+  follow_ups?: {
     hits: {
       edges: [{}];
     };
   };
-  primary_diagnosis: {
+  primary_diagnosis?: {
     hits: {
       edges: [{}];
     };
   };
-  treatments: {
+  treatments?: {
     hits: {
       edges: [{}];
     };
   };
-  files: {
+  files?: {
     hits: {
       edges: FileRecord[];
     };

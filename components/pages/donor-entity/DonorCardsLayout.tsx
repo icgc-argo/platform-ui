@@ -37,10 +37,10 @@ const PaddedColumn = styled(Col)`
 `;
 
 const DonorCardsLayout: React.ComponentType<{
-  data: DonorCentricRecord;
-}> = ({ data }) => {
-  const fileData = data.files;
-
+  donorData: DonorCentricRecord;
+}> = ({ donorData }) => {
+  // TODO: Remove test values
+  const timelineData = mockTimelineData;
   return (
     <div
       css={css`
@@ -49,15 +49,15 @@ const DonorCardsLayout: React.ComponentType<{
     >
       <PaddedRow>
         <PaddedColumn md={6} sm={12}>
-          <DonorDataTable data={data} />
+          <DonorDataTable data={donorData} />
         </PaddedColumn>
         <PaddedColumn md={6} sm={12}>
-          <DonorFileCard data={fileData} />
+          <DonorFileCard files={donorData.files} />
         </PaddedColumn>
       </PaddedRow>
       <PaddedRow>
         <PaddedColumn>
-          <ClinicalTimeline data={mockTimelineData} />
+          <ClinicalTimeline data={timelineData} />
         </PaddedColumn>
       </PaddedRow>
     </div>

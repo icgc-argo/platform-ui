@@ -29,14 +29,13 @@ import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { DownloadIcon } from '../file-entity/common';
 import { FileCentricDocumentField } from '../file-repository/types';
-import { DonorCentricRecord } from './types';
 
 export const DonorTitleBar: React.ComponentType<{
-  data: DonorCentricRecord;
+  programId: string;
+  donorId: string;
   isDownloadEnabled: boolean;
-}> = ({ data, isDownloadEnabled }) => {
+}> = ({ programId, donorId, isDownloadEnabled }) => {
   const theme = useTheme();
-  const { donorId, programId } = data;
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['donor_id'], donorId).build();
