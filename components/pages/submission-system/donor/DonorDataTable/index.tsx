@@ -26,24 +26,25 @@ import Typography from 'uikit/Typography';
 const DonorDataTable = ({ data }) => {
   const {
     programId,
-    submitter_donor_id,
+    submitterDonorId,
     gender,
     vitalStatus,
     cancerType,
     primarySite,
-    cause_of_death,
-    survival_time,
+    causeOfDeath,
+    survivalTime,
+    geneticDisorders,
     height,
     weight,
     bmi,
-    menopause_status,
-    age_at_menarche,
-    number_of_pregnancies,
-    number_of_children,
-    hrt_type,
-    hrt_duration,
-    contraception_type,
-    contraception_duration,
+    menopauseStatus,
+    ageAtMenarche,
+    numberOfPregnancies,
+    numberOfChildren,
+    hrtType,
+    hrtDuration,
+    contraceptionType,
+    contraceptionDuration,
   } = data;
   return (
     <div>
@@ -79,16 +80,15 @@ const DonorDataTable = ({ data }) => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'Submitter Donor ID', val: submitter_donor_id },
+                { id: 'Submitter Donor ID', val: submitterDonorId },
+                { id: 'Program Name', val: programId },
+                { id: 'Primary Site', val: primarySite },
+                { id: 'Cancer Type', val: cancerType },
                 { id: 'Gender', val: gender },
                 { id: 'Vital Status', val: vitalStatus },
-                { id: 'Cause of Death', val: cause_of_death },
-                { id: 'Survival Time', val: survival_time },
-                { id: 'Program Name', val: programId },
-                { id: 'Cancer Type', val: cancerType },
-                { id: 'Primary Site', val: primarySite },
-                { id: 'Height', val: height },
-                { id: 'Weight', val: weight },
+                { id: 'Cause of Death', val: causeOfDeath },
+                { id: 'Survival Time', val: survivalTime },
+                { id: 'Genetic Disorders', val: geneticDisorders },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
@@ -103,15 +103,17 @@ const DonorDataTable = ({ data }) => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'BMI', val: bmi },
-                { id: 'Menopause Status', val: menopause_status },
-                { id: 'Age at Menarche', val: age_at_menarche },
-                { id: 'Number of Pregnancies', val: number_of_pregnancies },
-                { id: 'Number of Birthed Children', val: number_of_children },
-                { id: 'Hormone Replacement Therapy Type', val: hrt_type },
-                { id: 'Hormone Replacement Therapy Duration', val: hrt_duration },
-                { id: 'Contraception Type', val: contraception_type },
-                { id: 'Contraception Duration', val: contraception_duration },
+                { id: 'Height', val: `${height} cm` },
+                { id: 'Weight', val: `${weight} kg` },
+                { id: 'BMI', val: `${bmi} kg/m²` },
+                { id: 'Menopause Status', val: menopauseStatus },
+                { id: 'Age at Menarche', val: ageAtMenarche },
+                { id: 'Number of Pregnancies', val: numberOfPregnancies },
+                { id: 'Number of Children', val: numberOfChildren },
+                { id: 'HRT Type', val: hrtType },
+                { id: 'HRT Duration', val: hrtDuration },
+                { id: 'Contraception Type', val: contraceptionType },
+                { id: 'Contraception Duration', val: contraceptionDuration },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },

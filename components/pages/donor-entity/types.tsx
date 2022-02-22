@@ -24,6 +24,21 @@ export interface DonorCentricRecord extends DonorRecord {
   donorId: string;
   programId: string;
   gender: string;
+  vitalStatus: string;
+  causeOfDeath?: string;
+  survivalTime?: string;
+  height?: number;
+  weight?: number;
+  bmi?: number;
+  geneticDisorders?: string;
+  menopauseStatus?: string;
+  ageAtMenarche?: number;
+  numberOfPregnancies?: number;
+  numberOfChildren?: number;
+  hrtType?: string;
+  hrtDuration?: number;
+  contraceptionType?: string;
+  contraceptionDuration?: number;
   specimens: {
     hits: {
       edges: SpecimenNode[];
