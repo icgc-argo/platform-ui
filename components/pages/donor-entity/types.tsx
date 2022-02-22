@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorRecord, FileRecord, FileSummaryInfo, DataAnalysisInfo } from '../file-entity/types';
+import { DonorRecord, FileRecord } from '../file-entity/types';
 import { Entity, SpecimenNode } from '../submission-system/donor/ClinicalTimeline/types';
 
 export interface DonorCentricRecord extends DonorRecord {
