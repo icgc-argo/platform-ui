@@ -27,14 +27,56 @@ import {
 export type DiagnosisNode = {
   node: {
     id: string;
+    // TODO: Remove Dummy Type Data
     data: Array<{}>;
+    program_id?: string;
+    submitter_donor_id?: string;
+    submitter_primary_diagnosis_id?: string;
+    age_at_diagnosis?: number;
+    cancer_type_code?: string;
+    cancer_type_additional_information?: string;
+    basis_of_diagnosis?: string;
+    laterality?: string;
+    lymph_nodes_examined_status?: string;
+    number_lymph_nodes_examined?: number;
+    number_lymph_nodes_positive?: number;
+    clinical_tumour_staging_system?: string;
+    clinical_t_category?: string;
+    clinical_n_category?: string;
+    clinical_m_category?: string;
+    clinical_stage_group?: string;
+    presenting_symptoms?: string;
+    performance_status?: string;
   };
 };
 
 export type FollowUpNode = {
   node: {
     id: string;
+    // TODO: Remove Dummy Type Data
     data: Array<{}>;
+    program_id?: string;
+    submitter_donor_id?: string;
+    submitter_follow_up_id?: string;
+    interval_of_followup?: number;
+    disease_status_at_followup?: string;
+    submitter_primary_diagnosis_id?: string;
+    submitter_treatment_id?: string;
+    weight_at_followup?: number;
+    relapse_type?: string;
+    relapse_interval?: number;
+    method_of_progression_status?: string;
+    anatomic_site_progression_or_recurrence?: string;
+    recurrence_tumour_staging_system?: string;
+    recurrence_t_category?: string;
+    recurrence_n_category?: string;
+    recurrence_m_category?: string;
+    recurrence_stage_group?: string;
+    posttherapy_tumour_staging_system?: string;
+    posttherapy_t_category?: string;
+    posttherapy_n_category?: string;
+    posttherapy_m_category?: string;
+    posttherapy_stage_group?: string;
   };
 };
 
