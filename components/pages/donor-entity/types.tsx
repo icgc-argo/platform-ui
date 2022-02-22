@@ -18,7 +18,25 @@
  */
 
 import { DonorRecord, FileRecord } from '../file-entity/types';
-import { Entity, SpecimenNode } from '../submission-system/donor/ClinicalTimeline/types';
+import {
+  Entity,
+  SpecimenNode,
+  TreatmentNode,
+} from '../submission-system/donor/ClinicalTimeline/types';
+
+export type DiagnosisNode = {
+  node: {
+    id: string;
+    data: Array<{}>;
+  };
+};
+
+export type FollowUpNode = {
+  node: {
+    id: string;
+    data: Array<{}>;
+  };
+};
 
 export interface DonorCentricRecord extends DonorRecord {
   donorId: string;
@@ -46,17 +64,17 @@ export interface DonorCentricRecord extends DonorRecord {
   };
   follow_ups?: {
     hits: {
-      edges: [{}];
+      edges: FollowUpNode[];
     };
   };
   primary_diagnosis?: {
     hits: {
-      edges: [{}];
+      edges: DiagnosisNode[];
     };
   };
   treatments?: {
     hits: {
-      edges: [{}];
+      edges: TreatmentNode[];
     };
   };
   files?: {
