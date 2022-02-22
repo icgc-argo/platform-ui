@@ -32,7 +32,7 @@ import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 
-import { dummyAssociatedDonorsInfo } from './dummyData';
+import { dummyDonorEntity } from './dummyData';
 
 const DonorEntity = ({ donorId }) => {
   // const { data: donorData, loading: donorLoading } = useEntityData({
@@ -40,7 +40,7 @@ const DonorEntity = ({ donorId }) => {
   // });
 
   // TESTING
-  const donorData = dummyAssociatedDonorsInfo;
+  const donorData = dummyDonorEntity;
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();

@@ -20,7 +20,7 @@
 import { DonorCentricRecord, DonorEntityData } from './types';
 import { EntityType } from '../submission-system/donor/ClinicalTimeline/types';
 
-export const dummyAssociatedDonorsInfo: DonorCentricRecord = {
+export const dummyDonorEntity: DonorCentricRecord = {
   programId: 'TEST-PR',
   donorId: 'DO252999',
   submitterDonorId: 'HCC1143',
