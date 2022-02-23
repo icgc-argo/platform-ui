@@ -1,7 +1,0 @@
-query VALID_ENTITY_CHECK($filters: JSON) {
-  file {
-    hits(filters: $filters) {
-      total
-    }
-  }
-}
