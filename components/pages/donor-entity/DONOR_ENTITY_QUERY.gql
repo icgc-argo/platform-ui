@@ -17,67 +17,68 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-# TODO: Replace 'file' with 'donor' once schema is updated
+# TODO: Replace 'file' with 'donor' and remove commented-out lines once schema is updated
 query DONOR_ENTITY_QUERY($filters: JSON) {
   file {
     hits(filters: $filters) {
       total
       edges {
         node {
-          program_id
-          donor_id
-          submitter_donor_id
-          gender
-          vital_status
-          cause_of_death
-          survival_time
-          primary_site
-          height
-          weight
-          bmi
-          genetic_disorders
-          menopause_status
-          age_at_diagnosis
-          age_at_menarche
-          number_of_pregnancies
-          number_of_children
-          hrt_type
-          hrt_duration
-          contraception_type
-          contraception_duration
-          associations {
-            specimen_id
-            specimen_type
-            tumour_normal_designation
-            sample_id
-            sample_type
-            matchedNormal_sample_id
-          }
-          specimens {
-            hits {
-              edges
-            }
-          }
-          follow_ups {
-            hits {
-              edges
-            }
-          }
-          primary_diagnosis {
-            hits {
-              edges
-            }
-          }
-          treatments {
-            hits {
-              edges
-            }
-          }
-          files {
-            hits {
-              edges
-            }
-          }
+          id
+          # program_id
+          # donor_id
+          # submitter_donor_id
+          # gender
+          # vital_status
+          # cause_of_death
+          # survival_time
+          # primary_site
+          # height
+          # weight
+          # bmi
+          # genetic_disorders
+          # menopause_status
+          # age_at_diagnosis
+          # age_at_menarche
+          # number_of_pregnancies
+          # number_of_children
+          # hrt_type
+          # hrt_duration
+          # contraception_type
+          # contraception_duration
+          # associations {
+          # specimen_id
+          # specimen_type
+          # tumour_normal_designation
+          # sample_id
+          # sample_type
+          # matchedNormal_sample_id
+          # }
+          # specimens {
+          #  hits {
+          #    edges
+          #  }
+          # }
+          # follow_ups {
+          #  hits {
+          #    edges
+          #  }
+          # }
+          # primary_diagnosis {
+          #  hits {
+          #    edges
+          #  }
+          # }
+          # treatments {
+          #  hits {
+          #    edges
+          #  }
+          # }
+          # files {
+          #  hits {
+          #    edges
+          #  }
+          # }
         }
       }
     }
