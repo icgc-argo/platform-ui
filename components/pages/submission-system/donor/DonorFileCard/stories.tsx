@@ -20,9 +20,10 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import DonorFileCard from '.';
+import { dummyDonorEntity } from 'components/pages/donor-entity/dummyData';
 
 const DonorFileCardStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  return <DonorFileCard />;
+  return <DonorFileCard files={dummyDonorEntity} />;
 });
 
 export default DonorFileCardStories;

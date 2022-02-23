@@ -17,39 +17,51 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { Row, Col } from 'react-grid-system';
+import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import DonorDataTable from '../submission-system/donor/DonorDataTable';
+import DonorFileCard from '../submission-system/donor/DonorFileCard';
+import ClinicalTimeline from '../submission-system/donor/ClinicalTimeline';
+import { DonorCentricRecord } from './types';
+import { mockTimelineData } from './dummyData';
 
-import Table from 'uikit/Table';
+const PaddedRow = styled(Row)`
+  padding-bottom: 8px;
+`;
 
-type MappedTableData = Array<{ key: string; val: any }>;
+const PaddedColumn = styled(Col)`
+  padding-bottom: 8px;
+  display: flex;
+  align-items: stretch;
+`;
 
-const SimpleTable = ({ data }) => {
-  const tableData: MappedTableData = Object.keys(data).map((k) => ({ key: k, val: data[k] }));
-
+const DonorCardsLayout: React.ComponentType<{
+  donorData: DonorCentricRecord;
+}> = ({ donorData }) => {
+  // TODO: Remove test values
+  const timelineData = mockTimelineData;
   return (
     <div
       css={css`
-        width: 100%;
+        margin: 0 5%;
       `}
     >
-      <Table
-        highlight={false}
-        TheadComponent={(props) => null}
-        parentRef={{ current: null }}
-        showPagination={false}
-        withOutsideBorder
-        data={tableData}
-        columns={[
-          {
-            sortable: false,
-            accessor: 'key',
-            style: { whiteSpace: 'unset', wordBreak: 'break-word' },
-          },
-          { accessor: 'val', style: { whiteSpace: 'unset', wordBreak: 'break-word' } },
-        ]}
-      />
+      <PaddedRow>
+        <PaddedColumn md={6} sm={12}>
+          <DonorDataTable data={donorData} />
+        </PaddedColumn>
+        <PaddedColumn md={6} sm={12}>
+          <DonorFileCard files={donorData.files} />
+        </PaddedColumn>
+      </PaddedRow>
+      <PaddedRow>
+        <PaddedColumn>
+          <ClinicalTimeline data={timelineData} />
+        </PaddedColumn>
+      </PaddedRow>
     </div>
   );
 };
 
-export default SimpleTable;
+export default DonorCardsLayout;

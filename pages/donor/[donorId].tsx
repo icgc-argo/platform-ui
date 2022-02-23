@@ -18,13 +18,13 @@
  */
 
 import { createPage } from 'global/utils/pages';
-import FileEntityPage from 'components/pages/file-entity';
+import DonorEntityPage from 'components/pages/donor-entity';
 import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
-import VALID_FILE_ENTITY_CHECK from './VALID_FILE_ENTITY_CHECK.gql';
+import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 
@@ -32,27 +32,28 @@ export default createPage({
   isPublic: true,
   isAccessible: async ({ initialPermissions }) => true,
   getInitialProps: async () => {
-    const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
-    if (!FEATURE_FILE_ENTITY_ENABLED) {
+    const { FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
+    if (!FEATURE_DONOR_ENTITY_ENABLED) {
       const err = new Error('Page Not Found') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 404;
       throw err;
     }
   },
 })((props) => {
-  const { fileId } = usePageQuery<{ fileId: string }>();
-  const filters = sqonBuilder.has('file_id', fileId).build();
+  const { donorId } = usePageQuery<{ donorId: string }>();
+  const filters = sqonBuilder.has('donor_id', donorId).build();
 
-  // small query to ensure the fileId is valid and user has access
+  // small query to ensure the donorId is valid
   const { loading, data } = useQuery<{
-    file: { hits: { total: number } };
-  }>(VALID_FILE_ENTITY_CHECK, {
+    donor: { hits: { total: number } };
+  }>(VALID_DONOR_ENTITY_CHECK, {
     variables: {
       filters,
     },
   });
-
-  const isValidEntity = !!get(data, 'file.hits.total', false);
+  // TODO: Remove Test Values
+  // const isValidEntity = !!get(data, 'file.hits.total', false);
+  const isValidEntity = true;
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
 
@@ -67,5 +68,5 @@ export default createPage({
   }
   setLoaderShown(false);
 
-  return <FileEntityPage {...props} fileId={fileId} />;
+  return <DonorEntityPage {...props} donorId={donorId} />;
 });

@@ -20,7 +20,7 @@
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { IdSearchQueryData } from './types';
+import { FacetDetails, IdSearchQueryData } from './types';
 import { useTheme } from 'uikit/ThemeProvider';
 import theme from 'uikit/theme/defaultTheme';
 
@@ -55,10 +55,12 @@ const ListItem = styled(Typography)`
 `;
 
 const SearchResultsMenu = ({
+  currentSearch,
   isLoading,
   searchData,
   onSelect,
 }: {
+  currentSearch: FacetDetails;
   isLoading: boolean;
   searchData: IdSearchQueryData;
   onSelect: Function;
@@ -80,55 +82,56 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    if (searchData.file.hits.total === 0) {
+    const menuData = currentSearch.getMenuData(searchData.file.hits.edges);
+
+    if (searchData.file.hits.total === 0 || menuData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
         </ResultsDropdown>
       );
     }
+
     return (
       <>
         <ResultsDropdown>
-          {searchData.file.hits.edges.map(({ node }) => {
-            return (
-              <div
+          {menuData.map(({ resultId, secondaryText, subText }, i) => (
+            <div
+              css={css`
+                cursor: pointer;
+                padding: 2px;
+                border-bottom: 1px solid ${theme.colors.primary_4};
+                &:hover {
+                  background-color: ${theme.colors.secondary_4};
+                }
+                &:last-child {
+                  border-bottom: 0px;
+                }
+              `}
+              onClick={() => onSelect(resultId)}
+              key={`${resultId}-${i}`}
+            >
+              <ListItem
                 css={css`
-                  cursor: pointer;
-                  padding: 2px;
-                  border-bottom: 1px solid ${theme.colors.primary_4};
-                  &:hover {
-                    background-color: ${theme.colors.secondary_4};
-                  }
-                  &:last-child {
-                    border-bottom: 0px;
-                  }
+                  font-size: 11px;
+                  font-weight: 500;
                 `}
-                onClick={() => onSelect(node.file_id)}
-                key={node.file_id}
               >
-                <ListItem
-                  css={css`
-                    font-size: 11px;
-                    font-weight: 500;
-                  `}
-                >
-                  <>
-                    <span style={{ fontWeight: 700 }}>{node.file_id} </span>
-                    {`(${node.study_id})`}
-                  </>
-                </ListItem>
-                <ListItem
-                  css={css`
-                    font-size: 9px;
-                    font-weight: 300;
-                  `}
-                >
-                  {node.data_category}
-                </ListItem>
-              </div>
-            );
-          })}
+                <>
+                  <span style={{ fontWeight: 700 }}>{resultId} </span>
+                  {`(${secondaryText})`}
+                </>
+              </ListItem>
+              <ListItem
+                css={css`
+                  font-size: 9px;
+                  font-weight: 300;
+                `}
+              >
+                {subText}
+              </ListItem>
+            </div>
+          ))}
         </ResultsDropdown>
       </>
     );

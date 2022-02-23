@@ -80,5 +80,4 @@ export type FileEntityData = {
   summary: FileSummaryInfo;
   dataAnalysis: DataAnalysisInfo;
   donorRecords: Array<DonorRecord>;
-  //fileRecords: Array<FileRecord>;
 };

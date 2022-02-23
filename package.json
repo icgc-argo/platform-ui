@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.105.3",
+  "version": "1.105.4",
   "scripts": {
     "dev": "next -p 8080",
     "build": "rm -rf .next && next build",
@@ -60,7 +60,7 @@
     "fast-json-stable-stringify": "^2.1.0",
     "file-loader": "^6.1.1",
     "file-saver": "^2.0.2",
-    "filesize": "^6.1.0",
+    "filesize": "^8.0.7",
     "graphql": "^14.2.1",
     "graphql-import": "^0.7.1",
     "i": "^0.3.6",
