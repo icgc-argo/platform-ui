@@ -74,6 +74,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         display: flex;
         align-items: center;
         width: 100%;
+        border-left: 3px solid black;
         border-bottom: 1px solid ${theme.colors.grey_2};
         margin-left: -1px;
         margin-right: -1px;
@@ -187,7 +188,7 @@ const Timeline = ({
         css={css`
           flex: 1;
           border: 1px solid ${theme.colors.grey_1};
-          width: 350px;
+          width: 215px;
         `}
       >
         {entities.map((entity, i) => (

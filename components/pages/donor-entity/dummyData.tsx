@@ -115,7 +115,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
   {
     type: EntityType.PRIMARY_DIAGNOSIS,
     id: 'PRIMARY DIAGNOSIS PD1',
-    description: 'Malignant neoplasm of pancreatic something something',
+    description: 'C41.1',
     interval: 242222,
     data: {
       'Primary Diagnosis ID': 'PD1',
@@ -143,7 +143,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
       'Primary Diagnosis ID': 'PD1',
       'Age at Diagnosis': '28 years',
       'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Cancer Type': 'Malignant neoplasm of pancreas',
       'Number of Positive Lymph Nodes': '2',
       'Number of Examined Lymph Nodes': '',
       'Clinical Tumour Staging System': 'Binet',
@@ -195,7 +195,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
       'Primary Diagnosis ID': 'PD1',
       'Age at Diagnosis': '28 years',
       'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplam of pancreas',
+      'Cancer Type': 'Malignant neoplasm of pancreas',
       'Number of Positive Lymph Nodes': '2',
       'Number of Examined Lymph Nodes': '',
       'Clinical Tumour Staging System': 'Binet',
