@@ -74,7 +74,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         display: flex;
         align-items: center;
         width: 100%;
-        border: 1px solid transparent;
+        border-bottom: 1px solid ${theme.colors.grey_2};
         margin-left: -1px;
         margin-right: -1px;
 
