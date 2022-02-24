@@ -109,7 +109,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
               justify-content: space-between;
             `}
           >
-            <Typography variant="caption" as="div">
+            <Typography variant="caption" as="div" bold={true}>
               {id}
             </Typography>
             {invalid ? (
@@ -127,8 +127,8 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
+              color: ${type === EntityType.DECEASED ? theme.colors.grey : 'initial'};
             `}
-            bold={type !== EntityType.DECEASED}
           >
             {description}
           </Typography>
