@@ -25,6 +25,7 @@ import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import { Entity, EntityType } from './types';
 import { InvalidIcon } from './common';
+import Icon from 'uikit/Icon';
 
 const DayCount = ({
   days,
@@ -73,9 +74,11 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         height: 46px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         border-left: 3px solid black;
         border-bottom: 1px solid ${theme.colors.grey_2};
+        padding-right: 6px;
         margin-left: -1px;
         margin-right: -1px;
 
@@ -135,6 +138,9 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           </Typography>
         </div>{' '}
       </VerticalTabs.Item>
+      {type === EntityType.SPECIMEN && (
+        <Icon name="testtube" fill={theme.colors.accent3_dark} width="15px" height="15px" />
+      )}
     </div>
   );
 };
