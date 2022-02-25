@@ -241,7 +241,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
     ],
   },
   { type: EntityType.FOLLOW_UP, id: 'FOLLOW UP FO2123', description: 'Relapse', interval: 111 },
-  { type: EntityType.DECEASED, id: 'Vital Status', description: 'Deceased', interval: 330 },
+  { type: EntityType.DECEASED, id: 'VITAL STATUS', description: 'Deceased', interval: 330 },
 ];
 
 export const noData: DonorCentricRecord = {
