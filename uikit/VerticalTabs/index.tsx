@@ -17,13 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, {
-  HtmlHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-  ReactElement,
-  MouseEventHandler,
-} from 'react';
+import React, { HtmlHTMLAttributes, HTMLAttributes, ReactNode, MouseEventHandler } from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { useTheme } from '../ThemeProvider';
@@ -100,6 +94,7 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disable
           }
         `}
 `;
+
 const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }>`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
@@ -142,7 +137,39 @@ const VerticalTabsItem: React.ComponentType<
 
   const clickHandler = (event) => disabled || onClick(event);
 
-  return (
+  const ContainerElements = (
+    <ContainerComponent
+      tabStyle={tabStyle}
+      disabled={disabled}
+      onClick={clickHandler}
+      {...rest}
+      ref={containerRef}
+    >
+      <Typography
+        variant="data"
+        as="div"
+        css={css`
+          width: 100%;
+        `}
+      >
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+          `}
+        >
+          {children}
+        </div>
+      </Typography>
+      {active && (
+        <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
+      )}
+    </ContainerComponent>
+  );
+
+  return tooltip ? (
     <Tooltip
       css={css`
         // these are applied to the internal container of the tooltip
@@ -152,36 +179,10 @@ const VerticalTabsItem: React.ComponentType<
       html={tooltip}
       position="right"
     >
-      <ContainerComponent
-        tabStyle={tabStyle}
-        disabled={disabled}
-        onClick={clickHandler}
-        {...rest}
-        ref={containerRef}
-      >
-        <Typography
-          variant="data"
-          as="div"
-          css={css`
-            width: 100%;
-          `}
-        >
-          <div
-            css={css`
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              text-align: left;
-            `}
-          >
-            {children}
-          </div>
-        </Typography>
-        {active && (
-          <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
-        )}
-      </ContainerComponent>
+      {ContainerElements}
     </Tooltip>
+  ) : (
+    ContainerElements
   );
 };
 VerticalTabsItem.displayName = 'VerticalTabs.Item';

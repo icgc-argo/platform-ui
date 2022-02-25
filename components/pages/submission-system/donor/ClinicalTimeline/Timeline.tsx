@@ -78,7 +78,6 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         width: 100%;
         border-left: 3px solid black;
         border-bottom: 1px solid ${theme.colors.grey_2};
-        padding-right: 6px;
         margin-left: -1px;
         margin-right: -1px;
 
@@ -139,7 +138,15 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         </div>{' '}
       </VerticalTabs.Item>
       {type === EntityType.SPECIMEN && (
-        <Icon name="testtube" fill={theme.colors.accent3_dark} width="15px" height="15px" />
+        <Icon
+          name="testtube"
+          fill={theme.colors.accent3_dark}
+          width="15px"
+          height="15px"
+          css={css`
+            margin-right: 6px;
+          `}
+        />
       )}
     </div>
   );
