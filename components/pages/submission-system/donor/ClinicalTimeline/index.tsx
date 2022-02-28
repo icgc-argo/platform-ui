@@ -137,78 +137,69 @@ const ClinicalTimeline = ({ data }) => {
           flex: 1;
         `}
       >
-        {data.length > 0 ? (
-          <>
-            <div
+        <>
+          <div
+            css={css`
+              writing-mode: vertical-lr;
+              transform: rotate(180deg);
+              margin-right: 10px;
+              text-align: center;
+            `}
+          >
+            <Typography
+              variant="data"
               css={css`
-                writing-mode: vertical-lr;
-                transform: rotate(180deg);
-                margin-right: 10px;
-                text-align: center;
+                font-weight: 600;
               `}
             >
-              <Typography
-                variant="data"
+              Interval since diagnosis (days)
+            </Typography>
+          </div>
+          <Timeline
+            entities={filteredData}
+            activeTab={activeTab}
+            onClickTab={({ entity, idx }) => {
+              setActiveTab(idx);
+            }}
+          />
+
+          <Row
+            style={{
+              flex: 1,
+              padding: '10px 20px',
+              border: `1px solid ${theme.colors.grey_1}`,
+              marginLeft: '-1px',
+            }}
+          >
+            <Col>
+              <Typography variant="navigation">
+                {ENTITY_DISPLAY[selectedClinical.type].title}
+              </Typography>
+              <div
                 css={css`
-                  font-weight: 600;
+                  display: flex;
+                  margin-top: 10px;
+                  flex-direction: column;
                 `}
               >
-                Interval since diagnosis (days)
-              </Typography>
-            </div>
-            <Timeline
-              entities={filteredData}
-              activeTab={activeTab}
-              onClickTab={({ entity, idx }) => {
-                setActiveTab(idx);
-              }}
-            />
+                {renderSelectedDataRow(selectedData, selectedSamples)}
+              </div>
 
-            <Row
-              style={{
-                flex: 1,
-                padding: '10px 20px',
-                border: `1px solid ${theme.colors.grey_1}`,
-                marginLeft: '-1px',
-              }}
-            >
-              <Col>
-                <Typography variant="navigation">
-                  {ENTITY_DISPLAY[selectedClinical.type].title}
-                </Typography>
+              {selectedTreatments.length > 0 && (
                 <div
                   css={css`
                     display: flex;
-                    margin-top: 10px;
                     flex-direction: column;
                   `}
                 >
-                  {renderSelectedDataRow(selectedData, selectedSamples)}
+                  {selectedTreatments.map((treatment) => (
+                    <Treatment treatment={treatment} />
+                  ))}
                 </div>
-
-                {selectedTreatments.length > 0 && (
-                  <div
-                    css={css`
-                      display: flex;
-                      flex-direction: column;
-                    `}
-                  >
-                    {selectedTreatments.map((treatment) => (
-                      <Treatment treatment={treatment} />
-                    ))}
-                  </div>
-                )}
-              </Col>
-            </Row>
-          </>
-        ) : (
-          <ContentPlaceholder
-            css={css`
-              flex: 1;
-            `}
-            title="There is no clinical timeline data for this donor."
-          />
-        )}
+              )}
+            </Col>
+          </Row>
+        </>
       </div>
     </Container>
   );
