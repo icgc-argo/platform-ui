@@ -82,6 +82,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
           const isDisabled = count <= 0;
+          const color = !isDisabled ? checkboxColor : theme.colors.grey_disabled;
 
           const changeFilter = () =>
             !isDisabled &&
@@ -108,7 +109,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
                 onChange={changeFilter}
                 aria-label={title}
                 disabled={isDisabled}
-                color={checkboxColor}
+                color={color}
                 size={STYLEDCHECKBOX_SIZES.SM}
               />
 

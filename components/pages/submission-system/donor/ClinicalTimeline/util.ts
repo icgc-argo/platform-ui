@@ -44,8 +44,8 @@ export const getTimelineStyles = (theme: typeof defaultTheme) => {
       backgroundColor: colors.accent2_4,
     },
     biomarker: {
-      checkboxColor: colors.accent2,
-      borderColor: colors.accent2_1,
+      checkboxColor: colors.warning,
+      borderColor: colors.warning_1,
       backgroundColor: colors.accent2_4,
     },
     deceased: {
