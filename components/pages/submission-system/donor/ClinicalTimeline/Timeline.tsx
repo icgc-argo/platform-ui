@@ -123,6 +123,17 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
                 `}
               />
             ) : null}
+            {type === EntityType.SPECIMEN && (
+              <Icon
+                name="testtube"
+                fill={theme.colors.accent3_dark}
+                width="15px"
+                height="15px"
+                css={css`
+                  margin-right: 6px;
+                `}
+              />
+            )}
           </div>
           <Typography
             variant="data"
@@ -138,17 +149,6 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           </Typography>
         </div>{' '}
       </VerticalTabs.Item>
-      {type === EntityType.SPECIMEN && !active && (
-        <Icon
-          name="testtube"
-          fill={theme.colors.accent3_dark}
-          width="15px"
-          height="15px"
-          css={css`
-            margin-right: 6px;
-          `}
-        />
-      )}
     </div>
   );
 };
