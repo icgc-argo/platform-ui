@@ -65,7 +65,8 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
-
+  console.log(item);
+  console.log(active);
   return (
     <div
       className="timelineItem"
@@ -137,7 +138,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           </Typography>
         </div>{' '}
       </VerticalTabs.Item>
-      {type === EntityType.SPECIMEN && (
+      {type === EntityType.SPECIMEN && !active && (
         <Icon
           name="testtube"
           fill={theme.colors.accent3_dark}
