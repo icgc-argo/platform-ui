@@ -53,10 +53,11 @@ const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.background : theme.colors.secondary_4)};
     border-width: ${({ contHeight }) => contHeight / 2}px;
+    left: -1px;
   }
   &:before {
     top: -1px;
-    left: 1px;
+    left: 0px;
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.border : theme.colors.secondary_2)};
     border-width: ${({ contHeight }) => (contHeight + 2) / 2}px; /* +2 for border around button */
