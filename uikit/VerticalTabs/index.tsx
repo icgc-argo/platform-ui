@@ -69,10 +69,7 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disable
   position: relative;
   transition: all 0.25s;
   min-height: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 10px;
   border: solid 1px;
   border-left: solid 3px;
   border-right: none;
