@@ -29,7 +29,6 @@ import get from 'lodash/get';
 import Samples from './Samples';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import Treatment, { ITreatment } from './Treatment';
 import { splitIntoColumns, tableFormat } from './util';
 import isEmpty from 'lodash/isEmpty';
@@ -46,6 +45,9 @@ export const ENTITY_DISPLAY = Object.freeze({
   },
   follow_up: {
     title: 'Follow Up',
+  },
+  biomarker: {
+    title: 'Biomarkers',
   },
 });
 
@@ -101,6 +103,7 @@ const ClinicalTimeline = ({ data }) => {
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
     EntityType.SPECIMEN,
+    EntityType.BIOMARKER,
     EntityType.TREATMENT,
   ]);
 

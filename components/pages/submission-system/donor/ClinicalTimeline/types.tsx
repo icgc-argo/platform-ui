@@ -22,6 +22,7 @@ export enum EntityType {
   SPECIMEN = 'specimen',
   TREATMENT = 'treatment',
   FOLLOW_UP = 'follow_up',
+  BIOMARKER = 'biomarker',
   DECEASED = 'deceased',
 }
 

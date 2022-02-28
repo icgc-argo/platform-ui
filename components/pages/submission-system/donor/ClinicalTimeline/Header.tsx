@@ -48,7 +48,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
         acc[type]++;
         return acc;
       },
-      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
+      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0, biomarker: 0 },
     );
 
   return (
