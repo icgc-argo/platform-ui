@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Checkbox from 'uikit/form/Checkbox';
+import Checkbox, { STYLEDCHECKBOX_SIZES } from 'uikit/form/Checkbox';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
@@ -109,6 +109,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
                 aria-label={title}
                 disabled={isDisabled}
                 color={checkboxColor}
+                size={STYLEDCHECKBOX_SIZES.SM}
               />
 
               <label
