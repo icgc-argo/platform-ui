@@ -46,6 +46,7 @@ const DayCount = ({
       css={css`
         margin-right: 12px;
         text-align: right;
+        font-weight: 600;
       `}
     >
       {format(days)}
@@ -212,6 +213,17 @@ const Timeline = ({
             />
           </div>
         ))}
+        <div
+          css={css`
+            display: inline-block;
+            transform: rotate(-90deg);
+            position: relative;
+            left: -8px;
+            top: -15px;
+          `}
+        >
+          <Icon name="arrow_left" fill={theme.colors.black} width="23px" height="23px" />
+        </div>
       </div>
     </div>
   );

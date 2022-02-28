@@ -147,7 +147,14 @@ const ClinicalTimeline = ({ data }) => {
                 text-align: center;
               `}
             >
-              <Typography variant="data">Interval since diagnosis (days)</Typography>
+              <Typography
+                variant="data"
+                css={css`
+                  font-weight: 600;
+                `}
+              >
+                Interval since diagnosis (days)
+              </Typography>
             </div>
             <Timeline
               entities={filteredData}
