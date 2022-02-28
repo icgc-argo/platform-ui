@@ -91,7 +91,6 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disable
       : `
           &:hover {
             cursor: pointer;
-            background: ${theme.colors.grey_3};
           }
         `}
 `;
@@ -104,14 +103,6 @@ const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }
   background: ${({ theme, tabStyle }) =>
     tabStyle ? tabStyle.background : theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary_dark};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.secondary_4};
-
-    .activeTriangle::after {
-      border-left-color: ${({ theme }) => theme.colors.secondary_4};
-    }
-  }
 `;
 
 const VerticalTabsItem: React.ComponentType<
@@ -138,7 +129,7 @@ const VerticalTabsItem: React.ComponentType<
 
   const clickHandler = (event) => disabled || onClick(event);
 
-  const ContainerElements = (
+  return (
     <ContainerComponent
       tabStyle={tabStyle}
       disabled={disabled}
@@ -146,44 +137,38 @@ const VerticalTabsItem: React.ComponentType<
       {...rest}
       ref={containerRef}
     >
-      <Typography
-        variant="data"
-        as="div"
+      <Tooltip
         css={css`
-          width: 100%;
+          // these are applied to the internal container of the tooltip
+          max-width: 200px;
         `}
+        disabled={!tooltip}
+        html={tooltip}
+        position="right"
       >
-        <div
+        <Typography
+          variant="data"
+          as="div"
           css={css`
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
+            width: 100%;
           `}
         >
-          {children}
-        </div>
-      </Typography>
-      {active && (
-        <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
-      )}
+          <div
+            css={css`
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              text-align: left;
+            `}
+          >
+            {children}
+          </div>
+        </Typography>
+        {active && (
+          <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
+        )}
+      </Tooltip>
     </ContainerComponent>
-  );
-
-  return tooltip ? (
-    <Tooltip
-      css={css`
-        // these are applied to the internal container of the tooltip
-        max-width: 200px;
-      `}
-      disabled={!tooltip}
-      html={tooltip}
-      position="right"
-    >
-      {ContainerElements}
-    </Tooltip>
-  ) : (
-    ContainerElements
   );
 };
 VerticalTabsItem.displayName = 'VerticalTabs.Item';

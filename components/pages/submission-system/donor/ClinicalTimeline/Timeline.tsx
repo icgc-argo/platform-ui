@@ -65,8 +65,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
-  console.log(item);
-  console.log(active);
+
   return (
     <div
       className="timelineItem"
@@ -77,10 +76,11 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         align-items: center;
         justify-content: space-between;
         width: 100%;
+        border: 1px solid ${theme.colors.grey_2};
         border-left: 3px solid black;
-        border-bottom: 1px solid ${theme.colors.grey_2};
         margin-left: -1px;
         margin-right: -1px;
+        cursor: pointer;
 
         ${active
           ? css`
@@ -90,7 +90,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       `}
     >
       <VerticalTabs.Item
-        disabled
+        disabled={disabled}
         tabStyle={{ border: borderColor, background: backgroundColor }}
         css={css`
           height: 100%;
