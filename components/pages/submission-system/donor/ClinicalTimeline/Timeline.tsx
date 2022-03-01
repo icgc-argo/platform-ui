@@ -20,7 +20,7 @@
 import React from 'react';
 import { css } from 'uikit';
 import Icon from 'uikit/Icon';
-import { getTimelineStyles } from './util';
+import { getDonorAge, getTimelineStyles } from './util';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
@@ -169,6 +169,7 @@ const Timeline = ({
       <div>
         {entities.map(({ type, interval, data }, i) => (
           <div
+            key={`${type}-${i}`}
             css={css`
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
@@ -188,8 +189,12 @@ const Timeline = ({
               }
             `}
           >
-            {(type === EntityType.PRIMARY_DIAGNOSIS || type === EntityType.DECEASED) && (
-              <Tag>age: {data && data['Age at Diagnosis']}</Tag>
+            {data && (type === EntityType.PRIMARY_DIAGNOSIS || type === EntityType.DECEASED) && (
+              <Tag variant="DISABLED">
+                {type === EntityType.PRIMARY_DIAGNOSIS
+                  ? `age:${getDonorAge(data).ageAtDiagnosis}`
+                  : `age:~${getDonorAge(data).ageAtDeath}`}
+              </Tag>
             )}
             <DayCount days={interval} />
           </div>

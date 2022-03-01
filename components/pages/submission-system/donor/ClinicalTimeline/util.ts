@@ -87,3 +87,15 @@ export const tableFormat = (data) =>
     acc[key] = value;
     return acc;
   }, {});
+
+export const getDonorAge = (data) => {
+  // TODO: consistent key handling based on real data
+  const ageAtDiagnosis = parseInt((data.ageAtDiagnosis || data['Age at Diagnosis']).split(' ')[0]);
+
+  const survivalTime = Math.floor(
+    parseInt((data.survivalTime || data['Survival Time'] || '0').split(' ')[0]) / 365,
+  );
+
+  const ageAtDeath = ageAtDiagnosis + survivalTime;
+  return { ageAtDiagnosis, survivalTime, ageAtDeath };
+};
