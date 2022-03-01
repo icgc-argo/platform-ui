@@ -54,7 +54,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 4);
-    const sampleCols = splitIntoColumns(selectedSamples[0], 1);
     return (
       <Col>
         <Row>
@@ -70,10 +69,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
             margin-top: 20px;
           `}
         >
-          <Typography variant="navigation">
-            Samples from this Specimen ({selectedSamples.length.toLocaleString()})
-          </Typography>
-          <SimpleTable data={tableFormat(sampleCols[0])} />
+          <Samples samples={selectedSamples} />
         </Row>
       </Col>
     );
@@ -119,7 +115,7 @@ const ClinicalTimeline = ({ data }) => {
   const filteredData = data.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
-  const selectedClinical: Entity[] = filteredData[activeTab];
+  const selectedClinical: Entity = filteredData[activeTab];
   const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []).map(({ node }) => ({
     ...node,
   }));
