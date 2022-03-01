@@ -77,7 +77,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
         `}
       >
         Show:
-        {(Object.keys(entityCounts) as Array<Filters>).map((entityKey) => {
+        {(Object.keys(entityCounts) as Array<Filters>).map((entityKey, i) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
@@ -102,6 +102,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
                 }
               `}
               onClick={changeFilter}
+              key={`${entityKey}-${i}`}
             >
               <Checkbox
                 value={title}

@@ -22,14 +22,14 @@ import Container from 'uikit/Container';
 import { css } from 'uikit';
 import Header from './Header';
 import Timeline from './Timeline';
-import { EntityType } from './types';
+import { EntityType, TreatmentNode } from './types';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import get from 'lodash/get';
 import Samples from './Samples';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
-import Treatment, { ITreatment } from './Treatment';
+import Treatment from './Treatment';
 import { splitIntoColumns, tableFormat } from './util';
 import isEmpty from 'lodash/isEmpty';
 
@@ -111,10 +111,9 @@ const ClinicalTimeline = ({ data }) => {
   const filteredData = data.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
-
   const selectedClinical = filteredData[activeTab];
   const selectedSamples = get(selectedClinical, 'samples', []);
-  const selectedTreatments: ITreatment[] = get(selectedClinical, 'treatments', []);
+  const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
   return (
@@ -195,9 +194,10 @@ const ClinicalTimeline = ({ data }) => {
                     flex-direction: column;
                   `}
                 >
-                  {selectedTreatments.map((treatment) => (
-                    <Treatment treatment={treatment} />
-                  ))}
+                  {selectedTreatments.map(
+                    (treatment, i) =>
+                      treatment && <Treatment key={`treatment-${i}`} treatment={treatment} />,
+                  )}
                 </div>
               )}
             </Col>

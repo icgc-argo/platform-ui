@@ -114,16 +114,16 @@ export const dummyDonorEntity: DonorCentricRecord = {
 export const mockTimelineData: Array<DonorEntityData> = [
   {
     type: EntityType.PRIMARY_DIAGNOSIS,
-    id: 'PRIMARY DIAGNOSIS PD1',
+    id: 'PRIMARY DIAGNOSIS PD2',
     description: 'C41.1',
-    interval: 242222,
+    interval: 0,
     data: {
       'Primary Diagnosis ID': 'PD1',
       'Age at Diagnosis': '28 years',
       'Cancer Type Code': 'C25.3',
       'Cancer Type': 'Malignant neoplasm of pancreas',
       'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '',
+      'Number of Examined Lymph Nodes': '20',
       'Clinical Tumour Staging System': 'Binet',
       'Clinical Stage Group': '',
       'Stage Suffix': 'A',
@@ -172,19 +172,6 @@ export const mockTimelineData: Array<DonorEntityData> = [
       'Age at Diagnosis': '28 years',
     },
     invalid: true,
-  },
-  { type: EntityType.SPECIMEN, id: 'SPECIMEN SP0123', description: 'Tumour', interval: 66 },
-  {
-    type: EntityType.TREATMENT,
-    id: 'TREATMENT TR8982',
-    description: 'Chemotherapy',
-    interval: 33333,
-  },
-  {
-    type: EntityType.TREATMENT,
-    id: 'TREATMENT TR8982',
-    description: 'Ablation',
-    interval: 13525,
   },
   {
     type: EntityType.TREATMENT,
