@@ -30,7 +30,7 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { EntityType, SampleNode, TreatmentNode } from './types';
+import { Entity, EntityType, SampleNode, TreatmentNode } from './types';
 import { splitIntoColumns, tableFormat } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
@@ -53,19 +53,29 @@ export const ENTITY_DISPLAY = Object.freeze({
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
-    const dataCols = splitIntoColumns(selectedData, 2);
+    const dataCols = splitIntoColumns(selectedData, 4);
+    const sampleCols = splitIntoColumns(selectedSamples[0], 1);
     return (
-      <Row>
-        <Col>
-          <SimpleTable data={tableFormat(dataCols[0])} />
-        </Col>
-        <Col>
+      <Col>
+        <Row>
+          <Col>
+            <SimpleTable data={tableFormat(dataCols[0])} />
+          </Col>
+          <Col>
+            <SimpleTable data={tableFormat(dataCols[1])} />
+          </Col>
+        </Row>
+        <Row
+          css={css`
+            margin-top: 20px;
+          `}
+        >
           <Typography variant="navigation">
             Samples from this Specimen ({selectedSamples.length.toLocaleString()})
           </Typography>
-          <Samples samples={selectedSamples} />
-        </Col>
-      </Row>
+          <SimpleTable data={tableFormat(sampleCols[0])} />
+        </Row>
+      </Col>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
@@ -109,8 +119,10 @@ const ClinicalTimeline = ({ data }) => {
   const filteredData = data.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
-  const selectedClinical = filteredData[activeTab];
-  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
+  const selectedClinical: Entity[] = filteredData[activeTab];
+  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []).map(({ node }) => ({
+    ...node,
+  }));
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
