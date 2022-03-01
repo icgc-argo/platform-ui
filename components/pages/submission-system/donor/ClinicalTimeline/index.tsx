@@ -19,19 +19,19 @@
 
 import React from 'react';
 import Container from 'uikit/Container';
-import { css } from 'uikit';
-import Header from './Header';
-import Timeline from './Timeline';
-import { EntityType, TreatmentNode } from './types';
-import Typography from 'uikit/Typography';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import Samples from './Samples';
+import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
+import Typography from 'uikit/Typography';
+import SimpleTable from 'uikit/Table/SimpleTable';
+import Header from './Header';
+import Samples from './Samples';
+import Timeline from './Timeline';
 import Treatment from './Treatment';
+import { EntityType, SampleNode, TreatmentNode } from './types';
 import { splitIntoColumns, tableFormat } from './util';
-import isEmpty from 'lodash/isEmpty';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -54,7 +54,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 1);
-
     return (
       <Row>
         <Col>
@@ -70,7 +69,6 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
-
     return (
       <Row>
         <Col>
@@ -112,7 +110,7 @@ const ClinicalTimeline = ({ data }) => {
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
   const selectedClinical = filteredData[activeTab];
-  const selectedSamples = get(selectedClinical, 'samples', []);
+  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
@@ -194,10 +192,9 @@ const ClinicalTimeline = ({ data }) => {
                     flex-direction: column;
                   `}
                 >
-                  {selectedTreatments.map(
-                    (treatment, i) =>
-                      treatment && <Treatment key={`treatment-${i}`} treatment={treatment} />,
-                  )}
+                  {selectedTreatments.map((treatment, i) => (
+                    <Treatment key={`treatment-${i}`} treatment={treatment} />
+                  ))}
                 </div>
               )}
             </Col>

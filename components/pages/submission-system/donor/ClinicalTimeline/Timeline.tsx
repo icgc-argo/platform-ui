@@ -19,13 +19,14 @@
 
 import React from 'react';
 import { css } from 'uikit';
-import Typography from 'uikit/Typography';
+import Icon from 'uikit/Icon';
 import { getTimelineStyles } from './util';
+import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
+import Tag from 'uikit/Tag';
 import { Entity, EntityType } from './types';
 import { InvalidIcon } from './common';
-import Icon from 'uikit/Icon';
 
 const DayCount = ({
   days,
@@ -166,7 +167,7 @@ const Timeline = ({
       `}
     >
       <div>
-        {entities.map(({ type, interval }, i) => (
+        {entities.map(({ type, interval, data }, i) => (
           <div
             css={css`
               display: flex;
@@ -187,6 +188,9 @@ const Timeline = ({
               }
             `}
           >
+            {(type === EntityType.PRIMARY_DIAGNOSIS || type === EntityType.DECEASED) && (
+              <Tag>age: {data && data['Age at Diagnosis']}</Tag>
+            )}
             <DayCount days={interval} />
           </div>
         ))}

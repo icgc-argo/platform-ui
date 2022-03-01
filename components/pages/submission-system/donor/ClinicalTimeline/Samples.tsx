@@ -30,8 +30,9 @@ const SampleList = styled('div')`
 
 const Samples = ({ samples }: { samples: Entity['samples'] }) => (
   <SampleList>
-    {samples.map(({ node }) => (
+    {samples.map(({ node }, i) => (
       <div
+        key={`${node.submitter_sample_id}-${i}`}
         css={css`
           padding: 5px 0;
         `}
@@ -39,7 +40,7 @@ const Samples = ({ samples }: { samples: Entity['samples'] }) => (
         <div>
           <Typography variant="caption">Submitter Sample ID: </Typography>
           <Typography variant="data" bold>
-            {node.sample_id}
+            {node.submitter_sample_id}
           </Typography>
         </div>
         <div>
