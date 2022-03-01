@@ -55,23 +55,17 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
     return (
-      <Col>
-        <Row>
+      <Row>
+        <Col>
           <SimpleTable data={tableFormat(dataCols[0])} />
-        </Row>
-        <Row
-          css={css`
-            margin-top: 20px;
-          `}
-        >
-          <Col>
-            <Typography variant="navigation">
-              Samples from this Specimen ({selectedSamples.length.toLocaleString()})
-            </Typography>
-            <Samples samples={selectedSamples} />
-          </Col>
-        </Row>
-      </Col>
+        </Col>
+        <Col>
+          <Typography variant="navigation">
+            Samples from this Specimen ({selectedSamples.length.toLocaleString()})
+          </Typography>
+          <Samples samples={selectedSamples} />
+        </Col>
+      </Row>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
