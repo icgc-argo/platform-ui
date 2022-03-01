@@ -118,7 +118,7 @@ const ClinicalTimeline = ({ data }) => {
     <Container
       css={css`
         padding: 12px 14px;
-        height: 750px;
+        min-height: 750px;
         display: flex;
         flex-direction: column;
       `}

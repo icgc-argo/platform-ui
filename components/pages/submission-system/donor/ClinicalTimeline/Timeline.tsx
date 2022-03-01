@@ -73,7 +73,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       className="timelineItem"
       onClick={() => !disabled && onClick()}
       css={css`
-        height: 46px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -174,6 +174,7 @@ const Timeline = ({
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
               align-items: center;
+              position: relative;
               justify-content: flex-end;
 
               &::after {
@@ -189,14 +190,22 @@ const Timeline = ({
               }
             `}
           >
+            <DayCount days={interval} />
             {data && (type === EntityType.PRIMARY_DIAGNOSIS || type === EntityType.DECEASED) && (
-              <Tag variant="DISABLED">
+              <Tag
+                css={css`
+                  padding: 1px 3px;
+                  position: absolute;
+                  top: 33px;
+                  right: 3px;
+                `}
+                variant="DISABLED"
+              >
                 {type === EntityType.PRIMARY_DIAGNOSIS
-                  ? `age:${getDonorAge(data).ageAtDiagnosis}`
-                  : `age:~${getDonorAge(data).ageAtDeath}`}
+                  ? `age: ${getDonorAge(data).ageAtDiagnosis}`
+                  : `age: ~${getDonorAge(data).ageAtDeath}`}
               </Tag>
             )}
-            <DayCount days={interval} />
           </div>
         ))}
       </div>
