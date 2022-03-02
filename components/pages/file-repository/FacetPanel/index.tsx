@@ -16,7 +16,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { css, styled } from 'uikit';
 import Facet from 'uikit/Facet';
@@ -405,6 +405,9 @@ const FacetPanel = () => {
   };
 
   const [searchQuery, setSearchQuery] = React.useState('');
+  useEffect(() => {
+    setSearchQuery('');
+  }, [currentTab]);
 
   const excludedIds = (currentFieldValue({
     filters,
