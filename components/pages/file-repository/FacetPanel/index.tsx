@@ -317,7 +317,7 @@ const useFileIdSearchQuery = (
 };
 
 const fileIDSearch: FacetDetails = {
-  name: 'Search Files',
+  name: 'Search by File ID',
   searchQuery: useFileIdSearchQuery,
   facetPath: FileFacetPath.file_id,
   variant: 'Other',
