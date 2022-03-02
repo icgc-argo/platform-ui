@@ -265,9 +265,9 @@ export const mockTimelineData: Array<DonorEntityData> = [
     type: EntityType.FOLLOW_UP,
     id: 'FOLLOW UP FO2123',
     data: {
-      program_id: '',
+      program_id: 'TEST-PR',
       submitter_donor_id: 'FO2123',
-      submitter_follow_up_id: '',
+      submitter_follow_up_id: 'FO2123',
       submitter_primary_diagnosis_id: 'PD1',
       interval_of_followup: '392 days',
       disease_status_at_followup: 'Relapse or recurrence',
