@@ -26,6 +26,7 @@ import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
+import ContentError from 'components/placeholders/ContentError';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
@@ -91,7 +92,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     return (
       <Row>
         <Col>
-          <SimpleTable data={[]} />
+          <ContentError />
         </Col>
       </Row>
     );

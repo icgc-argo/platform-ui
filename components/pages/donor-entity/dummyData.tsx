@@ -208,6 +208,14 @@ export const mockTimelineData: Array<DonorEntityData> = [
     ],
   },
   {
+    type: EntityType.SPECIMEN,
+    id: 'SPECIMEN SP0222',
+    description: 'Normal',
+    interval: 2,
+    data: {},
+    samples: [],
+  },
+  {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
     description: 'Chemotherapy, Radiation therapy, Surgery',
