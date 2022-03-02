@@ -53,16 +53,15 @@ export const ENTITY_DISPLAY = Object.freeze({
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
-    const dataCols = splitIntoColumns(selectedData, 4);
+    const dataCols = splitIntoColumns(selectedData, 2);
+    console.log(dataCols);
     return (
       <Col>
         <Row>
           <Col>
             <SimpleTable data={tableFormat(dataCols[0])} />
           </Col>
-          <Col>
-            <SimpleTable data={tableFormat(dataCols[1])} />
-          </Col>
+          <Col>{!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}</Col>
         </Row>
         <Row
           css={css`
