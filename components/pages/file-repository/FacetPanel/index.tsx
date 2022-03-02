@@ -206,9 +206,9 @@ const useFileFacetQuery = (
   );
 };
 
-const useDonorIdSearchQuery = (
+export const useDonorIdSearchQuery = (
   searchValue: string,
-  excludedIds: string[],
+  excludedIds?: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
   return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
     skip: !searchValue,
