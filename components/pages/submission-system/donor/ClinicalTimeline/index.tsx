@@ -54,7 +54,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
-    console.log(dataCols);
     return (
       <Col>
         <Row>
