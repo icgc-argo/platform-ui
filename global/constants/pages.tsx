@@ -50,6 +50,10 @@ export const PROGRAM_JOIN_LOGIN_PATH = `${SUBMISSION_PATH}/program/join/login/${
 export const FILE_ENTITY_ID_PATH = '[fileId]';
 export const FILE_ENTITY_PATH = `file/${FILE_ENTITY_ID_PATH}`;
 
+// donor entity
+export const DONOR_ENTITY_ID_PATH = '[donorId]';
+export const DONOR_ENTITY_PATH = `donor/${DONOR_ENTITY_ID_PATH}`;
+
 // rdpc path
 export const RDPC_PATH = '/rdpc';
 

@@ -25,7 +25,52 @@ export enum EntityType {
   DECEASED = 'deceased',
 }
 
-type Sample = { id: string; type: string };
+export type SampleNode = {
+  node: {
+    sample_id: string;
+    sample_type: string;
+    submitter_sample_id?: string;
+    matched_normal_submitter_sample_id?: string;
+  };
+};
+
+export type SpecimenNode = {
+  node: {
+    specimen_id: string;
+    submitter_specimen_id: string;
+    tumour_normal_designation: string;
+    specimen_type: string;
+    specimen_tissue_source?: string;
+    samples: { hits: { edges: SampleNode[] } };
+  };
+};
+
+export type TreatmentNode = {
+  node: {
+    treatment_type: string;
+    data: Array<{}>;
+    program_id?: string;
+    submitter_donor_id?: string;
+    submitter_treatment_id?: string;
+    submitter_primary_diagnosis_id?: string;
+    is_primary_treatment?: string;
+    line_of_treatment?: number;
+    treatment_start_interval?: number;
+    treatment_duration?: number;
+    days_per_cycle?: number;
+    number_of_cycles?: number;
+    treatment_intent?: string;
+    treatment_setting?: string;
+    response_to_treatment?: string;
+    outcome_of_treatment?: string;
+    toxicity_type?: string;
+    hematological_toxicity?: string;
+    'non-hematological_toxicity'?: string;
+    adverse_events?: string;
+    clinical_trials_database?: string;
+    clinical_trial_number?: string;
+  };
+};
 
 export type Entity = {
   type: EntityType;
@@ -33,6 +78,7 @@ export type Entity = {
   description: string;
   interval: number;
   data?: {};
-  samples?: Array<Sample>;
+  samples?: Array<SampleNode>;
   invalid?: Boolean;
+  treatments?: Array<TreatmentNode>;
 };

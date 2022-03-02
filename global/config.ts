@@ -45,6 +45,7 @@ export const getConfig = () => {
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
     FEATURE_DASHBOARD_CHARTS_ENABLED: publicConfig.FEATURE_DASHBOARD_CHARTS_ENABLED === 'true',
     FEATURE_FILE_ENTITY_ENABLED: publicConfig.FEATURE_FILE_ENTITY_ENABLED === 'true',
+    FEATURE_DONOR_ENTITY_ENABLED: publicConfig.FEATURE_DONOR_ENTITY_ENABLED === 'true',
     FEATURE_FACET_TABS_ENABLED: publicConfig.FEATURE_FACET_TABS_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
@@ -63,6 +64,7 @@ export const getConfig = () => {
     MAINTENANCE_MODE_ON: boolean;
     FEATURE_DASHBOARD_CHARTS_ENABLED: boolean;
     FEATURE_FILE_ENTITY_ENABLED: boolean;
+    FEATURE_DONOR_ENTITY_ENABLED: boolean;
     FEATURE_FACET_TABS_ENABLED: boolean;
   };
 };
