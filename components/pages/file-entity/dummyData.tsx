@@ -98,3 +98,18 @@ export const dummyFileRecords: Array<FileRecord> = [
     actions: FileAccessState.CONTROLLED,
   },
 ];
+
+export const dummyMetricsData: any = {
+  averageInsertSize: 162.1,
+  averageLength: 76,
+  duplicatedBases: 456,
+  errorRate: 0.004498106,
+  mappedBasesCigar: 12672,
+  mappedReads: 168,
+  mismatchBases: 57,
+  pairsOnDifferentChromosomes: 0,
+  pairedReads: 170,
+  properlyPairedReads: 168,
+  totalBases: 12920,
+  totalReads: 170,
+};
