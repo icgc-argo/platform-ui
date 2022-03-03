@@ -83,7 +83,7 @@ const SearchResultsMenu = ({
     );
   } else {
     const menuData = currentSearch.getMenuData(searchData.file.hits.edges);
-
+    console.log(menuData);
     if (searchData.file.hits.total === 0 || menuData.length === 0) {
       return (
         <ResultsDropdown>

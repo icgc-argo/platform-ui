@@ -443,7 +443,8 @@ const FacetPanel = () => {
     debouncedSearchTerm,
     excludedIds,
   );
-
+  console.log(idSearchData);
+  console.log(loading);
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
       op: 'and',
