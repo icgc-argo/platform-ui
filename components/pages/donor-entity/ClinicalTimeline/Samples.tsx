@@ -24,7 +24,10 @@ import Typography from 'uikit/Typography';
 import { SampleNode } from './types';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
-  const tableCols = Object.keys(samples[0]).map((k) => ({
+  const tableData = samples.map(({ node }) => ({
+    ...node,
+  }));
+  const tableCols = Object.keys(tableData[0]).map((k) => ({
     Header: k,
     accessor: k,
   }));
@@ -44,13 +47,13 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
           margin-bottom: 4px;
         `}
       >
-        Samples from this Specimen ({samples.length.toLocaleString()})
+        Samples from this Specimen ({tableData.length.toLocaleString()})
       </Typography>
       <div ref={containerRef}>
         <Table
           parentRef={containerRef}
           columns={tableCols}
-          data={samples}
+          data={tableData}
           withOutsideBorder
           stripped
           showPagination={false}
