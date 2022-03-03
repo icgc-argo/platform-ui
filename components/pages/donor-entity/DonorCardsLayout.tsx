@@ -20,9 +20,9 @@
 import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import DonorDataTable from '../submission-system/donor/DonorDataTable';
-import DonorFileCard from '../submission-system/donor/DonorFileCard';
-import ClinicalTimeline from '../submission-system/donor/ClinicalTimeline';
+import DonorDataTable from './DonorDataTable';
+import DonorFileCard from './DonorFileCard';
+import ClinicalTimeline from './ClinicalTimeline';
 import { DonorCentricRecord } from './types';
 import { mockTimelineData } from './dummyData';
 

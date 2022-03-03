@@ -2,15 +2,16 @@ import { css } from '@emotion/core';
 import React, { createRef } from 'react';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
+import { TreatmentNode } from './types';
 
-export interface ITreatment {
-  type: string;
-  data: { [key: string]: any }[];
-}
-const Treatment = ({ treatment }: { treatment: ITreatment }) => {
-  const title = treatment.type;
-  const tableCols = Object.keys(treatment.data[0]).map((k) => ({ Header: k, accessor: k }));
-  const tableData = treatment.data;
+const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => {
+  const {
+    node: { treatment_type: title, data: tableData },
+  } = treatment;
+  const tableCols = Object.keys(tableData[0]).map((k) => ({
+    Header: k,
+    accessor: k,
+  }));
   const containerRef = createRef<HTMLDivElement>();
 
   return (
