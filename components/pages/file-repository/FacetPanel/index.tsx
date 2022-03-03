@@ -264,7 +264,7 @@ const useFileIdSearchQuery = (
 
   const fileIDQueryFilter = FEATURE_FACET_TABS_ENABLED
     ? {
-        value: `*${searchValue.toUpperCase()}*`,
+        value: `*${searchValue}*`,
         fields: [FileCentricDocumentField['object_id'], FileCentricDocumentField['file_id']],
       }
     : {
