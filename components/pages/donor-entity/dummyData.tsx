@@ -18,7 +18,7 @@
  */
 
 import { DonorCentricRecord, DonorEntityData } from './types';
-import { EntityType } from '../submission-system/donor/ClinicalTimeline/types';
+import { EntityType } from './ClinicalTimeline/types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
   programId: 'TEST-PR',
