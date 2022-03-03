@@ -219,7 +219,7 @@ export const useDonorIdSearchQuery = (
           {
             op: 'filter' as ArrayFieldKeys,
             content: {
-              value: `*${searchValue.toUpperCase()}*`,
+              value: `*${searchValue}*`,
               fields: [
                 FileCentricDocumentField['donors.donor_id'],
                 FileCentricDocumentField['donors.submitter_donor_id'],
