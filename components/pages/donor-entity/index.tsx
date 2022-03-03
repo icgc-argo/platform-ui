@@ -31,17 +31,22 @@ import { get } from 'lodash';
 import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
-
 import { dummyDonorEntity } from './dummyData';
 
-const DonorEntity = ({ donorId }) => {
+const DonorEntity = ({ donor }) => {
   // const { data: donorData, loading: donorLoading } = useEntityData({
   //   donorId,
   // });
 
   // TODO: Remove test values
-  const donorData = dummyDonorEntity;
-  donorData.donorId = donorId;
+  const submitterDonorId = donor && donor.donors.hits.edges[0].node.submitter_donor_id;
+  const programId = donor && donor.study_id;
+
+  const donorData = {
+    ...dummyDonorEntity,
+    submitterDonorId,
+    programId,
+  };
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();
