@@ -66,7 +66,7 @@ const SearchResultsMenu = ({
   onSelect: Function;
 }) => {
   const theme = useTheme();
-  if (isLoading || !searchData) {
+  if (isLoading) {
     return (
       <ResultsDropdown>
         <NoResultsContainer>
@@ -82,9 +82,8 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    const menuData = currentSearch.getMenuData(searchData.file.hits.edges);
-    console.log(menuData);
-    if (searchData.file.hits.total === 0 || menuData.length === 0) {
+    const menuData = searchData && currentSearch.getMenuData(searchData.file.hits.edges);
+    if (!searchData || searchData.file.hits.total === 0 || menuData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
