@@ -32,8 +32,6 @@ const PaddedRow = styled(Row)`
 
 const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
-  display: flex;
-  align-items: stretch;
 `;
 
 const DonorCardsLayout: React.ComponentType<{
