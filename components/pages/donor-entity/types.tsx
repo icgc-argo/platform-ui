@@ -18,11 +18,7 @@
  */
 
 import { DonorRecord, FileRecord } from '../file-entity/types';
-import {
-  Entity,
-  SpecimenNode,
-  TreatmentNode,
-} from '../submission-system/donor/ClinicalTimeline/types';
+import { Entity, SpecimenNode, TreatmentNode } from './ClinicalTimeline/types';
 
 export type DiagnosisNode = {
   node: {
