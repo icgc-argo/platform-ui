@@ -27,6 +27,7 @@ import { useQuery } from '@apollo/react-hooks';
 import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import { useDonorIdSearchQuery } from 'components/pages/file-repository/FacetPanel';
 
 export default createPage({
   isPublic: true,
@@ -52,6 +53,7 @@ export default createPage({
     },
   });
   // TODO: Remove Test Values
+  const donor = useDonorIdSearchQuery(donorId, ['']).data?.file.hits.edges[0].node;
   // const isValidEntity = !!get(data, 'file.hits.total', false);
   const isValidEntity = true;
 
@@ -68,5 +70,5 @@ export default createPage({
   }
   setLoaderShown(false);
 
-  return <DonorEntityPage {...props} donorId={donorId} />;
+  return <DonorEntityPage {...props} donor={donor} />;
 });

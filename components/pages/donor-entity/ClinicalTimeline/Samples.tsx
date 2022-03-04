@@ -17,40 +17,51 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { css } from '@emotion/core';
+import React, { createRef } from 'react';
+import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
-import { css, styled } from 'uikit';
-import { Entity } from './types';
+import { SampleNode } from './types';
 
-const SampleList = styled('div')`
-  > div:not(:first-child) {
-    border-top: 1px solid ${({ theme }) => theme.colors.grey_2};
-  }
-`;
+const Samples = ({ samples }: { samples: SampleNode[] }) => {
+  const tableData = samples.map(({ node }) => ({
+    ...node,
+  }));
+  const tableCols = Object.keys(tableData[0]).map((k) => ({
+    Header: k,
+    accessor: k,
+  }));
+  const containerRef = createRef<HTMLDivElement>();
 
-const Samples = ({ samples }: { samples: Entity['samples'] }) => (
-  <SampleList>
-    {samples.map(({ node }) => (
-      <div
+  return (
+    <div
+      css={css`
+        margin: 14px 0 4px 0;
+        width: 100%;
+      `}
+    >
+      <Typography
+        variant="navigation"
+        as="div"
         css={css`
-          padding: 5px 0;
+          margin-bottom: 4px;
         `}
       >
-        <div>
-          <Typography variant="caption">Submitter Sample ID: </Typography>
-          <Typography variant="data" bold>
-            {node.sample_id}
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="caption">Sample Type: </Typography>
-          <Typography variant="data" bold>
-            {node.sample_type}
-          </Typography>
-        </div>
+        Samples from this Specimen ({tableData.length.toLocaleString()})
+      </Typography>
+      <div ref={containerRef}>
+        <Table
+          parentRef={containerRef}
+          columns={tableCols}
+          data={tableData}
+          withOutsideBorder
+          stripped
+          showPagination={false}
+          sortable={false}
+        />
       </div>
-    ))}
-  </SampleList>
-);
+    </div>
+  );
+};
 
 export default Samples;

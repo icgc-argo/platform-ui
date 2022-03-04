@@ -27,7 +27,7 @@ import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import PercentBar from 'uikit/PercentBar';
 import _ from 'lodash';
-import { Pipeline } from '../../common';
+import { Pipeline } from 'components/pages/submission-system/common';
 
 const StatDesc = styled('div')`
   display: flex;

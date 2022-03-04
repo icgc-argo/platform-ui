@@ -78,6 +78,7 @@ const DonorDataTable = ({ data }) => {
               TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
+              highlight={false}
               withOutsideBorder
               data={[
                 { id: 'Submitter Donor ID', val: submitterDonorId },
@@ -101,6 +102,7 @@ const DonorDataTable = ({ data }) => {
               TheadComponent={(props) => null}
               parentRef={{ current: null }}
               showPagination={false}
+              highlight={false}
               withOutsideBorder
               data={[
                 { id: 'Height', val: `${height} cm` },
