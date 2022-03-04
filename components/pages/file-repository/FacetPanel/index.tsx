@@ -56,7 +56,9 @@ import {
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
   IdSearchQueryVariables,
-  IdSearchQueryData,
+  FileIdSearchQueryData,
+  DonorIdSearchQueryData,
+  SearchMenuDataNode,
 } from './types';
 import Container from 'uikit/Container';
 import SEARCH_BY_FILE_QUERY from './SEARCH_BY_FILE_QUERY.gql';
@@ -209,8 +211,8 @@ const useFileFacetQuery = (
 export const useDonorIdSearchQuery = (
   searchValue: string,
   excludedIds?: string[],
-): { data: IdSearchQueryData; loading: boolean } => {
-  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
+): { data: DonorIdSearchQueryData; idSearchResults?: SearchMenuDataNode[]; loading: boolean } => {
+  const query = useQuery<DonorIdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
     skip: !searchValue,
     variables: {
       filters: {
@@ -254,12 +256,26 @@ export const useDonorIdSearchQuery = (
       },
     },
   });
+
+  return query.data && !query.loading
+    ? {
+        data: query.data,
+        idSearchResults: query.data.file.aggregations['donors__donor_id'].buckets.map(
+          ({ key, doc_count }): SearchMenuDataNode => ({
+            resultId: key,
+            secondaryText: `${doc_count}`,
+            subText: '',
+          }),
+        ),
+        loading: false,
+      }
+    : query;
 };
 
 const useFileIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
-): { data: IdSearchQueryData; loading: boolean } => {
+): { data: FileIdSearchQueryData; idSearchResults?: SearchMenuDataNode[]; loading: boolean } => {
   const { FEATURE_FACET_TABS_ENABLED } = getConfig();
 
   const fileIDQueryFilter = FEATURE_FACET_TABS_ENABLED
@@ -276,7 +292,7 @@ const useFileIdSearchQuery = (
         ],
       };
 
-  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
+  const query = useQuery<FileIdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
     skip: !searchValue,
     variables: {
       filters: {
@@ -314,6 +330,18 @@ const useFileIdSearchQuery = (
       },
     },
   });
+
+  return query.data && !query.loading
+    ? {
+        data: query.data,
+        idSearchResults: query.data.file.hits.edges.map(({ node }) => ({
+          resultId: node.file_id,
+          secondaryText: node.study_id,
+          subText: node.data_category,
+        })),
+        loading: false,
+      }
+    : query;
 };
 
 const fileIDSearch: FacetDetails = {
@@ -324,12 +352,6 @@ const fileIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField.file_id,
   placeholderText: 'e.g. FL13796, 009f4750-e167...',
   tooltipContent: 'Enter a File ID or Object ID.',
-  getMenuData: (nodes) =>
-    nodes.map(({ node }) => ({
-      resultId: node.file_id,
-      secondaryText: node.study_id,
-      subText: node.data_category,
-    })),
 };
 
 const donorIDSearch: FacetDetails = {
@@ -340,27 +362,6 @@ const donorIDSearch: FacetDetails = {
   esDocumentField: FileCentricDocumentField['donors.donor_id'],
   placeholderText: 'e.g. DO35083, PCSI_0103...',
   tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
-  getMenuData: (nodes) => {
-    // Filters out duplicate Donor IDs
-    let filteredIds = [];
-    const searchResults = [];
-    nodes.forEach(({ node }) => {
-      node.donors.hits.edges.forEach((hit) => {
-        if (
-          !filteredIds.includes(hit.node.donor_id) ||
-          !filteredIds.includes(hit.node.submitter_donor_id)
-        ) {
-          filteredIds.push(hit.node.donor_id, hit.node.submitter_donor_id);
-          searchResults.push({
-            resultId: hit.node.donor_id,
-            secondaryText: hit.node.submitter_donor_id,
-            subText: '',
-          });
-        }
-      });
-    });
-    return searchResults;
-  },
 };
 
 const FacetPanel = () => {
@@ -439,11 +440,12 @@ const FacetPanel = () => {
     }
   };
 
-  const { data: idSearchData, loading: idSearchLoading } = currentSearch.searchQuery(
-    debouncedSearchTerm,
-    excludedIds,
-  );
-  console.log(idSearchData);
+  const {
+    data: idSearchData,
+    idSearchResults,
+    loading: idSearchLoading,
+  } = currentSearch.searchQuery(debouncedSearchTerm, excludedIds);
+  console.log(idSearchResults);
   console.log(loading);
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
@@ -700,8 +702,7 @@ const FacetPanel = () => {
                       `}
                     />
                     <SearchResultsMenu
-                      currentSearch={currentSearch}
-                      searchData={idSearchData}
+                      searchData={idSearchResults}
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({

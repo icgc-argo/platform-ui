@@ -31,7 +31,7 @@ type NumericAggregation = any;
 export type SearchMenuDataNode = {
   resultId: string;
   secondaryText: string;
-  subText: string;
+  subText?: string;
 };
 
 export type FacetDetails = {
@@ -45,8 +45,11 @@ export type FacetDetails = {
   searchQuery?: (
     searchValue: string,
     excludedIds: string[],
-  ) => { data: IdSearchQueryData; loading: boolean };
-  getMenuData?: (nodes: Array<IdSearchQueryDataNode>) => Array<SearchMenuDataNode>;
+  ) => {
+    data: FileIdSearchQueryData | DonorIdSearchQueryData;
+    idSearchResults?: SearchMenuDataNode[];
+    loading: boolean;
+  };
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
@@ -98,7 +101,7 @@ export type FileRepoFacetsQueryVariables = {
   filters: FileRepoFiltersType;
 };
 
-type IdSearchQueryDataNode = {
+type FileIdSearchQueryDataNode = {
   node: {
     file_id: string;
     data_category: string;
@@ -111,11 +114,29 @@ type IdSearchQueryDataNode = {
   };
 };
 
-export type IdSearchQueryData = {
+export type FileIdSearchQueryData = {
   file: {
     hits: {
       total: number;
-      edges: IdSearchQueryDataNode[];
+      edges: FileIdSearchQueryDataNode[];
+    };
+  };
+};
+
+type DonorIdSearchQueryDataNode = {
+  key: string;
+  doc_count: number;
+};
+
+export type DonorIdSearchQueryData = {
+  file: {
+    aggregations: {
+      donors__donor_id: {
+        buckets: DonorIdSearchQueryDataNode[];
+      };
+      donors__submitter_donor_id: {
+        buckets: DonorIdSearchQueryDataNode[];
+      };
     };
   };
 };
