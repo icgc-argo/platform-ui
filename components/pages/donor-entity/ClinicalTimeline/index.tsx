@@ -19,20 +19,20 @@
 
 import React from 'react';
 import Container from 'uikit/Container';
-import { css } from 'uikit';
-import Header from './Header';
-import Timeline from './Timeline';
-import { EntityType } from './types';
-import Typography from 'uikit/Typography';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import Samples from './Samples';
+import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
 import { useTheme } from 'uikit/ThemeProvider';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import Treatment, { ITreatment } from './Treatment';
+import Typography from 'uikit/Typography';
+import SimpleTable from 'uikit/Table/SimpleTable';
+import ContentError from 'components/placeholders/ContentError';
+import Header from './Header';
+import Samples from './Samples';
+import Timeline from './Timeline';
+import Treatment from './Treatment';
+import { Entity, EntityType, SampleNode, TreatmentNode } from './types';
 import { splitIntoColumns, tableFormat } from './util';
-import isEmpty from 'lodash/isEmpty';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -47,28 +47,33 @@ export const ENTITY_DISPLAY = Object.freeze({
   follow_up: {
     title: 'Follow Up',
   },
+  biomarker: {
+    title: 'Biomarkers',
+  },
 });
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
-    const dataCols = splitIntoColumns(selectedData, 1);
-
+    const dataCols = splitIntoColumns(selectedData, 2);
     return (
-      <Row>
-        <Col>
-          <SimpleTable data={tableFormat(dataCols[0])} />
-        </Col>
-        <Col>
-          <Typography variant="navigation">
-            Samples from this Specimen ({selectedSamples.length.toLocaleString()})
-          </Typography>
+      <Col>
+        <Row>
+          <Col>
+            <SimpleTable data={tableFormat(dataCols[0])} />
+          </Col>
+          <Col>{!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}</Col>
+        </Row>
+        <Row
+          css={css`
+            margin-top: 20px;
+          `}
+        >
           <Samples samples={selectedSamples} />
-        </Col>
-      </Row>
+        </Row>
+      </Col>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
-
     return (
       <Row>
         <Col>
@@ -87,7 +92,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     return (
       <Row>
         <Col>
-          <SimpleTable data={[]} />
+          <ContentError />
         </Col>
       </Row>
     );
@@ -101,6 +106,7 @@ const ClinicalTimeline = ({ data }) => {
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
     EntityType.SPECIMEN,
+    EntityType.BIOMARKER,
     EntityType.TREATMENT,
   ]);
 
@@ -108,17 +114,16 @@ const ClinicalTimeline = ({ data }) => {
   const filteredData = data.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
-
-  const selectedClinical = filteredData[activeTab];
-  const selectedSamples = get(selectedClinical, 'samples', []);
-  const selectedTreatments: ITreatment[] = get(selectedClinical, 'treatments', []);
+  const selectedClinical: Entity = filteredData[activeTab];
+  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
+  const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
   return (
     <Container
       css={css`
         padding: 12px 14px;
-        height: 750px;
+        min-height: 750px;
         display: flex;
         flex-direction: column;
       `}
@@ -137,71 +142,69 @@ const ClinicalTimeline = ({ data }) => {
           flex: 1;
         `}
       >
-        {data.length > 0 ? (
-          <>
-            <div
+        <>
+          <div
+            css={css`
+              writing-mode: vertical-lr;
+              transform: rotate(180deg);
+              margin-right: 10px;
+              text-align: center;
+            `}
+          >
+            <Typography
+              variant="data"
               css={css`
-                writing-mode: vertical-lr;
-                transform: rotate(180deg);
-                margin-right: 10px;
-                text-align: center;
+                font-weight: 600;
               `}
             >
-              <Typography variant="data">Interval since diagnosis (days)</Typography>
-            </div>
-            <Timeline
-              entities={filteredData}
-              activeTab={activeTab}
-              onClickTab={({ entity, idx }) => {
-                setActiveTab(idx);
-              }}
-            />
+              Interval since diagnosis (days)
+            </Typography>
+          </div>
+          <Timeline
+            entities={filteredData}
+            activeTab={activeTab}
+            onClickTab={({ entity, idx }) => {
+              setActiveTab(idx);
+            }}
+          />
 
-            <Row
-              style={{
-                flex: 1,
-                padding: '10px 20px',
-                border: `1px solid ${theme.colors.grey_1}`,
-                marginLeft: '-1px',
-              }}
-            >
-              <Col>
-                <Typography variant="navigation">
-                  {ENTITY_DISPLAY[selectedClinical.type].title}
-                </Typography>
+          <Row
+            style={{
+              flex: 1,
+              padding: '10px 20px',
+              border: `1px solid ${theme.colors.grey_1}`,
+              marginLeft: '-1px',
+            }}
+          >
+            <Col>
+              <Typography variant="navigation">
+                {ENTITY_DISPLAY[selectedClinical.type].title}
+              </Typography>
+              <div
+                css={css`
+                  display: flex;
+                  margin-top: 10px;
+                  flex-direction: column;
+                `}
+              >
+                {renderSelectedDataRow(selectedData, selectedSamples)}
+              </div>
+
+              {selectedTreatments.length > 0 && (
                 <div
                   css={css`
                     display: flex;
-                    margin-top: 10px;
                     flex-direction: column;
                   `}
                 >
-                  {renderSelectedDataRow(selectedData, selectedSamples)}
+                  {selectedTreatments.map((treatment, i) => (
+                    <Treatment key={`treatment-${i}`} treatment={treatment} />
+                  ))}
                 </div>
-
-                {selectedTreatments.length > 0 && (
-                  <div
-                    css={css`
-                      display: flex;
-                      flex-direction: column;
-                    `}
-                  >
-                    {selectedTreatments.map((treatment) => (
-                      <Treatment treatment={treatment} />
-                    ))}
-                  </div>
-                )}
-              </Col>
-            </Row>
-          </>
-        ) : (
-          <ContentPlaceholder
-            css={css`
-              flex: 1;
-            `}
-            title="There is no clinical timeline data for this donor."
-          />
-        )}
+              )}
+            </Col>
+          </Row>
+        </>
       </div>
     </Container>
   );

@@ -17,13 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, {
-  HtmlHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-  ReactElement,
-  MouseEventHandler,
-} from 'react';
+import React, { HtmlHTMLAttributes, HTMLAttributes, ReactNode, MouseEventHandler } from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { useTheme } from '../ThemeProvider';
@@ -59,10 +53,11 @@ const Triangle = styled('div')<{ tabStyle: TabStyleType; contHeight: number }>`
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.background : theme.colors.secondary_4)};
     border-width: ${({ contHeight }) => contHeight / 2}px;
+    left: -1px;
   }
   &:before {
     top: -1px;
-    left: 1px;
+    left: 0px;
     border-color: transparent transparent transparent
       ${({ theme, tabStyle }) => (tabStyle ? tabStyle.border : theme.colors.secondary_2)};
     border-width: ${({ contHeight }) => (contHeight + 2) / 2}px; /* +2 for border around button */
@@ -74,10 +69,7 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disable
   position: relative;
   transition: all 0.25s;
   min-height: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 10px;
   border: solid 1px;
   border-left: solid 3px;
   border-right: none;
@@ -96,10 +88,10 @@ const BaseItemContainer = styled(FocusWrapper)<{ tabStyle: TabStyleType; disable
       : `
           &:hover {
             cursor: pointer;
-            background: ${theme.colors.grey_3};
           }
         `}
 `;
+
 const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }>`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-top-color: ${({ theme }) => theme.colors.secondary_2};
@@ -108,14 +100,6 @@ const ActiveItemContainer = styled(BaseItemContainer)<{ tabStyle: TabStyleType }
   background: ${({ theme, tabStyle }) =>
     tabStyle ? tabStyle.background : theme.colors.secondary_4};
   color: ${({ theme }) => theme.colors.secondary_dark};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.secondary_4};
-
-    .activeTriangle::after {
-      border-left-color: ${({ theme }) => theme.colors.secondary_4};
-    }
-  }
 `;
 
 const VerticalTabsItem: React.ComponentType<
@@ -143,21 +127,21 @@ const VerticalTabsItem: React.ComponentType<
   const clickHandler = (event) => disabled || onClick(event);
 
   return (
-    <Tooltip
-      css={css`
-        // these are applied to the internal container of the tooltip
-        max-width: 200px;
-      `}
-      disabled={!tooltip}
-      html={tooltip}
-      position="right"
+    <ContainerComponent
+      tabStyle={tabStyle}
+      disabled={disabled}
+      onClick={clickHandler}
+      {...rest}
+      ref={containerRef}
     >
-      <ContainerComponent
-        tabStyle={tabStyle}
-        disabled={disabled}
-        onClick={clickHandler}
-        {...rest}
-        ref={containerRef}
+      <Tooltip
+        css={css`
+          // these are applied to the internal container of the tooltip
+          max-width: 200px;
+        `}
+        disabled={!tooltip}
+        html={tooltip}
+        position="right"
       >
         <Typography
           variant="data"
@@ -180,8 +164,8 @@ const VerticalTabsItem: React.ComponentType<
         {active && (
           <Triangle tabStyle={tabStyle} contHeight={contHeight} className="activeTriangle" />
         )}
-      </ContainerComponent>
-    </Tooltip>
+      </Tooltip>
+    </ContainerComponent>
   );
 };
 VerticalTabsItem.displayName = 'VerticalTabs.Item';

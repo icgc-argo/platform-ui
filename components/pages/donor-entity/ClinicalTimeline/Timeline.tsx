@@ -19,10 +19,12 @@
 
 import React from 'react';
 import { css } from 'uikit';
+import Icon from 'uikit/Icon';
+import { getDonorAge, getTimelineStyles } from './util';
 import Typography from 'uikit/Typography';
-import { getTimelineStyles } from './util';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
+import Tag from 'uikit/Tag';
 import { Entity, EntityType } from './types';
 import { InvalidIcon } from './common';
 
@@ -45,6 +47,7 @@ const DayCount = ({
       css={css`
         margin-right: 12px;
         text-align: right;
+        font-weight: 600;
       `}
     >
       {format(days)}
@@ -70,23 +73,26 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       className="timelineItem"
       onClick={() => !disabled && onClick()}
       css={css`
-        height: 46px;
+        height: 48px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
-        border: 1px solid transparent;
+        border: 1px solid ${theme.colors.grey_2};
+        border-left: 3px solid black;
         margin-left: -1px;
         margin-right: -1px;
+        cursor: pointer;
 
         ${active
           ? css`
               border-color: ${borderColor};
             `
-          : null};
+          : 'overflow: hidden'};
       `}
     >
       <VerticalTabs.Item
-        disabled
+        disabled={disabled}
         tabStyle={{ border: borderColor, background: backgroundColor }}
         css={css`
           height: 100%;
@@ -109,7 +115,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
               justify-content: space-between;
             `}
           >
-            <Typography variant="caption" as="div">
+            <Typography variant="caption" as="div" bold={true}>
               {id}
             </Typography>
             {invalid ? (
@@ -119,6 +125,9 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
                 `}
               />
             ) : null}
+            {type === EntityType.SPECIMEN && (
+              <Icon name="testtube" fill={theme.colors.accent3_dark} width="15px" height="15px" />
+            )}
           </div>
           <Typography
             variant="data"
@@ -127,8 +136,8 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
+              color: ${type === EntityType.DECEASED ? theme.colors.grey : 'initial'};
             `}
-            bold={type !== EntityType.DECEASED}
           >
             {description}
           </Typography>
@@ -158,12 +167,14 @@ const Timeline = ({
       `}
     >
       <div>
-        {entities.map(({ type, interval }, i) => (
+        {entities.map(({ type, interval, data }, i) => (
           <div
+            key={`${type}-${i}`}
             css={css`
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
               align-items: center;
+              position: relative;
               justify-content: flex-end;
 
               &::after {
@@ -180,6 +191,21 @@ const Timeline = ({
             `}
           >
             <DayCount days={interval} />
+            {data && (type === EntityType.PRIMARY_DIAGNOSIS || type === EntityType.DECEASED) && (
+              <Tag
+                css={css`
+                  padding: 1px 3px;
+                  position: absolute;
+                  top: 33px;
+                  right: 3px;
+                `}
+                variant="DISABLED"
+              >
+                {type === EntityType.PRIMARY_DIAGNOSIS
+                  ? `age: ${getDonorAge(data).ageAtDiagnosis}`
+                  : `age: ~${getDonorAge(data).ageAtDeath}`}
+              </Tag>
+            )}
           </div>
         ))}
       </div>
@@ -187,7 +213,7 @@ const Timeline = ({
         css={css`
           flex: 1;
           border: 1px solid ${theme.colors.grey_1};
-          width: 350px;
+          width: 215px;
         `}
       >
         {entities.map((entity, i) => (
@@ -205,6 +231,17 @@ const Timeline = ({
             />
           </div>
         ))}
+        <div
+          css={css`
+            display: inline-block;
+            transform: rotate(-90deg);
+            position: relative;
+            left: -8px;
+            top: -15px;
+          `}
+        >
+          <Icon name="arrow_left" fill={theme.colors.black} width="23px" height="23px" />
+        </div>
       </div>
     </div>
   );
