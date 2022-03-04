@@ -23,6 +23,8 @@ import { Row, Col } from 'react-grid-system';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
+console.log('');
+
 const DonorDataTable = ({ data }) => {
   const {
     programId,
