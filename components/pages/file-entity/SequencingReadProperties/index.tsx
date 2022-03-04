@@ -24,8 +24,9 @@ import { Col, Row } from 'react-grid-system';
 import Typography from 'uikit/Typography';
 import { useTheme } from 'uikit/ThemeProvider';
 import { FileCard, TableDiv } from '../common';
+import { FileMetricsInfo } from '../types';
 
-const SequencingReadProperties = ({ metrics }: { metrics: any }) => {
+const SequencingReadProperties = ({ metrics }: { metrics: FileMetricsInfo }) => {
   const theme = useTheme();
 
   const CenteredCol = styled(Col)`

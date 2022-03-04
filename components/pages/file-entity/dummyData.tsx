@@ -23,6 +23,7 @@ import {
   DataAnalysisInfo,
   DonorRecord,
   FileRecord,
+  FileMetricsInfo
 } from './types';
 
 export const dummyFileSummaryInfo: FileSummaryInfo = {
@@ -99,7 +100,7 @@ export const dummyFileRecords: Array<FileRecord> = [
   },
 ];
 
-export const dummyMetricsData: any = {
+export const dummyMetricsInfo: FileMetricsInfo = {
   averageInsertSize: 162.1,
   averageLength: 76,
   duplicatedBases: 456,
