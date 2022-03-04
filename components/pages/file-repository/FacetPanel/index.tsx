@@ -441,12 +441,11 @@ const FacetPanel = () => {
   };
 
   const {
-    data: idSearchData,
     idSearchResults,
+    data: idSearchData,
     loading: idSearchLoading,
   } = currentSearch.searchQuery(debouncedSearchTerm, excludedIds);
-  console.log(idSearchResults);
-  console.log(loading);
+
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
       op: 'and',
