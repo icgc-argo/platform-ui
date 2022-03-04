@@ -27,7 +27,8 @@ import { useQuery } from '@apollo/react-hooks';
 import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
-import { useDonorIdSearchQuery } from 'components/pages/file-repository/FacetPanel';
+import useEntityData from 'components/pages/donor-entity/useEntityData';
+import { instructionBoxLoadingButtonStyle } from 'components/pages/submission-system/common';
 
 export default createPage({
   isPublic: true,
@@ -45,19 +46,21 @@ export default createPage({
   const filters = sqonBuilder.has('donor_id', donorId).build();
 
   // small query to ensure the donorId is valid
-  const { loading, data } = useQuery<{
+  const { loading: profileLoading, data: profile } = useQuery<{
     donor: { hits: { total: number } };
   }>(VALID_DONOR_ENTITY_CHECK, {
     variables: {
       filters,
     },
   });
+
   // TODO: Remove Test Values
-  const donor = useDonorIdSearchQuery(donorId, ['']).data?.file.hits.edges[0].node;
-  // const isValidEntity = !!get(data, 'file.hits.total', false);
+  const { data: donor, loading: donorLoading } = useEntityData(donorId);
+  // const isValidEntity = !!get(profile, 'file.hits.total', false);
   const isValidEntity = true;
 
   const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const loading = donorLoading || profileLoading;
 
   if (!loading && !isValidEntity) {
     setLoaderShown(false);

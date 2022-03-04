@@ -441,8 +441,8 @@ const FacetPanel = () => {
   };
 
   const {
-    idSearchResults,
     data: idSearchData,
+    idSearchResults,
     loading: idSearchLoading,
   } = currentSearch.searchQuery(debouncedSearchTerm, excludedIds);
 

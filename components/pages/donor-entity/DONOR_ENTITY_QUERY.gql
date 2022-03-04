@@ -25,6 +25,17 @@ query DONOR_ENTITY_QUERY($filters: JSON) {
       edges {
         node {
           id
+          study_id
+          donors {
+            hits {
+              edges {
+                node {
+                  donor_id
+                  submitter_donor_id
+                }
+              }
+            }
+          }
           # program_id
           # donor_id
           # submitter_donor_id

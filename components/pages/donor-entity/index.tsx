@@ -34,19 +34,17 @@ import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 import { dummyDonorEntity } from './dummyData';
 
 const DonorEntity = ({ donor }) => {
-  // const { data: donorData, loading: donorLoading } = useEntityData({
-  //   donorId,
-  // });
-
   // TODO: Remove test values
-  const submitterDonorId = donor && donor.donors.hits.edges[0].node.submitter_donor_id;
-  const programId = donor && donor.study_id;
+  const { submitterDonorId, programId, gender, donorId } = donor;
 
   const donorData = {
     ...dummyDonorEntity,
+    gender,
     submitterDonorId,
     programId,
+    donorId,
   };
+
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();

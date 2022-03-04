@@ -101,7 +101,7 @@ export type FileRepoFacetsQueryVariables = {
   filters: FileRepoFiltersType;
 };
 
-type FileIdSearchQueryDataNode = {
+type IdSearchQueryDataNode = {
   node: {
     file_id: string;
     data_category: string;
@@ -118,7 +118,7 @@ export type FileIdSearchQueryData = {
   file: {
     hits: {
       total: number;
-      edges: FileIdSearchQueryDataNode[];
+      edges: IdSearchQueryDataNode[];
     };
   };
 };

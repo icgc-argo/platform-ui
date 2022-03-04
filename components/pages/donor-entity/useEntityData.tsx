@@ -31,8 +31,8 @@ type DonorEntityData = {
   error?: any;
 };
 
-const useEntityData = ({ donorId }: { donorId: string }): DonorEntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField['donor_id'], donorId).build();
+const useEntityData = (donorId: string): DonorEntityData => {
+  const filters = sqonBuilder.has(FileCentricDocumentField['donors.donor_id'], donorId).build();
   const { data, loading, error } = useQuery(DONOR_ENTITY_QUERY, {
     variables: {
       filters,
@@ -40,20 +40,23 @@ const useEntityData = ({ donorId }: { donorId: string }): DonorEntityData => {
     errorPolicy: 'all',
   });
 
-  if (loading) {
-    return { data: noData, loading: true };
-  } else {
-    const entity = get(data, 'donor.hits.edges[0].node', null);
+  const entity = data?.file.hits.edges[0].node;
 
+  if (loading || !entity) {
+    return { data: noData, loading: true };
+  } else if (!loading && !entity) {
+    return { data: noData, loading: false };
+  } else {
+    // TODO: Revise Test Values
     const entityData: DonorCentricRecord = {
-      donorId: entity.donor_id,
-      programId: entity.program_id,
-      submitterDonorId: entity.submitter_donorid,
+      donorId: entity.donors.hits.edges[0].node.donor_id,
+      programId: entity.study_id,
+      submitterDonorId: entity.donors.hits.edges[0].node.submitter_donor_id,
+      gender: entity.donors.hits.edges[0].node.gender,
       primarySite: entity.primary_site,
       cancerType: entity.cancer_type,
       ageAtDiagnosis: entity.age_at_diagnosis,
       associations: entity.associations,
-      gender: entity.gender,
       vitalStatus: entity.vital_status,
       causeOfDeath: entity.cause_of_death,
       survivalTime: entity.survival_time,
@@ -75,10 +78,6 @@ const useEntityData = ({ donorId }: { donorId: string }): DonorEntityData => {
       treatments: entity.treatments,
       files: entity.files,
     };
-
-    if (!entity) {
-      return { data: noData, loading: false };
-    }
 
     if (error) {
       console.error(error.message);
