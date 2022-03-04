@@ -18,7 +18,6 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import { get } from 'lodash';
 import { DonorCentricRecord } from './types';
 import DONOR_ENTITY_QUERY from './DONOR_ENTITY_QUERY.gql';
 import { noData } from './dummyData';

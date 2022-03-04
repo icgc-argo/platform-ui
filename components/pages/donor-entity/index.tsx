@@ -21,7 +21,6 @@ import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from
 import Head from '../head';
 import NavBar from '../../NavBar';
 import clsx from 'clsx';
-import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
