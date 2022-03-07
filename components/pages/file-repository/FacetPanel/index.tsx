@@ -680,6 +680,9 @@ const FacetPanel = () => {
                   placeholder={currentSearch.placeholderText}
                   preset="search"
                   value={searchQuery}
+                  onKeyDown={(e) => {
+                    setSearchQuery(trim(e.target.value));
+                  }}
                   onChange={(e) => {
                     setSearchQuery(trim(e.target.value));
                   }}
