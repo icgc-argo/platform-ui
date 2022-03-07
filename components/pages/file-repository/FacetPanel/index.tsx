@@ -264,7 +264,7 @@ export const useDonorIdSearchQuery = (
           .map(
             ({ key, doc_count }): SearchMenuDataNode => ({
               resultId: key,
-              secondaryText: `${doc_count}`,
+              secondaryText: `${doc_count} files`,
               subText: '',
             }),
           )
