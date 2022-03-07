@@ -1,6 +1,6 @@
 query SEARCH_BY_FILE_QUERY($filters: JSON) {
   file {
-    hits(filters: $filters, first: 5) {
+    hits(filters: $filters) {
       total
       edges {
         node {

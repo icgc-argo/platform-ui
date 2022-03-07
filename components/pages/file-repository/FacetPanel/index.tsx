@@ -260,13 +260,15 @@ export const useDonorIdSearchQuery = (
   return query.data && !query.loading
     ? {
         data: query.data,
-        idSearchResults: query.data.file.aggregations['donors__donor_id'].buckets.map(
-          ({ key, doc_count }): SearchMenuDataNode => ({
-            resultId: key,
-            secondaryText: `${doc_count}`,
-            subText: '',
-          }),
-        ),
+        idSearchResults: query.data.file.aggregations['donors__donor_id'].buckets
+          .map(
+            ({ key, doc_count }): SearchMenuDataNode => ({
+              resultId: key,
+              secondaryText: `${doc_count}`,
+              subText: '',
+            }),
+          )
+          .slice(0, 5),
         loading: false,
       }
     : query;
@@ -334,11 +336,13 @@ const useFileIdSearchQuery = (
   return query.data && !query.loading
     ? {
         data: query.data,
-        idSearchResults: query.data.file.hits.edges.map(({ node }) => ({
-          resultId: node.file_id,
-          secondaryText: node.study_id,
-          subText: node.data_category,
-        })),
+        idSearchResults: query.data.file.hits.edges
+          .map(({ node }) => ({
+            resultId: node.file_id,
+            secondaryText: node.study_id,
+            subText: node.data_category,
+          }))
+          .slice(0, 5),
         loading: false,
       }
     : query;
