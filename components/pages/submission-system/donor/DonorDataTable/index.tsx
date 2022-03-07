@@ -46,6 +46,37 @@ const DonorDataTable = ({ data }) => {
     contraceptionType,
     contraceptionDuration,
   } = data;
+  const tableData = [
+    { id: 'Submitter Donor ID', val: submitterDonorId },
+    { id: 'Program Name', val: programId },
+    { id: 'Primary Site', val: primarySite },
+    { id: 'Cancer Type', val: cancerType },
+    { id: 'Gender', val: gender },
+    { id: 'Vital Status', val: vitalStatus },
+    { id: 'Cause of Death', val: causeOfDeath },
+    { id: 'Survival Time', val: survivalTime },
+    { id: 'Genetic Disorders', val: geneticDisorders },
+    { id: 'Height', val: `${height} cm` },
+    { id: 'Weight', val: `${weight} kg` },
+    { id: 'BMI', val: `${bmi} kg/m²` },
+    ...(gender && gender === 'Female'
+      ? [
+          { id: 'Menopause Status', val: menopauseStatus },
+          { id: 'Age at Menarche', val: ageAtMenarche },
+          { id: 'Number of Pregnancies', val: numberOfPregnancies },
+          { id: 'Number of Children', val: numberOfChildren },
+          { id: 'HRT Type', val: hrtType },
+          { id: 'HRT Duration', val: hrtDuration },
+          { id: 'Contraception Type', val: contraceptionType },
+          { id: 'Contraception Duration', val: contraceptionDuration },
+        ]
+      : []),
+  ];
+
+  const length = Math.ceil(tableData.length / 2);
+  const firstTable = tableData.slice(0, length);
+  const secondTable = tableData.slice(length + 1);
+
   return (
     <div>
       <Container
@@ -79,17 +110,7 @@ const DonorDataTable = ({ data }) => {
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder
-              data={[
-                { id: 'Submitter Donor ID', val: submitterDonorId },
-                { id: 'Program Name', val: programId },
-                { id: 'Primary Site', val: primarySite },
-                { id: 'Cancer Type', val: cancerType },
-                { id: 'Gender', val: gender },
-                { id: 'Vital Status', val: vitalStatus },
-                { id: 'Cause of Death', val: causeOfDeath },
-                { id: 'Survival Time', val: survivalTime },
-                { id: 'Genetic Disorders', val: geneticDisorders },
-              ]}
+              data={firstTable}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
                 { accessor: 'val', style: { whiteSpace: 'unset' } },
@@ -102,19 +123,7 @@ const DonorDataTable = ({ data }) => {
               parentRef={{ current: null }}
               showPagination={false}
               withOutsideBorder
-              data={[
-                { id: 'Height', val: `${height} cm` },
-                { id: 'Weight', val: `${weight} kg` },
-                { id: 'BMI', val: `${bmi} kg/m²` },
-                { id: 'Menopause Status', val: menopauseStatus },
-                { id: 'Age at Menarche', val: ageAtMenarche },
-                { id: 'Number of Pregnancies', val: numberOfPregnancies },
-                { id: 'Number of Children', val: numberOfChildren },
-                { id: 'HRT Type', val: hrtType },
-                { id: 'HRT Duration', val: hrtDuration },
-                { id: 'Contraception Type', val: contraceptionType },
-                { id: 'Contraception Duration', val: contraceptionDuration },
-              ]}
+              data={secondTable}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
                 { accessor: 'val', style: { whiteSpace: 'unset' } },
