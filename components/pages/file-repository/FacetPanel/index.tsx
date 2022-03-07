@@ -383,6 +383,7 @@ const FacetPanel = () => {
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
   const [searchOpen, setSearchOpen] = React.useState(false);
+  console.log(searchOpen);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
   const [expandedFacets, setExpandedFacets] = React.useState(
@@ -413,6 +414,7 @@ const FacetPanel = () => {
   useEffect(() => {
     setSearchQuery('');
   }, [currentTab]);
+  console.log(searchQuery);
 
   const excludedIds = (currentFieldValue({
     filters,
@@ -421,6 +423,12 @@ const FacetPanel = () => {
   }) || []) as Array<string>;
 
   const debouncedSearchTerm = useDebounce(searchQuery, 500);
+
+  const { idSearchResults, loading: idSearchLoading } = currentSearch.searchQuery(
+    debouncedSearchTerm,
+    excludedIds,
+  );
+  console.log(idSearchResults);
 
   const getOptions: GetAggregationResult = (facet) => {
     const options = (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
@@ -443,12 +451,6 @@ const FacetPanel = () => {
         return options;
     }
   };
-
-  const {
-    data: idSearchData,
-    idSearchResults,
-    loading: idSearchLoading,
-  } = currentSearch.searchQuery(debouncedSearchTerm, excludedIds);
 
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
@@ -680,11 +682,9 @@ const FacetPanel = () => {
                   placeholder={currentSearch.placeholderText}
                   preset="search"
                   value={searchQuery}
-                  onKeyDown={(e) => {
-                    setSearchQuery(trim(e.target.value));
-                  }}
                   onChange={(e) => {
                     setSearchQuery(trim(e.target.value));
+                    if (searchQuery && searchQuery.length >= 1) setSearchOpen(true);
                   }}
                   css={css`
                     &:hover {
