@@ -1,5 +1,4 @@
 import { FilterOption } from 'uikit/OptionsList';
-import { DonorRecord } from 'components/pages/file-entity/types';
 import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 
