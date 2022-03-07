@@ -64,6 +64,7 @@ const SearchResultsMenu = ({
   onSelect: Function;
 }) => {
   const theme = useTheme();
+
   if (isLoading) {
     return (
       <ResultsDropdown>
@@ -80,7 +81,7 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    if (!searchData) {
+    if (!searchData || searchData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
