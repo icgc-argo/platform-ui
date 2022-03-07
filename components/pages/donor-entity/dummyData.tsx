@@ -31,7 +31,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
   vitalStatus: 'Deceased',
   causeOfDeath: 'Died of Cancer',
   survivalTime: '440 days',
-  geneticDisorders: 'Gardner Syndrome',
+  geneticDisorders: 'Beckwith-Wiedemann Syndrome, Carney Complex, Li-Fraumeni Syndrome',
   height: 182.88,
   weight: 90.72,
   bmi: 27.12,
