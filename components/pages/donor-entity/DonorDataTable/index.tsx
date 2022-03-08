@@ -18,11 +18,16 @@
  */
 
 import { css } from 'uikit';
-import Container from 'uikit/Container';
 import { Row, Col } from 'react-grid-system';
+import sqonBuilder from 'sqon-builder';
+import { useQuery } from '@apollo/react-hooks';
+import Container from 'uikit/Container';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
 import { splitIntoColumns, tableFormat } from '../ClinicalTimeline/util';
+import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
+
+// TODO: Create useDonorCentricFieldDisplayName
 
 const DonorDataTable = ({ data }) => {
   const {
@@ -47,10 +52,14 @@ const DonorDataTable = ({ data }) => {
     contraceptionType,
     contraceptionDuration,
   } = data;
+  const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
+
+  const programName =
+    programs.length > 0 && programs.filter((program) => program.shortName === programId)[0].name;
 
   let displayData = {
     'Submitter Donor ID': submitterDonorId,
-    'Program Name': programId,
+    'Program Name': `${programName} (${programId})`,
     'Primary Site': primarySite,
     'Cancer Type': cancerType,
     Gender: gender,
