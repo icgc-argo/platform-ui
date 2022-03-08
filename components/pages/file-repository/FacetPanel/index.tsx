@@ -414,7 +414,6 @@ const FacetPanel = () => {
   useEffect(() => {
     setSearchQuery('');
   }, [currentTab]);
-  console.log(searchQuery);
 
   const excludedIds = (currentFieldValue({
     filters,
@@ -428,7 +427,6 @@ const FacetPanel = () => {
     debouncedSearchTerm,
     excludedIds,
   );
-  console.log(idSearchResults);
 
   const getOptions: GetAggregationResult = (facet) => {
     const options = (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
