@@ -55,7 +55,9 @@ const DonorDataTable = ({ data }) => {
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
 
   const programName =
-    programs.length > 0 && programs.filter((program) => program.shortName === programId)[0].name;
+    programs.length > 0
+      ? programs.filter((program) => program.shortName === programId)[0].name
+      : programId;
 
   let displayData = {
     'Submitter Donor ID': submitterDonorId,
