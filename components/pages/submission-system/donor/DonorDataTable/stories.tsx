@@ -20,9 +20,10 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import DonorDataTable from '.';
+import { dummyDonorEntity } from 'components/pages/donor-entity/dummyData';
 
 const DonorDataTableStories = storiesOf(`${__dirname}`, module).add('Basic', () => {
-  return <DonorDataTable />;
+  return <DonorDataTable data={dummyDonorEntity} />;
 });
 
 export default DonorDataTableStories;

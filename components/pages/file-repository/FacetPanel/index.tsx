@@ -16,19 +16,19 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import Facet from 'uikit/Facet';
-import { MenuItem } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import FileSelectButton from 'uikit/FileSelectButton';
-import { SubMenu } from 'uikit/SubMenu';
 import { css, styled } from 'uikit';
-import Typography from 'uikit/Typography';
+import Facet from 'uikit/Facet';
+import { MenuItem, SubMenu } from 'uikit/SubMenu';
+import { Input } from 'uikit/form';
 import Icon from 'uikit/Icon';
 import { useTheme } from 'uikit/ThemeProvider';
+import Tooltip from 'uikit/Tooltip';
 import { Collapsible } from 'uikit/PageLayout';
 import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
+import useClickAway from 'uikit/utils/useClickAway';
+import Tabs, { Tab } from 'uikit/Tabs';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -59,19 +59,17 @@ import {
   IdSearchQueryData,
 } from './types';
 import Container from 'uikit/Container';
-import SEARCH_BY_QUERY from './SEARCH_BY_QUERY.gql';
-import { concat, trim } from 'lodash';
+import SEARCH_BY_FILE_QUERY from './SEARCH_BY_FILE_QUERY.gql';
+import SEARCH_BY_DONOR_QUERY from './SEARCH_BY_DONOR_QUERY.gql';
+import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 import SelectedIds from './SelectedIds';
 import useDebounce from '../hooks/useDebounce';
-import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { FilterOption } from 'uikit/OptionsList';
-import Tabs, { Tab } from 'uikit/Tabs';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -179,13 +177,6 @@ const facetTabs = {
   ],
 };
 
-const fileIDSearch: FacetDetails = {
-  name: 'Search Files',
-  facetPath: FileFacetPath.file_id,
-  variant: 'Other',
-  esDocumentField: FileCentricDocumentField.file_id,
-};
-
 const FacetContainer = styled(Container)`
   z-index: 1;
   background: ${({ theme }) => theme.colors.white};
@@ -215,11 +206,11 @@ const useFileFacetQuery = (
   );
 };
 
-const useIdSearchQuery = (
+const useDonorIdSearchQuery = (
   searchValue: string,
   excludedIds: string[],
 ): { data: IdSearchQueryData; loading: boolean } => {
-  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_QUERY, {
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
     skip: !searchValue,
     variables: {
       filters: {
@@ -228,13 +219,72 @@ const useIdSearchQuery = (
           {
             op: 'filter' as ArrayFieldKeys,
             content: {
-              value: `*${searchValue.toLowerCase()}*`,
+              value: `*${searchValue.toUpperCase()}*`,
               fields: [
-                'file_autocomplete.analyzed',
-                'file_autocomplete.lowercase',
-                'file_autocomplete.prefix',
+                FileCentricDocumentField['donors.donor_id'],
+                FileCentricDocumentField['donors.submitter_donor_id'],
               ],
             },
+          },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['donors.donor_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
+          {
+            op: 'not' as CombinationKeys,
+            content: [
+              {
+                op: 'in' as ArrayFieldKeys,
+                content: {
+                  field: FileCentricDocumentField['donors.submitter_donor_id'],
+                  value: excludedIds,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  });
+};
+
+const useFileIdSearchQuery = (
+  searchValue: string,
+  excludedIds: string[],
+): { data: IdSearchQueryData; loading: boolean } => {
+  const { FEATURE_FACET_TABS_ENABLED } = getConfig();
+
+  const fileIDQueryFilter = FEATURE_FACET_TABS_ENABLED
+    ? {
+        value: `*${searchValue.toUpperCase()}*`,
+        fields: [FileCentricDocumentField['object_id'], FileCentricDocumentField['file_id']],
+      }
+    : {
+        value: `*${searchValue.toLowerCase()}*`,
+        fields: [
+          'file_autocomplete.analyzed',
+          'file_autocomplete.lowercase',
+          'file_autocomplete.prefix',
+        ],
+      };
+
+  return useQuery<IdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
+    skip: !searchValue,
+    variables: {
+      filters: {
+        op: 'and',
+        content: [
+          {
+            op: 'filter' as ArrayFieldKeys,
+            content: fileIDQueryFilter,
           },
           {
             op: 'not' as CombinationKeys,
@@ -266,6 +316,53 @@ const useIdSearchQuery = (
   });
 };
 
+const fileIDSearch: FacetDetails = {
+  name: 'Search Files',
+  searchQuery: useFileIdSearchQuery,
+  facetPath: FileFacetPath.file_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField.file_id,
+  placeholderText: 'e.g. FL13796, 009f4750-e167...',
+  tooltipContent: 'Enter a File ID or Object ID.',
+  getMenuData: (nodes) =>
+    nodes.map(({ node }) => ({
+      resultId: node.file_id,
+      secondaryText: node.study_id,
+      subText: node.data_category,
+    })),
+};
+
+const donorIDSearch: FacetDetails = {
+  name: 'Search by Donor ID',
+  searchQuery: useDonorIdSearchQuery,
+  facetPath: FileFacetPath.donor_id,
+  variant: 'Other',
+  esDocumentField: FileCentricDocumentField['donors.donor_id'],
+  placeholderText: 'e.g. DO35083, PCSI_0103...',
+  tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
+  getMenuData: (nodes) => {
+    // Filters out duplicate Donor IDs
+    let filteredIds = [];
+    const searchResults = [];
+    nodes.forEach(({ node }) => {
+      node.donors.hits.edges.forEach((hit) => {
+        if (
+          !filteredIds.includes(hit.node.donor_id) ||
+          !filteredIds.includes(hit.node.submitter_donor_id)
+        ) {
+          filteredIds.push(hit.node.donor_id, hit.node.submitter_donor_id);
+          searchResults.push({
+            resultId: hit.node.donor_id,
+            secondaryText: hit.node.submitter_donor_id,
+            subText: '',
+          });
+        }
+      });
+    });
+    return searchResults;
+  },
+};
+
 const FacetPanel = () => {
   const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
     useFileCentricFieldDisplayName();
@@ -277,12 +374,15 @@ const FacetPanel = () => {
 
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
-  const presetFacets = createPresetFacets(fieldDisplayNames);
-
-  const [expandedFacets, setExpandedFacets] = React.useState(
-    [...presetFacets, fileIDSearch].map((facet) => facet.facetPath),
-  );
+  const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
+  const currentSearch =
+    FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
   const [searchOpen, setSearchOpen] = React.useState(false);
+
+  const presetFacets = createPresetFacets(fieldDisplayNames);
+  const [expandedFacets, setExpandedFacets] = React.useState(
+    [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
+  );
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -308,7 +408,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField['file_id'],
+    dotField: FileCentricDocumentField[currentSearch.esDocumentField],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -336,7 +436,7 @@ const FacetPanel = () => {
     }
   };
 
-  const { data: idSearchData, loading: idSearchLoading } = useIdSearchQuery(
+  const { data: idSearchData, loading: idSearchLoading } = currentSearch.searchQuery(
     debouncedSearchTerm,
     excludedIds,
   );
@@ -457,9 +557,13 @@ const FacetPanel = () => {
   const facetContainerDefaultStyle = css`
     opacity: 1;
     pointer-events: 'auto';
+    overflow-x: hidden;
   `;
   const onRemoveSelectedId = (id: string) => {
-    const idFilterToRemove = SqonBuilder.has(FileCentricDocumentField['file_id'], id).build();
+    const idFilterToRemove = SqonBuilder.has(
+      FileCentricDocumentField[currentSearch.esDocumentField],
+      id,
+    ).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
@@ -472,7 +576,6 @@ const FacetPanel = () => {
     },
   });
 
-  const [currentTab, setTabs] = useState('clinical');
   const containerProps = {
     css: css`
       flex-grow: 1;
@@ -487,12 +590,16 @@ const FacetPanel = () => {
     border-bottom: 1px none ${theme.colors.white};
     border-radius: 3px 3px 0px 0px;
     flex-grow: 1;
+    width: 50%;
+    :hover {
+      background-color: ${theme.colors.grey_3};
+    }
 
     &.active {
       border-bottom: 0px none ${theme.colors.white};
       border-top: 4px solid ${theme.colors.secondary};
       :hover {
-        background-color: ${theme.colors.grey_3};
+        background-color: ${theme.colors.white};
       }
     }
   `;
@@ -522,12 +629,17 @@ const FacetPanel = () => {
           `}
         >
           <MenuItem
-            onClick={(e) => clickHandler(fileIDSearch)}
-            selected={expandedFacets.includes(fileIDSearch.facetPath)}
+            onClick={(e) => clickHandler(currentSearch)}
+            selected={expandedFacets.includes(currentSearch.facetPath)}
             className="FacetMenu"
-            content={fileIDSearch.name}
+            content={currentSearch.name}
             chevronOnLeftSide={true}
             isFacetVariant={true}
+            RightSideComp={
+              <Tooltip position={'right'} html={currentSearch.tooltipContent}>
+                <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+              </Tooltip>
+            }
             css={css`
               flex: 1;
             `}
@@ -556,7 +668,7 @@ const FacetPanel = () => {
                 <Input
                   size="sm"
                   aria-label="search-for-files"
-                  placeholder="e.g. DO9182, Sa1246.bam..."
+                  placeholder={currentSearch.placeholderText}
                   preset="search"
                   value={searchQuery}
                   onChange={(e) => {
@@ -584,11 +696,12 @@ const FacetPanel = () => {
                       `}
                     />
                     <SearchResultsMenu
+                      currentSearch={currentSearch}
                       searchData={idSearchData}
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({
-                          field: FileCentricDocumentField['file_id'],
+                          field: FileCentricDocumentField[currentSearch.esDocumentField],
                           value,
                         });
                         setSearchQuery('');
@@ -625,7 +738,7 @@ const FacetPanel = () => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
             })
             .filter((f) => {
-              return FEATURE_FACET_TABS_ENABLED ? facetTabs[currentTab].includes(f.facetPath) : f;
+              return facetTabs[currentTab].includes(f.facetPath);
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);

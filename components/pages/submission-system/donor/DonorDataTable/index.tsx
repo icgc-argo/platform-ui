@@ -23,7 +23,29 @@ import { Row, Col } from 'react-grid-system';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
 
-const DonorDataTable = () => {
+const DonorDataTable = ({ data }) => {
+  const {
+    programId,
+    submitterDonorId,
+    gender,
+    vitalStatus,
+    cancerType,
+    primarySite,
+    causeOfDeath,
+    survivalTime,
+    geneticDisorders,
+    height,
+    weight,
+    bmi,
+    menopauseStatus,
+    ageAtMenarche,
+    numberOfPregnancies,
+    numberOfChildren,
+    hrtType,
+    hrtDuration,
+    contraceptionType,
+    contraceptionDuration,
+  } = data;
   return (
     <div>
       <Container
@@ -58,16 +80,15 @@ const DonorDataTable = () => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'Submitter Donor ID', val: '...' },
-                { id: 'Gender', val: '...' },
-                { id: 'Vital Status', val: '...' },
-                { id: 'Cause of Death', val: '...' },
-                { id: 'Survival Time', val: '...' },
-                { id: 'Program Name', val: '...' },
-                { id: 'Cancer Type', val: '...' },
-                { id: 'Primary Site', val: '...' },
-                { id: 'Height', val: '...' },
-                { id: 'Weight', val: '...' },
+                { id: 'Submitter Donor ID', val: submitterDonorId },
+                { id: 'Program Name', val: programId },
+                { id: 'Primary Site', val: primarySite },
+                { id: 'Cancer Type', val: cancerType },
+                { id: 'Gender', val: gender },
+                { id: 'Vital Status', val: vitalStatus },
+                { id: 'Cause of Death', val: causeOfDeath },
+                { id: 'Survival Time', val: survivalTime },
+                { id: 'Genetic Disorders', val: geneticDisorders },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
@@ -82,15 +103,17 @@ const DonorDataTable = () => {
               showPagination={false}
               withOutsideBorder
               data={[
-                { id: 'BMI', val: '...' },
-                { id: 'Menopause Status', val: '...' },
-                { id: 'Age at Menarche', val: '...' },
-                { id: 'Number of Pregnancies', val: '...' },
-                { id: 'Number of Birthed Children', val: '...' },
-                { id: 'Prior Malignancy', val: '...' },
-                { id: 'Cancer Type Prior Malignancy', val: '...' },
-                { id: 'Age at Prior Malignancy', val: '...' },
-                { id: 'Laterality of Prior Malignancy', val: '...' },
+                { id: 'Height', val: `${height} cm` },
+                { id: 'Weight', val: `${weight} kg` },
+                { id: 'BMI', val: `${bmi} kg/m²` },
+                { id: 'Menopause Status', val: menopauseStatus },
+                { id: 'Age at Menarche', val: ageAtMenarche },
+                { id: 'Number of Pregnancies', val: numberOfPregnancies },
+                { id: 'Number of Children', val: numberOfChildren },
+                { id: 'HRT Type', val: hrtType },
+                { id: 'HRT Duration', val: hrtDuration },
+                { id: 'Contraception Type', val: contraceptionType },
+                { id: 'Contraception Duration', val: contraceptionDuration },
               ]}
               columns={[
                 { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },

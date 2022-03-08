@@ -1,0 +1,22 @@
+query SEARCH_BY_DONOR_QUERY($filters: JSON) {
+  file {
+    hits(filters: $filters, first: 5) {
+      total
+      edges {
+        node {
+          study_id
+          donors {
+            hits {
+              edges {
+                node {
+                  donor_id
+                  submitter_donor_id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
