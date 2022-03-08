@@ -43,7 +43,7 @@ const SimpleTable = ({ data }) => {
           {
             sortable: false,
             accessor: 'key',
-            style: { whiteSpace: 'unset', wordBreak: 'break-word' },
+            style: { whiteSpace: 'unset' },
           },
           { accessor: 'val', style: { whiteSpace: 'unset', wordBreak: 'break-word' } },
         ]}

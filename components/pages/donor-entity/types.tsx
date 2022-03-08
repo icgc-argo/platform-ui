@@ -92,9 +92,9 @@ export interface DonorCentricRecord extends DonorRecord {
   numberOfPregnancies?: number;
   numberOfChildren?: number;
   hrtType?: string;
-  hrtDuration?: number;
+  hrtDuration?: number | string;
   contraceptionType?: string;
-  contraceptionDuration?: number;
+  contraceptionDuration?: number | string;
   specimens?: {
     hits: {
       edges: SpecimenNode[];
