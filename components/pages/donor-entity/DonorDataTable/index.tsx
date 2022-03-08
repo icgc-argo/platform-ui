@@ -20,12 +20,16 @@
 import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
 import { useQuery } from '@apollo/react-hooks';
 import Container from 'uikit/Container';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
+import A from 'uikit/Link';
+import Link from 'next/link';
 import { splitIntoColumns, tableFormat } from '../ClinicalTimeline/util';
 import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 // TODO: Create useDonorCentricFieldDisplayName
 
@@ -53,15 +57,26 @@ const DonorDataTable = ({ data }) => {
     contraceptionDuration,
   } = data;
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
+  const programFilter = sqonBuilder.has('study_id', programId).build();
+  const programFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(programFilter))}`,
+  );
 
-  const programName =
-    programs.length > 0
-      ? programs.filter((program) => program.shortName === programId)[0].name
-      : programId;
+  const currentProgram =
+    programs &&
+    programs.length > 0 &&
+    programs.filter((program) => program.shortName === programId)[0];
+  const programName = currentProgram?.name || programId;
+  const programLink = (
+    <Link href={programFilterUrl} passHref>
+      <A>{`${programName} (${programId})`}</A>
+    </Link>
+  );
 
   let displayData = {
     'Submitter Donor ID': submitterDonorId,
-    'Program Name': `${programName} (${programId})`,
+    'Program Name': programLink,
     'Primary Site': primarySite,
     'Cancer Type': cancerType,
     Gender: gender,
