@@ -383,7 +383,6 @@ const FacetPanel = () => {
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
   const [searchOpen, setSearchOpen] = React.useState(false);
-  console.log(searchOpen);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
   const [expandedFacets, setExpandedFacets] = React.useState(
