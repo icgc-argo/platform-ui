@@ -327,9 +327,9 @@ export default function Homepage() {
               , and{' '}
               <Link
                 target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCK-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
+                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
               >
-                LUCK-KR
+                LUCA-KR
               </Link>
               .
               <div
