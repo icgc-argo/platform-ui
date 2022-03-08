@@ -297,38 +297,23 @@ export default function Homepage() {
                 Open Access Variant Filtered
               </Link>{' '}
               data in the File Repository for{' '}
-              <Link
-                target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-              >
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                 APGI-AU
               </Link>
               ,{' '}
-              <Link
-                target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-              >
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                 PACA-CA
               </Link>
               ,{' '}
-              <Link
-                target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-              >
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                 OCCAMS-GB
               </Link>
               ,{' '}
-              <Link
-                target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-              >
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                 PTC-SA
               </Link>
               , and{' '}
-              <Link
-                target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-              >
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                 LUCA-KR
               </Link>
               .
@@ -341,16 +326,11 @@ export default function Homepage() {
                 <div>
                   Program dashboards and the File Repository have been updated with new features to
                   filter on{' '}
-                  <Link
-                    target="_blank"
-                    href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
-                  >
+                  <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
                     Open Access Variant Filtered
                   </Link>{' '}
                   data, and new file detail pages are now accessible from the{' '}
-                  <Link target="_blank" href="https://platform.icgc-argo.org/repository">
-                    File Repository
-                  </Link>{' '}
+                  <Link href="https://platform.icgc-argo.org/repository">File Repository</Link>{' '}
                   table. <br />
                   <br />
                   <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
