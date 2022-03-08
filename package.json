@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.105.7",
+  "version": "1.106.0",
   "scripts": {
     "dev": "next -p 8080",
     "build": "rm -rf .next && next build",
