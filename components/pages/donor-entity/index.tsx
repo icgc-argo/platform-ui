@@ -34,14 +34,15 @@ import { dummyDonorEntity } from './dummyData';
 
 const DonorEntity = ({ donor }) => {
   // TODO: Remove test values
-  const { submitterDonorId, programId, gender, donorId } = donor;
+  const donorId = donor && donor.donors.hits.edges[0].node.donor_id;
+  const submitterDonorId = donor && donor.donors.hits.edges[0].node.submitter_donor_id;
+  const programId = donor && donor.study_id;
 
   const donorData = {
     ...dummyDonorEntity,
-    gender,
+    donorId,
     submitterDonorId,
     programId,
-    donorId,
   };
 
   const donorLoading = false;
