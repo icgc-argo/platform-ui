@@ -25,6 +25,7 @@ import {
   dummyDataAnalysisInfo,
   dummyFileRecords,
   dummyFileSummaryInfo,
+  dummyMetricsInfo,
 } from './dummyData';
 import clsx from 'clsx';
 import Head from '../head';
@@ -42,6 +43,7 @@ const FileRepositoryTableStories = storiesOf(`${__dirname}`, module).add('Basic'
     dataAnalysis: dummyDataAnalysisInfo,
     donorRecords: dummyAssociatedDonorsInfo,
     fileRecords: dummyFileRecords,
+    metrics: dummyMetricsInfo,
   };
 
   return (

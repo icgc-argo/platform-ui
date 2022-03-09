@@ -158,6 +158,24 @@ const createPresetFacets = (
   },
 ];
 
+// TODO: Remove when Facet Tabs are deployed to production
+const legacyDefaultTabs = [
+  FileFacetPath.study_id,
+  FileFacetPath.donors__specimens__specimen_type,
+  FileFacetPath.donors__specimens__specimen_tissue_source,
+  FileFacetPath.release_state,
+  FileFacetPath.embargo_stage,
+  FileFacetPath.analysis__experiment__experimental_strategy,
+  FileFacetPath.data_category,
+  FileFacetPath.data_type,
+  FileFacetPath.file_type,
+  FileFacetPath.file_access,
+  FileFacetPath.analysis__workflow__workflow_name,
+  FileCentricDocumentField.analysis_tools,
+  FileFacetPath.release_state,
+  FileFacetPath.embargo_stage,
+];
+
 const facetTabs = {
   clinical: [
     FileFacetPath.study_id,
@@ -746,7 +764,9 @@ const FacetPanel = () => {
               return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
             })
             .filter((f) => {
-              return facetTabs[currentTab].includes(f.facetPath);
+              return FEATURE_FACET_TABS_ENABLED
+                ? facetTabs[currentTab].includes(f.facetPath)
+                : legacyDefaultTabs.includes(f.facetPath);
             })
             .map((facetDetails) => {
               const facetProps = commonFacetProps(facetDetails);

@@ -24,8 +24,9 @@ import { Col, Row } from 'react-grid-system';
 import Typography from 'uikit/Typography';
 import { useTheme } from 'uikit/ThemeProvider';
 import { FileCard, TableDiv } from '../common';
+import { FileMetricsInfo } from '../types';
 
-const SequencingReadProperties = () => {
+const SequencingReadProperties = ({ metrics }: { metrics: FileMetricsInfo }) => {
   const theme = useTheme();
 
   const CenteredCol = styled(Col)`
@@ -61,24 +62,23 @@ const SequencingReadProperties = () => {
               `}
             >
               <CenteredCol lg={2} md={12}>
-                {/* TODO: un-comment and use values from metrics object once available in API */}
-                <StatNumber>{/* {total_reads.toLocaleString()} */}</StatNumber>
+                <StatNumber>{metrics.totalReads.toLocaleString()}</StatNumber>
                 <StatLabel>Total Reads</StatLabel>
               </CenteredCol>
               <CenteredCol lg={2} md={12}>
-                <StatNumber>{/* {paired_reads.toLocaleString()} */}</StatNumber>
+                <StatNumber>{metrics.pairedReads.toLocaleString()}</StatNumber>
                 <StatLabel>Paired Reads</StatLabel>
               </CenteredCol>
               <CenteredCol lg={4} md={12}>
-                <StatNumber>{/* {pairs_on_different_chromosomes.toLocaleString()} */}</StatNumber>
+                <StatNumber>{metrics.pairsOnDifferentChromosomes.toLocaleString()}</StatNumber>
                 <StatLabel>Pairs on Different Chromosomes</StatLabel>
               </CenteredCol>
               <CenteredCol lg={2} md={12}>
-                <StatNumber>{/* {average_insert_size.toLocaleString()} */}</StatNumber>
+                <StatNumber>{metrics.averageInsertSize.toLocaleString()}</StatNumber>
                 <StatLabel>Average Insert Size</StatLabel>
               </CenteredCol>
               <CenteredCol lg={2} md={12}>
-                <StatNumber>{/* {average_length.toLocaleString()} */}</StatNumber>
+                <StatNumber>{metrics.averageLength.toLocaleString()}</StatNumber>
                 <StatLabel>Average Length</StatLabel>
               </CenteredCol>
             </Row>

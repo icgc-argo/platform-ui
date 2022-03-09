@@ -56,14 +56,13 @@ const FileCardsLayout: React.ComponentType<{
           <AssociatedDonors donors={fileData.donorRecords} />
         </PaddedColumn>
       </PaddedRow>
-      {/* TODO: un-comment once `metrics` object is available in API */}
-      {/* {fileData.dataAnalysis.dataType === 'aligned_reads' && (
+      {fileData.dataAnalysis.dataType === 'Aligned Reads' && fileData.metrics && (
         <PaddedRow>
           <PaddedColumn>
-            <SequencingReadProperties />
+            <SequencingReadProperties metrics={fileData.metrics} />
           </PaddedColumn>
         </PaddedRow>
-      )} */}
+      )}
     </div>
   );
 };

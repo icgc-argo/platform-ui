@@ -212,7 +212,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'September 27, 2021', releaseIteration: 4 }}
+              version={{ date: 'March 7, 2022', releaseIteration: 5 }}
             />
           )}
         </div>
@@ -282,21 +282,41 @@ export default function Homepage() {
             <>
               <b>Announcements:</b>
               <br />
-              <b>September 27, 2021:</b> We are excited to announce{' '}
+              <b>March 7, 2022:</b> We are excited to announce{' '}
               <Link
                 target="_blank"
                 href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
               >
-                Data Release 4.0
+                Data Release 5.0
               </Link>{' '}
-              on the ICGC ARGO Data Platform, including a new addition of the{' '}
+              on the ICGC ARGO Data Platform, which includes{' '}
               <Link
                 target="_blank"
-                href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D"
+                href="https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering"
               >
-                APGI-AU
+                Open Access Variant Filtered
               </Link>{' '}
-              program as well as additional donors released for OCCAMS-GB and LUCA-KR.
+              data in the File Repository for{' '}
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                APGI-AU
+              </Link>
+              ,{' '}
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                PACA-CA
+              </Link>
+              ,{' '}
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                OCCAMS-GB
+              </Link>
+              ,{' '}
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                PTC-SA
+              </Link>
+              , and{' '}
+              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                LUCA-KR
+              </Link>
+              .
               <div
                 css={css`
                   margin-top: 10px;
@@ -304,14 +324,14 @@ export default function Homepage() {
               >
                 <b>New Features:</b>{' '}
                 <div>
-                  Program data submission dashboards have been updated with new features to{' '}
-                  <Link
-                    target="_blank"
-                    href="https://docs.icgc-argo.org/docs/submission/submitted-data#pre-release-data"
-                  >
-                    visualize pre-release data and filter dashboard table results
-                  </Link>
-                  .
+                  Program dashboards and the File Repository have been updated with new features to
+                  filter on{' '}
+                  <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+                    Open Access Variant Filtered
+                  </Link>{' '}
+                  data, and new file detail pages are now accessible from the{' '}
+                  <Link href="https://platform.icgc-argo.org/repository">File Repository</Link>{' '}
+                  table. <br />
                   <br />
                   <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
                     ARGO Data Dictionary 1.13
@@ -321,14 +341,14 @@ export default function Homepage() {
                     target="_blank"
                     href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
                   >
-                    Data Release 4.0
+                    Data Release 5.0
                   </Link>{' '}
                   and{' '}
                   <Link
                     target="_blank"
                     href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
                   >
-                    Software Release 1.101.3 - API 3.26.1
+                    Software Release 1.105.3 - API 3.28.2
                   </Link>{' '}
                   are now available.
                 </div>
