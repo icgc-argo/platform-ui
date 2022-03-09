@@ -61,7 +61,7 @@ const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
     field: FileCentricDocumentField.file_number,
-    order: 'asc' as FileRepositoryRecordSortOrder,
+    order: 'desc' as FileRepositoryRecordSortOrder,
   },
 ];
 
