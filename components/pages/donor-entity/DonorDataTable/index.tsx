@@ -18,10 +18,20 @@
  */
 
 import { css } from 'uikit';
-import Container from 'uikit/Container';
 import { Row, Col } from 'react-grid-system';
-import Table from 'uikit/Table';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { useQuery } from '@apollo/react-hooks';
+import Container from 'uikit/Container';
+import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
+import A from 'uikit/Link';
+import Link from 'next/link';
+import { splitIntoColumns, tableFormat } from '../ClinicalTimeline/util';
+import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+
+// TODO: Create useDonorCentricFieldDisplayName
 
 const DonorDataTable = ({ data }) => {
   const {
@@ -46,6 +56,55 @@ const DonorDataTable = ({ data }) => {
     contraceptionType,
     contraceptionDuration,
   } = data;
+  const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
+  const programFilter = sqonBuilder.has('study_id', programId).build();
+  const programFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(programFilter))}`,
+  );
+
+  const currentProgram =
+    programs &&
+    programs.length > 0 &&
+    programs.filter((program) => program.shortName === programId)[0];
+  const programName = currentProgram?.name || programId;
+  const programLink = (
+    <Link href={programFilterUrl} passHref>
+      <A>{`${programName} (${programId})`}</A>
+    </Link>
+  );
+
+  let displayData = {
+    'Submitter Donor ID': submitterDonorId,
+    'Program Name': programLink,
+    'Primary Site': primarySite,
+    'Cancer Type': cancerType,
+    Gender: gender,
+    'Vital Status': vitalStatus,
+    'Cause of Death': causeOfDeath,
+    'Survival Time': survivalTime,
+    'Genetic Disorders': geneticDisorders,
+    Height: `${height} cm`,
+    Weight: `${weight} kg`,
+    BMI: `${bmi} kg/m²`,
+  };
+  const femaleFields = {
+    'Menopause Status': menopauseStatus,
+    'Age at Menarche': ageAtMenarche,
+    'Number of Pregnancies': numberOfPregnancies,
+    'Number of Children': numberOfChildren,
+    'HRT Type': hrtType,
+    'HRT Duration': hrtDuration,
+    'Contraception Type': contraceptionType,
+    'Contraception Duration': contraceptionDuration,
+  };
+  if (gender === 'Female')
+    displayData = {
+      ...displayData,
+      ...femaleFields,
+    };
+
+  const tableData = splitIntoColumns(displayData, 2);
   return (
     <div>
       <Container
@@ -74,52 +133,10 @@ const DonorDataTable = ({ data }) => {
               margin-right: -10px;
             `}
           >
-            <Table
-              TheadComponent={(props) => null}
-              parentRef={{ current: null }}
-              showPagination={false}
-              withOutsideBorder
-              data={[
-                { id: 'Submitter Donor ID', val: submitterDonorId },
-                { id: 'Program Name', val: programId },
-                { id: 'Primary Site', val: primarySite },
-                { id: 'Cancer Type', val: cancerType },
-                { id: 'Gender', val: gender },
-                { id: 'Vital Status', val: vitalStatus },
-                { id: 'Cause of Death', val: causeOfDeath },
-                { id: 'Survival Time', val: survivalTime },
-                { id: 'Genetic Disorders', val: geneticDisorders },
-              ]}
-              columns={[
-                { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
-                { accessor: 'val', style: { whiteSpace: 'unset' } },
-              ]}
-            />
+            <SimpleTable data={tableFormat(tableData[0])} />
           </Col>
           <Col xs={6}>
-            <Table
-              TheadComponent={(props) => null}
-              parentRef={{ current: null }}
-              showPagination={false}
-              withOutsideBorder
-              data={[
-                { id: 'Height', val: `${height} cm` },
-                { id: 'Weight', val: `${weight} kg` },
-                { id: 'BMI', val: `${bmi} kg/m²` },
-                { id: 'Menopause Status', val: menopauseStatus },
-                { id: 'Age at Menarche', val: ageAtMenarche },
-                { id: 'Number of Pregnancies', val: numberOfPregnancies },
-                { id: 'Number of Children', val: numberOfChildren },
-                { id: 'HRT Type', val: hrtType },
-                { id: 'HRT Duration', val: hrtDuration },
-                { id: 'Contraception Type', val: contraceptionType },
-                { id: 'Contraception Duration', val: contraceptionDuration },
-              ]}
-              columns={[
-                { sortable: false, accessor: 'id', style: { whiteSpace: 'unset' } },
-                { accessor: 'val', style: { whiteSpace: 'unset' } },
-              ]}
-            />
+            <SimpleTable data={tableFormat(tableData[1])} />
           </Col>
         </Row>
       </Container>

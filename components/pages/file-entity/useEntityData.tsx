@@ -113,10 +113,28 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       };
     });
 
+    const metrics = entity.metrics ? (
+      {
+        averageInsertSize: entity.metrics.average_insert_size,
+        averageLength: entity.metrics.average_length,
+        duplicatedBases: entity.metrics.duplicated_bases,
+        errorRate: entity.metrics.error_rate,
+        mappedBasesCigar: entity.metrics.mapped_bases_cigar,
+        mappedReads: entity.metrics.mapped_reads,
+        mismatchBases: entity.metrics.mismatch_bases,
+        pairedReads: entity.metrics.paired_reads,
+        pairsOnDifferentChromosomes: entity.metrics.pairs_on_different_chromosomes,
+        properlyPairedReads: entity.metrics.properly_paired_reads,
+        totalBases: entity.metrics.total_bases,
+        totalReads: entity.metrics.total_reads,
+      }
+    ) : null;
+
     const entityData: FileEntityData = {
       summary,
       dataAnalysis,
       donorRecords,
+      metrics,
     };
 
     return { programShortName, access, size, embargoStage, data: entityData, loading };

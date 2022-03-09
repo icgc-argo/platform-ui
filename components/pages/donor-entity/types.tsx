@@ -18,11 +18,7 @@
  */
 
 import { DonorRecord, FileRecord } from '../file-entity/types';
-import {
-  Entity,
-  SpecimenNode,
-  TreatmentNode,
-} from '../submission-system/donor/ClinicalTimeline/types';
+import { Entity, SpecimenNode, TreatmentNode } from './ClinicalTimeline/types';
 
 export type DiagnosisNode = {
   node: {
@@ -96,9 +92,9 @@ export interface DonorCentricRecord extends DonorRecord {
   numberOfPregnancies?: number;
   numberOfChildren?: number;
   hrtType?: string;
-  hrtDuration?: number;
+  hrtDuration?: number | string;
   contraceptionType?: string;
-  contraceptionDuration?: number;
+  contraceptionDuration?: number | string;
   specimens?: {
     hits: {
       edges: SpecimenNode[];

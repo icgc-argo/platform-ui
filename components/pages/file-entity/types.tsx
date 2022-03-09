@@ -76,8 +76,24 @@ export type FileRecord = {
   actions: string;
 };
 
+export type FileMetricsInfo = {
+  averageInsertSize: number;
+  averageLength: number;
+  duplicatedBases: number;
+  errorRate: number;
+  mappedBasesCigar: number;
+  mappedReads: number;
+  mismatchBases: number;
+  pairedReads: number;
+  pairsOnDifferentChromosomes: number;
+  properlyPairedReads: number;
+  totalBases: number;
+  totalReads: number;
+};
+
 export type FileEntityData = {
   summary: FileSummaryInfo;
   dataAnalysis: DataAnalysisInfo;
   donorRecords: Array<DonorRecord>;
+  metrics?: FileMetricsInfo;
 };

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Checkbox from 'uikit/form/Checkbox';
+import Checkbox, { STYLEDCHECKBOX_SIZES } from 'uikit/form/Checkbox';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
@@ -48,7 +48,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
         acc[type]++;
         return acc;
       },
-      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0 },
+      { primary_diagnosis: 0, specimen: 0, treatment: 0, follow_up: 0, biomarker: 0 },
     );
 
   return (
@@ -77,11 +77,12 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
         `}
       >
         Show:
-        {(Object.keys(entityCounts) as Array<Filters>).map((entityKey) => {
+        {(Object.keys(entityCounts) as Array<Filters>).map((entityKey, i) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
           const count = entityCounts[entityKey];
           const isDisabled = count <= 0;
+          const color = !isDisabled ? checkboxColor : theme.colors.grey_disabled;
 
           const changeFilter = () =>
             !isDisabled &&
@@ -101,6 +102,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
                 }
               `}
               onClick={changeFilter}
+              key={`${entityKey}-${i}`}
             >
               <Checkbox
                 value={title}
@@ -108,7 +110,8 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
                 onChange={changeFilter}
                 aria-label={title}
                 disabled={isDisabled}
-                color={checkboxColor}
+                color={color}
+                size={STYLEDCHECKBOX_SIZES.SM}
               />
 
               <label
