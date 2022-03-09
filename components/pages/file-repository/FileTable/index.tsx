@@ -60,7 +60,7 @@ const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
-    field: FileCentricDocumentField.file_id,
+    field: FileCentricDocumentField.file_number,
     order: 'asc' as FileRepositoryRecordSortOrder,
   },
 ];
@@ -118,9 +118,16 @@ const useFileRepoPaginationState = () => {
     const sort = newSorted.reduce(
       (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
         const order = sortRule.desc ? 'desc' : 'asc';
+
+        // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
+        const sortField =
+          sortRule.id === FileCentricDocumentField.file_id
+            ? FileCentricDocumentField.file_number
+            : sortRule.id;
+
         return accSort.concat({
-          field: sortRule.id as FileCentricDocumentField,
-          order: order as FileRepositoryRecordSortOrder,
+          field: sortField,
+          order: order,
         });
       },
       [],
@@ -187,7 +194,7 @@ const FileTable = () => {
   > = [
     {
       Header: 'File ID',
-      id: FileCentricDocumentField['file_id'],
+      id: FileCentricDocumentField.file_id,
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_FILE_ENTITY_ENABLED ? (
