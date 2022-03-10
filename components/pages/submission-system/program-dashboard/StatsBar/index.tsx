@@ -157,7 +157,7 @@ const StatsBar = () => {
                 quantity={`${Math.round(
                   programDonorSummaryStats.percentageTumourAndNormal * 100,
                 )}%`}
-                description="Donors with Tumour & Normal"
+                description="Donors with a DNA T | N Matched Pair"
               >
                 <PercentBar
                   num={programDonorSummaryStats.percentageTumourAndNormal * 100}
@@ -168,7 +168,7 @@ const StatsBar = () => {
                 />
               </Statistic>
             ) : (
-              <Statistic quantity="..." description="Donors with Tumour & Normal">
+              <Statistic quantity="..." description="Donors with a DNA T | N Matched Pair">
                 <PercentBar num={0} den={100} fillColor="warning" />
               </Statistic>
             )}
