@@ -1,5 +1,4 @@
 import { FilterOption } from 'uikit/OptionsList';
-import { DonorRecord } from 'components/pages/file-entity/types';
 import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 
@@ -31,7 +30,7 @@ type NumericAggregation = any;
 export type SearchMenuDataNode = {
   resultId: string;
   secondaryText: string;
-  subText: string;
+  subText?: string;
 };
 
 export type FacetDetails = {
@@ -45,8 +44,11 @@ export type FacetDetails = {
   searchQuery?: (
     searchValue: string,
     excludedIds: string[],
-  ) => { data: IdSearchQueryData; loading: boolean };
-  getMenuData?: (nodes: Array<IdSearchQueryDataNode>) => Array<SearchMenuDataNode>;
+  ) => {
+    data: FileIdSearchQueryData | DonorIdSearchQueryData;
+    idSearchResults?: SearchMenuDataNode[];
+    loading: boolean;
+  };
 };
 
 export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
@@ -111,11 +113,29 @@ type IdSearchQueryDataNode = {
   };
 };
 
-export type IdSearchQueryData = {
+export type FileIdSearchQueryData = {
   file: {
     hits: {
       total: number;
       edges: IdSearchQueryDataNode[];
+    };
+  };
+};
+
+type DonorIdSearchQueryDataNode = {
+  key: string;
+  doc_count: number;
+};
+
+export type DonorIdSearchQueryData = {
+  file: {
+    aggregations: {
+      donors__donor_id: {
+        buckets: DonorIdSearchQueryDataNode[];
+      };
+      donors__submitter_donor_id: {
+        buckets: DonorIdSearchQueryDataNode[];
+      };
     };
   };
 };

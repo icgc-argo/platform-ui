@@ -21,7 +21,6 @@ import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from
 import Head from '../head';
 import NavBar from '../../NavBar';
 import clsx from 'clsx';
-import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
@@ -34,14 +33,8 @@ import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 import { dummyDonorEntity } from './dummyData';
 
 const DonorEntity = ({ donor }) => {
-  // const { data: donorData, loading: donorLoading } = useEntityData({
-  //   donorId,
-  // });
-
   // TODO: Remove test values
-  const donorId = donor && donor.donors.hits.edges[0].node.donor_id;
-  const submitterDonorId = donor && donor.donors.hits.edges[0].node.submitter_donor_id;
-  const programId = donor && donor.study_id;
+  const { donorId, submitterDonorId, programId } = donor;
 
   const donorData = {
     ...dummyDonorEntity,
@@ -49,6 +42,7 @@ const DonorEntity = ({ donor }) => {
     submitterDonorId,
     programId,
   };
+
   const donorLoading = false;
 
   const { egoJwt } = useAuthContext();
