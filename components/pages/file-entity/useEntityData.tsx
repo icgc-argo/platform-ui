@@ -18,7 +18,7 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import { get } from 'lodash';
+import { get, mapKeys, camelCase } from 'lodash';
 import {
   FileSummaryInfo,
   FileAccessState,
@@ -40,6 +40,14 @@ type EntityData = {
 };
 
 const noData = { programShortName: null, access: null, size: null, data: null, embargoStage: null };
+
+const isValidMetricsObject = (metrics: any) => {
+  return (
+    typeof metrics === 'object'
+      && Object.values(metrics).length
+      && Object.values(metrics).every(v => v !== null)
+  );
+};
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
@@ -113,21 +121,8 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       };
     });
 
-    const metrics = entity.metrics ? (
-      {
-        averageInsertSize: entity.metrics.average_insert_size,
-        averageLength: entity.metrics.average_length,
-        duplicatedBases: entity.metrics.duplicated_bases,
-        errorRate: entity.metrics.error_rate,
-        mappedBasesCigar: entity.metrics.mapped_bases_cigar,
-        mappedReads: entity.metrics.mapped_reads,
-        mismatchBases: entity.metrics.mismatch_bases,
-        pairedReads: entity.metrics.paired_reads,
-        pairsOnDifferentChromosomes: entity.metrics.pairs_on_different_chromosomes,
-        properlyPairedReads: entity.metrics.properly_paired_reads,
-        totalBases: entity.metrics.total_bases,
-        totalReads: entity.metrics.total_reads,
-      }
+    const metrics = isValidMetricsObject(entity.metrics) ? (
+      mapKeys(entity.metrics, (_, key) => camelCase(key))
     ) : null;
 
     const entityData: FileEntityData = {

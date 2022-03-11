@@ -34,6 +34,14 @@ const PaddedColumn = styled(Col)`
   padding-bottom: 8px;
 `;
 
+const shouldShowSequencingReadProperties = (fileData: FileEntityData) => {
+  return (
+    fileData.dataAnalysis.dataType === 'Aligned Reads'
+      && fileData.dataAnalysis.workflowType?.workflow_name === 'DNA Seq Alignment'
+      && fileData.metrics
+  );
+};
+
 const FileCardsLayout: React.ComponentType<{
   fileData: FileEntityData;
 }> = ({ fileData }) => {
@@ -56,7 +64,7 @@ const FileCardsLayout: React.ComponentType<{
           <AssociatedDonors donors={fileData.donorRecords} />
         </PaddedColumn>
       </PaddedRow>
-      {fileData.dataAnalysis.dataType === 'Aligned Reads' && fileData.metrics && (
+      {shouldShowSequencingReadProperties(fileData) && (
         <PaddedRow>
           <PaddedColumn>
             <SequencingReadProperties metrics={fileData.metrics} />
