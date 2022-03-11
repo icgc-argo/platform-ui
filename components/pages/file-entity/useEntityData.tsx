@@ -18,7 +18,12 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import { get, mapKeys, camelCase } from 'lodash';
+import {
+  camelCase,
+  get,
+  isObject,
+  mapKeys,
+} from 'lodash';
 import {
   FileSummaryInfo,
   FileAccessState,
@@ -43,7 +48,7 @@ const noData = { programShortName: null, access: null, size: null, data: null, e
 
 const isValidMetricsObject = (metrics: any) => {
   return (
-    typeof metrics === 'object'
+    isObject(metrics)
       && Object.values(metrics).length
       && Object.values(metrics).every(v => v !== null)
   );
