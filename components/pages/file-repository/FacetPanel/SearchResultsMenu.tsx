@@ -20,7 +20,7 @@
 import { css, styled } from 'uikit';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { FacetDetails, IdSearchQueryData } from './types';
+import { SearchMenuDataNode } from './types';
 import { useTheme } from 'uikit/ThemeProvider';
 import theme from 'uikit/theme/defaultTheme';
 
@@ -55,18 +55,17 @@ const ListItem = styled(Typography)`
 `;
 
 const SearchResultsMenu = ({
-  currentSearch,
   isLoading,
   searchData,
   onSelect,
 }: {
-  currentSearch: FacetDetails;
   isLoading: boolean;
-  searchData: IdSearchQueryData;
+  searchData: SearchMenuDataNode[];
   onSelect: Function;
 }) => {
   const theme = useTheme();
-  if (isLoading || !searchData) {
+
+  if (isLoading) {
     return (
       <ResultsDropdown>
         <NoResultsContainer>
@@ -82,9 +81,7 @@ const SearchResultsMenu = ({
       </ResultsDropdown>
     );
   } else {
-    const menuData = currentSearch.getMenuData(searchData.file.hits.edges);
-
-    if (searchData.file.hits.total === 0 || menuData.length === 0) {
+    if (!searchData || searchData.length === 0) {
       return (
         <ResultsDropdown>
           <NoResultsContainer>No results found</NoResultsContainer>
@@ -95,7 +92,7 @@ const SearchResultsMenu = ({
     return (
       <>
         <ResultsDropdown>
-          {menuData.map(({ resultId, secondaryText, subText }, i) => (
+          {searchData.map(({ resultId, secondaryText, subText }, i) => (
             <div
               css={css`
                 cursor: pointer;
