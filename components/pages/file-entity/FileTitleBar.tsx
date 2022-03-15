@@ -42,6 +42,9 @@ const FileDownloadTooltip = ({
   isDownloadEnabled: boolean;
   fileSize: number;
 }) => {
+  const { egoJwt } = useAuthContext();
+  const isUserLoggedIn = !!egoJwt;
+
   if (isDownloadEnabled) {
     return null;
   }
@@ -55,6 +58,18 @@ const FileDownloadTooltip = ({
           from the browser. Please
           <br />
           use the manifest.
+        </span>
+      </div>
+    );
+  }
+
+  if (isUserLoggedIn) {
+    return (
+      <div>
+        <span>
+          DACO approval is required to
+          <br />
+          download controlled files.
         </span>
       </div>
     );
