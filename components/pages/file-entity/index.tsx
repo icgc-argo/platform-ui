@@ -32,7 +32,10 @@ import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
-import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
+import {
+  EmbargoStageDisplayNames,
+  MAX_FILE_DOWNLOAD_SIZE,
+} from './../file-repository/utils/constants';
 
 const FileEntity = ({ fileId }) => {
   const {
@@ -54,7 +57,11 @@ const FileEntity = ({ fileId }) => {
 
   const isUserLoggedIn = !!egoJwt;
   const isDownloadEnabled =
-    access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true;
+    size > MAX_FILE_DOWNLOAD_SIZE
+      ? false
+      : access === FileAccessState.CONTROLLED
+      ? isUserLoggedIn && isDacoApproved
+      : true;
 
   const accessTier = embargoStage !== 'PUBLIC' ? EmbargoStageDisplayNames[embargoStage] : null;
   return (
@@ -82,6 +89,8 @@ const FileEntity = ({ fileId }) => {
                   fileId={fileId}
                   isDownloadEnabled={isDownloadEnabled}
                   accessTier={accessTier}
+                  fileSize={size}
+                  fileObjectId={data.summary.objectId}
                 />
               </ContentHeader>
 

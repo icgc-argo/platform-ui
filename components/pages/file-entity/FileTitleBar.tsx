@@ -17,10 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
 import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
+import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
 import Legend from 'uikit/Legend';
 import { DownloadIcon } from './common';
@@ -30,17 +32,58 @@ import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { MAX_FILE_DOWNLOAD_SIZE } from '../file-repository/utils/constants';
+import { get } from 'lodash';
+
+const FileDownloadTooltip = ({
+  isDownloadEnabled,
+  fileSize,
+}: {
+  isDownloadEnabled: boolean;
+  fileSize: number;
+}) => {
+  if (isDownloadEnabled) {
+    return null;
+  }
+
+  if (fileSize > MAX_FILE_DOWNLOAD_SIZE) {
+    return (
+      <div>
+        <span>
+          File is too large to download
+          <br />
+          from the browser. Please
+          <br />
+          use the manifest.
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <span>
+        Please log in to access
+        <br />
+        controlled files.
+      </span>
+    </div>
+  );
+};
 
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
   accessTier?: string;
-}> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
+  fileSize?: number;
+  fileObjectId?: string;
+}> = ({ programShortName, fileId, isDownloadEnabled, accessTier, fileSize, fileObjectId }) => {
   const theme = useTheme();
-  const { downloadFileWithEgoToken } = useAuthContext();
+  const { downloadFileWithEgoToken, fetchWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   return (
     <div
@@ -77,28 +120,49 @@ export const FileTitleBar: React.ComponentType<{
       >
         <Legend />
 
-        {/* TODO: Move download into Legend component once available: https://github.com/icgc-argo/platform-ui/issues/2108 */}
-        {/* <Tooltip
+        <Tooltip
           disabled={isDownloadEnabled}
           unmountHTMLWhenHide
-          position="left"
+          position="bottom"
           interactive
-          html={
-            <div>
-              <span>Please log in to access controlled files</span>
-            </div>
-          }
+          html={FileDownloadTooltip({ isDownloadEnabled, fileSize })}
         >
           <Button
             css={css`
               margin-right: 8px;
             `}
-            disabled={!isDownloadEnabled}
+            disabled={!isDownloadEnabled || isDownloading}
+            onClick={async () => {
+              setIsDownloading(true);
+
+              const downloadUrl = urlJoin(
+                GATEWAY_API_ROOT,
+                'storage-api/get-download-url',
+                fileObjectId,
+              );
+              const fileDownloadUrl = await fetchWithEgoToken(downloadUrl)
+                .then((res) => res.json())
+                .then((data) => get(data, 'url', undefined))
+                .catch((err) => console.error(err));
+
+              if (fileDownloadUrl) {
+                // because of CORS we can't just use a redirect, so instead
+                // we add a temporary anchor tag to the page and click it
+                const tempLink = document.createElement('a');
+                tempLink.href = fileDownloadUrl;
+                tempLink.setAttribute('target', '_blank');
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+              }
+
+              setIsDownloading(false);
+            }}
           >
             <DownloadIcon />
-            FILE
+            {!isDownloading ? 'FILE' : 'DOWNLOADING...'}
           </Button>
-        </Tooltip> */}
+        </Tooltip>
 
         <Button
           onClick={() => {
