@@ -194,6 +194,7 @@ const FileTable = () => {
   > = [
     {
       Header: 'File ID',
+      headerClassName: pagingState.sort == DEFAULT_SORT ? '-sort-desc' : '',
       id: FileCentricDocumentField.file_id,
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
