@@ -57,8 +57,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 });
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
-  console.log(selectedData);
-  console.log(selectedSamples);
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
     return (
@@ -124,7 +122,7 @@ const ClinicalTimeline = ({ data }) => {
   const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
-  console.log(selectedClinical.type);
+
   return (
     <Container
       css={css`
