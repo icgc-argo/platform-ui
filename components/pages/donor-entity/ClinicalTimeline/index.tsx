@@ -144,7 +144,7 @@ const ClinicalTimeline = ({ data }) => {
       <div
         css={css`
           display: flex;
-          flex: 0;
+          flex: 1;
         `}
       >
         <>
