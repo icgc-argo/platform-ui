@@ -84,6 +84,18 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         margin-right: -1px;
         cursor: pointer;
 
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 25px;
+          background-color: ${timelineStyles[type].borderColor};
+          position: absolute;
+          right: 98%;
+          z-index: 2;
+        }
+
         ${active
           ? css`
               border-color: ${borderColor};
@@ -176,21 +188,10 @@ const Timeline = ({
             css={css`
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
+              height: 50px;
               align-items: center;
               position: relative;
               justify-content: flex-end;
-
-              &::after {
-                content: '';
-                display: inline-block;
-                width: 7px;
-                height: 7px;
-                border-radius: 25px;
-                background-color: ${timelineStyles[type].borderColor};
-                position: relative;
-                left: 4px;
-                z-index: 2;
-              }
             `}
           >
             <DayCount days={interval} />
@@ -224,6 +225,7 @@ const Timeline = ({
             css={css`
               display: flex;
               align-items: center;
+              position: relative;
             `}
           >
             <TimelineItem
