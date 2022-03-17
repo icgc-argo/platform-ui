@@ -127,7 +127,6 @@ const ClinicalTimeline = ({ data }) => {
     <Container
       css={css`
         padding: 12px 14px;
-        min-height: 750px;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -145,7 +144,7 @@ const ClinicalTimeline = ({ data }) => {
       <div
         css={css`
           display: flex;
-          flex: 1;
+          flex: 0;
         `}
       >
         <>
