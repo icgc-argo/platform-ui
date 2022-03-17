@@ -27,6 +27,7 @@ import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import ContentError from 'components/placeholders/ContentError';
+import ContentPlaceholder from 'uikit/ContentPlaceholder/';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
@@ -50,9 +51,14 @@ export const ENTITY_DISPLAY = Object.freeze({
   biomarker: {
     title: 'Biomarkers',
   },
+  deceased: {
+    title: 'Vital Status',
+  },
 });
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
+  console.log(selectedData);
+  console.log(selectedSamples);
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
     return (
@@ -118,7 +124,7 @@ const ClinicalTimeline = ({ data }) => {
   const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
-
+  console.log(selectedClinical.type);
   return (
     <Container
       css={css`
@@ -189,7 +195,15 @@ const ClinicalTimeline = ({ data }) => {
                   flex-direction: column;
                 `}
               >
-                {renderSelectedDataRow(selectedData, selectedSamples)}
+                {selectedClinical.type === 'deceased' ? (
+                  <Row>
+                    <Col>
+                      <ContentPlaceholder />
+                    </Col>
+                  </Row>
+                ) : (
+                  renderSelectedDataRow(selectedData, selectedSamples)
+                )}
               </div>
 
               {selectedTreatments.length > 0 && (
