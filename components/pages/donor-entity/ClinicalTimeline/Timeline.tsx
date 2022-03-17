@@ -73,7 +73,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       className="timelineItem"
       onClick={() => !disabled && onClick()}
       css={css`
-        height: 48px;
+        height: fit-content;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -148,9 +148,6 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
             variant="data"
             as="div"
             css={css`
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
               color: ${type === EntityType.DECEASED ? theme.colors.grey : 'initial'};
             `}
           >
