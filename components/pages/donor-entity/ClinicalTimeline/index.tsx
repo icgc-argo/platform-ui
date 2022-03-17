@@ -126,6 +126,7 @@ const ClinicalTimeline = ({ data }) => {
         min-height: 750px;
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
         width: 100%;
       `}
     >
