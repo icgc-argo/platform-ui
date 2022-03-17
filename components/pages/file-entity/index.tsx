@@ -32,10 +32,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
-import {
-  EmbargoStageDisplayNames,
-  MAX_FILE_DOWNLOAD_SIZE,
-} from './../file-repository/utils/constants';
+import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
+import { getConfig } from 'global/config';
 
 const FileEntity = ({ fileId }) => {
   const {
@@ -50,6 +48,7 @@ const FileEntity = ({ fileId }) => {
   });
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
   const loading = profileLoading || fileLoading;
 

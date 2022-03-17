@@ -32,7 +32,6 @@ import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { MAX_FILE_DOWNLOAD_SIZE } from '../file-repository/utils/constants';
 import { get } from 'lodash';
 
 const FileDownloadTooltip = ({
@@ -44,6 +43,7 @@ const FileDownloadTooltip = ({
 }) => {
   const { egoJwt } = useAuthContext();
   const isUserLoggedIn = !!egoJwt;
+  const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
   if (isDownloadEnabled) {
     return null;

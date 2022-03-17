@@ -83,5 +83,3 @@ export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
     getter: 'object_id',
   },
 ];
-
-export const MAX_FILE_DOWNLOAD_SIZE = 100000000; // 100MB
