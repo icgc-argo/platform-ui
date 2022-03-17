@@ -179,6 +179,7 @@ const ClinicalTimeline = ({ data }) => {
               padding: '10px 20px',
               border: `1px solid ${theme.colors.grey_1}`,
               marginLeft: '-1px',
+              overflow: 'scroll',
             }}
           >
             <Col>
