@@ -31,7 +31,11 @@ const PaddedRow = styled(Row)`
 `;
 
 const PaddedColumn = styled(Col)`
+  padding-left: 8px !important;
+  padding-right: 8px !important;
   padding-bottom: 8px;
+  display: flex;
+  align-items: stretch;
 `;
 
 const DonorCardsLayout: React.ComponentType<{
