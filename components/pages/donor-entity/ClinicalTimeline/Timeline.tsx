@@ -88,7 +88,10 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
           ? css`
               border-color: ${borderColor};
             `
-          : 'overflow: hidden'};
+          : `overflow: hidden;
+            :hover {
+              background-color: #F2F2F8;
+            }`};
       `}
     >
       <VerticalTabs.Item
