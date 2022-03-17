@@ -154,7 +154,7 @@ const ClinicalTimeline = ({ data }) => {
               writing-mode: vertical-lr;
               transform: rotate(180deg);
               margin-right: 10px;
-              text-align: center;
+              text-align: right;
             `}
           >
             <Typography
