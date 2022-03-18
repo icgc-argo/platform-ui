@@ -25,7 +25,6 @@ import updateJwt from '../utils/updateJwt';
 import { AuthState } from '../utils/authReducer';
 
 export type T_AuthContext = {
-  data: ReturnType<typeof decodeToken> | null;
   egoJwt?: string;
   forceLogout: any;
   isAuthenticated: boolean;
@@ -34,10 +33,10 @@ export type T_AuthContext = {
   permissions: string[];
   setJwt: (token: string) => void;
   updateJwt: () => Promise<string | void>;
+  userModel: ReturnType<typeof decodeToken> | null;
 };
 
 const AuthContext = createContext<T_AuthContext>({
-  data: null,
   egoJwt: undefined,
   forceLogout: () => {},
   isAuthenticated: false,
@@ -46,6 +45,7 @@ const AuthContext = createContext<T_AuthContext>({
   permissions: [],
   setJwt: (token: string) => {},
   updateJwt: async () => {},
+  userModel: null,
 });
 
 export function AuthProvider({
@@ -76,7 +76,6 @@ export function AuthProvider({
   };
 
   const authContextValue: T_AuthContext = {
-    data: userModel,
     egoJwt: userJwt,
     forceLogout,
     isAuthenticated,
@@ -85,6 +84,7 @@ export function AuthProvider({
     permissions: userPermissions,
     setJwt: handleJwt,
     updateJwt,
+    userModel,
   };
 
   return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;

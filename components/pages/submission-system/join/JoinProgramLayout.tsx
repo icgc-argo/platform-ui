@@ -24,14 +24,11 @@ import Tabs, { Tab } from 'uikit/Tabs';
 import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
 import Typography from 'uikit/Typography';
 import DnaLoader from 'uikit/DnaLoader';
-import get from 'lodash/get';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { useRouter } from 'next/router';
 import { createRedirectURL } from 'global/utils/common';
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 import GoogleLogin from 'uikit/Button/GoogleLogin';
-import { getConfig } from 'global/config';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export enum InviteState {
@@ -56,7 +53,6 @@ export default function JoinProgramLayout({
   loading: boolean;
   notFound: boolean;
 }) {
-  const { EGO_URL } = getConfig();
   let inviteState: InviteState = InviteState.UnSet;
 
   if (notFound) {

@@ -20,6 +20,7 @@
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, getPermissionsFromToken, isValidJwt } from 'global/utils/egoJwt';
+import deleteTokens from 'global/auth/utils/deleteTokens';
 
 export const authInitialState = {
   isAuthenticated: false,
@@ -47,15 +48,16 @@ type AuthAction =
     };
 
 const setJwtCookie = (token: string) => {
+  console.log('setJwtCookie');
   Cookies.set(EGO_JWT_KEY, token);
 };
 
-const getTokenCookie = (): string => {
+const getJwtCookie = (): string => {
   return Cookies.get(EGO_JWT_KEY);
 };
 
-const removeTokenCookie = () => {
-  Cookies.set(EGO_JWT_KEY, null);
+const removeJwtCookie = () => {
+  deleteTokens();
 };
 
 const makeTokenState = (token: string, state: AuthState) => {
@@ -70,7 +72,7 @@ const makeTokenState = (token: string, state: AuthState) => {
       userJwt: token,
     };
   } else {
-    removeTokenCookie();
+    removeJwtCookie();
     return authInitialState;
   }
 };
@@ -78,19 +80,19 @@ const makeTokenState = (token: string, state: AuthState) => {
 export default function authReducer(state: AuthState = authInitialState, action: AuthAction) {
   switch (action.type) {
     case 'GET_TOKEN':
-      const storedToken = getTokenCookie();
+      const storedToken = getJwtCookie();
       return makeTokenState(storedToken, state);
     case 'UPDATE_TOKEN':
       const tokenPayload = action.payload || '';
       return makeTokenState(tokenPayload, state);
     case 'REMOVE_TOKEN':
-      removeTokenCookie();
+      removeJwtCookie();
       return {
         ...authInitialState,
         isLoggingOut: true,
       };
     case 'FINISH_LOGOUT':
-      removeTokenCookie();
+      removeJwtCookie();
       return {
         ...authInitialState,
         isLoggingOut: false,

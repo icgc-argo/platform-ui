@@ -26,13 +26,11 @@ import Typography from 'uikit/Typography';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramLayout from './JoinProgramLayout';
-import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import GoogleLoginButton from 'components/GoogleLoginButton';
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 const JoinProgramLoginPage = () => {
-  const { EGO_URL } = getConfig();
-
   const router = useRouter();
   const { inviteId } = router.query;
 

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
@@ -108,7 +108,11 @@ const ProgramManagement = () => {
 
   const { shortName: programShortName } = usePageQuery();
 
-  const { data: { program = null } = {}, loading, refetch } = useQuery(PROGRAM_QUERY, {
+  const {
+    data: { program = null } = {},
+    loading,
+    refetch,
+  } = useQuery(PROGRAM_QUERY, {
     variables: { shortName: programShortName },
   });
 

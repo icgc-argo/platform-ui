@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import React from 'react';
 import { css } from 'uikit';
@@ -56,8 +56,8 @@ const UsersTable = (tableProps: {
   loading: boolean;
   isOnlyOneAdminLeft: boolean;
 }) => {
-  const { data: egoTokenData } = useAuthContext();
-  const userEmail = egoTokenData ? egoTokenData.context.user.email : '';
+  const { userModel } = useAuthContext();
+  const userEmail = userModel ? userModel.context.user.email : '';
   const isUserThemselves = (user: UsersTableUser) => user.email === userEmail;
   const isUserTheLastAdmin = (user: UsersTableUser) =>
     tableProps.isOnlyOneAdminLeft && user.role === 'ADMIN';

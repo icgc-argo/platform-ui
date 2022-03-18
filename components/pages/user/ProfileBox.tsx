@@ -64,7 +64,7 @@ const UserInitialImage = ({ contentText = '' }) => {
 };
 
 export default function ProfileBox() {
-  const { data: userModel } = useAuthContext();
+  const { userModel } = useAuthContext();
 
   return (
     <Box title="Profile" iconName="user">

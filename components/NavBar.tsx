@@ -102,7 +102,7 @@ const getUserRole = (egoJwt, permissions) => {
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
   const { FEATURE_REPOSITORY_ENABLED } = getConfig();
-  const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
+  const { egoJwt, logOut, userModel, permissions } = useAuthContext();
   const canAccessSubmission = React.useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);

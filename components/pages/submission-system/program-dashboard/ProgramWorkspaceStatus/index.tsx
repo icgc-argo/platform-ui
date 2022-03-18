@@ -31,7 +31,7 @@ import {
 } from 'global/constants/pages';
 import { DashboardCard } from '../common';
 import { isCollaborator } from 'global/utils/egoJwt';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import React from 'react';
 
 const ConditionalLink: React.ComponentType<{

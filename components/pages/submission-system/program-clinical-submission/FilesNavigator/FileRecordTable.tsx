@@ -32,7 +32,7 @@ import {
 } from '../../common';
 import { CSSProperties, createRef } from 'react';
 import { useTheme } from 'uikit/ThemeProvider';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { isDccMember, isDataSubmitter } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';

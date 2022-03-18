@@ -22,7 +22,7 @@ import {
   PROGRAM_MANAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
@@ -62,9 +62,8 @@ const TableFilterInput = (props) => (
 
 export default function Programs({ authorizedPrograms = [] }: any) {
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
-  const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } = useQuery(
-    PROGRAMS_USERS_QUERY,
-  );
+  const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } =
+    useQuery(PROGRAMS_USERS_QUERY);
 
   if (programsWithUsers.length > 0) {
     programs.forEach((p) => {

@@ -20,10 +20,9 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import { getConfig } from 'global/config';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
@@ -36,23 +35,20 @@ import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
 import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
-import GoogleLogin from 'uikit/Button/GoogleLogin';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
-import queryString from 'query-string';
 import GoogleLoginButton from 'components/GoogleLoginButton';
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 
 const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }: any) => {
-  const { EGO_URL } = getConfig();
-
   const router = useRouter();
   const { inviteId } = router.query;
   const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
   const toaster = useToaster();
 
-  const { updateToken, data: userModel } = useAuthContext();
+  const { updateJwt, userModel } = useAuthContext();
 
   const [notFound, setNotFound] = React.useState(false);
 
@@ -94,7 +90,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
         },
       });
 
-      const egoToken = await updateToken(); // Side effect
+      const egoToken = await updateJwt(); // Side effect
       if (egoToken) {
         window.localStorage.setItem(
           JUST_JOINED_PROGRAM_STORAGE_KEY,

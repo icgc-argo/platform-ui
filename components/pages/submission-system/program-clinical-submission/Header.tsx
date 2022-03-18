@@ -23,7 +23,7 @@ import TitleBar from 'uikit/TitleBar';
 import { Row } from 'react-grid-system';
 import Link from 'uikit/Link';
 import Button from 'uikit/Button';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
@@ -59,10 +59,8 @@ const Header = ({
   const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const [loaderShown, setLoaderShown] = React.useState(false);
-  const {
-    refetch: refetchClinicalSubmission,
-    updateQuery: updateClinicalSubmissionQuery,
-  } = useClinicalSubmissionQuery(programShortName);
+  const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
+    useClinicalSubmissionQuery(programShortName);
 
   const commonToaster = useCommonToasters();
   const router = useRouter();
@@ -140,8 +138,8 @@ const Header = ({
 
         updateClinicalSubmissionQuery((previous) => ({
           ...previous,
-          clinicalSubmissions: placeholderClinicalSubmissionQueryData(programShortName)
-            .clinicalSubmissions,
+          clinicalSubmissions:
+            placeholderClinicalSubmissionQueryData(programShortName).clinicalSubmissions,
         }));
 
         router.push(DCC_DASHBOARD_PATH);
