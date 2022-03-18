@@ -25,11 +25,11 @@ import { NextPageContext } from 'next';
 const useApolloCache = ({
   Component,
   ctx,
-  userToken = '',
+  userJwt = '',
 }: {
   Component: PageWithConfig;
   ctx: NextPageContext;
-  userToken: string;
+  userJwt: string;
 }) => {
   const [apolloCache, setApolloCache] = useState({});
 
@@ -38,10 +38,10 @@ const useApolloCache = ({
       let graphqlQueriesToCache: GqlQueriesToPrefetch;
       try {
         graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
-          ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt: userToken })
+          ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt: userJwt })
           : [];
         const newApolloCache = graphqlQueriesToCache
-          ? await getApolloCacheForQueries(graphqlQueriesToCache)(userToken)
+          ? await getApolloCacheForQueries(graphqlQueriesToCache)(userJwt)
           : {};
         setApolloCache(newApolloCache);
       } catch (e) {

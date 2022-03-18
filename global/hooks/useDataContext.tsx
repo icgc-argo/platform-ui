@@ -20,8 +20,8 @@
 import { createContext, ReactElement, useContext } from 'react';
 import fetch from 'isomorphic-fetch';
 import { isValidJwt } from 'global/utils/egoJwt';
-import refreshJwt from 'global/utils/refreshJwt';
-import useAuthContext from './useAuthContext';
+import refreshJwt from 'global/auth/utils/refreshJwt';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 
 type T_DataContext = {
   downloadWithAuth: (input: RequestInfo, init?: RequestInit) => Promise<void>;
@@ -34,7 +34,7 @@ const DataContext = createContext<T_DataContext>({
 });
 
 export const DataProvider = ({ children }: { children: ReactElement }) => {
-  const { egoJwt, logOut, setToken } = useAuthContext();
+  const { egoJwt, logOut, setJwt } = useAuthContext();
 
   const fetchWithAuth: T_DataContext['fetchWithAuth'] = async (uri, options) => {
     const modifiedOption = {
@@ -45,7 +45,7 @@ export const DataProvider = ({ children }: { children: ReactElement }) => {
     if (egoJwt && !isValidJwt(egoJwt)) {
       const newJwt = (await refreshJwt()) as string;
       if (isValidJwt(newJwt)) {
-        setToken(newJwt);
+        setJwt(newJwt);
       } else {
         logOut();
       }
