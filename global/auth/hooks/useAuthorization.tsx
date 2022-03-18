@@ -17,35 +17,47 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getConfig } from 'global/config';
 import { NextPageContext } from 'next';
-import { isValidJwt } from '../egoJwt';
+import { useEffect, useState } from 'react';
 
-const getUserToken = async (ctx: NextPageContext, forceLogout: any) => {
-  const { EGO_TOKEN_URL } = getConfig();
-  return await fetch(EGO_TOKEN_URL, {
-    credentials: 'include',
-    headers: { accept: '*/*' },
-    body: null,
-    method: 'GET',
-    mode: 'cors',
-  })
-    .then((res) => {
-      if (res.status !== 200) {
-        forceLogout();
-      }
-      return res.text();
-    })
-    .then((token) => {
-      if (isValidJwt(token)) {
-        return token;
-      }
-    })
-    .catch((err) => {
-      console.warn(err);
-      forceLogout();
-      return err;
-    });
+import { getConfig } from 'global/config';
+import { getPermissionsFromToken } from 'global/utils/egoJwt';
+import { PageWithConfig } from 'global/utils/pages/types';
+import { AuthState } from 'global/auth/utils/authReducer';
+
+const { AUTH_DISABLED } = getConfig();
+
+const useAuthorization = ({
+  authState,
+  Component,
+  ctx,
+  loggingOut,
+}: {
+  authState: AuthState;
+  Component: PageWithConfig;
+  ctx: NextPageContext;
+  loggingOut: boolean;
+}) => {
+  const [isAuthorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    async function handleAuthorization() {
+      const { userJwt = '' } = authState;
+      const unauthorized = Component.isAccessible
+        ? !(await Component.isAccessible({
+            egoJwt: userJwt,
+            ctx,
+            initialPermissions: getPermissionsFromToken(userJwt),
+          }))
+        : false;
+
+      const authorizationCheck = unauthorized && !AUTH_DISABLED && !loggingOut;
+      setAuthorized(!authorizationCheck);
+    }
+    handleAuthorization();
+  }, [authState, ctx.asPath]);
+
+  return isAuthorized;
 };
 
-export default getUserToken;
+export default useAuthorization;

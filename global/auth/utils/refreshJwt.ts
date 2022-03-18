@@ -17,13 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getConfig } from 'global/config';
 import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { isValidJwt } from '../egoJwt';
+import { isValidJwt } from '../../utils/egoJwt';
 import Queue from 'promise-queue';
-
-const { EGO_REFRESH_URL } = getConfig();
+import useAuthContext from 'global/auth/hooks/useAuthContext';
+import { EGO_JWT_KEY } from 'global/constants';
+import { EGO_REFRESH_URL } from 'global/auth/utils/egoPaths';
 
 var maxConcurrent = 1;
 var maxQueue = Infinity;
@@ -31,18 +30,29 @@ var queue = new Queue(maxConcurrent, maxQueue);
 
 const refreshJwt = () =>
   queue.add(() => {
+    const { setJwt } = useAuthContext();
+
+    // get token from cookie not context,
+    // in case another session got a new JWT.
+    const storedJwt = Cookies.get(EGO_JWT_KEY);
+
+    if (isValidJwt(storedJwt)) {
+      setJwt(storedJwt);
+      return Promise.resolve(storedJwt);
+    }
+
     return fetch(EGO_REFRESH_URL, {
       credentials: 'include',
       headers: {
         accept: '*/*',
-        authorization: Cookies.get(EGO_JWT_KEY) || '',
+        authorization: `Bearer ${storedJwt}`,
       },
       method: 'POST',
     })
       .then((res) => res.text())
       .then((newJwt) => {
         if (isValidJwt(newJwt)) {
-          Cookies.set(EGO_JWT_KEY, newJwt);
+          setJwt(newJwt);
         }
         return newJwt;
       });

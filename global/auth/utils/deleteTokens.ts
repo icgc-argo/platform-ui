@@ -17,46 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { NextPageContext } from 'next';
-import { useEffect, useState } from 'react';
+import { EGO_JWT_KEY } from 'global/constants';
+import { EGO_REFRESH_URL } from 'global/auth/utils/egoPaths';
 
-import { getConfig } from 'global/config';
-import { getPermissionsFromToken } from 'global/utils/egoJwt';
-import { PageWithConfig } from 'global/utils/pages/types';
-import { AuthState } from './authReducer';
+const deleteTokens = () => {
+  const storedToken = localStorage.getItem(EGO_JWT_KEY) || '';
 
-const useAuthorization = ({
-  authState,
-  Component,
-  ctx,
-  loggingOut,
-}: {
-  authState: AuthState;
-  Component: PageWithConfig;
-  ctx: NextPageContext;
-  loggingOut: boolean;
-}) => {
-  const [isAuthorized, setAuthorized] = useState(false);
-  const { AUTH_DISABLED } = getConfig();
+  console.log('DELETE TOKENS jwt in localStorage', storedToken.slice(-10));
 
-  useEffect(() => {
-    async function handleAuthorization() {
-      const { userToken = '' } = authState;
-      const unauthorized = Component.isAccessible
-        ? !(await Component.isAccessible({
-            egoJwt: userToken,
-            ctx,
-            initialPermissions: getPermissionsFromToken(userToken),
-          }))
-        : false;
-
-      const authorizationCheck = unauthorized && !AUTH_DISABLED && !loggingOut;
-      setAuthorized(!authorizationCheck);
-    }
-    handleAuthorization();
-  }, [authState, ctx.asPath]);
-
-  return isAuthorized;
+  fetch(EGO_REFRESH_URL, {
+    credentials: 'include',
+    headers: {
+      accept: '*/*',
+      authorization: `Bearer ${storedToken}`,
+    },
+    method: 'DELETE',
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error();
+      }
+      console.log('DELETE TOKENS deleted the refresh token', res);
+    })
+    .catch((err) => {
+      console.warn(err);
+    })
+    .finally(() => {
+      console.log('DELETE TOKENS finally delete localStorage jwt');
+      localStorage.removeItem(EGO_JWT_KEY);
+    });
 };
 
-export default useAuthorization;
+export default deleteTokens;

@@ -17,28 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getConfig } from 'global/config';
-import useAuthContext, { T_AuthContext } from 'global/hooks/useAuthContext';
+import { isValidJwt } from '../../utils/egoJwt';
+import { EGO_TOKEN_URL } from 'global/auth/utils/egoPaths';
 
-const updateUserToken: T_AuthContext['updateToken'] = async () => {
-  const { EGO_UPDATE_URL } = getConfig();
-  const { egoJwt, setToken } = useAuthContext();
-
-  try {
-    const res = await fetch(EGO_UPDATE_URL, {
-      credentials: 'include',
-      headers: { Authorization: `Bearer ${egoJwt || ''}` },
-      body: null,
-      method: 'GET',
-      mode: 'cors',
+const getJwt = async (forceLogout: () => void) => {
+  return await fetch(EGO_TOKEN_URL, {
+    credentials: 'include',
+    headers: { accept: '*/*' },
+    body: null,
+    method: 'GET',
+    mode: 'cors',
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        forceLogout();
+      }
+      return res.text();
+    })
+    .then((token) => {
+      if (isValidJwt(token)) {
+        return token;
+      }
+    })
+    .catch((err) => {
+      console.warn(err);
+      forceLogout();
+      return err;
     });
-    const egoToken = await res.text();
-    setToken(egoToken);
-    return egoToken;
-  } catch (err) {
-    console.warn('err: ', err);
-    throw err;
-  }
 };
 
-export default updateUserToken;
+export default getJwt;

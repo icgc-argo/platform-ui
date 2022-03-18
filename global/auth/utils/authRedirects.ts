@@ -27,11 +27,13 @@ import { OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 
 export const redirectTo = (res: ServerResponse, url: string) => {
   if (res) {
+    // server-side
     res.writeHead(302, {
       Location: url,
     });
     res.end();
   } else {
+    // client-side
     Router.push(url);
   }
 };
@@ -46,8 +48,7 @@ export const redirectForcedLogout = (ctx: NextPageContext) => {
 };
 
 export const redirectOauth = (ctx: NextPageContext) => {
-  // redirect from /?isOauth=true
-  // due to encoded URL causing 404 error
+  // redirect from /?isOauth=true due to encoded URL causing 404 error
   const checkOauth = (query: NextPageContext['query']) =>
     get(query, OAUTH_QUERY_PARAM_NAME) === 'true';
 

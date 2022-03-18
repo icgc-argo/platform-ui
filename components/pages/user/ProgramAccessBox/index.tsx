@@ -172,7 +172,7 @@ const getProgramTableProgramFromEgoJwt = (
 
 const ProgramAccessBox = ({
   isDacoApproved,
-  readablePrograms,
+  readablePrograms = [],
   loading,
 }: {
   isDacoApproved: boolean;
@@ -180,8 +180,7 @@ const ProgramAccessBox = ({
   loading: boolean;
 }) => {
   const { permissions } = useAuthContext();
-  const programs =
-    !loading && getProgramTableProgramFromEgoJwt(permissions || [], readablePrograms);
+  const programs = !loading && getProgramTableProgramFromEgoJwt(permissions, readablePrograms);
 
   return (
     <Box

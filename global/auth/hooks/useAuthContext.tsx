@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -18,99 +18,73 @@
  */
 
 import { createContext, ReactElement, useContext, useState } from 'react';
-import fetch from 'isomorphic-fetch';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import queryString from 'query-string';
-import { getConfig } from 'global/config';
-import { EGO_JWT_KEY } from 'global/constants';
-import { decodeToken, getPermissionsFromToken, isValidJwt } from 'global/utils/egoJwt';
 
-type T_AuthContext = {
+import { decodeToken } from 'global/utils/egoJwt';
+import updateJwt from '../utils/updateJwt';
+import { AuthState } from '../utils/authReducer';
+
+export type T_AuthContext = {
   data: ReturnType<typeof decodeToken> | null;
   egoJwt?: string;
+  forceLogout: any;
+  isAuthenticated: boolean;
   isLoggingOut: boolean;
   logOut: (path?: string) => void;
   permissions: string[];
-  setToken: (token: string) => void;
-  updateToken: () => Promise<string | void>;
+  setJwt: (token: string) => void;
+  updateJwt: () => Promise<string | void>;
 };
 
 const AuthContext = createContext<T_AuthContext>({
   data: null,
   egoJwt: undefined,
+  forceLogout: () => {},
+  isAuthenticated: false,
   isLoggingOut: false,
   logOut: () => {},
   permissions: [],
-  setToken: (token: string) => {},
-  updateToken: async () => {},
+  setJwt: (token: string) => {},
+  updateJwt: async () => {},
 });
 
 export function AuthProvider({
-  egoJwt,
+  authState,
   children,
+  forceLogout,
+  handleLogout,
+  handleJwt,
 }: {
-  egoJwt?: T_AuthContext['egoJwt'];
+  authState: AuthState;
   children: ReactElement;
+  forceLogout: () => void;
+  handleLogout: () => void;
+  handleJwt: (token: string) => void;
 }) {
-  const { EGO_UPDATE_URL } = getConfig();
   const router = useRouter();
-  const permissions: T_AuthContext['permissions'] = getPermissionsFromToken(egoJwt);
   const [isLoggingOut, setIsLoggingOut] = useState<T_AuthContext['isLoggingOut']>(false);
 
-  const setToken: T_AuthContext['setToken'] = (token: string) => {
-    Cookies.set(EGO_JWT_KEY, token);
-  };
-
-  const removeToken = () => {
-    Cookies.remove(EGO_JWT_KEY);
-  };
+  const { isAuthenticated, userModel, userPermissions, userJwt = '' } = authState;
 
   const logOut: T_AuthContext['logOut'] = async (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
-    removeToken();
-    if (path) {
-      let { url, query } = queryString.parseUrl(path);
-      // Temp until we can remove private filters
-      delete query.filters;
-      router.push({ pathname: url, query: { ...query, loggingOut: true } }).then(router.reload);
-    } else {
-      router.push('/').then(router.reload);
-    }
-  };
-
-  if (egoJwt && !isValidJwt(egoJwt)) {
-    logOut();
-  }
-
-  const updateToken: T_AuthContext['updateToken'] = () => {
-    return fetch(EGO_UPDATE_URL, {
-      credentials: 'include',
-      headers: { Authorization: `Bearer ${egoJwt || ''}` },
-      body: null,
-      method: 'GET',
-      mode: 'cors',
-    })
-      .then((res) => res.text())
-      .then((egoToken) => {
-        Cookies.set(EGO_JWT_KEY, egoToken);
-        return egoToken;
-      })
-      .catch((err) => {
-        console.warn('err: ', err);
-        throw err;
-      });
+    router
+      .push('/')
+      .then(() => handleLogout())
+      .then(router.reload);
   };
 
   const authContextValue: T_AuthContext = {
-    data: egoJwt ? decodeToken(egoJwt || '') : null,
-    egoJwt,
+    data: userModel,
+    egoJwt: userJwt,
+    forceLogout,
+    isAuthenticated,
     isLoggingOut,
     logOut,
-    permissions,
-    setToken,
-    updateToken,
+    permissions: userPermissions,
+    setJwt: handleJwt,
+    updateJwt,
   };
 
   return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;

@@ -20,11 +20,9 @@
 import queryString from 'query-string';
 import { get } from 'lodash';
 import urlJoin from 'url-join';
-import { createRedirectURL } from '../common';
-import { getConfig } from '../../config';
+import { createRedirectURL } from 'global/utils/common';
 import { LOGIN_PAGE_PATH } from '../../constants/pages';
-
-const { EGO_URL } = getConfig();
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 const createLoginURL = (asPath: string): string => {
   // split URL into path & query.

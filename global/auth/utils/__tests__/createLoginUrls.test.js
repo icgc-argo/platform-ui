@@ -18,10 +18,8 @@
  */
 
 import { describe, expect, test } from '@jest/globals';
-import { getConfig } from 'global/config';
 import { createLoginURL } from '..';
-
-const { EGO_URL } = getConfig();
+import { EGO_URL } from 'global/utils/auth/egoPaths';
 
 describe('create ego URLs', () => {
   describe('create login URL with redirect parameter', () => {
