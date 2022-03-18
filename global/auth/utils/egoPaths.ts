@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,29 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import GoogleLogin from 'uikit/Button/GoogleLogin';
-import useAuthContext from 'global/auth/hooks/useAuthContext';
-import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
+import urlJoin from 'url-join';
+import { getConfig } from 'global/config';
 
-const GoogleLoginButton: React.ComponentType<
-  React.ComponentProps<typeof GoogleLogin> & {
-    logoutToRoot?: boolean;
-  }
-> = ({ logoutToRoot = false, ...props }) => {
-  const { logOut } = useAuthContext();
-  const { clearFilters } = useFiltersContext();
-  return (
-    <GoogleLogin
-      {...props}
-      onClick={(e) => {
-        if (props.onClick) {
-          props.onClick(e);
-        }
-        clearFilters();
-        logOut();
-      }}
-    />
-  );
-};
+const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
 
-export default GoogleLoginButton;
+export const EGO_URL = urlJoin(EGO_API_ROOT, `/oauth/login/google?client_id=${EGO_CLIENT_ID}`);
+export const EGO_REFRESH_URL = urlJoin(EGO_API_ROOT, `/oauth/refresh?client_id=${EGO_CLIENT_ID}`);
+export const EGO_TOKEN_URL = urlJoin(EGO_API_ROOT, `/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+export const EGO_UPDATE_URL = urlJoin(
+  EGO_API_ROOT,
+  `/oauth/update-ego-token?client_id=${EGO_CLIENT_ID}`,
+);

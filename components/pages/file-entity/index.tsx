@@ -27,7 +27,7 @@ import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';

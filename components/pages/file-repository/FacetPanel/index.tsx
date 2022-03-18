@@ -69,7 +69,7 @@ import useDebounce from '../hooks/useDebounce';
 import useClickAway from 'uikit/utils/useClickAway';
 import TooltipFacet from './TooltipFacet';
 import { getConfig } from 'global/config';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import { FilterOption } from 'uikit/OptionsList';
 
 const FacetRow = styled('div')`

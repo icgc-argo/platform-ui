@@ -33,6 +33,7 @@ import {
   DOCS_REGISTERING_SAMPLES_PAGE,
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
 } from 'global/constants/docSitePaths';
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 const LinkToHome = props => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -40,7 +41,6 @@ const LinkToDataRepo = props => <a {...props} onClick={() => 'TODO'} />;
 
 export default function LoginPage({ redirect }: { redirect: string }) {
   const theme = useTheme();
-  const { EGO_URL } = getConfig();
   const { DOCS_URL_ROOT } = getConfig();
   return (
     <DefaultLayout>

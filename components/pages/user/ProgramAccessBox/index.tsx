@@ -23,7 +23,7 @@ import { css } from 'uikit';
 import UikitLink from 'uikit/Link';
 import { Box } from '../common';
 import Table from 'uikit/Table';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import {
   isDccMember,
   canWriteProgram,

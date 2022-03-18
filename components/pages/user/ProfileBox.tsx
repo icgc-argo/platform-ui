@@ -23,7 +23,7 @@ import { ContentBox } from 'uikit/PageLayout';
 import Typography from 'uikit/Typography';
 import { Row, Col } from 'react-grid-system';
 import { css } from 'uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import useTheme from 'uikit/utils/useTheme';
 import { Box } from './common';
 

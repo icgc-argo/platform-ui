@@ -22,11 +22,10 @@ import Modal from 'uikit/Modal';
 import { css, styled } from 'uikit';
 import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
-import urljoin from 'url-join';
 import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
-import { getConfig } from 'global/config';
 import useTheme from 'uikit/utils/useTheme';
 import Banner from 'uikit/notifications/Banner';
+import { EGO_URL } from 'global/auth/utils/egoPaths';
 
 const Row = styled('span')`
   display: flex;
@@ -56,7 +55,6 @@ const ProgramServicesModal = ({
   hasPrograms: boolean;
   isLoggedIn: boolean;
 }) => {
-  const { DOCS_URL_ROOT, EGO_URL } = getConfig();
   const theme = useTheme();
 
   return (

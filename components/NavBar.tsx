@@ -18,7 +18,7 @@
  */
 
 import { SUBMISSION_PATH, USER_PAGE_PATH, FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import useAuthContext from 'global/hooks/useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
@@ -43,7 +43,7 @@ import { ModalPortal } from './ApplicationRoot';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from 'uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
-import createLoginURL from 'global/utils/auth/createLoginUrl';
+import createLoginURL from 'global/auth/utils/createLoginUrl';
 
 const NavBarLoginButton = () => {
   const { asPath } = usePageContext();

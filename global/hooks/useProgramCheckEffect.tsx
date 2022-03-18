@@ -24,7 +24,7 @@ import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 import { sleep } from 'global/utils/common';
-import useAuthContext from './useAuthContext';
+import useAuthContext from 'global/auth/hooks/useAuthContext';
 
 export const useProgramCheckEffect = () => {
   const { shortName } = usePageQuery<{ shortName: string }>();
