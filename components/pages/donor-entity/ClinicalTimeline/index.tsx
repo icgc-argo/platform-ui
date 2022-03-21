@@ -23,6 +23,7 @@ import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
+import Link from 'uikit/Link';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
@@ -196,6 +197,23 @@ const ClinicalTimeline = ({ data }) => {
               <Typography variant="navigation">
                 {ENTITY_DISPLAY[selectedClinical.type].title}
               </Typography>
+              {selectedClinical.type === 'specimen' && (
+                <Link
+                  bold
+                  uppercase
+                  withChevron={false}
+                  variant="BLOCK"
+                  css={css`
+                    float: right;
+                    font-size: 12.5px;
+                    position: relative;
+                    right: 14px;
+                    top: 2px;
+                  `}
+                >
+                  Explore Specimen Files ()
+                </Link>
+              )}
               <div
                 css={css`
                   display: flex;
