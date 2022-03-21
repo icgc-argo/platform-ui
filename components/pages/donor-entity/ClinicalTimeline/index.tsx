@@ -63,16 +63,16 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
       <Col>
         <Row>
           <Col
-            style={{
-              paddingLeft: '0px;',
-            }}
+            css={css`
+              padding-left: 0px !important;
+            `}
           >
             <SimpleTable data={tableFormat(dataCols[0])} />
           </Col>
           <Col
-            style={{
-              paddingLeft: '0px;',
-            }}
+            css={css`
+              padding-left: 0px !important;
+            `}
           >
             {!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}
           </Col>
