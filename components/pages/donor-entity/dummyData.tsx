@@ -141,7 +141,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
     interval: 2,
     data: {
       'Primary Diagnosis ID': 'PD1',
-      'Submitter Specimen Id': 'SP0013',
+      submitter_specimen_id: 'SP0013',
       'Tumour Normal Designation': 'Normal',
       'Age at Diagnosis': '28 years',
       'Cancer Type Code': 'C25.3',
@@ -162,7 +162,7 @@ export const mockTimelineData: Array<DonorEntityData> = [
     description: 'Tumour',
     interval: 353,
     data: {
-      'Submitter Specimen Id': 'SP0032',
+      submitter_specimen_id: 'SP0032',
       'Submitter Primary Diagnosis ID': 'PD1',
       'Tumour Normal Designation': 'Tumour',
       'Specimen Tissue Source': 'Blood derived',

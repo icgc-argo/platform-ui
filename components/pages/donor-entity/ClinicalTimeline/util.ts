@@ -79,12 +79,39 @@ export const splitIntoColumns = (
   }
 };
 
+const donorCentricDisplayNames = {
+  submitter_specimen_id: 'Submitter Specimen Id',
+  submitter_primary_diagnosis_id: 'Submitter Primary Diagnosis ID',
+  tumour_normal_designation: 'Tumour Normal Designation',
+  specimen_tissue_source: 'Specimen Tissue Source',
+  specimen_type: 'Specimen Type',
+  pathological_tumour_staging_system: 'Pathological Tumour Staging System',
+  age_at_diagnosis: 'Age at Diagnosis',
+  pathological_TNM_category: 'Pathological TNM Category',
+  pathological_stage_group: 'Pathological Stage Group',
+  specimen_acquisition_interval: 'Specimen Acquisition Interval',
+  tumour_histological_type: 'Tumor Histological Type',
+  specimen_anatomic_location: 'Specimen Anatomic Location',
+  specimen_laterality: 'Specimen Laterality',
+  specimen_processing: 'Specimen Processing',
+  number_of_positive_lymph_nodes: 'Number of Positive Lymph Nodes',
+  referrence_pathology_confirmed: 'Referrence Pathology Confirmed',
+  tumour_grading_system: 'Tumour Grading System',
+  tumour_grade: 'Tumour Grade',
+  percent_tumour_cells: 'Percent Tumour Cells',
+  percent_proliferating_calls: 'Percent Proliferating Calls',
+  percent_inflammatory_tissue: 'Percent Inflammatory Tissue',
+  percent_stromal_cells: 'Percent Stromal Cells',
+  percent_necrosis: 'Percent Necrosis',
+};
+
 // format for display
 export const tableFormat = (data) =>
   data.length > 0 &&
   data.reduce((acc, val) => {
     const [key, value] = Object.entries(val)[0];
-    acc[key] = value;
+    const displayKey = donorCentricDisplayNames[key] || key;
+    acc[displayKey] = value;
     return acc;
   }, {});
 

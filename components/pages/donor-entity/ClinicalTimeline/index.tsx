@@ -21,14 +21,17 @@ import React from 'react';
 import Container from 'uikit/Container';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { css } from 'uikit';
 import Link from 'uikit/Link';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
-import ContentError from 'components/placeholders/ContentError';
 import ContentPlaceholder from 'uikit/ContentPlaceholder/';
+import ContentError from 'components/placeholders/ContentError';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
@@ -59,7 +62,9 @@ export const ENTITY_DISPLAY = Object.freeze({
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
+    const tableData = tableFormat(selectedData);
     const dataCols = splitIntoColumns(selectedData, 2);
+
     return (
       <Col>
         <Row>
@@ -134,6 +139,14 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
+  const specimenFilter = sqonBuilder
+    .has('submitter_specimen_id', selectedData['submitter_specimen_id'])
+    .build();
+  const specimenFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(specimenFilter))}`,
+  );
+
   return (
     <Container
       css={css`
@@ -203,6 +216,7 @@ const ClinicalTimeline = ({ data }) => {
                   uppercase
                   withChevron={false}
                   variant="BLOCK"
+                  href={specimenFilterUrl}
                   css={css`
                     float: right;
                     font-size: 12.5px;
@@ -211,7 +225,7 @@ const ClinicalTimeline = ({ data }) => {
                     top: 2px;
                   `}
                 >
-                  Explore Specimen Files ()
+                  Explore Specimen Files (1)
                 </Link>
               )}
               <div
