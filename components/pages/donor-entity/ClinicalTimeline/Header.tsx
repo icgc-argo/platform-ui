@@ -69,14 +69,16 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
             margin-left: 18px;
           }
 
-          div:first-of-type {
-            margin-left: 6px;
-          }
-
           ${css(theme.typography.data as any)};
         `}
       >
-        Show:
+        <span
+          css={css`
+            margin-right: -12px;
+          `}
+        >
+          Show:
+        </span>
         {(Object.keys(entityCounts) as Array<Filters>).map((entityKey, i) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
@@ -95,7 +97,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
           return (
             <div
               css={css`
-                margin-left: 3px;
+                margin-left: ${i === 0 ? '6px' : '3px'};
                 display: flex;
                 &:hover {
                   cursor: pointer;
