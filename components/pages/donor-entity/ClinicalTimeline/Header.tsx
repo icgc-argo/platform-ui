@@ -24,7 +24,7 @@ import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
 import { css } from 'uikit';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType, Entity } from './types';
+import { EntityType, Entity } from '../types';
 
 type HeaderTypes = {
   entities: Array<Entity>;
@@ -69,7 +69,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
             margin-left: 18px;
           }
 
-          div:first-child {
+          div:first-of-type {
             margin-left: 6px;
           }
 

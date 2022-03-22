@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorCentricRecord, DonorEntityData } from './types';
-import { EntityType } from './ClinicalTimeline/types';
+import { DonorCentricRecord, DonorEntityData, EntityType } from './types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
   programId: 'TEST-PR',
@@ -56,11 +55,16 @@ export const dummyDonorEntity: DonorCentricRecord = {
       edges: [
         {
           node: {
-            specimen_tissue_source: 'Blood derived',
+            program_id: 'TEST-PR',
+            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
+            specimen_id: 'SP212999',
             specimen_type: 'Normal',
+            specimen_tissue_source: 'Blood derived',
             tumour_normal_designation: 'Normal',
             submitter_specimen_id: 'HCC1143_BAM_INPUT',
-            specimen_id: 'SP212999',
+            specimen_acquisition_interval: 2,
+            specimen_anatomic_location: 'C18',
             samples: {
               hits: {
                 edges: [
@@ -72,6 +76,45 @@ export const dummyDonorEntity: DonorCentricRecord = {
                       submitter_sample_id: 'HCC1143_BAM_INPUT',
                     },
                   },
+                ],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            program_id: 'TEST-PR',
+            primary_diagnosis_id: 'PD1',
+            submitter_specimen_id: 'SP0032',
+            tumour_normal_designation: 'Normal',
+            submitter_primary_diagnosis_id: 'PD1',
+            specimen_id: 'SP212999',
+            specimen_type: 'Normal',
+            specimen_tissue_source: 'Blood derived',
+            specimen_acquisition_interval: 12,
+            specimen_anatomic_location: 'C18',
+            pathological_tumour_staging_system: 'AJCC 7th edition',
+            pathological_t_category: 'T0',
+            pathological_n_category: 'N0a',
+            pathological_m_category: 'M1b',
+            pathological_stage_group: 'Stage IIIC',
+            tumour_histological_type: '9691/36',
+            specimen_laterality: 'Unknown',
+            tumour_grading_system: 'Gleason grade group system',
+            tumour_grade: 'High grade',
+            percent_tumour_cells: 0.2,
+            specimen_processing: 'Cryopreservation in dry ice (dead tissue)',
+            reference_pathology_confirmed: 'Yes',
+            specimen_storage: 'Frozen in liquid nitrogen',
+            percent_proliferating_cells: 0.2,
+            percent_inflammatory_tissue: 0.2,
+            percent_stromal_cells: 0.2,
+            percent_necrosis: 0.2,
+            samples: {
+              hits: {
+                edges: [
+                  { node: { sample_id: 'SAB5353', sample_type: 'Amplified DNA' } },
+                  { node: { sample_id: 'SAD3053', sample_type: 'Total DNA' } },
                 ],
               },
             },
@@ -133,28 +176,6 @@ export const mockTimelineData: Array<DonorEntityData> = [
       'Presenting Symptoms': 'Back Pain, Pancreatitis, Vomiting',
       'Performance Status': '--',
     },
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0013',
-    description: 'Normal',
-    interval: 2,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      submitter_specimen_id: 'SP0013',
-      'Tumour Normal Designation': 'Normal',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplasm of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '',
-      'Clinical Tumour Staging System': 'Binet',
-      'Clinical Stage Group': '',
-    },
-    samples: [
-      { node: { sample_id: 'SAB5353', sample_type: 'Amplified DNA' } },
-      { node: { sample_id: 'SAD3053', sample_type: 'Total DNA' } },
-    ],
   },
   {
     type: EntityType.SPECIMEN,

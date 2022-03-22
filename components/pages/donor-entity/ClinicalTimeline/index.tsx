@@ -36,8 +36,11 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { Entity, EntityType, SampleNode, TreatmentNode } from './types';
-import { splitIntoColumns, tableFormat } from './util';
+import { Entity, EntityType, SampleNode, TreatmentNode } from '../types';
+import { splitIntoColumns, tableFormat, formatTimelineEntityData } from './util';
+
+// TODO: Remove test values
+import { mockTimelineData } from '../dummyData';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -120,8 +123,12 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 };
 
 const ClinicalTimeline = ({ data }) => {
-  const theme = useTheme();
+  // TODO: Remove test values
+  const entityData = formatTimelineEntityData(data);
+  console.log('formatted entityData', entityData);
+  const entities = [mockTimelineData[0], ...entityData, ...mockTimelineData.slice(1)];
 
+  const theme = useTheme();
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
@@ -131,7 +138,7 @@ const ClinicalTimeline = ({ data }) => {
   ]);
 
   const [activeTab, setActiveTab] = React.useState<number>(0);
-  const filteredData = data.filter(
+  const filteredData = entities.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
   const selectedClinical: Entity = filteredData[activeTab];
@@ -158,7 +165,7 @@ const ClinicalTimeline = ({ data }) => {
       `}
     >
       <Header
-        entities={data}
+        entities={entities}
         activeEntities={activeEntities}
         onFiltersChange={(activeEntities) => {
           setActiveTab(0);

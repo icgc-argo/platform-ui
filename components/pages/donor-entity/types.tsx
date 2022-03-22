@@ -18,7 +18,6 @@
  */
 
 import { DonorRecord, FileRecord } from '../file-entity/types';
-import { Entity, SpecimenNode, TreatmentNode } from './ClinicalTimeline/types';
 
 export type DiagnosisNode = {
   node: {
@@ -121,5 +120,97 @@ export interface DonorCentricRecord extends DonorRecord {
     };
   };
 }
+
+export type SampleNode = {
+  node: {
+    sample_id: string;
+    sample_type: string;
+    submitter_sample_id?: string;
+    experimental_strategies?: string;
+    workflow_names?: string;
+    matched_normal_submitter_sample_id?: string;
+    available_files?: number;
+  };
+};
+
+export type SpecimenNode = {
+  node: {
+    program_id: string;
+    primary_diagnosis_id: string;
+    submitter_primary_diagnosis_id: string;
+    specimen_id: string;
+    submitter_specimen_id: string;
+    tumour_normal_designation: string;
+    specimen_acquisition_interval: number;
+    specimen_type: string;
+    specimen_anatomic_location: string;
+    samples: { hits: { edges: SampleNode[] } };
+    specimen_laterality?: string;
+    specimen_processing?: string;
+    specimen_storage?: string;
+    specimen_tissue_source?: string;
+    pathological_tumour_staging_system?: string;
+    pathological_t_category?: string;
+    pathological_n_category?: string;
+    pathological_m_category?: string;
+    pathological_stage_group?: string;
+    percent_tumour_cells?: number;
+    percent_proliferating_cells?: number;
+    percent_inflammatory_tissue?: number;
+    percent_stromal_cells?: number;
+    percent_necrosis?: number;
+    reference_pathology_confirmed?: string;
+    tumour_histological_type?: string;
+    tumour_grading_system?: string;
+    tumour_grade?: string;
+  };
+};
+
+export type TreatmentNode = {
+  node: {
+    treatment_type: string;
+    data: Array<{}>;
+    program_id?: string;
+    submitter_donor_id?: string;
+    submitter_treatment_id?: string;
+    submitter_primary_diagnosis_id?: string;
+    is_primary_treatment?: string;
+    line_of_treatment?: number;
+    treatment_start_interval?: number;
+    treatment_duration?: number;
+    days_per_cycle?: number;
+    number_of_cycles?: number;
+    treatment_intent?: string;
+    treatment_setting?: string;
+    response_to_treatment?: string;
+    outcome_of_treatment?: string;
+    toxicity_type?: string;
+    hematological_toxicity?: string;
+    'non-hematological_toxicity'?: string;
+    adverse_events?: string;
+    clinical_trials_database?: string;
+    clinical_trial_number?: string;
+  };
+};
+
+export enum EntityType {
+  PRIMARY_DIAGNOSIS = 'primary_diagnosis',
+  SPECIMEN = 'specimen',
+  TREATMENT = 'treatment',
+  FOLLOW_UP = 'follow_up',
+  BIOMARKER = 'biomarker',
+  DECEASED = 'deceased',
+}
+
+export type Entity = {
+  type: EntityType;
+  id: string;
+  description: string;
+  interval: number;
+  data?: {};
+  samples?: Array<SampleNode>;
+  invalid?: Boolean;
+  treatments?: Array<TreatmentNode>;
+};
 
 export interface DonorEntityData extends Entity {}

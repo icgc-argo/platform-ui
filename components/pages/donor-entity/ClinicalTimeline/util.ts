@@ -1,4 +1,3 @@
-import { isEmpty, chunk } from 'lodash';
 /*
  * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -18,7 +17,9 @@ import { isEmpty, chunk } from 'lodash';
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { isEmpty, chunk } from 'lodash';
 import defaultTheme from 'uikit/theme/defaultTheme';
+import { EntityType } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
@@ -125,4 +126,18 @@ export const getDonorAge = (data) => {
 
   const ageAtDeath = ageAtDiagnosis + survivalTime;
   return { ageAtDiagnosis, survivalTime, ageAtDeath };
+};
+
+export const formatTimelineEntityData = (data) => {
+  // TODO: Expand to other values; remove dummyData
+  console.log('formatTimeline data', data);
+  return (
+    data.specimens?.hits.edges.map(({ node }) => ({
+      id: `SPECIMEN ${node.specimen_id}`,
+      description: node.specimen_type,
+      type: EntityType.SPECIMEN,
+      interval: node.specimen_acquisition_interval,
+      data: node,
+    })) || []
+  );
 };
