@@ -138,6 +138,7 @@ const DonorFileCard = ({ files }) => {
       css={css`
         padding: 20px;
         padding-top: 0px;
+        height: 100%;
       `}
     >
       <Row justify="between">

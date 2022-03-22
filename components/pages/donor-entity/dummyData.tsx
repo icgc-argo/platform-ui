@@ -141,6 +141,8 @@ export const mockTimelineData: Array<DonorEntityData> = [
     interval: 2,
     data: {
       'Primary Diagnosis ID': 'PD1',
+      'Submitter Specimen Id': 'SP0013',
+      'Tumour Normal Designation': 'Normal',
       'Age at Diagnosis': '28 years',
       'Cancer Type Code': 'C25.3',
       'Cancer Type': 'Malignant neoplasm of pancreas',

@@ -106,12 +106,18 @@ const DonorDataTable = ({ data }) => {
 
   const tableData = splitIntoColumns(displayData, 2);
   return (
-    <div>
+    <div
+      css={css`
+        height: 100%;
+      `}
+    >
       <Container
         css={css`
           padding: 20px;
           padding-top: 0px;
           padding-right: 10px;
+          height: 100%;
+          box-sizing: border-box;
         `}
       >
         <Row>
@@ -130,12 +136,17 @@ const DonorDataTable = ({ data }) => {
           <Col
             xs={6}
             css={css`
-              margin-right: -10px;
+              height: 100%;
             `}
           >
             <SimpleTable data={tableFormat(tableData[0])} />
           </Col>
-          <Col xs={6}>
+          <Col
+            xs={6}
+            css={css`
+              height: 100%;
+            `}
+          >
             <SimpleTable data={tableFormat(tableData[1])} />
           </Col>
         </Row>
