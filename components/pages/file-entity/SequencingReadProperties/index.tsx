@@ -61,23 +61,23 @@ const SequencingReadProperties = ({ metrics }: { metrics: FileMetricsInfo }) => 
                 padding: 10px;
               `}
             >
-              <CenteredCol lg={2} md={12}>
+              <CenteredCol lg={2.4} md={4}>
                 <StatNumber>{metrics?.totalReads?.toLocaleString()}</StatNumber>
                 <StatLabel>Total Reads</StatLabel>
               </CenteredCol>
-              <CenteredCol lg={2} md={12}>
+              <CenteredCol lg={2.4} md={4}>
                 <StatNumber>{metrics?.pairedReads?.toLocaleString()}</StatNumber>
                 <StatLabel>Paired Reads</StatLabel>
               </CenteredCol>
-              <CenteredCol lg={4} md={12}>
+              <CenteredCol lg={2.4} md={4}>
                 <StatNumber>{metrics?.pairsOnDifferentChromosomes?.toLocaleString()}</StatNumber>
                 <StatLabel>Pairs on Different Chromosomes</StatLabel>
               </CenteredCol>
-              <CenteredCol lg={2} md={12}>
+              <CenteredCol lg={2.4} md={4}>
                 <StatNumber>{metrics?.averageInsertSize?.toLocaleString()}</StatNumber>
                 <StatLabel>Average Insert Size</StatLabel>
               </CenteredCol>
-              <CenteredCol lg={2} md={12}>
+              <CenteredCol lg={2.4} md={4}>
                 <StatNumber>{metrics?.averageLength?.toLocaleString()}</StatNumber>
                 <StatLabel>Average Length</StatLabel>
               </CenteredCol>

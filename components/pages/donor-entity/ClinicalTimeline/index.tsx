@@ -23,10 +23,12 @@ import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
+import Link from 'uikit/Link';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import ContentError from 'components/placeholders/ContentError';
+import ContentPlaceholder from 'uikit/ContentPlaceholder/';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
@@ -50,6 +52,9 @@ export const ENTITY_DISPLAY = Object.freeze({
   biomarker: {
     title: 'Biomarkers',
   },
+  deceased: {
+    title: 'Vital Status',
+  },
 });
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
@@ -58,10 +63,20 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     return (
       <Col>
         <Row>
-          <Col>
+          <Col
+            css={css`
+              padding-left: 0px !important;
+            `}
+          >
             <SimpleTable data={tableFormat(dataCols[0])} />
           </Col>
-          <Col>{!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}</Col>
+          <Col
+            css={css`
+              padding-left: 0px !important;
+            `}
+          >
+            {!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}
+          </Col>
         </Row>
         <Row
           css={css`
@@ -123,9 +138,10 @@ const ClinicalTimeline = ({ data }) => {
     <Container
       css={css`
         padding: 12px 14px;
-        min-height: 750px;
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
       `}
     >
       <Header
@@ -148,7 +164,7 @@ const ClinicalTimeline = ({ data }) => {
               writing-mode: vertical-lr;
               transform: rotate(180deg);
               margin-right: 10px;
-              text-align: center;
+              text-align: right;
             `}
           >
             <Typography
@@ -174,12 +190,30 @@ const ClinicalTimeline = ({ data }) => {
               padding: '10px 20px',
               border: `1px solid ${theme.colors.grey_1}`,
               marginLeft: '-1px',
+              overflow: 'scroll',
             }}
           >
             <Col>
               <Typography variant="navigation">
                 {ENTITY_DISPLAY[selectedClinical.type].title}
               </Typography>
+              {selectedClinical.type === 'specimen' && (
+                <Link
+                  bold
+                  uppercase
+                  withChevron={false}
+                  variant="BLOCK"
+                  css={css`
+                    float: right;
+                    font-size: 12.5px;
+                    position: relative;
+                    right: 14px;
+                    top: 2px;
+                  `}
+                >
+                  Explore Specimen Files ()
+                </Link>
+              )}
               <div
                 css={css`
                   display: flex;
@@ -187,7 +221,15 @@ const ClinicalTimeline = ({ data }) => {
                   flex-direction: column;
                 `}
               >
-                {renderSelectedDataRow(selectedData, selectedSamples)}
+                {selectedClinical.type === 'deceased' ? (
+                  <Row>
+                    <Col>
+                      <ContentPlaceholder />
+                    </Col>
+                  </Row>
+                ) : (
+                  renderSelectedDataRow(selectedData, selectedSamples)
+                )}
               </div>
 
               {selectedTreatments.length > 0 && (

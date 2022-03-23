@@ -31,7 +31,12 @@ const PaddedRow = styled(Row)`
 `;
 
 const PaddedColumn = styled(Col)`
+  padding-left: 8px !important;
+  padding-right: 8px !important;
   padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
 const DonorCardsLayout: React.ComponentType<{
@@ -46,10 +51,10 @@ const DonorCardsLayout: React.ComponentType<{
       `}
     >
       <PaddedRow>
-        <PaddedColumn md={6} sm={12}>
+        <PaddedColumn md={8} sm={12}>
           <DonorDataTable data={donorData} />
         </PaddedColumn>
-        <PaddedColumn md={6} sm={12}>
+        <PaddedColumn md={4} sm={12}>
           <DonorFileCard files={donorData.files} />
         </PaddedColumn>
       </PaddedRow>
