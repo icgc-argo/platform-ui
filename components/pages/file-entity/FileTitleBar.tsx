@@ -175,7 +175,7 @@ export const FileTitleBar: React.ComponentType<{
             }}
           >
             <DownloadIcon />
-            {!isDownloading ? 'FILE' : 'DOWNLOADING...'}
+            FILE
           </Button>
         </Tooltip>
 
