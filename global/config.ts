@@ -47,6 +47,7 @@ export const getConfig = () => {
     FEATURE_FILE_ENTITY_ENABLED: publicConfig.FEATURE_FILE_ENTITY_ENABLED === 'true',
     FEATURE_DONOR_ENTITY_ENABLED: publicConfig.FEATURE_DONOR_ENTITY_ENABLED === 'true',
     FEATURE_FACET_TABS_ENABLED: publicConfig.FEATURE_FACET_TABS_ENABLED === 'true',
+    FEATURE_RNASEQ_ENABLED: publicConfig.FEATURE_RNASEQ_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -66,5 +67,6 @@ export const getConfig = () => {
     FEATURE_FILE_ENTITY_ENABLED: boolean;
     FEATURE_DONOR_ENTITY_ENABLED: boolean;
     FEATURE_FACET_TABS_ENABLED: boolean;
+    FEATURE_RNASEQ_ENABLED: boolean;
   };
 };
