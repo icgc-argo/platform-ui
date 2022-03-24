@@ -125,9 +125,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 const ClinicalTimeline = ({ data }) => {
   // TODO: Remove test values
   const entityData = formatTimelineEntityData(data);
-  console.log('formatted entityData', entityData);
-  const entities = [mockTimelineData[0], ...entityData, ...mockTimelineData.slice(1)];
-
+  const entities = [mockTimelineData[0], ...entityData.specimens, ...mockTimelineData.slice(1)];
   const theme = useTheme();
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
@@ -142,7 +140,7 @@ const ClinicalTimeline = ({ data }) => {
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
   const selectedClinical: Entity = filteredData[activeTab];
-  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
+  const selectedSamples: SampleNode[] = get(selectedClinical, 'data.samples', []);
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 

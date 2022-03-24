@@ -81,6 +81,12 @@ export const splitIntoColumns = (
 };
 
 const donorCentricDisplayNames = {
+  program_id: 'Program ID',
+  primary_diagnosis_id: 'Primary Diagnosis ID',
+  specimen_id: 'Specimen ID',
+  pathological_t_category: 'Pathological T Category',
+  pathological_n_category: 'Pathological N Category',
+  pathological_m_category: 'Pathological M Category',
   submitter_specimen_id: 'Submitter Specimen Id',
   submitter_primary_diagnosis_id: 'Submitter Primary Diagnosis ID',
   tumour_normal_designation: 'Tumour Normal Designation',
@@ -110,8 +116,13 @@ const donorCentricDisplayNames = {
 export const tableFormat = (data) =>
   data.length > 0 &&
   data.reduce((acc, val) => {
+    // console.log('acc', acc);
+    // console.log('acc', val);
     const [key, value] = Object.entries(val)[0];
+    // console.log('key', key);
+    // console.log('value', value);
     const displayKey = donorCentricDisplayNames[key] || key;
+    // console.log('displayKey', displayKey);
     acc[displayKey] = value;
     return acc;
   }, {});
@@ -130,14 +141,21 @@ export const getDonorAge = (data) => {
 
 export const formatTimelineEntityData = (data) => {
   // TODO: Expand to other values; remove dummyData
-  console.log('formatTimeline data', data);
-  return (
-    data.specimens?.hits.edges.map(({ node }) => ({
+  const specimens = data.specimens?.hits.edges.map(({ node }) => {
+    const data = { ...node };
+    const samples = node.samples.hits.edges.map((sample) => ({ ...sample.node }));
+    delete data.samples;
+    return {
       id: `SPECIMEN ${node.specimen_id}`,
       description: node.specimen_type,
       type: EntityType.SPECIMEN,
       interval: node.specimen_acquisition_interval,
-      data: node,
-    })) || []
-  );
+      data,
+      samples,
+    };
+  });
+  return {
+    ...data,
+    specimens,
+  };
 };
