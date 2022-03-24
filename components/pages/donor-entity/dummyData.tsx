@@ -70,10 +70,11 @@ export const dummyDonorEntity: DonorCentricRecord = {
                 edges: [
                   {
                     node: {
-                      matched_normal_submitter_sample_id: null,
-                      sample_id: 'SA613000',
                       sample_type: 'Total DNA',
                       submitter_sample_id: 'HCC1143_BAM_INPUT',
+                      experimental_strategies: 'RNA-Seq',
+                      workflow_names: '--',
+                      available_files: 5,
                     },
                   },
                 ],
@@ -113,8 +114,24 @@ export const dummyDonorEntity: DonorCentricRecord = {
             samples: {
               hits: {
                 edges: [
-                  { node: { sample_id: 'SAB5353', sample_type: 'Amplified DNA' } },
-                  { node: { sample_id: 'SAD3053', sample_type: 'Total DNA' } },
+                  {
+                    node: {
+                      submitter_sample_id: 'SAB5353',
+                      sample_type: 'Amplified DNA',
+                      experimental_strategies: 'WGS',
+                      workflow_names: 'DNA Seq Alignment',
+                      available_files: 7,
+                    },
+                  },
+                  {
+                    node: {
+                      submitter_sample_id: 'SAD3053',
+                      sample_type: 'Total DNA',
+                      experimental_strategies: 'WXS',
+                      workflow_names: 'Ribo-Zero RNA',
+                      available_files: 3,
+                    },
+                  },
                 ],
               },
             },

@@ -123,9 +123,9 @@ export interface DonorCentricRecord extends DonorRecord {
 
 export type SampleNode = {
   node: {
-    sample_id: string;
+    sample_id?: string;
     sample_type: string;
-    submitter_sample_id?: string;
+    submitter_sample_id: string;
     experimental_strategies?: string;
     workflow_names?: string;
     matched_normal_submitter_sample_id?: string;

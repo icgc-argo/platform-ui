@@ -140,7 +140,7 @@ const ClinicalTimeline = ({ data }) => {
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
   const selectedClinical: Entity = filteredData[activeTab];
-  const selectedSamples: SampleNode[] = get(selectedClinical, 'data.samples', []);
+  const selectedSamples: SampleNode[] = get(selectedClinical, 'samples', []);
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
