@@ -37,7 +37,7 @@ import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
 import { Entity, EntityType, SampleNode, TreatmentNode } from '../types';
-import { splitIntoColumns, tableFormat, formatTimelineEntityData } from './util';
+import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 // TODO: Remove test values
 import { mockTimelineData } from '../dummyData';
@@ -65,7 +65,6 @@ export const ENTITY_DISPLAY = Object.freeze({
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
-    const tableData = tableFormat(selectedData);
     const dataCols = splitIntoColumns(selectedData, 2);
 
     return (
@@ -76,14 +75,14 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
               padding-left: 0px !important;
             `}
           >
-            <SimpleTable data={tableFormat(dataCols[0])} />
+            <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
           <Col
             css={css`
               padding-left: 0px !important;
             `}
           >
-            {!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}
+            {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
           </Col>
         </Row>
         <Row
@@ -100,13 +99,13 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     return (
       <Row>
         <Col>
-          <SimpleTable data={tableFormat(dataCols[0])} />
+          <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
         </Col>
         {/* always display column for row formatting */}
         <Col>
           {
             // may only have enough data for 1 column
-            !isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />
+            !isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />
           }
         </Col>
       </Row>

@@ -99,6 +99,7 @@ const donorCentricDisplayNames = {
   program_id: 'Program ID',
   primary_diagnosis_id: 'Primary Diagnosis ID',
   reference_pathology_confirmed: 'Referrence Pathology Confirmed',
+  sample_id: 'Sample ID',
   sample_type: 'Sample Type',
   specimen_type: 'Specimen Type',
   specimen_tissue_source: 'Specimen Tissue Source',
@@ -119,12 +120,14 @@ const donorCentricDisplayNames = {
 };
 
 // format for display
-export const tableFormat = (data) =>
+export const formatTableDisplayNames = (data: any[]) =>
   data.length > 0 &&
   data.reduce((acc, val) => {
-    const [key, value] = Object.entries(val)[0];
-    const displayKey = donorCentricDisplayNames[key] || key;
-    acc[displayKey] = value;
+    Object.keys(val).forEach((key) => {
+      const value = val[key];
+      const displayKey = donorCentricDisplayNames[key] || key;
+      acc[displayKey] = value;
+    });
     return acc;
   }, {});
 
