@@ -188,7 +188,7 @@ export const formatTimelineEntityData = (data) => {
 
     return {
       id: `SPECIMEN ${node.specimen_id}`,
-      description: node.specimen_type,
+      description: node.tumour_normal_designation,
       type: EntityType.SPECIMEN,
       interval: node.specimen_acquisition_interval,
       data,
