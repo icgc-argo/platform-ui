@@ -185,7 +185,6 @@ const Timeline = ({
             css={css`
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
-              height: 50px;
               align-items: center;
               position: relative;
               justify-content: flex-end;
