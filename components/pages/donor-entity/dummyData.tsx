@@ -137,13 +137,12 @@ export const dummyDonorEntity: DonorCentricRecord = {
             },
           },
         },
-
         {
           node: {
             program_id: 'TEST-PR',
             primary_diagnosis_id: 'PD1',
             submitter_specimen_id: 'SP0032',
-            tumour_normal_designation: 'Normal',
+            tumour_normal_designation: 'Tumour',
             submitter_primary_diagnosis_id: 'PD1',
             specimen_id: 'SP0032',
             specimen_tissue_source: 'Blood derived',

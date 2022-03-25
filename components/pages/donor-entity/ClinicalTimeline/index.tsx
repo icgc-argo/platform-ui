@@ -143,7 +143,9 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
+  const { donorId } = data;
   const specimenFilter = sqonBuilder
+    .has('donor_id', donorId)
     .has('submitter_specimen_id', selectedData['submitter_specimen_id'])
     .build();
   const specimenFilterUrl = urlJoin(
