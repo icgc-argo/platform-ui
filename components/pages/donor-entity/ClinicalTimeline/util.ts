@@ -88,7 +88,7 @@ const donorCentricDisplayNames = {
   pathological_t_category: 'Pathological T Category',
   pathological_n_category: 'Pathological N Category',
   pathological_m_category: 'Pathological M Category',
-  pathological_TNM_category: 'Pathological TNM Category',
+  pathological_tnm_category: 'Pathological TNM Category',
   pathological_tumour_staging_system: 'Pathological Tumour Staging System',
   pathological_stage_group: 'Pathological Stage Group',
   percent_tumour_cells: 'Percent Tumour Cells',
@@ -146,9 +146,18 @@ export const getDonorAge = (data) => {
 export const formatTimelineEntityData = (data) => {
   // TODO: Expand to other values; remove dummyData
   const specimens = data.specimens?.hits.edges.map(({ node }) => {
+    const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
     const data = { ...node };
+    if (pathological_t_category && pathological_n_category && pathological_m_category)
+      data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
     const samples = node.samples.hits.edges.map((sample) => ({ ...sample.node }));
-    delete data.samples;
+    [
+      'samples',
+      'pathological_t_category',
+      'pathological_n_category',
+      'pathological_m_category',
+    ].forEach((key) => delete data[key]);
+
     return {
       id: `SPECIMEN ${node.specimen_id}`,
       description: node.specimen_type,

@@ -171,7 +171,6 @@ export const dummyDonorEntity: DonorCentricRecord = {
                 edges: [
                   {
                     node: {
-                      sample_id: 'SA8778',
                       submitter_sample_id: 'SA8778',
                       sample_type: 'Other DNA Enrichments',
                       experimental_strategies: 'WGS, WXS',
@@ -181,7 +180,6 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   },
                   {
                     node: {
-                      sample_id: 'SA5432',
                       submitter_sample_id: 'SA5432',
                       sample_type: 'Ribo-Zero RNA',
                       experimental_strategies: 'WGS, WXS',
