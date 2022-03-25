@@ -229,7 +229,8 @@ const ClinicalTimeline = ({ data }) => {
                     top: 2px;
                   `}
                 >
-                  Explore Specimen Files (1)
+                  {/* Todo: Remove Mock Testing Value */}
+                  Explore Specimen Files ({selectedSamples.length})
                 </Link>
               )}
               <div

@@ -26,9 +26,10 @@ import { SampleNode } from '../types';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const tableData: TableDataBase = formatTableDisplayNames(samples);
-  const tableCols: TableColumnConfig<TableDataBase>[] = Object.keys(tableData).map((k) => ({
-    Header: k,
-    Cell: `${tableData[k]}`,
+
+  const tableCols: TableColumnConfig<TableDataBase>[] = Object.keys(tableData).map((key) => ({
+    Header: key,
+    Cell: tableData[key],
   }));
   const containerRef = createRef<HTMLDivElement>();
 

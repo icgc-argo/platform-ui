@@ -18,6 +18,11 @@
  */
 
 import { isEmpty, chunk } from 'lodash';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
 import { EntityType } from '../types';
 
@@ -144,13 +149,36 @@ export const getDonorAge = (data) => {
 };
 
 export const formatTimelineEntityData = (data) => {
-  // TODO: Expand to other values; remove dummyData
+  // TODO: Add functions for primary diagnosis, treatment, followUp, biomarker, etc; remove dummyData
   const specimens = data.specimens?.hits.edges.map(({ node }) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
     const data = { ...node };
+
+    data.specimen_acquisition_interval = `${node.specimen_acquisition_interval} days`;
+
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
-    const samples = node.samples.hits.edges.map((sample) => ({ ...sample.node }));
+
+    const samples = node.samples.hits.edges.map((sample) => {
+      const { donorId } = usePageQuery<{ donorId: string }>();
+      const sampleFilter = sqonBuilder
+        .has('donor_id', donorId)
+        .has('submitter_sample_id', sample.node['submitter_sample_id'])
+        .build();
+
+      const sampleFilterUrl = urlJoin(
+        FILE_REPOSITORY_PATH,
+        `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
+      );
+
+      const available_files = (
+        <Link variant="INLINE" href={sampleFilterUrl}>
+          {sample.node['available_files']}
+        </Link>
+      );
+      return { ...sample.node, available_files };
+    });
+
     [
       'samples',
       'pathological_t_category',
@@ -167,6 +195,7 @@ export const formatTimelineEntityData = (data) => {
       samples,
     };
   });
+
   return {
     ...data,
     specimens,
