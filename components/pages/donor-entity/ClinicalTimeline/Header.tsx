@@ -24,7 +24,7 @@ import useTheme from 'uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
 import { css } from 'uikit';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType, Entity } from './types';
+import { EntityType, Entity } from '../types';
 
 type HeaderTypes = {
   entities: Array<Entity>;
@@ -69,14 +69,16 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
             margin-left: 18px;
           }
 
-          div:first-child {
-            margin-left: 6px;
-          }
-
           ${css(theme.typography.data as any)};
         `}
       >
-        Show:
+        <span
+          css={css`
+            margin-right: -12px;
+          `}
+        >
+          Show:
+        </span>
         {(Object.keys(entityCounts) as Array<Filters>).map((entityKey, i) => {
           const { checkboxColor } = timelineStyles[entityKey];
           const { title } = ENTITY_DISPLAY[entityKey];
@@ -95,7 +97,7 @@ const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
           return (
             <div
               css={css`
-                margin-left: 3px;
+                margin-left: ${i === 0 ? '6px' : '3px'};
                 display: flex;
                 &:hover {
                   cursor: pointer;
