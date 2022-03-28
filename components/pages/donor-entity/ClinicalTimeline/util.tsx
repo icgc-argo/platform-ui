@@ -24,7 +24,7 @@ import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
-import { EntityType } from '../types';
+import { EntityType, SpecimenNode } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
@@ -148,11 +148,26 @@ export const getDonorAge = (data) => {
   return { ageAtDiagnosis, survivalTime, ageAtDeath };
 };
 
+type AliasedDisplayData = {
+  [K in keyof typeof donorCentricDisplayNames]?: any;
+};
+
 export const formatTimelineEntityData = (data) => {
   // TODO: Add functions for primary diagnosis, treatment, followUp, biomarker, etc; remove dummyData
-  const specimens = data.specimens?.hits.edges.map(({ node }) => {
+  const specimens = data.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
-    const data = { ...node };
+
+    const aliasedKeys = [
+      'samples',
+      'pathological_t_category',
+      'pathological_n_category',
+      'pathological_m_category',
+    ];
+
+    const data: AliasedDisplayData = Object.keys(node).reduce((acc, val) => {
+      if (!aliasedKeys.includes(val)) acc[val] = node[val];
+      return acc;
+    }, {});
 
     data.specimen_acquisition_interval = `${node.specimen_acquisition_interval} days`;
 
@@ -178,13 +193,6 @@ export const formatTimelineEntityData = (data) => {
       );
       return { ...sample.node, available_files };
     });
-
-    [
-      'samples',
-      'pathological_t_category',
-      'pathological_n_category',
-      'pathological_m_category',
-    ].forEach((key) => delete data[key]);
 
     return {
       id: `SPECIMEN ${node.specimen_id}`,
