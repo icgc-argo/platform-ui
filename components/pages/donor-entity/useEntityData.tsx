@@ -18,9 +18,9 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import { DonorCentricRecord } from './types';
+import { DonorCentricRecord, EntityType } from './types';
 import DONOR_ENTITY_QUERY from './DONOR_ENTITY_QUERY.gql';
-import { noData } from './dummyData';
+import { noData, dummyDonorEntity } from './dummyData';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
 
@@ -46,17 +46,16 @@ const useEntityData = (donorId: string): DonorEntityData => {
   } else if (!loading && !entity) {
     return { data: noData, loading: false };
   } else {
-    // TODO: Revise Test Values
     const entityData: DonorCentricRecord = {
       donorId: entity.donors.hits.edges[0].node.donor_id,
       programId: entity.study_id,
       submitterDonorId: entity.donors.hits.edges[0].node.submitter_donor_id,
       gender: entity.donors.hits.edges[0].node.gender,
+      vitalStatus: entity.vital_status,
       primarySite: entity.primary_site,
       cancerType: entity.cancer_type,
       ageAtDiagnosis: entity.age_at_diagnosis,
       associations: entity.associations,
-      vitalStatus: entity.vital_status,
       causeOfDeath: entity.cause_of_death,
       survivalTime: entity.survival_time,
       height: entity.height,
@@ -82,7 +81,15 @@ const useEntityData = (donorId: string): DonorEntityData => {
       console.error(error.message);
     }
 
-    return { data: entityData, loading, error };
+    // TODO: Remove testing values
+    const entityTestingData = {
+      ...dummyDonorEntity,
+      donorId: entityData.donorId,
+      programId: entityData.programId,
+      submitterDonorId: entityData.submitterDonorId,
+    };
+
+    return { data: entityTestingData, loading, error };
   }
 };
 

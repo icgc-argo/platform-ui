@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 import React, { createRef } from 'react';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
-import { TreatmentNode } from './types';
+import { TreatmentNode } from '../types';
 
 const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => {
   const {
