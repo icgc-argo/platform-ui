@@ -20,13 +20,13 @@
 import React from 'react';
 import { css } from 'uikit';
 import Icon from 'uikit/Icon';
-import { getDonorAge, getTimelineStyles } from './util';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import Tag from 'uikit/Tag';
-import { Entity, EntityType } from './types';
+import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
+import { getDonorAge, getTimelineStyles } from './util';
 
 const DayCount = ({
   days,
@@ -224,6 +224,7 @@ const Timeline = ({
               align-items: center;
               position: relative;
             `}
+            key={`${entity.id}-${i}`}
           >
             <TimelineItem
               item={entity}

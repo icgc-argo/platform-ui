@@ -19,17 +19,17 @@
 
 import { css } from '@emotion/core';
 import React, { createRef } from 'react';
-import Table from 'uikit/Table';
+import Table, { TableDataBase, TableColumnConfig } from 'uikit/Table';
 import Typography from 'uikit/Typography';
-import { SampleNode } from './types';
+import { formatTableDisplayNames } from './util';
+import { SampleNode } from '../types';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
-  const tableData = samples.map(({ node }) => ({
-    ...node,
-  }));
-  const tableCols = Object.keys(tableData[0]).map((k) => ({
-    Header: k,
-    accessor: k,
+  const tableData: TableDataBase = formatTableDisplayNames(samples);
+
+  const tableCols: TableColumnConfig<TableDataBase>[] = Object.keys(tableData).map((key) => ({
+    Header: key,
+    Cell: tableData[key],
   }));
   const containerRef = createRef<HTMLDivElement>();
 
@@ -47,15 +47,16 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
           margin-bottom: 4px;
         `}
       >
-        Samples from this Specimen ({tableData.length.toLocaleString()})
+        Samples from this Specimen ({samples.length.toLocaleString()})
       </Typography>
       <div ref={containerRef}>
         <Table
           parentRef={containerRef}
           columns={tableCols}
-          data={tableData}
+          data={samples}
           withOutsideBorder
           stripped
+          highlight={false}
           showPagination={false}
           sortable={false}
         />
