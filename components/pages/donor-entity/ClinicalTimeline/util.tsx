@@ -24,7 +24,7 @@ import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
-import { EntityType, SpecimenNode } from '../types';
+import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
@@ -153,7 +153,17 @@ type AliasedDisplayData = {
 };
 
 export const formatTimelineEntityData = (data) => {
-  // TODO: Add functions for primary diagnosis, treatment, followUp, biomarker, etc; remove dummyData
+  // TODO: Add functions for treatment, followUp, biomarker, etc; remove dummyData
+  const primary_diagnosis = data.primary_diagnosis?.hits.edges.map(
+    ({ node: { data, id, cancer_type_code } }: DiagnosisNode) => ({
+      id: `PRIMARY DIAGNOSIS ${id}`,
+      description: cancer_type_code,
+      type: EntityType.PRIMARY_DIAGNOSIS,
+      interval: 0,
+      data: data,
+    }),
+  )[0];
+
   const specimens = data.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
 
@@ -206,6 +216,7 @@ export const formatTimelineEntityData = (data) => {
 
   return {
     ...data,
+    primary_diagnosis,
     specimens,
   };
 };

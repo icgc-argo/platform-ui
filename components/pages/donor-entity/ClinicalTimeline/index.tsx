@@ -36,7 +36,7 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { Entity, EntityType, SampleNode, TreatmentNode } from '../types';
+import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
 import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 // TODO: Remove test values
@@ -121,7 +121,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
   }
 };
 
-const ClinicalTimeline = ({ data }) => {
+const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   // TODO: Remove test values
   const entityData = formatTimelineEntityData(data);
   const entities = [mockTimelineData[0], ...entityData.specimens, ...mockTimelineData.slice(1)];
