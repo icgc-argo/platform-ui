@@ -207,7 +207,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
             primary_diagnosis_id: 'PD1',
             age_at_diagnosis: 28,
             cancer_type_code: 'C25.3',
-            cancer_type: 'Malignant neoplasm of pancreas',
+            cancer_type_additional_information: 'Malignant neoplasm of pancreas',
             number_lymph_nodes_positive: 2,
             number_lymph_nodes_examined: 20,
             clinical_tumour_staging_system: 'Figo Staging System',

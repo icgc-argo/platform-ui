@@ -93,6 +93,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
+
     return (
       <Row>
         <Col>
