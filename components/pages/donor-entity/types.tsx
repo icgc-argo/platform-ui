@@ -21,13 +21,12 @@ import { DonorRecord, FileRecord } from '../file-entity/types';
 
 export type DiagnosisNode = {
   node: {
-    id: string;
-    // TODO: Remove Dummy Type Data
-    data: Array<{}>;
+    primary_diagnosis_id: string;
     program_id?: string;
     submitter_donor_id?: string;
     submitter_primary_diagnosis_id?: string;
     age_at_diagnosis?: number;
+    cancer_type?: string;
     cancer_type_code?: string;
     cancer_type_additional_information?: string;
     basis_of_diagnosis?: string;

@@ -201,7 +201,25 @@ export const dummyDonorEntity: DonorCentricRecord = {
   },
   primary_diagnosis: {
     hits: {
-      edges: [],
+      edges: [
+        {
+          node: {
+            primary_diagnosis_id: 'PD1',
+            age_at_diagnosis: 28,
+            cancer_type_code: 'C25.3',
+            cancer_type: 'Malignant neoplasm of pancreas',
+            number_lymph_nodes_positive: 2,
+            number_lymph_nodes_examined: 20,
+            clinical_tumour_staging_system: 'Figo Staging System',
+            clinical_stage_group: 'Stage IA1',
+            clinical_t_category: 'N/A',
+            clinical_n_category: 'N/A',
+            clinical_m_category: 'N/A',
+            presenting_symptoms: 'Back Pain, Pancreatitis, Vomiting',
+            performance_status: '--',
+          },
+        },
+      ],
     },
   },
   treatments: {
@@ -226,28 +244,6 @@ export const dummyDonorEntity: DonorCentricRecord = {
 };
 
 export const mockTimelineData: Array<DonorEntityData> = [
-  {
-    type: EntityType.PRIMARY_DIAGNOSIS,
-    id: 'PRIMARY DIAGNOSIS PD2',
-    description: 'C41.1',
-    interval: 0,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplasm of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '20',
-      'Clinical Tumour Staging System': 'Figo Staging System',
-      'Clinical Stage Group': 'Stage IA1',
-      'Stage Suffix': 'A',
-      'Clinical T Category': 'N/A',
-      'Clinical N Category': 'N/A',
-      'Clinical M Category': 'N/A',
-      'Presenting Symptoms': 'Back Pain, Pancreatitis, Vomiting',
-      'Performance Status': '--',
-    },
-  },
   {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',

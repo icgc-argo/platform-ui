@@ -39,9 +39,6 @@ import Treatment from './Treatment';
 import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
 import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
-// TODO: Remove test values
-import { mockTimelineData } from '../dummyData';
-
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
     title: 'Primary Diagnosis',
@@ -123,8 +120,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 
 const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   // TODO: Remove test values
-  const entityData = formatTimelineEntityData(data);
-  const entities = [mockTimelineData[0], ...entityData.specimens, ...mockTimelineData.slice(1)];
+  const entities = formatTimelineEntityData(data);
   const theme = useTheme();
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,

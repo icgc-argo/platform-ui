@@ -25,6 +25,8 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
 import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
+// TODO: Remove test values
+import { mockTimelineData } from '../dummyData';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
@@ -138,11 +140,9 @@ export const formatTableDisplayNames = (data: any[]) =>
 
 export const getDonorAge = (data) => {
   // TODO: consistent key handling based on real data
-  const ageAtDiagnosis = parseInt((data.ageAtDiagnosis || data['Age at Diagnosis']).split(' ')[0]);
+  const ageAtDiagnosis = parseInt(data.ageAtDiagnosis || data['age_at_diagnosis']);
 
-  const survivalTime = Math.floor(
-    parseInt((data.survivalTime || data['Survival Time'] || '0').split(' ')[0]) / 365,
-  );
+  const survivalTime = `${Math.floor((data.survivalTime || data['survival_time']) / 365)}`;
 
   const ageAtDeath = ageAtDiagnosis + survivalTime;
   return { ageAtDiagnosis, survivalTime, ageAtDeath };
@@ -154,15 +154,13 @@ type AliasedDisplayData = {
 
 export const formatTimelineEntityData = (data) => {
   // TODO: Add functions for treatment, followUp, biomarker, etc; remove dummyData
-  const primary_diagnosis = data.primary_diagnosis?.hits.edges.map(
-    ({ node: { data, id, cancer_type_code } }: DiagnosisNode) => ({
-      id: `PRIMARY DIAGNOSIS ${id}`,
-      description: cancer_type_code,
-      type: EntityType.PRIMARY_DIAGNOSIS,
-      interval: 0,
-      data: data,
-    }),
-  )[0];
+  const primary_diagnosis = data.primary_diagnosis?.hits.edges.map(({ node }: DiagnosisNode) => ({
+    id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
+    description: node.cancer_type_code,
+    type: EntityType.PRIMARY_DIAGNOSIS,
+    interval: 0,
+    data: node,
+  }))[0];
 
   const specimens = data.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
@@ -214,9 +212,7 @@ export const formatTimelineEntityData = (data) => {
     };
   });
 
-  return {
-    ...data,
-    primary_diagnosis,
-    specimens,
-  };
+  const entities = [primary_diagnosis, ...specimens, ...mockTimelineData.slice(1)];
+
+  return entities;
 };
