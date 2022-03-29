@@ -171,6 +171,15 @@ const Timeline = ({
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
+  const donorAgeDisplay = (type, data) => {
+    let age =
+      type === EntityType.PRIMARY_DIAGNOSIS
+        ? getDonorAge(data).ageAtDiagnosis
+        : getDonorAge(data).ageAtDeath;
+
+    return age >= 90 ? `age: >= 90` : `age : ${age}`;
+  };
+
   return (
     <div
       css={css`
@@ -202,9 +211,7 @@ const Timeline = ({
                 `}
                 variant="DISABLED"
               >
-                {type === EntityType.PRIMARY_DIAGNOSIS
-                  ? `age: ${getDonorAge(data).ageAtDiagnosis}`
-                  : `age: ~${getDonorAge(data).ageAtDeath}`}
+                {donorAgeDisplay(type, data)}
               </Tag>
             )}
           </div>

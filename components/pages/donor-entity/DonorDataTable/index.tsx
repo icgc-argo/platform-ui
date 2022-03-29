@@ -31,8 +31,6 @@ import { splitIntoColumns, formatTableDisplayNames } from '../ClinicalTimeline/u
 import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
-// TODO: Create useDonorCentricFieldDisplayName
-
 const DonorDataTable = ({ data }) => {
   const {
     programId,

@@ -18,9 +18,9 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import { DonorCentricRecord, EntityType } from './types';
+import { DonorCentricRecord, DonorEntity } from './types';
 import DONOR_ENTITY_QUERY from './DONOR_ENTITY_QUERY.gql';
-import { noData, dummyDonorEntity } from './dummyData';
+import { noData, dummyDonorQuery } from './dummyData';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
 
@@ -39,57 +39,27 @@ const useEntityData = (donorId: string): DonorEntityData => {
     errorPolicy: 'all',
   });
 
-  const entity = data?.file.hits.edges[0].node;
+  // TODO: Remove testing values
+  const node = data?.file.hits.edges[0].node;
+  const program_id = !loading && node && node.study_id;
+  const { donor_id, submitter_donor_id } = !loading && node && node.donors.hits.edges[0].node;
+  const entity = {
+    ...dummyDonorQuery.hits.edges[0].node,
+  };
+  if (donor_id) entity.donor_id = donor_id;
+  if (submitter_donor_id) entity.submitter_donor_id = submitter_donor_id;
+  if (program_id) entity.program_id = program_id;
 
   if (loading || !entity) {
     return { data: noData, loading: true };
   } else if (!loading && !entity) {
     return { data: noData, loading: false };
   } else {
-    const entityData: DonorCentricRecord = {
-      donorId: entity.donors.hits.edges[0].node.donor_id,
-      programId: entity.study_id,
-      submitterDonorId: entity.donors.hits.edges[0].node.submitter_donor_id,
-      gender: entity.donors.hits.edges[0].node.gender,
-      vitalStatus: entity.vital_status,
-      primarySite: entity.primary_site,
-      cancerType: entity.cancer_type,
-      ageAtDiagnosis: entity.age_at_diagnosis,
-      associations: entity.associations,
-      causeOfDeath: entity.cause_of_death,
-      survivalTime: entity.survival_time,
-      height: entity.height,
-      weight: entity.weight,
-      bmi: entity.bmi,
-      geneticDisorders: entity.genetic_disorders,
-      menopauseStatus: entity.menopause_status,
-      ageAtMenarche: entity.age_at_menarche,
-      numberOfPregnancies: entity.number_of_pregnancies,
-      numberOfChildren: entity.number_of_children,
-      hrtType: entity.hrt_type,
-      hrtDuration: entity.hrt_duration,
-      contraceptionType: entity.contraception_type,
-      contraceptionDuration: entity.contraception_duration,
-      specimens: entity.specimens,
-      follow_ups: entity.follow_ups,
-      primary_diagnosis: entity.primary_diagnosis,
-      treatments: entity.treatments,
-      files: entity.files,
-    };
-
     if (error) {
       console.error(error.message);
     }
 
-    // TODO: Remove testing values
-    const entityTestingData = {
-      ...dummyDonorEntity,
-      donorId: entityData.donorId,
-      programId: entityData.programId,
-      submitterDonorId: entityData.submitterDonorId,
-    };
-
-    return { data: entityTestingData, loading, error };
+    return { data: entity, loading, error };
   }
 };
 

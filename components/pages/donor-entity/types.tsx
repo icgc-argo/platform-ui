@@ -17,13 +17,114 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorRecord, FileRecord } from '../file-entity/types';
+import { Associations, FileRecord } from '../file-entity/types';
+
+export interface DonorCentricRecord {
+  donor_id: string;
+  program_id: string;
+  submitter_donor_id: string;
+  gender: string;
+  vital_status: string;
+  primary_site: string;
+  cancer_type?: string;
+  cause_of_death?: string;
+  age_at_diagnosis?: number;
+  associations: Associations;
+  survival_time?: number;
+  height?: number;
+  weight?: number;
+  bmi?: number;
+  genetic_disorders?: string;
+  menopause_status?: string;
+  age_at_menarche?: number;
+  number_of_pregnancies?: number;
+  number_of_children?: number;
+  hrt_type?: string;
+  hrt_duration?: number | string;
+  contraception_type?: string;
+  contraception_duration?: number | string;
+  specimens?: {
+    hits: {
+      edges: SpecimenNode[];
+    };
+  };
+  follow_ups?: {
+    hits: {
+      edges: FollowUpNode[];
+    };
+  };
+  primary_diagnosis?: {
+    hits: {
+      edges: DiagnosisNode[];
+    };
+  };
+  treatments?: {
+    hits: {
+      edges: TreatmentNode[];
+    };
+  };
+  files?: {
+    hits: {
+      edges: FileRecord[];
+    };
+  };
+}
+
+export type DonorCentricQuery = {
+  hits: {
+    edges: [{ node: DonorCentricRecord }];
+  };
+};
+
+export interface DonorEntity {
+  donorId: string;
+  programId: string;
+  gender: string;
+  vitalStatus: string;
+  causeOfDeath?: string;
+  survivalTime?: string;
+  height?: number;
+  weight?: number;
+  bmi?: number;
+  geneticDisorders?: string;
+  menopauseStatus?: string;
+  ageAtMenarche?: number;
+  numberOfPregnancies?: number;
+  numberOfChildren?: number;
+  hrtType?: string;
+  hrtDuration?: number | string;
+  contraceptionType?: string;
+  contraceptionDuration?: number | string;
+  specimens?: {
+    hits: {
+      edges: SpecimenNode[];
+    };
+  };
+  follow_ups?: {
+    hits: {
+      edges: FollowUpNode[];
+    };
+  };
+  primary_diagnosis?: {
+    hits: {
+      edges: DiagnosisNode[];
+    };
+  };
+  treatments?: {
+    hits: {
+      edges: TreatmentNode[];
+    };
+  };
+  files?: {
+    hits: {
+      edges: FileRecord[];
+    };
+  };
+}
 
 export type DiagnosisNode = {
   node: {
-    id: string;
-    // TODO: Remove Dummy Type Data
-    data: Array<{}>;
+    primary_diagnosis_id: string;
     program_id?: string;
     submitter_donor_id?: string;
     submitter_primary_diagnosis_id?: string;
@@ -74,52 +175,6 @@ export type FollowUpNode = {
     posttherapy_stage_group?: string;
   };
 };
-
-export interface DonorCentricRecord extends DonorRecord {
-  donorId: string;
-  programId: string;
-  gender: string;
-  vitalStatus: string;
-  causeOfDeath?: string;
-  survivalTime?: string;
-  height?: number;
-  weight?: number;
-  bmi?: number;
-  geneticDisorders?: string;
-  menopauseStatus?: string;
-  ageAtMenarche?: number;
-  numberOfPregnancies?: number;
-  numberOfChildren?: number;
-  hrtType?: string;
-  hrtDuration?: number | string;
-  contraceptionType?: string;
-  contraceptionDuration?: number | string;
-  specimens?: {
-    hits: {
-      edges: SpecimenNode[];
-    };
-  };
-  follow_ups?: {
-    hits: {
-      edges: FollowUpNode[];
-    };
-  };
-  primary_diagnosis?: {
-    hits: {
-      edges: DiagnosisNode[];
-    };
-  };
-  treatments?: {
-    hits: {
-      edges: TreatmentNode[];
-    };
-  };
-  files?: {
-    hits: {
-      edges: FileRecord[];
-    };
-  };
-}
 
 export type SampleNode = {
   node: {
