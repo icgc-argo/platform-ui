@@ -23,7 +23,7 @@ import { css } from '@emotion/core';
 import DonorDataTable from './DonorDataTable';
 import DonorFileCard from './DonorFileCard';
 import ClinicalTimeline from './ClinicalTimeline';
-import { DonorCentricRecord } from './types';
+import { DonorEntityData } from './useEntityData';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -39,7 +39,7 @@ const PaddedColumn = styled(Col)`
 `;
 
 const DonorCardsLayout: React.ComponentType<{
-  donorData: DonorCentricRecord;
+  donorData: DonorEntityData;
 }> = ({ donorData }) => (
   <div
     css={css`
@@ -48,15 +48,15 @@ const DonorCardsLayout: React.ComponentType<{
   >
     <PaddedRow>
       <PaddedColumn md={8} sm={12}>
-        <DonorDataTable data={donorData} />
+        <DonorDataTable data={donorData.summary} />
       </PaddedColumn>
       <PaddedColumn md={4} sm={12}>
-        <DonorFileCard files={donorData.files} />
+        <DonorFileCard files={donorData.data} />
       </PaddedColumn>
     </PaddedRow>
     <PaddedRow>
       <PaddedColumn>
-        <ClinicalTimeline data={donorData} />
+        <ClinicalTimeline data={donorData.data} />
       </PaddedColumn>
     </PaddedRow>
   </div>

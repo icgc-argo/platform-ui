@@ -24,9 +24,10 @@ import { noData, dummyDonorQuery } from './dummyData';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
 
-type DonorEntityData = {
+export type DonorEntityData = {
   loading: boolean;
   data: DonorCentricRecord;
+  summary?: {};
   error?: any;
 };
 
@@ -39,27 +40,56 @@ const useEntityData = (donorId: string): DonorEntityData => {
     errorPolicy: 'all',
   });
 
-  // TODO: Remove testing values
-  const node = data?.file.hits.edges[0].node;
-  const program_id = !loading && node && node.study_id;
-  const { donor_id, submitter_donor_id } = !loading && node && node.donors.hits.edges[0].node;
   const entity = {
     ...dummyDonorQuery.hits.edges[0].node,
   };
-  if (donor_id) entity.donor_id = donor_id;
-  if (submitter_donor_id) entity.submitter_donor_id = submitter_donor_id;
-  if (program_id) entity.program_id = program_id;
 
   if (loading || !entity) {
     return { data: noData, loading: true };
   } else if (!loading && !entity) {
     return { data: noData, loading: false };
   } else {
+    // TODO: Remove testing values
+    const node = data?.file.hits.edges[0].node;
+    const program_id = node && node.study_id;
+    const { donor_id, submitter_donor_id } = node && node.donors.hits.edges[0].node;
+    if (donor_id) entity.donor_id = donor_id;
+    if (submitter_donor_id) entity.submitter_donor_id = submitter_donor_id;
+    if (program_id) entity.program_id = program_id;
+
+    let summary = {};
+    [
+      'program_id',
+      'donor_id',
+      'submitter_donor_id',
+      'primary_site',
+      'cancer_type',
+      'age_at_diagnosis',
+      'gender',
+      'vital_status',
+      'cause_of_death',
+      'survival_time',
+      'genetic_disorders',
+      'height',
+      'weight',
+      'bmi',
+      'menopause_status',
+      'age_at_menarche',
+      'number_of_pregnancies',
+      'number_of_children',
+      'hrt_type',
+      'hrt_duration',
+      'contraception_type',
+      'contraception_duration',
+    ].forEach((current) => {
+      summary[current] = node[current];
+    });
+
     if (error) {
       console.error(error.message);
     }
 
-    return { data: entity, loading, error };
+    return { data: entity, summary, loading, error };
   }
 };
 

@@ -24,7 +24,7 @@ import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
-import { EntityType, SpecimenNode } from '../types';
+import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
@@ -124,6 +124,10 @@ const donorCentricDisplayNames = {
   workflow_names: 'Workflow Names',
 };
 
+type AliasedDisplayData = {
+  [K in keyof typeof donorCentricDisplayNames]?: any;
+};
+
 // format for display
 export const formatTableDisplayNames = (data: any[]) =>
   data.length > 0 &&
@@ -146,13 +150,19 @@ export const getDonorAge = (data) => {
   return { ageAtDiagnosis, survivalTime, ageAtDeath };
 };
 
-type AliasedDisplayData = {
-  [K in keyof typeof donorCentricDisplayNames]?: any;
-};
+export const formatTimelineEntityData = (donorData) => {
+  // TODO: Add functions for treatment, followUp, biomarker, etc; remove dummyData
+  const primary_diagnosis = donorData.primary_diagnosis?.hits.edges.map(
+    ({ node }: DiagnosisNode) => ({
+      id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
+      description: node.cancer_type_code,
+      type: EntityType.PRIMARY_DIAGNOSIS,
+      interval: 0,
+      data: node,
+    }),
+  )[0];
 
-export const formatTimelineEntityData = (data) => {
-  // TODO: Add functions for primary diagnosis, treatment, followUp, biomarker, etc; remove dummyData
-  const specimens = data.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
+  const specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
 
     const aliasedKeys = [
@@ -203,7 +213,8 @@ export const formatTimelineEntityData = (data) => {
   });
 
   return {
-    ...data,
+    ...donorData,
+    primary_diagnosis,
     specimens,
   };
 };

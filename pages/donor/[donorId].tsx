@@ -55,7 +55,8 @@ export default createPage({
   });
 
   // TODO: Remove Test Values
-  const { data: donor, loading: donorLoading } = useEntityData(donorId);
+  const donor = useEntityData(donorId);
+  const { loading: donorLoading } = donor;
   // const isValidEntity = !!get(profile, 'file.hits.total', false);
   const isValidEntity = true;
 
