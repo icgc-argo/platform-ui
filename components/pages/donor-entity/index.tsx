@@ -32,18 +32,19 @@ import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 
 const DonorEntity = ({ donor }) => {
-  // TODO: Remove Testing value
-  const donorLoading = false;
-
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const {
+    loading: donorLoading,
+    summary: { program_id, donor_id },
+  } = donor;
 
   const loading = profileLoading || donorLoading;
 
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
   const isUserLoggedIn = !!egoJwt;
   const isDownloadEnabled = isUserLoggedIn && isDacoApproved;
-  console.log(donor);
+
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -65,8 +66,8 @@ const DonorEntity = ({ donor }) => {
             <>
               <ContentHeader>
                 <DonorTitleBar
-                  programId={donor.summary.program_id}
-                  donorId={donor.summary.donor_id}
+                  programId={program_id}
+                  donorId={donor_id}
                   isDownloadEnabled={isDownloadEnabled}
                 />
               </ContentHeader>
