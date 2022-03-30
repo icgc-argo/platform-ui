@@ -175,7 +175,7 @@ const Timeline = ({
     let age =
       type === EntityType.PRIMARY_DIAGNOSIS
         ? getDonorAge(data).ageAtDiagnosis
-        : getDonorAge(data).ageAtDeath;
+        : `~ ${getDonorAge(data).ageAtDeath}`;
 
     return age >= 90 ? `age: >= 90` : `age: ${age}`;
   };
