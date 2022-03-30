@@ -204,7 +204,8 @@ export const dummyDonorEntity: DonorCentricRecord = {
       edges: [
         {
           node: {
-            submitter_primary_diagnosis_id: 'PD1',
+            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'paca_ca_pd_22323',
             age_at_diagnosis: 28,
             cancer_type_code: 'C25.3',
             cancer_type_additional_information: 'Malignant neoplasm of pancreas',
