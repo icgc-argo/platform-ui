@@ -43,7 +43,7 @@ const DonorEntity = ({ donor }) => {
   const isDacoApproved = get(userProfile, 'self.isDacoApproved');
   const isUserLoggedIn = !!egoJwt;
   const isDownloadEnabled = isUserLoggedIn && isDacoApproved;
-
+  console.log(donor);
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -65,8 +65,8 @@ const DonorEntity = ({ donor }) => {
             <>
               <ContentHeader>
                 <DonorTitleBar
-                  programId={donor.programId}
-                  donorId={donor.donorId}
+                  programId={donor.summary.program_id}
+                  donorId={donor.summary.donor_id}
                   isDownloadEnabled={isDownloadEnabled}
                 />
               </ContentHeader>
