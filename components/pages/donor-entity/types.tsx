@@ -125,15 +125,15 @@ export interface DonorEntity {
 export type DiagnosisNode = {
   node: {
     primary_diagnosis_id: string;
-    program_id?: string;
-    submitter_donor_id?: string;
-    submitter_primary_diagnosis_id?: string;
-    age_at_diagnosis?: number;
-    cancer_type_code?: string;
+    program_id: string;
+    submitter_donor_id: string;
+    submitter_primary_diagnosis_id: string;
+    age_at_diagnosis: number;
+    cancer_type_code: string;
     cancer_type_additional_information?: string;
     basis_of_diagnosis?: string;
     laterality?: string;
-    lymph_nodes_examined_status?: string;
+    lymph_nodes_examined_status: string;
     number_lymph_nodes_examined?: number;
     number_lymph_nodes_positive?: number;
     clinical_tumour_staging_system?: string;
