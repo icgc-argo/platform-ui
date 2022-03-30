@@ -124,7 +124,6 @@ export interface DonorEntity {
 
 export type DiagnosisNode = {
   node: {
-    primary_diagnosis_id: string;
     program_id?: string;
     submitter_donor_id?: string;
     submitter_primary_diagnosis_id?: string;
