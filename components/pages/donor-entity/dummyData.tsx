@@ -215,7 +215,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
             clinical_t_category: 'T1a',
             clinical_n_category: 'N0',
             clinical_m_category: 'M1d',
-            presenting_symptoms: 'Back Pain, Pancreatitis, Vomiting',
+            presenting_symptoms: 'Back Pain | Pancreatitis | Vomiting',
             performance_status: '--',
           },
         },

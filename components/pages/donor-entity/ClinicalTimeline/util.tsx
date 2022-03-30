@@ -217,13 +217,23 @@ export const getDonorAge = (data) => {
   return { ageAtDiagnosis, survivalTime, ageAtDeath };
 };
 
+const removePipeDelimiter = (data: AliasedDisplayData) => {
+  let displayData = { ...data };
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === 'string' && value.includes('|')) {
+      displayData[key] = value.replace(/\ \|/g, ',');
+    }
+  }
+  return displayData;
+};
+
 export const formatTimelineEntityData = (donorData) => {
   // TODO: Add functions for treatment, followUp, biomarker, etc; remove dummyData
   const primary_diagnosis = donorData.primary_diagnosis?.hits.edges.map(
     ({ node }: DiagnosisNode) => {
       const { clinical_t_category, clinical_n_category, clinical_m_category } = node;
       const aliasedKeys = ['clinical_t_category', 'clinical_n_category', 'clinical_m_category'];
-      const data: AliasedDisplayData = removeAliasedKeys(node, aliasedKeys);
+      const data: AliasedDisplayData = removePipeDelimiter(removeAliasedKeys(node, aliasedKeys));
       if (clinical_t_category && clinical_n_category && clinical_m_category)
         data.pathological_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
 
