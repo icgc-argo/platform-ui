@@ -177,7 +177,7 @@ const Timeline = ({
         ? getDonorAge(data).ageAtDiagnosis
         : getDonorAge(data).ageAtDeath;
 
-    return age >= 90 ? `age: >= 90` : `age : ${age}`;
+    return age >= 90 ? `age: >= 90` : `age: ${age}`;
   };
 
   return (

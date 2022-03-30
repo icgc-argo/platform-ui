@@ -27,7 +27,7 @@ import { FileCentricDocumentField } from '../file-repository/types';
 export type DonorEntityData = {
   loading: boolean;
   data: DonorCentricRecord;
-  summary?: {};
+  summary: {};
   error?: any;
 };
 
@@ -45,9 +45,9 @@ const useEntityData = (donorId: string): DonorEntityData => {
   };
 
   if (loading || !entity) {
-    return { data: noData, loading: true };
+    return { data: noData, summary: {}, loading: true };
   } else if (!loading && !entity) {
-    return { data: noData, loading: false };
+    return { data: noData, summary: {}, loading: false };
   } else {
     // TODO: Remove testing values
     const node = data?.file.hits.edges[0].node;
@@ -57,7 +57,7 @@ const useEntityData = (donorId: string): DonorEntityData => {
     if (submitter_donor_id) entity.submitter_donor_id = submitter_donor_id;
     if (program_id) entity.program_id = program_id;
 
-    let summary = {};
+    const summary = {};
     [
       'program_id',
       'donor_id',
@@ -81,8 +81,8 @@ const useEntityData = (donorId: string): DonorEntityData => {
       'hrt_duration',
       'contraception_type',
       'contraception_duration',
-    ].forEach((current) => {
-      summary[current] = node[current];
+    ].forEach((key) => {
+      summary[key] = entity[key];
     });
 
     if (error) {

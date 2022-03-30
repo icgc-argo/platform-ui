@@ -50,41 +50,28 @@ const DonorDataTable = ({ data }) => {
     </Link>
   );
 
-  // let displayData = {
-  //   'Submitter Donor ID': submitterDonorId,
-  //   'Program Name': programLink,
-  //   'Primary Site': primarySite,
-  //   'Cancer Type': cancerType,
-  //   Gender: gender,
-  //   'Vital Status': vitalStatus,
-  //   'Cause of Death': causeOfDeath,
-  //   'Survival Time': survivalTime,
-  //   'Genetic Disorders': geneticDisorders,
-  //   Height: `${height} cm`,
-  //   Weight: `${weight} kg`,
-  //   BMI: `${bmi} kg/m²`,
-  // };
-  const femaleFields = {
-    'Menopause Status': data.menopause_status,
-    'Age at Menarche': data.age_at_menarche,
-    'Number of Pregnancies': data.number_of_pregnancies,
-    'Number of Children': data.number_of_children,
-    'HRT Type': data.hrt_type,
-    'HRT Duration': data.hrt_duration,
-    'Contraception Type': data.contraception_type,
-    'Contraception Duration': data.contraception_duration,
-  };
+  const femaleFields = [
+    'menopause_status',
+    'age_at_menarche',
+    'number_of_pregnancies',
+    'number_of_children',
+    'hrt_type',
+    'hrt_duration',
+    'contraception_type',
+    'contraception_duration',
+  ];
+
   const displayData =
-    data.gender === 'Female'
-      ? {
-          ...data,
-          ...femaleFields,
-        }
-      : {
-          ...data,
-        };
+    data.gender === 'Male'
+      ? Object.keys(data)
+          .filter((key) => !femaleFields.includes(key))
+          .reduce((cur, key) => {
+            return Object.assign(cur, { [key]: data[key] });
+          }, {})
+      : { ...data };
 
   const tableData = splitIntoColumns(displayData, 2);
+
   return (
     <div
       css={css`
