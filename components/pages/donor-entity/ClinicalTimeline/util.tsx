@@ -257,7 +257,7 @@ export const formatTimelineEntityData = (donorData) => {
       'pathological_m_category',
     ];
 
-    const data: AliasedDisplayData = removeAliasedKeys(node, aliasedKeys);
+    const data: AliasedDisplayData = removePipeDelimiter(removeAliasedKeys(node, aliasedKeys));
 
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
