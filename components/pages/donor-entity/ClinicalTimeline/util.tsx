@@ -172,8 +172,38 @@ export const formatTableDisplayNames = (data: any[]) =>
     Object.keys(val).forEach((key) => {
       const value = val[key];
       const displayKey = donorCentricDisplayNames[key] || key;
-      acc[displayKey] = value;
+
+      let displayValue;
+      switch (key) {
+        case 'age_at_diagnosis':
+          displayValue = `${value} years`;
+          break;
+        case 'survival_time':
+          displayValue = `${value} days`;
+          break;
+        case 'specimen_acquisition_interval':
+          displayValue = `${value} days`;
+          break;
+        case 'height':
+          displayValue = `${value} cm`;
+          break;
+        case 'weight':
+          displayValue = `${value} kg`;
+          break;
+        case 'bmi':
+          displayValue = `${value} kg/m²`;
+          break;
+        default:
+          displayValue = value;
+      }
+      acc[displayKey] = displayValue;
     });
+    return acc;
+  }, {});
+
+export const removeAliasedKeys = (node, aliasedKeys) =>
+  Object.keys(node).reduce((acc, val) => {
+    if (!aliasedKeys.includes(val)) acc[val] = node[val];
     return acc;
   }, {});
 
@@ -190,13 +220,21 @@ export const getDonorAge = (data) => {
 export const formatTimelineEntityData = (donorData) => {
   // TODO: Add functions for treatment, followUp, biomarker, etc; remove dummyData
   const primary_diagnosis = donorData.primary_diagnosis?.hits.edges.map(
-    ({ node }: DiagnosisNode) => ({
-      id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
-      description: node.cancer_type_code,
-      type: EntityType.PRIMARY_DIAGNOSIS,
-      interval: 0,
-      data: node,
-    }),
+    ({ node }: DiagnosisNode) => {
+      const { clinical_t_category, clinical_n_category, clinical_m_category } = node;
+      const aliasedKeys = ['clinical_t_category', 'clinical_n_category', 'clinical_m_category'];
+      const data: AliasedDisplayData = removeAliasedKeys(node, aliasedKeys);
+      if (clinical_t_category && clinical_n_category && clinical_m_category)
+        data.pathological_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
+
+      return {
+        id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
+        description: node.cancer_type_code,
+        type: EntityType.PRIMARY_DIAGNOSIS,
+        interval: 0,
+        data,
+      };
+    },
   )[0];
 
   const specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
@@ -209,12 +247,7 @@ export const formatTimelineEntityData = (donorData) => {
       'pathological_m_category',
     ];
 
-    const data: AliasedDisplayData = Object.keys(node).reduce((acc, val) => {
-      if (!aliasedKeys.includes(val)) acc[val] = node[val];
-      return acc;
-    }, {});
-
-    data.specimen_acquisition_interval = `${node.specimen_acquisition_interval} days`;
+    const data: AliasedDisplayData = removeAliasedKeys(node, aliasedKeys);
 
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;

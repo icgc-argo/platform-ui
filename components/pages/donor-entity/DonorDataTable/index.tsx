@@ -27,7 +27,11 @@ import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
 import A from 'uikit/Link';
 import Link from 'next/link';
-import { splitIntoColumns, formatTableDisplayNames } from '../ClinicalTimeline/util';
+import {
+  removeAliasedKeys,
+  splitIntoColumns,
+  formatTableDisplayNames,
+} from '../ClinicalTimeline/util';
 import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
@@ -37,17 +41,6 @@ const DonorDataTable = ({ data }) => {
   const programFilterUrl = urlJoin(
     FILE_REPOSITORY_PATH,
     `?filters=${encodeURIComponent(JSON.stringify(programFilter))}`,
-  );
-
-  const currentProgram =
-    programs &&
-    programs.length > 0 &&
-    programs.filter((program) => program.shortName === data.program_id)[0];
-  const programName = currentProgram?.name || data.program_id;
-  const programLink = (
-    <Link href={programFilterUrl} passHref>
-      <A>{`${programName} (${data.program_id})`}</A>
-    </Link>
   );
 
   const femaleFields = [
@@ -61,14 +54,20 @@ const DonorDataTable = ({ data }) => {
     'contraception_duration',
   ];
 
-  const displayData =
-    data.gender === 'Male'
-      ? Object.keys(data)
-          .filter((key) => !femaleFields.includes(key))
-          .reduce((cur, key) => {
-            return Object.assign(cur, { [key]: data[key] });
-          }, {})
-      : { ...data };
+  const displayData = data.gender === 'Male' ? removeAliasedKeys(data, femaleFields) : { ...data };
+
+  const currentProgram =
+    programs &&
+    programs.length > 0 &&
+    programs.filter((program) => program.shortName === data.program_id)[0];
+  const programName = currentProgram?.name || data.program_id;
+  const programLink = (
+    <Link href={programFilterUrl} passHref>
+      <A>{`${programName} (${data.program_id})`}</A>
+    </Link>
+  );
+
+  displayData.program_id = programLink;
 
   const tableData = splitIntoColumns(displayData, 2);
 

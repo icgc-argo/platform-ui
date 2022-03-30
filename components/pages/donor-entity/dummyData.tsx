@@ -17,13 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  DonorCentricRecord,
-  DonorCentricQuery,
-  DonorEntity,
-  DonorEntityData,
-  EntityType,
-} from './types';
+import { DonorCentricRecord, DonorCentricQuery, DonorEntityData, EntityType } from './types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
   program_id: 'TEST-PR',
@@ -218,9 +212,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
             number_lymph_nodes_examined: 20,
             clinical_tumour_staging_system: 'Figo Staging System',
             clinical_stage_group: 'Stage IA1',
-            clinical_t_category: 'N/A',
-            clinical_n_category: 'N/A',
-            clinical_m_category: 'N/A',
+            clinical_t_category: 'T1a',
+            clinical_n_category: 'N0',
+            clinical_m_category: 'M1d',
             presenting_symptoms: 'Back Pain, Pancreatitis, Vomiting',
             performance_status: '--',
           },
