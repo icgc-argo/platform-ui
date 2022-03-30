@@ -206,6 +206,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
           node: {
             primary_diagnosis_id: 'PD1',
             submitter_primary_diagnosis_id: 'paca_ca_pd_22323',
+            program_id: 'TEST-PR',
+            submitter_donor_id: 'COLO-829',
+            lymph_nodes_examined_status: 'Yes',
             age_at_diagnosis: 28,
             cancer_type_code: 'C25.3',
             cancer_type_additional_information: 'Malignant neoplasm of pancreas',

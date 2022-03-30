@@ -110,6 +110,7 @@ const donorCentricDisplayNames = {
   hrt_type: 'HRT Type',
   hrt_duration: 'HRT Duration',
   interval_of_followup: 'Interval of Followup',
+  lymph_nodes_examined_status: 'Lymph Nodes Examined status',
   menopause_status: 'Menopause Status',
   number_of_children: 'Number of Children',
   number_lymph_nodes_positive: 'Number of Positive Lymph Nodes',
@@ -238,7 +239,7 @@ export const formatTimelineEntityData = (donorData) => {
         data.pathological_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
 
       return {
-        id: `PRIMARY DIAGNOSIS ${node.submitter_primary_diagnosis_id}`,
+        id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
         description: node.cancer_type_code,
         type: EntityType.PRIMARY_DIAGNOSIS,
         interval: 0,
