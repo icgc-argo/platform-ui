@@ -36,7 +36,7 @@ import useElementDimension from '../utils/Hook/useElementDimension';
 export { default as TablePagination, TableActionBar } from './TablePagination';
 
 export type TableVariant = 'DEFAULT' | 'STATIC';
-type TableDataBase = {
+export type TableDataBase = {
   [k: string]: any;
 };
 

@@ -21,18 +21,26 @@ import React from 'react';
 import Container from 'uikit/Container';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { css } from 'uikit';
+import Link from 'uikit/Link';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import SimpleTable from 'uikit/Table/SimpleTable';
+import ContentPlaceholder from 'uikit/ContentPlaceholder/';
 import ContentError from 'components/placeholders/ContentError';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { Entity, EntityType, SampleNode, TreatmentNode } from './types';
-import { splitIntoColumns, tableFormat } from './util';
+import { Entity, EntityType, SampleNode, TreatmentNode } from '../types';
+import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
+
+// TODO: Remove test values
+import { mockTimelineData } from '../dummyData';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -50,18 +58,32 @@ export const ENTITY_DISPLAY = Object.freeze({
   biomarker: {
     title: 'Biomarkers',
   },
+  deceased: {
+    title: 'Vital Status',
+  },
 });
 
 const renderSelectedDataRow = (selectedData, selectedSamples) => {
   if (selectedSamples.length > 0 && !isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
+
     return (
       <Col>
         <Row>
-          <Col>
-            <SimpleTable data={tableFormat(dataCols[0])} />
+          <Col
+            css={css`
+              padding-left: 0px !important;
+            `}
+          >
+            <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
-          <Col>{!isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />}</Col>
+          <Col
+            css={css`
+              padding-left: 0px !important;
+            `}
+          >
+            {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
+          </Col>
         </Row>
         <Row
           css={css`
@@ -77,13 +99,13 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     return (
       <Row>
         <Col>
-          <SimpleTable data={tableFormat(dataCols[0])} />
+          <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
         </Col>
         {/* always display column for row formatting */}
         <Col>
           {
             // may only have enough data for 1 column
-            !isEmpty(dataCols[1]) && <SimpleTable data={tableFormat(dataCols[1])} />
+            !isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />
           }
         </Col>
       </Row>
@@ -100,8 +122,10 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 };
 
 const ClinicalTimeline = ({ data }) => {
+  // TODO: Remove test values
+  const entityData = formatTimelineEntityData(data);
+  const entities = [mockTimelineData[0], ...entityData.specimens, ...mockTimelineData.slice(1)];
   const theme = useTheme();
-
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
@@ -111,7 +135,7 @@ const ClinicalTimeline = ({ data }) => {
   ]);
 
   const [activeTab, setActiveTab] = React.useState<number>(0);
-  const filteredData = data.filter(
+  const filteredData = entities.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
   const selectedClinical: Entity = filteredData[activeTab];
@@ -119,17 +143,28 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
+  const { donorId } = data;
+  const specimenFilter = sqonBuilder
+    .has('donor_id', donorId)
+    .has('submitter_specimen_id', selectedData['submitter_specimen_id'])
+    .build();
+  const specimenFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(specimenFilter))}`,
+  );
+
   return (
     <Container
       css={css`
         padding: 12px 14px;
-        min-height: 750px;
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
       `}
     >
       <Header
-        entities={data}
+        entities={entities}
         activeEntities={activeEntities}
         onFiltersChange={(activeEntities) => {
           setActiveTab(0);
@@ -148,7 +183,7 @@ const ClinicalTimeline = ({ data }) => {
               writing-mode: vertical-lr;
               transform: rotate(180deg);
               margin-right: 10px;
-              text-align: center;
+              text-align: right;
             `}
           >
             <Typography
@@ -174,12 +209,32 @@ const ClinicalTimeline = ({ data }) => {
               padding: '10px 20px',
               border: `1px solid ${theme.colors.grey_1}`,
               marginLeft: '-1px',
+              overflow: 'scroll',
             }}
           >
             <Col>
               <Typography variant="navigation">
                 {ENTITY_DISPLAY[selectedClinical.type].title}
               </Typography>
+              {selectedClinical.type === 'specimen' && (
+                <Link
+                  bold
+                  uppercase
+                  withChevron={false}
+                  variant="BLOCK"
+                  href={specimenFilterUrl}
+                  css={css`
+                    float: right;
+                    font-size: 12.5px;
+                    position: relative;
+                    right: 14px;
+                    top: 2px;
+                  `}
+                >
+                  {/* Todo: Remove Mock Testing Value */}
+                  Explore Specimen Files ({selectedSamples.length})
+                </Link>
+              )}
               <div
                 css={css`
                   display: flex;
@@ -187,7 +242,15 @@ const ClinicalTimeline = ({ data }) => {
                   flex-direction: column;
                 `}
               >
-                {renderSelectedDataRow(selectedData, selectedSamples)}
+                {selectedClinical.type === 'deceased' ? (
+                  <Row>
+                    <Col>
+                      <ContentPlaceholder />
+                    </Col>
+                  </Row>
+                ) : (
+                  renderSelectedDataRow(selectedData, selectedSamples)
+                )}
               </div>
 
               {selectedTreatments.length > 0 && (

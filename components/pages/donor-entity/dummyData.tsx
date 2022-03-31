@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorCentricRecord, DonorEntityData } from './types';
-import { EntityType } from './ClinicalTimeline/types';
+import { DonorCentricRecord, DonorEntityData, EntityType } from './types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
   programId: 'TEST-PR',
@@ -56,20 +55,135 @@ export const dummyDonorEntity: DonorCentricRecord = {
       edges: [
         {
           node: {
-            specimen_tissue_source: 'Blood derived',
+            program_id: 'TEST-PR',
+            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
+            specimen_id: 'SP212999',
             specimen_type: 'Normal',
+            specimen_tissue_source: 'Blood derived',
             tumour_normal_designation: 'Normal',
             submitter_specimen_id: 'HCC1143_BAM_INPUT',
-            specimen_id: 'SP212999',
+            specimen_acquisition_interval: 2,
+            specimen_anatomic_location: 'C18',
             samples: {
               hits: {
                 edges: [
                   {
                     node: {
-                      matched_normal_submitter_sample_id: null,
-                      sample_id: 'SA613000',
                       sample_type: 'Total DNA',
                       submitter_sample_id: 'HCC1143_BAM_INPUT',
+                      experimental_strategies: 'RNA-Seq',
+                      workflow_names: '--',
+                      available_files: 5,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            program_id: 'TEST-PR',
+            primary_diagnosis_id: 'PD1',
+            submitter_specimen_id: 'SP0032',
+            tumour_normal_designation: 'Tumour',
+            submitter_primary_diagnosis_id: 'PD1',
+            specimen_id: 'SP0222',
+            specimen_type: 'Normal',
+            specimen_tissue_source: 'Blood derived',
+            specimen_acquisition_interval: 12,
+            specimen_anatomic_location: 'C18',
+            pathological_tumour_staging_system: 'AJCC 7th edition',
+            pathological_t_category: 'T0',
+            pathological_n_category: 'N0a',
+            pathological_m_category: 'M1b',
+            pathological_stage_group: 'Stage IIIC',
+            tumour_histological_type: '9691/36',
+            specimen_laterality: 'Unknown',
+            tumour_grading_system: 'Gleason grade group system',
+            tumour_grade: 'High grade',
+            percent_tumour_cells: 0.2,
+            specimen_processing: 'Cryopreservation in dry ice (dead tissue)',
+            reference_pathology_confirmed: 'Yes',
+            specimen_storage: 'Frozen in liquid nitrogen',
+            percent_proliferating_cells: 0.2,
+            percent_inflammatory_tissue: 0.2,
+            percent_stromal_cells: 0.2,
+            percent_necrosis: 0.2,
+            samples: {
+              hits: {
+                edges: [
+                  {
+                    node: {
+                      submitter_sample_id: 'SAB5353',
+                      sample_type: 'Amplified DNA',
+                      experimental_strategies: 'WGS',
+                      workflow_names: 'DNA Seq Alignment',
+                      available_files: 7,
+                    },
+                  },
+                  {
+                    node: {
+                      submitter_sample_id: 'SAD3053',
+                      sample_type: 'Total DNA',
+                      experimental_strategies: 'WXS',
+                      workflow_names: 'Ribo-Zero RNA',
+                      available_files: 3,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            program_id: 'TEST-PR',
+            primary_diagnosis_id: 'PD1',
+            submitter_specimen_id: 'SP0032',
+            tumour_normal_designation: 'Tumour',
+            submitter_primary_diagnosis_id: 'PD1',
+            specimen_id: 'SP0032',
+            specimen_tissue_source: 'Blood derived',
+            specimen_type: 'Primary Tumour',
+            pathological_tumour_staging_system: 'AJCC 7th',
+            pathological_t_category: 'T0',
+            pathological_n_category: 'N0',
+            pathological_m_category: 'M0',
+            pathological_stage_group: 'Stage IIIC',
+            specimen_acquisition_interval: 353,
+            tumour_histological_type: '9691/36',
+            specimen_anatomic_location: 'C18',
+            specimen_laterality: '--',
+            specimen_processing: 'Cryopreservation in dry ice (dead tissue)',
+            specimen_storage: 'Frozen in liquid nitrogen',
+            tumour_grading_system: 'Gleason grade group system',
+            tumour_grade: 'High grade',
+            percent_tumour_cells: 0.2,
+            percent_proliferating_cells: 0.2,
+            percent_inflammatory_tissue: 0.2,
+            percent_stromal_cells: 0.2,
+            percent_necrosis: 0.2,
+            samples: {
+              hits: {
+                edges: [
+                  {
+                    node: {
+                      submitter_sample_id: 'SA8778',
+                      sample_type: 'Other DNA Enrichments',
+                      experimental_strategies: 'WGS, WXS',
+                      workflow_names: 'DNA Seq Alignment, GATK Mutect VC',
+                      available_files: 5,
+                    },
+                  },
+                  {
+                    node: {
+                      submitter_sample_id: 'SA5432',
+                      sample_type: 'Ribo-Zero RNA',
+                      experimental_strategies: 'WGS, WXS',
+                      workflow_names: '--',
+                      available_files: 6,
                     },
                   },
                 ],
@@ -133,87 +247,6 @@ export const mockTimelineData: Array<DonorEntityData> = [
       'Presenting Symptoms': 'Back Pain, Pancreatitis, Vomiting',
       'Performance Status': '--',
     },
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0013',
-    description: 'Normal',
-    interval: 2,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplasm of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '',
-      'Clinical Tumour Staging System': 'Binet',
-      'Clinical Stage Group': '',
-    },
-    samples: [
-      { node: { sample_id: 'SAB5353', sample_type: 'Amplified DNA' } },
-      { node: { sample_id: 'SAD3053', sample_type: 'Total DNA' } },
-    ],
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0032',
-    description: 'Tumour',
-    interval: 353,
-    data: {
-      'Submitter Specimen Id': 'SP0032',
-      'Submitter Primary Diagnosis ID': 'PD1',
-      'Tumour Normal Designation': 'Tumour',
-      'Specimen Tissue Source': 'Blood derived',
-      'Specimen Type': 'Primary Tumour',
-      'Pathological Tumour Staging System': 'AJCC 7th',
-      'Age at Diagnosis': '28 years',
-      'Pathological TNM Category': 'T0N0M0',
-      'Pathological Stage Group': 'Stage IIIC',
-      'Specimen Acquisition Interval': '12 days',
-      'Tumor Histological Type': '9691/36',
-      'Specimen Anatomic Location': 'C18',
-      'Specimen Laterality': '--',
-      'Specimen Processing': 'Cryopreservation in dry ice (dead tissue)',
-      'Number of Positive Lymph Nodes': 'Frozen in liquid nitrogen',
-      'Referrence Pathology Confirmed': 'Yes',
-      'Tumour Grading System': 'Gleason grade group system',
-      'Tumour Grade': 'High grade',
-      'Percent Tumour Cells': '0.20',
-      'Percent Proliferating Calls': '0.20',
-      'Percent Inflammatory Tissue': '0.20',
-      'Percent Stromal Cells': '0.20',
-      'Percent Necrosis': '0.20',
-    },
-    samples: [
-      {
-        node: {
-          sample_id: 'SA8778',
-          submitter_sample_id: 'SA8778',
-          sample_type: 'Other DNA Enrichments',
-          experimental_strategies: 'WGS, WXS',
-          workflow_names: 'DNA Seq Alignment, GATK Mutect VC',
-          available_files: 5,
-        },
-      },
-      {
-        node: {
-          sample_id: 'SA5432',
-          submitter_sample_id: 'SA5432',
-          sample_type: 'Ribo-Zero RNA',
-          experimental_strategies: 'WGS, WXS',
-          workflow_names: '--',
-          available_files: 6,
-        },
-      },
-    ],
-  },
-  {
-    type: EntityType.SPECIMEN,
-    id: 'SPECIMEN SP0222',
-    description: 'Normal',
-    interval: 2,
-    data: {},
-    samples: [],
   },
   {
     type: EntityType.TREATMENT,

@@ -20,13 +20,13 @@
 import React from 'react';
 import { css } from 'uikit';
 import Icon from 'uikit/Icon';
-import { getDonorAge, getTimelineStyles } from './util';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import Tag from 'uikit/Tag';
-import { Entity, EntityType } from './types';
+import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
+import { getDonorAge, getTimelineStyles } from './util';
 
 const DayCount = ({
   days,
@@ -73,7 +73,7 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
       className="timelineItem"
       onClick={() => !disabled && onClick()}
       css={css`
-        height: 48px;
+        height: fit-content;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -84,11 +84,26 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
         margin-right: -1px;
         cursor: pointer;
 
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 25px;
+          background-color: ${timelineStyles[type].borderColor};
+          position: absolute;
+          right: 98%;
+          z-index: 2;
+        }
+
         ${active
           ? css`
               border-color: ${borderColor};
             `
-          : 'overflow: hidden'};
+          : `overflow: hidden;
+            :hover {
+              background-color: #F2F2F8;
+            }`};
       `}
     >
       <VerticalTabs.Item
@@ -133,9 +148,6 @@ const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) =>
             variant="data"
             as="div"
             css={css`
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
               color: ${type === EntityType.DECEASED ? theme.colors.grey : 'initial'};
             `}
           >
@@ -173,21 +185,10 @@ const Timeline = ({
             css={css`
               display: flex;
               width: 70px; /* Approx width for 5 digits which is approximately 270 years */
+              height: 50px;
               align-items: center;
               position: relative;
               justify-content: flex-end;
-
-              &::after {
-                content: '';
-                display: inline-block;
-                width: 7px;
-                height: 7px;
-                border-radius: 25px;
-                background-color: ${timelineStyles[type].borderColor};
-                position: relative;
-                left: 4px;
-                z-index: 2;
-              }
             `}
           >
             <DayCount days={interval} />
@@ -221,7 +222,9 @@ const Timeline = ({
             css={css`
               display: flex;
               align-items: center;
+              position: relative;
             `}
+            key={`${entity.id}-${i}`}
           >
             <TimelineItem
               item={entity}

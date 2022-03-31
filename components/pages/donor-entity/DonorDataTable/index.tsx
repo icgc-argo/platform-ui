@@ -27,7 +27,7 @@ import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
 import A from 'uikit/Link';
 import Link from 'next/link';
-import { splitIntoColumns, tableFormat } from '../ClinicalTimeline/util';
+import { splitIntoColumns, formatTableDisplayNames } from '../ClinicalTimeline/util';
 import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
@@ -106,12 +106,18 @@ const DonorDataTable = ({ data }) => {
 
   const tableData = splitIntoColumns(displayData, 2);
   return (
-    <div>
+    <div
+      css={css`
+        height: 100%;
+      `}
+    >
       <Container
         css={css`
           padding: 20px;
           padding-top: 0px;
           padding-right: 10px;
+          height: 100%;
+          box-sizing: border-box;
         `}
       >
         <Row>
@@ -130,13 +136,18 @@ const DonorDataTable = ({ data }) => {
           <Col
             xs={6}
             css={css`
-              margin-right: -10px;
+              height: 100%;
             `}
           >
-            <SimpleTable data={tableFormat(tableData[0])} />
+            <SimpleTable data={formatTableDisplayNames(tableData[0])} />
           </Col>
-          <Col xs={6}>
-            <SimpleTable data={tableFormat(tableData[1])} />
+          <Col
+            xs={6}
+            css={css`
+              height: 100%;
+            `}
+          >
+            <SimpleTable data={formatTableDisplayNames(tableData[1])} />
           </Col>
         </Row>
       </Container>

@@ -20,9 +20,11 @@
 import { css } from '@emotion/core';
 import sqonBuilder from 'sqon-builder';
 import { useTheme } from 'uikit/ThemeProvider';
-import TitleBar from 'uikit/TitleBar';
 import Button from 'uikit/Button';
+import Icon from 'uikit/Icon';
 import Legend from 'uikit/Legend';
+import Link from 'uikit/Link';
+import TitleBar from 'uikit/TitleBar';
 import urlJoin from 'url-join';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
@@ -73,6 +75,39 @@ export const DonorTitleBar: React.ComponentType<{
         `}
       >
         <Legend />
+        <Link
+          css={css`
+            padding: 5px 10px;
+            font-size: ${theme.typography.data.fontSize};
+            font-weight: ${theme.typography.label.fontWeight};
+          `}
+          underline={false}
+          target="_blank"
+          href="https://docs.icgc-argo.org/dictionary"
+        >
+          <Icon
+            name={'info'}
+            fill="accent2_dark"
+            height="14px"
+            css={css`
+              margin-left: 5px;
+              margin-right: 0px;
+              position: relative;
+              top: 3px;
+              right: 3px;
+            `}
+          />
+          DATA DICTIONARY
+          <Icon
+            name={'chevron_right'}
+            fill="accent2_dark"
+            height="9px"
+            css={css`
+              margin-left: 5px;
+              margin-right: 0px;
+            `}
+          />
+        </Link>
         <Button
           onClick={() => {
             const downloadUrl = urlJoin(

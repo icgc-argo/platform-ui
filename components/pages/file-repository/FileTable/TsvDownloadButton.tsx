@@ -147,6 +147,7 @@ const TsvDownloadButton = ({
         break;
       default:
         console.log(`Selection from download dropdown '${item.value}' has no action defined.`);
+        setLoading(false);
         break;
     }
   };

@@ -36,6 +36,7 @@ import {
 } from '../common';
 import PercentBar from 'uikit/PercentBar';
 import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from '../DonorDataSummary/common';
+import { getConfig } from 'global/config';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -105,6 +106,8 @@ const StatsBar = () => {
     variables: { programShortName: programShortName },
     pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
   });
+  const { FEATURE_RNASEQ_ENABLED } = getConfig();
+
   return (
     <div>
       <Container>
@@ -157,7 +160,11 @@ const StatsBar = () => {
                 quantity={`${Math.round(
                   programDonorSummaryStats.percentageTumourAndNormal * 100,
                 )}%`}
-                description="Donors with a DNA T | N Matched Pair"
+                description={
+                  FEATURE_RNASEQ_ENABLED
+                    ? 'Donors with a DNA T | N Matched Pair'
+                    : 'Donors with Tumour & Normal'
+                }
               >
                 <PercentBar
                   num={programDonorSummaryStats.percentageTumourAndNormal * 100}
