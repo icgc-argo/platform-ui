@@ -32,7 +32,6 @@ import { getConfig } from 'global/config';
 import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { get } from 'lodash';
 
 const FileDownloadTooltip = ({
   isDownloadEnabled,
@@ -95,7 +94,7 @@ export const FileTitleBar: React.ComponentType<{
   fileObjectId?: string;
 }> = ({ programShortName, fileId, isDownloadEnabled, accessTier, fileSize, fileObjectId }) => {
   const theme = useTheme();
-  const { downloadFileWithEgoToken, fetchWithEgoToken } = useAuthContext();
+  const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
   const [isDownloading, setIsDownloading] = useState(false);
@@ -152,26 +151,13 @@ export const FileTitleBar: React.ComponentType<{
 
               const downloadUrl = urlJoin(
                 GATEWAY_API_ROOT,
-                'storage-api/get-download-url',
+                'storage-api/download-file',
                 fileObjectId,
               );
-              const fileDownloadUrl = await fetchWithEgoToken(downloadUrl)
-                .then((res) => res.json())
-                .then((data) => get(data, 'url', undefined))
-                .catch((err) => console.error(err));
 
-              if (fileDownloadUrl) {
-                // because of CORS we can't just use a redirect, so instead
-                // we add a temporary anchor tag to the page and click it
-                const tempLink = document.createElement('a');
-                tempLink.href = fileDownloadUrl;
-                tempLink.setAttribute('target', '_blank');
-                document.body.appendChild(tempLink);
-                tempLink.click();
-                document.body.removeChild(tempLink);
-              }
-
-              setIsDownloading(false);
+              await downloadFileWithEgoToken(downloadUrl)
+                .catch((err) => console.error(err))
+                .finally(() => setIsDownloading(false));
             }}
           >
             <DownloadIcon />
