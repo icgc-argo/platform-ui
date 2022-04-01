@@ -32,8 +32,7 @@ export const capitalize = (s: string) =>
  * @returns {string} filename
  */
 export const getFilename = (contentDisposition: string): string => {
-  const filenameRegex = /(?<=filename(?:=|\*=(?:[\w\-]+'')))["']?(?<filename>[^"';\n]+)["']?/gi;
-
+  const filenameRegex = /(?<=filename(?:=|\*=(?:[\w\-]+'')))["']?([^"';\n]+)["']?/gi;
   const matches = contentDisposition.match(filenameRegex);
-  return matches && matches[0].replace(/["']/g, '');
+  return matches ? matches[0].replace(/["']/g, '') : '';
 };
