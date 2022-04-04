@@ -214,6 +214,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
       edges: [
         {
           fileId: 'FL1203',
+          fileName: 'sd87fsdsdf798sdf87dfs9dsff97sdf987sdf987sdff798sdf798fds',
           dataType: 'Alignment QC',
           analysisWorkflow: 'DNA Seq Alignment',
           fileFormat: 'TXT',

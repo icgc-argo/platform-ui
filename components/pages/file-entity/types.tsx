@@ -24,6 +24,7 @@ export enum FileAccessState {
 
 export type FileSummaryInfo = {
   fileId: string;
+  fileName: string;
   objectId: string;
   fileFormat: string;
   size: number;
@@ -69,6 +70,7 @@ export type Associations = {
 
 export type FileRecord = {
   fileId: string;
+  fileName: string;
   dataType: string;
   analysisWorkflow: string;
   fileFormat: string;
