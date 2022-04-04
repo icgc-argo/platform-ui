@@ -171,7 +171,7 @@ const Timeline = ({
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
-  const donorAgeDisplay = (type, data) => {
+  const donorAgeDisplay = (type: EntityType, data) => {
     const age =
       type === EntityType.PRIMARY_DIAGNOSIS
         ? getDonorAge(data).ageAtDiagnosis
