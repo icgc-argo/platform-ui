@@ -219,7 +219,7 @@ export const getDonorAge = (data) => {
 };
 
 const removePipeDelimiter = (data: AliasedDisplayData) => {
-  let displayData = { ...data };
+  const displayData = { ...data };
   for (const [key, value] of Object.entries(data)) {
     if (typeof value === 'string' && value.includes('|')) {
       displayData[key] = value.replace(/\ \|/g, ',');
