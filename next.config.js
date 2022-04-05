@@ -19,13 +19,15 @@
 
 require('dotenv').config();
 
-const urlJoin = require('url-join');
-
-const withImages = require('next-images');
-const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const path = require('path');
+const urlJoin = require('url-join');
+const withImages = require('next-images');
+const withPlugins = require('next-compose-plugins');
 
-module.exports = withImages({
+const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
+
+module.exports = withPlugins([withTM, withImages], {
   exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
@@ -33,7 +35,7 @@ module.exports = withImages({
           '/404': { page: process.env.EXPORT_PATH },
         }
       : defaultPathMap,
-  webpack: (config) => {
+  webpack: (config, options) => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
       fs: 'empty',
@@ -43,6 +45,7 @@ module.exports = withImages({
       ...config.resolve.alias,
       // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly. It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
       'asn1.js': urlJoin(__dirname, '/node_modules/asn1.js/lib/asn1.js'),
+      react: path.resolve(__dirname, '.', 'node_modules', 'react'),
     };
     config.module.rules = [
       ...config.module.rules,
@@ -52,6 +55,10 @@ module.exports = withImages({
         loader: 'graphql-tag/loader',
       },
     ];
+
+    if (options.isServer) {
+      config.externals = ['react', ...config.externals];
+    }
 
     return config;
   },
