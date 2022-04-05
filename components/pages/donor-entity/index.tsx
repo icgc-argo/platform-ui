@@ -32,11 +32,12 @@ import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 
 const DonorEntity = ({ donor }) => {
-  // TODO: Remove Testing value
-  const donorLoading = false;
-
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const {
+    loading: donorLoading,
+    summary: { program_id, donor_id },
+  } = donor;
 
   const loading = profileLoading || donorLoading;
 
@@ -65,8 +66,8 @@ const DonorEntity = ({ donor }) => {
             <>
               <ContentHeader>
                 <DonorTitleBar
-                  programId={donor.programId}
-                  donorId={donor.donorId}
+                  programId={program_id}
+                  donorId={donor_id}
                   isDownloadEnabled={isDownloadEnabled}
                 />
               </ContentHeader>

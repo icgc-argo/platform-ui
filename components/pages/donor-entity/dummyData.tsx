@@ -17,31 +17,31 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorCentricRecord, DonorEntityData, EntityType } from './types';
+import { DonorCentricRecord, DonorCentricQuery, DonorEntityData, EntityType } from './types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
-  programId: 'TEST-PR',
-  donorId: 'DO252999',
-  submitterDonorId: 'HCC1143',
-  primarySite: 'Pancreas',
-  cancerType: 'Pancreatic Cancer',
-  ageAtDiagnosis: '67 years',
+  program_id: 'TEST-PR',
+  donor_id: 'DO252999',
+  submitter_donor_id: 'HCC1143',
+  primary_site: 'Pancreas',
+  cancer_type: 'Pancreatic Cancer',
+  age_at_diagnosis: Math.random() > 0.5 ? 28 : 88,
   gender: Math.random() > 0.5 ? 'Female' : 'Male',
-  vitalStatus: 'Deceased',
-  causeOfDeath: 'Died of Cancer',
-  survivalTime: '440 days',
-  geneticDisorders: 'Gardner Syndrome, Multiple Endocrine Neoplasia Type 1 (MEN1)',
+  vital_status: 'Deceased',
+  cause_of_death: 'Died of Cancer',
+  survival_time: Math.random() > 0.5 ? 440 : 1140,
+  genetic_disorders: 'Gardner Syndrome, Multiple Endocrine Neoplasia Type 1 (MEN1)',
   height: 182.88,
   weight: 90.72,
   bmi: 27.12,
-  menopauseStatus: '--',
-  ageAtMenarche: 13,
-  numberOfPregnancies: 0,
-  numberOfChildren: 0,
-  hrtType: '--',
-  hrtDuration: '--',
-  contraceptionType: '--',
-  contraceptionDuration: '--',
+  menopause_status: '--',
+  age_at_menarche: 13,
+  number_of_pregnancies: 0,
+  number_of_children: 0,
+  hrt_type: '--',
+  hrt_duration: '--',
+  contraception_type: '--',
+  contraception_duration: '--',
   associations: {
     specimenId: 'SP9991',
     specimenType: 'Primary tumour',
@@ -201,7 +201,29 @@ export const dummyDonorEntity: DonorCentricRecord = {
   },
   primary_diagnosis: {
     hits: {
-      edges: [],
+      edges: [
+        {
+          node: {
+            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'paca_ca_pd_22323',
+            program_id: 'TEST-PR',
+            submitter_donor_id: 'COLO-829',
+            lymph_nodes_examined_status: 'Yes',
+            age_at_diagnosis: 28,
+            cancer_type_code: 'C25.3',
+            cancer_type_additional_information: 'Malignant neoplasm of pancreas',
+            number_lymph_nodes_positive: 2,
+            number_lymph_nodes_examined: 20,
+            clinical_tumour_staging_system: 'Figo Staging System',
+            clinical_stage_group: 'Stage IA1',
+            clinical_t_category: 'T1a',
+            clinical_n_category: 'N0',
+            clinical_m_category: 'M1d',
+            presenting_symptoms: 'Back Pain | Pancreatitis | Vomiting',
+            performance_status: '--',
+          },
+        },
+      ],
     },
   },
   treatments: {
@@ -226,29 +248,13 @@ export const dummyDonorEntity: DonorCentricRecord = {
   },
 };
 
-export const mockTimelineData: Array<DonorEntityData> = [
-  {
-    type: EntityType.PRIMARY_DIAGNOSIS,
-    id: 'PRIMARY DIAGNOSIS PD2',
-    description: 'C41.1',
-    interval: 0,
-    data: {
-      'Primary Diagnosis ID': 'PD1',
-      'Age at Diagnosis': '28 years',
-      'Cancer Type Code': 'C25.3',
-      'Cancer Type': 'Malignant neoplasm of pancreas',
-      'Number of Positive Lymph Nodes': '2',
-      'Number of Examined Lymph Nodes': '20',
-      'Clinical Tumour Staging System': 'Figo Staging System',
-      'Clinical Stage Group': 'Stage IA1',
-      'Stage Suffix': 'A',
-      'Clinical T Category': 'N/A',
-      'Clinical N Category': 'N/A',
-      'Clinical M Category': 'N/A',
-      'Presenting Symptoms': 'Back Pain, Pancreatitis, Vomiting',
-      'Performance Status': '--',
-    },
+export const dummyDonorQuery: DonorCentricQuery = {
+  hits: {
+    edges: [{ node: dummyDonorEntity }],
   },
+};
+
+export const mockTimelineData: Array<DonorEntityData> = [
   {
     type: EntityType.TREATMENT,
     id: 'TREATMENT TR8982',
@@ -365,35 +371,35 @@ export const mockTimelineData: Array<DonorEntityData> = [
   {
     type: EntityType.DECEASED,
     id: 'VITAL STATUS',
-    data: { 'Age at Diagnosis': '28 years', 'Survival Time': '440 days' },
+    data: { age_at_diagnosis: 28, survival_time: 440 },
     description: 'Deceased',
     interval: 330,
   },
 ];
 
 export const noData: DonorCentricRecord = {
-  programId: '',
-  donorId: '',
-  submitterDonorId: '',
-  primarySite: '',
-  cancerType: '',
-  ageAtDiagnosis: '',
+  program_id: '',
+  donor_id: '',
+  submitter_donor_id: '',
+  primary_site: '',
+  cancer_type: '',
+  age_at_diagnosis: 0,
   gender: '',
-  vitalStatus: '',
-  causeOfDeath: '',
-  survivalTime: '',
-  geneticDisorders: '',
+  vital_status: '',
+  cause_of_death: '',
+  survival_time: 0,
+  genetic_disorders: '',
   height: 0,
   weight: 0,
   bmi: 0,
-  menopauseStatus: null,
-  ageAtMenarche: 0,
-  numberOfPregnancies: 0,
-  numberOfChildren: 0,
-  hrtType: null,
-  hrtDuration: null,
-  contraceptionType: null,
-  contraceptionDuration: null,
+  menopause_status: null,
+  age_at_menarche: 0,
+  number_of_pregnancies: 0,
+  number_of_children: 0,
+  hrt_type: null,
+  hrt_duration: null,
+  contraception_type: null,
+  contraception_duration: null,
   associations: {
     specimenId: '',
     specimenType: '',
