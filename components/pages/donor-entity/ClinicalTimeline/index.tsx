@@ -36,18 +36,9 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import {
-  DonorCentricRecord,
-  DonorEntity,
-  Entity,
-  EntityType,
-  SampleNode,
-  TreatmentNode,
-} from '../types';
-import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
-
-// TODO: Remove test values
+import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
 import { mockTimelineData } from '../dummyData';
+import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -75,20 +66,12 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     const dataCols = splitIntoColumns(selectedData, 2);
 
     return (
-      <Col>
+      <>
         <Row>
-          <Col
-            css={css`
-              padding-left: 0px !important;
-            `}
-          >
+          <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
-          <Col
-            css={css`
-              padding-left: 0px !important;
-            `}
-          >
+          <Col>
             {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
           </Col>
         </Row>
@@ -97,12 +80,15 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
             margin-top: 20px;
           `}
         >
-          <Samples samples={selectedSamples} />
+          <Col>
+            <Samples samples={selectedSamples} />
+          </Col>
         </Row>
-      </Col>
+      </>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
+
     return (
       <Row>
         <Col>
@@ -172,6 +158,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
         flex-direction: column;
         box-sizing: border-box;
         width: 100%;
+        min-height: 600px;
       `}
     >
       <Header

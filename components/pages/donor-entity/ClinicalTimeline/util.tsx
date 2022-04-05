@@ -24,7 +24,7 @@ import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Link from 'uikit/Link';
 import defaultTheme from 'uikit/theme/defaultTheme';
-import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
+import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {
   const colors = theme.colors;
