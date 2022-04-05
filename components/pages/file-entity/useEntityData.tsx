@@ -18,12 +18,7 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import {
-  camelCase,
-  get,
-  isObject,
-  mapKeys,
-} from 'lodash';
+import { camelCase, get, isObject, mapKeys } from 'lodash';
 import {
   FileSummaryInfo,
   FileAccessState,
@@ -48,9 +43,9 @@ const noData = { programShortName: null, access: null, size: null, data: null, e
 
 const isValidMetricsObject = (metrics: any) => {
   return (
-    isObject(metrics)
-      && Object.values(metrics).length
-      && Object.values(metrics).every(v => v !== null)
+    isObject(metrics) &&
+    Object.values(metrics).length &&
+    Object.values(metrics).every((v) => v !== null)
   );
 };
 
@@ -83,6 +78,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
 
     const summary: FileSummaryInfo = {
       fileId: entity.file_id,
+      fileName: entity.file.name,
       objectId: entity.object_id,
       fileFormat: entity.file_type,
       size,
@@ -126,9 +122,9 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       };
     });
 
-    const metrics = isValidMetricsObject(entity.metrics) ? (
-      mapKeys(entity.metrics, (_, key) => camelCase(key))
-    ) : null;
+    const metrics = isValidMetricsObject(entity.metrics)
+      ? mapKeys(entity.metrics, (_, key) => camelCase(key))
+      : null;
 
     const entityData: FileEntityData = {
       summary,

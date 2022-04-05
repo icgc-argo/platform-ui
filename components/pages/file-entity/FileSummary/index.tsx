@@ -51,6 +51,7 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
 
   const tableData = {
     'File ID': data.fileId,
+    'File Name': data.fileName,
     'Object ID': data.objectId,
     'File Type': data.fileFormat,
     'File Size': fileSize(data.size),

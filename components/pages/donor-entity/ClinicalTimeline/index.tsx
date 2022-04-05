@@ -36,7 +36,14 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
+import {
+  DonorCentricRecord,
+  DonorEntity,
+  Entity,
+  EntityType,
+  SampleNode,
+  TreatmentNode,
+} from '../types';
 import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
@@ -115,7 +122,12 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 
 const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   // TODO: Remove test values
-  const entities = formatTimelineEntityData(data);
+  const entityData = formatTimelineEntityData(data);
+  const entities = [
+    entityData.primary_diagnosis,
+    ...entityData.specimens,
+    ...mockTimelineData.slice(1),
+  ];
   const theme = useTheme();
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
@@ -134,9 +146,9 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
-  const { donorId } = data;
+  const { donor_id } = data;
   const specimenFilter = sqonBuilder
-    .has('donor_id', donorId)
+    .has('donor_id', donor_id)
     .has('submitter_specimen_id', selectedData['submitter_specimen_id'])
     .build();
   const specimenFilterUrl = urlJoin(
