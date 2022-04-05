@@ -54,7 +54,6 @@ const teamData: Array<Team> = [
       { name: 'Brandon Chan', title: 'Senior Technical Business Analyst' },
       { name: 'Jon Eubank', title: 'Software Architect, Team Lead' },
       { name: 'Kim Cullion', title: 'Senior UX/UI Designer' },
-      { name: 'Alex Lepsa' },
       { name: 'Alexis Li' },
       { name: 'Ann Catton' },
       { name: 'Bashar Allabadi' },
