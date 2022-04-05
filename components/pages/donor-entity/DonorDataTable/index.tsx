@@ -27,84 +27,50 @@ import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
 import A from 'uikit/Link';
 import Link from 'next/link';
-import { splitIntoColumns, tableFormat } from '../ClinicalTimeline/util';
+import {
+  removeAliasedKeys,
+  splitIntoColumns,
+  formatTableDisplayNames,
+} from '../ClinicalTimeline/util';
 import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
-// TODO: Create useDonorCentricFieldDisplayName
-
 const DonorDataTable = ({ data }) => {
-  const {
-    programId,
-    submitterDonorId,
-    gender,
-    vitalStatus,
-    cancerType,
-    primarySite,
-    causeOfDeath,
-    survivalTime,
-    geneticDisorders,
-    height,
-    weight,
-    bmi,
-    menopauseStatus,
-    ageAtMenarche,
-    numberOfPregnancies,
-    numberOfChildren,
-    hrtType,
-    hrtDuration,
-    contraceptionType,
-    contraceptionDuration,
-  } = data;
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
-  const programFilter = sqonBuilder.has('study_id', programId).build();
+  const programFilter = sqonBuilder.has('study_id', data.program_id).build();
   const programFilterUrl = urlJoin(
     FILE_REPOSITORY_PATH,
     `?filters=${encodeURIComponent(JSON.stringify(programFilter))}`,
   );
 
+  const femaleFields = [
+    'menopause_status',
+    'age_at_menarche',
+    'number_of_pregnancies',
+    'number_of_children',
+    'hrt_type',
+    'hrt_duration',
+    'contraception_type',
+    'contraception_duration',
+  ];
+
+  const displayData = data.gender === 'Male' ? removeAliasedKeys(data, femaleFields) : { ...data };
+
   const currentProgram =
     programs &&
     programs.length > 0 &&
-    programs.filter((program) => program.shortName === programId)[0];
-  const programName = currentProgram?.name || programId;
+    programs.filter((program) => program.shortName === data.program_id)[0];
+  const programName = currentProgram?.name || data.program_id;
   const programLink = (
     <Link href={programFilterUrl} passHref>
-      <A>{`${programName} (${programId})`}</A>
+      <A>{`${programName} (${data.program_id})`}</A>
     </Link>
   );
 
-  let displayData = {
-    'Submitter Donor ID': submitterDonorId,
-    'Program Name': programLink,
-    'Primary Site': primarySite,
-    'Cancer Type': cancerType,
-    Gender: gender,
-    'Vital Status': vitalStatus,
-    'Cause of Death': causeOfDeath,
-    'Survival Time': survivalTime,
-    'Genetic Disorders': geneticDisorders,
-    Height: `${height} cm`,
-    Weight: `${weight} kg`,
-    BMI: `${bmi} kg/m²`,
-  };
-  const femaleFields = {
-    'Menopause Status': menopauseStatus,
-    'Age at Menarche': ageAtMenarche,
-    'Number of Pregnancies': numberOfPregnancies,
-    'Number of Children': numberOfChildren,
-    'HRT Type': hrtType,
-    'HRT Duration': hrtDuration,
-    'Contraception Type': contraceptionType,
-    'Contraception Duration': contraceptionDuration,
-  };
-  if (gender === 'Female')
-    displayData = {
-      ...displayData,
-      ...femaleFields,
-    };
+  displayData.program_id = programLink;
 
   const tableData = splitIntoColumns(displayData, 2);
+
   return (
     <div
       css={css`
@@ -139,7 +105,7 @@ const DonorDataTable = ({ data }) => {
               height: 100%;
             `}
           >
-            <SimpleTable data={tableFormat(tableData[0])} />
+            <SimpleTable data={formatTableDisplayNames(tableData[0])} />
           </Col>
           <Col
             xs={6}
@@ -147,7 +113,7 @@ const DonorDataTable = ({ data }) => {
               height: 100%;
             `}
           >
-            <SimpleTable data={tableFormat(tableData[1])} />
+            <SimpleTable data={formatTableDisplayNames(tableData[1])} />
           </Col>
         </Row>
       </Container>

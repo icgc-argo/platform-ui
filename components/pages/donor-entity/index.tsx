@@ -30,23 +30,14 @@ import { get } from 'lodash';
 import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
 import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
-import { dummyDonorEntity } from './dummyData';
 
 const DonorEntity = ({ donor }) => {
-  // TODO: Remove test values
-  const { donorId, submitterDonorId, programId } = donor;
-
-  const donorData = {
-    ...dummyDonorEntity,
-    donorId,
-    submitterDonorId,
-    programId,
-  };
-
-  const donorLoading = false;
-
   const { egoJwt } = useAuthContext();
   const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const {
+    loading: donorLoading,
+    summary: { program_id, donor_id },
+  } = donor;
 
   const loading = profileLoading || donorLoading;
 
@@ -75,14 +66,14 @@ const DonorEntity = ({ donor }) => {
             <>
               <ContentHeader>
                 <DonorTitleBar
-                  programId={donorData.programId}
-                  donorId={donorData.donorId}
+                  programId={program_id}
+                  donorId={donor_id}
                   isDownloadEnabled={isDownloadEnabled}
                 />
               </ContentHeader>
 
               <ContentBody>
-                <DonorCardsLayout donorData={donorData} />
+                <DonorCardsLayout donorData={donor} />
               </ContentBody>
             </>
           )}

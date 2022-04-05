@@ -20,6 +20,7 @@
 import { getConfig } from 'global/config';
 import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { getFilename } from 'global/utils/stringUtils';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
@@ -122,7 +123,7 @@ export function AuthProvider({
     const data = await response.blob();
 
     const contentDispositionHeader = response.headers.get('content-disposition');
-    const filename = contentDispositionHeader ? contentDispositionHeader.split('filename=')[1] : '';
+    const filename = contentDispositionHeader ? getFilename(contentDispositionHeader) : '';
 
     const blob = new Blob([data], { type: data.type || 'application/octet-stream' });
     if (typeof window.navigator.msSaveBlob !== 'undefined') {

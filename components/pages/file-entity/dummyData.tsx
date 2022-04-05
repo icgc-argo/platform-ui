@@ -23,11 +23,12 @@ import {
   DataAnalysisInfo,
   DonorRecord,
   FileRecord,
-  FileMetricsInfo
+  FileMetricsInfo,
 } from './types';
 
 export const dummyFileSummaryInfo: FileSummaryInfo = {
   fileId: 'FL9991',
+  fileName: 'sd87fsdsdf798sdf87dfs9dsff97sdf987sdf987sdff798sdf798fds',
   objectId: '6329334b-dcd5-53c8-98fd-9812ac386d30',
   fileFormat: 'FASTQ',
   size: 7720000,
@@ -84,6 +85,7 @@ export const dummyAssociatedDonorsInfo: Array<DonorRecord> = [
 export const dummyFileRecords: Array<FileRecord> = [
   {
     fileId: 'FL10292',
+    fileName: 'sd87fsdsdf798sdf87dfs9dsff97sdf987sdf987sdff798sdf798fds',
     dataType: 'miRNA Expression Quantification',
     analysisWorkflow: 'BCGSC miRNA Profiling',
     fileFormat: 'TXT',
@@ -92,6 +94,7 @@ export const dummyFileRecords: Array<FileRecord> = [
   },
   {
     fileId: 'FL10122',
+    fileName: 'sd87fsdsdf798sdf87dfs9dsff97sdf987sdf987sdff798sdf798fds',
     dataType: 'Isoform Expression Quantification',
     analysisWorkflow: 'VarScan2 Variant Aggregation and Masking',
     fileFormat: 'TXT',

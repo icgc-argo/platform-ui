@@ -25,3 +25,14 @@ export const capitalize = (s: string) =>
     .split(' ')
     .map((str) => str.replace(str[0], (str[0] || '').toUpperCase()))
     .join(' ');
+
+/**
+ * Extracts the filename from the content-disposition header
+ * @param contentDisposition - content-disposition header
+ * @returns {string} filename
+ */
+export const getFilename = (contentDisposition: string): string => {
+  const filenameRegex = /(?<=filename(?:=|\*=(?:[\w\-]+'')))["']?([^"';\n]+)["']?/gi;
+  const matches = contentDisposition.match(filenameRegex);
+  return matches ? matches[0].replace(/["']/g, '') : '';
+};

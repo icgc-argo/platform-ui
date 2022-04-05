@@ -23,8 +23,7 @@ import { css } from '@emotion/core';
 import DonorDataTable from './DonorDataTable';
 import DonorFileCard from './DonorFileCard';
 import ClinicalTimeline from './ClinicalTimeline';
-import { DonorCentricRecord } from './types';
-import { mockTimelineData } from './dummyData';
+import { DonorEntityData } from './useEntityData';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -40,31 +39,27 @@ const PaddedColumn = styled(Col)`
 `;
 
 const DonorCardsLayout: React.ComponentType<{
-  donorData: DonorCentricRecord;
-}> = ({ donorData }) => {
-  // TODO: Remove test values
-  const timelineData = mockTimelineData;
-  return (
-    <div
-      css={css`
-        margin: 0 5%;
-      `}
-    >
-      <PaddedRow>
-        <PaddedColumn md={8} sm={12}>
-          <DonorDataTable data={donorData} />
-        </PaddedColumn>
-        <PaddedColumn md={4} sm={12}>
-          <DonorFileCard files={donorData.files} />
-        </PaddedColumn>
-      </PaddedRow>
-      <PaddedRow>
-        <PaddedColumn>
-          <ClinicalTimeline data={timelineData} />
-        </PaddedColumn>
-      </PaddedRow>
-    </div>
-  );
-};
+  donorData: DonorEntityData;
+}> = ({ donorData }) => (
+  <div
+    css={css`
+      margin: 0 5%;
+    `}
+  >
+    <PaddedRow>
+      <PaddedColumn md={8} sm={12}>
+        <DonorDataTable data={donorData.summary} />
+      </PaddedColumn>
+      <PaddedColumn md={4} sm={12}>
+        <DonorFileCard files={donorData.data} />
+      </PaddedColumn>
+    </PaddedRow>
+    <PaddedRow>
+      <PaddedColumn>
+        <ClinicalTimeline data={donorData.data} />
+      </PaddedColumn>
+    </PaddedRow>
+  </div>
+);
 
 export default DonorCardsLayout;

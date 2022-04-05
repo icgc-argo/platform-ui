@@ -20,13 +20,13 @@
 import React from 'react';
 import { css } from 'uikit';
 import Icon from 'uikit/Icon';
-import { getDonorAge, getTimelineStyles } from './util';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import VerticalTabs from 'uikit/VerticalTabs';
 import Tag from 'uikit/Tag';
-import { Entity, EntityType } from './types';
+import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
+import { getDonorAge, getTimelineStyles } from './util';
 
 const DayCount = ({
   days,
@@ -171,6 +171,15 @@ const Timeline = ({
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
 
+  const donorAgeDisplay = (type: EntityType, data) => {
+    const age =
+      type === EntityType.PRIMARY_DIAGNOSIS
+        ? getDonorAge(data).ageAtDiagnosis
+        : `~ ${getDonorAge(data).ageAtDeath}`;
+
+    return age >= 90 ? `age: >= 90` : `age: ${age}`;
+  };
+
   return (
     <div
       css={css`
@@ -202,9 +211,7 @@ const Timeline = ({
                 `}
                 variant="DISABLED"
               >
-                {type === EntityType.PRIMARY_DIAGNOSIS
-                  ? `age: ${getDonorAge(data).ageAtDiagnosis}`
-                  : `age: ~${getDonorAge(data).ageAtDeath}`}
+                {donorAgeDisplay(type, data)}
               </Tag>
             )}
           </div>
@@ -224,6 +231,7 @@ const Timeline = ({
               align-items: center;
               position: relative;
             `}
+            key={`${entity.id}-${i}`}
           >
             <TimelineItem
               item={entity}

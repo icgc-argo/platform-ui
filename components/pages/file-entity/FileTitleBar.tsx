@@ -17,10 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useState } from 'react';
 import { css } from '@emotion/core';
 import { useTheme } from 'uikit/ThemeProvider';
 import Tag from 'uikit/Tag';
 import TitleBar from 'uikit/TitleBar';
+import Tooltip from 'uikit/Tooltip';
 import Button from 'uikit/Button';
 import Legend from 'uikit/Legend';
 import { DownloadIcon } from './common';
@@ -31,16 +33,71 @@ import { FileCentricDocumentField } from '../file-repository/types';
 import sqonBuilder from 'sqon-builder';
 import useAuthContext from 'global/hooks/useAuthContext';
 
+const FileDownloadTooltip = ({
+  isDownloadEnabled,
+  fileSize,
+}: {
+  isDownloadEnabled: boolean;
+  fileSize: number;
+}) => {
+  const { egoJwt } = useAuthContext();
+  const isUserLoggedIn = !!egoJwt;
+  const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
+
+  if (isDownloadEnabled) {
+    return null;
+  }
+
+  if (fileSize > MAX_FILE_DOWNLOAD_SIZE) {
+    return (
+      <div>
+        <span>
+          File is too large to download
+          <br />
+          from the browser. Please
+          <br />
+          use the manifest.
+        </span>
+      </div>
+    );
+  }
+
+  if (isUserLoggedIn) {
+    return (
+      <div>
+        <span>
+          DACO approval is required to
+          <br />
+          download controlled files.
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <span>
+        Please log in to access
+        <br />
+        controlled files.
+      </span>
+    </div>
+  );
+};
+
 export const FileTitleBar: React.ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
   accessTier?: string;
-}> = ({ programShortName, fileId, isDownloadEnabled, accessTier }) => {
+  fileSize?: number;
+  fileObjectId?: string;
+}> = ({ programShortName, fileId, isDownloadEnabled, accessTier, fileSize, fileObjectId }) => {
   const theme = useTheme();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   return (
     <div
@@ -77,28 +134,36 @@ export const FileTitleBar: React.ComponentType<{
       >
         <Legend />
 
-        {/* TODO: Move download into Legend component once available: https://github.com/icgc-argo/platform-ui/issues/2108 */}
-        {/* <Tooltip
+        <Tooltip
           disabled={isDownloadEnabled}
           unmountHTMLWhenHide
-          position="left"
+          position="bottom"
           interactive
-          html={
-            <div>
-              <span>Please log in to access controlled files</span>
-            </div>
-          }
+          html={FileDownloadTooltip({ isDownloadEnabled, fileSize })}
         >
           <Button
             css={css`
               margin-right: 8px;
             `}
-            disabled={!isDownloadEnabled}
+            disabled={!isDownloadEnabled || isDownloading}
+            onClick={async () => {
+              setIsDownloading(true);
+
+              const downloadUrl = urlJoin(
+                GATEWAY_API_ROOT,
+                'storage-api/download-file',
+                fileObjectId,
+              );
+
+              await downloadFileWithEgoToken(downloadUrl)
+                .catch((err) => console.error(err))
+                .finally(() => setIsDownloading(false));
+            }}
           >
             <DownloadIcon />
             FILE
           </Button>
-        </Tooltip> */}
+        </Tooltip>
 
         <Button
           onClick={() => {
