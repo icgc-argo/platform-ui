@@ -36,14 +36,8 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import {
-  DonorCentricRecord,
-  DonorEntity,
-  Entity,
-  EntityType,
-  SampleNode,
-  TreatmentNode,
-} from '../types';
+import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
+import { mockTimelineData } from '../dummyData';
 import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
