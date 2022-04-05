@@ -168,6 +168,7 @@ type AliasedDisplayData = {
 
 // format for display
 export const formatTableDisplayNames = (data: any[]) =>
+  data &&
   data.length > 0 &&
   data.reduce((acc, val) => {
     Object.keys(val).forEach((key) => {
