@@ -36,11 +36,9 @@ import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { Entity, EntityType, SampleNode, TreatmentNode } from '../types';
-import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
-
-// TODO: Remove test values
+import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
 import { mockTimelineData } from '../dummyData';
+import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -68,20 +66,12 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     const dataCols = splitIntoColumns(selectedData, 2);
 
     return (
-      <Col>
+      <>
         <Row>
-          <Col
-            css={css`
-              padding-left: 0px !important;
-            `}
-          >
+          <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
-          <Col
-            css={css`
-              padding-left: 0px !important;
-            `}
-          >
+          <Col>
             {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
           </Col>
         </Row>
@@ -90,12 +80,15 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
             margin-top: 20px;
           `}
         >
-          <Samples samples={selectedSamples} />
+          <Col>
+            <Samples samples={selectedSamples} />
+          </Col>
         </Row>
-      </Col>
+      </>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
+
     return (
       <Row>
         <Col>
@@ -121,10 +114,14 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
   }
 };
 
-const ClinicalTimeline = ({ data }) => {
+const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   // TODO: Remove test values
   const entityData = formatTimelineEntityData(data);
-  const entities = [mockTimelineData[0], ...entityData.specimens, ...mockTimelineData.slice(1)];
+  const entities = [
+    entityData.primary_diagnosis,
+    ...entityData.specimens,
+    ...mockTimelineData.slice(1),
+  ];
   const theme = useTheme();
   const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
@@ -143,9 +140,9 @@ const ClinicalTimeline = ({ data }) => {
   const selectedTreatments: TreatmentNode[] = get(selectedClinical, 'treatments', []);
   const selectedData = get(selectedClinical, 'data', {});
 
-  const { donorId } = data;
+  const { donor_id } = data;
   const specimenFilter = sqonBuilder
-    .has('donor_id', donorId)
+    .has('donor_id', donor_id)
     .has('submitter_specimen_id', selectedData['submitter_specimen_id'])
     .build();
   const specimenFilterUrl = urlJoin(
@@ -161,6 +158,7 @@ const ClinicalTimeline = ({ data }) => {
         flex-direction: column;
         box-sizing: border-box;
         width: 100%;
+        min-height: 600px;
       `}
     >
       <Header
