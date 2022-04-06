@@ -44,13 +44,12 @@ const teamData: Array<Team> = [
   },
   {
     title: 'Bioinformatics and Data Curation',
-    members: [{ name: 'Hardeep Nahal' }, { name: 'Linda Xiang' }, { name: 'Edmund Su' }],
+    members: [{ name: 'Hardeep Nahal-Bose' }, { name: 'Linda Xiang' }, { name: 'Edmund Su' }],
     color: 'accent3',
   },
   {
     title: 'Software Engineering',
     members: [
-      { name: 'Atul Kachru', title: 'Senior Project Manager' },
       { name: 'Brandon Chan', title: 'Senior Technical Business Analyst' },
       { name: 'Jon Eubank', title: 'Software Architect, Team Lead' },
       { name: 'Kim Cullion', title: 'Senior UX/UI Designer' },
@@ -62,7 +61,6 @@ const teamData: Array<Team> = [
       { name: 'Henrich Feher' },
       { name: 'Jared Baker' },
       { name: 'Jaser Uddin' },
-      { name: 'Jon Eubank' },
       { name: 'Justin Richardsson' },
       { name: 'Rakesh Mistry' },
       { name: 'Sam Rich' },
@@ -83,6 +81,7 @@ const teamData: Array<Team> = [
   {
     title: 'Alumni',
     members: [
+      { name: 'Atul Kachru', title: 'Senior Project Manager' },
       { name: 'Christina Yung', title: 'Director of Genome Informatics, OICR' },
       { name: 'Dusan Andric', title: 'Software Architect, Team Lead' },
       { name: 'Rosi Bajari', title: 'Senior Technical Business Analyst' },
