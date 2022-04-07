@@ -70,6 +70,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                     node: {
                       sample_type: 'Total DNA',
                       submitter_sample_id: 'HCC1143_BAM_INPUT',
+                      matched_normal_submitter_sample_id: 'SA8778',
                       experimental_strategies: 'RNA-Seq',
                       workflow_names: '--',
                       available_files: 5,
@@ -113,6 +114,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SAB5353',
+                      matched_normal_submitter_sample_id: 'SA5432',
                       sample_type: 'Amplified DNA',
                       experimental_strategies: 'WGS',
                       workflow_names: 'DNA Seq Alignment',
@@ -122,6 +124,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SAD3053',
+                      matched_normal_submitter_sample_id: 'SAD3053',
                       sample_type: 'Total DNA',
                       experimental_strategies: 'WXS',
                       workflow_names: 'Ribo-Zero RNA',
@@ -165,6 +168,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SA8778',
+                      matched_normal_submitter_sample_id: 'SA8778',
                       sample_type: 'Other DNA Enrichments',
                       experimental_strategies: 'WGS, WXS',
                       workflow_names: 'DNA Seq Alignment, GATK Mutect VC',
@@ -174,6 +178,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SA5432',
+                      matched_normal_submitter_sample_id: 'SA5432',
                       sample_type: 'Ribo-Zero RNA',
                       experimental_strategies: 'WGS, WXS',
                       workflow_names: '--',
