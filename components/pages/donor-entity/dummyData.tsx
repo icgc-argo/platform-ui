@@ -56,13 +56,11 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
             submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP212999',
+            submitter_specimen_id: 'SP212999',
             specimen_type: 'Normal',
             specimen_tissue_source: 'Blood derived',
             tumour_normal_designation: 'Normal',
-            submitter_specimen_id: 'HCC1143_BAM_INPUT',
             specimen_acquisition_interval: 2,
             specimen_anatomic_location: 'C18',
             samples: {
@@ -85,11 +83,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
             submitter_specimen_id: 'SP0032',
             tumour_normal_designation: 'Tumour',
-            submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP0222',
             specimen_type: 'Normal',
             specimen_tissue_source: 'Blood derived',
             specimen_acquisition_interval: 12,
@@ -140,11 +136,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
             submitter_specimen_id: 'SP0032',
             tumour_normal_designation: 'Tumour',
-            submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP0032',
             specimen_tissue_source: 'Blood derived',
             specimen_type: 'Primary Tumour',
             pathological_tumour_staging_system: 'AJCC 7th',
