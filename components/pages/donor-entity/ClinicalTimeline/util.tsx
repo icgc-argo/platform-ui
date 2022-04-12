@@ -111,6 +111,7 @@ const donorCentricDisplayNames = {
   hrt_duration: 'HRT Duration',
   interval_of_followup: 'Interval of Followup',
   lymph_nodes_examined_status: 'Lymph Nodes Examined status',
+  matched_normal_submitter_sample_id: 'Matched Sample ID',
   menopause_status: 'Menopause Status',
   number_of_children: 'Number of Children',
   number_lymph_nodes_positive: 'Number of Positive Lymph Nodes',
@@ -147,10 +148,10 @@ const donorCentricDisplayNames = {
   specimen_storage: 'Specimen Storage',
   specimen_id: 'Specimen ID',
   submitter_donor_id: 'Submitter Donor ID',
-  submitter_follow_up_id: 'Submitter Follow Up ID',
-  submitter_sample_id: 'Submitter Sample ID',
-  submitter_specimen_id: 'Submitter Specimen Id',
-  submitter_primary_diagnosis_id: 'Submitter Primary Diagnosis ID',
+  submitter_follow_up_id: 'Follow Up ID',
+  submitter_sample_id: 'Sample ID',
+  submitter_specimen_id: 'Specimen Id',
+  submitter_primary_diagnosis_id: 'Primary Diagnosis ID',
   survival_time: 'Survival Time',
   tumour_grade: 'Tumour Grade',
   tumour_grading_system: 'Tumour Grading System',
@@ -285,7 +286,7 @@ export const formatTimelineEntityData = (donorData) => {
     });
 
     return {
-      id: `SPECIMEN ${node.specimen_id}`,
+      id: `SPECIMEN ${node.submitter_specimen_id}`,
       description: node.tumour_normal_designation,
       type: EntityType.SPECIMEN,
       interval: node.specimen_acquisition_interval,
