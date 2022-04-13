@@ -210,6 +210,8 @@ export const dummyDonorEntity: DonorCentricRecord = {
             age_at_diagnosis: 28,
             cancer_type_code: 'C25.3',
             cancer_type_additional_information: 'Malignant neoplasm of pancreas',
+            basis_of_diagnosis: 'Clinical',
+            laterality: 'Midline',
             lymph_nodes_examined_status: 'Yes',
             number_lymph_nodes_examined: 20,
             number_lymph_nodes_positive: 2,
