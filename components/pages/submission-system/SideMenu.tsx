@@ -44,6 +44,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_CLINICAL_DATA_PATH,
   PROGRAMS_LIST_PATH,
   DCC_DASHBOARD_PATH,
 } from 'global/constants/pages';
@@ -239,6 +240,22 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               }
               selected={
                 PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+              }
+            />
+          </Link>
+          <Link
+            prefetch
+            as={PROGRAM_CLINICAL_DATA_PATH.replace(
+              PROGRAM_SHORT_NAME_PATH,
+              props.program.shortName,
+            )}
+            href={PROGRAM_CLINICAL_DATA_PATH}
+          >
+            <MenuItem
+              level={3}
+              content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+              selected={
+                PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
               }
             />
           </Link>
