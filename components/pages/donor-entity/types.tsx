@@ -191,9 +191,7 @@ export type SampleNode = {
 export type SpecimenNode = {
   node: {
     program_id: string;
-    primary_diagnosis_id: string;
     submitter_primary_diagnosis_id: string;
-    specimen_id: string;
     submitter_specimen_id: string;
     tumour_normal_designation: string;
     specimen_acquisition_interval: number;
