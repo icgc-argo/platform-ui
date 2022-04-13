@@ -235,7 +235,14 @@ export const formatTimelineEntityData = (donorData) => {
   const primary_diagnosis = donorData.primary_diagnosis?.hits.edges.map(
     ({ node }: DiagnosisNode) => {
       const { clinical_t_category, clinical_n_category, clinical_m_category } = node;
-      const aliasedKeys = ['clinical_t_category', 'clinical_n_category', 'clinical_m_category'];
+      const aliasedKeys = [
+        'clinical_t_category',
+        'clinical_n_category',
+        'clinical_m_category',
+        'submitter_donor_id',
+        'program_id',
+        'submitter_primary_diagnosis_id',
+      ];
       const data: AliasedDisplayData = removePipeDelimiter(removeAliasedKeys(node, aliasedKeys));
       if (clinical_t_category && clinical_n_category && clinical_m_category)
         data.pathological_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
