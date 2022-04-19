@@ -89,6 +89,7 @@ const donorCentricDisplayNames = {
   age_at_diagnosis: 'Age at Diagnosis',
   age_at_menarche: 'Age at Menarche',
   available_files: 'Available Files',
+  basis_of_diagnosis: 'Basis of Diagnosis',
   bmi: 'BMI',
   cancer_type: 'Cancer Type',
   cancer_type_code: 'Cancer Type Code',
@@ -98,6 +99,7 @@ const donorCentricDisplayNames = {
   clinical_t_category: 'Clinical T Category',
   clinical_n_category: 'Clinical N Category',
   clinical_m_category: 'Clinical M Category',
+  clinical_tnm_category: 'Clinical TNM Category',
   clinical_tumour_staging_system: 'Clinical Tumour Staging System',
   contraception_type: 'Contraception Type',
   contraception_duration: 'Contraception Duration',
@@ -110,12 +112,13 @@ const donorCentricDisplayNames = {
   hrt_type: 'HRT Type',
   hrt_duration: 'HRT Duration',
   interval_of_followup: 'Interval of Followup',
-  lymph_nodes_examined_status: 'Lymph Nodes Examined status',
+  laterality: 'Laterality',
+  lymph_nodes_examined_status: 'Lymph Nodes Examined Status',
   matched_normal_submitter_sample_id: 'Matched Sample ID',
   menopause_status: 'Menopause Status',
   number_of_children: 'Number of Children',
-  number_lymph_nodes_positive: 'Number of Positive Lymph Nodes',
-  number_lymph_nodes_examined: 'Number of Lymph Nodes Examined',
+  number_lymph_nodes_positive: 'Number Lymph Nodes Positive ',
+  number_lymph_nodes_examined: 'Number Lymph Nodes Examined',
   number_of_positive_lymph_nodes: 'Number of Positive Lymph Nodes',
   number_of_pregnancies: 'Number of Pregnancies',
   pathological_t_category: 'Pathological T Category',
@@ -235,10 +238,17 @@ export const formatTimelineEntityData = (donorData) => {
   const primary_diagnosis = donorData.primary_diagnosis?.hits.edges.map(
     ({ node }: DiagnosisNode) => {
       const { clinical_t_category, clinical_n_category, clinical_m_category } = node;
-      const aliasedKeys = ['clinical_t_category', 'clinical_n_category', 'clinical_m_category'];
+      const aliasedKeys = [
+        'clinical_t_category',
+        'clinical_n_category',
+        'clinical_m_category',
+        'submitter_donor_id',
+        'program_id',
+        'submitter_primary_diagnosis_id',
+      ];
       const data: AliasedDisplayData = removePipeDelimiter(removeAliasedKeys(node, aliasedKeys));
       if (clinical_t_category && clinical_n_category && clinical_m_category)
-        data.pathological_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
+        data.clinical_tnm_category = `${clinical_t_category}${clinical_n_category}${clinical_m_category}`;
 
       return {
         id: `PRIMARY DIAGNOSIS ${node.primary_diagnosis_id}`,
