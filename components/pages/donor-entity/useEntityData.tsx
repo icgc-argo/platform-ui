@@ -51,8 +51,8 @@ const useEntityData = (donorId: string): DonorEntityData => {
   } else {
     // TODO: Remove testing values
     const node = data?.file.hits.edges[0].node;
-    const program_id = node && node.study_id;
-    const { donor_id, submitter_donor_id } = node && node.donors.hits.edges[0].node;
+    const program_id = node !== undefined && node.study_id;
+    const { donor_id, submitter_donor_id } = node !== undefined && node.donors.hits.edges[0].node;
     if (donor_id) entity.donor_id = donor_id;
     if (submitter_donor_id) entity.submitter_donor_id = submitter_donor_id;
     if (program_id) entity.program_id = program_id;

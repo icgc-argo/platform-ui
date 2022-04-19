@@ -58,7 +58,7 @@ query DONOR_ENTITY_QUERY($filters: JSON) {
           # contraception_type
           # contraception_duration
           # associations {
-          # specimen_id
+          # submitter_specimen_id
           # specimen_type
           # tumour_normal_designation
           # sample_id

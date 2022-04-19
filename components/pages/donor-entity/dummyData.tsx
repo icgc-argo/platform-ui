@@ -56,13 +56,11 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
             submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP212999',
+            submitter_specimen_id: 'SP212999',
             specimen_type: 'Normal',
             specimen_tissue_source: 'Blood derived',
             tumour_normal_designation: 'Normal',
-            submitter_specimen_id: 'HCC1143_BAM_INPUT',
             specimen_acquisition_interval: 2,
             specimen_anatomic_location: 'C18',
             samples: {
@@ -72,6 +70,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                     node: {
                       sample_type: 'Total DNA',
                       submitter_sample_id: 'HCC1143_BAM_INPUT',
+                      matched_normal_submitter_sample_id: 'SA8778',
                       experimental_strategies: 'RNA-Seq',
                       workflow_names: '--',
                       available_files: 5,
@@ -85,11 +84,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
             submitter_specimen_id: 'SP0032',
             tumour_normal_designation: 'Tumour',
-            submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP0222',
             specimen_type: 'Normal',
             specimen_tissue_source: 'Blood derived',
             specimen_acquisition_interval: 12,
@@ -117,6 +114,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SAB5353',
+                      matched_normal_submitter_sample_id: 'SA5432',
                       sample_type: 'Amplified DNA',
                       experimental_strategies: 'WGS',
                       workflow_names: 'DNA Seq Alignment',
@@ -126,6 +124,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SAD3053',
+                      matched_normal_submitter_sample_id: 'SAD3053',
                       sample_type: 'Total DNA',
                       experimental_strategies: 'WXS',
                       workflow_names: 'Ribo-Zero RNA',
@@ -140,11 +139,9 @@ export const dummyDonorEntity: DonorCentricRecord = {
         {
           node: {
             program_id: 'TEST-PR',
-            primary_diagnosis_id: 'PD1',
+            submitter_primary_diagnosis_id: 'PD1',
             submitter_specimen_id: 'SP0032',
             tumour_normal_designation: 'Tumour',
-            submitter_primary_diagnosis_id: 'PD1',
-            specimen_id: 'SP0032',
             specimen_tissue_source: 'Blood derived',
             specimen_type: 'Primary Tumour',
             pathological_tumour_staging_system: 'AJCC 7th',
@@ -171,6 +168,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SA8778',
+                      matched_normal_submitter_sample_id: 'SA8778',
                       sample_type: 'Other DNA Enrichments',
                       experimental_strategies: 'WGS, WXS',
                       workflow_names: 'DNA Seq Alignment, GATK Mutect VC',
@@ -180,6 +178,7 @@ export const dummyDonorEntity: DonorCentricRecord = {
                   {
                     node: {
                       submitter_sample_id: 'SA5432',
+                      matched_normal_submitter_sample_id: 'SA5432',
                       sample_type: 'Ribo-Zero RNA',
                       experimental_strategies: 'WGS, WXS',
                       workflow_names: '--',
@@ -204,21 +203,23 @@ export const dummyDonorEntity: DonorCentricRecord = {
       edges: [
         {
           node: {
-            primary_diagnosis_id: 'PD1',
-            submitter_primary_diagnosis_id: 'paca_ca_pd_22323',
             program_id: 'TEST-PR',
             submitter_donor_id: 'COLO-829',
-            lymph_nodes_examined_status: 'Yes',
+            submitter_primary_diagnosis_id: 'paca_ca_pd_22323',
+            primary_diagnosis_id: 'PD1',
             age_at_diagnosis: 28,
             cancer_type_code: 'C25.3',
             cancer_type_additional_information: 'Malignant neoplasm of pancreas',
-            number_lymph_nodes_positive: 2,
+            basis_of_diagnosis: 'Clinical',
+            laterality: 'Midline',
+            lymph_nodes_examined_status: 'Yes',
             number_lymph_nodes_examined: 20,
+            number_lymph_nodes_positive: 2,
             clinical_tumour_staging_system: 'Figo Staging System',
-            clinical_stage_group: 'Stage IA1',
             clinical_t_category: 'T1a',
             clinical_n_category: 'N0',
             clinical_m_category: 'M1d',
+            clinical_stage_group: 'Stage IA1',
             presenting_symptoms: 'Back Pain | Pancreatitis | Vomiting',
             performance_status: '--',
           },
