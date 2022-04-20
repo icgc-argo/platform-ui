@@ -1,0 +1,15 @@
+query CLINICAL_SUBMISSION_DATA($programShortName: String!) {
+  clinicalData(programShortName: $programShortName) {
+    programShortName
+    clinicalEntities {
+      entityName
+      records {
+        row
+        fields {
+          name
+          value
+        }
+      }
+    }
+  }
+}
