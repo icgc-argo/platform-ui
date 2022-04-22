@@ -111,17 +111,47 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
+enum CoreClinicalEntities {
+  'donor',
+  'specimens',
+  'primaryDiagnosis',
+  'followUps',
+  'treatments',
+}
+
+type ClinicalEntity = {
+  entityName: string;
+  entityFields: Array<[]>;
+  records: Array<{
+    name: string;
+    value: any;
+  }>;
+};
+
+type CompletionStats = {
+  coreCompletion: CoreCompletionFields;
+  coreCompletionDate: string;
+  coreCompletionPercentage: Number;
+  overriddenCoreCompletion: [CoreClinicalEntities];
+};
+
+type CoreCompletionFields = {
+  [k in CoreClinicalEntities]: Number;
+};
+
+type SchemaMetadata = {
+  lastValidSchemaVersion: string;
+  originalSchemaVersion: string;
+  isValid: boolean;
+  lastMigrationId: string;
+};
+
 type ClinicalEntityQueryResponse = {
   clinicalData: {
     programShortName: string;
-    clinicalEntities: Array<{
-      entityName: string;
-      entityFields: Array<[]>;
-      records: Array<{
-        name: string;
-        value: any;
-      }>;
-    }>;
+    clinicalEntities: Array<ClinicalEntity>;
+    schemaMetadata: Array<SchemaMetadata>;
+    completionStats: Array<CompletionStats>;
   };
 };
 
