@@ -9,5 +9,23 @@ query CLINICAL_ENTITY_DATA($programShortName: String!) {
         value
       }
     }
+    schemaMetadata {
+      lastValidSchemaVersion
+      originalSchemaVersion
+      isValid
+      lastMigrationId
+    }
+    completionStats {
+      coreCompletion {
+        donor
+        specimens
+        primaryDiagnosis
+        followUps
+        treatments
+      }
+      coreCompletionDate
+      coreCompletionPercentage
+      overriddenCoreCompletion
+    }
   }
 }
