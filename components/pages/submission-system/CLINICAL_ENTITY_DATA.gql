@@ -1,4 +1,4 @@
-query CLINICAL_DATA($programShortName: String!) {
+query CLINICAL_ENTITY_DATA($programShortName: String!) {
   clinicalData(programShortName: $programShortName) {
     programShortName
     clinicalEntities {

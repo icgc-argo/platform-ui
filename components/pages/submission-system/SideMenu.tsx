@@ -34,6 +34,7 @@ import DnaLoader from 'uikit/DnaLoader';
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
+import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
@@ -110,6 +111,20 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
+type ClinicalEntityQueryResponse = {
+  clinicalData: {
+    programShortName: string;
+    clinicalEntities: Array<{
+      entityName: string;
+      entityFields: Array<[]>;
+      records: Array<{
+        name: string;
+        value: any;
+      }>;
+    }>;
+  };
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
@@ -139,6 +154,14 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
+  const { data: clinicalEntityData, error: clinicalEntityErrors } =
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      variables: {
+        programShortName: props.program.shortName,
+      },
+      errorPolicy: 'all',
+    });
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
