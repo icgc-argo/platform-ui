@@ -14,18 +14,21 @@ query CLINICAL_ENTITY_DATA($programShortName: String!) {
       originalSchemaVersion
       isValid
       lastMigrationId
+      donorId
     }
     completionStats {
       coreCompletion {
         donor
         specimens
         primaryDiagnosis
+        familyHistory
         followUps
         treatments
       }
       coreCompletionDate
       coreCompletionPercentage
       overriddenCoreCompletion
+      donorId
     }
   }
 }
