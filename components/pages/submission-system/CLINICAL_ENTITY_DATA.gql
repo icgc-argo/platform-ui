@@ -1,6 +1,5 @@
 query CLINICAL_ENTITY_DATA($programShortName: String!) {
   clinicalData(programShortName: $programShortName) {
-    programShortName
     clinicalEntities {
       entityName
       entityFields
@@ -8,13 +7,6 @@ query CLINICAL_ENTITY_DATA($programShortName: String!) {
         name
         value
       }
-    }
-    schemaMetadata {
-      lastValidSchemaVersion
-      originalSchemaVersion
-      isValid
-      lastMigrationId
-      donorId
     }
     completionStats {
       coreCompletion {
