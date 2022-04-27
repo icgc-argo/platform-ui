@@ -1,6 +1,7 @@
 query CLINICAL_ENTITY_DATA(
   $programShortName: String!
   $withErrors: Boolean
+  $entityTypes: [String]
   $first: Int!
   $offset: Int!
   $filters: QueryFilter
@@ -10,6 +11,7 @@ query CLINICAL_ENTITY_DATA(
     variables: {
       programShortName: $programShortName
       withErrors: $withErrors
+      entityTypes: $entityTypes
       first: $first
       offset: $offset
       filters: $filters
