@@ -35,7 +35,7 @@ export const getConfig = () => {
       publicConfig.EGO_API_ROOT || '',
       `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
     ),
-    DACO_URL: publicConfig.DACO_URL || 'https://icgc.org/daco',
+    DACO_URL: publicConfig.DACO_URL || '',
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org',
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
@@ -49,6 +49,7 @@ export const getConfig = () => {
     FEATURE_FACET_TABS_ENABLED: publicConfig.FEATURE_FACET_TABS_ENABLED === 'true',
     MAX_FILE_DOWNLOAD_SIZE: publicConfig.MAX_FILE_DOWNLOAD_SIZE || 5000000, // 5MB
     FEATURE_RNASEQ_ENABLED: publicConfig.FEATURE_RNASEQ_ENABLED === 'true',
+    FEATURE_DACO_V2_ENABLED: publicConfig.FEATURE_DACO_V2_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -70,5 +71,6 @@ export const getConfig = () => {
     FEATURE_FACET_TABS_ENABLED: boolean;
     MAX_FILE_DOWNLOAD_SIZE: number;
     FEATURE_RNASEQ_ENABLED: boolean;
+    FEATURE_DACO_V2_ENABLED: boolean;
   };
 };
