@@ -1,5 +1,19 @@
-query CLINICAL_ENTITY_DATA($programShortName: String!) {
-  clinicalData(programShortName: $programShortName) {
+query CLINICAL_ENTITY_DATA(
+  $programShortName: String!
+  $first: Int!
+  $offset: Int!
+  $filters: QueryFilter
+  $sort: [QuerySort]
+) {
+  clinicalData(
+    variables: {
+      programShortName: $programShortName
+      first: $first
+      offset: $offset
+      filters: $filters
+      sort: $sort
+    }
+  ) {
     clinicalEntities {
       entityName
       entityFields

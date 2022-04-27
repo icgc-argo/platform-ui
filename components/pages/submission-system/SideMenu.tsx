@@ -191,11 +191,22 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     {
       variables: {
         programShortName: props.program.shortName,
+        first: 0,
+        offset: 20,
+        filters: { test: 'test' },
+        sort: [
+          {
+            field: 'donor_id',
+            order: 'desc',
+          },
+        ],
       },
       errorPolicy: 'all',
     },
   );
   const clinicalEntityErrors = error && error.graphQLErrors;
+  console.log(clinicalEntityData);
+  console.log(clinicalEntityErrors);
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
