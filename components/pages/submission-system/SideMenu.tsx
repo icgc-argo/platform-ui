@@ -191,6 +191,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     {
       variables: {
         programShortName: props.program.shortName,
+        withErrors: true,
         first: 0,
         offset: 20,
         filters: { test: 'test' },

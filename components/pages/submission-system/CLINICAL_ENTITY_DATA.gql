@@ -1,5 +1,6 @@
 query CLINICAL_ENTITY_DATA(
   $programShortName: String!
+  $withErrors: Boolean
   $first: Int!
   $offset: Int!
   $filters: QueryFilter
@@ -8,6 +9,7 @@ query CLINICAL_ENTITY_DATA(
   clinicalData(
     variables: {
       programShortName: $programShortName
+      withErrors: $withErrors
       first: $first
       offset: $offset
       filters: $filters
