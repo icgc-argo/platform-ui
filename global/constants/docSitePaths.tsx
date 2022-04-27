@@ -19,7 +19,7 @@
 import urljoin from 'url-join';
 import { getConfig } from 'global/config';
 
-const { DOCS_URL_ROOT } = getConfig();
+const { DOCS_URL_ROOT, FEATURE_DACO_V2_ENABLED } = getConfig();
 
 export const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, `/dictionary/`);
 
@@ -27,7 +27,10 @@ export const DOCS_DNA_PIPELINE_PAGE = urljoin(
   DOCS_URL_ROOT,
   '/docs/analysis-workflows/analysis-overview',
 );
-export const DOCS_DATA_ACCESS_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-access');
+export const DOCS_DATA_ACCESS_PAGE = FEATURE_DACO_V2_ENABLED
+  ? urljoin(DOCS_URL_ROOT, '/docs/data-access/daco/applying')
+  : urljoin(DOCS_URL_ROOT, '/docs/data-access/data-access');
+
 export const DOCS_DATA_DOWNLOAD_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-download');
 export const DOCS_PROGRAMMATIC_APIS_PAGE = urljoin(
   DOCS_URL_ROOT,
