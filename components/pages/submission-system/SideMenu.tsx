@@ -212,12 +212,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         first: 0,
         offset: 20,
         filters: { test: 'test' },
-        sort: [
-          {
-            field: 'donor_id',
-            order: 'desc',
-          },
-        ],
+        sort: '-donorId',
       },
       errorPolicy: 'all',
     },
