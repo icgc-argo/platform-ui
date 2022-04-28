@@ -2,10 +2,10 @@ query CLINICAL_ENTITY_DATA(
   $programShortName: String!
   $withErrors: Boolean
   $entityTypes: [String]
-  $first: Int!
-  $offset: Int!
+  $page: Int!
+  $limit: Int!
   $filters: QueryFilter
-  $sort: [QuerySort]
+  $sort: String!
 ) {
   clinicalData(
     variables: {
