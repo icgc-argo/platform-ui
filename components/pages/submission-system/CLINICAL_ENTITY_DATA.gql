@@ -1,6 +1,5 @@
 query CLINICAL_ENTITY_DATA(
   $programShortName: String!
-  $withErrors: Boolean
   $entityTypes: [String]
   $page: Int!
   $limit: Int!
@@ -10,7 +9,6 @@ query CLINICAL_ENTITY_DATA(
   clinicalData(
     variables: {
       programShortName: $programShortName
-      withErrors: $withErrors
       entityTypes: $entityTypes
       page: $page
       limit: $limit

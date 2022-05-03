@@ -189,7 +189,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const { data: clinicalEntityData } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     variables: {
       programShortName: props.program.shortName,
-      withErrors: true,
       entityTypes: [
         'sampleRegistration',
         'donor',
