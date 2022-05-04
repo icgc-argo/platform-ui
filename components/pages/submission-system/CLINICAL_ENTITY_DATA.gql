@@ -1,19 +1,6 @@
-query CLINICAL_ENTITY_DATA(
-  $programShortName: String!
-  $page: Int!
-  $limit: Int!
-  $entityTypes: [EntityTypes]
-  $filters: QueryFilter
-  $sort: String!
-) {
-  clinicalData(
-    programShortName: $programShortName
-    entityTypes: $entityTypes
-    page: $page
-    limit: $limit
-    filters: $filters
-    sort: $sort
-  ) {
+query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!) {
+  clinicalData(programShortName: $programShortName, filters: $filters) {
+    programShortName
     clinicalEntities {
       entityName
       entityFields
@@ -36,16 +23,10 @@ query CLINICAL_ENTITY_DATA(
       overriddenCoreCompletion
       donorId
     }
-    errors {
+    clinicalErrors {
       donorId
       submitterDonorId
-      errors {
-        entityName
-        errorType
-        fieldName
-        index
-        message
-      }
+      programId
     }
   }
 }

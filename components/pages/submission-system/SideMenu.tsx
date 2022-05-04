@@ -190,33 +190,40 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   // This will be moved to Submitted Data Page
-  const { data: clinicalEntityData } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+  const {
+    data: { clinicalData: clinicalEntityData },
+  } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
     variables: {
       programShortName: props.program.shortName,
-      entityTypes: [
-        'sampleRegistration',
-        'donor',
-        'specimens',
-        'primaryDiagnoses',
-        'familyHistory',
-        'treatment',
-        'chemotherapy',
-        'immunotherapy',
-        'surgery',
-        'radiation',
-        'followUps',
-        'hormoneTherapy',
-        'exposure',
-        'comorbidity',
-        'biomarker',
-      ],
-      page: 1,
-      limit: 20,
-      filters: { test: 'test' },
-      sort: '-donorId',
+      filters: {
+        entityTypes: [
+          'sampleRegistration',
+          'donor',
+          'specimens',
+          'primaryDiagnoses',
+          'familyHistory',
+          'treatment',
+          'chemotherapy',
+          'immunotherapy',
+          'surgery',
+          'radiation',
+          'followUps',
+          'hormoneTherapy',
+          'exposure',
+          'comorbidity',
+          'biomarker',
+        ],
+        page: 1,
+        limit: 20,
+        donorIds: [''],
+        submitterDonorIds: [''],
+        errorState: '',
+        sort: '-donorId',
+      },
     },
   });
+
   console.log(clinicalEntityData);
 
   const canSeeCollaboratorView = React.useMemo(() => {
