@@ -1,20 +1,18 @@
 query CLINICAL_ENTITY_DATA(
   $programShortName: String!
-  $entityTypes: [String]
   $page: Int!
   $limit: Int!
+  $entityTypes: [EntityTypes]
   $filters: QueryFilter
   $sort: String!
 ) {
   clinicalData(
-    variables: {
-      programShortName: $programShortName
-      entityTypes: $entityTypes
-      page: $page
-      limit: $limit
-      filters: $filters
-      sort: $sort
-    }
+    programShortName: $programShortName
+    entityTypes: $entityTypes
+    page: $page
+    limit: $limit
+    filters: $filters
+    sort: $sort
   ) {
     clinicalEntities {
       entityName

@@ -131,27 +131,31 @@ type ClinicalEntity = {
 type CompletionStats = {
   coreCompletion: CoreCompletionFields;
   coreCompletionDate: string;
-  coreCompletionPercentage: Number;
+  coreCompletionPercentage: number;
   overriddenCoreCompletion: [CoreClinicalEntities];
 };
 
 type CoreCompletionFields = {
-  [k in CoreClinicalEntities]: Number;
+  [k in CoreClinicalEntities]: number;
 };
 
-type SchemaMetadata = {
-  lastValidSchemaVersion: string;
-  originalSchemaVersion: string;
-  isValid: boolean;
-  lastMigrationId: string;
+type ClinicalErrorData = {
+  donorId: string;
+  submitterDonorId: string;
+  errors: {
+    entityName: string;
+    errorType: string;
+    fieldName: string;
+    index: number;
+    message: string;
+  };
 };
 
 type ClinicalEntityQueryResponse = {
   clinicalData: {
-    programShortName: string;
     clinicalEntities: Array<ClinicalEntity>;
-    schemaMetadata: Array<SchemaMetadata>;
     completionStats: Array<CompletionStats>;
+    clinicalErrors: Array<ClinicalErrorData>;
   };
 };
 
@@ -195,7 +199,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         'specimens',
         'primaryDiagnoses',
         'familyHistory',
-        'treatments',
+        'treatment',
         'chemotherapy',
         'immunotherapy',
         'surgery',
