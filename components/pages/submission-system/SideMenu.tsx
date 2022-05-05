@@ -190,9 +190,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   // This will be moved to Submitted Data Page
-  const {
-    data: { clinicalData: clinicalEntityData },
-  } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+  const { data: clinicalEntityData } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
     variables: {
       programShortName: props.program.shortName,
@@ -223,8 +221,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       },
     },
   });
-
-  console.log(clinicalEntityData);
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
