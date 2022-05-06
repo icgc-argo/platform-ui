@@ -26,7 +26,13 @@ query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!)
     clinicalErrors {
       donorId
       submitterDonorId
-      programId
+      errors {
+        errorType
+        fieldName
+        index
+        message
+        entityName
+      }
     }
   }
 }
