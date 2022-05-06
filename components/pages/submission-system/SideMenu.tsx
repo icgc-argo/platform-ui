@@ -119,6 +119,13 @@ enum CoreClinicalEntities {
   'treatments',
 }
 
+enum CompletionStates {
+  'all',
+  'invalid',
+  'complete',
+  'incomplete',
+}
+
 type ClinicalEntity = {
   entityName: string;
   entityFields: Array<[]>;
@@ -216,7 +223,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         limit: 20,
         donorIds: [],
         submitterDonorIds: [],
-        errorState: '',
+        completionState: CompletionStates[0],
         sort: '-donorId',
       },
     },
