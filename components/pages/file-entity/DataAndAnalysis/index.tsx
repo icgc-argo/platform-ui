@@ -123,8 +123,9 @@ const getWorkflowVersionLink = (workflowType: DataAnalysisWorkflowType) => {
 };
 
 // Hard-coded Genome Build as per: https://github.com/icgc-argo/platform-ui/issues/2105
-const GENOME_BUILD = 'GRCh38';
-const GENOME_BUILD_URL = 'https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.26/';
+const GENOME_BUILD = 'GRCh38DH';
+const GENOME_BUILD_URL =
+  'http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome';
 
 const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
   const theme = useTheme();
