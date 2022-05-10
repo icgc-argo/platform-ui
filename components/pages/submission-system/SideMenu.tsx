@@ -128,7 +128,7 @@ enum CompletionStates {
 
 type ClinicalEntity = {
   entityName: string;
-  entityFields: Array<[]>;
+  entityFields: string[];
   records: Array<{
     name: string;
     value: any;
