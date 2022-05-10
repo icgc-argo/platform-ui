@@ -2,7 +2,7 @@
   "name": "argo-platform-ui",
   "version": "1.108.0",
   "scripts": {
-    "dev": "next -p 3000",
+    "dev": "next -p 8080",
     "build": "rm -rf .next && next build",
     "export-maintenance": "npm run build && rm -rf ./out/maintenance && EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
     "create-component": "plop --plopfile ./uikit/plopfile.js",
