@@ -53,7 +53,6 @@ import {
   DONOR_ENTITY_PATH,
   DONOR_ENTITY_ID_PATH,
 } from 'global/constants/pages';
-import { config } from '@storybook/addon-actions';
 import { getConfig } from 'global/config';
 
 const DEFAULT_PAGE_SIZE = 20;
