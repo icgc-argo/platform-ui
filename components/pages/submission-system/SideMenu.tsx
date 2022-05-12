@@ -37,6 +37,7 @@ import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
+import { getConfig } from 'global/config';
 import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
 
 import {
@@ -169,6 +170,7 @@ type ClinicalEntityQueryResponse = {
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
+  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -197,37 +199,40 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   // This will be moved to Submitted Data Page
-  const { data: clinicalEntityData } = useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-    errorPolicy: 'all',
-    variables: {
-      programShortName: props.program.shortName,
-      filters: {
-        entityTypes: [
-          'sampleRegistration',
-          'donor',
-          'specimens',
-          'primaryDiagnoses',
-          'familyHistory',
-          'treatment',
-          'chemotherapy',
-          'immunotherapy',
-          'surgery',
-          'radiation',
-          'followUps',
-          'hormoneTherapy',
-          'exposure',
-          'comorbidity',
-          'biomarker',
-        ],
-        page: 1,
-        limit: 20,
-        donorIds: [],
-        submitterDonorIds: [],
-        completionState: CompletionStates[0],
-        sort: '-donorId',
+  const { data: clinicalEntityData } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: props.program.shortName,
+        filters: {
+          entityTypes: [
+            'sampleRegistration',
+            'donor',
+            'specimens',
+            'primaryDiagnoses',
+            'familyHistory',
+            'treatment',
+            'chemotherapy',
+            'immunotherapy',
+            'surgery',
+            'radiation',
+            'followUps',
+            'hormoneTherapy',
+            'exposure',
+            'comorbidity',
+            'biomarker',
+          ],
+          page: 0,
+          limit: 20,
+          donorIds: [],
+          submitterDonorIds: [],
+          completionState: CompletionStates[0],
+          sort: '-donorId',
+        },
       },
-    },
-  });
+    });
+  console.log(clinicalEntityData);
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
@@ -332,22 +337,24 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               }
             />
           </Link>
-          <Link
-            prefetch
-            as={PROGRAM_CLINICAL_DATA_PATH.replace(
-              PROGRAM_SHORT_NAME_PATH,
-              props.program.shortName,
-            )}
-            href={PROGRAM_CLINICAL_DATA_PATH}
-          >
-            <MenuItem
-              level={3}
-              content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
-              selected={
-                PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
-              }
-            />
-          </Link>
+          {FEATURE_SUBMITTED_DATA_ENABLED && (
+            <Link
+              prefetch
+              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                props.program.shortName,
+              )}
+              href={PROGRAM_CLINICAL_DATA_PATH}
+            >
+              <MenuItem
+                level={3}
+                content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+                selected={
+                  PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
+                }
+              />
+            </Link>
+          )}
         </>
       )}
       {canWriteToProgram && (
