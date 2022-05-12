@@ -1,14 +1,14 @@
-**Description of changes**
+# Description of changes
 
 <!-- Please add a brief description of the changes here: What is the new functionality, how did you accomplish this?-->
 
-**Type of Change**
+## Type of Change
 
 - [ ] Bug
 - [ ] Styling
 - [ ] New Feature
 
-**Checklist before requesting review:**
+## Checklist before requesting review
 
 - Design (select one):
   - [ ] Matches design:
@@ -18,8 +18,7 @@
   - [ ] No design provided, screenshot of changes included in PR
   - [ ] No changes to UI
 - UI Kit (select one):
-  - [ ] New Components with storybook stories created
-  - [ ] Modified Existing components and updates stories
+  - [ ] Modified Existing components
   - [ ] No new UIKit components or changes
 - [ ] Feature is minimally responsive
 - [ ] Manual testing of UI feature
