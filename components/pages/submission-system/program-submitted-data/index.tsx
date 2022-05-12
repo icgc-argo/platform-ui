@@ -22,8 +22,9 @@ import { useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
 import { Row, setConfiguration } from 'react-grid-system';
 
-import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import { getConfig } from 'global/config';
+import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
 import Link from 'uikit/Link';
 import TitleBar from 'uikit/TitleBar';
@@ -32,6 +33,8 @@ import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import { ClinicalEntityQueryResponse, clinicalEntityFilters } from './common';
 
 setConfiguration({ gutterWidth: 9 });
+
+const defaultClinicalEntityTab = 'donor';
 
 export default function ProgramDashboard(props) {
   const {
@@ -48,7 +51,16 @@ export default function ProgramDashboard(props) {
         filters: clinicalEntityFilters,
       },
     });
-  console.log(clinicalEntityData);
+
+  const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
+    'tab',
+    defaultClinicalEntityTab,
+    {
+      serialize: (v) => v,
+      deSerialize: (v) => v,
+    },
+  );
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
