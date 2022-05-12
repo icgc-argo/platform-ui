@@ -18,23 +18,37 @@
  */
 
 import * as React from 'react';
-import SubmissionLayout from '../layout';
-import { css } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
+import { useQuery } from '@apollo/react-hooks';
 import usePageContext from 'global/hooks/usePageContext';
-import { Row } from 'react-grid-system';
+import { Row, setConfiguration } from 'react-grid-system';
 
-import { setConfiguration } from 'react-grid-system';
-import Link from 'uikit/Link';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
+import { getConfig } from 'global/config';
+import { css } from 'uikit';
+import Link from 'uikit/Link';
+import TitleBar from 'uikit/TitleBar';
+import SubmissionLayout from '../layout';
+import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
+import { ClinicalEntityQueryResponse, clinicalEntityFilters } from './common';
 
 setConfiguration({ gutterWidth: 9 });
 
-export default function ProgramDashboard() {
+export default function ProgramDashboard(props) {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
 
+  const { data: clinicalEntityData } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: programShortName,
+        filters: clinicalEntityFilters,
+      },
+    });
+  console.log(clinicalEntityData);
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -55,7 +69,7 @@ export default function ProgramDashboard() {
                   margin-right: 20px;
                 `}
               >
-                Dashboard
+                Submitted Data
               </div>
             </Row>
           </TitleBar>

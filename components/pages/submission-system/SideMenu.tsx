@@ -32,11 +32,6 @@ import DnaLoader from 'uikit/DnaLoader';
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
-import CLINICAL_ENTITY_DATA from './program-submitted-data/CLINICAL_ENTITY_DATA.gql';
-import {
-  ClinicalEntityQueryResponse,
-  clinicalEntityFilters,
-} from './program-submitted-data/common';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { getConfig } from 'global/config';
@@ -144,17 +139,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
-
-  // This will be moved to Submitted Data Page
-  const { data: clinicalEntityData } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: props.program.shortName,
-        filters: clinicalEntityFilters,
-      },
-    });
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
