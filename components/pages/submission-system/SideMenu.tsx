@@ -121,10 +121,10 @@ enum CoreClinicalEntities {
 }
 
 enum CompletionStates {
-  'all',
-  'invalid',
-  'complete',
-  'incomplete',
+  all = 'all',
+  invalid = 'invalid',
+  complete = 'complete',
+  incomplete = 'incomplete',
 }
 
 type ClinicalEntity = {
@@ -167,6 +167,42 @@ type ClinicalEntityQueryResponse = {
   };
 };
 
+type ClinicalFilter = {
+  entityTypes: string[];
+  page: number;
+  limit: number;
+  donorIds?: string[];
+  submitterDonorIds?: string[];
+  completionState?: CompletionStates;
+  sort?: string;
+};
+
+const clinicalEntityFilters: ClinicalFilter = {
+  entityTypes: [
+    'sampleRegistration',
+    'donor',
+    'specimens',
+    'primaryDiagnoses',
+    'familyHistory',
+    'treatment',
+    'chemotherapy',
+    'immunotherapy',
+    'surgery',
+    'radiation',
+    'followUps',
+    'hormoneTherapy',
+    'exposure',
+    'comorbidity',
+    'biomarker',
+  ],
+  page: 0,
+  limit: 20,
+  donorIds: [],
+  submitterDonorIds: [],
+  completionState: CompletionStates['all'],
+  sort: '-donorId',
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
@@ -205,34 +241,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       errorPolicy: 'all',
       variables: {
         programShortName: props.program.shortName,
-        filters: {
-          entityTypes: [
-            'sampleRegistration',
-            'donor',
-            'specimens',
-            'primaryDiagnoses',
-            'familyHistory',
-            'treatment',
-            'chemotherapy',
-            'immunotherapy',
-            'surgery',
-            'radiation',
-            'followUps',
-            'hormoneTherapy',
-            'exposure',
-            'comorbidity',
-            'biomarker',
-          ],
-          page: 0,
-          limit: 20,
-          donorIds: [],
-          submitterDonorIds: [],
-          completionState: CompletionStates[0],
-          sort: '-donorId',
-        },
+        filters: clinicalEntityFilters,
       },
     });
-  console.log(clinicalEntityData);
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
