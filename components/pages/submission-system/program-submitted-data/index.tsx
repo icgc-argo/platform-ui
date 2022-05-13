@@ -32,6 +32,7 @@ import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import {
+  aliasEntityNames,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
@@ -57,6 +58,10 @@ export default function ProgramDashboard(props) {
         filters: clinicalEntityFilters,
       },
     });
+  const { clinicalData } =
+    clinicalEntityData == undefined
+      ? { clinicalData: { clinicalEntities: [] } }
+      : clinicalEntityData;
 
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
@@ -66,10 +71,12 @@ export default function ProgramDashboard(props) {
       deSerialize: (v) => v,
     },
   );
+  console.log(clinicalEntityData);
 
   const menuItems = clinicalEntityFields.map((entity) => ({
-    disabled: false,
+    disabled: !clinicalData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity]),
     name: clinicalEntityDisplayNames[entity],
+    active: selectedClinicalEntityTab === entity,
   }));
 
   return (

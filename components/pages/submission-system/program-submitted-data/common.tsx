@@ -64,8 +64,8 @@ export type ClinicalFilter = {
 };
 
 export const clinicalEntityDisplayNames = {
-  sampleRegistration: 'Sample Registration',
   donor: 'Donor',
+  sampleRegistration: 'Sample Registration',
   specimens: 'Specimens',
   primaryDiagnoses: 'Primary Diagnoses',
   familyHistory: 'Family History',
@@ -79,6 +79,24 @@ export const clinicalEntityDisplayNames = {
   exposure: 'Exposure',
   comorbidity: 'Comorbidity',
   biomarker: 'Biomarker',
+};
+
+export const aliasEntityNames = {
+  donor: 'donor',
+  sampleRegistration: 'sample_registration',
+  specimens: 'specimen',
+  primaryDiagnoses: 'primary_diagnosis',
+  familyHistory: 'family_history',
+  treatment: 'treatment',
+  chemotherapy: 'chemotherapy',
+  immunotherapy: 'immunotherapy',
+  surgery: 'surgery',
+  radiation: 'radiation',
+  followUps: 'follow_up',
+  hormoneTherapy: 'hormone_therapy',
+  exposure: 'exposure',
+  comorbidity: 'comorbidity',
+  biomarker: 'biomarker',
 };
 
 export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
