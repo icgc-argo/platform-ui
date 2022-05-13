@@ -27,9 +27,9 @@ import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
 import Container from 'uikit/Container';
-import ContentMenu from 'uikit/ContentMenu';
 import DnaLoader from 'uikit/DnaLoader';
 import Link from 'uikit/Link';
+import VerticalTabs from 'uikit/VerticalTabs';
 import TitleBar from 'uikit/TitleBar';
 import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
@@ -75,13 +75,19 @@ export default function ProgramSubmittedData(props) {
       deSerialize: (v) => v,
     },
   );
-  console.log(clinicalEntityData);
 
-  const menuItems = clinicalEntityFields.map((entity) => ({
-    disabled: !clinicalData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity]),
-    name: clinicalEntityDisplayNames[entity],
-    active: selectedClinicalEntityTab === entity,
-  }));
+  const menuItems = clinicalEntityFields.map((entity) => (
+    <VerticalTabs.Item
+      key={entity}
+      active={selectedClinicalEntityTab === entity}
+      onClick={(e) => setSelectedClinicalEntityTab(entity)}
+      disabled={
+        !clinicalData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+      }
+    >
+      {clinicalEntityDisplayNames[entity]}
+    </VerticalTabs.Item>
+  ));
 
   return (
     <SubmissionLayout
@@ -138,7 +144,8 @@ export default function ProgramSubmittedData(props) {
                 border: 1px solid ${theme.colors.grey_2}; ;
               `}
             >
-              <ContentMenu title="" contents={menuItems} />
+              <VerticalTabs>{menuItems}</VerticalTabs>
+              {/* <ContentMenu title="" contents={menuItems} /> */}
             </div>
             <div
               css={css`
