@@ -26,11 +26,17 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
+import ContentMenu from 'uikit/ContentMenu';
 import Link from 'uikit/Link';
 import TitleBar from 'uikit/TitleBar';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
-import { ClinicalEntityQueryResponse, clinicalEntityFilters } from './common';
+import {
+  ClinicalEntityQueryResponse,
+  clinicalEntityDisplayNames,
+  clinicalEntityFields,
+  clinicalEntityFilters,
+} from './common';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -60,6 +66,11 @@ export default function ProgramDashboard(props) {
       deSerialize: (v) => v,
     },
   );
+
+  const menuItems = clinicalEntityFields.map((entity) => ({
+    disabled: false,
+    name: clinicalEntityDisplayNames[entity],
+  }));
 
   return (
     <SubmissionLayout
@@ -101,7 +112,9 @@ export default function ProgramDashboard(props) {
         </div>
       }
     >
-      <div></div>
+      <div>
+        <ContentMenu title="" contents={menuItems} />
+      </div>
     </SubmissionLayout>
   );
 }

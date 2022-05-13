@@ -63,24 +63,28 @@ export type ClinicalFilter = {
   sort?: string;
 };
 
+export const clinicalEntityDisplayNames = {
+  sampleRegistration: 'Sample Registration',
+  donor: 'Donor',
+  specimens: 'Specimens',
+  primaryDiagnoses: 'Primary Diagnoses',
+  familyHistory: 'Family History',
+  treatment: 'Treatment',
+  chemotherapy: 'Chemotherapy',
+  immunotherapy: 'Immunotherapy',
+  surgery: 'Surgery',
+  radiation: 'Radiation',
+  followUps: 'Follow Ups',
+  hormoneTherapy: 'Hormone Therapy',
+  exposure: 'Exposure',
+  comorbidity: 'Comorbidity',
+  biomarker: 'Biomarker',
+};
+
+export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
+
 export const clinicalEntityFilters: ClinicalFilter = {
-  entityTypes: [
-    'sampleRegistration',
-    'donor',
-    'specimens',
-    'primaryDiagnoses',
-    'familyHistory',
-    'treatment',
-    'chemotherapy',
-    'immunotherapy',
-    'surgery',
-    'radiation',
-    'followUps',
-    'hormoneTherapy',
-    'exposure',
-    'comorbidity',
-    'biomarker',
-  ],
+  entityTypes: clinicalEntityFields,
   page: 0,
   limit: 20,
   donorIds: [],
