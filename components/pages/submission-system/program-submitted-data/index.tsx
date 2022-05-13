@@ -40,6 +40,7 @@ import {
   clinicalEntityDisplayNames,
   clinicalEntityFields,
   clinicalEntityFilters,
+  hasClinicalErrors,
 } from './common';
 
 setConfiguration({ gutterWidth: 9 });
@@ -64,7 +65,7 @@ export default function ProgramSubmittedData(props) {
     });
   const { clinicalData } =
     clinicalEntityData == undefined || loading
-      ? { clinicalData: { clinicalEntities: [] } }
+      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
       : clinicalEntityData;
 
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -86,6 +87,9 @@ export default function ProgramSubmittedData(props) {
       }
     >
       {clinicalEntityDisplayNames[entity]}
+      {hasClinicalErrors(clinicalData, entity) && (
+        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+      )}
     </VerticalTabs.Item>
   ));
 

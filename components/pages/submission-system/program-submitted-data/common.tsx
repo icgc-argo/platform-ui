@@ -42,7 +42,7 @@ export type ClinicalErrorData = {
     fieldName: string;
     index: number;
     message: string;
-  };
+  }[];
 };
 
 export type ClinicalEntityQueryResponse = {
@@ -110,3 +110,14 @@ export const clinicalEntityFilters: ClinicalFilter = {
   completionState: CompletionStates['all'],
   sort: '-donorId',
 };
+
+export const hasClinicalErrors = (
+  { clinicalErrors }: ClinicalEntityQueryResponse['clinicalData'],
+  currentEntity: string,
+) =>
+  clinicalErrors.length > 0 &&
+  clinicalErrors.filter(
+    (donor) =>
+      donor.errors &&
+      donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
+  ).length > 0;
