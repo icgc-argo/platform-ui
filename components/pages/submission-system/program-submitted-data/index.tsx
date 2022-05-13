@@ -26,9 +26,12 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
+import Container from 'uikit/Container';
 import ContentMenu from 'uikit/ContentMenu';
+import DnaLoader from 'uikit/DnaLoader';
 import Link from 'uikit/Link';
 import TitleBar from 'uikit/TitleBar';
+import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import {
@@ -43,13 +46,14 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramDashboard(props) {
+export default function ProgramSubmittedData(props) {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+  const theme = useTheme();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
 
-  const { data: clinicalEntityData } =
+  const { data: clinicalEntityData, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
       errorPolicy: 'all',
@@ -59,7 +63,7 @@ export default function ProgramDashboard(props) {
       },
     });
   const { clinicalData } =
-    clinicalEntityData == undefined
+    clinicalEntityData == undefined || loading
       ? { clinicalData: { clinicalEntities: [] } }
       : clinicalEntityData;
 
@@ -119,9 +123,31 @@ export default function ProgramDashboard(props) {
         </div>
       }
     >
-      <div>
-        <ContentMenu title="" contents={menuItems} />
-      </div>
+      <Container>
+        {loading ? (
+          <DnaLoader />
+        ) : (
+          <div
+            css={css`
+              width: 100%;
+            `}
+          >
+            <div
+              css={css`
+                width: 150px;
+                border: 1px solid ${theme.colors.grey_2}; ;
+              `}
+            >
+              <ContentMenu title="" contents={menuItems} />
+            </div>
+            <div
+              css={css`
+                width: 100%;
+              `}
+            />
+          </div>
+        )}
+      </Container>
     </SubmissionLayout>
   );
 }
