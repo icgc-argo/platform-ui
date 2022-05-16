@@ -20,6 +20,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// @ts-nocheck
+// this file isn't being used but is being kept as a resource.
+
 /*
  * Please edit me!
  */
