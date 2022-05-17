@@ -82,7 +82,7 @@
     "react-dom": "^16.13.1",
     "react-ga": "^3.3.0",
     "react-google-recaptcha": "^2.0.1",
-    "react-grid-system": "^6.4.1",
+    "react-grid-system": "^8.1.4",
     "react-json-view": "^1.21.3",
     "react-table": "6.10.0",
     "react-tippy": "^1.4.0",
