@@ -26,8 +26,10 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
+import Button from 'uikit/Button';
 import Container from 'uikit/Container';
 import DnaLoader from 'uikit/DnaLoader';
+import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import VerticalTabs from 'uikit/VerticalTabs';
 import TitleBar from 'uikit/TitleBar';
@@ -145,7 +147,7 @@ export default function ProgramSubmittedData(props) {
           >
             <div
               css={css`
-                width: 150px;
+                width: 20%;
                 display: inline-block;
                 border: 1px solid ${theme.colors.grey_2}; ;
               `}
@@ -156,6 +158,7 @@ export default function ProgramSubmittedData(props) {
               css={css`
                 display: inline-block;
                 height: 100%;
+                width: 75%;
                 vertical-align: top;
                 padding: 8px 12px;
               `}
@@ -163,18 +166,37 @@ export default function ProgramSubmittedData(props) {
               <div
                 css={css`
                   width: 100%;
+                  display: flex;
+                  justify-content: space-between;
                 `}
               >
                 <Typography
                   variant="subtitle2"
                   css={css`
-                    text-align: top;
-                    margin-top: 0px;
+                    margin-top: 4px;
                     margin-left: 4px;
                   `}
                 >
                   {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
                 </Typography>
+
+                <Button
+                  css={css`
+                    white-space: nowrap;
+                  `}
+                  variant="secondary"
+                  size="sm"
+                >
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    fill="accent2_dark"
+                    height="12px"
+                  />
+                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                </Button>
               </div>
             </div>
           </div>
