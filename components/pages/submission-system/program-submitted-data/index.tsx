@@ -183,9 +183,9 @@ export default function ProgramSubmittedData(props) {
                 <Button
                   css={css`
                     white-space: nowrap;
+                    height: fit-content;
                   `}
                   variant="secondary"
-                  size="sm"
                 >
                   <Icon
                     css={css`
