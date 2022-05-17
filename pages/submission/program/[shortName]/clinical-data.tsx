@@ -37,6 +37,5 @@ export default createPage({
   },
   startWithGlobalLoader: true,
 })((props) => {
-  // useProgramCheckEffect();
   return <ProgramClinicalData {...props} />;
 });

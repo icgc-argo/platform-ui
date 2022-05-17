@@ -42,6 +42,7 @@ import {
   clinicalEntityFilters,
   hasClinicalErrors,
 } from './common';
+import Typography from 'uikit/Typography';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -145,6 +146,7 @@ export default function ProgramSubmittedData(props) {
             <div
               css={css`
                 width: 150px;
+                display: inline-block;
                 border: 1px solid ${theme.colors.grey_2}; ;
               `}
             >
@@ -152,9 +154,27 @@ export default function ProgramSubmittedData(props) {
             </div>
             <div
               css={css`
-                width: 100%;
+                display: inline-block;
+                height: 100%;
+                vertical-align: top;
+                padding: 8px 12px;
               `}
-            />
+            >
+              <div
+                css={css`
+                  width: 100%;
+                `}
+              >
+                <Typography
+                  variant="subtitle"
+                  css={css`
+                    text-align: top;
+                  `}
+                >
+                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                </Typography>
+              </div>
+            </div>
           </div>
         )}
       </Container>

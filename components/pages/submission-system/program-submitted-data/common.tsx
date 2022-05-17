@@ -67,7 +67,7 @@ export const clinicalEntityDisplayNames = {
   donor: 'Donor',
   sampleRegistration: 'Sample Registration',
   specimens: 'Specimens',
-  primaryDiagnoses: 'Primary Diagnoses',
+  primaryDiagnoses: 'Primary Diagnosis',
   familyHistory: 'Family History',
   treatment: 'Treatment',
   chemotherapy: 'Chemotherapy',
