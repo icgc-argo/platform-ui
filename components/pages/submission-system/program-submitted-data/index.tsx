@@ -166,9 +166,11 @@ export default function ProgramSubmittedData(props) {
                 `}
               >
                 <Typography
-                  variant="subtitle"
+                  variant="subtitle2"
                   css={css`
                     text-align: top;
+                    margin-top: 0px;
+                    margin-left: 4px;
                   `}
                 >
                   {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
