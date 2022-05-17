@@ -149,7 +149,6 @@ export default function ProgramSubmittedData(props) {
               `}
             >
               <VerticalTabs>{menuItems}</VerticalTabs>
-              {/* <ContentMenu title="" contents={menuItems} /> */}
             </div>
             <div
               css={css`
