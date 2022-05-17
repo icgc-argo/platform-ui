@@ -158,7 +158,7 @@ export default function ProgramSubmittedData(props) {
               css={css`
                 display: inline-block;
                 height: 100%;
-                width: 75%;
+                width: 76%;
                 vertical-align: top;
                 padding: 8px 12px;
               `}
