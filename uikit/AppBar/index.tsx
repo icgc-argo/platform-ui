@@ -146,7 +146,7 @@ export const MenuItem = React.forwardRef<
 
     return (
       <MenuItemContainer className={className} id={id} ref={ref} active={active}>
-        <MenuItemContent bold>{children}</MenuItemContent>
+        <MenuItemContent>{children}</MenuItemContent>
         {isDropdownOpen && dropdownMenu}
       </MenuItemContainer>
     );

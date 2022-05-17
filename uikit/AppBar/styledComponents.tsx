@@ -19,19 +19,23 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { withProps } from 'recompose';
 
 import Typography from '../Typography';
+import { css } from '@emotion/core';
 
-const MenuItemTypography: typeof Typography = withProps(() => ({
-  variant: 'navigation',
-}))(Typography);
-
-export const MenuItemContent = styled(MenuItemTypography)`
-  margin: 0px 24px;
-  text-align: center;
-  text-decoration: none;
-`;
+export const MenuItemContent = ({ children }) => (
+  <Typography
+    bold
+    variant="navigation"
+    css={css`
+      margin: 0px 24px;
+      text-align: center;
+      text-decoration: none;
+    `}
+  >
+    {children}
+  </Typography>
+);
 export const MenuItemContainer = styled<
   'div',
   {

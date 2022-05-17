@@ -17,15 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { withProps } from 'recompose';
 
 import Icon from '../../Icon';
 import Typography from '../../Typography';
+import { css } from '@emotion/core';
 
 export type PopupPosition = 'UP' | 'DOWN';
 export const POPUP_POSITIONS = { UP: 'UP' as PopupPosition, DOWN: 'DOWN' as PopupPosition };
+
+export const DropdownItem = ({ disabled, theme }) => (
+  <Icon
+    name="chevron_down"
+    fill={disabled ? theme.colors.grey_disabled : 'black'}
+    css={css`
+      height: 100%;
+      width: 10px;
+      padding: 10px;
+      border-left: solid 1px ${disabled ? theme.colors.grey_2 : theme.colors.grey_1};
+    `}
+  />
+);
 
 export const DropdownIcon = withProps(({ disabled, theme }) => ({
   name: 'chevron_down',
@@ -69,10 +83,11 @@ const OptionContainer = styled('li')`
   }
 `;
 
-const OptionContent = withProps(() => ({
-  variant: 'paragraph',
-  component: 'span',
-}))(Typography);
+const OptionContent = ({ children }: { children?: ReactNode }) => (
+  <Typography variant="paragraph" component="span">
+    {children}
+  </Typography>
+);
 
 export const Option = ({ value, children, ...props }) => (
   <OptionContainer data-value={value} role="option" {...props}>
