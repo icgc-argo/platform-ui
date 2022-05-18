@@ -19,10 +19,8 @@
 
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { useLazyQuery } from '@apollo/react-hooks';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import Router from 'next/router';
 import styled from '@emotion/styled';
 
 import Submenu, { MenuItem } from 'uikit/SubMenu';
@@ -34,7 +32,6 @@ import DnaLoader from 'uikit/DnaLoader';
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
-import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { getConfig } from 'global/config';
@@ -112,97 +109,6 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
-enum CoreClinicalEntities {
-  'donor',
-  'specimens',
-  'primaryDiagnosis',
-  'followUps',
-  'treatments',
-}
-
-enum CompletionStates {
-  all = 'all',
-  invalid = 'invalid',
-  complete = 'complete',
-  incomplete = 'incomplete',
-}
-
-type ClinicalEntity = {
-  entityName: string;
-  entityFields: string[];
-  records: Array<{
-    name: string;
-    value: any;
-  }>;
-};
-
-type CompletionStats = {
-  coreCompletion: CoreCompletionFields;
-  coreCompletionDate: string;
-  coreCompletionPercentage: number;
-  overriddenCoreCompletion: [CoreClinicalEntities];
-};
-
-type CoreCompletionFields = {
-  [k in CoreClinicalEntities]: number;
-};
-
-type ClinicalErrorData = {
-  donorId: string;
-  submitterDonorId: string;
-  errors: {
-    entityName: string;
-    errorType: string;
-    fieldName: string;
-    index: number;
-    message: string;
-  };
-};
-
-type ClinicalEntityQueryResponse = {
-  clinicalData: {
-    clinicalEntities: Array<ClinicalEntity>;
-    completionStats: Array<CompletionStats>;
-    clinicalErrors: Array<ClinicalErrorData>;
-  };
-};
-
-type ClinicalFilter = {
-  entityTypes: string[];
-  page: number;
-  limit: number;
-  donorIds?: string[];
-  submitterDonorIds?: string[];
-  completionState?: CompletionStates;
-  sort?: string;
-};
-
-const clinicalEntityFilters: ClinicalFilter = {
-  entityTypes: [
-    'sampleRegistration',
-    'donor',
-    'specimens',
-    'primaryDiagnoses',
-    'familyHistory',
-    'treatment',
-    'chemotherapy',
-    'immunotherapy',
-    'surgery',
-    'radiation',
-    'followUps',
-    'hormoneTherapy',
-    'exposure',
-    'comorbidity',
-    'biomarker',
-  ],
-  page: 0,
-  limit: 20,
-  donorIds: [],
-  submitterDonorIds: [],
-  completionState: CompletionStates['all'],
-  sort: '-donorId',
-};
-
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
@@ -233,17 +139,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
-
-  // This will be moved to Submitted Data Page
-  const { data: clinicalEntityData } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: props.program.shortName,
-        filters: clinicalEntityFilters,
-      },
-    });
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
@@ -462,7 +357,6 @@ export default function SideMenu() {
   const isRdpc = React.useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
-  const canSeeRdpcs = isDcc;
   const canSeeDcc = isDcc;
 
   return (

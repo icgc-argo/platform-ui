@@ -20,9 +20,8 @@
 import React from 'react';
 
 import { createPage } from 'global/utils/pages';
-import ProgramClinicalSubmission from 'components/pages/submission-system/program-clinical-submission';
+import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
 import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
-import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
 
 export default createPage({
   isPublic: false,
@@ -37,6 +36,5 @@ export default createPage({
   },
   startWithGlobalLoader: true,
 })((props) => {
-  useProgramCheckEffect();
-  return <ProgramClinicalSubmission {...props} />;
+  return <ProgramClinicalData {...props} />;
 });
