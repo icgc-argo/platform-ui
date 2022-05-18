@@ -101,7 +101,7 @@ export const aliasEntityNames = {
 
 export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
 
-export const clinicalEntityFilters: ClinicalFilter = {
+export const defaultClinicalEntityFilters: ClinicalFilter = {
   entityTypes: clinicalEntityFields,
   page: 0,
   limit: 20,

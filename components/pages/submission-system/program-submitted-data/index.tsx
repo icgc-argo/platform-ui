@@ -36,12 +36,13 @@ import TitleBar from 'uikit/TitleBar';
 import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
+import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
 import {
   aliasEntityNames,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
-  clinicalEntityFilters,
+  defaultClinicalEntityFilters,
   hasClinicalErrors,
 } from './common';
 import Typography from 'uikit/Typography';
@@ -56,21 +57,6 @@ export default function ProgramSubmittedData(props) {
   } = usePageContext();
   const theme = useTheme();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-
-  const { data: clinicalEntityData, loading } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: programShortName,
-        filters: clinicalEntityFilters,
-      },
-    });
-  const { clinicalData } =
-    clinicalEntityData == undefined || loading
-      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
-      : clinicalEntityData;
-
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
     defaultClinicalEntityTab,
@@ -80,17 +66,54 @@ export default function ProgramSubmittedData(props) {
     },
   );
 
+  const { data: sideMenuQuery } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: programShortName,
+        filters: defaultClinicalEntityFilters,
+      },
+    });
+
+  const { data: clinicalEntityData, loading } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: programShortName,
+        filters: {
+          // TODO: Add user input for other filters
+          ...defaultClinicalEntityFilters,
+          entityTypes: [
+            clinicalEntityFields.find((entity) => entity === selectedClinicalEntityTab),
+          ],
+        },
+      },
+    });
+
+  const { clinicalData: sideMenuData } =
+    sideMenuQuery == undefined || loading
+      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
+      : sideMenuQuery;
+
+  // TODO: Populate Page w/ Entity Data
+  const { clinicalData } =
+    clinicalEntityData == undefined || loading
+      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
+      : clinicalEntityData;
+
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
       active={selectedClinicalEntityTab === entity}
       onClick={(e) => setSelectedClinicalEntityTab(entity)}
       disabled={
-        !clinicalData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
       }
     >
       {clinicalEntityDisplayNames[entity]}
-      {hasClinicalErrors(clinicalData, entity) && (
+      {hasClinicalErrors(sideMenuData, entity) && (
         <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
       )}
     </VerticalTabs.Item>
