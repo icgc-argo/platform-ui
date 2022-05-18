@@ -34,8 +34,10 @@ import DnaLoader from 'uikit/DnaLoader';
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
+import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
+import { getConfig } from 'global/config';
 import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
 
 import {
@@ -44,6 +46,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_CLINICAL_DATA_PATH,
   PROGRAMS_LIST_PATH,
   DCC_DASHBOARD_PATH,
 } from 'global/constants/pages';
@@ -109,9 +112,101 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
+enum CoreClinicalEntities {
+  'donor',
+  'specimens',
+  'primaryDiagnosis',
+  'followUps',
+  'treatments',
+}
+
+enum CompletionStates {
+  all = 'all',
+  invalid = 'invalid',
+  complete = 'complete',
+  incomplete = 'incomplete',
+}
+
+type ClinicalEntity = {
+  entityName: string;
+  entityFields: string[];
+  records: Array<{
+    name: string;
+    value: any;
+  }>;
+};
+
+type CompletionStats = {
+  coreCompletion: CoreCompletionFields;
+  coreCompletionDate: string;
+  coreCompletionPercentage: number;
+  overriddenCoreCompletion: [CoreClinicalEntities];
+};
+
+type CoreCompletionFields = {
+  [k in CoreClinicalEntities]: number;
+};
+
+type ClinicalErrorData = {
+  donorId: string;
+  submitterDonorId: string;
+  errors: {
+    entityName: string;
+    errorType: string;
+    fieldName: string;
+    index: number;
+    message: string;
+  };
+};
+
+type ClinicalEntityQueryResponse = {
+  clinicalData: {
+    clinicalEntities: Array<ClinicalEntity>;
+    completionStats: Array<CompletionStats>;
+    clinicalErrors: Array<ClinicalErrorData>;
+  };
+};
+
+type ClinicalFilter = {
+  entityTypes: string[];
+  page: number;
+  limit: number;
+  donorIds?: string[];
+  submitterDonorIds?: string[];
+  completionState?: CompletionStates;
+  sort?: string;
+};
+
+const clinicalEntityFilters: ClinicalFilter = {
+  entityTypes: [
+    'sampleRegistration',
+    'donor',
+    'specimens',
+    'primaryDiagnoses',
+    'familyHistory',
+    'treatment',
+    'chemotherapy',
+    'immunotherapy',
+    'surgery',
+    'radiation',
+    'followUps',
+    'hormoneTherapy',
+    'exposure',
+    'comorbidity',
+    'biomarker',
+  ],
+  page: 0,
+  limit: 20,
+  donorIds: [],
+  submitterDonorIds: [],
+  completionState: CompletionStates['all'],
+  sort: '-donorId',
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
+  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -138,6 +233,17 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     : false;
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
+
+  // This will be moved to Submitted Data Page
+  const { data: clinicalEntityData } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: props.program.shortName,
+        filters: clinicalEntityFilters,
+      },
+    });
 
   const canSeeCollaboratorView = React.useMemo(() => {
     return (
@@ -242,6 +348,24 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               }
             />
           </Link>
+          {FEATURE_SUBMITTED_DATA_ENABLED && (
+            <Link
+              prefetch
+              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                props.program.shortName,
+              )}
+              href={PROGRAM_CLINICAL_DATA_PATH}
+            >
+              <MenuItem
+                level={3}
+                content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+                selected={
+                  PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
+                }
+              />
+            </Link>
+          )}
         </>
       )}
       {canWriteToProgram && (
