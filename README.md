@@ -30,10 +30,7 @@ Navigate to `/compose` (`cd ./compose`) and Follow the instructions found in [`c
 
 ### Writing commits
 
-To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/package/gitmoji-cli), available as a dev dependency
-
-- `npm run commit` will start interactive commit tool
-- configuring gitmoji-cli: `npm run gitmoji-config`
+To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To easily access emojis on Mac, press ctrl+cmd+space.
 
 ### Type checking
 
