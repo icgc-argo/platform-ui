@@ -138,7 +138,6 @@
   "resolutions": {
     "glob-parent": "6.0.2",
     "graphiql": "1.5.16",
-    "immer": "9.0.6",
     "ini": "2.0.0",
     "node-fetch": "2.6.1",
     "object-path": "0.11.8",
