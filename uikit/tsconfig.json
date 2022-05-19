@@ -14,13 +14,5 @@
     "target": "es6"
   },
   "include": ["./**/*"],
-  "exclude": [
-    "node_modules",
-    "**/testSetup.*",
-    "**/*.test.*",
-    "**/testUtil.*",
-    "**/plopfile.js",
-    "**/*.stories.*",
-    "**/stories.*"
-  ]
+  "exclude": ["node_modules", "**/testSetup.*", "**/*.test.*", "**/testUtil.*", "**/plopfile.js"]
 }
