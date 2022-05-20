@@ -113,7 +113,7 @@
     "core-js": "^3.22.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "file-regex": "^3.0.1",
+    "file-regex": "^3.1.0",
     "graphql-tools": "^4.0.4",
     "husky": "^2.2.0",
     "mocha": "^8.4.0",
