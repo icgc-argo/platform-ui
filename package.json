@@ -110,7 +110,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.3.6",
-    "core-js": "^3.6.5",
+    "core-js": "^3.22.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.0.1",
