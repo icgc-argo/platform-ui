@@ -24,6 +24,7 @@ import { css } from 'uikit';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import { useTheme } from 'uikit/ThemeProvider';
+import Typography from 'uikit/Typography';
 import {
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
@@ -31,7 +32,7 @@ import {
   TableInfoHeaderContainer,
   CellContentCenter,
 } from '../../common';
-import { ClinicalEntity } from '../common';
+import { ClinicalEntity, ClinicalFilter } from '../common';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
@@ -93,10 +94,12 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 const DataTable = (props: {
   records: Array<ClinicalEntity>;
   stats?: DonorStats;
+  filters: ClinicalFilter;
   //   submissionInfo?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
-  const { records, stats } = props;
+  const { records, filters } = props;
+  const { page, limit } = filters;
   const containerRef = React.createRef<HTMLDivElement>();
 
   const filteredFirstRecord = records[0];
@@ -115,13 +118,18 @@ const DataTable = (props: {
         position: relative;
       `}
     >
-      {/* <TableInfoHeaderContainer
-        left={<StatsArea stats={stats} />}
-        right={<SubmissionInfoArea {...submissionInfo} />}
-      />{' '} */}
+      <TableInfoHeaderContainer
+        left={
+          <Typography>
+            Showing {page} of {limit}
+          </Typography>
+        }
+        //<StatsArea stats={stats} />
+        // right={<SubmissionInfoArea {...submissionInfo} />}
+      />{' '}
       <Table
         parentRef={containerRef}
-        showPagination={false}
+        showPagination={true}
         pageSize={Number.MAX_SAFE_INTEGER}
         columns={filteredFirstRecord.entityFields.map((key) => ({
           id: key,

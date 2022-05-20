@@ -52,6 +52,10 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
+const emptyResponse = {
+  clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] },
+};
+
 export default function ProgramSubmittedData(props) {
   const {
     query: { shortName: programShortName },
@@ -76,33 +80,28 @@ export default function ProgramSubmittedData(props) {
         filters: defaultClinicalEntityFilters,
       },
     });
-  console.log('sideMenuQuery', sideMenuQuery);
+
+  const userInput = {
+    // TODO: Add user input for other filters
+    ...defaultClinicalEntityFilters,
+    entityTypes: [clinicalEntityFields.find((entity) => entity === selectedClinicalEntityTab)],
+  };
+
   const { data: clinicalEntityData, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
       errorPolicy: 'all',
       variables: {
         programShortName: programShortName,
-        filters: {
-          // TODO: Add user input for other filters
-          ...defaultClinicalEntityFilters,
-          entityTypes: [
-            clinicalEntityFields.find((entity) => entity === selectedClinicalEntityTab),
-          ],
-        },
+        filters: userInput,
       },
     });
-  console.log('clinicalEntityData', clinicalEntityData);
+  console.log(clinicalEntityData);
   const { clinicalData: sideMenuData } =
-    sideMenuQuery == undefined || loading
-      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
-      : sideMenuQuery;
+    sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
 
-  // TODO: Populate Page w/ Entity Data
   const { clinicalData } =
-    clinicalEntityData == undefined || loading
-      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
-      : clinicalEntityData;
+    clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
@@ -227,7 +226,7 @@ export default function ProgramSubmittedData(props) {
               </div>
               {/* DataTable */}
               <div>
-                <DataTable records={clinicalData.clinicalEntities} />
+                <DataTable records={clinicalData.clinicalEntities} filters={userInput} />
               </div>
             </div>
           </div>
