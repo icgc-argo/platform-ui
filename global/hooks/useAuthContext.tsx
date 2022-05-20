@@ -29,6 +29,12 @@ import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';
 
+declare global {
+  interface Navigator {
+    msSaveBlob?: (blob: any, defaultName?: string) => boolean;
+  }
+}
+
 type T_AuthContext = {
   egoJwt?: string;
   logOut: (path?: string) => void;
