@@ -38,7 +38,7 @@ export type ClinicalEntity = {
   records: Array<{
     name: string;
     value: any;
-  }>;
+  }>[];
 };
 
 export type CompletionStats = {

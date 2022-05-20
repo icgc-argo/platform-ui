@@ -18,68 +18,18 @@
  */
 
 import memoize from 'lodash/memoize';
-import omit from 'lodash/omit';
 import React from 'react';
 import { css } from 'uikit';
-import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
-import {
-  DataTableStarIcon,
-  StatArea as StatAreaDisplay,
-  SubmissionInfoArea,
-  TableInfoHeaderContainer,
-  CellContentCenter,
-} from '../../common';
+import { TableInfoHeaderContainer } from '../../common';
 import { ClinicalEntity, ClinicalFilter } from '../common';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
-const REQUIRED_FILE_ENTRY_FIELDS = {
-  ROW: 'row',
-  IS_NEW: 'isNew',
-};
 export type DonorEntry = {
   row: string;
   isNew: boolean;
   [k: string]: string | number | boolean;
-};
-type DonorStats = {
-  newCount: number;
-  existingCount: number;
-};
-
-const StarIcon = ({
-  fill,
-  ...rest
-}: React.ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
-  <DataTableStarIcon fill={fill} />
-);
-
-const StatsArea = (props: { stats?: DonorStats }) => {
-  const { stats } = props;
-  return (
-    <StatAreaDisplay.Container>
-      <StatAreaDisplay.Section>
-        {stats ? (stats.existingCount + stats.newCount).toLocaleString() : 0} Total
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <Icon name="chevron_right" fill="grey_1" width="8px" />
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill="accent2" />
-          {stats && stats.newCount.toLocaleString()} New
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-      <StatAreaDisplay.Section>
-        <StatAreaDisplay.StatEntryContainer>
-          <StatAreaDisplay.StarIcon fill="grey_1" />
-          {stats && stats.existingCount.toLocaleString()} Already Registered
-        </StatAreaDisplay.StatEntryContainer>
-      </StatAreaDisplay.Section>
-    </StatAreaDisplay.Container>
-  );
 };
 
 const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
@@ -91,12 +41,7 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const DataTable = (props: {
-  entityData: ClinicalEntity;
-  stats?: DonorStats;
-  filters: ClinicalFilter;
-  //   submissionInfo?: React.ComponentProps<typeof SubmissionInfoArea>;
-}) => {
+const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter }) => {
   const theme = useTheme();
   const { entityData, filters } = props;
   const { page, limit } = filters;
@@ -104,13 +49,9 @@ const DataTable = (props: {
   const max = (page + 1) * limit;
   const containerRef = React.createRef<HTMLDivElement>();
 
-  //   = omit(
-  //     records[0],
-  //     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
-  //       return typeof value === 'string' ? value : '';
-  //     }),
-  //   );
-  console.log('entityData', entityData);
+  const records = [];
+  entityData.records.forEach((record) => record.forEach((r) => records.push(r)));
+
   return (
     <div
       ref={containerRef}
@@ -124,14 +65,14 @@ const DataTable = (props: {
             css={css`
               margin: 0px;
             `}
+            variant="default"
           >
             Showing {min} - {max} of {limit}
           </Typography>
         }
-        //<StatsArea stats={stats} />
-        // right={<SubmissionInfoArea {...submissionInfo} />}
       />{' '}
       <Table
+        withOutsideBorder
         parentRef={containerRef}
         showPagination={true}
         pageSize={Number.MAX_SAFE_INTEGER}
@@ -141,7 +82,7 @@ const DataTable = (props: {
           Header: key,
           minWidth: getColumnWidth(key),
         }))}
-        data={entityData.records}
+        data={records}
       />
     </div>
   );
