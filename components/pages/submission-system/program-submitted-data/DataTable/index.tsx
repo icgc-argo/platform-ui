@@ -92,25 +92,25 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 });
 
 const DataTable = (props: {
-  records: Array<ClinicalEntity>;
+  entityData: ClinicalEntity;
   stats?: DonorStats;
   filters: ClinicalFilter;
   //   submissionInfo?: React.ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
-  const { records, filters } = props;
+  const { entityData, filters } = props;
   const { page, limit } = filters;
+  const min = page * limit + 1;
+  const max = (page + 1) * limit;
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const filteredFirstRecord = records[0];
-  console.log('filteredFirstRecord', filteredFirstRecord);
   //   = omit(
   //     records[0],
   //     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
   //       return typeof value === 'string' ? value : '';
   //     }),
   //   );
-
+  console.log('entityData', entityData);
   return (
     <div
       ref={containerRef}
@@ -120,8 +120,12 @@ const DataTable = (props: {
     >
       <TableInfoHeaderContainer
         left={
-          <Typography>
-            Showing {page} of {limit}
+          <Typography
+            css={css`
+              margin: 0px;
+            `}
+          >
+            Showing {min} - {max} of {limit}
           </Typography>
         }
         //<StatsArea stats={stats} />
@@ -131,13 +135,13 @@ const DataTable = (props: {
         parentRef={containerRef}
         showPagination={true}
         pageSize={Number.MAX_SAFE_INTEGER}
-        columns={filteredFirstRecord.entityFields.map((key) => ({
+        columns={entityData.entityFields.map((key) => ({
           id: key,
           accessor: key,
           Header: key,
           minWidth: getColumnWidth(key),
         }))}
-        data={records}
+        data={entityData.records}
       />
     </div>
   );

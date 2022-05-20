@@ -226,7 +226,7 @@ export default function ProgramSubmittedData(props) {
               </div>
               {/* DataTable */}
               <div>
-                <DataTable records={clinicalData.clinicalEntities} filters={userInput} />
+                <DataTable entityData={clinicalData.clinicalEntities[0]} filters={userInput} />
               </div>
             </div>
           </div>
