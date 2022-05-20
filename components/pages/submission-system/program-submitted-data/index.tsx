@@ -33,6 +33,7 @@ import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import VerticalTabs from 'uikit/VerticalTabs';
 import TitleBar from 'uikit/TitleBar';
+import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
@@ -45,7 +46,7 @@ import {
   defaultClinicalEntityFilters,
   hasClinicalErrors,
 } from './common';
-import Typography from 'uikit/Typography';
+import DataTable from './DataTable';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -75,7 +76,7 @@ export default function ProgramSubmittedData(props) {
         filters: defaultClinicalEntityFilters,
       },
     });
-
+  console.log('sideMenuQuery', sideMenuQuery);
   const { data: clinicalEntityData, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
@@ -91,7 +92,7 @@ export default function ProgramSubmittedData(props) {
         },
       },
     });
-
+  console.log('clinicalEntityData', clinicalEntityData);
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading
       ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
@@ -168,6 +169,7 @@ export default function ProgramSubmittedData(props) {
               width: 100%;
             `}
           >
+            {/* Sidebar */}
             <div
               css={css`
                 width: 20%;
@@ -177,6 +179,7 @@ export default function ProgramSubmittedData(props) {
             >
               <VerticalTabs>{menuItems}</VerticalTabs>
             </div>
+            {/* Content */}
             <div
               css={css`
                 display: inline-block;
@@ -186,6 +189,7 @@ export default function ProgramSubmittedData(props) {
                 padding: 8px 12px;
               `}
             >
+              {/* Header */}
               <div
                 css={css`
                   width: 100%;
@@ -220,6 +224,10 @@ export default function ProgramSubmittedData(props) {
                   />
                   {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
                 </Button>
+              </div>
+              {/* DataTable */}
+              <div>
+                <DataTable records={clinicalData.clinicalEntities} />
               </div>
             </div>
           </div>
