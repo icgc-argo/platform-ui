@@ -52,9 +52,16 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
   const records = entityData.records.map((record) => {
     let clinicalRecord = {};
     record.forEach((r) => {
-      clinicalRecord[r.name] = r.value;
+      clinicalRecord[r.name] = r.value || '--';
     });
     return clinicalRecord;
+  });
+
+  const columns = [];
+  entityData.records.forEach((record) => {
+    record.forEach((r) => {
+      if (!columns.includes(r.name)) columns.push(r.name);
+    });
   });
 
   return (
@@ -81,7 +88,7 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
         parentRef={containerRef}
         showPagination={true}
         pageSize={Number.MAX_SAFE_INTEGER}
-        columns={entityData.entityFields.map((key) => ({
+        columns={columns.map((key) => ({
           id: key,
           accessor: key,
           Header: key,
