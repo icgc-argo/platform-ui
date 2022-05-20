@@ -49,8 +49,13 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
   const max = (page + 1) * limit;
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const records = [];
-  entityData.records.forEach((record) => record.forEach((r) => records.push(r)));
+  const records = entityData.records.map((record) => {
+    let clinicalRecord = {};
+    record.forEach((r) => {
+      clinicalRecord[r.name] = r.value;
+    });
+    return clinicalRecord;
+  });
 
   return (
     <div
