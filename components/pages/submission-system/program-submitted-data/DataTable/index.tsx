@@ -123,14 +123,12 @@ const DataTable = (props: {
         parentRef={containerRef}
         showPagination={false}
         pageSize={Number.MAX_SAFE_INTEGER}
-        columns={[
-          ...Object.entries(filteredFirstRecord.entityFields).map(([key], i, arr) => ({
-            id: key,
-            accessor: key,
-            Header: key,
-            minWidth: getColumnWidth(key),
-          })),
-        ]}
+        columns={filteredFirstRecord.entityFields.map((key) => ({
+          id: key,
+          accessor: key,
+          Header: key,
+          minWidth: getColumnWidth(key),
+        }))}
         data={records}
       />
     </div>
