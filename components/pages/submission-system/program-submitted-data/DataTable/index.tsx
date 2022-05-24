@@ -77,7 +77,7 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
             css={css`
               margin: 0px;
             `}
-            variant="default"
+            variant="data"
           >
             Showing {min} - {max} of {limit}
           </Typography>
