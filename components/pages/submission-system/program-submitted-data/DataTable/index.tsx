@@ -19,7 +19,7 @@
 
 import { useQuery } from '@apollo/react-hooks';
 import memoize from 'lodash/memoize';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import Table from 'uikit/Table';
@@ -27,7 +27,6 @@ import Typography from 'uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
-  ClinicalFilter,
   ClinicalEntityQueryResponse,
   clinicalEntityFields,
   defaultClinicalEntityFilters,
@@ -49,37 +48,56 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const DataTable = ({ entityType, program }: { entityType: string; program: string | string[] }) => {
-  const filters: ClinicalFilter = {
-    // TODO: Add user input for other filters
-    ...defaultClinicalEntityFilters,
-    entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
-  };
-  const { page, limit } = filters;
-  const min = page * limit + 1;
-  const max = (page + 1) * limit;
-  const containerRef = React.createRef<HTMLDivElement>();
+const defaultPageSettings = {
+  page: defaultClinicalEntityFilters.page,
+  pageSize: defaultClinicalEntityFilters.limit,
+};
 
-  const { data: clinicalEntityData, loading } = useQuery<ClinicalEntityQueryResponse>(
-    CLINICAL_ENTITY_DATA,
-    {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: program,
-        filters: filters,
+const getEntityData = (program: string, entityType: string, page: number, pageSize: number) =>
+  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+    errorPolicy: 'all',
+    variables: {
+      programShortName: program,
+      filters: {
+        ...defaultClinicalEntityFilters,
+        entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
+        limit: pageSize,
+        page,
       },
     },
-  );
+  });
+
+const DataTable = ({ entityType, program }: { entityType: string; program: string }) => {
+  const containerRef = React.createRef<HTMLDivElement>();
+  const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+
+  useEffect(() => {
+    setPageSettings(defaultPageSettings);
+  }, [entityType]);
+
+  const { page, pageSize } = pageSettings;
+  const min = page * pageSize + 1;
+  const max = (page + 1) * pageSize;
+
+  const updatePageSettings = (state) => {
+    console.log(state);
+    const newPageSettings = { page: state.page, pageSize: state.pageSize };
+    setPageSettings(newPageSettings);
+    console.log(newPageSettings);
+    return newPageSettings;
+  };
 
   const columns = [];
   let records = [];
+
+  const { data: clinicalEntityData, loading } = getEntityData(program, entityType, page, pageSize);
 
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
   if (clinicalData.clinicalEntities.length > 0) {
     const entityData = clinicalData.clinicalEntities[0];
-
+    console.log('records.length', entityData.records.length);
     records = entityData.records.map((record) => {
       let clinicalRecord = {};
       record.forEach((r) => {
@@ -94,7 +112,8 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
       });
     });
   }
-
+  console.log(page);
+  console.log(pageSize);
   return loading ? (
     <DnaLoader />
   ) : (
@@ -112,17 +131,17 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
             `}
             variant="data"
           >
-            Showing {min} - {max} of {limit}
+            Showing {min} - {max} of {pageSize}
           </Typography>
         }
       />
       <Table
         withOutsideBorder
+        manual
         parentRef={containerRef}
         showPagination={true}
-        sortable={true}
-        manual
-        pageSize={Number.MAX_SAFE_INTEGER}
+        page={page}
+        pageSize={pageSize}
         columns={columns.map((key) => ({
           id: key,
           accessor: key,
@@ -130,15 +149,8 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
           minWidth: getColumnWidth(key),
         }))}
         data={records}
-        onPageSizeChange={(pageSize, pageIndex) => {
-          console.log(pageSize);
-          console.log(pageIndex);
-          return {};
-        }}
-        onPageChange={(index) => {
-          console.log(index);
-          return {};
-        }}
+        onFetchData={updatePageSettings}
+        onPageSizeChange={updatePageSettings}
       />
     </div>
   );

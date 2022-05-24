@@ -72,7 +72,7 @@ export default function ProgramSubmittedData() {
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
       errorPolicy: 'all',
       variables: {
-        programShortName: programShortName,
+        programShortName,
         filters: defaultClinicalEntityFilters,
       },
     });
