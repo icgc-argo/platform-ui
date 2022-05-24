@@ -140,3 +140,7 @@ export const hasClinicalErrors = (
       donor.errors &&
       donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
   ).length > 0;
+
+export const emptyResponse: ClinicalEntityQueryResponse = {
+  clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] },
+};

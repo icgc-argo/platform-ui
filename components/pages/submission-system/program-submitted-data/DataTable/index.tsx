@@ -17,14 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/react-hooks';
 import memoize from 'lodash/memoize';
 import React from 'react';
 import { css } from 'uikit';
+import DnaLoader from 'uikit/DnaLoader';
 import Table from 'uikit/Table';
-import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
-import { ClinicalEntity, ClinicalFilter } from '../common';
+import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
+import {
+  ClinicalFilter,
+  ClinicalEntityQueryResponse,
+  clinicalEntityFields,
+  defaultClinicalEntityFilters,
+  emptyResponse,
+} from '../common';
 
 export type DonorEntry = {
   row: string;
@@ -41,30 +49,55 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter }) => {
-  const theme = useTheme();
-  const { entityData, filters } = props;
+const DataTable = ({ entityType, program }: { entityType: string; program: string | string[] }) => {
+  const filters: ClinicalFilter = {
+    // TODO: Add user input for other filters
+    ...defaultClinicalEntityFilters,
+    entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
+  };
   const { page, limit } = filters;
   const min = page * limit + 1;
   const max = (page + 1) * limit;
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const records = entityData.records.map((record) => {
-    let clinicalRecord = {};
-    record.forEach((r) => {
-      clinicalRecord[r.name] = r.value || '--';
-    });
-    return clinicalRecord;
-  });
+  const { data: clinicalEntityData, loading } = useQuery<ClinicalEntityQueryResponse>(
+    CLINICAL_ENTITY_DATA,
+    {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: program,
+        filters: filters,
+      },
+    },
+  );
 
   const columns = [];
-  entityData.records.forEach((record) => {
-    record.forEach((r) => {
-      if (!columns.includes(r.name)) columns.push(r.name);
-    });
-  });
+  let records = [];
 
-  return (
+  const { clinicalData } =
+    clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
+
+  if (clinicalData.clinicalEntities.length > 0) {
+    const entityData = clinicalData.clinicalEntities[0];
+
+    records = entityData.records.map((record) => {
+      let clinicalRecord = {};
+      record.forEach((r) => {
+        clinicalRecord[r.name] = r.value || '--';
+      });
+      return clinicalRecord;
+    });
+
+    entityData.records.forEach((record) => {
+      record.forEach((r) => {
+        if (!columns.includes(r.name)) columns.push(r.name);
+      });
+    });
+  }
+
+  return loading ? (
+    <DnaLoader />
+  ) : (
     <div
       ref={containerRef}
       css={css`
@@ -82,11 +115,13 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
             Showing {min} - {max} of {limit}
           </Typography>
         }
-      />{' '}
+      />
       <Table
         withOutsideBorder
         parentRef={containerRef}
         showPagination={true}
+        sortable={true}
+        manual
         pageSize={Number.MAX_SAFE_INTEGER}
         columns={columns.map((key) => ({
           id: key,
@@ -95,6 +130,15 @@ const DataTable = (props: { entityData: ClinicalEntity; filters: ClinicalFilter 
           minWidth: getColumnWidth(key),
         }))}
         data={records}
+        onPageSizeChange={(pageSize, pageIndex) => {
+          console.log(pageSize);
+          console.log(pageIndex);
+          return {};
+        }}
+        onPageChange={(index) => {
+          console.log(index);
+          return {};
+        }}
       />
     </div>
   );
