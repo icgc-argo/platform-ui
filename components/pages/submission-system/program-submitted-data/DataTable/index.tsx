@@ -62,7 +62,7 @@ const getEntityData = (program: string, entityType: string, page: number, pageSi
         ...defaultClinicalEntityFilters,
         entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
         limit: pageSize,
-        page,
+        page: page + 1,
       },
     },
   });
@@ -80,10 +80,8 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   const max = (page + 1) * pageSize;
 
   const updatePageSettings = (state) => {
-    console.log(state);
     const newPageSettings = { page: state.page, pageSize: state.pageSize };
     setPageSettings(newPageSettings);
-    console.log(newPageSettings);
     return newPageSettings;
   };
 
@@ -97,23 +95,23 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
 
   if (clinicalData.clinicalEntities.length > 0) {
     const entityData = clinicalData.clinicalEntities[0];
-    console.log('records.length', entityData.records.length);
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '--';
-      });
-      return clinicalRecord;
-    });
 
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
       });
     });
+
+    records = entityData.records.map((record) => {
+      let clinicalRecord = {};
+      record.forEach((r) => {
+        clinicalRecord[r.name] = r.value || '--';
+      });
+
+      return clinicalRecord;
+    });
   }
-  console.log(page);
-  console.log(pageSize);
+
   return loading ? (
     <DnaLoader />
   ) : (
