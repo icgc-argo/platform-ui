@@ -146,6 +146,7 @@ export default function ProgramSubmittedData() {
           <div
             css={css`
               width: 20%;
+              max-width: 170px;
               display: inline-block;
               border: 1px solid ${theme.colors.grey_2}; ;
             `}
@@ -157,7 +158,7 @@ export default function ProgramSubmittedData() {
             css={css`
               display: inline-block;
               height: 100%;
-              width: 76%;
+              max-width: calc(97% - 170px);
               vertical-align: top;
               padding: 8px 12px;
             `}
