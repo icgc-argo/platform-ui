@@ -41,9 +41,9 @@ export type DonorEntry = {
 
 const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
   const minWidth = 90;
-  const maxWidth = 230;
-  const spacePerChar = 9;
-  const margin = 25;
+  const maxWidth = 200;
+  const spacePerChar = 8;
+  const margin = 0;
   const targetWidth = keyString.length * spacePerChar + margin;
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
