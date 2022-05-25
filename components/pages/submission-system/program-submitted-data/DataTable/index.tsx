@@ -76,9 +76,6 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   }, [entityType]);
 
   const { page, pageSize } = pageSettings;
-  const min = page * pageSize + 1;
-  const max = (page + 1) * pageSize;
-
   const updatePageSettings = (state) => {
     const newPageSettings = { page: state.page, pageSize: state.pageSize };
     setPageSettings(newPageSettings);
@@ -89,7 +86,6 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   let records = [];
 
   const { data: clinicalEntityData, loading } = getEntityData(program, entityType, page, pageSize);
-
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
@@ -112,6 +108,10 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
     });
   }
 
+  const { totalDocs } = clinicalData;
+  const min = page * pageSize + 1;
+  const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
+
   return loading ? (
     <DnaLoader />
   ) : (
@@ -129,7 +129,7 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
             `}
             variant="data"
           >
-            Showing {min} - {max} of {pageSize}
+            Showing {min} - {max} of {totalDocs}
           </Typography>
         }
       />

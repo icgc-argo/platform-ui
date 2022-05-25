@@ -66,6 +66,8 @@ export type ClinicalErrorData = {
 
 export type ClinicalEntityQueryResponse = {
   clinicalData: {
+    programShortName?: string;
+    totalDocs: number;
     clinicalEntities: Array<ClinicalEntity>;
     completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
@@ -142,5 +144,10 @@ export const hasClinicalErrors = (
   ).length > 0;
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
-  clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] },
+  clinicalData: {
+    totalDocs: 0,
+    clinicalEntities: [],
+    completionStats: [],
+    clinicalErrors: [],
+  },
 };

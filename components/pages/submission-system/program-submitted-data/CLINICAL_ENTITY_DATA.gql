@@ -1,6 +1,7 @@
 query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!) {
   clinicalData(programShortName: $programShortName, filters: $filters) {
     programShortName
+    totalDocs
     clinicalEntities {
       entityName
       entityFields
