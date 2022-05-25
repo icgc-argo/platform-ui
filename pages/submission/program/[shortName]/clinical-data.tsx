@@ -34,7 +34,7 @@ export default createPage({
       canWriteProgramData({ permissions, programId: String(shortName) })
     );
   },
-  startWithGlobalLoader: true,
+  startWithGlobalLoader: false,
 })((props) => {
   return <ProgramClinicalData {...props} />;
 });

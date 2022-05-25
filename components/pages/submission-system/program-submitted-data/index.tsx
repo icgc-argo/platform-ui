@@ -26,32 +26,37 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from 'uikit';
+import Button from 'uikit/Button';
+import Container from 'uikit/Container';
+import DnaLoader from 'uikit/DnaLoader';
+import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
+import VerticalTabs from 'uikit/VerticalTabs';
 import TitleBar from 'uikit/TitleBar';
+import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
-import { ClinicalEntityQueryResponse, clinicalEntityFilters } from './common';
+import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
+import {
+  aliasEntityNames,
+  ClinicalEntityQueryResponse,
+  clinicalEntityDisplayNames,
+  clinicalEntityFields,
+  defaultClinicalEntityFilters,
+  hasClinicalErrors,
+} from './common';
+import Typography from 'uikit/Typography';
 
 setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramDashboard(props) {
+export default function ProgramSubmittedData(props) {
   const {
     query: { shortName: programShortName },
   } = usePageContext();
+  const theme = useTheme();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-
-  const { data: clinicalEntityData } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: programShortName,
-        filters: clinicalEntityFilters,
-      },
-    });
-
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
     defaultClinicalEntityTab,
@@ -60,6 +65,59 @@ export default function ProgramDashboard(props) {
       deSerialize: (v) => v,
     },
   );
+
+  const { data: sideMenuQuery } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: programShortName,
+        filters: defaultClinicalEntityFilters,
+      },
+    });
+
+  const { data: clinicalEntityData, loading } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: programShortName,
+        filters: {
+          // TODO: Add user input for other filters
+          ...defaultClinicalEntityFilters,
+          entityTypes: [
+            clinicalEntityFields.find((entity) => entity === selectedClinicalEntityTab),
+          ],
+        },
+      },
+    });
+
+  const { clinicalData: sideMenuData } =
+    sideMenuQuery == undefined || loading
+      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
+      : sideMenuQuery;
+
+  // TODO: Populate Page w/ Entity Data
+  const { clinicalData } =
+    clinicalEntityData == undefined || loading
+      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
+      : clinicalEntityData;
+
+  const menuItems = clinicalEntityFields.map((entity) => (
+    <VerticalTabs.Item
+      key={entity}
+      active={selectedClinicalEntityTab === entity}
+      onClick={(e) => setSelectedClinicalEntityTab(entity)}
+      disabled={
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+      }
+    >
+      {clinicalEntityDisplayNames[entity]}
+      {hasClinicalErrors(sideMenuData, entity) && (
+        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+      )}
+    </VerticalTabs.Item>
+  ));
 
   return (
     <SubmissionLayout
@@ -101,7 +159,72 @@ export default function ProgramDashboard(props) {
         </div>
       }
     >
-      <div></div>
+      <Container>
+        {loading ? (
+          <DnaLoader />
+        ) : (
+          <div
+            css={css`
+              width: 100%;
+            `}
+          >
+            <div
+              css={css`
+                width: 20%;
+                display: inline-block;
+                border: 1px solid ${theme.colors.grey_2}; ;
+              `}
+            >
+              <VerticalTabs>{menuItems}</VerticalTabs>
+            </div>
+            <div
+              css={css`
+                display: inline-block;
+                height: 100%;
+                width: 76%;
+                vertical-align: top;
+                padding: 8px 12px;
+              `}
+            >
+              <div
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                `}
+              >
+                <Typography
+                  variant="subtitle2"
+                  css={css`
+                    margin-top: 4px;
+                    margin-left: 4px;
+                  `}
+                >
+                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                </Typography>
+
+                <Button
+                  css={css`
+                    white-space: nowrap;
+                    height: fit-content;
+                  `}
+                  variant="secondary"
+                >
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    fill="accent2_dark"
+                    height="12px"
+                  />
+                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </Container>
     </SubmissionLayout>
   );
 }
