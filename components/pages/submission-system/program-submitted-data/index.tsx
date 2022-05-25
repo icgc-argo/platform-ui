@@ -158,7 +158,7 @@ export default function ProgramSubmittedData() {
             css={css`
               display: inline-block;
               height: 100%;
-              max-width: calc(97% - 170px);
+              width: calc(97% - 170px);
               vertical-align: top;
               padding: 8px 12px;
             `}
