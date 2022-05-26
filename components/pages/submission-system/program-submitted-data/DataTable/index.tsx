@@ -50,19 +50,26 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 
 const defaultPageSettings = {
   page: defaultClinicalEntityFilters.page,
-  pageSize: defaultClinicalEntityFilters.limit,
+  pageSize: defaultClinicalEntityFilters.pageSize,
 };
 
-const getEntityData = (program: string, entityType: string, page: number, pageSize: number) =>
+const getEntityData = (
+  program: string,
+  entityType: string,
+  page: number,
+  pageSize: number,
+  sort: string,
+) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
     variables: {
       programShortName: program,
       filters: {
         ...defaultClinicalEntityFilters,
+        sort,
+        page,
+        pageSize,
         entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
-        limit: pageSize,
-        page: page,
       },
     },
   });
@@ -70,12 +77,19 @@ const getEntityData = (program: string, entityType: string, page: number, pageSi
 const DataTable = ({ entityType, program }: { entityType: string; program: string }) => {
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+  const [sortSettings, setSortSettings] = useState(defaultPageSettings);
   const { page, pageSize } = pageSettings;
 
   const updatePageSettings = (state) => {
     const newPageSettings = { page: state.page, pageSize: state.pageSize };
     setPageSettings(newPageSettings);
     return newPageSettings;
+  };
+
+  const updateSortSettings = (sort) => {
+    const newSortSettings = `${sort[0].desc ? '-' : ''}${sort[0].id}`;
+    setSortSettings(newSortSettings);
+    return newSortSettings;
   };
 
   useEffect(() => {
@@ -152,6 +166,7 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
         data={records}
         onFetchData={updatePageSettings}
         onPageSizeChange={updatePageSettings}
+        onSortedChange={updateSortSettings}
       />
     </div>
   );

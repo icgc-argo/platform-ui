@@ -77,7 +77,7 @@ export type ClinicalEntityQueryResponse = {
 export type ClinicalFilter = {
   entityTypes: string[];
   page: number;
-  limit: number;
+  pageSize: number;
   donorIds?: string[];
   submitterDonorIds?: string[];
   completionState?: CompletionStates;
@@ -125,7 +125,7 @@ export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
 export const defaultClinicalEntityFilters: ClinicalFilter = {
   entityTypes: clinicalEntityFields,
   page: 0,
-  limit: 20,
+  pageSize: 20,
   donorIds: [],
   submitterDonorIds: [],
   completionState: CompletionStates['all'],
