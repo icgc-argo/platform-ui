@@ -62,7 +62,7 @@ const getEntityData = (program: string, entityType: string, page: number, pageSi
         ...defaultClinicalEntityFilters,
         entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
         limit: pageSize,
-        page: page + 1,
+        page: page,
       },
     },
   });
@@ -70,20 +70,21 @@ const getEntityData = (program: string, entityType: string, page: number, pageSi
 const DataTable = ({ entityType, program }: { entityType: string; program: string }) => {
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
-
-  useEffect(() => {
-    setPageSettings(defaultPageSettings);
-  }, [entityType]);
-
   const { page, pageSize } = pageSettings;
+
   const updatePageSettings = (state) => {
     const newPageSettings = { page: state.page, pageSize: state.pageSize };
     setPageSettings(newPageSettings);
     return newPageSettings;
   };
 
+  useEffect(() => {
+    setPageSettings(defaultPageSettings);
+  }, [entityType]);
+
   const columns = [];
   let records = [];
+  let totalDocs = 0;
 
   const { data: clinicalEntityData, loading } = getEntityData(program, entityType, page, pageSize);
   const { clinicalData } =
@@ -91,6 +92,7 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
 
   if (clinicalData.clinicalEntities.length > 0) {
     const entityData = clinicalData.clinicalEntities[0];
+    totalDocs = entityData.totalDocs;
 
     entityData.records.forEach((record) => {
       record.forEach((r) => {
@@ -108,9 +110,9 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
     });
   }
 
-  const { totalDocs } = clinicalData;
-  const min = page * pageSize + 1;
+  const min = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
+  const pages = Math.ceil(totalDocs / pageSize);
 
   return loading ? (
     <DnaLoader />
@@ -139,6 +141,7 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
         parentRef={containerRef}
         showPagination={true}
         page={page}
+        pages={pages}
         pageSize={pageSize}
         columns={columns.map((key) => ({
           id: key,

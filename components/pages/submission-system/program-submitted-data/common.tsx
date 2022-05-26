@@ -35,6 +35,7 @@ export enum CompletionStates {
 export type ClinicalEntity = {
   entityName: string;
   entityFields: string[];
+  totalDocs: number;
   records: Array<{
     name: string;
     value: any;
@@ -67,7 +68,6 @@ export type ClinicalErrorData = {
 export type ClinicalEntityQueryResponse = {
   clinicalData: {
     programShortName?: string;
-    totalDocs: number;
     clinicalEntities: Array<ClinicalEntity>;
     completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
@@ -145,7 +145,6 @@ export const hasClinicalErrors = (
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
-    totalDocs: 0,
     clinicalEntities: [],
     completionStats: [],
     clinicalErrors: [],
