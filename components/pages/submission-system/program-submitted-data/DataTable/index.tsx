@@ -31,6 +31,7 @@ import {
   clinicalEntityFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  aliasSortNames,
 } from '../common';
 
 export type DonorEntry = {
@@ -51,6 +52,7 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 const defaultPageSettings = {
   page: defaultClinicalEntityFilters.page,
   pageSize: defaultClinicalEntityFilters.pageSize,
+  sorted: [{ id: 'donorId', desc: true }],
 };
 
 const getEntityData = (
@@ -77,19 +79,21 @@ const getEntityData = (
 const DataTable = ({ entityType, program }: { entityType: string; program: string }) => {
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
-  const [sortSettings, setSortSettings] = useState(defaultPageSettings);
-  const { page, pageSize } = pageSettings;
+  const { page, pageSize, sorted } = pageSettings;
+  const { desc, id } = sorted[0];
+  const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
   const updatePageSettings = (state) => {
-    const newPageSettings = { page: state.page, pageSize: state.pageSize };
+    const { page, pageSize, sorted } = state;
+    const newPageSettings = { page, pageSize, sorted };
     setPageSettings(newPageSettings);
     return newPageSettings;
   };
 
-  const updateSortSettings = (sort) => {
-    const newSortSettings = `${sort[0].desc ? '-' : ''}${sort[0].id}`;
-    setSortSettings(newSortSettings);
-    return newSortSettings;
+  const updateSort = (sorted) => {
+    const newPageSettings = { ...pageSettings, sorted };
+    updatePageSettings(newPageSettings);
+    return newPageSettings;
   };
 
   useEffect(() => {
@@ -100,7 +104,13 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   let records = [];
   let totalDocs = 0;
 
-  const { data: clinicalEntityData, loading } = getEntityData(program, entityType, page, pageSize);
+  const { data: clinicalEntityData, loading } = getEntityData(
+    program,
+    entityType,
+    page,
+    pageSize,
+    sort,
+  );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
@@ -157,6 +167,7 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
         page={page}
         pages={pages}
         pageSize={pageSize}
+        sorted={sorted}
         columns={columns.map((key) => ({
           id: key,
           accessor: key,
@@ -164,9 +175,8 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
           minWidth: getColumnWidth(key),
         }))}
         data={records}
-        onFetchData={updatePageSettings}
         onPageSizeChange={updatePageSettings}
-        onSortedChange={updateSortSettings}
+        onSortedChange={updateSort}
       />
     </div>
   );

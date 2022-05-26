@@ -102,6 +102,8 @@ export const clinicalEntityDisplayNames = {
   biomarker: 'Biomarker',
 };
 
+export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
+
 export const aliasEntityNames = {
   donor: 'donor',
   sampleRegistration: 'sample_registration',
@@ -120,7 +122,10 @@ export const aliasEntityNames = {
   biomarker: 'biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
+export const aliasSortNames = {
+  donor_id: 'donorId',
+  program_id: 'programId',
+};
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {
   entityTypes: clinicalEntityFields,
@@ -129,7 +134,7 @@ export const defaultClinicalEntityFilters: ClinicalFilter = {
   donorIds: [],
   submitterDonorIds: [],
   completionState: CompletionStates['all'],
-  sort: '-donorId',
+  sort: aliasSortNames.donor_id,
 };
 
 export const hasClinicalErrors = (
