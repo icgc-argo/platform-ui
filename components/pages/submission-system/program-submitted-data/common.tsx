@@ -125,6 +125,7 @@ export const aliasEntityNames = {
 export const aliasSortNames = {
   donor_id: 'donorId',
   program_id: 'programId',
+  submitter_id: 'submitterId',
 };
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {
