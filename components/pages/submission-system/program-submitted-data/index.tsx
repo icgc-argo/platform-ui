@@ -46,7 +46,7 @@ import {
   hasClinicalErrors,
   emptyResponse,
 } from './common';
-import DataTable from './DataTable';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -201,7 +201,10 @@ export default function ProgramSubmittedData() {
             </div>
             {/* DataTable */}
             <div>
-              <DataTable entityType={selectedClinicalEntityTab} program={programShortName} />
+              <ClinicalEntityDataTable
+                entityType={selectedClinicalEntityTab}
+                program={programShortName}
+              />
             </div>
           </div>
         </div>

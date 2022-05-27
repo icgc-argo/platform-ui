@@ -55,7 +55,7 @@ const defaultPageSettings = {
   sorted: [{ id: 'donorId', desc: true }],
 };
 
-const getEntityData = (
+export const getEntityData = (
   program: string,
   entityType: string,
   page: number,
@@ -76,7 +76,13 @@ const getEntityData = (
     },
   });
 
-const DataTable = ({ entityType, program }: { entityType: string; program: string }) => {
+const ClinicalEntityDataTable = ({
+  entityType,
+  program,
+}: {
+  entityType: string;
+  program: string;
+}) => {
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
@@ -177,4 +183,4 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   );
 };
 
-export default DataTable;
+export default ClinicalEntityDataTable;

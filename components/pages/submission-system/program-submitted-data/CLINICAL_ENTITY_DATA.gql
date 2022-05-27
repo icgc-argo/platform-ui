@@ -9,20 +9,20 @@ query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!)
         name
         value
       }
-    }
-    completionStats {
-      coreCompletion {
-        donor
-        specimens
-        primaryDiagnosis
-        familyHistory
-        followUps
-        treatments
+      completionStats {
+        coreCompletion {
+          donor
+          specimens
+          primaryDiagnosis
+          familyHistory
+          followUps
+          treatments
+        }
+        coreCompletionDate
+        coreCompletionPercentage
+        overriddenCoreCompletion
+        donorId
       }
-      coreCompletionDate
-      coreCompletionPercentage
-      overriddenCoreCompletion
-      donorId
     }
     clinicalErrors {
       donorId
