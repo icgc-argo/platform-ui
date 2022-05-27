@@ -80,21 +80,13 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
-  console.log(sorted);
+
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
-  const updatePageSettings = (state) => {
-    const { page, pageSize, sorted = pageSettings.sorted } = state;
-
-    const newPageSettings = { page, pageSize, sorted };
+  const updatePageSettings = (key, value) => {
+    const newPageSettings = { ...pageSettings, [key]: value };
     setPageSettings(newPageSettings);
-    return newPageSettings;
-  };
-
-  const updateSort = (sorted) => {
-    const newPageSettings = { ...pageSettings, sorted };
-    updatePageSettings(newPageSettings);
     return newPageSettings;
   };
 
@@ -177,8 +169,9 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
           minWidth: getColumnWidth(key),
         }))}
         data={records}
-        onPageSizeChange={updatePageSettings}
-        onSortedChange={updateSort}
+        onPageChange={(value) => updatePageSettings('page', value)}
+        onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
+        onSortedChange={(value) => updatePageSettings('sorted', value)}
       />
     </div>
   );
