@@ -80,11 +80,13 @@ const DataTable = ({ entityType, program }: { entityType: string; program: strin
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
+  console.log(sorted);
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
   const updatePageSettings = (state) => {
-    const { page, pageSize, sorted } = state;
+    const { page, pageSize, sorted = pageSettings.sorted } = state;
+
     const newPageSettings = { page, pageSize, sorted };
     setPageSettings(newPageSettings);
     return newPageSettings;
