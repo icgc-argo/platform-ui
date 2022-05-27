@@ -27,11 +27,13 @@ import Typography from 'uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
-  ClinicalEntityQueryResponse,
+  aliasSortNames,
+  aliasEntityNames,
   clinicalEntityFields,
+  ClinicalEntityQueryResponse,
+  CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
-  aliasSortNames,
 } from '../common';
 
 export type DonorEntry = {
@@ -40,14 +42,25 @@ export type DonorEntry = {
   [k: string]: string | number | boolean;
 };
 
-const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
-  const minWidth = 90;
-  const maxWidth = 200;
-  const spacePerChar = 8;
-  const margin = 10;
-  const targetWidth = keyString.length * spacePerChar + margin;
-  return Math.max(Math.min(maxWidth, targetWidth), minWidth);
-});
+const completionColumnHeaders = {
+  donor: 'DO',
+  primaryDiagnosis: 'PD',
+  specimens: 'NS',
+  familyHistory: 'TS',
+  treatments: 'TR',
+  followUps: 'FO',
+};
+
+const getColumnWidth = memoize<(keyString: string, showCompletionStats: boolean) => number>(
+  (keyString, showCompletionStats) => {
+    const minWidth = showCompletionStats ? 45 : 90;
+    const maxWidth = 200;
+    const spacePerChar = 8;
+    const margin = 10;
+    const targetWidth = keyString.length * spacePerChar + margin;
+    return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+  },
+);
 
 const defaultPageSettings = {
   page: defaultClinicalEntityFilters.page,
@@ -103,6 +116,7 @@ const ClinicalEntityDataTable = ({
   const columns = [];
   let records = [];
   let totalDocs = 0;
+  let showCompletionStats = false;
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
@@ -116,6 +130,10 @@ const ClinicalEntityDataTable = ({
 
   if (clinicalData.clinicalEntities.length > 0) {
     const entityData = clinicalData.clinicalEntities[0];
+    const { completionStats, entityName } = entityData;
+    showCompletionStats = !!(completionStats && entityName === aliasEntityNames.donor);
+    if (showCompletionStats) columns.push(...Object.values(completionColumnHeaders));
+
     totalDocs = entityData.totalDocs;
 
     entityData.records.forEach((record) => {
@@ -128,6 +146,18 @@ const ClinicalEntityDataTable = ({
       let clinicalRecord = {};
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
+        if (completionStats && r.name === 'donor_id') {
+          const completion = completionStats.find(
+            (stat) => stat.donorId === parseInt(r.value),
+          ).coreCompletion;
+
+          CoreCompletionFields.forEach((field) => {
+            clinicalRecord[completionColumnHeaders[field]] =
+              completion[field] === null ? 0 : completion[field];
+          });
+
+          clinicalRecord = { ...clinicalRecord, ...completion };
+        }
       });
 
       return clinicalRecord;
@@ -172,7 +202,7 @@ const ClinicalEntityDataTable = ({
           id: key,
           accessor: key,
           Header: key,
-          minWidth: getColumnWidth(key),
+          minWidth: getColumnWidth(key, showCompletionStats),
         }))}
         data={records}
         onPageChange={(value) => updatePageSettings('page', value)}

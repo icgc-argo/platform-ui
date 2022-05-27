@@ -18,12 +18,27 @@
  */
 
 export enum CoreClinicalEntities {
-  'donor',
-  'specimens',
-  'primaryDiagnosis',
-  'followUps',
-  'treatments',
+  donor = 'donor',
+  specimens = 'specimens',
+  primaryDiagnosis = 'primaryDiagnosis',
+  familyHistory = 'familyHistory',
+  followUps = 'followUps',
+  treatments = 'treatments',
 }
+
+export const CoreCompletionFields = Object.values(CoreClinicalEntities);
+
+export type CoreCompletion = {
+  CoreClinicalEntities: number;
+};
+
+export type CompletionStats = {
+  coreCompletion: CoreCompletion;
+  coreCompletionDate: string;
+  coreCompletionPercentage: number;
+  donorId: number;
+  overriddenCoreCompletion: [CoreClinicalEntities];
+};
 
 export enum CompletionStates {
   all = 'all',
@@ -36,21 +51,11 @@ export type ClinicalEntity = {
   entityName: string;
   entityFields: string[];
   totalDocs: number;
+  completionStats?: Array<CompletionStats>;
   records: Array<{
     name: string;
     value: any;
   }>[];
-};
-
-export type CompletionStats = {
-  coreCompletion: CoreCompletionFields;
-  coreCompletionDate: string;
-  coreCompletionPercentage: number;
-  overriddenCoreCompletion: [CoreClinicalEntities];
-};
-
-export type CoreCompletionFields = {
-  [k in CoreClinicalEntities]: number;
 };
 
 export type ClinicalErrorData = {
@@ -69,7 +74,6 @@ export type ClinicalEntityQueryResponse = {
   clinicalData: {
     programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
-    completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
   };
 };
@@ -152,7 +156,6 @@ export const hasClinicalErrors = (
 export const emptyResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
     clinicalEntities: [],
-    completionStats: [],
     clinicalErrors: [],
   },
 };

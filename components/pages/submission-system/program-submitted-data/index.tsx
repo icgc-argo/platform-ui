@@ -46,7 +46,7 @@ import {
   hasClinicalErrors,
   emptyResponse,
 } from './common';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 
 setConfiguration({ gutterWidth: 9 });
 
