@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
-import usePageContext from 'global/hooks/usePageContext';
 import { Row, setConfiguration } from 'react-grid-system';
 
 import { getConfig } from 'global/config';
@@ -53,9 +53,7 @@ setConfiguration({ gutterWidth: 9 });
 const defaultClinicalEntityTab = 'donor';
 
 export default function ProgramSubmittedData() {
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
+  const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
