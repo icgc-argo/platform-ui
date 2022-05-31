@@ -24,6 +24,7 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import Table from 'uikit/Table';
 import Typography from 'uikit/Typography';
+import useTheme from 'uikit/utils/useTheme';
 import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
@@ -96,6 +97,7 @@ const ClinicalEntityDataTable = ({
   entityType: string;
   program: string;
 }) => {
+  const theme = useTheme();
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
@@ -198,6 +200,20 @@ const ClinicalEntityDataTable = ({
         pages={pages}
         pageSize={pageSize}
         sorted={sorted}
+        getTdProps={(state, row, column) => {
+          const { original } = row;
+          const { id } = column;
+          const isCompletionCell =
+            showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+          const errorState = original[id] === 0;
+
+          return {
+            style: {
+              color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
+              background: isCompletionCell && errorState ? theme.colors.error_4 : '',
+            },
+          };
+        }}
         columns={columns.map((key) => ({
           id: key,
           accessor: key,
