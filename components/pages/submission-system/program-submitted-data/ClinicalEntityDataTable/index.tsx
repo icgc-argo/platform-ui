@@ -220,6 +220,10 @@ const ClinicalEntityDataTable = ({
           id: key,
           accessor: key,
           Header: key,
+          headerStyle: {
+            'border-right':
+              key === completionColumnHeaders.followUps ? `3px solid ${theme.colors.grey}` : '',
+          },
           minWidth: getColumnWidth(key, showCompletionStats),
         }))}
         data={records}
