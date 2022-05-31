@@ -22,8 +22,8 @@ export enum CoreClinicalEntities {
   specimens = 'specimens',
   primaryDiagnosis = 'primaryDiagnosis',
   familyHistory = 'familyHistory',
-  followUps = 'followUps',
   treatments = 'treatments',
+  followUps = 'followUps',
 }
 
 export const CoreCompletionFields = Object.values(CoreClinicalEntities);

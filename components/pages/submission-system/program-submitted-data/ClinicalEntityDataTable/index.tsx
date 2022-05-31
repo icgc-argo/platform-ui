@@ -100,7 +100,7 @@ const ClinicalEntityDataTable = ({
   let totalDocs = 0;
   let showCompletionStats = false;
   let records = [];
-  const columns = [];
+  let columns = [];
   const theme = useTheme();
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
@@ -140,7 +140,9 @@ const ClinicalEntityDataTable = ({
         if (!columns.includes(r.name)) columns.push(r.name);
       });
     });
-    if (showCompletionStats) columns.splice(1, 0, ...Object.values(completionColumnHeaders));
+    if (showCompletionStats) {
+      columns.splice(1, 0, ...Object.values(completionColumnHeaders));
+    }
 
     records = entityData.records.map((record) => {
       let clinicalRecord = {};
@@ -164,17 +166,19 @@ const ClinicalEntityDataTable = ({
     });
   }
 
+  const getHeaderBorder = (key) =>
+    (showCompletionStats && key === completionColumnHeaders.followUps) ||
+    (!showCompletionStats && key === 'donor_id')
+      ? `3px solid ${theme.colors.grey}`
+      : '';
+
   const getCellStyles = (state, row, column) => {
     const { original } = row;
     const { id } = column;
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
     const errorState = original[id] === 0;
-    const border =
-      (showCompletionStats && id === completionColumnHeaders.followUps) ||
-      (!showCompletionStats && id === 'donor_id')
-        ? `3px solid ${theme.colors.grey}`
-        : '';
+    const border = getHeaderBorder(id);
 
     return {
       style: {
@@ -184,6 +188,37 @@ const ClinicalEntityDataTable = ({
       },
     };
   };
+
+  columns = columns.map((key) => {
+    return {
+      id: key,
+      accessor: key,
+      Header: key,
+      headerStyle: {
+        'border-right': getHeaderBorder(key),
+      },
+      minWidth: getColumnWidth(key, showCompletionStats),
+    };
+  });
+  if (showCompletionStats) {
+    columns = [
+      {
+        Header: 'CLINICAL CORE COMPLETION',
+        headerStyle: {
+          'border-right': getHeaderBorder(completionColumnHeaders.followUps),
+        },
+        columns: columns.slice(0, 7),
+      },
+      {
+        Header: 'SUBMITTED DONOR DATA',
+        headerStyle: {
+          'text-align': 'left',
+          'padding-left': '10%',
+        },
+        columns: columns.slice(7),
+      },
+    ];
+  }
 
   const min = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
@@ -220,19 +255,7 @@ const ClinicalEntityDataTable = ({
         pageSize={pageSize}
         sorted={sorted}
         getTdProps={getCellStyles}
-        columns={columns.map((key) => ({
-          id: key,
-          accessor: key,
-          Header: key,
-          headerStyle: {
-            'border-right':
-              (showCompletionStats && key === completionColumnHeaders.followUps) ||
-              (!showCompletionStats && key === 'donor_id')
-                ? `3px solid ${theme.colors.grey}`
-                : '',
-          },
-          minWidth: getColumnWidth(key, showCompletionStats),
-        }))}
+        columns={columns}
         data={records}
         onPageChange={(value) => updatePageSettings('page', value)}
         onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
