@@ -166,6 +166,23 @@ const ClinicalEntityDataTable = ({
     });
   }
 
+  const getCellStyles = (state, row, column) => {
+    const { original } = row;
+    const { id } = column;
+    const isCompletionCell =
+      showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+    const errorState = original[id] === 0;
+    const border = id === completionColumnHeaders.followUps ? `3px solid ${theme.colors.grey}` : '';
+
+    return {
+      style: {
+        color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
+        background: isCompletionCell && errorState ? theme.colors.error_4 : '',
+        'border-right': border,
+      },
+    };
+  };
+
   const min = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
   const pages = Math.ceil(totalDocs / pageSize);
@@ -200,20 +217,7 @@ const ClinicalEntityDataTable = ({
         pages={pages}
         pageSize={pageSize}
         sorted={sorted}
-        getTdProps={(state, row, column) => {
-          const { original } = row;
-          const { id } = column;
-          const isCompletionCell =
-            showCompletionStats && Object.values(completionColumnHeaders).includes(id);
-          const errorState = original[id] === 0;
-
-          return {
-            style: {
-              color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
-              background: isCompletionCell && errorState ? theme.colors.error_4 : '',
-            },
-          };
-        }}
+        getTdProps={getCellStyles}
         columns={columns.map((key) => ({
           id: key,
           accessor: key,
