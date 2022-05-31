@@ -134,7 +134,6 @@ const ClinicalEntityDataTable = ({
     const entityData = clinicalData.clinicalEntities[0];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasEntityNames.donor);
-    if (showCompletionStats) columns.push(...Object.values(completionColumnHeaders));
 
     totalDocs = entityData.totalDocs;
 
@@ -143,6 +142,7 @@ const ClinicalEntityDataTable = ({
         if (!columns.includes(r.name)) columns.push(r.name);
       });
     });
+    if (showCompletionStats) columns.splice(1, 0, ...Object.values(completionColumnHeaders));
 
     records = entityData.records.map((record) => {
       let clinicalRecord = {};
