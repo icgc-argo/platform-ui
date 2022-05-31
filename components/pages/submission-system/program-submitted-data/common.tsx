@@ -35,10 +35,11 @@ export enum CompletionStates {
 export type ClinicalEntity = {
   entityName: string;
   entityFields: string[];
+  totalDocs: number;
   records: Array<{
     name: string;
     value: any;
-  }>;
+  }>[];
 };
 
 export type CompletionStats = {
@@ -66,6 +67,7 @@ export type ClinicalErrorData = {
 
 export type ClinicalEntityQueryResponse = {
   clinicalData: {
+    programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
     completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
@@ -75,7 +77,7 @@ export type ClinicalEntityQueryResponse = {
 export type ClinicalFilter = {
   entityTypes: string[];
   page: number;
-  limit: number;
+  pageSize: number;
   donorIds?: string[];
   submitterDonorIds?: string[];
   completionState?: CompletionStates;
@@ -100,6 +102,8 @@ export const clinicalEntityDisplayNames = {
   biomarker: 'Biomarker',
 };
 
+export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
+
 export const aliasEntityNames = {
   donor: 'donor',
   sampleRegistration: 'sample_registration',
@@ -118,16 +122,20 @@ export const aliasEntityNames = {
   biomarker: 'biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
+export const aliasSortNames = {
+  donor_id: 'donorId',
+  program_id: 'programId',
+  submitter_id: 'submitterId',
+};
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {
   entityTypes: clinicalEntityFields,
   page: 0,
-  limit: 20,
+  pageSize: 20,
   donorIds: [],
   submitterDonorIds: [],
   completionState: CompletionStates['all'],
-  sort: '-donorId',
+  sort: aliasSortNames.donor_id,
 };
 
 export const hasClinicalErrors = (
@@ -140,3 +148,11 @@ export const hasClinicalErrors = (
       donor.errors &&
       donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
   ).length > 0;
+
+export const emptyResponse: ClinicalEntityQueryResponse = {
+  clinicalData: {
+    clinicalEntities: [],
+    completionStats: [],
+    clinicalErrors: [],
+  },
+};

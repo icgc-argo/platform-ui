@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
-import usePageContext from 'global/hooks/usePageContext';
 import { Row, setConfiguration } from 'react-grid-system';
 
 import { getConfig } from 'global/config';
@@ -33,9 +33,9 @@ import Icon from 'uikit/Icon';
 import Link from 'uikit/Link';
 import VerticalTabs from 'uikit/VerticalTabs';
 import TitleBar from 'uikit/TitleBar';
+import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
-import CLINICAL_ENTITY_DATA from './CLINICAL_ENTITY_DATA.gql';
 import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
 import {
   aliasEntityNames,
@@ -44,17 +44,16 @@ import {
   clinicalEntityFields,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
+  emptyResponse,
 } from './common';
-import Typography from 'uikit/Typography';
+import DataTable from './DataTable';
 
 setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramSubmittedData(props) {
-  const {
-    query: { shortName: programShortName },
-  } = usePageContext();
+export default function ProgramSubmittedData() {
+  const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -66,42 +65,18 @@ export default function ProgramSubmittedData(props) {
     },
   );
 
-  const { data: sideMenuQuery } =
+  const { data: sideMenuQuery, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
       errorPolicy: 'all',
       variables: {
-        programShortName: programShortName,
+        programShortName,
         filters: defaultClinicalEntityFilters,
       },
     });
 
-  const { data: clinicalEntityData, loading } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: programShortName,
-        filters: {
-          // TODO: Add user input for other filters
-          ...defaultClinicalEntityFilters,
-          entityTypes: [
-            clinicalEntityFields.find((entity) => entity === selectedClinicalEntityTab),
-          ],
-        },
-      },
-    });
-
   const { clinicalData: sideMenuData } =
-    sideMenuQuery == undefined || loading
-      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
-      : sideMenuQuery;
-
-  // TODO: Populate Page w/ Entity Data
-  const { clinicalData } =
-    clinicalEntityData == undefined || loading
-      ? { clinicalData: { clinicalEntities: [], completionStats: [], clinicalErrors: [] } }
-      : clinicalEntityData;
+    sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
@@ -160,70 +135,74 @@ export default function ProgramSubmittedData(props) {
       }
     >
       <Container>
-        {loading ? (
-          <DnaLoader />
-        ) : (
+        <div
+          css={css`
+            width: 100%;
+          `}
+        >
+          {/* Sidebar */}
           <div
             css={css`
-              width: 100%;
+              width: 20%;
+              max-width: 170px;
+              display: inline-block;
+              border: 1px solid ${theme.colors.grey_2}; ;
             `}
           >
+            {loading ? <DnaLoader /> : <VerticalTabs>{menuItems}</VerticalTabs>}
+          </div>
+          {/* Content */}
+          <div
+            css={css`
+              display: inline-block;
+              height: 100%;
+              width: calc(97% - 170px);
+              vertical-align: top;
+              padding: 8px 12px;
+            `}
+          >
+            {/* Header */}
             <div
               css={css`
-                width: 20%;
-                display: inline-block;
-                border: 1px solid ${theme.colors.grey_2}; ;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
               `}
             >
-              <VerticalTabs>{menuItems}</VerticalTabs>
-            </div>
-            <div
-              css={css`
-                display: inline-block;
-                height: 100%;
-                width: 76%;
-                vertical-align: top;
-                padding: 8px 12px;
-              `}
-            >
-              <div
+              <Typography
+                variant="subtitle2"
                 css={css`
-                  width: 100%;
-                  display: flex;
-                  justify-content: space-between;
+                  margin-top: 4px;
+                  margin-left: 4px;
                 `}
               >
-                <Typography
-                  variant="subtitle2"
-                  css={css`
-                    margin-top: 4px;
-                    margin-left: 4px;
-                  `}
-                >
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
-                </Typography>
+                {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+              </Typography>
 
-                <Button
+              <Button
+                css={css`
+                  white-space: nowrap;
+                  height: fit-content;
+                `}
+                variant="secondary"
+              >
+                <Icon
                   css={css`
-                    white-space: nowrap;
-                    height: fit-content;
+                    padding-right: 4px;
                   `}
-                  variant="secondary"
-                >
-                  <Icon
-                    css={css`
-                      padding-right: 4px;
-                    `}
-                    name="download"
-                    fill="accent2_dark"
-                    height="12px"
-                  />
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
-                </Button>
-              </div>
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                />
+                {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+              </Button>
+            </div>
+            {/* DataTable */}
+            <div>
+              <DataTable entityType={selectedClinicalEntityTab} program={programShortName} />
             </div>
           </div>
-        )}
+        </div>
       </Container>
     </SubmissionLayout>
   );
