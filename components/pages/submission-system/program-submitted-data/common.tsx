@@ -130,6 +130,12 @@ export const aliasSortNames = {
   donor_id: 'donorId',
   program_id: 'programId',
   submitter_id: 'submitterId',
+  DO: 'donorId',
+  PD: 'primaryDiagnoses',
+  NS: 'specimens',
+  TS: 'familyHistory',
+  TR: 'treatments',
+  FO: 'followUps',
 };
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {

@@ -97,11 +97,14 @@ const ClinicalEntityDataTable = ({
   entityType: string;
   program: string;
 }) => {
+  let totalDocs = 0;
+  let showCompletionStats = false;
+  let records = [];
+  const columns = [];
   const theme = useTheme();
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
-
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
@@ -114,11 +117,6 @@ const ClinicalEntityDataTable = ({
   useEffect(() => {
     setPageSettings(defaultPageSettings);
   }, [entityType]);
-
-  const columns = [];
-  let records = [];
-  let totalDocs = 0;
-  let showCompletionStats = false;
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
