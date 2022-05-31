@@ -170,7 +170,11 @@ const ClinicalEntityDataTable = ({
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
     const errorState = original[id] === 0;
-    const border = id === completionColumnHeaders.followUps ? `3px solid ${theme.colors.grey}` : '';
+    const border =
+      (showCompletionStats && id === completionColumnHeaders.followUps) ||
+      (!showCompletionStats && id === 'donor_id')
+        ? `3px solid ${theme.colors.grey}`
+        : '';
 
     return {
       style: {
@@ -222,7 +226,10 @@ const ClinicalEntityDataTable = ({
           Header: key,
           headerStyle: {
             'border-right':
-              key === completionColumnHeaders.followUps ? `3px solid ${theme.colors.grey}` : '',
+              (showCompletionStats && key === completionColumnHeaders.followUps) ||
+              (!showCompletionStats && key === 'donor_id')
+                ? `3px solid ${theme.colors.grey}`
+                : '',
           },
           minWidth: getColumnWidth(key, showCompletionStats),
         }))}
