@@ -17,19 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { storiesOf } from '@storybook/react';
-import { text } from '@storybook/addon-knobs';
 import React from 'react';
-import Tag from '.';
-import Icon from '../Icon';
 
-const TagStories = storiesOf(`${__dirname}`, module)
-  .add('Basic', () => <Tag> {text('Tag label', 'Tag label')}</Tag>)
-  .add('Tag with icon', () => (
-    <Tag>
-      Tag label&nbsp;&nbsp;
-      <Icon width="8px" height="8px" name="times" fill="#fff" />
-    </Tag>
-  ));
+import { createPage } from 'global/utils/pages';
+import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
+import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
 
-export default TagStories;
+export default createPage({
+  isPublic: false,
+  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
+    const {
+      query: { shortName },
+    } = ctx;
+    return (
+      canReadProgram({ permissions, programId: String(shortName) }) &&
+      canWriteProgramData({ permissions, programId: String(shortName) })
+    );
+  },
+  startWithGlobalLoader: false,
+})((props) => {
+  return <ProgramClinicalData {...props} />;
+});

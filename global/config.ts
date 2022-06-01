@@ -50,6 +50,7 @@ export const getConfig = () => {
     MAX_FILE_DOWNLOAD_SIZE: publicConfig.MAX_FILE_DOWNLOAD_SIZE || 5000000, // 5MB
     FEATURE_RNASEQ_ENABLED: publicConfig.FEATURE_RNASEQ_ENABLED === 'true',
     FEATURE_DACO_V2_ENABLED: publicConfig.FEATURE_DACO_V2_ENABLED === 'true',
+    FEATURE_SUBMITTED_DATA_ENABLED: publicConfig.FEATURE_SUBMITTED_DATA_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -72,5 +73,6 @@ export const getConfig = () => {
     MAX_FILE_DOWNLOAD_SIZE: number;
     FEATURE_RNASEQ_ENABLED: boolean;
     FEATURE_DACO_V2_ENABLED: boolean;
+    FEATURE_SUBMITTED_DATA_ENABLED: boolean;
   };
 };

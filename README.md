@@ -12,7 +12,7 @@ This project was bootstrapped with [Create Next App](https://github.com/segmenti
 
 Find the most recent version of this guide [here](https://github.com/segmentio/create-next-app/blob/master/lib/templates/default/README.md), and check out [Next.js repo](https://github.com/zeit/next.js) for the most up-to-date info on Next JS.
 
-## Development
+## Local development
 
 ### Starting local back-end services
 
@@ -26,8 +26,6 @@ Navigate to `/compose` (`cd ./compose`) and Follow the instructions found in [`c
 - Dev commands:
   - `npm run dev` starts local dev server
   - `npm run build` creates a production build.
-  - `npm run storybook` for starting the storybook on port 6006 for isolated component development.
-  - `npm run build-storybook` creates static storybook build in `./storybook-static`
   - `npm run force-resolutions` fixes vulnerable dependencies listed in `package.json > resolutions`
 
 ### Writing commits
@@ -55,22 +53,24 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 
 `/uikit` contains the reusable UI components for Argo.
 
-- ### Development:
-  - `npm run storybook` to run start a local storybook.
-  - creating a new component: `npm run create-component`
-  - **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
-- ### Build and publish to npm:
+### Uikit Development
 
-  1. Increase `version` under `uikit/package.release.json`
+- Creating a new component: `npm run create-component`
+- **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
 
-  - Automated process (recommended)
+### Build and publish to NPM
 
-    2. Merge that change to `develop`, and let the Jenkins pipeline handle it
+Increase `version` under `uikit/package.release.json`
 
-  - Manual process (discouraged, but available)
+#### Automated process (recommended)
 
-    2. Run `npm run build-uikit` which performs the following:
-    3. Run `npm run publish-uikit` to publish latest version to npm
+1. Merge that change to `develop`, and let the Jenkins pipeline handle it
 
-- ### Restriction:
-  - `uikit` components should not reference (`import`) anything outside of the `uikit` directory
+#### Manual process (discouraged, but available)
+
+1. Run `npm run build-uikit` which performs the following:
+2. Run `npm run publish-uikit` to publish latest version to npm
+
+### Restriction
+
+- `uikit` components should not reference (`import`) anything outside of the `uikit` directory
