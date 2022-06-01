@@ -120,7 +120,6 @@
     "plop": "^3.1.0",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "react-docgen-typescript-loader": "^3.2.1",
     "ts-mocha": "^8.0.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
