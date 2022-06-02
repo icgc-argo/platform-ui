@@ -118,7 +118,7 @@
     "enzyme-adapter-react-16": "^1.12.1",
     "file-regex": "^3.1.0",
     "graphql-tools": "^4.0.4",
-    "husky": "^2.2.0",
+    "husky": "^4.3.8",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.15",
     "plop": "^3.1.0",
