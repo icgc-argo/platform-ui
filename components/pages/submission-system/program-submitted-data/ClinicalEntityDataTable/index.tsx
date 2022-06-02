@@ -184,7 +184,7 @@ const ClinicalEntityDataTable = ({
       style: {
         color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
         background: isCompletionCell && errorState ? theme.colors.error_4 : '',
-        'border-right': border,
+        borderRight: border,
       },
     };
   };
@@ -195,7 +195,7 @@ const ClinicalEntityDataTable = ({
       accessor: key,
       Header: key,
       headerStyle: {
-        'border-right': getHeaderBorder(key),
+        borderRight: getHeaderBorder(key),
       },
       minWidth: getColumnWidth(key, showCompletionStats),
     };
@@ -205,15 +205,15 @@ const ClinicalEntityDataTable = ({
       {
         Header: 'CLINICAL CORE COMPLETION',
         headerStyle: {
-          'border-right': getHeaderBorder(completionColumnHeaders.followUps),
+          borderRight: getHeaderBorder(completionColumnHeaders.followUps),
         },
         columns: columns.slice(0, 7),
       },
       {
         Header: 'SUBMITTED DONOR DATA',
         headerStyle: {
-          'text-align': 'left',
-          'padding-left': '10%',
+          textAlign: 'left',
+          paddingLeft: '10%',
         },
         columns: columns.slice(7),
       },
