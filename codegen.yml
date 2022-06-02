@@ -1,0 +1,10 @@
+schema:
+  - ${GATEWAY_API_ROOT}/graphql
+documents: [./**/*.gql]
+generates:
+  generated/gql_schema.json:
+    plugins:
+      - introspection
+  generated/gql_types.tsx:
+    plugins:
+      - typescript
