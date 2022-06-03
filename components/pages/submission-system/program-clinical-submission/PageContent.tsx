@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Instruction from './Instruction';
-import Container from 'uikit/Container';
+import Container from '@icgc-argo/uikit/Container';
 import { containerStyle } from '../common';
 import FilesNavigator from './FilesNavigator';
 import {
@@ -33,12 +33,12 @@ import {
   SignOffSubmissionMutationVariables,
   ClinicalSubmissionError,
 } from './types';
-import Notification, { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
+import Notification, { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
-import DnaLoader from 'uikit/DnaLoader';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
@@ -47,7 +47,7 @@ import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import { sleep } from 'global/utils/common';
 import Router from 'next/router';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';

@@ -19,7 +19,7 @@
 
 import React from 'react';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 
 export default function useCommonToasters() {
   const toaster = useToaster();

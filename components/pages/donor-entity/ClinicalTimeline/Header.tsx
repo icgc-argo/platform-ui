@@ -18,11 +18,11 @@
  */
 
 import React from 'react';
-import Checkbox, { STYLEDCHECKBOX_SIZES } from 'uikit/form/Checkbox';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import Checkbox, { STYLEDCHECKBOX_SIZES } from '@icgc-argo/uikit/form/Checkbox';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { getTimelineStyles } from './util';
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import { ENTITY_DISPLAY } from './index';
 import { EntityType, Entity } from '../types';
 

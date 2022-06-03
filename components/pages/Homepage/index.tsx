@@ -19,20 +19,20 @@
 
 import React from 'react';
 import { Col, Row, Visible, Hidden } from 'react-grid-system';
-import { css, styled } from 'uikit';
-import Button from 'uikit/Button';
+import { css, styled } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
 
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
 import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
 import globeBackground from 'static/icgc-globe-bg.svg';
 
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import NextLink from 'next/link';
 
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import {
   DataReleaseBar,
   DataCallout,

@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Typography from 'uikit/Typography';
-import Link from 'uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
+import Link from '@icgc-argo/uikit/Link';
 import styled from '@emotion/styled';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import PicBeakers from 'static/register.svg';
 import PicHeart from 'static/clinical.svg';
 import PicDna from 'static/dna.svg';

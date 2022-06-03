@@ -21,9 +21,9 @@ import React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 
 import UsersTable from './UsersTable';
-import { TableActionBar } from 'uikit/Table';
-import Fade from 'uikit/transitions/Fade';
-import { TOAST_VARIANTS, TOAST_INTERACTION } from 'uikit/notifications/Toast';
+import { TableActionBar } from '@icgc-argo/uikit/Table';
+import Fade from '@icgc-argo/uikit/transitions/Fade';
+import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notifications/Toast';
 
 import EditUserModal from '../modals/editUser';
 import DeleteUserModal from '../modals/deleteUser';

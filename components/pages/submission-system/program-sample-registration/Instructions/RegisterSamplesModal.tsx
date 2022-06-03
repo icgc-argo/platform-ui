@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Modal from 'uikit/Modal';
+import Modal from '@icgc-argo/uikit/Modal';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';
@@ -26,7 +26,7 @@ import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATIO
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
 import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import Router from 'next/router';
 
 import {
@@ -35,8 +35,8 @@ import {
   CONTACT_PAGE_PATH,
 } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
-import Typography from 'uikit/Typography';
-import HyperLink from 'uikit/Link';
+import Typography from '@icgc-argo/uikit/Typography';
+import HyperLink from '@icgc-argo/uikit/Link';
 import Link from 'next/link';
 
 export default function RegisterSamplesModal({

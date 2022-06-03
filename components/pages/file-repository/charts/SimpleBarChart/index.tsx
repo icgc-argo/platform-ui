@@ -18,16 +18,16 @@
  */
 
 import React from 'react';
-import { css, styled } from 'uikit';
+import { css, styled } from '@icgc-argo/uikit';
 import { orderBy, maxBy } from 'lodash';
-import Tooltip from 'uikit/Tooltip';
+import Tooltip from '@icgc-argo/uikit/Tooltip';
 import { capitalize } from 'global/utils/stringUtils';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
-import { ContentBox } from 'uikit/PageLayout';
-import { ThemeColorNames } from 'uikit/theme/types';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { ContentBox } from '@icgc-argo/uikit/PageLayout';
+import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
 import pluralize from 'pluralize';
-import DnaLoader from 'uikit/DnaLoader';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {

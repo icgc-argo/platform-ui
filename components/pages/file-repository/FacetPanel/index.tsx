@@ -18,17 +18,17 @@
  */
 import React, { useEffect, useState } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import { css, styled } from 'uikit';
-import Facet from 'uikit/Facet';
-import { MenuItem, SubMenu } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import Icon from 'uikit/Icon';
-import { useTheme } from 'uikit/ThemeProvider';
-import Tooltip from 'uikit/Tooltip';
-import { Collapsible } from 'uikit/PageLayout';
-import NumberRangeFacet from 'uikit/Facet/NumberRangeFacet';
-import useClickAway from 'uikit/utils/useClickAway';
-import Tabs, { Tab } from 'uikit/Tabs';
+import { css, styled } from '@icgc-argo/uikit';
+import Facet from '@icgc-argo/uikit/Facet';
+import { MenuItem, SubMenu } from '@icgc-argo/uikit/SubMenu';
+import { Input } from '@icgc-argo/uikit/form';
+import Icon from '@icgc-argo/uikit/Icon';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import Tooltip from '@icgc-argo/uikit/Tooltip';
+import { Collapsible } from '@icgc-argo/uikit/PageLayout';
+import NumberRangeFacet from '@icgc-argo/uikit/Facet/NumberRangeFacet';
+import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
+import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
 import useFiltersContext from '../hooks/useFiltersContext';
 import {
   removeFilter,
@@ -60,7 +60,7 @@ import {
   DonorIdSearchQueryData,
   SearchMenuDataNode,
 } from './types';
-import Container from 'uikit/Container';
+import Container from '@icgc-argo/uikit/Container';
 import SEARCH_BY_FILE_QUERY from './SEARCH_BY_FILE_QUERY.gql';
 import SEARCH_BY_DONOR_QUERY from './SEARCH_BY_DONOR_QUERY.gql';
 import { trim } from 'lodash';

@@ -20,7 +20,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { LOCAL_STORAGE_SYSTEM_ALERTS_KEY } from 'global/constants';
-import SystemAlert from 'uikit/SystemAlert';
+import SystemAlert from '@icgc-argo/uikit/SystemAlert';
 import SYSTEM_ALERTS_QUERY from './SYSTEM_ALERTS.gql';
 
 type SystemAlert = {

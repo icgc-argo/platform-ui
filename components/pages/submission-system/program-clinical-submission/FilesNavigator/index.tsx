@@ -18,17 +18,17 @@
  */
 
 import React from 'react';
-import VerticalTabs from 'uikit/VerticalTabs';
-import { css } from 'uikit';
-import Typography from 'uikit/Typography';
+import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
+import { css } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
 import { ClinicalSubmissionEntityFile, ClinicalSubmissionQueryData } from '../types';
 import FileRecordTable from './FileRecordTable';
 import { Col } from 'react-grid-system';
 import { useToaster } from 'global/hooks/toaster';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClearSubmissionMutationVariables } from '../types';
@@ -36,7 +36,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
-import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
+import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 
 const FilesNavigator = ({
   fileStates,
