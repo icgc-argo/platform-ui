@@ -46,8 +46,8 @@ export type DonorEntry = {
 const completionColumnHeaders = {
   donor: 'DO',
   primaryDiagnosis: 'PD',
-  specimens: 'NS',
-  familyHistory: 'TS',
+  normalSpecimens: 'NS',
+  tumourSpecimens: 'TS',
   treatments: 'TR',
   followUps: 'FO',
 };
@@ -69,9 +69,14 @@ const defaultPageSettings = {
   sorted: [{ id: 'donorId', desc: true }],
 };
 
+const validateEntityQueryName = (entityQuery) => {
+  const entities = typeof entityQuery === 'string' ? [entityQuery] : entityQuery;
+  return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
+};
+
 export const getEntityData = (
   program: string,
-  entityType: string,
+  entityType: string | string[],
   page: number,
   pageSize: number,
   sort: string,
@@ -85,7 +90,7 @@ export const getEntityData = (
         sort,
         page,
         pageSize,
-        entityTypes: [clinicalEntityFields.find((entity) => entity === entityType)],
+        entityTypes: validateEntityQueryName(entityType),
       },
     },
   });
@@ -118,9 +123,16 @@ const ClinicalEntityDataTable = ({
     setPageSettings(defaultPageSettings);
   }, [entityType]);
 
+  const queryEntity =
+    entityType === 'donor' || entityType === 'sampleRegistration'
+      ? // Donor Completion Stats require Sample Registration data
+        // Sample Registration requires Specimen data
+        ['donor', 'sampleRegistration', 'specimens']
+      : entityType;
+
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
-    entityType,
+    queryEntity,
     page,
     pageSize,
     sort,
@@ -129,7 +141,9 @@ const ClinicalEntityDataTable = ({
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
   if (clinicalData.clinicalEntities.length > 0) {
-    const entityData = clinicalData.clinicalEntities[0];
+    const entityData = clinicalData.clinicalEntities.find(
+      (entity) => entity.entityName === aliasEntityNames[entityType],
+    );
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasEntityNames.donor);
 

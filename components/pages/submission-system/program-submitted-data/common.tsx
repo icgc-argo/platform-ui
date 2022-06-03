@@ -19,8 +19,9 @@
 
 export enum CoreClinicalEntities {
   donor = 'donor',
-  specimens = 'specimens',
   primaryDiagnosis = 'primaryDiagnosis',
+  normalSpecimens = 'normalSpecimens',
+  tumourSpecimens = 'tumourSpecimens',
   familyHistory = 'familyHistory',
   treatments = 'treatments',
   followUps = 'followUps',

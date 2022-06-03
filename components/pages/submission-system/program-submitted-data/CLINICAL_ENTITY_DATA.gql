@@ -17,6 +17,8 @@ query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!)
           familyHistory
           followUps
           treatments
+          normalSpecimens
+          tumourSpecimens
         }
         coreCompletionDate
         coreCompletionPercentage
