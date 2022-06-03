@@ -20,10 +20,10 @@
 import { useQuery } from '@apollo/react-hooks';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
-import { css } from 'uikit';
-import DnaLoader from 'uikit/DnaLoader';
-import Table from 'uikit/Table';
-import Typography from 'uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import Table from '@icgc-argo/uikit/Table';
+import Typography from '@icgc-argo/uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
