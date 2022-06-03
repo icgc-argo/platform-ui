@@ -123,16 +123,9 @@ const ClinicalEntityDataTable = ({
     setPageSettings(defaultPageSettings);
   }, [entityType]);
 
-  const queryEntity =
-    entityType === 'donor' || entityType === 'sampleRegistration'
-      ? // Donor Completion Stats require Sample Registration data
-        // Sample Registration requires Specimen data
-        ['donor', 'sampleRegistration', 'specimens']
-      : entityType;
-
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
-    queryEntity,
+    entityType,
     page,
     pageSize,
     sort,
