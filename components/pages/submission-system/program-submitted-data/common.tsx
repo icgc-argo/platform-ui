@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export enum CoreClinicalEntities {
+export enum CoreCompletionEntities {
   donor = 'donor',
   primaryDiagnosis = 'primaryDiagnosis',
   normalSpecimens = 'normalSpecimens',
@@ -27,10 +27,10 @@ export enum CoreClinicalEntities {
   followUps = 'followUps',
 }
 
-export const CoreCompletionFields = Object.values(CoreClinicalEntities);
+export const CoreCompletionFields = Object.values(CoreCompletionEntities);
 
 export type CoreCompletion = {
-  CoreClinicalEntities: number;
+  CoreCompletionEntities: number;
 };
 
 export type CompletionStats = {
@@ -38,7 +38,7 @@ export type CompletionStats = {
   coreCompletionDate: string;
   coreCompletionPercentage: number;
   donorId: number;
-  overriddenCoreCompletion: [CoreClinicalEntities];
+  overriddenCoreCompletion: [CoreCompletionEntities];
 };
 
 export enum CompletionStates {
