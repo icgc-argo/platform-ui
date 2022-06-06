@@ -1,7 +1,6 @@
 query SYSTEM_ALERTS {
   systemAlerts {
     dismissable
-    # beep
     id
     level
     message

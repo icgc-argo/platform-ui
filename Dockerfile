@@ -13,7 +13,6 @@ USER node
 
 RUN npm ci
 RUN npm run build-uikit
-RUN npm run graphql-codegen
 RUN npx next build
 
 EXPOSE 8080

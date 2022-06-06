@@ -2,8 +2,9 @@
   "name": "argo-platform-ui",
   "version": "1.108.0",
   "scripts": {
+    "graphql-codegen-watch": "graphql-codegen -r dotenv/config --watch",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
-    "dev": "npm run graphql-codegen && next -p 8080",
+    "dev": "npm run graphql-codegen-watch & next -p 8080",
     "local-build": "npm run graphql-codegen && npm run build-uikit && rm -rf .next && next build",
     "build": "rm -rf .next && npm run graphql-codegen && next build",
     "export-maintenance": "npm run build && rm -rf ./out/maintenance && EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
