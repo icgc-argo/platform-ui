@@ -22,7 +22,9 @@ import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
+import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
+import Tooltip from 'uikit/Tooltip';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
 import { TableInfoHeaderContainer } from '../../common';
@@ -210,7 +212,40 @@ const ClinicalEntityDataTable = ({
   if (showCompletionStats) {
     columns = [
       {
-        Header: 'CLINICAL CORE COMPLETION',
+        Header: (
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+            `}
+          >
+            CLINICAL CORE COMPLETION
+            <Tooltip
+              style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
+              html={
+                <>
+                  For clinical completeness, each donor requires:
+                  <br />
+                  DO: at least one Donor record
+                  <br />
+                  PD: at least one Primary Diagnosis record
+                  <br />
+                  NS: at least one Normal DNA Specimen record
+                  <br />
+                  TS: at least one Tumour DNA Specimen record
+                  <br />
+                  TR: at least one Treatment record
+                  <br />
+                  FO: at least one Follow Up record
+                </>
+              }
+            >
+              <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+            </Tooltip>
+          </div>
+        ),
         headerStyle: {
           borderRight: getHeaderBorder(completionColumnHeaders.followUps),
         },
@@ -219,8 +254,7 @@ const ClinicalEntityDataTable = ({
       {
         Header: 'SUBMITTED DONOR DATA',
         headerStyle: {
-          textAlign: 'left',
-          paddingLeft: '10%',
+          textAlign: 'center',
         },
         columns: columns.slice(7),
       },
