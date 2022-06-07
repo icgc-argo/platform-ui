@@ -303,9 +303,9 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
               >
                 Announcements:
               </Typography>
-              {newsItems.map((newsItem: NewsItem) => (
+              {newsItems.map((newsItem: NewsItem, index: number) => (
                 <Typography
-                  key={`newsItem-${encodeURI(newsItem.title)}`}
+                  key={`newsItem-${index}`}
                   variant="paragraph"
                   css={css`
                     margin: 1em 0 0 0;
