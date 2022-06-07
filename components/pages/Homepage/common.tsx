@@ -285,40 +285,37 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
               padding: 20px;
             `}
           >
-            <div>
-              {/** @Note DO NOT REMOVE div. Magic fix needed here to enforce style  */}
+            <Typography
+              component="div"
+              variant="paragraph"
+              css={css`
+                margin: 1em 0;
+                padding-bottom: 15px;
+                border-bottom: 1px solid ${theme.colors.grey_2};
+              `}
+            >
               <Typography
-                component="div"
+                bold
+                component="h3"
                 variant="paragraph"
                 css={css`
-                  margin: 1em 0;
-                  padding-bottom: 15px;
-                  border-bottom: 1px solid ${theme.colors.grey_2};
+                  margin: 0;
                 `}
               >
+                Announcements:
+              </Typography>
+              {newsItems.map((newsItem) => (
                 <Typography
-                  bold
-                  component="h3"
+                  key={`newsItem-${newsItem.title.slice(0, 5)}`}
                   variant="paragraph"
                   css={css`
-                    margin: 0;
+                    margin: 1em 0 0 0;
                   `}
                 >
-                  Announcements:
+                  {newsItem.title && <strong>{newsItem.title}:</strong>} {newsItem.text}
                 </Typography>
-                {newsItems.map((newsItem) => (
-                  <Typography
-                    key={`newsItem-${newsItem.title.slice(0, 5)}`}
-                    variant="paragraph"
-                    css={css`
-                      margin: 1em 0 0 0;
-                    `}
-                  >
-                    {newsItem.title && <strong>{newsItem.title}:</strong>} {newsItem.text}
-                  </Typography>
-                ))}
-              </Typography>
-            </div>
+              ))}
+            </Typography>
             <Typography variant="paragraph">
               If you have feature suggestions or feedback, please{' '}
               <Link href="/contact">contact us</Link>.
