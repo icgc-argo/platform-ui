@@ -32,6 +32,11 @@ import scientistImage from 'static/icgc-data-scientist-wide.jpg';
 import DnaLoader from 'uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
 
+export type NewsItem = {
+  title: String;
+  text: String | JSX.Element;
+};
+
 type DataReleaseStatistic = {
   quantity: number;
   description: string;
@@ -218,7 +223,7 @@ const GradientBar = styled('div')`
   margin: -5px 0px;
 `;
 
-export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = ({ newsItems }) => {
+export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
   const theme = useTheme();
   return (
     <Container
@@ -282,18 +287,37 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
           >
             <div>
               {/** @Note DO NOT REMOVE div. Magic fix needed here to enforce style  */}
-              {newsItems.map((item, index) => (
+              <Typography
+                component="div"
+                variant="paragraph"
+                css={css`
+                  margin: 1em 0;
+                  padding-bottom: 15px;
+                  border-bottom: 1px solid ${theme.colors.grey_2};
+                `}
+              >
                 <Typography
-                  key={`newsText-${index}`}
+                  bold
+                  component="h3"
                   variant="paragraph"
                   css={css`
-                    padding-bottom: 15px;
-                    border-bottom: 1px solid ${theme.colors.grey_2};
+                    margin: 0;
                   `}
                 >
-                  {item}
+                  Announcements:
                 </Typography>
-              ))}
+                {newsItems.map((newsItem) => (
+                  <Typography
+                    key={`newsItem-${newsItem.title.slice(0, 5)}`}
+                    variant="paragraph"
+                    css={css`
+                      margin: 1em 0 0 0;
+                    `}
+                  >
+                    {newsItem.title && <strong>{newsItem.title}:</strong>} {newsItem.text}
+                  </Typography>
+                ))}
+              </Typography>
             </div>
             <Typography variant="paragraph">
               If you have feature suggestions or feedback, please{' '}
