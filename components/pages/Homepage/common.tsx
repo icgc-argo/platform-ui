@@ -285,9 +285,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
               padding: 20px;
             `}
           >
-            <Typography
-              component="div"
-              variant="paragraph"
+            <div
               css={css`
                 margin: 1em 0;
                 padding-bottom: 15px;
@@ -315,7 +313,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
                   {newsItem.title && <strong>{newsItem.title}:</strong>} {newsItem.text}
                 </Typography>
               ))}
-            </Typography>
+            </div>
             <Typography variant="paragraph">
               If you have feature suggestions or feedback, please{' '}
               <Link href="/contact">contact us</Link>.
