@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ReactNode } from 'react';
 import { css, styled } from 'uikit';
 import { useTheme } from 'uikit/ThemeProvider';
 import Typography from 'uikit/Typography';
@@ -34,7 +35,7 @@ import { reactGridBreakpoints } from 'global/utils/common';
 
 export type NewsItem = {
   title: string;
-  text: string | JSX.Element;
+  text: ReactNode;
 };
 
 type DataReleaseStatistic = {
@@ -302,7 +303,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
               >
                 Announcements:
               </Typography>
-              {newsItems.map((newsItem) => (
+              {newsItems.map((newsItem: NewsItem) => (
                 <Typography
                   key={`newsItem-${encodeURI(newsItem.title)}`}
                   variant="paragraph"
