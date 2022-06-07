@@ -33,8 +33,8 @@ import DnaLoader from 'uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
 
 export type NewsItem = {
-  title: String;
-  text: String | JSX.Element;
+  title: string;
+  text: string | JSX.Element;
 };
 
 type DataReleaseStatistic = {
@@ -306,7 +306,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
               </Typography>
               {newsItems.map((newsItem) => (
                 <Typography
-                  key={`newsItem-${newsItem.title.slice(0, 5)}`}
+                  key={`newsItem-${encodeURI(newsItem.title)}`}
                   variant="paragraph"
                   css={css`
                     margin: 1em 0 0 0;
