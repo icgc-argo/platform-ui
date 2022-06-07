@@ -311,7 +311,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
                     margin: 1em 0 0 0;
                   `}
                 >
-                  {newsItem.title && <strong>{newsItem.title}:</strong>} {newsItem.text}
+                  {newsItem.title && <b>{newsItem.title}:</b>} {newsItem.text}
                 </Typography>
               ))}
             </div>
