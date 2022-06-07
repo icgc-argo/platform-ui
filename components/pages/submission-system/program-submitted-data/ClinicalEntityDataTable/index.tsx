@@ -225,21 +225,20 @@ const ClinicalEntityDataTable = ({
             <Tooltip
               style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
               html={
-                <>
-                  For clinical completeness, each donor requires:
-                  <br />
-                  DO: at least one Donor record
-                  <br />
-                  PD: at least one Primary Diagnosis record
-                  <br />
-                  NS: at least one Normal DNA Specimen record
-                  <br />
-                  TS: at least one Tumour DNA Specimen record
-                  <br />
-                  TR: at least one Treatment record
-                  <br />
-                  FO: at least one Follow Up record
-                </>
+                <p
+                  css={css`
+                    margin: 0px;
+                    margin-right: 6px;
+                  `}
+                >
+                  For clinical completeness, each donor requires: <br />
+                  DO: at least one Donor record <br />
+                  PD: at least one Primary Diagnosis record <br />
+                  NS: at least one Normal DNA Specimen record <br />
+                  TS: at least one Tumour DNA Specimen record <br />
+                  TR: at least one Treatment record <br />
+                  FO: at least one Follow Up record <br />
+                </p>
               }
             >
               <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
