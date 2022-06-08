@@ -279,8 +279,13 @@ const ClinicalEntityDataTable = ({
       {
         Header: 'SUBMITTED DONOR DATA',
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7),
-        Cell: (row) => (noData ? DefaultNoDataComponent : row),
+        columns: columns.slice(7).map((column) =>
+          noData
+            ? {
+                Cell: <DefaultNoDataComponent />,
+              }
+            : column,
+        ),
       },
     ];
   }
