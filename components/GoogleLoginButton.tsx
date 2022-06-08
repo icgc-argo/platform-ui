@@ -36,11 +36,11 @@ const GoogleLoginButton: React.ComponentType<React.ComponentProps<typeof GoogleL
         // jwt is removed, this is the url after the browser comes back from google: http://localhost:8080/?redirect=/submission%2Fprogram%2Fjoin%2Fdetails%2F<inviteId>%3FisOauth%3Dtrue
         // jwt is NOT removed: http://localhost:8080/submission%2Fprogram%2Fjoin%2Fdetails%2F<inviteId>%3FisOauth%3Dtrue
         // NOTE: the removeToken() fix does not work if the login button is right clicked to open a new tab, user will get a 404 after login as mentioned above
-        removeToken();
         if (props.onClick) {
           props.onClick(e);
         }
         clearFilters();
+        removeToken();
       }}
     />
   );
