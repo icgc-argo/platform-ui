@@ -77,6 +77,7 @@ export default function ProgramSubmittedData() {
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
+  const noData = sideMenuData.clinicalEntities.length === 0 ? true : false;
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
@@ -188,6 +189,7 @@ export default function ProgramSubmittedData() {
                     height: fit-content;
                   `}
                   variant="secondary"
+                  disabled={noData}
                 >
                   <Icon
                     css={css`

@@ -24,6 +24,7 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
+import DefaultNoDataComponent from 'uikit/Table/NoDataComponent';
 import Tooltip from 'uikit/Tooltip';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
@@ -54,16 +55,16 @@ const completionColumnHeaders = {
   followUps: 'FO',
 };
 
-const getColumnWidth = memoize<(keyString: string, showCompletionStats: boolean) => number>(
-  (keyString, showCompletionStats) => {
-    const minWidth = showCompletionStats ? 45 : 90;
-    const maxWidth = 200;
-    const spacePerChar = 8;
-    const margin = 10;
-    const targetWidth = keyString.length * spacePerChar + margin;
-    return Math.max(Math.min(maxWidth, targetWidth), minWidth);
-  },
-);
+const getColumnWidth = memoize<
+  (keyString: string, showCompletionStats: boolean, noData: boolean) => number
+>((keyString, showCompletionStats, noData) => {
+  const minWidth = showCompletionStats ? 45 : 95;
+  const maxWidth = noData && showCompletionStats && keyString !== ' ' ? 45 : 200;
+  const spacePerChar = 8;
+  const margin = 10;
+  const targetWidth = keyString.length * spacePerChar + margin;
+  return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+});
 
 const defaultPageSettings = {
   page: defaultClinicalEntityFilters.page,
@@ -134,8 +135,25 @@ const ClinicalEntityDataTable = ({
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
+  const noData = clinicalData.clinicalEntities.length === 0;
 
-  if (clinicalData.clinicalEntities.length > 0) {
+  if (noData) {
+    showCompletionStats = true;
+    columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
+
+    records = [
+      {
+        donor_id: 0,
+        DO: 0,
+        PD: 0,
+        FO: 0,
+        NS: 0,
+        TR: 0,
+        TS: 0,
+        ' ': ' ',
+      },
+    ];
+  } else {
     const entityData = clinicalData.clinicalEntities.find(
       (entity) => entity.entityName === aliasEntityNames[entityType],
     );
@@ -173,19 +191,6 @@ const ClinicalEntityDataTable = ({
 
       return clinicalRecord;
     });
-  } else {
-    showCompletionStats = true;
-    columns.splice(1, 0, ...Object.values(completionColumnHeaders));
-    records = [
-      {
-        DO: 0,
-        PD: 0,
-        FO: 0,
-        NS: 0,
-        TR: 0,
-        TS: 0,
-      },
-    ];
   }
 
   const getHeaderBorder = (key) =>
@@ -220,10 +225,19 @@ const ClinicalEntityDataTable = ({
       headerStyle: {
         borderRight: getHeaderBorder(key),
       },
-      minWidth: getColumnWidth(key, showCompletionStats),
+      minWidth: getColumnWidth(key, showCompletionStats, noData),
     };
   });
+
   if (showCompletionStats) {
+    const completionHeaderStyle = {
+      borderRight: getHeaderBorder(completionColumnHeaders.followUps),
+    };
+
+    const dataHeaderStyle = {
+      textAlign: 'center',
+    };
+
     columns = [
       {
         Header: (
@@ -259,17 +273,14 @@ const ClinicalEntityDataTable = ({
             </Tooltip>
           </div>
         ),
-        headerStyle: {
-          borderRight: getHeaderBorder(completionColumnHeaders.followUps),
-        },
-        columns: columns.slice(0, 7),
+        headerStyle: completionHeaderStyle,
+        columns: columns.slice(0, 7).map((column) => ({ ...column, maxWidth: noData ? 40 : 250 })),
       },
       {
         Header: 'SUBMITTED DONOR DATA',
-        headerStyle: {
-          textAlign: 'center',
-        },
+        headerStyle: dataHeaderStyle,
         columns: columns.slice(7),
+        Cell: (row) => (noData ? DefaultNoDataComponent : row),
       },
     ];
   }
