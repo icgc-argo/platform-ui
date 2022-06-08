@@ -173,6 +173,19 @@ const ClinicalEntityDataTable = ({
 
       return clinicalRecord;
     });
+  } else {
+    showCompletionStats = true;
+    columns.splice(1, 0, ...Object.values(completionColumnHeaders));
+    records = [
+      {
+        DO: 0,
+        PD: 0,
+        FO: 0,
+        NS: 0,
+        TR: 0,
+        TS: 0,
+      },
+    ];
   }
 
   const getHeaderBorder = (key) =>
@@ -184,6 +197,7 @@ const ClinicalEntityDataTable = ({
   const getCellStyles = (state, row, column) => {
     const { original } = row;
     const { id } = column;
+
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
     const errorState = original[id] === 0;
