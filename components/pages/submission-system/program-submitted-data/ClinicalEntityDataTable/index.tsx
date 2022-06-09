@@ -23,8 +23,8 @@ import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
-import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
-import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
+import ErrorNotification from '../../ErrorNotification';
+import { NOTIFICATION_VARIANTS, NotificationVariant } from 'uikit/notifications/Notification';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import noDataSvg from 'uikit/assets/noData.svg';
@@ -47,6 +47,37 @@ export type DonorEntry = {
   row: string;
   isNew: boolean;
   [k: string]: string | number | boolean;
+};
+
+const getErrorColumns = (level: NotificationVariant) => {
+  const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
+  return [
+    {
+      accessor: 'donorId',
+      Header: 'Donor Id',
+      id: 'donorId',
+    },
+    {
+      accessor: 'entityName',
+      Header: 'Entity',
+      id: 'entityName',
+    },
+    {
+      accessor: 'errorType',
+      Header: 'Error Type',
+      id: 'errorType',
+    },
+    {
+      accessor: 'fieldName',
+      Header: `Field Name`,
+      id: 'fieldName',
+    },
+    {
+      accessor: 'message',
+      Header: `Message`,
+      id: 'message',
+    },
+  ];
 };
 
 const Container = styled('div')`
@@ -174,7 +205,12 @@ const ClinicalEntityDataTable = ({
 
   const { clinicalErrors } = clinicalData;
   const hasErrors = clinicalData.clinicalErrors.length > 0;
-  console.log(clinicalErrors);
+  const tableErrors = clinicalErrors.reduce((prev, next) => {
+    const { donorId } = next;
+    const errors = next.errors.map((error) => ({ donorId, ...error }));
+    return [...prev, ...errors];
+  }, []);
+  const errorColumnConfig = getErrorColumns(NOTIFICATION_VARIANTS.ERROR);
 
   if (noData) {
     showCompletionStats = true;
@@ -351,6 +387,22 @@ const ClinicalEntityDataTable = ({
         position: relative;
       `}
     >
+      {hasErrors && (
+        <div
+          id="error-submission-workspace"
+          css={css`
+            margin: 12px 0px;
+          `}
+        >
+          <ErrorNotification
+            level={NOTIFICATION_VARIANTS.ERROR}
+            title={`${tableErrors.length.toLocaleString()} error(s) found in submission workspace`}
+            subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
+            errors={tableErrors}
+            columnConfig={errorColumnConfig}
+          />
+        </div>
+      )}
       <TableInfoHeaderContainer
         left={
           <Typography
@@ -363,29 +415,6 @@ const ClinicalEntityDataTable = ({
           </Typography>
         }
       />
-      {hasErrors && (
-        <div
-          id="error-submission-workspace"
-          css={css`
-            margin-top: 20px;
-          `}
-        >
-          <ErrorNotification
-            level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${clinicalErrors.length.toLocaleString()} error(s) found in submission workspace`}
-            subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
-            errors={clinicalErrors}
-            columnConfig={[
-              {
-                accessor: 'fileName',
-                Header: 'File',
-                maxWidth: 150,
-              },
-              ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
-            ]}
-          />
-        </div>
-      )}
       <Table
         withOutsideBorder
         manual
