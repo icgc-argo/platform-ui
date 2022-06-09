@@ -91,7 +91,7 @@ const completionColumnHeaders = {
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
-  const minWidth = showCompletionStats ? 50 : 95;
+  const minWidth = showCompletionStats ? 60 : 95;
   const maxWidth = noData && showCompletionStats && keyString !== ' ' ? 45 : 200;
   const spacePerChar = 8;
   const margin = 10;

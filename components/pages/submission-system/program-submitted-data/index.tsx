@@ -187,6 +187,10 @@ export default function ProgramSubmittedData() {
                   css={css`
                     white-space: nowrap;
                     height: fit-content;
+                    :disabled {
+                      background: #f6f6f7;
+                      color: ${theme.colors.grey_1};
+                    }
                   `}
                   variant="secondary"
                   disabled={noData}
@@ -196,7 +200,7 @@ export default function ProgramSubmittedData() {
                       padding-right: 4px;
                     `}
                     name="download"
-                    fill="accent2_dark"
+                    fill={noData ? 'grey_1' : 'accent2_dark'}
                     height="12px"
                   />
                   {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
