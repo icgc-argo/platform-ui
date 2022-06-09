@@ -91,7 +91,7 @@ const completionColumnHeaders = {
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
-  const minWidth = showCompletionStats ? 45 : 95;
+  const minWidth = showCompletionStats ? 50 : 95;
   const maxWidth = noData && showCompletionStats && keyString !== ' ' ? 45 : 200;
   const spacePerChar = 8;
   const margin = 10;
@@ -271,6 +271,11 @@ const ClinicalEntityDataTable = ({
       textAlign: 'center',
     };
 
+    const noDataCellStyle = {
+      height: 50,
+      borderBottom: `1px solid ${theme.colors.grey_2}`,
+    };
+
     columns = [
       {
         Header: (
@@ -307,12 +312,16 @@ const ClinicalEntityDataTable = ({
           </div>
         ),
         headerStyle: completionHeaderStyle,
-        columns: columns.slice(0, 7).map((column) => ({ ...column, maxWidth: noData ? 45 : 250 })),
+        columns: columns.slice(0, 7).map((column) => ({
+          ...column,
+          maxWidth: noData ? 50 : 250,
+          style: noData ? noDataCellStyle : {},
+        })),
       },
       {
         Header: 'SUBMITTED DONOR DATA',
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7).map((column) =>
+        columns: columns.slice(7).map((column, i) =>
           noData
             ? {
                 Cell: <NoDataCell />,
