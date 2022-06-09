@@ -398,7 +398,11 @@ const ClinicalEntityDataTable = ({
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${tableErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle={
-              <div>
+              <div
+                css={css`
+                  margin-bottom: 12px;
+                `}
+              >
                 <a href="https://docs.icgc-argo.org/dictionary">Version 1.13</a> of the data
                 dictionary was released and has made some donors invalid. Please download the error
                 report to view the affected donors, then submit a corrected TSV file in the{' '}
