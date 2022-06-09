@@ -35,7 +35,7 @@ import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
 import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
@@ -75,17 +75,28 @@ const CreateProgramPage = () => {
   const [sendCreateProgram] = useMutation<
     CreateProgramMutationResult,
     { program: CreateProgramMutationInput }
-  >(CREATE_PROGRAM_MUTATION, {
-    update: (store, { data }: { data: CreateProgramMutationResult }) => {
-      const { programs: cachedProgramList } = store.readQuery({ query: SIDE_MENU_PROGRAM_LIST });
-      store.writeQuery({
-        query: SIDE_MENU_PROGRAM_LIST,
-        data: {
-          programs: [...cachedProgramList, data.newProgram],
-        },
-      });
+  >(
+    gql`
+      ${CREATE_PROGRAM_MUTATION}
+    `,
+    {
+      update: (store, { data }: { data: CreateProgramMutationResult }) => {
+        const { programs: cachedProgramList } = store.readQuery({
+          query: gql`
+            ${SIDE_MENU_PROGRAM_LIST}
+          `,
+        });
+        store.writeQuery({
+          query: gql`
+            ${SIDE_MENU_PROGRAM_LIST}
+          `,
+          data: {
+            programs: [...cachedProgramList, data.newProgram],
+          },
+        });
+      },
     },
-  });
+  );
 
   const { setLoading: setFormDisabled } = useGlobalLoadingState();
 

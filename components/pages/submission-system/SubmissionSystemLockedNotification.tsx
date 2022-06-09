@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import React from 'react';
 import { css } from '@emotion/core';
 import Notification from 'uikit/notifications/Notification';
@@ -26,7 +26,9 @@ import CLINICAL_SUBMISSION_SYSTEM_DISABLED from './CLINICAL_SUBMISSION_SYSTEM_DI
 // Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical
 export const useSubmissionSystemDisabled = (): boolean => {
   const { data: { clinicalSubmissionSystemDisabled = undefined } = {} } = useQuery(
-    CLINICAL_SUBMISSION_SYSTEM_DISABLED,
+    gql`
+      ${CLINICAL_SUBMISSION_SYSTEM_DISABLED}
+    `,
   );
 
   return clinicalSubmissionSystemDisabled as boolean;

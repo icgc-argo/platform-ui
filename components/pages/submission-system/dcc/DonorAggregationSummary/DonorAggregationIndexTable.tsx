@@ -27,7 +27,7 @@ import SyncIndexButton from './table-cell-components/SyncIndexButton';
 import { format as formatDate, formatDistance } from 'date-fns';
 
 // GQL Query
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import PROGRAM_DONOR_INDEX_STATES from './PROGRAM_DONOR_INDEX_STATS.gql';
 
 const columns = [
@@ -75,9 +75,14 @@ const DonorAggregationIndexTable = ({
 }) => {
   const queries = (programs || []).map((program) => ({
     shortName: program.shortName,
-    query: useQuery(PROGRAM_DONOR_INDEX_STATES, {
-      variables: { programShortName: program.shortName },
-    }),
+    query: useQuery(
+      gql`
+        ${PROGRAM_DONOR_INDEX_STATES}
+      `,
+      {
+        variables: { programShortName: program.shortName },
+      },
+    ),
   }));
 
   const data = (queries || []).map(({ shortName, query: { loading, data } }) => ({

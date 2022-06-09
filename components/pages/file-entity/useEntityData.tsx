@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { camelCase, get, isObject, mapKeys } from 'lodash';
 import {
   FileSummaryInfo,
@@ -51,12 +51,17 @@ const isValidMetricsObject = (metrics: any) => {
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
   const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
-  const { data, loading, error } = useQuery(FILE_ENTITY_QUERY, {
-    variables: {
-      filters,
+  const { data, loading, error } = useQuery(
+    gql`
+      ${FILE_ENTITY_QUERY}
+    `,
+    {
+      variables: {
+        filters,
+      },
+      errorPolicy: 'all',
     },
-    errorPolicy: 'all',
-  });
+  );
 
   if (loading) {
     return { ...noData, loading: true };

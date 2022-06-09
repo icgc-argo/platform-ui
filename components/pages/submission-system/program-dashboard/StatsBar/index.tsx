@@ -26,7 +26,7 @@ import useTheme from 'uikit/utils/useTheme';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import _ from 'lodash';
 import {
@@ -102,10 +102,15 @@ const StatsBar = () => {
       },
     },
     loading,
-  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(DASHBOARD_SUMMARY_QUERY, {
-    variables: { programShortName: programShortName },
-    pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
-  });
+  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
+    gql`
+      ${DASHBOARD_SUMMARY_QUERY}
+    `,
+    {
+      variables: { programShortName: programShortName },
+      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+    },
+  );
   const { FEATURE_RNASEQ_ENABLED } = getConfig();
 
   return (

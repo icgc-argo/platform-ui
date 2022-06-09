@@ -27,7 +27,7 @@ import InstructionBox from 'uikit/InstructionBox';
 import HyperLink from 'uikit/Link';
 import Typography from 'uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
 import {
@@ -77,11 +77,16 @@ function Instructions({
 
   const commonToaster = useCommonToasters();
 
-  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION, {
-    onError: () => {
-      commonToaster.unknownError();
+  const [uploadFile, { loading: isUploading }] = useMutation(
+    gql`
+      ${UPLOAD_REGISTRATION}
+    `,
+    {
+      onError: () => {
+        commonToaster.unknownError();
+      },
     },
-  });
+  );
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 

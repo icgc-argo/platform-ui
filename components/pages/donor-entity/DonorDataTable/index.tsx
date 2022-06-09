@@ -21,7 +21,7 @@ import { css } from 'uikit';
 import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import Container from 'uikit/Container';
 import SimpleTable from 'uikit/Table/SimpleTable';
 import Typography from 'uikit/Typography';
@@ -36,7 +36,11 @@ import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const DonorDataTable = ({ data }) => {
-  const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
+  const { data: { programs = [] } = {}, loading } = useQuery(
+    gql`
+      ${PROGRAMS_LIST_QUERY}
+    `,
+  );
   const programFilter = sqonBuilder.has('study_id', data.program_id).build();
   const programFilterUrl = urlJoin(
     FILE_REPOSITORY_PATH,

@@ -27,7 +27,7 @@ import ApiTokenBox from './ApiTokenBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
 import PROFILE from './gql/PROFILE.gql';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
@@ -42,7 +42,12 @@ const Column = (props) => (
 );
 
 export function UserPage({ scope }) {
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
+  const { data, loading } = useQuery<ProfileQueryData>(
+    gql`
+      ${PROFILE}
+    `,
+    { variables: {} },
+  );
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');

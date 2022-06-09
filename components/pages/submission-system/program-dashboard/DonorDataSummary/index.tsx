@@ -21,7 +21,7 @@ import Typography from 'uikit/Typography';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { useQuery, QueryHookOptions } from '@apollo/client';
+import { useQuery, QueryHookOptions, gql } from '@apollo/client';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY.gql';
 import {
   ProgramDonorsSummaryQueryData,
@@ -66,7 +66,9 @@ export const useProgramDonorsSummaryQuery = ({
     ...(filters && Object.keys(filters).length > 0 && { filters }),
   };
   const hook = useQuery<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>(
-    PROGRAM_DONOR_SUMMARY_QUERY,
+    gql`
+      ${PROGRAM_DONOR_SUMMARY_QUERY}
+    `,
     {
       ...options,
       variables,

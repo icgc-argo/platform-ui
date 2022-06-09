@@ -37,7 +37,7 @@ import Notification, { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notific
 import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
 import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
 import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import DnaLoader from 'uikit/DnaLoader';
 import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
@@ -216,26 +216,40 @@ const PageContent = () => {
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
-  >(UPLOAD_CLINICAL_SUBMISSION, {
-    onCompleted: () => {
-      setSelectedClinicalEntityType(defaultClinicalEntityType);
+  >(
+    gql`
+      ${UPLOAD_CLINICAL_SUBMISSION}
+    `,
+    {
+      onCompleted: () => {
+        setSelectedClinicalEntityType(defaultClinicalEntityType);
+      },
+      onError: () => {
+        commonToaster.unknownError();
+      },
     },
-    onError: () => {
-      commonToaster.unknownError();
-    },
-  });
+  );
   const [validateSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ValidateSubmissionMutationVariables
-  >(VALIDATE_SUBMISSION_MUTATION, {
-    onCompleted: () => {
-      setSelectedClinicalEntityType(defaultClinicalEntityType);
+  >(
+    gql`
+      ${VALIDATE_SUBMISSION_MUTATION}
+    `,
+    {
+      onCompleted: () => {
+        setSelectedClinicalEntityType(defaultClinicalEntityType);
+      },
     },
-  });
+  );
   const [signOffSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     SignOffSubmissionMutationVariables
-  >(SIGN_OFF_SUBMISSION_MUTATION);
+  >(
+    gql`
+      ${SIGN_OFF_SUBMISSION_MUTATION}
+    `,
+  );
 
   const allDataErrors = React.useMemo(
     () =>

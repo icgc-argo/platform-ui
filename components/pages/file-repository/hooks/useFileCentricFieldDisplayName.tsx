@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import FILE_CENTRIC_EXTENDED_MAPPING from './FILE_CENTRIC_EXTENDED_MAPPING.gql';
 import { FileCentricDocumentField } from '../types';
 
@@ -12,7 +12,9 @@ const useFileCentricFieldDisplayName = (): {
   loading: boolean;
 } => {
   const { data, loading } = useQuery<{ file: { extended: ExtendedMapping } }>(
-    FILE_CENTRIC_EXTENDED_MAPPING,
+    gql`
+      ${FILE_CENTRIC_EXTENDED_MAPPING}
+    `,
   );
 
   return {

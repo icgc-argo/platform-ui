@@ -24,7 +24,7 @@ import StatItem from './StatItem';
 import STATS_BAR from './STATS_BAR.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { Col } from 'react-grid-system';
 
 type StatsBarQueryInput = {
@@ -55,11 +55,16 @@ type StatsBarQueryResponseData = {
 
 // TODO - type filters
 export const useFileRepoStatsBarQuery = (filters?: FileRepoFiltersType) => {
-  const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
-    variables: {
-      filters,
+  const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(
+    gql`
+      ${STATS_BAR}
+    `,
+    {
+      variables: {
+        filters,
+      },
     },
-  });
+  );
 
   const stats = {
     filesCount: hook?.data ? hook.data.file.hits.total : 0,

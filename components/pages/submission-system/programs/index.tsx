@@ -29,7 +29,7 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { Input } from 'uikit/form';
@@ -61,9 +61,16 @@ const TableFilterInput = (props) => (
 );
 
 export default function Programs({ authorizedPrograms = [] }: any) {
-  const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
-  const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } =
-    useQuery(PROGRAMS_USERS_QUERY);
+  const { data: { programs = [] } = {}, loading } = useQuery(
+    gql`
+      ${PROGRAMS_LIST_QUERY}
+    `,
+  );
+  const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } = useQuery(
+    gql`
+      ${PROGRAMS_USERS_QUERY}
+    `,
+  );
 
   if (programsWithUsers.length > 0) {
     programs.forEach((p) => {

@@ -20,7 +20,7 @@
 import React from 'react';
 import Modal from 'uikit/Modal';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
@@ -48,19 +48,26 @@ export default function RegisterSamplesModal({
   shortName: string;
   registrationId: string;
 }) {
-  const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
-    variables: {
-      shortName,
-      registrationId,
-    },
-    // update side menu status
-    refetchQueries: [
-      {
-        query: GET_REGISTRATION,
-        variables: { shortName },
+  const [commitRegistration] = useMutation(
+    gql`
+      ${COMMIT_CLINICAL_REGISTRATION_MUTATION}
+    `,
+    {
+      variables: {
+        shortName,
+        registrationId,
       },
-    ],
-  });
+      // update side menu status
+      refetchQueries: [
+        {
+          query: gql`
+            ${GET_REGISTRATION}
+          `,
+          variables: { shortName },
+        },
+      ],
+    },
+  );
 
   const { setLoading: setGlobalLoadingState } = useGlobalLoadingState();
 

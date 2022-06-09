@@ -48,7 +48,7 @@ import {
   DOCS_DATA_DOWNLOAD_PAGE,
   DOCS_API_TOKEN_PAGE,
 } from 'global/constants/docSitePaths';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';
@@ -103,7 +103,11 @@ export default function ContactPage() {
     reCaptcha: reCaptchaError,
   } = errors as typeof contactFormSchema;
 
-  const [createTicket] = useMutation(CREATE_JIRA_TICKET);
+  const [createTicket] = useMutation(
+    gql`
+      ${CREATE_JIRA_TICKET}
+    `,
+  );
   const toaster = useToaster();
   const reCaptchaRef = React.useRef(null);
   const [requestLoader, setRequestLoader] = React.useState(false);

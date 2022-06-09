@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -40,14 +40,19 @@ const JoinProgramLoginPage = () => {
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO, {
-    variables: { inviteId },
-    onError: (error) => {
-      if (error.message.includes('NOT_FOUND')) {
-        setNotFound(true);
-      }
+  } = useQuery(
+    gql`
+      ${GET_JOIN_PROGRAM_INFO}
+    `,
+    {
+      variables: { inviteId },
+      onError: (error) => {
+        if (error.message.includes('NOT_FOUND')) {
+          setNotFound(true);
+        }
+      },
     },
-  });
+  );
 
   const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = React.useState('');
 

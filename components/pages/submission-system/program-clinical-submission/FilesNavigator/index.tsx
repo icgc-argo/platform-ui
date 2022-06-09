@@ -30,7 +30,7 @@ import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';
@@ -59,7 +59,11 @@ const FilesNavigator = ({
   const [clearClinicalEntitySubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ClearSubmissionMutationVariables
-  >(CLEAR_SUBMISSION_MUTATION);
+  >(
+    gql`
+      ${CLEAR_SUBMISSION_MUTATION}
+    `,
+  );
 
   const { refetch: refetchClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
   const isPendingApproval = submissionState === 'PENDING_APPROVAL';

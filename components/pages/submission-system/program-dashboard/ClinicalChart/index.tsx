@@ -21,7 +21,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { find } from 'lodash';
 import { css } from '@emotion/core';
 import { format as formatDate, subDays } from 'date-fns';
-import { useQuery, QueryHookOptions } from '@apollo/client';
+import { useQuery, QueryHookOptions, gql } from '@apollo/client';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
 import { ContentError, ContentLoader } from 'components/placeholders';
@@ -73,18 +73,23 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
   const hook = useQuery<
     ProgramDonorPublishedAnalysisByDateRangeQueryData,
     ProgramDonorPublishedAnalysisByDateRangeQueryVariables
-  >(PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY, {
-    ...options,
-    skip: !dateRangeFrom || !dateRangeTo,
-    variables: {
-      bucketCount,
-      dateRangeFrom,
-      dateRangeTo,
-      donorFields,
-      programShortName,
+  >(
+    gql`
+      ${PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY}
+    `,
+    {
+      ...options,
+      skip: !dateRangeFrom || !dateRangeTo,
+      variables: {
+        bucketCount,
+        dateRangeFrom,
+        dateRangeTo,
+        donorFields,
+        programShortName,
+      },
+      pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
     },
-    pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
-  });
+  );
   return hook;
 };
 
@@ -113,9 +118,14 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
     data: programQueryData,
     error: programQueryError,
     loading: programQueryLoading,
-  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(DASHBOARD_SUMMARY_QUERY, {
-    variables: { programShortName: programShortName },
-  });
+  } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
+    gql`
+      ${DASHBOARD_SUMMARY_QUERY}
+    `,
+    {
+      variables: { programShortName: programShortName },
+    },
+  );
 
   // get data for chart lines - program donor published analyses
   // aggregated by date range

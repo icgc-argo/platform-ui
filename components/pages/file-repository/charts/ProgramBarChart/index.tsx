@@ -21,7 +21,7 @@ import SimpleBarChart from '../SimpleBarChart';
 import PROGRAMS_CHART from './PROGRAMS_CHART.gql';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 
 type ProgramIdsChartData = {
   file: {
@@ -41,11 +41,16 @@ type ChartQueryInput = {
 
 const ProgramBarChart = () => {
   const { filters, setFilterFromFieldAndValue } = useFiltersContext();
-  const { data, loading } = useQuery<ProgramIdsChartData, ChartQueryInput>(PROGRAMS_CHART, {
-    variables: {
-      filters,
+  const { data, loading } = useQuery<ProgramIdsChartData, ChartQueryInput>(
+    gql`
+      ${PROGRAMS_CHART}
+    `,
+    {
+      variables: {
+        filters,
+      },
     },
-  });
+  );
   const handleBarClick = (value) => {
     setFilterFromFieldAndValue({ field: 'study_id', value });
   };

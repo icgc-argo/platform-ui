@@ -25,7 +25,7 @@ import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { get } from 'lodash';
 import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
@@ -33,7 +33,11 @@ import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
 
 const DonorEntity = ({ donor }) => {
   const { egoJwt } = useAuthContext();
-  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const { data: userProfile, loading: profileLoading } = useQuery(
+    gql`
+      ${USER_PROFILE}
+    `,
+  );
   const {
     loading: donorLoading,
     summary: { program_id, donor_id },

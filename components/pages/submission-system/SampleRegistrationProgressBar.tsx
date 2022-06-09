@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
 import * as React from 'react';
@@ -31,9 +31,14 @@ const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: str
 }) => {
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
-  }>(GET_REGISTRATION, {
-    variables: { shortName: programShortName },
-  });
+  }>(
+    gql`
+      ${GET_REGISTRATION}
+    `,
+    {
+      variables: { shortName: programShortName },
+    },
+  );
 
   const schemaOrValidationErrors = get(
     clinicalRegistration,

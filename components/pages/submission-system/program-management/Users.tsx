@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 import UsersTable from './UsersTable';
 import { TableActionBar } from 'uikit/Table';
@@ -54,9 +54,21 @@ const Users = ({
   const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
   const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
   const [currentResendEmailUser, setCurrentResendEmailUser] = React.useState(null);
-  const [triggerEdit] = useMutation(EDIT_USER_MUTATION);
-  const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
-  const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);
+  const [triggerEdit] = useMutation(
+    gql`
+      ${EDIT_USER_MUTATION}
+    `,
+  );
+  const [triggerDelete] = useMutation(
+    gql`
+      ${REMOVE_USER_MUTATION}
+    `,
+  );
+  const [triggerResendInvite] = useMutation(
+    gql`
+      ${INVITE_USER_MUTATION}
+    `,
+  );
 
   const toaster = useToaster();
 

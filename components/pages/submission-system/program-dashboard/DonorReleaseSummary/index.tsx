@@ -20,14 +20,16 @@
 import { css } from '@emotion/core';
 import Typography from 'uikit/Typography';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';
 
 const DonorReleaseSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { data, loading } = useQuery<DashboardSummaryData, DashboardSummaryDataVariables>(
-    DASHBOARD_SUMMARY_QUERY,
+    gql`
+      ${DASHBOARD_SUMMARY_QUERY}
+    `,
     {
       variables: { programShortName: programShortName },
       // polling is not necessary here because it only wants the commitmentDonors

@@ -26,7 +26,7 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import PROGRAM_NAME_QUERY from './PROGRAM_NAME_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
@@ -37,11 +37,16 @@ import A from 'uikit/Link';
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const { loading, data: { program = undefined } = {} } = useQuery<{
     program: { name: string };
-  }>(PROGRAM_NAME_QUERY, {
-    variables: {
-      shortName: data.program,
+  }>(
+    gql`
+      ${PROGRAM_NAME_QUERY}
+    `,
+    {
+      variables: {
+        shortName: data.program,
+      },
     },
-  });
+  );
 
   const programFilter = sqonBuilder.has('study_id', data.program).build();
   const programFilterUrl = urlJoin(

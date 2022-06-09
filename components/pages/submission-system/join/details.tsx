@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
@@ -49,7 +49,11 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
 
   const router = useRouter();
   const { inviteId } = router.query;
-  const [joinProgram] = useMutation(JOIN_PROGRAM_MUTATION);
+  const [joinProgram] = useMutation(
+    gql`
+      ${JOIN_PROGRAM_MUTATION}
+    `,
+  );
   const toaster = useToaster();
 
   const { updateToken, data: userModel } = useAuthContext();
@@ -59,22 +63,27 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO, {
-    variables: { inviteId },
-    onCompleted: (data) => {
-      if (!joinProgramInvite) {
-        return;
-      }
+  } = useQuery(
+    gql`
+      ${GET_JOIN_PROGRAM_INFO}
+    `,
+    {
+      variables: { inviteId },
+      onCompleted: (data) => {
+        if (!joinProgramInvite) {
+          return;
+        }
+      },
+      onError: (error) => {
+        if (error.message.includes('NOT_FOUND')) {
+          setNotFound(true);
+        } else {
+          error[ERROR_STATUS_KEY] = 500;
+          throw new Error(error.message);
+        }
+      },
     },
-    onError: (error) => {
-      if (error.message.includes('NOT_FOUND')) {
-        setNotFound(true);
-      } else {
-        error[ERROR_STATUS_KEY] = 500;
-        throw new Error(error.message);
-      }
-    },
-  });
+  );
 
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');

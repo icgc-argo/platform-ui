@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useState, ComponentProps } from 'react';
 import { css } from '@emotion/core';
 import Link from 'uikit/Link';
 import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
@@ -45,18 +45,23 @@ export const SchemaInvalidSubmissionNotification = ({
 
   const { data: { clinicalSubmissions = undefined } = {} } = useQuery<{
     clinicalSubmissions: GqlClinicalSubmissionData;
-  }>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
-    variables: {
-      programShortName: programShortName,
+  }>(
+    gql`
+      ${SIDE_MENU_CLINICAL_SUBMISSION_STATE}
+    `,
+    {
+      variables: {
+        programShortName: programShortName,
+      },
     },
-  });
+  );
 
   const { DOCS_URL_ROOT } = getConfig();
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
   const hasSchemaErrorsAfterMigration =
     clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
-  const [closedMigrationMsg, setclosedMigrationMsg] = React.useState(false);
+  const [closedMigrationMsg, setclosedMigrationMsg] = useState(false);
 
   const getContentWithLink = (submissionPage: boolean) => (
     <div
@@ -75,9 +80,7 @@ export const SchemaInvalidSubmissionNotification = ({
     </div>
   );
 
-  const handleOnInteraction: React.ComponentProps<typeof Notification>['onInteraction'] = ({
-    type,
-  }) => {
+  const handleOnInteraction: ComponentProps<typeof Notification>['onInteraction'] = ({ type }) => {
     if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
       router.push(
         PROGRAM_CLINICAL_SUBMISSION_PATH.replace(

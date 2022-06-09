@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { useLazyQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
@@ -112,14 +112,21 @@ type SampleRegistrationQueryResponse = {
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
-  const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
-    variables: {
-      programShortName: props.program.shortName,
+  const { data } = useQuery<ClinicalSubmissionQueryResponse>(
+    gql`
+      ${SIDE_MENU_CLINICAL_SUBMISSION_STATE}
+    `,
+    {
+      variables: {
+        programShortName: props.program.shortName,
+      },
     },
-  });
+  );
 
   const { data: clinicalData } = useQuery<SampleRegistrationQueryResponse>(
-    SIDE_MENU_SAMPLE_REGISTRATION_STATE,
+    gql`
+      ${SIDE_MENU_SAMPLE_REGISTRATION_STATE}
+    `,
     {
       variables: {
         programShortName: props.program.shortName,
@@ -330,7 +337,11 @@ export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
-  const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
+  const { data: { programs } = { programs: null }, loading } = useQuery(
+    gql`
+      ${SIDE_MENU_PROGRAM_LIST}
+    `,
+  );
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 

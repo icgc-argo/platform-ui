@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { DonorCentricRecord, DonorEntity } from './types';
 import DONOR_ENTITY_QUERY from './DONOR_ENTITY_QUERY.gql';
 import { noData, dummyDonorQuery } from './dummyData';
@@ -33,12 +33,17 @@ export type DonorEntityData = {
 
 const useEntityData = (donorId: string): DonorEntityData => {
   const filters = sqonBuilder.has(FileCentricDocumentField['donors.donor_id'], donorId).build();
-  const { data, loading, error } = useQuery(DONOR_ENTITY_QUERY, {
-    variables: {
-      filters,
+  const { data, loading, error } = useQuery(
+    gql`
+      ${DONOR_ENTITY_QUERY}
+    `,
+    {
+      variables: {
+        filters,
+      },
+      errorPolicy: 'all',
     },
-    errorPolicy: 'all',
-  });
+  );
 
   const entity = {
     ...dummyDonorQuery.hits.edges[0].node,

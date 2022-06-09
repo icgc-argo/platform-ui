@@ -101,7 +101,6 @@
     "@types/url-join": "^4.0.0",
     "@types/yup": "^0.29.13",
     "babel-loader": "^8.2.5",
-    "babel-plugin-graphql-tag": "^3.3.0",
     "babel-plugin-import-graphql": "^2.8.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-polyfill": "^6.26.0",

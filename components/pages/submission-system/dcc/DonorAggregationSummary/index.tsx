@@ -24,7 +24,7 @@ import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
 
 // GQL Data Fetching
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
 
 const Card = styled(Container)`
@@ -32,7 +32,11 @@ const Card = styled(Container)`
 `;
 
 const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
+  const { loading, data } = useQuery(
+    gql`
+      ${SIDE_MENU_PROGRAM_LIST}
+    `,
+  );
 
   const programs = data ? data.programs : [];
   return (

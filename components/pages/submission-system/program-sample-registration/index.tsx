@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
 import union from 'lodash/union';
@@ -74,9 +74,14 @@ export default function ProgramIDRegistration() {
     updateQuery: updateClinicalRegistrationQuery,
   } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
-  }>(GET_REGISTRATION, {
-    variables: { shortName: programShortName },
-  });
+  }>(
+    gql`
+      ${GET_REGISTRATION}
+    `,
+    {
+      variables: { shortName: programShortName },
+    },
+  );
 
   const schemaOrValidationErrors = get(
     clinicalRegistration,
@@ -95,7 +100,11 @@ export default function ProgramIDRegistration() {
   );
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
-  const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
+  const [clearRegistration] = useMutation(
+    gql`
+      ${CLEAR_CLINICAL_REGISTRATION_MUTATION}
+    `,
+  );
 
   const toaster = useToaster();
 

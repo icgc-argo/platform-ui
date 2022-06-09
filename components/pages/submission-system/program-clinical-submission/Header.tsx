@@ -28,7 +28,7 @@ import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
@@ -70,32 +70,47 @@ const Header = ({
   const [reopenSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     { programShortName: string; submissionVersion: string }
-  >(REOPEN_SUBMISSION_MUTATION, {
-    variables: {
-      programShortName,
-      submissionVersion,
+  >(
+    gql`
+      ${REOPEN_SUBMISSION_MUTATION}
+    `,
+    {
+      variables: {
+        programShortName,
+        submissionVersion,
+      },
     },
-  });
+  );
 
   const [approveClinicalSubmission] = useMutation<
     boolean,
     { programShortName: string; submissionVersion: string }
-  >(APPROVE_SUBMISSION_MUTATION, {
-    variables: {
-      programShortName,
-      submissionVersion,
+  >(
+    gql`
+      ${APPROVE_SUBMISSION_MUTATION}
+    `,
+    {
+      variables: {
+        programShortName,
+        submissionVersion,
+      },
     },
-  });
+  );
 
   const [clearClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     ClearSubmissionMutationVariables
-  >(CLEAR_SUBMISSION_MUTATION, {
-    variables: {
-      programShortName,
-      submissionVersion,
+  >(
+    gql`
+      ${CLEAR_SUBMISSION_MUTATION}
+    `,
+    {
+      variables: {
+        programShortName,
+        submissionVersion,
+      },
     },
-  });
+  );
 
   const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({

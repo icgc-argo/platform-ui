@@ -22,7 +22,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';
@@ -112,9 +112,14 @@ const ProgramManagement = () => {
     data: { program = null } = {},
     loading,
     refetch,
-  } = useQuery(PROGRAM_QUERY, {
-    variables: { shortName: programShortName },
-  });
+  } = useQuery(
+    gql`
+      ${PROGRAM_QUERY}
+    `,
+    {
+      variables: { shortName: programShortName },
+    },
+  );
 
   const { activeTab, setActiveTab, TABS } = useTabState();
 
@@ -126,9 +131,17 @@ const ProgramManagement = () => {
   }
 
   const [showModal, setShowModal] = React.useState(false);
-  const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
+  const [triggerInvite] = useMutation(
+    gql`
+      ${INVITE_USER_MUTATION}
+    `,
+  );
 
-  const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);
+  const [sendUpdateProgram] = useMutation(
+    gql`
+      ${UPDATE_PROGRAM_MUTATION}
+    `,
+  );
   const onSubmit = async (data) => {
     try {
       await sendUpdateProgram({

@@ -24,7 +24,7 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isMatch from 'lodash/isMatch';
 import * as React from 'react';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { Col, Row } from 'react-grid-system';
 import Button from 'uikit/Button';
 import FormCheckbox from 'uikit/form/FormCheckbox';
@@ -151,7 +151,11 @@ export default function CreateProgramForm({
     hasErrors,
   } = formModel;
 
-  const { data: { programOptions = undefined } = {}, loading } = useQuery(QUERY_PROGRAM_VALUES);
+  const { data: { programOptions = undefined } = {}, loading } = useQuery(
+    gql`
+      ${QUERY_PROGRAM_VALUES}
+    `,
+  );
 
   const regionOptions = get(programOptions, 'regions', []);
 

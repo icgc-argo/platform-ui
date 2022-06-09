@@ -47,7 +47,7 @@ import {
   ArrayFieldKeys,
   CombinationKeys,
 } from '../utils/types';
-import { useQuery, QueryHookOptions } from '@apollo/client';
+import { useQuery, QueryHookOptions, gql } from '@apollo/client';
 import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
 import {
   FacetDetails,
@@ -216,7 +216,9 @@ const useFileFacetQuery = (
   options: Omit<QueryHookOptions<any, any>, 'variables'> = {},
 ) => {
   return useQuery<FileRepoFacetsQueryData, FileRepoFacetsQueryVariables>(
-    FILE_REPOSITORY_FACETS_QUERY,
+    gql`
+      ${FILE_REPOSITORY_FACETS_QUERY}
+    `,
     {
       ...options,
       variables: {
@@ -230,50 +232,55 @@ export const useDonorIdSearchQuery = (
   searchValue: string,
   excludedIds?: string[],
 ): { data: DonorIdSearchQueryData; idSearchResults?: SearchMenuDataNode[]; loading: boolean } => {
-  const query = useQuery<DonorIdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_DONOR_QUERY, {
-    skip: !searchValue,
-    variables: {
-      filters: {
-        op: 'and',
-        content: [
-          {
-            op: 'filter' as ArrayFieldKeys,
-            content: {
-              value: `*${searchValue}*`,
-              fields: [
-                FileCentricDocumentField['donors.donor_id'],
-                FileCentricDocumentField['donors.submitter_donor_id'],
+  const query = useQuery<DonorIdSearchQueryData, IdSearchQueryVariables>(
+    gql`
+      ${SEARCH_BY_DONOR_QUERY}
+    `,
+    {
+      skip: !searchValue,
+      variables: {
+        filters: {
+          op: 'and',
+          content: [
+            {
+              op: 'filter' as ArrayFieldKeys,
+              content: {
+                value: `*${searchValue}*`,
+                fields: [
+                  FileCentricDocumentField['donors.donor_id'],
+                  FileCentricDocumentField['donors.submitter_donor_id'],
+                ],
+              },
+            },
+            {
+              op: 'not' as CombinationKeys,
+              content: [
+                {
+                  op: 'in' as ArrayFieldKeys,
+                  content: {
+                    field: FileCentricDocumentField['donors.donor_id'],
+                    value: excludedIds,
+                  },
+                },
               ],
             },
-          },
-          {
-            op: 'not' as CombinationKeys,
-            content: [
-              {
-                op: 'in' as ArrayFieldKeys,
-                content: {
-                  field: FileCentricDocumentField['donors.donor_id'],
-                  value: excludedIds,
+            {
+              op: 'not' as CombinationKeys,
+              content: [
+                {
+                  op: 'in' as ArrayFieldKeys,
+                  content: {
+                    field: FileCentricDocumentField['donors.submitter_donor_id'],
+                    value: excludedIds,
+                  },
                 },
-              },
-            ],
-          },
-          {
-            op: 'not' as CombinationKeys,
-            content: [
-              {
-                op: 'in' as ArrayFieldKeys,
-                content: {
-                  field: FileCentricDocumentField['donors.submitter_donor_id'],
-                  value: excludedIds,
-                },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
     },
-  });
+  );
 
   return query.data && !query.loading
     ? {
@@ -312,44 +319,49 @@ const useFileIdSearchQuery = (
         ],
       };
 
-  const query = useQuery<FileIdSearchQueryData, IdSearchQueryVariables>(SEARCH_BY_FILE_QUERY, {
-    skip: !searchValue,
-    variables: {
-      filters: {
-        op: 'and',
-        content: [
-          {
-            op: 'filter' as ArrayFieldKeys,
-            content: fileIDQueryFilter,
-          },
-          {
-            op: 'not' as CombinationKeys,
-            content: [
-              {
-                op: 'in' as ArrayFieldKeys,
-                content: {
-                  field: FileCentricDocumentField['object_id'],
-                  value: excludedIds,
+  const query = useQuery<FileIdSearchQueryData, IdSearchQueryVariables>(
+    gql`
+      ${SEARCH_BY_FILE_QUERY}
+    `,
+    {
+      skip: !searchValue,
+      variables: {
+        filters: {
+          op: 'and',
+          content: [
+            {
+              op: 'filter' as ArrayFieldKeys,
+              content: fileIDQueryFilter,
+            },
+            {
+              op: 'not' as CombinationKeys,
+              content: [
+                {
+                  op: 'in' as ArrayFieldKeys,
+                  content: {
+                    field: FileCentricDocumentField['object_id'],
+                    value: excludedIds,
+                  },
                 },
-              },
-            ],
-          },
-          {
-            op: 'not' as CombinationKeys,
-            content: [
-              {
-                op: 'in' as ArrayFieldKeys,
-                content: {
-                  field: FileCentricDocumentField['file_id'],
-                  value: excludedIds,
+              ],
+            },
+            {
+              op: 'not' as CombinationKeys,
+              content: [
+                {
+                  op: 'in' as ArrayFieldKeys,
+                  content: {
+                    field: FileCentricDocumentField['file_id'],
+                    value: excludedIds,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
     },
-  });
+  );
 
   return query.data && !query.loading
     ? {

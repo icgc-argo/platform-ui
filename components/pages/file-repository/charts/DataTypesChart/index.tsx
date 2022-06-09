@@ -19,7 +19,7 @@
 
 import SimpleBarChart from '../SimpleBarChart';
 import DATA_TYPES_CHART from './DATA_TYPES_CHART.gql';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
 
@@ -41,11 +41,16 @@ type ChartQueryInput = {
 
 const DataTypesChart = () => {
   const { filters, setFilterFromFieldAndValue } = useFiltersContext();
-  const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(DATA_TYPES_CHART, {
-    variables: {
-      filters,
+  const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(
+    gql`
+      ${DATA_TYPES_CHART}
+    `,
+    {
+      variables: {
+        filters,
+      },
     },
-  });
+  );
   const handleBarClick = (value) => {
     setFilterFromFieldAndValue({ field: 'data_type', value });
   };

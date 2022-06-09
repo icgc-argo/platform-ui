@@ -28,7 +28,7 @@ import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from 'uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';
@@ -47,7 +47,11 @@ const FileEntity = ({ fileId }) => {
     fileId,
   });
   const { egoJwt } = useAuthContext();
-  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const { data: userProfile, loading: profileLoading } = useQuery(
+    gql`
+      ${USER_PROFILE}
+    `,
+  );
   const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
   const loading = profileLoading || fileLoading;
