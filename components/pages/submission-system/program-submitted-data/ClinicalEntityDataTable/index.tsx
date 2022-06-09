@@ -23,6 +23,8 @@ import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
+import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
+import { NOTIFICATION_VARIANTS } from 'uikit/notifications/Notification';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
 import noDataSvg from 'uikit/assets/noData.svg';
@@ -169,6 +171,10 @@ const ClinicalEntityDataTable = ({
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
+
+  const { clinicalErrors } = clinicalData;
+  const hasErrors = clinicalData.clinicalErrors.length > 0;
+  console.log(clinicalErrors);
 
   if (noData) {
     showCompletionStats = true;
@@ -357,6 +363,29 @@ const ClinicalEntityDataTable = ({
           </Typography>
         }
       />
+      {hasErrors && (
+        <div
+          id="error-submission-workspace"
+          css={css`
+            margin-top: 20px;
+          `}
+        >
+          <ErrorNotification
+            level={NOTIFICATION_VARIANTS.ERROR}
+            title={`${clinicalErrors.length.toLocaleString()} error(s) found in submission workspace`}
+            subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
+            errors={clinicalErrors}
+            columnConfig={[
+              {
+                accessor: 'fileName',
+                Header: 'File',
+                maxWidth: 150,
+              },
+              ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
+            ]}
+          />
+        </div>
+      )}
       <Table
         withOutsideBorder
         manual
