@@ -397,7 +397,17 @@ const ClinicalEntityDataTable = ({
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${tableErrors.length.toLocaleString()} error(s) found in submission workspace`}
-            subtitle="Version 1.13 of the data dictionary was released and has made some donors invalid. Please download the error report to view the affected donors, then submit a corrected TSV file in the Submit Clinical Data workspace. "
+            subtitle={
+              <div>
+                <a href="https://docs.icgc-argo.org/dictionary">Version 1.13</a> of the data
+                dictionary was released and has made some donors invalid. Please download the error
+                report to view the affected donors, then submit a corrected TSV file in the{' '}
+                <a href="/submission/program/PACA-CA/clinical-submission?tab=donor">
+                  Submit Clinical Data
+                </a>{' '}
+                workspace.
+              </div>
+            }
             errors={tableErrors}
             columnConfig={errorColumns}
           />

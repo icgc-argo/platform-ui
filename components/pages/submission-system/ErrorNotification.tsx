@@ -72,7 +72,7 @@ export default <Error extends { [k: string]: any }>({
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: string;
+  subtitle: string | Element;
   columnConfig: Array<
     TableColumnConfig<Error> & {
       accessor: keyof Error;
