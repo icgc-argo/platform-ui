@@ -49,36 +49,37 @@ export type DonorEntry = {
   [k: string]: string | number | boolean;
 };
 
-const getErrorColumns = (level: NotificationVariant) => {
-  const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
-  return [
-    {
-      accessor: 'donorId',
-      Header: 'Donor Id',
-      id: 'donorId',
-    },
-    {
-      accessor: 'entityName',
-      Header: 'Entity',
-      id: 'entityName',
-    },
-    {
-      accessor: 'errorType',
-      Header: 'Error Type',
-      id: 'errorType',
-    },
-    {
-      accessor: 'fieldName',
-      Header: `Field Name`,
-      id: 'fieldName',
-    },
-    {
-      accessor: 'message',
-      Header: `Message`,
-      id: 'message',
-    },
-  ];
-};
+const errorColumns = [
+  // update to # affected donors
+  {
+    accessor: 'donorId',
+    Header: 'Donor Id',
+    id: 'donorId',
+    maxWidth: 75,
+  },
+  {
+    accessor: 'fieldName',
+    Header: `Field with Error`,
+    id: 'fieldName',
+  },
+  // update to error value
+  {
+    accessor: 'entityName',
+    Header: 'Entity',
+    id: 'entityName',
+    maxWidth: 150,
+  },
+  {
+    accessor: 'errorType',
+    Header: 'Error Type',
+    id: 'errorType',
+  },
+  {
+    accessor: 'message',
+    Header: `Error Description`,
+    id: 'message',
+  },
+];
 
 const Container = styled('div')`
   display: flex;
@@ -210,7 +211,6 @@ const ClinicalEntityDataTable = ({
     const errors = next.errors.map((error) => ({ donorId, ...error }));
     return [...prev, ...errors];
   }, []);
-  const errorColumnConfig = getErrorColumns(NOTIFICATION_VARIANTS.ERROR);
 
   if (noData) {
     showCompletionStats = true;
@@ -397,9 +397,9 @@ const ClinicalEntityDataTable = ({
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${tableErrors.length.toLocaleString()} error(s) found in submission workspace`}
-            subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
+            subtitle="Version 1.13 of the data dictionary was released and has made some donors invalid. Please download the error report to view the affected donors, then submit a corrected TSV file in the Submit Clinical Data workspace. "
             errors={tableErrors}
-            columnConfig={errorColumnConfig}
+            columnConfig={errorColumns}
           />
         </div>
       )}
