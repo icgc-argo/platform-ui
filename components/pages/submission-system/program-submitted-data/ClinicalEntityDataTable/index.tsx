@@ -18,13 +18,14 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
+import styled from '@emotion/styled';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
+import noDataSvg from 'uikit/assets/noData.svg';
 import Tooltip from 'uikit/Tooltip';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
@@ -45,6 +46,38 @@ export type DonorEntry = {
   isNew: boolean;
   [k: string]: string | number | boolean;
 };
+
+const Container = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 14px auto;
+`;
+
+const NoDataCell = () => (
+  <Container>
+    <img
+      alt="no data found"
+      css={css`
+        height: 75px;
+      `}
+      src={noDataSvg}
+    />
+    <Typography
+      css={css`
+        margin-top: 14px;
+        margin-bottom: 0;
+      `}
+      color="grey"
+      variant="data"
+      as="p"
+      bold
+    >
+      No Data Found
+    </Typography>
+  </Container>
+);
 
 const completionColumnHeaders = {
   donor: 'DO',
@@ -274,7 +307,7 @@ const ClinicalEntityDataTable = ({
           </div>
         ),
         headerStyle: completionHeaderStyle,
-        columns: columns.slice(0, 7).map((column) => ({ ...column, maxWidth: noData ? 40 : 250 })),
+        columns: columns.slice(0, 7).map((column) => ({ ...column, maxWidth: noData ? 45 : 250 })),
       },
       {
         Header: 'SUBMITTED DONOR DATA',
@@ -282,7 +315,7 @@ const ClinicalEntityDataTable = ({
         columns: columns.slice(7).map((column) =>
           noData
             ? {
-                Cell: <ContentPlaceholder style={{ margin: '14px auto', padding: '0px' }} />,
+                Cell: <NoDataCell />,
               }
             : column,
         ),
