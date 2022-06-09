@@ -24,7 +24,7 @@ import { css } from 'uikit';
 import DnaLoader from 'uikit/DnaLoader';
 import Icon from 'uikit/Icon';
 import Table from 'uikit/Table';
-import DefaultNoDataComponent from 'uikit/Table/NoDataComponent';
+import ContentPlaceholder from 'uikit/ContentPlaceholder';
 import Tooltip from 'uikit/Tooltip';
 import Typography from 'uikit/Typography';
 import useTheme from 'uikit/utils/useTheme';
@@ -282,7 +282,7 @@ const ClinicalEntityDataTable = ({
         columns: columns.slice(7).map((column) =>
           noData
             ? {
-                Cell: <DefaultNoDataComponent />,
+                Cell: <ContentPlaceholder style={{ margin: '14px auto', padding: '0px' }} />,
               }
             : column,
         ),
