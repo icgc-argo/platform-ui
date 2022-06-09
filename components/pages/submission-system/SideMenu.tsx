@@ -18,8 +18,8 @@
  */
 
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import Router from 'next/router';

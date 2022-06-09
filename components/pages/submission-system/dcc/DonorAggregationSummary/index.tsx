@@ -24,7 +24,7 @@ import Typography from 'uikit/Typography';
 import Container from 'uikit/Container';
 
 // GQL Data Fetching
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
 
 const Card = styled(Container)`

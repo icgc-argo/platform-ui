@@ -27,7 +27,7 @@ import SyncIndexButton from './table-cell-components/SyncIndexButton';
 import { format as formatDate, formatDistance } from 'date-fns';
 
 // GQL Query
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import PROGRAM_DONOR_INDEX_STATES from './PROGRAM_DONOR_INDEX_STATS.gql';
 
 const columns = [

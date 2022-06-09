@@ -34,7 +34,7 @@ import DropdownButton from 'uikit/DropdownButton';
 import Container from 'uikit/Container';
 import Typography from 'uikit/Typography';
 import Icon from 'uikit/Icon';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';

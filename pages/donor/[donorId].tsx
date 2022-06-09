@@ -23,7 +23,7 @@ import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';

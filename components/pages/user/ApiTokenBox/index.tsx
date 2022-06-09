@@ -26,7 +26,7 @@ import Button from 'uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from 'uikit/ClipboardCopyField';
 import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';

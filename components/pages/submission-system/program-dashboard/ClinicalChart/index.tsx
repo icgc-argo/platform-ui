@@ -21,7 +21,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { find } from 'lodash';
 import { css } from '@emotion/core';
 import { format as formatDate, subDays } from 'date-fns';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/client';
 import useElementDimension from 'uikit/utils/Hook/useElementDimension';
 import Typography from 'uikit/Typography';
 import { ContentError, ContentLoader } from 'components/placeholders';

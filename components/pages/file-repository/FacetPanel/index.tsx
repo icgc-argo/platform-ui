@@ -47,7 +47,7 @@ import {
   ArrayFieldKeys,
   CombinationKeys,
 } from '../utils/types';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
 import {
   FacetDetails,

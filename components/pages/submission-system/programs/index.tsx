@@ -29,7 +29,7 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { Input } from 'uikit/form';

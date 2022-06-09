@@ -30,7 +30,7 @@ import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
 import Button from 'uikit/Button';
 import Icon from 'uikit/Icon';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionQuery } from '..';

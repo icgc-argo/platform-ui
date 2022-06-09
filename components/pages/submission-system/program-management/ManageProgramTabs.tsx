@@ -22,7 +22,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { css } from 'uikit';
 import Button from 'uikit/Button';
 import { ContentBox } from 'uikit/PageLayout';

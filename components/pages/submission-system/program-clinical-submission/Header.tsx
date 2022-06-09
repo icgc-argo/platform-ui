@@ -28,7 +28,7 @@ import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
 import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
 import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
