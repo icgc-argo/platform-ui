@@ -37,7 +37,7 @@ const createInMemoryCache = () =>
           }`;
 
         default:
-          return obj.id;
+          return `${obj.id}`;
       }
     },
   });
