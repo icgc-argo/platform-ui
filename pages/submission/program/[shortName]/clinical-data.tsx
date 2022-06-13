@@ -21,7 +21,9 @@ import React from 'react';
 
 import { createPage } from 'global/utils/pages';
 import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
+import ErrorPage from 'pages/_error';
 import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import { getConfig } from 'global/config';
 
 export default createPage({
   isPublic: false,
@@ -36,5 +38,8 @@ export default createPage({
   },
   startWithGlobalLoader: false,
 })((props) => {
+  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
+
+  if (!FEATURE_SUBMITTED_DATA_ENABLED) return <ErrorPage statusCode={404} />;
   return <ProgramClinicalData {...props} />;
 });
