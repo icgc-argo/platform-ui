@@ -3,7 +3,6 @@
   "version": "1.110.1",
   "scripts": {
     "dev": "next -p 8080",
-    "local-build": "rm -rf .next && next build",
     "build": "rm -rf .next && next build",
     "export-maintenance": "npm run build && rm -rf ./out/maintenance && EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
     "generate-fragment-types": "ts-node ./scripts/tsconfig.json ./scripts/generateFragmentTypes.ts",
