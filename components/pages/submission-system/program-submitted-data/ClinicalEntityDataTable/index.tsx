@@ -58,21 +58,16 @@ const errorColumns = [
     maxWidth: 75,
   },
   {
+    accessor: 'errorType',
+    Header: 'Error Value',
+    id: 'errorType',
+    maxWidth: 185,
+  },
+  {
     accessor: 'fieldName',
     Header: `Field with Error`,
     id: 'fieldName',
-  },
-  // update to error value
-  {
-    accessor: 'entityName',
-    Header: 'Entity',
-    id: 'entityName',
-    maxWidth: 150,
-  },
-  {
-    accessor: 'errorType',
-    Header: 'Error Type',
-    id: 'errorType',
+    maxWidth: 215,
   },
   {
     accessor: 'message',
@@ -206,12 +201,32 @@ const ClinicalEntityDataTable = ({
 
   const { clinicalErrors } = clinicalData;
   const hasErrors = clinicalData.clinicalErrors.length > 0;
+  console.log('clinicalErrors', clinicalErrors);
+  // collect error types
+  const newTableErrors = [];
+  clinicalErrors.forEach((donor) => {
+    donor.errors.forEach((error) => {
+      const { errorType, fieldName } = error;
+      const errorGroup = newTableErrors.find(
+        (tableErrorSet) =>
+          tableErrorSet[0].errorType === errorType && tableErrorSet[0].fieldName === fieldName,
+      );
+
+      if (!errorGroup) {
+        newTableErrors.push([error]);
+      } else {
+        errorGroup.concat([error]);
+      }
+    });
+  });
+  console.log('newTableErrors', newTableErrors);
+
   const tableErrors = clinicalErrors.reduce((prev, next) => {
     const { donorId } = next;
     const errors = next.errors.map((error) => ({ donorId, ...error }));
     return [...prev, ...errors];
   }, []);
-
+  console.log('tableErrors', tableErrors);
   if (noData) {
     showCompletionStats = true;
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
