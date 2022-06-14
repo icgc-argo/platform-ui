@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import omit from 'lodash/omit';
-import { TOAST_VARIANTS } from 'uikit/notifications/Toast';
 import {
-  NOTIFICATION_INTERACTION_EVENTS,
-  NotificationVariant,
-  NotificationInteractionEvent,
   NotificationInteraction,
-} from 'uikit/notifications/Notification';
+  NotificationInteractionEvent,
+  NotificationVariant,
+  NOTIFICATION_INTERACTION_EVENTS,
+} from '@icgc-argo/uikit/notifications/Notification';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import omit from 'lodash/omit';
+import * as React from 'react';
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {

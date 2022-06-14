@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Modal from 'uikit/Modal';
+import Modal from '@icgc-argo/uikit/Modal';
 import { UserModel } from '../common';
 
 const DeleteUserModal = ({

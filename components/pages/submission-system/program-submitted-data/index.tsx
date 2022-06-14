@@ -25,16 +25,15 @@ import { Row, setConfiguration } from 'react-grid-system';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
-import Container from 'uikit/Container';
-import DnaLoader from 'uikit/DnaLoader';
-import Icon from 'uikit/Icon';
-import Link from 'uikit/Link';
-import VerticalTabs from 'uikit/VerticalTabs';
-import TitleBar from 'uikit/TitleBar';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
+import Container from '@icgc-argo/uikit/Container';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import Icon from '@icgc-argo/uikit/Icon';
+import Link from '@icgc-argo/uikit/Link';
+import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
+import TitleBar from '@icgc-argo/uikit/TitleBar';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
 import {
@@ -47,6 +46,7 @@ import {
   emptyResponse,
 } from './common';
 import DataTable from './DataTable';
+import Typography from '@icgc-argo/uikit/Typography';
 
 setConfiguration({ gutterWidth: 9 });
 

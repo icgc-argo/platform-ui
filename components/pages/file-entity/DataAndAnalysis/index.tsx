@@ -18,11 +18,11 @@
  */
 
 import { FileCard, TableDiv } from '../common';
-import SimpleTable from 'uikit/Table/SimpleTable';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
-import { useTheme } from 'uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import { css } from '@emotion/core';
 
 function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {
