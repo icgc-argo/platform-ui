@@ -12,7 +12,6 @@ RUN chown -R node /appDir
 USER node
 
 RUN npm ci
-RUN npm run build-uikit
 RUN npx next build
 
 EXPOSE 8080
