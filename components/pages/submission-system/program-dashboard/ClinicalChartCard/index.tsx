@@ -19,10 +19,10 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import PicClipboard from 'static/clipboard.svg';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import Link from 'uikit/Link';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import Link from '@icgc-argo/uikit/Link';
 import { DashboardCard } from '../common';
 import { getConfig } from 'global/config';
 import ClinicalChart from '../ClinicalChart';

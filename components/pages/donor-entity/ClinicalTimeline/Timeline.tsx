@@ -18,12 +18,12 @@
  */
 
 import React from 'react';
-import { css } from 'uikit';
-import Icon from 'uikit/Icon';
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
-import VerticalTabs from 'uikit/VerticalTabs';
-import Tag from 'uikit/Tag';
+import { css } from '@icgc-argo/uikit';
+import Icon from '@icgc-argo/uikit/Icon';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
+import Tag from '@icgc-argo/uikit/Tag';
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';

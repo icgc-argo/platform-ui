@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import Progress from 'uikit/Progress';
+import Progress from '@icgc-argo/uikit/Progress';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';

@@ -20,7 +20,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import React from 'react';
 import { css } from '@emotion/core';
-import Notification from 'uikit/notifications/Notification';
+import Notification from '@icgc-argo/uikit/notifications/Notification';
 import CLINICAL_SUBMISSION_SYSTEM_DISABLED from './CLINICAL_SUBMISSION_SYSTEM_DISABLED.gql';
 
 // Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical

@@ -1,0 +1,39 @@
+query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!) {
+  clinicalData(programShortName: $programShortName, filters: $filters) {
+    programShortName
+    clinicalEntities {
+      entityName
+      entityFields
+      totalDocs
+      records {
+        name
+        value
+      }
+    }
+    completionStats {
+      coreCompletion {
+        donor
+        specimens
+        primaryDiagnosis
+        familyHistory
+        followUps
+        treatments
+      }
+      coreCompletionDate
+      coreCompletionPercentage
+      overriddenCoreCompletion
+      donorId
+    }
+    clinicalErrors {
+      donorId
+      submitterDonorId
+      errors {
+        errorType
+        fieldName
+        index
+        message
+        entityName
+      }
+    }
+  }
+}

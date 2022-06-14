@@ -19,24 +19,25 @@
 
 import React from 'react';
 import { Col, Row, Visible, Hidden } from 'react-grid-system';
-import { css, styled } from 'uikit';
-import Button from 'uikit/Button';
+import { css, styled } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
 
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
 import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
 import globeBackground from 'static/icgc-globe-bg.svg';
 
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import NextLink from 'next/link';
 
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import {
   DataReleaseBar,
   DataCallout,
   NewsContainer,
+  NewsItem,
   ResourceBox,
   OvertureBanner,
   ResponsiveGridLayout,
@@ -51,12 +52,94 @@ import {
   DOCS_PROGRAMMATIC_APIS_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
-  DOCS_SOFTWARE_RELEASES_PAGE,
-  DOCS_DICTIONARY_RELEASES_PAGE,
-  DOCS_DICTIONARY_PAGE,
 } from 'global/constants/docSitePaths';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 import Head from 'components/pages/head';
+
+const newsItems: NewsItem[] = [
+  {
+    title: 'June 8, 2022',
+    text: (
+      <>
+        Data submitters can now submit supplemental surgery data for donors that have this specified
+        treatment in the new{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+          Surgery clinical table
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    title: 'March 7, 2022',
+    text: (
+      <>
+        We are excited to announce{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
+          Data Release 5.0
+        </Link>
+        , which includes{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering"
+        >
+          Open Access Variant Filtered
+        </Link>{' '}
+        data in the File Repository for{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          APGI-AU
+        </Link>
+        ,{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          PACA-CA
+        </Link>
+        ,{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          OCCAMS-GB
+        </Link>
+        ,{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          PTC-SA
+        </Link>
+        , and{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          LUCA-KR
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    title: 'New Features',
+    text: (
+      <>
+        Program dashboards and the File Repository have been updated with new features to filter on{' '}
+        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
+          Open Access Variant Filtered
+        </Link>{' '}
+        data, and new file detail pages are now accessible from the{' '}
+        <Link href="https://platform.icgc-argo.org/repository">File Repository</Link> table.
+        <br />
+        <br />
+        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+          ARGO Data Dictionary 1.14
+        </Link>
+        ,{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
+          Data Release 5.0
+        </Link>{' '}
+        and{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
+        >
+          Software Release 1.110.1 - API 3.32.0
+        </Link>{' '}
+        are now available.
+      </>
+    ),
+  },
+];
 
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
@@ -277,85 +360,7 @@ export default function Homepage() {
             </DataCallout>
           </Col>
         </Row>
-        <NewsContainer
-          newsItems={[
-            <>
-              <b>Announcements:</b>
-              <br />
-              <b>March 7, 2022:</b> We are excited to announce{' '}
-              <Link
-                target="_blank"
-                href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-              >
-                Data Release 5.0
-              </Link>{' '}
-              on the ICGC ARGO Data Platform, which includes{' '}
-              <Link
-                target="_blank"
-                href="https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering"
-              >
-                Open Access Variant Filtered
-              </Link>{' '}
-              data in the File Repository for{' '}
-              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                APGI-AU
-              </Link>
-              ,{' '}
-              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                PACA-CA
-              </Link>
-              ,{' '}
-              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                OCCAMS-GB
-              </Link>
-              ,{' '}
-              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                PTC-SA
-              </Link>
-              , and{' '}
-              <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                LUCA-KR
-              </Link>
-              .
-              <div
-                css={css`
-                  margin-top: 10px;
-                `}
-              >
-                <b>New Features:</b>{' '}
-                <div>
-                  Program dashboards and the File Repository have been updated with new features to
-                  filter on{' '}
-                  <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-                    Open Access Variant Filtered
-                  </Link>{' '}
-                  data, and new file detail pages are now accessible from the{' '}
-                  <Link href="https://platform.icgc-argo.org/repository">File Repository</Link>{' '}
-                  table. <br />
-                  <br />
-                  <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-                    ARGO Data Dictionary 1.13
-                  </Link>
-                  ,{' '}
-                  <Link
-                    target="_blank"
-                    href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-                  >
-                    Data Release 5.0
-                  </Link>{' '}
-                  and{' '}
-                  <Link
-                    target="_blank"
-                    href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
-                  >
-                    Software Release 1.105.3 - API 3.28.2
-                  </Link>{' '}
-                  are now available.
-                </div>
-              </div>
-            </>,
-          ]}
-        />
+        <NewsContainer newsItems={newsItems} />
         <div
           css={css`
             background-image: url(${globeBackground});

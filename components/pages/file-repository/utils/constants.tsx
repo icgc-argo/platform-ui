@@ -1,4 +1,4 @@
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import { FileCentricDocumentField, FileRepositoryTSVColumn } from '../types';
 
 export const tooltipContent: { [key: string]: React.ReactNode } = {

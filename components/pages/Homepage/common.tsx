@@ -17,20 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled } from 'uikit';
-import { useTheme } from 'uikit/ThemeProvider';
-import Typography from 'uikit/Typography';
+import { css, styled } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import Typography from '@icgc-argo/uikit/Typography';
+import { ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { ThemeColorNames } from 'uikit/theme/types';
-import { UikitIconNames } from 'uikit/Icon/icons';
-import Icon from 'uikit/Icon';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
-import Container from 'uikit/Container';
-import overtureLogo from 'uikit/assets/overture-logo.svg';
+import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
+import Icon from '@icgc-argo/uikit/Icon';
+import Link from '@icgc-argo/uikit/Link';
+import Button from '@icgc-argo/uikit/Button';
+import Container from '@icgc-argo/uikit/Container';
+import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
 import scientistImage from 'static/icgc-data-scientist-wide.jpg';
-import DnaLoader from 'uikit/DnaLoader';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
+
+export type NewsItem = {
+  title: string;
+  text: ReactNode;
+};
 
 type DataReleaseStatistic = {
   quantity: number;
@@ -218,7 +224,7 @@ const GradientBar = styled('div')`
   margin: -5px 0px;
 `;
 
-export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = ({ newsItems }) => {
+export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
   const theme = useTheme();
   return (
     <Container
@@ -280,18 +286,32 @@ export const NewsContainer: React.ComponentType<{ newsItems: JSX.Element[] }> = 
               padding: 20px;
             `}
           >
-            <div>
-              {/** @Note DO NOT REMOVE div. Magic fix needed here to enforce style  */}
-              {newsItems.map((item, index) => (
+            <div
+              css={css`
+                margin: 1em 0;
+                padding-bottom: 15px;
+                border-bottom: 1px solid ${theme.colors.grey_2};
+              `}
+            >
+              <Typography
+                bold
+                component="h3"
+                variant="paragraph"
+                css={css`
+                  margin: 0;
+                `}
+              >
+                Announcements:
+              </Typography>
+              {newsItems.map((newsItem: NewsItem, index: number) => (
                 <Typography
-                  key={`newsText-${index}`}
+                  key={`newsItem-${index}`}
                   variant="paragraph"
                   css={css`
-                    padding-bottom: 15px;
-                    border-bottom: 1px solid ${theme.colors.grey_2};
+                    margin: 1em 0 0 0;
                   `}
                 >
-                  {item}
+                  {newsItem.title && <b>{newsItem.title}:</b>} {newsItem.text}
                 </Typography>
               ))}
             </div>

@@ -19,10 +19,10 @@
 
 import * as React from 'react';
 import SubmissionLayout from '../layout';
-import { css, styled } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
+import { css, styled } from '@icgc-argo/uikit';
+import TitleBar from '@icgc-argo/uikit/TitleBar';
 import usePageContext from 'global/hooks/usePageContext';
-import Banner, { BANNER_VARIANTS } from 'uikit/notifications/Banner';
+import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
@@ -33,10 +33,10 @@ import ClinicalChartCard from './ClinicalChartCard';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
 import DonorDataSummary from './DonorDataSummary';
 import { setConfiguration } from 'react-grid-system';
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import {
   DOCS_DATA_ACCESS_PAGE,
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,

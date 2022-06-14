@@ -18,19 +18,19 @@
  */
 
 import React from 'react';
-import Container from 'uikit/Container';
+import Container from '@icgc-argo/uikit/Container';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import { css } from 'uikit';
-import Link from 'uikit/Link';
-import { useTheme } from 'uikit/ThemeProvider';
-import Typography from 'uikit/Typography';
-import SimpleTable from 'uikit/Table/SimpleTable';
-import ContentPlaceholder from 'uikit/ContentPlaceholder/';
+import { css } from '@icgc-argo/uikit';
+import Link from '@icgc-argo/uikit/Link';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import Typography from '@icgc-argo/uikit/Typography';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder/';
 import ContentError from 'components/placeholders/ContentError';
 import Header from './Header';
 import Samples from './Samples';

@@ -1,4 +1,4 @@
-import { FilterOption } from 'uikit/OptionsList';
+import { FilterOption } from '@icgc-argo/uikit/OptionsList';
 import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 

@@ -19,8 +19,8 @@
 
 import { css } from '@emotion/core';
 import React, { createRef } from 'react';
-import Table, { TableDataBase, TableColumnConfig } from 'uikit/Table';
-import Typography from 'uikit/Typography';
+import Table, { TableDataBase, TableColumnConfig } from '@icgc-argo/uikit/Table';
+import Typography from '@icgc-argo/uikit/Typography';
 import { formatTableDisplayNames } from './util';
 import { SampleNode } from '../types';
 

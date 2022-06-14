@@ -19,23 +19,22 @@
 
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { useLazyQuery } from '@apollo/react-hooks';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import Router from 'next/router';
 import styled from '@emotion/styled';
 
-import Submenu, { MenuItem } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import Icon from 'uikit/Icon';
-import { css } from 'uikit';
-import DnaLoader from 'uikit/DnaLoader';
+import Submenu, { MenuItem } from '@icgc-argo/uikit/SubMenu';
+import { Input } from '@icgc-argo/uikit/form';
+import Icon from '@icgc-argo/uikit/Icon';
+import { css } from '@icgc-argo/uikit';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
+import { getConfig } from 'global/config';
 import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
 
 import {
@@ -44,6 +43,7 @@ import {
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_CLINICAL_DATA_PATH,
   PROGRAMS_LIST_PATH,
   DCC_DASHBOARD_PATH,
 } from 'global/constants/pages';
@@ -112,6 +112,7 @@ type SampleRegistrationQueryResponse = {
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
+  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
     variables: {
       programShortName: props.program.shortName,
@@ -242,6 +243,24 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               }
             />
           </Link>
+          {FEATURE_SUBMITTED_DATA_ENABLED && (
+            <Link
+              prefetch
+              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                props.program.shortName,
+              )}
+              href={PROGRAM_CLINICAL_DATA_PATH}
+            >
+              <MenuItem
+                level={3}
+                content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+                selected={
+                  PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
+                }
+              />
+            </Link>
+          )}
         </>
       )}
       {canWriteToProgram && (
@@ -338,7 +357,6 @@ export default function SideMenu() {
   const isRdpc = React.useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
-  const canSeeRdpcs = isDcc;
   const canSeeDcc = isDcc;
 
   return (

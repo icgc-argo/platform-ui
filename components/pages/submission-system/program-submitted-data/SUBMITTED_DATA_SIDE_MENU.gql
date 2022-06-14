@@ -1,0 +1,13 @@
+query SUBMITTED_DATA_SIDE_MENU($programShortName: String!, $filters: ClinicalInput!) {
+  clinicalData(programShortName: $programShortName, filters: $filters) {
+    programShortName
+    clinicalEntities {
+      entityName
+    }
+    clinicalErrors {
+      errors {
+        entityName
+      }
+    }
+  }
+}

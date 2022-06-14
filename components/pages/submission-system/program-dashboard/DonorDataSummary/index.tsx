@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import DonorSummaryTable from './DonorSummaryTable';
 import { usePageQuery } from 'global/hooks/usePageContext';
