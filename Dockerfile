@@ -6,11 +6,11 @@ RUN apk --no-cache add shadow
 RUN groupmod -g $APP_GID node 
 RUN usermod -u $APP_UID -g $APP_GID node
 RUN mkdir -p /appDir
-WORKDIR /appDir
-COPY . .
 RUN chown -R node /appDir
 USER node
+WORKDIR /appDir
 
+COPY . .
 RUN npm ci
 RUN npx next build
 
