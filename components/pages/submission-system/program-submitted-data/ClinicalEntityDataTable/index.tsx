@@ -206,7 +206,9 @@ const ClinicalEntityDataTable = ({
   const tableErrorGroups = [];
 
   clinicalErrors.forEach((donor) => {
-    const relatedErrors = donor.errors.filter((error) => error.entityName === entityType);
+    const relatedErrors = donor.errors.filter(
+      (error) => error.entityName === aliasEntityNames[entityType],
+    );
     totalErrors += relatedErrors.length;
     relatedErrors.forEach((error) => {
       const { errorType, fieldName } = error;
