@@ -52,22 +52,21 @@ export type DonorEntry = {
 const errorColumns = [
   // update to # affected donors
   {
-    accessor: 'donorId',
-    Header: 'Donor Id',
-    id: 'donorId',
-    maxWidth: 75,
-  },
-  {
-    accessor: 'errorType',
-    Header: 'Error Value',
-    id: 'errorType',
-    maxWidth: 185,
+    accessor: 'entries',
+    Header: '# Affected Donors',
+    id: 'entries',
   },
   {
     accessor: 'fieldName',
     Header: `Field with Error`,
     id: 'fieldName',
     maxWidth: 215,
+  },
+  {
+    accessor: 'errorType',
+    Header: 'Error Value',
+    id: 'errorType',
+    maxWidth: 185,
   },
   {
     accessor: 'message',
@@ -167,6 +166,7 @@ const ClinicalEntityDataTable = ({
   entityType: string;
   program: string;
 }) => {
+  // Init + Page Settings
   let totalDocs = 0;
   let showCompletionStats = false;
   let records = [];
@@ -199,34 +199,38 @@ const ClinicalEntityDataTable = ({
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
 
+  // Collect Error Data
   const { clinicalErrors } = clinicalData;
-  const hasErrors = clinicalData.clinicalErrors.length > 0;
-  console.log('clinicalErrors', clinicalErrors);
-  // collect error types
-  const newTableErrors = [];
+  const hasErrors = clinicalErrors.length > 0;
+  const tableErrorGroups = [];
   clinicalErrors.forEach((donor) => {
     donor.errors.forEach((error) => {
       const { errorType, fieldName } = error;
-      const errorGroup = newTableErrors.find(
-        (tableErrorSet) =>
-          tableErrorSet[0].errorType === errorType && tableErrorSet[0].fieldName === fieldName,
+      const relatedErrorGroup = tableErrorGroups.find(
+        (tableErrorGroup) =>
+          tableErrorGroup[0].errorType === errorType && tableErrorGroup[0].fieldName === fieldName,
       );
 
-      if (!errorGroup) {
-        newTableErrors.push([error]);
+      if (!relatedErrorGroup) {
+        tableErrorGroups.push([error]);
       } else {
-        errorGroup.concat([error]);
+        relatedErrorGroup.push(error);
       }
     });
   });
-  console.log('newTableErrors', newTableErrors);
+  const tableErrors = tableErrorGroups.map((errorGroup) => {
+    const entries = errorGroup.length;
+    const { errorType, fieldName, message } = errorGroup[0];
 
-  const tableErrors = clinicalErrors.reduce((prev, next) => {
-    const { donorId } = next;
-    const errors = next.errors.map((error) => ({ donorId, ...error }));
-    return [...prev, ...errors];
-  }, []);
-  console.log('tableErrors', tableErrors);
+    return {
+      entries,
+      errorType,
+      fieldName,
+      message,
+    };
+  });
+
+  // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
