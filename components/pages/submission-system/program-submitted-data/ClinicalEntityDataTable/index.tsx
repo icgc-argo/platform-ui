@@ -55,6 +55,7 @@ const errorColumns = [
     accessor: 'entries',
     Header: '# Affected Donors',
     id: 'entries',
+    maxWidth: 135,
   },
   {
     accessor: 'fieldName',
@@ -119,7 +120,7 @@ const completionColumnHeaders = {
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
-  const minWidth = showCompletionStats ? 60 : 95;
+  const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
   const maxWidth = noData && showCompletionStats && keyString !== ' ' ? 45 : 200;
   const spacePerChar = 8;
   const margin = 10;
@@ -201,10 +202,13 @@ const ClinicalEntityDataTable = ({
 
   // Collect Error Data
   const { clinicalErrors } = clinicalData;
-  const hasErrors = clinicalErrors.length > 0;
+  let totalErrors = 0;
   const tableErrorGroups = [];
+
   clinicalErrors.forEach((donor) => {
-    donor.errors.forEach((error) => {
+    const relatedErrors = donor.errors.filter((error) => error.entityName === entityType);
+    totalErrors += relatedErrors.length;
+    relatedErrors.forEach((error) => {
       const { errorType, fieldName } = error;
       const relatedErrorGroup = tableErrorGroups.find(
         (tableErrorGroup) =>
@@ -218,14 +222,16 @@ const ClinicalEntityDataTable = ({
       }
     });
   });
+  const hasErrors = totalErrors > 0;
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     const entries = errorGroup.length;
-    const { errorType, fieldName, message } = errorGroup[0];
+    const { errorType, fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
       errorType,
       fieldName,
+      entityName,
       message,
     };
   });
@@ -415,7 +421,7 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${tableErrors.length.toLocaleString()} error(s) found in submission workspace`}
+            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
             subtitle={
               <div
                 css={css`
