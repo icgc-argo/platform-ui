@@ -19,14 +19,14 @@
 
 import { displayDateAndTime } from 'global/utils/common';
 import urlJoin from 'url-join';
-import { css, styled } from 'uikit';
-import Icon, { Outline } from 'uikit/Icon';
-import { ThemeColorNames } from 'uikit/theme/types';
-import Typography from 'uikit/Typography';
-import Pipe from 'uikit/Pipe';
+import { css, styled } from '@icgc-argo/uikit';
+import Icon, { Outline } from '@icgc-argo/uikit/Icon';
+import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import Typography from '@icgc-argo/uikit/Typography';
+import Pipe from '@icgc-argo/uikit/Pipe';
 import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
-import { useTheme } from 'uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import { HtmlHTMLAttributes } from 'react';
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';

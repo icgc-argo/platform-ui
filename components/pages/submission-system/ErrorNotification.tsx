@@ -18,15 +18,15 @@
  */
 
 import React, { ReactNode } from 'react';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
 import Notification, {
   NotificationVariant,
   NOTIFICATION_VARIANTS,
-} from 'uikit/notifications/Notification';
-import Table, { TableColumnConfig } from 'uikit/Table';
+} from '@icgc-argo/uikit/notifications/Notification';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
 import { exportToTsv } from 'global/utils/common';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
 

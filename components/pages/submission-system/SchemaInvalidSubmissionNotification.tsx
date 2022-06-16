@@ -22,8 +22,10 @@ import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from '@emotion/core';
-import Link from 'uikit/Link';
-import Notification, { NOTIFICATION_INTERACTION_EVENTS } from 'uikit/notifications/Notification';
+import Link from '@icgc-argo/uikit/Link';
+import Notification, {
+  NOTIFICATION_INTERACTION_EVENTS,
+} from '@icgc-argo/uikit/notifications/Notification';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
 import { getConfig } from 'global/config';

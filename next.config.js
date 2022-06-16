@@ -25,7 +25,10 @@ const withImages = require('next-images');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
-module.exports = withImages({
+const withPlugins = require('next-compose-plugins');
+const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
+
+module.exports = withPlugins([withTM, withImages], {
   exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
@@ -33,7 +36,7 @@ module.exports = withImages({
           '/404': { page: process.env.EXPORT_PATH },
         }
       : defaultPathMap,
-  webpack: (config) => {
+  webpack: (config, options) => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
       fs: 'empty',
@@ -52,6 +55,15 @@ module.exports = withImages({
         loader: 'graphql-tag/loader',
       },
     ];
+
+    // These 'react' related configs are added to enable linking packages in development
+    // (e.g. UIKit), and not get the "broken Hooks" warning.
+    // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
+    if (options.isServer) {
+      config.externals = ['react', ...config.externals];
+    }
+
+    config.resolve.alias['react'] = path.resolve(__dirname, '.', 'node_modules', 'react');
 
     return config;
   },

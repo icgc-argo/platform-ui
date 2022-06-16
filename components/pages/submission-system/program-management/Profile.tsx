@@ -18,12 +18,12 @@
  */
 
 import React from 'react';
-import useTheme from 'uikit/utils/useTheme';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { Col, Row } from 'react-grid-system';
-import Typography from 'uikit/Typography';
-import InputLabel from 'uikit/form/InputLabel';
-import Icon from 'uikit/Icon';
-import { css } from 'uikit';
+import Typography from '@icgc-argo/uikit/Typography';
+import InputLabel from '@icgc-argo/uikit/form/InputLabel';
+import Icon from '@icgc-argo/uikit/Icon';
+import { css } from '@icgc-argo/uikit';
 import join from 'lodash/join';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';

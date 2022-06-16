@@ -20,11 +20,11 @@
 import React, { useState } from 'react';
 import { find } from 'lodash';
 import styled from '@emotion/styled';
-import Icon from 'uikit/Icon';
-import Button from 'uikit/Button';
-import theme from 'uikit/theme/defaultTheme';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
+import Icon from '@icgc-argo/uikit/Icon';
+import Button from '@icgc-argo/uikit/Button';
+import theme from '@icgc-argo/uikit/theme/defaultTheme';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css } from '@icgc-argo/uikit';
 import { chartLineMeta } from './utils';
 import { ChartType, DonorField } from './types';
 

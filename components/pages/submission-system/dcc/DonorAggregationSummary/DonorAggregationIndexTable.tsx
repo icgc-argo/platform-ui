@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Table from 'uikit/Table';
+import Table from '@icgc-argo/uikit/Table';
 
 import { css } from '@emotion/core';
 
