@@ -134,6 +134,12 @@ const defaultPageSettings = {
   sorted: [{ id: 'donorId', desc: true }],
 };
 
+const defaultErrorPageSettings = {
+  page: 0,
+  pageSize: 5,
+  sorted: [{ id: 'donorId', desc: true }],
+};
+
 const validateEntityQueryName = (entityQuery) => {
   const entities = typeof entityQuery === 'string' ? [entityQuery] : entityQuery;
   return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
@@ -176,6 +182,8 @@ const ClinicalEntityDataTable = ({
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
+  const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
+  const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
@@ -401,9 +409,14 @@ const ClinicalEntityDataTable = ({
     ];
   }
 
-  const min = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
-  const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
-  const pages = Math.ceil(totalDocs / pageSize);
+  const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
+  const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
+  const tablePages = Math.ceil(totalDocs / pageSize);
+
+  const errorMin = totalErrors > 0 ? errorPage * errorPageSize + 1 : totalErrors;
+  const errorMax =
+    totalErrors < (errorPage + 1) * errorPageSize ? totalErrors : (errorPage + 1) * errorPageSize;
+  const errorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
     <DnaLoader />
@@ -441,6 +454,14 @@ const ClinicalEntityDataTable = ({
             }
             errors={tableErrors}
             columnConfig={errorColumns}
+            onPageChange={(value) => updatePageSettings('page', value)}
+            onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
+            onSortedChange={(value) => updatePageSettings('sorted', value)}
+            tableProps={{
+              page: errorPage,
+              pageSize: errorPageSize,
+              sorted: errorSorted,
+            }}
           />
         </div>
       )}
@@ -452,7 +473,7 @@ const ClinicalEntityDataTable = ({
             `}
             variant="data"
           >
-            Showing {min} - {max} of {totalDocs}
+            Showing {tableMin} - {tableMax} of {totalDocs}
           </Typography>
         }
       />
@@ -462,7 +483,7 @@ const ClinicalEntityDataTable = ({
         parentRef={containerRef}
         showPagination={true}
         page={page}
-        pages={pages}
+        pages={tablePages}
         pageSize={pageSize}
         sorted={sorted}
         getTdProps={getCellStyles}

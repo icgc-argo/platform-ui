@@ -18,6 +18,7 @@
  */
 
 import React, { ReactNode } from 'react';
+import { TableProps } from 'react-table';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import Notification, {
@@ -68,6 +69,7 @@ export default <Error extends { [k: string]: any }>({
   columnConfig,
   onClearClick,
   tsvExcludeCols = [],
+  tableProps,
 }: {
   level: NotificationVariant;
   title: string;
@@ -80,6 +82,7 @@ export default <Error extends { [k: string]: any }>({
   errors: Array<Error>;
   onClearClick?: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
+  tableProps?: Partial<TableProps>;
 }) => {
   const onDownloadClick = () => {
     exportToTsv(errors, {
@@ -166,6 +169,7 @@ export default <Error extends { [k: string]: any }>({
               }))}
               data={errors}
               showPagination
+              {...tableProps}
             />
           </div>
         );
