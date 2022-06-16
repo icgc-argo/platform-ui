@@ -38,7 +38,7 @@ import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import Container from '@icgc-argo/uikit/Container';
 import Typography from '@icgc-argo/uikit/Typography';
 import Icon from '@icgc-argo/uikit/Icon';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_TABLE_QUERY from './FILE_REPOSITORY_TABLE_QUERY.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';

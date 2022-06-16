@@ -48,7 +48,7 @@ import {
   DOCS_DATA_DOWNLOAD_PAGE,
   DOCS_API_TOKEN_PAGE,
 } from 'global/constants/docSitePaths';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';

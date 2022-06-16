@@ -23,7 +23,7 @@ import { styled } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionQueryData } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY.gql';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/client';
 import { ContentHeader } from '@icgc-argo/uikit/PageLayout';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import Header from './Header';

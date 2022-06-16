@@ -35,7 +35,7 @@ import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit/notifications/Notification';
 import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';

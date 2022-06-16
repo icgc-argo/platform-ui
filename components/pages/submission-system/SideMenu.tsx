@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import styled from '@emotion/styled';

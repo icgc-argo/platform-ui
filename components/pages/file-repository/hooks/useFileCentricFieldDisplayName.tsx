@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import FILE_CENTRIC_EXTENDED_MAPPING from './FILE_CENTRIC_EXTENDED_MAPPING.gql';
 import { FileCentricDocumentField } from '../types';
 

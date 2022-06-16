@@ -26,7 +26,7 @@ import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import Button from '@icgc-argo/uikit/Button';
 import Icon from '@icgc-argo/uikit/Icon';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import _ from 'lodash';
 import {

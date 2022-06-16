@@ -4,7 +4,7 @@ query CLINICAL_ENTITY_DATA($programShortName: String!, $filters: ClinicalInput!)
     clinicalEntities {
       entityName
       entityFields
-      totalDocs
+      # totalDocs - failed gql validation
       records {
         name
         value

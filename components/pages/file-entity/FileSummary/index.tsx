@@ -26,7 +26,7 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import PROGRAM_NAME_QUERY from './PROGRAM_NAME_QUERY.gql';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';

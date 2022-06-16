@@ -19,7 +19,7 @@
 
 import SimpleBarChart from '../SimpleBarChart';
 import DATA_TYPES_CHART from './DATA_TYPES_CHART.gql';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
 

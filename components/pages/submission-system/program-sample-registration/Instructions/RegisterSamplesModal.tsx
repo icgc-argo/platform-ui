@@ -20,7 +20,7 @@
 import React from 'react';
 import Modal from '@icgc-argo/uikit/Modal';
 import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
 import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';

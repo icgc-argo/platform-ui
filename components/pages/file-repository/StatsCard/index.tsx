@@ -24,7 +24,7 @@ import StatItem from './StatItem';
 import STATS_BAR from './STATS_BAR.gql';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Col } from 'react-grid-system';
 
 type StatsBarQueryInput = {

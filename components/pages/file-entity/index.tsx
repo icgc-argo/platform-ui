@@ -34,7 +34,7 @@ import Footer from '../../Footer';
 import React from 'react';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { get } from 'lodash';
 import USER_PROFILE from './USER_PROFILE.gql';
 import { FileAccessState } from './types';

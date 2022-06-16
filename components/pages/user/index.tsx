@@ -27,7 +27,7 @@ import ApiTokenBox from './ApiTokenBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
 import PROFILE from './gql/PROFILE.gql';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
