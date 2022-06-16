@@ -77,7 +77,7 @@ export default function ProgramSubmittedData() {
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
-
+  console.log(sideMenuData);
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
@@ -88,7 +88,7 @@ export default function ProgramSubmittedData() {
       }
     >
       {clinicalEntityDisplayNames[entity]}
-      {hasClinicalErrors(sideMenuData, entity) && (
+      {sideMenuData.clinicalErrors !== null && hasClinicalErrors(sideMenuData, entity) && (
         <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
       )}
     </VerticalTabs.Item>
