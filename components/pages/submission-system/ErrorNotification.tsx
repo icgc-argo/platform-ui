@@ -76,7 +76,7 @@ export default <Error extends { [k: string]: any }>({
   subtitle: string | ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
-      accessor: keyof Error;
+      accessor: keyof Error | string;
     }
   >;
   errors: Array<Error>;

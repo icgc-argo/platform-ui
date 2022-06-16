@@ -26,7 +26,7 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import ErrorNotification from '../../ErrorNotification';
 import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 import Icon from '@icgc-argo/uikit/Icon';
-import Table from '@icgc-argo/uikit/Table';
+import Table, { TableColumnConfig, TableDataBase } from '@icgc-argo/uikit/Table';
 import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
 import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
@@ -454,13 +454,13 @@ const ClinicalEntityDataTable = ({
             }
             errors={tableErrors}
             columnConfig={errorColumns}
-            onPageChange={(value) => updatePageSettings('page', value)}
-            onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
-            onSortedChange={(value) => updatePageSettings('sorted', value)}
             tableProps={{
               page: errorPage,
               pageSize: errorPageSize,
               sorted: errorSorted,
+              onPageChange: (value) => updatePageSettings('page', value),
+              onPageSizeChange: (value) => updatePageSettings('pageSize', value),
+              onSortedChange: (value) => updatePageSettings('sorted', value),
             }}
           />
         </div>
