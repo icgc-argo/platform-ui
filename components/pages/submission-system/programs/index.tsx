@@ -40,8 +40,8 @@ import { INPUT_STATES } from '@icgc-argo/uikit/theme/defaultTheme/input';
 import Typography from '@icgc-argo/uikit/Typography';
 import SubmissionLayout from '../layout';
 import ProgramsTable from './ProgramsTable';
-import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
-import PROGRAMS_USERS_QUERY from './PROGRAMS_USERS_QUERY.gql';
+import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import get from 'lodash/get';
 
