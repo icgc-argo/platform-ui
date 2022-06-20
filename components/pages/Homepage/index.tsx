@@ -19,20 +19,20 @@
 
 import React from 'react';
 import { Col, Row, Visible, Hidden } from 'react-grid-system';
-import { css, styled } from 'uikit';
-import Button from 'uikit/Button';
+import { css, styled } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
 
-import Typography from 'uikit/Typography';
-import useTheme from 'uikit/utils/useTheme';
+import Typography from '@icgc-argo/uikit/Typography';
+import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
 import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
 import globeBackground from 'static/icgc-globe-bg.svg';
 
-import Link from 'uikit/Link';
+import Link from '@icgc-argo/uikit/Link';
 import NextLink from 'next/link';
 
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import {
   DataReleaseBar,
   DataCallout,
@@ -133,7 +133,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
         >
-          Software Release 1.105.3 - API 3.28.2
+          Software Release 1.110.1 - API 3.32.0
         </Link>{' '}
         are now available.
       </>

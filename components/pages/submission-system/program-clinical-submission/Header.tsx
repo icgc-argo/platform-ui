@@ -18,11 +18,11 @@
  */
 
 import * as React from 'react';
-import { css } from 'uikit';
-import TitleBar from 'uikit/TitleBar';
+import { css } from '@icgc-argo/uikit';
+import TitleBar from '@icgc-argo/uikit/TitleBar';
 import { Row } from 'react-grid-system';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
+import Link from '@icgc-argo/uikit/Link';
+import Button from '@icgc-argo/uikit/Button';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
@@ -32,7 +32,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
-import Modal from 'uikit/Modal';
+import Modal from '@icgc-argo/uikit/Modal';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';

@@ -18,13 +18,13 @@
  */
 
 import * as React from 'react';
-import Typography from 'uikit/Typography';
-import { css } from 'uikit';
-import Banner, { BANNER_SIZE, BANNER_VARIANTS } from 'uikit/notifications/Banner';
-import Link from 'uikit/Link';
-import Button from 'uikit/Button';
+import Typography from '@icgc-argo/uikit/Typography';
+import { css } from '@icgc-argo/uikit';
+import Banner, { BANNER_SIZE, BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
+import Link from '@icgc-argo/uikit/Link';
+import Button from '@icgc-argo/uikit/Button';
 import { Box } from '../common';
-import ClipboardCopyField from 'uikit/ClipboardCopyField';
+import ClipboardCopyField from '@icgc-argo/uikit/ClipboardCopyField';
 import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
 import { useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';

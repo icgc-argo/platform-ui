@@ -18,12 +18,12 @@
  */
 
 import * as React from 'react';
-import { css } from 'uikit';
-import { ContentBox } from 'uikit/PageLayout';
-import Typography from 'uikit/Typography';
-import Icon from 'uikit/Icon';
-import { UikitIconNames } from 'uikit/Icon/icons';
-import Tag from 'uikit/Tag';
+import { css } from '@icgc-argo/uikit';
+import { ContentBox } from '@icgc-argo/uikit/PageLayout';
+import Typography from '@icgc-argo/uikit/Typography';
+import Icon from '@icgc-argo/uikit/Icon';
+import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
+import Tag from '@icgc-argo/uikit/Tag';
 
 export const Box = ({
   children,

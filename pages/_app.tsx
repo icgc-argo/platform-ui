@@ -37,7 +37,7 @@ import DefaultLayout from '../components/pages/DefaultLayout';
 import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
-import DnaLoader from 'uikit/DnaLoader';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';

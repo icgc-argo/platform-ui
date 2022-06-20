@@ -29,6 +29,12 @@ import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';
 
+declare global {
+  interface Navigator {
+    msSaveBlob?: (blob: any, defaultName?: string) => boolean;
+  }
+}
+
 type T_AuthContext = {
   egoJwt?: string;
   logOut: (path?: string) => void;
@@ -51,6 +57,14 @@ const AuthContext = React.createContext<T_AuthContext>({
   isLoggingOut: false,
 });
 
+const setToken = (token: string) => {
+  Cookies.set(EGO_JWT_KEY, token);
+};
+
+export const removeToken = () => {
+  Cookies.remove(EGO_JWT_KEY);
+};
+
 export function AuthProvider({
   egoJwt,
   children,
@@ -70,14 +84,6 @@ export function AuthProvider({
   const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
   const router = useRouter();
-
-  const setToken = (token: string) => {
-    Cookies.set(EGO_JWT_KEY, token);
-  };
-
-  const removeToken = () => {
-    Cookies.remove(EGO_JWT_KEY);
-  };
 
   const logOut: T_AuthContext['logOut'] = async (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated

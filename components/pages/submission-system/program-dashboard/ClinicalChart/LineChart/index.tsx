@@ -29,7 +29,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { styled } from 'uikit';
+import { styled } from '@icgc-argo/uikit';
 import { chartLineMeta } from '../utils';
 import { getMaxY } from './utils';
 import {
@@ -40,7 +40,7 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import theme from 'uikit/theme/defaultTheme';
+import theme from '@icgc-argo/uikit/theme/defaultTheme';
 
 const options = {
   colors: {

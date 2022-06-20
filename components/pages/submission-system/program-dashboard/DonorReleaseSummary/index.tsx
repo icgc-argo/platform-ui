@@ -18,7 +18,7 @@
  */
 
 import { css } from '@emotion/core';
-import Typography from 'uikit/Typography';
+import Typography from '@icgc-argo/uikit/Typography';
 import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
 import { useQuery } from '@apollo/react-hooks';
 import { usePageQuery } from 'global/hooks/usePageContext';

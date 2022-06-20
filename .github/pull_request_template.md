@@ -17,9 +17,6 @@
     - spelling has been double checked
   - [ ] No design provided, screenshot of changes included in PR
   - [ ] No changes to UI
-- UI Kit (select one):
-  - [ ] Modified Existing components
-  - [ ] No new UIKit components or changes
 - [ ] Feature is minimally responsive
 - [ ] Manual testing of UI feature
 - [ ] Add copyrights to new files

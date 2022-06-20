@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
+import { css } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { useQuery } from '@apollo/react-hooks';
-import Container from 'uikit/Container';
-import SimpleTable from 'uikit/Table/SimpleTable';
-import Typography from 'uikit/Typography';
-import A from 'uikit/Link';
+import Container from '@icgc-argo/uikit/Container';
+import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
+import Typography from '@icgc-argo/uikit/Typography';
+import A from '@icgc-argo/uikit/Link';
 import Link from 'next/link';
 import {
   removeAliasedKeys,
