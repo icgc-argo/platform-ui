@@ -28,7 +28,7 @@ import { format as formatDate, formatDistance } from 'date-fns';
 
 // GQL Query
 import { useQuery } from '@apollo/client';
-import PROGRAM_DONOR_INDEX_STATES from './PROGRAM_DONOR_INDEX_STATS.gql';
+import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 
 const columns = [
   {
@@ -75,7 +75,7 @@ const DonorAggregationIndexTable = ({
 }) => {
   const queries = (programs || []).map((program) => ({
     shortName: program.shortName,
-    query: useQuery(PROGRAM_DONOR_INDEX_STATES, {
+    query: useQuery(PROGRAM_DONOR_INDEX_STATS_QUERY, {
       variables: { programShortName: program.shortName },
     }),
   }));
