@@ -17,11 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
-import CLINICAL_SCHEMA_VERSION_QUERY from './gql/CLINICAL_SCHEMA_VERSION_QUERY';
+import { gql } from '@apollo/client';
 
-export const useClinicalSubmissionSchemaVersion = () => {
-  return useQuery<{
-    clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION_QUERY);
-};
+const PROGRAM_SHORTNAME_QUERY = gql`
+  query PROGRAM_SHORTNAME_QUERY($shortName: String!) {
+    program(shortName: $shortName) {
+      name
+      shortName
+    }
+  }
+`;
+
+export default PROGRAM_SHORTNAME_QUERY;

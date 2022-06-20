@@ -17,11 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
-import CLINICAL_SCHEMA_VERSION_QUERY from './gql/CLINICAL_SCHEMA_VERSION_QUERY';
+import { gql } from '@apollo/client';
 
-export const useClinicalSubmissionSchemaVersion = () => {
-  return useQuery<{
-    clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION_QUERY);
-};
+const PROFILE_QUERY = gql`
+  query PROFILE_QUERY {
+    self {
+      isDacoApproved
+      apiKey {
+        exp
+        error
+        key
+      }
+    }
+    programs {
+      shortName
+      membershipType
+    }
+  }
+`;
+
+export default PROFILE_QUERY;

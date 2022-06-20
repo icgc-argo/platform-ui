@@ -21,7 +21,7 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { ERROR_STATUS_KEY } from 'pages/_error';
-import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
+import PROGRAM_SHORTNAME_QUERY from './gql/PROGRAM_SHORTNAME_QUERY';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
@@ -30,7 +30,7 @@ export const useProgramCheckEffect = () => {
   const { shortName } = usePageQuery<{ shortName: string }>();
   const { loading: loadingQuery, data: { program = undefined } = {} } = useQuery<{
     program: { name: string; shortName: string };
-  }>(PROGRAM_SHORTNAME, {
+  }>(PROGRAM_SHORTNAME_QUERY, {
     variables: {
       shortName: shortName,
     },
