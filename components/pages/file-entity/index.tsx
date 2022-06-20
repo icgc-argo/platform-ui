@@ -36,7 +36,7 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { useQuery } from '@apollo/client';
 import { get } from 'lodash';
-import USER_PROFILE_QUERY from '../../../global/gql/USER_PROFILE_QUERY';
+import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
 import { FileAccessState } from './types';
 import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
 import { getConfig } from 'global/config';
