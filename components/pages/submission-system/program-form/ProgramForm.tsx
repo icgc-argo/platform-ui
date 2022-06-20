@@ -40,7 +40,7 @@ import Typography from '@icgc-argo/uikit/Typography';
 import useFormHook from 'global/hooks/useFormHook';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
-import QUERY_PROGRAM_VALUES from '../QUERY_PROGRAM_VALUES.gql';
+import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
 import difference from 'lodash/difference';
 import { isEqual, xor } from 'lodash';
 
@@ -151,7 +151,7 @@ export default function CreateProgramForm({
     hasErrors,
   } = formModel;
 
-  const { data: { programOptions = undefined } = {}, loading } = useQuery(QUERY_PROGRAM_VALUES);
+  const { data: { programOptions = undefined } = {}, loading } = useQuery(PROGRAM_VALUES_QUERY);
 
   const regionOptions = get(programOptions, 'regions', []);
 
