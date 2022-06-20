@@ -33,13 +33,13 @@ import { ModalPortal } from 'components/ApplicationRoot';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
-import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
-import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
+import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
 import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notifications/Toast';
-import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
+import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
 import useCommonToasters from 'components/useCommonToasters';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 
