@@ -26,8 +26,9 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import ErrorNotification from '../../ErrorNotification';
 import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 import Icon from '@icgc-argo/uikit/Icon';
-import Table from '@icgc-argo/uikit/Table';
+import Link from '@icgc-argo/uikit/Link';
 import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
+import Table from '@icgc-argo/uikit/Table';
 import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
@@ -114,12 +115,12 @@ const Subtitle = (program) => (
       margin-bottom: 12px;
     `}
   >
-    <a href="https://docs.icgc-argo.org/dictionary">Version 1.13</a> of the data dictionary was
-    released and has made some donors invalid. Please download the error report to view the affected
-    donors, then submit a corrected TSV file in the{' '}
-    <a href={`/submission/program/${program}/clinical-submission?tab=donor`}>
+    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
+    was released and has made some donors invalid. Please download the error report to view the
+    affected donors, then submit a corrected TSV file in the{' '}
+    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
       Submit Clinical Data
-    </a>{' '}
+    </Link>{' '}
     workspace.
   </div>
 );
