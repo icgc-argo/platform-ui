@@ -21,12 +21,12 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { css } from '@emotion/core';
 import Notification from '@icgc-argo/uikit/notifications/Notification';
-import CLINICAL_SUBMISSION_SYSTEM_DISABLED from './CLINICAL_SUBMISSION_SYSTEM_DISABLED.gql';
+import CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY from './gql/CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY';
 
 // Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical
 export const useSubmissionSystemDisabled = (): boolean => {
   const { data: { clinicalSubmissionSystemDisabled = undefined } = {} } = useQuery(
-    CLINICAL_SUBMISSION_SYSTEM_DISABLED,
+    CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY,
   );
 
   return clinicalSubmissionSystemDisabled as boolean;
