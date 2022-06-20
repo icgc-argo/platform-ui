@@ -27,7 +27,7 @@ import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
 import { useQuery } from '@apollo/client';
-import PROGRAM_NAME_QUERY from './PROGRAM_NAME_QUERY.gql';
+import PROGRAM_NAME_QUERY from './gql/PROGRAM_NAME_QUERY';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
