@@ -35,11 +35,11 @@ import { useQuery } from '@apollo/client';
 import { get } from 'lodash';
 import { DonorTitleBar } from './DonorTitleBar';
 import DonorCardsLayout from './DonorCardsLayout';
-import USER_PROFILE from '../file-entity/USER_PROFILE.gql';
+import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
 
 const DonorEntity = ({ donor }) => {
   const { egoJwt } = useAuthContext();
-  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE);
+  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE_QUERY);
   const {
     loading: donorLoading,
     summary: { program_id, donor_id },
