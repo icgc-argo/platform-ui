@@ -48,7 +48,7 @@ import {
   CombinationKeys,
 } from '../utils/types';
 import { useQuery, QueryHookOptions } from '@apollo/client';
-import FILE_REPOSITORY_FACETS_QUERY from './FILE_REPOSITORY_FACETS_QUERY.gql';
+import FILE_REPOSITORY_FACETS_QUERY from './gql/FILE_REPOSITORY_FACETS_QUERY';
 import {
   FacetDetails,
   FileFacetPath,
@@ -61,8 +61,8 @@ import {
   SearchMenuDataNode,
 } from './types';
 import Container from '@icgc-argo/uikit/Container';
-import SEARCH_BY_FILE_QUERY from './SEARCH_BY_FILE_QUERY.gql';
-import SEARCH_BY_DONOR_QUERY from './SEARCH_BY_DONOR_QUERY.gql';
+import SEARCH_BY_FILE_QUERY from './gql/SEARCH_BY_FILE_QUERY';
+import SEARCH_BY_DONOR_QUERY from './gql/SEARCH_BY_DONOR_QUERY';
 import { trim } from 'lodash';
 import SearchResultsMenu from './SearchResultsMenu';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
