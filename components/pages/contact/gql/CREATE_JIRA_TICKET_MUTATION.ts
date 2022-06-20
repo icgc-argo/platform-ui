@@ -19,8 +19,8 @@
 
 import { gql } from '@apollo/client';
 
-const CREATE_JIRA_TICKET_QUERY = gql`
-  mutation CREATE_JIRA_TICKET_QUERY(
+const CREATE_JIRA_TICKET_MUTATION = gql`
+  mutation CREATE_JIRA_TICKET_MUTATION(
     $reCaptchaResponse: String!
     $messageCategory: JiraTicketCategory!
     $emailAddress: String!
@@ -41,4 +41,4 @@ const CREATE_JIRA_TICKET_QUERY = gql`
   }
 `;
 
-export default CREATE_JIRA_TICKET_QUERY;
+export default CREATE_JIRA_TICKET_MUTATION;
