@@ -19,8 +19,8 @@
 
 import { gql } from '@apollo/client';
 
-const SIDE_MENU_SAMPLE_REGISTRATION_STATE = gql`
-  query SIDE_MENU_SAMPLE_REGISTRATION_STATE($programShortName: String!) {
+const SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY = gql`
+  query SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY($programShortName: String!) {
     clinicalRegistration(shortName: $programShortName) {
       programShortName
       fileErrors {
@@ -35,4 +35,4 @@ const SIDE_MENU_SAMPLE_REGISTRATION_STATE = gql`
   }
 `;
 
-export default SIDE_MENU_SAMPLE_REGISTRATION_STATE;
+export default SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY;

@@ -30,8 +30,8 @@ import { css } from '@icgc-argo/uikit';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
-import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { getConfig } from 'global/config';
@@ -113,14 +113,17 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-  const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
-    variables: {
-      programShortName: props.program.shortName,
+  const { data } = useQuery<ClinicalSubmissionQueryResponse>(
+    SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
+    {
+      variables: {
+        programShortName: props.program.shortName,
+      },
     },
-  });
+  );
 
   const { data: clinicalData } = useQuery<SampleRegistrationQueryResponse>(
-    SIDE_MENU_SAMPLE_REGISTRATION_STATE,
+    SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY,
     {
       variables: {
         programShortName: props.program.shortName,
