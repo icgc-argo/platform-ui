@@ -19,7 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import { DonorCentricRecord, DonorEntity } from './types';
-import DONOR_ENTITY_QUERY from './DONOR_ENTITY_QUERY.gql';
+import DONOR_ENTITY_QUERY from './gql/DONOR_ENTITY_QUERY';
 import { noData, dummyDonorQuery } from './dummyData';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
