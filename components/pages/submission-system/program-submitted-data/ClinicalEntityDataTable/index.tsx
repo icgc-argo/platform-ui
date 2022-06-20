@@ -26,7 +26,7 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import ErrorNotification from '../../ErrorNotification';
 import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 import Icon from '@icgc-argo/uikit/Icon';
-import Table, { TableColumnConfig, TableDataBase } from '@icgc-argo/uikit/Table';
+import Table from '@icgc-argo/uikit/Table';
 import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
 import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
@@ -106,6 +106,22 @@ const NoDataCell = () => (
       No Data Found
     </Typography>
   </Container>
+);
+
+const Subtitle = (program) => (
+  <div
+    css={css`
+      margin-bottom: 12px;
+    `}
+  >
+    <a href="https://docs.icgc-argo.org/dictionary">Version 1.13</a> of the data dictionary was
+    released and has made some donors invalid. Please download the error report to view the affected
+    donors, then submit a corrected TSV file in the{' '}
+    <a href={`/submission/program/${program}/clinical-submission?tab=donor`}>
+      Submit Clinical Data
+    </a>{' '}
+    workspace.
+  </div>
 );
 
 const completionColumnHeaders = {
@@ -195,6 +211,7 @@ const ClinicalEntityDataTable = ({
 
   useEffect(() => {
     setPageSettings(defaultPageSettings);
+    setErrorPageSettings(defaultErrorPageSettings);
   }, [entityType]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
@@ -413,9 +430,6 @@ const ClinicalEntityDataTable = ({
   const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
   const tablePages = Math.ceil(totalDocs / pageSize);
 
-  const errorMin = totalErrors > 0 ? errorPage * errorPageSize + 1 : totalErrors;
-  const errorMax =
-    totalErrors < (errorPage + 1) * errorPageSize ? totalErrors : (errorPage + 1) * errorPageSize;
   const errorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
@@ -437,25 +451,12 @@ const ClinicalEntityDataTable = ({
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
-            subtitle={
-              <div
-                css={css`
-                  margin-bottom: 12px;
-                `}
-              >
-                <a href="https://docs.icgc-argo.org/dictionary">Version 1.13</a> of the data
-                dictionary was released and has made some donors invalid. Please download the error
-                report to view the affected donors, then submit a corrected TSV file in the{' '}
-                <a href="/submission/program/PACA-CA/clinical-submission?tab=donor">
-                  Submit Clinical Data
-                </a>{' '}
-                workspace.
-              </div>
-            }
+            subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
             tableProps={{
               page: errorPage,
+              pages: errorPages,
               pageSize: errorPageSize,
               sorted: errorSorted,
               onPageChange: (value) => updatePageSettings('page', value),
