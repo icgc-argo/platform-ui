@@ -18,7 +18,7 @@
  */
 
 import SimpleBarChart from '../SimpleBarChart';
-import DATA_TYPES_CHART from './DATA_TYPES_CHART.gql';
+import DATA_TYPES_CHART_QUERY from './gql/DATA_TYPES_CHART_QUERY';
 import { useQuery } from '@apollo/client';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
@@ -41,7 +41,7 @@ type ChartQueryInput = {
 
 const DataTypesChart = () => {
   const { filters, setFilterFromFieldAndValue } = useFiltersContext();
-  const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(DATA_TYPES_CHART, {
+  const { data, loading } = useQuery<DataTypesChartData, ChartQueryInput>(DATA_TYPES_CHART_QUERY, {
     variables: {
       filters,
     },
