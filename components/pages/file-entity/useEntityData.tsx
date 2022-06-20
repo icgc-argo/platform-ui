@@ -26,7 +26,7 @@ import {
   FileEntityData,
   DonorRecord,
 } from './types';
-import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
+import FILE_ENTITY_QUERY from 'components/pages/donor-entity/gql/VALID_DONOR_ENTITY_CHECK_QUERY';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
 
