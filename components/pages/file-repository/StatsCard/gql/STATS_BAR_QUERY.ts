@@ -17,16 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import HomePage from '../components/pages/Homepage';
-import { createPage } from 'global/utils/pages';
-import STATS_BAR_QUERY from '../components/pages/file-repository/StatsCard/gql/STATS_BAR_QUERY';
+import { gql } from '@apollo/client';
 
-const landingPage = HomePage;
+const STATS_BAR_QUERY = gql`
+  query STATS_BAR_QUERY($filters: JSON) {
+    file {
+      hits(filters: $filters) {
+        total
+      }
+      aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
+        donors__donor_id {
+          bucket_count
+        }
+        study_id {
+          bucket_count
+        }
+        file__size {
+          stats {
+            sum
+          }
+        }
+      }
+    }
+  }
+`;
 
-export default createPage({
-  isPublic: true,
-  getGqlQueriesToPrefetch: async () => {
-    return [{ query: STATS_BAR_QUERY }];
-  },
-  getInitialProps: async () => ({}),
-})(landingPage);
+export default STATS_BAR_QUERY;
