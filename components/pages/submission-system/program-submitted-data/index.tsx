@@ -77,7 +77,7 @@ export default function ProgramSubmittedData() {
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
-  const noData = sideMenuData.clinicalEntities.length === 0 ? true : false;
+  const noData = sideMenuData.clinicalEntities.length === 0;
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
