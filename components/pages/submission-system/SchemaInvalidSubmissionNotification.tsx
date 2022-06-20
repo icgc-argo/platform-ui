@@ -27,7 +27,7 @@ import Notification, {
   NOTIFICATION_INTERACTION_EVENTS,
 } from '@icgc-argo/uikit/notifications/Notification';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
@@ -47,7 +47,7 @@ export const SchemaInvalidSubmissionNotification = ({
 
   const { data: { clinicalSubmissions = undefined } = {} } = useQuery<{
     clinicalSubmissions: GqlClinicalSubmissionData;
-  }>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
+  }>(SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY, {
     variables: {
       programShortName: programShortName,
     },

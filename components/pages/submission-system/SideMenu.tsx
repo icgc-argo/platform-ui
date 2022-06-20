@@ -29,9 +29,9 @@ import Icon from '@icgc-argo/uikit/Icon';
 import { css } from '@icgc-argo/uikit';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
-import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
-import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
+import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { getConfig } from 'global/config';
@@ -349,7 +349,9 @@ export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
-  const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
+  const { data: { programs } = { programs: null }, loading } = useQuery(
+    SIDE_MENU_PROGRAM_LIST_QUERY,
+  );
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 
