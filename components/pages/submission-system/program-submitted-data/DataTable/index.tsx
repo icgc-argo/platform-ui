@@ -25,7 +25,7 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import Table from '@icgc-argo/uikit/Table';
 import Typography from '@icgc-argo/uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
+import CLINICAL_ENTITY_DATA_QUERY from '../gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   ClinicalEntityQueryResponse,
   clinicalEntityFields,
@@ -62,7 +62,7 @@ const getEntityData = (
   pageSize: number,
   sort: string,
 ) =>
-  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
     variables: {
       programShortName: program,

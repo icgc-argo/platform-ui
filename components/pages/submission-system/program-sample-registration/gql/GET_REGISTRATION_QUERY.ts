@@ -20,13 +20,13 @@
 import { gql } from '@apollo/client';
 import REGISTRATION_FRAGMENT from './REGISTRATION_FRAGMENT';
 
-const gqlcommandname = gql`
+const GET_REGISTRATION_QUERY = gql`
   ${REGISTRATION_FRAGMENT}
-  query GET_REGISTRATION($shortName: String!) {
+  query GET_REGISTRATION_QUERY($shortName: String!) {
     clinicalRegistration(shortName: $shortName) {
       ...Registration
     }
   }
 `;
 
-export default gqlcommandname;
+export default GET_REGISTRATION_QUERY;

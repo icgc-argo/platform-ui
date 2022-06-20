@@ -32,10 +32,10 @@ import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import Typography from '@icgc-argo/uikit/Typography';
 import { MinimalLayout } from '../layout';
-import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
+import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
-import JOIN_PROGRAM_MUTATION from './JOIN_PROGRAM_MUTATION.gql';
+import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';
 import GoogleLogin from '@icgc-argo/uikit/Button/GoogleLogin';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
@@ -59,7 +59,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO, {
+  } = useQuery(GET_JOIN_PROGRAM_INFO_QUERY, {
     variables: { inviteId },
     onCompleted: (data) => {
       if (!joinProgramInvite) {

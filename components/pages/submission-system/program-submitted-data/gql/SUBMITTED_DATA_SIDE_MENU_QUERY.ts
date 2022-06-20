@@ -17,32 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import DonorAggregationIndexTable from './DonorAggregationIndexTable';
+import { gql } from '@apollo/client';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
-
-// GQL Data Fetching
-import { useQuery } from '@apollo/client';
-import SIDE_MENU_PROGRAM_LIST_QUERY from 'components/pages/submission-system/gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-
-const Card = styled(Container)`
-  padding: 16px;
+const SUBMITTED_DATA_SIDE_MENU_QUERY = gql`
+  query SUBMITTED_DATA_SIDE_MENU_QUERY($programShortName: String!, $filters: ClinicalInput!) {
+    clinicalData(programShortName: $programShortName, filters: $filters) {
+      programShortName
+      clinicalEntities {
+        entityName
+      }
+      clinicalErrors {
+        errors {
+          entityName
+        }
+      }
+    }
+  }
 `;
 
-const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST_QUERY);
-
-  const programs = data ? data.programs : [];
-  return (
-    <Card>
-      <Typography variant="default" component="span">
-        Donor Aggregation Indices
-      </Typography>
-
-      <DonorAggregationIndexTable programs={programs} loading={loading} />
-    </Card>
-  );
-};
-export default DonorAggregationSummary;
+export default SUBMITTED_DATA_SIDE_MENU_QUERY;

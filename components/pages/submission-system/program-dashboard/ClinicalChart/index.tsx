@@ -25,7 +25,7 @@ import { useQuery, QueryHookOptions } from '@apollo/client';
 import useElementDimension from '@icgc-argo/uikit/utils/Hook/useElementDimension';
 import Typography from '@icgc-argo/uikit/Typography';
 import { ContentError, ContentLoader } from 'components/placeholders';
-import DASHBOARD_SUMMARY_QUERY from '../DASHBOARD_SUMMARY_QUERY.gql';
+import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import {
   DashboardCard,
@@ -45,7 +45,7 @@ import {
 } from './types';
 import Legend from './Legend';
 import { chartLineMeta, rangeButtons } from './utils';
-import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY.gql';
+import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;

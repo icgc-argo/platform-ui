@@ -17,32 +17,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import DonorAggregationIndexTable from './DonorAggregationIndexTable';
+import { gql } from '@apollo/client';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
-
-// GQL Data Fetching
-import { useQuery } from '@apollo/client';
-import SIDE_MENU_PROGRAM_LIST_QUERY from 'components/pages/submission-system/gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-
-const Card = styled(Container)`
-  padding: 16px;
+const PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY = gql`
+  query PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY(
+    $programShortName: String!
+    $bucketCount: Int!
+    $dateRangeFrom: DateTime!
+    $dateRangeTo: DateTime!
+    $donorFields: [DonorField]!
+  ) {
+    programDonorPublishedAnalysisByDateRange(
+      programShortName: $programShortName
+      bucketCount: $bucketCount
+      dateRangeFrom: $dateRangeFrom
+      dateRangeTo: $dateRangeTo
+      donorFields: $donorFields
+    ) {
+      title
+      buckets {
+        date
+        donors
+      }
+    }
+  }
 `;
 
-const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST_QUERY);
-
-  const programs = data ? data.programs : [];
-  return (
-    <Card>
-      <Typography variant="default" component="span">
-        Donor Aggregation Indices
-      </Typography>
-
-      <DonorAggregationIndexTable programs={programs} loading={loading} />
-    </Card>
-  );
-};
-export default DonorAggregationSummary;
+export default PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY;

@@ -29,7 +29,7 @@ import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
 import Button from '@icgc-argo/uikit/Button';
 import Icon from '@icgc-argo/uikit/Icon';
-import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION.gql';
+import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
 import { ClearSubmissionMutationVariables } from '../types';
 import useCommonToasters from 'components/useCommonToasters';

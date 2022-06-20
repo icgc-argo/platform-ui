@@ -17,32 +17,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import DonorAggregationIndexTable from './DonorAggregationIndexTable';
+import { gql } from '@apollo/client';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
-
-// GQL Data Fetching
-import { useQuery } from '@apollo/client';
-import SIDE_MENU_PROGRAM_LIST_QUERY from 'components/pages/submission-system/gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-
-const Card = styled(Container)`
-  padding: 16px;
+const GET_JOIN_PROGRAM_INFO_QUERY = gql`
+  query GET_JOIN_PROGRAM_INFO_QUERY($inviteId: ID!) {
+    joinProgramInvite(id: $inviteId) {
+      program {
+        name
+        shortName
+      }
+      user {
+        role
+        email
+        firstName
+        lastName
+      }
+      status
+    }
+    programOptions {
+      institutions
+    }
+  }
 `;
 
-const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST_QUERY);
-
-  const programs = data ? data.programs : [];
-  return (
-    <Card>
-      <Typography variant="default" component="span">
-        Donor Aggregation Indices
-      </Typography>
-
-      <DonorAggregationIndexTable programs={programs} loading={loading} />
-    </Card>
-  );
-};
-export default DonorAggregationSummary;
+export default GET_JOIN_PROGRAM_INFO_QUERY;

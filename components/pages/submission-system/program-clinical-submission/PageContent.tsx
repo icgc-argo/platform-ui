@@ -34,9 +34,9 @@ import {
   ClinicalSubmissionError,
 } from './types';
 import Notification, { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
-import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
-import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
-import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
+import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { displayDateAndTime } from 'global/utils/common';
@@ -216,7 +216,7 @@ const PageContent = () => {
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
-  >(UPLOAD_CLINICAL_SUBMISSION, {
+  >(UPLOAD_CLINICAL_SUBMISSION_MUTATION, {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
     },

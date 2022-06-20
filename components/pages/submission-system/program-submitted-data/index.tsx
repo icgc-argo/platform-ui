@@ -35,7 +35,7 @@ import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
 import TitleBar from '@icgc-argo/uikit/TitleBar';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
-import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
   aliasEntityNames,
   ClinicalEntityQueryResponse,
@@ -67,7 +67,7 @@ export default function ProgramSubmittedData() {
 
   const { data: sideMenuQuery, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName,

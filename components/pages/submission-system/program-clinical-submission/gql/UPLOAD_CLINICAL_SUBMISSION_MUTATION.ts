@@ -17,32 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import DonorAggregationIndexTable from './DonorAggregationIndexTable';
+import { gql } from '@apollo/client';
+import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
-
-// GQL Data Fetching
-import { useQuery } from '@apollo/client';
-import SIDE_MENU_PROGRAM_LIST_QUERY from 'components/pages/submission-system/gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-
-const Card = styled(Container)`
-  padding: 16px;
+const UPLOAD_CLINICAL_SUBMISSION_MUTATION = gql`
+  ${CLINICAL_SUBMISSION_FRAGMENT}
+  mutation UPLOAD_CLINICAL_SUBMISSION_MUTATION($programShortName: String!, $files: [Upload!]) {
+    clinicalSubmissions: uploadClinicalSubmissions(
+      programShortName: $programShortName
+      clinicalFiles: $files
+    ) {
+      ...ClinicalSubmissionFragment
+    }
+  }
 `;
 
-const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST_QUERY);
-
-  const programs = data ? data.programs : [];
-  return (
-    <Card>
-      <Typography variant="default" component="span">
-        Donor Aggregation Indices
-      </Typography>
-
-      <DonorAggregationIndexTable programs={programs} loading={loading} />
-    </Card>
-  );
-};
-export default DonorAggregationSummary;
+export default UPLOAD_CLINICAL_SUBMISSION_MUTATION;
