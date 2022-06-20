@@ -22,7 +22,7 @@ import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
 import * as React from 'react';
 import Progress from '@icgc-argo/uikit/Progress';
-import GET_REGISTRATION from './program-sample-registration/gql/GET_REGISTRATION.gql';
+import GET_REGISTRATION_QUERY from './program-sample-registration/gql/GET_REGISTRATION_QUERY';
 import { ClinicalRegistration } from './program-sample-registration/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
@@ -31,7 +31,7 @@ const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: str
 }) => {
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
-  }>(GET_REGISTRATION, {
+  }>(GET_REGISTRATION_QUERY, {
     variables: { shortName: programShortName },
   });
 

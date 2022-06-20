@@ -30,10 +30,10 @@ import Link from '@icgc-argo/uikit/Link';
 import TitleBar from '@icgc-argo/uikit/TitleBar';
 import Typography from '@icgc-argo/uikit/Typography';
 import SubmissionLayout from '../layout';
-import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRATION_MUTATION.gql';
+import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import FileTable from './FileTable';
 import NoDataMessage from './FileTable/NoDataMessage';
-import GET_REGISTRATION from './gql/GET_REGISTRATION.gql';
+import GET_REGISTRATION_QUERY from './gql/GET_REGISTRATION_QUERY';
 import Instructions from './Instructions';
 import { FileEntry } from './FileTable';
 import { containerStyle } from '../common';
@@ -74,7 +74,7 @@ export default function ProgramIDRegistration() {
     updateQuery: updateClinicalRegistrationQuery,
   } = useQuery<{
     clinicalRegistration: ClinicalRegistration;
-  }>(GET_REGISTRATION, {
+  }>(GET_REGISTRATION_QUERY, {
     variables: { shortName: programShortName },
   });
 
