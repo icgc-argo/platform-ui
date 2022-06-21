@@ -38,10 +38,12 @@ import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
 import {
-  aliasEntityNames,
+  aliasedEntityNames,
+  aliasedEntityFields,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
+  reverseEntityNames,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
@@ -78,14 +80,14 @@ export default function ProgramSubmittedData() {
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
   const noData = sideMenuData.clinicalEntities.length === 0;
-
+  // TODO: Fix SideMenu Error Badge
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
-      active={selectedClinicalEntityTab === entity}
-      onClick={(e) => setSelectedClinicalEntityTab(entity)}
+      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
       disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
       }
     >
       {clinicalEntityDisplayNames[entity]}
@@ -94,6 +96,7 @@ export default function ProgramSubmittedData() {
       )}
     </VerticalTabs.Item>
   ));
+  const currentEntity: string = reverseEntityNames[selectedClinicalEntityTab];
 
   return (
     <SubmissionLayout
@@ -180,7 +183,7 @@ export default function ProgramSubmittedData() {
                     margin-left: 4px;
                   `}
                 >
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                  {clinicalEntityDisplayNames[currentEntity]} Data
                 </Typography>
 
                 <Button
@@ -203,15 +206,12 @@ export default function ProgramSubmittedData() {
                     fill={noData ? 'grey_1' : 'accent2_dark'}
                     height="12px"
                   />
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                  {clinicalEntityDisplayNames[currentEntity]} Data
                 </Button>
               </div>
               {/* DataTable */}
               <div>
-                <ClinicalEntityDataTable
-                  entityType={selectedClinicalEntityTab}
-                  program={programShortName}
-                />
+                <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
               </div>
             </div>
           </div>

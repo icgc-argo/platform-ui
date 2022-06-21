@@ -33,7 +33,7 @@ import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
   aliasSortNames,
-  aliasEntityNames,
+  aliasedEntityNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
@@ -188,10 +188,10 @@ const ClinicalEntityDataTable = ({
     ];
   } else {
     const entityData = clinicalData.clinicalEntities.find(
-      (entity) => entity.entityName === aliasEntityNames[entityType],
+      (entity) => entity.entityName === aliasedEntityNames[entityType],
     );
     const { completionStats, entityName } = entityData;
-    showCompletionStats = !!(completionStats && entityName === aliasEntityNames.donor);
+    showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
     totalDocs = entityData.totalDocs;
 

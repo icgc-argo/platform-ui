@@ -92,24 +92,28 @@ export type ClinicalFilter = {
 export const clinicalEntityDisplayNames = {
   donor: 'Donor',
   sampleRegistration: 'Sample Registration',
+  sample_registration: 'Sample Registration',
   specimens: 'Specimens',
+  specimen: 'Specimens',
   primaryDiagnoses: 'Primary Diagnosis',
+  primary_diagnosis: 'Primary Diagnosis',
   treatment: 'Treatment',
   chemotherapy: 'Chemotherapy',
   hormoneTherapy: 'Hormone Therapy',
+  hormone_therapy: 'Hormone Therapy',
   immunotherapy: 'Immunotherapy',
   radiation: 'Radiation',
   surgery: 'Surgery',
   followUps: 'Follow Up',
+  follow_up: 'Follow Up',
   familyHistory: 'Family History',
+  family_history: 'Family History',
   exposure: 'Exposure',
   comorbidity: 'Comorbidity',
   biomarker: 'Biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
-
-export const aliasEntityNames = {
+export const aliasedEntityNames = {
   donor: 'donor',
   sampleRegistration: 'sample_registration',
   specimens: 'specimen',
@@ -122,6 +126,27 @@ export const aliasEntityNames = {
   radiation: 'radiation',
   followUps: 'follow_up',
   hormoneTherapy: 'hormone_therapy',
+  exposure: 'exposure',
+  comorbidity: 'comorbidity',
+  biomarker: 'biomarker',
+};
+
+export const clinicalEntityFields = Object.keys(aliasedEntityNames);
+export const aliasedEntityFields = Object.values(aliasedEntityNames);
+
+export const reverseEntityNames = {
+  donor: 'donor',
+  sample_registration: 'sampleRegistration',
+  specimen: 'specimens',
+  primary_diagnosis: 'primaryDiagnoses',
+  family_history: 'familyHistory',
+  treatment: 'treatment',
+  chemotherapy: 'chemotherapy',
+  immunotherapy: 'immunotherapy',
+  surgery: 'surgery',
+  radiation: 'radiation',
+  follow_up: 'followUps',
+  hormone_therapy: 'hormoneTherapy',
   exposure: 'exposure',
   comorbidity: 'comorbidity',
   biomarker: 'biomarker',
@@ -156,8 +181,7 @@ export const hasClinicalErrors = (
   clinicalErrors.length > 0 &&
   clinicalErrors.filter(
     (donor) =>
-      donor.errors &&
-      donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
+      donor.errors && donor.errors.some((error) => aliasedEntityFields.includes(error.entityName)),
   ).length > 0;
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
