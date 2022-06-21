@@ -22,7 +22,7 @@ import { gql } from '@apollo/client';
 // TODO: Replace 'file' with 'donor' once schema is updated
 
 const VALID_DONOR_ENTITY_CHECK_QUERY = gql`
-  query VALID_DONOR_ENTITY_CHECK_QUERY($filters: JSON) {
+  query ValidDonorEntityCheck($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

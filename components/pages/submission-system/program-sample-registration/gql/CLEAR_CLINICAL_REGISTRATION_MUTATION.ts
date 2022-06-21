@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const CLEAR_CLINICAL_REGISTRATION_MUTATION = gql`
-  mutation CLEAR_CLINICAL_REGISTRATION_MUTATION($shortName: String!, $registrationId: String!) {
+  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {
     clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)
   }
 `;

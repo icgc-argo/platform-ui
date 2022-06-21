@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const GET_JOIN_PROGRAM_INFO_QUERY = gql`
-  query GET_JOIN_PROGRAM_INFO_QUERY($inviteId: ID!) {
+  query GetJoinProgramInfo($inviteId: ID!) {
     joinProgramInvite(id: $inviteId) {
       program {
         name

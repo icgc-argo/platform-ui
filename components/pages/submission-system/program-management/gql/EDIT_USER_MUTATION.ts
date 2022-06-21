@@ -20,11 +20,7 @@
 import { gql } from '@apollo/client';
 
 const EDIT_USER_MUTATION = gql`
-  mutation EDIT_USER_MUTATION(
-    $userEmail: String!
-    $programShortName: String!
-    $userRole: UserRole!
-  ) {
+  mutation EditUser($userEmail: String!, $programShortName: String!, $userRole: UserRole!) {
     updateUser(userEmail: $userEmail, programShortName: $programShortName, userRole: $userRole)
   }
 `;

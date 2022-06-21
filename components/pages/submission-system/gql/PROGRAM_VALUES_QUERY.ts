@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_VALUES_QUERY = gql`
-  query PROGRAM_VALUES_QUERY {
+  query ProgramValues {
     programOptions {
       cancerTypes
       primarySites

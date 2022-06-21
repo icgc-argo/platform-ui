@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const SEARCH_BY_DONOR_QUERY = gql`
-  query SEARCH_BY_DONOR_QUERY($filters: JSON) {
+  query SearchByDonor($filters: JSON) {
     file {
       aggregations(filters: $filters) {
         donors__donor_id {

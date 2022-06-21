@@ -21,7 +21,7 @@ import { gql } from '@apollo/client';
 
 const DONOR_ENTITY_QUERY = gql`
   # TODO: Replace 'file' with 'donor' and remove commented-out lines once schema is updated
-  query DONOR_ENTITY_QUERY($filters: JSON) {
+  query DonorEntity($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

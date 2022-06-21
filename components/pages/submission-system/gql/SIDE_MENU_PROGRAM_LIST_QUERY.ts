@@ -22,7 +22,7 @@ import SIDE_MENU_PROGRAM_FRAGMENT from './SIDE_MENU_PROGRAM_FRAGMENT';
 
 const SIDE_MENU_PROGRAM_LIST_QUERY = gql`
   ${SIDE_MENU_PROGRAM_FRAGMENT}
-  query SIDE_MENU_PROGRAM_LIST_QUERY {
+  query SideMenuProgramListQuery {
     programs {
       ...SideMenuProgram
     }

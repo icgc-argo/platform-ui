@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const SYSTEM_ALERTS_QUERY = gql`
-  query SYSTEM_ALERTS_QUERY {
+  query SystemAlerts {
     systemAlerts {
       dismissable
       id

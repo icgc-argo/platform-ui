@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const STATS_BAR_QUERY = gql`
-  query STATS_BAR_QUERY($filters: JSON) {
+  query StatsBar($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

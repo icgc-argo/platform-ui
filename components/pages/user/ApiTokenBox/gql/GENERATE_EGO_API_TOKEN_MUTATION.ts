@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const GENERATE_EGO_API_TOKEN_MUTATION = gql`
-  mutation GENERATE_EGO_API_TOKEN_MUTATION {
+  mutation GenerateEgoApiToken {
     generateAccessKey {
       key
       exp

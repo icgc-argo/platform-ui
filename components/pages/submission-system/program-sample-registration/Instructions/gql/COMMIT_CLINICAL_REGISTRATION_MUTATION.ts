@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const COMMIT_CLINICAL_REGISTRATION_MUTATION = gql`
-  mutation COMMIT_CLINICAL_REGISTRATION_MUTATION($shortName: String!, $registrationId: String!) {
+  mutation CommitClinicalRegistration($shortName: String!, $registrationId: String!) {
     commitClinicalRegistration(shortName: $shortName, registrationId: $registrationId)
   }
 `;

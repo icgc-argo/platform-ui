@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const APPROVE_SUBMISSION_MUTATION = gql`
-  mutation APPROVE_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
+  mutation ApproveSubmission($programShortName: String!, $submissionVersion: String!) {
     approveClinicalSubmission(programShortName: $programShortName, version: $submissionVersion)
   }
 `;

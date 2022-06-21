@@ -22,7 +22,7 @@ import REGISTRATION_FRAGMENT from './REGISTRATION_FRAGMENT';
 
 const GET_REGISTRATION_QUERY = gql`
   ${REGISTRATION_FRAGMENT}
-  query GET_REGISTRATION_QUERY($shortName: String!) {
+  query GetRegistration($shortName: String!) {
     clinicalRegistration(shortName: $shortName) {
       ...Registration
     }

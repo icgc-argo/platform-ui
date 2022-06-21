@@ -22,7 +22,7 @@ import REGISTRATION_FRAGMENT from './REGISTRATION_FRAGMENT';
 
 const UPLOAD_REGISTRATION_MUTATION = gql`
   ${REGISTRATION_FRAGMENT}
-  mutation UPLOAD_REGISTRATION_MUTATION($shortName: String!, $registrationFile: Upload!) {
+  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
     uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile) {
       ...Registration
     }

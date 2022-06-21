@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAMS_USERS_QUERY = gql`
-  query PROGRAMS_USERS_QUERY {
+  query ProgramsUsers {
     programs {
       shortName
       users {

@@ -22,7 +22,7 @@ import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
 const SIGN_OFF_SUBMISSION_MUTATION = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  mutation SIGN_OFF_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
+  mutation SignOffSubmission($programShortName: String!, $submissionVersion: String!) {
     clinicalSubmissions: commitClinicalSubmission(
       programShortName: $programShortName
       version: $submissionVersion

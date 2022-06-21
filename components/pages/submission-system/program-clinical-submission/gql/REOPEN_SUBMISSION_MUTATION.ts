@@ -22,7 +22,7 @@ import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
 const REOPEN_SUBMISSION_MUTATION = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  mutation REOPEN_SUBMISSION_MUTATION($programShortName: String!, $submissionVersion: String!) {
+  mutation ReopenSubmission($programShortName: String!, $submissionVersion: String!) {
     clinicalSubmissions: reopenClinicalSubmission(
       programShortName: $programShortName
       version: $submissionVersion

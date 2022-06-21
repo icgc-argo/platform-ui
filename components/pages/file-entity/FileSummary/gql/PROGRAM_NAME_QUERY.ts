@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_NAME_QUERY = gql`
-  query PROGRAM_NAME_QUERY($shortName: String!) {
+  query ProgramName($shortName: String!) {
     program(shortName: $shortName) {
       name
     }

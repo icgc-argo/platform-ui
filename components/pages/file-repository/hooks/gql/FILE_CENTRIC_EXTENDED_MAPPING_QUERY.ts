@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const FILE_CENTRIC_EXTENDED_MAPPING_QUERY = gql`
-  query FILE_CENTRIC_EXTENDED_MAPPING_QUERY {
+  query FileCentricExtendedMapping {
     file {
       extended
     }

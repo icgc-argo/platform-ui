@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const CREATE_JIRA_TICKET_MUTATION = gql`
-  mutation CREATE_JIRA_TICKET_MUTATION(
+  mutation CreateJiraTicket(
     $reCaptchaResponse: String!
     $messageCategory: JiraTicketCategory!
     $emailAddress: String!

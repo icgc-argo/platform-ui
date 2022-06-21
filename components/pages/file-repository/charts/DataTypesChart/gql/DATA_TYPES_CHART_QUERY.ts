@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const DATA_TYPES_CHART_QUERY = gql`
-  query DATA_TYPES_CHART_QUERY($filters: JSON) {
+  query DataTypesChart($filters: JSON) {
     file {
       aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
         data_type {

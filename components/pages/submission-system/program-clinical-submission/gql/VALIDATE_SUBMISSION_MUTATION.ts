@@ -20,13 +20,13 @@
 import { gql } from '@apollo/client';
 import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
-const VALIDATE_SUBMISSION = gql`
+const VALIDATE_SUBMISSION_MUTATION = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  mutation VALIDATE_SUBMISSION($programShortName: String!, $submissionVersion: String!) {
+  mutation ValidateSubmission($programShortName: String!, $submissionVersion: String!) {
     validateClinicalSubmissions(programShortName: $programShortName, version: $submissionVersion) {
       ...ClinicalSubmissionFragment
     }
   }
 `;
 
-export default VALIDATE_SUBMISSION;
+export default VALIDATE_SUBMISSION_MUTATION;

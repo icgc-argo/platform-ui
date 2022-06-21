@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const UPDATE_PROGRAM_MUTATION = gql`
-  mutation UPDATE_PROGRAM_MUTATION($updates: UpdateProgramInput!, $shortName: String!) {
+  mutation UpdateProgram($updates: UpdateProgramInput!, $shortName: String!) {
     updateProgram(shortName: $shortName, updates: $updates)
   }
 `;

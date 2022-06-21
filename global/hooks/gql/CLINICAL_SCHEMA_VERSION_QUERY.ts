@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const CLINICAL_SCHEMA_VERSION_QUERY = gql`
-  query CLINICAL_SCHEMA_VERSION_QUERY {
+  query ClinicalSchemaVersion {
     clinicalSubmissionSchemaVersion
   }
 `;

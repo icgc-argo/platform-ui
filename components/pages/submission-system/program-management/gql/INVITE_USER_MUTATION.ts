@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const INVITE_USER_MUTATION = gql`
-  mutation INVITE_USER_MUTATION($invite: InviteUserInput!) {
+  mutation InviteUser($invite: InviteUserInput!) {
     inviteUser(invite: $invite)
   }
 `;

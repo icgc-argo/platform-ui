@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_DONOR_INDEX_STATS_QUERY = gql`
-  query PROGRAM_DONOR_INDEX_STATS_QUERY($programShortName: String!) {
+  query ProgramDonorIndexStats($programShortName: String!) {
     programDonorSummary(programShortName: $programShortName) {
       stats {
         programShortName

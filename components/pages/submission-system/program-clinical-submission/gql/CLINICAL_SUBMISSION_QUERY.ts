@@ -22,7 +22,7 @@ import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
 const CLINICAL_SUBMISSION_QUERY = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  query CLINICAL_SUBMISSION_QUERY($programShortName: String!) {
+  query ClinicalSubmission($programShortName: String!) {
     clinicalSubmissions(programShortName: $programShortName) {
       ...ClinicalSubmissionFragment
     }

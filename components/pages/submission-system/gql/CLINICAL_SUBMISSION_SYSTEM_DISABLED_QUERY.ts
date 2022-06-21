@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY = gql`
-  query CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY {
+  query ClinicalSubmissionSystemDisabled {
     clinicalSubmissionSystemDisabled
   }
 `;

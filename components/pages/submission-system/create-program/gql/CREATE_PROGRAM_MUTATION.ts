@@ -22,7 +22,7 @@ import SIDE_MENU_PROGRAM_FRAGMENT from '../../gql/SIDE_MENU_PROGRAM_FRAGMENT';
 
 const CREATE_PROGRAM_MUTATION = gql`
   ${SIDE_MENU_PROGRAM_FRAGMENT}
-  mutation CREATE_PROGRAM_MUTATION($program: ProgramInput!) {
+  mutation CreateProgram($program: ProgramInput!) {
     newProgram: createProgram(program: $program) {
       ...SideMenuProgram
     }

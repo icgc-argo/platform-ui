@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const FILE_REPOSITORY_TABLE_QUERY = gql`
-  query FILE_REPOSITORY_TABLE_QUERY($first: Int, $offset: Int, $filters: JSON, $sort: [Sort]) {
+  query FileRepositoryTable($first: Int, $offset: Int, $filters: JSON, $sort: [Sort]) {
     file {
       hits(first: $first, offset: $offset, filters: $filters, sort: $sort) {
         total

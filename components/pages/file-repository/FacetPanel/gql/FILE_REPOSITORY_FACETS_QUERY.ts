@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const FILE_REPOSITORY_FACETS_QUERY = gql`
-  query FILE_REPOSITORY_FACETS_QUERY($filters: JSON) {
+  query FileRepositoryFacets($filters: JSON) {
     file {
       aggregations(
         filters: $filters

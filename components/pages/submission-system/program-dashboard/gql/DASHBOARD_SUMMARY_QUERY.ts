@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const DASHBOARD_SUMMARY_QUERY = gql`
-  query DASHBOARD_SUMMARY_QUERY($programShortName: String!) {
+  query DashboardSummary($programShortName: String!) {
     programDonorSummary(programShortName: $programShortName) {
       stats {
         registeredDonorsCount

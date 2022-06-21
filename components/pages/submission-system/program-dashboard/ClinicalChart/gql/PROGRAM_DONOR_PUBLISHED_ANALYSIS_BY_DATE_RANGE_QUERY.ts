@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY = gql`
-  query PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY(
+  query ProgramDonorPublishedAnalysisByDateRange(
     $programShortName: String!
     $bucketCount: Int!
     $dateRangeFrom: DateTime!

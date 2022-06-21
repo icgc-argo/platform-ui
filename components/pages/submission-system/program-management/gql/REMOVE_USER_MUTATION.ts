@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const REMOVE_USER_MUTATION = gql`
-  mutation REMOVE_USER_MUTATION($userEmail: String!, $programShortName: String!) {
+  mutation RemoveUser($userEmail: String!, $programShortName: String!) {
     removeUser(userEmail: $userEmail, programShortName: $programShortName)
   }
 `;

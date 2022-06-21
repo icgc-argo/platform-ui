@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY = gql`
-  query SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY($programShortName: String!) {
+  query SideMenuSampleRegistrationState($programShortName: String!) {
     clinicalRegistration(shortName: $programShortName) {
       programShortName
       fileErrors {

@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const FILE_ENTITY_QUERY = gql`
-  query FILE_ENTITY_QUERY($filters: JSON) {
+  query FileEntity($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

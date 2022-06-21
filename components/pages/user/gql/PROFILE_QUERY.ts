@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROFILE_QUERY = gql`
-  query PROFILE_QUERY {
+  query Profile {
     self {
       isDacoApproved
       apiKey {

@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAMS_CHART_QUERY = gql`
-  query PROGRAMS_CHART_QUERY($filters: JSON) {
+  query ProgramsChart($filters: JSON) {
     file {
       aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
         program_ids: study_id {

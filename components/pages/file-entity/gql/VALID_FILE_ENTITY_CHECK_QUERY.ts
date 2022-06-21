@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const VALID_FILE_ENTITY_CHECK_QUERY = gql`
-  query VALID_FILE_ENTITY_CHECK_QUERY($filters: JSON) {
+  query ValidFileEntityCheck($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const SEARCH_BY_FILE_QUERY = gql`
-  query SEARCH_BY_FILE_QUERY($filters: JSON) {
+  query SearchByFile($filters: JSON) {
     file {
       hits(filters: $filters) {
         total

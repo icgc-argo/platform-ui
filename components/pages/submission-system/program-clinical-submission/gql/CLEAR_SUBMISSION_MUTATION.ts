@@ -22,7 +22,7 @@ import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
 const CLEAR_SUBMISSION_MUTATION = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  mutation CLEAR_SUBMISSION_MUTATION(
+  mutation ClearSubmission(
     $programShortName: String!
     $submissionVersion: String!
     $fileType: String

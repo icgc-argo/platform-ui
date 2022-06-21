@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const JOIN_PROGRAM_MUTATION = gql`
-  mutation JOIN_PROGRAM_MUTATION($joinProgramInput: JoinProgramInput!) {
+  mutation JoinProgram($joinProgramInput: JoinProgramInput!) {
     joinProgram(join: $joinProgramInput) {
       inviteAcceptedAt
     }

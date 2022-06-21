@@ -22,7 +22,7 @@ import CLINICAL_SUBMISSION_FRAGMENT from './CLINICAL_SUBMISSION_FRAGMENT';
 
 const UPLOAD_CLINICAL_SUBMISSION_MUTATION = gql`
   ${CLINICAL_SUBMISSION_FRAGMENT}
-  mutation UPLOAD_CLINICAL_SUBMISSION_MUTATION($programShortName: String!, $files: [Upload!]) {
+  mutation UploadClinicalSubmission($programShortName: String!, $files: [Upload!]) {
     clinicalSubmissions: uploadClinicalSubmissions(
       programShortName: $programShortName
       clinicalFiles: $files

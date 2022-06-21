@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_DONOR_SUMMARY_QUERY = gql`
-  query PROGRAM_DONOR_SUMMARY_QUERY(
+  query ProgramDonorSummary(
     $programShortName: String!
     $first: Int!
     $offset: Int!

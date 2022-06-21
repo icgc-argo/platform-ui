@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY = gql`
-  query SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY($programShortName: String!) {
+  query SideMenuClinicalSubmissionState($programShortName: String!) {
     clinicalSubmissions(programShortName: $programShortName) {
       programShortName
       state
