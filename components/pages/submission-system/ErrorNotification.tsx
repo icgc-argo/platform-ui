@@ -73,7 +73,7 @@ export default <Error extends { [k: string]: any }>({
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: string | ReactNode;
+  subtitle: ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
       accessor: keyof Error | string;
