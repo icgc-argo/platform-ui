@@ -181,7 +181,11 @@ export const hasClinicalErrors = (
   clinicalErrors.length > 0 &&
   clinicalErrors.filter(
     (donor) =>
-      donor.errors && donor.errors.some((error) => aliasedEntityFields.includes(error.entityName)),
+      donor.errors &&
+      donor.errors.some(
+        ({ entityName }) =>
+          aliasedEntityFields.includes(entityName) && entityName === currentEntity,
+      ),
   ).length > 0;
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
