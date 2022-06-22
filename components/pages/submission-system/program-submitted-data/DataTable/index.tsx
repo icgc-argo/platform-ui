@@ -25,7 +25,7 @@ import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import Table from '@icgc-argo/uikit/Table';
 import Typography from '@icgc-argo/uikit/Typography';
 import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA_QUERY from '../gql/CLINICAL_ENTITY_DATA_QUERY';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   ClinicalEntityQueryResponse,
   clinicalEntityFields,
