@@ -24,7 +24,7 @@ const createInMemoryCache = () =>
     typePolicies: {
       // define cache IDs. default is item.id
       Program: {
-        keyFields: ['name'],
+        keyFields: ['shortName'],
       },
       ClinicalRegistrationData: {
         keyFields: ['programShortName'],
