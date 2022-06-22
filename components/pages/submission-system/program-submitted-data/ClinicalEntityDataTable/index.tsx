@@ -79,6 +79,19 @@ const NoDataCell = () => (
   </Container>
 );
 
+const noDataCompletionStats = [
+  {
+    donor_id: 0,
+    DO: 0,
+    PD: 0,
+    FO: 0,
+    NS: 0,
+    TR: 0,
+    TS: 0,
+    ' ': ' ',
+  },
+];
+
 const completionColumnHeaders = {
   donor: 'DO',
   primaryDiagnosis: 'PD',
@@ -174,22 +187,12 @@ const ClinicalEntityDataTable = ({
     showCompletionStats = true;
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
 
-    records = [
-      {
-        donor_id: 0,
-        DO: 0,
-        PD: 0,
-        FO: 0,
-        NS: 0,
-        TR: 0,
-        TS: 0,
-        ' ': ' ',
-      },
-    ];
+    records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
       (entity) => entity.entityName === aliasedEntityNames[entityType],
     );
+    columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
@@ -208,6 +211,10 @@ const ClinicalEntityDataTable = ({
       let clinicalRecord = {};
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
+        columns.forEach((column) => {
+          if (!clinicalRecord[column] && !Object.values(completionColumnHeaders).includes(column))
+            clinicalRecord[column] = '--';
+        });
         if (completionStats && r.name === 'donor_id') {
           const completionRecord = completionStats.find(
             (stat) => stat.donorId === parseInt(r.value),
