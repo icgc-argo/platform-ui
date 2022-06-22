@@ -211,10 +211,6 @@ const ClinicalEntityDataTable = ({
       let clinicalRecord = {};
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
-        columns.forEach((column) => {
-          if (!clinicalRecord[column] && !Object.values(completionColumnHeaders).includes(column))
-            clinicalRecord[column] = '--';
-        });
         if (completionStats && r.name === 'donor_id') {
           const completionRecord = completionStats.find(
             (stat) => stat.donorId === parseInt(r.value),
