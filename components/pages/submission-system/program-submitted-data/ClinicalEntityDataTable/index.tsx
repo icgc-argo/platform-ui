@@ -209,13 +209,15 @@ const ClinicalEntityDataTable = ({
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
         if (completionStats && r.name === 'donor_id') {
-          const completion = completionStats.find(
+          const completionRecord = completionStats.find(
             (stat) => stat.donorId === parseInt(r.value),
-          ).coreCompletion;
+          );
+
+          const completion = completionRecord ? completionRecord.coreCompletion : {};
 
           CoreCompletionFields.forEach((field) => {
-            clinicalRecord[completionColumnHeaders[field]] =
-              completion[field] === null ? 0 : completion[field];
+            const completionField = completionColumnHeaders[field];
+            clinicalRecord[completionField] = completion[field] ? completion[field] : 0;
           });
 
           clinicalRecord = { ...clinicalRecord, ...completion };
