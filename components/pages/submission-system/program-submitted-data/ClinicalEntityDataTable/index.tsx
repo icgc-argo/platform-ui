@@ -304,9 +304,8 @@ const ClinicalEntityDataTable = ({
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
         if (completionStats && r.name === 'donor_id') {
-          const completion = completionStats.find(
-            (stat) => stat.donorId === parseInt(r.value),
-          ).coreCompletion;
+          const completion =
+            completionStats.find((stat) => stat.donorId === parseInt(r.value)).coreCompletion || {};
 
           CoreCompletionFields.forEach((field) => {
             clinicalRecord[completionColumnHeaders[field]] =
