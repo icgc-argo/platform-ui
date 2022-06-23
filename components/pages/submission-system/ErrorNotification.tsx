@@ -61,7 +61,7 @@ export const getDefaultColumns = (level: NotificationVariant) => {
   ];
 };
 
-export default <Error extends { [k: string]: any }>({
+const ErrorNotification = <Error extends { [k: string]: any }>({
   level,
   title,
   errors,
@@ -174,3 +174,5 @@ export default <Error extends { [k: string]: any }>({
     />
   );
 };
+
+export default ErrorNotification;
