@@ -23,7 +23,7 @@ const PROGRAM_QUERY = gql`
   query Program($shortName: String!) {
     program(shortName: $shortName) {
       name
-      shortName
+      shortName # this is the ID
       description
       commitmentDonors
       submittedDonors
