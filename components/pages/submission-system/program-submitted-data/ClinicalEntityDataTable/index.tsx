@@ -134,6 +134,15 @@ const completionColumnHeaders = {
   followUps: 'FO',
 };
 
+const emptyCompletion = {
+  DO: 0,
+  PD: 0,
+  FO: 0,
+  NS: 0,
+  TR: 0,
+  TS: 0,
+};
+
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
@@ -272,12 +281,7 @@ const ClinicalEntityDataTable = ({
     records = [
       {
         donor_id: 0,
-        DO: 0,
-        PD: 0,
-        FO: 0,
-        NS: 0,
-        TR: 0,
-        TS: 0,
+        ...emptyCompletion,
         ' ': ' ',
       },
     ];
@@ -305,7 +309,8 @@ const ClinicalEntityDataTable = ({
         clinicalRecord[r.name] = r.value || '--';
         if (completionStats && r.name === 'donor_id') {
           const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value)).coreCompletion || {};
+            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+            emptyCompletion;
 
           CoreCompletionFields.forEach((field) => {
             clinicalRecord[completionColumnHeaders[field]] =
