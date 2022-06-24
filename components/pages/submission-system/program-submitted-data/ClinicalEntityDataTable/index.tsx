@@ -58,7 +58,6 @@ const Container = styled('div')`
 const NoDataCell = () => (
   <Container>
     <img
-      alt="no data found"
       css={css`
         height: 75px;
       `}
