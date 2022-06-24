@@ -171,6 +171,7 @@ const ClinicalEntityDataTable = ({
 
   if (noData) {
     showCompletionStats = true;
+    // Empty string column holds No Data image
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
 
     records = [
