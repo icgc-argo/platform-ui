@@ -33,6 +33,7 @@ import Icon from '@icgc-argo/uikit/Icon';
 import Link from '@icgc-argo/uikit/Link';
 import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
 import TitleBar from '@icgc-argo/uikit/TitleBar';
+import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
@@ -46,7 +47,6 @@ import {
   emptyResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
-import Typography from '@icgc-argo/uikit/Typography';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -77,7 +77,7 @@ export default function ProgramSubmittedData() {
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
-  const noData = sideMenuData.clinicalEntities.length === 0 ? true : false;
+  const noData = sideMenuData.clinicalEntities.length === 0;
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
