@@ -58,7 +58,6 @@ const Container = styled('div')`
 const NoDataCell = () => (
   <Container>
     <img
-      alt="no data found"
       css={css`
         height: 75px;
       `}
@@ -88,7 +87,6 @@ const noDataCompletionStats = [
     NS: 0,
     TR: 0,
     TS: 0,
-    ' ': ' ',
   },
 ];
 
@@ -105,7 +103,7 @@ const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
   const minWidth = showCompletionStats ? 60 : 95;
-  const maxWidth = noData && showCompletionStats && keyString !== ' ' ? 45 : 200;
+  const maxWidth = noData && showCompletionStats ? 45 : 200;
   const spacePerChar = 8;
   const margin = 10;
   const targetWidth = keyString.length * spacePerChar + margin;
