@@ -466,6 +466,9 @@ const ClinicalEntityDataTable = ({
               onPageChange: (value) => updatePageSettings('page', value),
               onPageSizeChange: (value) => updatePageSettings('pageSize', value),
               onSortedChange: (value) => updatePageSettings('sorted', value),
+              // TODO: Test + Update Pagination in #2267
+              // https://github.com/icgc-argo/platform-ui/issues/2267
+              showPagination: false,
             }}
           />
         </div>
