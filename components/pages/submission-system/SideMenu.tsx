@@ -249,10 +249,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           {FEATURE_SUBMITTED_DATA_ENABLED && (
             <Link
               prefetch
-              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+              as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
-              )}
+              )}?tab=donor`}
               href={PROGRAM_CLINICAL_DATA_PATH}
             >
               <MenuItem

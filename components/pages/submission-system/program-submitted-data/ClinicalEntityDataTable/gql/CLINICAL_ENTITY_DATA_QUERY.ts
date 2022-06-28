@@ -20,31 +20,33 @@
 import { gql } from '@apollo/client';
 
 const CLINICAL_ENTITY_DATA_QUERY = gql`
-  query ClinicalEntityData($programShortName: String!, $filters: ClinicalInput!) {
+  query CLINICAL_ENTITY_DATA_QUERY($programShortName: String!, $filters: ClinicalInput!) {
     clinicalData(programShortName: $programShortName, filters: $filters) {
       programShortName
       clinicalEntities {
         entityName
         entityFields
-        # totalDocs - failed gql validation
+        totalDocs
         records {
           name
           value
         }
-      }
-      completionStats {
-        coreCompletion {
-          donor
-          specimens
-          primaryDiagnosis
-          familyHistory
-          followUps
-          treatments
+        completionStats {
+          coreCompletion {
+            donor
+            specimens
+            primaryDiagnosis
+            familyHistory
+            followUps
+            treatments
+            normalSpecimens
+            tumourSpecimens
+          }
+          coreCompletionDate
+          coreCompletionPercentage
+          overriddenCoreCompletion
+          donorId
         }
-        coreCompletionDate
-        coreCompletionPercentage
-        overriddenCoreCompletion
-        donorId
       }
       clinicalErrors {
         donorId

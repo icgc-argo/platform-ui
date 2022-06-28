@@ -17,13 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export enum CoreClinicalEntities {
-  'donor',
-  'specimens',
-  'primaryDiagnosis',
-  'followUps',
-  'treatments',
+export enum CoreCompletionEntities {
+  donor = 'donor',
+  primaryDiagnosis = 'primaryDiagnosis',
+  normalSpecimens = 'normalSpecimens',
+  tumourSpecimens = 'tumourSpecimens',
+  familyHistory = 'familyHistory',
+  treatments = 'treatments',
+  followUps = 'followUps',
 }
+
+export const CoreCompletionFields = Object.values(CoreCompletionEntities);
+
+export type CoreCompletion = {
+  CoreCompletionEntities: number;
+};
+
+export type CompletionStats = {
+  coreCompletion: CoreCompletion;
+  coreCompletionDate: string;
+  coreCompletionPercentage: number;
+  donorId: number;
+  overriddenCoreCompletion: [CoreCompletionEntities];
+};
 
 export enum CompletionStates {
   all = 'all',
@@ -36,21 +52,11 @@ export type ClinicalEntity = {
   entityName: string;
   entityFields: string[];
   totalDocs: number;
+  completionStats?: Array<CompletionStats>;
   records: Array<{
     name: string;
     value: any;
   }>[];
-};
-
-export type CompletionStats = {
-  coreCompletion: CoreCompletionFields;
-  coreCompletionDate: string;
-  coreCompletionPercentage: number;
-  overriddenCoreCompletion: [CoreClinicalEntities];
-};
-
-export type CoreCompletionFields = {
-  [k in CoreClinicalEntities]: number;
 };
 
 export type ClinicalErrorData = {
@@ -69,7 +75,6 @@ export type ClinicalEntityQueryResponse = {
   clinicalData: {
     programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
-    completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
   };
 };
@@ -90,7 +95,7 @@ export const clinicalEntityDisplayNames = {
   specimens: 'Specimens',
   primaryDiagnoses: 'Primary Diagnosis',
   familyHistory: 'Family History',
-  treatment: 'Treatment',
+  treatment: 'Treatments',
   chemotherapy: 'Chemotherapy',
   immunotherapy: 'Immunotherapy',
   surgery: 'Surgery',
@@ -126,6 +131,12 @@ export const aliasSortNames = {
   donor_id: 'donorId',
   program_id: 'programId',
   submitter_id: 'submitterId',
+  DO: 'donorId',
+  PD: 'primaryDiagnoses',
+  NS: 'specimens',
+  TS: 'familyHistory',
+  TR: 'treatments',
+  FO: 'followUps',
 };
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {
@@ -152,7 +163,6 @@ export const hasClinicalErrors = (
 export const emptyResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
     clinicalEntities: [],
-    completionStats: [],
     clinicalErrors: [],
   },
 };
