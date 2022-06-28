@@ -41,6 +41,15 @@ To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To ea
   - `Cmd+Shift+B`, then select `tsc:build - tsconfig.json`
   - This will report errors in vscode's `PROBLEMS` tab
 
+### GraphQL
+
+- We use [GraphQL Code Generator](https://www.graphql-code-generator.com/) to generate an introspection schema and types.
+- Install the [GraphQL VSCode plugin](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) for code suggestions based on the schema as well as syntax highlighting.
+- Modify `./codegen.yml` to get the schema either from your configured API or a local file.
+- `npm run gql-check` to check your GraphQL files and run a build.
+- `npm run dev` will also watch for GraphQL changes.
+- Name your GraphQL documents appropriately: They need to go in a `gql` folder and have `_QUERY` `_MUTATION` `_FRAGMENT` at the end of the filename. They also need to be `*.ts` files.
+
 ## Uikit
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/378c5fea-f016-406c-9449-f3099441b0b1/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
