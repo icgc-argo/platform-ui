@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { getDefaultRedirectPathForUser } from './index';
 import { getPermissionsFromToken } from '../egoJwt';
