@@ -62,7 +62,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
   } = useQuery(GET_JOIN_PROGRAM_INFO_QUERY, {
     variables: { inviteId },
     onCompleted: (data) => {
-      if (!joinProgramInvite) {
+      if (!data.joinProgramInvite) {
         return;
       }
     },
