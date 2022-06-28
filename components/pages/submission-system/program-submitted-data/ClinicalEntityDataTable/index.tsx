@@ -282,6 +282,7 @@ const ClinicalEntityDataTable = ({
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
+    // Empty string column holds No Data image
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
 
     records = noDataCompletionStats;
