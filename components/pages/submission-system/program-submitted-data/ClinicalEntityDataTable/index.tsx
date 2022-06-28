@@ -51,7 +51,6 @@ export type DonorEntry = {
 };
 
 const errorColumns = [
-  // update to # affected donors
   {
     accessor: 'entries',
     Header: '# Affected Donors',
