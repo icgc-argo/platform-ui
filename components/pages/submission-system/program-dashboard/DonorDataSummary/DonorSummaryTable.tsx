@@ -51,7 +51,7 @@ import {
 } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import { SortedChangeFunction, SortingRule } from 'react-table';
+import { SortingRule, SortedChangeFunction } from 'global/types/table';
 import ContentError from 'components/placeholders/ContentError';
 import { Row } from 'react-grid-system';
 

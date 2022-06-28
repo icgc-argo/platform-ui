@@ -18,7 +18,7 @@
  */
 
 import React, { ReactNode } from 'react';
-import { TableProps } from 'react-table';
+import { TableProps } from 'global/types/table';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import Notification, {
