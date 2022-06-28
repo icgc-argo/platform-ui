@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const CLINICAL_ENTITY_DATA_QUERY = gql`
-  query CLINICAL_ENTITY_DATA_QUERY($programShortName: String!, $filters: ClinicalInput!) {
+  query ClinicalEntityData($programShortName: String!, $filters: ClinicalInput!) {
     clinicalData(programShortName: $programShortName, filters: $filters) {
       programShortName
       clinicalEntities {
