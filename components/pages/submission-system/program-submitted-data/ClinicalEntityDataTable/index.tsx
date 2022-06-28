@@ -23,9 +23,12 @@ import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import ErrorNotification from '../../ErrorNotification';
+import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
 import Icon from '@icgc-argo/uikit/Icon';
-import Table from '@icgc-argo/uikit/Table';
+import Link from '@icgc-argo/uikit/Link';
 import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
+import Table from '@icgc-argo/uikit/Table';
 import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
@@ -46,6 +49,33 @@ export type DonorEntry = {
   isNew: boolean;
   [k: string]: string | number | boolean;
 };
+
+const errorColumns = [
+  // update to # affected donors
+  {
+    accessor: 'entries',
+    Header: '# Affected Donors',
+    id: 'entries',
+    maxWidth: 135,
+  },
+  {
+    accessor: 'fieldName',
+    Header: `Field with Error`,
+    id: 'fieldName',
+    maxWidth: 215,
+  },
+  {
+    accessor: 'errorType',
+    Header: 'Error Value',
+    id: 'errorType',
+    maxWidth: 185,
+  },
+  {
+    accessor: 'message',
+    Header: `Error Description`,
+    id: 'message',
+  },
+];
 
 const Container = styled('div')`
   display: flex;
@@ -78,17 +108,37 @@ const NoDataCell = () => (
   </Container>
 );
 
+const emptyCompletion = {
+  DO: 0,
+  PD: 0,
+  FO: 0,
+  NS: 0,
+  TR: 0,
+  TS: 0,
+};
+
 const noDataCompletionStats = [
   {
     donor_id: 0,
-    DO: 0,
-    PD: 0,
-    FO: 0,
-    NS: 0,
-    TR: 0,
-    TS: 0,
+    ...emptyCompletion,
   },
 ];
+
+const Subtitle = (program) => (
+  <div
+    css={css`
+      margin-bottom: 12px;
+    `}
+  >
+    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
+    was released and has made some donors invalid. Please download the error report to view the
+    affected donors, then submit a corrected TSV file in the{' '}
+    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
+      Submit Clinical Data
+    </Link>{' '}
+    workspace.
+  </div>
+);
 
 const completionColumnHeaders = {
   donor: 'DO',
@@ -102,7 +152,7 @@ const completionColumnHeaders = {
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
 >((keyString, showCompletionStats, noData) => {
-  const minWidth = showCompletionStats ? 60 : 95;
+  const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
   const maxWidth = noData && showCompletionStats ? 45 : 200;
   const spacePerChar = 8;
   const margin = 10;
@@ -113,6 +163,12 @@ const getColumnWidth = memoize<
 const defaultPageSettings = {
   page: defaultClinicalEntityFilters.page,
   pageSize: defaultClinicalEntityFilters.pageSize,
+  sorted: [{ id: 'donorId', desc: true }],
+};
+
+const defaultErrorPageSettings = {
+  page: 0,
+  pageSize: 5,
   sorted: [{ id: 'donorId', desc: true }],
 };
 
@@ -149,6 +205,7 @@ const ClinicalEntityDataTable = ({
   entityType: string;
   program: string;
 }) => {
+  // Init + Page Settings
   let totalDocs = 0;
   let showCompletionStats = false;
   let records = [];
@@ -157,6 +214,8 @@ const ClinicalEntityDataTable = ({
   const containerRef = React.createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
+  const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
+  const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
 
@@ -168,6 +227,7 @@ const ClinicalEntityDataTable = ({
 
   useEffect(() => {
     setPageSettings(defaultPageSettings);
+    setErrorPageSettings(defaultErrorPageSettings);
   }, [entityType]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
@@ -181,6 +241,45 @@ const ClinicalEntityDataTable = ({
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
 
+  // Collect Error Data
+  const { clinicalErrors } = clinicalData;
+  let totalErrors = 0;
+  const tableErrorGroups = [];
+
+  clinicalErrors.forEach((donor) => {
+    const relatedErrors = donor.errors.filter(
+      (error) => error.entityName === aliasedEntityNames[entityType],
+    );
+    totalErrors += relatedErrors.length;
+    relatedErrors.forEach((error) => {
+      const { errorType, fieldName } = error;
+      const relatedErrorGroup = tableErrorGroups.find(
+        (tableErrorGroup) =>
+          tableErrorGroup[0].errorType === errorType && tableErrorGroup[0].fieldName === fieldName,
+      );
+
+      if (!relatedErrorGroup) {
+        tableErrorGroups.push([error]);
+      } else {
+        relatedErrorGroup.push(error);
+      }
+    });
+  });
+  const hasErrors = totalErrors > 0;
+  const tableErrors = tableErrorGroups.map((errorGroup) => {
+    const entries = errorGroup.length;
+    const { errorType, fieldName, entityName, message } = errorGroup[0];
+
+    return {
+      entries,
+      errorType,
+      fieldName,
+      entityName,
+      message,
+    };
+  });
+
+  // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
@@ -210,11 +309,9 @@ const ClinicalEntityDataTable = ({
       record.forEach((r) => {
         clinicalRecord[r.name] = r.value || '--';
         if (completionStats && r.name === 'donor_id') {
-          const completionRecord = completionStats.find(
-            (stat) => stat.donorId === parseInt(r.value),
-          );
-
-          const completion = completionRecord ? completionRecord.coreCompletion : {};
+          const completion =
+            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+            emptyCompletion;
 
           CoreCompletionFields.forEach((field) => {
             const completionField = completionColumnHeaders[field];
@@ -335,9 +432,11 @@ const ClinicalEntityDataTable = ({
     ];
   }
 
-  const min = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
-  const max = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
-  const pages = Math.ceil(totalDocs / pageSize);
+  const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
+  const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
+  const tablePages = Math.ceil(totalDocs / pageSize);
+
+  const errorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
     <DnaLoader />
@@ -348,6 +447,34 @@ const ClinicalEntityDataTable = ({
         position: relative;
       `}
     >
+      {hasErrors && (
+        <div
+          id="error-submission-workspace"
+          css={css`
+            margin: 12px 0px;
+          `}
+        >
+          <ErrorNotification
+            level={NOTIFICATION_VARIANTS.ERROR}
+            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
+            subtitle={<Subtitle program={program} />}
+            errors={tableErrors}
+            columnConfig={errorColumns}
+            tableProps={{
+              page: errorPage,
+              pages: errorPages,
+              pageSize: errorPageSize,
+              sorted: errorSorted,
+              onPageChange: (value) => updatePageSettings('page', value),
+              onPageSizeChange: (value) => updatePageSettings('pageSize', value),
+              onSortedChange: (value) => updatePageSettings('sorted', value),
+              // TODO: Test + Update Pagination in #2267
+              // https://github.com/icgc-argo/platform-ui/issues/2267
+              showPagination: false,
+            }}
+          />
+        </div>
+      )}
       <TableInfoHeaderContainer
         left={
           <Typography
@@ -356,7 +483,7 @@ const ClinicalEntityDataTable = ({
             `}
             variant="data"
           >
-            Showing {min} - {max} of {totalDocs}
+            Showing {tableMin} - {tableMax} of {totalDocs}
           </Typography>
         }
       />
@@ -366,7 +493,7 @@ const ClinicalEntityDataTable = ({
         parentRef={containerRef}
         showPagination={true}
         page={page}
-        pages={pages}
+        pages={tablePages}
         pageSize={pageSize}
         sorted={sorted}
         getTdProps={getCellStyles}
