@@ -316,7 +316,7 @@ const ClinicalEntityDataTable = ({
 
           CoreCompletionFields.forEach((field) => {
             const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] ? completion[field] : 0;
+            clinicalRecord[completionField] = completion[field] || 0;
           });
 
           clinicalRecord = { ...clinicalRecord, ...completion };
