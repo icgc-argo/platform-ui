@@ -17,13 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export enum CoreClinicalEntities {
-  'donor',
-  'specimens',
-  'primaryDiagnosis',
-  'followUps',
-  'treatments',
+export enum CoreCompletionEntities {
+  donor = 'donor',
+  primaryDiagnosis = 'primaryDiagnosis',
+  normalSpecimens = 'normalSpecimens',
+  tumourSpecimens = 'tumourSpecimens',
+  treatments = 'treatments',
+  followUps = 'followUps',
 }
+
+export const CoreCompletionFields = Object.values(CoreCompletionEntities);
+
+export type CoreCompletion = {
+  CoreCompletionEntities: number;
+};
+
+export type CompletionStats = {
+  coreCompletion: CoreCompletion;
+  coreCompletionDate: string;
+  coreCompletionPercentage: number;
+  donorId: number;
+  overriddenCoreCompletion: [CoreCompletionEntities];
+};
 
 export enum CompletionStates {
   all = 'all',
@@ -36,21 +51,11 @@ export type ClinicalEntity = {
   entityName: string;
   entityFields: string[];
   totalDocs: number;
+  completionStats?: Array<CompletionStats>;
   records: Array<{
     name: string;
     value: any;
   }>[];
-};
-
-export type CompletionStats = {
-  coreCompletion: CoreCompletionFields;
-  coreCompletionDate: string;
-  coreCompletionPercentage: number;
-  overriddenCoreCompletion: [CoreClinicalEntities];
-};
-
-export type CoreCompletionFields = {
-  [k in CoreClinicalEntities]: number;
 };
 
 export type ClinicalErrorData = {
@@ -69,7 +74,6 @@ export type ClinicalEntityQueryResponse = {
   clinicalData: {
     programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
-    completionStats: Array<CompletionStats>;
     clinicalErrors: Array<ClinicalErrorData>;
   };
 };
@@ -87,24 +91,28 @@ export type ClinicalFilter = {
 export const clinicalEntityDisplayNames = {
   donor: 'Donor',
   sampleRegistration: 'Sample Registration',
-  specimens: 'Specimens',
+  sample_registration: 'Sample Registration',
+  specimens: 'Specimen',
+  specimen: 'Specimen',
   primaryDiagnoses: 'Primary Diagnosis',
-  familyHistory: 'Family History',
+  primary_diagnosis: 'Primary Diagnosis',
   treatment: 'Treatment',
   chemotherapy: 'Chemotherapy',
-  immunotherapy: 'Immunotherapy',
-  surgery: 'Surgery',
-  radiation: 'Radiation',
-  followUps: 'Follow Ups',
   hormoneTherapy: 'Hormone Therapy',
+  hormone_therapy: 'Hormone Therapy',
+  immunotherapy: 'Immunotherapy',
+  radiation: 'Radiation',
+  surgery: 'Surgery',
+  followUps: 'Follow Up',
+  follow_up: 'Follow Up',
+  familyHistory: 'Family History',
+  family_history: 'Family History',
   exposure: 'Exposure',
   comorbidity: 'Comorbidity',
   biomarker: 'Biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
-
-export const aliasEntityNames = {
+export const aliasedEntityNames = {
   donor: 'donor',
   sampleRegistration: 'sample_registration',
   specimens: 'specimen',
@@ -122,10 +130,23 @@ export const aliasEntityNames = {
   biomarker: 'biomarker',
 };
 
+export const clinicalEntityFields = Object.keys(aliasedEntityNames);
+export const aliasedEntityFields = Object.values(aliasedEntityNames);
+
+// Util for finding camelCase alias for snake_case values
+export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) =>
+  Object.entries(aliasedEntityNames).find(([key, value]) => value === selectedClinicalEntity)[0];
+
 export const aliasSortNames = {
   donor_id: 'donorId',
   program_id: 'programId',
   submitter_id: 'submitterId',
+  DO: 'donorId',
+  PD: 'primaryDiagnoses',
+  NS: 'specimens',
+  TS: 'familyHistory',
+  TR: 'treatments',
+  FO: 'followUps',
 };
 
 export const defaultClinicalEntityFilters: ClinicalFilter = {
@@ -146,13 +167,16 @@ export const hasClinicalErrors = (
   clinicalErrors.filter(
     (donor) =>
       donor.errors &&
-      donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
+      donor.errors.some(
+        ({ entityName }) =>
+          aliasedEntityFields.includes(entityName) &&
+          reverseLookUpEntityAlias(entityName) === currentEntity,
+      ),
   ).length > 0;
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
     clinicalEntities: [],
-    completionStats: [],
     clinicalErrors: [],
   },
 };

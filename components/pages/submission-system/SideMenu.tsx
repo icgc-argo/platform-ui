@@ -49,6 +49,11 @@ import {
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import {
+  ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
+} from './program-submitted-data/common';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 type SideMenuProgram = {
@@ -127,6 +132,17 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       },
     },
   );
+
+  const { data: sideMenuQuery } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: props.program.shortName,
+        filters: defaultClinicalEntityFilters,
+      },
+    });
+  const clinicalDataHasErrors = sideMenuQuery?.clinicalData.clinicalErrors.length > 0;
 
   const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
   const clinicalRegistrationHasError =
@@ -246,15 +262,20 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           {FEATURE_SUBMITTED_DATA_ENABLED && (
             <Link
               prefetch
-              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+              as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
-              )}
+              )}?tab=donor`}
               href={PROGRAM_CLINICAL_DATA_PATH}
             >
               <MenuItem
                 level={3}
-                content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+                content={
+                  <StatusMenuItem>
+                    Submitted Data{' '}
+                    {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
+                  </StatusMenuItem>
+                }
                 selected={
                   PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
                 }
