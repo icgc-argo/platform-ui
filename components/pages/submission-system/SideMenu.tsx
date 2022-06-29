@@ -49,7 +49,7 @@ import {
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
-import SUBMITTED_DATA_SIDE_MENU from './program-submitted-data/SUBMITTED_DATA_SIDE_MENU.gql';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
   ClinicalEntityQueryResponse,
   defaultClinicalEntityFilters,
@@ -135,7 +135,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   const { data: sideMenuQuery } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName: props.program.shortName,
