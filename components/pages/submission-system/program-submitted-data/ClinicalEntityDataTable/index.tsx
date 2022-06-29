@@ -36,7 +36,7 @@ import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
   aliasSortNames,
-  aliasEntityNames,
+  aliasedEntityNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
@@ -108,6 +108,22 @@ const NoDataCell = () => (
   </Container>
 );
 
+const emptyCompletion = {
+  DO: 0,
+  PD: 0,
+  FO: 0,
+  NS: 0,
+  TR: 0,
+  TS: 0,
+};
+
+const noDataCompletionStats = [
+  {
+    donor_id: 0,
+    ...emptyCompletion,
+  },
+];
+
 const Subtitle = (program) => (
   <div
     css={css`
@@ -131,15 +147,6 @@ const completionColumnHeaders = {
   tumourSpecimens: 'TS',
   treatments: 'TR',
   followUps: 'FO',
-};
-
-const emptyCompletion = {
-  DO: 0,
-  PD: 0,
-  FO: 0,
-  NS: 0,
-  TR: 0,
-  TS: 0,
 };
 
 const getColumnWidth = memoize<
@@ -241,7 +248,7 @@ const ClinicalEntityDataTable = ({
 
   clinicalErrors.forEach((donor) => {
     const relatedErrors = donor.errors.filter(
-      (error) => error.entityName === aliasEntityNames[entityType],
+      (error) => error.entityName === aliasedEntityNames[entityType],
     );
     totalErrors += relatedErrors.length;
     relatedErrors.forEach((error) => {
@@ -278,18 +285,14 @@ const ClinicalEntityDataTable = ({
     // Empty string column holds No Data image
     columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
 
-    records = [
-      {
-        donor_id: 0,
-        ...emptyCompletion,
-      },
-    ];
+    records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
-      (entity) => entity.entityName === aliasEntityNames[entityType],
+      (entity) => entity.entityName === aliasedEntityNames[entityType],
     );
+    columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
-    showCompletionStats = !!(completionStats && entityName === aliasEntityNames.donor);
+    showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
     totalDocs = entityData.totalDocs;
 
@@ -312,8 +315,8 @@ const ClinicalEntityDataTable = ({
             emptyCompletion;
 
           CoreCompletionFields.forEach((field) => {
-            clinicalRecord[completionColumnHeaders[field]] =
-              completion[field] === null ? 0 : completion[field];
+            const completionField = completionColumnHeaders[field];
+            clinicalRecord[completionField] = completion[field] || 0;
           });
 
           clinicalRecord = { ...clinicalRecord, ...completion };

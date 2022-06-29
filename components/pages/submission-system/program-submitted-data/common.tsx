@@ -22,7 +22,6 @@ export enum CoreCompletionEntities {
   primaryDiagnosis = 'primaryDiagnosis',
   normalSpecimens = 'normalSpecimens',
   tumourSpecimens = 'tumourSpecimens',
-  familyHistory = 'familyHistory',
   treatments = 'treatments',
   followUps = 'followUps',
 }
@@ -92,24 +91,28 @@ export type ClinicalFilter = {
 export const clinicalEntityDisplayNames = {
   donor: 'Donor',
   sampleRegistration: 'Sample Registration',
-  specimens: 'Specimens',
+  sample_registration: 'Sample Registration',
+  specimens: 'Specimen',
+  specimen: 'Specimen',
   primaryDiagnoses: 'Primary Diagnosis',
-  familyHistory: 'Family History',
-  treatment: 'Treatments',
+  primary_diagnosis: 'Primary Diagnosis',
+  treatment: 'Treatment',
   chemotherapy: 'Chemotherapy',
-  immunotherapy: 'Immunotherapy',
-  surgery: 'Surgery',
-  radiation: 'Radiation',
-  followUps: 'Follow Ups',
   hormoneTherapy: 'Hormone Therapy',
+  hormone_therapy: 'Hormone Therapy',
+  immunotherapy: 'Immunotherapy',
+  radiation: 'Radiation',
+  surgery: 'Surgery',
+  followUps: 'Follow Up',
+  follow_up: 'Follow Up',
+  familyHistory: 'Family History',
+  family_history: 'Family History',
   exposure: 'Exposure',
   comorbidity: 'Comorbidity',
   biomarker: 'Biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(clinicalEntityDisplayNames);
-
-export const aliasEntityNames = {
+export const aliasedEntityNames = {
   donor: 'donor',
   sampleRegistration: 'sample_registration',
   specimens: 'specimen',
@@ -126,6 +129,13 @@ export const aliasEntityNames = {
   comorbidity: 'comorbidity',
   biomarker: 'biomarker',
 };
+
+export const clinicalEntityFields = Object.keys(aliasedEntityNames);
+export const aliasedEntityFields = Object.values(aliasedEntityNames);
+
+// Util for finding camelCase alias for snake_case values
+export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) =>
+  Object.entries(aliasedEntityNames).find(([key, value]) => value === selectedClinicalEntity)[0];
 
 export const aliasSortNames = {
   donor_id: 'donorId',
@@ -157,7 +167,10 @@ export const hasClinicalErrors = (
   clinicalErrors.filter(
     (donor) =>
       donor.errors &&
-      donor.errors.some((error) => error.entityName === aliasEntityNames[currentEntity]),
+      donor.errors.some(
+        ({ entityName }) =>
+          aliasedEntityFields.includes(entityName) && entityName === currentEntity,
+      ),
   ).length > 0;
 
 export const emptyResponse: ClinicalEntityQueryResponse = {
