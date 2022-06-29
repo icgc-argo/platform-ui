@@ -39,11 +39,10 @@ import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
 import {
   aliasedEntityNames,
-  aliasedEntityFields,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
-  reverseEntityNames,
+  reverseLookUpEntityAlias,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
@@ -95,7 +94,8 @@ export default function ProgramSubmittedData() {
       )}
     </VerticalTabs.Item>
   ));
-  const currentEntity: string = reverseEntityNames[selectedClinicalEntityTab];
+
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   return (
     <SubmissionLayout
