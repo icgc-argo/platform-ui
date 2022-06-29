@@ -51,7 +51,6 @@ export type DonorEntry = {
 };
 
 const errorColumns = [
-  // update to # affected donors
   {
     accessor: 'entries',
     Header: '# Affected Donors',
@@ -339,13 +338,17 @@ const ClinicalEntityDataTable = ({
 
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
-    const errorState = original[id] === 0;
+    const errorState =
+      (isCompletionCell && original[id] === 0) ||
+      clinicalErrors
+        .find((donor) => donor.donorId == original['donor_id'])
+        ?.errors.find((error) => error.fieldName === id);
     const border = getHeaderBorder(id);
 
     return {
       style: {
         color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
-        background: isCompletionCell && errorState ? theme.colors.error_4 : '',
+        background: errorState ? theme.colors.error_4 : '',
         borderRight: border,
       },
     };

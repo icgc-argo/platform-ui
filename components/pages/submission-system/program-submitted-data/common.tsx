@@ -169,7 +169,8 @@ export const hasClinicalErrors = (
       donor.errors &&
       donor.errors.some(
         ({ entityName }) =>
-          aliasedEntityFields.includes(entityName) && entityName === currentEntity,
+          aliasedEntityFields.includes(entityName) &&
+          reverseLookUpEntityAlias(entityName) === currentEntity,
       ),
   ).length > 0;
 
