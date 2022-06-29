@@ -18,6 +18,6 @@
  */
 
 import React from 'react';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 
 export const InvalidIcon = (props) => <Icon name="warning" fill="error" height="18px" {...props} />;

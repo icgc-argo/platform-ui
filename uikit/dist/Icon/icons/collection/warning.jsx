@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2020 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+import { css } from '@emotion/core';
+export default {
+  title: 'Users',
+  viewBox: '0 0 30 30',
+  pathDefinitions: [
+    {
+      d: 'M15 2c-.848 0-1.631.423-2.066 1.155L.326 24.458a2.323 2.323 0 0 0 0 2.374c.363.612 1.051 1.17 1.901 1.168h25.546c.85 0 1.537-.556 1.9-1.168a2.323 2.323 0 0 0 0-2.374L17.067 3.155A2.378 2.378 0 0 0 15 2',
+    },
+    {
+      d: 'M14.843 20.556a2.232 2.232 0 0 0-2.243 2.222A2.232 2.232 0 0 0 14.843 25a2.232 2.232 0 0 0 2.242-2.222 2.232 2.232 0 0 0-2.242-2.222m0-11.556a2.233 2.233 0 0 0-2.243 2.222l.449 6.667c0 .982.803 1.778 1.794 1.778.99 0 1.794-.796 1.794-1.778l.448-6.667A2.232 2.232 0 0 0 14.843 9',
+      fill: 'white',
+    },
+  ],
+  css: css`
+    height: 12px;
+  `,
+};
+//# sourceMappingURL=warning.jsx.map

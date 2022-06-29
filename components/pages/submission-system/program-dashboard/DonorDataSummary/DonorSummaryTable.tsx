@@ -26,20 +26,20 @@ import {
   DonorSummaryEntrySortOrder,
   ProgramDonorSummaryEntryField,
 } from './types';
-import Table, { TableColumnConfig } from 'uikit/Table';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
 
 import { displayDate } from 'global/utils/common';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import DropdownPanel, {
   FilterOption,
   ListFilter,
   TextInputFilter,
   FilterClearButton,
-} from 'uikit/DropdownPanel';
+} from '@icgc-argo/uikit/DropdownPanel';
 import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
 
 import React, { createRef, useRef, useState } from 'react';
-import { useTheme } from 'uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
@@ -51,7 +51,7 @@ import {
 } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import { SortedChangeFunction, SortingRule } from 'react-table';
+import { SortingRule, SortedChangeFunction } from 'global/types/table';
 import ContentError from 'components/placeholders/ContentError';
 import { Row } from 'react-grid-system';
 

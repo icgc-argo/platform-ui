@@ -18,8 +18,8 @@
  */
 
 import React from 'react';
-import ContentPlaceholder from 'uikit/ContentPlaceholder';
-import Icon from 'uikit/Icon';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import Icon from '@icgc-argo/uikit/Icon';
 
 const ContentError = ({
   title = 'Something went wrong.',

@@ -23,11 +23,11 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
-import Submenu, { MenuItem } from 'uikit/SubMenu';
-import { Input } from 'uikit/form';
-import Icon from 'uikit/Icon';
-import { css } from 'uikit';
-import DnaLoader from 'uikit/DnaLoader';
+import Submenu, { MenuItem } from '@icgc-argo/uikit/SubMenu';
+import { Input } from '@icgc-argo/uikit/form';
+import Icon from '@icgc-argo/uikit/Icon';
+import { css } from '@icgc-argo/uikit';
+import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
 import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
@@ -49,6 +49,11 @@ import {
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import {
+  ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
+} from './program-submitted-data/common';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 type SideMenuProgram = {
@@ -127,6 +132,17 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       },
     },
   );
+
+  const { data: sideMenuQuery } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: props.program.shortName,
+        filters: defaultClinicalEntityFilters,
+      },
+    });
+  const clinicalDataHasErrors = sideMenuQuery?.clinicalData.clinicalErrors.length > 0;
 
   const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;
   const clinicalRegistrationHasError =
@@ -246,15 +262,20 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           {FEATURE_SUBMITTED_DATA_ENABLED && (
             <Link
               prefetch
-              as={PROGRAM_CLINICAL_DATA_PATH.replace(
+              as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
-              )}
+              )}?tab=donor`}
               href={PROGRAM_CLINICAL_DATA_PATH}
             >
               <MenuItem
                 level={3}
-                content={<StatusMenuItem>Submitted Data</StatusMenuItem>}
+                content={
+                  <StatusMenuItem>
+                    Submitted Data{' '}
+                    {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
+                  </StatusMenuItem>
+                }
                 selected={
                   PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
                 }

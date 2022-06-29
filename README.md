@@ -30,10 +30,7 @@ Navigate to `/compose` (`cd ./compose`) and Follow the instructions found in [`c
 
 ### Writing commits
 
-To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/package/gitmoji-cli), available as a dev dependency
-
-- `npm run commit` will start interactive commit tool
-- configuring gitmoji-cli: `npm run gitmoji-config`
+To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To easily access emojis on Mac, press ctrl+cmd+space.
 
 ### Type checking
 
@@ -50,27 +47,3 @@ To keep commit messages consistent, we use [gitmoji-cli](https://www.npmjs.com/p
 [![Storybook](https://img.shields.io/badge/React-Storybook-ff69b4)](https://argo-ui-storybook.netlify.com)
 [![npm version](https://badge.fury.io/js/%40icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/%40icgc-argo%2Fuikit)
 [![TypeScript](https://img.shields.io/badge/types-%20TypeScript-blue)](https://www.typescriptlang.org/)
-
-`/uikit` contains the reusable UI components for Argo.
-
-### Uikit Development
-
-- Creating a new component: `npm run create-component`
-- **Important:** If new dependencies are added for uikit, please include in `uikit/package.release.json`
-
-### Build and publish to NPM
-
-Increase `version` under `uikit/package.release.json`
-
-#### Automated process (recommended)
-
-1. Merge that change to `develop`, and let the Jenkins pipeline handle it
-
-#### Manual process (discouraged, but available)
-
-1. Run `npm run build-uikit` which performs the following:
-2. Run `npm run publish-uikit` to publish latest version to npm
-
-### Restriction
-
-- `uikit` components should not reference (`import`) anything outside of the `uikit` directory

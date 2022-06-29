@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from 'uikit';
-import Container from 'uikit/Container';
+import { css } from '@icgc-argo/uikit';
+import Container from '@icgc-argo/uikit/Container';
 import { PaddedRow } from '../index';
 import StatItem from './StatItem';
 import STATS_BAR from './STATS_BAR.gql';

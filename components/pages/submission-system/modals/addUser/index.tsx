@@ -18,11 +18,11 @@
  */
 
 import React from 'react';
-import { styled, css } from 'uikit';
-import Modal from 'uikit/Modal';
-import Button from 'uikit/Button';
-import Icon from 'uikit/Icon';
-import Typography from 'uikit/Typography';
+import { styled, css } from '@icgc-argo/uikit';
+import Modal from '@icgc-argo/uikit/Modal';
+import Button from '@icgc-argo/uikit/Button';
+import Icon from '@icgc-argo/uikit/Icon';
+import Typography from '@icgc-argo/uikit/Typography';
 import { UserSection, UserSectionProps } from '../styledComponents';
 import useFormHook from 'global/hooks/useFormHook';
 import { UserModel, userSchema } from '../common';

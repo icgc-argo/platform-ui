@@ -17,19 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css } from 'uikit';
-import Button from 'uikit/Button';
+import React, { ReactNode } from 'react';
+import { TableProps } from 'global/types/table';
+import { css } from '@icgc-argo/uikit';
+import Button from '@icgc-argo/uikit/Button';
 import Notification, {
   NotificationVariant,
   NOTIFICATION_VARIANTS,
-} from 'uikit/notifications/Notification';
-import Table, { TableColumnConfig } from 'uikit/Table';
+} from '@icgc-argo/uikit/notifications/Notification';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
 import { exportToTsv } from 'global/utils/common';
-import Icon from 'uikit/Icon';
+import Icon from '@icgc-argo/uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
@@ -69,18 +69,20 @@ export default <Error extends { [k: string]: any }>({
   columnConfig,
   onClearClick,
   tsvExcludeCols = [],
+  tableProps,
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: string;
+  subtitle: ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
-      accessor: keyof Error;
+      accessor: keyof Error | string;
     }
   >;
   errors: Array<Error>;
   onClearClick?: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
+  tableProps?: Partial<TableProps>;
 }) => {
   const onDownloadClick = () => {
     exportToTsv(errors, {
@@ -167,6 +169,7 @@ export default <Error extends { [k: string]: any }>({
               }))}
               data={errors}
               showPagination
+              {...tableProps}
             />
           </div>
         );
