@@ -89,7 +89,7 @@ export default function ProgramSubmittedData() {
       }
     >
       {clinicalEntityDisplayNames[entity]}
-      {sideMenuData.clinicalErrors !== null && hasClinicalErrors(sideMenuData, entity) && (
+      {hasClinicalErrors(sideMenuData, entity) && (
         <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
       )}
     </VerticalTabs.Item>
