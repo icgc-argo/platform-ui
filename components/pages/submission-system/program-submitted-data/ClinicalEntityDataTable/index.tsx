@@ -220,6 +220,11 @@ const ClinicalEntityDataTable = ({
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
+
+    if (key === 'pageSize' && value > pageSettings.pageSize) {
+      // Prevents bug querying nonexistent data
+      newPageSettings.page = 0;
+    }
     setPageSettings(newPageSettings);
     return newPageSettings;
   };
