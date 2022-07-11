@@ -17,50 +17,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+// partial types from react-table 6 for uikit compatibility
+// react-table was removed from this app for React 17+ compatibility
 
-const CLINICAL_ENTITY_DATA_QUERY = gql`
-  query ClinicalEntityData($programShortName: String!, $filters: ClinicalInput!) {
-    clinicalData(programShortName: $programShortName, filters: $filters) {
-      programShortName
-      clinicalEntities {
-        entityName
-        entityFields
-        totalDocs
-        records {
-          name
-          value
-        }
-        completionStats {
-          coreCompletion {
-            donor
-            specimens
-            primaryDiagnosis
-            familyHistory
-            followUps
-            treatments
-            normalSpecimens
-            tumourSpecimens
-          }
-          coreCompletionDate
-          coreCompletionPercentage
-          overriddenCoreCompletion
-          donorId
-        }
-      }
-      clinicalErrors {
-        donorId
-        submitterDonorId
-        errors {
-          errorType
-          fieldName
-          index
-          message
-          entityName
-        }
-      }
-    }
-  }
-`;
+export type SortingRule = {
+  id: string;
+  desc: boolean;
+};
 
-export default CLINICAL_ENTITY_DATA_QUERY;
+export type SortedChangeFunction = (
+  newSorted: SortingRule[],
+  column: any,
+  additive: boolean,
+) => void;
+
+export type PageChangeFunction = (page: number) => void;
+export type PageSizeChangeFunction = (newPageSize: number, newPage: number) => void;
+
+export type TableProps = {
+  page?: number;
+  pages?: number;
+  pageSize: number;
+  sorted: SortingRule[];
+  onPageChange?: PageChangeFunction;
+  onPageSizeChange?: PageSizeChangeFunction;
+  onSortedChange?: SortedChangeFunction;
+  showPagination?: boolean;
+};

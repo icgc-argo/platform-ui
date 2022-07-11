@@ -18,7 +18,7 @@
  */
 
 import { FileRepoFiltersType } from '../utils/types';
-import { SortingRule } from 'react-table';
+import { SortingRule } from 'global/types/table';
 import { FileCentricDocumentField } from '../types';
 
 export type FileRepositoryRecord = {

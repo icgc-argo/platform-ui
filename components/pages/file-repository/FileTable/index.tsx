@@ -44,7 +44,7 @@ import useFiltersContext from '../hooks/useFiltersContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
-import { SortedChangeFunction } from 'react-table';
+import { SortedChangeFunction } from 'global/types/table';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';

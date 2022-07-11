@@ -1,8 +1,8 @@
 schema:
   # remote
-  # - ${GATEWAY_API_ROOT}/graphql
+  - ${GATEWAY_API_ROOT}/graphql
   # local
-  - generated/gql_schema.json
+  # - generated/gql_schema.json
 documents: [./**/*.gql, ./**/*_QUERY.ts, ./**/*_MUTATION.ts, ./**/*_FRAGMENT.ts]
 generates:
   generated/gql_schema.json:

@@ -33,20 +33,21 @@ import Icon from '@icgc-argo/uikit/Icon';
 import Link from '@icgc-argo/uikit/Link';
 import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
 import TitleBar from '@icgc-argo/uikit/TitleBar';
+import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
-  aliasEntityNames,
+  aliasedEntityNames,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
+  reverseLookUpEntityAlias,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
 } from './common';
-import DataTable from './DataTable';
-import Typography from '@icgc-argo/uikit/Typography';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -77,14 +78,14 @@ export default function ProgramSubmittedData() {
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
-
+  const noData = sideMenuData.clinicalEntities.length === 0;
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
-      active={selectedClinicalEntityTab === entity}
-      onClick={(e) => setSelectedClinicalEntityTab(entity)}
+      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
       disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
       }
     >
       {clinicalEntityDisplayNames[entity]}
@@ -93,6 +94,8 @@ export default function ProgramSubmittedData() {
       )}
     </VerticalTabs.Item>
   ));
+
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   return (
     <SubmissionLayout
@@ -134,76 +137,85 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <Container>
-        <div
-          css={css`
-            width: 100%;
-          `}
-        >
-          {/* Sidebar */}
+      {loading ? (
+        <DnaLoader />
+      ) : (
+        <Container>
           <div
             css={css`
-              width: 20%;
-              max-width: 170px;
-              display: inline-block;
-              border: 1px solid ${theme.colors.grey_2}; ;
+              width: 100%;
             `}
           >
-            {loading ? <DnaLoader /> : <VerticalTabs>{menuItems}</VerticalTabs>}
-          </div>
-          {/* Content */}
-          <div
-            css={css`
-              display: inline-block;
-              height: 100%;
-              width: calc(97% - 170px);
-              vertical-align: top;
-              padding: 8px 12px;
-            `}
-          >
-            {/* Header */}
+            {/* Sidebar */}
             <div
               css={css`
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
+                width: 20%;
+                max-width: 170px;
+                display: inline-block;
+                border: 1px solid ${theme.colors.grey_2}; ;
               `}
             >
-              <Typography
-                variant="subtitle2"
-                css={css`
-                  margin-top: 4px;
-                  margin-left: 4px;
-                `}
-              >
-                {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
-              </Typography>
-
-              <Button
-                css={css`
-                  white-space: nowrap;
-                  height: fit-content;
-                `}
-                variant="secondary"
-              >
-                <Icon
-                  css={css`
-                    padding-right: 4px;
-                  `}
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                />
-                {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
-              </Button>
+              <VerticalTabs>{menuItems}</VerticalTabs>
             </div>
-            {/* DataTable */}
-            <div>
-              <DataTable entityType={selectedClinicalEntityTab} program={programShortName} />
+            {/* Content */}
+            <div
+              css={css`
+                display: inline-block;
+                height: 100%;
+                width: calc(97% - 170px);
+                vertical-align: top;
+                padding: 8px 12px;
+              `}
+            >
+              {/* Header */}
+              <div
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                `}
+              >
+                <Typography
+                  variant="subtitle2"
+                  css={css`
+                    margin-top: 4px;
+                    margin-left: 4px;
+                  `}
+                >
+                  {clinicalEntityDisplayNames[currentEntity]} Data
+                </Typography>
+
+                <Button
+                  css={css`
+                    white-space: nowrap;
+                    height: fit-content;
+                    :disabled {
+                      background: #f6f6f7;
+                      color: ${theme.colors.grey_1};
+                    }
+                  `}
+                  variant="secondary"
+                  disabled={noData}
+                >
+                  <Icon
+                    css={css`
+                      padding-right: 4px;
+                    `}
+                    name="download"
+                    fill={noData ? 'grey_1' : 'accent2_dark'}
+                    height="12px"
+                  />
+                  {clinicalEntityDisplayNames[currentEntity]} Data
+                </Button>
+              </div>
+              {/* DataTable */}
+              <div>
+                <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
+              </div>
             </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      )}
     </SubmissionLayout>
   );
 }
