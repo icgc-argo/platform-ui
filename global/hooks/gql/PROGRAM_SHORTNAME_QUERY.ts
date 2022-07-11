@@ -23,7 +23,7 @@ const PROGRAM_SHORTNAME_QUERY = gql`
   query ProgramShortname($shortName: String!) {
     program(shortName: $shortName) {
       name
-      shortName
+      shortName # this is the ID
     }
   }
 `;

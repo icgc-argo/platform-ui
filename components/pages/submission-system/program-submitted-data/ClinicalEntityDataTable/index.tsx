@@ -33,7 +33,7 @@ import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA_QUERY from '../gql/CLINICAL_ENTITY_DATA_QUERY';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   aliasSortNames,
   aliasedEntityNames,

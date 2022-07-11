@@ -3,7 +3,7 @@ schema:
   - ${GATEWAY_API_ROOT}/graphql
   # local
   # - generated/gql_schema.json
-documents: [./**/*.gql, ./**/*_QUERY.ts, ./**/*_MUTATION.ts, ./**/*_FRAGMENT.ts]
+documents: [./**/gql/*.ts]
 generates:
   generated/gql_schema.json:
     plugins:

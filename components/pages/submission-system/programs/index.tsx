@@ -65,20 +65,21 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } =
     useQuery(PROGRAMS_USERS_QUERY);
 
-  if (programsWithUsers.length > 0) {
-    programs.forEach((p) => {
-      const users = get(
-        programsWithUsers.find((pp) => p.shortName == pp.shortName),
-        'users',
-        [],
-      );
-      p.administrators = filter(users, { role: 'ADMIN' });
-    });
-  }
+  const programsWithAdmins = programs.map((program) => {
+    const users = get(
+      programsWithUsers.find((pp) => program.shortName == pp.shortName),
+      'users',
+      [],
+    );
+    return {
+      ...program,
+      ...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
+    };
+  });
 
   const { egoJwt, permissions } = useAuthContext();
   const canCreate = React.useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
-  const sortedPrograms = orderBy(programs, 'name');
+  const sortedPrograms = orderBy(programsWithAdmins, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
     router.push({
@@ -130,7 +131,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
         loading={loading}
       >
         <TableActionBar>
-          {programs.length.toLocaleString()} results
+          {programsWithAdmins.length.toLocaleString()} results
           {/*   <TableFilterInput /> */}
         </TableActionBar>
         <ProgramsTable

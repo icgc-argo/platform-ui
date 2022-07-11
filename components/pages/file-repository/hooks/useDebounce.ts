@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // from https://usehooks.com/useDebounce/
-
-export default <T>(value: T, delay: number): T => {
+const useDebounce = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -17,3 +16,5 @@ export default <T>(value: T, delay: number): T => {
 
   return debouncedValue;
 };
+
+export default useDebounce;

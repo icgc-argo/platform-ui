@@ -37,6 +37,7 @@ const DASHBOARD_SUMMARY_QUERY = gql`
     }
     program(shortName: $programShortName) {
       commitmentDonors
+      shortName # this is the ID
     }
   }
 `;
