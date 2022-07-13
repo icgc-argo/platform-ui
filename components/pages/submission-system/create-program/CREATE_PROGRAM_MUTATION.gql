@@ -1,7 +1,0 @@
-#import "../SIDE_MENU_PROGRAM_FRAGMENT.gql"
-
-mutation CREATE_PROGRAM_MUTATION($program: ProgramInput!) {
-  newProgram: createProgram(program: $program) {
-    ...SideMenuProgram
-  }
-}

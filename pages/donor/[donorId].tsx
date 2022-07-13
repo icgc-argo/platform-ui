@@ -23,8 +23,8 @@ import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
-import { useQuery } from '@apollo/react-hooks';
-import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
+import { useQuery } from '@apollo/client';
+import VALID_DONOR_ENTITY_CHECK_QUERY from 'components/pages/donor-entity/gql/VALID_DONOR_ENTITY_CHECK_QUERY';
 import get from 'lodash/get';
 import { useGlobalLoadingState } from 'components/ApplicationRoot';
 import useEntityData from 'components/pages/donor-entity/useEntityData';
@@ -48,7 +48,7 @@ export default createPage({
   // small query to ensure the donorId is valid
   const { loading: profileLoading, data: profile } = useQuery<{
     donor: { hits: { total: number } };
-  }>(VALID_DONOR_ENTITY_CHECK, {
+  }>(VALID_DONOR_ENTITY_CHECK_QUERY, {
     variables: {
       filters,
     },

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import styled from '@emotion/styled';
@@ -29,9 +29,9 @@ import Icon from '@icgc-argo/uikit/Icon';
 import { css } from '@icgc-argo/uikit';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 
-import SIDE_MENU_PROGRAM_LIST from './SIDE_MENU_PROGRAM_LIST.gql';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE from './SIDE_MENU_CLINICAL_SUBMISSION_STATE.gql';
-import SIDE_MENU_SAMPLE_REGISTRATION_STATE from './SIDE_MENU_SAMPLE_REGISTRATION_STATE.gql';
+import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import { getConfig } from 'global/config';
@@ -118,14 +118,17 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-  const { data } = useQuery<ClinicalSubmissionQueryResponse>(SIDE_MENU_CLINICAL_SUBMISSION_STATE, {
-    variables: {
-      programShortName: props.program.shortName,
+  const { data } = useQuery<ClinicalSubmissionQueryResponse>(
+    SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
+    {
+      variables: {
+        programShortName: props.program.shortName,
+      },
     },
-  });
+  );
 
   const { data: clinicalData } = useQuery<SampleRegistrationQueryResponse>(
-    SIDE_MENU_SAMPLE_REGISTRATION_STATE,
+    SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY,
     {
       variables: {
         programShortName: props.program.shortName,
@@ -370,7 +373,9 @@ export default function SideMenu() {
   const pageContext = usePageContext();
   const isInProgramSection = pageContext.pathname.indexOf(PROGRAMS_LIST_PATH) === 0;
   const { activeItem, toggleItem } = useToggledSelectState(isInProgramSection ? 1 : 0);
-  const { data: { programs } = { programs: null }, loading } = useQuery(SIDE_MENU_PROGRAM_LIST);
+  const { data: { programs } = { programs: null }, loading } = useQuery(
+    SIDE_MENU_PROGRAM_LIST_QUERY,
+  );
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 

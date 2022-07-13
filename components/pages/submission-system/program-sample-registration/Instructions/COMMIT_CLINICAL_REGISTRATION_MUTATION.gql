@@ -1,3 +1,0 @@
-mutation COMMIT_CLINICAL_REGISTRATION_MUTATION($shortName: String!, $registrationId: String!) {
-  commitClinicalRegistration(shortName: $shortName, registrationId: $registrationId)
-}

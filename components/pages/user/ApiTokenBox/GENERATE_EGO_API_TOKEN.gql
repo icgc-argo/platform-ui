@@ -1,7 +1,0 @@
-mutation GENERATE_EGO_API_TOKEN {
-  generateAccessKey {
-    key
-    exp
-    error
-  }
-}

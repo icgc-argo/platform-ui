@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/react-hooks';
-import CLINICAL_SCHEMA_VERSION from './gql/CLINICAL_SCHEMA_VERSION.gql';
+import { useQuery } from '@apollo/client';
+import CLINICAL_SCHEMA_VERSION_QUERY from './gql/CLINICAL_SCHEMA_VERSION_QUERY';
 
 export const useClinicalSubmissionSchemaVersion = () => {
   return useQuery<{
     clinicalSubmissionSchemaVersion: string;
-  }>(CLINICAL_SCHEMA_VERSION);
+  }>(CLINICAL_SCHEMA_VERSION_QUERY);
 };

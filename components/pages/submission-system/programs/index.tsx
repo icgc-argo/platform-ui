@@ -29,7 +29,7 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import { Input } from '@icgc-argo/uikit/form';
@@ -40,8 +40,8 @@ import { INPUT_STATES } from '@icgc-argo/uikit/theme/defaultTheme/input';
 import Typography from '@icgc-argo/uikit/Typography';
 import SubmissionLayout from '../layout';
 import ProgramsTable from './ProgramsTable';
-import PROGRAMS_LIST_QUERY from './PROGRAMS_LIST_QUERY.gql';
-import PROGRAMS_USERS_QUERY from './PROGRAMS_USERS_QUERY.gql';
+import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import get from 'lodash/get';
 
@@ -65,20 +65,21 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } =
     useQuery(PROGRAMS_USERS_QUERY);
 
-  if (programsWithUsers.length > 0) {
-    programs.forEach((p) => {
-      const users = get(
-        programsWithUsers.find((pp) => p.shortName == pp.shortName),
-        'users',
-        [],
-      );
-      p.administrators = filter(users, { role: 'ADMIN' });
-    });
-  }
+  const programsWithAdmins = programs.map((program) => {
+    const users = get(
+      programsWithUsers.find((pp) => program.shortName == pp.shortName),
+      'users',
+      [],
+    );
+    return {
+      ...program,
+      ...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
+    };
+  });
 
   const { egoJwt, permissions } = useAuthContext();
   const canCreate = React.useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
-  const sortedPrograms = orderBy(programs, 'name');
+  const sortedPrograms = orderBy(programsWithAdmins, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
     router.push({
@@ -130,7 +131,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
         loading={loading}
       >
         <TableActionBar>
-          {programs.length.toLocaleString()} results
+          {programsWithAdmins.length.toLocaleString()} results
           {/*   <TableFilterInput /> */}
         </TableActionBar>
         <ProgramsTable

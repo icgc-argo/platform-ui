@@ -35,7 +35,7 @@ import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import ReCAPTCHA from 'react-google-recaptcha';
 import yup from 'global/utils/validations';
-import CREATE_JIRA_TICKET from './CREATE_JIRA_TICKET.gql';
+import CREATE_JIRA_TICKET_MUTATION from './gql/CREATE_JIRA_TICKET_MUTATION';
 import { firstName, lastName, email } from 'global/utils/form/validations';
 import useFormHook from 'global/hooks/useFormHook';
 import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
@@ -48,7 +48,7 @@ import {
   DOCS_DATA_DOWNLOAD_PAGE,
   DOCS_API_TOKEN_PAGE,
 } from 'global/constants/docSitePaths';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';
@@ -103,7 +103,7 @@ export default function ContactPage() {
     reCaptcha: reCaptchaError,
   } = errors as typeof contactFormSchema;
 
-  const [createTicket] = useMutation(CREATE_JIRA_TICKET);
+  const [createTicket] = useMutation(CREATE_JIRA_TICKET_MUTATION);
   const toaster = useToaster();
   const reCaptchaRef = React.useRef(null);
   const [requestLoader, setRequestLoader] = React.useState(false);

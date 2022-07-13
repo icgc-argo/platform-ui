@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
@@ -33,7 +33,7 @@ import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   aliasSortNames,
   aliasedEntityNames,
@@ -183,7 +183,7 @@ export const getEntityData = (
   pageSize: number,
   sort: string,
 ) =>
-  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
     variables: {
       programShortName: program,

@@ -1,7 +1,0 @@
-#import "./REGISTRATION_FRAGMENT.gql"
-
-mutation UPLOAD_REGISTRATION($shortName: String!, $registrationFile: Upload!) {
-  uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile) {
-    ...Registration
-  }
-}

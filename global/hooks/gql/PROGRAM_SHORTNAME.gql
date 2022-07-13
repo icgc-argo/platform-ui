@@ -1,6 +1,0 @@
-query PROGRAM_SHORTNAME($shortName: String!) {
-  program(shortName: $shortName) {
-    name
-    shortName
-  }
-}

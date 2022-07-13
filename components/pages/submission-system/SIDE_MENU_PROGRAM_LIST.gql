@@ -1,7 +1,0 @@
-#import "./SIDE_MENU_PROGRAM_FRAGMENT.gql"
-
-query SIDE_MENU_PROGRAM_LIST {
-  programs {
-    ...SideMenuProgram
-  }
-}
