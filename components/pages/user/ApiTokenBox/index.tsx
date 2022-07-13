@@ -25,8 +25,8 @@ import Link from '@icgc-argo/uikit/Link';
 import Button from '@icgc-argo/uikit/Button';
 import { Box } from '../common';
 import ClipboardCopyField from '@icgc-argo/uikit/ClipboardCopyField';
-import GENERATE_EGO_API_TOKEN from './GENERATE_EGO_API_TOKEN.gql';
-import { useMutation } from '@apollo/react-hooks';
+import GENERATE_EGO_API_TOKEN_MUTATION from './gql/GENERATE_EGO_API_TOKEN_MUTATION';
+import { useMutation } from '@apollo/client';
 import get from 'lodash/get';
 import { getConfig } from 'global/config';
 import { ApiToken } from '../types';
@@ -43,7 +43,7 @@ const ApiTokenBox = ({
 }) => {
   const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
   const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
-  const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN);
+  const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN_MUTATION);
 
   const { DOCS_URL_ROOT } = getConfig();
 

@@ -51,7 +51,7 @@ import {
 } from './common';
 import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import { SortedChangeFunction, SortingRule } from 'react-table';
+import { SortingRule, SortedChangeFunction } from 'global/types/table';
 import ContentError from 'components/placeholders/ContentError';
 import { Row } from 'react-grid-system';
 
@@ -393,6 +393,8 @@ const DonorSummaryTable = ({
     sorts: initialSorts,
   });
 
+  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
+
   const offset = pagingState.pageSize * pagingState.page;
   const first = pagingState.pageSize;
   const sorts = pagingState.sorts;
@@ -727,7 +729,6 @@ const DonorSummaryTable = ({
     },
   ];
 
-  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
   const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
   React.useEffect(() => {
     if (loading) {

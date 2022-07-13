@@ -21,7 +21,7 @@ import { css } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Container from '@icgc-argo/uikit/Container';
 import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 import Typography from '@icgc-argo/uikit/Typography';
@@ -32,7 +32,7 @@ import {
   splitIntoColumns,
   formatTableDisplayNames,
 } from '../ClinicalTimeline/util';
-import PROGRAMS_LIST_QUERY from '../../submission-system/programs/PROGRAMS_LIST_QUERY.gql';
+import PROGRAMS_LIST_QUERY from '../../submission-system/programs/gql/PROGRAMS_LIST_QUERY';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const DonorDataTable = ({ data }) => {

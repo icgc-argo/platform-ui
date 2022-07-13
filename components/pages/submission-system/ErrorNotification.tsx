@@ -17,7 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { TableProps } from 'global/types/table';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import Notification, {
@@ -29,7 +30,6 @@ import { exportToTsv } from 'global/utils/common';
 import Icon from '@icgc-argo/uikit/Icon';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
@@ -61,7 +61,7 @@ export const getDefaultColumns = (level: NotificationVariant) => {
   ];
 };
 
-export default <Error extends { [k: string]: any }>({
+const ErrorNotification = <Error extends { [k: string]: any }>({
   level,
   title,
   errors,
@@ -69,18 +69,20 @@ export default <Error extends { [k: string]: any }>({
   columnConfig,
   onClearClick,
   tsvExcludeCols = [],
+  tableProps,
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: string;
+  subtitle: ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
-      accessor: keyof Error;
+      accessor: keyof Error | string;
     }
   >;
   errors: Array<Error>;
   onClearClick?: React.ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
+  tableProps?: Partial<TableProps>;
 }) => {
   const onDownloadClick = () => {
     exportToTsv(errors, {
@@ -167,6 +169,7 @@ export default <Error extends { [k: string]: any }>({
               }))}
               data={errors}
               showPagination
+              {...tableProps}
             />
           </div>
         );
@@ -174,3 +177,5 @@ export default <Error extends { [k: string]: any }>({
     />
   );
 };
+
+export default ErrorNotification;

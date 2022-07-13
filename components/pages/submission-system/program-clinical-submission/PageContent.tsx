@@ -34,10 +34,10 @@ import {
   ClinicalSubmissionError,
 } from './types';
 import Notification, { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
-import UPLOAD_CLINICAL_SUBMISSION from './gql/UPLOAD_CLINICAL_SUBMISSION.gql';
-import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION.gql';
-import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
+import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
+import { useMutation } from '@apollo/client';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
@@ -64,6 +64,23 @@ import {
   SubmissionSystemLockedNotification,
   useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
+
+const CLINICAL_FILE_ORDER = [
+  'donor',
+  'specimen',
+  'primary_diagnosis',
+  'treatment',
+  'chemotherapy',
+  'hormone_therapy',
+  'immunotherapy',
+  'radiation',
+  'surgery',
+  'follow_up',
+  'family_history',
+  'exposure',
+  'comorbidity',
+  'biomarker',
+];
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile =
   (submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state']) =>
@@ -110,6 +127,14 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile =
     };
   };
 
+const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
+  map(
+    orderBy(dataObj.clinicalSubmissions.clinicalEntities, (e) =>
+      CLINICAL_FILE_ORDER.indexOf(e.clinicalType),
+    ),
+    gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
+  );
+
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
@@ -130,44 +155,11 @@ const PageContent = () => {
   const toaster = useToaster();
   const commonToaster = useCommonToasters();
 
-  const {
-    data,
-    loading: loadingClinicalSubmission,
-    updateQuery: updateClinicalSubmissionQuery,
-    refetch,
-  } = useClinicalSubmissionQuery(programShortName, {
-    onCompleted: () => {
-      setSelectedClinicalEntityType(defaultClinicalEntityType);
-    },
-  });
-
-  const CLINICAL_FILE_ORDER = [
-    'donor',
-    'specimen',
-    'primary_diagnosis',
-    'treatment',
-    'chemotherapy',
-    'hormone_therapy',
-    'immunotherapy',
-    'radiation',
-    'surgery',
-    'follow_up',
-    'family_history',
-    'exposure',
-    'comorbidity',
-    'biomarker',
-  ];
-
-  const fileNavigatorFiles = map(
-    orderBy(data.clinicalSubmissions.clinicalEntities, (e) =>
-      CLINICAL_FILE_ORDER.indexOf(e.clinicalType),
-    ),
-    gqlClinicalEntityToClinicalSubmissionEntityFile(data.clinicalSubmissions.state),
-  );
-
-  const defaultClinicalEntityType = React.useMemo((): string | null => {
+  const getClinicalEntityType = (dataObj?: ClinicalSubmissionQueryData) => {
+    const defaultType = null;
+    if (!dataObj) return defaultType;
     const fileToClinicalEntityType = (file: File): string =>
-      data.clinicalSubmissions.clinicalEntities
+      dataObj.clinicalSubmissions.clinicalEntities
         .map((e) => e.clinicalType)
         .find((entityType) => !!file.name.match(new RegExp(`^${entityType}.*\\.tsv`, 'i')));
 
@@ -179,44 +171,72 @@ const PageContent = () => {
         ? uniq(map(currentFileList.fileList, fileToClinicalEntityType))
         : [];
 
+    const files = getFileNavigatorFiles(dataObj);
+
     const fileToFocusOn = head(
-      orderBy(fileNavigatorFiles, (file) => {
+      orderBy(files, (file) => {
         const wereFilesUploaded = lastUploadedEntityTypes.length > 0;
         const applyPriorityRule = wereFilesUploaded
           ? lastUploadedEntityTypes.includes(file.clinicalType)
           : true;
         switch (file.status) {
           case 'ERROR':
-            return applyPriorityRule ? 0 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 0 : files.length;
           case 'UPDATE':
-            return applyPriorityRule ? 1 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 1 : files.length;
           case 'WARNING':
-            return applyPriorityRule ? 2 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 2 : files.length;
           case 'SUCCESS':
-            return applyPriorityRule ? 3 : fileNavigatorFiles.length;
+            return applyPriorityRule ? 3 : files.length;
           case 'NONE':
-            return fileNavigatorFiles.length;
+            return files.length;
           default:
-            return fileNavigatorFiles.length;
+            return files.length;
         }
       }),
     );
-    return fileNavigatorFiles.length ? fileToFocusOn.clinicalType : null;
-  }, [data]);
+    return files.length ? fileToFocusOn.clinicalType : defaultType;
+  };
+
+  const [tabFromData, setTabFromData] = React.useState<string | null>(null);
 
   const [selectedClinicalEntityType, setSelectedClinicalEntityType] = useUrlParamState(
     'tab',
-    defaultClinicalEntityType,
+    getClinicalEntityType(),
     {
       serialize: (v) => v,
       deSerialize: (v) => v,
     },
   );
 
+  React.useEffect(() => {
+    // using setSelectedClinicalEntityType in useClinicalSubmissionQuery onCompleted callback
+    // causes an infinite loop
+    setSelectedClinicalEntityType(tabFromData);
+  }, [tabFromData]);
+
+  const {
+    data,
+    loading: loadingClinicalSubmission,
+    updateQuery: updateClinicalSubmissionQuery,
+    refetch,
+  } = useClinicalSubmissionQuery(programShortName, {
+    onCompleted: (result) => {
+      const nextClinicalEntityType = getClinicalEntityType(result);
+      setTabFromData(nextClinicalEntityType);
+    },
+  });
+
+  const fileNavigatorFiles = getFileNavigatorFiles(data);
+
+  const defaultClinicalEntityType = React.useMemo((): string | null => {
+    return getClinicalEntityType(data);
+  }, [data]);
+
   const [uploadClinicalSubmission] = useMutation<
     ClinicalSubmissionQueryData,
     UploadFilesMutationVariables
-  >(UPLOAD_CLINICAL_SUBMISSION, {
+  >(UPLOAD_CLINICAL_SUBMISSION_MUTATION, {
     onCompleted: () => {
       setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
@@ -569,7 +589,7 @@ const PageContent = () => {
             submissionState={data.clinicalSubmissions.state}
             clearDataError={handleClearSchemaError}
             fileStates={fileNavigatorFiles}
-            selectedClinicalEntityType={selectedClinicalEntityType}
+            selectedClinicalEntityType={selectedClinicalEntityType || tabFromData}
             onFileSelect={setSelectedClinicalEntityType}
             submissionVersion={data.clinicalSubmissions.version}
             programShortName={programShortName}

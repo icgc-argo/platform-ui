@@ -19,7 +19,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Row, setConfiguration } from 'react-grid-system';
 
 import { getConfig } from 'global/config';
@@ -36,12 +36,13 @@ import TitleBar from '@icgc-argo/uikit/TitleBar';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
-import SUBMITTED_DATA_SIDE_MENU from './SUBMITTED_DATA_SIDE_MENU.gql';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
-  aliasEntityNames,
+  aliasedEntityNames,
   ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
+  reverseLookUpEntityAlias,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
@@ -67,7 +68,7 @@ export default function ProgramSubmittedData() {
 
   const { data: sideMenuQuery, loading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU, {
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName,
@@ -78,14 +79,13 @@ export default function ProgramSubmittedData() {
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
   const noData = sideMenuData.clinicalEntities.length === 0;
-
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
-      active={selectedClinicalEntityTab === entity}
-      onClick={(e) => setSelectedClinicalEntityTab(entity)}
+      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
       disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasEntityNames[entity])
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
       }
     >
       {clinicalEntityDisplayNames[entity]}
@@ -94,6 +94,8 @@ export default function ProgramSubmittedData() {
       )}
     </VerticalTabs.Item>
   ));
+
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   return (
     <SubmissionLayout
@@ -180,7 +182,7 @@ export default function ProgramSubmittedData() {
                     margin-left: 4px;
                   `}
                 >
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                  {clinicalEntityDisplayNames[currentEntity]} Data
                 </Typography>
 
                 <Button
@@ -203,15 +205,12 @@ export default function ProgramSubmittedData() {
                     fill={noData ? 'grey_1' : 'accent2_dark'}
                     height="12px"
                   />
-                  {clinicalEntityDisplayNames[selectedClinicalEntityTab]} Data
+                  {clinicalEntityDisplayNames[currentEntity]} Data
                 </Button>
               </div>
               {/* DataTable */}
               <div>
-                <ClinicalEntityDataTable
-                  entityType={selectedClinicalEntityTab}
-                  program={programShortName}
-                />
+                <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
               </div>
             </div>
           </div>
