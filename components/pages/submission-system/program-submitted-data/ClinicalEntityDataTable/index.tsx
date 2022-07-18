@@ -283,6 +283,18 @@ const ClinicalEntityDataTable = ({
     };
   });
 
+  const sortEntityData = (prev, next) => {
+    const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']);
+    const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']);
+
+    if (errorsA && errorsB) {
+      return 0;
+    } else if (errorsA && !errorsB) {
+      // Sort Data w/ Errors First
+      return -1;
+    } else return 1;
+  };
+
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
@@ -299,7 +311,6 @@ const ClinicalEntityDataTable = ({
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
     totalDocs = entityData.totalDocs;
-
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
@@ -309,26 +320,27 @@ const ClinicalEntityDataTable = ({
       columns.splice(1, 0, ...Object.values(completionColumnHeaders));
     }
 
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '--';
-        if (completionStats && r.name === 'donor_id') {
-          const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-            emptyCompletion;
+    records = entityData.records
+      .map((record) => {
+        let clinicalRecord = {};
+        record.forEach((r) => {
+          clinicalRecord[r.name] = r.value || '--';
+          if (completionStats && r.name === 'donor_id') {
+            const completion =
+              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+              emptyCompletion;
+            CoreCompletionFields.forEach((field) => {
+              const completionField = completionColumnHeaders[field];
+              clinicalRecord[completionField] = completion[field] || 0;
+            });
 
-          CoreCompletionFields.forEach((field) => {
-            const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] || 0;
-          });
+            clinicalRecord = { ...clinicalRecord, ...completion };
+          }
+        });
 
-          clinicalRecord = { ...clinicalRecord, ...completion };
-        }
-      });
-
-      return clinicalRecord;
-    });
+        return clinicalRecord;
+      })
+      .sort(sortEntityData);
   }
 
   const getHeaderBorder = (key) =>
@@ -504,6 +516,7 @@ const ClinicalEntityDataTable = ({
         page={page}
         pages={tablePages}
         pageSize={pageSize}
+        defaultSortMethod={sortEntityData}
         sorted={sorted}
         getTdProps={getCellStyles}
         columns={columns}
