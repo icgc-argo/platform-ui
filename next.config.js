@@ -37,10 +37,9 @@ module.exports = withPlugins([withTM, withImages], {
         }
       : defaultPathMap,
   webpack: (config, options) => {
-    // Fixes npm packages that depend on `fs` module
-    config.node = {
-      fs: 'empty',
-    };
+    if (!options.isServer) {
+      config.resolve.fallback.fs = false;
+    }
     config.resolve.modules.push(path.resolve('./'));
     config.resolve.alias = {
       ...config.resolve.alias,
