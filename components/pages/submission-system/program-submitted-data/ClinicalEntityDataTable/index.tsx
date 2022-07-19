@@ -443,9 +443,8 @@ const ClinicalEntityDataTable = ({
 
   const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
-  const tablePages = Math.ceil(totalDocs / pageSize);
-
-  const errorPages = Math.ceil(totalErrors / errorPageSize);
+  const numTablePages = Math.ceil(totalDocs / pageSize);
+  const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
     <DnaLoader />
@@ -471,7 +470,7 @@ const ClinicalEntityDataTable = ({
             columnConfig={errorColumns}
             tableProps={{
               page: errorPage,
-              pages: errorPages,
+              pages: numErrorPages,
               pageSize: errorPageSize,
               sorted: errorSorted,
               onPageChange: (value) => updatePageSettings('page', value),
@@ -502,7 +501,7 @@ const ClinicalEntityDataTable = ({
         parentRef={containerRef}
         showPagination={true}
         page={page}
-        pages={tablePages}
+        pages={numTablePages}
         pageSize={pageSize}
         sorted={sorted}
         getTdProps={getCellStyles}
