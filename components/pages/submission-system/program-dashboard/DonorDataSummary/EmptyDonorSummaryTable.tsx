@@ -21,9 +21,6 @@ import Typography from '@icgc-argo/uikit/Typography';
 import Link from '@icgc-argo/uikit/Link';
 import styled from '@emotion/styled';
 import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
-import PicBeakers from 'static/register.svg';
-import PicHeart from 'static/clinical.svg';
-import PicDna from 'static/dna.svg';
 import { css } from '@emotion/core';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
@@ -50,9 +47,9 @@ const EmptyDonorSummaryState = () => {
           max-height: 100%;
         `}
       >
-        <NoDataIcon alt="no data found" src={PicBeakers} />
-        <NoDataIcon alt="no data found" src={PicHeart} />
-        <NoDataIcon alt="no data found" src={PicDna} />
+        <NoDataIcon alt="no data found" src="/static/register.svg" />
+        <NoDataIcon alt="no data found" src="/static/clinical.svg" />
+        <NoDataIcon alt="no data found" src="/static/dna.svg" />
       </div>
     </ContentPlaceholder>
   );

@@ -53,7 +53,7 @@ export default function Error500Page() {
                 margin: 0 8px -2px;
               `}
               alt="Logo mark"
-              src={logoMark}
+              src="/static/logomark.svg"
             />
             0
           </Typography>
@@ -80,7 +80,7 @@ export default function Error500Page() {
             text-align: center;
           `}
         >
-          <img alt="Broken dna" src={image} />
+          <img alt="Broken dna" src="/static/dna-broken.svg" />
         </Col>
       </Row>
     </ErrorLayout>

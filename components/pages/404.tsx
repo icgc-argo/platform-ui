@@ -25,8 +25,6 @@ import HyperLink from '@icgc-argo/uikit/Link';
 import { getConfig } from 'global/config';
 import Link from 'next/link';
 import { Row, Col } from 'react-grid-system';
-import image from 'static/dna-broken.svg';
-import logoMark from 'static/logomark.svg';
 
 export default function Error404Page() {
   const { DOCS_URL_ROOT } = getConfig();
@@ -53,7 +51,7 @@ export default function Error404Page() {
                 margin: 0 8px -2px;
               `}
               alt="Logo mark"
-              src={logoMark}
+              src="/static/logomark.svg"
             />
             4
           </Typography>
@@ -82,7 +80,7 @@ export default function Error404Page() {
             text-align: center;
           `}
         >
-          <img alt="Broken dna" src={image} />
+          <img alt="Broken dna" src="/static/dna-broken.svg" />
         </Col>
       </Row>
     </ErrorLayout>

@@ -29,7 +29,6 @@ import Link from '@icgc-argo/uikit/Link';
 import Button from '@icgc-argo/uikit/Button';
 import Container from '@icgc-argo/uikit/Container';
 import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
-import scientistImage from 'static/icgc-data-scientist-wide.jpg';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
 
@@ -249,7 +248,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
                   rgba(21, 28, 61, 0.33) 66%,
                   rgba(21, 28, 61, 1) 100%
                 ),
-                url(${scientistImage});
+                url('/static/icgc-data-scientist-wide.jpg');
               background-size: cover;
               width: 100%;
               min-height: 210px;

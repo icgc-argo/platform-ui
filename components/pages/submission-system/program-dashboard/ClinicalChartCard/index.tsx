@@ -67,7 +67,7 @@ const ClinicalChartCard = ({ chartType, comingSoonLink, title }: CardProps) => {
         `}
       >
         <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
-          <img alt="Coming Soon." src={PicClipboard} />
+          <img alt="Coming Soon." src="/static/clipboard.svg" />
         </ContentPlaceholder>
       </div>
     </DashboardCard>
