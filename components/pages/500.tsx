@@ -25,8 +25,6 @@ import HyperLink from '@icgc-argo/uikit/Link';
 import { getConfig } from 'global/config';
 import Link from 'next/link';
 import { Row, Col } from 'react-grid-system';
-import image from 'static/dna-broken.svg';
-import logoMark from 'static/logomark.svg';
 
 export default function Error500Page() {
   const { DOCS_URL_ROOT } = getConfig();
