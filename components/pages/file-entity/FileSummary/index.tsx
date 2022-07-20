@@ -63,8 +63,8 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
           align-items: center;
         `}
       >
-        <React.Fragment>{getAccessIcon(data.access)}</React.Fragment>
-        <React.Fragment> {startCase(data.access)}</React.Fragment>
+        <>{getAccessIcon(data.access)}</>
+        <> {startCase(data.access)}</>
       </div>
     ),
     Program: (

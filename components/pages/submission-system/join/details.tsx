@@ -140,7 +140,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
         notFound={notFound}
       >
         {incorrectEmail ? (
-          <React.Fragment>
+          <>
             <Banner
               title={'Incorrect email address'}
               variant={BANNER_VARIANTS.ERROR}
@@ -162,9 +162,9 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
                 redirectPath={fullDetailsRedirect}
               />
             </div>
-          </React.Fragment>
+          </>
         ) : (
-          <React.Fragment>
+          <>
             <Typography variant="subtitle2" as="h2">
               Hello {get(joinProgramInvite, 'user.firstName')}{' '}
               {get(joinProgramInvite, 'user.lastName')}
@@ -182,7 +182,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
               userRole={get(joinProgramInvite, 'user.role')}
               institutions={institutions}
             />
-          </React.Fragment>
+          </>
         )}
       </JoinProgramLayout>
     </MinimalLayout>

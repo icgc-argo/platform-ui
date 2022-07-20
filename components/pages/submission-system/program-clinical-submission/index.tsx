@@ -82,7 +82,7 @@ export default function ProgramClinicalSubmission() {
   const isPendingApproval = data.clinicalSubmissions.state === 'PENDING_APPROVAL';
 
   return (
-    <React.Fragment>
+    <>
       <SubmissionLayout
         subtitle={`${programShortName} Clinical Submission`}
         ContentHeaderComponent={styled(ContentHeader)`
@@ -99,6 +99,6 @@ export default function ProgramClinicalSubmission() {
       >
         <PageContent />
       </SubmissionLayout>
-    </React.Fragment>
+    </>
   );
 }

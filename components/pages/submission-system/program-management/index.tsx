@@ -45,7 +45,7 @@ const ProgramManagement = () => {
           `}
         >
           <TitleBar>
-            <React.Fragment>{programShortName}</React.Fragment>
+            <>{programShortName}</>
             <Row nogutter align="center">
               <div
                 css={css`

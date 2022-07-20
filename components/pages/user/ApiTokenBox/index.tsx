@@ -163,7 +163,7 @@ const ApiTokenBox = ({
           variant={BANNER_VARIANTS.WARNING}
           content={
             hasTokenAccess ? (
-              <React.Fragment>
+              <>
                 <span>
                   &#8226; Your API token is associated with your user credentials and should{' '}
                   <strong>NEVER</strong> be shared with anyone.
@@ -172,9 +172,9 @@ const ApiTokenBox = ({
                 <span>
                   &#8226; When you generate a new token, all previous tokens become invalid.
                 </span>
-              </React.Fragment>
+              </>
             ) : (
-              <React.Fragment>
+              <>
                 <span>
                   You do not have permission to generate an API token to download controlled data.
                   Learn more about{' '}
@@ -182,7 +182,7 @@ const ApiTokenBox = ({
                     how to apply for access to ICGC Controlled Data.
                   </Link>
                 </span>
-              </React.Fragment>
+              </>
             )
           }
         />

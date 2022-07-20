@@ -91,10 +91,10 @@ function Instructions({
     });
 
   return (
-    <React.Fragment>
+    <>
       <InstructionBox
         steps={[
-          <React.Fragment>
+          <>
             <Typography variant="data" component="span">
               1. Download the registration template and format it using{' '}
               <Link target="_blank" href={DOCS_DICTIONARY_PAGE} bold>
@@ -120,8 +120,8 @@ function Instructions({
                 File Template
               </span>
             </Button>
-          </React.Fragment>,
-          <React.Fragment>
+          </>,
+          <>
             <Typography variant="data" component="span">
               2. Upload your formatted registration TSV file.
             </Typography>
@@ -147,8 +147,8 @@ function Instructions({
                 Upload File
               </span>
             </FileSelectButton>
-          </React.Fragment>,
-          <React.Fragment>
+          </>,
+          <>
             <Typography variant="data" component="span">
               3. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
@@ -162,7 +162,7 @@ function Instructions({
             >
               Register Samples
             </Button>
-          </React.Fragment>,
+          </>,
         ]}
         footer={
           <div css={footerContentStyle}>
@@ -183,7 +183,7 @@ function Instructions({
           registrationId={registrationId}
         />
       )}
-    </React.Fragment>
+    </>
   );
 }
 

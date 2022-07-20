@@ -101,11 +101,7 @@ const CreateProgramPage = () => {
       toaster.addToast({
         title: '',
         variant: TOAST_VARIANTS.SUCCESS,
-        content: (
-          <React.Fragment>
-            The program: {<strong>{data.programName}</strong>} has been created
-          </React.Fragment>
-        ),
+        content: <>The program: {<strong>{data.programName}</strong>} has been created</>,
         onInteraction: (event) => {
           if (event.type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
             router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, data.shortName));
@@ -140,7 +136,7 @@ const CreateProgramPage = () => {
           `}
         >
           <TitleBar>
-            <React.Fragment>Create a Program</React.Fragment>
+            <>Create a Program</>
           </TitleBar>
         </div>
       }

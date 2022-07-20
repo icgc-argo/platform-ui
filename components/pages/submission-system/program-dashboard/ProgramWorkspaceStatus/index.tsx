@@ -44,7 +44,7 @@ const ConditionalLink: React.ComponentType<{
       <Hyperlink {...hyperlink}>{children}</Hyperlink>
     </Link>
   ) : (
-    <React.Fragment>{children}</React.Fragment>
+    <>{children}</>
   );
 };
 

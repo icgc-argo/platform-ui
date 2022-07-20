@@ -48,10 +48,10 @@ const SubmissionSummaryTable = ({
 
   const newDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
-      <React.Fragment>
+      <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.NEW} />
         New
-      </React.Fragment>
+      </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
       (acc, entity) => ({
@@ -64,10 +64,10 @@ const SubmissionSummaryTable = ({
 
   const updatedDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
-      <React.Fragment>
+      <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
         Updated
-      </React.Fragment>
+      </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
       (acc, entity) => ({

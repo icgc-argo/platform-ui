@@ -91,7 +91,7 @@ const SearchResultsMenu = ({
     }
 
     return (
-      <React.Fragment>
+      <>
         <ResultsDropdown>
           {searchData.map(({ resultId, secondaryText, subText }, i) => (
             <div
@@ -115,10 +115,10 @@ const SearchResultsMenu = ({
                   font-weight: 500;
                 `}
               >
-                <React.Fragment>
+                <>
                   <span style={{ fontWeight: 700 }}>{resultId} </span>
                   {`(${secondaryText})`}
-                </React.Fragment>
+                </>
               </ListItem>
               <ListItem
                 css={css`
@@ -131,7 +131,7 @@ const SearchResultsMenu = ({
             </div>
           ))}
         </ResultsDropdown>
-      </React.Fragment>
+      </>
     );
   }
 };

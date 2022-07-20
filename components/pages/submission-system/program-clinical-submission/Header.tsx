@@ -178,7 +178,7 @@ const Header = ({
   };
 
   return (
-    <React.Fragment>
+    <>
       {isModalShown && (
         <ModalPortal>
           <Modal {...modalProps} />
@@ -194,7 +194,7 @@ const Header = ({
         `}
       >
         <TitleBar>
-          <React.Fragment>{programShortName}</React.Fragment>
+          <>{programShortName}</>
           <Row nogutter align="center">
             <div
               css={css`
@@ -221,7 +221,7 @@ const Header = ({
             </Button>
           )}
           {!isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button
                 id="button-clear-submission" // For Selenium
                 variant="text"
@@ -246,18 +246,18 @@ const Header = ({
               >
                 HELP
               </Link>
-            </React.Fragment>
+            </>
           )}
           {isDcc && isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
                 approve
               </Button>
-            </React.Fragment>
+            </>
           )}
         </Row>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
