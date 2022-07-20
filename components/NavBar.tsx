@@ -294,7 +294,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                         ))}
                       </DropdownMenu>
                     ) : (
-                      <></>
+                      <React.Fragment></React.Fragment>
                     )
                   }
                 >

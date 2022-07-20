@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
 import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
@@ -62,8 +63,8 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
           align-items: center;
         `}
       >
-        <>{getAccessIcon(data.access)}</>
-        <> {startCase(data.access)}</>
+        <React.Fragment>{getAccessIcon(data.access)}</React.Fragment>
+        <React.Fragment> {startCase(data.access)}</React.Fragment>
       </div>
     ),
     Program: (

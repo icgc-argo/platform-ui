@@ -110,7 +110,7 @@ export default function ProgramSubmittedData() {
           `}
         >
           <TitleBar>
-            <>{programShortName}</>
+            <React.Fragment>{programShortName}</React.Fragment>
             <Row nogutter align="center">
               <div
                 css={css`

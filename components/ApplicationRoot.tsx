@@ -233,7 +233,7 @@ export default function ApplicationRoot({
   initialPermissions: string[];
 }) {
   return (
-    <>
+    <React.Fragment>
       <style>
         {`
             body {
@@ -290,6 +290,6 @@ export default function ApplicationRoot({
           </PageContext.Provider>
         </ApolloClientProvider>
       </AuthProvider>
-    </>
+    </React.Fragment>
   );
 }

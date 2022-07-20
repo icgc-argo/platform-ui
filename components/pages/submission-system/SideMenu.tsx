@@ -192,7 +192,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         />
       </Link>
       {canSeeCollaboratorView && (
-        <>
+        <React.Fragment>
           <Link
             prefetch
             as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
@@ -285,7 +285,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               />
             </Link>
           )}
-        </>
+        </React.Fragment>
       )}
       {canWriteToProgram && (
         <Link
@@ -324,7 +324,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
   }, [egoJwt]);
 
   return (
-    <>
+    <React.Fragment>
       <MenuItem
         level={1}
         selected
@@ -365,7 +365,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         </MenuItem>
       ))}
-    </>
+    </React.Fragment>
   );
 };
 
@@ -404,7 +404,7 @@ export default function SideMenu() {
           </MenuItem>
         )
       ) : (
-        <>
+        <React.Fragment>
           {canSeeDcc && (
             <Link href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
@@ -422,7 +422,7 @@ export default function SideMenu() {
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
           </MenuItem>
-        </>
+        </React.Fragment>
       )}
     </Submenu>
   );

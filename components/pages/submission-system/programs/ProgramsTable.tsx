@@ -158,7 +158,11 @@ export default function ProgramsTable(tableProps: {
           </A>
         ));
 
-        const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;
+        const cellContent = tableProps.loadingUser ? (
+          <React.Fragment>Loading</React.Fragment>
+        ) : (
+          adminLinks
+        );
 
         return <FormattedCell cellInfo={original}>{cellContent}</FormattedCell>;
       },

@@ -178,7 +178,7 @@ const Header = ({
   };
 
   return (
-    <>
+    <React.Fragment>
       {isModalShown && (
         <ModalPortal>
           <Modal {...modalProps} />
@@ -194,7 +194,7 @@ const Header = ({
         `}
       >
         <TitleBar>
-          <>{programShortName}</>
+          <React.Fragment>{programShortName}</React.Fragment>
           <Row nogutter align="center">
             <div
               css={css`
@@ -249,15 +249,15 @@ const Header = ({
             </React.Fragment>
           )}
           {isDcc && isPendingApproval && (
-            <>
+            <React.Fragment>
               <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
                 approve
               </Button>
-            </>
+            </React.Fragment>
           )}
         </Row>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 
