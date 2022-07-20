@@ -284,30 +284,12 @@ const ClinicalEntityDataTable = ({
   });
 
   const sortEntityData = (prev, next) => {
-    // Sort Data w/ Errors First, Followed by Low CompletionStats
-    // > 0	Sort a before b
-    // < 0	Sort b before a
-    // === 0	No Change
+    // Sort Data w/ Errors First
+    // > 0	Sort a before b, < 0 Sort b before a,  === 0 No Change
     const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
     const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
 
-    const completionA =
-      entityType === 'donor'
-        ? Object.values(completionColumnHeaders)
-            .map((header) => prev[header])
-            .reduce((count, next) => count + next, 0)
-        : 0;
-
-    const completionB =
-      entityType === 'donor'
-        ? Object.values(completionColumnHeaders)
-            .map((header) => next[header])
-            .reduce((count, next) => count - next, 0)
-        : 0;
-    console.log('completionA', completionA);
-    console.log('completionB', completionB);
-    const sort = errorsA + errorsB + completionA + completionB;
-    console.log('sort', sort);
+    const sort = errorsA + errorsB;
 
     return sort;
   };
