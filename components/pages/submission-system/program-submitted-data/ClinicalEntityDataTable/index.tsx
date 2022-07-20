@@ -285,12 +285,9 @@ const ClinicalEntityDataTable = ({
 
   const sortEntityData = (prev, next) => {
     // Sort Data w/ Errors First
-    // > 0	Sort a before b, < 0 Sort b before a,  === 0 No Change
     const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
     const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
-
     const sort = errorsA + errorsB;
-
     return sort;
   };
 
