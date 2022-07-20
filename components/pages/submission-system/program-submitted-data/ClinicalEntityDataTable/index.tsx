@@ -288,8 +288,8 @@ const ClinicalEntityDataTable = ({
     // > 0	Sort a before b
     // < 0	Sort b before a
     // === 0	No Change
-    const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? 1 : 0;
-    const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? -1 : 0;
+    const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
+    const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
 
     const completionA =
       entityType === 'donor'
@@ -304,8 +304,10 @@ const ClinicalEntityDataTable = ({
             .map((header) => next[header])
             .reduce((count, next) => count - next, 0)
         : 0;
-
+    console.log('completionA', completionA);
+    console.log('completionB', completionB);
     const sort = errorsA + errorsB + completionA + completionB;
+    console.log('sort', sort);
 
     return sort;
   };
