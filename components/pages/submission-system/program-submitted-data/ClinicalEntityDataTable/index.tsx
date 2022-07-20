@@ -284,10 +284,27 @@ const ClinicalEntityDataTable = ({
   });
 
   const sortEntityData = (prev, next) => {
-    // Sort Data w/ Errors First
-    const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
-    const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
-    const sort = errorsA + errorsB;
+    let sort = 0;
+    if (entityType === 'donor') {
+      // Donor tab sorts Clinically Incomplete donors to top
+      const completionA = Object.values(completionColumnHeaders)
+        .map((header) => prev[header])
+        .reduce((count, next) => count + next, 0);
+
+      const completionB = Object.values(completionColumnHeaders)
+        .map((header) => next[header])
+        .reduce((count, next) => count - next, 0);
+
+      sort += completionA + completionB;
+    }
+
+    if (hasErrors) {
+      // If Current Entity has Errors, Prioritize Data w/ Errors
+      const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
+      const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
+      sort += errorsA + errorsB;
+    }
+
     return sort;
   };
 
