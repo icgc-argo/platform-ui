@@ -239,7 +239,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             disableLogoLink ? (
               <div {...props} />
             ) : (
-              <Link prefetch href={`/`}>
+              <Link href={`/`}>
                 <a {...props} id="home-login" />
               </Link>
             )
