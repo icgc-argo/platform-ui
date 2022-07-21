@@ -34,7 +34,6 @@
     "color": "^4.2.3",
     "date-fns": "^2.28.0",
     "dotenv": "^7.0.0",
-    "dotenv-webpack": "^1.7.0",
     "element-resize-detector": "^1.2.4",
     "emotion-theming": "^10.0.10",
     "express": "^4.18.1",
