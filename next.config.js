@@ -23,7 +23,6 @@ const urlJoin = require('url-join');
 
 const withImages = require('next-images');
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
@@ -37,24 +36,26 @@ module.exports = withPlugins([withTM, withImages], {
         }
       : defaultPathMap,
   webpack: (config, options) => {
-    if (!options.isServer) {
-      config.resolve.fallback.fs = false;
-    }
+    // allows absolute imports from components, global, pages, etc
     config.resolve.modules.push(path.resolve('./'));
+
     config.resolve.alias = {
       ...config.resolve.alias,
-      // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly. It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
+      // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly.
+      // It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
       'asn1.js': urlJoin(__dirname, '/node_modules/asn1.js/lib/asn1.js'),
     };
 
     // These 'react' related configs are added to enable linking packages in development
     // (e.g. UIKit), and not get the "broken Hooks" warning.
     // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
+    // start react configs
     if (options.isServer) {
       config.externals = ['react', ...config.externals];
     }
 
     config.resolve.alias['react'] = path.resolve(__dirname, '.', 'node_modules', 'react');
+    // end react configs
 
     return config;
   },
