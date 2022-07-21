@@ -284,7 +284,7 @@ const ClinicalEntityDataTable = ({
   });
 
   const sortEntityData = (prev, next) => {
-    let sort = 0;
+    let sortVal = 0;
     if (entityType === 'donor') {
       // Donor tab sorts Clinically Incomplete donors to top
       const completionA = Object.values(completionColumnHeaders)
@@ -295,17 +295,23 @@ const ClinicalEntityDataTable = ({
         .map((header) => next[header])
         .reduce((count, next) => count - next, 0);
 
-      sort += completionA + completionB;
+      sortVal += completionA + completionB;
     }
 
     if (hasErrors) {
       // If Current Entity has Errors, Prioritize Data w/ Errors
       const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
       const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
-      sort += errorsA + errorsB;
+      sortVal += errorsA + errorsB;
     }
 
-    return sort;
+    if (!sort.includes('donorId')) {
+      const sortKey = sort.includes('-') ? sort.slice(1) : sort;
+      const polarity = sort.includes('-') ? -1 : 1;
+      sortVal += prev[sortKey] > next[sortKey] ? polarity : -1 * polarity;
+    }
+
+    return sortVal;
   };
 
   // Map Completion Stats + Entity Data
