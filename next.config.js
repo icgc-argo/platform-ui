@@ -46,14 +46,6 @@ module.exports = withPlugins([withTM, withImages], {
       // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly. It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
       'asn1.js': urlJoin(__dirname, '/node_modules/asn1.js/lib/asn1.js'),
     };
-    config.module.rules = [
-      ...config.module.rules,
-      {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader',
-      },
-    ];
 
     // These 'react' related configs are added to enable linking packages in development
     // (e.g. UIKit), and not get the "broken Hooks" warning.
