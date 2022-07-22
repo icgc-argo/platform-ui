@@ -36,7 +36,8 @@ module.exports = withPlugins([withTM, withImages], {
         }
       : defaultPathMap,
   webpack: (config, options) => {
-    // allows absolute imports from components, global, pages, etc
+    // allows absolute imports from top level folders (components, pages, global)
+    // breaks the default import behavior for the public folder
     config.resolve.modules.push(path.resolve('./'));
 
     config.resolve.alias = {
