@@ -40,6 +40,9 @@ module.exports = withPlugins([withTM, withImages], {
     // breaks the default import behavior for the public folder
     config.resolve.modules.push(path.resolve('./'));
 
+    // restore default public folder imports
+    config.resolve.alias['images'] = path.join(__dirname, 'public', 'images');
+
     config.resolve.alias = {
       ...config.resolve.alias,
       // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly.
