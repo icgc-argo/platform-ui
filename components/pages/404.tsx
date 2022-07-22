@@ -25,8 +25,8 @@ import HyperLink from '@icgc-argo/uikit/Link';
 import { getConfig } from 'global/config';
 import Link from 'next/link';
 import { Row, Col } from 'react-grid-system';
-import dnaBrokenImage from 'assets/images/dna-broken.svg';
-import logoMarkImage from 'assets/images/logomark.svg';
+import dnaBrokenImage from 'images/dna-broken.svg';
+import logoMarkImage from 'images/logomark.svg';
 import Image from 'next/image';
 
 export default function Error404Page() {
