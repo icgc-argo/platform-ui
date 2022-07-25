@@ -294,6 +294,7 @@ const ClinicalEntityDataTable = ({
       sortVal += errorsA + errorsB;
     }
 
+    // Handles Sorting by Core Completion columns
     const completionColumns = Object.values(aliasSortNames);
     const completionSortIndex = completionColumns.indexOf(sortKey);
 
@@ -322,10 +323,8 @@ const ClinicalEntityDataTable = ({
       (entity) => entity.entityName === aliasedEntityNames[entityType],
     );
     columns = [...entityData.entityFields];
-    console.log('entityData', entityData);
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    console.log('completionStats', completionStats);
 
     totalDocs = entityData.totalDocs;
     entityData.records.forEach((record) => {
