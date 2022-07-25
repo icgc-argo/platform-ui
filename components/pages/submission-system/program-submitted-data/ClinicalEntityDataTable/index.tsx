@@ -216,7 +216,8 @@ const ClinicalEntityDataTable = ({
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
-  const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
+  const sortKey = aliasSortNames[id] || id;
+  const sort = `${desc ? '-' : ''}${sortKey}`;
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
@@ -293,6 +294,19 @@ const ClinicalEntityDataTable = ({
       sortVal += errorsA + errorsB;
     }
 
+    const completionColumns = Object.values(aliasSortNames);
+    const completionSortIndex = completionColumns.indexOf(sortKey);
+
+    if (completionSortIndex) {
+      const columnNames = Object.keys(aliasSortNames);
+      const completionSortKey = columnNames[completionSortIndex];
+      const completionA = prev[completionSortKey];
+      const completionB = next[completionSortKey];
+
+      sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+      sortVal *= desc ? -1 : 1;
+    }
+
     return sortVal;
   };
 
@@ -308,8 +322,10 @@ const ClinicalEntityDataTable = ({
       (entity) => entity.entityName === aliasedEntityNames[entityType],
     );
     columns = [...entityData.entityFields];
+    console.log('entityData', entityData);
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
+    console.log('completionStats', completionStats);
 
     totalDocs = entityData.totalDocs;
     entityData.records.forEach((record) => {
