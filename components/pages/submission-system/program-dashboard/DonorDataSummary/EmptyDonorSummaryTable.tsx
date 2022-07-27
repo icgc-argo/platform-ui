@@ -24,6 +24,10 @@ import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import { css } from '@emotion/core';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
+import registerIcon from 'images/register.svg';
+import clinicalIcon from 'images/clinical.svg';
+import dnaIcon from 'images/dna.svg';
+
 const EmptyDonorSummaryState = () => {
   const getStartedLink = (
     <Typography variant="data" component="span">
@@ -47,9 +51,9 @@ const EmptyDonorSummaryState = () => {
           max-height: 100%;
         `}
       >
-        <NoDataIcon alt="no data found" src="/static/register.svg" />
-        <NoDataIcon alt="no data found" src="/static/clinical.svg" />
-        <NoDataIcon alt="no data found" src="/static/dna.svg" />
+        <NoDataIcon alt="no data found" src={registerIcon} />
+        <NoDataIcon alt="no data found" src={clinicalIcon} />
+        <NoDataIcon alt="no data found" src={dnaIcon} />
       </div>
     </ContentPlaceholder>
   );
