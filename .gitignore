@@ -60,6 +60,7 @@ typings/
 # next.js build output
 .next
 out/
+# next-env.d.ts
 
 # Testing
 test_reports
