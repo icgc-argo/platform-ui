@@ -107,6 +107,8 @@ const NoDataCell = () => (
   </Container>
 );
 
+const completionColumns = Object.values(aliasSortNames);
+
 const emptyCompletion = {
   DO: 0,
   PD: 0,
@@ -289,13 +291,23 @@ const ClinicalEntityDataTable = ({
 
     if (hasErrors) {
       // If Current Entity has Errors, Prioritize Data w/ Errors
-      const errorsA = clinicalErrors.find((error) => error.donorId == prev['donor_id']) ? -1 : 0;
-      const errorsB = clinicalErrors.find((error) => error.donorId == next['donor_id']) ? 1 : 0;
+      const { errorsA, errorsB } = clinicalErrors.reduce(
+        (acc, current) => {
+          if (current.donorId == prev['donor_id']) {
+            acc.errorsA = -1;
+          }
+          if (current.donorId == next['donor_id']) {
+            acc.errorsB = 1;
+          }
+          return acc;
+        },
+        { errorsA: 0, errorsB: 0 },
+      );
+
       sortVal += errorsA + errorsB;
     }
 
     // Handles Sorting by Core Completion columns
-    const completionColumns = Object.values(aliasSortNames);
     const completionSortIndex = completionColumns.indexOf(sortKey);
 
     if (completionSortIndex) {
