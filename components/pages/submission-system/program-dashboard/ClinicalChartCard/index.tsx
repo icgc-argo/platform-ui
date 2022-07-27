@@ -20,13 +20,15 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import Typography from '@icgc-argo/uikit/Typography';
-import PicClipboard from 'static/clipboard.svg';
 import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import Link from '@icgc-argo/uikit/Link';
-import { DashboardCard } from '../common';
+import Image from 'next/image';
+import { DashboardCard } from 'components/pages/submission-system/program-dashboard/common';
 import { getConfig } from 'global/config';
-import ClinicalChart from '../ClinicalChart';
-import { ChartType } from '../ClinicalChart/types';
+import ClinicalChart from 'components/pages/submission-system/program-dashboard/ClinicalChart';
+import { ChartType } from 'components/pages/submission-system/program-dashboard/ClinicalChart/types';
+
+import clipboardIcon from 'images/clipboard.svg';
 
 // TODO: retire this component when we don't need the "coming soon"
 // component and the feature flag anymore.
@@ -67,7 +69,7 @@ const ClinicalChartCard = ({ chartType, comingSoonLink, title }: CardProps) => {
         `}
       >
         <ContentPlaceholder title="Coming Soon." link={getStartedLink}>
-          <img alt="Coming Soon." src="/static/clipboard.svg" />
+          <Image alt="Coming Soon" src={clipboardIcon} layout="fixed" width={120} height={88} />
         </ContentPlaceholder>
       </div>
     </DashboardCard>
