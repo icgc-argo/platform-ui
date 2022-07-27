@@ -27,6 +27,7 @@ const path = require('path');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
+// withImages is needed for uikit components like Icon and Logo
 module.exports = withPlugins([withTM, withImages], {
   exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
