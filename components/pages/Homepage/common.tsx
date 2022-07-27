@@ -31,6 +31,7 @@ import Container from '@icgc-argo/uikit/Container';
 import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import { reactGridBreakpoints } from 'global/utils/common';
+import Image from 'next/image';
 
 export type NewsItem = {
   title: string;
@@ -248,7 +249,7 @@ export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ 
                   rgba(21, 28, 61, 0.33) 66%,
                   rgba(21, 28, 61, 1) 100%
                 ),
-                url('/static/icgc-data-scientist-wide.jpg');
+                url('/images/icgc-data-scientist-wide.jpg');
               background-size: cover;
               width: 100%;
               min-height: 210px;
@@ -432,10 +433,11 @@ export const OvertureBanner: React.ComponentType<{}> = ({}) => {
           padding-top: 4px;
         `}
       >
-        <img
+        <Image
           alt="Ontario Institute for Cancer Research"
           src={overtureLogo}
-          style={{ height: '24px', width: '124px' }}
+          width={124}
+          height={24}
         />
       </Link>
       <Typography

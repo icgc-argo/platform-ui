@@ -19,6 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
+import Image from 'next/image';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
@@ -86,12 +87,7 @@ const Container = styled('div')`
 
 const NoDataCell = () => (
   <Container>
-    <img
-      css={css`
-        height: 75px;
-      `}
-      src={noDataSvg}
-    />
+    <Image alt="" src={noDataSvg} width={102} height={75} layout="fixed" />
     <Typography
       css={css`
         margin-top: 14px;
