@@ -29,8 +29,6 @@ const path = require('path');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
 const nextConfig = (_phase, { defaultConfig }) => {
-  // withImages is needed for uikit components like Icon and Logo
-  // const plugins = [];
   const plugins = [withTM];
 
   const config = {
