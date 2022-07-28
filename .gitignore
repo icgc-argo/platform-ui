@@ -78,5 +78,3 @@ generated
 .cache
 
 **/.DS_STORE
-
-tsconfig.tsbuildinfo
