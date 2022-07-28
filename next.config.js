@@ -26,11 +26,11 @@ require('dotenv').config();
 const urlJoin = require('url-join');
 const path = require('path');
 
-// const withImages = require('next-images');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
 const nextConfig = (_phase, { defaultConfig }) => {
   // withImages is needed for uikit components like Icon and Logo
+  // const plugins = [];
   const plugins = [withTM];
 
   const config = {
@@ -66,6 +66,11 @@ const nextConfig = (_phase, { defaultConfig }) => {
 
       config.resolve.alias['react'] = path.resolve(__dirname, '.', 'node_modules', 'react');
       // end react configs
+
+      config.module.rules.push({
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      });
 
       return config;
     },

@@ -18,8 +18,5 @@
     "incremental": true
   },
   "exclude": ["node_modules", "scripts/*", "**/*.test.ts"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
-  "paths": {
-    "images/*": ["public/images/*"]
-  }
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"]
 }
