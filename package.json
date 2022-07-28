@@ -48,7 +48,6 @@
     "lodash": "^4.17.21",
     "next": "^12.1.6",
     "next-cookies": "^1.1.2",
-    "next-images": "^1.8.4",
     "npm-force-resolutions": "^0.0.10",
     "pluralize": "^8.0.0",
     "promise-queue": "^2.2.5",
