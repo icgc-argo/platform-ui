@@ -26,9 +26,6 @@ import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import DefaultLayout from '../DefaultLayout';
 
-import galaxyBackground from 'static/icgc-galaxy-bg.jpg';
-import globeBackground from 'static/icgc-globe-bg.svg';
-
 import Link from '@icgc-argo/uikit/Link';
 import NextLink from 'next/link';
 
@@ -174,7 +171,7 @@ const HeroDiv = styled('div')`
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
-      url(${galaxyBackground});`};
+      url('/static/icgc-galaxy-bg.jpg');`};
 
   background-position: center;
   background-size: cover;
@@ -363,7 +360,7 @@ export default function Homepage() {
         <NewsContainer newsItems={newsItems} />
         <div
           css={css`
-            background-image: url(${globeBackground});
+            background-image: url('/static/icgc-globe-bg.svg');
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;

@@ -23,11 +23,11 @@ const urlJoin = require('url-join');
 
 const withImages = require('next-images');
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
+// withImages is needed for uikit components like Icon and Logo
 module.exports = withPlugins([withTM, withImages], {
   exportPathMap: (defaultPathMap) =>
     process.env.EXPORT_PATH
@@ -37,33 +37,30 @@ module.exports = withPlugins([withTM, withImages], {
         }
       : defaultPathMap,
   webpack: (config, options) => {
-    // Fixes npm packages that depend on `fs` module
-    config.node = {
-      fs: 'empty',
-    };
+    // allows absolute imports from top level folders (components, pages, global)
+    // breaks the default import behavior for the public folder
     config.resolve.modules.push(path.resolve('./'));
+
+    // restore default public folder imports
+    config.resolve.alias['images'] = path.join(__dirname, 'public', 'images');
+
     config.resolve.alias = {
       ...config.resolve.alias,
-      // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly. It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
+      // This asn1 nonsense is to allow the jsonwebtokens dependency `parse-asn1` to get webpacked correctly.
+      // It has a dependency called `asn1.js` and a file with the same name that webpack gets confused.
       'asn1.js': urlJoin(__dirname, '/node_modules/asn1.js/lib/asn1.js'),
     };
-    config.module.rules = [
-      ...config.module.rules,
-      {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader',
-      },
-    ];
 
     // These 'react' related configs are added to enable linking packages in development
     // (e.g. UIKit), and not get the "broken Hooks" warning.
     // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
+    // start react configs
     if (options.isServer) {
       config.externals = ['react', ...config.externals];
     }
 
     config.resolve.alias['react'] = path.resolve(__dirname, '.', 'node_modules', 'react');
+    // end react configs
 
     return config;
   },

@@ -181,7 +181,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   return (
     <div>
       <Link
-        prefetch
         as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
         href={PROGRAM_DASHBOARD_PATH}
       >
@@ -194,7 +193,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       {canSeeCollaboratorView && (
         <>
           <Link
-            prefetch
             as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -221,7 +219,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
             />
           </Link>
           <Link
-            prefetch
             as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -264,7 +261,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           </Link>
           {FEATURE_SUBMITTED_DATA_ENABLED && (
             <Link
-              prefetch
               as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
@@ -289,7 +285,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       )}
       {canWriteToProgram && (
         <Link
-          prefetch
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
           href={PROGRAM_MANAGE_PATH}
         >
@@ -344,7 +339,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         }
       />
       {canSeeAllPrograms && (
-        <Link prefetch as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
+        <Link as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
             content={'All Programs'}

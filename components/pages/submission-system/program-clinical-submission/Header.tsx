@@ -221,7 +221,7 @@ const Header = ({
             </Button>
           )}
           {!isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button
                 id="button-clear-submission" // For Selenium
                 variant="text"
@@ -246,7 +246,7 @@ const Header = ({
               >
                 HELP
               </Link>
-            </React.Fragment>
+            </>
           )}
           {isDcc && isPendingApproval && (
             <>

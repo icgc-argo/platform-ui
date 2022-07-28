@@ -23,7 +23,7 @@ import NextHead from 'next/head';
 export default function Head() {
   return (
     <NextHead>
-      <link rel="icon" href="/static/favicon.ico" />
+      <link rel="icon" href="/public/favicon.ico" />
     </NextHead>
   );
 }

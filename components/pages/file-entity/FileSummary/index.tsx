@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
 import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
