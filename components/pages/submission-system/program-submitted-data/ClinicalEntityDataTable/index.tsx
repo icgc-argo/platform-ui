@@ -109,7 +109,6 @@ const NoDataCell = () => (
 
 const completionKeys = Object.values(aliasSortNames);
 const completionColumnNames = Object.keys(aliasSortNames);
-
 const emptyCompletion = {
   DO: 0,
   PD: 0,
@@ -308,7 +307,7 @@ const ClinicalEntityDataTable = ({
       sortVal += errorsA + errorsB;
     }
 
-    // Handles Sorting by Core Completion columns
+    // Handles Manual User Sorting by Core Completion columns
     const completionSortIndex = completionKeys.indexOf(sortKey);
 
     if (completionSortIndex) {
