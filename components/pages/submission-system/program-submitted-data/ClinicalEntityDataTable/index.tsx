@@ -289,24 +289,6 @@ const ClinicalEntityDataTable = ({
   const sortEntityData = (prev, next) => {
     let sortVal = 0;
 
-    if (hasErrors) {
-      // If Current Entity has Errors, Prioritize Data w/ Errors
-      const { errorsA, errorsB } = clinicalErrors.reduce(
-        (acc, current) => {
-          if (current.donorId == prev['donor_id']) {
-            acc.errorsA = -1;
-          }
-          if (current.donorId == next['donor_id']) {
-            acc.errorsB = 1;
-          }
-          return acc;
-        },
-        { errorsA: 0, errorsB: 0 },
-      );
-
-      sortVal += errorsA + errorsB;
-    }
-
     // Handles Manual User Sorting by Core Completion columns
     const completionSortIndex = completionKeys.indexOf(sortKey);
 
