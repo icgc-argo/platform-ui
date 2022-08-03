@@ -42,6 +42,7 @@ import {
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  clinicalEntityDisplayNames,
 } from '../common';
 
 export type DonorEntry = {
@@ -464,7 +465,9 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
+            title={`${totalErrors.toLocaleString()} error(s) found in ${clinicalEntityDisplayNames[
+              entityType
+            ].toLowerCase()} data`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
