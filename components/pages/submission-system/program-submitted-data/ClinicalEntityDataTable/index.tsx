@@ -323,7 +323,8 @@ const ClinicalEntityDataTable = ({
             clinicalRecord[completionField] = completion[field] || 0;
           });
 
-          clinicalRecord = { ...clinicalRecord, ...completion };
+          const donor_id = `DO${r.value}`;
+          clinicalRecord = { ...clinicalRecord, donor_id, ...completion };
         }
       });
 
