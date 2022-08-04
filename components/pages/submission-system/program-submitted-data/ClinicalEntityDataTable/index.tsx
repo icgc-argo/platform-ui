@@ -45,6 +45,9 @@ import {
   clinicalEntityDisplayNames,
 } from '../common';
 
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+
 export type DonorEntry = {
   row: string;
   isNew: boolean;
@@ -124,22 +127,6 @@ const noDataCompletionStats = [
   },
 ];
 
-const Subtitle = (program) => (
-  <div
-    css={css`
-      margin-bottom: 12px;
-    `}
-  >
-    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
-    was released and has made some donors invalid. Please download the error report to view the
-    affected donors, then submit a corrected TSV file in the{' '}
-    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
-      Submit Clinical Data
-    </Link>{' '}
-    workspace.
-  </div>
-);
-
 const completionColumnHeaders = {
   donor: 'DO',
   primaryDiagnosis: 'PD',
@@ -218,6 +205,29 @@ const ClinicalEntityDataTable = ({
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
   const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
+
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+
+  console.log('lastestDictionaryResponse.loading', latestDictionaryResponse.loading);
+
+  const Subtitle = (program) => (
+    <div
+      css={css`
+        margin-bottom: 12px;
+      `}
+    >
+      <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+        {!latestDictionaryResponse.loading &&
+          `Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
+      </Link>{' '}
+      of the data dictionary was released and has made some donors invalid. Please download the
+      error report to view the affected donors, then submit a corrected TSV file in the{' '}
+      <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
+        Submit Clinical Data
+      </Link>{' '}
+      workspace.
+    </div>
+  );
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
