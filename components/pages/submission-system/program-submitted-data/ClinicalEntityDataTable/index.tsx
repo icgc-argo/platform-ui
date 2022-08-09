@@ -48,6 +48,8 @@ import {
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 
+import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+
 export type DonorEntry = {
   row: string;
   isNew: boolean;
@@ -208,8 +210,6 @@ const ClinicalEntityDataTable = ({
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
-  console.log('lastestDictionaryResponse.loading', latestDictionaryResponse.loading);
-
   const Subtitle = (program) => (
     <div
       css={css`
@@ -222,9 +222,14 @@ const ClinicalEntityDataTable = ({
       </Link>{' '}
       of the data dictionary was released and has made some donors invalid. Please download the
       error report to view the affected donors, then submit a corrected TSV file in the{' '}
-      <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
-        Submit Clinical Data
-      </Link>{' '}
+      <Link
+        href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+          PROGRAM_SHORT_NAME_PATH,
+          program.program as string,
+        )}
+      >
+        Submit Clinical Data{' '}
+      </Link>
       workspace.
     </div>
   );
