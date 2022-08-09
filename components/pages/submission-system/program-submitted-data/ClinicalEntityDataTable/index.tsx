@@ -37,6 +37,7 @@ import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
   aliasSortNames,
   aliasedEntityNames,
+  aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
@@ -312,7 +313,7 @@ const ClinicalEntityDataTable = ({
     records = entityData.records.map((record) => {
       let clinicalRecord = {};
       record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '--';
+        clinicalRecord[r.name] = r.value;
         if (completionStats && r.name === 'donor_id') {
           const completion =
             completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
@@ -356,18 +357,28 @@ const ClinicalEntityDataTable = ({
     const columnErrorData =
       donorErrorData &&
       donorErrorData.errors.filter(
-        (error) => error && error.entityName === entityType && error.fieldName === id,
+        (error) =>
+          error &&
+          (error.entityName === entityType ||
+            (aliasedEntityFields.includes(error.entityName) &&
+              aliasedEntityNames[entityType] === error.entityName)) &&
+          error.fieldName === id,
       );
 
     const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
 
     const specificErrorValue =
       hasClinicalErrors &&
-      columnErrorData.filter((error) => error.info.value && error.info.value[0] === original[id])
-        .length > 0;
+      columnErrorData.filter(
+        (error) =>
+          error.info?.value === original[id] ||
+          (error.info?.value && error.info.value[0] === original[id]),
+      );
 
     let errorState =
-      (isCompletionCell && original[id] === 0) || specificErrorValue || hasClinicalErrors;
+      (isCompletionCell && original[id] === 0) ||
+      specificErrorValue?.length > 0 ||
+      hasClinicalErrors;
 
     const border = getHeaderBorder(id);
 
