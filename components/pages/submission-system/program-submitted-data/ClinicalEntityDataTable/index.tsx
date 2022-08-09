@@ -444,7 +444,16 @@ const ClinicalEntityDataTable = ({
         })),
       },
       {
-        Header: 'SUBMITTED DONOR DATA',
+        Header: (
+          <div
+            css={css`
+              position: absolute;
+              left: 20px;
+            `}
+          >
+            SUBMITTED DONOR DATA
+          </div>
+        ),
         headerStyle: dataHeaderStyle,
         columns: columns.slice(7).map((column, i) =>
           noData
