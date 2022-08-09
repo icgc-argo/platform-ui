@@ -69,12 +69,12 @@ const errorColumns = [
     id: 'fieldName',
     maxWidth: 215,
   },
-  {
-    accessor: 'errorType',
-    Header: 'Error Value',
-    id: 'errorType',
-    maxWidth: 185,
-  },
+  // {
+  //   accessor: 'errorType',
+  //   Header: 'Error Value',
+  //   id: 'errorType',
+  //   maxWidth: 185,
+  // },
   {
     accessor: 'message',
     Header: `Error Description`,
