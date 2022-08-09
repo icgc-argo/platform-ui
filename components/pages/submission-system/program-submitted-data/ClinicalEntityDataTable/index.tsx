@@ -347,7 +347,7 @@ const ClinicalEntityDataTable = ({
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
     const cellDonorId = parseInt(
-      original['donor_id'].includes('DO')
+      original['donor_id'] && original['donor_id'].includes('DO')
         ? original['donor_id'].substring(2)
         : original['donor_id'],
     );
@@ -375,10 +375,7 @@ const ClinicalEntityDataTable = ({
           (error.info?.value && error.info.value[0] === original[id]),
       );
 
-    let errorState =
-      (isCompletionCell && original[id] === 0) ||
-      specificErrorValue?.length > 0 ||
-      hasClinicalErrors;
+    let errorState = (isCompletionCell && original[id] === 0) || specificErrorValue?.length > 0;
 
     const border = getHeaderBorder(id);
 
