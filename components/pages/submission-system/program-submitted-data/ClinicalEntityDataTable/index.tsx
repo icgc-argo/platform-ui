@@ -59,7 +59,7 @@ export type DonorEntry = {
 const errorColumns = [
   {
     accessor: 'entries',
-    Header: '# Affected Donors',
+    Header: '# Affected Records',
     id: 'entries',
     maxWidth: 135,
   },
