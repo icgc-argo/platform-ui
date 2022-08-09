@@ -344,11 +344,31 @@ const ClinicalEntityDataTable = ({
 
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
-    const errorState =
-      (isCompletionCell && original[id] === 0) ||
-      clinicalErrors
-        .find((donor) => donor.donorId == original['donor_id'])
-        ?.errors.find((error) => error.fieldName === id);
+
+    const cellDonorId = parseInt(
+      original['donor_id'].includes('DO')
+        ? original['donor_id'].substring(2)
+        : original['donor_id'],
+    );
+
+    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+
+    const columnErrorData =
+      donorErrorData &&
+      donorErrorData.errors.filter(
+        (error) => error && error.entityName === entityType && error.fieldName === id,
+      );
+
+    const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+    const specificErrorValue =
+      hasClinicalErrors &&
+      columnErrorData.filter((error) => error.info.value && error.info.value[0] === original[id])
+        .length > 0;
+
+    let errorState =
+      (isCompletionCell && original[id] === 0) || specificErrorValue || hasClinicalErrors;
+
     const border = getHeaderBorder(id);
 
     return {

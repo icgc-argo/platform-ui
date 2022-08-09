@@ -59,13 +59,14 @@ export type ClinicalEntity = {
 };
 
 export type ClinicalErrorData = {
-  donorId: string;
+  donorId: number;
   submitterDonorId: string;
   errors: {
     entityName: string;
     errorType: string;
     fieldName: string;
     index: number;
+    info: { value: string[] };
     message: string;
   }[];
 };
