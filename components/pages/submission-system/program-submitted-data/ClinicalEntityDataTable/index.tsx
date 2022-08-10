@@ -107,6 +107,8 @@ const NoDataCell = () => (
   </Container>
 );
 
+const completionKeys = Object.values(aliasSortNames);
+const completionColumnNames = Object.keys(aliasSortNames);
 const emptyCompletion = {
   DO: 0,
   PD: 0,
@@ -216,7 +218,8 @@ const ClinicalEntityDataTable = ({
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
-  const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
+  const sortKey = aliasSortNames[id] || id;
+  const sort = `${desc ? '-' : ''}${sortKey}`;
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
@@ -283,6 +286,42 @@ const ClinicalEntityDataTable = ({
     };
   });
 
+  const sortEntityData = (prev, next) => {
+    let sortVal = 0;
+
+    if (hasErrors) {
+      // If Current Entity has Errors, Prioritize Data w/ Errors
+      const { errorsA, errorsB } = clinicalErrors.reduce(
+        (acc, current) => {
+          if (current.donorId == prev['donor_id']) {
+            acc.errorsA = -1;
+          }
+          if (current.donorId == next['donor_id']) {
+            acc.errorsB = 1;
+          }
+          return acc;
+        },
+        { errorsA: 0, errorsB: 0 },
+      );
+
+      sortVal += errorsA + errorsB;
+    }
+
+    // Handles Manual User Sorting by Core Completion columns
+    const completionSortIndex = completionKeys.indexOf(sortKey);
+
+    if (completionSortIndex) {
+      const completionSortKey = completionColumnNames[completionSortIndex];
+      const completionA = prev[completionSortKey];
+      const completionB = next[completionSortKey];
+
+      sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+      sortVal *= desc ? -1 : 1;
+    }
+
+    return sortVal;
+  };
+
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
@@ -299,7 +338,6 @@ const ClinicalEntityDataTable = ({
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
     totalDocs = entityData.totalDocs;
-
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
@@ -309,26 +347,27 @@ const ClinicalEntityDataTable = ({
       columns.splice(1, 0, ...Object.values(completionColumnHeaders));
     }
 
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '--';
-        if (completionStats && r.name === 'donor_id') {
-          const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-            emptyCompletion;
+    records = entityData.records
+      .map((record) => {
+        let clinicalRecord = {};
+        record.forEach((r) => {
+          clinicalRecord[r.name] = r.value || '--';
+          if (completionStats && r.name === 'donor_id') {
+            const completion =
+              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+              emptyCompletion;
+            CoreCompletionFields.forEach((field) => {
+              const completionField = completionColumnHeaders[field];
+              clinicalRecord[completionField] = completion[field] || 0;
+            });
 
-          CoreCompletionFields.forEach((field) => {
-            const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] || 0;
-          });
+            clinicalRecord = { ...clinicalRecord, ...completion };
+          }
+        });
 
-          clinicalRecord = { ...clinicalRecord, ...completion };
-        }
-      });
-
-      return clinicalRecord;
-    });
+        return clinicalRecord;
+      })
+      .sort(sortEntityData);
   }
 
   const getHeaderBorder = (key) =>
@@ -503,6 +542,7 @@ const ClinicalEntityDataTable = ({
         page={page}
         pages={numTablePages}
         pageSize={pageSize}
+        defaultSortMethod={sortEntityData}
         sorted={sorted}
         getTdProps={getCellStyles}
         columns={columns}
