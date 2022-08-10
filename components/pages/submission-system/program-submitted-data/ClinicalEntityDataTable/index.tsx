@@ -303,7 +303,7 @@ const ClinicalEntityDataTable = ({
   if (noData) {
     showCompletionStats = true;
     // Empty string column holds No Data image
-    columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
+    // columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
 
     records = noDataCompletionStats;
   } else {
@@ -402,7 +402,7 @@ const ClinicalEntityDataTable = ({
     };
 
     columns = [
-      {
+      !noData && {
         Header: (
           <div
             css={css`
@@ -447,23 +447,21 @@ const ClinicalEntityDataTable = ({
         Header: (
           <div
             css={css`
-              position: absolute;
-              left: 20px;
+              width: 100%;
+              text-align: left;
+              padding-left: 5px;
             `}
           >
             SUBMITTED DONOR DATA
           </div>
         ),
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7).map((column, i) =>
-          noData
-            ? {
-                Cell: <NoDataCell />,
-              }
-            : column,
-        ),
+
+        ...(noData
+          ? { Cell: <NoDataCell /> }
+          : { columns: columns.slice(7).map((column, i) => column) }),
       },
-    ];
+    ].filter((x) => x); // removes falsy element when there is no data
   }
 
   const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
