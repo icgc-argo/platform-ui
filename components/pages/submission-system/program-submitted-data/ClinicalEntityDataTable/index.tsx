@@ -49,6 +49,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 
 export type DonorEntry = {
   row: string;
@@ -91,26 +92,22 @@ const Container = styled('div')`
 `;
 
 const NoDataCell = () => (
-  <Container>
-    <img
-      css={css`
-        height: 75px;
-      `}
-      src={noDataSvg}
-    />
-    <Typography
-      css={css`
-        margin-top: 14px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="data"
-      as="p"
-      bold
+  <div
+    css={css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+    `}
+  >
+    <ContentPlaceholder
+      title="You do not have any data uploaded."
+      subtitle="Follow the instructions above to get started."
     >
-      No Data Found
-    </Typography>
-  </Container>
+      <img alt="No Data" src={noDataSvg} />
+    </ContentPlaceholder>
+  </div>
 );
 
 const emptyCompletion = {
@@ -210,7 +207,7 @@ const ClinicalEntityDataTable = ({
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
 
-  const Subtitle = (program) => (
+  const Subtitle = ({ program = '' }) => (
     <div
       css={css`
         margin-bottom: 12px;
@@ -222,12 +219,7 @@ const ClinicalEntityDataTable = ({
       </Link>{' '}
       of the data dictionary was released and has made some donors invalid. Please download the
       error report to view the affected donors, then submit a corrected TSV file in the{' '}
-      <Link
-        href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-          PROGRAM_SHORT_NAME_PATH,
-          program.program as string,
-        )}
-      >
+      <Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
         Submit Clinical Data{' '}
       </Link>
       workspace.
@@ -402,7 +394,7 @@ const ClinicalEntityDataTable = ({
     };
 
     columns = [
-      !noData && {
+      {
         Header: (
           <div
             css={css`
@@ -456,12 +448,9 @@ const ClinicalEntityDataTable = ({
           </div>
         ),
         headerStyle: dataHeaderStyle,
-
-        ...(noData
-          ? { Cell: <NoDataCell /> }
-          : { columns: columns.slice(7).map((column, i) => column) }),
+        columns: columns.slice(7).map((column, i) => column),
       },
-    ].filter((x) => x); // removes falsy element when there is no data
+    ];
   }
 
   const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
@@ -471,6 +460,8 @@ const ClinicalEntityDataTable = ({
 
   return loading ? (
     <DnaLoader />
+  ) : noData ? (
+    <NoDataCell />
   ) : (
     <div
       ref={containerRef}
