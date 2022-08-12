@@ -70,12 +70,6 @@ const errorColumns = [
     id: 'fieldName',
     maxWidth: 215,
   },
-  // {
-  //   accessor: 'errorType',
-  //   Header: 'Error Value',
-  //   id: 'errorType',
-  //   maxWidth: 185,
-  // },
   {
     accessor: 'message',
     Header: `Error Description`,
@@ -291,8 +285,6 @@ const ClinicalEntityDataTable = ({
   if (noData) {
     showCompletionStats = true;
     // Empty string column holds No Data image
-    // columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
-
     records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
@@ -313,26 +305,27 @@ const ClinicalEntityDataTable = ({
       columns.splice(1, 0, ...Object.values(completionColumnHeaders));
     }
 
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || ' ';
-        if (completionStats && r.name === 'donor_id') {
-          const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-            emptyCompletion;
+    records = entityData.records
+      .map((record) => {
+        let clinicalRecord = {};
+        record.forEach((r) => {
+          clinicalRecord[r.name] = r.value || '';
+          if (completionStats && r.name === 'donor_id') {
+            const completion =
+              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+              emptyCompletion;
+            CoreCompletionFields.forEach((field) => {
+              const completionField = completionColumnHeaders[field];
+              clinicalRecord[completionField] = completion[field] || 0;
+            });
 
-          CoreCompletionFields.forEach((field) => {
-            const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] || 0;
-          });
+            clinicalRecord = { ...clinicalRecord, ...completion };
+          }
+        });
 
-          clinicalRecord = { ...clinicalRecord, ...completion };
-        }
-      });
-
-      return clinicalRecord;
-    });
+        return clinicalRecord;
+      })
+      .sort(sortEntityData);
   }
 
   const getHeaderBorder = (key) =>
@@ -381,7 +374,8 @@ const ClinicalEntityDataTable = ({
     };
 
     const dataHeaderStyle = {
-      textAlign: 'center',
+      textAlign: 'left',
+      paddingLeft: '6px',
     };
 
     const noDataCellStyle = {
@@ -432,17 +426,7 @@ const ClinicalEntityDataTable = ({
         })),
       },
       {
-        Header: (
-          <div
-            css={css`
-              width: 100%;
-              text-align: left;
-              padding-left: 5px;
-            `}
-          >
-            SUBMITTED DONOR DATA
-          </div>
-        ),
+        Header: <div>SUBMITTED DONOR DATA</div>,
         headerStyle: dataHeaderStyle,
         columns: columns.slice(7).map((column, i) => column),
       },
