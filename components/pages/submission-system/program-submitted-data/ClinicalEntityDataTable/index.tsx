@@ -200,7 +200,6 @@ const ClinicalEntityDataTable = ({
   const sort = `${desc ? '-' : ''}${sortKey}`;
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
-
   const Subtitle = ({ program = '' }) => (
     <div
       css={css`
