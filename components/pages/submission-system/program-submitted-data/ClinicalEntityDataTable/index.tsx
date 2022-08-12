@@ -42,7 +42,14 @@ import {
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  clinicalEntityDisplayNames,
 } from '../common';
+
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+
+import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 
 export type DonorEntry = {
   row: string;
@@ -53,7 +60,7 @@ export type DonorEntry = {
 const errorColumns = [
   {
     accessor: 'entries',
-    Header: '# Affected Donors',
+    Header: '# Affected Records',
     id: 'entries',
     maxWidth: 135,
   },
@@ -62,12 +69,6 @@ const errorColumns = [
     Header: `Field with Error`,
     id: 'fieldName',
     maxWidth: 215,
-  },
-  {
-    accessor: 'errorType',
-    Header: 'Error Value',
-    id: 'errorType',
-    maxWidth: 185,
   },
   {
     accessor: 'message',
@@ -85,26 +86,19 @@ const Container = styled('div')`
 `;
 
 const NoDataCell = () => (
-  <Container>
-    <img
-      css={css`
-        height: 75px;
-      `}
-      src={noDataSvg}
-    />
-    <Typography
-      css={css`
-        margin-top: 14px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="data"
-      as="p"
-      bold
-    >
-      No Data Found
-    </Typography>
-  </Container>
+  <div
+    css={css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+    `}
+  >
+    <ContentPlaceholder title="No Data Found.">
+      <img alt="No Data" src={noDataSvg} />
+    </ContentPlaceholder>
+  </div>
 );
 
 const completionKeys = Object.values(aliasSortNames);
@@ -124,22 +118,6 @@ const noDataCompletionStats = [
     ...emptyCompletion,
   },
 ];
-
-const Subtitle = (program) => (
-  <div
-    css={css`
-      margin-bottom: 12px;
-    `}
-  >
-    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
-    was released and has made some donors invalid. Please download the error report to view the
-    affected donors, then submit a corrected TSV file in the{' '}
-    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
-      Submit Clinical Data
-    </Link>{' '}
-    workspace.
-  </div>
-);
 
 const completionColumnHeaders = {
   donor: 'DO',
@@ -221,6 +199,26 @@ const ClinicalEntityDataTable = ({
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
 
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+  const Subtitle = ({ program = '' }) => (
+    <div
+      css={css`
+        margin-bottom: 12px;
+      `}
+    >
+      <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+        {!latestDictionaryResponse.loading &&
+          `Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
+      </Link>{' '}
+      of the data dictionary was released and has made some donors invalid. Please download the
+      error report to view the affected donors, then submit a corrected TSV file in the{' '}
+      <Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
+        Submit Clinical Data{' '}
+      </Link>
+      workspace.
+    </div>
+  );
+
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
 
@@ -275,11 +273,10 @@ const ClinicalEntityDataTable = ({
   const hasErrors = totalErrors > 0;
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     const entries = errorGroup.length;
-    const { errorType, fieldName, entityName, message } = errorGroup[0];
+    const { fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
-      errorType,
       fieldName,
       entityName,
       message,
@@ -325,9 +322,6 @@ const ClinicalEntityDataTable = ({
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
-    // Empty string column holds No Data image
-    columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
-
     records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
@@ -351,7 +345,7 @@ const ClinicalEntityDataTable = ({
       .map((record) => {
         let clinicalRecord = {};
         record.forEach((r) => {
-          clinicalRecord[r.name] = r.value || '--';
+          clinicalRecord[r.name] = r.value || '';
           if (completionStats && r.name === 'donor_id') {
             const completion =
               completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
@@ -416,7 +410,8 @@ const ClinicalEntityDataTable = ({
     };
 
     const dataHeaderStyle = {
-      textAlign: 'center',
+      textAlign: 'left',
+      paddingLeft: '6px',
     };
 
     const noDataCellStyle = {
@@ -467,15 +462,9 @@ const ClinicalEntityDataTable = ({
         })),
       },
       {
-        Header: 'SUBMITTED DONOR DATA',
+        Header: <div>SUBMITTED DONOR DATA</div>,
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7).map((column, i) =>
-          noData
-            ? {
-                Cell: <NoDataCell />,
-              }
-            : column,
-        ),
+        columns: columns.slice(7).map((column, i) => column),
       },
     ];
   }
@@ -487,6 +476,8 @@ const ClinicalEntityDataTable = ({
 
   return loading ? (
     <DnaLoader />
+  ) : noData ? (
+    <NoDataCell />
   ) : (
     <div
       ref={containerRef}
@@ -503,7 +494,9 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
+            title={`${totalErrors.toLocaleString()} error(s) found in ${clinicalEntityDisplayNames[
+              entityType
+            ].toLowerCase()} data`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
