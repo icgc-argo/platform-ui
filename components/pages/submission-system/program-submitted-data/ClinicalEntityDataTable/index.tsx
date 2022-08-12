@@ -101,10 +101,7 @@ const NoDataCell = () => (
       padding: 80px 0;
     `}
   >
-    <ContentPlaceholder
-      title="You do not have any data uploaded."
-      subtitle="Follow the instructions above to get started."
-    >
+    <ContentPlaceholder title="No Data Found.">
       <img alt="No Data" src={noDataSvg} />
     </ContentPlaceholder>
   </div>
@@ -280,11 +277,10 @@ const ClinicalEntityDataTable = ({
   const hasErrors = totalErrors > 0;
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     const entries = errorGroup.length;
-    const { errorType, fieldName, entityName, message } = errorGroup[0];
+    const { fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
-      errorType,
       fieldName,
       entityName,
       message,
