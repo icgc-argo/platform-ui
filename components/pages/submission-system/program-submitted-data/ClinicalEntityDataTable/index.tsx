@@ -322,7 +322,6 @@ const ClinicalEntityDataTable = ({
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
-    // Empty string column holds No Data image
     records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
