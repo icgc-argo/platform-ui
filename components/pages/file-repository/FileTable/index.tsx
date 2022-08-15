@@ -78,7 +78,7 @@ const useFileRepoTableQuery = (
     'variables'
   > = {},
 ) => {
-  return useQuery<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>(
+  const queryResult = useQuery<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>(
     FILE_REPOSITORY_TABLE_QUERY,
     {
       ...options,
@@ -88,8 +88,13 @@ const useFileRepoTableQuery = (
         filters,
         sort,
       },
+      errorPolicy: 'all',
     },
   );
+  if (queryResult.error) {
+    console.error(queryResult.error);
+  }
+  return queryResult;
 };
 
 const useFileRepoPaginationState = () => {
