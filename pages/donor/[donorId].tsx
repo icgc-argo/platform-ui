@@ -60,19 +60,19 @@ export default createPage({
   // const isValidEntity = !!get(profile, 'file.hits.total', false);
   const isValidEntity = true;
 
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoadingState();
   const loading = donorLoading || profileLoading;
 
   if (!loading && !isValidEntity) {
-    setLoaderShown(false);
+    setGlobalLoading(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
     return <ErrorPage statusCode={404} />;
   } else if (loading) {
-    setLoaderShown(true);
+    setGlobalLoading(true);
     return <div></div>;
   }
-  setLoaderShown(false);
+  setGlobalLoading(false);
 
   return <DonorEntityPage {...props} donor={donor} />;
 });

@@ -35,21 +35,21 @@ export const useProgramCheckEffect = () => {
       shortName: shortName,
     },
   });
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading, isGlobalLoading } = useGlobalLoadingState();
   const { isLoggingOut } = useAuthContext();
 
   useEffect(() => {
     if (!isLoggingOut) {
-      if (!program && !isLoaderShown) {
-        setLoaderShown(true);
+      if (!program && !isGlobalLoading) {
+        setGlobalLoading(true);
       }
       if (!loadingQuery) {
         if (!program) {
           const err = new Error('Program not found') as Error & { statusCode?: number };
           err[ERROR_STATUS_KEY] = 404;
           throw err;
-        } else if (isLoaderShown) {
-          sleep(1200).then(() => setLoaderShown(false));
+        } else if (isGlobalLoading) {
+          sleep(1200).then(() => setGlobalLoading(false));
         }
       }
     }

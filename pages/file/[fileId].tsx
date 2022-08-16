@@ -54,18 +54,18 @@ export default createPage({
 
   const isValidEntity = !!get(data, 'file.hits.total', false);
 
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoadingState();
 
   if (!loading && !isValidEntity) {
-    setLoaderShown(false);
+    setGlobalLoading(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
     return <ErrorPage statusCode={404} />;
   } else if (loading) {
-    setLoaderShown(true);
+    setGlobalLoading(true);
     return <div></div>;
   }
-  setLoaderShown(false);
+  setGlobalLoading(false);
 
   return <FileEntityPage {...props} fileId={fileId} />;
 });

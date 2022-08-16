@@ -87,11 +87,11 @@ const CreateProgramPage = () => {
     },
   });
 
-  const { setLoading: setFormDisabled } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoadingState();
 
   const onSubmit = async (data) => {
     try {
-      setFormDisabled(true);
+      setGlobalLoading(true);
       await sendCreateProgram({
         variables: { program: createProgramInput(data) },
       });
@@ -118,7 +118,7 @@ const CreateProgramPage = () => {
         commonToasters.unknownError();
       }
     } finally {
-      setFormDisabled(false);
+      setGlobalLoading(false);
     }
   };
 

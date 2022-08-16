@@ -112,7 +112,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile =
 
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { setLoading: setPageLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoadingState();
 
   // not declared as a side effect that changes with program change
   // change in 'data' always seems to take precedence over currentFileList within `defaultClinicalEntityType`
@@ -372,7 +372,7 @@ const PageContent = () => {
     try {
       const userDidApprove = await getSignOffConfirmation();
       if (userDidApprove) {
-        setPageLoaderShown(true);
+        setGlobalLoading(true);
         await sleep();
         const { data: newData } = await signOffSubmission({
           variables: {
@@ -394,13 +394,13 @@ const PageContent = () => {
               'Your clinical data has been submitted. You will see the updates on your dashboard shortly.',
           });
         } else {
-          setPageLoaderShown(false);
+          setGlobalLoading(false);
         }
       }
     } catch (err) {
       await refetch();
       commonToaster.unknownErrorWithReloadMessage();
-      setPageLoaderShown(false);
+      setGlobalLoading(false);
     }
   };
 

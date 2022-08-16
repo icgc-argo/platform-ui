@@ -62,14 +62,14 @@ export default function RegisterSamplesModal({
     ],
   });
 
-  const { setLoading: setGlobalLoadingState } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoadingState();
 
   const toaster = useToaster();
 
   const handleActionClick = async () => {
     handleCancelClick();
 
-    setGlobalLoadingState(true);
+    setGlobalLoading(true);
     await sleep();
 
     await commitRegistration()
@@ -105,7 +105,7 @@ export default function RegisterSamplesModal({
           content: error.toString(),
         });
       });
-    setGlobalLoadingState(false);
+    setGlobalLoading(false);
   };
 
   return (

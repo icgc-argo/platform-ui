@@ -100,13 +100,13 @@ export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
 };
 
 const loaderPortalRef = React.createRef<HTMLDivElement>();
-export const GlobalLoaderView = ({ isLoading }: { isLoading: boolean }) => {
+const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: boolean }) => {
   const ref = loaderPortalRef.current;
   const fadeIn = 400;
   const fadeOut = 600;
   return ref
     ? ReactDOM.createPortal(
-        <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
+        <CSSTransition in={isGlobalLoading} timeout={fadeIn} classNames="on" unmountOnExit>
           {() => (
             <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
               <Modal.Overlay
@@ -130,23 +130,23 @@ export const GlobalLoaderView = ({ isLoading }: { isLoading: boolean }) => {
 };
 
 const GlobalLoadingContext = React.createContext({
-  isLoading: false,
-  setLoading: (isLoading: boolean) => {},
+  isGlobalLoading: false,
+  setGlobalLoading: (isGlobalLoading: boolean) => {},
 });
 export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
-export const GlobalLoaderProvider = ({
+const GlobalLoaderProvider = ({
   children,
   startWithGlobalLoader,
 }: {
   children: React.ReactNode | React.ReactNodeArray;
   startWithGlobalLoader: boolean;
 }) => {
-  const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
+  const [isGlobalLoading, setGlobalLoading] = React.useState(startWithGlobalLoader || false);
 
   return (
-    <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
+    <GlobalLoadingContext.Provider value={{ isGlobalLoading, setGlobalLoading }}>
       {children}
-      <GlobalLoaderView isLoading={isLoading} />
+      <GlobalLoaderView isGlobalLoading={isGlobalLoading} />
     </GlobalLoadingContext.Provider>
   );
 };
@@ -266,7 +266,7 @@ export default function ApplicationRoot({
                     position: fixed;
                     left: 0px;
                     top: 0px;
-                    z-index: 9999;
+                    z-index: 9998;
                     ${fillAvailableWidth}
                   `}
                   ref={modalPortalRef}
