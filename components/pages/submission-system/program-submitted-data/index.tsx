@@ -48,6 +48,7 @@ import {
   emptyResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
+import { GlobalLoaderView } from 'components/ApplicationRoot';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -137,85 +138,83 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      {loading ? (
-        <DnaLoader />
-      ) : (
-        <Container>
+      <GlobalLoaderView isLoading={loading} />
+
+      <Container>
+        <div
+          css={css`
+            width: 100%;
+          `}
+        >
+          {/* Sidebar */}
           <div
             css={css`
-              width: 100%;
+              width: 20%;
+              max-width: 170px;
+              display: inline-block;
+              border: 1px solid ${theme.colors.grey_2}; ;
             `}
           >
-            {/* Sidebar */}
+            <VerticalTabs>{menuItems}</VerticalTabs>
+          </div>
+          {/* Content */}
+          <div
+            css={css`
+              display: inline-block;
+              height: 100%;
+              width: calc(97% - 170px);
+              vertical-align: top;
+              padding: 8px 12px;
+            `}
+          >
+            {/* Header */}
             <div
               css={css`
-                width: 20%;
-                max-width: 170px;
-                display: inline-block;
-                border: 1px solid ${theme.colors.grey_2}; ;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
               `}
             >
-              <VerticalTabs>{menuItems}</VerticalTabs>
-            </div>
-            {/* Content */}
-            <div
-              css={css`
-                display: inline-block;
-                height: 100%;
-                width: calc(97% - 170px);
-                vertical-align: top;
-                padding: 8px 12px;
-              `}
-            >
-              {/* Header */}
-              <div
+              <Typography
+                variant="subtitle2"
                 css={css`
-                  width: 100%;
-                  display: flex;
-                  justify-content: space-between;
+                  margin-top: 4px;
+                  margin-left: 4px;
                 `}
               >
-                <Typography
-                  variant="subtitle2"
-                  css={css`
-                    margin-top: 4px;
-                    margin-left: 4px;
-                  `}
-                >
-                  {clinicalEntityDisplayNames[currentEntity]} Data
-                </Typography>
+                {clinicalEntityDisplayNames[currentEntity]} Data
+              </Typography>
 
-                <Button
+              <Button
+                css={css`
+                  white-space: nowrap;
+                  height: fit-content;
+                  :disabled {
+                    background: #f6f6f7;
+                    color: ${theme.colors.grey_1};
+                  }
+                `}
+                variant="secondary"
+                disabled={noData}
+              >
+                <Icon
                   css={css`
-                    white-space: nowrap;
-                    height: fit-content;
-                    :disabled {
-                      background: #f6f6f7;
-                      color: ${theme.colors.grey_1};
-                    }
+                    padding-right: 4px;
                   `}
-                  variant="secondary"
-                  disabled={noData}
-                >
-                  <Icon
-                    css={css`
-                      padding-right: 4px;
-                    `}
-                    name="download"
-                    fill={noData ? 'grey_1' : 'accent2_dark'}
-                    height="12px"
-                  />
-                  {clinicalEntityDisplayNames[currentEntity]} Data
-                </Button>
-              </div>
-              {/* DataTable */}
-              <div>
-                <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
-              </div>
+                  name="download"
+                  fill={noData ? 'grey_1' : 'accent2_dark'}
+                  height="12px"
+                />
+                {clinicalEntityDisplayNames[currentEntity]} Data
+              </Button>
+            </div>
+            {/* DataTable */}
+            <div>
+              <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
             </div>
           </div>
-        </Container>
-      )}
+        </div>
+      </Container>
     </SubmissionLayout>
   );
 }
