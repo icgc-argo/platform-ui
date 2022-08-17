@@ -42,62 +42,7 @@ import GdprMessage from './GdprMessage';
 import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import SystemAlerts from './SystemAlerts';
-
-/**
- * The global portal where modals will show up
- */
-
-const fillAvailableWidth = css`
-  width: -webkit-fill-available;
-  width: -moz-available;
-  min-width: -webkit-fill-available;
-  min-width: -moz-available;
-`;
-
-const fillAvailableHeight = css`
-  height: -webkit-fill-available;
-  height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: -moz-available;
-`;
-
-const modalPortalRef = React.createRef<HTMLDivElement>();
-const useMounted = () => {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted;
-};
-export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
-  const ref = modalPortalRef.current;
-  const mounted = useMounted();
-  return ref
-    ? ReactDOM.createPortal(
-        <div
-          id="modalContainer"
-          css={css`
-            transition: all 0.2s;
-            opacity: ${mounted ? 1 : 0};
-          `}
-        >
-          <Modal.Overlay
-            css={css`
-              ${fillAvailableWidth}
-              ${fillAvailableHeight}
-              @media (min-width: 768px) {
-                width: 100vw;
-                height: 100vh;
-              }
-            `}
-          >
-            {children}
-          </Modal.Overlay>
-        </div>,
-        ref,
-      )
-    : null;
-};
+import { fillAvailableHeight, fillAvailableWidth, modalPortalRef } from './Modal';
 
 const loaderPortalRef = React.createRef<HTMLDivElement>();
 const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: boolean }) => {

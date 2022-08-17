@@ -19,7 +19,8 @@
 
 import React from 'react';
 import Modal from '@icgc-argo/uikit/Modal';
-import { ModalPortal, useGlobalLoader } from 'components/ApplicationRoot';
+import { useGlobalLoader } from 'components/ApplicationRoot';
+import ModalPortal from 'components/Modal';
 import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
