@@ -26,7 +26,7 @@ import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
 import VALID_FILE_ENTITY_CHECK from './VALID_FILE_ENTITY_CHECK.gql';
 import get from 'lodash/get';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 
 export default createPage({
   isPublic: true,

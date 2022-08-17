@@ -38,7 +38,7 @@ import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 
 /* *************************************** *
  * Reshape form data for gql input

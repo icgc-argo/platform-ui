@@ -43,7 +43,7 @@ import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';

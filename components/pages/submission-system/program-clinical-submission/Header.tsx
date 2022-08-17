@@ -31,7 +31,7 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
 import Modal from '@icgc-argo/uikit/Modal';
 import { sleep } from 'global/utils/common';

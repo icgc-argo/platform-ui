@@ -22,7 +22,7 @@ import { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
 

@@ -19,7 +19,7 @@
 
 import React from 'react';
 import Modal from '@icgc-argo/uikit/Modal';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
 import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';

@@ -25,76 +25,20 @@ import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 import { css, ThemeProvider } from '@icgc-argo/uikit';
-import Modal from '@icgc-argo/uikit/Modal';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
-import { CSSTransition } from 'react-transition-group';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
-import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import SystemAlerts from './SystemAlerts';
-import { fillAvailableHeight, fillAvailableWidth, modalPortalRef } from './Modal';
-
-const loaderPortalRef = React.createRef<HTMLDivElement>();
-const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: boolean }) => {
-  const ref = loaderPortalRef.current;
-  const fadeIn = 400;
-  const fadeOut = 600;
-  return ref
-    ? ReactDOM.createPortal(
-        <CSSTransition in={isGlobalLoading} timeout={fadeIn} classNames="on" unmountOnExit>
-          {() => (
-            <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
-              <Modal.Overlay
-                css={css`
-                  ${fillAvailableWidth}
-                  ${fillAvailableHeight}
-                  @media (min-width: 768px) {
-                    width: 100vw;
-                    height: 100vh;
-                  }
-                `}
-              >
-                <DnaLoader />
-              </Modal.Overlay>
-            </FadingDiv>
-          )}
-        </CSSTransition>,
-        ref,
-      )
-    : null;
-};
-
-const GlobalLoadingContext = React.createContext({
-  isGlobalLoading: false,
-  setGlobalLoading: (isGlobalLoading: boolean) => {},
-});
-export const useGlobalLoader = () => React.useContext(GlobalLoadingContext);
-const GlobalLoaderProvider = ({
-  children,
-  startWithGlobalLoader,
-}: {
-  children: React.ReactNode | React.ReactNodeArray;
-  startWithGlobalLoader: boolean;
-}) => {
-  const [isGlobalLoading, setGlobalLoading] = React.useState(startWithGlobalLoader || false);
-
-  return (
-    <GlobalLoadingContext.Provider value={{ isGlobalLoading, setGlobalLoading }}>
-      {children}
-      <GlobalLoaderView isGlobalLoading={isGlobalLoading} />
-    </GlobalLoadingContext.Provider>
-  );
-};
+import { fillAvailableWidth, modalPortalRef } from './Modal';
+import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';
 
 const ToastProvider = ({ children }) => {
   const toaster = useToastState();

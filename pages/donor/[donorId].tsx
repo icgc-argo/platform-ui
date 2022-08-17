@@ -26,7 +26,7 @@ import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
 import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
-import { useGlobalLoader } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import useEntityData from 'components/pages/donor-entity/useEntityData';
 import { instructionBoxLoadingButtonStyle } from 'components/pages/submission-system/common';
 
