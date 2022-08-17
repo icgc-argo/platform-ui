@@ -49,6 +49,7 @@ export const useProgramCheckEffect = () => {
           err[ERROR_STATUS_KEY] = 404;
           throw err;
         } else if (isGlobalLoading) {
+          // extend loading animation so it looks better
           sleep(1200).then(() => setGlobalLoading(false));
         }
       }

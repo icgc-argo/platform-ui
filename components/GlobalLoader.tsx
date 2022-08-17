@@ -39,6 +39,7 @@ import { fillAvailableHeight, fillAvailableWidth } from './Modal';
  */
 
 export type IsGlobalLoading = boolean;
+
 export const GLOBAL_LOADING_DEFAULT = false;
 
 export const loaderPortalRef = React.createRef<HTMLDivElement>();
