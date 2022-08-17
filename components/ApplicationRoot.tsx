@@ -25,7 +25,7 @@ import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import * as React from 'react';
-import { css, ThemeProvider } from '@icgc-argo/uikit';
+import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
@@ -108,6 +108,13 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
+const RefDiv = styled('div')`
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 9999;
+`;
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -150,27 +157,8 @@ export default function ApplicationRoot({
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9998;
-                    ${fillAvailableWidth}
-                  `}
-                  id="modalPortalRef"
-                  ref={modalPortalRef}
-                />
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9999;
-                  `}
-                  id="loaderPortalRef"
-                  ref={loaderPortalRef}
-                />
+                <RefDiv id="modalPortalRef" ref={modalPortalRef} />
+                <RefDiv id="loaderPortalRef" ref={loaderPortalRef} />
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
