@@ -31,7 +31,7 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
 import { useMutation } from '@apollo/react-hooks';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoader } from 'components/ApplicationRoot';
 import Modal from '@icgc-argo/uikit/Modal';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
@@ -58,7 +58,7 @@ const Header = ({
   const { egoJwt, permissions } = useAuthContext();
   const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
-  const { isGlobalLoading, setGlobalLoading } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
   const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
     useClinicalSubmissionQuery(programShortName);
 

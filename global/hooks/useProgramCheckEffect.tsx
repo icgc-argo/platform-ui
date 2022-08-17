@@ -22,7 +22,7 @@ import { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import { useGlobalLoader } from 'components/ApplicationRoot';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
 
@@ -35,7 +35,7 @@ export const useProgramCheckEffect = () => {
       shortName: shortName,
     },
   });
-  const { setGlobalLoading, isGlobalLoading } = useGlobalLoadingState();
+  const { setGlobalLoading, isGlobalLoading } = useGlobalLoader();
   const { isLoggingOut } = useAuthContext();
 
   useEffect(() => {

@@ -43,7 +43,7 @@ import { displayDateAndTime } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
-import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
+import { ModalPortal, useGlobalLoader } from 'components/ApplicationRoot';
 import SignOffValidationModal from './SignOffValidationModal';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
@@ -112,7 +112,7 @@ const gqlClinicalEntityToClinicalSubmissionEntityFile =
 
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { setGlobalLoading } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
 
   // not declared as a side effect that changes with program change
   // change in 'data' always seems to take precedence over currentFileList within `defaultClinicalEntityType`

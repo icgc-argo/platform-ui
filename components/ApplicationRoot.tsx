@@ -133,7 +133,7 @@ const GlobalLoadingContext = React.createContext({
   isGlobalLoading: false,
   setGlobalLoading: (isGlobalLoading: boolean) => {},
 });
-export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
+export const useGlobalLoader = () => React.useContext(GlobalLoadingContext);
 const GlobalLoaderProvider = ({
   children,
   startWithGlobalLoader,

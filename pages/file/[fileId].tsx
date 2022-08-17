@@ -26,7 +26,7 @@ import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
 import VALID_FILE_ENTITY_CHECK from './VALID_FILE_ENTITY_CHECK.gql';
 import get from 'lodash/get';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import { useGlobalLoader } from 'components/ApplicationRoot';
 
 export default createPage({
   isPublic: true,
@@ -54,7 +54,7 @@ export default createPage({
 
   const isValidEntity = !!get(data, 'file.hits.total', false);
 
-  const { setGlobalLoading } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
 
   if (!loading && !isValidEntity) {
     setGlobalLoading(false);
