@@ -158,6 +158,7 @@ export default function ApplicationRoot({
                     z-index: 9998;
                     ${fillAvailableWidth}
                   `}
+                  id="modalPortalRef"
                   ref={modalPortalRef}
                 />
                 <div
@@ -167,6 +168,7 @@ export default function ApplicationRoot({
                     top: 0px;
                     z-index: 9999;
                   `}
+                  id="loaderPortalRef"
                   ref={loaderPortalRef}
                 />
                 <PersistentStateProvider>

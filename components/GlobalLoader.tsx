@@ -26,8 +26,24 @@ import Modal from '@icgc-argo/uikit/Modal';
 import { FadingDiv } from './Fader';
 import { fillAvailableHeight, fillAvailableWidth } from './Modal';
 
+/*
+ * ############################################################################
+ * Instructions for using the global loader:
+ *
+ * 1. Use the useGlobalLoader() hook rather than adding more loaders.
+ * 2. Use setGlobalLoader(true) to show the loader.
+ * 3. Use setGlobalLoader(false) to hide the loader.
+ * 4. OPTIONAL: To show the loader when the page loads,
+ *    add `startWithGlobalLoader: true` in createPage().
+ *    This is used by getInitialProps and only runs on 1st render.
+ */
+
+export type IsGlobalLoading = boolean;
+export const GLOBAL_LOADING_DEFAULT = false;
+
 export const loaderPortalRef = React.createRef<HTMLDivElement>();
-const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: boolean }) => {
+
+const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: IsGlobalLoading }) => {
   const ref = loaderPortalRef.current;
   const fadeIn = 400;
   const fadeOut = 600;
@@ -57,8 +73,8 @@ const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: boolean }) => 
 };
 
 const GlobalLoadingContext = React.createContext({
-  isGlobalLoading: false,
-  setGlobalLoading: (isGlobalLoading: boolean) => {},
+  isGlobalLoading: GLOBAL_LOADING_DEFAULT,
+  setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
 });
 
 const useGlobalLoader = () => React.useContext(GlobalLoadingContext);
@@ -68,9 +84,11 @@ export const GlobalLoaderProvider = ({
   startWithGlobalLoader,
 }: {
   children: React.ReactNode | React.ReactNodeArray;
-  startWithGlobalLoader: boolean;
+  startWithGlobalLoader: IsGlobalLoading;
 }) => {
-  const [isGlobalLoading, setGlobalLoading] = React.useState(startWithGlobalLoader || false);
+  const [isGlobalLoading, setGlobalLoading] = React.useState(
+    startWithGlobalLoader || GLOBAL_LOADING_DEFAULT,
+  );
 
   return (
     <GlobalLoadingContext.Provider value={{ isGlobalLoading, setGlobalLoading }}>
