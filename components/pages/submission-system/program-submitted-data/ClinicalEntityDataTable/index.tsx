@@ -346,7 +346,7 @@ const ClinicalEntityDataTable = ({
       .map((record) => {
         let clinicalRecord = {};
         record.forEach((r) => {
-          clinicalRecord[r.name] = r.value || '';
+          clinicalRecord[r.name] = r.name === 'donor_id' ? `DO${r.value}` : r.value || '';
           if (completionStats && r.name === 'donor_id') {
             const completion =
               completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
@@ -357,8 +357,7 @@ const ClinicalEntityDataTable = ({
               clinicalRecord[completionField] = completion[field] || 0;
             });
 
-            const donor_id = `DO${r.value}`;
-            clinicalRecord = { ...clinicalRecord, donor_id, ...completion };
+            clinicalRecord = { ...clinicalRecord, ...completion };
           }
         });
 
