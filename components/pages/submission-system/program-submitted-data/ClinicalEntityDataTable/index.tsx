@@ -248,7 +248,7 @@ const ClinicalEntityDataTable = ({
   const noData = clinicalData.clinicalEntities.length === 0;
 
   // Collect Error Data
-  const { clinicalErrors } = clinicalData;
+  const { clinicalErrors = [] } = clinicalData;
   let totalErrors = 0;
   const tableErrorGroups = [];
 
@@ -407,7 +407,11 @@ const ClinicalEntityDataTable = ({
           (error.info?.value && error.info.value[0] === original[id]),
       );
 
-    let errorState = (isCompletionCell && original[id] === 0) || specificErrorValue?.length > 0;
+    // TODO: Only highlight specificErrors; requires update to clinical service
+    let errorState =
+      (isCompletionCell && original[id] === 0) ||
+      specificErrorValue?.length > 0 ||
+      hasClinicalErrors;
 
     const border = getHeaderBorder(id);
 

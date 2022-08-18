@@ -164,6 +164,7 @@ export const hasClinicalErrors = (
   { clinicalErrors }: ClinicalEntityQueryResponse['clinicalData'],
   currentEntity: string,
 ) =>
+  clinicalErrors &&
   clinicalErrors.length > 0 &&
   clinicalErrors.filter(
     (donor) =>
