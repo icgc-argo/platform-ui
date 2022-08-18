@@ -342,27 +342,29 @@ const ClinicalEntityDataTable = ({
       columns.splice(1, 0, ...Object.values(completionColumnHeaders));
     }
 
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '';
-        if (completionStats && r.name === 'donor_id') {
-          const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-            emptyCompletion;
+    records = entityData.records
+      .map((record) => {
+        let clinicalRecord = {};
+        record.forEach((r) => {
+          clinicalRecord[r.name] = r.value || '';
+          if (completionStats && r.name === 'donor_id') {
+            const completion =
+              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+              emptyCompletion;
 
-          CoreCompletionFields.forEach((field) => {
-            const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] || 0;
-          });
+            CoreCompletionFields.forEach((field) => {
+              const completionField = completionColumnHeaders[field];
+              clinicalRecord[completionField] = completion[field] || 0;
+            });
 
-          const donor_id = `DO${r.value}`;
-          clinicalRecord = { ...clinicalRecord, donor_id, ...completion };
-        }
-      });
+            const donor_id = `DO${r.value}`;
+            clinicalRecord = { ...clinicalRecord, donor_id, ...completion };
+          }
+        });
 
-      return clinicalRecord;
-    });
+        return clinicalRecord;
+      })
+      .sort(sortEntityData);
   }
 
   const getHeaderBorder = (key) =>
