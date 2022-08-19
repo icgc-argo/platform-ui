@@ -380,10 +380,11 @@ const ClinicalEntityDataTable = ({
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
+    const originalDonorId = original['donor_id'];
     const cellDonorId = parseInt(
-      original['donor_id'] && original['donor_id'].includes('DO')
-        ? original['donor_id'].substring(2)
-        : original['donor_id'],
+      originalDonorId && originalDonorId.includes('DO')
+        ? originalDonorId.substring(2)
+        : originalDonorId,
     );
 
     const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
