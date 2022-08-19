@@ -346,8 +346,9 @@ const ClinicalEntityDataTable = ({
       .map((record) => {
         let clinicalRecord = {};
         record.forEach((r) => {
-          clinicalRecord[r.name] = r.name === 'donor_id' ? `DO${r.value}` : r.value || '';
-          if (completionStats && r.name === 'donor_id') {
+          const displayKey = r.name;
+          clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+          if (completionStats && displayKey === 'donor_id') {
             const completion =
               completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
               emptyCompletion;
