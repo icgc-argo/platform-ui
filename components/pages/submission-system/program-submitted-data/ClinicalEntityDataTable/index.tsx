@@ -409,7 +409,7 @@ const ClinicalEntityDataTable = ({
       );
 
     // TODO: Only highlight specificErrors; requires update to clinical service
-    let errorState =
+    const errorState =
       (isCompletionCell && original[id] === 0) ||
       specificErrorValue?.length > 0 ||
       hasClinicalErrors;
