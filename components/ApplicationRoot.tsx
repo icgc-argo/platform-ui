@@ -108,7 +108,7 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
-const RefDiv = styled('div')`
+const TopLayerContainer = styled('div')`
   position: fixed;
   left: 0px;
   top: 0px;
@@ -157,8 +157,8 @@ export default function ApplicationRoot({
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
-                <RefDiv id="modalPortalRef" ref={modalPortalRef} />
-                <RefDiv id="loaderPortalRef" ref={loaderPortalRef} />
+                <TopLayerContainer id="modalPortal" ref={modalPortalRef} />
+                <TopLayerContainer id="loaderPortal" ref={loaderPortalRef} />
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />
