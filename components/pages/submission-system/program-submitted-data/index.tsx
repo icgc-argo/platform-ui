@@ -48,6 +48,7 @@ import {
   emptyResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
+import SearchBar from './SearchBar';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -137,6 +138,8 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
+      <SearchBar noData={noData}></SearchBar>
+
       {loading ? (
         <DnaLoader />
       ) : (
