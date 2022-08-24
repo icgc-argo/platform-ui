@@ -34,6 +34,7 @@ import {
   searchBarParentStyle,
   searchInputFieldStyle,
   searchFilterButtonStyle,
+  searchFilterContainerStyle,
   searchFilterIconStyle,
   searchDownloadIconStyle,
 } from './style';
@@ -43,6 +44,7 @@ import Button from '@icgc-argo/uikit/Button';
 
 import { css } from '@icgc-argo/uikit';
 import { DownloadIcon } from 'components/pages/file-entity/common';
+import Typography from '@icgc-argo/uikit/Typography';
 
 export default function SearchBar({ noData }: { noData: boolean }) {
   const theme = useTheme();
@@ -53,8 +55,8 @@ export default function SearchBar({ noData }: { noData: boolean }) {
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
-      <div css={searchTitleParentStyle}>
-        Clincial Data for:{' '}
+      <Typography css={searchTitleParentStyle} variant="subtitle2">
+        Clinical Data for:{' '}
         <b css={searchBoldTextStyle}>{keyword ? ` ${keyword}` : ` All Donors`}</b>
         {keyword && (
           <Button
@@ -67,13 +69,13 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             <u>Clear Filters</u>
           </Button>
         )}
-      </div>
+      </Typography>
 
       {/* Grouping second to forth item together */}
       <div css={searchRightSideGroupStyle}>
         {/* Second item - filter */}
         <div css={searchFilterParentStyle}>
-          Quick Filters:
+          <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
             variant="secondary"
@@ -117,9 +119,16 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             }}
             getOverrideCss={() => searchInputFieldStyle}
           ></Input>
-          <Button variant="secondary" css={searchFilterButtonStyle}>
-            <Icon name="filter" fill="accent2_dark" css={searchFilterIconStyle}></Icon>
-            List
+          <Button css={searchFilterButtonStyle} variant="secondary">
+            <span css={searchFilterContainerStyle}>
+              <Icon
+                name="filter"
+                fill="accent2_dark"
+                height="12px"
+                css={searchFilterIconStyle}
+              ></Icon>{' '}
+              List
+            </span>
           </Button>
         </div>
         {/* Fourth item - download button*/}

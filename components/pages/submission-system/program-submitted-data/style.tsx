@@ -25,16 +25,8 @@ export const searchBackgroundStyle = css`
   justify-content: space-between;
   width: auto;
   height: auto;
-  margin: 0 0 25px 0;
-  padding: 12px 17px 12px 17px;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  font-family: WorkSans, sans-serif;
-  font-size: 16px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
+  margin-bottom: 25px;
+  padding: 0 17px;
 `;
 
 export const searchTitleParentStyle = css`
@@ -63,14 +55,14 @@ export const searchFilterParentStyle = css`
   display: flex;
   align-items: center;
   width: fit-content;
-  margin: 5px 10px 5px 10px;
+  margin: 0 10px;
 `;
 
 export const searchDropdownStyle = css`
   width: fit-content;
   height: fit-content;
   margin: 0 0 0 7px;
-  padding: 8px 8px 8px 8px;
+  padding: 8px;
 `;
 
 export const searchDownArrowStyle = css`
@@ -84,7 +76,7 @@ export const searchBarParentStyle = css`
   border-style: solid;
   border-color: #babcc2;
   border-width: 1px;
-  margin: 5px 10px 5px 10px;
+  margin: 0 10px;
 `;
 
 export const searchInputFieldStyle = css`
@@ -92,7 +84,6 @@ export const searchInputFieldStyle = css`
   border-top: none;
   border-left: none;
   border-bottom: none;
-  margin-right: 2px;
   width: 215px;
 `;
 
@@ -101,10 +92,15 @@ export const searchFilterButtonStyle = css`
   border: none;
 `;
 
+export const searchFilterContainerStyle = css`
+  display: flex;
+  align-items: center;
+`;
+
 export const searchFilterIconStyle = css`
-  margin-right: 3px;
+  margin-right: 5px;
 `;
 
 export const searchDownloadIconStyle = css`
-  margin: 0 3px 0 3px;
+  margin: 0 3px;
 `;
