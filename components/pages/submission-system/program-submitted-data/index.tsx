@@ -28,7 +28,6 @@ import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import Container from '@icgc-argo/uikit/Container';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import Icon from '@icgc-argo/uikit/Icon';
 import Link from '@icgc-argo/uikit/Link';
 import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
@@ -48,7 +47,7 @@ import {
   emptyResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
-import { GlobalLoaderView } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -57,6 +56,7 @@ const defaultClinicalEntityTab = 'donor';
 export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
+  const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
@@ -76,6 +76,10 @@ export default function ProgramSubmittedData() {
         filters: defaultClinicalEntityFilters,
       },
     });
+
+  React.useEffect(() => {
+    setGlobalLoading(loading);
+  }, [loading]);
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
@@ -138,8 +142,6 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <GlobalLoaderView isLoading={loading} />
-
       <Container>
         <div
           css={css`
