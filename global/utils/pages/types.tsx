@@ -19,6 +19,7 @@
 
 import * as React from 'react';
 import { NextPageContext } from 'next';
+import { IsGlobalLoading } from 'components/GlobalLoader';
 
 export type GetInitialPropsContext = NextPageContext & {
   res?: NextPageContext['res'] & {
@@ -47,6 +48,6 @@ export type PageConfigProps = {
       variables?: { [key: string]: any };
     }>
   >;
-  startWithGlobalLoader: boolean;
+  startWithGlobalLoader: IsGlobalLoading;
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
