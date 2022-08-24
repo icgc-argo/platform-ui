@@ -50,14 +50,12 @@ export default function SearchBar({ noData }: { noData: boolean }) {
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
-  useEffect(() => {}, []);
 
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
-        Clinical Data for:{' '}
-        <b css={searchBoldTextStyle}>{keyword ? ` ${keyword}` : ` All Donors`}</b>
+        Clinical Data for: <b css={searchBoldTextStyle}>{keyword || ` All Donors`}</b>
         {keyword && (
           <Button
             onClick={() => {
@@ -118,15 +116,10 @@ export default function SearchBar({ noData }: { noData: boolean }) {
               setKeyword(e.target.value);
             }}
             getOverrideCss={() => searchInputFieldStyle}
-          ></Input>
+          />
           <Button css={searchFilterButtonStyle} variant="secondary">
             <span css={searchFilterContainerStyle}>
-              <Icon
-                name="filter"
-                fill="accent2_dark"
-                height="12px"
-                css={searchFilterIconStyle}
-              ></Icon>{' '}
+              <Icon name="filter" fill="accent2_dark" height="12px" css={searchFilterIconStyle} />{' '}
               List
             </span>
           </Button>
