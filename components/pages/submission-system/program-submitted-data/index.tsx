@@ -138,7 +138,7 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar noData={noData}></SearchBar>
+      <SearchBar noData={noData} />
 
       {loading ? (
         <DnaLoader />

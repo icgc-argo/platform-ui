@@ -1,23 +1,42 @@
+/*
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import {
-  background,
-  titleParent,
-  boldText,
-  clearFilter,
-  rightSideGroup,
-  filterParent,
-  dropdown,
-  downArrow,
-  searchBarParent,
-  inputField,
-  filterButton,
-  filterIcon,
-  downloadIcon,
-} from './common';
+  searchBackgroundStyle,
+  searchTitleParentStyle,
+  searchBoldTextStyle,
+  searchClearFilterStyle,
+  searchRightSideGroupStyle,
+  searchFilterParentStyle,
+  searchDropdownStyle,
+  searchDownArrowStyle,
+  searchBarParentStyle,
+  searchInputFieldStyle,
+  searchFilterButtonStyle,
+  searchFilterIconStyle,
+  searchDownloadIconStyle,
+} from './style';
 import Icon from '@icgc-argo/uikit/Icon';
 import { Input } from '@icgc-argo/uikit/form';
 import Button from '@icgc-argo/uikit/Button';
@@ -32,16 +51,17 @@ export default function SearchBar({ noData }: { noData: boolean }) {
   useEffect(() => {}, []);
 
   return (
-    <Container css={background}>
+    <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
-      <div css={titleParent}>
-        Clincial Data for: <b css={boldText}>{keyword ? ` ${keyword}` : ` All Donors`}</b>
+      <div css={searchTitleParentStyle}>
+        Clincial Data for:{' '}
+        <b css={searchBoldTextStyle}>{keyword ? ` ${keyword}` : ` All Donors`}</b>
         {keyword && (
           <Button
             onClick={() => {
               setKeyword('');
             }}
-            css={clearFilter}
+            css={searchClearFilterStyle}
             variant="secondary"
           >
             <u>Clear Filters</u>
@@ -50,12 +70,12 @@ export default function SearchBar({ noData }: { noData: boolean }) {
       </div>
 
       {/* Grouping second to forth item together */}
-      <div css={rightSideGroup}>
+      <div css={searchRightSideGroupStyle}>
         {/* Second item - filter */}
-        <div css={filterParent}>
+        <div css={searchFilterParentStyle}>
           Quick Filters:
           <DropdownButton
-            css={dropdown}
+            css={searchDropdownStyle}
             variant="secondary"
             size="sm"
             onItemClick={() => {}}
@@ -79,12 +99,12 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             ]}
           >
             - select an option -
-            <Icon name="chevron_down" fill="accent2_dark" css={downArrow} />
+            <Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
           </DropdownButton>
         </div>
 
         {/* Third item - search bar */}
-        <div css={searchBarParent}>
+        <div css={searchBarParentStyle}>
           <Input
             aria-label="search-for-files"
             size="sm"
@@ -95,14 +115,14 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
-            getOverrideCss={() => inputField}
+            getOverrideCss={() => searchInputFieldStyle}
           ></Input>
-          <Button variant="secondary" css={filterButton}>
-            <Icon name="filter" fill="accent2_dark" css={filterIcon}></Icon>
+          <Button variant="secondary" css={searchFilterButtonStyle}>
+            <Icon name="filter" fill="accent2_dark" css={searchFilterIconStyle}></Icon>
             List
           </Button>
         </div>
-        {/* Forth item - download button*/}
+        {/* Fourth item - download button*/}
 
         <Button
           css={css`
@@ -117,7 +137,7 @@ export default function SearchBar({ noData }: { noData: boolean }) {
           disabled={noData}
         >
           <Icon
-            css={downloadIcon}
+            css={searchDownloadIconStyle}
             name="download"
             fill={noData ? 'grey_1' : 'accent2_dark'}
             height="12px"

@@ -16,7 +16,6 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css } from '@icgc-argo/uikit';
 
 export enum CoreCompletionEntities {
   donor = 'donor',
@@ -181,93 +180,3 @@ export const emptyResponse: ClinicalEntityQueryResponse = {
     clinicalErrors: [],
   },
 };
-
-export const background = css`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: auto;
-  height: auto;
-  margin: 0 0 25px 0;
-  padding: 12px 17px 12px 17px;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
-  font-family: WorkSans, sans-serif;
-  font-size: 16px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-`;
-
-export const titleParent = css`
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  margin-left: 10px;
-`;
-
-export const boldText = css`
-  margin-left: 5px;
-`;
-
-export const clearFilter = css`
-  background-color: inherit;
-  border: none;
-`;
-
-export const rightSideGroup = css`
-  display: felx;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-export const filterParent = css`
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  margin: 5px 10px 5px 10px;
-`;
-
-export const dropdown = css`
-  width: fit-content;
-  height: fit-content;
-  margin: 0 0 0 7px;
-  padding: 8px 8px 8px 8px;
-`;
-
-export const downArrow = css`
-  margin-left: 10px;
-  height: 9px;
-`;
-
-export const searchBarParent = css`
-  display: flex;
-  border-radius: 100px;
-  border-style: solid;
-  border-color: #babcc2;
-  border-width: 1px;
-  margin: 5px 10px 5px 10px;
-`;
-
-export const inputField = css`
-  border-radius: 100px 0 0 100px;
-  border-top: none;
-  border-left: none;
-  border-bottom: none;
-  margin-right: 2px;
-  width: 215px;
-`;
-
-export const filterButton = css`
-  border-radius: 0 100px 100px 0;
-  border: none;
-`;
-
-export const filterIcon = css`
-  margin-right: 3px;
-`;
-
-export const downloadIcon = css`
-  margin: 0 3px 0 3px;
-`;
