@@ -36,7 +36,7 @@ export default createPage({
       canWriteProgramData({ permissions, programId: String(shortName) })
     );
   },
-  startWithGlobalLoader: false,
+  startWithGlobalLoader: true,
 })((props) => {
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
 
