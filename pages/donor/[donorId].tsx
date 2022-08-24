@@ -26,7 +26,7 @@ import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/react-hooks';
 import VALID_DONOR_ENTITY_CHECK from './VALID_DONOR_ENTITY_CHECK.gql';
 import get from 'lodash/get';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import useEntityData from 'components/pages/donor-entity/useEntityData';
 import { instructionBoxLoadingButtonStyle } from 'components/pages/submission-system/common';
 
@@ -60,19 +60,19 @@ export default createPage({
   // const isValidEntity = !!get(profile, 'file.hits.total', false);
   const isValidEntity = true;
 
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
   const loading = donorLoading || profileLoading;
 
   if (!loading && !isValidEntity) {
-    setLoaderShown(false);
+    setGlobalLoading(false);
     const err = new Error('Page Not Found') as Error & { statusCode?: number };
     err[ERROR_STATUS_KEY] = 404;
     return <ErrorPage statusCode={404} />;
   } else if (loading) {
-    setLoaderShown(true);
+    setGlobalLoading(true);
     return <div></div>;
   }
-  setLoaderShown(false);
+  setGlobalLoading(false);
 
   return <DonorEntityPage {...props} donor={donor} />;
 });
