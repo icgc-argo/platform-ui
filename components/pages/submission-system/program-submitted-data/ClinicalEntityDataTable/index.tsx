@@ -475,7 +475,13 @@ const ClinicalEntityDataTable = ({
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
-    <DnaLoader />
+    <DnaLoader
+      css={css`
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      `}
+    />
   ) : noData ? (
     <NoDataCell />
   ) : (
