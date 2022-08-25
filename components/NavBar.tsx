@@ -48,7 +48,7 @@ import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
-import { ModalPortal } from './ApplicationRoot';
+import ModalPortal from './Modal';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';

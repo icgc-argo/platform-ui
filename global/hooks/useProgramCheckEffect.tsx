@@ -22,7 +22,7 @@ import { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME from './gql/PROGRAM_SHORTNAME.gql';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
 
@@ -35,21 +35,22 @@ export const useProgramCheckEffect = () => {
       shortName: shortName,
     },
   });
-  const { setLoading: setLoaderShown, isLoading: isLoaderShown } = useGlobalLoadingState();
+  const { setGlobalLoading, isGlobalLoading } = useGlobalLoader();
   const { isLoggingOut } = useAuthContext();
 
   useEffect(() => {
     if (!isLoggingOut) {
-      if (!program && !isLoaderShown) {
-        setLoaderShown(true);
+      if (!program && !isGlobalLoading) {
+        setGlobalLoading(true);
       }
       if (!loadingQuery) {
         if (!program) {
           const err = new Error('Program not found') as Error & { statusCode?: number };
           err[ERROR_STATUS_KEY] = 404;
           throw err;
-        } else if (isLoaderShown) {
-          sleep(1200).then(() => setLoaderShown(false));
+        } else if (isGlobalLoading) {
+          // extend loading animation so it looks better
+          sleep(1200).then(() => setGlobalLoading(false));
         }
       }
     }

@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
@@ -41,9 +41,7 @@ import {
 import Icon from '@icgc-argo/uikit/Icon';
 import { Input } from '@icgc-argo/uikit/form';
 import Button from '@icgc-argo/uikit/Button';
-
 import { css } from '@icgc-argo/uikit';
-import { DownloadIcon } from 'components/pages/file-entity/common';
 import Typography from '@icgc-argo/uikit/Typography';
 
 export default function SearchBar({ noData }: { noData: boolean }) {
