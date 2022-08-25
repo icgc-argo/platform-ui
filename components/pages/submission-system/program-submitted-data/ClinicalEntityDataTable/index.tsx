@@ -37,6 +37,7 @@ import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
   aliasSortNames,
   aliasedEntityNames,
+  aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
@@ -247,7 +248,7 @@ const ClinicalEntityDataTable = ({
   const noData = clinicalData.clinicalEntities.length === 0;
 
   // Collect Error Data
-  const { clinicalErrors } = clinicalData;
+  const { clinicalErrors = [] } = clinicalData;
   let totalErrors = 0;
   const tableErrorGroups = [];
 
@@ -345,11 +346,13 @@ const ClinicalEntityDataTable = ({
       .map((record) => {
         let clinicalRecord = {};
         record.forEach((r) => {
-          clinicalRecord[r.name] = r.value || '';
-          if (completionStats && r.name === 'donor_id') {
+          const displayKey = r.name;
+          clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+          if (completionStats && displayKey === 'donor_id') {
             const completion =
               completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
               emptyCompletion;
+
             CoreCompletionFields.forEach((field) => {
               const completionField = completionColumnHeaders[field];
               clinicalRecord[completionField] = completion[field] || 0;
@@ -376,11 +379,43 @@ const ClinicalEntityDataTable = ({
 
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+
+    const originalDonorId = original['donor_id'];
+    const cellDonorId = parseInt(
+      originalDonorId && originalDonorId.includes('DO')
+        ? originalDonorId.substring(2)
+        : originalDonorId,
+    );
+
+    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+
+    const columnErrorData =
+      donorErrorData &&
+      donorErrorData.errors.filter(
+        (error) =>
+          error &&
+          (error.entityName === entityType ||
+            (aliasedEntityFields.includes(error.entityName) &&
+              aliasedEntityNames[entityType] === error.entityName)) &&
+          error.fieldName === id,
+      );
+
+    const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+    const specificErrorValue =
+      hasClinicalErrors &&
+      columnErrorData.filter(
+        (error) =>
+          error.info?.value === original[id] ||
+          (error.info?.value && error.info.value[0] === original[id]),
+      );
+
+    // TODO: Only highlight specificErrors; requires update to clinical service
     const errorState =
       (isCompletionCell && original[id] === 0) ||
-      clinicalErrors
-        .find((donor) => donor.donorId == original['donor_id'])
-        ?.errors.find((error) => error.fieldName === id);
+      specificErrorValue?.length > 0 ||
+      hasClinicalErrors;
+
     const border = getHeaderBorder(id);
 
     return {
