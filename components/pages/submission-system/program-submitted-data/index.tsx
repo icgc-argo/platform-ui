@@ -144,7 +144,6 @@ export default function ProgramSubmittedData() {
       }
     >
       <SearchBar noData={noData} />
-
       {loading ? (
         <DnaLoader />
       ) : (
@@ -155,7 +154,6 @@ export default function ProgramSubmittedData() {
             `}
           >
             {/* Sidebar */}
-
             <div
               css={css`
                 width: 20%;
