@@ -38,7 +38,7 @@ import CREATE_PROGRAM_MUTATION from './gql/CREATE_PROGRAM_MUTATION';
 import { useMutation } from '@apollo/client';
 import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST_QUERY from '../gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-import { useGlobalLoadingState } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
 
 /* *************************************** *
  * Reshape form data for gql input
@@ -89,11 +89,11 @@ const CreateProgramPage = () => {
     },
   });
 
-  const { setLoading: setFormDisabled } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
 
   const onSubmit = async (data) => {
     try {
-      setFormDisabled(true);
+      setGlobalLoading(true);
       await sendCreateProgram({
         variables: { program: createProgramInput(data) },
       });
@@ -120,7 +120,7 @@ const CreateProgramPage = () => {
         commonToasters.unknownError();
       }
     } finally {
-      setFormDisabled(false);
+      setGlobalLoading(false);
     }
   };
 

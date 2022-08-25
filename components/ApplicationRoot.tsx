@@ -24,130 +24,19 @@ import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { css, ThemeProvider } from '@icgc-argo/uikit';
-import Modal from '@icgc-argo/uikit/Modal';
+import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
-import { CSSTransition } from 'react-transition-group';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { getConfig } from 'global/config';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import GdprMessage from './GdprMessage';
-import { FadingDiv } from './Fader';
 import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import SystemAlerts from './SystemAlerts';
-
-/**
- * The global portal where modals will show up
- */
-
-const fillAvailableWidth = css`
-  width: -webkit-fill-available;
-  width: -moz-available;
-  min-width: -webkit-fill-available;
-  min-width: -moz-available;
-`;
-
-const fillAvailableHeight = css`
-  height: -webkit-fill-available;
-  height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: -moz-available;
-`;
-
-const modalPortalRef = React.createRef<HTMLDivElement>();
-const useMounted = () => {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted;
-};
-export const ModalPortal = ({ children }: { children: React.ReactElement }) => {
-  const ref = modalPortalRef.current;
-  const mounted = useMounted();
-  return ref
-    ? ReactDOM.createPortal(
-        <div
-          id="modalContainer"
-          css={css`
-            transition: all 0.2s;
-            opacity: ${mounted ? 1 : 0};
-          `}
-        >
-          <Modal.Overlay
-            css={css`
-              ${fillAvailableWidth}
-              ${fillAvailableHeight}
-              @media (min-width: 768px) {
-                width: 100vw;
-                height: 100vh;
-              }
-            `}
-          >
-            {children}
-          </Modal.Overlay>
-        </div>,
-        ref,
-      )
-    : null;
-};
-
-const loaderPortalRef = React.createRef<HTMLDivElement>();
-export const GlobalLoaderView = ({ isLoading }: { isLoading: boolean }) => {
-  const ref = loaderPortalRef.current;
-  const fadeIn = 400;
-  const fadeOut = 600;
-  return ref
-    ? ReactDOM.createPortal(
-        <CSSTransition in={isLoading} timeout={fadeIn} classNames="on" unmountOnExit>
-          {() => (
-            <FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
-              <Modal.Overlay
-                css={css`
-                  ${fillAvailableWidth}
-                  ${fillAvailableHeight}
-                  @media (min-width: 768px) {
-                    width: 100vw;
-                    height: 100vh;
-                  }
-                `}
-              >
-                <DnaLoader />
-              </Modal.Overlay>
-            </FadingDiv>
-          )}
-        </CSSTransition>,
-        ref,
-      )
-    : null;
-};
-
-const GlobalLoadingContext = React.createContext({
-  isLoading: false,
-  setLoading: (isLoading: boolean) => {},
-});
-export const useGlobalLoadingState = () => React.useContext(GlobalLoadingContext);
-export const GlobalLoaderProvider = ({
-  children,
-  startWithGlobalLoader,
-}: {
-  children: React.ReactNode | React.ReactNodeArray;
-  startWithGlobalLoader: boolean;
-}) => {
-  const [isLoading, setLoading] = React.useState(startWithGlobalLoader || false);
-
-  return (
-    <GlobalLoadingContext.Provider value={{ isLoading, setLoading }}>
-      {children}
-      <GlobalLoaderView isLoading={isLoading} />
-    </GlobalLoadingContext.Provider>
-  );
-};
+import { fillAvailableWidth, modalPortalRef } from './Modal';
+import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';
 
 const ToastProvider = ({ children }) => {
   const toaster = useToastState();
@@ -217,6 +106,13 @@ const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
+const TopLayerContainer = styled('div')`
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 9999;
+`;
+
 export default function ApplicationRoot({
   egoJwt,
   apolloCache,
@@ -259,25 +155,8 @@ export default function ApplicationRoot({
           <PageContext.Provider value={pageContext}>
             <ThemeProvider>
               <ToastProvider>
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9999;
-                    ${fillAvailableWidth}
-                  `}
-                  ref={modalPortalRef}
-                />
-                <div
-                  css={css`
-                    position: fixed;
-                    left: 0px;
-                    top: 0px;
-                    z-index: 9999;
-                  `}
-                  ref={loaderPortalRef}
-                />
+                <TopLayerContainer id="modalPortal" ref={modalPortalRef} />
+                <TopLayerContainer id="loaderPortal" ref={loaderPortalRef} />
                 <PersistentStateProvider>
                   <GlobalLoaderProvider startWithGlobalLoader={startWithGlobalLoader}>
                     <GdprMessage />

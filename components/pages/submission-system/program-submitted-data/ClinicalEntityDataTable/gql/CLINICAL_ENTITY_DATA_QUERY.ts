@@ -55,6 +55,9 @@ const CLINICAL_ENTITY_DATA_QUERY = gql`
           errorType
           fieldName
           index
+          info {
+            value
+          }
           message
           entityName
         }

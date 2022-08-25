@@ -19,8 +19,9 @@
 
 import React from 'react';
 import Modal from '@icgc-argo/uikit/Modal';
-import { ModalPortal, useGlobalLoadingState } from 'components/ApplicationRoot';
 import { useMutation } from '@apollo/client';
+import useGlobalLoader from 'components/GlobalLoader';
+import ModalPortal from 'components/Modal';
 import pluralize from 'pluralize';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
@@ -62,14 +63,14 @@ export default function RegisterSamplesModal({
     ],
   });
 
-  const { setLoading: setGlobalLoadingState } = useGlobalLoadingState();
+  const { setGlobalLoading } = useGlobalLoader();
 
   const toaster = useToaster();
 
   const handleActionClick = async () => {
     handleCancelClick();
 
-    setGlobalLoadingState(true);
+    setGlobalLoading(true);
     await sleep();
 
     await commitRegistration()
@@ -105,7 +106,7 @@ export default function RegisterSamplesModal({
           content: error.toString(),
         });
       });
-    setGlobalLoadingState(false);
+    setGlobalLoading(false);
   };
 
   return (
