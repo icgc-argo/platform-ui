@@ -59,13 +59,14 @@ export type ClinicalEntity = {
 };
 
 export type ClinicalErrorData = {
-  donorId: string;
+  donorId: number;
   submitterDonorId: string;
   errors: {
     entityName: string;
     errorType: string;
     fieldName: string;
     index: number;
+    info: { value: string[] };
     message: string;
   }[];
 };
@@ -163,6 +164,7 @@ export const hasClinicalErrors = (
   { clinicalErrors }: ClinicalEntityQueryResponse['clinicalData'],
   currentEntity: string,
 ) =>
+  clinicalErrors &&
   clinicalErrors.length > 0 &&
   clinicalErrors.filter(
     (donor) =>
