@@ -494,6 +494,12 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noData ? 50 : 250,
           style: noData ? noDataCellStyle : {},
+          Cell: ({ value }) =>
+            value === 1 ? (
+              <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+            ) : (
+              value
+            ),
         })),
       },
       {
