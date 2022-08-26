@@ -44,6 +44,7 @@ import {
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
+  CompletionStates,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
@@ -102,7 +103,8 @@ export default function ProgramSubmittedData() {
   ));
 
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
-
+  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  console.log(completionState);
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -143,7 +145,7 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar noData={noData} />
+      <SearchBar onChange={setCompletionState} noData={noData} />
       {loading ? (
         <DnaLoader />
       ) : (
@@ -217,7 +219,11 @@ export default function ProgramSubmittedData() {
               </div>
               {/* DataTable */}
               <div>
-                <ClinicalEntityDataTable entityType={currentEntity} program={programShortName} />
+                <ClinicalEntityDataTable
+                  entityType={currentEntity}
+                  program={programShortName}
+                  completionState={completionState}
+                />
               </div>
             </div>
           </div>

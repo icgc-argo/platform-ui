@@ -44,6 +44,7 @@ import {
   defaultClinicalEntityFilters,
   emptyResponse,
   clinicalEntityDisplayNames,
+  CompletionStates,
 } from '../common';
 
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
@@ -163,6 +164,7 @@ export const getEntityData = (
   page: number,
   pageSize: number,
   sort: string,
+  completionState: CompletionStates,
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
@@ -173,6 +175,7 @@ export const getEntityData = (
         sort,
         page,
         pageSize,
+        completionState,
         entityTypes: validateEntityQueryName(entityType),
       },
     },
@@ -181,9 +184,11 @@ export const getEntityData = (
 const ClinicalEntityDataTable = ({
   entityType,
   program,
+  completionState = CompletionStates['all'],
 }: {
   entityType: string;
   program: string;
+  completionState: CompletionStates;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -242,6 +247,7 @@ const ClinicalEntityDataTable = ({
     page,
     pageSize,
     sort,
+    completionState,
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;

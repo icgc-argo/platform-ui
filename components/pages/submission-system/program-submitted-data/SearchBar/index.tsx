@@ -44,7 +44,13 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
-export default function SearchBar({ noData }: { noData: boolean }) {
+export default function SearchBar({
+  noData,
+  onChange,
+}: {
+  noData: boolean;
+  onChange: (state: string) => void;
+}) {
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
@@ -76,7 +82,9 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             css={searchDropdownStyle}
             variant="secondary"
             size="sm"
-            onItemClick={() => {}}
+            onItemClick={(e) => {
+              onChange(e.value);
+            }}
             menuItems={[
               {
                 display: 'Show all donors',
@@ -84,15 +92,15 @@ export default function SearchBar({ noData }: { noData: boolean }) {
               },
               {
                 display: 'Show invalid donors',
-                value: 'all',
+                value: 'invalid',
               },
               {
                 display: 'Show clinically complete donors',
-                value: 'all',
+                value: 'complete',
               },
               {
                 display: 'Show clinically incomplete donors',
-                value: 'all',
+                value: 'incomplete',
               },
             ]}
           >
