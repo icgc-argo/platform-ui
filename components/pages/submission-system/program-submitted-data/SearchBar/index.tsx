@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { CompletionStates } from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -49,7 +50,7 @@ export default function SearchBar({
   onChange,
 }: {
   noData: boolean;
-  onChange: (state: string) => void;
+  onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
 }) {
   const theme = useTheme();
 
@@ -88,19 +89,19 @@ export default function SearchBar({
             menuItems={[
               {
                 display: 'Show all donors',
-                value: 'all',
+                value: CompletionStates['all'],
               },
               {
                 display: 'Show invalid donors',
-                value: 'invalid',
+                value: CompletionStates['invalid'],
               },
               {
                 display: 'Show clinically complete donors',
-                value: 'complete',
+                value: CompletionStates['complete'],
               },
               {
                 display: 'Show clinically incomplete donors',
-                value: 'incomplete',
+                value: CompletionStates['incomplete'],
               },
             ]}
           >
