@@ -30,7 +30,7 @@ const withPlugins = require('next-compose-plugins');
 const withImages = require('next-images');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
-const nextConfig = withPlugins([withTM, withImages], {
+const nextConfig = withPlugins([withImages, withTM], {
   exportPathMap: async (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
@@ -63,11 +63,6 @@ const nextConfig = withPlugins([withTM, withImages], {
 
     config.resolve.alias['react'] = path.resolve(__dirname, '.', 'node_modules', 'react');
     // end react configs
-
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    });
 
     return config;
   },
