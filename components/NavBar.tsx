@@ -227,20 +227,6 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     );
   };
 
-  const LogoComponent = React.forwardRef((props, ref) => (
-    <div
-      ref={ref}
-      {...props}
-      css={css`
-        padding: 0 18px;
-      `}
-    >
-      <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
-    </div>
-  ));
-
-  console.log(disableLogoLink);
-
   return (
     <AppBar
       css={css`
@@ -250,13 +236,18 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       `}
     >
       <Section>
-        {disableLogoLink ? (
-          <LogoComponent />
-        ) : (
-          <Link href="/" id="home-login">
-            <LogoComponent />
-          </Link>
-        )}
+        <Link href={disableLogoLink ? '#' : '/'} id="home-login">
+          <div
+            css={css`
+              padding: 0 18px;
+              &:hover {
+                cursor: ${disableLogoLink ? 'normal' : 'pointer'};
+              }
+            `}
+          >
+            <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
+          </div>
+        </Link>
 
         {isMobileDropdownOpen && <MobileDropdown />}
 
