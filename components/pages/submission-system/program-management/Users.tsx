@@ -28,7 +28,7 @@ import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notification
 import EditUserModal from '../modals/editUser';
 import DeleteUserModal from '../modals/deleteUser';
 import ResendInviteModal from '../modals/resendInvite';
-import { ModalPortal } from 'components/ApplicationRoot';
+import ModalPortal from 'components/Modal';
 
 import { useToaster } from 'global/hooks/toaster';
 import { UserModel, RoleDisplayName } from '../modals/common';

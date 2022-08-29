@@ -38,12 +38,20 @@ import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   aliasSortNames,
   aliasedEntityNames,
+  aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  clinicalEntityDisplayNames,
 } from '../common';
+
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+
+import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 
 export type DonorEntry = {
   row: string;
@@ -54,7 +62,7 @@ export type DonorEntry = {
 const errorColumns = [
   {
     accessor: 'entries',
-    Header: '# Affected Donors',
+    Header: '# Affected Records',
     id: 'entries',
     maxWidth: 135,
   },
@@ -63,12 +71,6 @@ const errorColumns = [
     Header: `Field with Error`,
     id: 'fieldName',
     maxWidth: 215,
-  },
-  {
-    accessor: 'errorType',
-    Header: 'Error Value',
-    id: 'errorType',
-    maxWidth: 185,
   },
   {
     accessor: 'message',
@@ -86,23 +88,23 @@ const Container = styled('div')`
 `;
 
 const NoDataCell = () => (
-  <Container>
-    <Image alt="" src={noDataSvg} width={102} height={75} layout="fixed" />
-    <Typography
-      css={css`
-        margin-top: 14px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="data"
-      as="p"
-      bold
-    >
-      No Data Found
-    </Typography>
-  </Container>
+  <div
+    css={css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+    `}
+  >
+    <ContentPlaceholder title="No Data Found.">
+      <img alt="No Data" src={noDataSvg} />
+    </ContentPlaceholder>
+  </div>
 );
 
+const completionKeys = Object.values(aliasSortNames);
+const completionColumnNames = Object.keys(aliasSortNames);
 const emptyCompletion = {
   DO: 0,
   PD: 0,
@@ -118,22 +120,6 @@ const noDataCompletionStats = [
     ...emptyCompletion,
   },
 ];
-
-const Subtitle = (program) => (
-  <div
-    css={css`
-      margin-bottom: 12px;
-    `}
-  >
-    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
-    was released and has made some donors invalid. Please download the error report to view the
-    affected donors, then submit a corrected TSV file in the{' '}
-    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
-      Submit Clinical Data
-    </Link>{' '}
-    workspace.
-  </div>
-);
 
 const completionColumnHeaders = {
   donor: 'DO',
@@ -212,7 +198,28 @@ const ClinicalEntityDataTable = ({
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
-  const sort = `${desc ? '-' : ''}${aliasSortNames[id] || id}`;
+  const sortKey = aliasSortNames[id] || id;
+  const sort = `${desc ? '-' : ''}${sortKey}`;
+
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+  const Subtitle = ({ program = '' }) => (
+    <div
+      css={css`
+        margin-bottom: 12px;
+      `}
+    >
+      <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+        {!latestDictionaryResponse.loading &&
+          `Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
+      </Link>{' '}
+      of the data dictionary was released and has made some donors invalid. Please download the
+      error report to view the affected donors, then submit a corrected TSV file in the{' '}
+      <Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
+        Submit Clinical Data{' '}
+      </Link>
+      workspace.
+    </div>
+  );
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
@@ -242,7 +249,7 @@ const ClinicalEntityDataTable = ({
   const noData = clinicalData.clinicalEntities.length === 0;
 
   // Collect Error Data
-  const { clinicalErrors } = clinicalData;
+  const { clinicalErrors = [] } = clinicalData;
   let totalErrors = 0;
   const tableErrorGroups = [];
 
@@ -268,23 +275,55 @@ const ClinicalEntityDataTable = ({
   const hasErrors = totalErrors > 0;
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     const entries = errorGroup.length;
-    const { errorType, fieldName, entityName, message } = errorGroup[0];
+    const { fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
-      errorType,
       fieldName,
       entityName,
       message,
     };
   });
 
+  const sortEntityData = (prev, next) => {
+    let sortVal = 0;
+
+    if (hasErrors) {
+      // If Current Entity has Errors, Prioritize Data w/ Errors
+      const { errorsA, errorsB } = clinicalErrors.reduce(
+        (acc, current) => {
+          if (current.donorId == prev['donor_id']) {
+            acc.errorsA = -1;
+          }
+          if (current.donorId == next['donor_id']) {
+            acc.errorsB = 1;
+          }
+          return acc;
+        },
+        { errorsA: 0, errorsB: 0 },
+      );
+
+      sortVal += errorsA + errorsB;
+    }
+
+    // Handles Manual User Sorting by Core Completion columns
+    const completionSortIndex = completionKeys.indexOf(sortKey);
+
+    if (completionSortIndex) {
+      const completionSortKey = completionColumnNames[completionSortIndex];
+      const completionA = prev[completionSortKey];
+      const completionB = next[completionSortKey];
+
+      sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+      sortVal *= desc ? -1 : 1;
+    }
+
+    return sortVal;
+  };
+
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
-    // Empty string column holds No Data image
-    columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
-
     records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
@@ -295,7 +334,6 @@ const ClinicalEntityDataTable = ({
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
     totalDocs = entityData.totalDocs;
-
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
@@ -305,26 +343,29 @@ const ClinicalEntityDataTable = ({
       columns.splice(1, 0, ...Object.values(completionColumnHeaders));
     }
 
-    records = entityData.records.map((record) => {
-      let clinicalRecord = {};
-      record.forEach((r) => {
-        clinicalRecord[r.name] = r.value || '--';
-        if (completionStats && r.name === 'donor_id') {
-          const completion =
-            completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-            emptyCompletion;
+    records = entityData.records
+      .map((record) => {
+        let clinicalRecord = {};
+        record.forEach((r) => {
+          const displayKey = r.name;
+          clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+          if (completionStats && displayKey === 'donor_id') {
+            const completion =
+              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
+              emptyCompletion;
 
-          CoreCompletionFields.forEach((field) => {
-            const completionField = completionColumnHeaders[field];
-            clinicalRecord[completionField] = completion[field] || 0;
-          });
+            CoreCompletionFields.forEach((field) => {
+              const completionField = completionColumnHeaders[field];
+              clinicalRecord[completionField] = completion[field] || 0;
+            });
 
-          clinicalRecord = { ...clinicalRecord, ...completion };
-        }
-      });
+            clinicalRecord = { ...clinicalRecord, ...completion };
+          }
+        });
 
-      return clinicalRecord;
-    });
+        return clinicalRecord;
+      })
+      .sort(sortEntityData);
   }
 
   const getHeaderBorder = (key) =>
@@ -339,11 +380,43 @@ const ClinicalEntityDataTable = ({
 
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+
+    const originalDonorId = original['donor_id'];
+    const cellDonorId = parseInt(
+      originalDonorId && originalDonorId.includes('DO')
+        ? originalDonorId.substring(2)
+        : originalDonorId,
+    );
+
+    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+
+    const columnErrorData =
+      donorErrorData &&
+      donorErrorData.errors.filter(
+        (error) =>
+          error &&
+          (error.entityName === entityType ||
+            (aliasedEntityFields.includes(error.entityName) &&
+              aliasedEntityNames[entityType] === error.entityName)) &&
+          error.fieldName === id,
+      );
+
+    const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+    const specificErrorValue =
+      hasClinicalErrors &&
+      columnErrorData.filter(
+        (error) =>
+          error.info?.value === original[id] ||
+          (error.info?.value && error.info.value[0] === original[id]),
+      );
+
+    // TODO: Only highlight specificErrors; requires update to clinical service
     const errorState =
       (isCompletionCell && original[id] === 0) ||
-      clinicalErrors
-        .find((donor) => donor.donorId == original['donor_id'])
-        ?.errors.find((error) => error.fieldName === id);
+      specificErrorValue?.length > 0 ||
+      hasClinicalErrors;
+
     const border = getHeaderBorder(id);
 
     return {
@@ -373,7 +446,8 @@ const ClinicalEntityDataTable = ({
     };
 
     const dataHeaderStyle = {
-      textAlign: 'center',
+      textAlign: 'left',
+      paddingLeft: '6px',
     };
 
     const noDataCellStyle = {
@@ -424,15 +498,9 @@ const ClinicalEntityDataTable = ({
         })),
       },
       {
-        Header: 'SUBMITTED DONOR DATA',
+        Header: <div>SUBMITTED DONOR DATA</div>,
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7).map((column, i) =>
-          noData
-            ? {
-                Cell: <NoDataCell />,
-              }
-            : column,
-        ),
+        columns: columns.slice(7).map((column, i) => column),
       },
     ];
   }
@@ -443,7 +511,15 @@ const ClinicalEntityDataTable = ({
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
-    <DnaLoader />
+    <DnaLoader
+      css={css`
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      `}
+    />
+  ) : noData ? (
+    <NoDataCell />
   ) : (
     <div
       ref={containerRef}
@@ -460,7 +536,9 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
+            title={`${totalErrors.toLocaleString()} error(s) found in ${clinicalEntityDisplayNames[
+              entityType
+            ].toLowerCase()} data`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
@@ -499,6 +577,7 @@ const ClinicalEntityDataTable = ({
         page={page}
         pages={numTablePages}
         pageSize={pageSize}
+        defaultSortMethod={sortEntityData}
         sorted={sorted}
         getTdProps={getCellStyles}
         columns={columns}

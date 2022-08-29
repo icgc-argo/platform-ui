@@ -29,7 +29,7 @@ import { ContentBox } from '@icgc-argo/uikit/PageLayout';
 import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
 import AddUserModal from 'components/pages/submission-system/modals/addUser';
 import ProgramForm from '../program-form/ProgramForm';
-import { ModalPortal } from 'components/ApplicationRoot';
+import ModalPortal from 'components/Modal';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';

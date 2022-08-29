@@ -31,7 +31,8 @@ import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { ModalPortal, GlobalLoaderView } from 'components/ApplicationRoot';
+import useGlobalLoader from 'components/GlobalLoader';
+import ModalPortal from 'components/Modal';
 import Modal from '@icgc-argo/uikit/Modal';
 import { sleep } from 'global/utils/common';
 import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
@@ -58,7 +59,7 @@ const Header = ({
   const { egoJwt, permissions } = useAuthContext();
   const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
-  const [loaderShown, setLoaderShown] = React.useState(false);
+  const { setGlobalLoading } = useGlobalLoader();
   const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
     useClinicalSubmissionQuery(programShortName);
 
@@ -108,7 +109,7 @@ const Header = ({
       buttonSize: 'sm',
     });
     if (didUserConfirm) {
-      setLoaderShown(true);
+      setGlobalLoading(true);
       await sleep();
       try {
         await reopenSubmission();
@@ -116,7 +117,7 @@ const Header = ({
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
       } finally {
-        setLoaderShown(false);
+        setGlobalLoading(false);
       }
     }
   };
@@ -131,7 +132,7 @@ const Header = ({
     });
 
     if (didUserConfirm) {
-      setLoaderShown(true);
+      setGlobalLoading(true);
       await sleep();
       try {
         await approveClinicalSubmission();
@@ -153,13 +154,13 @@ const Header = ({
         await refetchClinicalSubmission();
         commonToaster.unknownErrorWithReloadMessage();
       } finally {
-        setLoaderShown(false);
+        setGlobalLoading(false);
       }
     }
   };
 
   const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
-    setLoaderShown(true);
+    setGlobalLoading(true);
     await sleep();
     try {
       await clearClinicalSubmission();
@@ -173,7 +174,7 @@ const Header = ({
       await refetchClinicalSubmission();
       commonToaster.unknownErrorWithReloadMessage();
     } finally {
-      setLoaderShown(false);
+      setGlobalLoading(false);
     }
   };
 
@@ -184,7 +185,6 @@ const Header = ({
           <Modal {...modalProps} />
         </ModalPortal>
       )}
-      <GlobalLoaderView isLoading={loaderShown} />
       <div
         css={css`
           display: flex;
