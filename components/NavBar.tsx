@@ -29,6 +29,7 @@ import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJ
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import Link from 'next/link';
+import Image from 'next/image';
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
 import AppBar, {
@@ -52,6 +53,7 @@ import ModalPortal from './Modal';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import { useScreenClass } from 'react-grid-system';
+import ArgoLogo from 'images/argo-logo.svg';
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
@@ -234,17 +236,18 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       `}
     >
       <Section>
-        <Logo
-          DomComponent={(props) =>
-            disableLogoLink ? (
-              <div {...props} />
-            ) : (
-              <Link href={`/`}>
-                <a {...props} id="home-login" />
-              </Link>
-            )
-          }
-        />
+        <Link href={disableLogoLink ? '#' : '/'} id="home-login">
+          <div
+            css={css`
+              padding: 0 18px;
+              &:hover {
+                cursor: ${disableLogoLink ? 'normal' : 'pointer'};
+              }
+            `}
+          >
+            <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
+          </div>
+        </Link>
 
         {isMobileDropdownOpen && <MobileDropdown />}
 

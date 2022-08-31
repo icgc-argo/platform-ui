@@ -126,7 +126,7 @@ export default function TeamPage() {
             height: 140px;
             display: flex;
             align-items: center;
-            background-image: url('/static/icgc-galaxy-bg.jpg');
+            background-image: url('/images/icgc-galaxy-bg.jpg');
             background-position: center;
             background-size: cover;
             margin-bottom: 36px;

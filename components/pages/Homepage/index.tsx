@@ -171,7 +171,7 @@ const HeroDiv = styled('div')`
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
-      url('/static/icgc-galaxy-bg.jpg');`};
+      url('/images/icgc-galaxy-bg.jpg');`};
 
   background-position: center;
   background-size: cover;
@@ -360,7 +360,7 @@ export default function Homepage() {
         <NewsContainer newsItems={newsItems} />
         <div
           css={css`
-            background-image: url('/static/icgc-globe-bg.svg');
+            background-image: url('/images/icgc-globe-bg.svg');
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;

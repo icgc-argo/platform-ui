@@ -17,19 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @type {import('next').NextConfig}
+ */
+
 require('dotenv').config();
 
 const urlJoin = require('url-join');
-
-const withImages = require('next-images');
 const path = require('path');
 
 const withPlugins = require('next-compose-plugins');
+const withImages = require('next-images');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
-// withImages is needed for uikit components like Icon and Logo
-module.exports = withPlugins([withTM, withImages], {
-  exportPathMap: (defaultPathMap) =>
+const nextConfig = withPlugins([withImages, withTM], {
+  exportPathMap: async (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
           '/': { page: process.env.EXPORT_PATH },
@@ -87,3 +89,5 @@ module.exports = withPlugins([withTM, withImages], {
     FEATURE_SUBMITTED_DATA_ENABLED: process.env.FEATURE_SUBMITTED_DATA_ENABLED,
   },
 });
+
+module.exports = nextConfig;
