@@ -373,10 +373,11 @@ const ClinicalEntityDataTable = ({
       ? `3px solid ${theme.colors.grey}`
       : '';
 
+  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
+
   const getCellStyles = (state, row, column) => {
     const { original } = row;
-    const { id } = column;
-
+    const { id, ...others } = column;
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
@@ -423,6 +424,17 @@ const ClinicalEntityDataTable = ({
         color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
         background: errorState ? theme.colors.error_4 : '',
         borderRight: border,
+        ...(column.Header === 'donor_id' && {
+          background: 'white',
+          position: 'absolute',
+        }),
+        ...(column.Header === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(column.Header === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
     };
   };
@@ -434,6 +446,19 @@ const ClinicalEntityDataTable = ({
       Header: key,
       headerStyle: {
         borderRight: getHeaderBorder(key),
+        ...(key === 'donor_id' && {
+          position: 'absolute',
+          //z-index used here because header element is beneath its neighbouring element.
+          zIndex: 1,
+          background: 'white',
+        }),
+        ...(key === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(key === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
       minWidth: getColumnWidth(key, showCompletionStats, noData),
     };
@@ -584,6 +609,11 @@ const ClinicalEntityDataTable = ({
         onPageChange={(value) => updatePageSettings('page', value)}
         onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
         onSortedChange={(value) => updatePageSettings('sorted', value)}
+        onResizedChange={(newResized) => {
+          newResized.forEach(
+            (column) => column.id === 'donor_id' && setStickyDonorIDColumnsWidth(column.value),
+          );
+        }}
       />
     </div>
   );
