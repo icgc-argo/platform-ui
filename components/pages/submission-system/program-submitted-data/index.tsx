@@ -104,7 +104,6 @@ export default function ProgramSubmittedData() {
 
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
   const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
-  console.log(completionState);
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -145,7 +144,7 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar onChange={setCompletionState} noData={noData} />
+      <SearchBar onChange={setCompletionState} completionState={completionState} noData={noData} />
       {loading ? (
         <DnaLoader />
       ) : (

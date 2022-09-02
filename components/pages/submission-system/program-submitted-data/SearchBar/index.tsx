@@ -45,16 +45,39 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
+const menuItems = [
+  {
+    display: 'Show all donors',
+    value: CompletionStates['all'],
+  },
+  {
+    display: 'Show invalid donors',
+    value: CompletionStates['invalid'],
+  },
+  {
+    display: 'Show clinically complete donors',
+    value: CompletionStates['complete'],
+  },
+  {
+    display: 'Show clinically incomplete donors',
+    value: CompletionStates['incomplete'],
+  },
+];
+
 export default function SearchBar({
   noData,
   onChange,
+  completionState,
 }: {
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
+  completionState: CompletionStates;
 }) {
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
+  const [displayText, setDisplayText] = useState('- Select an option -');
+  let isFirstRender = true;
 
   return (
     <Container css={searchBackgroundStyle}>
@@ -81,31 +104,20 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
+            value={completionState}
             variant="secondary"
             size="sm"
             onItemClick={(e) => {
               onChange(e.value);
+              const completionDisplayText =
+                menuItems.find((item) => {
+                  return item.value === e.value;
+                })?.display || '- Select an option -';
+              setDisplayText(completionDisplayText);
             }}
-            menuItems={[
-              {
-                display: 'Show all donors',
-                value: CompletionStates['all'],
-              },
-              {
-                display: 'Show invalid donors',
-                value: CompletionStates['invalid'],
-              },
-              {
-                display: 'Show clinically complete donors',
-                value: CompletionStates['complete'],
-              },
-              {
-                display: 'Show clinically incomplete donors',
-                value: CompletionStates['incomplete'],
-              },
-            ]}
+            menuItems={menuItems}
           >
-            - select an option -
+            {displayText}
             <Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
           </DropdownButton>
         </div>
