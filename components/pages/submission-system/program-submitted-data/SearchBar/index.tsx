@@ -45,21 +45,28 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
+const titleCopy = {
+  all: 'All Donors',
+  invalid: 'Invalid Donors',
+  complete: 'Complete Donors',
+  incomplete: 'Incomplete Donors',
+};
+
 const menuItems = [
   {
-    display: 'Show all donors',
+    display: `Show ${titleCopy['all']}`,
     value: CompletionStates['all'],
   },
   {
-    display: 'Show invalid donors',
+    display: `Show ${titleCopy['invalid']}`,
     value: CompletionStates['invalid'],
   },
   {
-    display: 'Show clinically complete donors',
+    display: `Show ${titleCopy['complete']}`,
     value: CompletionStates['complete'],
   },
   {
-    display: 'Show clinically incomplete donors',
+    display: `Show ${titleCopy['incomplete']}`,
     value: CompletionStates['incomplete'],
   },
 ];
@@ -77,13 +84,13 @@ export default function SearchBar({
 
   const [keyword, setKeyword] = useState('');
   const [displayText, setDisplayText] = useState('- Select an option -');
-  let isFirstRender = true;
+  const titleText = keyword || titleCopy[completionState];
 
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
-        Clinical Data for: <b css={searchBoldTextStyle}>{keyword || ` All Donors`}</b>
+        Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
         {keyword && (
           <Button
             onClick={() => {
