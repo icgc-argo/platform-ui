@@ -54,19 +54,19 @@ const titleCopy = {
 
 const menuItems = [
   {
-    display: `Show ${titleCopy['all']}`,
+    display: `Show ${titleCopy[CompletionStates['all']]}`,
     value: CompletionStates['all'],
   },
   {
-    display: `Show ${titleCopy['invalid']}`,
+    display: `Show ${titleCopy[CompletionStates['invalid']]}`,
     value: CompletionStates['invalid'],
   },
   {
-    display: `Show ${titleCopy['complete']}`,
+    display: `Show ${titleCopy[CompletionStates['complete']]}`,
     value: CompletionStates['complete'],
   },
   {
-    display: `Show ${titleCopy['incomplete']}`,
+    display: `Show ${titleCopy[CompletionStates['incomplete']]}`,
     value: CompletionStates['incomplete'],
   },
 ];
