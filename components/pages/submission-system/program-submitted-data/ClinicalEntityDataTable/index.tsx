@@ -377,7 +377,7 @@ const ClinicalEntityDataTable = ({
 
   const getCellStyles = (state, row, column) => {
     const { original } = row;
-    const { id, ...others } = column;
+    const { id } = column;
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
