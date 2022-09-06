@@ -111,9 +111,9 @@ export default function SearchBar({
             size="sm"
             onItemClick={(e) => {
               onChange(e.value);
-              const completionDisplayText =
-                (COMPLETION_OPTIONS[e.value] && `Show ${COMPLETION_OPTIONS[e.value].display}`) ||
-                '- Select an option -';
+              const completionDisplayText = COMPLETION_OPTIONS[e.value]
+                ? `Show ${COMPLETION_OPTIONS[e.value].display}`
+                : '- Select an option -';
               setDisplayText(completionDisplayText);
             }}
             menuItems={MENU_ITEMS}
