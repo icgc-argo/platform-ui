@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { CompletionStates } from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -44,16 +45,47 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
-export default function SearchBar({ noData }: { noData: boolean }) {
+const COMPLETION_OPTIONS = {
+  all: {
+    display: `All Donors`,
+    value: CompletionStates['all'],
+  },
+  invalid: {
+    display: `Invalid Donors`,
+    value: CompletionStates['invalid'],
+  },
+  complete: {
+    display: `Complete Donors`,
+    value: CompletionStates['complete'],
+  },
+  incomplete: {
+    display: `Incomplete Donors`,
+    value: CompletionStates['incomplete'],
+  },
+};
+
+const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
+
+export default function SearchBar({
+  noData,
+  onChange,
+  completionState,
+}: {
+  noData: boolean;
+  onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
+  completionState: CompletionStates;
+}) {
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
+  const [displayText, setDisplayText] = useState('- Select an option -');
+  const titleText = keyword || COMPLETION_OPTIONS[completionState].display;
 
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
-        Clinical Data for: <b css={searchBoldTextStyle}>{keyword || ` All Donors`}</b>
+        Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
         {keyword && (
           <Button
             onClick={() => {
@@ -74,29 +106,19 @@ export default function SearchBar({ noData }: { noData: boolean }) {
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
+            value={completionState}
             variant="secondary"
             size="sm"
-            onItemClick={() => {}}
-            menuItems={[
-              {
-                display: 'Show all donors',
-                value: 'all',
-              },
-              {
-                display: 'Show invalid donors',
-                value: 'all',
-              },
-              {
-                display: 'Show clinically complete donors',
-                value: 'all',
-              },
-              {
-                display: 'Show clinically incomplete donors',
-                value: 'all',
-              },
-            ]}
+            onItemClick={(e) => {
+              onChange(e.value);
+              const completionDisplayText = COMPLETION_OPTIONS[e.value]
+                ? `Show ${COMPLETION_OPTIONS[e.value].display}`
+                : '- Select an option -';
+              setDisplayText(completionDisplayText);
+            }}
+            menuItems={MENU_ITEMS}
           >
-            - select an option -
+            {displayText}
             <Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
           </DropdownButton>
         </div>
