@@ -45,31 +45,26 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
-const titleCopy = {
-  all: 'All Donors',
-  invalid: 'Invalid Donors',
-  complete: 'Complete Donors',
-  incomplete: 'Incomplete Donors',
-};
-
-const menuItems = [
-  {
-    display: `Show ${titleCopy[CompletionStates['all']]}`,
+const COMPLETION_OPTIONS = {
+  all: {
+    display: `All Donors`,
     value: CompletionStates['all'],
   },
-  {
-    display: `Show ${titleCopy[CompletionStates['invalid']]}`,
+  invalid: {
+    display: `Invalid Donors`,
     value: CompletionStates['invalid'],
   },
-  {
-    display: `Show ${titleCopy[CompletionStates['complete']]}`,
+  complete: {
+    display: `Complete Donors`,
     value: CompletionStates['complete'],
   },
-  {
-    display: `Show ${titleCopy[CompletionStates['incomplete']]}`,
+  incomplete: {
+    display: `Incomplete Donors`,
     value: CompletionStates['incomplete'],
   },
-];
+};
+
+const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 export default function SearchBar({
   noData,
@@ -84,7 +79,7 @@ export default function SearchBar({
 
   const [keyword, setKeyword] = useState('');
   const [displayText, setDisplayText] = useState('- Select an option -');
-  const titleText = keyword || titleCopy[completionState];
+  const titleText = keyword || COMPLETION_OPTIONS[completionState].display;
 
   return (
     <Container css={searchBackgroundStyle}>
@@ -117,12 +112,11 @@ export default function SearchBar({
             onItemClick={(e) => {
               onChange(e.value);
               const completionDisplayText =
-                menuItems.find((item) => {
-                  return item.value === e.value;
-                })?.display || '- Select an option -';
+                (COMPLETION_OPTIONS[e.value] && `Show ${COMPLETION_OPTIONS[e.value].display}`) ||
+                '- Select an option -';
               setDisplayText(completionDisplayText);
             }}
-            menuItems={menuItems}
+            menuItems={MENU_ITEMS}
           >
             {displayText}
             <Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
