@@ -44,7 +44,13 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
-export default function SearchBar({ noData }: { noData: boolean }) {
+export default function SearchBar({
+  noData,
+  setModalVisible,
+}: {
+  noData: boolean;
+  setModalVisible: any;
+}) {
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
@@ -115,7 +121,11 @@ export default function SearchBar({ noData }: { noData: boolean }) {
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
-          <Button css={searchFilterButtonStyle} variant="secondary">
+          <Button
+            css={searchFilterButtonStyle}
+            variant="secondary"
+            onClick={() => setModalVisible(true)}
+          >
             <span css={searchFilterContainerStyle}>
               <Icon name="filter" fill="accent2_dark" height="12px" css={searchFilterIconStyle} />{' '}
               List

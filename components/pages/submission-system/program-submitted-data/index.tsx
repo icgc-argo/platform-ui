@@ -18,6 +18,7 @@
  */
 
 import * as React from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
 import { Row, setConfiguration } from 'react-grid-system';
@@ -49,6 +50,7 @@ import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
 import useGlobalLoader from 'components/GlobalLoader';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import ModalPortal from 'components/Modal';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -81,6 +83,8 @@ export default function ProgramSubmittedData() {
   React.useEffect(() => {
     setGlobalLoading(loading);
   }, [loading]);
+
+  const [ModalVisible, setModalVisible] = useState(false);
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
@@ -143,11 +147,12 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar noData={noData} />
+      <SearchBar noData={noData} setModalVisible={setModalVisible} />
       {loading ? (
         <DnaLoader />
       ) : (
         <Container>
+          {ModalVisible}
           <div
             css={css`
               width: 100%;
