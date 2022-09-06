@@ -37,12 +37,21 @@ import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
 import {
   aliasSortNames,
   aliasedEntityNames,
+  aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  clinicalEntityDisplayNames,
+  CompletionStates,
 } from '../common';
+
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+
+import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
+import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 
 export type DonorEntry = {
   row: string;
@@ -53,7 +62,7 @@ export type DonorEntry = {
 const errorColumns = [
   {
     accessor: 'entries',
-    Header: '# Affected Donors',
+    Header: '# Affected Records',
     id: 'entries',
     maxWidth: 135,
   },
@@ -62,12 +71,6 @@ const errorColumns = [
     Header: `Field with Error`,
     id: 'fieldName',
     maxWidth: 215,
-  },
-  {
-    accessor: 'errorType',
-    Header: 'Error Value',
-    id: 'errorType',
-    maxWidth: 185,
   },
   {
     accessor: 'message',
@@ -85,26 +88,19 @@ const Container = styled('div')`
 `;
 
 const NoDataCell = () => (
-  <Container>
-    <img
-      css={css`
-        height: 75px;
-      `}
-      src={noDataSvg}
-    />
-    <Typography
-      css={css`
-        margin-top: 14px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="data"
-      as="p"
-      bold
-    >
-      No Data Found
-    </Typography>
-  </Container>
+  <div
+    css={css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+    `}
+  >
+    <ContentPlaceholder title="No Data Found.">
+      <img alt="No Data" src={noDataSvg} />
+    </ContentPlaceholder>
+  </div>
 );
 
 const completionKeys = Object.values(aliasSortNames);
@@ -124,22 +120,6 @@ const noDataCompletionStats = [
     ...emptyCompletion,
   },
 ];
-
-const Subtitle = (program) => (
-  <div
-    css={css`
-      margin-bottom: 12px;
-    `}
-  >
-    <Link href="https://docs.icgc-argo.org/dictionary">Version 1.13</Link> of the data dictionary
-    was released and has made some donors invalid. Please download the error report to view the
-    affected donors, then submit a corrected TSV file in the{' '}
-    <Link href={`/submission/program/${program}/clinical-submission?tab=donor`}>
-      Submit Clinical Data
-    </Link>{' '}
-    workspace.
-  </div>
-);
 
 const completionColumnHeaders = {
   donor: 'DO',
@@ -184,6 +164,7 @@ export const getEntityData = (
   page: number,
   pageSize: number,
   sort: string,
+  completionState: CompletionStates,
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
@@ -194,6 +175,7 @@ export const getEntityData = (
         sort,
         page,
         pageSize,
+        completionState,
         entityTypes: validateEntityQueryName(entityType),
       },
     },
@@ -202,9 +184,11 @@ export const getEntityData = (
 const ClinicalEntityDataTable = ({
   entityType,
   program,
+  completionState = CompletionStates['all'],
 }: {
   entityType: string;
   program: string;
+  completionState: CompletionStates;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -220,6 +204,26 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+
+  const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+  const Subtitle = ({ program = '' }) => (
+    <div
+      css={css`
+        margin-bottom: 12px;
+      `}
+    >
+      <Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+        {!latestDictionaryResponse.loading &&
+          `Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
+      </Link>{' '}
+      of the data dictionary was released and has made some donors invalid. Please download the
+      error report to view the affected donors, then submit a corrected TSV file in the{' '}
+      <Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
+        Submit Clinical Data{' '}
+      </Link>
+      workspace.
+    </div>
+  );
 
   const updatePageSettings = (key, value) => {
     const newPageSettings = { ...pageSettings, [key]: value };
@@ -243,13 +247,14 @@ const ClinicalEntityDataTable = ({
     page,
     pageSize,
     sort,
+    completionState,
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
 
   // Collect Error Data
-  const { clinicalErrors } = clinicalData;
+  const { clinicalErrors = [] } = clinicalData;
   let totalErrors = 0;
   const tableErrorGroups = [];
 
@@ -275,11 +280,10 @@ const ClinicalEntityDataTable = ({
   const hasErrors = totalErrors > 0;
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     const entries = errorGroup.length;
-    const { errorType, fieldName, entityName, message } = errorGroup[0];
+    const { fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
-      errorType,
       fieldName,
       entityName,
       message,
@@ -325,9 +329,6 @@ const ClinicalEntityDataTable = ({
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
-    // Empty string column holds No Data image
-    columns = ['donor_id', ...Object.values(completionColumnHeaders), ' '];
-
     records = noDataCompletionStats;
   } else {
     const entityData = clinicalData.clinicalEntities.find(
@@ -351,11 +352,13 @@ const ClinicalEntityDataTable = ({
       .map((record) => {
         let clinicalRecord = {};
         record.forEach((r) => {
-          clinicalRecord[r.name] = r.value || '--';
-          if (completionStats && r.name === 'donor_id') {
+          const displayKey = r.name;
+          clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+          if (completionStats && displayKey === 'donor_id') {
             const completion =
               completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
               emptyCompletion;
+
             CoreCompletionFields.forEach((field) => {
               const completionField = completionColumnHeaders[field];
               clinicalRecord[completionField] = completion[field] || 0;
@@ -376,17 +379,50 @@ const ClinicalEntityDataTable = ({
       ? `3px solid ${theme.colors.grey}`
       : '';
 
+  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
+
   const getCellStyles = (state, row, column) => {
     const { original } = row;
     const { id } = column;
-
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+
+    const originalDonorId = original['donor_id'];
+    const cellDonorId = parseInt(
+      originalDonorId && originalDonorId.includes('DO')
+        ? originalDonorId.substring(2)
+        : originalDonorId,
+    );
+
+    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+
+    const columnErrorData =
+      donorErrorData &&
+      donorErrorData.errors.filter(
+        (error) =>
+          error &&
+          (error.entityName === entityType ||
+            (aliasedEntityFields.includes(error.entityName) &&
+              aliasedEntityNames[entityType] === error.entityName)) &&
+          error.fieldName === id,
+      );
+
+    const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+    const specificErrorValue =
+      hasClinicalErrors &&
+      columnErrorData.filter(
+        (error) =>
+          error.info?.value === original[id] ||
+          (error.info?.value && error.info.value[0] === original[id]),
+      );
+
+    // TODO: Only highlight specificErrors; requires update to clinical service
     const errorState =
       (isCompletionCell && original[id] === 0) ||
-      clinicalErrors
-        .find((donor) => donor.donorId == original['donor_id'])
-        ?.errors.find((error) => error.fieldName === id);
+      specificErrorValue?.length > 0 ||
+      hasClinicalErrors;
+
     const border = getHeaderBorder(id);
 
     return {
@@ -394,6 +430,17 @@ const ClinicalEntityDataTable = ({
         color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
         background: errorState ? theme.colors.error_4 : '',
         borderRight: border,
+        ...(column.Header === 'donor_id' && {
+          background: 'white',
+          position: 'absolute',
+        }),
+        ...(column.Header === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(column.Header === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
     };
   };
@@ -405,6 +452,19 @@ const ClinicalEntityDataTable = ({
       Header: key,
       headerStyle: {
         borderRight: getHeaderBorder(key),
+        ...(key === 'donor_id' && {
+          position: 'absolute',
+          //z-index used here because header element is beneath its neighbouring element.
+          zIndex: 1,
+          background: 'white',
+        }),
+        ...(key === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(key === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
       minWidth: getColumnWidth(key, showCompletionStats, noData),
     };
@@ -416,7 +476,8 @@ const ClinicalEntityDataTable = ({
     };
 
     const dataHeaderStyle = {
-      textAlign: 'center',
+      textAlign: 'left',
+      paddingLeft: '6px',
     };
 
     const noDataCellStyle = {
@@ -464,18 +525,18 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noData ? 50 : 250,
           style: noData ? noDataCellStyle : {},
+          Cell: ({ value }) =>
+            value === 1 ? (
+              <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+            ) : (
+              value
+            ),
         })),
       },
       {
-        Header: 'SUBMITTED DONOR DATA',
+        Header: <div>SUBMITTED DONOR DATA</div>,
         headerStyle: dataHeaderStyle,
-        columns: columns.slice(7).map((column, i) =>
-          noData
-            ? {
-                Cell: <NoDataCell />,
-              }
-            : column,
-        ),
+        columns: columns.slice(7).map((column, i) => column),
       },
     ];
   }
@@ -486,7 +547,15 @@ const ClinicalEntityDataTable = ({
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
-    <DnaLoader />
+    <DnaLoader
+      css={css`
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      `}
+    />
+  ) : noData ? (
+    <NoDataCell />
   ) : (
     <div
       ref={containerRef}
@@ -503,7 +572,9 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${totalErrors.toLocaleString()} error(s) found in submission workspace`}
+            title={`${totalErrors.toLocaleString()} error(s) found in ${clinicalEntityDisplayNames[
+              entityType
+            ].toLowerCase()} data`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
@@ -550,6 +621,11 @@ const ClinicalEntityDataTable = ({
         onPageChange={(value) => updatePageSettings('page', value)}
         onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
         onSortedChange={(value) => updatePageSettings('sorted', value)}
+        onResizedChange={(newResized) => {
+          newResized.forEach(
+            (column) => column.id === 'donor_id' && setStickyDonorIDColumnsWidth(column.value),
+          );
+        }}
       />
     </div>
   );

@@ -36,6 +36,7 @@ import {
   getAuthorizedProgramScopes,
 } from '../egoJwt';
 import { PageConfigProps, PageWithConfig } from './types';
+import { GLOBAL_LOADING_DEFAULT } from 'components/GlobalLoader';
 
 export const getDefaultRedirectPathForUser = (
   permissions: string[],
@@ -77,6 +78,6 @@ export const createPage =
     page.isAccessible = isAccessible || (async () => true);
     page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
     page.getInitialProps = getInitialProps || (async () => []);
-    page.startWithGlobalLoader = startWithGlobalLoader || false;
+    page.startWithGlobalLoader = startWithGlobalLoader || GLOBAL_LOADING_DEFAULT;
     return page as PageWithConfig;
   };

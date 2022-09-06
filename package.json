@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.111.2",
+  "version": "1.112.0",
   "scripts": {
     "dev": "next -p 8080",
     "build": "rm -rf .next && next build",
@@ -25,6 +25,7 @@
     "@icgc-argo/ego-token-utils": "^8.1.1",
     "@icgc-argo/uikit": "^1.16.0",
     "@overture-stack/arranger-components": "^3.0.0-beta.3",
+    "@types/react-transition-group": "^4.4.5",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
