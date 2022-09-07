@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 import { CompletionStates } from '../common';
 import {
   searchBackgroundStyle,
@@ -78,6 +79,8 @@ export default function SearchBar({
   const theme = useTheme();
 
   const [keyword, setKeyword] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+
   const [displayText, setDisplayText] = useState('- Select an option -');
   const titleText = keyword || COMPLETION_OPTIONS[completionState].display;
 
@@ -134,9 +137,38 @@ export default function SearchBar({
             value={keyword}
             onChange={(e) => {
               setKeyword(e.target.value);
+              if (keyword && keyword.length >= 1) setSearchOpen(true);
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
+          {keyword && keyword.length >= 1 && searchOpen ? (
+            <>
+              <div
+                css={css`
+                  background: transparent;
+                  border-right: 1px solid ${theme.colors.primary_4};
+                  border-left: 1px solid ${theme.colors.primary_4};
+                  height: 18px;
+                  width: 248px;
+                  z-index: 0;
+                  position: absolute;
+                  top: 28px;
+                `}
+              />
+              <SearchResultsMenu
+                searchData={[{ resultId: keyword, secondaryText: '' }]}
+                isLoading={false}
+                onSelect={(value) => {
+                  // setFilterFromFieldAndValue({
+                  //   field: FileCentricDocumentField[currentSearch.esDocumentField],
+                  //   value,
+                  // });
+                  setKeyword('');
+                  setSearchOpen(false);
+                }}
+              />
+            </>
+          ) : null}
           <Button css={searchFilterButtonStyle} variant="secondary">
             <span css={searchFilterContainerStyle}>
               <Icon name="filter" fill="accent2_dark" height="12px" css={searchFilterIconStyle} />{' '}
