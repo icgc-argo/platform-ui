@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { BASE_URL } from 'e2e/config';
+
+const TEST_BASE_URL = process.env.TEST_BASE_URL;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(BASE_URL);
+  await page.goto(TEST_BASE_URL);
   // Click nav >> text=File Repository
   await page.locator('nav >> text=File Repository').click();
 });
@@ -10,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('File Repo', () => {
   test('expect page to have default filters', async ({ page }) => {
     await expect(page).toHaveURL(
-      `${BASE_URL}repository?filters=%7B%22content%22%3A%5B%5D%2C%22op%22%3A%22and%22%7D`,
+      `${TEST_BASE_URL}repository?filters=%7B%22content%22%3A%5B%5D%2C%22op%22%3A%22and%22%7D`,
     );
   });
 
