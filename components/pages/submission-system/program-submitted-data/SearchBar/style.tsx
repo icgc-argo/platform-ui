@@ -77,6 +77,7 @@ export const searchBarParentStyle = css`
   border-color: #babcc2;
   border-width: 1px;
   margin: 0 10px;
+  position: relative;
 `;
 
 export const searchInputFieldStyle = css`
