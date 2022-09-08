@@ -18,6 +18,7 @@
  */
 
 import * as React from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
 import { Row, setConfiguration } from 'react-grid-system';
@@ -58,6 +59,7 @@ const defaultClinicalEntityTab = 'donor';
 export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
+  const [keyword, setKeyword] = useState('');
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -144,7 +146,13 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar onChange={setCompletionState} completionState={completionState} noData={noData} />
+      <SearchBar
+        onChange={setCompletionState}
+        completionState={completionState}
+        noData={noData}
+        keyword={keyword}
+        setKeyword={setKeyword}
+      />
       {loading ? (
         <DnaLoader />
       ) : (
@@ -222,6 +230,7 @@ export default function ProgramSubmittedData() {
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
+                  searchText={keyword}
                 />
               </div>
             </div>

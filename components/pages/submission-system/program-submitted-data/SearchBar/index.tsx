@@ -71,14 +71,16 @@ export default function SearchBar({
   noData,
   onChange,
   completionState,
+  keyword,
+  setKeyword,
 }: {
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
-
-  const [keyword, setKeyword] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
 
   const [displayText, setDisplayText] = useState('- Select an option -');

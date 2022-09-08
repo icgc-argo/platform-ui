@@ -185,10 +185,12 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
+  searchText,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
+  searchText: string;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
