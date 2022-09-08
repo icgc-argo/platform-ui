@@ -74,3 +74,6 @@ chromedriver.log
 .cache
 
 **/.DS_STORE
+/test-results/
+/playwright-report/
+/playwright/.cache/

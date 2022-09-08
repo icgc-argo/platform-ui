@@ -11,7 +11,10 @@
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx gqlValidation/compilation.test.ts",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json ./testSetup.tsx  ./testSetup.tsx components/**/*.test.tsx global/**/*.test.tsx",
     "test-gql-validation": "ts-mocha -p ./tsconfig.test.json ./testSetup.tsx ./gqlValidation/queryValidations.test.ts",
-    "force-resolutions": "npx npm-force-resolutions"
+    "force-resolutions": "npx npm-force-resolutions",
+    "e2e": "npx playwright test",
+    "e2e-debug": "npx playwright test --debug",
+    "e2e-report": "npx playwright show-report"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -81,6 +84,7 @@
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
     "@babel/register": "^7.17.7",
+    "@playwright/test": "^1.25.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/file-saver": "^2.0.5",
     "@types/isomorphic-fetch": "0.0.35",
