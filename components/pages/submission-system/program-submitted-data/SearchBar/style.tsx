@@ -85,7 +85,7 @@ export const searchInputFieldStyle = css`
   border-top: none;
   border-left: none;
   border-bottom: none;
-  width: 215px;
+  width: 248px;
 `;
 
 export const searchFilterButtonStyle = css`
