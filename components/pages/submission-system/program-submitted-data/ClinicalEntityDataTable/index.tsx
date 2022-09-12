@@ -166,7 +166,7 @@ export const getEntityData = (
   sort: string,
   completionState: CompletionStates,
   donorIds: number[],
-  // submitterDonorIds: string[],
+  submitterDonorIds: string[],
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
     errorPolicy: 'all',
@@ -179,7 +179,7 @@ export const getEntityData = (
         pageSize,
         completionState,
         donorIds,
-        // submitterDonorIds,
+        submitterDonorIds,
         entityTypes: validateEntityQueryName(entityType),
       },
     },
@@ -216,7 +216,7 @@ const ClinicalEntityDataTable = ({
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
 
-  // const submitterDonorIds = [searchText];
+  const submitterDonorIds = [searchText];
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -262,7 +262,7 @@ const ClinicalEntityDataTable = ({
     sort,
     completionState,
     donorIds,
-    // submitterDonorIds,
+    submitterDonorIds,
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
