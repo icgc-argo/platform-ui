@@ -19,11 +19,18 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { CompletionStates } from '../common';
+import CLINICAL_ENTITY_SEARCH_RESULTS from '../CLINICAL_ENTITY_SEARCH_RESULTS.gql';
+import {
+  ClinicalEntitySearchResultResponse,
+  CompletionStates,
+  defaultClinicalEntityFilters,
+  emptyResponse,
+} from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -68,23 +75,57 @@ const COMPLETION_OPTIONS = {
 const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 export default function SearchBar({
+  program,
   noData,
   onChange,
   completionState,
   keyword,
   setKeyword,
+  donorIds,
+  submitterDonorIds,
 }: {
+  program: string;
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  donorIds: number[];
+  submitterDonorIds: string[];
 }) {
   const theme = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
 
   const [displayText, setDisplayText] = useState('- Select an option -');
   const titleText = keyword || COMPLETION_OPTIONS[completionState].display;
+  const entityTypes = ['donor'];
+
+  const { loading, data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
+    CLINICAL_ENTITY_SEARCH_RESULTS,
+    {
+      errorPolicy: 'all',
+      variables: {
+        programShortName: program,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds,
+          submitterDonorIds,
+          entityTypes,
+        },
+      },
+    },
+  );
+
+  const { clinicalData } =
+    searchResultData == undefined || loading ? emptyResponse : searchResultData;
+  const entity = clinicalData.clinicalEntities[0];
+  const searchResults =
+    entity?.records.map((record) => {
+      const donorId = record.find((pair) => pair.name === 'donor_id')?.value || '';
+      const submitterId = record.find((pair) => pair.name === 'submitter_donor_id')?.value || '';
+      return { resultId: donorId, secondaryText: submitterId };
+    }) || [];
 
   return (
     <Container css={searchBackgroundStyle}>
@@ -158,8 +199,8 @@ export default function SearchBar({
                 `}
               />
               <SearchResultsMenu
-                searchData={[{ resultId: keyword, secondaryText: '' }]}
-                isLoading={false}
+                searchData={searchResults}
+                isLoading={loading}
                 onSelect={(value) => {
                   // setFilterFromFieldAndValue({
                   //   field: FileCentricDocumentField[currentSearch.esDocumentField],

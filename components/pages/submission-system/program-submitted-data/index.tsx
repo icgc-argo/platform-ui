@@ -106,6 +106,14 @@ export default function ProgramSubmittedData() {
 
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
   const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  const searchDonorIds =
+    keyword
+      .match(/[0-9]*/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
+
+  const searchSubmitterIds = [keyword];
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -147,11 +155,14 @@ export default function ProgramSubmittedData() {
       }
     >
       <SearchBar
+        program={programShortName}
         onChange={setCompletionState}
         completionState={completionState}
         noData={noData}
         keyword={keyword}
         setKeyword={setKeyword}
+        donorIds={searchDonorIds}
+        submitterDonorIds={searchSubmitterIds}
       />
       {loading ? (
         <DnaLoader />
@@ -230,7 +241,8 @@ export default function ProgramSubmittedData() {
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
-                  searchText={keyword}
+                  donorIds={searchDonorIds}
+                  submitterDonorIds={searchSubmitterIds}
                 />
               </div>
             </div>

@@ -79,6 +79,13 @@ export type ClinicalEntityQueryResponse = {
   };
 };
 
+export type ClinicalEntitySearchResultResponse = {
+  clinicalData: {
+    programShortName?: string;
+    clinicalEntities: Array<ClinicalEntity>;
+  };
+};
+
 export type ClinicalFilter = {
   entityTypes: string[];
   page: number;

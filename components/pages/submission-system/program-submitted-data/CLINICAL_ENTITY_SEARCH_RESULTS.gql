@@ -1,0 +1,13 @@
+query CLINICAL_ENTITY_SEARCH_RESULTS($programShortName: String!, $filters: ClinicalInput!) {
+  clinicalData(programShortName: $programShortName, filters: $filters) {
+    programShortName
+    clinicalEntities {
+      entityName
+      totalDocs
+      records {
+        name
+        value
+      }
+    }
+  }
+}

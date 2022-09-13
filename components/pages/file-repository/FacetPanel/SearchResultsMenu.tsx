@@ -108,25 +108,29 @@ const SearchResultsMenu = ({
               onClick={() => onSelect(resultId)}
               key={`${resultId}-${i}`}
             >
-              <ListItem
-                css={css`
-                  font-size: 11px;
-                  font-weight: 500;
-                `}
-              >
-                <>
-                  <span style={{ fontWeight: 700 }}>{resultId} </span>
-                  {`(${secondaryText})`}
-                </>
-              </ListItem>
-              <ListItem
-                css={css`
-                  font-size: 9px;
-                  font-weight: 300;
-                `}
-              >
-                {subText}
-              </ListItem>
+              {secondaryText && (
+                <ListItem
+                  css={css`
+                    font-size: 11px;
+                    font-weight: 500;
+                  `}
+                >
+                  <>
+                    <span style={{ fontWeight: 700 }}>{resultId} </span>
+                    {`(${secondaryText})`}
+                  </>
+                </ListItem>
+              )}
+              {subText && (
+                <ListItem
+                  css={css`
+                    font-size: 9px;
+                    font-weight: 300;
+                  `}
+                >
+                  {subText}
+                </ListItem>
+              )}
             </div>
           ))}
         </ResultsDropdown>

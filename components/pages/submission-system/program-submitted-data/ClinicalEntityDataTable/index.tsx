@@ -18,7 +18,6 @@
  */
 
 import { useQuery } from '@apollo/react-hooks';
-import styled from '@emotion/styled';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
@@ -78,14 +77,6 @@ const errorColumns = [
     id: 'message',
   },
 ];
-
-const Container = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 14px auto;
-`;
 
 const NoDataCell = () => (
   <div
@@ -189,12 +180,14 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  searchText,
+  donorIds,
+  submitterDonorIds,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
-  searchText: string;
+  donorIds: number[];
+  submitterDonorIds: string[];
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -210,13 +203,6 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
-  const donorIds =
-    searchText
-      .match(/[0-9]*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
-
-  const submitterDonorIds = [searchText];
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
