@@ -95,9 +95,7 @@ export default function SearchBar({
 }) {
   const theme = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
-
   const [displayText, setDisplayText] = useState('- Select an option -');
-  const titleText = keyword || COMPLETION_OPTIONS[completionState].display;
   const entityTypes = ['donor'];
 
   const { loading, data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
@@ -126,6 +124,13 @@ export default function SearchBar({
       const submitterId = record.find((pair) => pair.name === 'submitter_donor_id')?.value || '';
       return { resultId: donorId, secondaryText: submitterId };
     }) || [];
+
+  const titleText =
+    keyword && searchResults.length === 1
+      ? searchResults[0].resultId
+      : keyword && searchResults.length > 1
+      ? `${searchResults.length} Donors`
+      : COMPLETION_OPTIONS[completionState].display;
 
   return (
     <Container css={searchBackgroundStyle}>
