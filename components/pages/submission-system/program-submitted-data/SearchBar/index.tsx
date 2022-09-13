@@ -127,7 +127,7 @@ export default function SearchBar({
 
   const titleText =
     keyword && searchResults.length === 1
-      ? searchResults[0].resultId
+      ? `DO${searchResults[0].resultId}`
       : keyword && searchResults.length > 1
       ? `${searchResults.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
@@ -207,11 +207,7 @@ export default function SearchBar({
                 searchData={searchResults}
                 isLoading={loading}
                 onSelect={(value) => {
-                  // setFilterFromFieldAndValue({
-                  //   field: FileCentricDocumentField[currentSearch.esDocumentField],
-                  //   value,
-                  // });
-                  setKeyword('');
+                  setKeyword(value);
                   setSearchOpen(false);
                 }}
               />
