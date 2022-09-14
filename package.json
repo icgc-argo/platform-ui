@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.111.1",
+  "version": "1.112.0",
   "scripts": {
     "graphql-codegen-watch": "graphql-codegen -r dotenv/config --watch",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
@@ -12,7 +12,10 @@
     "type-check": "tsc -p ./tsconfig.json",
     "test": "NODE_PATH=./ ts-mocha -p ./tsconfig.test.json global/**/*.test.tsx",
     "test:watch": "NODE_PATH=./ ts-mocha --watch -p ./tsconfig.test.json global/**/*.test.tsx",
-    "force-resolutions": "npx npm-force-resolutions"
+    "force-resolutions": "npx npm-force-resolutions",
+    "e2e": "npx playwright test",
+    "e2e-debug": "npx playwright test --debug",
+    "e2e-report": "npx playwright show-report"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -71,6 +74,7 @@
     "@babel/cli": "^7.18.10",
     "@babel/plugin-proposal-optional-chaining": "^7.17.12",
     "@types/chai": "^4.3.1",
+    "@playwright/test": "^1.25.1",
     "@types/file-saver": "^2.0.5",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/js-cookie": "^3.0.2",

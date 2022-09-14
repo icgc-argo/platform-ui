@@ -80,3 +80,6 @@ generated
 **/.DS_STORE
 
 tsconfig.tsbuildinfo
+/test-results/
+/playwright-report/
+/playwright/.cache/

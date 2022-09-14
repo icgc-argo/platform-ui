@@ -45,6 +45,7 @@ import {
   defaultClinicalEntityFilters,
   emptyResponse,
   clinicalEntityDisplayNames,
+  CompletionStates,
 } from '../common';
 
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
@@ -164,6 +165,7 @@ export const getEntityData = (
   page: number,
   pageSize: number,
   sort: string,
+  completionState: CompletionStates,
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
@@ -174,6 +176,7 @@ export const getEntityData = (
         sort,
         page,
         pageSize,
+        completionState,
         entityTypes: validateEntityQueryName(entityType),
       },
     },
@@ -182,9 +185,11 @@ export const getEntityData = (
 const ClinicalEntityDataTable = ({
   entityType,
   program,
+  completionState = CompletionStates['all'],
 }: {
   entityType: string;
   program: string;
+  completionState: CompletionStates;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -243,6 +248,7 @@ const ClinicalEntityDataTable = ({
     page,
     pageSize,
     sort,
+    completionState,
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
@@ -374,10 +380,11 @@ const ClinicalEntityDataTable = ({
       ? `3px solid ${theme.colors.grey}`
       : '';
 
+  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
+
   const getCellStyles = (state, row, column) => {
     const { original } = row;
     const { id } = column;
-
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
@@ -424,6 +431,17 @@ const ClinicalEntityDataTable = ({
         color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
         background: errorState ? theme.colors.error_4 : '',
         borderRight: border,
+        ...(column.Header === 'donor_id' && {
+          background: 'white',
+          position: 'absolute',
+        }),
+        ...(column.Header === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(column.Header === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
     };
   };
@@ -435,6 +453,19 @@ const ClinicalEntityDataTable = ({
       Header: key,
       headerStyle: {
         borderRight: getHeaderBorder(key),
+        ...(key === 'donor_id' && {
+          position: 'absolute',
+          //z-index used here because header element is beneath its neighbouring element.
+          zIndex: 1,
+          background: 'white',
+        }),
+        ...(key === 'DO' && {
+          marginLeft: stickyDonorIDColumnsWidth,
+        }),
+        ...(key === 'program_id' &&
+          !showCompletionStats && {
+            marginLeft: stickyDonorIDColumnsWidth,
+          }),
       },
       minWidth: getColumnWidth(key, showCompletionStats, noData),
     };
@@ -495,6 +526,12 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noData ? 50 : 250,
           style: noData ? noDataCellStyle : {},
+          Cell: ({ value }) =>
+            value === 1 ? (
+              <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+            ) : (
+              value
+            ),
         })),
       },
       {
@@ -585,6 +622,11 @@ const ClinicalEntityDataTable = ({
         onPageChange={(value) => updatePageSettings('page', value)}
         onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
         onSortedChange={(value) => updatePageSettings('sorted', value)}
+        onResizedChange={(newResized) => {
+          newResized.forEach(
+            (column) => column.id === 'donor_id' && setStickyDonorIDColumnsWidth(column.value),
+          );
+        }}
       />
     </div>
   );
