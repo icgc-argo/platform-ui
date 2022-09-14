@@ -19,8 +19,8 @@
 
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
-import { ContentHeader, ContentBody } from '@icgc-argo/uikit/PageLayout';
-import Typography from '@icgc-argo/uikit/Typography';
+import { ContentHeader, ContentBody } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import { css } from '@icgc-argo/uikit';
 import ApiTokenBox from './ApiTokenBox';

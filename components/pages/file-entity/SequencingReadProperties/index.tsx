@@ -21,8 +21,8 @@ import React from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Col, Row } from 'react-grid-system';
-import Typography from '@icgc-argo/uikit/Typography';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import { FileCard, TableDiv } from '../common';
 import { FileMetricsInfo } from '../types';
 

@@ -20,13 +20,13 @@
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
 import DefaultLayout from './DefaultLayout';
-import Typography from '@icgc-argo/uikit/Typography';
-import TitleBorder from '@icgc-argo/uikit/TitleBorder';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import { Typography } from '@icgc-argo/uikit';
+import { TitleBorder } from '@icgc-argo/uikit';
+import { ThemeColorNames } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import Head from 'components/pages/head';
 
 type Member = { name: string; title?: string };

@@ -20,8 +20,8 @@
 import ErrorLayout from 'components/pages/error';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import A from '@icgc-argo/uikit/Link';
-import Typography from '@icgc-argo/uikit/Typography';
+import { A } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import clientErrorImage from 'images/client-error.svg';
 import Image from 'next/image';
 

@@ -18,7 +18,7 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
+import { Container } from '@icgc-argo/uikit';
 
 export const DashboardCard: React.ComponentType<{ cardHeight?: string; loading?: boolean }> = ({
   children,

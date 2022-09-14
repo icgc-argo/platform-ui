@@ -19,11 +19,11 @@
 
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
-import Tag from '@icgc-argo/uikit/Tag';
+import { Icon } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
+import { VerticalTabs } from '@icgc-argo/uikit';
+import { Tag } from '@icgc-argo/uikit';
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';

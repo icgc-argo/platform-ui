@@ -20,11 +20,11 @@
 import filesize from 'filesize';
 import pluralize from 'pluralize';
 import { css } from '@icgc-argo/uikit';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
+import { UikitIconNames } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useTheme } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 
 type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'fileSize';
 

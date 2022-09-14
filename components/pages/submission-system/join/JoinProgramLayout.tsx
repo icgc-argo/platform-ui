@@ -19,18 +19,18 @@
 
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
-import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
-import Typography from '@icgc-argo/uikit/Typography';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { Container } from '@icgc-argo/uikit';
+import { Tabs, Tab } from '@icgc-argo/uikit';
+import { Banner, BANNER_VARIANTS } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { DnaLoader } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import { createRedirectURL } from 'global/utils/common';
 
-import GoogleLogin from '@icgc-argo/uikit/Button/GoogleLogin';
+import { GoogleLogin } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 

@@ -23,11 +23,11 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
-import Submenu, { MenuItem } from '@icgc-argo/uikit/SubMenu';
-import { Input } from '@icgc-argo/uikit/form';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Submenu, MenuItem } from '@icgc-argo/uikit';
+import { Input } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 
 import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';

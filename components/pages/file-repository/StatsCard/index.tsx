@@ -18,7 +18,7 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
+import { Container } from '@icgc-argo/uikit';
 import { PaddedRow } from '../index';
 import StatItem from './StatItem';
 import STATS_BAR_QUERY from './gql/STATS_BAR_QUERY';

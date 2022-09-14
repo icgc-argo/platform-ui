@@ -20,7 +20,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { css } from '@icgc-argo/uikit';
-import Modal from '@icgc-argo/uikit/Modal';
+import { Modal } from '@icgc-argo/uikit';
 
 export const fillAvailableWidth = css`
   width: -webkit-fill-available;

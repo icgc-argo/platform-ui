@@ -18,18 +18,18 @@
  */
 
 import { css, styled } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useTheme } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import Button from '@icgc-argo/uikit/Button';
-import Container from '@icgc-argo/uikit/Container';
-import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { ThemeColorNames } from '@icgc-argo/uikit';
+import { UikitIconNames } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { overtureLogo } from '@icgc-argo/uikit';
+import { DnaLoader } from '@icgc-argo/uikit';
 import { reactGridBreakpoints } from 'global/utils/common';
 import Image from 'next/image';
 

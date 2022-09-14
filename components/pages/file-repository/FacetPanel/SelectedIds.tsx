@@ -18,9 +18,9 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
+import { useTheme } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 
 const SelectedIds = ({ ids = [], onRemove }: { ids: string[]; onRemove: (id: string) => void }) => {
   const theme = useTheme();

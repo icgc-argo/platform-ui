@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import { css, styled } from '@icgc-argo/uikit';
-import Link from '@icgc-argo/uikit/Link';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Link } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { getConfig } from 'global/config';
 import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';

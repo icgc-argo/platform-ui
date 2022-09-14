@@ -20,14 +20,14 @@
 import React from 'react';
 import { css, styled } from '@icgc-argo/uikit';
 import { orderBy, maxBy } from 'lodash';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
+import { Tooltip } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
+import { ContentBox } from '@icgc-argo/uikit';
+import { ThemeColorNames } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {

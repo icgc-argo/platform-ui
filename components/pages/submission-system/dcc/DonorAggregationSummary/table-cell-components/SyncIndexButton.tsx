@@ -21,9 +21,9 @@ import { useState } from 'react';
 import urlJoin from 'url-join';
 import { isEmpty } from 'lodash';
 
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import Button from '@icgc-argo/uikit/Button';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useTheme } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 
 import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';

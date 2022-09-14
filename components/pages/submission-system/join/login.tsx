@@ -22,7 +22,7 @@ import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JoinProgramLayout from './JoinProgramLayout';

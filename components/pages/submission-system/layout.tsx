@@ -32,7 +32,7 @@ import {
   PageContent,
   Panel,
   Sidebar,
-} from '@icgc-argo/uikit/PageLayout';
+} from '@icgc-argo/uikit';
 import Footer from '../../Footer';
 import Head from '../head';
 import SideMenu from './SideMenu';

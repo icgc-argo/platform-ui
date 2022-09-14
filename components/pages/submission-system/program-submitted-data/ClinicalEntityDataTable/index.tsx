@@ -23,16 +23,16 @@ import Image from 'next/image';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 import ErrorNotification from '../../ErrorNotification';
-import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
-import Table from '@icgc-argo/uikit/Table';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { noDataSvg } from '@icgc-argo/uikit';
+import { Table } from '@icgc-argo/uikit';
+import { Tooltip } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import { TableInfoHeaderContainer } from '../../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
@@ -52,7 +52,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import { ContentPlaceholder } from '@icgc-argo/uikit';
 
 export type DonorEntry = {
   row: string;

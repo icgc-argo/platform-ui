@@ -22,10 +22,10 @@ import { Row, Col } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { useQuery } from '@apollo/client';
-import Container from '@icgc-argo/uikit/Container';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
-import Typography from '@icgc-argo/uikit/Typography';
-import A from '@icgc-argo/uikit/Link';
+import { Container } from '@icgc-argo/uikit';
+import { SimpleTable } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { A } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import {
   removeAliasedKeys,

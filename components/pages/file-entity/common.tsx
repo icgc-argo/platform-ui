@@ -19,9 +19,9 @@
 
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import Icon from '@icgc-argo/uikit/Icon';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Icon } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { FileAccessState } from './types';
 
 export const FileCard: React.ComponentType<{

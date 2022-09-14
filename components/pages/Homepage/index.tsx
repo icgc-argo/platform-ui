@@ -20,16 +20,16 @@
 import React from 'react';
 import { Col, Row, Visible, Hidden } from 'react-grid-system';
 import { css, styled } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
+import { Button } from '@icgc-argo/uikit';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import DefaultLayout from '../DefaultLayout';
 
-import Link from '@icgc-argo/uikit/Link';
+import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 
-import Icon from '@icgc-argo/uikit/Icon';
+import { Icon } from '@icgc-argo/uikit';
 import {
   DataReleaseBar,
   DataCallout,

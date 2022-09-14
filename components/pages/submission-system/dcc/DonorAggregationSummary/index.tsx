@@ -20,8 +20,8 @@
 import styled from '@emotion/styled';
 import DonorAggregationIndexTable from './DonorAggregationIndexTable';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
+import { Typography } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
 
 // GQL Data Fetching
 import { useQuery } from '@apollo/client';

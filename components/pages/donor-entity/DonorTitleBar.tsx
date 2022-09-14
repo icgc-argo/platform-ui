@@ -19,12 +19,12 @@
 
 import { css } from '@emotion/core';
 import sqonBuilder from 'sqon-builder';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import Legend from '@icgc-argo/uikit/Legend';
-import Link from '@icgc-argo/uikit/Link';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
+import { useTheme } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Legend } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { TitleBar } from '@icgc-argo/uikit';
 import urlJoin from 'url-join';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';

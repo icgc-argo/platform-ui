@@ -26,12 +26,12 @@
  */
 
 import React from 'react';
-import { MenuItem } from '@icgc-argo/uikit/SubMenu';
+import { MenuItem } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import OptionsListComp, { FilterOption } from '@icgc-argo/uikit/OptionsList';
-import Icon from '@icgc-argo/uikit/Icon';
+import { OptionsListComp, FilterOption } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { styled } from '@icgc-argo/uikit';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
+import { Tooltip } from '@icgc-argo/uikit';
 
 const TooltipFacet = ({
   subMenuName,

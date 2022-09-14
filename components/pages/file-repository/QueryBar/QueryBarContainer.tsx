@@ -18,14 +18,14 @@
  */
 
 import React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Typography } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
 import { css } from '@icgc-argo/uikit';
 import QueryBar from './';
 import isEmpty from 'lodash/isEmpty';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import useFiltersContext from '../hooks/useFiltersContext';
 
 import { PaddedRow } from '../index';

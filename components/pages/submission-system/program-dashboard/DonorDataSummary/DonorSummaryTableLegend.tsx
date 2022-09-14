@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Icon from '@icgc-argo/uikit/Icon';
+import { Icon } from '@icgc-argo/uikit';
 
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import {
@@ -32,8 +32,8 @@ import {
   TableLegendSection,
   TableLegendEntry,
 } from '../../common';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useTheme } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
 import { Row, Col } from 'react-grid-system';
 

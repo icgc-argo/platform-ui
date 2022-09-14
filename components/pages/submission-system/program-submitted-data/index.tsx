@@ -25,14 +25,14 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import Container from '@icgc-argo/uikit/Container';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { Button } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { VerticalTabs } from '@icgc-argo/uikit';
+import { TitleBar } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
@@ -49,7 +49,7 @@ import {
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
 import useGlobalLoader from 'components/GlobalLoader';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 
 setConfiguration({ gutterWidth: 9 });
 

@@ -19,11 +19,11 @@
 
 import React from 'react';
 import FileTable from './FileTable';
-import { PageContainer } from '@icgc-argo/uikit/PageLayout';
+import { PageContainer } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import Footer from '../../Footer';
 import Head from '../head';
-import { PageContent, PageBody, ContentBody } from '@icgc-argo/uikit/PageLayout';
+import { PageContent, PageBody, ContentBody } from '@icgc-argo/uikit';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 import { styled } from '@icgc-argo/uikit';
 import FacetPanel from './FacetPanel';

@@ -18,8 +18,8 @@
  */
 
 import React from 'react';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { ContentPlaceholder } from '@icgc-argo/uikit';
+import { DnaLoader } from '@icgc-argo/uikit';
 
 const ContentLoader = ({ title = '', subtitle = '' }: { title?: string; subtitle?: string }) => {
   return (

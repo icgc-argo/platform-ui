@@ -21,9 +21,9 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import MailTo from '@icgc-argo/uikit/MailTo';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
+import { MailTo } from '@icgc-argo/uikit';
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
+import { InteractiveIcon } from '@icgc-argo/uikit';
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 

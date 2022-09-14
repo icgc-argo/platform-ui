@@ -20,17 +20,17 @@
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { css, styled } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import { Input } from '@icgc-argo/uikit/form';
-import FormControl from '@icgc-argo/uikit/form/FormControl';
-import InputLabel from '@icgc-argo/uikit/form/InputLabel';
-import Select from '@icgc-argo/uikit/form/Select';
-import Textarea from '@icgc-argo/uikit/form/Textarea';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { Button } from '@icgc-argo/uikit';
+import { Input } from '@icgc-argo/uikit';
+import { FormControl } from '@icgc-argo/uikit';
+import { InputLabel } from '@icgc-argo/uikit';
+import { Select } from '@icgc-argo/uikit';
+import { Textarea } from '@icgc-argo/uikit';
+import { ContentBox } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import DefaultLayout from 'components/pages/DefaultLayout';
-import Link from '@icgc-argo/uikit/Link';
+import { Link } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import urljoin from 'url-join';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -38,7 +38,7 @@ import yup from 'global/utils/validations';
 import CREATE_JIRA_TICKET_MUTATION from './gql/CREATE_JIRA_TICKET_MUTATION';
 import { firstName, lastName, email } from 'global/utils/form/validations';
 import useFormHook from 'global/hooks/useFormHook';
-import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
+import { FormHelperText } from '@icgc-argo/uikit';
 import {
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
@@ -50,7 +50,7 @@ import {
 } from 'global/constants/docSitePaths';
 import { useMutation } from '@apollo/client';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit';
 import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTIONS } from './common';
 import Head from 'components/pages/head';
 

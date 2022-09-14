@@ -20,8 +20,8 @@
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
 import { GqlClinicalSubmissionData } from './types';
-import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Modal, ModalContainer } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import styled from '@emotion/styled';
 

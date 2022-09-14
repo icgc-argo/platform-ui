@@ -18,11 +18,7 @@
  */
 
 import React from 'react';
-import {
-  SelectTable,
-  TableColumnConfig,
-  useSelectTableSelectionState,
-} from '@icgc-argo/uikit/Table';
+import { SelectTable, TableColumnConfig, useSelectTableSelectionState } from '@icgc-argo/uikit';
 import {
   FileRepositoryRecord,
   FileRepositoryTableQueryData,
@@ -32,12 +28,12 @@ import {
   FileRepositorySortingRule,
 } from './types';
 import filesize from 'filesize';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
+import { InteractiveIcon } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
+import { DropdownButton } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
 import useFiltersContext from '../hooks/useFiltersContext';
@@ -45,11 +41,11 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { FileRepoFiltersType } from '../utils/types';
 import { SortedChangeFunction } from 'global/types/table';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
-import A from '@icgc-argo/uikit/Link';
+import { A } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import {
   FILE_ENTITY_ID_PATH,

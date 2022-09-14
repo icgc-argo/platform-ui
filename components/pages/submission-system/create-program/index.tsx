@@ -20,19 +20,19 @@
 import React from 'react';
 import { css, styled } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
+import { TitleBar } from '@icgc-argo/uikit';
 import ProgramForm from '../program-form/ProgramForm';
-import Container from '@icgc-argo/uikit/Container';
+import { Container } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import Button from '@icgc-argo/uikit/Button';
+import { Button } from '@icgc-argo/uikit';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
-import { NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit/notifications/Notification';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit';
 import { useRouter } from 'next/router';
 import CREATE_PROGRAM_MUTATION from './gql/CREATE_PROGRAM_MUTATION';
 import { useMutation } from '@apollo/client';

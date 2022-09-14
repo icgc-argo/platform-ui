@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import React, { createRef } from 'react';
-import Table from '@icgc-argo/uikit/Table';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Table } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { TreatmentNode } from '../types';
 
 const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => {

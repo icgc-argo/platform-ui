@@ -19,7 +19,7 @@
 
 import NavBar from 'components/NavBar';
 import Footer from '../Footer';
-import { PageContainer } from '@icgc-argo/uikit/PageLayout';
+import { PageContainer } from '@icgc-argo/uikit';
 import styled from '@emotion/styled';
 
 const ThreeRowPageContainer = styled(PageContainer)`

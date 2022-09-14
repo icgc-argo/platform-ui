@@ -18,10 +18,10 @@
  */
 
 import { ClinicalSubmissionEntityFile } from '../types';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import { css } from '@icgc-argo/uikit';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Icon } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
 import {
   DataTableStarIcon,
@@ -31,7 +31,7 @@ import {
   CellContentCenter,
 } from '../../common';
 import { CSSProperties, createRef } from 'react';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember, isDataSubmitter } from 'global/utils/egoJwt';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';

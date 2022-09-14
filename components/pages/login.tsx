@@ -20,15 +20,15 @@
 import React from 'react';
 import Image from 'next/image';
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { Container } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import DefaultLayout from './DefaultLayout';
 import { getConfig } from 'global/config';
-import Notification from '@icgc-argo/uikit/notifications/Notification';
+import { Notification } from '@icgc-argo/uikit';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import urljoin from 'url-join';
-import Link from '@icgc-argo/uikit/Link';
+import { Link } from '@icgc-argo/uikit';
 import {
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_REGISTERING_SAMPLES_PAGE,

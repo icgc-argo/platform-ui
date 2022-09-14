@@ -18,11 +18,11 @@
  */
 
 import { css } from '@emotion/core';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import Hyperlink, { HyperLinkProps } from '@icgc-argo/uikit/Link';
+import { Hyperlink, HyperLinkProps } from '@icgc-argo/uikit';
 import Link, { LinkProps } from 'next/link';
 import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,

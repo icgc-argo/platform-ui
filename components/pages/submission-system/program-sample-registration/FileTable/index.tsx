@@ -21,11 +21,11 @@ import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import Affix from '@icgc-argo/uikit/Affix';
+import { Affix } from '@icgc-argo/uikit';
 import clsx from 'clsx';
-import Icon from '@icgc-argo/uikit/Icon';
-import Table from '@icgc-argo/uikit/Table';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { Icon } from '@icgc-argo/uikit';
+import { Table } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import {
   DataTableStarIcon,
   StatArea as StatAreaDisplay,

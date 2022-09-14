@@ -19,7 +19,7 @@
 
 import React from 'react';
 import ErrorLayout from 'components/pages/error';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import Image from 'next/image';

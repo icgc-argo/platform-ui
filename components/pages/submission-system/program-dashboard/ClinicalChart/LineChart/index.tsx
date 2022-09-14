@@ -40,7 +40,7 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import theme from '@icgc-argo/uikit/theme/defaultTheme';
+import { theme } from '@icgc-argo/uikit';
 
 const options = {
   colors: {

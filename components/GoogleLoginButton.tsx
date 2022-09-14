@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import GoogleLogin from '@icgc-argo/uikit/Button/GoogleLogin';
+import { GoogleLogin } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { removeToken } from 'global/hooks/useAuthContext';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';

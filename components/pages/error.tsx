@@ -19,11 +19,11 @@
 
 import * as React from 'react';
 import NavBar from 'components/NavBar';
-import { MenuItem } from '@icgc-argo/uikit/AppBar';
+import { MenuItem } from '@icgc-argo/uikit';
 import Footer from '../Footer';
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import { PageContainer } from '@icgc-argo/uikit/PageLayout';
+import { Container } from '@icgc-argo/uikit';
+import { PageContainer } from '@icgc-argo/uikit';
 
 export default function ErrorLayout({
   children,

@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Icon } from '@icgc-argo/uikit';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
@@ -26,7 +26,7 @@ import {
   downloadTsvFileTemplate,
 } from '../../common';
 import { css } from '@icgc-argo/uikit';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
+import { DropdownButton } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
 
 const FileTemplatesDownloadButton = ({ clinicalTypes }: { clinicalTypes: string[] }) => {

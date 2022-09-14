@@ -31,18 +31,18 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import { Input } from '@icgc-argo/uikit/form';
-import { INPUT_PRESETS } from '@icgc-argo/uikit/form/Input';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import { TableActionBar } from '@icgc-argo/uikit/Table';
-import { INPUT_STATES } from '@icgc-argo/uikit/theme/defaultTheme/input';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Button } from '@icgc-argo/uikit';
+import { Input } from '@icgc-argo/uikit';
+import { INPUT_PRESETS } from '@icgc-argo/uikit';
+import { ContentBox } from '@icgc-argo/uikit';
+import { TableActionBar } from '@icgc-argo/uikit';
+import { INPUT_STATES } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
 import ProgramsTable from './ProgramsTable';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 
 const TableFilterInput = (props) => (

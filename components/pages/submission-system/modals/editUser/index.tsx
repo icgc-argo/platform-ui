@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
+import { Modal, ModalContainer } from '@icgc-argo/uikit';
 import styled from '@emotion/styled';
 import { UserSection, UserSectionProps, UserField } from '../styledComponents';
 import { UserModel, userSchema } from '../common';

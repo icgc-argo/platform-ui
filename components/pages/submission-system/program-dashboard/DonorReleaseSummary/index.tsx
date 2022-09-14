@@ -18,7 +18,7 @@
  */
 
 import { css } from '@emotion/core';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import { useQuery } from '@apollo/client';
 import { usePageQuery } from 'global/hooks/usePageContext';

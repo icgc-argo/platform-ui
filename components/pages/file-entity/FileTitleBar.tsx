@@ -19,12 +19,12 @@
 
 import { useState } from 'react';
 import { css } from '@emotion/core';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Tag from '@icgc-argo/uikit/Tag';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import Button from '@icgc-argo/uikit/Button';
-import Legend from '@icgc-argo/uikit/Legend';
+import { useTheme } from '@icgc-argo/uikit';
+import { Tag } from '@icgc-argo/uikit';
+import { TitleBar } from '@icgc-argo/uikit';
+import { Tooltip } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Legend } from '@icgc-argo/uikit';
 import { DownloadIcon } from './common';
 import urlJoin from 'url-join';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';

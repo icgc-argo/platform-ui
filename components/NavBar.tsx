@@ -32,18 +32,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
-import AppBar, {
+import {
+  AppBar,
   DropdownMenu,
-  Logo,
   MenuGroup,
   MenuItem,
   Section,
   UserBadge,
   NavElement,
   NavBarElement,
-} from '@icgc-argo/uikit/AppBar';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
+} from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
 import { get } from 'lodash';
@@ -51,7 +51,7 @@ import queryString from 'query-string';
 import urlJoin from 'url-join';
 import ModalPortal from './Modal';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
-import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
+import { useClickAway } from '@icgc-argo/uikit';
 import { useScreenClass } from 'react-grid-system';
 import ArgoLogo from 'images/argo-logo.svg';
 

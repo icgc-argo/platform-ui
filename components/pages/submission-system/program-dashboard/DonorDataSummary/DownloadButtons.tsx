@@ -20,8 +20,8 @@
 import { Row, Col } from 'react-grid-system';
 import urlJoin from 'url-join';
 import { css } from '@emotion/core';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Button } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from 'global/constants';
@@ -29,7 +29,7 @@ import { saveAs } from 'file-saver';
 import React from 'react';
 import { format as formatDate } from 'date-fns';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 
 const DownloadButton = ({

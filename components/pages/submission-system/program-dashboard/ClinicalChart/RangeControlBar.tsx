@@ -19,8 +19,8 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useTheme } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { rangeButtons } from './utils';
 
 const RangeButton = ({

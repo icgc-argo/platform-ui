@@ -22,8 +22,8 @@ import {
   NotificationInteractionEvent,
   NotificationVariant,
   NOTIFICATION_INTERACTION_EVENTS,
-} from '@icgc-argo/uikit/notifications/Notification';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+} from '@icgc-argo/uikit';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit';
 import omit from 'lodash/omit';
 import * as React from 'react';
 

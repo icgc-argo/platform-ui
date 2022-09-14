@@ -19,11 +19,11 @@
 
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
-import Tag from '@icgc-argo/uikit/Tag';
+import { ContentBox } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { UikitIconNames } from '@icgc-argo/uikit';
+import { Tag } from '@icgc-argo/uikit';
 
 export const Box = ({
   children,

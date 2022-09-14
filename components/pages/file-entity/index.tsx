@@ -17,13 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  PageContainer,
-  PageBody,
-  ContentHeader,
-  PageContent,
-  ContentBody,
-} from '@icgc-argo/uikit/PageLayout';
+import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from '@icgc-argo/uikit';
 import Head from '../head';
 import NavBar from '../../NavBar';
 import clsx from 'clsx';
@@ -32,7 +26,7 @@ import FileCardsLayout from './FileCardsLayout';
 import useEntityData from './useEntityData';
 import Footer from '../../Footer';
 import React from 'react';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { useQuery } from '@apollo/client';
 import { get } from 'lodash';

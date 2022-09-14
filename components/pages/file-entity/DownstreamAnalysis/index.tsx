@@ -19,13 +19,13 @@
 
 import { FileCard, getAccessIcon, DownloadIcon } from '../common';
 import { css } from '@emotion/core';
-import Button from '@icgc-argo/uikit/Button';
+import { Button } from '@icgc-argo/uikit';
 import { FileRecord } from '../types';
 import fileSize from 'filesize';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import Link from '@icgc-argo/uikit/Link';
+import { Typography } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 
 const DownstreamAnalysis = ({ data }: { data: Array<FileRecord> }) => {
   const containerRef = React.createRef<HTMLDivElement>();

@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import Footer from '@icgc-argo/uikit/Footer';
+import { Footer } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
 import { APP_VERSION } from 'global/constants';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import urlJoin from 'url-join';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';

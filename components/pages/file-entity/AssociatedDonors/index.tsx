@@ -19,14 +19,14 @@
 
 import { FileCard, TableDiv } from '../common';
 import { css } from '@emotion/core';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
+import { VerticalTabs } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
 import { DonorRecord } from '../types';
 import React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import styled from '@emotion/styled';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
+import { useTheme } from '@icgc-argo/uikit';
+import { SimpleTable } from '@icgc-argo/uikit';
 
 const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
   const theme = useTheme();

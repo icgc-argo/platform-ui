@@ -19,11 +19,11 @@
 
 import React from 'react';
 import { css, styled } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Typography } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import { SearchMenuDataNode } from './types';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import theme from '@icgc-argo/uikit/theme/defaultTheme';
+import { useTheme } from '@icgc-argo/uikit';
+import { theme } from '@icgc-argo/uikit';
 
 const ResultsDropdown = styled('div')`
   position: absolute;

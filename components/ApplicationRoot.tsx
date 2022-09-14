@@ -25,7 +25,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import * as React from 'react';
 import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
-import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
+import { ToastStack } from '@icgc-argo/uikit';
 import urljoin from 'url-join';
 import Head from 'components/Head';
 import get from 'lodash/get';

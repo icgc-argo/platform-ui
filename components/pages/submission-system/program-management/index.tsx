@@ -20,10 +20,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { css } from '@icgc-argo/uikit';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
+import { TitleBar } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
-import Link from '@icgc-argo/uikit/Link';
+import { Link } from '@icgc-argo/uikit';
 import { Row } from 'react-grid-system';
 import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';

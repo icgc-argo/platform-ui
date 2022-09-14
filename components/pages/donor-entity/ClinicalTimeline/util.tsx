@@ -22,8 +22,8 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import Link from '@icgc-argo/uikit/Link';
-import defaultTheme from '@icgc-argo/uikit/theme/defaultTheme';
+import { Link } from '@icgc-argo/uikit';
+import { defaultTheme } from '@icgc-argo/uikit';
 import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
 
 export const getTimelineStyles = (theme: typeof defaultTheme) => {

@@ -20,14 +20,11 @@
 import React, { ReactNode } from 'react';
 import { TableProps } from 'global/types/table';
 import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import Notification, {
-  NotificationVariant,
-  NOTIFICATION_VARIANTS,
-} from '@icgc-argo/uikit/notifications/Notification';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { Button } from '@icgc-argo/uikit';
+import Notification, { NotificationVariant, NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import { exportToTsv } from 'global/utils/common';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Icon } from '@icgc-argo/uikit';
 import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
 

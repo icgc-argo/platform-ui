@@ -18,25 +18,25 @@
  */
 
 import * as React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import Button from '@icgc-argo/uikit/Button';
-import InstructionBox from '@icgc-argo/uikit/InstructionBox';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Typography } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { InstructionBox } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
   instructionBoxButtonStyle,
   instructionBoxLoadingButtonStyle,
 } from '../../common';
-import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
+import { FileSelectButton } from '@icgc-argo/uikit';
 import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
-import Link from '@icgc-argo/uikit/Link';
+import { Link } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import { css } from '@icgc-argo/uikit';
-import { BUTTON_SIZES } from '@icgc-argo/uikit/Button/constants';
-import { ButtonLoader } from '@icgc-argo/uikit/Button/types';
+import { BUTTON_SIZES } from '@icgc-argo/uikit';
+import { ButtonLoader } from '@icgc-argo/uikit';
 
 const InstructionLoader = ({ theme, text }: ButtonLoader) => {
   const disabledColor = theme.colors.accent2_dark;

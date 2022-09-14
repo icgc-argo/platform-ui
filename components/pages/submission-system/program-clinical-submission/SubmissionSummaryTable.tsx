@@ -20,10 +20,10 @@
 import * as React from 'react';
 import { GqlClinicalSubmissionData } from './types';
 import { capitalize } from 'global/utils/stringUtils';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
 
 const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {

@@ -18,15 +18,15 @@
  */
 
 import React from 'react';
-import Modal from '@icgc-argo/uikit/Modal';
+import { Modal } from '@icgc-argo/uikit';
 import { css, styled } from '@icgc-argo/uikit';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
+import { Icon } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import urljoin from 'url-join';
 import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import { getConfig } from 'global/config';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import Banner from '@icgc-argo/uikit/notifications/Banner';
+import { useTheme } from '@icgc-argo/uikit';
+import { Banner } from '@icgc-argo/uikit';
 
 const Row = styled('span')`
   display: flex;

@@ -18,15 +18,15 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
+import { Container } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
-import Table from '@icgc-argo/uikit/Table';
-import Typography from '@icgc-argo/uikit/Typography';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import typography from '@icgc-argo/uikit/theme/defaultTheme/typography';
+import { Table } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
+import { Icon } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
+import { typography } from '@icgc-argo/uikit';
 
 const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,

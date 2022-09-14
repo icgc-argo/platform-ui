@@ -20,13 +20,13 @@
 import Link from 'next/link';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import PercentageBar from '@icgc-argo/uikit/PercentageBar';
-import Table from '@icgc-argo/uikit/Table';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import A from '@icgc-argo/uikit/Link';
+import { PercentageBar } from '@icgc-argo/uikit';
+import { Table } from '@icgc-argo/uikit';
+import { InteractiveIcon } from '@icgc-argo/uikit';
+import { Tooltip } from '@icgc-argo/uikit';
+import { A } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { TableColumnConfig } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';

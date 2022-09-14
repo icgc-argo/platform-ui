@@ -20,7 +20,7 @@
 import React from 'react';
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
+import { SimpleTable } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 
 import { FileSummaryInfo } from '../types';
@@ -33,7 +33,7 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import Link from 'next/link';
-import A from '@icgc-argo/uikit/Link';
+import { A } from '@icgc-argo/uikit';
 
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const { loading, data: { program = undefined } = {} } = useQuery<{

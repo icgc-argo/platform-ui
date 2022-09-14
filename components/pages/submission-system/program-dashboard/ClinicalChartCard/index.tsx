@@ -19,9 +19,9 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import Typography from '@icgc-argo/uikit/Typography';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
-import Link from '@icgc-argo/uikit/Link';
+import { Typography } from '@icgc-argo/uikit';
+import { ContentPlaceholder } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { DashboardCard } from 'components/pages/submission-system/program-dashboard/common';
 import { getConfig } from 'global/config';

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import theme from '@icgc-argo/uikit/theme/defaultTheme';
+import { theme } from '@icgc-argo/uikit';
 
 export const rangeButtons = [
   {

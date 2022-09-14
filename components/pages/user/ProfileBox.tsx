@@ -19,12 +19,12 @@
 
 import * as React from 'react';
 import DefaultLayout from '../DefaultLayout';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import Typography from '@icgc-argo/uikit/Typography';
+import { ContentBox } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
 import { css } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { useTheme } from '@icgc-argo/uikit';
 import { Box } from './common';
 
 const UserInitialImage = ({ contentText = '' }) => {

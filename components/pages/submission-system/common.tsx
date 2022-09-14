@@ -20,13 +20,13 @@
 import { displayDateAndTime } from 'global/utils/common';
 import urlJoin from 'url-join';
 import { css, styled } from '@icgc-argo/uikit';
-import Icon, { Outline } from '@icgc-argo/uikit/Icon';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
-import Typography from '@icgc-argo/uikit/Typography';
-import Pipe from '@icgc-argo/uikit/Pipe';
+import { Icon, Outline } from '@icgc-argo/uikit';
+import { ThemeColorNames } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
+import { Pipe } from '@icgc-argo/uikit';
 import { formatFileName } from './program-sample-registration/util';
 import { Row, Col } from 'react-grid-system';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { useTheme } from '@icgc-argo/uikit';
 import { HtmlHTMLAttributes } from 'react';
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';

@@ -18,14 +18,14 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-import theme from '@icgc-argo/uikit/theme/defaultTheme';
+import { theme } from '@icgc-argo/uikit';
 import dynamic from 'next/dynamic';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
-import Button from '@icgc-argo/uikit/Button';
+import { Button } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
 import { toDisplayValue } from '../utils';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 

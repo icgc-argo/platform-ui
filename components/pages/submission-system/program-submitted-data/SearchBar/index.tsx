@@ -19,9 +19,9 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import Container from '@icgc-argo/uikit/Container';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { Container } from '@icgc-argo/uikit';
+import { DropdownButton } from '@icgc-argo/uikit';
+import { useTheme } from '@icgc-argo/uikit';
 import { CompletionStates } from '../common';
 import {
   searchBackgroundStyle,
@@ -39,11 +39,11 @@ import {
   searchFilterIconStyle,
   searchDownloadIconStyle,
 } from './style';
-import Icon from '@icgc-argo/uikit/Icon';
-import { Input } from '@icgc-argo/uikit/form';
-import Button from '@icgc-argo/uikit/Button';
+import { Icon } from '@icgc-argo/uikit';
+import { Input } from '@icgc-argo/uikit';
+import { Button } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Typography } from '@icgc-argo/uikit';
 
 const COMPLETION_OPTIONS = {
   all: {

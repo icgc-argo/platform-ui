@@ -21,8 +21,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import Modal from '@icgc-argo/uikit/Modal';
+import { DnaLoader } from '@icgc-argo/uikit';
+import { Modal } from '@icgc-argo/uikit';
 import { FadingDiv } from './Fader';
 import { fillAvailableHeight, fillAvailableWidth } from './Modal';
 

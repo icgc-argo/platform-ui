@@ -24,11 +24,11 @@ import union from 'lodash/union';
 import * as React from 'react';
 import { Row } from 'react-grid-system';
 import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import Container from '@icgc-argo/uikit/Container';
-import Link from '@icgc-argo/uikit/Link';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Button } from '@icgc-argo/uikit';
+import { Container } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
+import { TitleBar } from '@icgc-argo/uikit';
+import { Typography } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import FileTable from './FileTable';
@@ -40,7 +40,7 @@ import { containerStyle } from '../common';
 import { useToaster } from 'global/hooks/toaster';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
 import { ClinicalRegistrationData, ClinicalRegistration } from './types';
-import Notification, { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
+import { Notification, NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import {
   SubmissionSystemLockedNotification,
@@ -50,7 +50,7 @@ import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import { getConfig } from 'global/config';
 import { DOCS_REGISTERING_SAMPLES_PAGE } from 'global/constants/docSitePaths';
 import Head from 'components/pages/head';
-import { BUTTON_VARIANTS, BUTTON_SIZES } from '@icgc-argo/uikit/Button/constants';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from '@icgc-argo/uikit';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
