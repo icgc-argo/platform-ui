@@ -21,7 +21,7 @@ import React from 'react';
 import ErrorLayout from 'components/pages/error';
 import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
-import { HyperLink } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 import { getConfig } from 'global/config';
 import { Row, Col } from 'react-grid-system';
@@ -74,12 +74,12 @@ export default function Error403Page() {
           </Typography>
           <Typography variant="subtitle2">
             Check out our{' '}
-            <HyperLink target="_blank" href={DOCS_URL_ROOT}>
+            <Link target="_blank" href={DOCS_URL_ROOT}>
               Documentation
-            </HyperLink>{' '}
+            </Link>{' '}
             or head back{' '}
             <NextLink href="/">
-              <HyperLink>Home</HyperLink>
+              <Link>Home</Link>
             </NextLink>
             .
           </Typography>

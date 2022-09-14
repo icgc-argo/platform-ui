@@ -24,7 +24,6 @@ import { css } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { InstructionBox } from '@icgc-argo/uikit';
-import { HyperLink } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import RegisterSamplesModal from './RegisterSamplesModal';
 import { useMutation } from '@apollo/client';
@@ -169,7 +168,7 @@ function Instructions({
             <Typography variant="data">
               If you have any changes to previously registered data, please {` `}
               <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact the DCC</HyperLink>
+                <Link>contact the DCC</Link>
               </Link>
               .
             </Typography>

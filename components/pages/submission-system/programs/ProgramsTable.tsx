@@ -24,7 +24,7 @@ import { PercentageBar } from '@icgc-argo/uikit';
 import { Table } from '@icgc-argo/uikit';
 import { InteractiveIcon } from '@icgc-argo/uikit';
 import { Tooltip } from '@icgc-argo/uikit';
-import { A } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { TableColumnConfig } from '@icgc-argo/uikit';
 import get from 'lodash/get';
@@ -91,7 +91,7 @@ export default function ProgramsTable(tableProps: {
             href={PROGRAM_DASHBOARD_PATH}
             as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
           >
-            <A>{original.shortName}</A>
+            <Link>{original.shortName}</Link>
           </NextLink>
         </FormattedCell>
       ),
@@ -146,7 +146,7 @@ export default function ProgramsTable(tableProps: {
       accessor: 'administrators',
       Cell: ({ original }) => {
         const adminLinks = get(original, 'administrators', []).map((admin, idx) => (
-          <A
+          <Link
             key={admin.email}
             href={`mailto: ${admin.email}`}
             css={css`
@@ -155,7 +155,7 @@ export default function ProgramsTable(tableProps: {
           >
             {admin.firstName + ' ' + admin.lastName}
             {idx != original.administrators.length - 1 && ','}
-          </A>
+          </Link>
         ));
 
         const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;

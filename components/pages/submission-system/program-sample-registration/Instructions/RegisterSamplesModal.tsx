@@ -37,7 +37,7 @@ import {
 } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
 import { Typography } from '@icgc-argo/uikit';
-import { HyperLink } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 
 export default function RegisterSamplesModal({
@@ -92,7 +92,7 @@ export default function RegisterSamplesModal({
               You will see the updates on your dashboard shortly. If you have any changes to this
               registered sample data, please{' '}
               <NextLink href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact the DCC.</HyperLink>
+                <Link>contact the DCC.</Link>
               </NextLink>
             </Typography>
           ),

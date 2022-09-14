@@ -18,7 +18,7 @@
  */
 
 import NextLink from 'next/link';
-import { A } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
 const ProgramDashboardLink = ({ program }: { program: string }) => {
   return (
@@ -26,7 +26,7 @@ const ProgramDashboardLink = ({ program }: { program: string }) => {
       as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}
       href={PROGRAM_DASHBOARD_PATH}
     >
-      <A>{program}</A>
+      <Link>{program}</Link>
     </NextLink>
   );
 };

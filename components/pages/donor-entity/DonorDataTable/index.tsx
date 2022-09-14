@@ -25,7 +25,7 @@ import { useQuery } from '@apollo/client';
 import { Container } from '@icgc-argo/uikit';
 import { SimpleTable } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
-import { A } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 import {
   removeAliasedKeys,
@@ -63,7 +63,7 @@ const DonorDataTable = ({ data }) => {
   const programName = currentProgram?.name || data.program_id;
   const programLink = (
     <NextLink href={programFilterUrl} passHref>
-      <A>{`${programName} (${data.program_id})`}</A>
+      <Link>{`${programName} (${data.program_id})`}</Link>
     </NextLink>
   );
 

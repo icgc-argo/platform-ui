@@ -25,7 +25,6 @@ import { Typography } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
 import { Link } from '@icgc-argo/uikit';
-import { HyperLink } from '@icgc-argo/uikit';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 const GdprMessage = () => {
@@ -70,7 +69,7 @@ const GdprMessage = () => {
             settings, you consent to our use of cookies in accordance with our Privacy Policy. To
             learn more about how we use cookies on this website, please review our{' '}
             <Link href={ARGO_PRIVACY_PAGE} target="_blank">
-              <HyperLink invert>Privacy Policy</HyperLink>
+              <Link invert>Privacy Policy</Link>
             </Link>
             .
           </Typography>

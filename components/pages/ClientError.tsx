@@ -20,7 +20,7 @@
 import ErrorLayout from 'components/pages/error';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
-import { A } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import clientErrorImage from 'images/client-error.svg';
 import Image from 'next/image';
@@ -72,9 +72,9 @@ export default function Error404Page() {
             as="p"
           >
             We are working on fixing the problem and appreciate your patience.{' '}
-            <A href="#" onClick={handleReloadClick}>
+            <Link href="#" onClick={handleReloadClick}>
               Reload this page
-            </A>
+            </Link>
             .
           </Typography>
         </div>

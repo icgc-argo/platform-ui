@@ -33,7 +33,7 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import NextLink from 'next/link';
-import { A } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const { loading, data: { program = undefined } = {} } = useQuery<{
@@ -69,9 +69,9 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
     ),
     Program: (
       <NextLink href={programFilterUrl} passHref>
-        <A>
+        <Link>
           {get(program, 'name', false) ? `${get(program, 'name')} (${data.program})` : data.program}
-        </A>
+        </Link>
       </NextLink>
     ),
     'MD5 Checksum': data.checksum,
