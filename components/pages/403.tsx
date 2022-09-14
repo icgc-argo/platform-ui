@@ -22,7 +22,7 @@ import ErrorLayout from 'components/pages/error';
 import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
 import { HyperLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { getConfig } from 'global/config';
 import { Row, Col } from 'react-grid-system';
 import dnaLockedImage from 'images/dna-locked.svg';
@@ -78,9 +78,9 @@ export default function Error403Page() {
               Documentation
             </HyperLink>{' '}
             or head back{' '}
-            <Link href="/">
+            <NextLink href="/">
               <HyperLink>Home</HyperLink>
-            </Link>
+            </NextLink>
             .
           </Typography>
         </Col>

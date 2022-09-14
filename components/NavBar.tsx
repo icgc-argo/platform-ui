@@ -28,7 +28,7 @@ import usePageContext from 'global/hooks/usePageContext';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import Image from 'next/image';
 import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
@@ -161,7 +161,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: FILE_REPOSITORY_PATH,
       shouldRender: FEATURE_REPOSITORY_ENABLED,
       active: path.search(FILE_REPOSITORY_PATH) === 0,
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
     {
       isLink: userModel && egoJwt && canAccessSubmission,
@@ -170,7 +170,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: getDefaultRedirectPathForUser(permissions),
       active: path.search(SUBMISSION_PATH) === 0 || isModalVisible,
       onClick: () => setModalVisibility(!isModalVisible),
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
   ];
 
@@ -179,7 +179,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       href: USER_PAGE_PATH,
       active: onProfilePage,
       name: 'Profile & Token',
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
     {
       isLink: false,
@@ -191,7 +191,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       name: 'Logout',
       active: false,
       href: '',
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
   ];
 
@@ -236,7 +236,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       `}
     >
       <Section>
-        <Link href={disableLogoLink ? '#' : '/'} id="home-login">
+        <NextLink href={disableLogoLink ? '#' : '/'} id="home-login">
           <div
             css={css`
               padding: 0 18px;
@@ -247,14 +247,14 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
           >
             <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
           </div>
-        </Link>
+        </NextLink>
 
         {isMobileDropdownOpen && <MobileDropdown />}
 
         {!hideLinks && !isMobileLayout && (
           <MenuGroup>
             {mainNavDetails.slice(0, NUM_ELEMENTS_IN_FIRST_SECTION).map((element, idx) => (
-              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={Link} />
+              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={NextLink} />
             ))}
           </MenuGroup>
         )}
@@ -267,7 +267,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
               mainNavDetails
                 .slice(NUM_ELEMENTS_IN_FIRST_SECTION, mainNavDetails.length)
                 .map((element, idx) => (
-                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={Link} />
+                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={NextLink} />
                 ))}
 
             {!userModel && <NavBarLoginButton />}
@@ -292,7 +292,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             key={`profileNavDetail_${idx}`}
                             {...element}
                             isDropdown={true}
-                            LinkComp={Link}
+                            LinkComp={NextLink}
                           ></NavBarElement>
                         ))}
                       </DropdownMenu>

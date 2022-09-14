@@ -38,7 +38,7 @@ import {
 import { sleep } from 'global/utils/common';
 import { Typography } from '@icgc-argo/uikit';
 import { HyperLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -91,9 +91,9 @@ export default function RegisterSamplesModal({
             <Typography>
               You will see the updates on your dashboard shortly. If you have any changes to this
               registered sample data, please{' '}
-              <Link href={CONTACT_PAGE_PATH}>
+              <NextLink href={CONTACT_PAGE_PATH}>
                 <HyperLink>contact the DCC.</HyperLink>
-              </Link>
+              </NextLink>
             </Typography>
           ),
         });

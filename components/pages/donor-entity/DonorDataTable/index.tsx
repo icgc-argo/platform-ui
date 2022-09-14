@@ -26,7 +26,7 @@ import { Container } from '@icgc-argo/uikit';
 import { SimpleTable } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { A } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   removeAliasedKeys,
   splitIntoColumns,
@@ -62,9 +62,9 @@ const DonorDataTable = ({ data }) => {
     programs.filter((program) => program.shortName === data.program_id)[0];
   const programName = currentProgram?.name || data.program_id;
   const programLink = (
-    <Link href={programFilterUrl} passHref>
+    <NextLink href={programFilterUrl} passHref>
       <A>{`${programName} (${data.program_id})`}</A>
-    </Link>
+    </NextLink>
   );
 
   displayData.program_id = programLink;

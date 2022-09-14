@@ -32,7 +32,7 @@ import PROGRAM_NAME_QUERY from './gql/PROGRAM_NAME_QUERY';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { A } from '@icgc-argo/uikit';
 
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
@@ -68,11 +68,11 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
       </div>
     ),
     Program: (
-      <Link href={programFilterUrl} passHref>
+      <NextLink href={programFilterUrl} passHref>
         <A>
           {get(program, 'name', false) ? `${get(program, 'name')} (${data.program})` : data.program}
         </A>
-      </Link>
+      </NextLink>
     ),
     'MD5 Checksum': data.checksum,
     'Repository Name': data.repoName,

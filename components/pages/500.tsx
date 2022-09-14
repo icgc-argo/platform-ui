@@ -23,7 +23,7 @@ import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
 import { HyperLink } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { Row, Col } from 'react-grid-system';
 import dnaBrokenImage from 'images/dna-broken.svg';
 import logoMarkImage from 'images/logomark.svg';

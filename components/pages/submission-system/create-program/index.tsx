@@ -23,7 +23,7 @@ import SubmissionLayout from '../layout';
 import { TitleBar } from '@icgc-argo/uikit';
 import ProgramForm from '../program-form/ProgramForm';
 import { Container } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -151,9 +151,9 @@ const CreateProgramPage = () => {
         <ProgramForm
           onSubmit={onSubmit}
           leftFooterComponent={() => (
-            <Link href={PROGRAMS_LIST_PATH}>
+            <NextLink href={PROGRAMS_LIST_PATH}>
               <Button variant="text">Cancel</Button>
-            </Link>
+            </NextLink>
           )}
         />
       </Container>

@@ -46,7 +46,7 @@ import TsvDownloadButton from './TsvDownloadButton';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import { FileCentricDocumentField } from '../types';
 import { A } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   FILE_ENTITY_ID_PATH,
   FILE_ENTITY_PATH,
@@ -203,13 +203,13 @@ const FileTable = () => {
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_FILE_ENTITY_ENABLED ? (
-          <Link
+          <NextLink
             href={FILE_ENTITY_PATH}
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
             passHref
           >
             <A>{original.fileId}</A>
-          </Link>
+          </NextLink>
         ) : (
           original.objectId
         );
@@ -221,13 +221,13 @@ const FileTable = () => {
       accessor: 'donorId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_DONOR_ENTITY_ENABLED ? (
-          <Link
+          <NextLink
             href={DONOR_ENTITY_PATH}
             as={DONOR_ENTITY_PATH.replace(DONOR_ENTITY_ID_PATH, original.donorId)}
             passHref
           >
             <A>{original.donorId}</A>
-          </Link>
+          </NextLink>
         ) : (
           original.donorId
         );

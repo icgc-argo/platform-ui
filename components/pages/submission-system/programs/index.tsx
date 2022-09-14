@@ -26,7 +26,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from '@apollo/client';
@@ -115,9 +115,9 @@ export default function Programs({ authorizedPrograms = [] }: any) {
             All Programs
           </Typography>
           {canCreate && (
-            <Link href={CREATE_PROGRAM_PAGE_PATH}>
+            <NextLink href={CREATE_PROGRAM_PAGE_PATH}>
               <Button id="primary-action-create-program">Create a program</Button>
-            </Link>
+            </NextLink>
           )}
         </div>
       }

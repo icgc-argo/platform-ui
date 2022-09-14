@@ -20,7 +20,7 @@
 import * as React from 'react';
 import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
-import { UikitLink } from '@icgc-argo/uikit';
+import { Link } from '@icgc-argo/uikit';
 import { Box } from '../common';
 import { Table } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
@@ -32,7 +32,7 @@ import {
   getProgramMembershipAccessLevel,
 } from 'global/utils/egoJwt';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -58,15 +58,15 @@ interface Column {
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
-    <Link
+    <NextLink
       href={
         isDccMember(permissions)
           ? PROGRAMS_LIST_PATH
           : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
       }
     >
-      <UikitLink>{original.shortName}</UikitLink>
-    </Link>
+      <Link>{original.shortName}</Link>
+    </NextLink>
   );
   const containerRef = React.createRef<HTMLDivElement>();
 

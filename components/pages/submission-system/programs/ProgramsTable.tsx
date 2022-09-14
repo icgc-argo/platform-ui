@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Link from 'next/link';
+import NextLink from 'next/link';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
 import { PercentageBar } from '@icgc-argo/uikit';
@@ -87,12 +87,12 @@ export default function ProgramsTable(tableProps: {
       accessor: 'shortName',
       Cell: ({ original }) => (
         <FormattedCell cellInfo={original}>
-          <Link
+          <NextLink
             href={PROGRAM_DASHBOARD_PATH}
             as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
           >
             <A>{original.shortName}</A>
-          </Link>
+          </NextLink>
         </FormattedCell>
       ),
     },

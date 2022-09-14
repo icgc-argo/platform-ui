@@ -20,7 +20,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import styled from '@emotion/styled';
 
 import { Submenu, MenuItem } from '@icgc-argo/uikit';
@@ -180,7 +180,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   return (
     <div>
-      <Link
+      <NextLink
         as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
         href={PROGRAM_DASHBOARD_PATH}
       >
@@ -189,10 +189,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           content="Dashboard"
           selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
         />
-      </Link>
+      </NextLink>
       {canSeeCollaboratorView && (
         <>
-          <Link
+          <NextLink
             as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -217,8 +217,8 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                 PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
               }
             />
-          </Link>
-          <Link
+          </NextLink>
+          <NextLink
             as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -258,9 +258,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                 PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
               }
             />
-          </Link>
+          </NextLink>
           {FEATURE_SUBMITTED_DATA_ENABLED && (
-            <Link
+            <NextLink
               as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
@@ -279,12 +279,12 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                   PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
                 }
               />
-            </Link>
+            </NextLink>
           )}
         </>
       )}
       {canWriteToProgram && (
-        <Link
+        <NextLink
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
           href={PROGRAM_MANAGE_PATH}
         >
@@ -293,7 +293,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
             content="Manage Program"
             selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
           />
-        </Link>
+        </NextLink>
       )}
     </div>
   );
@@ -339,13 +339,13 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         }
       />
       {canSeeAllPrograms && (
-        <Link as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
+        <NextLink as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
             content={'All Programs'}
             selected={pageContext.pathname === PROGRAMS_LIST_PATH}
           />
-        </Link>
+        </NextLink>
       )}
       {filteredPrograms.map((program, programIndex) => (
         <MenuItem
@@ -401,9 +401,9 @@ export default function SideMenu() {
       ) : (
         <>
           {canSeeDcc && (
-            <Link href={DCC_DASHBOARD_PATH}>
+            <NextLink href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
-            </Link>
+            </NextLink>
           )}
 
           <MenuItem
