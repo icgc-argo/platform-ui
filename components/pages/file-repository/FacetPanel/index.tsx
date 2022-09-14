@@ -18,7 +18,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import { css, styled } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import { Facet } from '@icgc-argo/uikit';
 import { MenuItem, SubMenu } from '@icgc-argo/uikit';
 import { Input } from '@icgc-argo/uikit';
@@ -199,8 +199,8 @@ const facetTabs = {
 
 const FacetContainer = styled(Container)`
   z-index: 1;
-  background: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => theme.shadows.pageElement};
+  background: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
+  box-shadow: ${({ theme }: { theme: UikitTheme }) => theme.shadows.pageElement};
   display: flex;
   flex-direction: column;
   justify-content: space-between;

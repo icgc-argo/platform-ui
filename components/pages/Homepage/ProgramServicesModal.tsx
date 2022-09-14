@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { Modal } from '@icgc-argo/uikit';
+import { Modal, UikitTheme } from '@icgc-argo/uikit';
 import { css, styled } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { Link } from '@icgc-argo/uikit';
@@ -31,7 +31,7 @@ import { Banner } from '@icgc-argo/uikit';
 const Row = styled('span')`
   display: flex;
   justify-content: center;
-  border-top: ${({ theme }) => `solid 1px  ${theme.colors.grey_2}`};
+  border-top: ${({ theme }: { theme: UikitTheme }) => `solid 1px  ${theme.colors.grey_2}`};
 
   &:first-of-type {
     border: none;

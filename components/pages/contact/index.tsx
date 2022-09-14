@@ -19,7 +19,7 @@
 
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
-import { css, styled } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { Input } from '@icgc-argo/uikit';
 import { FormControl } from '@icgc-argo/uikit';
@@ -55,14 +55,14 @@ import { messageCategory, messageDescription, reCaptcha, CONTACT_CATEGORY_OPTION
 import Head from 'components/pages/head';
 
 const Ul = styled('ul')`
-  ${({ theme }) => css(theme.typography.paragraph)};
+  ${({ theme }: { theme: UikitTheme }) => css(theme.typography.paragraph as any)};
   padding-left: 18px;
   margin-top: 5px;
   margin-bottom: 30px;
 `;
 
 const Ul2 = styled('ul')`
-  ${({ theme }) => css(theme.typography.paragraph)};
+  ${({ theme }: { theme: UikitTheme }) => css(theme.typography.paragraph as any)};
   padding-left: 0px;
   margin-top: 5px;
   margin-bottom: 30px;

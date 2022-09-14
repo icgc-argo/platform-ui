@@ -20,7 +20,7 @@
 import React, { useState } from 'react';
 import { find } from 'lodash';
 import styled from '@emotion/styled';
-import { Icon } from '@icgc-argo/uikit';
+import { Icon, UikitTheme } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { theme } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
@@ -59,7 +59,7 @@ const StyledLegendLabel = styled('label')`
   align-items: center;
   display: flex;
   .legend-input-title {
-    ${({ theme }) => css(theme.typography.data)};
+    ${({ theme }: { theme: UikitTheme }) => css(theme.typography.data as any)};
     line-height: 20px;
     padding: 2px;
   }

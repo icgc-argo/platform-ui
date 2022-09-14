@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { Typography } from '@icgc-argo/uikit';
+import { Typography, UikitTheme } from '@icgc-argo/uikit';
 import { css, styled } from '@icgc-argo/uikit';
 import { Link } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
@@ -28,11 +28,11 @@ import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 const ContainerComponent = styled('div')`
   display: flex;
-  border: solid 1px ${({ theme }) => theme.colors.grey_2};
+  border: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
   padding: 8px;
   border-radius: 8px;
   & > :not(:last-child) {
-    border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
+    border-right: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
   }
 `;
 const SectionComponent = styled('div')`

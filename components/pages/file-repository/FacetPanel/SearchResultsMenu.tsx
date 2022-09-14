@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { css, styled } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { SearchMenuDataNode } from './types';
@@ -36,7 +36,7 @@ const ResultsDropdown = styled('div')`
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
   padding-top: 2px;
-  box-shadow: ${({ theme }) => theme.shadows.pageElement};
+  box-shadow: ${({ theme }: { theme: UikitTheme }) => theme.shadows.pageElement};
 `;
 
 const NoResultsContainer = styled(Typography)`

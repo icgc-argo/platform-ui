@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import { useTheme } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { ReactNode } from 'react';
@@ -216,7 +216,7 @@ export const DataCallout: React.ComponentType<{
   );
 };
 const GradientBar = styled('div')`
-  background-image: ${({ theme }) =>
+  background-image: ${({ theme }: { theme: UikitTheme }) =>
     `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${theme.colors.accent3_dark} 100%)`};
 
   width: 40%;

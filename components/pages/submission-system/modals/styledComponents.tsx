@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { InputLabel } from '@icgc-argo/uikit';
+import { InputLabel, UikitTheme } from '@icgc-argo/uikit';
 import { MultiSelect } from '@icgc-argo/uikit';
 import { Input } from '@icgc-argo/uikit';
 import { FormControl } from '@icgc-argo/uikit';
@@ -34,7 +34,7 @@ import { UserModel } from './common';
 
 const Section = styled('div')`
   padding: 12px 11px;
-  border: solid 1px ${({ theme }) => theme.colors.grey_2};
+  border: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
   margin-top: 15px;
   display: flex;
 `;

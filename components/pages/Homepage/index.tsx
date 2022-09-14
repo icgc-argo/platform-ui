@@ -19,7 +19,7 @@
 
 import React from 'react';
 import { Col, Row, Visible, Hidden } from 'react-grid-system';
-import { css, styled } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 
 import { Typography } from '@icgc-argo/uikit';
@@ -167,7 +167,7 @@ const SeparationLine: React.ComponentType<{}> = () => {
 };
 
 const HeroDiv = styled('div')`
-  background-image: ${({ theme }) =>
+  background-image: ${({ theme }: { theme: UikitTheme }) =>
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
@@ -175,7 +175,7 @@ const HeroDiv = styled('div')`
 
   background-position: center;
   background-size: cover;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.primary};
   width: 100%;
 `;
 

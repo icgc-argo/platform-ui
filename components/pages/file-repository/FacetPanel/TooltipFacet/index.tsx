@@ -26,7 +26,7 @@
  */
 
 import React from 'react';
-import { MenuItem } from '@icgc-argo/uikit';
+import { MenuItem, UikitTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
 import { OptionsListComp, FilterOption } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
@@ -56,11 +56,11 @@ const TooltipFacet = ({
 }) => {
   const OptionsList = styled(OptionsListComp)`
     > div:not(:first-of-type):hover {
-      background-color: ${({ theme }) => theme.colors.warning_3};
+      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.warning_3};
     }
     > div:last-child {
       border-bottom: 1px solid;
-      border-color: ${({ theme }) => theme.colors.grey_2};
+      border-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
     }
   `;
 
