@@ -19,6 +19,7 @@
 
 import * as React from 'react';
 import { NextPageContext } from 'next';
+import { DocumentNode } from 'graphql';
 import { IsGlobalLoading } from 'components/GlobalLoader';
 
 export type GetInitialPropsContext = NextPageContext & {
@@ -44,7 +45,7 @@ export type PageConfigProps = {
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
   getGqlQueriesToPrefetch: (args: GetInitialPropsContextWithEgo) => Promise<
     Array<{
-      query: string; // The gql query string
+      query: string | DocumentNode; // The gql query string
       variables?: { [key: string]: any };
     }>
   >;

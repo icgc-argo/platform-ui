@@ -60,6 +60,7 @@ typings/
 # next.js build output
 .next
 out/
+next-env.d.ts
 
 # Testing
 test_reports
@@ -70,10 +71,15 @@ chromedriver.log
 # VSCode
 .vscode
 
+# graphql-codegen generated files
+generated
+
 .graphqlconfig
 .cache
 
 **/.DS_STORE
+
+tsconfig.tsbuildinfo
 /test-results/
 /playwright-report/
 /playwright/.cache/

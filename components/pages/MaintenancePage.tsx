@@ -22,7 +22,9 @@ import ErrorLayout from 'components/pages/error';
 import Typography from '@icgc-argo/uikit/Typography';
 import { css } from '@icgc-argo/uikit';
 import { Row, Col } from 'react-grid-system';
-import image from 'static/group-33.svg';
+import Image from 'next/image';
+
+import maintenanceImage from 'images/group-33.svg';
 
 const MaintenancePage = () => (
   <ErrorLayout hideApiVersion hideNavbarLinks hideInternalPaths>
@@ -64,7 +66,7 @@ const MaintenancePage = () => (
           text-align: center;
         `}
       >
-        <img alt="Broken dna" src={image} />
+        <Image alt="Maintenance" src={maintenanceImage} layout="fixed" width={367} height={300} />
       </Col>
     </Row>
   </ErrorLayout>

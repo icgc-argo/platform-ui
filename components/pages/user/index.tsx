@@ -26,8 +26,8 @@ import { css } from '@icgc-argo/uikit';
 import ApiTokenBox from './ApiTokenBox';
 import ProgramAccessBox from './ProgramAccessBox';
 import ProfileBox from './ProfileBox';
-import PROFILE from './gql/PROFILE.gql';
-import { useQuery } from '@apollo/react-hooks';
+import PROFILE_QUERY from './gql/PROFILE_QUERY';
+import { useQuery } from '@apollo/client';
 import get from 'lodash/get';
 import { ProfileQueryData } from './types';
 import Head from 'components/pages/head';
@@ -42,7 +42,7 @@ const Column = (props) => (
 );
 
 export function UserPage({ scope }) {
-  const { data, loading } = useQuery<ProfileQueryData>(PROFILE, { variables: {} });
+  const { data, loading } = useQuery<ProfileQueryData>(PROFILE_QUERY, { variables: {} });
   const isDacoApproved = get(data, ['self', 'isDacoApproved']);
   const apiToken = get(data, ['self', 'apiKey']);
   const programs = get(data, 'programs');
