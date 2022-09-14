@@ -50,7 +50,7 @@ import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
 import useGlobalLoader from 'components/GlobalLoader';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import ModalPortal from 'components/Modal';
+import FilterModal from './FilterModal';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -107,6 +107,8 @@ export default function ProgramSubmittedData() {
 
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
+  console.log('defaultClinicalEntityFilters', defaultClinicalEntityFilters);
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -148,11 +150,12 @@ export default function ProgramSubmittedData() {
       }
     >
       <SearchBar noData={noData} setModalVisible={setModalVisible} />
+
       {loading ? (
         <DnaLoader />
       ) : (
         <Container>
-          {ModalVisible}
+          {ModalVisible && <FilterModal setModalVisible={setModalVisible} />}
           <div
             css={css`
               width: 100%;
