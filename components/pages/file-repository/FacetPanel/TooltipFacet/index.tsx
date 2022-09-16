@@ -28,7 +28,7 @@
 import React from 'react';
 import { MenuItem, UikitTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import { OptionsListComp, FilterOption } from '@icgc-argo/uikit';
+import { OptionsList, OptionsListFilterOption } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { styled } from '@icgc-argo/uikit';
 import { Tooltip } from '@icgc-argo/uikit';
@@ -45,7 +45,7 @@ const TooltipFacet = ({
   tooltipContent = null,
 }: {
   subMenuName: string;
-  options: Array<FilterOption>;
+  options: Array<OptionsListFilterOption>;
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   countUnit?: string;
@@ -54,7 +54,7 @@ const TooltipFacet = ({
   parseDisplayValue?: (inputValue: string) => string;
   tooltipContent: React.ReactNode;
 }) => {
-  const OptionsList = styled(OptionsListComp)`
+  const StyledOptionsList = styled(OptionsList)`
     > div:not(:first-of-type):hover {
       background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.warning_3};
     }
@@ -81,8 +81,7 @@ const TooltipFacet = ({
         width: 100%;
       `}
     >
-      {/* @ts-ignore*/}
-      <OptionsList
+      <StyledOptionsList
         options={options}
         countUnit={countUnit}
         onOptionToggle={onOptionToggle}
