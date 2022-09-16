@@ -23,7 +23,6 @@ import { Typography } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { SearchMenuDataNode } from './types';
 import { useTheme } from '@icgc-argo/uikit';
-import { theme } from '@icgc-argo/uikit';
 
 const ResultsDropdown = styled('div')`
   position: absolute;
@@ -31,7 +30,7 @@ const ResultsDropdown = styled('div')`
   left: 0px;
   background-color: white;
   width: 248px;
-  border: 1px solid ${theme.colors.primary_4};
+  box-shadow: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
   border-top: 0px;
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
@@ -40,7 +39,7 @@ const ResultsDropdown = styled('div')`
 `;
 
 const NoResultsContainer = styled(Typography)`
-  color: ${theme.colors.primary_2};
+  color: ${({ theme }: { theme: UikitTheme }) => theme.colors.primary_2};
   font-size: 14px;
   font-style: italic;
   margin: 0;
