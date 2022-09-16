@@ -284,7 +284,7 @@ const ClinicalEntityDataTable = ({
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     // Counts Number of Records affected for each Error Object
     const { fieldName, entityName, message, errorType } = errorGroup[0];
-    console.log('errorGroup', errorGroup);
+
     const entries = errorGroup
       .map((error) => error.donorId)
       .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
