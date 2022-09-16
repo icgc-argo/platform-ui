@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { css, styled } from '@icgc-argo/uikit';
 import { orderBy, maxBy } from 'lodash';
 import { Tooltip } from '@icgc-argo/uikit';
@@ -36,7 +36,7 @@ type SimpleBarChartProps = {
   containerStyle?: React.CSSProperties;
   chartHeight?: number;
   loading?: boolean;
-  onClick?: (value: string) => void;
+  onClick?: (value: string, event: any) => void;
 };
 
 const defaultChartHeight = 100;
@@ -139,14 +139,14 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
   chartHeight = defaultChartHeight,
   loading = false,
   onClick = (value, event) => {},
-}) => {
+}: SimpleBarChartProps) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
   const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
     <ContentBox
-      style={containerStyle}
+      style={containerStyle as any} // conflicting React versions/types
       css={css`
         display: flex;
         flex-direction: column;

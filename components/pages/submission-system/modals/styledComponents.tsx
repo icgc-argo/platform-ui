@@ -34,7 +34,7 @@ import { UserModel } from './common';
 
 const Section = styled('div')`
   padding: 12px 11px;
-  border: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
+  border: solid 1px ${({ theme }: { theme?: UikitTheme }) => theme.colors.grey_2};
   margin-top: 15px;
   display: flex;
 `;

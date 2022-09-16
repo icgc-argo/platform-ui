@@ -59,7 +59,7 @@ const StyledLegendLabel = styled('label')`
   align-items: center;
   display: flex;
   .legend-input-title {
-    ${({ theme }: { theme: UikitTheme }) => css(theme.typography.data as any)};
+    ${({ theme }: { theme?: UikitTheme }) => css(theme.typography.data as any)};
     line-height: 20px;
     padding: 2px;
   }
