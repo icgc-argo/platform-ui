@@ -301,8 +301,7 @@ const ClinicalEntityDataTable = ({
               ((errorType === 'MISSING_REQUIRED_FIELD' || errorType === 'INVALID_BY_SCRIPT') &&
                 !tableRecords.some((record) => record.name === fieldName))),
         );
-        console.log('currentEntityRecords', currentEntityRecords);
-        console.log('currentDonorRecords', currentDonorRecords);
+
         return totalRecordCount + currentDonorRecords.length;
       }, 0);
 
