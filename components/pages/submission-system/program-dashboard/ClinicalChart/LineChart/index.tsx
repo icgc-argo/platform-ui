@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, theme } from '@icgc-argo/uikit';
+import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import {
   compareAsc,
   differenceInDays,
@@ -37,10 +37,10 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { chartLineMeta } from '../utils';
+import { makeChartLineMeta } from '../utils';
 import { getMaxY } from './utils';
 
-const options = {
+const getOptions = (theme: UikitTheme) => ({
   colors: {
     axisBorder: theme.colors.grey_1,
     chartLineDefault: theme.colors.accent2_dark,
@@ -56,13 +56,7 @@ const options = {
   strokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
-};
-
-const TextStyleGroup = styled.g`
-  fill: ${options.colors.text};
-  font-family: ${options.fontFamily};
-  font-size: ${options.fontSize}px;
-`;
+});
 
 const makePointsString = (points: PointsCoordinates) => {
   // offset positioning by 0.5 to sharpen straight, thin (0.5 strokeWidth) SVG lines
@@ -102,6 +96,14 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
+  const theme = useTheme();
+  const options = getOptions(theme);
+
+  const TextStyleGroup = styled.g`
+    fill: ${options.colors.text};
+    font-family: ${options.fontFamily};
+    font-size: ${options.fontSize}px;
+  `;
   // setup Y axis
   const maxY = Math.max(yAxisThreshold, getMaxY(data));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
@@ -142,21 +144,22 @@ const LineChart = ({
   };
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
-  const chartLines = data
-    .filter((dataItem: DataItem) => activeLines.includes(dataItem.title) || data.length === 1)
-    .map((dataItem: DataItem) => ({
-      field: dataItem.title as DonorField,
-      title: find(chartLineMeta, { field: dataItem.title }).title,
-      points: dataItem.buckets
-        .map((dataBucket: DataBucket, i: number) => {
-          const xCoordinate = getX(i);
-          const yCoordinate = Math.floor(
-            chartHeight - topPadding / 2 - (dataBucket.donors / maxY) * chartHeight + padding / 2,
-          );
-          return `${xCoordinate},${yCoordinate}`;
-        })
-        .join(' '),
-    }));
+  const makeChartLines = (theme: UikitTheme) =>
+    data
+      .filter((dataItem: DataItem) => activeLines.includes(dataItem.title) || data.length === 1)
+      .map((dataItem: DataItem) => ({
+        field: dataItem.title as DonorField,
+        title: find(makeChartLineMeta(theme), { field: dataItem.title }).title,
+        points: dataItem.buckets
+          .map((dataBucket: DataBucket, i: number) => {
+            const xCoordinate = getX(i);
+            const yCoordinate = Math.floor(
+              chartHeight - topPadding / 2 - (dataBucket.donors / maxY) * chartHeight + padding / 2,
+            );
+            return `${xCoordinate},${yCoordinate}`;
+          })
+          .join(' '),
+      }));
 
   // setup axis elements
   const Axis = ({ points }: { points: PointsCoordinates }) => (
@@ -372,12 +375,12 @@ const LineChart = ({
   const ChartLines = () => {
     return (
       <g fill="none" strokeWidth={options.chartStrokeWidth}>
-        {chartLines.map((chartLine: ChartLine) => (
+        {makeChartLines(theme).map((chartLine: ChartLine) => (
           <polyline
             key={chartLine.title}
             points={chartLine.points}
             stroke={
-              find(chartLineMeta, { field: chartLine.field }).color ||
+              find(makeChartLineMeta(theme), { field: chartLine.field }).color ||
               options.colors.chartLineDefault
             }
           />
@@ -389,7 +392,7 @@ const LineChart = ({
   const ChartPoints = () => {
     return (
       <g>
-        {chartLines.map((chartLine: ChartLine) => {
+        {makeChartLines(theme).map((chartLine: ChartLine) => {
           const pointsCoordinates = chartLine.points.split(' ').map((point: string) => {
             const [xCoordinate, yCoordinate] = point
               .split(',')
@@ -399,7 +402,7 @@ const LineChart = ({
           return (
             <g
               fill={
-                find(chartLineMeta, { field: chartLine.field }).color ||
+                find(makeChartLineMeta(theme), { field: chartLine.field }).color ||
                 options.colors.chartLineDefault
               }
               key={chartLine.field}

@@ -17,17 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import { Button, css, Icon, theme, Typography, UikitTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, styled, Typography, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { find } from 'lodash';
 import { useState } from 'react';
 import { ChartType, DonorField } from './types';
-import { chartLineMeta } from './utils';
+import { makeChartLineMeta } from './utils';
 
 const StyledLegend = styled('div')`
-  background: ${theme.colors.white};
+  background: ${({ theme }: { theme?: UikitTheme }) => theme.colors.white};
   border-radius: 4px;
-  border: 1px solid ${theme.colors.grey_1};
+  border: ${({ theme }: { theme?: UikitTheme }) => `1px solid ${theme.colors.grey_1}`};
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   display: flex;
   left: -80px;
@@ -43,10 +42,10 @@ const StyledLegend = styled('div')`
     margin-bottom: 3px;
     text-align: center;
     &.yellow {
-      background: ${theme.colors.warning_4};
+      background: ${({ theme }: { theme: UikitTheme }) => theme.colors.warning_4};
     }
     &.blue {
-      background: ${theme.colors.accent3_3};
+      background: ${({ theme }: { theme: UikitTheme }) => theme.colors.accent3_3};
     }
   }
 `;
@@ -93,23 +92,28 @@ const LegendInput = ({
   handleLegendInput: any;
   isActive: boolean;
   title: string;
-}) => (
-  <StyledLegendLabel>
-    <input
-      checked={isActive}
-      onChange={() => handleLegendInput(field)}
-      type="checkbox"
-      value={field}
-    />
-    <span
-      className="legend-input-color"
-      css={css`
-        background: ${find(chartLineMeta, { field: field }).color};
-      `}
-    />
-    <span className="legend-input-title">{title.includes('Raw Reads') ? 'Raw Reads' : title}</span>
-  </StyledLegendLabel>
-);
+}) => {
+  const theme = useTheme();
+  return (
+    <StyledLegendLabel>
+      <input
+        checked={isActive}
+        onChange={() => handleLegendInput(field)}
+        type="checkbox"
+        value={field}
+      />
+      <span
+        className="legend-input-color"
+        css={css`
+          background: ${find(makeChartLineMeta(theme), { field: field }).color};
+        `}
+      />
+      <span className="legend-input-title">
+        {title.includes('Raw Reads') ? 'Raw Reads' : title}
+      </span>
+    </StyledLegendLabel>
+  );
+};
 
 const Legend = ({
   chartType,
@@ -121,6 +125,7 @@ const Legend = ({
   handleLegendInput: any;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const theme = useTheme();
   return (
     <div
       css={css`
@@ -136,7 +141,7 @@ const Legend = ({
                 DNA-SEQ PIPELINE
               </Typography>
             </div>
-            {chartLineMeta
+            {makeChartLineMeta(theme)
               .filter((line) => line.dataType === 'DNA' && line.chartType === chartType)
               .map((line) => (
                 <LegendInput
@@ -154,7 +159,7 @@ const Legend = ({
             <div className="legend-title blue">
               <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
             </div>
-            {chartLineMeta
+            {makeChartLineMeta(theme)
               .filter(line => line.dataType === 'RNA' && line.chartType === chartType)
               .map((line => (
                 <LegendInput

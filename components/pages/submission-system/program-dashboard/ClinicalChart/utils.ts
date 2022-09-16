@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { theme } from '@icgc-argo/uikit';
+import { UikitTheme } from '@icgc-argo/uikit';
 
 export const rangeButtons = [
   {
@@ -42,7 +42,7 @@ export const rangeButtons = [
   },
 ];
 
-export const chartLineMeta = [
+export const makeChartLineMeta = (theme: UikitTheme) => [
   {
     chartType: 'clinical',
     color: theme.colors.accent2_dark,

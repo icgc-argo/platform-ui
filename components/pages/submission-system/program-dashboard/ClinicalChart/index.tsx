@@ -22,7 +22,7 @@ import { find } from 'lodash';
 import { css } from '@emotion/core';
 import { format as formatDate, subDays } from 'date-fns';
 import { useQuery, QueryHookOptions } from '@apollo/client';
-import { useElementDimension } from '@icgc-argo/uikit';
+import { useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { ContentError, ContentLoader } from 'components/placeholders';
 import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
@@ -44,7 +44,7 @@ import {
   RangeButtons,
 } from './types';
 import Legend from './Legend';
-import { chartLineMeta, rangeButtons } from './utils';
+import { makeChartLineMeta, rangeButtons } from './utils';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
 
 const CHART_HEIGHT = 220;
@@ -93,6 +93,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
   const [dateRangeFrom, setDateRangeFrom] = useState<string | null>(null);
   const [dateRangeTo, setDateRangeTo] = useState<string | null>(null);
   const [activeRangeBtn, setActiveRangeBtn] = useState<RangeButtons>('All');
+  const theme = useTheme();
 
   useEffect(() => {
     const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
@@ -119,7 +120,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
 
   // get data for chart lines - program donor published analyses
   // aggregated by date range
-  const donorFieldsByChartType = chartLineMeta
+  const donorFieldsByChartType = makeChartLineMeta(theme)
     .filter((line) => line.chartType === chartType)
     .map((line) => line.field);
 
