@@ -17,10 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { css } from '@emotion/core';
-import { useTheme } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
+import { Typography, useTheme } from '@icgc-argo/uikit';
 import { rangeButtons } from './utils';
 
 const RangeButton = ({

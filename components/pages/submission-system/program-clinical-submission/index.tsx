@@ -17,18 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { QueryHookOptions, useQuery } from '@apollo/client';
+import { ContentHeader, styled, useTheme } from '@icgc-argo/uikit';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import * as React from 'react';
 import SubmissionLayout from '../layout';
-import { styled } from '@icgc-argo/uikit';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionQueryData } from './types';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY';
-import { useQuery, QueryHookOptions } from '@apollo/client';
-import { ContentHeader } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
 import Header from './Header';
 import PageContent from './PageContent';
-import Head from 'components/pages/head';
+import { ClinicalSubmissionQueryData } from './types';
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
 ): ClinicalSubmissionQueryData => ({

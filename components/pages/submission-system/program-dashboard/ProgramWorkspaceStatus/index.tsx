@@ -18,21 +18,20 @@
  */
 
 import { css } from '@emotion/core';
-import { Typography } from '@icgc-argo/uikit';
-import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import { Link, HyperLinkProps } from '@icgc-argo/uikit';
-import NextLink, { LinkProps } from 'next/link';
+import { HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
 import {
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
-import { DashboardCard } from '../common';
-import { isCollaborator } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { isCollaborator } from 'global/utils/egoJwt';
+import NextLink, { LinkProps } from 'next/link';
 import React from 'react';
+import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
+import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
+import { DashboardCard } from '../common';
 
 const ConditionalLink: React.ComponentType<{
   showAsLink: boolean;

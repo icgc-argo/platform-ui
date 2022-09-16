@@ -17,39 +17,41 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import { Row, setConfiguration } from 'react-grid-system';
+import {
+  Button,
+  Container,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  TitleBar,
+  Typography,
+  useTheme,
+  VerticalTabs,
+} from '@icgc-argo/uikit';
+import useGlobalLoader from 'components/GlobalLoader';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
-import { css } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Container } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { VerticalTabs } from '@icgc-argo/uikit';
-import { TitleBar } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { Row, setConfiguration } from 'react-grid-system';
 import SubmissionLayout from '../layout';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import {
   aliasedEntityNames,
-  ClinicalEntityQueryResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
-  reverseLookUpEntityAlias,
-  defaultClinicalEntityFilters,
-  hasClinicalErrors,
-  emptyResponse,
+  ClinicalEntityQueryResponse,
   CompletionStates,
+  defaultClinicalEntityFilters,
+  emptyResponse,
+  hasClinicalErrors,
+  reverseLookUpEntityAlias,
 } from './common';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
-import useGlobalLoader from 'components/GlobalLoader';
-import { DnaLoader } from '@icgc-argo/uikit';
 
 setConfiguration({ gutterWidth: 9 });
 

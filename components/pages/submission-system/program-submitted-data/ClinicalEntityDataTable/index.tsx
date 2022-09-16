@@ -19,40 +19,41 @@
 
 import { useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
-import Image from 'next/image';
-import memoize from 'lodash/memoize';
-import React, { useState, useEffect } from 'react';
-import { css } from '@icgc-argo/uikit';
-import { DnaLoader } from '@icgc-argo/uikit';
-import ErrorNotification from '../../ErrorNotification';
-import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { noDataSvg } from '@icgc-argo/uikit';
-import { Table } from '@icgc-argo/uikit';
-import { Tooltip } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
-  aliasSortNames,
-  aliasedEntityNames,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  noDataSvg,
+  NOTIFICATION_VARIANTS,
+  Table,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
+import memoize from 'lodash/memoize';
+import React, { useEffect, useState } from 'react';
+import { TableInfoHeaderContainer } from '../../common';
+import ErrorNotification from '../../ErrorNotification';
+import {
   aliasedEntityFields,
+  aliasedEntityNames,
+  aliasSortNames,
+  clinicalEntityDisplayNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
+  CompletionStates,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
-  clinicalEntityDisplayNames,
-  CompletionStates,
 } from '../common';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
-import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
-import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
 import { ContentPlaceholder } from '@icgc-argo/uikit';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 
 export type DonorEntry = {
   row: string;

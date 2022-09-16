@@ -17,21 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled, UikitTheme } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { ReactNode } from 'react';
-import { Col, Row } from 'react-grid-system';
-import { ThemeColorNames } from '@icgc-argo/uikit';
-import { UikitIconNames } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Container } from '@icgc-argo/uikit';
-import { overtureLogo } from '@icgc-argo/uikit';
-import { DnaLoader } from '@icgc-argo/uikit';
+import {
+  Button,
+  Container,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  overtureLogo,
+  styled,
+  ThemeColorNames,
+  Typography,
+  UikitIconNames,
+  UikitTheme,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { reactGridBreakpoints } from 'global/utils/common';
 import Image from 'next/image';
+import { ReactNode } from 'react';
+import { Col, Row } from 'react-grid-system';
 
 export type NewsItem = {
   title: string;

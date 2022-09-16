@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import NextLink from 'next/link';
 import { Link } from '@icgc-argo/uikit';
-import { PROGRAM_SHORT_NAME_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import NextLink from 'next/link';
 const ProgramDashboardLink = ({ program }: { program: string }) => {
   return (
     <NextLink

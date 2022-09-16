@@ -17,17 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import { Row, Col } from 'react-grid-system';
 import styled from '@emotion/styled-base';
-import { useTheme } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { PercentBar } from '@icgc-argo/uikit';
-import _ from 'lodash';
+import { Button, Container, Icon, PercentBar, Typography } from '@icgc-argo/uikit';
 import { Pipeline } from 'components/pages/submission-system/common';
+import { Col, Row } from 'react-grid-system';
 
 const StatDesc = styled('div')`
   display: flex;

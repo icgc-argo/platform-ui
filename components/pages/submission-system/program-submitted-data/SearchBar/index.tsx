@@ -17,33 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {
+  Button,
+  Container,
+  css,
+  DropdownButton,
+  Icon,
+  Input,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
 import * as React from 'react';
 import { useState } from 'react';
-import { Container } from '@icgc-argo/uikit';
-import { DropdownButton } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
 import { CompletionStates } from '../common';
 import {
   searchBackgroundStyle,
-  searchTitleParentStyle,
+  searchBarParentStyle,
   searchBoldTextStyle,
   searchClearFilterStyle,
-  searchRightSideGroupStyle,
-  searchFilterParentStyle,
-  searchDropdownStyle,
   searchDownArrowStyle,
-  searchBarParentStyle,
-  searchInputFieldStyle,
+  searchDownloadIconStyle,
+  searchDropdownStyle,
   searchFilterButtonStyle,
   searchFilterContainerStyle,
   searchFilterIconStyle,
-  searchDownloadIconStyle,
+  searchFilterParentStyle,
+  searchInputFieldStyle,
+  searchRightSideGroupStyle,
+  searchTitleParentStyle,
 } from './style';
-import { Icon } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
 
 const COMPLETION_OPTIONS = {
   all: {

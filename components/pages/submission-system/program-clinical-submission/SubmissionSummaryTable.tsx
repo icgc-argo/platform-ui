@@ -17,14 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { GqlClinicalSubmissionData } from './types';
+import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
+import * as React from 'react';
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
-import { useTheme } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
+import { GqlClinicalSubmissionData } from './types';
 
 const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
   errorsFound: [],

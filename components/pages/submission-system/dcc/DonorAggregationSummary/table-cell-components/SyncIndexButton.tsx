@@ -17,18 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import urlJoin from 'url-join';
-import { isEmpty } from 'lodash';
 
-import { useTheme } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
+import { Button, Typography, useTheme } from '@icgc-argo/uikit';
 
-import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
-const { GATEWAY_API_ROOT } = getConfig();
 import { DONOR_AGGREGATOR_SYNC_PROGRAM } from 'global/constants/gatewayApiPaths';
+import useAuthContext from 'global/hooks/useAuthContext';
+const { GATEWAY_API_ROOT } = getConfig();
 
 const SyncIndexButton = ({ program }: { program: string }) => {
   const theme = useTheme();

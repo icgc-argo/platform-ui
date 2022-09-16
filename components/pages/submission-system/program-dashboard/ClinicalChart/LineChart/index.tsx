@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { find } from 'lodash';
+import { styled, theme } from '@icgc-argo/uikit';
 import {
   compareAsc,
   differenceInDays,
@@ -29,9 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { styled } from '@icgc-argo/uikit';
-import { chartLineMeta } from '../utils';
-import { getMaxY } from './utils';
+import { find } from 'lodash';
 import {
   ChartLine,
   ChartType,
@@ -40,7 +37,8 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { theme } from '@icgc-argo/uikit';
+import { chartLineMeta } from '../utils';
+import { getMaxY } from './utils';
 
 const options = {
   colors: {

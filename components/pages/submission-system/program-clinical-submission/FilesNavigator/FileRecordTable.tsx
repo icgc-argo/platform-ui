@@ -17,27 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalSubmissionEntityFile } from '../types';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
+import { css, Icon, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
+import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
+import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import { css } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
+import React, { createRef, CSSProperties } from 'react';
 import {
+  CellContentCenter,
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
-  CellContentCenter,
 } from '../../common';
-import { CSSProperties, createRef } from 'react';
-import { useTheme } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, isDataSubmitter } from 'global/utils/egoJwt';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
-import get from 'lodash/get';
-import React from 'react';
-import { usePageQuery } from 'global/hooks/usePageContext';
+import { ClinicalSubmissionEntityFile } from '../types';
 
 const StarIcon = DataTableStarIcon;
 

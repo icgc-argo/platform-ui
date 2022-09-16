@@ -17,19 +17,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { InputLabel, UikitTheme } from '@icgc-argo/uikit';
-import { MultiSelect } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { FormControl } from '@icgc-argo/uikit';
-import styled from '@emotion/styled';
-import { Icon } from '@icgc-argo/uikit';
-import { Select } from '@icgc-argo/uikit';
-import { FormHelperText } from '@icgc-argo/uikit';
-import { PROGRAM_USER_ROLES } from 'global/constants';
 import css from '@emotion/css';
-import PropTypes from 'prop-types';
-import { Row, Col } from 'react-grid-system';
+import styled from '@emotion/styled';
+import {
+  FormControl,
+  FormHelperText,
+  Icon,
+  Input,
+  InputLabel,
+  Select,
+  UikitTheme,
+} from '@icgc-argo/uikit';
+import { PROGRAM_USER_ROLES } from 'global/constants';
+import React from 'react';
+import { Col, Row } from 'react-grid-system';
 import { UserModel } from './common';
 
 const Section = styled('div')`

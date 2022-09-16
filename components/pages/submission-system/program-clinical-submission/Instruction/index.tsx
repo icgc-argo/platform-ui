@@ -17,26 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { Typography } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { InstructionBox } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
 import {
-  instructionBoxButtonIconStyle,
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonStyle,
-  instructionBoxLoadingButtonStyle,
-} from '../../common';
-import { FileSelectButton } from '@icgc-argo/uikit';
-import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
-import { Link } from '@icgc-argo/uikit';
+  Button,
+  ButtonLoader,
+  BUTTON_SIZES,
+  css,
+  FileSelectButton,
+  Icon,
+  InstructionBox,
+  Link,
+  Typography,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import { css } from '@icgc-argo/uikit';
-import { BUTTON_SIZES } from '@icgc-argo/uikit';
-import { ButtonLoader } from '@icgc-argo/uikit';
+import * as React from 'react';
+import {
+  instructionBoxButtonContentStyle,
+  instructionBoxButtonIconStyle,
+  instructionBoxButtonStyle,
+  instructionBoxLoadingButtonStyle,
+} from '../../common';
+import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
 
 const InstructionLoader = ({ theme, text }: ButtonLoader) => {
   const disabledColor = theme.colors.accent2_dark;

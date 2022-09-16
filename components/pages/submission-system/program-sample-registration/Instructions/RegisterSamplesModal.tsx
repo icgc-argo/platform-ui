@@ -17,27 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { Modal } from '@icgc-argo/uikit';
 import { useMutation } from '@apollo/client';
+import { Modal, TOAST_VARIANTS } from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import pluralize from 'pluralize';
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
-import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
-import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit';
+import get from 'lodash/get';
 import Router from 'next/router';
+import pluralize from 'pluralize';
+import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 
+import { Link, Typography } from '@icgc-argo/uikit';
 import {
+  CONTACT_PAGE_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  CONTACT_PAGE_PATH,
 } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
-import { Typography } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 
 export default function RegisterSamplesModal({

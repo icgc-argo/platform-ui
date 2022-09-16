@@ -17,14 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { Checkbox, css, STYLEDCHECKBOX_SIZES, Typography, useTheme } from '@icgc-argo/uikit';
 import React from 'react';
-import { Checkbox, STYLEDCHECKBOX_SIZES } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { getTimelineStyles } from './util';
-import { css } from '@icgc-argo/uikit';
+import { Entity, EntityType } from '../types';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType, Entity } from '../types';
+import { getTimelineStyles } from './util';
 
 type HeaderTypes = {
   entities: Array<Entity>;

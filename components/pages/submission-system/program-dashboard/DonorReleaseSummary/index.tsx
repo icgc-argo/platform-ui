@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
 import { css } from '@emotion/core';
 import { Typography } from '@icgc-argo/uikit';
-import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
-import { useQuery } from '@apollo/client';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';
+import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 
 const DonorReleaseSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();

@@ -17,54 +17,56 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import Instruction from './Instruction';
-import { Container } from '@icgc-argo/uikit';
-import { containerStyle } from '../common';
-import FilesNavigator from './FilesNavigator';
-import {
-  ClinicalSubmissionEntityFile,
-  GqlClinicalEntity,
-  ClinicalSubmissionQueryData,
-  ValidateSubmissionMutationVariables,
-  UploadFilesMutationVariables,
-  SignOffSubmissionMutationVariables,
-  ClinicalSubmissionError,
-} from './types';
-import { Notification, NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
-import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
-import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
-import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
-import { DnaLoader } from '@icgc-argo/uikit';
-import { displayDateAndTime } from 'global/utils/common';
-import { capitalize } from 'global/utils/stringUtils';
-import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import {
+  Container,
+  css,
+  DnaLoader,
+  Notification,
+  NOTIFICATION_VARIANTS,
+  Typography,
+} from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import SignOffValidationModal from './SignOffValidationModal';
-import SubmissionSummaryTable from './SubmissionSummaryTable';
-import useUserConfirmationModalState from './useUserConfirmationModalState';
-import { Typography } from '@icgc-argo/uikit';
-import { sleep } from 'global/utils/common';
-import Router from 'next/router';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import orderBy from 'lodash/orderBy';
-import head from 'lodash/head';
-import map from 'lodash/map';
-import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
-import { useClinicalSubmissionQuery } from '.';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { useToaster } from 'global/hooks/toaster';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { displayDateAndTime, sleep } from 'global/utils/common';
+import { capitalize } from 'global/utils/stringUtils';
+import head from 'lodash/head';
+import map from 'lodash/map';
+import orderBy from 'lodash/orderBy';
+import uniq from 'lodash/uniq';
+import Router from 'next/router';
+import * as React from 'react';
+import { useClinicalSubmissionQuery } from '.';
+import { containerStyle } from '../common';
+import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
   useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
+import FilesNavigator from './FilesNavigator';
+import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
+import Instruction from './Instruction';
+import SignOffValidationModal from './SignOffValidationModal';
+import SubmissionSummaryTable from './SubmissionSummaryTable';
+import {
+  ClinicalSubmissionEntityFile,
+  ClinicalSubmissionError,
+  ClinicalSubmissionQueryData,
+  GqlClinicalEntity,
+  SignOffSubmissionMutationVariables,
+  UploadFilesMutationVariables,
+  ValidateSubmissionMutationVariables,
+} from './types';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
 
 const CLINICAL_FILE_ORDER = [
   'donor',

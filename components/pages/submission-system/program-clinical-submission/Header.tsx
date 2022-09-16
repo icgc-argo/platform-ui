@@ -17,33 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { TitleBar } from '@icgc-argo/uikit';
-import { Row } from 'react-grid-system';
-import { Link } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
-import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION';
-import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION';
-import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
-import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
-import useUserConfirmationModalState from './useUserConfirmationModalState';
+import { Button, css, Link, Modal, TitleBar } from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import { Modal } from '@icgc-argo/uikit';
-import { sleep } from 'global/utils/common';
-import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
-import { useRouter } from 'next/router';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { sleep } from 'global/utils/common';
+import { isDccMember } from 'global/utils/egoJwt';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { Row } from 'react-grid-system';
+import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
-import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
+import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION';
+import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
+import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION';
+import { ClearSubmissionMutationVariables, ClinicalSubmissionQueryData } from './types';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
 
 const Header = ({
   programShortName,

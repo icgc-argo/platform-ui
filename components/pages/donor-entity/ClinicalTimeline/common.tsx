@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { Icon } from '@icgc-argo/uikit';
 
 export const InvalidIcon = (props) => <Icon name="warning" fill="error" height="18px" {...props} />;

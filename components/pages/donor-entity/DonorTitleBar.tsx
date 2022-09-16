@@ -18,17 +18,12 @@
  */
 
 import { css } from '@emotion/core';
-import sqonBuilder from 'sqon-builder';
-import { useTheme } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Legend } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { TitleBar } from '@icgc-argo/uikit';
-import urlJoin from 'url-join';
+import { Button, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
 import { DownloadIcon } from '../file-entity/common';
 import { FileCentricDocumentField } from '../file-repository/types';
 

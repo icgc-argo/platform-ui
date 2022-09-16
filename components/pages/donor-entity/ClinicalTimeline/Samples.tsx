@@ -18,11 +18,10 @@
  */
 
 import { css } from '@emotion/core';
-import React, { createRef } from 'react';
-import { Table, TableDataBase, TableColumnConfig } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { formatTableDisplayNames } from './util';
+import { Table, TableColumnConfig, TableDataBase, Typography } from '@icgc-argo/uikit';
+import { createRef } from 'react';
 import { SampleNode } from '../types';
+import { formatTableDisplayNames } from './util';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const tableData: TableDataBase = formatTableDisplayNames(samples);

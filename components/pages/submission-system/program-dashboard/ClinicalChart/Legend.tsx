@@ -17,16 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
-import { find } from 'lodash';
 import styled from '@emotion/styled';
-import { Icon, UikitTheme } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { theme } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { chartLineMeta } from './utils';
+import { Button, css, Icon, theme, Typography, UikitTheme } from '@icgc-argo/uikit';
+import { find } from 'lodash';
+import { useState } from 'react';
 import { ChartType, DonorField } from './types';
+import { chartLineMeta } from './utils';
 
 const StyledLegend = styled('div')`
   background: ${theme.colors.white};

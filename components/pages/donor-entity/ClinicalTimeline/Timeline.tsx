@@ -17,13 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Icon, Tag, Typography, useTheme, VerticalTabs } from '@icgc-argo/uikit';
 import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { VerticalTabs } from '@icgc-argo/uikit';
-import { Tag } from '@icgc-argo/uikit';
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';

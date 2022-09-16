@@ -17,17 +17,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { CSSProperties } from 'react';
-import { css, styled } from '@icgc-argo/uikit';
-import { orderBy, maxBy } from 'lodash';
-import { Tooltip } from '@icgc-argo/uikit';
+import {
+  ContentBox,
+  css,
+  DnaLoader,
+  styled,
+  ThemeColorNames,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import { Typography } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit';
-import { ThemeColorNames } from '@icgc-argo/uikit';
+import { maxBy, orderBy } from 'lodash';
 import pluralize from 'pluralize';
-import { DnaLoader } from '@icgc-argo/uikit';
+import React from 'react';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {

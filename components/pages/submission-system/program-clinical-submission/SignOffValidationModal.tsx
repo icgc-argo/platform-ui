@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { GqlClinicalSubmissionData } from './types';
-import { Modal, ModalContainer } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import SubmissionSummaryTable from './SubmissionSummaryTable';
 import styled from '@emotion/styled';
+import { css, Modal, ModalContainer, Typography } from '@icgc-argo/uikit';
+import * as React from 'react';
+import SubmissionSummaryTable from './SubmissionSummaryTable';
+import { GqlClinicalSubmissionData } from './types';
 
 const SignOffModalCont = styled(ModalContainer)`
   max-width: 1120px;
