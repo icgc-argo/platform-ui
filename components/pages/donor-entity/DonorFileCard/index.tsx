@@ -26,7 +26,6 @@ import { Button } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { Link } from '@icgc-argo/uikit';
 import { useTheme } from '@icgc-argo/uikit';
-import { typography } from '@icgc-argo/uikit';
 
 const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,

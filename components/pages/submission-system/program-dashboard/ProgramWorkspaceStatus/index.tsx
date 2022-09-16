@@ -22,8 +22,8 @@ import { Typography } from '@icgc-argo/uikit';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import { Hyperlink, HyperLinkProps } from '@icgc-argo/uikit';
-import Link, { LinkProps } from 'next/link';
+import { Link, HyperLinkProps } from '@icgc-argo/uikit';
+import NextLink, { LinkProps } from 'next/link';
 import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
@@ -40,9 +40,9 @@ const ConditionalLink: React.ComponentType<{
   hyperlink?: HyperLinkProps;
 }> = ({ showAsLink, link, hyperlink, children }) => {
   return showAsLink ? (
-    <Link {...link}>
-      <Hyperlink {...hyperlink}>{children}</Hyperlink>
-    </Link>
+    <NextLink {...link}>
+      <Link {...hyperlink}>{children}</Link>
+    </NextLink>
   ) : (
     <>{children}</>
   );

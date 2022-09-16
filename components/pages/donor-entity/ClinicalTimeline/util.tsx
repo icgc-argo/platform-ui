@@ -22,11 +22,10 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { Link } from '@icgc-argo/uikit';
-import { defaultTheme } from '@icgc-argo/uikit';
+import { Link, UikitTheme } from '@icgc-argo/uikit';
 import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
 
-export const getTimelineStyles = (theme: typeof defaultTheme) => {
+export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
   return {
     primary_diagnosis: {

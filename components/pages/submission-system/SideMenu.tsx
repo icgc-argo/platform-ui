@@ -23,7 +23,7 @@ import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 import styled from '@emotion/styled';
 
-import { Submenu, MenuItem } from '@icgc-argo/uikit';
+import { SubMenu, MenuItem } from '@icgc-argo/uikit';
 import { Input } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
@@ -381,7 +381,7 @@ export default function SideMenu() {
   const canSeeDcc = isDcc;
 
   return (
-    <Submenu>
+    <SubMenu>
       {canOnlyAccessOneProgram ? (
         loading ? (
           <Loader />
@@ -419,6 +419,6 @@ export default function SideMenu() {
           </MenuItem>
         </>
       )}
-    </Submenu>
+    </SubMenu>
   );
 }

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { styled, css } from '@icgc-argo/uikit';
+import { styled, css, UikitTheme } from '@icgc-argo/uikit';
 import { Modal } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
@@ -57,7 +57,8 @@ const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete })
 
 const AddSection = styled(Button)`
   text-transform: uppercase;
-  color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
+  color: ${({ disabled, theme }: { disabled: boolean; theme: UikitTheme }) =>
+    disabled ? '#d0d1d8' : theme.colors.accent2_dark};
   margin-top: 14px;
 `;
 
