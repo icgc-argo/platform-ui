@@ -1,4 +1,4 @@
-import { FilterOption } from '@icgc-argo/uikit';
+import { OptionsListFilterOption } from '@icgc-argo/uikit';
 import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
 
@@ -51,7 +51,7 @@ export type FacetDetails = {
   };
 };
 
-export type GetAggregationResult = (queryData: FacetDetails) => FilterOption[];
+export type GetAggregationResult = (queryData: FacetDetails) => OptionsListFilterOption[];
 
 export type FileRepoFacetsQueryData = {
   file: {
