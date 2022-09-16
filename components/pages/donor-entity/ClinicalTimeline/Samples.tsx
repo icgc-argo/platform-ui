@@ -19,7 +19,7 @@
 
 import { css } from '@emotion/core';
 import React, { createRef } from 'react';
-import Table, { TableDataBase, TableColumnConfig } from '@icgc-argo/uikit';
+import { Table, TableDataBase, TableColumnConfig } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { formatTableDisplayNames } from './util';
 import { SampleNode } from '../types';

@@ -30,7 +30,8 @@ import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 
 import { displayDate } from 'global/utils/common';
 import { Icon } from '@icgc-argo/uikit';
-import DropdownPanel, {
+import {
+  DropdownPanel,
   FilterOption,
   ListFilter,
   TextInputFilter,

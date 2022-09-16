@@ -20,7 +20,7 @@
 import * as React from 'react';
 import { Typography } from '@icgc-argo/uikit';
 import { css } from '@icgc-argo/uikit';
-import Banner, { BANNER_SIZE, BANNER_VARIANTS } from '@icgc-argo/uikit';
+import { Banner, BANNER_SIZE, BANNER_VARIANTS } from '@icgc-argo/uikit';
 import { Link } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { Box } from '../common';
