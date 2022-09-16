@@ -46,6 +46,7 @@ import {
   emptyResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
+  reverseLookUpEntityAlias,
 } from '../common';
 
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
@@ -281,23 +282,27 @@ const ClinicalEntityDataTable = ({
   });
 
   const tableErrors = tableErrorGroups.map((errorGroup) => {
+    // Counts Number of Records affected for each Error Object
+    const { fieldName, entityName, message, errorType } = errorGroup[0];
     const entries = errorGroup
       .map((error) => error.donorId)
       .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
       .reduce((totalRecordCount, currentDonorId) => {
         const currentEntityRecords =
-          clinicalData.clinicalEntities.find((entity) => entity.entityName === entityType)
-            ?.records || [];
+          clinicalData.clinicalEntities.find(
+            (entity) => reverseLookUpEntityAlias(entity.entityName) === entityType,
+          )?.records || [];
 
         const currentDonorRecords = currentEntityRecords.filter(
           (tableRecords) =>
             tableRecords.some((record) => record.value === `${currentDonorId}`) &&
-            tableRecords.some((record) => record.name === errorGroup[0].fieldName),
+            (tableRecords.some((record) => record.name === fieldName) ||
+              (errorType === 'MISSING_REQUIRED_FIELD' &&
+                !tableRecords.some((record) => record.name === fieldName))),
         );
 
         return totalRecordCount + currentDonorRecords.length;
       }, 0);
-    const { fieldName, entityName, message } = errorGroup[0];
 
     return {
       entries,
