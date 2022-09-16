@@ -34,13 +34,13 @@ import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
 import {
   AppBar,
+  AppBarMenuItem,
   DropdownMenu,
   MenuGroup,
-  MenuItem,
+  NavBarElement,
+  NavElement,
   Section,
   UserBadge,
-  NavElement,
-  NavBarElement,
 } from '@icgc-argo/uikit';
 import { Button } from '@icgc-argo/uikit';
 import { Icon } from '@icgc-argo/uikit';
@@ -281,7 +281,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   }
                 }}
               >
-                <MenuItem
+                <AppBarMenuItem
                   active={onProfilePage}
                   ref={React.createRef()}
                   dropdownMenu={
@@ -311,7 +311,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                       title={getUserRole(egoJwt, permissions)}
                     />
                   )}
-                </MenuItem>
+                </AppBarMenuItem>
               </div>
             )}
             {isMobileLayout && (
@@ -321,7 +321,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   setMobileDropdownOpen(!isMobileDropdownOpen);
                 }}
               >
-                <MenuItem>
+                <AppBarMenuItem>
                   <Icon
                     name={
                       isMobileDropdownOpen && !usingProfileOptions ? 'hamburger_close' : 'hamburger'
@@ -330,7 +330,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                       isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
                     }
                   ></Icon>
-                </MenuItem>
+                </AppBarMenuItem>
               </div>
             )}
           </MenuGroup>
