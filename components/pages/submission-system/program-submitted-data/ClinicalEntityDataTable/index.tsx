@@ -284,6 +284,7 @@ const ClinicalEntityDataTable = ({
   const tableErrors = tableErrorGroups.map((errorGroup) => {
     // Counts Number of Records affected for each Error Object
     const { fieldName, entityName, message, errorType } = errorGroup[0];
+    console.log('errorGroup', errorGroup);
     const entries = errorGroup
       .map((error) => error.donorId)
       .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
@@ -297,10 +298,11 @@ const ClinicalEntityDataTable = ({
           (tableRecords) =>
             tableRecords.some((record) => record.value === `${currentDonorId}`) &&
             (tableRecords.some((record) => record.name === fieldName) ||
-              (errorType === 'MISSING_REQUIRED_FIELD' &&
+              ((errorType === 'MISSING_REQUIRED_FIELD' || errorType === 'INVALID_BY_SCRIPT') &&
                 !tableRecords.some((record) => record.name === fieldName))),
         );
-
+        console.log('currentEntityRecords', currentEntityRecords);
+        console.log('currentDonorRecords', currentDonorRecords);
         return totalRecordCount + currentDonorRecords.length;
       }, 0);
 
