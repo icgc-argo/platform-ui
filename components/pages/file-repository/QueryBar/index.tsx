@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { theme } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme } from '@icgc-argo/uikit';
 import dynamic from 'next/dynamic';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
@@ -52,7 +51,7 @@ const Value = dynamic(() =>
   import('@overture-stack/arranger-components/dist/SQONView').then((comp) => comp.Value),
 ) as ValueNode;
 
-const content = css`
+const Content = styled('div')`
   & .sqon-view {
     background-color: transparent;
     display: flex;
@@ -82,11 +81,12 @@ const content = css`
       flex: none;
     }
     & .sqon-bubble.sqon-clear {
-      border: solid 1px ${theme.colors.grey_1};
-      background-color: ${theme.colors.white};
-      color: ${theme.colors.accent2_dark};
+      border: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
+      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
+      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.accent2_dark};
       &:hover {
-        background-color: ${theme.button.colors.secondary.hover};
+        background-color: ${({ theme }: { theme: UikitTheme }) =>
+          theme.button.colors.secondary.hover};
       }
       padding: 0 12px;
       text-transform: uppercase;
@@ -100,8 +100,8 @@ const content = css`
       margin-right: 5px;
     }
     & .sqon-value {
-      background-color: ${theme.colors.secondary};
-      color: ${theme.colors.white};
+      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary};
+      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
       padding: 0 7px 0 12px;
       margin-right: 4px;
       cursor: pointer;
@@ -112,8 +112,8 @@ const content = css`
     }
     & .sqon-less,
     .sqon-more {
-      background-color: ${theme.colors.secondary_1};
-      color: ${theme.colors.white};
+      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary_1};
+      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
       padding: 0 12px;
       text-transform: uppercase;
       cursor: pointer;
@@ -141,7 +141,7 @@ const content = css`
     & .sqon-value-group {
       font-size: 22px;
       line-height: 22px;
-      color: ${theme.colors.secondary};
+      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary};
     }
     & .sqon-value-group-start {
       margin-right: 6px;
@@ -181,7 +181,7 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
   const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
   return (
-    <div css={content}>
+    <Content>
       <SQONView
         sqon={filters}
         setSQON={setFilterFromFieldAndValue}
@@ -208,7 +208,7 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
           </Value>
         )}
       />
-    </div>
+    </Content>
   );
 };
 

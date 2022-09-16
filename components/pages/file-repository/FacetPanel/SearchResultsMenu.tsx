@@ -30,7 +30,7 @@ const ResultsDropdown = styled('div')`
   left: 0px;
   background-color: white;
   width: 248px;
-  box-shadow: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
+  border: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
   border-top: 0px;
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
