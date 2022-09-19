@@ -80,7 +80,7 @@ export type ClinicalEntityQueryResponse = {
 };
 
 export type ClinicalEntitySearchResultResponse = {
-  clinicalData: {
+  clinicalSearchResults: {
     programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
   };
@@ -187,5 +187,11 @@ export const emptyResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
     clinicalEntities: [],
     clinicalErrors: [],
+  },
+};
+
+export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
+  clinicalSearchResults: {
+    clinicalEntities: [],
   },
 };

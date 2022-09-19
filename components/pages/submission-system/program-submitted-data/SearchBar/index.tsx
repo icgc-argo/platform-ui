@@ -29,7 +29,7 @@ import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,
   defaultClinicalEntityFilters,
-  emptyResponse,
+  emptySearchResponse,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -115,9 +115,9 @@ export default function SearchBar({
     },
   );
 
-  const { clinicalData } =
-    searchResultData == undefined || loading ? emptyResponse : searchResultData;
-  const entity = clinicalData.clinicalEntities[0];
+  const { clinicalSearchResults } =
+    searchResultData == undefined || loading ? emptySearchResponse : searchResultData;
+  const entity = clinicalSearchResults.clinicalEntities[0];
   const searchResults =
     entity?.records
       .map((record) => {
