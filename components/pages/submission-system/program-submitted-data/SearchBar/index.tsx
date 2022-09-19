@@ -117,14 +117,12 @@ export default function SearchBar({
 
   const { clinicalSearchResults } =
     searchResultData == undefined || loading ? emptySearchResponse : searchResultData;
-  const entity = clinicalSearchResults.clinicalEntities[0];
+
   const searchResults =
-    entity?.records
-      .map((record) => {
-        const donorId = record.find((pair) => pair.name === 'donor_id')?.value || null;
-        const submitterId =
-          record.find((pair) => pair.name === 'submitter_donor_id')?.value || null;
-        return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterId } : null;
+    clinicalSearchResults.searchResults
+      .map((result) => {
+        const { donorId, submitterDonorId } = result;
+        return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
       })
       .filter((result) => !!result) || [];
 

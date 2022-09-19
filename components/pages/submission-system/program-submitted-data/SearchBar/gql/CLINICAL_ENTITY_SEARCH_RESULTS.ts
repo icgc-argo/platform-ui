@@ -4,13 +4,9 @@ const CLINICAL_ENTITY_SEARCH_RESULTS = gql`
   query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {
     clinicalSearchResults(programShortName: $programShortName, filters: $filters) {
       programShortName
-      clinicalEntities {
-        entityName
-        totalDocs
-        records {
-          name
-          value
-        }
+      searchResults {
+        donorId
+        submitterDonorId
       }
     }
   }

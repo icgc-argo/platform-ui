@@ -58,6 +58,11 @@ export type ClinicalEntity = {
   }>[];
 };
 
+export type ClinicalSearchResult = {
+  donorId: number;
+  submitterDonorId: string;
+};
+
 export type ClinicalErrorData = {
   donorId: number;
   submitterDonorId: string;
@@ -82,7 +87,7 @@ export type ClinicalEntityQueryResponse = {
 export type ClinicalEntitySearchResultResponse = {
   clinicalSearchResults: {
     programShortName?: string;
-    clinicalEntities: Array<ClinicalEntity>;
+    searchResults: Array<ClinicalSearchResult>;
   };
 };
 
@@ -192,6 +197,6 @@ export const emptyResponse: ClinicalEntityQueryResponse = {
 
 export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
   clinicalSearchResults: {
-    clinicalEntities: [],
+    searchResults: [],
   },
 };
