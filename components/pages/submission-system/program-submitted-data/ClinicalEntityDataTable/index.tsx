@@ -239,7 +239,7 @@ const ClinicalEntityDataTable = ({
   useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
-  }, [entityType]);
+  }, [entityType, donorIds, submitterDonorIds]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,

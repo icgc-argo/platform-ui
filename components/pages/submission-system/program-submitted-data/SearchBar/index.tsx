@@ -119,11 +119,14 @@ export default function SearchBar({
     searchResultData == undefined || loading ? emptyResponse : searchResultData;
   const entity = clinicalData.clinicalEntities[0];
   const searchResults =
-    entity?.records.map((record) => {
-      const donorId = record.find((pair) => pair.name === 'donor_id')?.value || '';
-      const submitterId = record.find((pair) => pair.name === 'submitter_donor_id')?.value || '';
-      return { resultId: donorId, secondaryText: submitterId };
-    }) || [];
+    entity?.records
+      .map((record) => {
+        const donorId = record.find((pair) => pair.name === 'donor_id')?.value || null;
+        const submitterId =
+          record.find((pair) => pair.name === 'submitter_donor_id')?.value || null;
+        return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterId } : null;
+      })
+      .filter((result) => !!result) || [];
 
   const titleText =
     keyword && searchResults.length === 1

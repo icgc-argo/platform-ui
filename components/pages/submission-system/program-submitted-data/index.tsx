@@ -109,7 +109,7 @@ export default function ProgramSubmittedData() {
   // Matches Digits preceded by DO or by Comma
   const searchDonorIds =
     keyword
-      .match(/((?<=,)|(?<=DO)|(^\d))\d*/gi)
+      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
 
