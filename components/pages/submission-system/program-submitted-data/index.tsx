@@ -106,9 +106,10 @@ export default function ProgramSubmittedData() {
 
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
   const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  // Matches Digits preceded by DO or by Comma
   const searchDonorIds =
     keyword
-      .match(/[0-9]*/gi)
+      .match(/((?<=,)|(?<=DO)|(^\d))\d*/gi)
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
 
