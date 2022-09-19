@@ -21,6 +21,8 @@ import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
 import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import beakersImage from 'images/beakers.svg';
+import Image from 'next/image';
 
 export default function NoDataMessage(props: { loading: boolean }) {
   return (
@@ -40,7 +42,13 @@ export default function NoDataMessage(props: { loading: boolean }) {
           title="You do not have any registration data uploaded."
           subtitle="Follow the instructions above to get started."
         >
-          <img alt="Chemistry beakers" src="/static/beakers.svg" />
+          <Image
+            alt="Chemistry beakers"
+            src={beakersImage}
+            layout="fixed"
+            width={167}
+            height={151}
+          />
         </ContentPlaceholder>
       )}
     </div>

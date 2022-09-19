@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ApolloClient from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloClient, ApolloLink, ApolloProvider } from '@apollo/client';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
 import useAuthContext, { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
@@ -29,7 +28,6 @@ import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
 import urljoin from 'url-join';
 import Head from 'components/Head';
-import { ApolloProvider } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import { createUploadLink } from 'apollo-upload-client';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';

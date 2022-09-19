@@ -35,7 +35,7 @@ const UserInitialImage = ({ contentText = '' }) => {
         position: relative;
         width: 100px;
         height: 100px;
-        background: url('static/initials-large.svg');
+        background: url('assets/images/initials-large.svg');
         pointer-events: none;
       `}
     >

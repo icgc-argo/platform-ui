@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const SUBMITTED_DATA_SIDE_MENU_QUERY = gql`
   query SubmittedDataSideMenu($programShortName: String!, $filters: ClinicalInput!) {

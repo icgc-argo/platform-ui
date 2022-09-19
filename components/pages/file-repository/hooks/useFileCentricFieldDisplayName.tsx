@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/react-hooks';
-import FILE_CENTRIC_EXTENDED_MAPPING from './FILE_CENTRIC_EXTENDED_MAPPING.gql';
+import { useQuery } from '@apollo/client';
+import FILE_CENTRIC_EXTENDED_MAPPING_QUERY from './gql/FILE_CENTRIC_EXTENDED_MAPPING_QUERY';
 import { FileCentricDocumentField } from '../types';
 
 type ExtendedMapping = {
@@ -12,7 +12,7 @@ const useFileCentricFieldDisplayName = (): {
   loading: boolean;
 } => {
   const { data, loading } = useQuery<{ file: { extended: ExtendedMapping } }>(
-    FILE_CENTRIC_EXTENDED_MAPPING,
+    FILE_CENTRIC_EXTENDED_MAPPING_QUERY,
   );
 
   return {

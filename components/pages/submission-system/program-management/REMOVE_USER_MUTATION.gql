@@ -1,3 +1,0 @@
-mutation REMOVE_USER_MUTATION($userEmail: String!, $programShortName: String!) {
-  removeUser(userEmail: $userEmail, programShortName: $programShortName)
-}

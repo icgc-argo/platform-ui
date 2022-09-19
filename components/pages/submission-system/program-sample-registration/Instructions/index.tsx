@@ -27,9 +27,9 @@ import InstructionBox from '@icgc-argo/uikit/InstructionBox';
 import HyperLink from '@icgc-argo/uikit/Link';
 import Typography from '@icgc-argo/uikit/Typography';
 import RegisterSamplesModal from './RegisterSamplesModal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
-import UPLOAD_REGISTRATION from '../gql/UPLOAD_REGISTRATION.gql';
+import UPLOAD_REGISTRATION_MUTATION from '../gql/UPLOAD_REGISTRATION_MUTATION';
 import {
   instructionBoxButtonIconStyle,
   instructionBoxButtonContentStyle,
@@ -77,7 +77,7 @@ function Instructions({
 
   const commonToaster = useCommonToasters();
 
-  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION, {
+  const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
     onError: () => {
       commonToaster.unknownError();
     },

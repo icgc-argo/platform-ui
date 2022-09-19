@@ -1,7 +1,0 @@
-#import "./CLINICAL_SUBMISSION_FRAGMENT.gql"
-
-query CLINICAL_SUBMISSIONS_QUERY($programShortName: String!) {
-  clinicalSubmissions(programShortName: $programShortName) {
-    ...ClinicalSubmissionFragment
-  }
-}

@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import UsersTable from './UsersTable';
 import { TableActionBar } from '@icgc-argo/uikit/Table';
@@ -34,9 +34,9 @@ import { useToaster } from 'global/hooks/toaster';
 import { UserModel, RoleDisplayName } from '../modals/common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 
-import EDIT_USER_MUTATION from './EDIT_USER_MUTATION.gql';
-import REMOVE_USER_MUTATION from './REMOVE_USER_MUTATION.gql';
-import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+import EDIT_USER_MUTATION from './gql/EDIT_USER_MUTATION';
+import REMOVE_USER_MUTATION from './gql/REMOVE_USER_MUTATION';
+import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
 
 export const adminRestrictionText = 'A program must have at least one Program Administrator';
 

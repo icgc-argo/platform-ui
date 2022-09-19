@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { FileCard, TableDiv, getAccessIcon } from '../common';
 import { css } from '@emotion/core';
 import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
@@ -26,8 +27,8 @@ import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
 
-import { useQuery } from '@apollo/react-hooks';
-import PROGRAM_NAME_QUERY from './PROGRAM_NAME_QUERY.gql';
+import { useQuery } from '@apollo/client';
+import PROGRAM_NAME_QUERY from './gql/PROGRAM_NAME_QUERY';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';

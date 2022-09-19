@@ -25,10 +25,10 @@ import Link from '@icgc-argo/uikit/Link';
 import Button from '@icgc-argo/uikit/Button';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
-import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION.gql';
-import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION.gql';
-import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION';
+import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION';
+import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
+import { useMutation } from '@apollo/client';
 import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
 import useGlobalLoader from 'components/GlobalLoader';
@@ -221,7 +221,7 @@ const Header = ({
             </Button>
           )}
           {!isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button
                 id="button-clear-submission" // For Selenium
                 variant="text"
@@ -246,7 +246,7 @@ const Header = ({
               >
                 HELP
               </Link>
-            </React.Fragment>
+            </>
           )}
           {isDcc && isPendingApproval && (
             <>

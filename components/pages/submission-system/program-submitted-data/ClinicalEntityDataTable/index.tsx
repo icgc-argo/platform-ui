@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
@@ -32,7 +32,7 @@ import Tooltip from '@icgc-argo/uikit/Tooltip';
 import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA from '../CLINICAL_ENTITY_DATA.gql';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
   aliasSortNames,
   aliasedEntityNames,
@@ -44,6 +44,7 @@ import {
   emptyResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
+  reverseLookUpEntityAlias,
 } from '../common';
 
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
@@ -159,7 +160,7 @@ export const getEntityData = (
   donorIds: number[],
   submitterDonorIds: string[],
 ) =>
-  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA, {
+  useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
     variables: {
       programShortName: program,
@@ -256,32 +257,53 @@ const ClinicalEntityDataTable = ({
 
   // Collect Error Data
   const { clinicalErrors = [] } = clinicalData;
-  let totalErrors = 0;
   const tableErrorGroups = [];
 
   clinicalErrors.forEach((donor) => {
     const relatedErrors = donor.errors.filter(
       (error) => error.entityName === aliasedEntityNames[entityType],
     );
-    totalErrors += relatedErrors.length;
+
     relatedErrors.forEach((error) => {
+      const { donorId } = donor;
       const { errorType, fieldName } = error;
       const relatedErrorGroup = tableErrorGroups.find(
         (tableErrorGroup) =>
           tableErrorGroup[0].errorType === errorType && tableErrorGroup[0].fieldName === fieldName,
       );
+      const tableError = { ...error, donorId };
 
       if (!relatedErrorGroup) {
-        tableErrorGroups.push([error]);
+        tableErrorGroups.push([tableError]);
       } else {
-        relatedErrorGroup.push(error);
+        relatedErrorGroup.push(tableError);
       }
     });
   });
-  const hasErrors = totalErrors > 0;
+
   const tableErrors = tableErrorGroups.map((errorGroup) => {
-    const entries = errorGroup.length;
-    const { fieldName, entityName, message } = errorGroup[0];
+    // Counts Number of Records affected for each Error Object
+    const { fieldName, entityName, message, errorType } = errorGroup[0];
+
+    const entries = errorGroup
+      .map((error) => error.donorId)
+      .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
+      .reduce((totalRecordCount, currentDonorId) => {
+        const currentEntityRecords =
+          clinicalData.clinicalEntities.find(
+            (entity) => reverseLookUpEntityAlias(entity.entityName) === entityType,
+          )?.records || [];
+
+        const currentDonorRecords = currentEntityRecords.filter(
+          (tableRecords) =>
+            tableRecords.some((record) => record.value === `${currentDonorId}`) &&
+            (tableRecords.some((record) => record.name === fieldName) ||
+              ((errorType === 'MISSING_REQUIRED_FIELD' || errorType === 'INVALID_BY_SCRIPT') &&
+                !tableRecords.some((record) => record.name === fieldName))),
+        );
+
+        return totalRecordCount + currentDonorRecords.length;
+      }, 0);
 
     return {
       entries,
@@ -290,6 +312,12 @@ const ClinicalEntityDataTable = ({
       message,
     };
   });
+
+  const totalErrors = tableErrors.reduce(
+    (errorCount, errorGroup) => errorCount + errorGroup.entries,
+    0,
+  );
+  const hasErrors = totalErrors > 0;
 
   const sortEntityData = (prev, next) => {
     let sortVal = 0;

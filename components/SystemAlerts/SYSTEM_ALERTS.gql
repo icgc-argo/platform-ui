@@ -1,9 +1,0 @@
-query SYSTEM_ALERTS {
-  systemAlerts {
-    dismissable
-    id
-    level
-    message
-    title
-  }
-}

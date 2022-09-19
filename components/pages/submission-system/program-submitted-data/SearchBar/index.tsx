@@ -19,12 +19,12 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import CLINICAL_ENTITY_SEARCH_RESULTS from '../CLINICAL_ENTITY_SEARCH_RESULTS.gql';
+import CLINICAL_ENTITY_SEARCH_RESULTS from './gql/CLINICAL_ENTITY_SEARCH_RESULTS';
 import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,

@@ -25,8 +25,9 @@ import HyperLink from '@icgc-argo/uikit/Link';
 import Link from 'next/link';
 import { getConfig } from 'global/config';
 import { Row, Col } from 'react-grid-system';
-import image from 'static/dna-locked.svg';
-import logoMark from 'static/logomark.svg';
+import dnaLockedImage from 'images/dna-locked.svg';
+import logoMarkImage from 'images/logomark.svg';
+import Image from 'next/image';
 
 export default function Error403Page() {
   const { DOCS_URL_ROOT } = getConfig();
@@ -48,16 +49,19 @@ export default function Error403Page() {
             `}
           >
             4
-            <img
+            <Image
               css={css`
                 margin: 0 8px -2px;
               `}
-              alt="Logo mark"
-              src={logoMark}
+              alt="0"
+              src={logoMarkImage}
+              layout="fixed"
+              width={70}
+              height={71}
             />
             3
           </Typography>
-          <Typography as="div" variant="subtitle" color="secondary">
+          <Typography as="h2" variant="subtitle" color="secondary">
             Forbidden
           </Typography>
           <Typography
@@ -87,7 +91,7 @@ export default function Error403Page() {
             text-align: center;
           `}
         >
-          <img alt="Broken dna" src={image} />
+          <Image alt="Locked DNA" src={dnaLockedImage} layout="fixed" width={273} height={300} />
         </Col>
       </Row>
     </ErrorLayout>

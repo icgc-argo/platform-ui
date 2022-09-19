@@ -34,10 +34,10 @@ import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit/notifications/Notification';
 import { useRouter } from 'next/router';
-import CREATE_PROGRAM_MUTATION from './CREATE_PROGRAM_MUTATION.gql';
-import { useMutation } from '@apollo/react-hooks';
+import CREATE_PROGRAM_MUTATION from './gql/CREATE_PROGRAM_MUTATION';
+import { useMutation } from '@apollo/client';
 import useCommonToasters from 'components/useCommonToasters';
-import SIDE_MENU_PROGRAM_LIST from '../SIDE_MENU_PROGRAM_LIST.gql';
+import SIDE_MENU_PROGRAM_LIST_QUERY from '../gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import useGlobalLoader from 'components/GlobalLoader';
 
 /* *************************************** *
@@ -77,9 +77,11 @@ const CreateProgramPage = () => {
     { program: CreateProgramMutationInput }
   >(CREATE_PROGRAM_MUTATION, {
     update: (store, { data }: { data: CreateProgramMutationResult }) => {
-      const { programs: cachedProgramList } = store.readQuery({ query: SIDE_MENU_PROGRAM_LIST });
+      const { programs: cachedProgramList } = store.readQuery({
+        query: SIDE_MENU_PROGRAM_LIST_QUERY,
+      });
       store.writeQuery({
-        query: SIDE_MENU_PROGRAM_LIST,
+        query: SIDE_MENU_PROGRAM_LIST_QUERY,
         data: {
           programs: [...cachedProgramList, data.newProgram],
         },

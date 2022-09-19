@@ -1,5 +1,0 @@
-mutation JOIN_PROGRAM_MUTATION($joinProgramInput: JoinProgramInput!) {
-  joinProgram(join: $joinProgramInput) {
-    inviteAcceptedAt
-  }
-}
