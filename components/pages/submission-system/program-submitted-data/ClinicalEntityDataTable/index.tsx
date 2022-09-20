@@ -209,17 +209,19 @@ const ClinicalEntityDataTable = ({
   const {
     clinicalSearchResults: { searchResults, totalResults },
   } = donorSearchResults;
-  console.log('page', page);
-  console.log('pageSize', pageSize);
+
+  const nextSearchPage = (page + 1) * pageSize;
   const donorIds = useDefaultQuery
     ? []
-    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId).slice(0, pageSize);
+    : searchResults
+        .map(({ donorId }: ClinicalSearchResults) => donorId)
+        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
   const submitterDonorIds = useDefaultQuery
     ? []
     : searchResults
         .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
         .filter((id) => !!id)
-        .slice(0, pageSize);
+        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -242,6 +244,7 @@ const ClinicalEntityDataTable = ({
   );
 
   const updatePageSettings = (key, value) => {
+    console.log(key, value);
     const newPageSettings = { ...pageSettings, [key]: value };
 
     if (key === 'pageSize' && value !== pageSettings.pageSize) {
@@ -255,7 +258,7 @@ const ClinicalEntityDataTable = ({
   useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
-  }, [entityType, useDefaultQuery, donorIds, submitterDonorIds]);
+  }, [entityType, useDefaultQuery]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
@@ -267,6 +270,7 @@ const ClinicalEntityDataTable = ({
     donorIds,
     submitterDonorIds,
   );
+  console.log('clinicalEntityData', clinicalEntityData);
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
@@ -382,7 +386,8 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-
+    console.log('totalResults', totalResults);
+    console.log('totalDocs', entityData.totalDocs);
     totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
@@ -589,6 +594,7 @@ const ClinicalEntityDataTable = ({
   const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
   const numTablePages = Math.ceil(totalDocs / pageSize);
+  console.log('numTablePages', numTablePages);
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
