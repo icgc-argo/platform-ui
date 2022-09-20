@@ -116,7 +116,9 @@ export default function ProgramSubmittedData() {
       .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
-  const searchSubmitterIds = [keyword];
+  const searchSubmitterIds = [keyword].filter((word) => !!word);
+  const useDefaultQuery =
+    searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
@@ -266,6 +268,7 @@ export default function ProgramSubmittedData() {
                   program={programShortName}
                   completionState={completionState}
                   searchResults={searchResults}
+                  useDefaultQuery={useDefaultQuery}
                 />
               </div>
             </div>

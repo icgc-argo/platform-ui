@@ -183,11 +183,13 @@ const ClinicalEntityDataTable = ({
   program,
   completionState = CompletionStates['all'],
   searchResults,
+  useDefaultQuery,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
   searchResults: ClinicalSearchResults[];
+  useDefaultQuery: boolean;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -203,10 +205,14 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
-  const donorIds = searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
-  const submitterDonorIds = searchResults
-    .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-    .filter((id) => !!id);
+  const donorIds = useDefaultQuery
+    ? []
+    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
+  const submitterDonorIds = useDefaultQuery
+    ? []
+    : searchResults
+        .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+        .filter((id) => !!id);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -242,7 +248,7 @@ const ClinicalEntityDataTable = ({
   useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
-  }, [entityType, donorIds, submitterDonorIds]);
+  }, [entityType, useDefaultQuery, donorIds, submitterDonorIds]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
