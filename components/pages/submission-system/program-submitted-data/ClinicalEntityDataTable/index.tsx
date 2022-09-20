@@ -244,7 +244,6 @@ const ClinicalEntityDataTable = ({
   );
 
   const updatePageSettings = (key, value) => {
-    console.log(key, value);
     const newPageSettings = { ...pageSettings, [key]: value };
 
     if (key === 'pageSize' && value !== pageSettings.pageSize) {
@@ -270,7 +269,6 @@ const ClinicalEntityDataTable = ({
     donorIds,
     submitterDonorIds,
   );
-  console.log('clinicalEntityData', clinicalEntityData);
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
   const noData = clinicalData.clinicalEntities.length === 0;
@@ -386,8 +384,6 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    console.log('totalResults', totalResults);
-    console.log('totalDocs', entityData.totalDocs);
     totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
@@ -594,7 +590,6 @@ const ClinicalEntityDataTable = ({
   const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
   const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
   const numTablePages = Math.ceil(totalDocs / pageSize);
-  console.log('numTablePages', numTablePages);
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
   return loading ? (
