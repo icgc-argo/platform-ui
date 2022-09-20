@@ -36,7 +36,7 @@ import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
-import CLINICAL_ENTITY_SEARCH_RESULTS from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import {
   aliasedEntityNames,
   ClinicalEntityQueryResponse,
@@ -120,7 +120,7 @@ export default function ProgramSubmittedData() {
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
-    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS, {
+    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName,
