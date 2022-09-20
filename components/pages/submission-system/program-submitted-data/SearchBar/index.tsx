@@ -19,18 +19,11 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import CLINICAL_ENTITY_SEARCH_RESULTS from './gql/CLINICAL_ENTITY_SEARCH_RESULTS';
-import {
-  ClinicalEntitySearchResultResponse,
-  CompletionStates,
-  defaultClinicalEntityFilters,
-  emptySearchResponse,
-} from '../common';
+import { CompletionStates, ClinicalSearchResult } from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -75,51 +68,28 @@ const COMPLETION_OPTIONS = {
 const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 export default function SearchBar({
-  program,
   noData,
   onChange,
   completionState,
+  loading,
   keyword,
   setKeyword,
-  donorIds,
-  submitterDonorIds,
+  searchResults,
 }: {
-  program: string;
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  loading: boolean;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
-  donorIds: number[];
-  submitterDonorIds: string[];
+  searchResults: ClinicalSearchResult[];
 }) {
   const theme = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
   const [displayText, setDisplayText] = useState('- Select an option -');
-  const entityTypes = ['donor'];
 
-  const { loading, data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
-    CLINICAL_ENTITY_SEARCH_RESULTS,
-    {
-      errorPolicy: 'all',
-      variables: {
-        programShortName: program,
-        filters: {
-          ...defaultClinicalEntityFilters,
-          completionState,
-          donorIds,
-          submitterDonorIds,
-          entityTypes,
-        },
-      },
-    },
-  );
-
-  const { clinicalSearchResults } =
-    searchResultData == undefined || loading ? emptySearchResponse : searchResultData;
-
-  const searchResults =
-    clinicalSearchResults.searchResults
+  const searchResultItems =
+    searchResults
       .map((result) => {
         const { donorId, submitterDonorId } = result;
         return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
@@ -127,10 +97,10 @@ export default function SearchBar({
       .filter((result) => !!result) || [];
 
   const titleText =
-    keyword && searchResults.length === 1
-      ? `DO${searchResults[0].resultId}`
+    keyword && searchResultItems.length === 1
+      ? `DO${searchResultItems[0].resultId}`
       : keyword && searchResults.length > 1
-      ? `${searchResults.length} Donors`
+      ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 
   return (
@@ -205,7 +175,7 @@ export default function SearchBar({
                 `}
               />
               <SearchResultsMenu
-                searchData={searchResults}
+                searchData={searchResultItems}
                 isLoading={loading}
                 onSelect={(value) => {
                   setKeyword(value);

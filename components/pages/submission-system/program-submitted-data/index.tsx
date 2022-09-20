@@ -36,15 +36,18 @@ import Typography from '@icgc-argo/uikit/Typography';
 import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import CLINICAL_ENTITY_SEARCH_RESULTS from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS';
 import {
   aliasedEntityNames,
   ClinicalEntityQueryResponse,
+  ClinicalEntitySearchResultResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
   reverseLookUpEntityAlias,
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
+  emptySearchResponse,
   CompletionStates,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
@@ -60,6 +63,7 @@ export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
+  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -70,8 +74,10 @@ export default function ProgramSubmittedData() {
       deSerialize: (v) => v,
     },
   );
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
-  const { data: sideMenuQuery, loading } =
+  // Side Menu Query
+  const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
@@ -82,11 +88,11 @@ export default function ProgramSubmittedData() {
     });
 
   React.useEffect(() => {
-    setGlobalLoading(loading);
-  }, [loading]);
+    setGlobalLoading(sideMenuLoading);
+  }, [sideMenuLoading]);
 
   const { clinicalData: sideMenuData } =
-    sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
+    sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
   const noData = sideMenuData.clinicalEntities.length === 0;
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
@@ -104,16 +110,32 @@ export default function ProgramSubmittedData() {
     </VerticalTabs.Item>
   ));
 
-  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
-  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
   // Matches Digits preceded by DO or by Comma
   const searchDonorIds =
     keyword
       .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
-
   const searchSubmitterIds = [keyword];
+
+  // Search Result Query
+  const { data: searchResultData, loading: searchResultsLoading } =
+    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds: searchDonorIds,
+          submitterDonorIds: searchSubmitterIds,
+          entityTypes: ['donor'],
+        },
+      },
+    });
+
+  const { clinicalSearchResults } =
+    searchResultData == undefined || searchResultsLoading ? emptySearchResponse : searchResultData;
 
   return (
     <SubmissionLayout
@@ -156,16 +178,15 @@ export default function ProgramSubmittedData() {
       }
     >
       <SearchBar
-        program={programShortName}
-        onChange={setCompletionState}
         completionState={completionState}
-        noData={noData}
         keyword={keyword}
+        loading={searchResultsLoading}
+        noData={noData}
+        onChange={setCompletionState}
+        searchResults={clinicalSearchResults.searchResults}
         setKeyword={setKeyword}
-        donorIds={searchDonorIds}
-        submitterDonorIds={searchSubmitterIds}
       />
-      {loading ? (
+      {searchResultsLoading ? (
         <DnaLoader />
       ) : (
         <Container>
