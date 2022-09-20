@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 import { CompletionStates, ClinicalSearchResult } from '../common';
 import {
@@ -85,8 +86,19 @@ export default function SearchBar({
   searchResults: ClinicalSearchResult[];
 }) {
   const theme = useTheme();
-  const [searchOpen, setSearchOpen] = useState(false);
   const [displayText, setDisplayText] = useState('- Select an option -');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const setSearchValue = (value) => {
+    setKeyword(value);
+    setSearchOpen(false);
+  };
+
+  const menuItemDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  useClickAway({
+    domElementRef: menuItemDropdownRef,
+    onElementClick: setSearchValue,
+    onClickAway: () => setSearchOpen(false),
+  });
 
   const searchResultItems =
     searchResults
@@ -173,14 +185,12 @@ export default function SearchBar({
                   position: absolute;
                   top: 28px;
                 `}
+                ref={menuItemDropdownRef}
               />
               <SearchResultsMenu
                 searchData={searchResultItems}
                 isLoading={loading}
-                onSelect={(value) => {
-                  setKeyword(value);
-                  setSearchOpen(false);
-                }}
+                onSelect={setSearchValue}
               />
             </>
           ) : null}
