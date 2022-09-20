@@ -134,7 +134,9 @@ export default function ProgramSubmittedData() {
       },
     });
 
-  const { clinicalSearchResults } =
+  const {
+    clinicalSearchResults: { searchResults },
+  } =
     searchResultData == undefined || searchResultsLoading ? emptySearchResponse : searchResultData;
 
   return (
@@ -183,7 +185,7 @@ export default function ProgramSubmittedData() {
         loading={searchResultsLoading}
         noData={noData}
         onChange={setCompletionState}
-        searchResults={clinicalSearchResults.searchResults}
+        searchResults={searchResults}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
@@ -263,8 +265,7 @@ export default function ProgramSubmittedData() {
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
-                  donorIds={searchDonorIds}
-                  submitterDonorIds={searchSubmitterIds}
+                  searchResults={searchResults}
                 />
               </div>
             </div>

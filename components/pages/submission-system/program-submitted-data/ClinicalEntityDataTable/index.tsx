@@ -52,6 +52,7 @@ import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
 import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import { ClinicalSearchResults } from 'generated/gql_types';
 
 export type DonorEntry = {
   row: string;
@@ -181,14 +182,12 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  donorIds,
-  submitterDonorIds,
+  searchResults,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
-  donorIds: number[];
-  submitterDonorIds: string[];
+  searchResults: ClinicalSearchResults[];
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -204,6 +203,10 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+  const donorIds = searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
+  const submitterDonorIds = searchResults
+    .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+    .filter((id) => !!id);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
