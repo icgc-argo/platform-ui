@@ -136,11 +136,6 @@ export default function ProgramSubmittedData() {
       },
     });
 
-  const {
-    clinicalSearchResults: { searchResults },
-  } =
-    searchResultData == undefined || searchResultsLoading ? emptySearchResponse : searchResultData;
-
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -187,7 +182,7 @@ export default function ProgramSubmittedData() {
         loading={searchResultsLoading}
         noData={noData}
         onChange={setCompletionState}
-        searchResults={searchResults}
+        donorSearchResults={searchResultData}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
@@ -267,7 +262,7 @@ export default function ProgramSubmittedData() {
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
-                  searchResults={searchResults}
+                  donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
                 />
               </div>

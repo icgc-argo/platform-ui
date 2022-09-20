@@ -24,7 +24,11 @@ import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { CompletionStates, ClinicalSearchResult } from '../common';
+import {
+  CompletionStates,
+  ClinicalEntitySearchResultResponse,
+  emptySearchResponse,
+} from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -75,7 +79,7 @@ export default function SearchBar({
   loading,
   keyword,
   setKeyword,
-  searchResults,
+  donorSearchResults,
 }: {
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
@@ -83,7 +87,7 @@ export default function SearchBar({
   loading: boolean;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
-  searchResults: ClinicalSearchResult[];
+  donorSearchResults: ClinicalEntitySearchResultResponse;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
@@ -100,13 +104,17 @@ export default function SearchBar({
     onClickAway: () => setSearchOpen(false),
   });
 
+  const {
+    clinicalSearchResults: { searchResults, totalResults },
+  } = donorSearchResults || emptySearchResponse;
   const searchResultItems =
     searchResults
       .map((result) => {
         const { donorId, submitterDonorId } = result;
         return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
       })
-      .filter((result) => !!result) || [];
+      .filter((result) => !!result)
+      .slice(0, 20) || [];
 
   const titleText =
     keyword && searchResultItems.length === 1

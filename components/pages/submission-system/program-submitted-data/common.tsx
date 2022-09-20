@@ -87,6 +87,7 @@ export type ClinicalEntityQueryResponse = {
 export type ClinicalEntitySearchResultResponse = {
   clinicalSearchResults: {
     programShortName?: string;
+    totalResults: number;
     searchResults: Array<ClinicalSearchResult>;
   };
 };
@@ -198,5 +199,6 @@ export const emptyResponse: ClinicalEntityQueryResponse = {
 export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
   clinicalSearchResults: {
     searchResults: [],
+    totalResults: 0,
   },
 };

@@ -39,6 +39,7 @@ import {
   aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
+  ClinicalEntitySearchResultResponse,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
@@ -182,13 +183,13 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  searchResults,
+  donorSearchResults,
   useDefaultQuery,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
-  searchResults: ClinicalSearchResults[];
+  donorSearchResults: ClinicalEntitySearchResultResponse;
   useDefaultQuery: boolean;
 }) => {
   // Init + Page Settings
@@ -205,14 +206,20 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+  const {
+    clinicalSearchResults: { searchResults, totalResults },
+  } = donorSearchResults;
+  console.log('page', page);
+  console.log('pageSize', pageSize);
   const donorIds = useDefaultQuery
     ? []
-    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
+    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId).slice(0, pageSize);
   const submitterDonorIds = useDefaultQuery
     ? []
     : searchResults
         .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-        .filter((id) => !!id);
+        .filter((id) => !!id)
+        .slice(0, pageSize);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -376,7 +383,7 @@ const ClinicalEntityDataTable = ({
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
-    totalDocs = entityData.totalDocs;
+    totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
