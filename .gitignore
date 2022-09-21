@@ -72,7 +72,7 @@ chromedriver.log
 .vscode
 
 # graphql-codegen generated files
-generated
+generated/gql_schema.json
 
 .graphqlconfig
 .cache

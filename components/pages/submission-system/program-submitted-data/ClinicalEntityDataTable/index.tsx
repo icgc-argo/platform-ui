@@ -18,8 +18,6 @@
  */
 
 import { useQuery } from '@apollo/client';
-import styled from '@emotion/styled';
-import Image from 'next/image';
 import memoize from 'lodash/memoize';
 import React, { useState, useEffect } from 'react';
 import { css } from '@icgc-argo/uikit';
@@ -41,6 +39,7 @@ import {
   aliasedEntityFields,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
+  ClinicalEntitySearchResultResponse,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
@@ -54,6 +53,7 @@ import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 
 import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
 import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import { ClinicalSearchResults } from 'generated/gql_types';
 
 export type DonorEntry = {
   row: string;
@@ -80,14 +80,6 @@ const errorColumns = [
     id: 'message',
   },
 ];
-
-const Container = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 14px auto;
-`;
 
 const NoDataCell = () => (
   <div
@@ -167,6 +159,8 @@ export const getEntityData = (
   pageSize: number,
   sort: string,
   completionState: CompletionStates,
+  donorIds: number[],
+  submitterDonorIds: string[],
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
@@ -178,6 +172,8 @@ export const getEntityData = (
         page,
         pageSize,
         completionState,
+        donorIds,
+        submitterDonorIds,
         entityTypes: validateEntityQueryName(entityType),
       },
     },
@@ -187,10 +183,14 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
+  donorSearchResults,
+  useDefaultQuery,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
+  donorSearchResults: ClinicalEntitySearchResultResponse;
+  useDefaultQuery: boolean;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -206,6 +206,22 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+  const {
+    clinicalSearchResults: { searchResults, totalResults },
+  } = donorSearchResults;
+
+  const nextSearchPage = (page + 1) * pageSize;
+  const donorIds = useDefaultQuery
+    ? []
+    : searchResults
+        .map(({ donorId }: ClinicalSearchResults) => donorId)
+        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+  const submitterDonorIds = useDefaultQuery
+    ? []
+    : searchResults
+        .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+        .filter((id) => !!id)
+        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -241,7 +257,7 @@ const ClinicalEntityDataTable = ({
   useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
-  }, [entityType]);
+  }, [entityType, useDefaultQuery]);
 
   const { data: clinicalEntityData, loading } = getEntityData(
     program,
@@ -250,6 +266,8 @@ const ClinicalEntityDataTable = ({
     pageSize,
     sort,
     completionState,
+    donorIds,
+    submitterDonorIds,
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
@@ -366,8 +384,7 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-
-    totalDocs = entityData.totalDocs;
+    totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
