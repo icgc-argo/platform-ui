@@ -125,7 +125,6 @@ const Legend = ({
   handleLegendInput: any;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log({ activeLines });
   return (
     <div
       css={css`
