@@ -34,11 +34,11 @@ const StyledLegend = styled('div')`
   border: 1px solid ${theme.colors.grey_1};
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.08);
   display: flex;
-  left: -80px;
+  left: -225px;
   padding: 5px 3px;
   position: absolute;
   top: -155px;
-  width: 155px;
+  width: 300px;
   .legend-column {
     padding: 0 2px;
     width: 100%;
@@ -147,28 +147,30 @@ const Legend = ({
                   field={line.field as DonorField}
                   handleLegendInput={handleLegendInput}
                   isActive={activeLines.includes(line.field)}
-                  key={line.title}
+                  key={line.field}
                   title={line.title}
                 />
               ))}
           </div>
-          {/*
-          // not using RNA yet
-           <div className="legend-column">
+
+          <div className="legend-column">
             <div className="legend-title blue">
-              <Typography color="black" variant="caption" bold>RNA-SEQ PIPELINE</Typography>
+              <Typography color="black" variant="caption" bold>
+                RNA-SEQ PIPELINE
+              </Typography>
             </div>
             {chartLineMeta
-              .filter(line => line.dataType === 'RNA' && line.chartType === chartType)
-              .map((line => (
+              .filter((line) => line.dataType === 'RNA' && line.chartType === chartType)
+              .map((line) => (
                 <LegendInput
+                  field={line.field as DonorField}
                   handleLegendInput={handleLegendInput}
-                  isActive={activeLines.includes(line.title)}
-                  key={line.title}
+                  isActive={activeLines.includes(line.field)}
+                  key={line.field}
                   title={line.title}
                 />
-              )))}
-          </div> */}
+              ))}
+          </div>
         </StyledLegend>
       )}
     </div>
