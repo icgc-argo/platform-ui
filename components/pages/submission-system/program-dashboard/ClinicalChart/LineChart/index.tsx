@@ -376,7 +376,7 @@ const LineChart = ({
       <g fill="none" strokeWidth={options.chartStrokeWidth}>
         {chartLines.map((chartLine: ChartLine) => (
           <polyline
-            key={chartLine.title}
+            key={chartLine.field}
             points={chartLine.points}
             stroke={
               find(chartLineMeta, { field: chartLine.field }).color ||

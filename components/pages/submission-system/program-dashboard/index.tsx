@@ -73,13 +73,9 @@ export default function ProgramDashboard() {
   `;
 
   const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
-    !['xl'].includes(size)
-      ? css`
-          padding-bottom: 16px;
-        `
-      : css`
-          padding-bottom: 0px;
-        `;
+    css`
+      padding-bottom: ${['xl'].includes(size) ? '0' : '8'}px;
+    `;
 
   return (
     <SubmissionLayout
@@ -193,14 +189,17 @@ export default function ProgramDashboard() {
             </Col>
           )}
         />
-
-        <Col xl={4} lg={12}>
-          <ClinicalChartCard
-            chartType="molecular"
-            comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
-            title="Molecular Data Summary"
-          />
-        </Col>
+        <ScreenClassRender
+          render={(screenClass) => (
+            <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
+              <ClinicalChartCard
+                chartType="molecular"
+                comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
+                title="Molecular Data Summary"
+              />
+            </Col>
+          )}
+        />
       </PaddedRow>
       <PaddedRow>
         <Col xs={12}>
