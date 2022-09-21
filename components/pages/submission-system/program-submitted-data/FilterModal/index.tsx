@@ -1,19 +1,32 @@
-import * as React from 'react';
-import { useState } from 'react';
-import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
+import React, { useState } from 'react';
+import Modal from '@icgc-argo/uikit/Modal';
 import Textarea from '@icgc-argo/uikit/form/Textarea';
-import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
-import styled from '@emotion/styled';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import ModalPortal from 'components/Modal';
+import MatchResults from './MatchResults';
 
 export default function FilterModal({ setModalVisible }: { setModalVisible: any }) {
   const [idList, setIdList] = useState('');
+  const theme = useTheme();
+
+  let fileHandle;
+  const pickerOpts = {
+    types: [
+      {
+        accept: {
+          'text/plain': ['.txt'],
+        },
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false,
+  };
 
   //make matchID dynamic
-  const matchID = 3;
-  const unmatchedID = 6;
+  const numMatched = 3;
+  const numUnmatched = 6;
 
   return (
     <ModalPortal>
@@ -22,54 +35,46 @@ export default function FilterModal({ setModalVisible }: { setModalVisible: any 
         actionButtonText="View Results"
         actionDisabled={idList ? false : true}
         cancelText="Cancel"
-        onActionClick={function noRefCheck() {}}
+        // onActionClick={function noRefCheck() {}}
         onCancelClick={() => setModalVisible(false)}
         onCloseClick={() => setModalVisible(false)}
-        ContainerEl={styled(ModalContainer)`
-          width: 100%;
-        `}
       >
         <div>
           <div>
-            Type or copy-and-paste a list of <b>donor ids or submitter donor ids,</b> separated by
-            new lines:
+            Type or copy-and-paste a list of <b>donor ids or submitter donor ids,</b> separated by a
+            comma:
           </div>
           <br></br>
           <Textarea
-            placeholder="e.g. D05490,
-                    PCSI_0467,
-                    D05499"
-            aria-label="Donor IDs"
-            id="donor_ids"
             css={css`
               height: 115px;
             `}
+            placeholder="e.g. D05490
+                    PCSI_0467
+                    D05499"
+            aria-label="Donor IDs"
+            id="id_list"
             value={idList}
             onChange={(e) => setIdList(e.target.value)}
           ></Textarea>
           <br></br>
           <div>
-            Or choose a <b>txt</b> file to upload
+            Or choose a <b>.txt</b> file to upload
           </div>
-          <FileSelectButton
-            css={css`
-              margin-top: 7px;
-            `}
-            id="button-submission-file-select" // For Selenium
-            isAsync
-            variant="primary"
-            size={'sm'}
-            inputProps={{
-              accept: '.tsv',
-              multiple: true,
+
+          <Button
+            size="sm"
+            onClick={async () => {
+              [fileHandle] = await window.showOpenFilePicker();
+
+              const file = await fileHandle.getFile();
+              const content = await file.text();
+
+              return setIdList(idList + ' ' + content);
             }}
-            onFilesSelect={null}
-            // isLoading={isUploading}
-            // disabled={!uploadEnabled}
-            // Loader={(props) => <InstructionLoader text="VALIDATING FILES" {...props} />}
           >
             Browse
-          </FileSelectButton>
+          </Button>
 
           {/* parent <div> of the bottom four items, title, match ID, unmatched ID and clear button */}
           <div
@@ -88,53 +93,24 @@ export default function FilterModal({ setModalVisible }: { setModalVisible: any 
               Your ID List results in:
             </b>
             {/* <div> of matched ID */}
-            <div
-              css={css`
-                display: flex;
-                align-items: center;
-              `}
-            >
-              Matched IDs:
-              <b
-                css={css`
-                  margin-left: 4px;
-                  color: #0774d3;
-                `}
-              >
-                {matchID}
-              </b>
-            </div>
-            {/* <div> of unmatched ID */}
-            <div
-              css={css`
-                display: flex;
-                align-items: center;
-              `}
-            >
-              Unmatched IDs:
-              <b
-                css={css`
-                  margin-left: 4px;
-                  color: #0774d3;
-                `}
-              >
-                {unmatchedID}
-              </b>
-            </div>
-
+            <MatchResults numMatched={numMatched} numUnmatched={numUnmatched} />
             {/* <Button> of clear button */}
-            <Button
-              onClick={() => setIdList('')}
-              css={css`
-                // background-color: inherit;
-                border: none;
-                width: fit-content;
-                padding: 2px;
-              `}
-              variant="secondary"
-            >
-              <u>Clear Upload</u>
-            </Button>
+            {idList && (
+              <Button
+                onClick={(e) => {
+                  setIdList('');
+                }}
+                css={css`
+                  // background-color: inherit;
+                  border: none;
+                  width: fit-content;
+                  padding: 2px;
+                `}
+                variant="secondary"
+              >
+                <u>Clear Upload</u>
+              </Button>
+            )}
           </div>
         </div>
       </Modal>
