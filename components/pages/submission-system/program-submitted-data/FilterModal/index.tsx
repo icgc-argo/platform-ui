@@ -6,6 +6,7 @@ import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import ModalPortal from 'components/Modal';
 import MatchResults from './MatchResults';
+import { fileOpen, supported } from 'browser-fs-access';
 
 export default function FilterModal({ setModalVisible }: { setModalVisible: any }) {
   const [idList, setIdList] = useState('');
@@ -16,12 +17,12 @@ export default function FilterModal({ setModalVisible }: { setModalVisible: any 
     types: [
       {
         accept: {
-          'text/plain': ['.txt'],
+          'text/*': ['.txt', '.csv'],
         },
       },
     ],
     excludeAcceptAllOption: true,
-    multiple: false,
+    multiple: true,
   };
 
   //make matchID dynamic
@@ -47,10 +48,10 @@ export default function FilterModal({ setModalVisible }: { setModalVisible: any 
           <br></br>
           <Textarea
             css={css`
-              height: 115px;
+              height: 135px;
             `}
-            placeholder="e.g. D05490
-                    PCSI_0467
+            placeholder="e.g. D05490,
+                    PCSI_0467,
                     D05499"
             aria-label="Donor IDs"
             id="id_list"
@@ -59,18 +60,30 @@ export default function FilterModal({ setModalVisible }: { setModalVisible: any 
           ></Textarea>
           <br></br>
           <div>
-            Or choose a <b>.txt</b> file to upload
+            Or choose a <b>.txt</b> or a <b>.csv</b> file to upload
           </div>
 
           <Button
             size="sm"
             onClick={async () => {
-              [fileHandle] = await window.showOpenFilePicker();
-
-              const file = await fileHandle.getFile();
-              const content = await file.text();
-
-              return setIdList(idList + ' ' + content);
+              if (supported) {
+                try {
+                  [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+                  const file = await fileHandle.getFile();
+                  const content = await file.text();
+                  console.log('supported');
+                  if (idList) {
+                    setIdList(idList + ', ' + content);
+                  } else {
+                    setIdList(content);
+                  }
+                } catch (abortError) {
+                  return;
+                }
+              } else {
+                console.log('unsupported');
+                const blob = await fileOpen({ mimeTypes: ['text/*'], multiple: true });
+              }
             }}
           >
             Browse

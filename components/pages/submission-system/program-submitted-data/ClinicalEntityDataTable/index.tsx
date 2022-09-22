@@ -540,8 +540,6 @@ const ClinicalEntityDataTable = ({
   const numTablePages = Math.ceil(totalDocs / pageSize);
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
-  console.log('entityData.record', records);
-
   return loading ? (
     <DnaLoader
       css={css`
