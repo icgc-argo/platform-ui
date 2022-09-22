@@ -22,7 +22,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import isEmpty from 'lodash/isEmpty';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { css } from '@icgc-argo/uikit';
 import Button from '@icgc-argo/uikit/Button';
 import { ContentBox } from '@icgc-argo/uikit/PageLayout';
@@ -33,13 +33,13 @@ import ModalPortal from 'components/Modal';
 import { isDccMember } from 'global/utils/egoJwt';
 import Users from './Users';
 import Profile from './Profile';
-import PROGRAM_QUERY from './PROGRAM_QUERY.gql';
-import INVITE_USER_MUTATION from './INVITE_USER_MUTATION.gql';
+import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
+import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
 import { UserModel as ModalUserModel } from '../modals/common';
 
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notifications/Toast';
-import UPDATE_PROGRAM_MUTATION from './UPDATE_PROGRAM_MUTATION.gql';
+import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
 import useCommonToasters from 'components/useCommonToasters';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 

@@ -22,6 +22,13 @@ import { useState } from 'react';
 import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
+import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
+import {
+  CompletionStates,
+  ClinicalEntitySearchResultResponse,
+  emptySearchResponse,
+} from '../common';
 import {
   searchBackgroundStyle,
   searchTitleParentStyle,
@@ -44,22 +51,85 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 
+const COMPLETION_OPTIONS = {
+  all: {
+    display: `All Donors`,
+    value: CompletionStates['all'],
+  },
+  invalid: {
+    display: `Invalid Donors`,
+    value: CompletionStates['invalid'],
+  },
+  complete: {
+    display: `Complete Donors`,
+    value: CompletionStates['complete'],
+  },
+  incomplete: {
+    display: `Incomplete Donors`,
+    value: CompletionStates['incomplete'],
+  },
+};
+
+const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
+
 export default function SearchBar({
-  noData,
   setModalVisible,
+  noData,
+  onChange,
+  completionState,
+  loading,
+  keyword,
+  setKeyword,
+  donorSearchResults,
 }: {
-  noData: boolean;
   setModalVisible: any;
+  noData: boolean;
+  onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
+  completionState: CompletionStates;
+  loading: boolean;
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  donorSearchResults: ClinicalEntitySearchResultResponse;
 }) {
   const theme = useTheme();
+  const [displayText, setDisplayText] = useState('- Select an option -');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const setSearchValue = (value) => {
+    setKeyword(value);
+    setSearchOpen(false);
+  };
 
-  const [keyword, setKeyword] = useState('');
+  const menuItemDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  useClickAway({
+    domElementRef: menuItemDropdownRef,
+    onElementClick: setSearchValue,
+    onClickAway: () => setSearchOpen(false),
+  });
+
+  const {
+    clinicalSearchResults: { searchResults, totalResults },
+  } = donorSearchResults || emptySearchResponse;
+  const searchResultItems =
+    searchResults
+      .map((result) => {
+        const { donorId, submitterDonorId } = result;
+        return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
+      })
+      .filter((result) => !!result)
+      .slice(0, 20) || [];
+
+  const titleText =
+    keyword && searchResultItems.length === 1
+      ? `${searchResultItems[0].resultId}`
+      : keyword && searchResults.length > 1
+      ? `${searchResultItems.length} Donors`
+      : COMPLETION_OPTIONS[completionState].display;
 
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
-        Clinical Data for: <b css={searchBoldTextStyle}>{keyword || ` All Donors`}</b>
+        Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
         {keyword && (
           <Button
             onClick={() => {
@@ -80,29 +150,19 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
+            value={completionState}
             variant="secondary"
             size="sm"
-            onItemClick={() => {}}
-            menuItems={[
-              {
-                display: 'Show all donors',
-                value: 'all',
-              },
-              {
-                display: 'Show invalid donors',
-                value: 'all',
-              },
-              {
-                display: 'Show clinically complete donors',
-                value: 'all',
-              },
-              {
-                display: 'Show clinically incomplete donors',
-                value: 'all',
-              },
-            ]}
+            onItemClick={(e) => {
+              onChange(e.value);
+              const completionDisplayText = COMPLETION_OPTIONS[e.value]
+                ? `Show ${COMPLETION_OPTIONS[e.value].display}`
+                : '- Select an option -';
+              setDisplayText(completionDisplayText);
+            }}
+            menuItems={MENU_ITEMS}
           >
-            - select an option -
+            {displayText}
             <Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
           </DropdownButton>
         </div>
@@ -118,9 +178,32 @@ export default function SearchBar({
             value={keyword}
             onChange={(e) => {
               setKeyword(e.target.value);
+              if (keyword && keyword.length >= 1) setSearchOpen(true);
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
+          {keyword && keyword.length >= 1 && searchOpen ? (
+            <>
+              <div
+                css={css`
+                  background: transparent;
+                  border-right: 1px solid ${theme.colors.primary_4};
+                  border-left: 1px solid ${theme.colors.primary_4};
+                  height: 18px;
+                  width: 248px;
+                  z-index: 0;
+                  position: absolute;
+                  top: 28px;
+                `}
+                ref={menuItemDropdownRef}
+              />
+              <SearchResultsMenu
+                searchData={searchResultItems}
+                isLoading={loading}
+                onSelect={setSearchValue}
+              />
+            </>
+          ) : null}
           <Button
             css={searchFilterButtonStyle}
             variant="secondary"

@@ -24,15 +24,15 @@ import Typography from '@icgc-argo/uikit/Typography';
 import Container from '@icgc-argo/uikit/Container';
 
 // GQL Data Fetching
-import { useQuery } from '@apollo/react-hooks';
-import SIDE_MENU_PROGRAM_LIST from 'components/pages/submission-system/SIDE_MENU_PROGRAM_LIST.gql';
+import { useQuery } from '@apollo/client';
+import SIDE_MENU_PROGRAM_LIST_QUERY from 'components/pages/submission-system/gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 
 const Card = styled(Container)`
   padding: 16px;
 `;
 
 const DonorAggregationSummary = () => {
-  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST);
+  const { loading, data } = useQuery(SIDE_MENU_PROGRAM_LIST_QUERY);
 
   const programs = data ? data.programs : [];
   return (

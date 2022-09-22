@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { camelCase, get, isObject, mapKeys } from 'lodash';
 import {
   FileSummaryInfo,
@@ -26,7 +26,7 @@ import {
   FileEntityData,
   DonorRecord,
 } from './types';
-import FILE_ENTITY_QUERY from './FILE_ENTITY_QUERY.gql';
+import FILE_ENTITY_QUERY from 'components/pages/file-entity/gql/FILE_ENTITY_QUERY';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentField } from '../file-repository/types';
 

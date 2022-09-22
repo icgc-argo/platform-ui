@@ -21,10 +21,10 @@ import { css } from '@icgc-argo/uikit';
 import Container from '@icgc-argo/uikit/Container';
 import { PaddedRow } from '../index';
 import StatItem from './StatItem';
-import STATS_BAR from './STATS_BAR.gql';
+import STATS_BAR_QUERY from './gql/STATS_BAR_QUERY';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileRepoFiltersType } from '../utils/types';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Col } from 'react-grid-system';
 
 type StatsBarQueryInput = {
@@ -55,7 +55,7 @@ type StatsBarQueryResponseData = {
 
 // TODO - type filters
 export const useFileRepoStatsBarQuery = (filters?: FileRepoFiltersType) => {
-  const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR, {
+  const hook = useQuery<StatsBarQueryResponseData, StatsBarQueryInput>(STATS_BAR_QUERY, {
     variables: {
       filters,
     },

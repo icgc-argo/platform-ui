@@ -17,14 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 import { MinimalLayout } from '../layout';
-import GET_JOIN_PROGRAM_INFO from './GET_JOIN_PROGRAM_INFO.gql';
+import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JoinProgramLayout from './JoinProgramLayout';
 import { getConfig } from 'global/config';
 import { createRedirectURL } from 'global/utils/common';
@@ -40,7 +40,7 @@ const JoinProgramLoginPage = () => {
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO, {
+  } = useQuery(GET_JOIN_PROGRAM_INFO_QUERY, {
     variables: { inviteId },
     onError: (error) => {
       if (error.message.includes('NOT_FOUND')) {

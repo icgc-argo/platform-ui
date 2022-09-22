@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "downlevelIteration": true,
-    "types": ["@types/wicg-file-system-access"]
+    "types": ["@types/wicg-file-system-access"],
+    "incremental": true
   },
   "exclude": ["node_modules", "scripts/*", "**/*.test.ts"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"]
