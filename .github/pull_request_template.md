@@ -10,6 +10,7 @@
 - [ ] Refactoring
 - [ ] Release candidate
 - [ ] Styling
+- [ ] Testing
 - [ ] Other (please describe)
 
 ## Checklist before requesting review
@@ -24,5 +25,6 @@
 - Back-end (select one):
   - [ ] Back-end PRs merged, tested on develop, and linked in this PR
   - [ ] No back-end changes
+- [ ] Manually tested changes
 - [ ] Added copyrights to new files
 - [ ] Connected ticket to PR
