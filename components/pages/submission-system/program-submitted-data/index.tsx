@@ -47,13 +47,13 @@ import {
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
-  emptySearchResponse,
   CompletionStates,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
 import useGlobalLoader from 'components/GlobalLoader';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import FilterModal from './FilterModal';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -90,6 +90,8 @@ export default function ProgramSubmittedData() {
   React.useEffect(() => {
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
@@ -177,6 +179,7 @@ export default function ProgramSubmittedData() {
       }
     >
       <SearchBar
+        setModalVisible={setModalVisible}
         completionState={completionState}
         keyword={keyword}
         loading={searchResultsLoading}
@@ -189,6 +192,7 @@ export default function ProgramSubmittedData() {
         <DnaLoader />
       ) : (
         <Container>
+          {modalVisible && <FilterModal setModalVisible={setModalVisible} />}
           <div
             css={css`
               width: 100%;

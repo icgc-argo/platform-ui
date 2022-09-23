@@ -73,6 +73,7 @@ const COMPLETION_OPTIONS = {
 const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 export default function SearchBar({
+  setModalVisible,
   noData,
   onChange,
   completionState,
@@ -81,6 +82,7 @@ export default function SearchBar({
   setKeyword,
   donorSearchResults,
 }: {
+  setModalVisible: any;
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
@@ -202,7 +204,11 @@ export default function SearchBar({
               />
             </>
           ) : null}
-          <Button css={searchFilterButtonStyle} variant="secondary">
+          <Button
+            css={searchFilterButtonStyle}
+            variant="secondary"
+            onClick={() => setModalVisible(true)}
+          >
             <span css={searchFilterContainerStyle}>
               <Icon name="filter" fill="accent2_dark" height="12px" css={searchFilterIconStyle} />{' '}
               List

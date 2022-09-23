@@ -33,6 +33,7 @@
     "@icgc-argo/uikit": "^1.16.0",
     "@overture-stack/arranger-components": "^3.0.0-beta.3",
     "apollo-upload-client": "^11.0.0",
+    "browser-fs-access": "^0.31.0",
     "clsx": "^1.1.1",
     "color": "^4.2.3",
     "date-fns": "^2.28.0",
@@ -73,8 +74,8 @@
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/plugin-proposal-optional-chaining": "^7.17.12",
-    "@types/chai": "^4.3.1",
     "@playwright/test": "^1.25.1",
+    "@types/chai": "^4.3.1",
     "@types/file-saver": "^2.0.5",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/js-cookie": "^3.0.2",
