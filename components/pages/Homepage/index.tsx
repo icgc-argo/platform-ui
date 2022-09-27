@@ -216,10 +216,8 @@ export default function Homepage() {
             color="white"
             css={css`
               margin: 0 50px;
-              font-size: 15px;
-
+              font-size: 15px !important;
               line-height: 24px;
-
               text-align: center;
               width: 60%;
             `}

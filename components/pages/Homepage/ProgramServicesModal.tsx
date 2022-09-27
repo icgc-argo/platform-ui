@@ -17,16 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { Modal, UikitTheme } from '@icgc-argo/uikit';
-import { css, styled } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import urljoin from 'url-join';
-import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
+import { Banner, css, Icon, Link, Modal, styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { useTheme } from '@icgc-argo/uikit';
-import { Banner } from '@icgc-argo/uikit';
+import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 
 const Row = styled('span')`
   display: flex;
@@ -56,7 +49,7 @@ const ProgramServicesModal = ({
   hasPrograms: boolean;
   isLoggedIn: boolean;
 }) => {
-  const { DOCS_URL_ROOT, EGO_URL } = getConfig();
+  const { EGO_URL } = getConfig();
   const theme = useTheme();
 
   return (
