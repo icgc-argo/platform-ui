@@ -47,7 +47,6 @@ import {
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
-  emptySearchResponse,
   CompletionStates,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
