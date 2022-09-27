@@ -454,13 +454,15 @@ const DonorSummaryTable = ({
       },
     });
 
-  const errorLinkData = donorsWithErrors.map((donorId) => {
-    const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
-      (donor) => donorId === donor.donorId,
-    );
-    const entity = currentDonor.errors[0].entityName;
-    return { donorId, entity };
-  });
+  const errorLinkData = clinicalErrorData
+    ? donorsWithErrors.map((donorId) => {
+        const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
+          (donor) => donorId === donor.donorId,
+        );
+        const entity = currentDonor.errors[0].entityName;
+        return { donorId, entity };
+      })
+    : [];
 
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
@@ -502,7 +504,11 @@ const DonorSummaryTable = ({
           ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return `${original.donorId} (${original.submitterDonorId})`;
+            return (
+              <a
+                href={`/submission/program/${programShortName}/clinical-data/?donorId=${original.donorId}`}
+              >{`${original.donorId} (${original.submitterDonorId})`}</a>
+            );
           },
         },
         {

@@ -48,6 +48,7 @@ import {
   hasClinicalErrors,
   emptyResponse,
   CompletionStates,
+  parseDonorIdString,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
@@ -114,11 +115,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   ));
 
   // Matches Digits preceded by DO or by Comma
-  const searchDonorIds =
-    keyword
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
+  const searchDonorIds = selectedDonors
+    ? [parseDonorIdString(selectedDonors)]
+    : keyword
+        .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+        ?.filter((match) => !!match)
+        .map((idString) => parseInt(idString)) || [];
   const searchSubmitterIds = [keyword].filter((word) => !!word);
   const useDefaultQuery =
     searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';

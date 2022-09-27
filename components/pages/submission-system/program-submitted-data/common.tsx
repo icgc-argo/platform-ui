@@ -151,6 +151,8 @@ export const aliasedEntityFields = Object.values(aliasedEntityNames);
 export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) =>
   Object.entries(aliasedEntityNames).find(([key, value]) => value === selectedClinicalEntity)[0];
 
+export const parseDonorIdString = (donorId: string) => parseInt(donorId.split('DO')[1]);
+
 export const aliasSortNames = {
   donor_id: 'donorId',
   program_id: 'programId',
