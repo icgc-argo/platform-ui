@@ -43,6 +43,7 @@ import {
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  emptySearchResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
   reverseLookUpEntityAlias,
@@ -183,7 +184,7 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  donorSearchResults,
+  donorSearchResults = emptySearchResponse,
   useDefaultQuery,
 }: {
   entityType: string;
@@ -206,9 +207,10 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+
   const {
     clinicalSearchResults: { searchResults, totalResults },
-  } = donorSearchResults;
+  } = donorSearchResults || emptySearchResponse;
 
   const nextSearchPage = (page + 1) * pageSize;
   const donorIds = useDefaultQuery

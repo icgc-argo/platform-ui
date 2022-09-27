@@ -49,6 +49,7 @@ import {
   emptyResponse,
   CompletionStates,
   parseDonorIdString,
+  emptySearchResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
@@ -141,6 +142,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
+  const searchResults =
+    searchResultData === null || searchResultData === undefined
+      ? emptySearchResponse
+      : searchResultData;
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -187,7 +193,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         loading={searchResultsLoading}
         noData={noData}
         onChange={setCompletionState}
-        donorSearchResults={searchResultData}
+        donorSearchResults={searchResults}
         setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />

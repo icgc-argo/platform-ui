@@ -21,6 +21,7 @@ import React, { createRef, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Row } from 'react-grid-system';
 import { startCase } from 'lodash';
+import urlJoin from 'url-join';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
@@ -506,15 +507,16 @@ const DonorSummaryTable = ({
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             const errorTab =
-              errorLinkData.find(
-                (error) => error.donorId === parseDonorIdString(original.donorId),
-              ) || '';
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
 
-            return (
-              <a
-                href={`/submission/program/${programShortName}/clinical-data/?donorId=${original.donorId}&tab=${errorTab}`}
-              >{`${original.donorId} (${original.submitterDonorId})`}</a>
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}`,
+              errorTab && `&tab=${errorTab}`,
             );
+            return <a href={linkUrl}>{`${original.donorId} (${original.submitterDonorId})`}</a>;
           },
         },
         {
