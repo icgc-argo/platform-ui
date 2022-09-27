@@ -59,7 +59,7 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramSubmittedData({ donorId }: { donorId: string }) {
+export default function ProgramSubmittedData({ donorId = '' }: { donorId: string }) {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
