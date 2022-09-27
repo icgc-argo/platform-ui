@@ -59,7 +59,7 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramSubmittedData() {
+export default function ProgramSubmittedData({ donorId }: { donorId: string }) {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
@@ -74,6 +74,10 @@ export default function ProgramSubmittedData() {
       deSerialize: (v) => v,
     },
   );
+  const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
+    serialize: (v) => v,
+    deSerialize: (v) => v,
+  });
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   // Side Menu Query
@@ -183,6 +187,7 @@ export default function ProgramSubmittedData() {
         noData={noData}
         onChange={setCompletionState}
         donorSearchResults={searchResultData}
+        setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (

@@ -23,6 +23,7 @@ import { createPage } from 'global/utils/pages';
 import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
 import ErrorPage from 'pages/_error';
 import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import { getConfig } from 'global/config';
 
 export default createPage({
@@ -39,7 +40,8 @@ export default createPage({
   startWithGlobalLoader: true,
 })((props) => {
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
+  const { donorId } = usePageQuery<{ donorId: string }>();
 
   if (!FEATURE_SUBMITTED_DATA_ENABLED) return <ErrorPage statusCode={404} />;
-  return <ProgramClinicalData {...props} />;
+  return <ProgramClinicalData {...props} donorId={donorId} />;
 });
