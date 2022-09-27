@@ -134,7 +134,7 @@ export default function SearchBar({
         {keyword && (
           <Button
             onClick={() => {
-              setKeyword('');
+              setSearchValue('');
             }}
             css={searchClearFilterStyle}
             variant="secondary"

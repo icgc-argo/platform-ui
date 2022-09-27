@@ -148,8 +148,13 @@ export const clinicalEntityFields = Object.keys(aliasedEntityNames);
 export const aliasedEntityFields = Object.values(aliasedEntityNames);
 
 // Util for finding camelCase alias for snake_case values
-export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) =>
-  Object.entries(aliasedEntityNames).find(([key, value]) => value === selectedClinicalEntity)[0];
+export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) => {
+  const findAlias = Object.entries(aliasedEntityNames).find(
+    ([key, value]) => value === selectedClinicalEntity,
+  );
+
+  return findAlias ? findAlias[0] : 'donor';
+};
 
 export const parseDonorIdString = (donorId: string) => parseInt(donorId.split('DO')[1]);
 
