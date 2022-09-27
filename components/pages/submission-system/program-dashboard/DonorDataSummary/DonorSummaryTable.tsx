@@ -38,6 +38,7 @@ import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-su
 import {
   defaultClinicalEntityFilters,
   ClinicalEntityQueryResponse,
+  parseDonorIdString,
 } from 'components/pages/submission-system/program-submitted-data/common';
 import { SortingRule, SortedChangeFunction } from 'global/types/table';
 import { displayDate } from 'global/utils/common';
@@ -504,9 +505,14 @@ const DonorSummaryTable = ({
           ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
+            const errorTab =
+              errorLinkData.find(
+                (error) => error.donorId === parseDonorIdString(original.donorId),
+              ) || '';
+
             return (
               <a
-                href={`/submission/program/${programShortName}/clinical-data/?donorId=${original.donorId}`}
+                href={`/submission/program/${programShortName}/clinical-data/?donorId=${original.donorId}&tab=${errorTab}`}
               >{`${original.donorId} (${original.submitterDonorId})`}</a>
             );
           },
