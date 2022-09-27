@@ -108,7 +108,7 @@ export default function SearchBar({
   });
 
   const {
-    clinicalSearchResults: { searchResults, totalResults },
+    clinicalSearchResults: { searchResults },
   } = donorSearchResults || emptySearchResponse;
   const searchResultItems =
     searchResults
