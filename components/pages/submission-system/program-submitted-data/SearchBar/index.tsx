@@ -23,7 +23,13 @@ import Container from '@icgc-argo/uikit/Container';
 import DropdownButton from '@icgc-argo/uikit/DropdownButton';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
+import Icon from '@icgc-argo/uikit/Icon';
+import { Input } from '@icgc-argo/uikit/form';
+import Button from '@icgc-argo/uikit/Button';
+import { css } from '@icgc-argo/uikit';
+import Typography from '@icgc-argo/uikit/Typography';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
+import DownloadButtons from '../DownloadButtons';
 import {
   CompletionStates,
   ClinicalEntitySearchResultResponse,
@@ -45,11 +51,6 @@ import {
   searchFilterIconStyle,
   searchDownloadIconStyle,
 } from './style';
-import Icon from '@icgc-argo/uikit/Icon';
-import { Input } from '@icgc-argo/uikit/form';
-import Button from '@icgc-argo/uikit/Button';
-import { css } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
 
 const COMPLETION_OPTIONS = {
   all: {
@@ -211,7 +212,8 @@ export default function SearchBar({
         </div>
         {/* Fourth item - download button*/}
 
-        <Button
+        <DownloadButtons text="Clinical Data" />
+        {/* <Button
           css={css`
             margin: 5px 10px 5px 10px;
             height: fit-content;
@@ -230,7 +232,7 @@ export default function SearchBar({
             height="12px"
           />
           Clinical Data
-        </Button>
+        </Button> */}
       </div>
     </Container>
   );
