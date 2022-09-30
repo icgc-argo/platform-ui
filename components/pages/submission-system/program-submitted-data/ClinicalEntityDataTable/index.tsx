@@ -46,8 +46,6 @@ import {
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
-  clinicalEntityDisplayNames,
-  CompletionStates,
   reverseLookUpEntityAlias,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';

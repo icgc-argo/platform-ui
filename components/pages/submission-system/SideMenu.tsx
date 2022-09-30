@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import * as React from 'react';
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
