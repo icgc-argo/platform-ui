@@ -29,7 +29,7 @@ import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import DownloadButtons from '../DownloadButtons';
+import ClinicalDownloadButton from '../DownloadButtons';
 import {
   CompletionStates,
   ClinicalEntitySearchResultResponse,
@@ -212,7 +212,7 @@ export default function SearchBar({
         </div>
         {/* Fourth item - download button*/}
 
-        <DownloadButtons text="Clinical Data" />
+        <ClinicalDownloadButton searchResults={searchResults} text="Clinical Data" />
         {/* <Button
           css={css`
             margin: 5px 10px 5px 10px;

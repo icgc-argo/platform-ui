@@ -31,6 +31,8 @@ import { format as formatDate } from 'date-fns';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import { getConfig } from 'global/config';
+import { ClinicalSearchResults } from 'generated/gql_types';
+import queryString from 'query-string';
 
 const DownloadButton = ({
   text,
@@ -61,7 +63,13 @@ const DownloadButton = ({
   </Button>
 );
 
-const DownloadButtons = ({ text }: { text?: string }) => {
+const ClinicalDownloadButton = ({
+  text,
+  searchResults = [],
+}: {
+  text?: string;
+  searchResults: ClinicalSearchResults[];
+}) => {
   const toaster = useToaster();
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -76,6 +84,13 @@ const DownloadButtons = ({ text }: { text?: string }) => {
     }
     return res;
   };
+
+  const donorIds = searchResults.map(({ donorId }) => donorId);
+  const submitterDonorIds = searchResults
+    .map(({ submitterDonorId }) => submitterDonorId)
+    .filter(Boolean);
+
+  const query = queryString.stringify({ donorIds, submitterDonorIds }, { arrayFormat: 'comma' });
 
   const handleDownloadAllError = () => {
     toaster.addToast({
@@ -92,7 +107,7 @@ const DownloadButtons = ({ text }: { text?: string }) => {
 
     const url = urlJoin(
       GATEWAY_API_ROOT,
-      `/clinical/program/${programShortName}/clinical-data-tsv`,
+      `/clinical/program/${programShortName}/clinical-data-tsv?${query}`,
     );
 
     setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
@@ -125,14 +140,8 @@ const DownloadButtons = ({ text }: { text?: string }) => {
           isLoading={buttonLoadingState.isDownloadAllLoading}
         />
       </Col>
-      {/* <Col>
-        <DownloadButton text={'Missing Data'} />
-      </Col>
-      <Col>
-        <DownloadButton text={'Table Data'} />
-      </Col> */}
     </Row>
   );
 };
 
-export default DownloadButtons;
+export default ClinicalDownloadButton;
