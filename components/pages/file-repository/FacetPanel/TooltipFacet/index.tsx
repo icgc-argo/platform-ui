@@ -34,7 +34,7 @@ import {
   Tooltip,
   UikitTheme,
 } from '@icgc-argo/uikit';
-import React from 'react';
+import * as React from 'react';
 
 const TooltipFacet = ({
   subMenuName,

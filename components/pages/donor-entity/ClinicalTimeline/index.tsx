@@ -30,7 +30,7 @@ import ContentError from 'components/placeholders/ContentError';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import React from 'react';
+import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
@@ -68,7 +68,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     const dataCols = splitIntoColumns(selectedData, 2);
 
     return (
-      <>
+      <React.Fragment>
         <Row>
           <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
@@ -86,7 +86,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
             <Samples samples={selectedSamples} />
           </Col>
         </Row>
-      </>
+      </React.Fragment>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
@@ -177,7 +177,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
           flex: 1;
         `}
       >
-        <>
+        <React.Fragment>
           <div
             css={css`
               writing-mode: vertical-lr;
@@ -267,7 +267,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
               )}
             </Col>
           </Row>
-        </>
+        </React.Fragment>
       </div>
     </Container>
   );

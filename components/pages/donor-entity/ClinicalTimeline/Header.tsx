@@ -18,7 +18,7 @@
  */
 
 import { Checkbox, css, STYLEDCHECKBOX_SIZES, Typography, useTheme } from '@icgc-argo/uikit';
-import React from 'react';
+import * as React from 'react';
 import { Entity, EntityType } from '../types';
 import { ENTITY_DISPLAY } from './index';
 import { getTimelineStyles } from './util';

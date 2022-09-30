@@ -18,7 +18,7 @@
  */
 
 import { isEmpty } from 'lodash';
-import { useState } from 'react';
+import * as React from 'react';
 import urlJoin from 'url-join';
 
 import { Button, Typography, useTheme } from '@icgc-argo/uikit';
@@ -30,8 +30,8 @@ const { GATEWAY_API_ROOT } = getConfig();
 
 const SyncIndexButton = ({ program }: { program: string }) => {
   const theme = useTheme();
-  const [requestResult, setRequestResult] = useState<'SUCCESS' | 'ERROR' | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [requestResult, setRequestResult] = React.useState<'SUCCESS' | 'ERROR' | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
   const { fetchWithEgoToken } = useAuthContext();
 
   // On Click Handler sends request to gateway to sync program

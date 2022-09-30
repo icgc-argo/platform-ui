@@ -20,7 +20,7 @@
 import { Button, css, Icon, Modal, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
 import uniqueId from 'lodash/uniqueId';
-import React from 'react';
+import * as React from 'react';
 import { UserModel, userSchema } from '../common';
 import { UserSection, UserSectionProps } from '../styledComponents';
 

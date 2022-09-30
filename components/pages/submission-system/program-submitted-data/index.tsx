@@ -35,7 +35,7 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import * as React from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import SubmissionLayout from '../layout';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
@@ -62,7 +62,7 @@ const defaultClinicalEntityTab = 'donor';
 export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = React.useState('');
   const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
@@ -149,7 +149,7 @@ export default function ProgramSubmittedData() {
           `}
         >
           <TitleBar>
-            <>{programShortName}</>
+            <React.Fragment>{programShortName}</React.Fragment>
             <Row nogutter align="center">
               <div
                 css={css`

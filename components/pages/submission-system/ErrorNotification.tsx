@@ -30,7 +30,7 @@ import {
 import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
-import React, { ReactNode } from 'react';
+import * as React from 'react';
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
@@ -75,7 +75,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: ReactNode;
+  subtitle: React.ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
       accessor: keyof Error | string;

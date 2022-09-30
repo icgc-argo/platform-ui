@@ -22,7 +22,7 @@ import { Button, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uik
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useState } from 'react';
+import * as React from 'react';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FileCentricDocumentField } from '../file-repository/types';
@@ -92,7 +92,7 @@ export const FileTitleBar: React.ComponentType<{
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading, setIsDownloading] = React.useState(false);
 
   return (
     <div

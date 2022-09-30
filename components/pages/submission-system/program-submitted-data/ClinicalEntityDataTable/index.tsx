@@ -32,7 +32,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { TableInfoHeaderContainer } from '../../common';
 import ErrorNotification from '../../ErrorNotification';
 import {
@@ -201,9 +201,9 @@ const ClinicalEntityDataTable = ({
   let columns = [];
   const theme = useTheme();
   const containerRef = React.createRef<HTMLDivElement>();
-  const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+  const [pageSettings, setPageSettings] = React.useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
-  const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
+  const [errorPageSettings, setErrorPageSettings] = React.useState(defaultErrorPageSettings);
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
@@ -256,7 +256,7 @@ const ClinicalEntityDataTable = ({
     return newPageSettings;
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
   }, [entityType, useDefaultQuery]);
@@ -427,7 +427,7 @@ const ClinicalEntityDataTable = ({
       ? `3px solid ${theme.colors.grey}`
       : '';
 
-  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
+  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = React.useState(74);
 
   const getCellStyles = (state, row, column) => {
     const { original } = row;

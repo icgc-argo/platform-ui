@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 
 // from https://usehooks.com/useDebounce/
 const useDebounce = <T>(value: T, delay: number): T => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = React.useState(value);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);

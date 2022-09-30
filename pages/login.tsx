@@ -20,7 +20,7 @@
 import LoginPage from 'components/pages/login';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import queryString from 'query-string';
 
 import { createRedirectURL } from 'global/utils/common';

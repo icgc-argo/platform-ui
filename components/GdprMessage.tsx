@@ -20,7 +20,7 @@
 import { css } from '@emotion/core';
 import { Button, Icon, Link, Typography, useTheme } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
-import React from 'react';
+import * as React from 'react';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 const GdprMessage = () => {
@@ -37,7 +37,7 @@ const GdprMessage = () => {
     sync();
   }, []);
   return (
-    <>
+    <React.Fragment>
       {!accepted && (
         <div
           css={css`
@@ -82,7 +82,7 @@ const GdprMessage = () => {
           </div>
         </div>
       )}
-    </>
+    </React.Fragment>
   );
 };
 

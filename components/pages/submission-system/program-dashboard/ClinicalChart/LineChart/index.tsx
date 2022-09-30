@@ -425,7 +425,7 @@ const LineChart = ({
 
   return (
     width && (
-      <>
+      <React.Fragment>
         <svg viewBox={`0 0 ${width} ${height}`}>
           <XAxis />
           <TicksXAxis />
@@ -438,7 +438,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
         </svg>
-      </>
+      </React.Fragment>
     )
   );
 };

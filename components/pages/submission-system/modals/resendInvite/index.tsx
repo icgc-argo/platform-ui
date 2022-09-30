@@ -18,7 +18,7 @@
  */
 
 //@ flow
-import React from 'react';
+import * as React from 'react';
 import { Modal } from '@icgc-argo/uikit';
 import { UserModel } from '../common';
 

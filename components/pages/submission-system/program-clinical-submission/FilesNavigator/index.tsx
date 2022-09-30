@@ -185,7 +185,7 @@ const FilesNavigator = ({
             />
           </div>
         ) : !!selectedFile.records.length ? (
-          <>
+          <React.Fragment>
             <div
               css={css`
                 padding: 8px;
@@ -227,7 +227,7 @@ const FilesNavigator = ({
                 createdAt: selectedFile.createdAt,
               }}
             />
-          </>
+          </React.Fragment>
         ) : (
           <div
             css={css`

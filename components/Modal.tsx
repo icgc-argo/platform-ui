@@ -18,7 +18,7 @@
  */
 
 import { css, Modal } from '@icgc-argo/uikit';
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 
 export const fillAvailableWidth = css`

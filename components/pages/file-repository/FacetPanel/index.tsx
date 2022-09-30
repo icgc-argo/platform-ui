@@ -39,7 +39,7 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { trim } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
@@ -403,7 +403,7 @@ const FacetPanel = () => {
 
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
-  const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
+  const [currentTab, setTabs] = React.useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
   const [searchOpen, setSearchOpen] = React.useState(false);
@@ -434,7 +434,7 @@ const FacetPanel = () => {
   };
 
   const [searchQuery, setSearchQuery] = React.useState('');
-  useEffect(() => {
+  React.useEffect(() => {
     setSearchQuery('');
   }, [currentTab]);
 
@@ -715,7 +715,7 @@ const FacetPanel = () => {
                   `}
                 />
                 {searchQuery && searchQuery.length >= 1 && searchOpen ? (
-                  <>
+                  <React.Fragment>
                     <div
                       css={css`
                         background: transparent;
@@ -740,7 +740,7 @@ const FacetPanel = () => {
                         setSearchOpen(false);
                       }}
                     />
-                  </>
+                  </React.Fragment>
                 ) : null}
               </div>
               {/* disabled for initial File Repo release */}

@@ -28,7 +28,7 @@ import {
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import NextLink from 'next/link';
-import React from 'react';
+import * as React from 'react';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -72,8 +72,8 @@ const FormattedCell: React.ComponentType<{ cellInfo: TableProgramInternal }> = (
 
 export default function ProgramsTable(tableProps: {
   programs: Array<ProgramsTableProgram>;
-  onProgramUsersClick: ({ program: ProgramsTableProgram }) => void;
-  onProgramEditClick: ({ program: ProgramsTableProgram }) => void;
+  onProgramUsersClick: ({ program }: { program: ProgramsTableProgram }) => void;
+  onProgramEditClick: ({ program }: { program: ProgramsTableProgram }) => void;
   loading: boolean;
   loadingUser: boolean;
   LoadingComponent: React.ReactType;
@@ -159,7 +159,11 @@ export default function ProgramsTable(tableProps: {
           </Link>
         ));
 
-        const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;
+        const cellContent = tableProps.loadingUser ? (
+          <React.Fragment>Loading</React.Fragment>
+        ) : (
+          adminLinks
+        );
 
         return <FormattedCell cellInfo={original}>{cellContent}</FormattedCell>;
       },

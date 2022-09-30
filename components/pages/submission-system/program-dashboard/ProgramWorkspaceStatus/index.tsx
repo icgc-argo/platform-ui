@@ -28,7 +28,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { isCollaborator } from 'global/utils/egoJwt';
 import NextLink, { LinkProps } from 'next/link';
-import React from 'react';
+import * as React from 'react';
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
 import { DashboardCard } from '../common';
@@ -43,7 +43,7 @@ const ConditionalLink: React.ComponentType<{
       <Link {...hyperlink}>{children}</Link>
     </NextLink>
   ) : (
-    <>{children}</>
+    <React.Fragment>{children}</React.Fragment>
   );
 };
 

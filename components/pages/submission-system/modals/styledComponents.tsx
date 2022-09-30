@@ -29,7 +29,7 @@ import {
   UikitTheme,
 } from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';
-import React from 'react';
+import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { UserModel } from './common';
 

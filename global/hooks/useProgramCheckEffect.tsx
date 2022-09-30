@@ -18,7 +18,7 @@
  */
 
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { useEffect } from 'react';
+import * as React from 'react';
 import { useQuery } from '@apollo/client';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME_QUERY from './gql/PROGRAM_SHORTNAME_QUERY';
@@ -38,7 +38,7 @@ export const useProgramCheckEffect = () => {
   const { setGlobalLoading, isGlobalLoading } = useGlobalLoader();
   const { isLoggingOut } = useAuthContext();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isLoggingOut) {
       if (!program && !isGlobalLoading) {
         setGlobalLoading(true);

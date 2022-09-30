@@ -25,7 +25,7 @@ import { isDccMember } from 'global/utils/egoJwt';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import pluralize from 'pluralize';
-import React from 'react';
+import * as React from 'react';
 import { UserModel as ModalUserModel } from '../modals/common';
 import ProgramForm from '../program-form/ProgramForm';
 import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';

@@ -25,7 +25,7 @@ import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import pluralize from 'pluralize';
-import React, { createRef, CSSProperties } from 'react';
+import * as React from 'react';
 import {
   CellContentCenter,
   DataTableStarIcon,
@@ -146,7 +146,7 @@ const FileRecordTable = ({
           return `${priority}::${r.row}`;
         },
   );
-  const containerRef = createRef<HTMLDivElement>();
+  const containerRef = React.createRef<HTMLDivElement>();
 
   const tableData = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
@@ -236,7 +236,7 @@ const FileRecordTable = ({
         </div>
       </div>
     ) : (
-      <>{original[fieldName]}</>
+      <React.Fragment>{original[fieldName]}</React.Fragment>
     );
 
   const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
@@ -326,7 +326,7 @@ const FileRecordTable = ({
                     background: theme.colors.accent3_3,
                   }
                 : {},
-          } as { style: CSSProperties })
+          } as { style: React.CSSProperties })
         }
         getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
           ({
@@ -343,7 +343,7 @@ const FileRecordTable = ({
                   background: theme.colors.accent3_4,
                 }
               : {},
-          } as { style: CSSProperties })
+          } as { style: React.CSSProperties })
         }
         getTrGroupProps={(_, { original }: { original: typeof tableData[0] }) =>
           isPendingApproval && rowHasUpdate(original)

@@ -185,7 +185,7 @@ export default function ProgramIDRegistration() {
       contentHeader={
         <div css={pageHeaderStyle}>
           <TitleBar>
-            <>{programShortName}</>
+            <React.Fragment>{programShortName}</React.Fragment>
             <Row nogutter align="center">
               <div
                 css={css`
@@ -249,7 +249,7 @@ export default function ProgramIDRegistration() {
         `}
       >
         {fileRecords.length > 0 ? (
-          <>
+          <React.Fragment>
             <div css={cardHeaderContainerStyle}>
               <Typography
                 css={css`
@@ -276,7 +276,7 @@ export default function ProgramIDRegistration() {
               stats={stats}
               submissionInfo={submissionInfo}
             />
-          </>
+          </React.Fragment>
         ) : schemaOrValidationErrors.length > 0 ? (
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}

@@ -20,7 +20,7 @@
 import { useQuery } from '@apollo/client';
 import { SystemAlert } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_SYSTEM_ALERTS_KEY } from 'global/constants';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import SYSTEM_ALERTS_QUERY from './gql/SYSTEM_ALERTS_QUERY';
 
 type SystemAlert = {
@@ -41,10 +41,10 @@ const setLocalStorage = (ids: string[]) => {
 const useSystemAlertsQuery = (options: {} = {}) => useQuery(SYSTEM_ALERTS_QUERY, { ...options });
 
 const SystemAlerts = () => {
-  const [alerts, setAlerts] = useState([]);
-  const [dismissedAlerts, setDismissedAlerts] = useState([]);
+  const [alerts, setAlerts] = React.useState([]);
+  const [dismissedAlerts, setDismissedAlerts] = React.useState([]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const ids = getLocalStorage();
     setDismissedAlerts(ids);
   }, []);
@@ -62,11 +62,11 @@ const SystemAlerts = () => {
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
   return alertsDisplay.length > 0 && !loading ? (
-    <>
+    <React.Fragment>
       {alertsDisplay.map((alert: SystemAlert) => (
         <SystemAlert alert={alert} key={alert.id} onClose={() => handleClose(alert.id)} />
       ))}
-    </>
+    </React.Fragment>
   ) : null;
 };
 

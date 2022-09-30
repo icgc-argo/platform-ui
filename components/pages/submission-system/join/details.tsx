@@ -34,7 +34,7 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
-import React from 'react';
+import * as React from 'react';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';
@@ -139,7 +139,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
         notFound={notFound}
       >
         {incorrectEmail ? (
-          <>
+          <React.Fragment>
             <Banner
               title={'Incorrect email address'}
               variant={BANNER_VARIANTS.ERROR}
@@ -161,9 +161,9 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
                 redirectPath={fullDetailsRedirect}
               />
             </div>
-          </>
+          </React.Fragment>
         ) : (
-          <>
+          <React.Fragment>
             <Typography variant="subtitle2" as="h2">
               Hello {get(joinProgramInvite, 'user.firstName')}{' '}
               {get(joinProgramInvite, 'user.lastName')}
@@ -181,7 +181,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
               userRole={get(joinProgramInvite, 'user.role')}
               institutions={institutions}
             />
-          </>
+          </React.Fragment>
         )}
       </JoinProgramLayout>
     </MinimalLayout>

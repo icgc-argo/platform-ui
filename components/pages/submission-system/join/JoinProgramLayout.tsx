@@ -166,7 +166,7 @@ export default function JoinProgramLayout({
             />
           )}
           {inviteState == InviteState.Accepted && (
-            <>
+            <React.Fragment>
               <Banner
                 title={'This invitation has already been accepted'}
                 variant={BANNER_VARIANTS.WARNING}
@@ -192,7 +192,7 @@ export default function JoinProgramLayout({
                   })}
                 />
               </div>
-            </>
+            </React.Fragment>
           )}
           {inviteState == InviteState.Pending && children}
           {loading && (

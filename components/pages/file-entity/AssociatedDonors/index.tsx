@@ -19,7 +19,7 @@
 
 import { css } from '@emotion/core';
 import { SimpleTable, styled, Typography, useTheme } from '@icgc-argo/uikit';
-import React from 'react';
+import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { FileCard, TableDiv } from '../common';
 import { DonorRecord } from '../types';

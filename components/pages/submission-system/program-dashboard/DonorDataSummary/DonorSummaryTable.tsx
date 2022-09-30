@@ -46,7 +46,7 @@ import { css } from '@emotion/core';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';
-import React, { createRef, useRef, useState } from 'react';
+import * as React from 'react';
 import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
 import {
@@ -83,7 +83,7 @@ const DonorSummaryTable = ({
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
 
-  const containerRef = createRef<HTMLDivElement>();
+  const containerRef = React.createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
   const [filterState, setFilterState] = React.useState([]);
@@ -283,10 +283,10 @@ const DonorSummaryTable = ({
     filterValue?: string;
     onFilter?: (text?: string) => void;
   }) => {
-    const [open, setOpen] = useState(false);
-    const buttonRef = useRef<HTMLInputElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const panelRef = useRef<HTMLElement>(null);
+    const [open, setOpen] = React.useState(false);
+    const buttonRef = React.useRef<HTMLInputElement>(null);
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const panelRef = React.useRef<HTMLElement>(null);
 
     // Focus on the input when the panel opens
     const focusInput = () => {
@@ -344,7 +344,7 @@ const DonorSummaryTable = ({
     activeFilters?: Array<string>;
     onFilter?: (filters?: Array<FilterOption>) => void;
   }) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
     const options = React.useMemo(
       () =>
         filterOptions.map((option) => ({
@@ -354,8 +354,8 @@ const DonorSummaryTable = ({
         })),
       [filterOptions, activeFilters],
     );
-    const buttonRef = useRef<HTMLInputElement>(null);
-    const panelRef = useRef<HTMLElement>(null);
+    const buttonRef = React.useRef<HTMLInputElement>(null);
+    const panelRef = React.useRef<HTMLElement>(null);
 
     // Close dropdown panel when tabbing out of it
     const handleBlur = (e: React.FocusEvent) => {
@@ -717,7 +717,7 @@ const DonorSummaryTable = ({
           Clear Filters
         </FilterClearButton>
       ) : (
-        <></>
+        <React.Fragment></React.Fragment>
       ),
       columns: [
         {
@@ -784,7 +784,7 @@ const DonorSummaryTable = ({
       {programDonorsSummaryQueryError ? (
         <ContentError />
       ) : (
-        <>
+        <React.Fragment>
           <DonorSummaryTableLegend
             css={css`
               opacity: ${isTableLoading ? 0.5 : 1};
@@ -808,7 +808,7 @@ const DonorSummaryTable = ({
             // filter panel style workarounds
             className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
           />
-        </>
+        </React.Fragment>
       )}
     </div>
   );

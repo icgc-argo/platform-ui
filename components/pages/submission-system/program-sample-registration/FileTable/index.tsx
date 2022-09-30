@@ -21,7 +21,7 @@ import { css, Icon, Table, useTheme } from '@icgc-argo/uikit';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
-import React from 'react';
+import * as React from 'react';
 import {
   CellContentCenter,
   DataTableStarIcon,

@@ -83,7 +83,7 @@ export default function ProgramDashboard() {
           `}
         >
           <TitleBar>
-            <>{programShortName}</>
+            <React.Fragment>{programShortName}</React.Fragment>
             <Row nogutter align="center">
               <div
                 css={css`

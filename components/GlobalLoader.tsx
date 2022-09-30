@@ -18,7 +18,7 @@
  */
 
 import { css, DnaLoader, Modal } from '@icgc-argo/uikit';
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { FadingDiv } from './Fader';

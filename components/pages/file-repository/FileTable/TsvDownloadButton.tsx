@@ -23,7 +23,7 @@ import { getConfig } from 'global/config';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
-import { useState } from 'react';
+import * as React from 'react';
 import urlJoin from 'url-join';
 import {
   instructionBoxButtonContentStyle,
@@ -56,7 +56,7 @@ const TsvDownloadButton = ({
   const { GATEWAY_API_ROOT } = getConfig();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
       ? [

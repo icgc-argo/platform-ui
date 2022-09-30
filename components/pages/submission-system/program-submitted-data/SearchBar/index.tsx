@@ -29,7 +29,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import React, { useState } from 'react';
+import * as React from 'react';
 import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,
@@ -91,8 +91,8 @@ export default function SearchBar({
   donorSearchResults: ClinicalEntitySearchResultResponse;
 }) {
   const theme = useTheme();
-  const [displayText, setDisplayText] = useState('- Select an option -');
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [displayText, setDisplayText] = React.useState('- Select an option -');
+  const [searchOpen, setSearchOpen] = React.useState(false);
   const setSearchValue = (value) => {
     setKeyword(value);
     setSearchOpen(false);
@@ -182,7 +182,7 @@ export default function SearchBar({
             getOverrideCss={() => searchInputFieldStyle}
           />
           {keyword && keyword.length >= 1 && searchOpen ? (
-            <>
+            <React.Fragment>
               <div
                 css={css`
                   background: transparent;
@@ -201,7 +201,7 @@ export default function SearchBar({
                 isLoading={loading}
                 onSelect={setSearchValue}
               />
-            </>
+            </React.Fragment>
           ) : null}
           <Button css={searchFilterButtonStyle} variant="secondary">
             <span css={searchFilterContainerStyle}>

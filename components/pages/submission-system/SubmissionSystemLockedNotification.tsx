@@ -18,7 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import React from 'react';
+import * as React from 'react';
 import { css } from '@emotion/core';
 import { Notification } from '@icgc-argo/uikit';
 import CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY from './gql/CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY';

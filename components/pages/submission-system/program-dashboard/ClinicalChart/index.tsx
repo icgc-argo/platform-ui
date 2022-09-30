@@ -24,7 +24,7 @@ import { ContentError, ContentLoader } from 'components/placeholders';
 import { format as formatDate, subDays } from 'date-fns';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { find } from 'lodash';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import {
   DashboardCard,
   DashboardSummaryData,
@@ -89,12 +89,12 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
 
 const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: string }) => {
   // handle date range selection
-  const [dateRangeFrom, setDateRangeFrom] = useState<string | null>(null);
-  const [dateRangeTo, setDateRangeTo] = useState<string | null>(null);
-  const [activeRangeBtn, setActiveRangeBtn] = useState<RangeButtons>('All');
+  const [dateRangeFrom, setDateRangeFrom] = React.useState<string | null>(null);
+  const [dateRangeTo, setDateRangeTo] = React.useState<string | null>(null);
+  const [activeRangeBtn, setActiveRangeBtn] = React.useState<RangeButtons>('All');
   const theme = useTheme();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
     const today = new Date();
     const dateRangeStart =
@@ -136,17 +136,17 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
   );
 
   // make the chart responsive
-  const lineChartRef = useRef<HTMLDivElement>(null);
+  const lineChartRef = React.useRef<HTMLDivElement>(null);
   const { resizing, width: responsiveWidth } = useElementDimension(lineChartRef);
-  const [initialWidth, setInitialWidth] = useState<number | null>(null);
-  useLayoutEffect(() => {
+  const [initialWidth, setInitialWidth] = React.useState<number | null>(null);
+  React.useLayoutEffect(() => {
     if (lineChartRef.current) {
       setInitialWidth(lineChartRef.current.getBoundingClientRect().width);
     }
   });
 
   // handle the legend
-  const [activeLines, setActiveLines] = useState(donorFieldsByChartType);
+  const [activeLines, setActiveLines] = React.useState(donorFieldsByChartType);
   const handleLegendInput = (line: string) => {
     const nextLines = activeLines.includes(line)
       ? activeLines.filter((activeLine) => activeLine !== line)
@@ -190,7 +190,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
         ) : isLoading ? (
           <ContentLoader />
         ) : (
-          <>
+          <React.Fragment>
             <RangeControlBar
               activeBtn={activeRangeBtn}
               handleBtnClick={setActiveRangeBtn}
@@ -222,7 +222,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
                 yAxisTitle="donors"
               />
             </div>
-          </>
+          </React.Fragment>
         )}
       </div>
     </DashboardCard>

@@ -25,7 +25,7 @@ import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
 import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
 

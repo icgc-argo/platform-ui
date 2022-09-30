@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 
 import { createPage } from 'global/utils/pages';
