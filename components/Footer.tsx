@@ -27,7 +27,6 @@ import {
 } from 'global/constants/argoPages';
 import { STATUS_PATH } from 'global/constants/gatewayApiPaths';
 import * as internalPaths from 'global/constants/pages';
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as React from 'react';
 import urlJoin from 'url-join';
 
@@ -60,7 +59,7 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
       links={[
         {
           displayName: 'Contact',
-          href: CONTACT_PAGE_PATH,
+          href: internalPaths.CONTACT_PAGE_PATH,
           target: '_self',
         },
         {
