@@ -17,11 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Link, Typography } from '@icgc-argo/uikit';
 import ErrorLayout from 'components/pages/error';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
 import clientErrorImage from 'images/client-error.svg';
 import Image from 'next/image';
 

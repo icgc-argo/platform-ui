@@ -17,17 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { css, Link, Typography } from '@icgc-argo/uikit';
 import ErrorLayout from 'components/pages/error';
-import { Typography } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import NextLink from 'next/link';
-import { Row, Col } from 'react-grid-system';
 import dnaBrokenImage from 'images/dna-broken.svg';
 import logoMarkImage from 'images/logomark.svg';
 import Image from 'next/image';
+import NextLink from 'next/link';
+import { Col, Row } from 'react-grid-system';
 
 export default function Error404Page() {
   const { DOCS_URL_ROOT } = getConfig();

@@ -17,12 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { css, Typography } from '@icgc-argo/uikit';
 import ErrorLayout from 'components/pages/error';
-import { Typography } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
 import Image from 'next/image';
+import { Col, Row } from 'react-grid-system';
 
 import maintenanceImage from 'images/group-33.svg';
 

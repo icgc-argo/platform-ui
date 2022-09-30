@@ -17,10 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Modal } from '@icgc-argo/uikit';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { css } from '@icgc-argo/uikit';
-import { Modal } from '@icgc-argo/uikit';
 
 export const fillAvailableWidth = css`
   width: -webkit-fill-available;
