@@ -18,69 +18,69 @@
  */
 
 const mockData = [
-  {
-    title: 'coreCompletionDate',
-    buckets: [
-      {
-        date: '2020-11-11T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-13T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-14T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-16T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-17T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-19T21:25:17.000Z',
-        donors: 299,
-      },
-      {
-        date: '2020-11-20T21:25:17.000Z',
-        donors: 299,
-      },
-    ],
-  },
+  // {
+  //   title: 'coreCompletionDate',
+  //   buckets: [
+  //     {
+  //       date: '2020-11-11T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-13T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-14T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-16T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-17T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-19T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //     {
+  //       date: '2020-11-20T21:25:17.000Z',
+  //       donors: 299,
+  //     },
+  //   ],
+  // },
   {
     title: 'rawReadsFirstPublishedDate',
     buckets: [
       {
         date: '2020-11-11T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-13T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-14T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-16T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-17T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-19T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
       {
         date: '2020-11-20T21:25:17.000Z',
-        donors: 0,
+        donors: 100,
       },
     ],
   },
@@ -89,31 +89,31 @@ const mockData = [
     buckets: [
       {
         date: '2020-11-11T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-13T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-14T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-16T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-17T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-19T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
       {
         date: '2020-11-20T21:25:17.000Z',
-        donors: 0,
+        donors: 150,
       },
     ],
   },
@@ -213,6 +213,72 @@ const mockData = [
       {
         date: '2020-11-20T21:25:17.000Z',
         donors: 1,
+      },
+    ],
+  },
+  {
+    title: 'rnaRawReadsFirstPublishedDate',
+    buckets: [
+      {
+        date: '2020-11-11T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-13T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-14T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-16T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-17T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-19T21:25:17.000Z',
+        donors: 75,
+      },
+      {
+        date: '2020-11-20T21:25:17.000Z',
+        donors: 75,
+      },
+    ],
+  },
+  {
+    title: 'rnaAlignmentFirstPublishedDate',
+    buckets: [
+      {
+        date: '2020-11-11T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-13T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-14T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-16T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-17T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-19T21:25:17.000Z',
+        donors: 200,
+      },
+      {
+        date: '2020-11-20T21:25:17.000Z',
+        donors: 200,
       },
     ],
   },

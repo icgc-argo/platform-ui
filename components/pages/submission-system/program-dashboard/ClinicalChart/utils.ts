@@ -85,24 +85,18 @@ export const makeChartLineMeta = (theme: UikitTheme) => [
     field: 'openAccessFirstPublishedDate',
     title: 'Open Access VF',
   },
-  // RNA
-  // not used right now
-  // {
-  //   chartType: 'molecular',
-  //   color: theme.colors.accent3_dark,
-  //   dataType: 'RNA',
-  //   title: 'RNA Raw Reads',
-  // },
-  // {
-  //   chartType: 'molecular',
-  //   color: theme.colors.secondary_dark,
-  //   dataType: 'RNA',
-  //   title: 'RNA-Seq1',
-  // },
-  // {
-  //   chartType: 'molecular',
-  //   color: theme.colors.accent2_dark,
-  //   dataType: 'RNA',
-  //   title: 'RNA-Seq2',
-  // },
+  {
+    chartType: 'molecular',
+    color: theme.colors.accent2_1,
+    dataType: 'RNA',
+    field: 'rnaRawReadsFirstPublishedDate',
+    title: 'RNA Raw Reads',
+  },
+  {
+    chartType: 'molecular',
+    color: theme.colors.secondary_dark,
+    dataType: 'RNA',
+    field: 'rnaAlignmentFirstPublishedDate',
+    title: 'Alignment',
+  },
 ];

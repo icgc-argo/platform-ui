@@ -116,17 +116,19 @@ const SearchResultsMenu = ({
               >
                 <>
                   <span style={{ fontWeight: 700 }}>{resultId} </span>
-                  {`(${secondaryText})`}
+                  {secondaryText && `(${secondaryText})`}
                 </>
               </ListItem>
-              <ListItem
-                css={css`
-                  font-size: 9px;
-                  font-weight: 300;
-                `}
-              >
-                {subText}
-              </ListItem>
+              {subText && (
+                <ListItem
+                  css={css`
+                    font-size: 9px;
+                    font-weight: 300;
+                  `}
+                >
+                  {subText}
+                </ListItem>
+              )}
             </div>
           ))}
         </ResultsDropdown>

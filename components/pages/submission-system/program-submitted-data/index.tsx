@@ -35,15 +35,16 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import SubmissionLayout from '../layout';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import {
   aliasedEntityNames,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
+  ClinicalEntitySearchResultResponse,
   CompletionStates,
   defaultClinicalEntityFilters,
   emptyResponse,
@@ -52,6 +53,7 @@ import {
 } from './common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -60,6 +62,8 @@ const defaultClinicalEntityTab = 'donor';
 export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
+  const [keyword, setKeyword] = useState('');
+  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -70,8 +74,10 @@ export default function ProgramSubmittedData() {
       deSerialize: (v) => v,
     },
   );
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
-  const { data: sideMenuQuery, loading } =
+  // Side Menu Query
+  const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
@@ -82,11 +88,11 @@ export default function ProgramSubmittedData() {
     });
 
   React.useEffect(() => {
-    setGlobalLoading(loading);
-  }, [loading]);
+    setGlobalLoading(sideMenuLoading);
+  }, [sideMenuLoading]);
 
   const { clinicalData: sideMenuData } =
-    sideMenuQuery == undefined || loading ? emptyResponse : sideMenuQuery;
+    sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
   const noData = sideMenuData.clinicalEntities.length === 0;
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
@@ -104,8 +110,32 @@ export default function ProgramSubmittedData() {
     </VerticalTabs.Item>
   ));
 
-  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
-  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  // Matches Digits preceded by DO or by Comma
+  const searchDonorIds =
+    keyword
+      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
+  const searchSubmitterIds = [keyword].filter((word) => !!word);
+  const useDefaultQuery =
+    searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
+
+  // Search Result Query
+  const { data: searchResultData, loading: searchResultsLoading } =
+    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds: searchDonorIds,
+          submitterDonorIds: searchSubmitterIds,
+          entityTypes: ['donor'],
+        },
+      },
+    });
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -146,8 +176,16 @@ export default function ProgramSubmittedData() {
         </div>
       }
     >
-      <SearchBar onChange={setCompletionState} completionState={completionState} noData={noData} />
-      {loading ? (
+      <SearchBar
+        completionState={completionState}
+        keyword={keyword}
+        loading={searchResultsLoading}
+        noData={noData}
+        onChange={setCompletionState}
+        donorSearchResults={searchResultData}
+        setKeyword={setKeyword}
+      />
+      {searchResultsLoading ? (
         <DnaLoader />
       ) : (
         <Container>
@@ -224,6 +262,8 @@ export default function ProgramSubmittedData() {
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
+                  donorSearchResults={searchResultData}
+                  useDefaultQuery={useDefaultQuery}
                 />
               </div>
             </div>
