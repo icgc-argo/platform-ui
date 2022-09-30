@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import * as React from 'react';
 import { css, Icon, styled, Typography, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { SearchMenuDataNode } from './types';
 
