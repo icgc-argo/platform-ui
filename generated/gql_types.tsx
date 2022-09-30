@@ -223,6 +223,7 @@ export type ClinicalSearchData = {
   __typename?: 'ClinicalSearchData';
   programShortName: Scalars['String'];
   searchResults: Array<Maybe<ClinicalSearchResults>>;
+  totalResults: Scalars['Int'];
 };
 
 /** Clinical Data DonorId Search Result Record */
