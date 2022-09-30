@@ -17,19 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { displayDateAndTime } from 'global/utils/common';
-import urlJoin from 'url-join';
-import { css, styled } from '@icgc-argo/uikit';
-import { Icon, Outline } from '@icgc-argo/uikit';
-import { ThemeColorNames } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Pipe } from '@icgc-argo/uikit';
-import { formatFileName } from './program-sample-registration/util';
-import { Row, Col } from 'react-grid-system';
-import { useTheme } from '@icgc-argo/uikit';
-import { HtmlHTMLAttributes } from 'react';
+import {
+  css,
+  Icon,
+  Outline,
+  Pipe,
+  styled,
+  ThemeColorNames,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';
+import { displayDateAndTime } from 'global/utils/common';
+import { HtmlHTMLAttributes } from 'react';
+import { Col, Row } from 'react-grid-system';
+import urlJoin from 'url-join';
+import { formatFileName } from './program-sample-registration/util';
 
 export const containerStyle = css`
   padding: 8px;

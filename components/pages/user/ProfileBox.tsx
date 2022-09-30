@@ -17,14 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import DefaultLayout from '../DefaultLayout';
-import { ContentBox } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
-import { css } from '@icgc-argo/uikit';
+import { css, Typography, useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useTheme } from '@icgc-argo/uikit';
+import { Col, Row } from 'react-grid-system';
 import { Box } from './common';
 
 const UserInitialImage = ({ contentText = '' }) => {

@@ -17,11 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { css } from '@emotion/core';
-import { Link } from '@icgc-argo/uikit';
-import { Notification } from '@icgc-argo/uikit';
-import { getConfig } from 'global/config';
+import { Link, Notification } from '@icgc-argo/uikit';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import pluralize from 'pluralize';

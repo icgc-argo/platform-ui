@@ -17,16 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { css } from '@emotion/core';
-import { Typography } from '@icgc-argo/uikit';
-import { ContentPlaceholder } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import Image from 'next/image';
-import { DashboardCard } from 'components/pages/submission-system/program-dashboard/common';
-import { getConfig } from 'global/config';
+import { ContentPlaceholder, Link, Typography } from '@icgc-argo/uikit';
 import ClinicalChart from 'components/pages/submission-system/program-dashboard/ClinicalChart';
 import { ChartType } from 'components/pages/submission-system/program-dashboard/ClinicalChart/types';
+import { DashboardCard } from 'components/pages/submission-system/program-dashboard/common';
+import { getConfig } from 'global/config';
+import Image from 'next/image';
 
 import clipboardIcon from 'images/clipboard.svg';
 

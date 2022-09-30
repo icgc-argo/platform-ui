@@ -18,7 +18,6 @@
  */
 
 import css from '@emotion/css';
-import { styled } from '@icgc-argo/uikit';
 import {
   FormControl,
   FormHelperText,
@@ -26,6 +25,7 @@ import {
   Input,
   InputLabel,
   Select,
+  styled,
   UikitTheme,
 } from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';

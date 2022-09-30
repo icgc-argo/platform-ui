@@ -16,62 +16,68 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import React, { useEffect, useState } from 'react';
-import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import { css, styled, UikitTheme } from '@icgc-argo/uikit';
-import { Facet } from '@icgc-argo/uikit';
-import { MenuItem, SubMenu } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import { Tooltip } from '@icgc-argo/uikit';
-import { Collapsible } from '@icgc-argo/uikit';
-import { NumberRangeFacet } from '@icgc-argo/uikit';
-import { useClickAway } from '@icgc-argo/uikit';
-import { Tabs, Tab } from '@icgc-argo/uikit';
-import useFiltersContext from '../hooks/useFiltersContext';
+import { QueryHookOptions, useQuery } from '@apollo/client';
 import {
-  removeFilter,
-  inCurrentFilters,
-  toggleFilter,
-  replaceFilter,
+  Collapsible,
+  Container,
+  css,
+  Facet,
+  Icon,
+  Input,
+  MenuItem,
+  NumberRangeFacet,
+  styled,
+  SubMenu,
+  Tab,
+  Tabs,
+  Tooltip,
+  UikitTheme,
+  useClickAway,
+  useTheme,
+} from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
+import { trim } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import SqonBuilder from 'sqon-builder';
+import useDebounce from '../hooks/useDebounce';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { FileCentricDocumentField } from '../types';
+import {
   currentFieldValue,
-  toDisplayValue,
   getDisplayName,
   getTooltipContent,
+  inCurrentFilters,
+  removeFilter,
+  replaceFilter,
+  toDisplayValue,
+  toggleFilter,
 } from '../utils';
-import SqonBuilder from 'sqon-builder';
 import {
-  FileRepoFiltersType,
-  ScalarFieldKeys,
   ArrayFieldKeys,
   CombinationKeys,
+  FileRepoFiltersType,
+  ScalarFieldKeys,
 } from '../utils/types';
-import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_FACETS_QUERY from './gql/FILE_REPOSITORY_FACETS_QUERY';
+import SEARCH_BY_DONOR_QUERY from './gql/SEARCH_BY_DONOR_QUERY';
+import SEARCH_BY_FILE_QUERY from './gql/SEARCH_BY_FILE_QUERY';
+import SearchResultsMenu from './SearchResultsMenu';
+import SelectedIds from './SelectedIds';
+import TooltipFacet from './TooltipFacet';
 import {
+  DonorIdSearchQueryData,
   FacetDetails,
   FileFacetPath,
+  FileIdSearchQueryData,
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
   IdSearchQueryVariables,
-  FileIdSearchQueryData,
-  DonorIdSearchQueryData,
   SearchMenuDataNode,
 } from './types';
-import { Container } from '@icgc-argo/uikit';
-import SEARCH_BY_FILE_QUERY from './gql/SEARCH_BY_FILE_QUERY';
-import SEARCH_BY_DONOR_QUERY from './gql/SEARCH_BY_DONOR_QUERY';
-import { trim } from 'lodash';
-import SearchResultsMenu from './SearchResultsMenu';
-import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import { FileCentricDocumentField } from '../types';
-import SelectedIds from './SelectedIds';
-import useDebounce from '../hooks/useDebounce';
-import TooltipFacet from './TooltipFacet';
-import { getConfig } from 'global/config';
-import useAuthContext from 'global/hooks/useAuthContext';
 
 const FacetRow = styled('div')`
   display: flex;

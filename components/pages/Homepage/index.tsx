@@ -17,17 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, styled, UikitTheme } from '@icgc-argo/uikit';
+import {
+  Button,
+  css,
+  Icon,
+  Link,
+  styled,
+  Typography,
+  UikitTheme,
+  useTheme,
+} from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Hidden, Row, Visible } from 'react-grid-system';
 
-import { Typography, useTheme } from '@icgc-argo/uikit';
 import DefaultLayout from '../DefaultLayout';
 
-import { Link } from '@icgc-argo/uikit';
 import NextLink from 'next/link';
 
-import { Icon } from '@icgc-argo/uikit';
 import Head from 'components/pages/head';
 import { getConfig } from 'global/config';
 import {

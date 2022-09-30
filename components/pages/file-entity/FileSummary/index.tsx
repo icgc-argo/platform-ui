@@ -17,23 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { FileCard, TableDiv, getAccessIcon } from '../common';
+import * as React from 'react';
 import { css } from '@emotion/core';
-import { SimpleTable } from '@icgc-argo/uikit';
 import get from 'lodash/get';
+import { FileCard, getAccessIcon, TableDiv } from '../common';
 
-import { FileSummaryInfo } from '../types';
 import fileSize from 'filesize';
 import { startCase } from 'lodash';
+import { FileSummaryInfo } from '../types';
 
 import { useQuery } from '@apollo/client';
-import PROGRAM_NAME_QUERY from './gql/PROGRAM_NAME_QUERY';
-import sqonBuilder from 'sqon-builder';
-import urlJoin from 'url-join';
+import { Link, SimpleTable } from '@icgc-argo/uikit';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import NextLink from 'next/link';
-import { Link } from '@icgc-argo/uikit';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import PROGRAM_NAME_QUERY from './gql/PROGRAM_NAME_QUERY';
 
 const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
   const { loading, data: { program = undefined } = {} } = useQuery<{

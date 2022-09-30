@@ -17,13 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ContentBox, css, Icon, Tag, Typography, UikitIconNames } from '@icgc-argo/uikit';
 import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { UikitIconNames } from '@icgc-argo/uikit';
-import { Tag } from '@icgc-argo/uikit';
 
 export const Box = ({
   children,

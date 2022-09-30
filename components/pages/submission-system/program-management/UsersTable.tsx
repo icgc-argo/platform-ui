@@ -17,13 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, InteractiveIcon, MailTo, Table, TableColumnConfig } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { MailTo } from '@icgc-argo/uikit';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
-import { InteractiveIcon } from '@icgc-argo/uikit';
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 

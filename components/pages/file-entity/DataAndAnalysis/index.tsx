@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileCard, TableDiv } from '../common';
-import { SimpleTable } from '@icgc-argo/uikit';
-import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
-import { Link } from '@icgc-argo/uikit';
-import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
-import { useTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
+import { Link, SimpleTable, useTheme } from '@icgc-argo/uikit';
+import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
+import { FileCard, TableDiv } from '../common';
+import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
 
 function getWorkflowTypeDisplay(workflowType: DataAnalysisWorkflowType): string {
   return workflowType ? [workflowType.workflow_name, workflowType.workflow_version].join(', ') : '';

@@ -17,15 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileCard, getAccessIcon, DownloadIcon } from '../common';
 import { css } from '@emotion/core';
-import { Button } from '@icgc-argo/uikit';
-import { FileRecord } from '../types';
+import { Button, Link, Table, TableColumnConfig, Typography } from '@icgc-argo/uikit';
 import fileSize from 'filesize';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import React from 'react';
-import { Typography } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
+import { DownloadIcon, FileCard, getAccessIcon } from '../common';
+import { FileRecord } from '../types';
 
 const DownstreamAnalysis = ({ data }: { data: Array<FileRecord> }) => {
   const containerRef = React.createRef<HTMLDivElement>();

@@ -17,21 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useState } from 'react';
 import { css } from '@emotion/core';
-import { useTheme } from '@icgc-argo/uikit';
-import { Tag } from '@icgc-argo/uikit';
-import { TitleBar } from '@icgc-argo/uikit';
-import { Tooltip } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Legend } from '@icgc-argo/uikit';
-import { DownloadIcon } from './common';
-import urlJoin from 'url-join';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import { Button, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { FileCentricDocumentField } from '../file-repository/types';
-import sqonBuilder from 'sqon-builder';
+import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { useState } from 'react';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FileCentricDocumentField } from '../file-repository/types';
+import { DownloadIcon } from './common';
 
 const FileDownloadTooltip = ({
   isDownloadEnabled,

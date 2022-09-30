@@ -18,12 +18,21 @@
  */
 
 import { useMutation } from '@apollo/client';
-import { Button, css, Icon, InstructionBox, Link, Typography } from '@icgc-argo/uikit';
+import {
+  Button,
+  css,
+  Icon,
+  InstructionBox,
+  Link,
+  Typography,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
+  FileSelectButton,
+} from '@icgc-argo/uikit';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 import * as React from 'react';
 import RegisterSamplesModal from './RegisterSamplesModal';
 
-import { BUTTON_SIZES, BUTTON_VARIANTS, FileSelectButton } from '@icgc-argo/uikit';
 import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';

@@ -17,23 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, PageBody, ContentHeader, PageContent, ContentBody } from '@icgc-argo/uikit';
-import Head from '../head';
-import NavBar from '../../NavBar';
-import clsx from 'clsx';
-import { FileTitleBar } from './FileTitleBar';
-import FileCardsLayout from './FileCardsLayout';
-import useEntityData from './useEntityData';
-import Footer from '../../Footer';
-import React from 'react';
-import { DnaLoader } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
+import * as React from 'react';
 import { useQuery } from '@apollo/client';
-import { get } from 'lodash';
-import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
-import { FileAccessState } from './types';
-import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
+import {
+  ContentBody,
+  ContentHeader,
+  DnaLoader,
+  PageBody,
+  PageContainer,
+  PageContent,
+} from '@icgc-argo/uikit';
+import clsx from 'clsx';
 import { getConfig } from 'global/config';
+import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { get } from 'lodash';
+import Footer from '../../Footer';
+import NavBar from '../../NavBar';
+import Head from '../head';
+import { EmbargoStageDisplayNames } from './../file-repository/utils/constants';
+import FileCardsLayout from './FileCardsLayout';
+import { FileTitleBar } from './FileTitleBar';
+import { FileAccessState } from './types';
+import useEntityData from './useEntityData';
 
 const FileEntity = ({ fileId }) => {
   const {

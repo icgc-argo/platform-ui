@@ -17,32 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
 import css from '@emotion/css';
+import {
+  Button,
+  FormCheckbox,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  MultiSelect,
+  Option,
+  RadioCheckboxGroup,
+  Select,
+  Textarea,
+  Typography,
+} from '@icgc-argo/uikit';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import useFormHook from 'global/hooks/useFormHook';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import isMatch from 'lodash/isMatch';
 import * as React from 'react';
-import { useQuery } from '@apollo/client';
 import { Col, Row } from 'react-grid-system';
-import { Button } from '@icgc-argo/uikit';
-import { FormCheckbox } from '@icgc-argo/uikit';
-import { FormControl } from '@icgc-argo/uikit';
-import { FormHelperText } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { InputLabel } from '@icgc-argo/uikit';
-import { MultiSelect, Option } from '@icgc-argo/uikit';
-import { RadioCheckboxGroup } from '@icgc-argo/uikit';
-import { Select } from '@icgc-argo/uikit';
-import { Textarea } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import useFormHook from 'global/hooks/useFormHook';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
+import { xor } from 'lodash';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
-import difference from 'lodash/difference';
-import { isEqual, xor } from 'lodash';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts

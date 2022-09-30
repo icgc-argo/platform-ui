@@ -17,23 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Icon, Table, useTheme } from '@icgc-argo/uikit';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
 import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { Affix } from '@icgc-argo/uikit';
-import clsx from 'clsx';
-import { Icon } from '@icgc-argo/uikit';
-import { Table } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
 import {
+  CellContentCenter,
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
-  CellContentCenter,
 } from '../../common';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',

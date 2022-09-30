@@ -18,29 +18,28 @@
  */
 
 import { useMutation, useQuery } from '@apollo/client';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { Banner, BANNER_VARIANTS, css, TOAST_VARIANTS, Typography } from '@icgc-argo/uikit';
+import GoogleLoginButton from 'components/GoogleLoginButton';
+import { getConfig } from 'global/config';
+import {
+  INVITE_ID,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_JOIN_DETAILS_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { createRedirectURL } from 'global/utils/common';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import { getConfig } from 'global/config';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { Banner, BANNER_VARIANTS } from '@icgc-argo/uikit';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
+import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';
 import JoinProgramForm from './joinProgramForm';
 import JoinProgramLayout from './JoinProgramLayout';
-import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';
-import { GoogleLogin } from '@icgc-argo/uikit';
-import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
-import { createRedirectURL } from 'global/utils/common';
-import queryString from 'query-string';
-import GoogleLoginButton from 'components/GoogleLoginButton';
 
 export const JUST_JOINED_PROGRAM_STORAGE_KEY = 'justJoinedProgram';
 

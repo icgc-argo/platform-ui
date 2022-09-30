@@ -17,18 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {
+  Button,
+  css,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  INPUT_SIZES,
+  MultiSelect,
+  Option,
+  Typography,
+} from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
 import React from 'react';
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import { css } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { INPUT_SIZES } from '@icgc-argo/uikit';
-import { FormControl } from '@icgc-argo/uikit';
-import { FormHelperText } from '@icgc-argo/uikit';
-import { InputLabel } from '@icgc-argo/uikit';
-import { MultiSelect, Option } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
 import schema from './validation';
 
 const initialFields = schema.cast({});

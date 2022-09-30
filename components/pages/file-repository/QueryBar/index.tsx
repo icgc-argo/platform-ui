@@ -17,16 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled, UikitTheme } from '@icgc-argo/uikit';
-import dynamic from 'next/dynamic';
-import useFiltersContext from '../hooks/useFiltersContext';
-import { FileRepoFiltersType } from '../utils/types';
-import { Button } from '@icgc-argo/uikit';
+import { Button, css, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
-import { toDisplayValue } from '../utils';
-import { Typography } from '@icgc-argo/uikit';
+import dynamic from 'next/dynamic';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';
+import { toDisplayValue } from '../utils';
+import { FileRepoFiltersType } from '../utils/types';
 
 type ValueNode = React.FunctionComponent<{
   onClick?: () => void;

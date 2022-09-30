@@ -17,17 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import DefaultLayout from './DefaultLayout';
-import { Typography } from '@icgc-argo/uikit';
-import { TitleBorder } from '@icgc-argo/uikit';
-import { ThemeColorNames } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
+import { css, ThemeColorNames, TitleBorder, Typography, useTheme } from '@icgc-argo/uikit';
+import Head from 'components/pages/head';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
-import { useTheme } from '@icgc-argo/uikit';
-import Head from 'components/pages/head';
+import { Col, Row } from 'react-grid-system';
+import DefaultLayout from './DefaultLayout';
 
 type Member = { name: string; title?: string };
 type Team = { title: string; members: Array<Member>; color: keyof ThemeColorNames };

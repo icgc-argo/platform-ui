@@ -17,18 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import FileTable from './FileTable';
-import { PageContainer } from '@icgc-argo/uikit';
+import { ContentBody, PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
+import { Col, Row, setConfiguration } from 'react-grid-system';
 import Footer from '../../Footer';
 import Head from '../head';
-import { PageContent, PageBody, ContentBody } from '@icgc-argo/uikit';
-import { Row, Col, setConfiguration } from 'react-grid-system';
-import { styled } from '@icgc-argo/uikit';
-import FacetPanel from './FacetPanel';
 import DataTypesChart from './charts/DataTypesChart';
 import ProgramBarChart from './charts/ProgramBarChart';
+import FacetPanel from './FacetPanel';
+import FileTable from './FileTable';
 import StatsCard from './StatsCard';
 
 import { FiltersProvider } from './hooks/useFiltersContext';

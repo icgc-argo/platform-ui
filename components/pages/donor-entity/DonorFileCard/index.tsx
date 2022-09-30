@@ -17,15 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Container } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
-import { Table } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
+import { Button, Container, css, Icon, Link, Table, Typography, useTheme } from '@icgc-argo/uikit';
+import { Col, Row } from 'react-grid-system';
 
 const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,

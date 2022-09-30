@@ -17,31 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import useAuthContext from 'global/hooks/useAuthContext';
-import isEmpty from 'lodash/isEmpty';
-import pluralize from 'pluralize';
-import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit';
-import { Tabs, Tab } from '@icgc-argo/uikit';
-import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import ProgramForm from '../program-form/ProgramForm';
+import { useMutation, useQuery } from '@apollo/client';
 import ModalPortal from 'components/Modal';
+import AddUserModal from 'components/pages/submission-system/modals/addUser';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
-import Users from './Users';
-import Profile from './Profile';
-import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
-import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
+import isEmpty from 'lodash/isEmpty';
+import { useRouter } from 'next/router';
+import pluralize from 'pluralize';
+import React from 'react';
 import { UserModel as ModalUserModel } from '../modals/common';
+import ProgramForm from '../program-form/ProgramForm';
+import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
+import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
+import Profile from './Profile';
+import Users from './Users';
 
-import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit';
-import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
+import {
+  Button,
+  ContentBox,
+  css,
+  Tab,
+  Tabs,
+  TOAST_INTERACTION,
+  TOAST_VARIANTS,
+} from '@icgc-argo/uikit';
 import useCommonToasters from 'components/useCommonToasters';
+import { useToaster } from 'global/hooks/toaster';
 import useUrlParamState from 'global/hooks/useUrlParamState';
+import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
 
 const createUserInput = ({
   data,

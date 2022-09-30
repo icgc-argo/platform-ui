@@ -17,12 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css, styled, UikitTheme } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
+import { css, Icon, styled, Typography, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { SearchMenuDataNode } from './types';
-import { useTheme } from '@icgc-argo/uikit';
 
 const ResultsDropdown = styled('div')`
   position: absolute;

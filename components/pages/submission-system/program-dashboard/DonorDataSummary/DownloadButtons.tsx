@@ -17,20 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Row, Col } from 'react-grid-system';
-import urlJoin from 'url-join';
 import { css } from '@emotion/core';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
+import { Button, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { format as formatDate } from 'date-fns';
+import { saveAs } from 'file-saver';
+import { getConfig } from 'global/config';
+import { EGO_JWT_KEY } from 'global/constants';
+import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { saveAs } from 'file-saver';
 import React from 'react';
-import { format as formatDate } from 'date-fns';
-import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit';
-import { getConfig } from 'global/config';
+import { Col, Row } from 'react-grid-system';
+import urlJoin from 'url-join';
 
 const DownloadButton = ({
   text,

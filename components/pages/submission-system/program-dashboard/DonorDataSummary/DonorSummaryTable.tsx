@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import {
   DonorDataReleaseState,
   DonorSummaryEntrySort,
@@ -34,13 +33,16 @@ import {
   FilterOption,
   Icon,
   ListFilter,
+  styled,
+  Table,
+  TableColumnConfig,
   TextInputFilter,
+  useTheme,
 } from '@icgc-argo/uikit';
 import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
 import { css } from '@emotion/core';
-import { styled, useTheme } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';

@@ -17,23 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
+import { useQuery } from '@apollo/client';
+import { Container, css, Link, SimpleTable, Typography } from '@icgc-argo/uikit';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import NextLink from 'next/link';
+import { Col, Row } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { useQuery } from '@apollo/client';
-import { Container } from '@icgc-argo/uikit';
-import { SimpleTable } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import NextLink from 'next/link';
+import PROGRAMS_LIST_QUERY from '../../submission-system/programs/gql/PROGRAMS_LIST_QUERY';
 import {
+  formatTableDisplayNames,
   removeAliasedKeys,
   splitIntoColumns,
-  formatTableDisplayNames,
 } from '../ClinicalTimeline/util';
-import PROGRAMS_LIST_QUERY from '../../submission-system/programs/gql/PROGRAMS_LIST_QUERY';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const DonorDataTable = ({ data }) => {
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);

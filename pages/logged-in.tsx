@@ -17,17 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { EGO_JWT_KEY } from 'global/constants';
+import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { DnaLoader } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit';
-import urlJoin from 'url-join';
-import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
+import React from 'react';
+import urlJoin from 'url-join';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();

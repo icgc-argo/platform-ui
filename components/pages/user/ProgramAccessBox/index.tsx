@@ -17,29 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { Typography } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { Link } from '@icgc-argo/uikit';
-import { Box } from '../common';
-import { Table } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
-import {
-  isDccMember,
-  canWriteProgram,
-  canWriteProgramData,
-  canReadProgramData,
-  getProgramMembershipAccessLevel,
-} from 'global/utils/egoJwt';
-import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
-import NextLink from 'next/link';
+import { css, Icon, Link, Table, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import { Icon } from '@icgc-argo/uikit';
+import useAuthContext from 'global/hooks/useAuthContext';
+import {
+  canReadProgramData,
+  canWriteProgram,
+  canWriteProgramData,
+  getProgramMembershipAccessLevel,
+  isDccMember,
+} from 'global/utils/egoJwt';
 import { capitalize } from 'lodash';
+import NextLink from 'next/link';
+import * as React from 'react';
+import { Box } from '../common';
+import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
 
 type T_ProgramTableProgram = {
   shortName: string;

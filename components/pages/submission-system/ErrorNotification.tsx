@@ -17,16 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { ReactNode } from 'react';
+import {
+  Button,
+  css,
+  Icon,
+  Notification,
+  NotificationVariant,
+  NOTIFICATION_VARIANTS,
+  Table,
+  TableColumnConfig,
+} from '@icgc-argo/uikit';
 import { TableProps } from 'global/types/table';
-import { css } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Notification, NotificationVariant, NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import { exportToTsv } from 'global/utils/common';
-import { Icon } from '@icgc-argo/uikit';
-import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
+import React, { ReactNode } from 'react';
+import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';

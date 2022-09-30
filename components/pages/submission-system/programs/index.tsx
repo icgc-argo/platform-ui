@@ -17,6 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
+import {
+  Button,
+  ContentBox,
+  css,
+  Input,
+  INPUT_PRESETS,
+  INPUT_STATES,
+  TableActionBar,
+  Typography,
+} from '@icgc-argo/uikit';
 import {
   CREATE_PROGRAM_PAGE_PATH,
   PROGRAM_MANAGE_PATH,
@@ -25,25 +36,15 @@ import {
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
+import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { INPUT_PRESETS } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit';
-import { TableActionBar } from '@icgc-argo/uikit';
-import { INPUT_STATES } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
-import ProgramsTable from './ProgramsTable';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
-import { DnaLoader } from '@icgc-argo/uikit';
-import get from 'lodash/get';
+import ProgramsTable from './ProgramsTable';
 
 const TableFilterInput = (props) => (
   <Input

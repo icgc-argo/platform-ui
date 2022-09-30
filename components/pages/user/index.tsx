@@ -17,20 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import DefaultLayout from '../DefaultLayout';
-import { ContentHeader, ContentBody } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
-import { css } from '@icgc-argo/uikit';
-import ApiTokenBox from './ApiTokenBox';
-import ProgramAccessBox from './ProgramAccessBox';
-import ProfileBox from './ProfileBox';
-import PROFILE_QUERY from './gql/PROFILE_QUERY';
 import { useQuery } from '@apollo/client';
-import get from 'lodash/get';
-import { ProfileQueryData } from './types';
+import { ContentBody, ContentHeader, css, Typography } from '@icgc-argo/uikit';
 import Head from 'components/pages/head';
+import get from 'lodash/get';
+import { Col, Row } from 'react-grid-system';
+import DefaultLayout from '../DefaultLayout';
+import ApiTokenBox from './ApiTokenBox';
+import PROFILE_QUERY from './gql/PROFILE_QUERY';
+import ProfileBox from './ProfileBox';
+import ProgramAccessBox from './ProgramAccessBox';
+import { ProfileQueryData } from './types';
 
 const Column = (props) => (
   <Col

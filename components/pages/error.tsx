@@ -17,13 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
+import { Container, css, PageContainer } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
-import { MenuItem } from '@icgc-argo/uikit';
 import Footer from '../Footer';
-import { css } from '@icgc-argo/uikit';
-import { Container } from '@icgc-argo/uikit';
-import { PageContainer } from '@icgc-argo/uikit';
 
 export default function ErrorLayout({
   children,
