@@ -18,7 +18,6 @@
  */
 
 import { useQuery } from '@apollo/client';
-import styled from '@emotion/styled';
 import {
   css,
   DnaLoader,
@@ -26,6 +25,7 @@ import {
   Link,
   noDataSvg,
   NOTIFICATION_VARIANTS,
+  styled,
   Table,
   Tooltip,
   Typography,

@@ -40,9 +40,8 @@ import {
 import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
 
 import React, { createRef, useRef, useState } from 'react';
-import { useTheme } from '@icgc-argo/uikit';
+import { styled, useTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import styled from '@emotion/styled';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import {
   RELEASED_STATE_FILL_COLOURS,

@@ -19,8 +19,7 @@
 
 import { Typography } from '@icgc-argo/uikit';
 import { Link } from '@icgc-argo/uikit';
-import styled from '@emotion/styled';
-import { ContentPlaceholder } from '@icgc-argo/uikit';
+import { ContentPlaceholder, styled } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 

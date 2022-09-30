@@ -18,8 +18,7 @@
  */
 
 import { css } from '@emotion/core';
-import styled from '@emotion/styled';
-import { SimpleTable, Typography, useTheme } from '@icgc-argo/uikit';
+import { SimpleTable, styled, Typography, useTheme } from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import { FileCard, TableDiv } from '../common';

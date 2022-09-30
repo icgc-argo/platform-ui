@@ -17,43 +17,38 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
-import styled from '@emotion/styled';
+import * as React from 'react';
 
-import { SubMenu, MenuItem } from '@icgc-argo/uikit';
-import { Input } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { DnaLoader } from '@icgc-argo/uikit';
+import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 
-import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
-import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
+import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { getConfig } from 'global/config';
-import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
+import { canWriteProgram, isCollaborator, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 
 import {
-  PROGRAM_SHORT_NAME_PATH,
-  PROGRAM_MANAGE_PATH,
-  PROGRAM_DASHBOARD_PATH,
-  PROGRAM_SAMPLE_REGISTRATION_PATH,
-  PROGRAM_CLINICAL_SUBMISSION_PATH,
-  PROGRAM_CLINICAL_DATA_PATH,
-  PROGRAMS_LIST_PATH,
   DCC_DASHBOARD_PATH,
+  PROGRAMS_LIST_PATH,
+  PROGRAM_CLINICAL_DATA_PATH,
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_MANAGE_PATH,
+  PROGRAM_SAMPLE_REGISTRATION_PATH,
+  PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
   ClinicalEntityQueryResponse,
   defaultClinicalEntityFilters,
 } from './program-submitted-data/common';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 type SideMenuProgram = {

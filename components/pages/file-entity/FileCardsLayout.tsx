@@ -18,7 +18,7 @@
  */
 
 import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled';
+import { styled } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
 import FileSummary from './FileSummary';
 import DataAndAnalysis from './DataAndAnalysis';
@@ -36,9 +36,9 @@ const PaddedColumn = styled(Col)`
 
 const shouldShowSequencingReadProperties = (fileData: FileEntityData) => {
   return (
-    fileData.dataAnalysis.dataType === 'Aligned Reads'
-      && fileData.dataAnalysis.workflowType?.workflow_name === 'DNA Seq Alignment'
-      && fileData.metrics
+    fileData.dataAnalysis.dataType === 'Aligned Reads' &&
+    fileData.dataAnalysis.workflowType?.workflow_name === 'DNA Seq Alignment' &&
+    fileData.metrics
   );
 };
 

@@ -77,9 +77,6 @@ const TooltipFacet = ({
         </Tooltip>
       }
       isFacetVariant={true}
-      css={css`
-        width: 100%;
-      `}
     >
       <StyledOptionsList
         options={options}

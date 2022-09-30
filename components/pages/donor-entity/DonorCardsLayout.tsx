@@ -18,7 +18,7 @@
  */
 
 import { css } from '@emotion/core';
-import styled from '@emotion/styled';
+import { styled } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
 import ClinicalTimeline from './ClinicalTimeline';
 import DonorDataTable from './DonorDataTable';

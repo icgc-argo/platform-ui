@@ -18,8 +18,7 @@
  */
 
 import { css } from '@emotion/core';
-import styled from '@emotion/styled-base';
-import { Button, Container, Icon, PercentBar, Typography } from '@icgc-argo/uikit';
+import { Button, Container, Icon, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { Pipeline } from 'components/pages/submission-system/common';
 import { Col, Row } from 'react-grid-system';
 

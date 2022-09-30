@@ -19,8 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/core';
-import styled from '@emotion/styled-base';
-import { Container, PercentBar, Typography } from '@icgc-argo/uikit';
+import { Container, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { Col, Row } from 'react-grid-system';

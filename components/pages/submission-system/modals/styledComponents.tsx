@@ -18,7 +18,7 @@
  */
 
 import css from '@emotion/css';
-import styled from '@emotion/styled';
+import { styled } from '@icgc-argo/uikit';
 import {
   FormControl,
   FormHelperText,

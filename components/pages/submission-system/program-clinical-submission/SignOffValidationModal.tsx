@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
-import { css, Modal, ModalContainer, Typography } from '@icgc-argo/uikit';
+import { css, Modal, ModalContainer, styled, Typography } from '@icgc-argo/uikit';
 import * as React from 'react';
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import { GqlClinicalSubmissionData } from './types';
