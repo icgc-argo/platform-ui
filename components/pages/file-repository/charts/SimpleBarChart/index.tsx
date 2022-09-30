@@ -149,7 +149,7 @@ const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
 
   return (
     <ContentBox
-      style={containerStyle as any} // conflicting React versions/types
+      style={containerStyle as any}
       css={css`
         display: flex;
         flex-direction: column;
