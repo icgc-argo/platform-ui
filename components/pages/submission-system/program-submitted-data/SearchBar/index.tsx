@@ -29,8 +29,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,

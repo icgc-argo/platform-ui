@@ -17,21 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { Footer } from '@icgc-argo/uikit';
-import { css } from '@icgc-argo/uikit';
-import { APP_VERSION } from 'global/constants';
-import { useTheme } from '@icgc-argo/uikit';
+import { css, Footer, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import urlJoin from 'url-join';
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import * as internalPaths from 'global/constants/pages';
+import { APP_VERSION } from 'global/constants';
 import {
   ARGO_PRIVACY_PAGE,
-  ARGO_TERMS_PAGE,
   ARGO_PUBLICATION_PAGE,
+  ARGO_TERMS_PAGE,
 } from 'global/constants/argoPages';
 import { STATUS_PATH } from 'global/constants/gatewayApiPaths';
+import * as internalPaths from 'global/constants/pages';
+import { CONTACT_PAGE_PATH } from 'global/constants/pages';
+import * as React from 'react';
+import urlJoin from 'url-join';
 
 export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();

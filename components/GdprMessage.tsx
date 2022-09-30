@@ -17,14 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import { Icon } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
+import { Button, Icon, Link, Typography, useTheme } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
-import { Link } from '@icgc-argo/uikit';
+import React from 'react';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 const GdprMessage = () => {

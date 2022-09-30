@@ -17,12 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, DnaLoader, Modal } from '@icgc-argo/uikit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
-import { css } from '@icgc-argo/uikit';
-import { DnaLoader } from '@icgc-argo/uikit';
-import { Modal } from '@icgc-argo/uikit';
 import { FadingDiv } from './Fader';
 import { fillAvailableHeight, fillAvailableWidth } from './Modal';
 

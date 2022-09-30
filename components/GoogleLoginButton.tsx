@@ -18,7 +18,6 @@
  */
 
 import { GoogleLogin } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { removeToken } from 'global/hooks/useAuthContext';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 
