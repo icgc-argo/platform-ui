@@ -17,9 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { ContentPlaceholder } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
+import { ContentPlaceholder, Icon } from '@icgc-argo/uikit';
 
 const ContentError = ({
   title = 'Something went wrong.',

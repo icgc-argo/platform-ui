@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { useToaster } from 'global/hooks/toaster';
 
 export default function useCommonToasters() {
   const toaster = useToaster();

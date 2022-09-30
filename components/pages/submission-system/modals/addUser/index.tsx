@@ -17,16 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { styled, css, UikitTheme } from '@icgc-argo/uikit';
-import { Modal } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
-import { UserSection, UserSectionProps } from '../styledComponents';
+import { Button, css, Icon, Modal, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
-import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
+import React from 'react';
+import { UserModel, userSchema } from '../common';
+import { UserSection, UserSectionProps } from '../styledComponents';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });

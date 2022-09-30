@@ -25,13 +25,16 @@
  * - no "select all" option
  */
 
+import {
+  Icon,
+  MenuItem,
+  OptionsList,
+  OptionsListFilterOption,
+  styled,
+  Tooltip,
+  UikitTheme,
+} from '@icgc-argo/uikit';
 import React from 'react';
-import { MenuItem, UikitTheme } from '@icgc-argo/uikit';
-import { css } from '@emotion/core';
-import { OptionsList, OptionsListFilterOption } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
-import { styled } from '@icgc-argo/uikit';
-import { Tooltip } from '@icgc-argo/uikit';
 
 const TooltipFacet = ({
   subMenuName,

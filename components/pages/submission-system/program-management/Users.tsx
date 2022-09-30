@@ -17,26 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { useMutation } from '@apollo/client';
+import React from 'react';
 
+import { TableActionBar, TOAST_INTERACTION, TOAST_VARIANTS } from '@icgc-argo/uikit';
 import UsersTable from './UsersTable';
-import { TableActionBar } from '@icgc-argo/uikit';
-import { Fade } from '@icgc-argo/uikit';
-import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit';
 
-import EditUserModal from '../modals/editUser';
-import DeleteUserModal from '../modals/deleteUser';
-import ResendInviteModal from '../modals/resendInvite';
 import ModalPortal from 'components/Modal';
+import DeleteUserModal from '../modals/deleteUser';
+import EditUserModal from '../modals/editUser';
+import ResendInviteModal from '../modals/resendInvite';
 
-import { useToaster } from 'global/hooks/toaster';
-import { UserModel, RoleDisplayName } from '../modals/common';
 import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
+import { useToaster } from 'global/hooks/toaster';
+import { UserModel } from '../modals/common';
 
 import EDIT_USER_MUTATION from './gql/EDIT_USER_MUTATION';
-import REMOVE_USER_MUTATION from './gql/REMOVE_USER_MUTATION';
 import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
+import REMOVE_USER_MUTATION from './gql/REMOVE_USER_MUTATION';
 
 export const adminRestrictionText = 'A program must have at least one Program Administrator';
 

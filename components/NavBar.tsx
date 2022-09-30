@@ -18,42 +18,42 @@
  */
 
 import {
-  SUBMISSION_PATH,
-  USER_PAGE_PATH,
-  FILE_REPOSITORY_PATH,
-  LOGIN_PAGE_PATH,
-} from 'global/constants/pages';
-import useAuthContext from 'global/hooks/useAuthContext';
-import usePageContext from 'global/hooks/usePageContext';
-import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
-import { getDefaultRedirectPathForUser } from 'global/utils/pages';
-import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
-import NextLink from 'next/link';
-import Image from 'next/image';
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import {
   AppBar,
   AppBarMenuItem,
+  Button,
+  css,
   DropdownMenu,
+  Icon,
   MenuGroup,
   NavBarElement,
   NavElement,
   Section,
+  useClickAway,
   UserBadge,
 } from '@icgc-argo/uikit';
-import { Button } from '@icgc-argo/uikit';
-import { Icon } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
+import {
+  FILE_REPOSITORY_PATH,
+  LOGIN_PAGE_PATH,
+  SUBMISSION_PATH,
+  USER_PAGE_PATH,
+} from 'global/constants/pages';
+import useAuthContext from 'global/hooks/useAuthContext';
+import usePageContext from 'global/hooks/usePageContext';
 import { createRedirectURL } from 'global/utils/common';
+import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import { getDefaultRedirectPathForUser } from 'global/utils/pages';
+import ArgoLogo from 'images/argo-logo.svg';
 import { get } from 'lodash';
+import Image from 'next/image';
+import NextLink from 'next/link';
 import queryString from 'query-string';
+import * as React from 'react';
+import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ModalPortal from './Modal';
+import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
-import { useClickAway } from '@icgc-argo/uikit';
-import { useScreenClass } from 'react-grid-system';
-import ArgoLogo from 'images/argo-logo.svg';
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();

@@ -17,43 +17,43 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 import {
-  DonorSummaryRecord,
   DonorDataReleaseState,
-  MolecularProcessingStatus,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  DonorSummaryRecord,
+  MolecularProcessingStatus,
   ProgramDonorSummaryEntryField,
 } from './types';
-import { Table, TableColumnConfig } from '@icgc-argo/uikit';
 
-import { displayDate } from 'global/utils/common';
-import { Icon } from '@icgc-argo/uikit';
 import {
   DropdownPanel,
+  FilterClearButton,
   FilterOption,
+  Icon,
   ListFilter,
   TextInputFilter,
-  FilterClearButton,
 } from '@icgc-argo/uikit';
-import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
+import { displayDate } from 'global/utils/common';
+import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
-import React, { createRef, useRef, useState } from 'react';
-import { styled, useTheme } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import DonorSummaryTableLegend from './DonorSummaryTableLegend';
+import { styled, useTheme } from '@icgc-argo/uikit';
+import ContentError from 'components/placeholders/ContentError';
+import { SortedChangeFunction, SortingRule } from 'global/types/table';
+import { startCase } from 'lodash';
+import React, { createRef, useRef, useState } from 'react';
+import { Row } from 'react-grid-system';
+import { useProgramDonorsSummaryQuery } from '.';
 import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
+  FILTER_OPTIONS,
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
-  FILTER_OPTIONS,
-  EMPTY_PROGRAM_SUMMARY_STATS,
 } from './common';
-import { startCase } from 'lodash';
-import { useProgramDonorsSummaryQuery } from '.';
-import { SortingRule, SortedChangeFunction } from 'global/types/table';
-import ContentError from 'components/placeholders/ContentError';
-import { Row } from 'react-grid-system';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));

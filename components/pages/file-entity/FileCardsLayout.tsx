@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Row, Col } from 'react-grid-system';
-import { styled } from '@icgc-argo/uikit';
 import { css } from '@emotion/core';
-import FileSummary from './FileSummary';
-import DataAndAnalysis from './DataAndAnalysis';
+import { styled } from '@icgc-argo/uikit';
+import { Col, Row } from 'react-grid-system';
 import AssociatedDonors from './AssociatedDonors';
+import DataAndAnalysis from './DataAndAnalysis';
+import FileSummary from './FileSummary';
 import SequencingReadProperties from './SequencingReadProperties';
 import { FileEntityData } from './types';
 
