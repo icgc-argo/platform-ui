@@ -17,22 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { Row, Col } from 'react-grid-system';
+import { format as formatDate } from 'date-fns';
+import { saveAs } from 'file-saver';
+import { ClinicalSearchResults } from 'generated/gql_types';
+import Cookies from 'js-cookie';
+import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { css } from '@emotion/core';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import Button from '@icgc-argo/uikit/Button';
 import Icon from '@icgc-argo/uikit/Icon';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { saveAs } from 'file-saver';
-import React from 'react';
-import { format as formatDate } from 'date-fns';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import { getConfig } from 'global/config';
-import { ClinicalSearchResults } from 'generated/gql_types';
-import queryString from 'query-string';
+import { EGO_JWT_KEY } from 'global/constants';
+import { CompletionStates } from './common';
 
 const DownloadButton = ({
   text,
@@ -67,10 +68,12 @@ const ClinicalDownloadButton = ({
   text,
   searchResults = [],
   entityTypes = [],
+  completionState,
 }: {
   text?: string;
   searchResults: ClinicalSearchResults[];
   entityTypes: string[];
+  completionState: CompletionStates;
 }) => {
   const toaster = useToaster();
 
@@ -93,7 +96,7 @@ const ClinicalDownloadButton = ({
     .filter(Boolean);
 
   const query = queryString.stringify(
-    { donorIds, submitterDonorIds, entityTypes },
+    { donorIds, submitterDonorIds, entityTypes, completionState },
     { arrayFormat: 'comma' },
   );
 

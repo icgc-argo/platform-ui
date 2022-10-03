@@ -236,6 +236,7 @@ export default function ProgramSubmittedData() {
                   searchResults={searchResultData.clinicalSearchResults.searchResults}
                   text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
                   entityTypes={[currentEntity]}
+                  completionState={completionState}
                 />
               </div>
               {/* DataTable */}

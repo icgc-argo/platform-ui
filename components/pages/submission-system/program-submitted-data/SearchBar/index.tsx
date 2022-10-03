@@ -34,6 +34,7 @@ import {
   CompletionStates,
   ClinicalEntitySearchResultResponse,
   emptySearchResponse,
+  clinicalEntityFields,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -215,7 +216,8 @@ export default function SearchBar({
         <ClinicalDownloadButton
           searchResults={searchResults}
           text="Clinical Data"
-          entityTypes={[]}
+          entityTypes={clinicalEntityFields}
+          completionState={completionState}
         />
       </div>
     </Container>
