@@ -90,7 +90,7 @@ export default function JoinProgramLayout({
         <div
           css={css`
             border-radius: 8px 0 0 8px;
-            background-image: url('/static/argo-data-scientist.jpg');
+            background-image: url('/images/argo-data-scientist.jpg');
             background-size: cover;
           `}
         />

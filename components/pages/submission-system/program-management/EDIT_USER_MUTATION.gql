@@ -1,3 +1,0 @@
-mutation EDIT_USER_MUTATION($userEmail: String!, $programShortName: String!, $userRole: UserRole!) {
-  updateUser(userEmail: $userEmail, programShortName: $programShortName, userRole: $userRole)
-}

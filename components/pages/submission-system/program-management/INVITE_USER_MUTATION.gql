@@ -1,3 +1,0 @@
-mutation INVITE_USER_MUTATION($invite: InviteUserInput!) {
-  inviteUser(invite: $invite)
-}

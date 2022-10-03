@@ -19,12 +19,12 @@
 
 import React from 'react';
 import Modal from '@icgc-argo/uikit/Modal';
+import { useMutation } from '@apollo/client';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import { useMutation } from '@apollo/react-hooks';
 import pluralize from 'pluralize';
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from './COMMIT_CLINICAL_REGISTRATION_MUTATION.gql';
-import GET_REGISTRATION from '../gql/GET_REGISTRATION.gql';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
+import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
 import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
 import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
@@ -57,7 +57,7 @@ export default function RegisterSamplesModal({
     // update side menu status
     refetchQueries: [
       {
-        query: GET_REGISTRATION,
+        query: GET_REGISTRATION_QUERY,
         variables: { shortName },
       },
     ],

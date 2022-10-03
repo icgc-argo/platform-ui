@@ -27,7 +27,6 @@ import { Row, Col } from 'react-grid-system';
 import chunk from 'lodash/chunk';
 import get from 'lodash/get';
 import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import banner from 'static/icgc-galaxy-bg.jpg';
 import Head from 'components/pages/head';
 
 type Member = { name: string; title?: string };
@@ -127,7 +126,7 @@ export default function TeamPage() {
             height: 140px;
             display: flex;
             align-items: center;
-            background-image: url(${banner});
+            background-image: url('/images/icgc-galaxy-bg.jpg');
             background-position: center;
             background-size: cover;
             margin-bottom: 36px;

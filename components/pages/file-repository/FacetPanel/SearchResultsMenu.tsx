@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { css, styled } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
 import Icon from '@icgc-argo/uikit/Icon';
@@ -116,17 +117,19 @@ const SearchResultsMenu = ({
               >
                 <>
                   <span style={{ fontWeight: 700 }}>{resultId} </span>
-                  {`(${secondaryText})`}
+                  {secondaryText && `(${secondaryText})`}
                 </>
               </ListItem>
-              <ListItem
-                css={css`
-                  font-size: 9px;
-                  font-weight: 300;
-                `}
-              >
-                {subText}
-              </ListItem>
+              {subText && (
+                <ListItem
+                  css={css`
+                    font-size: 9px;
+                    font-weight: 300;
+                  `}
+                >
+                  {subText}
+                </ListItem>
+              )}
             </div>
           ))}
         </ResultsDropdown>

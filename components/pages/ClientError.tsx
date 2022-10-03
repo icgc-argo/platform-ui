@@ -22,6 +22,8 @@ import React from 'react';
 import { css } from '@icgc-argo/uikit';
 import A from '@icgc-argo/uikit/Link';
 import Typography from '@icgc-argo/uikit/Typography';
+import clientErrorImage from 'images/client-error.svg';
+import Image from 'next/image';
 
 export default function Error404Page() {
   const handleReloadClick = () => window.location.reload();
@@ -77,7 +79,13 @@ export default function Error404Page() {
           </Typography>
         </div>
         <div>
-          <img alt="Bug in the code" src="/static/client-error.svg" />
+          <Image
+            alt="Bug in the code"
+            src={clientErrorImage}
+            layout="fixed"
+            width={514}
+            height={350}
+          />
         </div>
       </div>
     </ErrorLayout>

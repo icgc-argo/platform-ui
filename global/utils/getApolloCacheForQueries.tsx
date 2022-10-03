@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
+import { ApolloClient, createHttpLink } from '@apollo/client';
 import fetch from 'isomorphic-fetch';
 import urlJoin from 'url-join';
 import createInMemoryCache from './createInMemoryCache';

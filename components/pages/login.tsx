@@ -18,6 +18,7 @@
  */
 
 import React from 'react';
+import Image from 'next/image';
 import { css } from '@icgc-argo/uikit';
 import Container from '@icgc-argo/uikit/Container';
 import Typography from '@icgc-argo/uikit/Typography';
@@ -33,6 +34,9 @@ import {
   DOCS_REGISTERING_SAMPLES_PAGE,
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
 } from 'global/constants/docSitePaths';
+
+import argoLogo from 'images/argo.svg';
+import testtubeIcon from 'images/testtube.svg';
 
 const LinkToHome = (props) => <a style={{ cursor: 'pointer' }} {...props} onClick={() => 'TODO'} />;
 
@@ -75,7 +79,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
             noShadow={false}
           />
           <div>
-            <img width="350px" alt="" src="/static/argo.svg" />
+            <Image alt="ARGO ICGC logo" src={argoLogo} layout="fixed" width={350} height={76} />
           </div>
           <div
             css={css`
@@ -111,7 +115,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
                 margin-right: 16px;
               `}
             >
-              <img alt="" src="/static/testtube.svg" />
+              <Image src={testtubeIcon} width={50} height={50} alt="" layout="fixed" />
             </div>
             <div>
               <Typography
@@ -165,7 +169,7 @@ export default function LoginPage({ redirect }: { redirect: string }) {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-image: url('/static/icgc-argo-galaxy.jpg');
+                background-image: url('/images/icgc-argo-galaxy.jpg');
                 background-position: center;
                 background-size: cover;
               `}
@@ -191,14 +195,14 @@ export default function LoginPage({ redirect }: { redirect: string }) {
             </div>
             <div
               css={css`
-                background-image: url('/static/icgc-argo-researcher.jpg');
+                background-image: url('/images/icgc-argo-researcher.jpg');
                 background-position: center;
                 background-size: cover;
               `}
             />
             <div
               css={css`
-                background-image: url('/static/icgc-argo-clinician-and-patient.jpg');
+                background-image: url('/images/icgc-argo-clinician-and-patient.jpg');
                 background-position: center;
                 background-size: cover;
               `}
