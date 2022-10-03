@@ -66,9 +66,11 @@ const DownloadButton = ({
 const ClinicalDownloadButton = ({
   text,
   searchResults = [],
+  entityTypes = [],
 }: {
   text?: string;
   searchResults: ClinicalSearchResults[];
+  entityTypes: string[];
 }) => {
   const toaster = useToaster();
 
@@ -89,7 +91,6 @@ const ClinicalDownloadButton = ({
   const submitterDonorIds = searchResults
     .map(({ submitterDonorId }) => submitterDonorId)
     .filter(Boolean);
-  const entityTypes = [''];
 
   const query = queryString.stringify(
     { donorIds, submitterDonorIds, entityTypes },

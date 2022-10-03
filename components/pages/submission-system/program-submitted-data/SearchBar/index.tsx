@@ -210,29 +210,13 @@ export default function SearchBar({
             </span>
           </Button>
         </div>
-        {/* Fourth item - download button*/}
 
-        <ClinicalDownloadButton searchResults={searchResults} text="Clinical Data" />
-        {/* <Button
-          css={css`
-            margin: 5px 10px 5px 10px;
-            height: fit-content;
-            :disabled {
-              background: #f6f6f7;
-              color: ${theme.colors.grey_1};
-            }
-          `}
-          variant="secondary"
-          disabled={noData}
-        >
-          <Icon
-            css={searchDownloadIconStyle}
-            name="download"
-            fill={noData ? 'grey_1' : 'accent2_dark'}
-            height="12px"
-          />
-          Clinical Data
-        </Button> */}
+        {/* Fourth item - download button*/}
+        <ClinicalDownloadButton
+          searchResults={searchResults}
+          text="Clinical Data"
+          entityTypes={[]}
+        />
       </div>
     </Container>
   );
