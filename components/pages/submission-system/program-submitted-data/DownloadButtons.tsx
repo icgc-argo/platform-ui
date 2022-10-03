@@ -89,8 +89,12 @@ const ClinicalDownloadButton = ({
   const submitterDonorIds = searchResults
     .map(({ submitterDonorId }) => submitterDonorId)
     .filter(Boolean);
+  const entityTypes = [''];
 
-  const query = queryString.stringify({ donorIds, submitterDonorIds }, { arrayFormat: 'comma' });
+  const query = queryString.stringify(
+    { donorIds, submitterDonorIds, entityTypes },
+    { arrayFormat: 'comma' },
+  );
 
   const handleDownloadAllError = () => {
     toaster.addToast({
