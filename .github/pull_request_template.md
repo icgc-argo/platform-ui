@@ -5,8 +5,13 @@
 ## Type of Change
 
 - [ ] Bug
+- [ ] Dependency updates
+- [ ] Feature
+- [ ] Refactoring
+- [ ] Release candidate
 - [ ] Styling
-- [ ] New Feature
+- [ ] Testing
+- [ ] Other (please describe)
 
 ## Checklist before requesting review
 
@@ -17,7 +22,9 @@
     - spelling has been double checked
   - [ ] No design provided, screenshot of changes included in PR
   - [ ] No changes to UI
-- [ ] Feature is minimally responsive
-- [ ] Manual testing of UI feature
-- [ ] Add copyrights to new files
+- Back-end (select one):
+  - [ ] Back-end PRs merged, tested on develop, and linked in this PR
+  - [ ] No back-end changes
+- [ ] Manually tested changes
+- [ ] Added copyrights to new files
 - [ ] Connected ticket to PR
