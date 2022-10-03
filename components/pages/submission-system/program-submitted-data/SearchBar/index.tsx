@@ -125,6 +125,8 @@ export default function SearchBar({
       ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 
+  const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
+
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
@@ -214,7 +216,7 @@ export default function SearchBar({
 
         {/* Fourth item - download button*/}
         <ClinicalDownloadButton
-          searchResults={searchResults}
+          searchResults={downloadIds}
           text="Clinical Data"
           entityTypes={clinicalEntityFields}
           completionState={completionState}
