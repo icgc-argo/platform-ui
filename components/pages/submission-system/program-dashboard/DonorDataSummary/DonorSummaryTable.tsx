@@ -439,7 +439,7 @@ const DonorSummaryTable = ({
     .filter((entry) => !entry.validWithCurrentDictionary)
     .map((entry) => {
       const { donorId } = entry;
-      const ID = parseInt(donorId.split('DO')[1]);
+      const ID = parseDonorIdString(donorId);
       return ID;
     });
 
