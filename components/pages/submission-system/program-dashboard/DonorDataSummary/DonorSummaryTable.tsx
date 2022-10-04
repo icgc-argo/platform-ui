@@ -33,6 +33,7 @@ import DropdownPanel, {
   TextInputFilter,
   FilterClearButton,
 } from '@icgc-argo/uikit/DropdownPanel';
+import Link from '@icgc-argo/uikit/Link';
 
 import ContentError from 'components/placeholders/ContentError';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
@@ -516,7 +517,9 @@ const DonorSummaryTable = ({
               `/clinical-data/?donorId=${original.donorId}`,
               errorTab && `&tab=${errorTab}`,
             );
-            return <a href={linkUrl}>{`${original.donorId} (${original.submitterDonorId})`}</a>;
+            return (
+              <Link href={linkUrl}>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+            );
           },
         },
         {
