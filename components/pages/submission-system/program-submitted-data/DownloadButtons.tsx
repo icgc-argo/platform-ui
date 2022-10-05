@@ -115,7 +115,10 @@ const ClinicalDownloadButton = ({
 
     const url = urlJoin(
       GATEWAY_API_ROOT,
-      `/clinical/program/${programShortName}/clinical-data-tsv?${query}`,
+      `/clinical/program/`,
+      programShortName,
+      `/clinical-data-tsv?`,
+      query,
     );
 
     setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
