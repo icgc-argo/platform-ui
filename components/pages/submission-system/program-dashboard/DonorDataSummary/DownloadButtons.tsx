@@ -66,9 +66,7 @@ const DownloadButtons = () => {
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
 
-  const [buttonLoadingState, setButtonLoadingState] = React.useState({
-    isDownloadAllLoading: false,
-  });
+  const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
 
   const checkResponseIs200 = (res: Response) => {
     if (res.status !== 200) {
@@ -84,7 +82,7 @@ const DownloadButtons = () => {
       variant: TOAST_VARIANTS.ERROR,
       content: 'File failed to download.',
     });
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
+    setButtonLoadingState(false);
   };
 
   const onClickDownloadAll = () => {
@@ -95,7 +93,7 @@ const DownloadButtons = () => {
       `/clinical/program/${programShortName}/all-clinical-data`,
     );
 
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
+    setButtonLoadingState(true);
 
     fetch(url, {
       headers: {
@@ -109,7 +107,7 @@ const DownloadButtons = () => {
         const now = formatDate(Date.now(), 'yyyyMMdd');
         const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 
-        setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
+        setButtonLoadingState(false);
 
         saveAs(blob, fileName);
       })
@@ -122,15 +120,9 @@ const DownloadButtons = () => {
         <DownloadButton
           text={'All Clinical Data'}
           onClick={onClickDownloadAll}
-          isLoading={buttonLoadingState.isDownloadAllLoading}
+          isLoading={buttonLoadingState}
         />
       </Col>
-      {/* <Col>
-        <DownloadButton text={'Missing Data'} />
-      </Col>
-      <Col>
-        <DownloadButton text={'Table Data'} />
-      </Col> */}
     </Row>
   );
 };
