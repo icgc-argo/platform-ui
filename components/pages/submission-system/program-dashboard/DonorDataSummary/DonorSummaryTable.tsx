@@ -22,6 +22,7 @@ import { useQuery } from '@apollo/client';
 import { Row } from 'react-grid-system';
 import { startCase } from 'lodash';
 import urlJoin from 'url-join';
+import NextLink from 'next/link';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
@@ -518,7 +519,9 @@ const DonorSummaryTable = ({
               errorTab && `&tab=${errorTab}`,
             );
             return (
-              <Link href={linkUrl}>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              <NextLink href={linkUrl}>
+                <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              </NextLink>
             );
           },
         },
