@@ -19,10 +19,7 @@
 
 import React from 'react';
 import { Row, Col } from 'react-grid-system';
-import { format as formatDate } from 'date-fns';
-import { saveAs } from 'file-saver';
 import { ClinicalSearchResults } from 'generated/gql_types';
-import Cookies from 'js-cookie';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { css } from '@emotion/core';
@@ -31,8 +28,8 @@ import Button from '@icgc-argo/uikit/Button';
 import Icon from '@icgc-argo/uikit/Icon';
 import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
-import { EGO_JWT_KEY } from 'global/constants';
 import { CompletionStates } from './common';
 
 const DownloadButton = ({
@@ -78,17 +75,9 @@ const ClinicalDownloadButton = ({
   const toaster = useToaster();
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { downloadFileWithEgoToken } = useAuthContext();
 
-  const [buttonLoadingState, setButtonLoadingState] = React.useState({
-    isDownloadAllLoading: false,
-  });
-
-  const checkResponseIs200 = (res: Response) => {
-    if (res.status !== 200) {
-      throw new Error('Download failed');
-    }
-    return res;
-  };
+  const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
 
   const donorIds = searchResults.map(({ donorId }) => donorId);
   const submitterDonorIds = searchResults
@@ -107,7 +96,7 @@ const ClinicalDownloadButton = ({
       variant: TOAST_VARIANTS.ERROR,
       content: 'File failed to download.',
     });
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
+    setButtonLoadingState(false);
   };
 
   const onClickDownloadAll = () => {
@@ -121,23 +110,11 @@ const ClinicalDownloadButton = ({
       query,
     );
 
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
+    setButtonLoadingState(true);
 
-    fetch(url, {
-      headers: {
-        authorization: `Bearer ${Cookies.get(EGO_JWT_KEY) || ''}`,
-      },
-      method: 'GET',
-    })
-      .then(checkResponseIs200)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const now = formatDate(Date.now(), 'yyyyMMdd');
-        const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
-
-        setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
-
-        saveAs(blob, fileName);
+    downloadFileWithEgoToken(url)
+      .then(() => {
+        setButtonLoadingState(false);
       })
       .catch(handleDownloadAllError);
   };
@@ -148,7 +125,7 @@ const ClinicalDownloadButton = ({
         <DownloadButton
           text={text || 'All Clinical Data'}
           onClick={onClickDownloadAll}
-          isLoading={buttonLoadingState.isDownloadAllLoading}
+          isLoading={buttonLoadingState}
         />
       </Col>
     </Row>
