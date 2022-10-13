@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { NormalizedCacheObject } from '@apollo/client';
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
 import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
@@ -83,7 +84,7 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ apolloCache: typeof InMemoryCache }> = ({
+const ApolloClientProvider: React.ComponentType<{ apolloCache: NormalizedCacheObject }> = ({
   children,
   apolloCache,
 }) => {

@@ -31,7 +31,7 @@ import urlJoin from 'url-join';
 import queryString from 'query-string';
 import { get } from 'lodash';
 import DefaultLayout from '../components/pages/DefaultLayout';
-import { InMemoryCache } from '@apollo/client';
+import { NormalizedCacheObject } from '@apollo/client';
 
 import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
@@ -63,7 +63,7 @@ const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
 };
 
 type RootGetInitialPropsData = {
-  apolloCache: typeof InMemoryCache;
+  apolloCache: NormalizedCacheObject;
   ctx: ClientSideGetInitialPropsContext;
   egoJwt?: string;
   initialPermissions: string[];
