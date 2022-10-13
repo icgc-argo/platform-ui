@@ -31,6 +31,7 @@ import urlJoin from 'url-join';
 import queryString from 'query-string';
 import { get } from 'lodash';
 import DefaultLayout from '../components/pages/DefaultLayout';
+import { InMemoryCache } from '@apollo/client';
 
 import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
@@ -62,33 +63,26 @@ const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
 };
 
 type RootGetInitialPropsData = {
-  pageProps: { [k: string]: any };
-  unauthorized: boolean;
-  pathname: string;
+  apolloCache: typeof InMemoryCache;
   ctx: ClientSideGetInitialPropsContext;
   egoJwt?: string;
-  apolloCache: {};
+  initialPermissions: string[];
+  maintenanceModeOn: boolean;
+  pageProps: { [k: string]: any };
+  pathname: string;
+  startWithGlobalLoader: boolean;
+  unauthorized: boolean;
 };
 
 const removeCookie = (res, cookieName) => {
   res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
 };
 
-class Root extends App<
-  {
-    egoJwt?: string;
-    ctx: NextPageContext;
-    apolloCache: any;
-    pathname: string;
-    unauthorized: boolean;
-    startWithGlobalLoader: boolean;
-    initialPermissions: string[];
-    maintenanceModeOn: boolean;
-  },
-  {},
-  { isLoadingLoginRedirect: boolean }
-> {
-  static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
+class Root extends App<RootGetInitialPropsData, {}, { isLoadingLoginRedirect: boolean }> {
+  static async getInitialProps({
+    Component,
+    ctx,
+  }: AppContext & { Component: PageWithConfig }): Promise<RootGetInitialPropsData> {
     const { AUTH_DISABLED, MAINTENANCE_MODE_ON } = getConfig();
     if (MAINTENANCE_MODE_ON) {
       return {
@@ -163,19 +157,19 @@ class Root extends App<
     const startWithGlobalLoader = Component.startWithGlobalLoader || false;
 
     return {
-      pageProps,
-      unauthorized,
-      pathname: ctx.pathname,
-      egoJwt: refreshedJwt || egoJwt,
+      apolloCache: undefined,
       ctx: {
+        asPath: ctx.asPath,
         pathname: ctx.pathname,
         query: ctx.query,
-        asPath: ctx.asPath,
       },
-      apolloCache: {},
-      startWithGlobalLoader,
+      egoJwt: refreshedJwt || egoJwt,
       initialPermissions,
       maintenanceModeOn: MAINTENANCE_MODE_ON,
+      pageProps,
+      pathname: ctx.pathname,
+      startWithGlobalLoader,
+      unauthorized,
     };
   }
 

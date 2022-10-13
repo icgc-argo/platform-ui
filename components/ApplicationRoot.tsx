@@ -17,26 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ApolloClient, ApolloLink, ApolloProvider } from '@apollo/client';
+import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
+import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
+import { createUploadLink } from 'apollo-upload-client';
+import Head from 'components/Head';
+import { getConfig } from 'global/config';
+import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import { ToasterContext, useToastState } from 'global/hooks/toaster';
 import useAuthContext, { AuthProvider } from 'global/hooks/useAuthContext';
 import { PageContext } from 'global/hooks/usePageContext';
 import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
-import * as React from 'react';
-import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
-import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
-import urljoin from 'url-join';
-import Head from 'components/Head';
-import get from 'lodash/get';
-import { createUploadLink } from 'apollo-upload-client';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
-import { getConfig } from 'global/config';
+import get from 'lodash/get';
+import * as React from 'react';
+import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
-import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
-import SystemAlerts from './SystemAlerts';
-import { fillAvailableWidth, modalPortalRef } from './Modal';
 import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';
+import { modalPortalRef } from './Modal';
+import SystemAlerts from './SystemAlerts';
 
 const ToastProvider = ({ children }) => {
   const toaster = useToastState();
@@ -83,7 +83,7 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
+const ApolloClientProvider: React.ComponentType<{ apolloCache: typeof InMemoryCache }> = ({
   children,
   apolloCache,
 }) => {
