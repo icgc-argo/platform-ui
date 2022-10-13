@@ -19,8 +19,6 @@
 
 import HomePage from '../components/pages/Homepage';
 import { createPage } from 'global/utils/pages';
-import STATS_BAR_QUERY from '../components/pages/file-repository/StatsCard/gql/STATS_BAR_QUERY';
-
 const landingPage = HomePage;
 
 export default createPage({

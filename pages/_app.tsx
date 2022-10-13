@@ -160,7 +160,6 @@ class Root extends App<
 
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
-    const apolloCache = {};
     const startWithGlobalLoader = Component.startWithGlobalLoader || false;
 
     return {
@@ -173,7 +172,7 @@ class Root extends App<
         query: ctx.query,
         asPath: ctx.asPath,
       },
-      apolloCache,
+      apolloCache: {},
       startWithGlobalLoader,
       initialPermissions,
       maintenanceModeOn: MAINTENANCE_MODE_ON,
