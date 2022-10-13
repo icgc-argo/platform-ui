@@ -60,7 +60,6 @@ type CreatePageConfigs = {
   isPublic?: PageConfigProps['isPublic'];
   isAccessible?: PageConfigProps['isAccessible'];
   getInitialProps?: PageConfigProps['getInitialProps'];
-  getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
   startWithGlobalLoader?: PageConfigProps['startWithGlobalLoader'];
 };
 export const createPage =
@@ -68,7 +67,6 @@ export const createPage =
     isPublic,
     isAccessible,
     getInitialProps,
-    getGqlQueriesToPrefetch,
     startWithGlobalLoader,
   }: CreatePageConfigs) =>
   (
@@ -76,7 +74,6 @@ export const createPage =
   ): PageWithConfig => {
     page.isPublic = isPublic || false;
     page.isAccessible = isAccessible || (async () => true);
-    page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
     page.getInitialProps = getInitialProps || (async () => []);
     page.startWithGlobalLoader = startWithGlobalLoader || GLOBAL_LOADING_DEFAULT;
     return page as PageWithConfig;

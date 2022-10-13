@@ -43,12 +43,6 @@ export type PageConfigProps = {
     initialPermissions?: string[];
   }) => Promise<boolean>;
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
-  getGqlQueriesToPrefetch: (args: GetInitialPropsContextWithEgo) => Promise<
-    Array<{
-      query: string | DocumentNode; // The gql query string
-      variables?: { [key: string]: any };
-    }>
-  >;
   startWithGlobalLoader: IsGlobalLoading;
 };
 export type PageWithConfig = PageConfigProps & React.ComponentType<any>;

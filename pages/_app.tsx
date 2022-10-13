@@ -19,9 +19,7 @@
 
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
-import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
-import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
 import * as React from 'react';
@@ -162,19 +160,7 @@ class Root extends App<
 
     const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
 
-    let graphqlQueriesToCache;
-    let apolloCache = {};
-    try {
-      graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
-        ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-        : [];
-      apolloCache = graphqlQueriesToCache
-        ? await getApolloCacheForQueries(graphqlQueriesToCache)(egoJwt)
-        : {};
-    } catch (e) {
-      console.log(e);
-    }
-
+    const apolloCache = {};
     const startWithGlobalLoader = Component.startWithGlobalLoader || false;
 
     return {
