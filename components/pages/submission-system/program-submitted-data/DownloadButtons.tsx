@@ -17,20 +17,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React from 'react';
 import { Row, Col } from 'react-grid-system';
+import { ClinicalSearchResults } from 'generated/gql_types';
+import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { css } from '@emotion/core';
+import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
 import Button from '@icgc-argo/uikit/Button';
 import Icon from '@icgc-argo/uikit/Icon';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { saveAs } from 'file-saver';
-import React from 'react';
-import { format as formatDate } from 'date-fns';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
+import { CompletionStates } from './common';
 
 const DownloadButton = ({
   text,
@@ -61,19 +61,33 @@ const DownloadButton = ({
   </Button>
 );
 
-const DownloadButtons = () => {
+const ClinicalDownloadButton = ({
+  text,
+  searchResults = [],
+  entityTypes = [],
+  completionState,
+}: {
+  text?: string;
+  searchResults: ClinicalSearchResults[];
+  entityTypes: string[];
+  completionState: CompletionStates;
+}) => {
   const toaster = useToaster();
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
+  const { downloadFileWithEgoToken } = useAuthContext();
 
   const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
 
-  const checkResponseIs200 = (res: Response) => {
-    if (res.status !== 200) {
-      throw new Error('Download failed');
-    }
-    return res;
-  };
+  const donorIds = searchResults.map(({ donorId }) => donorId);
+  const submitterDonorIds = searchResults
+    .map(({ submitterDonorId }) => submitterDonorId)
+    .filter(Boolean);
+
+  const query = queryString.stringify(
+    { donorIds, submitterDonorIds, entityTypes, completionState },
+    { arrayFormat: 'comma' },
+  );
 
   const handleDownloadAllError = () => {
     toaster.addToast({
@@ -90,26 +104,17 @@ const DownloadButtons = () => {
 
     const url = urlJoin(
       GATEWAY_API_ROOT,
-      `/clinical/program/${programShortName}/all-clinical-data`,
+      `/clinical/program/`,
+      programShortName,
+      `/clinical-data-tsv?`,
+      query,
     );
 
     setButtonLoadingState(true);
 
-    fetch(url, {
-      headers: {
-        authorization: `Bearer ${Cookies.get(EGO_JWT_KEY) || ''}`,
-      },
-      method: 'GET',
-    })
-      .then(checkResponseIs200)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const now = formatDate(Date.now(), 'yyyyMMdd');
-        const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
-
+    downloadFileWithEgoToken(url)
+      .then(() => {
         setButtonLoadingState(false);
-
-        saveAs(blob, fileName);
       })
       .catch(handleDownloadAllError);
   };
@@ -118,7 +123,7 @@ const DownloadButtons = () => {
     <Row>
       <Col>
         <DownloadButton
-          text={'All Clinical Data'}
+          text={text || 'All Clinical Data'}
           onClick={onClickDownloadAll}
           isLoading={buttonLoadingState}
         />
@@ -127,4 +132,4 @@ const DownloadButtons = () => {
   );
 };
 
-export default DownloadButtons;
+export default ClinicalDownloadButton;

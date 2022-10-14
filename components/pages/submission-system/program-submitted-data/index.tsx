@@ -26,9 +26,8 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
+import ClinicalDownloadButton from './DownloadButtons';
 import Container from '@icgc-argo/uikit/Container';
-import Icon from '@icgc-argo/uikit/Icon';
 import Link from '@icgc-argo/uikit/Link';
 import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
 import TitleBar from '@icgc-argo/uikit/TitleBar';
@@ -245,28 +244,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   {clinicalEntityDisplayNames[currentEntity]} Data
                 </Typography>
 
-                <Button
-                  css={css`
-                    white-space: nowrap;
-                    height: fit-content;
-                    :disabled {
-                      background: #f6f6f7;
-                      color: ${theme.colors.grey_1};
-                    }
-                  `}
-                  variant="secondary"
-                  disabled={noData}
-                >
-                  <Icon
-                    css={css`
-                      padding-right: 4px;
-                    `}
-                    name="download"
-                    fill={noData ? 'grey_1' : 'accent2_dark'}
-                    height="12px"
-                  />
-                  {clinicalEntityDisplayNames[currentEntity]} Data
-                </Button>
+                <ClinicalDownloadButton
+                  searchResults={searchResultData.clinicalSearchResults.searchResults}
+                  text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+                  entityTypes={[currentEntity]}
+                  completionState={completionState}
+                />
               </div>
               {/* DataTable */}
               <div>
