@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import { Button, Container, Icon, PercentBar, styled, Typography } from '@icgc-argo/uikit';
+import { Button, Container, css, Icon, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { Pipeline } from 'components/pages/submission-system/common';
 import { Col, Row } from 'react-grid-system';
 

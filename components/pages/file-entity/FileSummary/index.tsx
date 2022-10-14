@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import { FileCard, getAccessIcon, TableDiv } from '../common';
 

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,

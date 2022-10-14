@@ -18,7 +18,7 @@
  */
 
 import { QueryHookOptions, useQuery } from '@apollo/client';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { Typography, useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { ContentError, ContentLoader } from 'components/placeholders';
 import { format as formatDate, subDays } from 'date-fns';

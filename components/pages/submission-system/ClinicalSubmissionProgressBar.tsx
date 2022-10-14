@@ -22,7 +22,7 @@ import { Progress } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
 const ClinicalSubmissionProgressBar: React.ComponentType<{

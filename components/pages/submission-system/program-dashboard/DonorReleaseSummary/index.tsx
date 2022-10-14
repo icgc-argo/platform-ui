@@ -18,7 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { Typography } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';

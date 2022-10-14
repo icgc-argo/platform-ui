@@ -18,7 +18,6 @@
  */
 
 import { useQuery } from '@apollo/client';
-import css from '@emotion/css';
 import {
   Button,
   FormCheckbox,
@@ -32,6 +31,7 @@ import {
   Select,
   Textarea,
   Typography,
+  css,
 } from '@icgc-argo/uikit';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';

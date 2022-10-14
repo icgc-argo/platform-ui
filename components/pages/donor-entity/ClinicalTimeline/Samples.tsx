@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import { Table, TableColumnConfig, TableDataBase, Typography } from '@icgc-argo/uikit';
+import { css, Table, TableColumnConfig, TableDataBase, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { SampleNode } from '../types';
 import { formatTableDisplayNames } from './util';

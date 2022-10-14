@@ -20,7 +20,7 @@
 import * as React from 'react';
 import { Table } from '@icgc-argo/uikit';
 
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
 import SyncIndexButton from './table-cell-components/SyncIndexButton';

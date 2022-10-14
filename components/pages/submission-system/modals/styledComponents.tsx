@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import css from '@emotion/css';
 import {
   FormControl,
   FormHelperText,
@@ -27,6 +26,7 @@ import {
   Select,
   styled,
   UikitTheme,
+  css,
 } from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';
 import * as React from 'react';

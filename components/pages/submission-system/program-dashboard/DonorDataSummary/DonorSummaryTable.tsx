@@ -42,7 +42,7 @@ import {
 import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';

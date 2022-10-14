@@ -161,7 +161,7 @@ const Timeline = ({
 }: {
   entities: Array<Entity>;
   activeTab: number;
-  onClickTab: ({ entity: Entity, idx: number }) => void;
+  onClickTab: (props: { entity: Entity; idx: number }) => void;
 }) => {
   const theme = useTheme();
   const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);

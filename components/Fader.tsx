@@ -18,13 +18,14 @@
  */
 
 import { styled } from '@icgc-argo/uikit';
+import React from 'react';
 
 type FadingDivProps = {
   enterAnimationLength?: number;
   exitAnimationLength?: number;
 };
 
-export const FadingDiv = styled('div')`
+export const FadingDiv = styled('div')<React.PropsWithChildren<FadingDivProps>>`
   height: 100vh;
   width: 100vw;
   position: fixed;

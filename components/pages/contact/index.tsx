@@ -59,14 +59,14 @@ import { CONTACT_CATEGORY_OPTIONS, messageCategory, messageDescription, reCaptch
 import CREATE_JIRA_TICKET_MUTATION from './gql/CREATE_JIRA_TICKET_MUTATION';
 
 const Ul = styled('ul')`
-  ${({ theme }: { theme: UikitTheme }) => css(theme.typography.paragraph as any)};
+  ${({ theme }) => css(theme.typography.paragraph as any)};
   padding-left: 18px;
   margin-top: 5px;
   margin-bottom: 30px;
 `;
 
 const Ul2 = styled('ul')`
-  ${({ theme }: { theme: UikitTheme }) => css(theme.typography.paragraph as any)};
+  ${({ theme }) => css(theme.typography.paragraph as any)};
   padding-left: 0px;
   margin-top: 5px;
   margin-bottom: 30px;

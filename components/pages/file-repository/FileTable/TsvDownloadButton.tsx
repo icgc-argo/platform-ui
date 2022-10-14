@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';

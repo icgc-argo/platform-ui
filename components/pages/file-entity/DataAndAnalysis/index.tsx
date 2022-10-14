@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { Link, SimpleTable, useTheme } from '@icgc-argo/uikit';
 import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
 import { FileCard, TableDiv } from '../common';

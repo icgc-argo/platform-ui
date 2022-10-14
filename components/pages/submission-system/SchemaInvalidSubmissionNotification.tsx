@@ -18,7 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import { Link, Notification, NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';

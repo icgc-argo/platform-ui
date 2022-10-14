@@ -1,5 +1,4 @@
-import { css } from '@emotion/core';
-import { Table, Typography } from '@icgc-argo/uikit';
+import { css, Table, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { TreatmentNode } from '../types';
 

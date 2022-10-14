@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import { Button, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';

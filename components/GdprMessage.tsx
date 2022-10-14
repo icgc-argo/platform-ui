@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import { Button, Icon, Link, Typography, useTheme } from '@icgc-argo/uikit';
+import { Button, Icon, Link, Typography, useTheme, css } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
 import * as React from 'react';
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
