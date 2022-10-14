@@ -25,6 +25,7 @@ import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';
 import { toDisplayValue } from '../utils';
 import { FileRepoFiltersType } from '../utils/types';
+import SQONView, { Value } from '../../../SQONView';
 
 type ValueNode = React.FunctionComponent<{
   onClick?: () => void;
@@ -41,13 +42,6 @@ type Filter = React.FunctionComponent<{
   ValueCrumb?: ValueNode;
   FieldCrumb?: FieldNode;
 }>;
-
-const SQONView = dynamic(
-  () => import('@overture-stack/arranger-components/dist/SQONView'),
-) as Filter;
-const Value = dynamic(() =>
-  import('@overture-stack/arranger-components/dist/SQONView').then((comp) => comp.Value),
-) as ValueNode;
 
 const Content = styled('div')`
   & .sqon-view {
@@ -79,12 +73,11 @@ const Content = styled('div')`
       flex: none;
     }
     & .sqon-bubble.sqon-clear {
-      border: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
-      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
-      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.accent2_dark};
+      border: ${({ theme }) => `1px solid ${theme.colors.primary_4}`};
+      background-color: ${({ theme }) => theme.colors.white};
+      color: ${({ theme }) => theme.colors.accent2_dark};
       &:hover {
-        background-color: ${({ theme }: { theme: UikitTheme }) =>
-          theme.button.colors.secondary.hover};
+        background-color: ${({ theme }) => theme.button.colors.secondary.hover};
       }
       padding: 0 12px;
       text-transform: uppercase;
@@ -98,8 +91,8 @@ const Content = styled('div')`
       margin-right: 5px;
     }
     & .sqon-value {
-      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary};
-      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
+      background-color: ${({ theme }) => theme.colors.secondary};
+      color: ${({ theme }) => theme.colors.white};
       padding: 0 7px 0 12px;
       margin-right: 4px;
       cursor: pointer;
@@ -110,8 +103,8 @@ const Content = styled('div')`
     }
     & .sqon-less,
     .sqon-more {
-      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary_1};
-      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
+      background-color: ${({ theme }) => theme.colors.secondary_1};
+      color: ${({ theme }) => theme.colors.white};
       padding: 0 12px;
       text-transform: uppercase;
       cursor: pointer;
@@ -139,7 +132,7 @@ const Content = styled('div')`
     & .sqon-value-group {
       font-size: 22px;
       line-height: 22px;
-      color: ${({ theme }: { theme: UikitTheme }) => theme.colors.secondary};
+      color: ${({ theme }) => theme.colors.secondary};
     }
     & .sqon-value-group-start {
       margin-right: 6px;
