@@ -17,6 +17,42 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import React, { createRef, useRef, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { Row } from 'react-grid-system';
+import { startCase } from 'lodash';
+import urlJoin from 'url-join';
+import NextLink from 'next/link';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import Icon from '@icgc-argo/uikit/Icon';
+import DropdownPanel, {
+  FilterOption,
+  ListFilter,
+  TextInputFilter,
+  FilterClearButton,
+} from '@icgc-argo/uikit/DropdownPanel';
+import Link from '@icgc-argo/uikit/Link';
+
+import ContentError from 'components/placeholders/ContentError';
+import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
+import {
+  defaultClinicalEntityFilters,
+  ClinicalEntityQueryResponse,
+  parseDonorIdString,
+} from 'components/pages/submission-system/program-submitted-data/common';
+import { SortingRule, SortedChangeFunction } from 'global/types/table';
+import { displayDate } from 'global/utils/common';
+import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
+import {
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+  FILTER_OPTIONS,
+  EMPTY_PROGRAM_SUMMARY_STATS,
+} from './common';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import {
   DonorSummaryRecord,
   DonorDataReleaseState,
@@ -26,34 +62,7 @@ import {
   DonorSummaryEntrySortOrder,
   ProgramDonorSummaryEntryField,
 } from './types';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
-
-import { displayDate } from 'global/utils/common';
-import Icon from '@icgc-argo/uikit/Icon';
-import DropdownPanel, {
-  FilterOption,
-  ListFilter,
-  TextInputFilter,
-  FilterClearButton,
-} from '@icgc-argo/uikit/DropdownPanel';
-import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
-
-import React, { createRef, useRef, useState } from 'react';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
-import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import {
-  RELEASED_STATE_FILL_COLOURS,
-  RELEASED_STATE_STROKE_COLOURS,
-  FILTER_OPTIONS,
-  EMPTY_PROGRAM_SUMMARY_STATS,
-} from './common';
-import { startCase } from 'lodash';
 import { useProgramDonorsSummaryQuery } from '.';
-import { SortingRule, SortedChangeFunction } from 'global/types/table';
-import ContentError from 'components/placeholders/ContentError';
-import { Row } from 'react-grid-system';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -428,6 +437,37 @@ const DonorSummaryTable = ({
     },
   });
 
+  const donorsWithErrors = programDonorSummaryEntries
+    .filter((entry) => !entry.validWithCurrentDictionary)
+    .map((entry) => {
+      const { donorId } = entry;
+      const ID = parseDonorIdString(donorId);
+      return ID;
+    });
+
+  // Search Result Query
+  const { data: clinicalErrorData, loading: errorDataLoading } =
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ERRORS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          donorIds: donorsWithErrors,
+        },
+      },
+    });
+
+  const errorLinkData = clinicalErrorData
+    ? donorsWithErrors.map((donorId) => {
+        const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
+          (donor) => donorId === donor.donorId,
+        );
+        const entity = currentDonor.errors[0].entityName;
+        return { donorId, entity };
+      })
+    : [];
+
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -468,7 +508,21 @@ const DonorSummaryTable = ({
           ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return `${original.donorId} (${original.submitterDonorId})`;
+            const errorTab =
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
+
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}`,
+              errorTab && `&tab=${errorTab}`,
+            );
+            return (
+              <NextLink href={linkUrl}>
+                <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              </NextLink>
+            );
           },
         },
         {
