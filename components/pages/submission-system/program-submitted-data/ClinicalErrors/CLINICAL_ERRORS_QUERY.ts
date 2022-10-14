@@ -17,31 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { gql } from '@apollo/client';
 
-import { createPage } from 'global/utils/pages';
-import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
-import ErrorPage from 'pages/_error';
-import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import { getConfig } from 'global/config';
+const CLINICAL_ERRORS_QUERY = gql`
+  query ClinicalErrorData($programShortName: String!, $filters: ClinicalInput!) {
+    clinicalData(programShortName: $programShortName, filters: $filters) {
+      programShortName
+      clinicalErrors {
+        donorId
+        submitterDonorId
+        errors {
+          errorType
+          fieldName
+          index
+          info {
+            value
+          }
+          message
+          entityName
+        }
+      }
+    }
+  }
+`;
 
-export default createPage({
-  isPublic: false,
-  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
-    const {
-      query: { shortName },
-    } = ctx;
-    return (
-      canReadProgram({ permissions, programId: String(shortName) }) &&
-      canWriteProgramData({ permissions, programId: String(shortName) })
-    );
-  },
-  startWithGlobalLoader: true,
-})((props) => {
-  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-  const { donorId } = usePageQuery<{ donorId: string }>();
-
-  if (!FEATURE_SUBMITTED_DATA_ENABLED) return <ErrorPage statusCode={404} />;
-  return <ProgramClinicalData {...props} donorId={donorId} />;
-});
+export default CLINICAL_ERRORS_QUERY;

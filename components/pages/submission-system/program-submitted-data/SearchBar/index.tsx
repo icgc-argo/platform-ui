@@ -80,6 +80,7 @@ export default function SearchBar({
   keyword,
   setKeyword,
   donorSearchResults,
+  setUrlDonorIds,
 }: {
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
@@ -88,12 +89,14 @@ export default function SearchBar({
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
   const [searchOpen, setSearchOpen] = useState(false);
   const setSearchValue = (value) => {
     setKeyword(value);
+    setUrlDonorIds(value);
     setSearchOpen(false);
   };
 
@@ -105,7 +108,7 @@ export default function SearchBar({
   });
 
   const {
-    clinicalSearchResults: { searchResults, totalResults },
+    clinicalSearchResults: { searchResults },
   } = donorSearchResults || emptySearchResponse;
   const searchResultItems =
     searchResults
@@ -131,7 +134,7 @@ export default function SearchBar({
         {keyword && (
           <Button
             onClick={() => {
-              setKeyword('');
+              setSearchValue('');
             }}
             css={searchClearFilterStyle}
             variant="secondary"

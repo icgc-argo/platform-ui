@@ -47,8 +47,9 @@ import {
   defaultClinicalEntityFilters,
   hasClinicalErrors,
   emptyResponse,
-  emptySearchResponse,
   CompletionStates,
+  parseDonorIdString,
+  emptySearchResponse,
 } from './common';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
@@ -59,7 +60,7 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramSubmittedData() {
+export default function ProgramSubmittedData({ donorId = '' }: { donorId: string }) {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
@@ -74,6 +75,10 @@ export default function ProgramSubmittedData() {
       deSerialize: (v) => v,
     },
   );
+  const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
+    serialize: (v) => v,
+    deSerialize: (v) => v,
+  });
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   // Side Menu Query
@@ -111,11 +116,12 @@ export default function ProgramSubmittedData() {
   ));
 
   // Matches Digits preceded by DO or by Comma
-  const searchDonorIds =
-    keyword
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
+  const searchDonorIds = selectedDonors
+    ? [parseDonorIdString(selectedDonors)]
+    : keyword
+        .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+        ?.filter((match) => !!match)
+        .map((idString) => parseInt(idString)) || [];
   const searchSubmitterIds = [keyword].filter((word) => !!word);
   const useDefaultQuery =
     searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
@@ -135,6 +141,11 @@ export default function ProgramSubmittedData() {
         },
       },
     });
+
+  const searchResults =
+    searchResultData === null || searchResultData === undefined
+      ? emptySearchResponse
+      : searchResultData;
 
   return (
     <SubmissionLayout
@@ -182,7 +193,8 @@ export default function ProgramSubmittedData() {
         loading={searchResultsLoading}
         noData={noData}
         onChange={setCompletionState}
-        donorSearchResults={searchResultData}
+        donorSearchResults={searchResults}
+        setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
