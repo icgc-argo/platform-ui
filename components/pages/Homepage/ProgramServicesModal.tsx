@@ -24,7 +24,7 @@ import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 const Row = styled('span')`
   display: flex;
   justify-content: center;
-  border-top: ${({ theme }: { theme: UikitTheme }) => `solid 1px  ${theme.colors.grey_2}`};
+  border-top: ${({ theme }) => `solid 1px  ${theme.colors.grey_2}`};
 
   &:first-of-type {
     border: none;

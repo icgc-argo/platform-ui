@@ -65,7 +65,7 @@ export default function ProgramDashboard() {
     padding-bottom: 8px;
   `;
 
-  const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') =>
+  const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') =>
     css`
       padding-bottom: ${['xl'].includes(size) ? '0' : '8'}px;
     `;
@@ -172,7 +172,7 @@ export default function ProgramDashboard() {
           </Row>
         </Col>
         <ScreenClassRender
-          render={(screenClass) => (
+          render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
               <ClinicalChartCard
                 chartType="clinical"
@@ -183,7 +183,7 @@ export default function ProgramDashboard() {
           )}
         />
         <ScreenClassRender
-          render={(screenClass) => (
+          render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl') => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
               <ClinicalChartCard
                 chartType="molecular"

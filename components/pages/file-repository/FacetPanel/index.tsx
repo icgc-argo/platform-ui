@@ -205,8 +205,8 @@ const facetTabs = {
 
 const FacetContainer = styled(Container)`
   z-index: 1;
-  background: ${({ theme }: { theme: UikitTheme }) => theme.colors.white};
-  box-shadow: ${({ theme }: { theme: UikitTheme }) => theme.shadows.pageElement};
+  background: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => theme.shadows.pageElement};
   display: flex;
   flex-direction: column;
   justify-content: space-between;

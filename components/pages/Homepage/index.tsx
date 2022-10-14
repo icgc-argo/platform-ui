@@ -171,7 +171,7 @@ const SeparationLine: React.ComponentType<{}> = () => {
 };
 
 const HeroDiv = styled('div')`
-  background-image: ${({ theme }: { theme: UikitTheme }) =>
+  background-image: ${({ theme }) =>
     `linear-gradient(to bottom, 
       ${theme.colors.primary}, 
       ${theme.colors.accent2}00 105%),
@@ -179,7 +179,7 @@ const HeroDiv = styled('div')`
 
   background-position: center;
   background-size: cover;
-  background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
 `;
 
@@ -220,7 +220,7 @@ export default function Homepage() {
             color="white"
             css={css`
               margin: 0 50px;
-              font-size: 15px !important;
+              font-size: 15px;
               line-height: 24px;
               text-align: center;
               width: 60%;

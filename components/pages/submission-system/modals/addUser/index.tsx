@@ -51,10 +51,9 @@ const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete })
   );
 };
 
-const AddSection = styled(Button)`
+const AddSection = styled(Button)<{ disabled: boolean }>`
   text-transform: uppercase;
-  color: ${({ disabled, theme }: { disabled: boolean; theme: UikitTheme }) =>
-    disabled ? '#d0d1d8' : theme.colors.accent2_dark};
+  color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
   margin-top: 14px;
 `;
 

@@ -79,7 +79,7 @@ const CreateProgramPage = () => {
     { program: CreateProgramMutationInput }
   >(CREATE_PROGRAM_MUTATION, {
     update: (store, { data }: { data: CreateProgramMutationResult }) => {
-      const { programs: cachedProgramList } = store.readQuery({
+      const { programs: cachedProgramList } = store.readQuery<any>({
         query: SIDE_MENU_PROGRAM_LIST_QUERY,
       });
       store.writeQuery({

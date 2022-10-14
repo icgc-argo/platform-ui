@@ -27,16 +27,16 @@ const ResultsDropdown = styled('div')`
   left: 0px;
   background-color: white;
   width: 248px;
-  border: ${({ theme }: { theme: UikitTheme }) => `1px solid ${theme.colors.primary_4}`};
+  border: ${({ theme }) => `1px solid ${theme.colors.primary_4}`};
   border-top: 0px;
   border-radius: 0px 0px 8px 8px;
   z-index: 2;
   padding-top: 2px;
-  box-shadow: ${({ theme }: { theme: UikitTheme }) => theme.shadows.pageElement};
+  box-shadow: ${({ theme }) => theme.shadows.pageElement};
 `;
 
 const NoResultsContainer = styled(Typography)`
-  color: ${({ theme }: { theme: UikitTheme }) => theme.colors.primary_2};
+  color: ${({ theme }) => theme.colors.primary_2};
   font-size: 14px;
   font-style: italic;
   margin: 0;

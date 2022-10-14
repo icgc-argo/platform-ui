@@ -24,11 +24,11 @@ import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const ContainerComponent = styled('div')`
   display: flex;
-  border: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
+  border: solid 1px ${({ theme }) => theme.colors.grey_2};
   padding: 8px;
   border-radius: 8px;
   & > :not(:last-child) {
-    border-right: solid 1px ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
+    border-right: solid 1px ${({ theme }) => theme.colors.grey_2};
   }
 `;
 const SectionComponent = styled('div')`

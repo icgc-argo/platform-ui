@@ -47,9 +47,9 @@ const StatusDisplayName: { [key in StatusKey]: string } = {
 
 const UsersTable = (tableProps: {
   users: Array<UsersTableUser>;
-  onUserEditClick: ({ user: UsersTableUser }) => void;
-  onUserDeleteClick: ({ user: UsersTableUser }) => void;
-  onUserResendInviteClick: ({ user: UsersTableUser }) => void;
+  onUserEditClick: (props: { user: UsersTableUser }) => void;
+  onUserDeleteClick: (props: { user: UsersTableUser }) => void;
+  onUserResendInviteClick: (props: { user: UsersTableUser }) => void;
   loading: boolean;
   isOnlyOneAdminLeft: boolean;
 }) => {

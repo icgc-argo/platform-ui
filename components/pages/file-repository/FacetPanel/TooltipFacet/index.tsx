@@ -32,7 +32,6 @@ import {
   OptionsListFilterOption,
   styled,
   Tooltip,
-  UikitTheme,
 } from '@icgc-argo/uikit';
 import * as React from 'react';
 
@@ -59,11 +58,11 @@ const TooltipFacet = ({
 }) => {
   const StyledOptionsList = styled(OptionsList)`
     > div:not(:first-of-type):hover {
-      background-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.warning_3};
+      background-color: ${({ theme }) => theme.colors.warning_3};
     }
     > div:last-child {
       border-bottom: 1px solid;
-      border-color: ${({ theme }: { theme: UikitTheme }) => theme.colors.grey_2};
+      border-color: ${({ theme }) => theme.colors.grey_2};
     }
   `;
 
@@ -80,6 +79,7 @@ const TooltipFacet = ({
         </Tooltip>
       }
       isFacetVariant={true}
+      css={''}
     >
       <StyledOptionsList
         options={options}

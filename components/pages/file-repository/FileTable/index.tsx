@@ -18,7 +18,7 @@
  */
 
 import { QueryHookOptions, useQuery } from '@apollo/client';
-import { css } from '@emotion/core';
+import { css } from '@icgc-argo/uikit';
 import {
   Container,
   Link,

@@ -160,7 +160,8 @@ class Root extends App<
       throw err;
     }
 
-    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
+    const pageProps =
+      (Component.getInitialProps && (await Component.getInitialProps({ ...ctx, egoJwt }))) || {};
 
     let graphqlQueriesToCache;
     let apolloCache = {};

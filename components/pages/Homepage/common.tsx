@@ -220,7 +220,7 @@ export const DataCallout: React.ComponentType<{
   );
 };
 const GradientBar = styled('div')`
-  background-image: ${({ theme }: { theme: UikitTheme }) =>
+  background-image: ${({ theme }) =>
     `linear-gradient(to left, ${theme.colors.accent3_2} 0%, ${theme.colors.accent1_1} 47%, ${theme.colors.accent3_dark} 100%)`};
 
   width: 40%;

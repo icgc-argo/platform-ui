@@ -42,10 +42,10 @@ const StyledLegend = styled('div')`
     margin-bottom: 3px;
     text-align: center;
     &.yellow {
-      background: ${({ theme }: { theme: UikitTheme }) => theme.colors.warning_4};
+      background: ${({ theme }) => theme.colors.warning_4};
     }
     &.blue {
-      background: ${({ theme }: { theme: UikitTheme }) => theme.colors.accent3_3};
+      background: ${({ theme }) => theme.colors.accent3_3};
     }
   }
 `;

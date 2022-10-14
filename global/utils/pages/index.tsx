@@ -71,9 +71,7 @@ export const createPage =
     getGqlQueriesToPrefetch,
     startWithGlobalLoader,
   }: CreatePageConfigs) =>
-  (
-    page: React.ComponentType<P> & CreatePageConfigs = () => <div>Here's a page</div>,
-  ): PageWithConfig => {
+  (page: React.ComponentType<P> & CreatePageConfigs): PageWithConfig => {
     page.isPublic = isPublic || false;
     page.isAccessible = isAccessible || (async () => true);
     page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
