@@ -22,15 +22,12 @@ import { Row, Col } from 'react-grid-system';
 import { ClinicalSearchResults } from 'generated/gql_types';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
-import { css } from '@emotion/core';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
 import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
 import { CompletionStates } from './common';
+import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
 
 const DownloadButton = ({
   text,
