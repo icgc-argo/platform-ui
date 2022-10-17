@@ -75,7 +75,7 @@ export const createPage =
     page.isPublic = isPublic || false;
     page.isAccessible = isAccessible || (async () => true);
     page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
-    page.getInitialProps = getInitialProps || (async () => []);
+    page.getInitialProps = getInitialProps || (async () => ({}));
     page.startWithGlobalLoader = startWithGlobalLoader || GLOBAL_LOADING_DEFAULT;
     return page as PageWithConfig;
   };
