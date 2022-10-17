@@ -28,12 +28,13 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { isCollaborator } from 'global/utils/egoJwt';
 import NextLink, { LinkProps } from 'next/link';
+import { ComponentType, useMemo } from 'react';
 
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
 import { DashboardCard } from '../common';
 
-const ConditionalLink: React.ComponentType<{
+const ConditionalLink: ComponentType<{
   showAsLink: boolean;
   link: LinkProps;
   hyperlink?: HyperLinkProps;
@@ -51,7 +52,7 @@ export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { egoJwt, permissions } = useAuthContext();
 
-  const canViewLinks = React.useMemo(() => {
+  const canViewLinks = useMemo(() => {
     return !isCollaborator({
       permissions,
       programId: programShortName,

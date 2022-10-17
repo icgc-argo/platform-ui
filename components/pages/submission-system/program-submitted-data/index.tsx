@@ -35,6 +35,7 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 
 import { Row, setConfiguration } from 'react-grid-system';
 import SubmissionLayout from '../layout';
@@ -62,8 +63,8 @@ const defaultClinicalEntityTab = 'donor';
 export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
-  const [keyword, setKeyword] = React.useState('');
-  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  const [keyword, setKeyword] = useState('');
+  const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -87,7 +88,7 @@ export default function ProgramSubmittedData() {
       },
     });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
 

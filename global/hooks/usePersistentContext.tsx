@@ -17,23 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { createContext, useContext, useState } from 'react';
 
 // persist state between page navigations
 
-export const PersistentContext = React.createContext({
+export const PersistentContext = createContext({
   getItem: (key: string, defaultValue?: any) => null as any,
   setItem: (key: string, value: any) => {},
 });
 
 export function usePersistentContext() {
-  return React.useContext(PersistentContext);
+  return useContext(PersistentContext);
 }
 
-// Just like React.useState, but the state returned by this function is persistent across page navigations
+// Just like useState, but the state returned by this function is persistent across page navigations
 export default function usePersistState(key: string, defaultValue?: any) {
   const { getItem, setItem } = usePersistentContext();
-  const [persistState, setPersistState] = React.useState(getItem(key, defaultValue));
+  const [persistState, setPersistState] = useState(getItem(key, defaultValue));
 
   return [
     persistState,

@@ -18,6 +18,7 @@
  */
 
 import { css, Modal } from '@icgc-argo/uikit';
+import { createRef, useState, useEffect, PropsWithChildren } from 'react';
 
 import ReactDOM from 'react-dom';
 
@@ -35,17 +36,17 @@ export const fillAvailableHeight = css`
   min-height: -moz-available;
 `;
 
-export const modalPortalRef = React.createRef<HTMLDivElement>();
+export const modalPortalRef = createRef<HTMLDivElement>();
 
 const useMounted = () => {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
     setMounted(true);
   }, []);
   return mounted;
 };
 
-const ModalPortal = ({ children }: { children: React.ReactElement }) => {
+const ModalPortal = ({ children }: PropsWithChildren<{}>) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
   return ref

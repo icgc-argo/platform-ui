@@ -18,18 +18,18 @@
  */
 
 import { ContentBox, css, Icon, Tag, Typography, UikitIconNames } from '@icgc-argo/uikit';
+import { PropsWithChildren } from 'react';
 
 export const Box = ({
   children,
   title,
   iconName,
   tag,
-}: {
-  children: React.ReactNode | React.ReactNodeArray;
+}: PropsWithChildren<{
   title: string;
   iconName: UikitIconNames;
   tag?: string;
-}) => (
+}>) => (
   <ContentBox
     css={css`
       width: 100%;

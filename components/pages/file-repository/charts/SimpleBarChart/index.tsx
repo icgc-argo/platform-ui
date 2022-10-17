@@ -30,12 +30,13 @@ import {
 import { capitalize } from 'global/utils/stringUtils';
 import { maxBy, orderBy } from 'lodash';
 import pluralize from 'pluralize';
+import { CSSProperties, ComponentType } from 'react';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
   type: FileRepoDataType;
-  containerStyle?: React.CSSProperties;
+  containerStyle?: CSSProperties;
   chartHeight?: number;
   loading?: boolean;
   onClick?: (value: string, event: any) => void;
@@ -134,7 +135,7 @@ const YAxis = ({ max, theme }) => {
   );
 };
 
-const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
+const SimpleBarChart: ComponentType<SimpleBarChartProps> = ({
   data = [],
   type,
   containerStyle = {},

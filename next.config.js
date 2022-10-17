@@ -60,12 +60,6 @@ const nextConfig = withPlugins([withImages, withTM], {
       react: path.resolve(__dirname, 'node_modules', 'react'),
     };
 
-    config.plugins.push(
-      new options.webpack.ProvidePlugin({
-        React: 'react',
-      }),
-    );
-
     // These 'react' related configs are added to enable linking packages in development
     // (e.g. UIKit), and not get the "broken Hooks" warning.
     // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react

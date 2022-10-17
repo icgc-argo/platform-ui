@@ -22,6 +22,7 @@ import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
 import { addInFilters } from '../utils';
 import { FileRepoFiltersType, FieldOperator } from '../utils/types';
+import { createContext, useContext } from 'react';
 
 type FiltersContextType = {
   filters: FileRepoFiltersType;
@@ -41,7 +42,7 @@ export const defaultFilters: FileRepoFiltersType = {
   content: [],
 };
 
-const FiltersContext = React.createContext<FiltersContextType>({
+const FiltersContext = createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
   setFilterFromFieldAndValue: () => {},
@@ -81,5 +82,5 @@ export function FiltersProvider({ children }) {
 }
 
 export default function useFiltersContext() {
-  return React.useContext(FiltersContext);
+  return useContext(FiltersContext);
 }

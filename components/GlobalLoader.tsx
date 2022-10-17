@@ -18,6 +18,7 @@
  */
 
 import { css, DnaLoader, Modal } from '@icgc-argo/uikit';
+import { createRef, createContext, useContext, PropsWithChildren, useState } from 'react';
 
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
@@ -40,7 +41,7 @@ export type IsGlobalLoading = boolean;
 
 export const GLOBAL_LOADING_DEFAULT = false;
 
-export const loaderPortalRef = React.createRef<HTMLDivElement>();
+export const loaderPortalRef = createRef<HTMLDivElement>();
 
 const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: IsGlobalLoading }) => {
   const ref = loaderPortalRef.current;
@@ -71,21 +72,20 @@ const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: IsGlobalLoadin
     : null;
 };
 
-const GlobalLoadingContext = React.createContext({
+const GlobalLoadingContext = createContext({
   isGlobalLoading: GLOBAL_LOADING_DEFAULT,
   setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
 });
 
-const useGlobalLoader = () => React.useContext(GlobalLoadingContext);
+const useGlobalLoader = () => useContext(GlobalLoadingContext);
 
 export const GlobalLoaderProvider = ({
   children,
   startWithGlobalLoader,
-}: {
-  children: React.ReactNode | React.ReactNodeArray;
+}: PropsWithChildren<{
   startWithGlobalLoader: IsGlobalLoading;
-}) => {
-  const [isGlobalLoading, setGlobalLoading] = React.useState(
+}>) => {
+  const [isGlobalLoading, setGlobalLoading] = useState(
     startWithGlobalLoader || GLOBAL_LOADING_DEFAULT,
   );
 

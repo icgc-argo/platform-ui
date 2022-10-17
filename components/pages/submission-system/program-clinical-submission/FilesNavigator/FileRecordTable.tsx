@@ -25,6 +25,7 @@ import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import pluralize from 'pluralize';
+import { ComponentProps, useMemo, createRef, CSSProperties } from 'react';
 
 import {
   CellContentCenter,
@@ -47,7 +48,7 @@ type FileStat = {
 };
 
 export const FILE_STATE_COLORS: {
-  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'];
+  [k in RecordState]: ComponentProps<typeof StarIcon>['fill'];
 } = {
   ERROR: 'error',
   WARNING: 'warning',
@@ -113,11 +114,11 @@ const FileRecordTable = ({
   isPendingApproval: boolean;
   isSubmissionValidated: boolean;
   file: ClinicalSubmissionEntityFile;
-  submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
+  submissionData?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { egoJwt, permissions } = useAuthContext();
-  const isDiffPreview = React.useMemo(
+  const isDiffPreview = useMemo(
     () =>
       (isDccMember(permissions) || isDataSubmitter({ permissions, programId: programShortName })) &&
       isPendingApproval,
@@ -146,7 +147,7 @@ const FileRecordTable = ({
           return `${priority}::${r.row}`;
         },
   );
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   const tableData = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
@@ -326,7 +327,7 @@ const FileRecordTable = ({
                     background: theme.colors.accent3_3,
                   }
                 : {},
-          } as { style: React.CSSProperties })
+          } as { style: CSSProperties })
         }
         getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
           ({
@@ -343,7 +344,7 @@ const FileRecordTable = ({
                   background: theme.colors.accent3_4,
                 }
               : {},
-          } as { style: React.CSSProperties })
+          } as { style: CSSProperties })
         }
         getTrGroupProps={(_, { original }: { original: typeof tableData[0] }) =>
           isPendingApproval && rowHasUpdate(original)

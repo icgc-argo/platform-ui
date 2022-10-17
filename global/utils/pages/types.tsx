@@ -20,6 +20,7 @@
 import { NextPageContext } from 'next';
 import { DocumentNode } from 'graphql';
 import { IsGlobalLoading } from 'components/GlobalLoader';
+import { ComponentType } from 'react';
 
 export type GetInitialPropsContext = NextPageContext & {
   res?: NextPageContext['res'] & {
@@ -50,4 +51,4 @@ export type PageConfigProps = {
   >;
   startWithGlobalLoader: IsGlobalLoading;
 };
-export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
+export type PageWithConfig = PageConfigProps & ComponentType<any>;

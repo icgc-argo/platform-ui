@@ -18,6 +18,7 @@
  */
 
 import { css, Icon, Tag, Typography, useTheme, VerticalTabs } from '@icgc-argo/uikit';
+import { useMemo } from 'react';
 
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
@@ -60,7 +61,7 @@ type TimeLineItemProps = {
 const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) => {
   const { type, description, id, invalid } = item;
   const theme = useTheme();
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
 
   return (
@@ -164,7 +165,7 @@ const Timeline = ({
   onClickTab: (props: { entity: Entity; idx: number }) => void;
 }) => {
   const theme = useTheme();
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
 
   const donorAgeDisplay = (type: EntityType, data) => {
     const age =

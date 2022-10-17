@@ -29,6 +29,7 @@ import {
   css,
 } from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';
+import { ComponentType } from 'react';
 
 import { Col, Row } from 'react-grid-system';
 import { UserModel } from './common';
@@ -51,7 +52,7 @@ export type UserSectionProps = {
   disabledFields: Array<UserField>;
   showDelete?: boolean;
 };
-export const UserSection: React.ComponentType<UserSectionProps> = ({
+export const UserSection: ComponentType<UserSectionProps> = ({
   user,
   onChange,
   validateField,

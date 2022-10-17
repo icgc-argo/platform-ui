@@ -19,9 +19,10 @@
 
 import { css } from '@icgc-argo/uikit';
 import { Container, Icon, styled, Typography } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { FileAccessState } from './types';
 
-export const FileCard: React.ComponentType<{
+export const FileCard: ComponentType<{
   cardTitle?: string;
   cardHeight?: string;
   loading?: boolean;

@@ -29,6 +29,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { sleep } from 'global/utils/common';
 import { isDccMember } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
+import { useMemo, ComponentProps } from 'react';
 
 import { Row } from 'react-grid-system';
 import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
@@ -52,7 +53,7 @@ const Header = ({
   submissionVersion: string;
 }) => {
   const { egoJwt, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
+  const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const { setGlobalLoading } = useGlobalLoader();
   const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
@@ -93,7 +94,7 @@ const Header = ({
     },
   });
 
-  const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionReopen: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
       children: isDcc
@@ -117,7 +118,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionApproval: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: 'Approve Submission?',
       children: 'Are you sure you want to approve this clinical submission?',
@@ -154,7 +155,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionClear: ComponentProps<typeof Button>['onClick'] = async () => {
     setGlobalLoading(true);
     await sleep();
     try {

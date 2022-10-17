@@ -36,6 +36,7 @@ import {
 } from '../egoJwt';
 import { PageConfigProps, PageWithConfig } from './types';
 import { GLOBAL_LOADING_DEFAULT } from 'components/GlobalLoader';
+import { ComponentType } from 'react';
 
 export const getDefaultRedirectPathForUser = (
   permissions: string[],
@@ -70,7 +71,7 @@ export const createPage =
     getGqlQueriesToPrefetch,
     startWithGlobalLoader,
   }: CreatePageConfigs) =>
-  (page: React.ComponentType<P> & CreatePageConfigs): PageWithConfig => {
+  (page: ComponentType<P> & CreatePageConfigs): PageWithConfig => {
     page.isPublic = isPublic || false;
     page.isAccessible = isAccessible || (async () => true);
     page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);

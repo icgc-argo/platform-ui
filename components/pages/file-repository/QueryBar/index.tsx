@@ -26,19 +26,20 @@ import { FileCentricDocumentField } from '../types';
 import { toDisplayValue } from '../utils';
 import { FileRepoFiltersType } from '../utils/types';
 import SQONView, { Value } from '../../../SQONView';
+import { FunctionComponent } from 'react';
 
-type ValueNode = React.FunctionComponent<{
+type ValueNode = FunctionComponent<{
   onClick?: () => void;
 }>;
 
-type FieldNode = React.FunctionComponent<{
+type FieldNode = FunctionComponent<{
   onClick?: () => void;
 }>;
-type Filter = React.FunctionComponent<{
+type Filter = FunctionComponent<{
   sqon: FileRepoFiltersType | {};
   setSQON: ({ field, value }: { field: string; value: string }) => void;
   onClear?: () => void;
-  Clear?: React.FunctionComponent<{}>;
+  Clear?: FunctionComponent<{}>;
   ValueCrumb?: ValueNode;
   FieldCrumb?: FieldNode;
 }>;

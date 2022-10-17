@@ -56,6 +56,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
+import { createRef, useState, PropsWithChildren, Ref, useRef, useMemo, useEffect } from 'react';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -83,10 +84,10 @@ const DonorSummaryTable = ({
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
-  const [filterState, setFilterState] = React.useState([]);
+  const [filterState, setFilterState] = useState([]);
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
@@ -212,17 +213,16 @@ const DonorSummaryTable = ({
     handleBlur,
     active,
     children,
-  }: {
+  }: PropsWithChildren<{
     header: string;
     open: boolean;
     setOpen?: (open?: boolean | any) => void;
     focusFirst?: () => void;
-    buttonRef?: React.Ref<HTMLInputElement>;
-    panelRef?: React.Ref<HTMLElement>;
+    buttonRef?: Ref<HTMLInputElement>;
+    panelRef?: Ref<HTMLElement>;
     handleBlur?: (event?: any) => void;
     active?: boolean;
-    children: React.ReactNode;
-  }) => {
+  }>) => {
     const theme = useTheme();
 
     return (
@@ -283,10 +283,10 @@ const DonorSummaryTable = ({
     filterValue?: string;
     onFilter?: (text?: string) => void;
   }) => {
-    const [open, setOpen] = React.useState(false);
-    const buttonRef = React.useRef<HTMLInputElement>(null);
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const panelRef = React.useRef<HTMLElement>(null);
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
 
     // Focus on the input when the panel opens
     const focusInput = () => {
@@ -296,7 +296,7 @@ const DonorSummaryTable = ({
     };
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -344,8 +344,8 @@ const DonorSummaryTable = ({
     activeFilters?: Array<string>;
     onFilter?: (filters?: Array<FilterOption>) => void;
   }) => {
-    const [open, setOpen] = React.useState(false);
-    const options = React.useMemo(
+    const [open, setOpen] = useState(false);
+    const options = useMemo(
       () =>
         filterOptions.map((option) => ({
           ...option,
@@ -354,11 +354,11 @@ const DonorSummaryTable = ({
         })),
       [filterOptions, activeFilters],
     );
-    const buttonRef = React.useRef<HTMLInputElement>(null);
-    const panelRef = React.useRef<HTMLElement>(null);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -388,14 +388,14 @@ const DonorSummaryTable = ({
     );
   };
 
-  const [pagingState, setPagingState] = React.useState({
+  const [pagingState, setPagingState] = useState({
     pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,
   });
 
-  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
+  const [loaderTimeout, setLoaderTimeout] = useState<NodeJS.Timeout>();
 
   const offset = pagingState.pageSize * pagingState.page;
   const first = pagingState.pageSize;
@@ -731,8 +731,8 @@ const DonorSummaryTable = ({
     },
   ];
 
-  const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
-  React.useEffect(() => {
+  const [isTableLoading, setIsTableLoading] = useState(isCardLoading);
+  useEffect(() => {
     if (loading) {
       setIsTableLoading(true);
     }

@@ -20,6 +20,7 @@
 import { css, InteractiveIcon, MailTo, Table, TableColumnConfig } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
+import { createRef } from 'react';
 
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
@@ -150,7 +151,7 @@ const UsersTable = (tableProps: {
       ),
     },
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   return (
     <div

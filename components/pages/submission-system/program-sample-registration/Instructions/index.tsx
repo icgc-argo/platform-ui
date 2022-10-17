@@ -44,6 +44,7 @@ import {
   instructionBoxButtonStyle,
 } from '../../common';
 import UPLOAD_REGISTRATION_MUTATION from '../gql/UPLOAD_REGISTRATION_MUTATION';
+import { useState } from 'react';
 
 function Instructions({
   uploadEnabled,
@@ -68,7 +69,7 @@ function Instructions({
     downloadTsvFileTemplate('sample_registration.tsv');
   };
 
-  const [showRegisterSamplesModal, setShowRegisterSamplesModal] = React.useState(false);
+  const [showRegisterSamplesModal, setShowRegisterSamplesModal] = useState(false);
   const handleRegisterClick = () => {
     setShowRegisterSamplesModal(true);
   };

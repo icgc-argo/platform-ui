@@ -26,6 +26,7 @@ import { EGO_JWT_KEY } from 'global/constants';
 import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Cookies from 'js-cookie';
+import { useState } from 'react';
 
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -64,7 +65,7 @@ const DownloadButtons = () => {
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
 
-  const [buttonLoadingState, setButtonLoadingState] = React.useState({
+  const [buttonLoadingState, setButtonLoadingState] = useState({
     isDownloadAllLoading: false,
   });
 

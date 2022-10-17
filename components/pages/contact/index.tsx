@@ -51,6 +51,7 @@ import { useToaster } from 'global/hooks/toaster';
 import useFormHook from 'global/hooks/useFormHook';
 import { email, firstName, lastName } from 'global/utils/form/validations';
 import yup from 'global/utils/validations';
+import { useRef, useState, ComponentProps } from 'react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Col, Row } from 'react-grid-system';
@@ -109,10 +110,10 @@ export default function ContactPage() {
 
   const [createTicket] = useMutation(CREATE_JIRA_TICKET_MUTATION);
   const toaster = useToaster();
-  const reCaptchaRef = React.useRef(null);
-  const [requestLoader, setRequestLoader] = React.useState(false);
+  const reCaptchaRef = useRef(null);
+  const [requestLoader, setRequestLoader] = useState(false);
 
-  const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const submitForm: ComponentProps<typeof Button>['onClick'] = async () => {
     try {
       const validData = await validateForm();
 

@@ -48,6 +48,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
+import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -58,9 +59,9 @@ import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
   const { EGO_URL } = getConfig();
-  const [loginPath, setLoginPath] = React.useState('');
+  const [loginPath, setLoginPath] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const redirect = get(query, 'redirect') as string;
     if (redirect) {
       const parsedRedirect = queryString.parseUrl(redirect);
@@ -136,19 +137,19 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
-  const canAccessSubmission = React.useMemo(() => {
+  const canAccessSubmission = useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
   const { asPath: path, query } = usePageContext();
   const { clearFilters } = useFiltersContext();
 
-  const [isModalVisible, setModalVisibility] = React.useState(false);
+  const [isModalVisible, setModalVisibility] = useState(false);
 
-  const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
+  const [isMobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobileDropdownOpen && !isMobileLayout) setMobileDropdownOpen(false);
   }, [isMobileLayout, isMobileDropdownOpen]);
 
@@ -196,9 +197,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   ];
 
   const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
-  const [usingProfileOptions, setUsingProfileOptions] = React.useState(true);
+  const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
-  const mobileDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: mobileDropdownRef,
     onClickAway: () => setMobileDropdownOpen(false),
@@ -283,7 +284,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
               >
                 <AppBarMenuItem
                   active={onProfilePage}
-                  ref={React.createRef()}
+                  ref={createRef()}
                   dropdownMenu={
                     !isMobileLayout ? (
                       <DropdownMenu>

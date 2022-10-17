@@ -20,6 +20,7 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import { ContentHeader, styled, useTheme } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
+import { useState } from 'react';
 
 import SubmissionLayout from '../layout';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY';
@@ -72,7 +73,7 @@ export const useClinicalSubmissionQuery = (
 export default function ProgramClinicalSubmission() {
   const theme = useTheme();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const [] = React.useState<FileList | null>(null);
+  const [] = useState<FileList | null>(null);
 
   const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
 

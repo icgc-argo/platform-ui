@@ -33,6 +33,7 @@ import {
 } from 'global/utils/egoJwt';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
+import { createRef } from 'react';
 
 import { Box } from '../common';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
@@ -64,7 +65,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       <Link>{original.shortName}</Link>
     </NextLink>
   );
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   const baseCols: Column[] = [
     {

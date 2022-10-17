@@ -29,6 +29,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
+import { Dispatch, SetStateAction, useState, createRef, RefObject } from 'react';
 
 import {
   ClinicalEntitySearchResultResponse,
@@ -83,22 +84,22 @@ export default function SearchBar({
   donorSearchResults,
 }: {
   noData: boolean;
-  onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
+  onChange: Dispatch<SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
   loading: boolean;
   keyword: string;
-  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  setKeyword: Dispatch<SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
 }) {
   const theme = useTheme();
-  const [displayText, setDisplayText] = React.useState('- Select an option -');
-  const [searchOpen, setSearchOpen] = React.useState(false);
+  const [displayText, setDisplayText] = useState('- Select an option -');
+  const [searchOpen, setSearchOpen] = useState(false);
   const setSearchValue = (value) => {
     setKeyword(value);
     setSearchOpen(false);
   };
 
-  const menuItemDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  const menuItemDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: menuItemDropdownRef,
     onElementClick: setSearchValue,

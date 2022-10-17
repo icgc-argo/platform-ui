@@ -56,6 +56,7 @@ import {
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
+import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
@@ -142,7 +143,7 @@ const newsItems: NewsItem[] = [
   },
 ];
 
-const SeparationLine: React.ComponentType<{}> = () => {
+const SeparationLine: ComponentType<{}> = () => {
   const theme = useTheme();
   return (
     <>

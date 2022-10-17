@@ -34,6 +34,7 @@ import { UserModel } from '../modals/common';
 import EDIT_USER_MUTATION from './gql/EDIT_USER_MUTATION';
 import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
 import REMOVE_USER_MUTATION from './gql/REMOVE_USER_MUTATION';
+import { useState } from 'react';
 
 export const adminRestrictionText = 'A program must have at least one Program Administrator';
 
@@ -48,9 +49,9 @@ const Users = ({
   onUserUpdate: () => void;
   loading: boolean;
 }) => {
-  const [currentEditingUser, setCurrentEditingUser] = React.useState(null);
-  const [currentDeletingUser, setCurrentDeletingUser] = React.useState(null);
-  const [currentResendEmailUser, setCurrentResendEmailUser] = React.useState(null);
+  const [currentEditingUser, setCurrentEditingUser] = useState(null);
+  const [currentDeletingUser, setCurrentDeletingUser] = useState(null);
+  const [currentResendEmailUser, setCurrentResendEmailUser] = useState(null);
   const [triggerEdit] = useMutation(EDIT_USER_MUTATION);
   const [triggerDelete] = useMutation(REMOVE_USER_MUTATION);
   const [triggerResendInvite] = useMutation(INVITE_USER_MUTATION);

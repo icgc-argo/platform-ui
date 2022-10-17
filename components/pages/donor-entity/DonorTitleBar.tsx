@@ -21,12 +21,13 @@ import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { ComponentType } from 'react';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DownloadIcon } from '../file-entity/common';
 import { FileCentricDocumentField } from '../file-repository/types';
 
-export const DonorTitleBar: React.ComponentType<{
+export const DonorTitleBar: ComponentType<{
   programId: string;
   donorId: string;
   isDownloadEnabled: boolean;

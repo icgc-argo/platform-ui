@@ -18,6 +18,7 @@
  */
 
 import { styled, css } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 import ClinicalTimeline from './ClinicalTimeline';
 import DonorDataTable from './DonorDataTable';
@@ -37,7 +38,7 @@ const PaddedColumn = styled(Col)`
   align-items: stretch;
 `;
 
-const DonorCardsLayout: React.ComponentType<{
+const DonorCardsLayout: ComponentType<{
   donorData: DonorEntityData;
 }> = ({ donorData }) => (
   <div

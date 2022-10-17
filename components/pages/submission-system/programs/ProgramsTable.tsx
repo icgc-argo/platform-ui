@@ -28,6 +28,7 @@ import {
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import NextLink from 'next/link';
+import { ComponentType, createRef, ElementType, useMemo } from 'react';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -49,11 +50,11 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
   ASSOCIATE: 'ASSOCIATE',
 };
 
-const FormattedCell: React.ComponentType<{ cellInfo: TableProgramInternal }> = ({
+const FormattedCell: ComponentType<{ cellInfo: TableProgramInternal }> = ({
   children,
   cellInfo,
 }) => {
-  const isRenderingOnMultipleRows = React.useMemo(() => {
+  const isRenderingOnMultipleRows = useMemo(() => {
     return cellInfo.countries.length > 1 || cellInfo.cancerTypes.length > 1;
   }, [cellInfo]);
 
@@ -75,7 +76,7 @@ export default function ProgramsTable(tableProps: {
   onProgramEditClick: ({ program }: { program: ProgramsTableProgram }) => void;
   loading: boolean;
   loadingUser: boolean;
-  LoadingComponent: React.ReactType;
+  LoadingComponent: ElementType;
 }) {
   const data: Array<TableProgramInternal> = tableProps.programs.map((p) => ({
     ...p,
@@ -223,7 +224,7 @@ export default function ProgramsTable(tableProps: {
   ];
   return (
     <Table
-      parentRef={React.createRef()}
+      parentRef={createRef()}
       data={data}
       columns={columns}
       showPagination={false}

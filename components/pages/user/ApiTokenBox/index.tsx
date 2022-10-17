@@ -31,6 +31,7 @@ import {
 import { getConfig } from 'global/config';
 import { DOCS_DATA_ACCESS_PAGE, DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
 import get from 'lodash/get';
+import { useState } from 'react';
 
 import { Box } from '../common';
 import { ApiToken } from '../types';
@@ -45,8 +46,8 @@ const ApiTokenBox = ({
   loading: boolean;
   hasTokenAccess: boolean;
 }) => {
-  const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
-  const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
+  const [generatedApiToken, setGeneratedApiToken] = useState(null);
+  const [isGeneratingApiToken, setIsGeneratingApiToken] = useState(false);
   const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN_MUTATION);
 
   const { DOCS_URL_ROOT } = getConfig();

@@ -19,12 +19,13 @@
 
 import { Button, Icon, Link, Typography, useTheme, css } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
+import { useState, useEffect } from 'react';
 
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 const GdprMessage = () => {
   const theme = useTheme();
-  const [accepted, setAcceptedState] = React.useState(true);
+  const [accepted, setAcceptedState] = useState(true);
   const sync = () => {
     setAcceptedState(localStorage.getItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY) === 'true');
   };
@@ -32,7 +33,7 @@ const GdprMessage = () => {
     localStorage.setItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY, String(accepted));
     sync();
   };
-  React.useEffect(() => {
+  useEffect(() => {
     sync();
   }, []);
   return (

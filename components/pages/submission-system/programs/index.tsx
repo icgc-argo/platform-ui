@@ -40,6 +40,7 @@ import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
 import SubmissionLayout from '../layout';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
@@ -79,7 +80,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   });
 
   const { egoJwt, permissions } = useAuthContext();
-  const canCreate = React.useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
+  const canCreate = useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
   const sortedPrograms = orderBy(programsWithAdmins, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {

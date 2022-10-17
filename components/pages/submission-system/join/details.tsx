@@ -34,6 +34,7 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
+import { useState, ComponentProps, useEffect } from 'react';
 
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
@@ -53,7 +54,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
 
   const { updateToken, data: userModel } = useAuthContext();
 
-  const [notFound, setNotFound] = React.useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
@@ -78,9 +79,7 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
 
-  const handleSubmit: React.ComponentProps<typeof JoinProgramForm>['onSubmit'] = async (
-    validData,
-  ) => {
+  const handleSubmit: ComponentProps<typeof JoinProgramForm>['onSubmit'] = async (validData) => {
     try {
       await joinProgram({
         variables: {
@@ -119,9 +118,9 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
     }
   };
 
-  const [fullDetailsRedirect, setFullDetailsRedirect] = React.useState('');
+  const [fullDetailsRedirect, setFullDetailsRedirect] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFullDetailsRedirect(
       createRedirectURL({
         origin: location.origin,

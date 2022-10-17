@@ -31,6 +31,7 @@ import {
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { useState } from 'react';
 
 import {
   instructionBoxButtonContentStyle,
@@ -84,9 +85,9 @@ const Instruction = ({
 }) => {
   const { DOCS_URL_ROOT } = getConfig();
 
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
-  const [isValidating, setIsValidating] = React.useState<boolean>(false);
-  const [isSigningOff, setIsSigningOff] = React.useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isValidating, setIsValidating] = useState<boolean>(false);
+  const [isSigningOff, setIsSigningOff] = useState<boolean>(false);
 
   const handleFileUploadClick = async (files: FileList) => {
     setIsUploading(true);

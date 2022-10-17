@@ -25,18 +25,19 @@ import {
   TOAST_VARIANTS,
 } from '@icgc-argo/uikit';
 import omit from 'lodash/omit';
+import { createContext, ReactNode, useState, useContext } from 'react';
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {
   variant?: NotificationVariant;
   interactionType?: NotificationInteraction;
-  title: React.ReactNode;
-  content: React.ReactNode;
+  title: ReactNode;
+  content: ReactNode;
   onInteraction?: (e: ToastEventPayload) => any;
 };
 export const useToastState = () => {
   const DEFAULT_TIMEOUT = 8000;
-  const [toastStack, setToastStack] = React.useState<(ToastConfig & { id: string })[]>([]);
+  const [toastStack, setToastStack] = useState<(ToastConfig & { id: string })[]>([]);
 
   const addToast = (toast: ToastConfig & { timeout?: number }) => {
     console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
@@ -84,5 +85,5 @@ export const useToastState = () => {
 type Toaster = ReturnType<typeof useToastState>;
 
 // @ts-ignore It's ok ts, we will make sure there's always a context
-export const ToasterContext = React.createContext<Toaster>();
-export const useToaster = () => React.useContext<Toaster>(ToasterContext);
+export const ToasterContext = createContext<Toaster>();
+export const useToaster = () => useContext<Toaster>(ToasterContext);

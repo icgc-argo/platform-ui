@@ -18,6 +18,7 @@
  */
 
 import { css, Modal, ModalContainer, styled, Typography } from '@icgc-argo/uikit';
+import { ComponentProps } from 'react';
 
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import { GqlClinicalSubmissionData } from './types';
@@ -35,9 +36,9 @@ const SignOffValidationModal = ({
 }: {
   clinicalSubmissions: GqlClinicalSubmissionData;
   hasUpdate: boolean;
-  onCloseClick: React.ComponentProps<typeof Modal>['onCloseClick'];
-  onActionClick: React.ComponentProps<typeof Modal>['onActionClick'];
-  onCancelClick: React.ComponentProps<typeof Modal>['onCancelClick'];
+  onCloseClick: ComponentProps<typeof Modal>['onCloseClick'];
+  onActionClick: ComponentProps<typeof Modal>['onActionClick'];
+  onCancelClick: ComponentProps<typeof Modal>['onCancelClick'];
 }) => {
   return (
     <Modal

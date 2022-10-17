@@ -19,9 +19,10 @@
 
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
+import { ComponentProps, useEffect, useState } from 'react';
 
 export const RELEASED_STATE_FILL_COLOURS: {
-  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['fill'];
+  [k in DonorDataReleaseState]: ComponentProps<typeof StarIcon>['fill'];
 } = {
   [DonorDataReleaseState.FULLY]: 'secondary',
   [DonorDataReleaseState.PARTIALLY]: 'secondary_2',
@@ -29,7 +30,7 @@ export const RELEASED_STATE_FILL_COLOURS: {
 };
 
 export const RELEASED_STATE_STROKE_COLOURS: {
-  [k in DonorDataReleaseState]: React.ComponentProps<typeof StarIcon>['outline'];
+  [k in DonorDataReleaseState]: ComponentProps<typeof StarIcon>['outline'];
 } = {
   [DonorDataReleaseState.FULLY]: null,
   [DonorDataReleaseState.PARTIALLY]: null,
@@ -37,8 +38,8 @@ export const RELEASED_STATE_STROKE_COLOURS: {
 };
 
 export const useTimeout = (msTimeout: number = 30000) => {
-  const [isTimeOut, setIsTimeOut] = React.useState(false);
-  React.useEffect(() => {
+  const [isTimeOut, setIsTimeOut] = useState(false);
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsTimeOut(true);
     }, msTimeout);

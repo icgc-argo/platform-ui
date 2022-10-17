@@ -56,6 +56,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { createRef, useState, useEffect } from 'react';
 
 export type DonorEntry = {
   row: string;
@@ -200,10 +201,10 @@ const ClinicalEntityDataTable = ({
   let records = [];
   let columns = [];
   const theme = useTheme();
-  const containerRef = React.createRef<HTMLDivElement>();
-  const [pageSettings, setPageSettings] = React.useState(defaultPageSettings);
+  const containerRef = createRef<HTMLDivElement>();
+  const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
-  const [errorPageSettings, setErrorPageSettings] = React.useState(defaultErrorPageSettings);
+  const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
   const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
@@ -256,7 +257,7 @@ const ClinicalEntityDataTable = ({
     return newPageSettings;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPageSettings(defaultPageSettings);
     setErrorPageSettings(defaultErrorPageSettings);
   }, [entityType, useDefaultQuery]);
@@ -427,7 +428,7 @@ const ClinicalEntityDataTable = ({
       ? `3px solid ${theme.colors.grey}`
       : '';
 
-  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = React.useState(74);
+  const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
 
   const getCellStyles = (state, row, column) => {
     const { original } = row;

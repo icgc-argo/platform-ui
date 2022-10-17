@@ -52,6 +52,7 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRAT
 import GET_REGISTRATION_QUERY from './gql/GET_REGISTRATION_QUERY';
 import Instructions from './Instructions';
 import { ClinicalRegistration, ClinicalRegistrationData } from './types';
+import { ComponentProps } from 'react';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -149,9 +150,7 @@ export default function ProgramIDRegistration() {
     };
   }
 
-  const onErrorClose: (
-    index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] =
+  const onErrorClose: (index: number) => ComponentProps<typeof Notification>['onInteraction'] =
     (index) =>
     ({ type }) => {
       if (type === 'CLOSE') {

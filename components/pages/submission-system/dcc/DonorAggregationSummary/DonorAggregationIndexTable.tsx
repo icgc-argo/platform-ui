@@ -28,6 +28,7 @@ import { format as formatDate, formatDistance } from 'date-fns';
 // GQL Query
 import { useQuery } from '@apollo/client';
 import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
+import { createRef } from 'react';
 
 const columns = [
   {
@@ -89,7 +90,7 @@ const DonorAggregationIndexTable = ({
 
   const someQueriesLoading = queries.some((query) => query.query.loading);
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   return (
     <div
       ref={containerRef}

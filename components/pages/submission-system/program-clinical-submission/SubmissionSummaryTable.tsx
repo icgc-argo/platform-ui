@@ -19,6 +19,7 @@
 
 import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
+import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
@@ -90,7 +91,7 @@ const SubmissionSummaryTable = ({
         } as TableColumnConfig<Entry>),
     ),
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   return (
     <div
       css={css`
@@ -112,7 +113,7 @@ const SubmissionSummaryTable = ({
                     ? theme.colors.accent3_3
                     : theme.colors.accent2_4
                   : null,
-            } as React.CSSProperties,
+            } as CSSProperties,
           };
         }}
         columns={columns}

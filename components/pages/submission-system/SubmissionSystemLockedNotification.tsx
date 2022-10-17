@@ -21,6 +21,7 @@ import { useQuery } from '@apollo/client';
 
 import { css } from '@icgc-argo/uikit';
 import { Notification } from '@icgc-argo/uikit';
+import { useState, ComponentProps } from 'react';
 import CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY from './gql/CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY';
 
 // Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical
@@ -41,7 +42,7 @@ export const SubmissionSystemLockedNotification = ({
   marginBottom?: number;
   canClose?: boolean;
 }) => {
-  const [showNotification, setshowNotification] = React.useState(true);
+  const [showNotification, setshowNotification] = useState(true);
   const isWorkspaceDisabled = useSubmissionSystemDisabled();
 
   const getContent = () => (
@@ -54,7 +55,7 @@ export const SubmissionSystemLockedNotification = ({
     </div>
   );
 
-  const handleOnInteraction: React.ComponentProps<typeof Notification>['onInteraction'] = () => {
+  const handleOnInteraction: ComponentProps<typeof Notification>['onInteraction'] = () => {
     setshowNotification(false);
   };
 

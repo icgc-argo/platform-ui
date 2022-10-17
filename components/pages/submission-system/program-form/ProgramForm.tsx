@@ -44,6 +44,7 @@ import { createProgramSchema, updateProgramSchema } from './validations';
 
 import { xor } from 'lodash';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
+import { PropsWithChildren, ComponentType } from 'react';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -52,7 +53,7 @@ const SectionTitle = (props) => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }: { sm?: number; children?: React.ReactNode }) => (
+const InputLabelWrapper = ({ sm = 3, children }: PropsWithChildren<{ sm?: number }>) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -85,7 +86,7 @@ export default function CreateProgramForm({
   program = {},
   onSubmit,
 }: {
-  leftFooterComponent: React.ComponentType<{
+  leftFooterComponent: ComponentType<{
     formModel: FormModel;
   }>;
   program?: {

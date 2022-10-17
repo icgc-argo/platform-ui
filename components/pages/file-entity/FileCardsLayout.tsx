@@ -19,6 +19,7 @@
 
 import { css } from '@icgc-argo/uikit';
 import { styled } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 import AssociatedDonors from './AssociatedDonors';
 import DataAndAnalysis from './DataAndAnalysis';
@@ -42,7 +43,7 @@ const shouldShowSequencingReadProperties = (fileData: FileEntityData) => {
   );
 };
 
-const FileCardsLayout: React.ComponentType<{
+const FileCardsLayout: ComponentType<{
   fileData: FileEntityData;
 }> = ({ fileData }) => {
   return (

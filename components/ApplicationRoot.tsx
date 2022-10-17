@@ -30,6 +30,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import get from 'lodash/get';
+import { useState, ComponentType, useMemo, PropsWithChildren } from 'react';
 
 import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
@@ -65,7 +66,7 @@ const ToastProvider = ({ children }) => {
 };
 
 function PersistentStateProvider({ children }) {
-  const [persistentContext, setPersistentContext] = React.useState({});
+  const [persistentContext, setPersistentContext] = useState({});
 
   const setItem = (k, v) => {
     setPersistentContext({
@@ -82,15 +83,12 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ apolloCache: any }> = ({
-  children,
-  apolloCache,
-}) => {
+const ApolloClientProvider: ComponentType<{ apolloCache: any }> = ({ children, apolloCache }) => {
   const { GATEWAY_API_ROOT } = getConfig();
   const { fetchWithEgoToken } = useAuthContext();
-  const clientSideCache = React.useMemo(() => createInMemoryCache().restore(apolloCache), []);
+  const clientSideCache = useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
-  const client = React.useMemo(() => {
+  const client = useMemo(() => {
     const uploadLink = createUploadLink({
       uri: urljoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
       fetch: fetchWithEgoToken,
@@ -119,14 +117,13 @@ export default function ApplicationRoot({
   children,
   startWithGlobalLoader,
   initialPermissions,
-}: {
+}: PropsWithChildren<{
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
-  children: React.ReactElement;
   startWithGlobalLoader: boolean;
   initialPermissions: string[];
-}) {
+}>) {
   return (
     <>
       <style>

@@ -20,6 +20,7 @@
 import { useQuery } from '@apollo/client';
 import { SystemAlert } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_SYSTEM_ALERTS_KEY } from 'global/constants';
+import { useEffect, useState } from 'react';
 
 import SYSTEM_ALERTS_QUERY from './gql/SYSTEM_ALERTS_QUERY';
 
@@ -41,10 +42,10 @@ const setLocalStorage = (ids: string[]) => {
 const useSystemAlertsQuery = (options: {} = {}) => useQuery(SYSTEM_ALERTS_QUERY, { ...options });
 
 const SystemAlerts = () => {
-  const [alerts, setAlerts] = React.useState([]);
-  const [dismissedAlerts, setDismissedAlerts] = React.useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [dismissedAlerts, setDismissedAlerts] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const ids = getLocalStorage();
     setDismissedAlerts(ids);
   }, []);

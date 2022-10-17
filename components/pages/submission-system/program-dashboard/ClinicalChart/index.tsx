@@ -24,6 +24,7 @@ import { ContentError, ContentLoader } from 'components/placeholders';
 import { format as formatDate, subDays } from 'date-fns';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { find } from 'lodash';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 
 import {
   DashboardCard,
@@ -89,12 +90,12 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
 
 const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: string }) => {
   // handle date range selection
-  const [dateRangeFrom, setDateRangeFrom] = React.useState<string | null>(null);
-  const [dateRangeTo, setDateRangeTo] = React.useState<string | null>(null);
-  const [activeRangeBtn, setActiveRangeBtn] = React.useState<RangeButtons>('All');
+  const [dateRangeFrom, setDateRangeFrom] = useState<string | null>(null);
+  const [dateRangeTo, setDateRangeTo] = useState<string | null>(null);
+  const [activeRangeBtn, setActiveRangeBtn] = useState<RangeButtons>('All');
   const theme = useTheme();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const daysInRange = find(rangeButtons, { title: activeRangeBtn }).days;
     const today = new Date();
     const dateRangeStart =
@@ -136,17 +137,17 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
   );
 
   // make the chart responsive
-  const lineChartRef = React.useRef<HTMLDivElement>(null);
+  const lineChartRef = useRef<HTMLDivElement>(null);
   const { resizing, width: responsiveWidth } = useElementDimension(lineChartRef);
-  const [initialWidth, setInitialWidth] = React.useState<number | null>(null);
-  React.useLayoutEffect(() => {
+  const [initialWidth, setInitialWidth] = useState<number | null>(null);
+  useLayoutEffect(() => {
     if (lineChartRef.current) {
       setInitialWidth(lineChartRef.current.getBoundingClientRect().width);
     }
   });
 
   // handle the legend
-  const [activeLines, setActiveLines] = React.useState(donorFieldsByChartType);
+  const [activeLines, setActiveLines] = useState(donorFieldsByChartType);
   const handleLegendInput = (line: string) => {
     const nextLines = activeLines.includes(line)
       ? activeLines.filter((activeLine) => activeLine !== line)

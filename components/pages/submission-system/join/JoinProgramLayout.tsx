@@ -29,6 +29,7 @@ import {
 } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
+import { PropsWithChildren } from 'react';
 
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import { getConfig } from 'global/config';
@@ -48,13 +49,12 @@ export default function JoinProgramLayout({
   joinProgramInvite = {},
   notFound,
   loading,
-}: {
+}: PropsWithChildren<{
   tabValue: string;
-  children: React.ReactNode;
   joinProgramInvite: any;
   loading: boolean;
   notFound: boolean;
-}) {
+}>) {
   const { EGO_URL } = getConfig();
   let inviteState: InviteState = InviteState.UnSet;
 

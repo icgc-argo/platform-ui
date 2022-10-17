@@ -36,6 +36,7 @@ import { reactGridBreakpoints } from 'global/utils/common';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
+import { ComponentType } from 'react';
 
 export type NewsItem = {
   title: string;
@@ -52,7 +53,7 @@ type DataReleaseVersion = {
   date: string;
 };
 
-export const DataReleaseBar: React.ComponentType<{
+export const DataReleaseBar: ComponentType<{
   stats: Array<DataReleaseStatistic>;
   version: DataReleaseVersion;
   loading: boolean;
@@ -127,7 +128,7 @@ export const DataReleaseBar: React.ComponentType<{
   );
 };
 
-export const CircleContainer: React.ComponentType<{
+export const CircleContainer: ComponentType<{
   fill: keyof ThemeColorNames;
 }> = ({ fill, children }) => {
   const theme = useTheme();
@@ -148,7 +149,7 @@ export const CircleContainer: React.ComponentType<{
   );
 };
 
-export const DataCallout: React.ComponentType<{
+export const DataCallout: ComponentType<{
   iconName: UikitIconNames;
   iconFill: keyof ThemeColorNames;
   circleFill: keyof ThemeColorNames;
@@ -228,7 +229,7 @@ const GradientBar = styled('div')`
   margin: -5px 0px;
 `;
 
-export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
+export const NewsContainer: ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
   const theme = useTheme();
   return (
     <Container
@@ -347,7 +348,7 @@ export const ResponsiveGridLayout = styled('div')`
   grid-gap: 1rem;
 `;
 
-export const ResourceBox: React.ComponentType<{
+export const ResourceBox: ComponentType<{
   iconName: UikitIconNames;
   iconFill: keyof ThemeColorNames;
   circleFill: keyof ThemeColorNames;
@@ -416,7 +417,7 @@ export const ResourceBox: React.ComponentType<{
   );
 };
 
-export const OvertureBanner: React.ComponentType<{}> = ({}) => {
+export const OvertureBanner: ComponentType<{}> = ({}) => {
   const theme = useTheme();
   return (
     <div
