@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import ClinicalDownloadButton from '../DownloadButtons';
 import {
   Button,
   Container,
@@ -35,6 +36,7 @@ import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,
   emptySearchResponse,
+  clinicalEntityFields,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -42,7 +44,6 @@ import {
   searchBoldTextStyle,
   searchClearFilterStyle,
   searchDownArrowStyle,
-  searchDownloadIconStyle,
   searchDropdownStyle,
   searchFilterButtonStyle,
   searchFilterContainerStyle,
@@ -82,6 +83,7 @@ export default function SearchBar({
   keyword,
   setKeyword,
   donorSearchResults,
+  setUrlDonorIds,
 }: {
   noData: boolean;
   onChange: Dispatch<SetStateAction<CompletionStates>>;
@@ -90,12 +92,14 @@ export default function SearchBar({
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
   const [searchOpen, setSearchOpen] = useState(false);
   const setSearchValue = (value) => {
     setKeyword(value);
+    setUrlDonorIds(value);
     setSearchOpen(false);
   };
 
@@ -107,7 +111,7 @@ export default function SearchBar({
   });
 
   const {
-    clinicalSearchResults: { searchResults, totalResults },
+    clinicalSearchResults: { searchResults },
   } = donorSearchResults || emptySearchResponse;
   const searchResultItems =
     searchResults
@@ -125,6 +129,8 @@ export default function SearchBar({
       ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 
+  const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
+
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
@@ -133,7 +139,7 @@ export default function SearchBar({
         {keyword && (
           <Button
             onClick={() => {
-              setKeyword('');
+              setSearchValue('');
             }}
             css={searchClearFilterStyle}
             variant="secondary"
@@ -211,28 +217,14 @@ export default function SearchBar({
             </span>
           </Button>
         </div>
-        {/* Fourth item - download button*/}
 
-        <Button
-          css={css`
-            margin: 5px 10px 5px 10px;
-            height: fit-content;
-            :disabled {
-              background: #f6f6f7;
-              color: ${theme.colors.grey_1};
-            }
-          `}
-          variant="secondary"
-          disabled={noData}
-        >
-          <Icon
-            css={searchDownloadIconStyle}
-            name="download"
-            fill={noData ? 'grey_1' : 'accent2_dark'}
-            height="12px"
-          />
-          Clinical Data
-        </Button>
+        {/* Fourth item - download button*/}
+        <ClinicalDownloadButton
+          searchResults={downloadIds}
+          text="Clinical Data"
+          entityTypes={clinicalEntityFields}
+          completionState={completionState}
+        />
       </div>
     </Container>
   );

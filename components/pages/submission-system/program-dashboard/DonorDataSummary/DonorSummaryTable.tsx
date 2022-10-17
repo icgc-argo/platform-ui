@@ -17,6 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
+import NextLink from 'next/link';
+import urlJoin from 'url-join';
+
+import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
+import {
+  ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
+  parseDonorIdString,
+} from 'components/pages/submission-system/program-submitted-data/common';
+
 import {
   DonorDataReleaseState,
   DonorSummaryEntrySort,
@@ -42,11 +53,12 @@ import {
 import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
-import { css } from '@icgc-argo/uikit';
+import { css, Link } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';
 
+import { createRef, PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from 'react';
 import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
 import {
@@ -56,7 +68,6 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { createRef, useState, PropsWithChildren, Ref, useRef, useMemo, useEffect } from 'react';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -430,6 +441,37 @@ const DonorSummaryTable = ({
     },
   });
 
+  const donorsWithErrors = programDonorSummaryEntries
+    .filter((entry) => !entry.validWithCurrentDictionary)
+    .map((entry) => {
+      const { donorId } = entry;
+      const ID = parseDonorIdString(donorId);
+      return ID;
+    });
+
+  // Search Result Query
+  const { data: clinicalErrorData, loading: errorDataLoading } =
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ERRORS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          donorIds: donorsWithErrors,
+        },
+      },
+    });
+
+  const errorLinkData = clinicalErrorData
+    ? donorsWithErrors.map((donorId) => {
+        const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
+          (donor) => donorId === donor.donorId,
+        );
+        const entity = currentDonor.errors[0].entityName;
+        return { donorId, entity };
+      })
+    : [];
+
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -470,7 +512,21 @@ const DonorSummaryTable = ({
           ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return `${original.donorId} (${original.submitterDonorId})`;
+            const errorTab =
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
+
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}`,
+              errorTab && `&tab=${errorTab}`,
+            );
+            return (
+              <NextLink href={linkUrl}>
+                <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              </NextLink>
+            );
           },
         },
         {

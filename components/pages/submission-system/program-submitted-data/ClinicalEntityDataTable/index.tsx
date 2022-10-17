@@ -39,14 +39,15 @@ import {
   aliasedEntityFields,
   aliasedEntityNames,
   aliasSortNames,
-  clinicalEntityDisplayNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
-  CompletionStates,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  emptySearchResponse,
+  clinicalEntityDisplayNames,
+  CompletionStates,
   reverseLookUpEntityAlias,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
@@ -186,7 +187,7 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  donorSearchResults,
+  donorSearchResults = emptySearchResponse,
   useDefaultQuery,
 }: {
   entityType: string;
@@ -209,9 +210,10 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+
   const {
     clinicalSearchResults: { searchResults, totalResults },
-  } = donorSearchResults;
+  } = donorSearchResults || emptySearchResponse;
 
   const nextSearchPage = (page + 1) * pageSize;
   const donorIds = useDefaultQuery
