@@ -19,7 +19,7 @@
 
 import { css, DropdownButton, Icon } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import * as React from 'react';
+
 import {
   downloadTsvFileTemplate,
   instructionBoxButtonContentStyle,

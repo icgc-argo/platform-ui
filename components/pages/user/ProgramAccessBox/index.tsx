@@ -33,7 +33,7 @@ import {
 } from 'global/utils/egoJwt';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
-import * as React from 'react';
+
 import { Box } from '../common';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
 

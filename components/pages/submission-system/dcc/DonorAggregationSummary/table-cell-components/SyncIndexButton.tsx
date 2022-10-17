@@ -18,7 +18,7 @@
  */
 
 import { isEmpty } from 'lodash';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 
 import { Button, Typography, useTheme } from '@icgc-argo/uikit';

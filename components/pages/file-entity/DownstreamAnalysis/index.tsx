@@ -20,7 +20,7 @@
 import { css } from '@icgc-argo/uikit';
 import { Button, Link, Table, TableColumnConfig, Typography } from '@icgc-argo/uikit';
 import fileSize from 'filesize';
-import * as React from 'react';
+
 import { DownloadIcon, FileCard, getAccessIcon } from '../common';
 import { FileRecord } from '../types';
 

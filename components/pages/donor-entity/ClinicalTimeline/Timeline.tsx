@@ -18,7 +18,7 @@
  */
 
 import { css, Icon, Tag, Typography, useTheme, VerticalTabs } from '@icgc-argo/uikit';
-import * as React from 'react';
+
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';

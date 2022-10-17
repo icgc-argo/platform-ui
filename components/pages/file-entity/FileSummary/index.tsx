@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { css } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import { FileCard, getAccessIcon, TableDiv } from '../common';

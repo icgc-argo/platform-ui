@@ -38,7 +38,7 @@ import useFormHook from 'global/hooks/useFormHook';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import * as React from 'react';
+
 import { Col, Row } from 'react-grid-system';
 import { createProgramSchema, updateProgramSchema } from './validations';
 

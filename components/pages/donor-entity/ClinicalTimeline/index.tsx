@@ -30,7 +30,7 @@ import ContentError from 'components/placeholders/ContentError';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import * as React from 'react';
+
 import { Col, Row } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';

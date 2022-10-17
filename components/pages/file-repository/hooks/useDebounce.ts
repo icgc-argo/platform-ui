@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 // from https://usehooks.com/useDebounce/
 const useDebounce = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = React.useState(value);

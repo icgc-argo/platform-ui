@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-
 import { createPage } from 'global/utils/pages';
 import ProgramSampleRegistration from 'components/pages/submission-system/program-sample-registration';
 import { isRdpcMember, canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';

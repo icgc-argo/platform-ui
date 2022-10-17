@@ -24,7 +24,7 @@ import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 
 export default createPage({ isPublic: true })(() => {

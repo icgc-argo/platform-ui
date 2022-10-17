@@ -22,7 +22,7 @@ import { Button, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uik
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
-import * as React from 'react';
+
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FileCentricDocumentField } from '../file-repository/types';

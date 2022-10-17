@@ -28,7 +28,7 @@ import {
   DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 import usePageContext from 'global/hooks/usePageContext';
-import * as React from 'react';
+
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import SubmissionLayout from '../layout';

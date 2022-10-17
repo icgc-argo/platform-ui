@@ -27,7 +27,7 @@ import {
   UikitTheme,
   useTheme,
 } from '@icgc-argo/uikit';
-import * as React from 'react';
+
 import { Col, Hidden, Row, Visible } from 'react-grid-system';
 
 import DefaultLayout from '../DefaultLayout';

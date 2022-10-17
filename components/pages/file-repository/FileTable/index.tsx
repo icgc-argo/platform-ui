@@ -40,7 +40,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import * as React from 'react';
+
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';

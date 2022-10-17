@@ -18,7 +18,6 @@
  */
 
 import { Modal } from '@icgc-argo/uikit';
-import * as React from 'react';
 
 type ModalProps = React.ComponentProps<typeof Modal>;
 

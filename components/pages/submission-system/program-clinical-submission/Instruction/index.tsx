@@ -31,7 +31,7 @@ import {
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import * as React from 'react';
+
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,

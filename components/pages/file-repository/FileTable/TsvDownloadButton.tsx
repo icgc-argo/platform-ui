@@ -23,7 +23,7 @@ import { getConfig } from 'global/config';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 import {
   instructionBoxButtonContentStyle,

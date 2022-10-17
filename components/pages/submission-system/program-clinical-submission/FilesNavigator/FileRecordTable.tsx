@@ -25,7 +25,7 @@ import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import pluralize from 'pluralize';
-import * as React from 'react';
+
 import {
   CellContentCenter,
   DataTableStarIcon,

@@ -18,7 +18,7 @@
  */
 
 import { usePageQuery } from 'global/hooks/usePageContext';
-import * as React from 'react';
+
 import { useQuery } from '@apollo/client';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME_QUERY from './gql/PROGRAM_SHORTNAME_QUERY';

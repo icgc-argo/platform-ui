@@ -19,7 +19,6 @@
 
 import TeamPage from 'components/pages/team';
 import { createPage } from 'global/utils/pages';
-import * as React from 'react';
 
 export default createPage({
   isPublic: true,

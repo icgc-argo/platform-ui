@@ -31,7 +31,7 @@ import {
 import { getConfig } from 'global/config';
 import { DOCS_DATA_ACCESS_PAGE, DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
 import get from 'lodash/get';
-import * as React from 'react';
+
 import { Box } from '../common';
 import { ApiToken } from '../types';
 import GENERATE_EGO_API_TOKEN_MUTATION from './gql/GENERATE_EGO_API_TOKEN_MUTATION';

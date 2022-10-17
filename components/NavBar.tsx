@@ -48,7 +48,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import * as React from 'react';
+
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ModalPortal from './Modal';

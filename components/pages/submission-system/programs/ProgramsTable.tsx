@@ -28,7 +28,6 @@ import {
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {

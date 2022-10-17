@@ -30,7 +30,7 @@ import {
   FileSelectButton,
 } from '@icgc-argo/uikit';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import * as React from 'react';
+
 import RegisterSamplesModal from './RegisterSamplesModal';
 
 import useCommonToasters from 'components/useCommonToasters';

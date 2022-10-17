@@ -18,7 +18,7 @@
  */
 
 import { css, Modal, ModalContainer, styled, Typography } from '@icgc-argo/uikit';
-import * as React from 'react';
+
 import SubmissionSummaryTable from './SubmissionSummaryTable';
 import { GqlClinicalSubmissionData } from './types';
 

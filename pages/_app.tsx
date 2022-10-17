@@ -24,7 +24,7 @@ import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/e
 import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
-import * as React from 'react';
+
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';

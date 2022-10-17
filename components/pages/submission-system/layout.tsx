@@ -22,7 +22,7 @@ import NavBar from 'components/NavBar';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
-import * as React from 'react';
+
 import {
   Collapsible,
   ContentBody,

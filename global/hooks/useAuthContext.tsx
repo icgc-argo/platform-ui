@@ -24,7 +24,7 @@ import { getFilename } from 'global/utils/stringUtils';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';

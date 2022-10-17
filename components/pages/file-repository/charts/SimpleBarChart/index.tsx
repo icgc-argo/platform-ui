@@ -30,7 +30,6 @@ import {
 import { capitalize } from 'global/utils/stringUtils';
 import { maxBy, orderBy } from 'lodash';
 import pluralize from 'pluralize';
-import * as React from 'react';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {

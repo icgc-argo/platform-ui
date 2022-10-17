@@ -32,7 +32,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
-import * as React from 'react';
+
 import { TableInfoHeaderContainer } from '../../common';
 import ErrorNotification from '../../ErrorNotification';
 import {

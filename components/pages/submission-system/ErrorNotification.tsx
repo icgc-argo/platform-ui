@@ -30,7 +30,7 @@ import {
 import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
-import * as React from 'react';
+
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 
 export const getDefaultColumns = (level: NotificationVariant) => {

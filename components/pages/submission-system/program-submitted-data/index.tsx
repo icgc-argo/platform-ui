@@ -35,7 +35,7 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import { Row, setConfiguration } from 'react-grid-system';
 import SubmissionLayout from '../layout';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';

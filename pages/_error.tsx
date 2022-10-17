@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import get from 'lodash/get';
 import Page404 from 'components/pages/404';
 import Page500 from 'components/pages/500';

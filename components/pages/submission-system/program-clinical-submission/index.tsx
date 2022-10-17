@@ -20,7 +20,7 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import { ContentHeader, styled, useTheme } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import * as React from 'react';
+
 import SubmissionLayout from '../layout';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY';
 import Header from './Header';

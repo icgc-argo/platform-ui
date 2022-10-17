@@ -20,7 +20,7 @@
 import { css, InteractiveIcon, MailTo, Table, TableColumnConfig } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
-import * as React from 'react';
+
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 

@@ -19,7 +19,7 @@
 
 import { Button, css, Icon, styled, Typography, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { find } from 'lodash';
-import * as React from 'react';
+
 import { ChartType, DonorField } from './types';
 import { makeChartLineMeta } from './utils';
 

@@ -34,7 +34,7 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
-import * as React from 'react';
+
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';

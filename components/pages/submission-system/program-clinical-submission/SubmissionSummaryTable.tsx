@@ -19,7 +19,7 @@
 
 import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import * as React from 'react';
+
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';

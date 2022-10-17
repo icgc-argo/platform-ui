@@ -40,7 +40,7 @@ import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import SubmissionLayout from '../layout';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';

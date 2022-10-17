@@ -41,7 +41,7 @@ import map from 'lodash/map';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import Router from 'next/router';
-import * as React from 'react';
+
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';

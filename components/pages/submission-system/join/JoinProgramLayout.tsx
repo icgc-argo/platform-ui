@@ -29,7 +29,6 @@ import {
 } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
-import * as React from 'react';
 
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import { getConfig } from 'global/config';

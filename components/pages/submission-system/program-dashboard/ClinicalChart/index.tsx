@@ -24,7 +24,7 @@ import { ContentError, ContentLoader } from 'components/placeholders';
 import { format as formatDate, subDays } from 'date-fns';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { find } from 'lodash';
-import * as React from 'react';
+
 import {
   DashboardCard,
   DashboardSummaryData,

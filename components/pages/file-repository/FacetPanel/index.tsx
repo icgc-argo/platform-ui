@@ -39,7 +39,7 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { trim } from 'lodash';
-import * as React from 'react';
+
 import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';

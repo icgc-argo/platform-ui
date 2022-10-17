@@ -46,7 +46,7 @@ import { css } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';
-import * as React from 'react';
+
 import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
 import {

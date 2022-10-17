@@ -51,7 +51,7 @@ import { useToaster } from 'global/hooks/toaster';
 import useFormHook from 'global/hooks/useFormHook';
 import { email, firstName, lastName } from 'global/utils/form/validations';
 import yup from 'global/utils/validations';
-import * as React from 'react';
+
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Col, Row } from 'react-grid-system';
 import urljoin from 'url-join';

@@ -25,7 +25,6 @@ import {
   TOAST_VARIANTS,
 } from '@icgc-argo/uikit';
 import omit from 'lodash/omit';
-import * as React from 'react';
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {

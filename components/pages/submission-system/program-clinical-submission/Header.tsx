@@ -29,7 +29,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { sleep } from 'global/utils/common';
 import { isDccMember } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import { Row } from 'react-grid-system';
 import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';

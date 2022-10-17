@@ -20,7 +20,6 @@
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 

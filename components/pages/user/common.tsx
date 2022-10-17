@@ -18,7 +18,6 @@
  */
 
 import { ContentBox, css, Icon, Tag, Typography, UikitIconNames } from '@icgc-argo/uikit';
-import * as React from 'react';
 
 export const Box = ({
   children,

@@ -30,7 +30,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import get from 'lodash/get';
-import * as React from 'react';
+
 import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
 import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';

@@ -36,7 +36,7 @@ import usePageContext from 'global/hooks/usePageContext';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import union from 'lodash/union';
-import * as React from 'react';
+
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';

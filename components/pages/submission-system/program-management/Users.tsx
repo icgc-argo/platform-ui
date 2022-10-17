@@ -18,7 +18,6 @@
  */
 
 import { useMutation } from '@apollo/client';
-import * as React from 'react';
 
 import { TableActionBar, TOAST_INTERACTION, TOAST_VARIANTS } from '@icgc-argo/uikit';
 import UsersTable from './UsersTable';
