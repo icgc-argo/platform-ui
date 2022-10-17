@@ -368,7 +368,7 @@ export type CompletionStats = {
   __typename?: 'CompletionStats';
   coreCompletion?: Maybe<CoreCompletionFields>;
   coreCompletionDate?: Maybe<Scalars['String']>;
-  coreCompletionPercentage?: Maybe<Scalars['Float']>;
+  coreCompletionPercentage?: Maybe<Scalars['Int']>;
   donorId?: Maybe<Scalars['Int']>;
   overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
