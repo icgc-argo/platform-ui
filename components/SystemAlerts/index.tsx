@@ -62,11 +62,11 @@ const SystemAlerts = () => {
   const alertsDisplay = alerts.filter(({ id }) => !dismissedAlerts.includes(id));
 
   return alertsDisplay.length > 0 && !loading ? (
-    <React.Fragment>
+    <>
       {alertsDisplay.map((alert: SystemAlert) => (
         <SystemAlert alert={alert} key={alert.id} onClose={() => handleClose(alert.id)} />
       ))}
-    </React.Fragment>
+    </>
   ) : null;
 };
 

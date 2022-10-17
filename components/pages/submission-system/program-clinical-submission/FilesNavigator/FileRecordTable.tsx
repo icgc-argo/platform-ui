@@ -236,7 +236,7 @@ const FileRecordTable = ({
         </div>
       </div>
     ) : (
-      <React.Fragment>{original[fieldName]}</React.Fragment>
+      <>{original[fieldName]}</>
     );
 
   const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [

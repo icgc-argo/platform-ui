@@ -199,7 +199,7 @@ export default function CreateProgramForm({
   };
 
   return (
-    <React.Fragment>
+    <>
       <form name="createProgram">
         <Col>
           <Row>
@@ -479,7 +479,7 @@ export default function CreateProgramForm({
             </Row>
           </FormControl>
           {!isEditing && (
-            <React.Fragment>
+            <>
               <Row>
                 <Col>
                   <SectionTitle>Program Administrator</SectionTitle>
@@ -550,7 +550,7 @@ export default function CreateProgramForm({
                   </Col>
                 </Row>
               </FormControl>
-            </React.Fragment>
+            </>
           )}
         </Col>
       </form>
@@ -576,6 +576,6 @@ export default function CreateProgramForm({
         )}
         {LeftFooterComponent && <LeftFooterComponent formModel={formModel} />}
       </Row>
-    </React.Fragment>
+    </>
   );
 }

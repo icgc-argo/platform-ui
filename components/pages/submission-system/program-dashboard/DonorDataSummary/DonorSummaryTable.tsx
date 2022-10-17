@@ -717,7 +717,7 @@ const DonorSummaryTable = ({
           Clear Filters
         </FilterClearButton>
       ) : (
-        <React.Fragment></React.Fragment>
+        <></>
       ),
       columns: [
         {
@@ -784,7 +784,7 @@ const DonorSummaryTable = ({
       {programDonorsSummaryQueryError ? (
         <ContentError />
       ) : (
-        <React.Fragment>
+        <>
           <DonorSummaryTableLegend
             css={css`
               opacity: ${isTableLoading ? 0.5 : 1};
@@ -808,7 +808,7 @@ const DonorSummaryTable = ({
             // filter panel style workarounds
             className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
           />
-        </React.Fragment>
+        </>
       )}
     </div>
   );

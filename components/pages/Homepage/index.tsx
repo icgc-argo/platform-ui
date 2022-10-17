@@ -61,20 +61,20 @@ const newsItems: NewsItem[] = [
   {
     title: 'June 8, 2022',
     text: (
-      <React.Fragment>
+      <>
         Data submitters can now submit supplemental surgery data for donors that have this specified
         treatment in the new{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
           Surgery clinical table
         </Link>
         .
-      </React.Fragment>
+      </>
     ),
   },
   {
     title: 'March 7, 2022',
     text: (
-      <React.Fragment>
+      <>
         We are excited to announce{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
           Data Release 5.0
@@ -107,13 +107,13 @@ const newsItems: NewsItem[] = [
           LUCA-KR
         </Link>
         .
-      </React.Fragment>
+      </>
     ),
   },
   {
     title: 'New Features',
     text: (
-      <React.Fragment>
+      <>
         Program dashboards and the File Repository have been updated with new features to filter on{' '}
         <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
           Open Access Variant Filtered
@@ -137,7 +137,7 @@ const newsItems: NewsItem[] = [
           Software Release 1.110.1 - API 3.32.0
         </Link>{' '}
         are now available.
-      </React.Fragment>
+      </>
     ),
   },
 ];
@@ -145,7 +145,7 @@ const newsItems: NewsItem[] = [
 const SeparationLine: React.ComponentType<{}> = () => {
   const theme = useTheme();
   return (
-    <React.Fragment>
+    <>
       <Hidden sm>
         <div
           css={css`
@@ -166,7 +166,7 @@ const SeparationLine: React.ComponentType<{}> = () => {
           `}
         />
       </Visible>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -68,7 +68,7 @@ const DonorEntity = ({ donor }) => {
               <DnaLoader />
             </div>
           ) : (
-            <React.Fragment>
+            <>
               <ContentHeader>
                 <DonorTitleBar
                   programId={program_id}
@@ -80,7 +80,7 @@ const DonorEntity = ({ donor }) => {
               <ContentBody>
                 <DonorCardsLayout donorData={donor} />
               </ContentBody>
-            </React.Fragment>
+            </>
           )}
           <Footer />
         </PageContent>

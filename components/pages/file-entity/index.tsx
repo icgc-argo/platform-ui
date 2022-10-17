@@ -86,7 +86,7 @@ const FileEntity = ({ fileId }) => {
               <DnaLoader />
             </div>
           ) : (
-            <React.Fragment>
+            <>
               <ContentHeader>
                 <FileTitleBar
                   programShortName={programShortName}
@@ -101,7 +101,7 @@ const FileEntity = ({ fileId }) => {
               <ContentBody>
                 <FileCardsLayout fileData={data} />
               </ContentBody>
-            </React.Fragment>
+            </>
           )}
           <Footer />
         </PageContent>

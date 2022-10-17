@@ -190,7 +190,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
         ) : isLoading ? (
           <ContentLoader />
         ) : (
-          <React.Fragment>
+          <>
             <RangeControlBar
               activeBtn={activeRangeBtn}
               handleBtnClick={setActiveRangeBtn}
@@ -222,7 +222,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
                 yAxisTitle="donors"
               />
             </div>
-          </React.Fragment>
+          </>
         )}
       </div>
     </DashboardCard>

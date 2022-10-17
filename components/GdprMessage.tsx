@@ -36,7 +36,7 @@ const GdprMessage = () => {
     sync();
   }, []);
   return (
-    <React.Fragment>
+    <>
       {!accepted && (
         <div
           css={css`
@@ -81,7 +81,7 @@ const GdprMessage = () => {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

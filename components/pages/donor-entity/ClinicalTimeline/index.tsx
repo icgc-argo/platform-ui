@@ -68,7 +68,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
     const dataCols = splitIntoColumns(selectedData, 2);
 
     return (
-      <React.Fragment>
+      <>
         <Row>
           <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
@@ -86,7 +86,7 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
             <Samples samples={selectedSamples} />
           </Col>
         </Row>
-      </React.Fragment>
+      </>
     );
   } else if (!isEmpty(selectedData)) {
     const dataCols = splitIntoColumns(selectedData, 2);
@@ -177,7 +177,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
           flex: 1;
         `}
       >
-        <React.Fragment>
+        <>
           <div
             css={css`
               writing-mode: vertical-lr;
@@ -267,7 +267,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
               )}
             </Col>
           </Row>
-        </React.Fragment>
+        </>
       </div>
     </Container>
   );

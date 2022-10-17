@@ -715,7 +715,7 @@ const FacetPanel = () => {
                   `}
                 />
                 {searchQuery && searchQuery.length >= 1 && searchOpen ? (
-                  <React.Fragment>
+                  <>
                     <div
                       css={css`
                         background: transparent;
@@ -740,7 +740,7 @@ const FacetPanel = () => {
                         setSearchOpen(false);
                       }}
                     />
-                  </React.Fragment>
+                  </>
                 ) : null}
               </div>
               {/* disabled for initial File Repo release */}

@@ -182,7 +182,7 @@ export default function SearchBar({
             getOverrideCss={() => searchInputFieldStyle}
           />
           {keyword && keyword.length >= 1 && searchOpen ? (
-            <React.Fragment>
+            <>
               <div
                 css={css`
                   background: transparent;
@@ -201,7 +201,7 @@ export default function SearchBar({
                 isLoading={loading}
                 onSelect={setSearchValue}
               />
-            </React.Fragment>
+            </>
           ) : null}
           <Button css={searchFilterButtonStyle} variant="secondary">
             <span css={searchFilterContainerStyle}>
