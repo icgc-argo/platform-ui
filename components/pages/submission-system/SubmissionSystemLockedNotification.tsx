@@ -19,9 +19,8 @@
 
 import { useQuery } from '@apollo/client';
 
-import { css } from '@icgc-argo/uikit';
-import { Notification } from '@icgc-argo/uikit';
-import { useState, ComponentProps } from 'react';
+import { css, Notification } from '@icgc-argo/uikit';
+import { ComponentProps, useState } from 'react';
 import CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY from './gql/CLINICAL_SUBMISSION_SYSTEM_DISABLED_QUERY';
 
 // Note: submission system disabled means disabled for both sample_registraiton and clinical_submission in clinical

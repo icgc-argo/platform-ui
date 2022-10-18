@@ -18,8 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Container, PercentBar, styled, Typography } from '@icgc-argo/uikit';
+import { Container, css, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { ComponentType } from 'react';

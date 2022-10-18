@@ -17,18 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Table } from '@icgc-argo/uikit';
+import { css, Table } from '@icgc-argo/uikit';
 
-import { css } from '@icgc-argo/uikit';
-
+import { format as formatDate, formatDistance } from 'date-fns';
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
 import SyncIndexButton from './table-cell-components/SyncIndexButton';
-import { format as formatDate, formatDistance } from 'date-fns';
 
 // GQL Query
 import { useQuery } from '@apollo/client';
-import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 import { createRef } from 'react';
+import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 
 const columns = [
   {

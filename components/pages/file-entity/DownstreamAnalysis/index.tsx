@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Button, Link, Table, TableColumnConfig, Typography } from '@icgc-argo/uikit';
+import { Button, css, Link, Table, TableColumnConfig, Typography } from '@icgc-argo/uikit';
 import fileSize from 'filesize';
 import { createRef } from 'react';
 

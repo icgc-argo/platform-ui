@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Button, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
 import { format as formatDate } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { getConfig } from 'global/config';

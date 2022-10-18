@@ -17,27 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Typography } from '@icgc-argo/uikit';
-import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
-import DonorSummaryTable from './DonorSummaryTable';
+import { QueryHookOptions, useQuery } from '@apollo/client';
+import { css, Typography } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { useQuery, QueryHookOptions } from '@apollo/client';
+import { Col, Row } from 'react-grid-system';
+import ContentError from '../../../../placeholders/ContentError';
+import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
+import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from './common';
+import DonorSummaryTable from './DonorSummaryTable';
+import DownloadButtons from './DownloadButtons';
+import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
+import { InvalidDonorsNotification } from './InvalidDonorsNotification';
 import {
-  ProgramDonorsSummaryQueryData,
-  ProgramDonorsSummaryQueryVariables,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  ProgramDonorsSummaryQueryData,
+  ProgramDonorsSummaryQueryVariables,
   ProgramDonorSummaryFilter,
 } from './types';
-import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
-import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from './common';
-import { css } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
-import DownloadButtons from './DownloadButtons';
-import { InvalidDonorsNotification } from './InvalidDonorsNotification';
-import ContentError from '../../../../placeholders/ContentError';
 
 export const useProgramDonorsSummaryQuery = ({
   programShortName,

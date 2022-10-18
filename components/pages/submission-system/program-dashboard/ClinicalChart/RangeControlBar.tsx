@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Typography, useTheme } from '@icgc-argo/uikit';
+import { css, Typography, useTheme } from '@icgc-argo/uikit';
 import { PropsWithChildren } from 'react';
 import { rangeButtons } from './utils';
 

@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Icon, useTheme } from '@icgc-argo/uikit';
+import { css, Icon, useTheme } from '@icgc-argo/uikit';
 import { StatArea as StatAreaDisplay } from '../../common';
 import {
   EMPTY_PROGRAM_SUMMARY_STATS,

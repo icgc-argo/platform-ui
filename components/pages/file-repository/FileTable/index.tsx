@@ -18,9 +18,9 @@
  */
 
 import { QueryHookOptions, useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
 import {
   Container,
+  css,
   Link,
   SelectTable,
   TableColumnConfig,
@@ -40,7 +40,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import { useState, useEffect, createRef } from 'react';
+import { createRef, useEffect, useState } from 'react';
 
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';

@@ -18,13 +18,12 @@
  */
 
 import { QueryHookOptions, useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Typography, useElementDimension, useTheme } from '@icgc-argo/uikit';
+import { css, Typography, useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { ContentError, ContentLoader } from 'components/placeholders';
 import { format as formatDate, subDays } from 'date-fns';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { find } from 'lodash';
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import {
   DashboardCard,

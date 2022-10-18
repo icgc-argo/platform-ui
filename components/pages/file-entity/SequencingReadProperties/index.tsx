@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { styled, Typography, useTheme } from '@icgc-argo/uikit';
+import { css, styled, Typography, useTheme } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
 import { FileCard, TableDiv } from '../common';
 import { FileMetricsInfo } from '../types';

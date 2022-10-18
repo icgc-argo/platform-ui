@@ -39,10 +39,12 @@ import {
 } from './types';
 
 import {
+  css,
   DropdownPanel,
   FilterClearButton,
   FilterOption,
   Icon,
+  Link,
   ListFilter,
   styled,
   Table,
@@ -53,7 +55,6 @@ import {
 import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
-import { css, Link } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';

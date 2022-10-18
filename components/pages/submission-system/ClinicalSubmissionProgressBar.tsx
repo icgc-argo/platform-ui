@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Progress } from '@icgc-argo/uikit';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionError } from './program-clinical-submission/types';
+import { css, Progress } from '@icgc-argo/uikit';
+import { ComponentProps, ComponentType, useMemo, useState } from 'react';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';
-import { css } from '@icgc-argo/uikit';
+import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
-import { ComponentType, useState, useMemo, ComponentProps } from 'react';
 
 const ClinicalSubmissionProgressBar: ComponentType<{
   programShortName: string;
