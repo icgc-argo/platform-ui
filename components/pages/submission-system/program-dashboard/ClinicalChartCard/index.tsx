@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { ContentPlaceholder, Link, Typography } from '@icgc-argo/uikit';
+import { ContentPlaceholder, css, Link, Typography } from '@icgc-argo/uikit';
 import ClinicalChart from 'components/pages/submission-system/program-dashboard/ClinicalChart';
 import { ChartType } from 'components/pages/submission-system/program-dashboard/ClinicalChart/types';
 import { DashboardCard } from 'components/pages/submission-system/program-dashboard/common';

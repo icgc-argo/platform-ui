@@ -69,14 +69,14 @@ spec:
                 }
             }
         }
-        stage('Test') {
-            steps {
-                container('node') {
-                    sh "npm ci"
-                    sh "npm run test"
-                }
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         container('node') {
+        //             sh "npm ci"
+        //             sh "npm run test"
+        //         }
+        //     }
+        // }
 
         stage('Build container') {
             steps {

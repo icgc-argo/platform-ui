@@ -30,7 +30,8 @@ import {
 import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
-import * as React from 'react';
+import { ReactNode, ComponentProps, createRef } from 'react';
+
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
@@ -75,14 +76,14 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
 }: {
   level: NotificationVariant;
   title: string;
-  subtitle: React.ReactNode;
+  subtitle: ReactNode;
   columnConfig: Array<
     TableColumnConfig<Error> & {
       accessor: keyof Error | string;
     }
   >;
   errors: Array<Error>;
-  onClearClick?: React.ComponentProps<typeof Button>['onClick'];
+  onClearClick?: ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
   tableProps?: Partial<TableProps>;
 }) => {
@@ -149,7 +150,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
         `,
       }}
       content={(() => {
-        const containerRef = React.createRef<HTMLDivElement>();
+        const containerRef = createRef<HTMLDivElement>();
         return (
           <div
             ref={containerRef}

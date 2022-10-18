@@ -18,9 +18,9 @@
  */
 
 import { QueryHookOptions, useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
 import {
   Container,
+  css,
   Link,
   SelectTable,
   TableColumnConfig,
@@ -40,7 +40,8 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import * as React from 'react';
+import { createRef, useEffect, useState } from 'react';
+
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';
@@ -95,13 +96,13 @@ const useFileRepoTableQuery = (
 };
 
 const useFileRepoPaginationState = () => {
-  const [pagingState, setPagingState] = React.useState({
+  const [pagingState, setPagingState] = useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
     sort: DEFAULT_SORT,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     resetCurrentPage();
   }, [pagingState.pageSize]);
 
@@ -165,7 +166,7 @@ const FileTable = () => {
 
   const { pagingState, onPageChange, onPageSizeChange, onSortedChange, resetCurrentPage } =
     useFileRepoPaginationState();
-  React.useEffect(() => {
+  useEffect(() => {
     resetCurrentPage();
   }, [filters]);
 
@@ -305,7 +306,7 @@ const FileTable = () => {
     //   },
     // },
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({

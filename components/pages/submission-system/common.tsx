@@ -30,7 +30,7 @@ import {
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';
 import { displayDateAndTime } from 'global/utils/common';
-import { HtmlHTMLAttributes } from 'react';
+import { ComponentType, HtmlHTMLAttributes, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import { formatFileName } from './program-sample-registration/util';
@@ -128,12 +128,12 @@ export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?
   <Icon name="star" width="16px" height="16px" {...props} />
 );
 export const StatArea: {
-  Container: React.ComponentType<{ className?: string }>;
-  Section: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement> & { faded?: boolean }>;
-  StatEntryContainer: React.ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
+  Container: ComponentType<{ className?: string }>;
+  Section: ComponentType<HtmlHTMLAttributes<HTMLDivElement> & { faded?: boolean }>;
+  StatEntryContainer: ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
   StarIcon: typeof DataTableStarIcon;
 } = (() => {
-  const Container: React.ComponentType<{ className?: string }> = ({ children, className }) => (
+  const Container: ComponentType<{ className?: string }> = ({ children, className }) => (
     <Typography
       variant="data"
       component="div"
@@ -228,8 +228,8 @@ export const TableInfoHeaderContainer = ({
   right,
   noMargin,
 }: {
-  left?: React.ReactNode;
-  right?: React.ReactNode;
+  left?: ReactNode;
+  right?: ReactNode;
   noMargin?: boolean;
 }) => {
   const theme = useTheme();

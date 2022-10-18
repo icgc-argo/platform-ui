@@ -28,7 +28,8 @@ import {
   DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 import usePageContext from 'global/hooks/usePageContext';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import SubmissionLayout from '../layout';
@@ -48,9 +49,9 @@ export default function ProgramDashboard() {
     query: { shortName: programShortName },
   } = usePageContext();
 
-  const [justJoined, setJustJoined] = React.useState(null);
+  const [justJoined, setJustJoined] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // to prevent server side rendering mismatch
     if (typeof window !== 'undefined') {
       const justJoinedProgram = window.localStorage.getItem(JUST_JOINED_PROGRAM_STORAGE_KEY);
@@ -83,7 +84,7 @@ export default function ProgramDashboard() {
           `}
         >
           <TitleBar>
-            <React.Fragment>{programShortName}</React.Fragment>
+            <>{programShortName}</>
             <Row nogutter align="center">
               <div
                 css={css`

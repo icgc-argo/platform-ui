@@ -20,13 +20,14 @@
 import { useQuery } from '@apollo/client';
 import usePageContext from 'global/hooks/usePageContext';
 import get from 'lodash/get';
-import * as React from 'react';
+
 import { Progress } from '@icgc-argo/uikit';
 import GET_REGISTRATION_QUERY from './program-sample-registration/gql/GET_REGISTRATION_QUERY';
 import { ClinicalRegistration } from './program-sample-registration/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
+import { ComponentType, ComponentProps } from 'react';
 
-const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: string }> = ({
+const SampleRegistrationProgressBar: ComponentType<{ programShortName: string }> = ({
   programShortName,
 }) => {
   const { data: { clinicalRegistration = undefined } = {} } = useQuery<{
@@ -44,8 +45,8 @@ const SampleRegistrationProgressBar: React.ComponentType<{ programShortName: str
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const progressStates: {
-    upload: React.ComponentProps<typeof Progress.Item>['state'];
-    register: React.ComponentProps<typeof Progress.Item>['state'];
+    upload: ComponentProps<typeof Progress.Item>['state'];
+    register: ComponentProps<typeof Progress.Item>['state'];
   } = {
     upload: isSubmissionSystemDisabled
       ? 'locked'

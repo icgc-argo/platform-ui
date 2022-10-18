@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Typography, useTheme } from '@icgc-argo/uikit';
+import { css, Typography, useTheme } from '@icgc-argo/uikit';
+import { PropsWithChildren } from 'react';
 import { rangeButtons } from './utils';
 
 const RangeButton = ({
@@ -26,12 +26,11 @@ const RangeButton = ({
   handleClick,
   isActive,
   label,
-}: {
-  children: any;
+}: PropsWithChildren<{
   handleClick: () => void;
   isActive: boolean;
   label: string;
-}) => {
+}>) => {
   const theme = useTheme();
 
   return (

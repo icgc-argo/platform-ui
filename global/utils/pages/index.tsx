@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import orderBy from 'lodash/orderBy';
 import {
   LOGIN_PAGE_PATH,
@@ -37,6 +36,7 @@ import {
 } from '../egoJwt';
 import { PageConfigProps, PageWithConfig } from './types';
 import { GLOBAL_LOADING_DEFAULT } from 'components/GlobalLoader';
+import { ComponentType } from 'react';
 
 export const getDefaultRedirectPathForUser = (
   permissions: string[],
@@ -60,7 +60,6 @@ type CreatePageConfigs = {
   isPublic?: PageConfigProps['isPublic'];
   isAccessible?: PageConfigProps['isAccessible'];
   getInitialProps?: PageConfigProps['getInitialProps'];
-  getGqlQueriesToPrefetch?: PageConfigProps['getGqlQueriesToPrefetch'];
   startWithGlobalLoader?: PageConfigProps['startWithGlobalLoader'];
 };
 export const createPage =
@@ -68,14 +67,12 @@ export const createPage =
     isPublic,
     isAccessible,
     getInitialProps,
-    getGqlQueriesToPrefetch,
     startWithGlobalLoader,
   }: CreatePageConfigs) =>
-  (page: React.ComponentType<P> & CreatePageConfigs): PageWithConfig => {
+  (page: ComponentType<P> & CreatePageConfigs): PageWithConfig => {
     page.isPublic = isPublic || false;
     page.isAccessible = isAccessible || (async () => true);
-    page.getGqlQueriesToPrefetch = getGqlQueriesToPrefetch || (async () => []);
-    page.getInitialProps = getInitialProps || (async () => []);
+    page.getInitialProps = getInitialProps || (async () => ({}));
     page.startWithGlobalLoader = startWithGlobalLoader || GLOBAL_LOADING_DEFAULT;
     return page as PageWithConfig;
   };

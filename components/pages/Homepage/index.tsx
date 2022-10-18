@@ -27,7 +27,7 @@ import {
   UikitTheme,
   useTheme,
 } from '@icgc-argo/uikit';
-import * as React from 'react';
+
 import { Col, Hidden, Row, Visible } from 'react-grid-system';
 
 import DefaultLayout from '../DefaultLayout';
@@ -56,25 +56,26 @@ import {
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
+import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
     title: 'June 8, 2022',
     text: (
-      <React.Fragment>
+      <>
         Data submitters can now submit supplemental surgery data for donors that have this specified
         treatment in the new{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
           Surgery clinical table
         </Link>
         .
-      </React.Fragment>
+      </>
     ),
   },
   {
     title: 'March 7, 2022',
     text: (
-      <React.Fragment>
+      <>
         We are excited to announce{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
           Data Release 5.0
@@ -107,13 +108,13 @@ const newsItems: NewsItem[] = [
           LUCA-KR
         </Link>
         .
-      </React.Fragment>
+      </>
     ),
   },
   {
     title: 'New Features',
     text: (
-      <React.Fragment>
+      <>
         Program dashboards and the File Repository have been updated with new features to filter on{' '}
         <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
           Open Access Variant Filtered
@@ -137,15 +138,15 @@ const newsItems: NewsItem[] = [
           Software Release 1.110.1 - API 3.32.0
         </Link>{' '}
         are now available.
-      </React.Fragment>
+      </>
     ),
   },
 ];
 
-const SeparationLine: React.ComponentType<{}> = () => {
+const SeparationLine: ComponentType<{}> = () => {
   const theme = useTheme();
   return (
-    <React.Fragment>
+    <>
       <Hidden sm>
         <div
           css={css`
@@ -166,7 +167,7 @@ const SeparationLine: React.ComponentType<{}> = () => {
           `}
         />
       </Visible>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -187,7 +188,7 @@ export default function Homepage() {
   const theme = useTheme();
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
-  const { data: stats, loading } = useFileRepoStatsBarQuery();
+  const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
   return (
     <DefaultLayout>
@@ -199,7 +200,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED ? '0px' : '40px'};
+            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError ? '0px' : '40px'};
           `}
         >
           <Typography
@@ -284,13 +285,13 @@ export default function Homepage() {
             </Link>
           </div>
 
-          {FEATURE_LANDING_PAGE_STATS_ENABLED && (
+          {FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError && (
             <DataReleaseBar
-              loading={loading}
+              loading={statsLoading}
               stats={[
-                { quantity: stats.programsCount, description: 'PROGRAMS' },
-                { quantity: stats.donorsCount, description: 'DONORS' },
-                { quantity: stats.filesCount, description: 'FILES' },
+                { quantity: statsData.programsCount, description: 'PROGRAMS' },
+                { quantity: statsData.donorsCount, description: 'DONORS' },
+                { quantity: statsData.filesCount, description: 'FILES' },
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}

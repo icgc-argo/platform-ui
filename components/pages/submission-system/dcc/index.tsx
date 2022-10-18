@@ -17,10 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-
+import { css, Typography } from '@icgc-argo/uikit';
 import SubmissionLayout from '../layout';
-import { Typography } from '@icgc-argo/uikit';
 
 import DonorAggregationSummary from './DonorAggregationSummary';
 

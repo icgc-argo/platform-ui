@@ -29,7 +29,7 @@ import {
 } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
-import * as React from 'react';
+import { PropsWithChildren } from 'react';
 
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import { getConfig } from 'global/config';
@@ -49,13 +49,12 @@ export default function JoinProgramLayout({
   joinProgramInvite = {},
   notFound,
   loading,
-}: {
+}: PropsWithChildren<{
   tabValue: string;
-  children: React.ReactNode;
   joinProgramInvite: any;
   loading: boolean;
   notFound: boolean;
-}) {
+}>) {
   const { EGO_URL } = getConfig();
   let inviteState: InviteState = InviteState.UnSet;
 
@@ -166,7 +165,7 @@ export default function JoinProgramLayout({
             />
           )}
           {inviteState == InviteState.Accepted && (
-            <React.Fragment>
+            <>
               <Banner
                 title={'This invitation has already been accepted'}
                 variant={BANNER_VARIANTS.WARNING}
@@ -192,7 +191,7 @@ export default function JoinProgramLayout({
                   })}
                 />
               </div>
-            </React.Fragment>
+            </>
           )}
           {inviteState == InviteState.Pending && children}
           {loading && (

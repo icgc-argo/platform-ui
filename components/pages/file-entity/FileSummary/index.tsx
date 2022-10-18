@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import { FileCard, getAccessIcon, TableDiv } from '../common';
 
@@ -27,7 +25,7 @@ import { startCase } from 'lodash';
 import { FileSummaryInfo } from '../types';
 
 import { useQuery } from '@apollo/client';
-import { Link, SimpleTable } from '@icgc-argo/uikit';
+import { css, Link, SimpleTable } from '@icgc-argo/uikit';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import NextLink from 'next/link';
 import sqonBuilder from 'sqon-builder';
@@ -62,8 +60,8 @@ const FileSummary = ({ data }: { data: FileSummaryInfo }) => {
           align-items: center;
         `}
       >
-        <React.Fragment>{getAccessIcon(data.access)}</React.Fragment>
-        <React.Fragment> {startCase(data.access)}</React.Fragment>
+        <>{getAccessIcon(data.access)}</>
+        <> {startCase(data.access)}</>
       </div>
     ),
     Program: (

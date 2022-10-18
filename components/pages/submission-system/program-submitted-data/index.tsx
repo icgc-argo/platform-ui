@@ -35,8 +35,10 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import { Row, setConfiguration } from 'react-grid-system';
+import ClinicalDownloadButton from './DownloadButtons';
 import SubmissionLayout from '../layout';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import {
@@ -48,7 +50,9 @@ import {
   CompletionStates,
   defaultClinicalEntityFilters,
   emptyResponse,
+  emptySearchResponse,
   hasClinicalErrors,
+  parseDonorIdString,
   reverseLookUpEntityAlias,
 } from './common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
@@ -59,11 +63,11 @@ setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
 
-export default function ProgramSubmittedData() {
+export default function ProgramSubmittedData({ donorId = '' }: { donorId: string }) {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
-  const [keyword, setKeyword] = React.useState('');
-  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  const [keyword, setKeyword] = useState('');
+  const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -74,6 +78,10 @@ export default function ProgramSubmittedData() {
       deSerialize: (v) => v,
     },
   );
+  const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
+    serialize: (v) => v,
+    deSerialize: (v) => v,
+  });
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
   // Side Menu Query
@@ -87,7 +95,7 @@ export default function ProgramSubmittedData() {
       },
     });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
 
@@ -111,11 +119,12 @@ export default function ProgramSubmittedData() {
   ));
 
   // Matches Digits preceded by DO or by Comma
-  const searchDonorIds =
-    keyword
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
+  const searchDonorIds = selectedDonors
+    ? [parseDonorIdString(selectedDonors)]
+    : keyword
+        .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+        ?.filter((match) => !!match)
+        .map((idString) => parseInt(idString)) || [];
   const searchSubmitterIds = [keyword].filter((word) => !!word);
   const useDefaultQuery =
     searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
@@ -136,6 +145,11 @@ export default function ProgramSubmittedData() {
       },
     });
 
+  const searchResults =
+    searchResultData === null || searchResultData === undefined
+      ? emptySearchResponse
+      : searchResultData;
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Dashboard`}
@@ -149,7 +163,7 @@ export default function ProgramSubmittedData() {
           `}
         >
           <TitleBar>
-            <React.Fragment>{programShortName}</React.Fragment>
+            <>{programShortName}</>
             <Row nogutter align="center">
               <div
                 css={css`
@@ -182,7 +196,8 @@ export default function ProgramSubmittedData() {
         loading={searchResultsLoading}
         noData={noData}
         onChange={setCompletionState}
-        donorSearchResults={searchResultData}
+        donorSearchResults={searchResults}
+        setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
@@ -233,28 +248,12 @@ export default function ProgramSubmittedData() {
                   {clinicalEntityDisplayNames[currentEntity]} Data
                 </Typography>
 
-                <Button
-                  css={css`
-                    white-space: nowrap;
-                    height: fit-content;
-                    :disabled {
-                      background: #f6f6f7;
-                      color: ${theme.colors.grey_1};
-                    }
-                  `}
-                  variant="secondary"
-                  disabled={noData}
-                >
-                  <Icon
-                    css={css`
-                      padding-right: 4px;
-                    `}
-                    name="download"
-                    fill={noData ? 'grey_1' : 'accent2_dark'}
-                    height="12px"
-                  />
-                  {clinicalEntityDisplayNames[currentEntity]} Data
-                </Button>
+                <ClinicalDownloadButton
+                  searchResults={searchResultData.clinicalSearchResults.searchResults}
+                  text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+                  entityTypes={[currentEntity]}
+                  completionState={completionState}
+                />
               </div>
               {/* DataTable */}
               <div>

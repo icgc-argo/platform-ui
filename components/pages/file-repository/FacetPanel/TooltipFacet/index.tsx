@@ -33,7 +33,7 @@ import {
   styled,
   Tooltip,
 } from '@icgc-argo/uikit';
-import * as React from 'react';
+import { ReactNode } from 'react';
 
 const TooltipFacet = ({
   subMenuName,
@@ -54,7 +54,7 @@ const TooltipFacet = ({
   onOptionToggle: (facetValue: string | string[]) => void;
   onSelectAllOptions: (allOptionsSelected: boolean) => void;
   parseDisplayValue?: (inputValue: string) => string;
-  tooltipContent: React.ReactNode;
+  tooltipContent: ReactNode;
 }) => {
   const StyledOptionsList = styled(OptionsList)`
     > div:not(:first-of-type):hover {

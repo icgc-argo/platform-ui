@@ -17,13 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
+import { css, DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
-import * as React from 'react';
+import { useState } from 'react';
+
 import urlJoin from 'url-join';
 import {
   instructionBoxButtonContentStyle,
@@ -56,7 +56,7 @@ const TsvDownloadButton = ({
   const { GATEWAY_API_ROOT } = getConfig();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
       ? [

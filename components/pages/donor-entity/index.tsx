@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { useQuery } from '@apollo/client';
 import {
   ContentBody,
@@ -69,7 +68,7 @@ const DonorEntity = ({ donor }) => {
               <DnaLoader />
             </div>
           ) : (
-            <React.Fragment>
+            <>
               <ContentHeader>
                 <DonorTitleBar
                   programId={program_id}
@@ -81,7 +80,7 @@ const DonorEntity = ({ donor }) => {
               <ContentBody>
                 <DonorCardsLayout donorData={donor} />
               </ContentBody>
-            </React.Fragment>
+            </>
           )}
           <Footer />
         </PageContent>

@@ -24,7 +24,8 @@ import { getConfig } from 'global/config';
 import { INVITE_ID, PROGRAM_JOIN_DETAILS_PATH } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JoinProgramLayout from './JoinProgramLayout';
@@ -35,7 +36,7 @@ const JoinProgramLoginPage = () => {
   const router = useRouter();
   const { inviteId } = router.query;
 
-  const [notFound, setNotFound] = React.useState(false);
+  const [notFound, setNotFound] = useState(false);
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
@@ -48,9 +49,9 @@ const JoinProgramLoginPage = () => {
     },
   });
 
-  const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = React.useState('');
+  const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFullJoinLoginRedirect(
       createRedirectURL({
         origin: location.origin,

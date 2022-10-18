@@ -1,7 +1,8 @@
 import { css } from '@icgc-argo/uikit';
+import { ReactNode } from 'react';
 import { FileCentricDocumentField, FileRepositoryTSVColumn } from '../types';
 
-export const tooltipContent: { [key: string]: React.ReactNode } = {
+export const tooltipContent: { [key: string]: ReactNode } = {
   embargo_stage: (
     <div
       css={css`

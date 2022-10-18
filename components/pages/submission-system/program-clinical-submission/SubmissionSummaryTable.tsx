@@ -19,7 +19,8 @@
 
 import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import * as React from 'react';
+import { createRef, CSSProperties } from 'react';
+
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';
@@ -46,10 +47,10 @@ const SubmissionSummaryTable = ({
 
   const newDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
-      <React.Fragment>
+      <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.NEW} />
         New
-      </React.Fragment>
+      </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
       (acc, entity) => ({
@@ -62,10 +63,10 @@ const SubmissionSummaryTable = ({
 
   const updatedDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
-      <React.Fragment>
+      <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
         Updated
-      </React.Fragment>
+      </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
       (acc, entity) => ({
@@ -90,7 +91,7 @@ const SubmissionSummaryTable = ({
         } as TableColumnConfig<Entry>),
     ),
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   return (
     <div
       css={css`
@@ -112,7 +113,7 @@ const SubmissionSummaryTable = ({
                     ? theme.colors.accent3_3
                     : theme.colors.accent2_4
                   : null,
-            } as React.CSSProperties,
+            } as CSSProperties,
           };
         }}
         columns={columns}

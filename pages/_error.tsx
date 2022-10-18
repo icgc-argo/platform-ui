@@ -17,16 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import get from 'lodash/get';
 import Page404 from 'components/pages/404';
 import Page500 from 'components/pages/500';
 import Page403 from 'components/pages/403';
 import ClientError from 'components/pages/ClientError';
+import { Component } from 'react';
 
 export const ERROR_STATUS_KEY = 'statusCode';
 
-class Error extends React.Component<{ statusCode: number }> {
+class Error extends Component<{ statusCode: number }> {
   static getInitialProps({ res, err }) {
     if (get(err, ERROR_STATUS_KEY) === 403) {
       if (res) {

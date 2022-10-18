@@ -39,7 +39,8 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { trim } from 'lodash';
-import * as React from 'react';
+import { useState, useEffect, ComponentProps, createRef } from 'react';
+
 import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
@@ -403,20 +404,20 @@ const FacetPanel = () => {
 
   const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
 
-  const [currentTab, setTabs] = React.useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
+  const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
-  const [searchOpen, setSearchOpen] = React.useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
-  const [expandedFacets, setExpandedFacets] = React.useState(
+  const [expandedFacets, setExpandedFacets] = useState(
     [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
   );
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
-  const [aggregations, setAggregations] = React.useState({});
+  const [aggregations, setAggregations] = useState({});
 
   const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
@@ -433,8 +434,8 @@ const FacetPanel = () => {
     }
   };
 
-  const [searchQuery, setSearchQuery] = React.useState('');
-  React.useEffect(() => {
+  const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
     setSearchQuery('');
   }, [currentTab]);
 
@@ -519,7 +520,7 @@ const FacetPanel = () => {
 
   const onFacetOptionToggle: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
+  ) => ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
     return (facetValue) => {
       const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
 
@@ -528,7 +529,7 @@ const FacetPanel = () => {
   };
   const onFacetSelectAllOptionsToggle: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
+  ) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
     return (allOptionsSelected) => {
       if (allOptionsSelected) {
         const updatedFilters = removeFilter(
@@ -547,7 +548,7 @@ const FacetPanel = () => {
 
   const onNumberRangeFacetSubmit: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
     return (min, max) => {
       const newFilters = getRangeFilters(facetDetails.name, min, max);
       // remove any existing fields for this facetDetails first
@@ -560,7 +561,7 @@ const FacetPanel = () => {
   };
   const numberRangeFacetMin: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
     return (
       currentFieldValue({
         filters,
@@ -571,7 +572,7 @@ const FacetPanel = () => {
   };
   const numberRangeFacetMax: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
     return (
       currentFieldValue({
         filters,
@@ -599,7 +600,7 @@ const FacetPanel = () => {
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
-  const searchRef = React.createRef<HTMLDivElement>();
+  const searchRef = createRef<HTMLDivElement>();
   useClickAway({
     domElementRef: searchRef,
     onClickAway: () => setSearchOpen(false),
@@ -715,7 +716,7 @@ const FacetPanel = () => {
                   `}
                 />
                 {searchQuery && searchQuery.length >= 1 && searchOpen ? (
-                  <React.Fragment>
+                  <>
                     <div
                       css={css`
                         background: transparent;
@@ -740,7 +741,7 @@ const FacetPanel = () => {
                         setSearchOpen(false);
                       }}
                     />
-                  </React.Fragment>
+                  </>
                 ) : null}
               </div>
               {/* disabled for initial File Repo release */}

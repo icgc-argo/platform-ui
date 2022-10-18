@@ -20,7 +20,6 @@
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 
@@ -50,6 +49,7 @@ import {
 } from './program-submitted-data/common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
+import { useState, useMemo, ReactNode } from 'react';
 
 type SideMenuProgram = {
   shortName: string;
@@ -78,7 +78,7 @@ const StatusMenuItem = styled('div')`
 `;
 
 const useToggledSelectState = (initialIndex = -1) => {
-  const [activeItem, setActiveItem] = React.useState(initialIndex);
+  const [activeItem, setActiveItem] = useState(initialIndex);
   const toggleItem = (itemIndex) =>
     itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
   return { activeItem, toggleItem };
@@ -154,7 +154,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
-  const canSeeCollaboratorView = React.useMemo(() => {
+  const canSeeCollaboratorView = useMemo(() => {
     return (
       egoJwt &&
       !isCollaborator({
@@ -163,7 +163,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       })
     );
   }, [egoJwt]);
-  const canWriteToProgram = React.useMemo(() => {
+  const canWriteToProgram = useMemo(() => {
     return (
       egoJwt &&
       canWriteProgram({
@@ -186,7 +186,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
         />
       </NextLink>
       {canSeeCollaboratorView && (
-        <React.Fragment>
+        <>
           <NextLink
             as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
@@ -244,7 +244,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                         [null as any]: clinicalSubmissionHasSchemaErrors ? (
                           <Icon name="exclamation" fill="error" width="15px" />
                         ) : null,
-                      } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode }
+                      } as { [k in typeof data.clinicalSubmissions.state]: ReactNode }
                     )[data ? data.clinicalSubmissions.state : null]
                   )}
                 </StatusMenuItem>
@@ -276,7 +276,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
               />
             </NextLink>
           )}
-        </React.Fragment>
+        </>
       )}
       {canWriteToProgram && (
         <NextLink
@@ -309,12 +309,12 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     currentViewingProgramIndex,
   );
   const { egoJwt, permissions } = useAuthContext();
-  const canSeeAllPrograms = React.useMemo(() => {
+  const canSeeAllPrograms = useMemo(() => {
     return egoJwt && isDccMember(permissions);
   }, [egoJwt]);
 
   return (
-    <React.Fragment>
+    <>
       <MenuItem
         level={1}
         selected
@@ -355,7 +355,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
           />
         </MenuItem>
       ))}
-    </React.Fragment>
+    </>
   );
 };
 
@@ -369,8 +369,8 @@ export default function SideMenu() {
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 
-  const isDcc = React.useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
-  const isRdpc = React.useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
+  const isDcc = useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
+  const isRdpc = useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeDcc = isDcc;
@@ -394,7 +394,7 @@ export default function SideMenu() {
           </MenuItem>
         )
       ) : (
-        <React.Fragment>
+        <>
           {canSeeDcc && (
             <NextLink href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
@@ -412,7 +412,7 @@ export default function SideMenu() {
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
           </MenuItem>
-        </React.Fragment>
+        </>
       )}
     </SubMenu>
   );

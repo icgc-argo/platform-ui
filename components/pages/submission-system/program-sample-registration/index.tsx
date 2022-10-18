@@ -36,7 +36,7 @@ import usePageContext from 'global/hooks/usePageContext';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import union from 'lodash/union';
-import * as React from 'react';
+
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
@@ -52,6 +52,7 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRAT
 import GET_REGISTRATION_QUERY from './gql/GET_REGISTRATION_QUERY';
 import Instructions from './Instructions';
 import { ClinicalRegistration, ClinicalRegistrationData } from './types';
+import { ComponentProps } from 'react';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -149,9 +150,7 @@ export default function ProgramIDRegistration() {
     };
   }
 
-  const onErrorClose: (
-    index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] =
+  const onErrorClose: (index: number) => ComponentProps<typeof Notification>['onInteraction'] =
     (index) =>
     ({ type }) => {
       if (type === 'CLOSE') {
@@ -185,7 +184,7 @@ export default function ProgramIDRegistration() {
       contentHeader={
         <div css={pageHeaderStyle}>
           <TitleBar>
-            <React.Fragment>{programShortName}</React.Fragment>
+            <>{programShortName}</>
             <Row nogutter align="center">
               <div
                 css={css`
@@ -249,7 +248,7 @@ export default function ProgramIDRegistration() {
         `}
       >
         {fileRecords.length > 0 ? (
-          <React.Fragment>
+          <>
             <div css={cardHeaderContainerStyle}>
               <Typography
                 css={css`
@@ -276,7 +275,7 @@ export default function ProgramIDRegistration() {
               stats={stats}
               submissionInfo={submissionInfo}
             />
-          </React.Fragment>
+          </>
         ) : schemaOrValidationErrors.length > 0 ? (
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}

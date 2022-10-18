@@ -18,8 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Typography } from '@icgc-argo/uikit';
+import { css, Typography } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { DashboardCard, DashboardSummaryData, DashboardSummaryDataVariables } from '../common';
 import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';

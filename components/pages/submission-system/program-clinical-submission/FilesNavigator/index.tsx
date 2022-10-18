@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { useMutation } from '@apollo/client';
 import {
   Button,
@@ -185,7 +184,7 @@ const FilesNavigator = ({
             />
           </div>
         ) : !!selectedFile.records.length ? (
-          <React.Fragment>
+          <>
             <div
               css={css`
                 padding: 8px;
@@ -227,7 +226,7 @@ const FilesNavigator = ({
                 createdAt: selectedFile.createdAt,
               }}
             />
-          </React.Fragment>
+          </>
         ) : (
           <div
             css={css`

@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Container, Icon, styled, Typography } from '@icgc-argo/uikit';
+import { Container, css, Icon, styled, Typography } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { FileAccessState } from './types';
 
-export const FileCard: React.ComponentType<{
+export const FileCard: ComponentType<{
   cardTitle?: string;
   cardHeight?: string;
   loading?: boolean;

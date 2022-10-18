@@ -18,7 +18,8 @@
  */
 
 import { Checkbox, css, STYLEDCHECKBOX_SIZES, Typography, useTheme } from '@icgc-argo/uikit';
-import * as React from 'react';
+import { useMemo } from 'react';
+
 import { Entity, EntityType } from '../types';
 import { ENTITY_DISPLAY } from './index';
 import { getTimelineStyles } from './util';
@@ -35,7 +36,7 @@ type EntityCounts = { [k in Filters]: number };
 const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const theme = useTheme();
 
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
 
   const entityCounts: EntityCounts = entities
     .filter((entity) => entity.type !== EntityType.DECEASED)

@@ -30,7 +30,8 @@ import {
   Typography,
 } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
-import * as React from 'react';
+import { ComponentProps } from 'react';
+
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
 import schema from './validation';
 
@@ -55,16 +56,16 @@ const JoinProgramForm = ({
   const availableInstitutions = institutions || [];
 
   const handleBlur =
-    (fieldKey: string): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
+    (fieldKey: string): ComponentProps<typeof MultiSelect>['onBlur'] =>
     (_) =>
       validateField({ key: fieldKey });
 
   const handleChange =
-    (fieldName: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onChange'] =>
+    (fieldName: keyof typeof initialFields): ComponentProps<typeof MultiSelect>['onChange'] =>
     ({ target }) =>
       setData({ key: fieldName, val: target.value });
 
-  const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const submitForm: ComponentProps<typeof Button>['onClick'] = async () => {
     const validData = await validateForm();
     onSubmit(validData);
   };

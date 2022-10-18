@@ -18,10 +18,10 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import { Container, PercentBar, styled, Typography } from '@icgc-argo/uikit';
+import { Container, css, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
+import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 import {
   DashboardSummaryData,
@@ -43,7 +43,7 @@ const StatDesc = styled('div')`
   justify-content: space-between;
 `;
 
-const Statistic: React.ComponentType<{ quantity: String; description: String }> = ({
+const Statistic: ComponentType<{ quantity: String; description: String }> = ({
   children,
   quantity,
   description,

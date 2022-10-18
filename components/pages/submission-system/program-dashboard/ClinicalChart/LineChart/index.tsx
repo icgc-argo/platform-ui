@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import {
   compareAsc,
@@ -425,7 +424,7 @@ const LineChart = ({
 
   return (
     width && (
-      <React.Fragment>
+      <>
         <svg viewBox={`0 0 ${width} ${height}`}>
           <XAxis />
           <TicksXAxis />
@@ -438,7 +437,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
         </svg>
-      </React.Fragment>
+      </>
     )
   );
 };

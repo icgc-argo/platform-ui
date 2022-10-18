@@ -19,7 +19,8 @@
 
 import { Button, css, Icon, styled, Typography, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { find } from 'lodash';
-import * as React from 'react';
+import { useState } from 'react';
+
 import { ChartType, DonorField } from './types';
 import { makeChartLineMeta } from './utils';
 
@@ -124,7 +125,7 @@ const Legend = ({
   activeLines: string[];
   handleLegendInput: any;
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
   return (
     <div

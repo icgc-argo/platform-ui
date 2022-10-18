@@ -18,20 +18,20 @@
  */
 
 import { isEmpty } from 'lodash';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 
-import { Button, Typography, useTheme } from '@icgc-argo/uikit';
+import { Button, Typography } from '@icgc-argo/uikit';
 
 import { getConfig } from 'global/config';
 import { DONOR_AGGREGATOR_SYNC_PROGRAM } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { useState } from 'react';
 const { GATEWAY_API_ROOT } = getConfig();
 
 const SyncIndexButton = ({ program }: { program: string }) => {
-  const theme = useTheme();
-  const [requestResult, setRequestResult] = React.useState<'SUCCESS' | 'ERROR' | null>(null);
-  const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
+  const [requestResult, setRequestResult] = useState<'SUCCESS' | 'ERROR' | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const { fetchWithEgoToken } = useAuthContext();
 
   // On Click Handler sends request to gateway to sync program

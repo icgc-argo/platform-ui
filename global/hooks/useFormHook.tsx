@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import isArray from 'lodash/isArray';
 import yup from 'global/utils/validations';
+import { useState } from 'react';
 
 export type DefaultDataShape = { [k: string]: any };
 
@@ -51,8 +51,9 @@ function useFormHook<T extends DefaultDataShape>({
     data: initialFields,
   };
 
-  const [form, setForm] =
-    React.useState<{ errors: typeof initErrors; data: typeof initialFields }>(initialState);
+  const [form, setForm] = useState<{ errors: typeof initErrors; data: typeof initialFields }>(
+    initialState,
+  );
 
   const { errors, data } = form;
 

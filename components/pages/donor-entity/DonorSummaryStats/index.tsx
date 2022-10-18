@@ -19,6 +19,7 @@
 
 import { Button, Container, css, Icon, PercentBar, styled, Typography } from '@icgc-argo/uikit';
 import { Pipeline } from 'components/pages/submission-system/common';
+import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
 const StatDesc = styled('div')`
@@ -32,7 +33,7 @@ const StatDesc = styled('div')`
   justify-content: space-between;
 `;
 
-const Statistic: React.ComponentType<{ quantity: String; description: String }> = ({
+const Statistic: ComponentType<{ quantity: String; description: String }> = ({
   children,
   quantity,
   description,
@@ -65,7 +66,7 @@ const Statistic: React.ComponentType<{ quantity: String; description: String }> 
   </div>
 );
 
-const FilesButton: React.ComponentType<{ quantity: String }> = ({ children, quantity }) => (
+const FilesButton: ComponentType<{ quantity: String }> = ({ children, quantity }) => (
   <div>
     <StatDesc>
       {/* Div for Quantity */}
@@ -89,7 +90,7 @@ const FilesButton: React.ComponentType<{ quantity: String }> = ({ children, quan
   </div>
 );
 
-const Designation: React.ComponentType<{
+const Designation: ComponentType<{
   description: String;
   left: number;
   right: number;

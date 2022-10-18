@@ -25,7 +25,7 @@ import { isDccMember } from 'global/utils/egoJwt';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import pluralize from 'pluralize';
-import * as React from 'react';
+
 import { UserModel as ModalUserModel } from '../modals/common';
 import ProgramForm from '../program-form/ProgramForm';
 import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
@@ -46,6 +46,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { useToaster } from 'global/hooks/toaster';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
+import { useMemo, useState } from 'react';
 
 const createUserInput = ({
   data,
@@ -108,7 +109,7 @@ const useTabState = () => {
 
 const ProgramManagement = () => {
   const { egoJwt, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
+  const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
 
   const { shortName: programShortName } = usePageQuery();
 
@@ -129,7 +130,7 @@ const ProgramManagement = () => {
     setActiveTab(newValue);
   }
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
 
   const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);

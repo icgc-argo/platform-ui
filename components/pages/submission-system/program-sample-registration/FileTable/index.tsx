@@ -21,7 +21,8 @@ import { css, Icon, Table, useTheme } from '@icgc-argo/uikit';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
-import * as React from 'react';
+import { ComponentProps, createRef } from 'react';
+
 import {
   CellContentCenter,
   DataTableStarIcon,
@@ -47,7 +48,7 @@ type FileStats = {
 const StarIcon = ({
   fill,
   ...rest
-}: React.ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
+}: ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
   <DataTableStarIcon fill={fill} />
 );
 
@@ -89,7 +90,7 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 const FileTable = (props: {
   records: Array<FileEntry>;
   stats?: FileStats;
-  submissionInfo?: React.ComponentProps<typeof SubmissionInfoArea>;
+  submissionInfo?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
   const { records, stats, submissionInfo } = props;
@@ -101,7 +102,7 @@ const FileTable = (props: {
     }),
   );
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   return (
     <div

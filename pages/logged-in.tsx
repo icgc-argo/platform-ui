@@ -24,7 +24,8 @@ import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import { useEffect } from 'react';
+
 import urlJoin from 'url-join';
 
 export default createPage({ isPublic: true })(() => {
@@ -37,7 +38,7 @@ export default createPage({ isPublic: true })(() => {
     router.push(redirect);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
     fetch(egoLoginUrl, {
       credentials: 'include',

@@ -31,7 +31,8 @@ import {
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import * as React from 'react';
+import { useState } from 'react';
+
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
@@ -84,9 +85,9 @@ const Instruction = ({
 }) => {
   const { DOCS_URL_ROOT } = getConfig();
 
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
-  const [isValidating, setIsValidating] = React.useState<boolean>(false);
-  const [isSigningOff, setIsSigningOff] = React.useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isValidating, setIsValidating] = useState<boolean>(false);
+  const [isSigningOff, setIsSigningOff] = useState<boolean>(false);
 
   const handleFileUploadClick = async (files: FileList) => {
     setIsUploading(true);
@@ -109,7 +110,7 @@ const Instruction = ({
   return (
     <InstructionBox
       steps={[
-        <React.Fragment>
+        <>
           <Typography variant="data" component="span">
             1. Download the clinical file templates and format them using{' '}
             <Link target="_blank" bold href={DOCS_DICTIONARY_PAGE}>
@@ -119,8 +120,8 @@ const Instruction = ({
             </Link>
           </Typography>
           <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
-        </React.Fragment>,
-        <React.Fragment>
+        </>,
+        <>
           <Typography variant="data" component="span">
             2. Upload your formatted clinical TSV files.
           </Typography>
@@ -149,8 +150,8 @@ const Instruction = ({
               Upload Files
             </span>
           </FileSelectButton>
-        </React.Fragment>,
-        <React.Fragment>
+        </>,
+        <>
           <Typography variant="data" component="span">
             3. Validate your entire submission workspace.
           </Typography>
@@ -167,8 +168,8 @@ const Instruction = ({
           >
             <span css={instructionBoxButtonContentStyle}>Validate Submission</span>
           </Button>
-        </React.Fragment>,
-        <React.Fragment>
+        </>,
+        <>
           <Typography variant="data" component="span">
             4. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
@@ -184,7 +185,7 @@ const Instruction = ({
           >
             <span css={instructionBoxButtonContentStyle}>Sign Off submission</span>
           </Button>
-        </React.Fragment>,
+        </>,
       ]}
     />
   );

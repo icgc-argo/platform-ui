@@ -17,6 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
+import NextLink from 'next/link';
+import urlJoin from 'url-join';
+
+import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
+import {
+  ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
+  parseDonorIdString,
+} from 'components/pages/submission-system/program-submitted-data/common';
+
 import {
   DonorDataReleaseState,
   DonorSummaryEntrySort,
@@ -28,10 +39,12 @@ import {
 } from './types';
 
 import {
+  css,
   DropdownPanel,
   FilterClearButton,
   FilterOption,
   Icon,
+  Link,
   ListFilter,
   styled,
   Table,
@@ -42,11 +55,11 @@ import {
 import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 
-import { css } from '@icgc-argo/uikit';
 import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';
-import * as React from 'react';
+
+import { createRef, PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from 'react';
 import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
 import {
@@ -83,10 +96,10 @@ const DonorSummaryTable = ({
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
-  const [filterState, setFilterState] = React.useState([]);
+  const [filterState, setFilterState] = useState([]);
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
@@ -212,17 +225,16 @@ const DonorSummaryTable = ({
     handleBlur,
     active,
     children,
-  }: {
+  }: PropsWithChildren<{
     header: string;
     open: boolean;
     setOpen?: (open?: boolean | any) => void;
     focusFirst?: () => void;
-    buttonRef?: React.Ref<HTMLInputElement>;
-    panelRef?: React.Ref<HTMLElement>;
+    buttonRef?: Ref<HTMLInputElement>;
+    panelRef?: Ref<HTMLElement>;
     handleBlur?: (event?: any) => void;
     active?: boolean;
-    children: React.ReactNode;
-  }) => {
+  }>) => {
     const theme = useTheme();
 
     return (
@@ -283,10 +295,10 @@ const DonorSummaryTable = ({
     filterValue?: string;
     onFilter?: (text?: string) => void;
   }) => {
-    const [open, setOpen] = React.useState(false);
-    const buttonRef = React.useRef<HTMLInputElement>(null);
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const panelRef = React.useRef<HTMLElement>(null);
+    const [open, setOpen] = useState(false);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
 
     // Focus on the input when the panel opens
     const focusInput = () => {
@@ -296,7 +308,7 @@ const DonorSummaryTable = ({
     };
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -344,8 +356,8 @@ const DonorSummaryTable = ({
     activeFilters?: Array<string>;
     onFilter?: (filters?: Array<FilterOption>) => void;
   }) => {
-    const [open, setOpen] = React.useState(false);
-    const options = React.useMemo(
+    const [open, setOpen] = useState(false);
+    const options = useMemo(
       () =>
         filterOptions.map((option) => ({
           ...option,
@@ -354,11 +366,11 @@ const DonorSummaryTable = ({
         })),
       [filterOptions, activeFilters],
     );
-    const buttonRef = React.useRef<HTMLInputElement>(null);
-    const panelRef = React.useRef<HTMLElement>(null);
+    const buttonRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLElement>(null);
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -388,14 +400,14 @@ const DonorSummaryTable = ({
     );
   };
 
-  const [pagingState, setPagingState] = React.useState({
+  const [pagingState, setPagingState] = useState({
     pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,
   });
 
-  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
+  const [loaderTimeout, setLoaderTimeout] = useState<NodeJS.Timeout>();
 
   const offset = pagingState.pageSize * pagingState.page;
   const first = pagingState.pageSize;
@@ -429,6 +441,37 @@ const DonorSummaryTable = ({
       },
     },
   });
+
+  const donorsWithErrors = programDonorSummaryEntries
+    .filter((entry) => !entry.validWithCurrentDictionary)
+    .map((entry) => {
+      const { donorId } = entry;
+      const ID = parseDonorIdString(donorId);
+      return ID;
+    });
+
+  // Search Result Query
+  const { data: clinicalErrorData, loading: errorDataLoading } =
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ERRORS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          donorIds: donorsWithErrors,
+        },
+      },
+    });
+
+  const errorLinkData = clinicalErrorData
+    ? donorsWithErrors.map((donorId) => {
+        const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
+          (donor) => donorId === donor.donorId,
+        );
+        const entity = currentDonor.errors[0].entityName;
+        return { donorId, entity };
+      })
+    : [];
 
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
@@ -470,7 +513,21 @@ const DonorSummaryTable = ({
           ),
           accessor: 'donorId',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            return `${original.donorId} (${original.submitterDonorId})`;
+            const errorTab =
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
+
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}`,
+              errorTab && `&tab=${errorTab}`,
+            );
+            return (
+              <NextLink href={linkUrl}>
+                <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              </NextLink>
+            );
           },
         },
         {
@@ -717,7 +774,7 @@ const DonorSummaryTable = ({
           Clear Filters
         </FilterClearButton>
       ) : (
-        <React.Fragment></React.Fragment>
+        <></>
       ),
       columns: [
         {
@@ -731,8 +788,8 @@ const DonorSummaryTable = ({
     },
   ];
 
-  const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
-  React.useEffect(() => {
+  const [isTableLoading, setIsTableLoading] = useState(isCardLoading);
+  useEffect(() => {
     if (loading) {
       setIsTableLoading(true);
     }
@@ -784,7 +841,7 @@ const DonorSummaryTable = ({
       {programDonorsSummaryQueryError ? (
         <ContentError />
       ) : (
-        <React.Fragment>
+        <>
           <DonorSummaryTableLegend
             css={css`
               opacity: ${isTableLoading ? 0.5 : 1};
@@ -808,7 +865,7 @@ const DonorSummaryTable = ({
             // filter panel style workarounds
             className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
           />
-        </React.Fragment>
+        </>
       )}
     </div>
   );

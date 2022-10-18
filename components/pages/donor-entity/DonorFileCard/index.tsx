@@ -18,9 +18,10 @@
  */
 
 import { Button, Container, css, Icon, Link, Table, Typography, useTheme } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
-const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
+const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,
   link,
   fileCount,
@@ -99,7 +100,7 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
   </Row>
 );
 
-const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
+const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
   const theme = useTheme();
   return (
     <Col xs={12}>

@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Button, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uikit';
+import { Button, css, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
-import * as React from 'react';
+import { ComponentType, useState } from 'react';
+
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { FileCentricDocumentField } from '../file-repository/types';
@@ -80,7 +80,7 @@ const FileDownloadTooltip = ({
   );
 };
 
-export const FileTitleBar: React.ComponentType<{
+export const FileTitleBar: ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;
@@ -92,7 +92,7 @@ export const FileTitleBar: React.ComponentType<{
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
-  const [isDownloading, setIsDownloading] = React.useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   return (
     <div

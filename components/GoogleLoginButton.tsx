@@ -19,11 +19,10 @@
 
 import { GoogleLogin } from '@icgc-argo/uikit';
 import { removeToken } from 'global/hooks/useAuthContext';
+import { ComponentType, ComponentProps } from 'react';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 
-const GoogleLoginButton: React.ComponentType<React.ComponentProps<typeof GoogleLogin>> = ({
-  ...props
-}) => {
+const GoogleLoginButton: ComponentType<ComponentProps<typeof GoogleLogin>> = ({ ...props }) => {
   const { clearFilters } = useFiltersContext();
   return (
     <GoogleLogin

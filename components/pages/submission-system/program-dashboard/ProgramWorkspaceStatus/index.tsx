@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
+import { css, HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
@@ -28,12 +27,13 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { isCollaborator } from 'global/utils/egoJwt';
 import NextLink, { LinkProps } from 'next/link';
-import * as React from 'react';
+import { ComponentType, useMemo } from 'react';
+
 import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
 import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
 import { DashboardCard } from '../common';
 
-const ConditionalLink: React.ComponentType<{
+const ConditionalLink: ComponentType<{
   showAsLink: boolean;
   link: LinkProps;
   hyperlink?: HyperLinkProps;
@@ -43,7 +43,7 @@ const ConditionalLink: React.ComponentType<{
       <Link {...hyperlink}>{children}</Link>
     </NextLink>
   ) : (
-    <React.Fragment>{children}</React.Fragment>
+    <>{children}</>
   );
 };
 
@@ -51,7 +51,7 @@ export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { egoJwt, permissions } = useAuthContext();
 
-  const canViewLinks = React.useMemo(() => {
+  const canViewLinks = useMemo(() => {
     return !isCollaborator({
       permissions,
       programId: programShortName,

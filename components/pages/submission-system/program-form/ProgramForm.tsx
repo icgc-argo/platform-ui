@@ -38,12 +38,13 @@ import useFormHook from 'global/hooks/useFormHook';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import * as React from 'react';
+
 import { Col, Row } from 'react-grid-system';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
 import { xor } from 'lodash';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
+import { PropsWithChildren, ComponentType } from 'react';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -52,7 +53,7 @@ const SectionTitle = (props) => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }: { sm?: number; children?: React.ReactNode }) => (
+const InputLabelWrapper = ({ sm = 3, children }: PropsWithChildren<{ sm?: number }>) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -85,7 +86,7 @@ export default function CreateProgramForm({
   program = {},
   onSubmit,
 }: {
-  leftFooterComponent: React.ComponentType<{
+  leftFooterComponent: ComponentType<{
     formModel: FormModel;
   }>;
   program?: {
@@ -199,7 +200,7 @@ export default function CreateProgramForm({
   };
 
   return (
-    <React.Fragment>
+    <>
       <form name="createProgram">
         <Col>
           <Row>
@@ -479,7 +480,7 @@ export default function CreateProgramForm({
             </Row>
           </FormControl>
           {!isEditing && (
-            <React.Fragment>
+            <>
               <Row>
                 <Col>
                   <SectionTitle>Program Administrator</SectionTitle>
@@ -550,7 +551,7 @@ export default function CreateProgramForm({
                   </Col>
                 </Row>
               </FormControl>
-            </React.Fragment>
+            </>
           )}
         </Col>
       </form>
@@ -576,6 +577,6 @@ export default function CreateProgramForm({
         )}
         {LeftFooterComponent && <LeftFooterComponent formModel={formModel} />}
       </Row>
-    </React.Fragment>
+    </>
   );
 }

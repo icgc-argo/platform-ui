@@ -29,7 +29,8 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { sleep } from 'global/utils/common';
 import { isDccMember } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import { useMemo, ComponentProps } from 'react';
+
 import { Row } from 'react-grid-system';
 import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
@@ -52,7 +53,7 @@ const Header = ({
   submissionVersion: string;
 }) => {
   const { egoJwt, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
+  const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const { setGlobalLoading } = useGlobalLoader();
   const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
@@ -93,7 +94,7 @@ const Header = ({
     },
   });
 
-  const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionReopen: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
       children: isDcc
@@ -117,7 +118,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionApproval: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: 'Approve Submission?',
       children: 'Are you sure you want to approve this clinical submission?',
@@ -154,7 +155,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionClear: ComponentProps<typeof Button>['onClick'] = async () => {
     setGlobalLoading(true);
     await sleep();
     try {
@@ -174,7 +175,7 @@ const Header = ({
   };
 
   return (
-    <React.Fragment>
+    <>
       {isModalShown && (
         <ModalPortal>
           <Modal {...modalProps} />
@@ -189,7 +190,7 @@ const Header = ({
         `}
       >
         <TitleBar>
-          <React.Fragment>{programShortName}</React.Fragment>
+          <>{programShortName}</>
           <Row nogutter align="center">
             <div
               css={css`
@@ -216,7 +217,7 @@ const Header = ({
             </Button>
           )}
           {!isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button
                 id="button-clear-submission" // For Selenium
                 variant="text"
@@ -241,18 +242,18 @@ const Header = ({
               >
                 HELP
               </Link>
-            </React.Fragment>
+            </>
           )}
           {isDcc && isPendingApproval && (
-            <React.Fragment>
+            <>
               <Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
                 approve
               </Button>
-            </React.Fragment>
+            </>
           )}
         </Row>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
