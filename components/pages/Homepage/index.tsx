@@ -183,7 +183,7 @@ export default function Homepage() {
   const theme = useTheme();
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
-  const { data: stats, loading } = useFileRepoStatsBarQuery();
+  const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
   return (
     <DefaultLayout>
@@ -195,7 +195,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED ? '0px' : '40px'};
+            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError ? '0px' : '40px'};
           `}
         >
           <Typography
@@ -282,13 +282,13 @@ export default function Homepage() {
             </Link>
           </div>
 
-          {FEATURE_LANDING_PAGE_STATS_ENABLED && (
+          {FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError && (
             <DataReleaseBar
-              loading={loading}
+              loading={statsLoading}
               stats={[
-                { quantity: stats.programsCount, description: 'PROGRAMS' },
-                { quantity: stats.donorsCount, description: 'DONORS' },
-                { quantity: stats.filesCount, description: 'FILES' },
+                { quantity: statsData.programsCount, description: 'PROGRAMS' },
+                { quantity: statsData.donorsCount, description: 'DONORS' },
+                { quantity: statsData.filesCount, description: 'FILES' },
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}

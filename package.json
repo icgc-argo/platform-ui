@@ -8,6 +8,7 @@
     "watch-next": "next -p 8080",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
     "build": "rm -rf .next && next build",
+    "serve": "npm run build && next start",
     "gql-check": "npm run graphql-codegen && npm run build",
     "export-maintenance": "npm run build && rm -rf ./out/maintenance && EXPORT_PATH=/maintenance next export -o ./out/maintenance && rm ./out/maintenance/404.html",
     "type-check-scripts": "tsc -p ./scripts/tsconfig.json",
