@@ -53,8 +53,6 @@ To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To ea
 - Name your GraphQL documents appropriately: They need to go in a `gql` folder and have `_QUERY` `_MUTATION` `_FRAGMENT` at the end of the filename. They also need to be `*.ts` files.
 
 ## Uikit
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/378c5fea-f016-406c-9449-f3099441b0b1/deploy-status)](https://app.netlify.com/sites/argo-ui-storybook/deploys)
-[![Storybook](https://img.shields.io/badge/React-Storybook-ff69b4)](https://argo-ui-storybook.netlify.com)
-[![npm version](https://badge.fury.io/js/%40icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/%40icgc-argo%2Fuikit)
-[![TypeScript](https://img.shields.io/badge/types-%20TypeScript-blue)](https://www.typescriptlang.org/)
+This project is built with UI components provided by `@icgc-argo/uikit`. For more information, please visit:
+- [![npm version](https://badge.fury.io/js/@icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/@icgc-argo%2Fuikit)
+- [Github](https://github.com/icgc-argo/uikit)
