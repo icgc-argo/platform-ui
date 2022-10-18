@@ -54,5 +54,6 @@ To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To ea
 
 ## Uikit
 This project is built with UI components provided by `@icgc-argo/uikit`. For more information, please visit:
-- [![npm version](https://badge.fury.io/js/@icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/@icgc-argo%2Fuikit)
 - [Github](https://github.com/icgc-argo/uikit)
+- [![npm version](https://badge.fury.io/js/@icgc-argo%2Fuikit.svg)](https://badge.fury.io/js/@icgc-argo%2Fuikit)
+- [![Storybook](https://img.shields.io/badge/React-Storybook-ff69b4)](https://argo-ui-storybook.netlify.com)
