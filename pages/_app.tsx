@@ -19,12 +19,10 @@
 
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
-import { LOGIN_PAGE_PATH } from 'global/constants/pages';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
-import getApolloCacheForQueries from 'global/utils/getApolloCacheForQueries';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
-import * as React from 'react';
+
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';
@@ -33,11 +31,12 @@ import urlJoin from 'url-join';
 import queryString from 'query-string';
 import { get } from 'lodash';
 import DefaultLayout from '../components/pages/DefaultLayout';
+import { NormalizedCacheObject } from '@apollo/client';
 
 import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
@@ -64,33 +63,26 @@ const enforceLogin = ({ ctx }: { ctx: NextPageContext }) => {
 };
 
 type RootGetInitialPropsData = {
-  pageProps: { [k: string]: any };
-  unauthorized: boolean;
-  pathname: string;
+  apolloCache: NormalizedCacheObject;
   ctx: ClientSideGetInitialPropsContext;
   egoJwt?: string;
-  apolloCache: {};
+  initialPermissions: string[];
+  maintenanceModeOn: boolean;
+  pageProps: { [k: string]: any };
+  pathname: string;
+  startWithGlobalLoader: boolean;
+  unauthorized: boolean;
 };
 
 const removeCookie = (res, cookieName) => {
   res && res.setHeader('Set-Cookie', `${cookieName}=deleted; expires=${new Date(1).toUTCString()}`);
 };
 
-class Root extends App<
-  {
-    egoJwt?: string;
-    ctx: NextPageContext;
-    apolloCache: any;
-    pathname: string;
-    unauthorized: boolean;
-    startWithGlobalLoader: boolean;
-    initialPermissions: string[];
-    maintenanceModeOn: boolean;
-  },
-  {},
-  { isLoadingLoginRedirect: boolean }
-> {
-  static async getInitialProps({ Component, ctx }: AppContext & { Component: PageWithConfig }) {
+class Root extends App<RootGetInitialPropsData, {}, { isLoadingLoginRedirect: boolean }> {
+  static async getInitialProps({
+    Component,
+    ctx,
+  }: AppContext & { Component: PageWithConfig }): Promise<RootGetInitialPropsData> {
     const { AUTH_DISABLED, MAINTENANCE_MODE_ON } = getConfig();
     if (MAINTENANCE_MODE_ON) {
       return {
@@ -160,37 +152,26 @@ class Root extends App<
       throw err;
     }
 
-    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
-
-    let graphqlQueriesToCache;
-    let apolloCache = {};
-    try {
-      graphqlQueriesToCache = Component.getGqlQueriesToPrefetch
-        ? await Component.getGqlQueriesToPrefetch({ ...ctx, egoJwt })
-        : [];
-      apolloCache = graphqlQueriesToCache
-        ? await getApolloCacheForQueries(graphqlQueriesToCache)(egoJwt)
-        : {};
-    } catch (e) {
-      console.log(e);
-    }
+    const pageProps = Component.getInitialProps
+      ? await Component.getInitialProps({ ...ctx, egoJwt })
+      : {};
 
     const startWithGlobalLoader = Component.startWithGlobalLoader || false;
 
     return {
-      pageProps,
-      unauthorized,
-      pathname: ctx.pathname,
-      egoJwt: refreshedJwt || egoJwt,
+      apolloCache: undefined,
       ctx: {
+        asPath: ctx.asPath,
         pathname: ctx.pathname,
         query: ctx.query,
-        asPath: ctx.asPath,
       },
-      apolloCache,
-      startWithGlobalLoader,
+      egoJwt: refreshedJwt || egoJwt,
       initialPermissions,
       maintenanceModeOn: MAINTENANCE_MODE_ON,
+      pageProps,
+      pathname: ctx.pathname,
+      startWithGlobalLoader,
+      unauthorized,
     };
   }
 

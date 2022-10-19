@@ -17,22 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
-import Banner, { BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
-import Typography from '@icgc-argo/uikit/Typography';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import get from 'lodash/get';
-import useAuthContext from 'global/hooks/useAuthContext';
+import {
+  Banner,
+  BANNER_VARIANTS,
+  Container,
+  css,
+  DnaLoader,
+  Tab,
+  Tabs,
+  Typography,
+} from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { useRouter } from 'next/router';
 import { createRedirectURL } from 'global/utils/common';
+import { PropsWithChildren } from 'react';
 
-import GoogleLogin from '@icgc-argo/uikit/Button/GoogleLogin';
-import { getConfig } from 'global/config';
 import GoogleLoginButton from 'components/GoogleLoginButton';
+import { getConfig } from 'global/config';
 
 export enum InviteState {
   NotFound,
@@ -49,13 +49,12 @@ export default function JoinProgramLayout({
   joinProgramInvite = {},
   notFound,
   loading,
-}: {
+}: PropsWithChildren<{
   tabValue: string;
-  children: React.ReactNode;
   joinProgramInvite: any;
   loading: boolean;
   notFound: boolean;
-}) {
+}>) {
   const { EGO_URL } = getConfig();
   let inviteState: InviteState = InviteState.UnSet;
 

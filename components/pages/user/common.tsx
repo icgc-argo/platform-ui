@@ -17,25 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
-import Tag from '@icgc-argo/uikit/Tag';
+import { ContentBox, css, Icon, Tag, Typography, UikitIconNames } from '@icgc-argo/uikit';
+import { PropsWithChildren } from 'react';
 
 export const Box = ({
   children,
   title,
   iconName,
   tag,
-}: {
-  children: React.ReactNode | React.ReactNodeArray;
+}: PropsWithChildren<{
   title: string;
   iconName: UikitIconNames;
   tag?: string;
-}) => (
+}>) => (
   <ContentBox
     css={css`
       width: 100%;

@@ -17,15 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import { PaddedRow } from '../index';
-import StatItem from './StatItem';
-import STATS_BAR_QUERY from './gql/STATS_BAR_QUERY';
-import useFiltersContext from '../hooks/useFiltersContext';
-import { FileRepoFiltersType } from '../utils/types';
 import { useQuery } from '@apollo/client';
+import { Container, css } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { PaddedRow } from '../index';
+import { FileRepoFiltersType } from '../utils/types';
+import STATS_BAR_QUERY from './gql/STATS_BAR_QUERY';
+import StatItem from './StatItem';
 
 type StatsBarQueryInput = {
   filters: FileRepoFiltersType;

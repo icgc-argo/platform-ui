@@ -17,25 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Icon from '@icgc-argo/uikit/Icon';
-
-import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
-import {
-  RELEASED_STATE_FILL_COLOURS,
-  RELEASED_STATE_STROKE_COLOURS,
-  EMPTY_PROGRAM_SUMMARY_STATS,
-} from './common';
+import { css, Icon, Typography, useTheme } from '@icgc-argo/uikit';
+import { Col, Row } from 'react-grid-system';
 import {
   StatArea,
   TableLegendContainer,
-  TableLegendStatusIcon,
-  TableLegendSection,
   TableLegendEntry,
+  TableLegendSection,
+  TableLegendStatusIcon,
 } from '../../common';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
-import { css } from '@emotion/core';
-import { Row, Col } from 'react-grid-system';
+import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+} from './common';
+import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 
 const DonorSummaryTableLegend = ({
   programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,

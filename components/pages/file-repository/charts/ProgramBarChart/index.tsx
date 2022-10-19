@@ -22,6 +22,7 @@ import PROGRAMS_CHART_QUERY from './gql/PROGRAMS_CHART_QUERY';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
 import { useQuery } from '@apollo/client';
+import { ComponentProps } from 'react';
 
 type ProgramIdsChartData = {
   file: {
@@ -50,7 +51,7 @@ const ProgramBarChart = () => {
     setFilterFromFieldAndValue({ field: 'study_id', value });
   };
 
-  const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
+  const chartData: ComponentProps<typeof SimpleBarChart>['data'] = data
     ? data.file.aggregations.program_ids.buckets.map((bucket) => ({
         category: bucket.key,
         count: bucket.doc_count,

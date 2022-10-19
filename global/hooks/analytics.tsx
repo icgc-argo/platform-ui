@@ -17,13 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 import usePageContext from './usePageContext';
 
 export const useModalViewAnalyticsEffect = (name: string, isShown: boolean) => {
   const pageContext = usePageContext();
-  React.useEffect(() => {
+  useEffect(() => {
     if (isShown) {
       ReactGA.modalview(`${pageContext.asPath}:${name}`);
     }

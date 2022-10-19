@@ -24,10 +24,11 @@ import { getFilename } from 'global/utils/stringUtils';
 import fetch from 'isomorphic-fetch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+
 import urlJoin from 'url-join';
 import refreshJwt from 'global/utils/refreshJwt';
 import queryString from 'query-string';
+import { createContext, PropsWithChildren, useState, useContext } from 'react';
 
 declare global {
   interface Navigator {
@@ -46,7 +47,7 @@ type T_AuthContext = {
   isLoggingOut: boolean;
 };
 
-const AuthContext = React.createContext<T_AuthContext>({
+const AuthContext = createContext<T_AuthContext>({
   egoJwt: undefined,
   logOut: () => {},
   updateToken: async () => {},
@@ -68,11 +69,10 @@ export const removeToken = () => {
 export function AuthProvider({
   egoJwt,
   children,
-}: {
+}: PropsWithChildren<{
   egoJwt?: string;
-  children: React.ReactElement;
   initialPermissions: string[];
-}) {
+}>) {
   const { EGO_API_ROOT, EGO_CLIENT_ID } = getConfig();
   const updateTokenUrl = urlJoin(
     EGO_API_ROOT,
@@ -81,7 +81,7 @@ export function AuthProvider({
 
   const permissions = getPermissionsFromToken(egoJwt);
 
-  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const router = useRouter();
 
@@ -202,5 +202,5 @@ export function AuthProvider({
 }
 
 export default function useAuthContext() {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 }

@@ -17,21 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useState } from 'react';
-import urlJoin from 'url-join';
 import { isEmpty } from 'lodash';
 
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import Button from '@icgc-argo/uikit/Button';
-import Typography from '@icgc-argo/uikit/Typography';
+import urlJoin from 'url-join';
 
-import useAuthContext from 'global/hooks/useAuthContext';
+import { Button, Typography } from '@icgc-argo/uikit';
+
 import { getConfig } from 'global/config';
-const { GATEWAY_API_ROOT } = getConfig();
 import { DONOR_AGGREGATOR_SYNC_PROGRAM } from 'global/constants/gatewayApiPaths';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { useState } from 'react';
+const { GATEWAY_API_ROOT } = getConfig();
 
 const SyncIndexButton = ({ program }: { program: string }) => {
-  const theme = useTheme();
   const [requestResult, setRequestResult] = useState<'SUCCESS' | 'ERROR' | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const { fetchWithEgoToken } = useAuthContext();

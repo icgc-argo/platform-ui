@@ -17,6 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
+import {
+  Button,
+  ContentBox,
+  css,
+  Input,
+  INPUT_PRESETS,
+  INPUT_STATES,
+  TableActionBar,
+  Typography,
+} from '@icgc-argo/uikit';
 import {
   CREATE_PROGRAM_PAGE_PATH,
   PROGRAM_MANAGE_PATH,
@@ -25,25 +36,16 @@ import {
 import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
 import filter from 'lodash/filter';
+import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import { Input } from '@icgc-argo/uikit/form';
-import { INPUT_PRESETS } from '@icgc-argo/uikit/form/Input';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import { TableActionBar } from '@icgc-argo/uikit/Table';
-import { INPUT_STATES } from '@icgc-argo/uikit/theme/defaultTheme/input';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useMemo } from 'react';
+
 import SubmissionLayout from '../layout';
-import ProgramsTable from './ProgramsTable';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import get from 'lodash/get';
+import ProgramsTable from './ProgramsTable';
 
 const TableFilterInput = (props) => (
   <Input
@@ -78,7 +80,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   });
 
   const { egoJwt, permissions } = useAuthContext();
-  const canCreate = React.useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
+  const canCreate = useMemo(() => egoJwt && isDccMember(permissions), [egoJwt]);
   const sortedPrograms = orderBy(programsWithAdmins, 'name');
   const router = useRouter();
   const handleProgramUsersClick = ({ program }) => {
@@ -115,9 +117,9 @@ export default function Programs({ authorizedPrograms = [] }: any) {
             All Programs
           </Typography>
           {canCreate && (
-            <Link href={CREATE_PROGRAM_PAGE_PATH}>
+            <NextLink href={CREATE_PROGRAM_PAGE_PATH}>
               <Button id="primary-action-create-program">Create a program</Button>
-            </Link>
+            </NextLink>
           )}
         </div>
       }

@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Modal from '@icgc-argo/uikit/Modal';
+import { Modal } from '@icgc-argo/uikit';
 import { UserModel } from '../common';
 
 const DeleteUserModal = ({

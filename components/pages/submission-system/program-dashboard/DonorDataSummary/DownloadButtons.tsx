@@ -17,20 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Row, Col } from 'react-grid-system';
-import urlJoin from 'url-join';
-import { css } from '@emotion/core';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
+import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { format as formatDate } from 'date-fns';
+import { saveAs } from 'file-saver';
+import { getConfig } from 'global/config';
+import { EGO_JWT_KEY } from 'global/constants';
+import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from 'global/constants';
-import { saveAs } from 'file-saver';
-import React from 'react';
-import { format as formatDate } from 'date-fns';
-import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
-import { getConfig } from 'global/config';
+import { useState } from 'react';
+
+import { Col, Row } from 'react-grid-system';
+import urlJoin from 'url-join';
 
 const DownloadButton = ({
   text,
@@ -66,9 +64,7 @@ const DownloadButtons = () => {
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
 
-  const [buttonLoadingState, setButtonLoadingState] = React.useState({
-    isDownloadAllLoading: false,
-  });
+  const [buttonLoadingState, setButtonLoadingState] = useState(false);
 
   const checkResponseIs200 = (res: Response) => {
     if (res.status !== 200) {
@@ -84,7 +80,7 @@ const DownloadButtons = () => {
       variant: TOAST_VARIANTS.ERROR,
       content: 'File failed to download.',
     });
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
+    setButtonLoadingState(false);
   };
 
   const onClickDownloadAll = () => {
@@ -95,7 +91,7 @@ const DownloadButtons = () => {
       `/clinical/program/${programShortName}/all-clinical-data`,
     );
 
-    setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: true });
+    setButtonLoadingState(true);
 
     fetch(url, {
       headers: {
@@ -109,7 +105,7 @@ const DownloadButtons = () => {
         const now = formatDate(Date.now(), 'yyyyMMdd');
         const fileName = `${programShortName}_Clinical_Data_${now}.zip`;
 
-        setButtonLoadingState({ ...buttonLoadingState, isDownloadAllLoading: false });
+        setButtonLoadingState(false);
 
         saveAs(blob, fileName);
       })
@@ -122,15 +118,9 @@ const DownloadButtons = () => {
         <DownloadButton
           text={'All Clinical Data'}
           onClick={onClickDownloadAll}
-          isLoading={buttonLoadingState.isDownloadAllLoading}
+          isLoading={buttonLoadingState}
         />
       </Col>
-      {/* <Col>
-        <DownloadButton text={'Missing Data'} />
-      </Col>
-      <Col>
-        <DownloadButton text={'Table Data'} />
-      </Col> */}
     </Row>
   );
 };

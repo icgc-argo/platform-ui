@@ -17,26 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import Button from '@icgc-argo/uikit/Button';
-import InstructionBox from '@icgc-argo/uikit/InstructionBox';
-import Icon from '@icgc-argo/uikit/Icon';
 import {
-  instructionBoxButtonIconStyle,
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonStyle,
-  instructionBoxLoadingButtonStyle,
-} from '../../common';
-import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
-import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
-import Link from '@icgc-argo/uikit/Link';
+  Button,
+  ButtonLoader,
+  BUTTON_SIZES,
+  css,
+  FileSelectButton,
+  Icon,
+  InstructionBox,
+  Link,
+  Typography,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import { css } from '@icgc-argo/uikit';
-import { BUTTON_SIZES } from '@icgc-argo/uikit/Button/constants';
-import { ButtonLoader } from '@icgc-argo/uikit/Button/types';
+import { useState } from 'react';
+
+import {
+  instructionBoxButtonContentStyle,
+  instructionBoxButtonIconStyle,
+  instructionBoxButtonStyle,
+  instructionBoxLoadingButtonStyle,
+} from '../../common';
+import FileTemplatesDownloadButton from './FileTemplatesDownloadButton';
 
 const InstructionLoader = ({ theme, text }: ButtonLoader) => {
   const disabledColor = theme.colors.accent2_dark;
@@ -82,9 +85,9 @@ const Instruction = ({
 }) => {
   const { DOCS_URL_ROOT } = getConfig();
 
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
-  const [isValidating, setIsValidating] = React.useState<boolean>(false);
-  const [isSigningOff, setIsSigningOff] = React.useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isValidating, setIsValidating] = useState<boolean>(false);
+  const [isSigningOff, setIsSigningOff] = useState<boolean>(false);
 
   const handleFileUploadClick = async (files: FileList) => {
     setIsUploading(true);

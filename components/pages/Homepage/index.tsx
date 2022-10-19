@@ -17,41 +17,37 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { Col, Row, Visible, Hidden } from 'react-grid-system';
-import { css, styled } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
+import { Button, css, Icon, Link, styled, Typography, useTheme } from '@icgc-argo/uikit';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { Col, Hidden, Row, Visible } from 'react-grid-system';
+
 import DefaultLayout from '../DefaultLayout';
 
-import Link from '@icgc-argo/uikit/Link';
 import NextLink from 'next/link';
 
-import Icon from '@icgc-argo/uikit/Icon';
-import {
-  DataReleaseBar,
-  DataCallout,
-  NewsContainer,
-  NewsItem,
-  ResourceBox,
-  OvertureBanner,
-  ResponsiveGridLayout,
-} from './common';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import Head from 'components/pages/head';
 import { getConfig } from 'global/config';
 import {
   DOCS_DATA_ACCESS_PAGE,
-  DOCS_DNA_PIPELINE_PAGE,
-  DOCS_PUBLICATION_GUIDELINE_PAGE,
-  DOCS_DATA_RELEASES_PAGE,
-  DOCS_PROGRAMMATIC_APIS_PAGE,
-  DOCS_SUBMISSION_OVERVIEW_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
+  DOCS_DATA_RELEASES_PAGE,
+  DOCS_DNA_PIPELINE_PAGE,
+  DOCS_PROGRAMMATIC_APIS_PAGE,
+  DOCS_PUBLICATION_GUIDELINE_PAGE,
+  DOCS_SUBMISSION_OVERVIEW_PAGE,
 } from 'global/constants/docSitePaths';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
-import Head from 'components/pages/head';
+import {
+  DataCallout,
+  DataReleaseBar,
+  NewsContainer,
+  NewsItem,
+  OvertureBanner,
+  ResourceBox,
+  ResponsiveGridLayout,
+} from './common';
+import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
@@ -138,7 +134,7 @@ const newsItems: NewsItem[] = [
   },
 ];
 
-const SeparationLine: React.ComponentType<{}> = () => {
+const SeparationLine: ComponentType<{}> = () => {
   const theme = useTheme();
   return (
     <>
@@ -183,7 +179,7 @@ export default function Homepage() {
   const theme = useTheme();
   const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
-  const { data: stats, loading } = useFileRepoStatsBarQuery();
+  const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
   return (
     <DefaultLayout>
@@ -195,7 +191,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED ? '0px' : '40px'};
+            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError ? '0px' : '40px'};
           `}
         >
           <Typography
@@ -217,9 +213,7 @@ export default function Homepage() {
             css={css`
               margin: 0 50px;
               font-size: 15px;
-
               line-height: 24px;
-
               text-align: center;
               width: 60%;
             `}
@@ -282,13 +276,13 @@ export default function Homepage() {
             </Link>
           </div>
 
-          {FEATURE_LANDING_PAGE_STATS_ENABLED && (
+          {FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError && (
             <DataReleaseBar
-              loading={loading}
+              loading={statsLoading}
               stats={[
-                { quantity: stats.programsCount, description: 'PROGRAMS' },
-                { quantity: stats.donorsCount, description: 'DONORS' },
-                { quantity: stats.filesCount, description: 'FILES' },
+                { quantity: statsData.programsCount, description: 'PROGRAMS' },
+                { quantity: statsData.donorsCount, description: 'DONORS' },
+                { quantity: statsData.filesCount, description: 'FILES' },
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}

@@ -18,42 +18,46 @@
  */
 
 import { useQuery } from '@apollo/client';
-import memoize from 'lodash/memoize';
-import React, { useState, useEffect } from 'react';
-import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import ErrorNotification from '../../ErrorNotification';
-import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import noDataSvg from '@icgc-argo/uikit/assets/noData.svg';
-import Table from '@icgc-argo/uikit/Table';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import { TableInfoHeaderContainer } from '../../common';
-import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 import {
-  aliasSortNames,
-  aliasedEntityNames,
+  ContentPlaceholder,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  noDataSvg,
+  NOTIFICATION_VARIANTS,
+  Table,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
+import memoize from 'lodash/memoize';
+
+import { TableInfoHeaderContainer } from '../../common';
+import ErrorNotification from '../../ErrorNotification';
+import {
   aliasedEntityFields,
+  aliasedEntityNames,
+  aliasSortNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
   CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
+  emptySearchResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
   reverseLookUpEntityAlias,
 } from '../common';
+import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
-import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 
-import { PROGRAM_SHORT_NAME_PATH, PROGRAM_CLINICAL_SUBMISSION_PATH } from 'global/constants/pages';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
 import { ClinicalSearchResults } from 'generated/gql_types';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { createRef, useState, useEffect } from 'react';
 
 export type DonorEntry = {
   row: string;
@@ -183,7 +187,7 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  donorSearchResults,
+  donorSearchResults = emptySearchResponse,
   useDefaultQuery,
 }: {
   entityType: string;
@@ -198,7 +202,7 @@ const ClinicalEntityDataTable = ({
   let records = [];
   let columns = [];
   const theme = useTheme();
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
@@ -206,9 +210,10 @@ const ClinicalEntityDataTable = ({
   const { desc, id } = sorted[0];
   const sortKey = aliasSortNames[id] || id;
   const sort = `${desc ? '-' : ''}${sortKey}`;
+
   const {
     clinicalSearchResults: { searchResults, totalResults },
-  } = donorSearchResults;
+  } = donorSearchResults || emptySearchResponse;
 
   const nextSearchPage = (page + 1) * pageSize;
   const donorIds = useDefaultQuery

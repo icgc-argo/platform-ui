@@ -17,44 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
-import Link from 'next/link';
-import styled from '@emotion/styled';
+import NextLink from 'next/link';
 
-import Submenu, { MenuItem } from '@icgc-argo/uikit/SubMenu';
-import { Input } from '@icgc-argo/uikit/form';
-import Icon from '@icgc-argo/uikit/Icon';
-import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 
-import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
-import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
+import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { getConfig } from 'global/config';
-import { isDccMember, canWriteProgram, isCollaborator, isRdpcMember } from 'global/utils/egoJwt';
+import { canWriteProgram, isCollaborator, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
+import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 
 import {
-  PROGRAM_SHORT_NAME_PATH,
-  PROGRAM_MANAGE_PATH,
-  PROGRAM_DASHBOARD_PATH,
-  PROGRAM_SAMPLE_REGISTRATION_PATH,
-  PROGRAM_CLINICAL_SUBMISSION_PATH,
-  PROGRAM_CLINICAL_DATA_PATH,
-  PROGRAMS_LIST_PATH,
   DCC_DASHBOARD_PATH,
+  PROGRAMS_LIST_PATH,
+  PROGRAM_CLINICAL_DATA_PATH,
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_MANAGE_PATH,
+  PROGRAM_SAMPLE_REGISTRATION_PATH,
+  PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import {
   ClinicalEntityQueryResponse,
   defaultClinicalEntityFilters,
 } from './program-submitted-data/common';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
+import { useState, useMemo, ReactNode } from 'react';
 
 type SideMenuProgram = {
   shortName: string;
@@ -83,7 +78,7 @@ const StatusMenuItem = styled('div')`
 `;
 
 const useToggledSelectState = (initialIndex = -1) => {
-  const [activeItem, setActiveItem] = React.useState(initialIndex);
+  const [activeItem, setActiveItem] = useState(initialIndex);
   const toggleItem = (itemIndex) =>
     itemIndex === activeItem ? setActiveItem(-1) : setActiveItem(itemIndex);
   return { activeItem, toggleItem };
@@ -159,7 +154,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
-  const canSeeCollaboratorView = React.useMemo(() => {
+  const canSeeCollaboratorView = useMemo(() => {
     return (
       egoJwt &&
       !isCollaborator({
@@ -168,7 +163,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       })
     );
   }, [egoJwt]);
-  const canWriteToProgram = React.useMemo(() => {
+  const canWriteToProgram = useMemo(() => {
     return (
       egoJwt &&
       canWriteProgram({
@@ -180,7 +175,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   return (
     <div>
-      <Link
+      <NextLink
         as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
         href={PROGRAM_DASHBOARD_PATH}
       >
@@ -189,10 +184,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           content="Dashboard"
           selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
         />
-      </Link>
+      </NextLink>
       {canSeeCollaboratorView && (
         <>
-          <Link
+          <NextLink
             as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -217,8 +212,8 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                 PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
               }
             />
-          </Link>
-          <Link
+          </NextLink>
+          <NextLink
             as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
               PROGRAM_SHORT_NAME_PATH,
               props.program.shortName,
@@ -249,7 +244,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                         [null as any]: clinicalSubmissionHasSchemaErrors ? (
                           <Icon name="exclamation" fill="error" width="15px" />
                         ) : null,
-                      } as { [k in typeof data.clinicalSubmissions.state]: React.ReactNode }
+                      } as { [k in typeof data.clinicalSubmissions.state]: ReactNode }
                     )[data ? data.clinicalSubmissions.state : null]
                   )}
                 </StatusMenuItem>
@@ -258,9 +253,9 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                 PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
               }
             />
-          </Link>
+          </NextLink>
           {FEATURE_SUBMITTED_DATA_ENABLED && (
-            <Link
+            <NextLink
               as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
@@ -279,12 +274,12 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                   PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
                 }
               />
-            </Link>
+            </NextLink>
           )}
         </>
       )}
       {canWriteToProgram && (
-        <Link
+        <NextLink
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
           href={PROGRAM_MANAGE_PATH}
         >
@@ -293,7 +288,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
             content="Manage Program"
             selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
           />
-        </Link>
+        </NextLink>
       )}
     </div>
   );
@@ -314,7 +309,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
     currentViewingProgramIndex,
   );
   const { egoJwt, permissions } = useAuthContext();
-  const canSeeAllPrograms = React.useMemo(() => {
+  const canSeeAllPrograms = useMemo(() => {
     return egoJwt && isDccMember(permissions);
   }, [egoJwt]);
 
@@ -339,13 +334,13 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         }
       />
       {canSeeAllPrograms && (
-        <Link as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
+        <NextLink as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
             content={'All Programs'}
             selected={pageContext.pathname === PROGRAMS_LIST_PATH}
           />
-        </Link>
+        </NextLink>
       )}
       {filteredPrograms.map((program, programIndex) => (
         <MenuItem
@@ -374,14 +369,14 @@ export default function SideMenu() {
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
 
-  const isDcc = React.useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
-  const isRdpc = React.useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
+  const isDcc = useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
+  const isRdpc = useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
   const canSeeDcc = isDcc;
 
   return (
-    <Submenu>
+    <SubMenu>
       {canOnlyAccessOneProgram ? (
         loading ? (
           <Loader />
@@ -401,9 +396,9 @@ export default function SideMenu() {
       ) : (
         <>
           {canSeeDcc && (
-            <Link href={DCC_DASHBOARD_PATH}>
+            <NextLink href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
-            </Link>
+            </NextLink>
           )}
 
           <MenuItem
@@ -419,6 +414,6 @@ export default function SideMenu() {
           </MenuItem>
         </>
       )}
-    </Submenu>
+    </SubMenu>
   );
 }

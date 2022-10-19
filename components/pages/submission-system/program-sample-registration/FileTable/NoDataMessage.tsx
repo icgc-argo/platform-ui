@@ -17,10 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
+import { ContentPlaceholder, css, DnaLoader } from '@icgc-argo/uikit';
 import beakersImage from 'images/beakers.svg';
 import Image from 'next/image';
 

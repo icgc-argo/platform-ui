@@ -20,11 +20,12 @@
 import LoginPage from 'components/pages/login';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Router from 'next/router';
-import React from 'react';
+
 import queryString from 'query-string';
 
 import { createRedirectURL } from 'global/utils/common';
 import { getPermissionsFromToken } from 'global/utils/egoJwt';
+import { useState, useEffect } from 'react';
 
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,
@@ -54,9 +55,9 @@ export default createPage<{ redirect: string; egoJwt: string }>({
     // };
   },
 })(({ redirect, egoJwt }) => {
-  const [fullRedirect, setFullRedirect] = React.useState('');
+  const [fullRedirect, setFullRedirect] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (egoJwt) {
       Router.replace(redirect || getDefaultRedirectPathForUser(getPermissionsFromToken(egoJwt)));
     }

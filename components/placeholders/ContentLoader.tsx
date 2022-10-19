@@ -17,9 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { ContentPlaceholder, DnaLoader } from '@icgc-argo/uikit';
 
 const ContentLoader = ({ title = '', subtitle = '' }: { title?: string; subtitle?: string }) => {
   return (

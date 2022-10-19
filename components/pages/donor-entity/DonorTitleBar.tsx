@@ -17,22 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import sqonBuilder from 'sqon-builder';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import Legend from '@icgc-argo/uikit/Legend';
-import Link from '@icgc-argo/uikit/Link';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import urlJoin from 'url-join';
+import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { ComponentType } from 'react';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
 import { DownloadIcon } from '../file-entity/common';
 import { FileCentricDocumentField } from '../file-repository/types';
 
-export const DonorTitleBar: React.ComponentType<{
+export const DonorTitleBar: ComponentType<{
   programId: string;
   donorId: string;
   isDownloadEnabled: boolean;

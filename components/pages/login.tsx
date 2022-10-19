@@ -17,23 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Image from 'next/image';
-import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import DefaultLayout from './DefaultLayout';
-import { getConfig } from 'global/config';
-import Notification from '@icgc-argo/uikit/notifications/Notification';
+import { Container, css, Link, Notification, Typography, useTheme } from '@icgc-argo/uikit';
 import GoogleLoginButton from 'components/GoogleLoginButton';
-import urljoin from 'url-join';
-import Link from '@icgc-argo/uikit/Link';
+import { getConfig } from 'global/config';
 import {
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_REGISTERING_SAMPLES_PAGE,
   DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
 } from 'global/constants/docSitePaths';
+import Image from 'next/image';
+import urljoin from 'url-join';
+import DefaultLayout from './DefaultLayout';
 
 import argoLogo from 'images/argo.svg';
 import testtubeIcon from 'images/testtube.svg';

@@ -16,62 +16,68 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import React, { useEffect, useState } from 'react';
-import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
-import { css, styled } from '@icgc-argo/uikit';
-import Facet from '@icgc-argo/uikit/Facet';
-import { MenuItem, SubMenu } from '@icgc-argo/uikit/SubMenu';
-import { Input } from '@icgc-argo/uikit/form';
-import Icon from '@icgc-argo/uikit/Icon';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import { Collapsible } from '@icgc-argo/uikit/PageLayout';
-import NumberRangeFacet from '@icgc-argo/uikit/Facet/NumberRangeFacet';
-import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
-import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
-import useFiltersContext from '../hooks/useFiltersContext';
+import { QueryHookOptions, useQuery } from '@apollo/client';
 import {
-  removeFilter,
-  inCurrentFilters,
-  toggleFilter,
-  replaceFilter,
+  Collapsible,
+  Container,
+  css,
+  Facet,
+  Icon,
+  Input,
+  MenuItem,
+  NumberRangeFacet,
+  styled,
+  SubMenu,
+  Tab,
+  Tabs,
+  Tooltip,
+  useClickAway,
+  useTheme,
+} from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
+import { trim } from 'lodash';
+import { useState, useEffect, ComponentProps, createRef } from 'react';
+
+import SqonBuilder from 'sqon-builder';
+import useDebounce from '../hooks/useDebounce';
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { FileCentricDocumentField } from '../types';
+import {
   currentFieldValue,
-  toDisplayValue,
   getDisplayName,
   getTooltipContent,
+  inCurrentFilters,
+  removeFilter,
+  replaceFilter,
+  toDisplayValue,
+  toggleFilter,
 } from '../utils';
-import SqonBuilder from 'sqon-builder';
 import {
-  FileRepoFiltersType,
-  ScalarFieldKeys,
   ArrayFieldKeys,
   CombinationKeys,
+  FileRepoFiltersType,
+  ScalarFieldKeys,
 } from '../utils/types';
-import { useQuery, QueryHookOptions } from '@apollo/client';
 import FILE_REPOSITORY_FACETS_QUERY from './gql/FILE_REPOSITORY_FACETS_QUERY';
+import SEARCH_BY_DONOR_QUERY from './gql/SEARCH_BY_DONOR_QUERY';
+import SEARCH_BY_FILE_QUERY from './gql/SEARCH_BY_FILE_QUERY';
+import SearchResultsMenu from './SearchResultsMenu';
+import SelectedIds from './SelectedIds';
+import TooltipFacet from './TooltipFacet';
 import {
+  DonorIdSearchQueryData,
   FacetDetails,
   FileFacetPath,
+  FileIdSearchQueryData,
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
   GetAggregationResult,
   IdSearchQueryVariables,
-  FileIdSearchQueryData,
-  DonorIdSearchQueryData,
   SearchMenuDataNode,
 } from './types';
-import Container from '@icgc-argo/uikit/Container';
-import SEARCH_BY_FILE_QUERY from './gql/SEARCH_BY_FILE_QUERY';
-import SEARCH_BY_DONOR_QUERY from './gql/SEARCH_BY_DONOR_QUERY';
-import { trim } from 'lodash';
-import SearchResultsMenu from './SearchResultsMenu';
-import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import { FileCentricDocumentField } from '../types';
-import SelectedIds from './SelectedIds';
-import useDebounce from '../hooks/useDebounce';
-import TooltipFacet from './TooltipFacet';
-import { getConfig } from 'global/config';
-import useAuthContext from 'global/hooks/useAuthContext';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -400,17 +406,17 @@ const FacetPanel = () => {
   const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
   const currentSearch =
     FEATURE_FACET_TABS_ENABLED && currentTab === 'clinical' ? donorIDSearch : fileIDSearch;
-  const [searchOpen, setSearchOpen] = React.useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const presetFacets = createPresetFacets(fieldDisplayNames);
-  const [expandedFacets, setExpandedFacets] = React.useState(
+  const [expandedFacets, setExpandedFacets] = useState(
     [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
   );
   const uploadDisabled = false; // TODO: implement correctly
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
-  const [aggregations, setAggregations] = React.useState({});
+  const [aggregations, setAggregations] = useState({});
 
   const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
@@ -427,7 +433,7 @@ const FacetPanel = () => {
     }
   };
 
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   useEffect(() => {
     setSearchQuery('');
   }, [currentTab]);
@@ -513,7 +519,7 @@ const FacetPanel = () => {
 
   const onFacetOptionToggle: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
+  ) => ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
     return (facetValue) => {
       const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
 
@@ -522,7 +528,7 @@ const FacetPanel = () => {
   };
   const onFacetSelectAllOptionsToggle: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
+  ) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
     return (allOptionsSelected) => {
       if (allOptionsSelected) {
         const updatedFilters = removeFilter(
@@ -541,7 +547,7 @@ const FacetPanel = () => {
 
   const onNumberRangeFacetSubmit: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
     return (min, max) => {
       const newFilters = getRangeFilters(facetDetails.name, min, max);
       // remove any existing fields for this facetDetails first
@@ -554,7 +560,7 @@ const FacetPanel = () => {
   };
   const numberRangeFacetMin: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['min'] = (facetDetails) => {
     return (
       currentFieldValue({
         filters,
@@ -565,7 +571,7 @@ const FacetPanel = () => {
   };
   const numberRangeFacetMax: (
     facetDetails: FacetDetails,
-  ) => React.ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
+  ) => ComponentProps<typeof NumberRangeFacet>['max'] = (facetDetails) => {
     return (
       currentFieldValue({
         filters,
@@ -593,7 +599,7 @@ const FacetPanel = () => {
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
   };
 
-  const searchRef = React.createRef<HTMLDivElement>();
+  const searchRef = createRef<HTMLDivElement>();
   useClickAway({
     domElementRef: searchRef,
     onClickAway: () => setSearchOpen(false),

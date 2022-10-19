@@ -17,32 +17,31 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import Typography from '@icgc-argo/uikit/Typography';
-import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
-import Hyperlink, { HyperLinkProps } from '@icgc-argo/uikit/Link';
-import Link, { LinkProps } from 'next/link';
+import { css, HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
 import {
+  PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  PROGRAM_CLINICAL_SUBMISSION_PATH,
 } from 'global/constants/pages';
-import { DashboardCard } from '../common';
-import { isCollaborator } from 'global/utils/egoJwt';
 import useAuthContext from 'global/hooks/useAuthContext';
-import React from 'react';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { isCollaborator } from 'global/utils/egoJwt';
+import NextLink, { LinkProps } from 'next/link';
+import { ComponentType, useMemo } from 'react';
 
-const ConditionalLink: React.ComponentType<{
+import ClinicalSubmissionProgressBar from '../../ClinicalSubmissionProgressBar';
+import SampleRegistrationProgressBar from '../../SampleRegistrationProgressBar';
+import { DashboardCard } from '../common';
+
+const ConditionalLink: ComponentType<{
   showAsLink: boolean;
   link: LinkProps;
   hyperlink?: HyperLinkProps;
 }> = ({ showAsLink, link, hyperlink, children }) => {
   return showAsLink ? (
-    <Link {...link}>
-      <Hyperlink {...hyperlink}>{children}</Hyperlink>
-    </Link>
+    <NextLink {...link}>
+      <Link {...hyperlink}>{children}</Link>
+    </NextLink>
   ) : (
     <>{children}</>
   );
@@ -52,7 +51,7 @@ export default function ProgramWorkplaceStatus() {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { egoJwt, permissions } = useAuthContext();
 
-  const canViewLinks = React.useMemo(() => {
+  const canViewLinks = useMemo(() => {
     return !isCollaborator({
       permissions,
       programId: programShortName,

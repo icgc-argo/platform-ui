@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
@@ -45,13 +45,13 @@ export const useHook = <T>(
 ) => {
   const router = useRouter();
   const currentQuery = getParams(router);
-  const [firstRender, setFirstRender] = React.useState<boolean>(true);
-  const [previousQuery, setPreviousQuery] = React.useState<{ [key: string]: string }>(null);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
+  const [previousQuery, setPreviousQuery] = useState<{ [key: string]: string }>(null);
 
   const hasQueryParms = !!router.asPath.split('?')[1];
   const previousValue = !hasQueryParms && previousQuery;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query = {
       [key]: serialize(initialValue),
       ...currentQuery,

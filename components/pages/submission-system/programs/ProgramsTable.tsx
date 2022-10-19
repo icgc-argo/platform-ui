@@ -17,17 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Link from 'next/link';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import PercentageBar from '@icgc-argo/uikit/PercentageBar';
-import Table from '@icgc-argo/uikit/Table';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import A from '@icgc-argo/uikit/Link';
+import {
+  css,
+  InteractiveIcon,
+  Link,
+  PercentageBar,
+  Table,
+  TableColumnConfig,
+} from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { TableColumnConfig } from '@icgc-argo/uikit/Table';
 import get from 'lodash/get';
+import NextLink from 'next/link';
+import { ComponentType, createRef, ElementType, useMemo } from 'react';
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -49,11 +50,11 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
   ASSOCIATE: 'ASSOCIATE',
 };
 
-const FormattedCell: React.ComponentType<{ cellInfo: TableProgramInternal }> = ({
+const FormattedCell: ComponentType<{ cellInfo: TableProgramInternal }> = ({
   children,
   cellInfo,
 }) => {
-  const isRenderingOnMultipleRows = React.useMemo(() => {
+  const isRenderingOnMultipleRows = useMemo(() => {
     return cellInfo.countries.length > 1 || cellInfo.cancerTypes.length > 1;
   }, [cellInfo]);
 
@@ -71,11 +72,11 @@ const FormattedCell: React.ComponentType<{ cellInfo: TableProgramInternal }> = (
 
 export default function ProgramsTable(tableProps: {
   programs: Array<ProgramsTableProgram>;
-  onProgramUsersClick: ({ program: ProgramsTableProgram }) => void;
-  onProgramEditClick: ({ program: ProgramsTableProgram }) => void;
+  onProgramUsersClick: ({ program }: { program: ProgramsTableProgram }) => void;
+  onProgramEditClick: ({ program }: { program: ProgramsTableProgram }) => void;
   loading: boolean;
   loadingUser: boolean;
-  LoadingComponent: React.ReactType;
+  LoadingComponent: ElementType;
 }) {
   const data: Array<TableProgramInternal> = tableProps.programs.map((p) => ({
     ...p,
@@ -87,12 +88,12 @@ export default function ProgramsTable(tableProps: {
       accessor: 'shortName',
       Cell: ({ original }) => (
         <FormattedCell cellInfo={original}>
-          <Link
+          <NextLink
             href={PROGRAM_DASHBOARD_PATH}
             as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
           >
-            <A>{original.shortName}</A>
-          </Link>
+            <Link>{original.shortName}</Link>
+          </NextLink>
         </FormattedCell>
       ),
     },
@@ -146,7 +147,7 @@ export default function ProgramsTable(tableProps: {
       accessor: 'administrators',
       Cell: ({ original }) => {
         const adminLinks = get(original, 'administrators', []).map((admin, idx) => (
-          <A
+          <Link
             key={admin.email}
             href={`mailto: ${admin.email}`}
             css={css`
@@ -155,7 +156,7 @@ export default function ProgramsTable(tableProps: {
           >
             {admin.firstName + ' ' + admin.lastName}
             {idx != original.administrators.length - 1 && ','}
-          </A>
+          </Link>
         ));
 
         const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;
@@ -223,7 +224,7 @@ export default function ProgramsTable(tableProps: {
   ];
   return (
     <Table
-      parentRef={React.createRef()}
+      parentRef={createRef()}
       data={data}
       columns={columns}
       showPagination={false}

@@ -17,28 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Footer from '@icgc-argo/uikit/Footer';
-import { css } from '@icgc-argo/uikit';
-import { APP_VERSION } from 'global/constants';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
+import { css, Footer, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import urlJoin from 'url-join';
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import * as internalPaths from 'global/constants/pages';
+import { APP_VERSION } from 'global/constants';
 import {
   ARGO_PRIVACY_PAGE,
-  ARGO_TERMS_PAGE,
   ARGO_PUBLICATION_PAGE,
+  ARGO_TERMS_PAGE,
 } from 'global/constants/argoPages';
 import { STATUS_PATH } from 'global/constants/gatewayApiPaths';
+import * as internalPaths from 'global/constants/pages';
+import { useState, useEffect } from 'react';
+
+import urlJoin from 'url-join';
 
 export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths = false }) {
   const theme = useTheme();
   const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = getConfig();
-  const [apiVersion, setApiVersion] = React.useState(null);
+  const [apiVersion, setApiVersion] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch(urlJoin(GATEWAY_API_ROOT, STATUS_PATH))
       .then((res) => res.json())
       .then((version) => {
@@ -62,7 +60,7 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
       links={[
         {
           displayName: 'Contact',
-          href: CONTACT_PAGE_PATH,
+          href: internalPaths.CONTACT_PAGE_PATH,
           target: '_self',
         },
         {

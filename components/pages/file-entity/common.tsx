@@ -17,14 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
-import Icon from '@icgc-argo/uikit/Icon';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
+import { Container, css, Icon, styled, Typography } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 import { FileAccessState } from './types';
 
-export const FileCard: React.ComponentType<{
+export const FileCard: ComponentType<{
   cardTitle?: string;
   cardHeight?: string;
   loading?: boolean;

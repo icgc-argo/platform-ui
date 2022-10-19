@@ -17,31 +17,34 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { CONTACT_PAGE_PATH } from 'global/constants/pages';
-import Link from '@icgc-argo/uikit/Link';
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import InstructionBox from '@icgc-argo/uikit/InstructionBox';
-import HyperLink from '@icgc-argo/uikit/Link';
-import Typography from '@icgc-argo/uikit/Typography';
-import RegisterSamplesModal from './RegisterSamplesModal';
 import { useMutation } from '@apollo/client';
-
-import UPLOAD_REGISTRATION_MUTATION from '../gql/UPLOAD_REGISTRATION_MUTATION';
 import {
-  instructionBoxButtonIconStyle,
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonStyle,
-  downloadTsvFileTemplate,
-} from '../../common';
-import FileSelectButton from '@icgc-argo/uikit/FileSelectButton';
+  Button,
+  css,
+  Icon,
+  InstructionBox,
+  Link,
+  Typography,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
+  FileSelectButton,
+} from '@icgc-argo/uikit';
+import { CONTACT_PAGE_PATH } from 'global/constants/pages';
+
+import RegisterSamplesModal from './RegisterSamplesModal';
+
+import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
-import useCommonToasters from 'components/useCommonToasters';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
-import { BUTTON_VARIANTS, BUTTON_SIZES } from '@icgc-argo/uikit/Button/constants';
+import {
+  downloadTsvFileTemplate,
+  instructionBoxButtonContentStyle,
+  instructionBoxButtonIconStyle,
+  instructionBoxButtonStyle,
+} from '../../common';
+import UPLOAD_REGISTRATION_MUTATION from '../gql/UPLOAD_REGISTRATION_MUTATION';
+import { useState } from 'react';
 
 function Instructions({
   uploadEnabled,
@@ -66,7 +69,7 @@ function Instructions({
     downloadTsvFileTemplate('sample_registration.tsv');
   };
 
-  const [showRegisterSamplesModal, setShowRegisterSamplesModal] = React.useState(false);
+  const [showRegisterSamplesModal, setShowRegisterSamplesModal] = useState(false);
   const handleRegisterClick = () => {
     setShowRegisterSamplesModal(true);
   };
@@ -169,7 +172,7 @@ function Instructions({
             <Typography variant="data">
               If you have any changes to previously registered data, please {` `}
               <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact the DCC</HyperLink>
+                <Link>contact the DCC</Link>
               </Link>
               .
             </Typography>

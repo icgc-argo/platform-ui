@@ -17,16 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { styled, css } from '@icgc-argo/uikit';
-import Modal from '@icgc-argo/uikit/Modal';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
-import { UserSection, UserSectionProps } from '../styledComponents';
+import { Button, css, Icon, Modal, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
-import { UserModel, userSchema } from '../common';
 import uniqueId from 'lodash/uniqueId';
+import { useEffect, useState } from 'react';
+
+import { UserModel, userSchema } from '../common';
+import { UserSection, UserSectionProps } from '../styledComponents';
 
 const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete }) => {
   const form = useFormHook({ initialFields: UserModel, schema: userSchema });
@@ -34,7 +31,7 @@ const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete })
   const { errors, data, setData, validateField, touched } = form;
   const validationErrors = errors as UserSectionProps['errors'];
 
-  React.useEffect(() => {
+  useEffect(() => {
     formSubscriptions[id] = form;
     onUpdate();
   });
@@ -55,7 +52,7 @@ const AddUser = ({ id, formSubscriptions, removeSection, onUpdate, showDelete })
   );
 };
 
-const AddSection = styled(Button)`
+const AddSection = styled(Button)<{ disabled: boolean }>`
   text-transform: uppercase;
   color: ${({ disabled, theme }) => (disabled ? '#d0d1d8' : theme.colors.accent2_dark)};
   margin-top: 14px;
@@ -70,10 +67,10 @@ const AddUserModal = ({
   dismissModal: () => any | void;
   users: Array<typeof UserModel>;
 }) => {
-  const [formIds, setFormIds] = React.useState([uniqueId()]);
-  const [isLastSectionTouched, setIsLastSectionTouched] = React.useState(false);
-  const [isFormTouched, setIsFormTouched] = React.useState(false);
-  const [hasErrors, setHasErrors] = React.useState(false);
+  const [formIds, setFormIds] = useState([uniqueId()]);
+  const [isLastSectionTouched, setIsLastSectionTouched] = useState(false);
+  const [isFormTouched, setIsFormTouched] = useState(false);
+  const [hasErrors, setHasErrors] = useState(false);
   const formSubscriptions = {};
 
   // check if form has been touched

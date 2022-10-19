@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { GqlClinicalSubmissionData } from './types';
-import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
-import Typography from '@icgc-argo/uikit/Typography';
+import { css, Modal, ModalContainer, styled, Typography } from '@icgc-argo/uikit';
+import { ComponentProps } from 'react';
+
 import SubmissionSummaryTable from './SubmissionSummaryTable';
-import styled from '@emotion/styled';
+import { GqlClinicalSubmissionData } from './types';
 
 const SignOffModalCont = styled(ModalContainer)`
   max-width: 1120px;
@@ -38,9 +36,9 @@ const SignOffValidationModal = ({
 }: {
   clinicalSubmissions: GqlClinicalSubmissionData;
   hasUpdate: boolean;
-  onCloseClick: React.ComponentProps<typeof Modal>['onCloseClick'];
-  onActionClick: React.ComponentProps<typeof Modal>['onActionClick'];
-  onCancelClick: React.ComponentProps<typeof Modal>['onCancelClick'];
+  onCloseClick: ComponentProps<typeof Modal>['onCloseClick'];
+  onActionClick: ComponentProps<typeof Modal>['onActionClick'];
+  onCancelClick: ComponentProps<typeof Modal>['onCancelClick'];
 }) => {
   return (
     <Modal

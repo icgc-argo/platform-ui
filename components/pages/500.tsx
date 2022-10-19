@@ -17,17 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { css, Link, Typography } from '@icgc-argo/uikit';
 import ErrorLayout from 'components/pages/error';
-import Typography from '@icgc-argo/uikit/Typography';
-import { css } from '@icgc-argo/uikit';
-import HyperLink from '@icgc-argo/uikit/Link';
 import { getConfig } from 'global/config';
-import Link from 'next/link';
-import { Row, Col } from 'react-grid-system';
 import dnaBrokenImage from 'images/dna-broken.svg';
 import logoMarkImage from 'images/logomark.svg';
 import Image from 'next/image';
+import NextLink from 'next/link';
+import { Col, Row } from 'react-grid-system';
 
 export default function Error500Page() {
   const { DOCS_URL_ROOT } = getConfig();
@@ -67,13 +64,13 @@ export default function Error500Page() {
           <Typography variant="subtitle2">Oops! We cannot handle this request.</Typography>
           <Typography variant="subtitle2">
             Check out our{' '}
-            <HyperLink target="_blank" href={DOCS_URL_ROOT}>
+            <Link target="_blank" href={DOCS_URL_ROOT}>
               Documentation
-            </HyperLink>{' '}
+            </Link>{' '}
             or head back{' '}
-            <Link href="/">
-              <HyperLink>Home</HyperLink>
-            </Link>
+            <NextLink href="/">
+              <Link>Home</Link>
+            </NextLink>
             .
           </Typography>
         </Col>

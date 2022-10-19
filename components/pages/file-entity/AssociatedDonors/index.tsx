@@ -17,21 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileCard, TableDiv } from '../common';
-import { css } from '@emotion/core';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
+import { css, SimpleTable, styled, Typography, useTheme } from '@icgc-argo/uikit';
+import { useState } from 'react';
+
 import { Col, Row } from 'react-grid-system';
+import { FileCard, TableDiv } from '../common';
 import { DonorRecord } from '../types';
-import React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import styled from '@emotion/styled';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
 
 const AssociatedDonors = ({ donors }: { donors: Array<DonorRecord> }) => {
   const theme = useTheme();
 
-  const [selectedDonor, setSelectedDonor] = React.useState(donors[0]);
+  const [selectedDonor, setSelectedDonor] = useState(donors[0]);
 
   const formatDonorInfo = (donorInfo: DonorRecord) => {
     return {
