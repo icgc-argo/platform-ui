@@ -63,13 +63,14 @@ export const SchemaInvalidSubmissionNotification = ({
         padding: 8px 8px 8px 0px;
       `}
     >
+      {` The clinical submission you have in progress is invalid. `}
       {!latestDictionaryResponse.loading && (
         <Link href={DOCS_DICTIONARY_PAGE} target="_blank">
           Version {latestDictionaryResponse.data.clinicalSubmissionSchemaVersion} of the data
           dictionary
         </Link>
       )}
-      {` was released and has made your clinical submission invalid. `}
+      {` was released and has made your in progress clinical submission invalid. `}
       {submissionPage ? `See the details below.` : `See the details in your clinical workspace.`}
     </div>
   );
