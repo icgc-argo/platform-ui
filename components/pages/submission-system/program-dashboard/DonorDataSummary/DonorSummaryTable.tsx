@@ -782,18 +782,18 @@ const DonorSummaryTable = ({
                     panelLegend={'Sample Registration Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'rnaSampleStatus',
+                        'rnaRegisteredSample',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
                     filterCounts={{
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                      [FILTER_OPTIONS.dataSubmittedNoData[0].key]:
                         programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                      [FILTER_OPTIONS.dataSubmittedNoData[1].key]:
                         programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
                     }}
-                    activeFilters={getFilterValue('rnaSampleStatus')}
+                    activeFilters={getFilterValue('rnaRegisteredSample')}
                   />
                 ),
                 id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
@@ -815,11 +815,11 @@ const DonorSummaryTable = ({
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
                     filterCounts={{
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                      [FILTER_OPTIONS.dataSubmittedNoData[0].key]:
                         programDonorSummaryStats?.rnaRawReadStatus?.dataSubmitted,
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                      [FILTER_OPTIONS.dataSubmittedNoData[1].key]:
                         programDonorSummaryStats?.rnaRawReadStatus?.noDataSubmitted,
                     }}
                     activeFilters={getFilterValue('rnaRawReads')}

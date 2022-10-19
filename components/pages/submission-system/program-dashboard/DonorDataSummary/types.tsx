@@ -161,7 +161,7 @@ export type ProgramDonorSummaryEntryField =
   | 'updatedAt'
   | 'createdAt'
   | 'rnaRawReads'
-  | 'rnaSampleStatus'
+  | 'rnaRegisteredSample'
   | 'rnaAlignmentStatus';
 
 export type ProgramDonorSummaryFilter = {
