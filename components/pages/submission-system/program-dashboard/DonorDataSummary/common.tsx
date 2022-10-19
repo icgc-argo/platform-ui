@@ -91,6 +91,16 @@ export const FILTER_OPTIONS = {
       value: 'No Data',
     },
   ],
+  dataSubmittedNoDataSubmitted: [
+    {
+      key: 'DATA_SUBMITTED',
+      value: 'Data Submitted',
+    },
+    {
+      key: 'NO_DATA_SUBMITTED',
+      value: 'No Data Submitted',
+    },
+  ],
 };
 
 export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
@@ -141,4 +151,8 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   completedWorkflowRuns: 0,
   inProgressWorkflowRuns: 0,
   failedWorkflowRuns: 0,
+  rnaRawReadStatus: {
+    dataSubmitted: 0,
+    noDataSubmitted: 0,
+  },
 };

@@ -19,45 +19,48 @@
 
 import { useState } from 'react';
 import { css, styled, Tab, Tabs, useTheme } from '@icgc-argo/uikit';
+import { ProgramDonorSummaryEntryField } from './types';
 
-export enum PipelineTabNames {
+export enum PipelineNames {
   DNA = 'DNA',
   RNA = 'RNA',
 }
 
-export const getPipelineTabSettings = () => {
+export const getPipelineSettings = () => {
   const theme = useTheme();
   return {
-    [PipelineTabNames.DNA]: {
+    [PipelineNames.DNA]: {
       alignmentsFailed: 'alignmentsFailed',
       alignmentsCompleted: 'alignmentsCompleted',
       alignmentsRunning: 'alignmentsRunning',
+      rawReads: 'rawReads' as ProgramDonorSummaryEntryField,
+      rawReadsLegend: 'Raw Reads Status',
       color: theme.colors.warning_4,
     },
-    [PipelineTabNames.RNA]: {
+    [PipelineNames.RNA]: {
       alignmentsFailed: 'rnaAlignmentFailed',
       alignmentsCompleted: 'rnaAlignmentsCompleted',
       alignmentsRunning: 'rnaAlignmentsRunning',
+      rawReads: 'rnaRawReads' as ProgramDonorSummaryEntryField,
+      rawReadsLegend: 'RNA Raw Reads Status',
       color: theme.colors.accent3_4,
     },
   };
 };
 
-export const usePipelineTabs = () => {
-  const [activePipelineTab, setActivePipelineTab] = useState<PipelineTabNames>(
-    PipelineTabNames.DNA,
-  );
-  const pipelineTabSettings = getPipelineTabSettings();
-  const pipelineTabColor = pipelineTabSettings[activePipelineTab].color;
+export const usePipelines = () => {
+  const [activePipeline, setActivePipeline] = useState<PipelineNames>(PipelineNames.DNA);
+  const pipelineSettings = getPipelineSettings();
+  const pipelineColor = pipelineSettings[activePipeline].color;
   return {
-    activePipelineTab,
-    pipelineTabColor,
-    pipelineTabSettings,
-    setActivePipelineTab,
+    activePipeline,
+    pipelineColor,
+    pipelineSettings,
+    setActivePipeline,
   };
 };
 
-const StyledPipelineTab = styled(Tab)<{ pipelineTabColor: string }>`
+const StyledPipelineTab = styled(Tab)<{ pipelineColor: string }>`
   align-items: center;
   justify-content: center;
   padding: 3px 0px;
@@ -72,11 +75,11 @@ const StyledPipelineTab = styled(Tab)<{ pipelineTabColor: string }>`
     background-color: ${({ theme }) => css(theme.colors.grey_4)};
   }
   &.active {
-    background: ${(props) => props.pipelineTabColor};
+    background: ${(props) => props.pipelineColor};
     border-bottom: 0px none ${({ theme }) => css(theme.colors.white)};
     border-top: 3px solid ${({ theme }) => css(theme.colors.secondary)};
     :hover {
-      background-color: ${(props) => props.pipelineTabColor};
+      background-color: ${(props) => props.pipelineColor};
     }
   }
   &:first-of-type {
@@ -85,26 +88,18 @@ const StyledPipelineTab = styled(Tab)<{ pipelineTabColor: string }>`
 `;
 
 export const PipelineTabs = ({
-  activePipelineTab,
+  activePipeline,
   handlePipelineTabs,
 }: {
-  activePipelineTab: PipelineTabNames;
-  handlePipelineTabs: (e: any, value: PipelineTabNames) => void;
+  activePipeline: PipelineNames;
+  handlePipelineTabs: (e: any, value: PipelineNames) => void;
 }) => {
-  const { pipelineTabColor } = usePipelineTabs();
+  const { pipelineColor } = usePipelines();
 
   return (
-    <Tabs onChange={handlePipelineTabs} value={activePipelineTab}>
-      <StyledPipelineTab
-        label="DNA-SEQ"
-        pipelineTabColor={pipelineTabColor}
-        value={PipelineTabNames.DNA}
-      />
-      <StyledPipelineTab
-        label="RNA-SEQ"
-        pipelineTabColor={pipelineTabColor}
-        value={PipelineTabNames.RNA}
-      />
+    <Tabs onChange={handlePipelineTabs} value={activePipeline}>
+      <StyledPipelineTab label="DNA-SEQ" pipelineColor={pipelineColor} value={PipelineNames.DNA} />
+      <StyledPipelineTab label="RNA-SEQ" pipelineColor={pipelineColor} value={PipelineNames.RNA} />
     </Tabs>
   );
 };

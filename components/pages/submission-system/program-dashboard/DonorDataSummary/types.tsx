@@ -35,6 +35,11 @@ export type CompletedInProgressFailedFilterCounts = {
   noData: number;
 };
 
+export type DataSubmittedDataNotSubmittedFilterCounts = {
+  dataSubmitted: number;
+  noDataSubmitted: number;
+};
+
 export type DonorSummaryRecord = {
   releaseStatus: DonorDataReleaseState;
   donorId: string;
@@ -80,6 +85,7 @@ export type ProgramDonorReleaseStats = {
   completedWorkflowRuns?: number;
   inProgressWorkflowRuns?: number;
   failedWorkflowRuns?: number;
+  rnaRawReadStatus?: DataSubmittedDataNotSubmittedFilterCounts;
 };
 
 export enum DonorDataReleaseState {
@@ -151,7 +157,8 @@ export type ProgramDonorSummaryEntryField =
   | 'openAccessFailed'
   | 'processingStatus'
   | 'updatedAt'
-  | 'createdAt';
+  | 'createdAt'
+  | 'rnaRawReads';
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;

@@ -71,7 +71,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { PipelineTabNames, PipelineTabs, usePipelineTabs } from './PipelineTabs';
+import { PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -89,8 +89,7 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
-  const { activePipelineTab, pipelineTabColor, pipelineTabSettings, setActivePipelineTab } =
-    usePipelineTabs();
+  const { activePipeline, pipelineColor, pipelineSettings, setActivePipeline } = usePipelines();
 
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
@@ -101,6 +100,7 @@ const DonorSummaryTable = ({
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
+  const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -572,9 +572,9 @@ const DonorSummaryTable = ({
       ],
     },
     {
-      Header: `${activePipelineTab.toUpperCase()}-SEQ PIPELINE`,
+      Header: `${activePipeline.toUpperCase()}-SEQ PIPELINE`,
       headerStyle: {
-        background: pipelineTabColor,
+        background: pipelineColor,
       },
       columns: [
         {
@@ -605,35 +605,69 @@ const DonorSummaryTable = ({
             />
           ),
         },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Raw Reads'}
-              panelLegend={'Raw Reads Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'rawReads',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.validInvalid}
-              filterCounts={{
-                [FILTER_OPTIONS.validInvalid[0].key]:
-                  programDonorSummaryStats?.rawReadsStatus?.valid,
-                [FILTER_OPTIONS.validInvalid[1].key]:
-                  programDonorSummaryStats?.rawReadsStatus?.invalid,
-              }}
-              activeFilters={getFilterValue('rawReads')}
-            />
-          ),
-          id: RAW_READS_COLUMN_ID,
-          Cell: ({ original }) => (
-            <DesignationCell
-              left={original.publishedNormalAnalysis}
-              right={original.publishedTumourAnalysis}
-            />
-          ),
-        },
+        ...(activePipeline === PipelineNames.DNA
+          ? [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Raw Reads'}
+                    panelLegend={'Raw Reads Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rawReads',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validInvalid[0].key]:
+                        programDonorSummaryStats?.rawReadsStatus?.valid,
+                      [FILTER_OPTIONS.validInvalid[1].key]:
+                        programDonorSummaryStats?.rawReadsStatus?.invalid,
+                    }}
+                    activeFilters={getFilterValue('rawReads')}
+                  />
+                ),
+                id: RAW_READS_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.publishedNormalAnalysis}
+                    right={original.publishedTumourAnalysis}
+                  />
+                ),
+              },
+            ]
+          : [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'RNA Raw Reads'}
+                    panelLegend={'RNA Raw Reads Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaRawReads',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaRawReads')}
+                  />
+                ),
+                id: RNA_RAW_READS_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaPublishedNormalAnalysis}
+                    right={original.rnaPublishedTumourAnalysis}
+                  />
+                ),
+              },
+            ]),
         {
           Header: (
             <ListFilterHeader
@@ -662,13 +696,13 @@ const DonorSummaryTable = ({
           id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
-              complete={original[pipelineTabSettings[activePipelineTab].alignmentsCompleted]}
-              inProgress={original[pipelineTabSettings[activePipelineTab].alignmentsRunning]}
-              error={original[pipelineTabSettings[activePipelineTab].alignmentsFailed]}
+              complete={original[pipelineSettings[activePipeline].alignmentsCompleted]}
+              inProgress={original[pipelineSettings[activePipeline].alignmentsRunning]}
+              error={original[pipelineSettings[activePipeline].alignmentsFailed]}
             />
           ),
         },
-        ...(activePipelineTab === PipelineTabNames.DNA
+        ...(activePipeline === PipelineNames.DNA
           ? [
               {
                 Header: (
@@ -864,9 +898,9 @@ const DonorSummaryTable = ({
             programDonorSummaryStats={programDonorSummaryStats}
           />
           <PipelineTabs
-            activePipelineTab={activePipelineTab}
+            activePipeline={activePipeline}
             handlePipelineTabs={(e, value) => {
-              setActivePipelineTab(value);
+              setActivePipeline(value);
             }}
           />
 
