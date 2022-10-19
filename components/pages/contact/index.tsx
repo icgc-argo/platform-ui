@@ -32,7 +32,6 @@ import {
   Textarea,
   TOAST_VARIANTS,
   Typography,
-  UikitTheme,
   useTheme,
 } from '@icgc-argo/uikit';
 import DefaultLayout from 'components/pages/DefaultLayout';

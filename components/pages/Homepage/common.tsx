@@ -29,14 +29,12 @@ import {
   ThemeColorNames,
   Typography,
   UikitIconNames,
-  UikitTheme,
   useTheme,
 } from '@icgc-argo/uikit';
 import { reactGridBreakpoints } from 'global/utils/common';
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ComponentType, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { ComponentType } from 'react';
 
 export type NewsItem = {
   title: string;

@@ -31,7 +31,6 @@ import {
   Tab,
   Tabs,
   Tooltip,
-  UikitTheme,
   useClickAway,
   useTheme,
 } from '@icgc-argo/uikit';

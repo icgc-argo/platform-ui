@@ -17,16 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  Button,
-  css,
-  Icon,
-  Link,
-  styled,
-  Typography,
-  UikitTheme,
-  useTheme,
-} from '@icgc-argo/uikit';
+import { Button, css, Icon, Link, styled, Typography, useTheme } from '@icgc-argo/uikit';
 
 import { Col, Hidden, Row, Visible } from 'react-grid-system';
 
