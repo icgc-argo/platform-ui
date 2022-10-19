@@ -781,8 +781,8 @@ const DonorSummaryTable = ({
               {
                 Header: (
                   <ListFilterHeader
-                    header={'RNA Registered Samples'}
-                    panelLegend={'RNA Sample Registration Status'}
+                    header={'Registered Samples'}
+                    panelLegend={'Sample Registration Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'rnaSampleStatus',
@@ -810,8 +810,8 @@ const DonorSummaryTable = ({
               {
                 Header: (
                   <ListFilterHeader
-                    header={'RNA Raw Reads'}
-                    panelLegend={'RNA Raw Reads Status'}
+                    header={'Raw Reads'}
+                    panelLegend={'Raw Reads Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'rnaRawReads',
@@ -839,8 +839,8 @@ const DonorSummaryTable = ({
               {
                 Header: (
                   <ListFilterHeader
-                    header={'RNA Alignment'}
-                    panelLegend={'RNA Alignment Status'}
+                    header={'Alignment'}
+                    panelLegend={'Alignment Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'rnaAlignmentStatus',
