@@ -162,7 +162,7 @@ export type ProgramDonorSummaryEntryField =
   | 'createdAt'
   | 'rnaRawReads'
   | 'rnaSampleStatus'
-  | 'rnaAlignmentStatusCount';
+  | 'rnaAlignmentStatus';
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;

@@ -840,7 +840,7 @@ const DonorSummaryTable = ({
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'rnaAlignmentStatusCount',
+                        'rnaAlignmentStatus',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
@@ -855,7 +855,7 @@ const DonorSummaryTable = ({
                       [FILTER_OPTIONS.completedInProgressFailed[3].key]:
                         programDonorSummaryStats?.rnaAlignmentStatusCount?.noData,
                     }}
-                    activeFilters={getFilterValue('rnaAlignmentStatusCount')}
+                    activeFilters={getFilterValue('rnaAlignmentStatus')}
                   />
                 ),
                 id: RNA_ALIGNMENT_COLUMN_ID,
