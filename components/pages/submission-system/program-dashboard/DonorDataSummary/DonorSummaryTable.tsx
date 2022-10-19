@@ -71,11 +71,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-
-enum PipelineTabs {
-  DNA = 'DNA',
-  RNA = 'RNA',
-}
+import { PipelineTabNames, PipelineTabs, usePipelineTabs } from './PipelineTabs';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -93,51 +89,8 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
-  const [activePipelineTab, setActivePipelineTab] = useState<PipelineTabs>(PipelineTabs.DNA);
-  const theme = useTheme();
-  const pipelineTabSettings = {
-    [PipelineTabs.DNA]: {
-      alignmentsFailed: 'alignmentsFailed',
-      alignmentsCompleted: 'alignmentsCompleted',
-      alignmentsRunning: 'alignmentsRunning',
-      color: theme.colors.warning_4,
-    },
-    [PipelineTabs.RNA]: {
-      alignmentsFailed: 'rnaAlignmentFailed',
-      alignmentsCompleted: 'rnaAlignmentsCompleted',
-      alignmentsRunning: 'rnaAlignmentsRunning',
-      color: theme.colors.accent3_4,
-    },
-  };
-
-  const pipelineTabColor = pipelineTabSettings[activePipelineTab].color;
-
-  const StyledPipelineTab = styled(Tab)`
-    align-items: center;
-    justify-content: center;
-    padding: 3px 0px;
-    margin: 0 8px 0 0;
-    border: 1px solid ${theme.colors.grey_2};
-    border-bottom: 1px none ${theme.colors.white};
-    border-radius: 5px 5px 0px 0px;
-    width: 150px;
-    font-size: 13px;
-    background: ${theme.colors.grey_3};
-    :hover {
-      background-color: ${theme.colors.grey_4};
-    }
-    &.active {
-      background: ${pipelineTabColor};
-      border-bottom: 0px none ${theme.colors.white};
-      border-top: 3px solid ${theme.colors.secondary};
-      :hover {
-        background-color: ${pipelineTabColor};
-      }
-    }
-    &:first-of-type {
-      margin-left: 279px;
-    }
-  `;
+  const { activePipelineTab, pipelineTabColor, pipelineTabSettings, setActivePipelineTab } =
+    usePipelineTabs();
 
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
@@ -715,7 +668,7 @@ const DonorSummaryTable = ({
             />
           ),
         },
-        ...(activePipelineTab === PipelineTabs.DNA
+        ...(activePipelineTab === PipelineTabNames.DNA
           ? [
               {
                 Header: (
@@ -910,15 +863,13 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
-          <Tabs
-            value={activePipelineTab}
-            onChange={(e, value) => {
+          <PipelineTabs
+            activePipelineTab={activePipelineTab}
+            handlePipelineTabs={(e, value) => {
               setActivePipelineTab(value);
             }}
-          >
-            <StyledPipelineTab value={PipelineTabs.DNA} label="DNA-SEQ" />
-            <StyledPipelineTab value={PipelineTabs.RNA} label="RNA-SEQ" />
-          </Tabs>
+          />
+
           <Table
             loading={isTableLoading}
             parentRef={containerRef}
