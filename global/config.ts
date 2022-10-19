@@ -51,6 +51,8 @@ export const getConfig = () => {
     FEATURE_RNASEQ_ENABLED: publicConfig.FEATURE_RNASEQ_ENABLED === 'true',
     FEATURE_DACO_V2_ENABLED: publicConfig.FEATURE_DACO_V2_ENABLED === 'true',
     FEATURE_SUBMITTED_DATA_ENABLED: publicConfig.FEATURE_SUBMITTED_DATA_ENABLED === 'true',
+    FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED:
+      publicConfig.FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -74,5 +76,6 @@ export const getConfig = () => {
     FEATURE_RNASEQ_ENABLED: boolean;
     FEATURE_DACO_V2_ENABLED: boolean;
     FEATURE_SUBMITTED_DATA_ENABLED: boolean;
+    FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED: boolean;
   };
 };

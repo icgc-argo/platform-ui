@@ -70,6 +70,7 @@ import {
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
+import getConfig from 'next/config';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -87,6 +88,7 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
+  const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = getConfig();
   const { activePipeline, setActivePipeline } = usePipelines();
 
   // These are used to sort columns with multiple fields
@@ -956,12 +958,14 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
-          <PipelineTabs
-            activePipeline={activePipeline}
-            handlePipelineTabs={(e, value) => {
-              setActivePipeline(value);
-            }}
-          />
+          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && (
+            <PipelineTabs
+              activePipeline={activePipeline}
+              handlePipelineTabs={(e, value) => {
+                setActivePipeline(value);
+              }}
+            />
+          )}
 
           <Table
             loading={isTableLoading}
