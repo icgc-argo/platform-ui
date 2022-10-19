@@ -155,4 +155,14 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
     dataSubmitted: 0,
     noDataSubmitted: 0,
   },
+  rnaSampleStatus: {
+    dataSubmitted: 0,
+    noDataSubmitted: 0,
+  },
+  rnaAlignmentStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
 };

@@ -47,10 +47,8 @@ import {
   Link,
   ListFilter,
   styled,
-  Tab,
   Table,
   TableColumnConfig,
-  Tabs,
   TextInputFilter,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -71,7 +69,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { PipelineNames, PipelineTabs, usePipelines, PIPELINE_COLORS } from './PipelineTabs';
+import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -89,7 +87,6 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
-  const theme = useTheme();
   const { activePipeline, setActivePipeline } = usePipelines();
 
   // These are used to sort columns with multiple fields
@@ -575,9 +572,9 @@ const DonorSummaryTable = ({
       ],
     },
     {
-      Header: `${activePipeline.toUpperCase()}-SEQ PIPELINE`,
+      Header: `${activePipeline}-SEQ PIPELINE`,
       headerStyle: {
-        background: theme.colors[PIPELINE_COLORS[activePipeline]],
+        background: useTheme().colors[PIPELINE_COLORS[activePipeline]],
       },
       columns: [
         ...(activePipeline === PipelineNames.DNA
@@ -843,22 +840,22 @@ const DonorSummaryTable = ({
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'rnaAlignmentStatus',
+                        'rnaAlignmentStatusCount',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
                       [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                        programDonorSummaryStats?.rnaAlignmentStatus?.completed,
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.completed,
                       [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                        programDonorSummaryStats?.rnaAlignmentStatus?.inProgress,
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.inProgress,
                       [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                        programDonorSummaryStats?.rnaAlignmentStatus?.failed,
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.failed,
                       [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                        programDonorSummaryStats?.rnaAlignmentStatus?.noData,
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.noData,
                     }}
-                    activeFilters={getFilterValue('rnaAlignmentStatus')}
+                    activeFilters={getFilterValue('rnaAlignmentStatusCount')}
                   />
                 ),
                 id: RNA_ALIGNMENT_COLUMN_ID,
@@ -947,7 +944,6 @@ const DonorSummaryTable = ({
       css={css`
         z-index: 2;
         padding-top: 10px;
-        position: relative;
       `}
     >
       {programDonorsSummaryQueryError ? (

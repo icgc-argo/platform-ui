@@ -87,7 +87,7 @@ export type ProgramDonorReleaseStats = {
   failedWorkflowRuns?: number;
   rnaRawReadStatus?: DataSubmittedDataNotSubmittedFilterCounts;
   rnaSampleStatus?: DataSubmittedDataNotSubmittedFilterCounts;
-  rnaAlignmentStatus?: CompletedInProgressFailedFilterCounts;
+  rnaAlignmentStatusCount?: CompletedInProgressFailedFilterCounts;
 };
 
 export enum DonorDataReleaseState {
@@ -162,7 +162,7 @@ export type ProgramDonorSummaryEntryField =
   | 'createdAt'
   | 'rnaRawReads'
   | 'rnaSampleStatus'
-  | 'rnaAlignmentStatus';
+  | 'rnaAlignmentStatusCount';
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;
