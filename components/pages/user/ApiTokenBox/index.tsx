@@ -17,20 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import { css } from '@icgc-argo/uikit';
-import Banner, { BANNER_SIZE, BANNER_VARIANTS } from '@icgc-argo/uikit/notifications/Banner';
-import Link from '@icgc-argo/uikit/Link';
-import Button from '@icgc-argo/uikit/Button';
-import { Box } from '../common';
-import ClipboardCopyField from '@icgc-argo/uikit/ClipboardCopyField';
-import GENERATE_EGO_API_TOKEN_MUTATION from './gql/GENERATE_EGO_API_TOKEN_MUTATION';
 import { useMutation } from '@apollo/client';
-import get from 'lodash/get';
+import {
+  Banner,
+  BANNER_SIZE,
+  BANNER_VARIANTS,
+  Button,
+  ClipboardCopyField,
+  css,
+  Link,
+  Typography,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
+import { DOCS_DATA_ACCESS_PAGE, DOCS_DATA_DOWNLOAD_PAGE } from 'global/constants/docSitePaths';
+import get from 'lodash/get';
+import { useState } from 'react';
+
+import { Box } from '../common';
 import { ApiToken } from '../types';
-import { DOCS_DATA_DOWNLOAD_PAGE, DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
+import GENERATE_EGO_API_TOKEN_MUTATION from './gql/GENERATE_EGO_API_TOKEN_MUTATION';
 
 const ApiTokenBox = ({
   apiToken,
@@ -41,8 +46,8 @@ const ApiTokenBox = ({
   loading: boolean;
   hasTokenAccess: boolean;
 }) => {
-  const [generatedApiToken, setGeneratedApiToken] = React.useState(null);
-  const [isGeneratingApiToken, setIsGeneratingApiToken] = React.useState(false);
+  const [generatedApiToken, setGeneratedApiToken] = useState(null);
+  const [isGeneratingApiToken, setIsGeneratingApiToken] = useState(false);
   const [generateApiToken] = useMutation(GENERATE_EGO_API_TOKEN_MUTATION);
 
   const { DOCS_URL_ROOT } = getConfig();

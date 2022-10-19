@@ -17,11 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Link, Typography } from '@icgc-argo/uikit';
 import ErrorLayout from 'components/pages/error';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import A from '@icgc-argo/uikit/Link';
-import Typography from '@icgc-argo/uikit/Typography';
 import clientErrorImage from 'images/client-error.svg';
 import Image from 'next/image';
 
@@ -72,9 +69,9 @@ export default function Error404Page() {
             as="p"
           >
             We are working on fixing the problem and appreciate your patience.{' '}
-            <A href="#" onClick={handleReloadClick}>
+            <Link href="#" onClick={handleReloadClick}>
               Reload this page
-            </A>
+            </Link>
             .
           </Typography>
         </div>

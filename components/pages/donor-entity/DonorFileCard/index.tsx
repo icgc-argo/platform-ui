@@ -17,18 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
-import { Row, Col } from 'react-grid-system';
-import Table from '@icgc-argo/uikit/Table';
-import Typography from '@icgc-argo/uikit/Typography';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import typography from '@icgc-argo/uikit/theme/defaultTheme/typography';
+import { Button, Container, css, Icon, Link, Table, Typography, useTheme } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
+import { Col, Row } from 'react-grid-system';
 
-const DataRow: React.ComponentType<{ name: string; link: string; fileCount: number }> = ({
+const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,
   link,
   fileCount,
@@ -107,7 +100,7 @@ const DataRow: React.ComponentType<{ name: string; link: string; fileCount: numb
   </Row>
 );
 
-const FileTable: React.ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
+const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
   const theme = useTheme();
   return (
     <Col xs={12}>

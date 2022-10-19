@@ -17,28 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css, styled } from '@icgc-argo/uikit';
-import SubmissionLayout from '../layout';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import ProgramForm from '../program-form/ProgramForm';
-import Container from '@icgc-argo/uikit/Container';
-import Link from 'next/link';
+import { useMutation } from '@apollo/client';
+import {
+  Button,
+  Container,
+  css,
+  NOTIFICATION_INTERACTION_EVENTS,
+  TitleBar,
+  TOAST_VARIANTS,
+} from '@icgc-argo/uikit';
+import useGlobalLoader from 'components/GlobalLoader';
+import useCommonToasters from 'components/useCommonToasters';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
 } from 'global/constants/pages';
-import Button from '@icgc-argo/uikit/Button';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
-import { NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit/notifications/Notification';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import CREATE_PROGRAM_MUTATION from './gql/CREATE_PROGRAM_MUTATION';
-import { useMutation } from '@apollo/client';
-import useCommonToasters from 'components/useCommonToasters';
 import SIDE_MENU_PROGRAM_LIST_QUERY from '../gql/SIDE_MENU_PROGRAM_LIST_QUERY';
-import useGlobalLoader from 'components/GlobalLoader';
+import SubmissionLayout from '../layout';
+import ProgramForm from '../program-form/ProgramForm';
+import CREATE_PROGRAM_MUTATION from './gql/CREATE_PROGRAM_MUTATION';
 
 /* *************************************** *
  * Reshape form data for gql input
@@ -77,7 +78,7 @@ const CreateProgramPage = () => {
     { program: CreateProgramMutationInput }
   >(CREATE_PROGRAM_MUTATION, {
     update: (store, { data }: { data: CreateProgramMutationResult }) => {
-      const { programs: cachedProgramList } = store.readQuery({
+      const { programs: cachedProgramList } = store.readQuery<any>({
         query: SIDE_MENU_PROGRAM_LIST_QUERY,
       });
       store.writeQuery({
@@ -151,9 +152,9 @@ const CreateProgramPage = () => {
         <ProgramForm
           onSubmit={onSubmit}
           leftFooterComponent={() => (
-            <Link href={PROGRAMS_LIST_PATH}>
+            <NextLink href={PROGRAMS_LIST_PATH}>
               <Button variant="text">Cancel</Button>
-            </Link>
+            </NextLink>
           )}
         />
       </Container>

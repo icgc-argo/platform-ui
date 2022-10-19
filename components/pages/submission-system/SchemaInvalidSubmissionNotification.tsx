@@ -18,19 +18,16 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { css } from '@emotion/core';
-import Link from '@icgc-argo/uikit/Link';
-import Notification, {
-  NOTIFICATION_INTERACTION_EVENTS,
-} from '@icgc-argo/uikit/notifications/Notification';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import { css, Link, Notification, NOTIFICATION_INTERACTION_EVENTS } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { useRouter } from 'next/router';
+import { ComponentProps, useState } from 'react';
+
+import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
+import { GqlClinicalSubmissionData } from './program-clinical-submission/types';
 
 export const SchemaInvalidSubmissionNotification = ({
   marginTop,
@@ -58,7 +55,7 @@ export const SchemaInvalidSubmissionNotification = ({
 
   const hasSchemaErrorsAfterMigration =
     clinicalSubmissions && clinicalSubmissions.state === 'INVALID_BY_MIGRATION';
-  const [closedMigrationMsg, setclosedMigrationMsg] = React.useState(false);
+  const [closedMigrationMsg, setclosedMigrationMsg] = useState(false);
 
   const getContentWithLink = (submissionPage: boolean) => (
     <div
@@ -77,9 +74,7 @@ export const SchemaInvalidSubmissionNotification = ({
     </div>
   );
 
-  const handleOnInteraction: React.ComponentProps<typeof Notification>['onInteraction'] = ({
-    type,
-  }) => {
+  const handleOnInteraction: ComponentProps<typeof Notification>['onInteraction'] = ({ type }) => {
     if (type === NOTIFICATION_INTERACTION_EVENTS.ACTION) {
       router.push(
         PROGRAM_CLINICAL_SUBMISSION_PATH.replace(

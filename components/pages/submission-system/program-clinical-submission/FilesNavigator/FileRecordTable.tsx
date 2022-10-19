@@ -17,27 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalSubmissionEntityFile } from '../types';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+import { css, Icon, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
+import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
+import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import { css } from '@icgc-argo/uikit';
-import Icon from '@icgc-argo/uikit/Icon';
 import pluralize from 'pluralize';
+import { ComponentProps, useMemo, createRef, CSSProperties } from 'react';
+
 import {
+  CellContentCenter,
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
-  CellContentCenter,
 } from '../../common';
-import { CSSProperties, createRef } from 'react';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember, isDataSubmitter } from 'global/utils/egoJwt';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
-import get from 'lodash/get';
-import React from 'react';
-import { usePageQuery } from 'global/hooks/usePageContext';
+import { ClinicalSubmissionEntityFile } from '../types';
 
 const StarIcon = DataTableStarIcon;
 
@@ -51,7 +48,7 @@ type FileStat = {
 };
 
 export const FILE_STATE_COLORS: {
-  [k in RecordState]: React.ComponentProps<typeof StarIcon>['fill'];
+  [k in RecordState]: ComponentProps<typeof StarIcon>['fill'];
 } = {
   ERROR: 'error',
   WARNING: 'warning',
@@ -117,11 +114,11 @@ const FileRecordTable = ({
   isPendingApproval: boolean;
   isSubmissionValidated: boolean;
   file: ClinicalSubmissionEntityFile;
-  submissionData?: React.ComponentProps<typeof SubmissionInfoArea>;
+  submissionData?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { egoJwt, permissions } = useAuthContext();
-  const isDiffPreview = React.useMemo(
+  const isDiffPreview = useMemo(
     () =>
       (isDccMember(permissions) || isDataSubmitter({ permissions, programId: programShortName })) &&
       isPendingApproval,

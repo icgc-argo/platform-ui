@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-
 import { createPage } from 'global/utils/pages';
 import ProgramClinicalSubmission from 'components/pages/submission-system/program-clinical-submission';
 import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';

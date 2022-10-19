@@ -18,17 +18,17 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { PROGRAM_JOIN_DETAILS_PATH, INVITE_ID } from 'global/constants/pages';
+import { css, Typography } from '@icgc-argo/uikit';
+import GoogleLoginButton from 'components/GoogleLoginButton';
+import { getConfig } from 'global/config';
+import { INVITE_ID, PROGRAM_JOIN_DETAILS_PATH } from 'global/constants/pages';
+import { createRedirectURL } from 'global/utils/common';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
+import { useState, useEffect } from 'react';
+
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JoinProgramLayout from './JoinProgramLayout';
-import { getConfig } from 'global/config';
-import { createRedirectURL } from 'global/utils/common';
-import GoogleLoginButton from 'components/GoogleLoginButton';
 
 const JoinProgramLoginPage = () => {
   const { EGO_URL } = getConfig();
@@ -36,7 +36,7 @@ const JoinProgramLoginPage = () => {
   const router = useRouter();
   const { inviteId } = router.query;
 
-  const [notFound, setNotFound] = React.useState(false);
+  const [notFound, setNotFound] = useState(false);
   const {
     data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
     loading,
@@ -49,9 +49,9 @@ const JoinProgramLoginPage = () => {
     },
   });
 
-  const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = React.useState('');
+  const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFullJoinLoginRedirect(
       createRedirectURL({
         origin: location.origin,

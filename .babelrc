@@ -5,10 +5,22 @@
       {
         "transform-runtime": {
           "useESModules": false
+        },
+        "preset-react": {
+          "runtime": "automatic",
+          "importSource": "@emotion/react"
         }
       }
-    ],
-    ["@emotion/babel-preset-css-prop", { "autoLabel": true }]
+    ]
   ],
-  "plugins": ["@babel/plugin-proposal-optional-chaining"]
+  "plugins": [
+    "@babel/plugin-proposal-optional-chaining",
+    [
+      "@emotion",
+      {
+        "autoLabel": "dev-only",
+        "labelFormat": "[local]"
+      }
+    ]
+  ]
 }

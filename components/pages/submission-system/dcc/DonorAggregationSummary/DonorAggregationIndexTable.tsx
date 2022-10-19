@@ -17,17 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Table from '@icgc-argo/uikit/Table';
+import { css, Table } from '@icgc-argo/uikit';
 
-import { css } from '@emotion/core';
-
+import { format as formatDate, formatDistance } from 'date-fns';
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
 import SyncIndexButton from './table-cell-components/SyncIndexButton';
-import { format as formatDate, formatDistance } from 'date-fns';
 
 // GQL Query
 import { useQuery } from '@apollo/client';
+import { createRef } from 'react';
 import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 
 const columns = [
@@ -90,7 +88,7 @@ const DonorAggregationIndexTable = ({
 
   const someQueriesLoading = queries.some((query) => query.query.loading);
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
   return (
     <div
       ref={containerRef}

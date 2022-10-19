@@ -17,14 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Icon, Typography, UikitIconNames, useTheme } from '@icgc-argo/uikit';
 import filesize from 'filesize';
-import pluralize from 'pluralize';
-import { css } from '@icgc-argo/uikit';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
 import { capitalize } from 'global/utils/stringUtils';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
+import pluralize from 'pluralize';
 
 type StatType = 'file' | 'primary site' | 'donor' | 'program' | 'fileSize';
 

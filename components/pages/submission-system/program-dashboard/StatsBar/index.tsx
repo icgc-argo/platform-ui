@@ -17,26 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Container from '@icgc-argo/uikit/Container';
-import { css, keyframes } from '@emotion/core';
-import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled-base';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import { useQuery } from '@apollo/client';
+import { Container, css, PercentBar, styled, Typography } from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import _ from 'lodash';
+import { ComponentType } from 'react';
+import { Col, Row } from 'react-grid-system';
 import {
   DashboardSummaryData,
   DashboardSummaryDataVariables,
   POLL_INTERVAL_MILLISECONDS,
 } from '../common';
-import PercentBar from '@icgc-argo/uikit/PercentBar';
-import { useTimeout, EMPTY_PROGRAM_SUMMARY_STATS } from '../DonorDataSummary/common';
-import { getConfig } from 'global/config';
+import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from '../DonorDataSummary/common';
+import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 
 const StatDesc = styled('div')`
   display: flex;
@@ -50,7 +43,7 @@ const StatDesc = styled('div')`
   justify-content: space-between;
 `;
 
-const Statistic: React.ComponentType<{ quantity: String; description: String }> = ({
+const Statistic: ComponentType<{ quantity: String; description: String }> = ({
   children,
   quantity,
   description,

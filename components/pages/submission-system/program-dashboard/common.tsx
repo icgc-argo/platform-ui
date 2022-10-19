@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import Container from '@icgc-argo/uikit/Container';
+import { Container, css } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
 
-export const DashboardCard: React.ComponentType<{ cardHeight?: string; loading?: boolean }> = ({
+export const DashboardCard: ComponentType<{ cardHeight?: string; loading?: boolean }> = ({
   children,
   cardHeight = '100%',
   loading = false,

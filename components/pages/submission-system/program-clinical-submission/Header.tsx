@@ -17,33 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import { Row } from 'react-grid-system';
-import Link from '@icgc-argo/uikit/Link';
-import Button from '@icgc-argo/uikit/Button';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { isDccMember } from 'global/utils/egoJwt';
-import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION';
-import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION';
-import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
-import { ClinicalSubmissionQueryData, ClearSubmissionMutationVariables } from './types';
-import useUserConfirmationModalState from './useUserConfirmationModalState';
+import { Button, css, Link, Modal, TitleBar } from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import Modal from '@icgc-argo/uikit/Modal';
-import { sleep } from 'global/utils/common';
-import { useClinicalSubmissionQuery, placeholderClinicalSubmissionQueryData } from '.';
 import useCommonToasters from 'components/useCommonToasters';
-import { useRouter } from 'next/router';
+import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
 import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { sleep } from 'global/utils/common';
+import { isDccMember } from 'global/utils/egoJwt';
+import { useRouter } from 'next/router';
+import { useMemo, ComponentProps } from 'react';
+
+import { Row } from 'react-grid-system';
+import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
 import ClinicalSubmissionProgressBar from '../ClinicalSubmissionProgressBar';
 import { useSubmissionSystemDisabled } from '../SubmissionSystemLockedNotification';
-import { getConfig } from 'global/config';
-import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
+import APPROVE_SUBMISSION_MUTATION from './gql/APPROVE_SUBMISSION_MUTATION';
+import CLEAR_SUBMISSION_MUTATION from './gql/CLEAR_SUBMISSION_MUTATION';
+import REOPEN_SUBMISSION_MUTATION from './gql/REOPEN_SUBMISSION_MUTATION';
+import { ClearSubmissionMutationVariables, ClinicalSubmissionQueryData } from './types';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
 
 const Header = ({
   programShortName,
@@ -57,7 +53,7 @@ const Header = ({
   submissionVersion: string;
 }) => {
   const { egoJwt, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
+  const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
   const { isModalShown, getUserConfirmation, modalProps } = useUserConfirmationModalState();
   const { setGlobalLoading } = useGlobalLoader();
   const { refetch: refetchClinicalSubmission, updateQuery: updateClinicalSubmissionQuery } =
@@ -98,7 +94,7 @@ const Header = ({
     },
   });
 
-  const handleSubmissionReopen: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionReopen: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
       children: isDcc
@@ -122,7 +118,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionApproval: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionApproval: ComponentProps<typeof Button>['onClick'] = async () => {
     const didUserConfirm = await getUserConfirmation({
       title: 'Approve Submission?',
       children: 'Are you sure you want to approve this clinical submission?',
@@ -159,7 +155,7 @@ const Header = ({
     }
   };
 
-  const handleSubmissionClear: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const handleSubmissionClear: ComponentProps<typeof Button>['onClick'] = async () => {
     setGlobalLoading(true);
     await sleep();
     try {

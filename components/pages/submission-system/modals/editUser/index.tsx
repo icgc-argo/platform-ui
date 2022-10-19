@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Modal, { ModalContainer } from '@icgc-argo/uikit/Modal';
-import styled from '@emotion/styled';
-import { UserSection, UserSectionProps, UserField } from '../styledComponents';
-import { UserModel, userSchema } from '../common';
+import { Modal, ModalContainer, styled } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
 import { adminRestrictionText } from '../../program-management/Users';
+import { UserModel, userSchema } from '../common';
+import { UserField, UserSection, UserSectionProps } from '../styledComponents';
 
 const EditUserModalContainer = styled(ModalContainer)`
   width: 100%;

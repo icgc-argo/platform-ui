@@ -17,31 +17,36 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import useAuthContext from 'global/hooks/useAuthContext';
-import isEmpty from 'lodash/isEmpty';
-import pluralize from 'pluralize';
-import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@apollo/client';
-import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import Tabs, { Tab } from '@icgc-argo/uikit/Tabs';
-import AddUserModal from 'components/pages/submission-system/modals/addUser';
-import ProgramForm from '../program-form/ProgramForm';
+import { useMutation, useQuery } from '@apollo/client';
 import ModalPortal from 'components/Modal';
+import AddUserModal from 'components/pages/submission-system/modals/addUser';
+import useAuthContext from 'global/hooks/useAuthContext';
 import { isDccMember } from 'global/utils/egoJwt';
-import Users from './Users';
-import Profile from './Profile';
-import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
-import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
-import { UserModel as ModalUserModel } from '../modals/common';
+import isEmpty from 'lodash/isEmpty';
+import { useRouter } from 'next/router';
+import pluralize from 'pluralize';
 
-import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS, TOAST_INTERACTION } from '@icgc-argo/uikit/notifications/Toast';
-import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
+import { UserModel as ModalUserModel } from '../modals/common';
+import ProgramForm from '../program-form/ProgramForm';
+import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
+import PROGRAM_QUERY from './gql/PROGRAM_QUERY';
+import Profile from './Profile';
+import Users from './Users';
+
+import {
+  Button,
+  ContentBox,
+  css,
+  Tab,
+  Tabs,
+  TOAST_INTERACTION,
+  TOAST_VARIANTS,
+} from '@icgc-argo/uikit';
 import useCommonToasters from 'components/useCommonToasters';
+import { useToaster } from 'global/hooks/toaster';
 import useUrlParamState from 'global/hooks/useUrlParamState';
+import UPDATE_PROGRAM_MUTATION from './gql/UPDATE_PROGRAM_MUTATION';
+import { useMemo, useState } from 'react';
 
 const createUserInput = ({
   data,
@@ -104,7 +109,7 @@ const useTabState = () => {
 
 const ProgramManagement = () => {
   const { egoJwt, permissions } = useAuthContext();
-  const isDcc = React.useMemo(() => isDccMember(permissions), [egoJwt]);
+  const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
 
   const { shortName: programShortName } = usePageQuery();
 
@@ -125,7 +130,7 @@ const ProgramManagement = () => {
     setActiveTab(newValue);
   }
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [triggerInvite] = useMutation(INVITE_USER_MUTATION);
 
   const [sendUpdateProgram] = useMutation(UPDATE_PROGRAM_MUTATION);

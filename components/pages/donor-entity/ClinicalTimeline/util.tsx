@@ -17,16 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { isEmpty, chunk } from 'lodash';
-import sqonBuilder from 'sqon-builder';
-import urlJoin from 'url-join';
+import { Link, UikitTheme } from '@icgc-argo/uikit';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import Link from '@icgc-argo/uikit/Link';
-import defaultTheme from '@icgc-argo/uikit/theme/defaultTheme';
-import { EntityType, SpecimenNode, DiagnosisNode } from '../types';
+import { chunk, isEmpty } from 'lodash';
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
 
-export const getTimelineStyles = (theme: typeof defaultTheme) => {
+export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
   return {
     primary_diagnosis: {

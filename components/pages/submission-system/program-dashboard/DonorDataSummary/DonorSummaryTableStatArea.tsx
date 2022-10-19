@@ -17,17 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Icon from '@icgc-argo/uikit/Icon';
-
-import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
+import { css, Icon, useTheme } from '@icgc-argo/uikit';
+import { StatArea as StatAreaDisplay } from '../../common';
 import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
-  EMPTY_PROGRAM_SUMMARY_STATS,
 } from './common';
-import { StatArea as StatAreaDisplay } from '../../common';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import { css } from '@emotion/core';
+import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 
 const DonorStatsArea = ({
   programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,

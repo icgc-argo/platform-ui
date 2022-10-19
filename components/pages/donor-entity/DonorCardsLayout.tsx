@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import { styled, css } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
+import { Col, Row } from 'react-grid-system';
+import ClinicalTimeline from './ClinicalTimeline';
 import DonorDataTable from './DonorDataTable';
 import DonorFileCard from './DonorFileCard';
-import ClinicalTimeline from './ClinicalTimeline';
 import { DonorEntityData } from './useEntityData';
 
 const PaddedRow = styled(Row)`
@@ -38,7 +38,7 @@ const PaddedColumn = styled(Col)`
   align-items: stretch;
 `;
 
-const DonorCardsLayout: React.ComponentType<{
+const DonorCardsLayout: ComponentType<{
   donorData: DonorEntityData;
 }> = ({ donorData }) => (
   <div

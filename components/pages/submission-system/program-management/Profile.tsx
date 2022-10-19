@@ -17,17 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import { Col, Row } from 'react-grid-system';
-import Typography from '@icgc-argo/uikit/Typography';
-import InputLabel from '@icgc-argo/uikit/form/InputLabel';
-import Icon from '@icgc-argo/uikit/Icon';
-import { css } from '@icgc-argo/uikit';
-import join from 'lodash/join';
+import { css, Icon, InputLabel, Typography, useTheme } from '@icgc-argo/uikit';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
+import join from 'lodash/join';
 import replace from 'lodash/replace';
+import { Col, Row } from 'react-grid-system';
 
 const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
 

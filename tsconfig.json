@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "downlevelIteration": true,
-    "incremental": true
+    "incremental": true,
+    "types": ["@emotion/react/types/css-prop"]
   },
   "exclude": ["node_modules", "scripts/*", "**/*.test.ts"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"]

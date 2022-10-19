@@ -22,7 +22,7 @@ import NavBar from 'components/NavBar';
 import usePersistentState from 'global/hooks/usePersistentContext';
 import debounce from 'lodash/debounce';
 import hasIn from 'lodash/hasIn';
-import * as React from 'react';
+
 import {
   Collapsible,
   ContentBody,
@@ -32,10 +32,12 @@ import {
   PageContent,
   Panel,
   Sidebar,
-} from '@icgc-argo/uikit/PageLayout';
+} from '@icgc-argo/uikit';
 import Footer from '../../Footer';
 import Head from '../head';
 import SideMenu from './SideMenu';
+import { ReactNodeArray } from 'prop-types';
+import { PropsWithChildren, ReactNode, useRef, useLayoutEffect } from 'react';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,
@@ -44,16 +46,15 @@ const SubmissionLayout = ({
   children,
   subtitle,
   ContentHeaderComponent = ContentHeader,
-}: {
+}: PropsWithChildren<{
   noSidebar?: boolean;
-  sideMenu?: React.ReactNode | React.ReactNodeArray;
-  contentHeader?: React.ReactNode | React.ReactNodeArray;
-  children: React.ReactNode | React.ReactNodeArray;
+  sideMenu?: ReactNode | ReactNodeArray;
+  contentHeader?: ReactNode | ReactNodeArray;
   subtitle?: string;
   ContentHeaderComponent?: typeof ContentHeader;
-}) => {
+}>) => {
   const [sidemenuScrollTop, setSidemenuScrollTop] = usePersistentState('sidemenuScrollTop', 0);
-  const panelRef = React.useRef(null);
+  const panelRef = useRef(null);
 
   const setScroll = debounce(setSidemenuScrollTop, 100);
 
@@ -63,7 +64,7 @@ const SubmissionLayout = ({
 
   // Only run on client side, don't run on server side
   if (hasIn(process, 'browser')) {
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
       if (panelRef.current) {
         panelRef.current.scrollTop = sidemenuScrollTop;
       }

@@ -25,13 +25,15 @@
  * - no "select all" option
  */
 
-import React from 'react';
-import { MenuItem } from '@icgc-argo/uikit/SubMenu';
-import { css } from '@emotion/core';
-import OptionsListComp, { FilterOption } from '@icgc-argo/uikit/OptionsList';
-import Icon from '@icgc-argo/uikit/Icon';
-import { styled } from '@icgc-argo/uikit';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
+import {
+  Icon,
+  MenuItem,
+  OptionsList,
+  OptionsListFilterOption,
+  styled,
+  Tooltip,
+} from '@icgc-argo/uikit';
+import { ReactNode } from 'react';
 
 const TooltipFacet = ({
   subMenuName,
@@ -45,16 +47,16 @@ const TooltipFacet = ({
   tooltipContent = null,
 }: {
   subMenuName: string;
-  options: Array<FilterOption>;
+  options: Array<OptionsListFilterOption>;
   isExpanded?: boolean;
   onClick?: (e: any) => void;
   countUnit?: string;
   onOptionToggle: (facetValue: string | string[]) => void;
   onSelectAllOptions: (allOptionsSelected: boolean) => void;
   parseDisplayValue?: (inputValue: string) => string;
-  tooltipContent: React.ReactNode;
+  tooltipContent: ReactNode;
 }) => {
-  const OptionsList = styled(OptionsListComp)`
+  const StyledOptionsList = styled(OptionsList)`
     > div:not(:first-of-type):hover {
       background-color: ${({ theme }) => theme.colors.warning_3};
     }
@@ -77,12 +79,9 @@ const TooltipFacet = ({
         </Tooltip>
       }
       isFacetVariant={true}
-      css={css`
-        width: 100%;
-      `}
+      css={''}
     >
-      {/* @ts-ignore*/}
-      <OptionsList
+      <StyledOptionsList
         options={options}
         countUnit={countUnit}
         onOptionToggle={onOptionToggle}

@@ -17,52 +17,58 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { createRef, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Row } from 'react-grid-system';
-import { startCase } from 'lodash';
-import urlJoin from 'url-join';
 import NextLink from 'next/link';
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Icon from '@icgc-argo/uikit/Icon';
-import DropdownPanel, {
-  FilterOption,
-  ListFilter,
-  TextInputFilter,
-  FilterClearButton,
-} from '@icgc-argo/uikit/DropdownPanel';
-import Link from '@icgc-argo/uikit/Link';
+import urlJoin from 'url-join';
 
-import ContentError from 'components/placeholders/ContentError';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
 import {
-  defaultClinicalEntityFilters,
   ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
   parseDonorIdString,
 } from 'components/pages/submission-system/program-submitted-data/common';
-import { SortingRule, SortedChangeFunction } from 'global/types/table';
-import { displayDate } from 'global/utils/common';
-import { DataTableStarIcon as StarIcon, CellContentCenter, Pipeline } from '../../common';
+
 import {
-  RELEASED_STATE_FILL_COLOURS,
-  RELEASED_STATE_STROKE_COLOURS,
-  FILTER_OPTIONS,
-  EMPTY_PROGRAM_SUMMARY_STATS,
-} from './common';
-import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import {
-  DonorSummaryRecord,
   DonorDataReleaseState,
-  MolecularProcessingStatus,
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
   DonorSummaryEntrySortOrder,
+  DonorSummaryRecord,
+  MolecularProcessingStatus,
   ProgramDonorSummaryEntryField,
 } from './types';
+
+import {
+  css,
+  DropdownPanel,
+  FilterClearButton,
+  FilterOption,
+  Icon,
+  Link,
+  ListFilter,
+  styled,
+  Table,
+  TableColumnConfig,
+  TextInputFilter,
+  useTheme,
+} from '@icgc-argo/uikit';
+import { displayDate } from 'global/utils/common';
+import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
+
+import ContentError from 'components/placeholders/ContentError';
+import { SortedChangeFunction, SortingRule } from 'global/types/table';
+import { startCase } from 'lodash';
+
+import { createRef, PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from 'react';
+import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
+import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
+  FILTER_OPTIONS,
+  RELEASED_STATE_FILL_COLOURS,
+  RELEASED_STATE_STROKE_COLOURS,
+} from './common';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -93,7 +99,7 @@ const DonorSummaryTable = ({
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
-  const [filterState, setFilterState] = React.useState([]);
+  const [filterState, setFilterState] = useState([]);
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
@@ -219,17 +225,16 @@ const DonorSummaryTable = ({
     handleBlur,
     active,
     children,
-  }: {
+  }: PropsWithChildren<{
     header: string;
     open: boolean;
     setOpen?: (open?: boolean | any) => void;
     focusFirst?: () => void;
-    buttonRef?: React.Ref<HTMLInputElement>;
-    panelRef?: React.Ref<HTMLElement>;
+    buttonRef?: Ref<HTMLInputElement>;
+    panelRef?: Ref<HTMLElement>;
     handleBlur?: (event?: any) => void;
     active?: boolean;
-    children: React.ReactNode;
-  }) => {
+  }>) => {
     const theme = useTheme();
 
     return (
@@ -303,7 +308,7 @@ const DonorSummaryTable = ({
     };
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -352,7 +357,7 @@ const DonorSummaryTable = ({
     onFilter?: (filters?: Array<FilterOption>) => void;
   }) => {
     const [open, setOpen] = useState(false);
-    const options = React.useMemo(
+    const options = useMemo(
       () =>
         filterOptions.map((option) => ({
           ...option,
@@ -365,7 +370,7 @@ const DonorSummaryTable = ({
     const panelRef = useRef<HTMLElement>(null);
 
     // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
       const nextTarget = e.relatedTarget as Node;
 
       if (open && !panelRef?.current?.contains(nextTarget)) {
@@ -395,14 +400,14 @@ const DonorSummaryTable = ({
     );
   };
 
-  const [pagingState, setPagingState] = React.useState({
+  const [pagingState, setPagingState] = useState({
     pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
     sorts: initialSorts,
   });
 
-  const [loaderTimeout, setLoaderTimeout] = React.useState<NodeJS.Timeout>();
+  const [loaderTimeout, setLoaderTimeout] = useState<NodeJS.Timeout>();
 
   const offset = pagingState.pageSize * pagingState.page;
   const first = pagingState.pageSize;
@@ -783,8 +788,8 @@ const DonorSummaryTable = ({
     },
   ];
 
-  const [isTableLoading, setIsTableLoading] = React.useState(isCardLoading);
-  React.useEffect(() => {
+  const [isTableLoading, setIsTableLoading] = useState(isCardLoading);
+  useEffect(() => {
     if (loading) {
       setIsTableLoading(true);
     }

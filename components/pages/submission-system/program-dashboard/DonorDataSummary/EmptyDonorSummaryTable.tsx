@@ -17,16 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Link from '@icgc-argo/uikit/Link';
-import styled from '@emotion/styled';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder';
-import { css } from '@emotion/core';
+import { ContentPlaceholder, css, Link, styled, Typography } from '@icgc-argo/uikit';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 
-import registerIcon from 'images/register.svg';
 import clinicalIcon from 'images/clinical.svg';
 import dnaIcon from 'images/dna.svg';
+import registerIcon from 'images/register.svg';
 
 const EmptyDonorSummaryState = () => {
   const getStartedLink = (

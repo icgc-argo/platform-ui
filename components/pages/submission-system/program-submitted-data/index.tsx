@@ -17,43 +17,47 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import { Row, setConfiguration } from 'react-grid-system';
+import {
+  Button,
+  Container,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  TitleBar,
+  Typography,
+  useTheme,
+  VerticalTabs,
+} from '@icgc-argo/uikit';
+import useGlobalLoader from 'components/GlobalLoader';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
-import { css } from '@icgc-argo/uikit';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+
+import { Row, setConfiguration } from 'react-grid-system';
 import ClinicalDownloadButton from './DownloadButtons';
-import Container from '@icgc-argo/uikit/Container';
-import Link from '@icgc-argo/uikit/Link';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
 import SubmissionLayout from '../layout';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
-import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import {
   aliasedEntityNames,
-  ClinicalEntityQueryResponse,
-  ClinicalEntitySearchResultResponse,
   clinicalEntityDisplayNames,
   clinicalEntityFields,
-  reverseLookUpEntityAlias,
-  defaultClinicalEntityFilters,
-  hasClinicalErrors,
-  emptyResponse,
+  ClinicalEntityQueryResponse,
+  ClinicalEntitySearchResultResponse,
   CompletionStates,
-  parseDonorIdString,
+  defaultClinicalEntityFilters,
+  emptyResponse,
   emptySearchResponse,
+  hasClinicalErrors,
+  parseDonorIdString,
+  reverseLookUpEntityAlias,
 } from './common';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
-import useGlobalLoader from 'components/GlobalLoader';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -63,7 +67,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
-  const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
+  const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
@@ -91,7 +95,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
 

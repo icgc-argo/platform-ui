@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, InteractiveIcon, MailTo, Table, TableColumnConfig } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import MailTo from '@icgc-argo/uikit/MailTo';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
+import { createRef } from 'react';
+
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 
@@ -50,9 +48,9 @@ const StatusDisplayName: { [key in StatusKey]: string } = {
 
 const UsersTable = (tableProps: {
   users: Array<UsersTableUser>;
-  onUserEditClick: ({ user: UsersTableUser }) => void;
-  onUserDeleteClick: ({ user: UsersTableUser }) => void;
-  onUserResendInviteClick: ({ user: UsersTableUser }) => void;
+  onUserEditClick: (props: { user: UsersTableUser }) => void;
+  onUserDeleteClick: (props: { user: UsersTableUser }) => void;
+  onUserResendInviteClick: (props: { user: UsersTableUser }) => void;
   loading: boolean;
   isOnlyOneAdminLeft: boolean;
 }) => {
@@ -153,7 +151,7 @@ const UsersTable = (tableProps: {
       ),
     },
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   return (
     <div

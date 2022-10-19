@@ -22,7 +22,7 @@ import { EGO_JWT_KEY } from 'global/constants';
 import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
-import * as React from 'react';
+
 import ReactGA from 'react-ga';
 import { ERROR_STATUS_KEY } from './_error';
 import App, { AppContext } from 'next/app';
@@ -36,7 +36,7 @@ import { NormalizedCacheObject } from '@apollo/client';
 import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import { NextPageContext } from 'next';
 import { getConfig } from 'global/config';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { DnaLoader } from '@icgc-argo/uikit';
 import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
 import omit from 'lodash/omit';
 import refreshJwt from 'global/utils/refreshJwt';
@@ -152,7 +152,9 @@ class Root extends App<RootGetInitialPropsData, {}, { isLoadingLoginRedirect: bo
       throw err;
     }
 
-    const pageProps = await Component.getInitialProps({ ...ctx, egoJwt });
+    const pageProps = Component.getInitialProps
+      ? await Component.getInitialProps({ ...ctx, egoJwt })
+      : {};
 
     const startWithGlobalLoader = Component.startWithGlobalLoader || false;
 

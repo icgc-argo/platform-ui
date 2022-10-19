@@ -17,24 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import InputLabel from '@icgc-argo/uikit/form/InputLabel';
-import MultiSelect from '@icgc-argo/uikit/form/MultiSelect';
-import Input from '@icgc-argo/uikit/form/Input';
-import FormControl from '@icgc-argo/uikit/form/FormControl';
-import styled from '@emotion/styled';
-import Icon from '@icgc-argo/uikit/Icon';
-import Select from '@icgc-argo/uikit/form/Select';
-import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
+import {
+  FormControl,
+  FormHelperText,
+  Icon,
+  Input,
+  InputLabel,
+  Select,
+  styled,
+  UikitTheme,
+  css,
+} from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';
-import css from '@emotion/css';
-import PropTypes from 'prop-types';
-import { Row, Col } from 'react-grid-system';
+import { ComponentType } from 'react';
+
+import { Col, Row } from 'react-grid-system';
 import { UserModel } from './common';
 
 const Section = styled('div')`
   padding: 12px 11px;
-  border: solid 1px ${({ theme }) => theme.colors.grey_2};
+  border: solid 1px ${({ theme }: { theme?: UikitTheme }) => theme.colors.grey_2};
   margin-top: 15px;
   display: flex;
 `;
@@ -50,7 +52,7 @@ export type UserSectionProps = {
   disabledFields: Array<UserField>;
   showDelete?: boolean;
 };
-export const UserSection: React.ComponentType<UserSectionProps> = ({
+export const UserSection: ComponentType<UserSectionProps> = ({
   user,
   onChange,
   validateField,

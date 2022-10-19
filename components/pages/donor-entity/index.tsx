@@ -17,25 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  PageContainer,
-  PageBody,
-  ContentHeader,
-  PageContent,
-  ContentBody,
-} from '@icgc-argo/uikit/PageLayout';
-import Head from '../head';
-import NavBar from '../../NavBar';
-import clsx from 'clsx';
-import Footer from '../../Footer';
-import React from 'react';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { useQuery } from '@apollo/client';
-import { get } from 'lodash';
-import { DonorTitleBar } from './DonorTitleBar';
-import DonorCardsLayout from './DonorCardsLayout';
+import {
+  ContentBody,
+  ContentHeader,
+  DnaLoader,
+  PageBody,
+  PageContainer,
+  PageContent,
+} from '@icgc-argo/uikit';
+import clsx from 'clsx';
 import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { get } from 'lodash';
+import Footer from '../../Footer';
+import NavBar from '../../NavBar';
+import Head from '../head';
+import DonorCardsLayout from './DonorCardsLayout';
+import { DonorTitleBar } from './DonorTitleBar';
 
 const DonorEntity = ({ donor }) => {
   const { egoJwt } = useAuthContext();

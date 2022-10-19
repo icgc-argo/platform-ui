@@ -17,26 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css, styled } from '@icgc-argo/uikit';
-import { orderBy, maxBy } from 'lodash';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
+import {
+  ContentBox,
+  css,
+  DnaLoader,
+  styled,
+  ThemeColorNames,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import { ContentBox } from '@icgc-argo/uikit/PageLayout';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
+import { maxBy, orderBy } from 'lodash';
 import pluralize from 'pluralize';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import { CSSProperties, ComponentType } from 'react';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
   data: Array<{ category: string; count: number }>;
   type: FileRepoDataType;
-  containerStyle?: React.CSSProperties;
+  containerStyle?: CSSProperties;
   chartHeight?: number;
   loading?: boolean;
-  onClick?: (value: string) => void;
+  onClick?: (value: string, event: any) => void;
 };
 
 const defaultChartHeight = 100;
@@ -132,21 +135,21 @@ const YAxis = ({ max, theme }) => {
   );
 };
 
-const SimpleBarChart: React.ComponentType<SimpleBarChartProps> = ({
+const SimpleBarChart: ComponentType<SimpleBarChartProps> = ({
   data = [],
   type,
   containerStyle = {},
   chartHeight = defaultChartHeight,
   loading = false,
   onClick = (value, event) => {},
-}) => {
+}: SimpleBarChartProps) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
   const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
     <ContentBox
-      style={containerStyle}
+      style={containerStyle as any}
       css={css`
         display: flex;
         flex-direction: column;

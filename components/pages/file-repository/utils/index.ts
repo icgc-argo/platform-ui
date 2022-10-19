@@ -16,6 +16,7 @@ import {
 } from './types';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 import { facetDisplayNames, tooltipContent } from './constants';
+import { ReactNode } from 'react';
 
 const IS_MISSING = '__missing__';
 
@@ -239,7 +240,7 @@ export const toDisplayValue: (value: string, field?: string) => string = (value,
   return value;
 };
 
-export const getTooltipContent = (facetPath: string): React.ReactNode => tooltipContent[facetPath];
+export const getTooltipContent = (facetPath: string): ReactNode => tooltipContent[facetPath];
 
 export const getDisplayName = (facetName: string, fieldName: string): string =>
   facetDisplayNames[facetName]?.[fieldName];

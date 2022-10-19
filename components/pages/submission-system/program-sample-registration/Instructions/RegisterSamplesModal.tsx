@@ -17,28 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Modal from '@icgc-argo/uikit/Modal';
 import { useMutation } from '@apollo/client';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import pluralize from 'pluralize';
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
-import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
-import get from 'lodash/get';
 import { useToaster } from 'global/hooks/toaster';
-import { TOAST_VARIANTS } from '@icgc-argo/uikit/notifications/Toast';
+import get from 'lodash/get';
 import Router from 'next/router';
+import pluralize from 'pluralize';
+import GET_REGISTRATION_QUERY from '../gql/GET_REGISTRATION_QUERY';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from './gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 
+import { Link, Modal, TOAST_VARIANTS, Typography } from '@icgc-argo/uikit';
 import {
+  CONTACT_PAGE_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  CONTACT_PAGE_PATH,
 } from 'global/constants/pages';
 import { sleep } from 'global/utils/common';
-import Typography from '@icgc-argo/uikit/Typography';
-import HyperLink from '@icgc-argo/uikit/Link';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -91,9 +87,9 @@ export default function RegisterSamplesModal({
             <Typography>
               You will see the updates on your dashboard shortly. If you have any changes to this
               registered sample data, please{' '}
-              <Link href={CONTACT_PAGE_PATH}>
-                <HyperLink>contact the DCC.</HyperLink>
-              </Link>
+              <NextLink href={CONTACT_PAGE_PATH}>
+                <Link>contact the DCC.</Link>
+              </NextLink>
             </Typography>
           ),
         });

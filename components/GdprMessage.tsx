@@ -17,20 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import { css } from '@emotion/core';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
-import Button from '@icgc-argo/uikit/Button';
+import { Button, Icon, Link, Typography, useTheme, css } from '@icgc-argo/uikit';
 import { LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY } from 'global/constants';
-import Link from '@icgc-argo/uikit/Link';
-import HyperLink from '@icgc-argo/uikit/Link';
+import { useState, useEffect } from 'react';
+
 import { ARGO_PRIVACY_PAGE } from '../global/constants/argoPages';
 
 const GdprMessage = () => {
   const theme = useTheme();
-  const [accepted, setAcceptedState] = React.useState(true);
+  const [accepted, setAcceptedState] = useState(true);
   const sync = () => {
     setAcceptedState(localStorage.getItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY) === 'true');
   };
@@ -38,7 +33,7 @@ const GdprMessage = () => {
     localStorage.setItem(LOCAL_STORAGE_GDPR_ACCEPTANCE_KEY, String(accepted));
     sync();
   };
-  React.useEffect(() => {
+  useEffect(() => {
     sync();
   }, []);
   return (
@@ -70,7 +65,7 @@ const GdprMessage = () => {
             settings, you consent to our use of cookies in accordance with our Privacy Policy. To
             learn more about how we use cookies on this website, please review our{' '}
             <Link href={ARGO_PRIVACY_PAGE} target="_blank">
-              <HyperLink invert>Privacy Policy</HyperLink>
+              <Link invert>Privacy Policy</Link>
             </Link>
             .
           </Typography>

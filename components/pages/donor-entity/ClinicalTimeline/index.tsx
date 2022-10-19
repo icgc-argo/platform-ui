@@ -17,28 +17,31 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Container from '@icgc-argo/uikit/Container';
-import isEmpty from 'lodash/isEmpty';
+import {
+  Container,
+  ContentPlaceholder,
+  css,
+  Link,
+  SimpleTable,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
+import ContentError from 'components/placeholders/ContentError';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
-import { Row, Col } from 'react-grid-system';
+import isEmpty from 'lodash/isEmpty';
+import { useState } from 'react';
+
+import { Col, Row } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import { css } from '@icgc-argo/uikit';
-import Link from '@icgc-argo/uikit/Link';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
-import ContentPlaceholder from '@icgc-argo/uikit/ContentPlaceholder/';
-import ContentError from 'components/placeholders/ContentError';
+import { mockTimelineData } from '../dummyData';
+import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
 import Treatment from './Treatment';
-import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } from '../types';
-import { mockTimelineData } from '../dummyData';
-import { splitIntoColumns, formatTableDisplayNames, formatTimelineEntityData } from './util';
+import { formatTableDisplayNames, formatTimelineEntityData, splitIntoColumns } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
   primary_diagnosis: {
@@ -123,7 +126,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
     ...mockTimelineData.slice(1),
   ];
   const theme = useTheme();
-  const [activeEntities, setActiveEntities] = React.useState<Array<EntityType>>([
+  const [activeEntities, setActiveEntities] = useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
     EntityType.PRIMARY_DIAGNOSIS,
     EntityType.SPECIMEN,
@@ -131,7 +134,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
     EntityType.TREATMENT,
   ]);
 
-  const [activeTab, setActiveTab] = React.useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const filteredData = entities.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
