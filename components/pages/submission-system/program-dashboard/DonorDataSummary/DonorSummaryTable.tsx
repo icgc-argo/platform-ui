@@ -101,6 +101,7 @@ const DonorSummaryTable = ({
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
   const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
+  const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegisteredTumourSamples';
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -577,36 +578,37 @@ const DonorSummaryTable = ({
         background: pipelineColor,
       },
       columns: [
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Registered Samples'}
-              panelLegend={'Sample Registration Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'registeredSamplePairs',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.validInvalid}
-              filterCounts={{
-                [FILTER_OPTIONS.validInvalid[0].key]: programDonorSummaryStats?.sampleStatus?.valid,
-                [FILTER_OPTIONS.validInvalid[1].key]:
-                  programDonorSummaryStats?.sampleStatus?.invalid,
-              }}
-              activeFilters={getFilterValue('registeredSamplePairs')}
-            />
-          ),
-          id: REGISTERED_SAMPLE_COLUMN_ID,
-          Cell: ({ original }) => (
-            <DesignationCell
-              left={original.registeredNormalSamples}
-              right={original.registeredTumourSamples}
-            />
-          ),
-        },
         ...(activePipeline === PipelineNames.DNA
           ? [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Registered Samples'}
+                    panelLegend={'Sample Registration Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'registeredSamplePairs',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validInvalid[0].key]:
+                        programDonorSummaryStats?.sampleStatus?.valid,
+                      [FILTER_OPTIONS.validInvalid[1].key]:
+                        programDonorSummaryStats?.sampleStatus?.invalid,
+                    }}
+                    activeFilters={getFilterValue('registeredSamplePairs')}
+                  />
+                ),
+                id: REGISTERED_SAMPLE_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.registeredNormalSamples}
+                    right={original.registeredTumourSamples}
+                  />
+                ),
+              },
               {
                 Header: (
                   <ListFilterHeader
@@ -638,6 +640,35 @@ const DonorSummaryTable = ({
               },
             ]
           : [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'RNA Registered Samples'}
+                    panelLegend={'RNA Sample Registration Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaSampleStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaSampleStatus')}
+                  />
+                ),
+                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaRegisteredNormalSamples}
+                    right={original.rnaRegisteredTumourSamples}
+                  />
+                ),
+              },
               {
                 Header: (
                   <ListFilterHeader
