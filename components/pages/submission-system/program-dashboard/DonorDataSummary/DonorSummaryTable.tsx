@@ -174,8 +174,8 @@ const DonorSummaryTable = ({
     const DesignationEntry = styled('div')`
       text-align: center;
       flex: 1;
-      color: ${(props: { num: number }) =>
-        isValid(props.num) ? theme.colors.black : theme.colors.error};
+      background: ${(props: { num: number }) =>
+        isValid(props.num) ? 'transparent' : theme.colors.error_4};
     `;
 
     return (
