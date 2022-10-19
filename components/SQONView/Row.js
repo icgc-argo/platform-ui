@@ -17,21 +17,46 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
-import ProgramDashboard from 'components/pages/submission-system/program-dashboard';
-import { canReadProgram } from 'global/utils/egoJwt';
-import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
+import { Children, cloneElement } from 'react';
 
-export default createPage({
-  isPublic: false,
-  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
-    const {
-      query: { shortName },
-    } = ctx;
-    return canReadProgram({ permissions, programId: String(shortName) });
-  },
-  startWithGlobalLoader: true,
-})((props) => {
-  useProgramCheckEffect();
-  return <ProgramDashboard {...props} />;
-});
+/*----------------------------------------------------------------------------*/
+
+const baseStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  boxSizing: 'border-box',
+  position: 'relative',
+  outline: 'none',
+};
+
+const Row = ({ flex, wrap, style, spacing, children, ...props }) => (
+  <div
+    style={{
+      ...baseStyle,
+      flex,
+      ...(wrap ? { flexWrap: 'wrap' } : {}),
+      ...style,
+    }}
+    {...props}
+  >
+    {!spacing && children}
+    {spacing &&
+      Children.map(
+        children,
+        (child, i) =>
+          child &&
+          cloneElement(child, {
+            ...child.props,
+            key: i,
+            style: {
+              ...(i ? { marginLeft: spacing } : {}),
+              ...(child.props.style ? child.props.style : {}),
+            },
+          }),
+      )}
+  </div>
+);
+
+/*----------------------------------------------------------------------------*/
+
+export default Row;

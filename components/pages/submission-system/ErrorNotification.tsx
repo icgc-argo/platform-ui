@@ -17,19 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { ReactNode } from 'react';
-import { TableProps } from 'global/types/table';
-import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import Notification, {
+import {
+  Button,
+  css,
+  Icon,
+  Notification,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
-} from '@icgc-argo/uikit/notifications/Notification';
-import Table, { TableColumnConfig } from '@icgc-argo/uikit/Table';
+  Table,
+  TableColumnConfig,
+} from '@icgc-argo/uikit';
+import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
-import Icon from '@icgc-argo/uikit/Icon';
-import { instructionBoxButtonIconStyle, instructionBoxButtonContentStyle } from './common';
 import union from 'lodash/union';
+import { ReactNode, ComponentProps, createRef } from 'react';
+
+import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
@@ -80,7 +83,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
     }
   >;
   errors: Array<Error>;
-  onClearClick?: React.ComponentProps<typeof Button>['onClick'];
+  onClearClick?: ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
   tableProps?: Partial<TableProps>;
 }) => {
@@ -147,7 +150,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
         `,
       }}
       content={(() => {
-        const containerRef = React.createRef<HTMLDivElement>();
+        const containerRef = createRef<HTMLDivElement>();
         return (
           <div
             ref={containerRef}

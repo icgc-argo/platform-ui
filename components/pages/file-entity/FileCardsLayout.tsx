@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Row, Col } from 'react-grid-system';
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
-import FileSummary from './FileSummary';
-import DataAndAnalysis from './DataAndAnalysis';
+import { css, styled } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
+import { Col, Row } from 'react-grid-system';
 import AssociatedDonors from './AssociatedDonors';
+import DataAndAnalysis from './DataAndAnalysis';
+import FileSummary from './FileSummary';
 import SequencingReadProperties from './SequencingReadProperties';
 import { FileEntityData } from './types';
 
@@ -36,13 +36,13 @@ const PaddedColumn = styled(Col)`
 
 const shouldShowSequencingReadProperties = (fileData: FileEntityData) => {
   return (
-    fileData.dataAnalysis.dataType === 'Aligned Reads'
-      && fileData.dataAnalysis.workflowType?.workflow_name === 'DNA Seq Alignment'
-      && fileData.metrics
+    fileData.dataAnalysis.dataType === 'Aligned Reads' &&
+    fileData.dataAnalysis.workflowType?.workflow_name === 'DNA Seq Alignment' &&
+    fileData.metrics
   );
 };
 
-const FileCardsLayout: React.ComponentType<{
+const FileCardsLayout: ComponentType<{
   fileData: FileEntityData;
 }> = ({ fileData }) => {
   return (

@@ -17,21 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
-import { ReactNode } from 'react';
-import { Col, Row } from 'react-grid-system';
-import { ThemeColorNames } from '@icgc-argo/uikit/theme/types';
-import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
-import Icon from '@icgc-argo/uikit/Icon';
-import Link from '@icgc-argo/uikit/Link';
-import Button from '@icgc-argo/uikit/Button';
-import Container from '@icgc-argo/uikit/Container';
-import overtureLogo from '@icgc-argo/uikit/assets/overture-logo.svg';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
+import {
+  Button,
+  Container,
+  css,
+  DnaLoader,
+  Icon,
+  Link,
+  overtureLogo,
+  styled,
+  ThemeColorNames,
+  Typography,
+  UikitIconNames,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { reactGridBreakpoints } from 'global/utils/common';
 import Image from 'next/image';
+import { ComponentType, ReactNode } from 'react';
+import { Col, Row } from 'react-grid-system';
 
 export type NewsItem = {
   title: string;
@@ -48,7 +51,7 @@ type DataReleaseVersion = {
   date: string;
 };
 
-export const DataReleaseBar: React.ComponentType<{
+export const DataReleaseBar: ComponentType<{
   stats: Array<DataReleaseStatistic>;
   version: DataReleaseVersion;
   loading: boolean;
@@ -123,7 +126,7 @@ export const DataReleaseBar: React.ComponentType<{
   );
 };
 
-export const CircleContainer: React.ComponentType<{
+export const CircleContainer: ComponentType<{
   fill: keyof ThemeColorNames;
 }> = ({ fill, children }) => {
   const theme = useTheme();
@@ -144,7 +147,7 @@ export const CircleContainer: React.ComponentType<{
   );
 };
 
-export const DataCallout: React.ComponentType<{
+export const DataCallout: ComponentType<{
   iconName: UikitIconNames;
   iconFill: keyof ThemeColorNames;
   circleFill: keyof ThemeColorNames;
@@ -224,7 +227,7 @@ const GradientBar = styled('div')`
   margin: -5px 0px;
 `;
 
-export const NewsContainer: React.ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
+export const NewsContainer: ComponentType<{ newsItems: NewsItem[] }> = ({ newsItems }) => {
   const theme = useTheme();
   return (
     <Container
@@ -343,7 +346,7 @@ export const ResponsiveGridLayout = styled('div')`
   grid-gap: 1rem;
 `;
 
-export const ResourceBox: React.ComponentType<{
+export const ResourceBox: ComponentType<{
   iconName: UikitIconNames;
   iconFill: keyof ThemeColorNames;
   circleFill: keyof ThemeColorNames;
@@ -412,7 +415,7 @@ export const ResourceBox: React.ComponentType<{
   );
 };
 
-export const OvertureBanner: React.ComponentType<{}> = ({}) => {
+export const OvertureBanner: ComponentType<{}> = ({}) => {
   const theme = useTheme();
   return (
     <div

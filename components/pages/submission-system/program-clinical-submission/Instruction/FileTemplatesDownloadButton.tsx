@@ -17,20 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Icon from '@icgc-argo/uikit/Icon';
-import {
-  instructionBoxButtonIconStyle,
-  instructionBoxButtonContentStyle,
-  instructionBoxButtonStyle,
-  downloadTsvFileTemplate,
-} from '../../common';
-import { css } from '@icgc-argo/uikit';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
+import { css, DropdownButton, Icon } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
+import { ComponentProps } from 'react';
+
+import {
+  downloadTsvFileTemplate,
+  instructionBoxButtonContentStyle,
+  instructionBoxButtonIconStyle,
+  instructionBoxButtonStyle,
+} from '../../common';
 
 const FileTemplatesDownloadButton = ({ clinicalTypes }: { clinicalTypes: string[] }) => {
-  const onItemClick: React.ComponentProps<typeof DropdownButton>['onItemClick'] = (item) => {
+  const onItemClick: ComponentProps<typeof DropdownButton>['onItemClick'] = (item) => {
     if (item.value === 'all') {
       downloadTsvFileTemplate(`all`);
     } else {

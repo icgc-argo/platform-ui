@@ -17,17 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { EGO_JWT_KEY } from 'global/constants';
+import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { createPage, getDefaultRedirectPathForUser } from 'global/utils/pages';
 import Cookies from 'js-cookie';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import urlJoin from 'url-join';
-import { getPermissionsFromToken } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+import urlJoin from 'url-join';
 
 export default createPage({ isPublic: true })(() => {
   const theme = useTheme();
@@ -39,7 +38,7 @@ export default createPage({ isPublic: true })(() => {
     router.push(redirect);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
     fetch(egoLoginUrl, {
       credentials: 'include',

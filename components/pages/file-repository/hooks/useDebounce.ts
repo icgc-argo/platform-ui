@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // from https://usehooks.com/useDebounce/
 const useDebounce = <T>(value: T, delay: number): T => {

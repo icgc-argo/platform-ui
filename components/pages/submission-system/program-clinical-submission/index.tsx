@@ -17,18 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import SubmissionLayout from '../layout';
-import { styled } from '@icgc-argo/uikit';
+import { QueryHookOptions, useQuery } from '@apollo/client';
+import { ContentHeader, styled, useTheme } from '@icgc-argo/uikit';
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionQueryData } from './types';
+import { useState } from 'react';
+
+import SubmissionLayout from '../layout';
 import CLINICAL_SUBMISSION_QUERY from './gql/CLINICAL_SUBMISSION_QUERY';
-import { useQuery, QueryHookOptions } from '@apollo/client';
-import { ContentHeader } from '@icgc-argo/uikit/PageLayout';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import Header from './Header';
 import PageContent from './PageContent';
-import Head from 'components/pages/head';
+import { ClinicalSubmissionQueryData } from './types';
 export const placeholderClinicalSubmissionQueryData = (
   shortName: string,
 ): ClinicalSubmissionQueryData => ({
@@ -75,7 +73,7 @@ export const useClinicalSubmissionQuery = (
 export default function ProgramClinicalSubmission() {
   const theme = useTheme();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const [] = React.useState<FileList | null>(null);
+  const [] = useState<FileList | null>(null);
 
   const { data, loading: loadingClinicalSubmission } = useClinicalSubmissionQuery(programShortName);
 

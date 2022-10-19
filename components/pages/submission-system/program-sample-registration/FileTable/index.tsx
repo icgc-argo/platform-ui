@@ -17,23 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { css, Icon, Table, useTheme } from '@icgc-argo/uikit';
+import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import Affix from '@icgc-argo/uikit/Affix';
-import clsx from 'clsx';
-import Icon from '@icgc-argo/uikit/Icon';
-import Table from '@icgc-argo/uikit/Table';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
+import { ComponentProps, createRef } from 'react';
+
 import {
+  CellContentCenter,
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
-  CellContentCenter,
 } from '../../common';
-import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -52,7 +48,7 @@ type FileStats = {
 const StarIcon = ({
   fill,
   ...rest
-}: React.ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
+}: ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
   <DataTableStarIcon fill={fill} />
 );
 
@@ -94,7 +90,7 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
 const FileTable = (props: {
   records: Array<FileEntry>;
   stats?: FileStats;
-  submissionInfo?: React.ComponentProps<typeof SubmissionInfoArea>;
+  submissionInfo?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const theme = useTheme();
   const { records, stats, submissionInfo } = props;
@@ -106,7 +102,7 @@ const FileTable = (props: {
     }),
   );
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   return (
     <div

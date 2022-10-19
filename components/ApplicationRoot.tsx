@@ -17,10 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { NormalizedCacheObject } from '@apollo/client';
-import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { css, styled, ThemeProvider } from '@icgc-argo/uikit';
-import ToastStack from '@icgc-argo/uikit/notifications/ToastStack';
+import { css, styled, ThemeProvider, ToastStack } from '@icgc-argo/uikit';
+import { ApolloClient, ApolloLink, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import Head from 'components/Head';
 import { getConfig } from 'global/config';
@@ -32,7 +30,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import get from 'lodash/get';
-import * as React from 'react';
+import { useState, ComponentType, useMemo, PropsWithChildren } from 'react';
 import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
 import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';
@@ -67,7 +65,7 @@ const ToastProvider = ({ children }) => {
 };
 
 function PersistentStateProvider({ children }) {
-  const [persistentContext, setPersistentContext] = React.useState({});
+  const [persistentContext, setPersistentContext] = useState({});
 
   const setItem = (k, v) => {
     setPersistentContext({
@@ -84,15 +82,15 @@ function PersistentStateProvider({ children }) {
   );
 }
 
-const ApolloClientProvider: React.ComponentType<{ apolloCache: NormalizedCacheObject }> = ({
+const ApolloClientProvider: ComponentType<{ apolloCache: NormalizedCacheObject }> = ({
   children,
   apolloCache,
 }) => {
   const { GATEWAY_API_ROOT } = getConfig();
   const { fetchWithEgoToken } = useAuthContext();
-  const clientSideCache = React.useMemo(() => createInMemoryCache().restore(apolloCache), []);
+  const clientSideCache = useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
-  const client = React.useMemo(() => {
+  const client = useMemo(() => {
     const uploadLink = createUploadLink({
       uri: urljoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
       fetch: fetchWithEgoToken,
@@ -121,14 +119,13 @@ export default function ApplicationRoot({
   children,
   startWithGlobalLoader,
   initialPermissions,
-}: {
+}: PropsWithChildren<{
   egoJwt?: string;
   apolloCache: {};
   pageContext: ClientSideGetInitialPropsContext;
-  children: React.ReactElement;
   startWithGlobalLoader: boolean;
   initialPermissions: string[];
-}) {
+}>) {
   return (
     <>
       <style>

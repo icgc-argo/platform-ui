@@ -17,21 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useState } from 'react';
-import { css } from '@emotion/core';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Tag from '@icgc-argo/uikit/Tag';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
-import Tooltip from '@icgc-argo/uikit/Tooltip';
-import Button from '@icgc-argo/uikit/Button';
-import Legend from '@icgc-argo/uikit/Legend';
-import { DownloadIcon } from './common';
-import urlJoin from 'url-join';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import { Button, css, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { FileCentricDocumentField } from '../file-repository/types';
-import sqonBuilder from 'sqon-builder';
+import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { ComponentType, useState } from 'react';
+
+import sqonBuilder from 'sqon-builder';
+import urlJoin from 'url-join';
+import { FileCentricDocumentField } from '../file-repository/types';
+import { DownloadIcon } from './common';
 
 const FileDownloadTooltip = ({
   isDownloadEnabled,
@@ -85,7 +80,7 @@ const FileDownloadTooltip = ({
   );
 };
 
-export const FileTitleBar: React.ComponentType<{
+export const FileTitleBar: ComponentType<{
   programShortName: string;
   fileId: string;
   isDownloadEnabled: boolean;

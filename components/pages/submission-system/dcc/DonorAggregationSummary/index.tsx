@@ -17,11 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
 import DonorAggregationIndexTable from './DonorAggregationIndexTable';
 
-import Typography from '@icgc-argo/uikit/Typography';
-import Container from '@icgc-argo/uikit/Container';
+import { Container, styled, Typography } from '@icgc-argo/uikit';
 
 // GQL Data Fetching
 import { useQuery } from '@apollo/client';

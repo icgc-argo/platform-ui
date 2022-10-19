@@ -17,10 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
+import { css, Icon, Typography, useTheme } from '@icgc-argo/uikit';
 
 const SelectedIds = ({ ids = [], onRemove }: { ids: string[]; onRemove: (id: string) => void }) => {
   const theme = useTheme();

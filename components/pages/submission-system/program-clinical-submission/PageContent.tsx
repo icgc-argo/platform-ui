@@ -17,54 +17,57 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import Instruction from './Instruction';
-import Container from '@icgc-argo/uikit/Container';
-import { containerStyle } from '../common';
-import FilesNavigator from './FilesNavigator';
-import {
-  ClinicalSubmissionEntityFile,
-  GqlClinicalEntity,
-  ClinicalSubmissionQueryData,
-  ValidateSubmissionMutationVariables,
-  UploadFilesMutationVariables,
-  SignOffSubmissionMutationVariables,
-  ClinicalSubmissionError,
-} from './types';
-import Notification, { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit/notifications/Notification';
-import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
-import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
-import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
 import { useMutation } from '@apollo/client';
-import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import { displayDateAndTime } from 'global/utils/common';
-import { capitalize } from 'global/utils/stringUtils';
-import { useToaster } from 'global/hooks/toaster';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import {
+  Container,
+  css,
+  DnaLoader,
+  Notification,
+  NOTIFICATION_VARIANTS,
+  Typography,
+} from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
-import SignOffValidationModal from './SignOffValidationModal';
-import SubmissionSummaryTable from './SubmissionSummaryTable';
-import useUserConfirmationModalState from './useUserConfirmationModalState';
-import Typography from '@icgc-argo/uikit/Typography';
-import { sleep } from 'global/utils/common';
-import Router from 'next/router';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import orderBy from 'lodash/orderBy';
-import head from 'lodash/head';
-import map from 'lodash/map';
-import uniq from 'lodash/uniq';
 import useCommonToasters from 'components/useCommonToasters';
-import { useClinicalSubmissionQuery } from '.';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import { useToaster } from 'global/hooks/toaster';
+import { usePageQuery } from 'global/hooks/usePageContext';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
+import { displayDateAndTime, sleep } from 'global/utils/common';
+import { capitalize } from 'global/utils/stringUtils';
+import head from 'lodash/head';
+import map from 'lodash/map';
+import orderBy from 'lodash/orderBy';
+import uniq from 'lodash/uniq';
+import Router from 'next/router';
+import { useState, useEffect, useMemo, ComponentProps } from 'react';
+
+import { useClinicalSubmissionQuery } from '.';
+import { containerStyle } from '../common';
+import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
   useSubmissionSystemDisabled,
 } from '../SubmissionSystemLockedNotification';
+import FilesNavigator from './FilesNavigator';
+import SIGN_OFF_SUBMISSION_MUTATION from './gql/SIGN_OFF_SUBMISSION_MUTATION';
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from './gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from './gql/VALIDATE_SUBMISSION_MUTATION';
+import Instruction from './Instruction';
+import SignOffValidationModal from './SignOffValidationModal';
+import SubmissionSummaryTable from './SubmissionSummaryTable';
+import {
+  ClinicalSubmissionEntityFile,
+  ClinicalSubmissionError,
+  ClinicalSubmissionQueryData,
+  GqlClinicalEntity,
+  SignOffSubmissionMutationVariables,
+  UploadFilesMutationVariables,
+  ValidateSubmissionMutationVariables,
+} from './types';
+import useUserConfirmationModalState from './useUserConfirmationModalState';
 
 const CLINICAL_FILE_ORDER = [
   'donor',
@@ -142,7 +145,7 @@ const PageContent = () => {
 
   // not declared as a side effect that changes with program change
   // change in 'data' always seems to take precedence over currentFileList within `defaultClinicalEntityType`
-  const [currentFileList, setCurrentFileList] = React.useState<{
+  const [currentFileList, setCurrentFileList] = useState<{
     fileList: FileList | null;
     shortName: string;
   }>({ fileList: null, shortName: programShortName });
@@ -199,7 +202,7 @@ const PageContent = () => {
     return files.length ? fileToFocusOn.clinicalType : defaultType;
   };
 
-  const [tabFromData, setTabFromData] = React.useState<string | null>(null);
+  const [tabFromData, setTabFromData] = useState<string | null>(null);
 
   const [selectedClinicalEntityType, setSelectedClinicalEntityType] = useUrlParamState(
     'tab',
@@ -210,7 +213,7 @@ const PageContent = () => {
     },
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     // using setSelectedClinicalEntityType in useClinicalSubmissionQuery onCompleted callback
     // causes an infinite loop
     setSelectedClinicalEntityType(tabFromData);
@@ -230,7 +233,7 @@ const PageContent = () => {
 
   const fileNavigatorFiles = getFileNavigatorFiles(data);
 
-  const defaultClinicalEntityType = React.useMemo((): string | null => {
+  const defaultClinicalEntityType = useMemo((): string | null => {
     return getClinicalEntityType(data);
   }, [data]);
 
@@ -258,7 +261,7 @@ const PageContent = () => {
     SignOffSubmissionMutationVariables
   >(SIGN_OFF_SUBMISSION_MUTATION);
 
-  const allDataErrors = React.useMemo(
+  const allDataErrors = useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
         Array<
@@ -279,7 +282,7 @@ const PageContent = () => {
     [data],
   );
 
-  const allDataWarnings = React.useMemo(
+  const allDataWarnings = useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
         Array<
@@ -319,9 +322,7 @@ const PageContent = () => {
 
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
-  const onErrorClose: (
-    index: number,
-  ) => React.ComponentProps<typeof Notification>['onInteraction'] =
+  const onErrorClose: (index: number) => ComponentProps<typeof Notification>['onInteraction'] =
     (index) =>
     ({ type }) => {
       if (type === 'CLOSE') {
@@ -374,9 +375,9 @@ const PageContent = () => {
     }
   };
 
-  const handleClearSchemaError: React.ComponentProps<
-    typeof FilesNavigator
-  >['clearDataError'] = async (file) => {
+  const handleClearSchemaError: ComponentProps<typeof FilesNavigator>['clearDataError'] = async (
+    file,
+  ) => {
     await updateClinicalSubmissionQuery((previous) => ({
       ...previous,
       clinicalSubmissions: {

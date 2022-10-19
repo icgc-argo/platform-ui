@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Modal from '@icgc-argo/uikit/Modal';
+import { Modal } from '@icgc-argo/uikit';
+import { ComponentProps, useState } from 'react';
 
-type ModalProps = React.ComponentProps<typeof Modal>;
+type ModalProps = ComponentProps<typeof Modal>;
 
 const useUserConfirmationModalState = (initialModalProps: ModalProps = {}) => {
-  const [isModalShown, setModalShown] = React.useState(false);
-  const [modalProps, setModalProps] = React.useState<ModalProps>(initialModalProps);
-  const [{ onConfirmed, onCancel }, setSignOffFlow] = React.useState({
+  const [isModalShown, setModalShown] = useState(false);
+  const [modalProps, setModalProps] = useState<ModalProps>(initialModalProps);
+  const [{ onConfirmed, onCancel }, setSignOffFlow] = useState({
     onConfirmed: () => setModalShown(false),
     onCancel: () => setModalShown(false),
   });

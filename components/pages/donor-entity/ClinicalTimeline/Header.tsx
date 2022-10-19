@@ -17,14 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Checkbox, { STYLEDCHECKBOX_SIZES } from '@icgc-argo/uikit/form/Checkbox';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import { getTimelineStyles } from './util';
-import { css } from '@icgc-argo/uikit';
+import { Checkbox, css, STYLEDCHECKBOX_SIZES, Typography, useTheme } from '@icgc-argo/uikit';
+import { useMemo } from 'react';
+
+import { Entity, EntityType } from '../types';
 import { ENTITY_DISPLAY } from './index';
-import { EntityType, Entity } from '../types';
+import { getTimelineStyles } from './util';
 
 type HeaderTypes = {
   entities: Array<Entity>;
@@ -38,7 +36,7 @@ type EntityCounts = { [k in Filters]: number };
 const Header = ({ entities, activeEntities, onFiltersChange }: HeaderTypes) => {
   const theme = useTheme();
 
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
 
   const entityCounts: EntityCounts = entities
     .filter((entity) => entity.type !== EntityType.DECEASED)

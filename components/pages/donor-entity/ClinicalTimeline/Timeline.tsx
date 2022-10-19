@@ -17,13 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css } from '@icgc-argo/uikit';
-import Icon from '@icgc-argo/uikit/Icon';
-import Typography from '@icgc-argo/uikit/Typography';
-import useTheme from '@icgc-argo/uikit/utils/useTheme';
-import VerticalTabs from '@icgc-argo/uikit/VerticalTabs';
-import Tag from '@icgc-argo/uikit/Tag';
+import { css, Icon, Tag, Typography, useTheme, VerticalTabs } from '@icgc-argo/uikit';
+import { useMemo } from 'react';
+
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';
@@ -65,7 +61,7 @@ type TimeLineItemProps = {
 const TimelineItem = ({ item, active, onClick, disabled }: TimeLineItemProps) => {
   const { type, description, id, invalid } = item;
   const theme = useTheme();
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
   const { backgroundColor, borderColor } = timelineStyles[type];
 
   return (
@@ -166,10 +162,10 @@ const Timeline = ({
 }: {
   entities: Array<Entity>;
   activeTab: number;
-  onClickTab: ({ entity: Entity, idx: number }) => void;
+  onClickTab: (props: { entity: Entity; idx: number }) => void;
 }) => {
   const theme = useTheme();
-  const timelineStyles = React.useMemo(() => getTimelineStyles(theme), [theme]);
+  const timelineStyles = useMemo(() => getTimelineStyles(theme), [theme]);
 
   const donorAgeDisplay = (type: EntityType, data) => {
     const age =

@@ -17,16 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { css, Link, TitleBar } from '@icgc-argo/uikit';
+import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import { useRouter } from 'next/router';
-import { css } from '@icgc-argo/uikit';
-import TitleBar from '@icgc-argo/uikit/TitleBar';
+import { Row } from 'react-grid-system';
 import SubmissionLayout from '../layout';
 import ManageProgramTabs from './ManageProgramTabs';
-import Link from '@icgc-argo/uikit/Link';
-import { Row } from 'react-grid-system';
-import { DOCS_MANAGING_PROGRAM_ACCESS_PAGE } from 'global/constants/docSitePaths';
-import Head from 'components/pages/head';
 
 const ProgramManagement = () => {
   const router = useRouter();

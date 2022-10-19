@@ -18,49 +18,50 @@
  */
 
 import {
-  SUBMISSION_PATH,
-  USER_PAGE_PATH,
+  AppBar,
+  AppBarMenuItem,
+  Button,
+  css,
+  DropdownMenu,
+  Icon,
+  MenuGroup,
+  NavBarElement,
+  NavElement,
+  Section,
+  useClickAway,
+  UserBadge,
+} from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
+import {
   FILE_REPOSITORY_PATH,
   LOGIN_PAGE_PATH,
+  SUBMISSION_PATH,
+  USER_PAGE_PATH,
 } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
+import { createRedirectURL } from 'global/utils/common';
 import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
-import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
-import Link from 'next/link';
-import Image from 'next/image';
-import * as React from 'react';
-import { css } from '@icgc-argo/uikit';
-import AppBar, {
-  DropdownMenu,
-  Logo,
-  MenuGroup,
-  MenuItem,
-  Section,
-  UserBadge,
-  NavElement,
-  NavBarElement,
-} from '@icgc-argo/uikit/AppBar';
-import Button from '@icgc-argo/uikit/Button';
-import Icon from '@icgc-argo/uikit/Icon';
-import { getConfig } from 'global/config';
-import { createRedirectURL } from 'global/utils/common';
+import ArgoLogo from 'images/argo-logo.svg';
 import { get } from 'lodash';
+import Image from 'next/image';
+import NextLink from 'next/link';
 import queryString from 'query-string';
+import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
+
+import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ModalPortal from './Modal';
+import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
-import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
-import { useScreenClass } from 'react-grid-system';
-import ArgoLogo from 'images/argo-logo.svg';
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
   const { EGO_URL } = getConfig();
-  const [loginPath, setLoginPath] = React.useState('');
+  const [loginPath, setLoginPath] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const redirect = get(query, 'redirect') as string;
     if (redirect) {
       const parsedRedirect = queryString.parseUrl(redirect);
@@ -136,19 +137,19 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
   const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
-  const canAccessSubmission = React.useMemo(() => {
+  const canAccessSubmission = useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
   const { asPath: path, query } = usePageContext();
   const { clearFilters } = useFiltersContext();
 
-  const [isModalVisible, setModalVisibility] = React.useState(false);
+  const [isModalVisible, setModalVisibility] = useState(false);
 
-  const [isMobileDropdownOpen, setMobileDropdownOpen] = React.useState(false);
+  const [isMobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const isMobileLayout = ['xs', 'sm', 'md'].includes(screenClass);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobileDropdownOpen && !isMobileLayout) setMobileDropdownOpen(false);
   }, [isMobileLayout, isMobileDropdownOpen]);
 
@@ -161,7 +162,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: FILE_REPOSITORY_PATH,
       shouldRender: FEATURE_REPOSITORY_ENABLED,
       active: path.search(FILE_REPOSITORY_PATH) === 0,
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
     {
       isLink: userModel && egoJwt && canAccessSubmission,
@@ -170,7 +171,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       as: getDefaultRedirectPathForUser(permissions),
       active: path.search(SUBMISSION_PATH) === 0 || isModalVisible,
       onClick: () => setModalVisibility(!isModalVisible),
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
   ];
 
@@ -179,7 +180,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       href: USER_PAGE_PATH,
       active: onProfilePage,
       name: 'Profile & Token',
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
     {
       isLink: false,
@@ -191,14 +192,14 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       name: 'Logout',
       active: false,
       href: '',
-      LinkComp: Link,
+      LinkComp: NextLink,
     },
   ];
 
   const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
-  const [usingProfileOptions, setUsingProfileOptions] = React.useState(true);
+  const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
-  const mobileDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: mobileDropdownRef,
     onClickAway: () => setMobileDropdownOpen(false),
@@ -236,7 +237,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       `}
     >
       <Section>
-        <Link href={disableLogoLink ? '#' : '/'} id="home-login">
+        <NextLink href={disableLogoLink ? '#' : '/'} id="home-login">
           <div
             css={css`
               padding: 0 18px;
@@ -247,14 +248,14 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
           >
             <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
           </div>
-        </Link>
+        </NextLink>
 
         {isMobileDropdownOpen && <MobileDropdown />}
 
         {!hideLinks && !isMobileLayout && (
           <MenuGroup>
             {mainNavDetails.slice(0, NUM_ELEMENTS_IN_FIRST_SECTION).map((element, idx) => (
-              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={Link} />
+              <NavBarElement key={`navbarElement_1${idx}`} {...element} LinkComp={NextLink} />
             ))}
           </MenuGroup>
         )}
@@ -267,7 +268,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
               mainNavDetails
                 .slice(NUM_ELEMENTS_IN_FIRST_SECTION, mainNavDetails.length)
                 .map((element, idx) => (
-                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={Link} />
+                  <NavBarElement key={`navbarElement_2${idx}`} {...element} LinkComp={NextLink} />
                 ))}
 
             {!userModel && <NavBarLoginButton />}
@@ -281,9 +282,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   }
                 }}
               >
-                <MenuItem
+                <AppBarMenuItem
                   active={onProfilePage}
-                  ref={React.createRef()}
+                  ref={createRef()}
                   dropdownMenu={
                     !isMobileLayout ? (
                       <DropdownMenu>
@@ -292,7 +293,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             key={`profileNavDetail_${idx}`}
                             {...element}
                             isDropdown={true}
-                            LinkComp={Link}
+                            LinkComp={NextLink}
                           ></NavBarElement>
                         ))}
                       </DropdownMenu>
@@ -311,7 +312,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                       title={getUserRole(egoJwt, permissions)}
                     />
                   )}
-                </MenuItem>
+                </AppBarMenuItem>
               </div>
             )}
             {isMobileLayout && (
@@ -321,7 +322,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   setMobileDropdownOpen(!isMobileDropdownOpen);
                 }}
               >
-                <MenuItem>
+                <AppBarMenuItem>
                   <Icon
                     name={
                       isMobileDropdownOpen && !usingProfileOptions ? 'hamburger_close' : 'hamburger'
@@ -330,7 +331,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                       isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
                     }
                   ></Icon>
-                </MenuItem>
+                </AppBarMenuItem>
               </div>
             )}
           </MenuGroup>

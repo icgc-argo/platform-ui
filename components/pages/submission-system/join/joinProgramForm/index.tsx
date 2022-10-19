@@ -17,18 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {
+  Button,
+  css,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  INPUT_SIZES,
+  MultiSelect,
+  Option,
+  Typography,
+} from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
-import React from 'react';
+import { ComponentProps } from 'react';
+
 import { Col, Row, ScreenClassRender } from 'react-grid-system';
-import { css } from '@icgc-argo/uikit';
-import Button from '@icgc-argo/uikit/Button';
-import { Input } from '@icgc-argo/uikit/form';
-import { INPUT_SIZES } from '@icgc-argo/uikit/form/common';
-import FormControl from '@icgc-argo/uikit/form/FormControl';
-import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
-import InputLabel from '@icgc-argo/uikit/form/InputLabel';
-import MultiSelect, { Option } from '@icgc-argo/uikit/form/MultiSelect';
-import Typography from '@icgc-argo/uikit/Typography';
 import schema from './validation';
 
 const initialFields = schema.cast({});
@@ -52,16 +56,16 @@ const JoinProgramForm = ({
   const availableInstitutions = institutions || [];
 
   const handleBlur =
-    (fieldKey: string): React.ComponentProps<typeof MultiSelect>['onBlur'] =>
+    (fieldKey: string): ComponentProps<typeof MultiSelect>['onBlur'] =>
     (_) =>
       validateField({ key: fieldKey });
 
   const handleChange =
-    (fieldName: keyof typeof initialFields): React.ComponentProps<typeof MultiSelect>['onChange'] =>
+    (fieldName: keyof typeof initialFields): ComponentProps<typeof MultiSelect>['onChange'] =>
     ({ target }) =>
       setData({ key: fieldName, val: target.value });
 
-  const submitForm: React.ComponentProps<typeof Button>['onClick'] = async () => {
+  const submitForm: ComponentProps<typeof Button>['onClick'] = async () => {
     const validData = await validateForm();
     onSubmit(validData);
   };

@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
 import { NextPageContext } from 'next';
 import { DocumentNode } from 'graphql';
 import { IsGlobalLoading } from 'components/GlobalLoader';
+import { ComponentType } from 'react';
 
 export type GetInitialPropsContext = NextPageContext & {
   res?: NextPageContext['res'] & {
@@ -45,4 +45,4 @@ export type PageConfigProps = {
   getInitialProps: (args: GetInitialPropsContextWithEgo) => Promise<any>;
   startWithGlobalLoader: IsGlobalLoading;
 };
-export type PageWithConfig = PageConfigProps & React.ComponentType<any>;
+export type PageWithConfig = PageConfigProps & ComponentType<any>;

@@ -17,12 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
+import { css, styled, Typography, useTheme } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
-import Typography from '@icgc-argo/uikit/Typography';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
 import { FileCard, TableDiv } from '../common';
 import { FileMetricsInfo } from '../types';
 

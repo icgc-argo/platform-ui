@@ -17,47 +17,45 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { QueryHookOptions, useQuery } from '@apollo/client';
 import {
+  Container,
+  css,
+  Link,
   SelectTable,
   TableColumnConfig,
+  Typography,
   useSelectTableSelectionState,
-} from '@icgc-argo/uikit/Table';
+  useTheme,
+} from '@icgc-argo/uikit';
+import filesize from 'filesize';
+import { getConfig } from 'global/config';
+import {
+  DONOR_ENTITY_ID_PATH,
+  DONOR_ENTITY_PATH,
+  FILE_ENTITY_ID_PATH,
+  FILE_ENTITY_PATH,
+} from 'global/constants/pages';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { SortedChangeFunction } from 'global/types/table';
+import NextLink from 'next/link';
+import pluralize from 'pluralize';
+import { createRef, useEffect, useState } from 'react';
+
+import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
+import useFiltersContext from '../hooks/useFiltersContext';
+import { FileCentricDocumentField } from '../types';
+import { FileRepoFiltersType } from '../utils/types';
+import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
+import TsvDownloadButton from './TsvDownloadButton';
 import {
   FileRepositoryRecord,
-  FileRepositoryTableQueryData,
-  FileRepositoryTableQueryVariables,
   FileRepositoryRecordSort,
   FileRepositoryRecordSortOrder,
   FileRepositorySortingRule,
+  FileRepositoryTableQueryData,
+  FileRepositoryTableQueryVariables,
 } from './types';
-import filesize from 'filesize';
-import InteractiveIcon from '@icgc-argo/uikit/Icon/InteractiveIcon';
-import { css } from '@emotion/core';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
-import Container from '@icgc-argo/uikit/Container';
-import Typography from '@icgc-argo/uikit/Typography';
-import Icon from '@icgc-argo/uikit/Icon';
-import { useQuery, QueryHookOptions } from '@apollo/client';
-import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
-import useFiltersContext from '../hooks/useFiltersContext';
-import useAuthContext from 'global/hooks/useAuthContext';
-import pluralize from 'pluralize';
-import { FileRepoFiltersType } from '../utils/types';
-import { SortedChangeFunction } from 'global/types/table';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import TsvDownloadButton from './TsvDownloadButton';
-import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import { FileCentricDocumentField } from '../types';
-import A from '@icgc-argo/uikit/Link';
-import Link from 'next/link';
-import {
-  FILE_ENTITY_ID_PATH,
-  FILE_ENTITY_PATH,
-  DONOR_ENTITY_PATH,
-  DONOR_ENTITY_ID_PATH,
-} from 'global/constants/pages';
-import { getConfig } from 'global/config';
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
@@ -98,13 +96,13 @@ const useFileRepoTableQuery = (
 };
 
 const useFileRepoPaginationState = () => {
-  const [pagingState, setPagingState] = React.useState({
+  const [pagingState, setPagingState] = useState({
     pageSize: DEFAULT_PAGE_SIZE,
     page: DEFAULT_PAGE_OFFSET,
     sort: DEFAULT_SORT,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     resetCurrentPage();
   }, [pagingState.pageSize]);
 
@@ -168,7 +166,7 @@ const FileTable = () => {
 
   const { pagingState, onPageChange, onPageSizeChange, onSortedChange, resetCurrentPage } =
     useFileRepoPaginationState();
-  React.useEffect(() => {
+  useEffect(() => {
     resetCurrentPage();
   }, [filters]);
 
@@ -207,13 +205,13 @@ const FileTable = () => {
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_FILE_ENTITY_ENABLED ? (
-          <Link
+          <NextLink
             href={FILE_ENTITY_PATH}
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
             passHref
           >
-            <A>{original.fileId}</A>
-          </Link>
+            <Link>{original.fileId}</Link>
+          </NextLink>
         ) : (
           original.objectId
         );
@@ -225,13 +223,13 @@ const FileTable = () => {
       accessor: 'donorId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_DONOR_ENTITY_ENABLED ? (
-          <Link
+          <NextLink
             href={DONOR_ENTITY_PATH}
             as={DONOR_ENTITY_PATH.replace(DONOR_ENTITY_ID_PATH, original.donorId)}
             passHref
           >
-            <A>{original.donorId}</A>
-          </Link>
+            <Link>{original.donorId}</Link>
+          </NextLink>
         ) : (
           original.donorId
         );
@@ -308,7 +306,7 @@ const FileTable = () => {
     //   },
     // },
   ];
-  const containerRef = React.createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
   const fileRepoEntries: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({

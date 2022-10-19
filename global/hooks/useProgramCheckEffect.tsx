@@ -18,13 +18,14 @@
  */
 
 import { usePageQuery } from 'global/hooks/usePageContext';
-import { useEffect } from 'react';
+
 import { useQuery } from '@apollo/client';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 import PROGRAM_SHORTNAME_QUERY from './gql/PROGRAM_SHORTNAME_QUERY';
 import useGlobalLoader from 'components/GlobalLoader';
 import { sleep } from 'global/utils/common';
 import useAuthContext from './useAuthContext';
+import { useEffect } from 'react';
 
 export const useProgramCheckEffect = () => {
   const { shortName } = usePageQuery<{ shortName: string }>();

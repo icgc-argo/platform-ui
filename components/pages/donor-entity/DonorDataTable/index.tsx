@@ -17,23 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { Row, Col } from 'react-grid-system';
+import { useQuery } from '@apollo/client';
+import { Container, css, Link, SimpleTable, Typography } from '@icgc-argo/uikit';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import NextLink from 'next/link';
+import { Col, Row } from 'react-grid-system';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { useQuery } from '@apollo/client';
-import Container from '@icgc-argo/uikit/Container';
-import SimpleTable from '@icgc-argo/uikit/Table/SimpleTable';
-import Typography from '@icgc-argo/uikit/Typography';
-import A from '@icgc-argo/uikit/Link';
-import Link from 'next/link';
+import PROGRAMS_LIST_QUERY from '../../submission-system/programs/gql/PROGRAMS_LIST_QUERY';
 import {
+  formatTableDisplayNames,
   removeAliasedKeys,
   splitIntoColumns,
-  formatTableDisplayNames,
 } from '../ClinicalTimeline/util';
-import PROGRAMS_LIST_QUERY from '../../submission-system/programs/gql/PROGRAMS_LIST_QUERY';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const DonorDataTable = ({ data }) => {
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
@@ -62,9 +58,9 @@ const DonorDataTable = ({ data }) => {
     programs.filter((program) => program.shortName === data.program_id)[0];
   const programName = currentProgram?.name || data.program_id;
   const programLink = (
-    <Link href={programFilterUrl} passHref>
-      <A>{`${programName} (${data.program_id})`}</A>
-    </Link>
+    <NextLink href={programFilterUrl} passHref>
+      <Link>{`${programName} (${data.program_id})`}</Link>
+    </NextLink>
   );
 
   displayData.program_id = programLink;

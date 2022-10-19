@@ -17,32 +17,34 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import css from '@emotion/css';
+import { useQuery } from '@apollo/client';
+import {
+  Button,
+  FormCheckbox,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  MultiSelect,
+  Option,
+  RadioCheckboxGroup,
+  Select,
+  Textarea,
+  Typography,
+  css,
+} from '@icgc-argo/uikit';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import useFormHook from 'global/hooks/useFormHook';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import isMatch from 'lodash/isMatch';
-import * as React from 'react';
-import { useQuery } from '@apollo/client';
+
 import { Col, Row } from 'react-grid-system';
-import Button from '@icgc-argo/uikit/Button';
-import FormCheckbox from '@icgc-argo/uikit/form/FormCheckbox';
-import FormControl from '@icgc-argo/uikit/form/FormControl';
-import FormHelperText from '@icgc-argo/uikit/form/FormHelperText';
-import Input from '@icgc-argo/uikit/form/Input';
-import InputLabel from '@icgc-argo/uikit/form/InputLabel';
-import MultiSelect, { Option } from '@icgc-argo/uikit/form/MultiSelect';
-import RadioCheckboxGroup from '@icgc-argo/uikit/form/RadioCheckboxGroup';
-import Select from '@icgc-argo/uikit/form/Select';
-import Textarea from '@icgc-argo/uikit/form/Textarea';
-import Typography from '@icgc-argo/uikit/Typography';
-import useFormHook from 'global/hooks/useFormHook';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
+import { xor } from 'lodash';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
-import difference from 'lodash/difference';
-import { isEqual, xor } from 'lodash';
+import { PropsWithChildren, ComponentType } from 'react';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -51,7 +53,7 @@ const SectionTitle = (props) => (
   <Typography component="h3" variant="sectionHeader" color="secondary" bold {...props} />
 );
 
-const InputLabelWrapper = ({ sm = 3, children }: { sm?: number; children?: React.ReactNode }) => (
+const InputLabelWrapper = ({ sm = 3, children }: PropsWithChildren<{ sm?: number }>) => (
   <Col sm={sm} style={{ paddingTop: 6 }}>
     {children}
   </Col>
@@ -84,7 +86,7 @@ export default function CreateProgramForm({
   program = {},
   onSubmit,
 }: {
-  leftFooterComponent: React.ComponentType<{
+  leftFooterComponent: ComponentType<{
     formModel: FormModel;
   }>;
   program?: {

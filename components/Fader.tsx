@@ -17,14 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import styled from '@emotion/styled';
+import { styled } from '@icgc-argo/uikit';
+import { PropsWithChildren } from 'react';
 
 type FadingDivProps = {
   enterAnimationLength?: number;
   exitAnimationLength?: number;
 };
 
-export const FadingDiv = styled('div')`
+export const FadingDiv = styled('div')<PropsWithChildren<FadingDivProps>>`
   height: 100vh;
   width: 100vw;
   position: fixed;

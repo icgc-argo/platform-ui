@@ -22,6 +22,7 @@ import DATA_TYPES_CHART_QUERY from './gql/DATA_TYPES_CHART_QUERY';
 import { useQuery } from '@apollo/client';
 import { FileRepoFiltersType } from '../../utils/types';
 import useFiltersContext from '../../hooks/useFiltersContext';
+import { ComponentProps } from 'react';
 
 type DataTypesChartData = {
   file: {
@@ -50,7 +51,7 @@ const DataTypesChart = () => {
     setFilterFromFieldAndValue({ field: 'data_type', value });
   };
 
-  const chartData: React.ComponentProps<typeof SimpleBarChart>['data'] = data
+  const chartData: ComponentProps<typeof SimpleBarChart>['data'] = data
     ? data.file.aggregations.data_type.buckets.map((bucket) => ({
         category: bucket.key,
         count: bucket.doc_count,

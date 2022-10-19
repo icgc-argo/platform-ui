@@ -17,14 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Typography from '@icgc-argo/uikit/Typography';
-import { css, styled } from '@icgc-argo/uikit';
-import Link from '@icgc-argo/uikit/Link';
-import Icon from '@icgc-argo/uikit/Icon';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { css, Icon, Link, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 
 const ContainerComponent = styled('div')`
   display: flex;

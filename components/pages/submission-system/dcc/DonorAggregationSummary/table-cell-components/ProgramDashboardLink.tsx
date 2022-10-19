@@ -17,17 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Link from 'next/link';
-import A from '@icgc-argo/uikit/Link';
-import { PROGRAM_SHORT_NAME_PATH, PROGRAM_DASHBOARD_PATH } from 'global/constants/pages';
+import { Link } from '@icgc-argo/uikit';
+import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
+import NextLink from 'next/link';
 const ProgramDashboardLink = ({ program }: { program: string }) => {
   return (
-    <Link
+    <NextLink
       as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}
       href={PROGRAM_DASHBOARD_PATH}
     >
-      <A>{program}</A>
-    </Link>
+      <Link>{program}</Link>
+    </NextLink>
   );
 };
 export default ProgramDashboardLink;

@@ -17,40 +17,41 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import { useState } from 'react';
-import Container from '@icgc-argo/uikit/Container';
-import DropdownButton from '@icgc-argo/uikit/DropdownButton';
-import { useTheme } from '@icgc-argo/uikit/ThemeProvider';
-import useClickAway from '@icgc-argo/uikit/utils/useClickAway';
-import Icon from '@icgc-argo/uikit/Icon';
-import { Input } from '@icgc-argo/uikit/form';
-import Button from '@icgc-argo/uikit/Button';
-import { css } from '@icgc-argo/uikit';
-import Typography from '@icgc-argo/uikit/Typography';
-import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 import ClinicalDownloadButton from '../DownloadButtons';
 import {
-  CompletionStates,
+  Button,
+  Container,
+  css,
+  DropdownButton,
+  Icon,
+  Input,
+  Typography,
+  useClickAway,
+  useTheme,
+} from '@icgc-argo/uikit';
+import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
+import { Dispatch, SetStateAction, useState, createRef, RefObject } from 'react';
+
+import {
   ClinicalEntitySearchResultResponse,
+  CompletionStates,
   emptySearchResponse,
   clinicalEntityFields,
 } from '../common';
 import {
   searchBackgroundStyle,
-  searchTitleParentStyle,
+  searchBarParentStyle,
   searchBoldTextStyle,
   searchClearFilterStyle,
-  searchRightSideGroupStyle,
-  searchFilterParentStyle,
-  searchDropdownStyle,
   searchDownArrowStyle,
-  searchBarParentStyle,
-  searchInputFieldStyle,
+  searchDropdownStyle,
   searchFilterButtonStyle,
   searchFilterContainerStyle,
   searchFilterIconStyle,
-  searchDownloadIconStyle,
+  searchFilterParentStyle,
+  searchInputFieldStyle,
+  searchRightSideGroupStyle,
+  searchTitleParentStyle,
 } from './style';
 
 const COMPLETION_OPTIONS = {
@@ -85,11 +86,11 @@ export default function SearchBar({
   setUrlDonorIds,
 }: {
   noData: boolean;
-  onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
+  onChange: Dispatch<SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
   loading: boolean;
   keyword: string;
-  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  setKeyword: Dispatch<SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
@@ -102,7 +103,7 @@ export default function SearchBar({
     setSearchOpen(false);
   };
 
-  const menuItemDropdownRef = React.createRef() as React.RefObject<HTMLDivElement>;
+  const menuItemDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: menuItemDropdownRef,
     onElementClick: setSearchValue,

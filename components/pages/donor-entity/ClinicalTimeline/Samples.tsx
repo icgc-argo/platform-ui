@@ -17,12 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/core';
-import React, { createRef } from 'react';
-import Table, { TableDataBase, TableColumnConfig } from '@icgc-argo/uikit/Table';
-import Typography from '@icgc-argo/uikit/Typography';
-import { formatTableDisplayNames } from './util';
+import { css, Table, TableColumnConfig, TableDataBase, Typography } from '@icgc-argo/uikit';
+import { createRef } from 'react';
 import { SampleNode } from '../types';
+import { formatTableDisplayNames } from './util';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const tableData: TableDataBase = formatTableDisplayNames(samples);

@@ -18,6 +18,7 @@
  */
 
 import { expect } from 'chai';
+import { describe, it } from 'mocha';
 import { getDefaultRedirectPathForUser } from './index';
 import { getPermissionsFromToken } from '../egoJwt';
 

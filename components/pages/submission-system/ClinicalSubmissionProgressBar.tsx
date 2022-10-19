@@ -17,23 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as React from 'react';
-import Progress from '@icgc-argo/uikit/Progress';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import { ClinicalSubmissionError } from './program-clinical-submission/types';
+import { css, Progress } from '@icgc-argo/uikit';
+import { ComponentProps, ComponentType, useMemo, useState } from 'react';
 import { useClinicalSubmissionQuery } from './program-clinical-submission';
-import { css } from '@emotion/core';
+import { ClinicalSubmissionError } from './program-clinical-submission/types';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 
-const ClinicalSubmissionProgressBar: React.ComponentType<{
+const ClinicalSubmissionProgressBar: ComponentType<{
   programShortName: string;
   approvalBarWidth?: number;
 }> = ({ programShortName, approvalBarWidth }) => {
-  const [] = React.useState<FileList | null>(null);
+  const [] = useState<FileList | null>(null);
 
   const { data } = useClinicalSubmissionQuery(programShortName);
 
-  const allDataErrors = React.useMemo(
+  const allDataErrors = useMemo(
     () =>
       data.clinicalSubmissions.clinicalEntities.reduce<
         Array<
@@ -68,9 +66,9 @@ const ClinicalSubmissionProgressBar: React.ComponentType<{
   const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
 
   const progressStates: {
-    upload: React.ComponentProps<typeof Progress.Item>['state'];
-    validate: React.ComponentProps<typeof Progress.Item>['state'];
-    signOff: React.ComponentProps<typeof Progress.Item>['state'];
+    upload: ComponentProps<typeof Progress.Item>['state'];
+    validate: ComponentProps<typeof Progress.Item>['state'];
+    signOff: ComponentProps<typeof Progress.Item>['state'];
   } = {
     upload: isSubmissionSystemDisabled
       ? 'locked'
