@@ -47,8 +47,10 @@ import {
   Link,
   ListFilter,
   styled,
+  Tab,
   Table,
   TableColumnConfig,
+  Tabs,
   TextInputFilter,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -70,6 +72,11 @@ import {
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 
+enum PipelineTabs {
+  DNA = 'DNA',
+  RNA = 'RNA',
+}
+
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
 
@@ -86,10 +93,51 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
+  const [activePipelineTab, setActivePipelineTab] = useState<PipelineTabs>(PipelineTabs.DNA);
+  const theme = useTheme();
+  const pipelineTabSettings = {
+    [PipelineTabs.DNA]: {
+      alignmentsFailed: 'alignmentsFailed',
+      alignmentsCompleted: 'alignmentsCompleted',
+      alignmentsRunning: 'alignmentsRunning',
+      color: theme.colors.warning_4,
+    },
+    [PipelineTabs.RNA]: {
+      alignmentsFailed: 'rnaAlignmentFailed',
+      alignmentsCompleted: 'rnaAlignmentsCompleted',
+      alignmentsRunning: 'rnaAlignmentsRunning',
+      color: theme.colors.accent3_4,
+    },
+  };
+  const pipelineTabColor = pipelineTabSettings[activePipelineTab].color;
+  const tabStyles = css`
+    align-items: center;
+    justify-content: center;
+    padding: 3px 0px;
+    margin: 0 8px 0 0;
+    border: 1px solid ${theme.colors.grey_2};
+    border-bottom: 1px none ${theme.colors.white};
+    border-radius: 5px 5px 0px 0px;
+    width: 150px;
+    font-size: 13px;
+    background: ${theme.colors.grey_3};
+    :hover {
+      background-color: ${theme.colors.grey_4};
+    }
+    &.active {
+      background: ${pipelineTabColor};
+      border-bottom: 0px none ${theme.colors.white};
+      border-top: 3px solid ${theme.colors.secondary};
+      :hover {
+        background-color: ${pipelineTabColor};
+      }
+    }
+  `;
+
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
   const ID_SEPARATOR = '-';
-  const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
+  const REGISTERED_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
@@ -103,7 +151,10 @@ const DonorSummaryTable = ({
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
-      newFilters.push({ field: field, values: typeof value === 'string' ? [value] : value });
+      newFilters.push({
+        field: field,
+        values: typeof value === 'string' ? [value] : value,
+      });
     }
     setFilterState(newFilters);
   };
@@ -529,6 +580,7 @@ const DonorSummaryTable = ({
               </NextLink>
             );
           },
+          width: 150,
         },
         {
           Header: (
@@ -557,11 +609,20 @@ const DonorSummaryTable = ({
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
+          width: 100,
         },
+      ],
+    },
+    {
+      Header: `${activePipelineTab.toUpperCase()}-SEQ PIPELINE`,
+      headerStyle: {
+        background: pipelineTabColor,
+      },
+      columns: [
         {
           Header: (
             <ListFilterHeader
-              header={'Samples'}
+              header={'Registered Samples'}
               panelLegend={'Sample Registration Status'}
               onFilter={(options) =>
                 updateFilter(
@@ -578,23 +639,14 @@ const DonorSummaryTable = ({
               activeFilters={getFilterValue('registeredSamplePairs')}
             />
           ),
-          id: REGISTERD_SAMPLE_COLUMN_ID,
+          id: REGISTERED_SAMPLE_COLUMN_ID,
           Cell: ({ original }) => (
             <DesignationCell
               left={original.registeredNormalSamples}
               right={original.registeredTumourSamples}
             />
           ),
-          width: 100,
         },
-      ],
-    },
-    {
-      Header: 'DNA-SEQ PIPELINE',
-      headerStyle: {
-        background: useTheme().colors.warning_4,
-      },
-      columns: [
         {
           Header: (
             <ListFilterHeader
@@ -623,7 +675,6 @@ const DonorSummaryTable = ({
               right={original.publishedTumourAnalysis}
             />
           ),
-          width: 100,
         },
         {
           Header: (
@@ -653,114 +704,118 @@ const DonorSummaryTable = ({
           id: ALIGNMENT_COLUMN_ID,
           Cell: ({ original }) => (
             <Pipeline
-              complete={original.alignmentsCompleted}
-              inProgress={original.alignmentsRunning}
-              error={original.alignmentsFailed}
+              complete={original[pipelineTabSettings[activePipelineTab].alignmentsCompleted]}
+              inProgress={original[pipelineTabSettings[activePipelineTab].alignmentsRunning]}
+              error={original[pipelineTabSettings[activePipelineTab].alignmentsFailed]}
             />
           ),
         },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Sanger VC'}
-              panelLegend={'Sanger VC Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'sangerVCStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('sangerVCStatus')}
-            />
-          ),
-          id: SANGER_VC_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.sangerVcsCompleted}
-              inProgress={original.sangerVcsRunning}
-              error={original.sangerVcsFailed}
-            />
-          ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Mutect2 VC'}
-              panelLegend={'Mutect2 VC Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'mutectStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('mutectStatus')}
-            />
-          ),
-          id: MUTECT2_VC_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.mutectCompleted}
-              inProgress={original.mutectRunning}
-              error={original.mutectFailed}
-            />
-          ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Open Access VF'}
-              panelLegend={'Open Access VF Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'openAccessStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('openAccessStatus')}
-            />
-          ),
-          id: OPEN_ACCESS_VF_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.openAccessCompleted}
-              inProgress={original.openAccessRunning}
-              error={original.openAccessFailed}
-            />
-          ),
-        },
+        ...(activePipelineTab === PipelineTabs.DNA
+          ? [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Sanger VC'}
+                    panelLegend={'Sanger VC Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'sangerVCStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('sangerVCStatus')}
+                  />
+                ),
+                id: SANGER_VC_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.sangerVcsCompleted}
+                    inProgress={original.sangerVcsRunning}
+                    error={original.sangerVcsFailed}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Mutect2 VC'}
+                    panelLegend={'Mutect2 VC Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'mutectStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('mutectStatus')}
+                  />
+                ),
+                id: MUTECT2_VC_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.mutectCompleted}
+                    inProgress={original.mutectRunning}
+                    error={original.mutectFailed}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Open Access VF'}
+                    panelLegend={'Open Access VF Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'openAccessStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('openAccessStatus')}
+                  />
+                ),
+                id: OPEN_ACCESS_VF_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.openAccessCompleted}
+                    inProgress={original.openAccessRunning}
+                    error={original.openAccessFailed}
+                  />
+                ),
+              },
+            ]
+          : []),
       ],
     },
     {
@@ -836,6 +891,7 @@ const DonorSummaryTable = ({
       css={css`
         z-index: 2;
         padding-top: 10px;
+        position: relative;
       `}
     >
       {programDonorsSummaryQueryError ? (
@@ -848,6 +904,21 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
+          <div
+            css={css`
+              margin-left: 299px;
+            `}
+          >
+            <Tabs
+              value={activePipelineTab}
+              onChange={(e, value) => {
+                setActivePipelineTab(value);
+              }}
+            >
+              <Tab value={PipelineTabs.DNA} label="DNA-SEQ" css={tabStyles} />
+              <Tab value={PipelineTabs.RNA} label="RNA-SEQ" css={tabStyles} />
+            </Tabs>
+          </div>
           <Table
             loading={isTableLoading}
             parentRef={containerRef}

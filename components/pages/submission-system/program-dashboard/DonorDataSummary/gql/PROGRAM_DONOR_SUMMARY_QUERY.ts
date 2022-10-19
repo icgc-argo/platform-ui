@@ -60,6 +60,13 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         openAccessCompleted
         processingStatus
         updatedAt
+        rnaRegisteredNormalSamples
+        rnaRegisteredTumourSamples
+        rnaPublishedNormalAnalysis
+        rnaPublishedTumourAnalysis
+        rnaAlignmentsCompleted
+        rnaAlignmentsRunning
+        rnaAlignmentFailed
       }
       stats {
         registeredDonorsCount
@@ -106,6 +113,20 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
           inProgress
           failed
           noData
+        }
+        rnaAlignmentStatusCount {
+          completed
+          inProgress
+          failed
+          noData
+        }
+        rnaSampleStatus {
+          dataSubmitted
+          noDataSubmitted
+        }
+        rnaRawReadStatus {
+          dataSubmitted
+          noDataSubmitted
         }
       }
     }
