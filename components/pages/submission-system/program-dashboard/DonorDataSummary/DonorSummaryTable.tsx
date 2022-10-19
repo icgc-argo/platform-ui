@@ -71,7 +71,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
+import { PipelineNames, PipelineTabs, usePipelines, PIPELINE_COLORS } from './PipelineTabs';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -89,7 +89,8 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
-  const { activePipeline, pipelineColor, pipelineSettings, setActivePipeline } = usePipelines();
+  const theme = useTheme();
+  const { activePipeline, setActivePipeline } = usePipelines();
 
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
@@ -102,6 +103,7 @@ const DonorSummaryTable = ({
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
   const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
   const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegisteredTumourSamples';
+  const RNA_ALIGNMENT_COLUMN_ID = 'rnaAlignmentsCompleted-rnaAlignmentsRunning-rnaAlignmentFailed';
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -575,7 +577,7 @@ const DonorSummaryTable = ({
     {
       Header: `${activePipeline.toUpperCase()}-SEQ PIPELINE`,
       headerStyle: {
-        background: pipelineColor,
+        background: theme.colors[PIPELINE_COLORS[activePipeline]],
       },
       columns: [
         ...(activePipeline === PipelineNames.DNA
@@ -638,103 +640,40 @@ const DonorSummaryTable = ({
                   />
                 ),
               },
-            ]
-          : [
               {
                 Header: (
                   <ListFilterHeader
-                    header={'RNA Registered Samples'}
-                    panelLegend={'RNA Sample Registration Status'}
+                    header={'Alignment'}
+                    panelLegend={'Alignment Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'rnaSampleStatus',
+                        'alignmentStatus',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
-                        programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
-                        programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.noData,
                     }}
-                    activeFilters={getFilterValue('rnaSampleStatus')}
+                    activeFilters={getFilterValue('alignmentStatus')}
                   />
                 ),
-                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
+                id: ALIGNMENT_COLUMN_ID,
                 Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.rnaRegisteredNormalSamples}
-                    right={original.rnaRegisteredTumourSamples}
+                  <Pipeline
+                    complete={original.alignmentsCompleted}
+                    inProgress={original.alignmentsRunning}
+                    error={original.alignmentsFailed}
                   />
                 ),
               },
-              {
-                Header: (
-                  <ListFilterHeader
-                    header={'RNA Raw Reads'}
-                    panelLegend={'RNA Raw Reads Status'}
-                    onFilter={(options) =>
-                      updateFilter(
-                        'rnaRawReads',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
-                    }
-                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
-                    filterCounts={{
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
-                        programDonorSummaryStats?.rnaRawReadStatus?.dataSubmitted,
-                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
-                        programDonorSummaryStats?.rnaRawReadStatus?.noDataSubmitted,
-                    }}
-                    activeFilters={getFilterValue('rnaRawReads')}
-                  />
-                ),
-                id: RNA_RAW_READS_COLUMN_ID,
-                Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.rnaPublishedNormalAnalysis}
-                    right={original.rnaPublishedTumourAnalysis}
-                  />
-                ),
-              },
-            ]),
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Alignment'}
-              panelLegend={'Alignment Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'alignmentStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('alignmentStatus')}
-            />
-          ),
-          id: ALIGNMENT_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original[pipelineSettings[activePipeline].alignmentsCompleted]}
-              inProgress={original[pipelineSettings[activePipeline].alignmentsRunning]}
-              error={original[pipelineSettings[activePipeline].alignmentsFailed]}
-            />
-          ),
-        },
-        ...(activePipeline === PipelineNames.DNA
-          ? [
               {
                 Header: (
                   <ListFilterHeader
@@ -838,7 +777,100 @@ const DonorSummaryTable = ({
                 ),
               },
             ]
-          : []),
+          : [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'RNA Registered Samples'}
+                    panelLegend={'RNA Sample Registration Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaSampleStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaSampleStatus')}
+                  />
+                ),
+                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaRegisteredNormalSamples}
+                    right={original.rnaRegisteredTumourSamples}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'RNA Raw Reads'}
+                    panelLegend={'RNA Raw Reads Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaRawReads',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoDataSubmitted}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[0].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoDataSubmitted[1].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaRawReads')}
+                  />
+                ),
+                id: RNA_RAW_READS_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaPublishedNormalAnalysis}
+                    right={original.rnaPublishedTumourAnalysis}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'RNA Alignment'}
+                    panelLegend={'RNA Alignment Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaAlignmentStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatus?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatus?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatus?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatus?.noData,
+                    }}
+                    activeFilters={getFilterValue('rnaAlignmentStatus')}
+                  />
+                ),
+                id: RNA_ALIGNMENT_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.rnaAlignmentsCompleted}
+                    inProgress={original.rnaAlignmentsRunning}
+                    error={original.rnaAlignmentFailed}
+                  />
+                ),
+              },
+            ]),
       ],
     },
     {
