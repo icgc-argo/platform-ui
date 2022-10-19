@@ -109,8 +109,10 @@ const DonorSummaryTable = ({
       color: theme.colors.accent3_4,
     },
   };
+
   const pipelineTabColor = pipelineTabSettings[activePipelineTab].color;
-  const tabStyles = css`
+
+  const StyledPipelineTab = styled(Tab)`
     align-items: center;
     justify-content: center;
     padding: 3px 0px;
@@ -131,6 +133,9 @@ const DonorSummaryTable = ({
       :hover {
         background-color: ${pipelineTabColor};
       }
+    }
+    &:first-of-type {
+      margin-left: 279px;
     }
   `;
 
@@ -580,7 +585,7 @@ const DonorSummaryTable = ({
               </NextLink>
             );
           },
-          width: 150,
+          width: 135,
         },
         {
           Header: (
@@ -609,7 +614,7 @@ const DonorSummaryTable = ({
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
-          width: 100,
+          width: 95,
         },
       ],
     },
@@ -838,6 +843,7 @@ const DonorSummaryTable = ({
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
+          width: 95,
         },
       ],
     },
@@ -904,21 +910,15 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
-          <div
-            css={css`
-              margin-left: 299px;
-            `}
+          <Tabs
+            value={activePipelineTab}
+            onChange={(e, value) => {
+              setActivePipelineTab(value);
+            }}
           >
-            <Tabs
-              value={activePipelineTab}
-              onChange={(e, value) => {
-                setActivePipelineTab(value);
-              }}
-            >
-              <Tab value={PipelineTabs.DNA} label="DNA-SEQ" css={tabStyles} />
-              <Tab value={PipelineTabs.RNA} label="RNA-SEQ" css={tabStyles} />
-            </Tabs>
-          </div>
+            <StyledPipelineTab value={PipelineTabs.DNA} label="DNA-SEQ" />
+            <StyledPipelineTab value={PipelineTabs.RNA} label="RNA-SEQ" />
+          </Tabs>
           <Table
             loading={isTableLoading}
             parentRef={containerRef}
