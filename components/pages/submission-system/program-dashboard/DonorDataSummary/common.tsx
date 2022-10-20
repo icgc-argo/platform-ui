@@ -91,13 +91,13 @@ export const FILTER_OPTIONS = {
       value: 'No data',
     },
   ],
-  dataSubmittedNoDataSubmitted: [
+  dataSubmittedNoData: [
     {
       key: 'DATA_SUBMITTED',
       value: 'Data submitted',
     },
     {
-      key: 'NO_DATA_SUBMITTED',
+      key: 'NO_DATA',
       value: 'No data submitted',
     },
   ],
