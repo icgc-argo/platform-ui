@@ -884,7 +884,27 @@ const DonorSummaryTable = ({
       ),
       columns: [
         {
-          Header: 'Alerts',
+          Header: (
+            <ListFilterHeader
+              header={'Alerts'}
+              panelLegend={'Filter Alerts'}
+              onFilter={(options) =>
+                updateFilter(
+                  'validWithCurrentDictionary',
+                  options.filter((option) => option.isChecked).map((option) => option.key),
+                )
+              }
+              filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
+              filterCounts={{
+                [FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
+                  programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+                [FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
+                  programDonorSummaryStats?.registeredDonorsCount -
+                    programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+              }}
+              activeFilters={getFilterValue('validWithCurrentDictionary')}
+            />
+          ),
           accessor: 'validWithCurrentDictionary',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             const theme = useTheme();

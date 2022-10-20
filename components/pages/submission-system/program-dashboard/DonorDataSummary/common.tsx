@@ -101,6 +101,16 @@ export const FILTER_OPTIONS = {
       value: 'No Data',
     },
   ],
+  validWithCurrentDictionary: [
+    {
+      key: 'REQUIRES_UPDATES',
+      value: 'Requires Clinical Updates',
+    },
+    {
+      key: 'NO_ALERTS',
+      value: 'No Alerts',
+    },
+  ],
 };
 
 export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
