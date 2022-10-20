@@ -884,6 +884,36 @@ const DonorSummaryTable = ({
       ),
       columns: [
         {
+          Header: 'Alerts',
+          accessor: 'validWithCurrentDictionary',
+          Cell: ({ original }: { original: DonorSummaryRecord }) => {
+            const theme = useTheme();
+
+            const errorTab =
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
+
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}`,
+              errorTab && `&tab=${errorTab}`,
+            );
+
+            return !original.validWithCurrentDictionary ? (
+              <NextLink href={linkUrl}>
+                <Link>
+                  <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
+                  Update Clinical
+                </Link>
+              </NextLink>
+            ) : (
+              ''
+            );
+          },
+          width: 125,
+        },
+        {
           Header: 'Last Updated',
           accessor: 'updatedAt',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
