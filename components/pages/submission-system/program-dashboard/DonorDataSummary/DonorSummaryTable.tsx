@@ -70,7 +70,7 @@ import {
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
-import getConfig from 'next/config';
+import { getConfig } from 'global/config';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
