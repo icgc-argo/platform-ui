@@ -69,6 +69,8 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
+import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
+import { getConfig } from 'global/config';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -86,15 +88,21 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
+  const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = getConfig();
+  const { activePipeline, setActivePipeline } = usePipelines();
+
   // These are used to sort columns with multiple fields
   // the order of the fields is how its is order in asc or desc
   const ID_SEPARATOR = '-';
-  const REGISTERD_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
+  const REGISTERED_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
   const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
   const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
   const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
   const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
   const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
+  const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
+  const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegisteredTumourSamples';
+  const RNA_ALIGNMENT_COLUMN_ID = 'rnaAlignmentsCompleted-rnaAlignmentsRunning-rnaAlignmentFailed';
 
   const containerRef = createRef<HTMLDivElement>();
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
@@ -103,7 +111,10 @@ const DonorSummaryTable = ({
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
-      newFilters.push({ field: field, values: typeof value === 'string' ? [value] : value });
+      newFilters.push({
+        field: field,
+        values: typeof value === 'string' ? [value] : value,
+      });
     }
     setFilterState(newFilters);
   };
@@ -162,8 +173,8 @@ const DonorSummaryTable = ({
     const DesignationEntry = styled('div')`
       text-align: center;
       flex: 1;
-      color: ${(props: { num: number }) =>
-        isValid(props.num) ? theme.colors.black : theme.colors.error};
+      background: ${(props: { num: number }) =>
+        isValid(props.num) ? 'transparent' : theme.colors.error_4};
     `;
 
     return (
@@ -529,6 +540,7 @@ const DonorSummaryTable = ({
               </NextLink>
             );
           },
+          width: 135,
         },
         {
           Header: (
@@ -557,210 +569,307 @@ const DonorSummaryTable = ({
           Cell: ({ original }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Samples'}
-              panelLegend={'Sample Registration Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'registeredSamplePairs',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.validInvalid}
-              filterCounts={{
-                [FILTER_OPTIONS.validInvalid[0].key]: programDonorSummaryStats?.sampleStatus?.valid,
-                [FILTER_OPTIONS.validInvalid[1].key]:
-                  programDonorSummaryStats?.sampleStatus?.invalid,
-              }}
-              activeFilters={getFilterValue('registeredSamplePairs')}
-            />
-          ),
-          id: REGISTERD_SAMPLE_COLUMN_ID,
-          Cell: ({ original }) => (
-            <DesignationCell
-              left={original.registeredNormalSamples}
-              right={original.registeredTumourSamples}
-            />
-          ),
-          width: 100,
+          width: 95,
         },
       ],
     },
     {
-      Header: 'DNA-SEQ PIPELINE',
+      Header: `${activePipeline}-SEQ PIPELINE`,
       headerStyle: {
-        background: useTheme().colors.warning_4,
+        background: useTheme().colors[PIPELINE_COLORS[activePipeline]],
       },
       columns: [
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Raw Reads'}
-              panelLegend={'Raw Reads Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'rawReads',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.validInvalid}
-              filterCounts={{
-                [FILTER_OPTIONS.validInvalid[0].key]:
-                  programDonorSummaryStats?.rawReadsStatus?.valid,
-                [FILTER_OPTIONS.validInvalid[1].key]:
-                  programDonorSummaryStats?.rawReadsStatus?.invalid,
-              }}
-              activeFilters={getFilterValue('rawReads')}
-            />
-          ),
-          id: RAW_READS_COLUMN_ID,
-          Cell: ({ original }) => (
-            <DesignationCell
-              left={original.publishedNormalAnalysis}
-              right={original.publishedTumourAnalysis}
-            />
-          ),
-          width: 100,
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Alignment'}
-              panelLegend={'Alignment Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'alignmentStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.alignmentStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('alignmentStatus')}
-            />
-          ),
-          id: ALIGNMENT_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.alignmentsCompleted}
-              inProgress={original.alignmentsRunning}
-              error={original.alignmentsFailed}
-            />
-          ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Sanger VC'}
-              panelLegend={'Sanger VC Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'sangerVCStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.sangerStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('sangerVCStatus')}
-            />
-          ),
-          id: SANGER_VC_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.sangerVcsCompleted}
-              inProgress={original.sangerVcsRunning}
-              error={original.sangerVcsFailed}
-            />
-          ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Mutect2 VC'}
-              panelLegend={'Mutect2 VC Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'mutectStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.mutectStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('mutectStatus')}
-            />
-          ),
-          id: MUTECT2_VC_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.mutectCompleted}
-              inProgress={original.mutectRunning}
-              error={original.mutectFailed}
-            />
-          ),
-        },
-        {
-          Header: (
-            <ListFilterHeader
-              header={'Open Access VF'}
-              panelLegend={'Open Access VF Status'}
-              onFilter={(options) =>
-                updateFilter(
-                  'openAccessStatus',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.completedInProgressFailed}
-              filterCounts={{
-                [FILTER_OPTIONS.completedInProgressFailed[0].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.completed,
-                [FILTER_OPTIONS.completedInProgressFailed[1].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.inProgress,
-                [FILTER_OPTIONS.completedInProgressFailed[2].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.failed,
-                [FILTER_OPTIONS.completedInProgressFailed[3].key]:
-                  programDonorSummaryStats?.openAccessStatusCount?.noData,
-              }}
-              activeFilters={getFilterValue('openAccessStatus')}
-            />
-          ),
-          id: OPEN_ACCESS_VF_COLUMN_ID,
-          Cell: ({ original }) => (
-            <Pipeline
-              complete={original.openAccessCompleted}
-              inProgress={original.openAccessRunning}
-              error={original.openAccessFailed}
-            />
-          ),
-        },
+        ...(activePipeline === PipelineNames.DNA
+          ? [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Registered Samples'}
+                    panelLegend={'Sample Registration Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'registeredSamplePairs',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validInvalid[0].key]:
+                        programDonorSummaryStats?.sampleStatus?.valid,
+                      [FILTER_OPTIONS.validInvalid[1].key]:
+                        programDonorSummaryStats?.sampleStatus?.invalid,
+                    }}
+                    activeFilters={getFilterValue('registeredSamplePairs')}
+                  />
+                ),
+                id: REGISTERED_SAMPLE_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.registeredNormalSamples}
+                    right={original.registeredTumourSamples}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Raw Reads'}
+                    panelLegend={'Raw Reads Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rawReads',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validInvalid[0].key]:
+                        programDonorSummaryStats?.rawReadsStatus?.valid,
+                      [FILTER_OPTIONS.validInvalid[1].key]:
+                        programDonorSummaryStats?.rawReadsStatus?.invalid,
+                    }}
+                    activeFilters={getFilterValue('rawReads')}
+                  />
+                ),
+                id: RAW_READS_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.publishedNormalAnalysis}
+                    right={original.publishedTumourAnalysis}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Alignment'}
+                    panelLegend={'Alignment Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'alignmentStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.alignmentStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('alignmentStatus')}
+                  />
+                ),
+                id: ALIGNMENT_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.alignmentsCompleted}
+                    inProgress={original.alignmentsRunning}
+                    error={original.alignmentsFailed}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Sanger VC'}
+                    panelLegend={'Sanger VC Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'sangerVCStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.sangerStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('sangerVCStatus')}
+                  />
+                ),
+                id: SANGER_VC_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.sangerVcsCompleted}
+                    inProgress={original.sangerVcsRunning}
+                    error={original.sangerVcsFailed}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Mutect2 VC'}
+                    panelLegend={'Mutect2 VC Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'mutectStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.mutectStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('mutectStatus')}
+                  />
+                ),
+                id: MUTECT2_VC_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.mutectCompleted}
+                    inProgress={original.mutectRunning}
+                    error={original.mutectFailed}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Open Access VF'}
+                    panelLegend={'Open Access VF Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'openAccessStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.openAccessStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('openAccessStatus')}
+                  />
+                ),
+                id: OPEN_ACCESS_VF_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.openAccessCompleted}
+                    inProgress={original.openAccessRunning}
+                    error={original.openAccessFailed}
+                  />
+                ),
+              },
+            ]
+          : [
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Registered Samples'}
+                    panelLegend={'Sample Registration Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaRegisteredSample',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoData[0].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoData[1].key]:
+                        programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaRegisteredSample')}
+                  />
+                ),
+                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaRegisteredNormalSamples}
+                    right={original.rnaRegisteredTumourSamples}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Raw Reads'}
+                    panelLegend={'Raw Reads Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaRawReads',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
+                    filterCounts={{
+                      [FILTER_OPTIONS.dataSubmittedNoData[0].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.dataSubmitted,
+                      [FILTER_OPTIONS.dataSubmittedNoData[1].key]:
+                        programDonorSummaryStats?.rnaRawReadStatus?.noDataSubmitted,
+                    }}
+                    activeFilters={getFilterValue('rnaRawReads')}
+                  />
+                ),
+                id: RNA_RAW_READS_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <DesignationCell
+                    left={original.rnaPublishedNormalAnalysis}
+                    right={original.rnaPublishedTumourAnalysis}
+                  />
+                ),
+              },
+              {
+                Header: (
+                  <ListFilterHeader
+                    header={'Alignment'}
+                    panelLegend={'Alignment Status'}
+                    onFilter={(options) =>
+                      updateFilter(
+                        'rnaAlignmentStatus',
+                        options.filter((option) => option.isChecked).map((option) => option.key),
+                      )
+                    }
+                    filterOptions={FILTER_OPTIONS.completedInProgressFailed}
+                    filterCounts={{
+                      [FILTER_OPTIONS.completedInProgressFailed[0].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.completed,
+                      [FILTER_OPTIONS.completedInProgressFailed[1].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.inProgress,
+                      [FILTER_OPTIONS.completedInProgressFailed[2].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.failed,
+                      [FILTER_OPTIONS.completedInProgressFailed[3].key]:
+                        programDonorSummaryStats?.rnaAlignmentStatusCount?.noData,
+                    }}
+                    activeFilters={getFilterValue('rnaAlignmentStatus')}
+                  />
+                ),
+                id: RNA_ALIGNMENT_COLUMN_ID,
+                Cell: ({ original }) => (
+                  <Pipeline
+                    complete={original.rnaAlignmentsCompleted}
+                    inProgress={original.rnaAlignmentsRunning}
+                    error={original.rnaAlignmentFailed}
+                  />
+                ),
+              },
+            ]),
       ],
     },
     {
@@ -783,6 +892,7 @@ const DonorSummaryTable = ({
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
+          width: 95,
         },
       ],
     },
@@ -848,6 +958,15 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
+          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && (
+            <PipelineTabs
+              activePipeline={activePipeline}
+              handlePipelineTabs={(e, value) => {
+                setActivePipeline(value);
+              }}
+            />
+          )}
+
           <Table
             loading={isTableLoading}
             parentRef={containerRef}
