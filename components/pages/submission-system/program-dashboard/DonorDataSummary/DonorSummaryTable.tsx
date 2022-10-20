@@ -126,14 +126,11 @@ const DonorSummaryTable = ({
     filterState.find((x) => x.field === field)?.values;
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
-    const theme = useTheme();
-    const displayIcon = original.validWithCurrentDictionary ? (
+    const displayIcon = (
       <StarIcon
         fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
         outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
       />
-    ) : (
-      <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />
     );
     return <CellContentCenter>{displayIcon}</CellContentCenter>;
   };
