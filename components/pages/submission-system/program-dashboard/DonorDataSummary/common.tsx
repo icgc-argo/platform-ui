@@ -101,6 +101,34 @@ export const FILTER_OPTIONS = {
       value: 'No Data',
     },
   ],
+  tnRegisteredTnNotRegistered: [
+    {
+      key: 'T_N_REGISTERED',
+      value: 'T and N Registered',
+    },
+    {
+      key: 'T_N_NOT_REGISTERED',
+      value: 'T or N not registered',
+    },
+    {
+      key: 'NO_SAMPLES_REGISTERED',
+      value: 'No samples registered',
+    },
+  ],
+  tnMatchedPairSubmittedTnMatchedPairNotSubmitted: [
+    {
+      key: 'T_N_MATCHED_PAIR_SUBMITTED',
+      value: 'T|N matched pair submitted',
+    },
+    {
+      key: 'T_N_MATCHED_PAIR_NOT_SUBMITTED',
+      value: 'T|N matched pair not submitted',
+    },
+    {
+      key: 'NO_DATA_SUBMITTED',
+      value: 'No data submitted',
+    },
+  ],
 };
 
 export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {

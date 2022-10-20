@@ -585,18 +585,18 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Registered Samples'}
-                    panelLegend={'Sample Registration Status'}
+                    panelLegend={'DNA Registration Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'registeredSamplePairs',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterOptions={FILTER_OPTIONS.tnRegisteredTnNotRegistered}
                     filterCounts={{
-                      [FILTER_OPTIONS.validInvalid[0].key]:
+                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
                         programDonorSummaryStats?.sampleStatus?.valid,
-                      [FILTER_OPTIONS.validInvalid[1].key]:
+                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
                         programDonorSummaryStats?.sampleStatus?.invalid,
                     }}
                     activeFilters={getFilterValue('registeredSamplePairs')}
@@ -621,11 +621,11 @@ const DonorSummaryTable = ({
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.validInvalid}
+                    filterOptions={FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted}
                     filterCounts={{
-                      [FILTER_OPTIONS.validInvalid[0].key]:
+                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
                         programDonorSummaryStats?.rawReadsStatus?.valid,
-                      [FILTER_OPTIONS.validInvalid[1].key]:
+                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
                         programDonorSummaryStats?.rawReadsStatus?.invalid,
                     }}
                     activeFilters={getFilterValue('rawReads')}
