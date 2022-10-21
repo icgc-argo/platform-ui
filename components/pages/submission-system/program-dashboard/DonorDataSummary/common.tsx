@@ -103,11 +103,11 @@ export const FILTER_OPTIONS = {
   ],
   validWithCurrentDictionary: [
     {
-      key: 'REQUIRES_UPDATES',
+      key: 'INVALID',
       value: 'Requires Clinical Updates',
     },
     {
-      key: 'NO_ALERTS',
+      key: 'VALID',
       value: 'No Alerts',
     },
   ],
