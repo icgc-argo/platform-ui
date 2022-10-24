@@ -588,18 +588,20 @@ const DonorSummaryTable = ({
                     panelLegend={'DNA Registration Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'registeredSamplePairs',
+                        'dnaTNRegistered',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
                     filterOptions={FILTER_OPTIONS.tnRegisteredTnNotRegistered}
                     filterCounts={{
                       [FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
-                        programDonorSummaryStats?.sampleStatus?.valid,
+                        programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorAndNormal,
                       [FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
-                        programDonorSummaryStats?.sampleStatus?.invalid,
+                        programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorOrNormal,
+                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[2].key]:
+                        programDonorSummaryStats?.dnaTNRegisteredStatus?.noData,
                     }}
-                    activeFilters={getFilterValue('registeredSamplePairs')}
+                    activeFilters={getFilterValue('dnaTNRegistered')}
                   />
                 ),
                 id: REGISTERED_SAMPLE_COLUMN_ID,
@@ -614,21 +616,23 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Raw Reads'}
-                    panelLegend={'Raw Reads Status'}
+                    panelLegend={'DNA Raw Reads Status'}
                     onFilter={(options) =>
                       updateFilter(
-                        'rawReads',
+                        'dnaTNMatchedPair',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
                     filterOptions={FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted}
                     filterCounts={{
                       [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
-                        programDonorSummaryStats?.rawReadsStatus?.valid,
+                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalMatchedPair,
                       [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
-                        programDonorSummaryStats?.rawReadsStatus?.invalid,
+                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalNoMatchedPair,
+                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
+                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
                     }}
-                    activeFilters={getFilterValue('rawReads')}
+                    activeFilters={getFilterValue('dnaTNMatchedPair')}
                   />
                 ),
                 id: RAW_READS_COLUMN_ID,
