@@ -919,15 +919,15 @@ const DonorSummaryTable = ({
               errorTab && `&tab=${errorTab}`,
             );
 
-            return !original.validWithCurrentDictionary ? (
+            return original.validWithCurrentDictionary ? (
+              ''
+            ) : (
               <NextLink href={linkUrl}>
                 <Link>
                   <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
                   Update Clinical
                 </Link>
               </NextLink>
-            ) : (
-              ''
             );
           },
           width: 125,
