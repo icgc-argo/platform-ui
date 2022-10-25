@@ -484,11 +484,6 @@ const DonorSummaryTable = ({
       })
     : [];
 
-  // for feature flag only
-  const dnaSamplesFilterKeys = FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-    ? FILTER_OPTIONS.tnRegisteredTnNotRegistered
-    : FILTER_OPTIONS.validInvalid;
-
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
