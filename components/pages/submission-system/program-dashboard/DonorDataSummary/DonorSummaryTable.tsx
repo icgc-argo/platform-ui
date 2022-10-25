@@ -777,18 +777,18 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Registered Samples'}
-                    panelLegend={'Sample Registration Status'}
+                    panelLegend={'RNA Registration Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'rnaRegisteredSample',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
+                    filterOptions={FILTER_OPTIONS.samplesRegisteredNoSamplesRegistered}
                     filterCounts={{
-                      [FILTER_OPTIONS.dataSubmittedNoData[0].key]:
+                      [FILTER_OPTIONS.samplesRegisteredNoSamplesRegistered[0].key]:
                         programDonorSummaryStats?.rnaSampleStatus?.dataSubmitted,
-                      [FILTER_OPTIONS.dataSubmittedNoData[1].key]:
+                      [FILTER_OPTIONS.samplesRegisteredNoSamplesRegistered[1].key]:
                         programDonorSummaryStats?.rnaSampleStatus?.noDataSubmitted,
                     }}
                     activeFilters={getFilterValue('rnaRegisteredSample')}
@@ -806,7 +806,7 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Raw Reads'}
-                    panelLegend={'Raw Reads Status'}
+                    panelLegend={'RNA Raw Reads Status'}
                     onFilter={(options) =>
                       updateFilter(
                         'rnaRawReads',
