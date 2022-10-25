@@ -60,7 +60,7 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'NO_DATA',
-      value: 'No Data Submitted',
+      value: 'No data submitted',
     },
   ],
   validInvalid: [
@@ -80,7 +80,7 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'IN_PROGRESS',
-      value: 'In Progress',
+      value: 'In progress',
     },
     {
       key: 'FAILED',
@@ -88,17 +88,27 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'NO_DATA',
-      value: 'No Data',
+      value: 'No data',
     },
   ],
   dataSubmittedNoData: [
     {
       key: 'DATA_SUBMITTED',
-      value: 'Data Submitted',
+      value: 'Data submitted',
     },
     {
       key: 'NO_DATA',
-      value: 'No Data',
+      value: 'No data submitted',
+    },
+  ],
+  samplesRegisteredNoSamplesRegistered: [
+    {
+      key: 'SAMPLES_REGISTERED',
+      value: 'Samples registered',
+    },
+    {
+      key: 'NO_SAMPLES_REGISTERED',
+      value: 'No samples registered',
     },
   ],
 };
