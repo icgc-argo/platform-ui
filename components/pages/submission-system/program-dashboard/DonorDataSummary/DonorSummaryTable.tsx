@@ -484,6 +484,11 @@ const DonorSummaryTable = ({
       })
     : [];
 
+  // for feature flag only
+  const dnaSamplesFilterKeys = FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+    ? FILTER_OPTIONS.tnRegisteredTnNotRegistered
+    : FILTER_OPTIONS.validInvalid;
+
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
       Header: 'CLINICAL DATA STATUS',
@@ -585,23 +590,44 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Registered Samples'}
-                    panelLegend={'DNA Registration Status'}
+                    panelLegend={`${
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA' : 'Sample'
+                    } Registration Status`}
                     onFilter={(options) =>
                       updateFilter(
-                        'dnaTNRegistered',
+                        FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                          ? 'dnaTNRegistered'
+                          : 'registeredSamplePairs',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.tnRegisteredTnNotRegistered}
-                    filterCounts={{
-                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
-                        programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorAndNormal,
-                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
-                        programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorOrNormal,
-                      [FILTER_OPTIONS.tnRegisteredTnNotRegistered[2].key]:
-                        programDonorSummaryStats?.dnaTNRegisteredStatus?.noData,
-                    }}
-                    activeFilters={getFilterValue('dnaTNRegistered')}
+                    filterOptions={
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                        ? FILTER_OPTIONS.tnRegisteredTnNotRegistered
+                        : FILTER_OPTIONS.validInvalid
+                    }
+                    filterCounts={
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                        ? {
+                            [FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
+                              programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorAndNormal,
+                            [FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
+                              programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorOrNormal,
+                            [FILTER_OPTIONS.tnRegisteredTnNotRegistered[2].key]:
+                              programDonorSummaryStats?.dnaTNRegisteredStatus?.noData,
+                          }
+                        : {
+                            [FILTER_OPTIONS.validInvalid[0].key]:
+                              programDonorSummaryStats?.sampleStatus?.valid,
+                            [FILTER_OPTIONS.validInvalid[1].key]:
+                              programDonorSummaryStats?.sampleStatus?.invalid,
+                          }
+                    }
+                    activeFilters={getFilterValue(
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                        ? 'dnaTNRegistered'
+                        : 'registeredSamplePairs',
+                    )}
                   />
                 ),
                 id: REGISTERED_SAMPLE_COLUMN_ID,
@@ -616,23 +642,42 @@ const DonorSummaryTable = ({
                 Header: (
                   <ListFilterHeader
                     header={'Raw Reads'}
-                    panelLegend={'DNA Raw Reads Status'}
+                    panelLegend={`${
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA ' : ''
+                    }Raw Reads Status`}
                     onFilter={(options) =>
                       updateFilter(
-                        'dnaTNMatchedPair',
+                        FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'dnaTNMatchedPair' : 'rawReads',
                         options.filter((option) => option.isChecked).map((option) => option.key),
                       )
                     }
-                    filterOptions={FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted}
-                    filterCounts={{
-                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
-                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalMatchedPair,
-                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
-                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalNoMatchedPair,
-                      [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
-                        programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
-                    }}
-                    activeFilters={getFilterValue('dnaTNMatchedPair')}
+                    filterOptions={
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                        ? FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted
+                        : FILTER_OPTIONS.validInvalid
+                    }
+                    filterCounts={
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                        ? {
+                            [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
+                              programDonorSummaryStats?.dnaTNMatchedPairStatus
+                                ?.tumorNormalMatchedPair,
+                            [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
+                              programDonorSummaryStats?.dnaTNMatchedPairStatus
+                                ?.tumorNormalNoMatchedPair,
+                            [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
+                              programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
+                          }
+                        : {
+                            [FILTER_OPTIONS.validInvalid[0].key]:
+                              programDonorSummaryStats?.rawReadsStatus?.valid,
+                            [FILTER_OPTIONS.validInvalid[1].key]:
+                              programDonorSummaryStats?.rawReadsStatus?.invalid,
+                          }
+                    }
+                    activeFilters={getFilterValue(
+                      FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'dnaTNMatchedPair' : 'rawReads',
+                    )}
                   />
                 ),
                 id: RAW_READS_COLUMN_ID,
