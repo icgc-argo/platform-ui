@@ -125,15 +125,14 @@ const DonorSummaryTable = ({
   const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
     filterState.find((x) => x.field === field)?.values;
 
-  const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => {
-    const displayIcon = (
+  const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => (
+    <CellContentCenter>
       <StarIcon
         fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
         outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
       />
-    );
-    return <CellContentCenter>{displayIcon}</CellContentCenter>;
-  };
+    </CellContentCenter>
+  );
 
   const PercentageCell = ({
     original,
