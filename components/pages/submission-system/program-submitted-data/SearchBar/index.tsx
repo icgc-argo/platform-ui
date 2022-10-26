@@ -50,6 +50,8 @@ import { Input } from '@icgc-argo/uikit/form';
 import Button from '@icgc-argo/uikit/Button';
 import { css } from '@icgc-argo/uikit';
 import Typography from '@icgc-argo/uikit/Typography';
+import FilterModal from './FilterModal';
+import { StringLocale } from 'yup/lib/locale';
 
 const COMPLETION_OPTIONS = {
   all: {
@@ -77,19 +79,29 @@ export default function SearchBar({
   noData,
   onChange,
   completionState,
+  programShortName,
   loading,
   keyword,
   setKeyword,
   donorSearchResults,
+  modalVisible,
+  setFilterUsed,
+  setFilterTextBox,
+  filterTextBox,
 }: {
-  setModalVisible: any;
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
   onChange: React.Dispatch<React.SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  programShortName: string;
   loading: boolean;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  modalVisible: boolean;
+  setFilterUsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
+  filterTextBox: string;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
@@ -109,6 +121,7 @@ export default function SearchBar({
   const {
     clinicalSearchResults: { searchResults, totalResults },
   } = donorSearchResults || emptySearchResponse;
+
   const searchResultItems =
     searchResults
       .map((result) => {
@@ -127,6 +140,15 @@ export default function SearchBar({
 
   return (
     <Container css={searchBackgroundStyle}>
+      {modalVisible && (
+        <FilterModal
+          setModalVisible={setModalVisible}
+          setFilterUsed={setFilterUsed}
+          setFilterTextBox={setFilterTextBox}
+          filterTextBox={filterTextBox}
+          programShortName={programShortName}
+        />
+      )}
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
         Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>

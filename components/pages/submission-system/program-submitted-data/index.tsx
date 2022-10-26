@@ -53,7 +53,6 @@ import ClinicalEntityDataTable from './ClinicalEntityDataTable/index';
 import SearchBar from './SearchBar';
 import useGlobalLoader from 'components/GlobalLoader';
 import DnaLoader from '@icgc-argo/uikit/DnaLoader';
-import FilterModal from './FilterModal';
 
 setConfiguration({ gutterWidth: 9 });
 
@@ -63,9 +62,13 @@ export default function ProgramSubmittedData() {
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
+  const [filterUsed, setFilterUsed] = useState(false);
+  const [filterTextBox, setFilterTextBox] = useState('');
+
   const [completionState, setCompletionState] = React.useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
     defaultClinicalEntityTab,
@@ -90,8 +93,6 @@ export default function ProgramSubmittedData() {
   React.useEffect(() => {
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
-
-  const [modalVisible, setModalVisible] = useState(false);
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
@@ -119,8 +120,24 @@ export default function ProgramSubmittedData() {
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
   const searchSubmitterIds = [keyword].filter((word) => !!word);
-  const useDefaultQuery =
+  let useDefaultQuery =
     searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
+
+  // Format text coming from filter
+  const filterDonorIds =
+    filterTextBox
+      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
+
+  const filterSubmitterIds =
+    filterTextBox
+      .split(',')
+      .map((str) => str.trim())
+      .filter((word) => !!word) || [];
+  if (filterUsed) {
+    useDefaultQuery = false;
+  }
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
@@ -131,8 +148,8 @@ export default function ProgramSubmittedData() {
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: searchDonorIds,
-          submitterDonorIds: searchSubmitterIds,
+          donorIds: filterUsed ? filterDonorIds : searchDonorIds,
+          submitterDonorIds: filterUsed ? filterSubmitterIds : searchSubmitterIds,
           entityTypes: ['donor'],
         },
       },
@@ -180,7 +197,12 @@ export default function ProgramSubmittedData() {
     >
       <SearchBar
         setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        setFilterUsed={setFilterUsed}
+        setFilterTextBox={setFilterTextBox}
+        filterTextBox={filterTextBox}
         completionState={completionState}
+        programShortName={programShortName}
         keyword={keyword}
         loading={searchResultsLoading}
         noData={noData}
@@ -192,7 +214,6 @@ export default function ProgramSubmittedData() {
         <DnaLoader />
       ) : (
         <Container>
-          {modalVisible && <FilterModal setModalVisible={setModalVisible} />}
           <div
             css={css`
               width: 100%;
