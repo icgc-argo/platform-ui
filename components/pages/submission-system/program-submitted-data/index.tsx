@@ -101,7 +101,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
-  const noData = sideMenuData.clinicalEntities.length === 0;
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
@@ -145,10 +144,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
-  const searchResults =
-    searchResultData === null || searchResultData === undefined
-      ? emptySearchResponse
-      : searchResultData;
+  const noSearchData = searchResultData === null || searchResultData === undefined;
+  const searchResults = noSearchData ? emptySearchResponse : searchResultData;
+  const noData = sideMenuData.clinicalEntities.length === 0 || noSearchData;
 
   return (
     <SubmissionLayout

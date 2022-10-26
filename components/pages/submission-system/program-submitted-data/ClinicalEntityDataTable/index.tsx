@@ -276,7 +276,8 @@ const ClinicalEntityDataTable = ({
   );
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
-  const noData = clinicalData.clinicalEntities.length === 0;
+
+  const noData = clinicalData.clinicalEntities.length === 0 || totalResults === 0;
 
   // Collect Error Data
   const { clinicalErrors = [] } = clinicalData;
