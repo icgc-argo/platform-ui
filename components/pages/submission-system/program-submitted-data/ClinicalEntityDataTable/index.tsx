@@ -653,7 +653,7 @@ const ClinicalEntityDataTable = ({
             `}
             variant="data"
           >
-            Showing {tableMin} - {tableMax} of {totalDocs}
+            Showing {tableMin} - {tableMax} of {totalDocs} records
           </Typography>
         }
       />
