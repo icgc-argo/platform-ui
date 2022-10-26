@@ -111,6 +111,34 @@ export const FILTER_OPTIONS = {
       value: 'No samples registered',
     },
   ],
+  tnRegisteredTnNotRegistered: [
+    {
+      key: 'TUMOR_AND_NORMAL',
+      value: 'T and N registered',
+    },
+    {
+      key: 'TUMOR_OR_NORMAL',
+      value: 'T or N not registered',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No samples registered',
+    },
+  ],
+  tnMatchedPairSubmittedTnMatchedPairNotSubmitted: [
+    {
+      key: 'TUMOR_NORMAL_MATCHED_PAIR',
+      value: 'T|N matched pair submitted',
+    },
+    {
+      key: 'TUMOR_NORMAL_NO_MATCHED_PAIR',
+      value: 'T|N matched pair not submitted',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No data submitted',
+    },
+  ],
 };
 
 export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
@@ -129,6 +157,16 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   sampleStatus: {
     valid: 0,
     invalid: 0,
+  },
+  dnaTNRegisteredStatus: {
+    tumorAndNormal: 0,
+    tumorOrNormal: 0,
+    noData: 0,
+  },
+  dnaTNMatchedPairStatus: {
+    tumorNormalMatchedPair: 0,
+    tumorNormalNoMatchedPair: 0,
+    noData: 0,
   },
   rawReadsStatus: {
     valid: 0,
