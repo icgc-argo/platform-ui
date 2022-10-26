@@ -177,7 +177,7 @@ const HeroDiv = styled('div')`
 
 export default function Homepage() {
   const theme = useTheme();
-  const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
+  const { FEATURE_REPOSITORY_ENABLED } = getConfig();
 
   const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
@@ -191,7 +191,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError ? '0px' : '40px'};
+            padding-bottom: ${statsError ? '40px' : '0px'};
           `}
         >
           <Typography
@@ -276,7 +276,7 @@ export default function Homepage() {
             </Link>
           </div>
 
-          {FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError && (
+          {!statsError && (
             <DataReleaseBar
               loading={statsLoading}
               stats={[
