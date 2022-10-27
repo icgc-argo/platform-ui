@@ -117,18 +117,21 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     </VerticalTabs.Item>
   ));
 
-  // Matches Digits preceded by DO or by Comma
+  // Matches Digits preceded by DO or by Comma/Space, or sequential Digits not followed by other chars
+  // Example: DO259138, 2579137, DASH-7 will match first 2 Donor IDs, but not 3rd Submitter ID
   const searchDonorIds = selectedDonors
     ? [parseDonorIdString(selectedDonors)]
     : keyword
-        .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+        .match(/(^\d*(?!\D*))|((?<=,|, )|(?<=DO))\d*/gi)
         ?.filter((match) => !!match)
         .map((idString) => parseInt(idString)) || [];
 
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
 
-  const searchSubmitterIds = donorPrefixSearch ? [] : [keyword].filter((word) => !!word);
+  const searchSubmitterIds = donorPrefixSearch
+    ? []
+    : keyword.split(/, |,/).filter((word) => !!word);
   const useDefaultQuery =
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
