@@ -47,9 +47,9 @@ import {
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
-  CompletionStates,
   defaultClinicalEntityFilters,
   emptyResponse,
+  CompletionStates,
   emptySearchResponse,
   hasClinicalErrors,
   parseDonorIdString,
@@ -67,9 +67,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
+  const [filterUsed, setFilterUsed] = useState(false);
+  const [filterTextBox, setFilterTextBox] = useState('');
   const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
     'tab',
     defaultClinicalEntityTab,
@@ -126,8 +129,24 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         ?.filter((match) => !!match)
         .map((idString) => parseInt(idString)) || [];
   const searchSubmitterIds = [keyword].filter((word) => !!word);
-  const useDefaultQuery =
+  let useDefaultQuery =
     searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
+
+  // Format text coming from filter
+  const filterDonorIds =
+    filterTextBox
+      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
+
+  const filterSubmitterIds =
+    filterTextBox
+      .split(',')
+      .map((str) => str.trim())
+      .filter((word) => !!word) || [];
+  if (filterUsed) {
+    useDefaultQuery = false;
+  }
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
@@ -138,8 +157,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: searchDonorIds,
-          submitterDonorIds: searchSubmitterIds,
+          donorIds: filterUsed ? filterDonorIds : searchDonorIds,
+          submitterDonorIds: filterUsed ? filterSubmitterIds : searchSubmitterIds,
           entityTypes: ['donor'],
         },
       },
@@ -191,7 +210,13 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       }
     >
       <SearchBar
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        setFilterUsed={setFilterUsed}
+        setFilterTextBox={setFilterTextBox}
+        filterTextBox={filterTextBox}
         completionState={completionState}
+        programShortName={programShortName}
         keyword={keyword}
         loading={searchResultsLoading}
         noData={noData}
