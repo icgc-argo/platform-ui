@@ -124,9 +124,14 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
         ?.filter((match) => !!match)
         .map((idString) => parseInt(idString)) || [];
-  const searchSubmitterIds = [keyword].filter((word) => !!word);
+
+  // Matches 'D' or 'DO' exactly (case insensitive)
+  const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
+
+  const searchSubmitterIds = donorPrefixSearch ? [] : [keyword].filter((word) => !!word);
   const useDefaultQuery =
-    searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
+    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+    completionState === 'all';
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
