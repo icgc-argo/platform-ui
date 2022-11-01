@@ -20,7 +20,6 @@
 import { createPage } from 'global/utils/pages';
 import FileEntityPage from 'components/pages/file-entity';
 import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
-import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/client';
@@ -31,14 +30,6 @@ import useGlobalLoader from 'components/GlobalLoader';
 export default createPage({
   isPublic: true,
   isAccessible: async ({ initialPermissions }) => true,
-  getInitialProps: async () => {
-    const { FEATURE_FILE_ENTITY_ENABLED } = getConfig();
-    if (!FEATURE_FILE_ENTITY_ENABLED) {
-      const err = new Error('Page Not Found') as Error & { statusCode?: number };
-      err[ERROR_STATUS_KEY] = 404;
-      throw err;
-    }
-  },
 })((props) => {
   const { fileId } = usePageQuery<{ fileId: string }>();
   const filters = sqonBuilder.has('file_id', fileId).build();
