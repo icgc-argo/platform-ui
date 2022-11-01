@@ -26,7 +26,6 @@ import DefaultLayout from '../DefaultLayout';
 import NextLink from 'next/link';
 
 import Head from 'components/pages/head';
-import { getConfig } from 'global/config';
 import {
   DOCS_DATA_ACCESS_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
@@ -177,7 +176,6 @@ const HeroDiv = styled('div')`
 
 export default function Homepage() {
   const theme = useTheme();
-  const { FEATURE_REPOSITORY_ENABLED, FEATURE_LANDING_PAGE_STATS_ENABLED } = getConfig();
 
   const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
@@ -191,7 +189,7 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError ? '0px' : '40px'};
+            padding-bottom: ${statsError ? '40px' : '0px'};
           `}
         >
           <Typography
@@ -231,28 +229,26 @@ export default function Homepage() {
               margin-top: 20px;
             `}
           >
-            {FEATURE_REPOSITORY_ENABLED && (
-              <NextLink href={FILE_REPOSITORY_PATH}>
-                <Link
-                  underline={false}
-                  css={css`
-                    margin: 0 15px;
-                  `}
-                >
-                  <Button variant="secondary">
-                    <Icon
-                      css={css`
-                        padding-right: 2px;
-                      `}
-                      name="file"
-                      fill="accent2"
-                      height="12px"
-                    />
-                    Browse the Data
-                  </Button>
-                </Link>
-              </NextLink>
-            )}
+            <NextLink href={FILE_REPOSITORY_PATH}>
+              <Link
+                underline={false}
+                css={css`
+                  margin: 0 15px;
+                `}
+              >
+                <Button variant="secondary">
+                  <Icon
+                    css={css`
+                      padding-right: 2px;
+                    `}
+                    name="file"
+                    fill="accent2"
+                    height="12px"
+                  />
+                  Browse the Data
+                </Button>
+              </Link>
+            </NextLink>
 
             <Link
               href="https://www.icgc-argo.org/"
@@ -276,7 +272,7 @@ export default function Homepage() {
             </Link>
           </div>
 
-          {FEATURE_LANDING_PAGE_STATS_ENABLED && !statsError && (
+          {!statsError && (
             <DataReleaseBar
               loading={statsLoading}
               stats={[

@@ -135,7 +135,6 @@ const getUserRole = (egoJwt, permissions) => {
 
 export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const screenClass = useScreenClass();
-  const { EGO_URL, FEATURE_REPOSITORY_ENABLED } = getConfig();
   const { egoJwt, logOut, data: userModel, permissions } = useAuthContext();
   const canAccessSubmission = useMemo(() => {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
@@ -160,7 +159,6 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       name: 'File Repository',
       href: FILE_REPOSITORY_PATH,
       as: FILE_REPOSITORY_PATH,
-      shouldRender: FEATURE_REPOSITORY_ENABLED,
       active: path.search(FILE_REPOSITORY_PATH) === 0,
       LinkComp: NextLink,
     },

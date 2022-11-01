@@ -156,7 +156,7 @@ const useFileRepoPaginationState = () => {
 };
 
 const FileTable = () => {
-  const { FEATURE_FILE_ENTITY_ENABLED, FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
+  const { FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
 
   const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
@@ -204,7 +204,7 @@ const FileTable = () => {
       id: FileCentricDocumentField.file_id,
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
-        return FEATURE_FILE_ENTITY_ENABLED ? (
+        return (
           <NextLink
             href={FILE_ENTITY_PATH}
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
@@ -212,8 +212,6 @@ const FileTable = () => {
           >
             <Link>{original.fileId}</Link>
           </NextLink>
-        ) : (
-          original.objectId
         );
       },
     },

@@ -396,12 +396,11 @@ const FacetPanel = () => {
   const { data: fieldDisplayNames, loading: loadingFieldDisplayNames } =
     useFileCentricFieldDisplayName();
 
-  const { FEATURE_ACCESS_FACET_ENABLED, FEATURE_FACET_TABS_ENABLED } = getConfig();
+  const { FEATURE_FACET_TABS_ENABLED } = getConfig();
   const { egoJwt, permissions } = useAuthContext();
-  const embargoStageEnabled =
-    FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && canReadSomeProgram(permissions);
+  const embargoStageEnabled = !!egoJwt && canReadSomeProgram(permissions);
 
-  const releaseStateEnabled = FEATURE_ACCESS_FACET_ENABLED && !!egoJwt && isDccMember(permissions);
+  const releaseStateEnabled = !!egoJwt && isDccMember(permissions);
 
   const [currentTab, setTabs] = useState(FEATURE_FACET_TABS_ENABLED ? 'clinical' : 'file');
   const currentSearch =

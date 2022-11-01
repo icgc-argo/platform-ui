@@ -35,7 +35,7 @@ import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';
 import SubmissionLayout from '../layout';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import { SubmissionSystemLockedNotification } from '../SubmissionSystemLockedNotification';
-import ClinicalChartCard from './ClinicalChartCard';
+import ClinicalChart from './ClinicalChart';
 import DonorDataSummary from './DonorDataSummary';
 import DonorReleaseSummary from './DonorReleaseSummary';
 import ProgramWorkspaceStatus from './ProgramWorkspaceStatus';
@@ -175,22 +175,14 @@ export default function ProgramDashboard() {
         <ScreenClassRender
           render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-              <ClinicalChartCard
-                chartType="clinical"
-                comingSoonLink={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
-                title="Completed Core Clinical Data"
-              />
+              <ClinicalChart chartType="clinical" title="Completed Core Clinical Data" />
             </Col>
           )}
         />
         <ScreenClassRender
           render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl') => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-              <ClinicalChartCard
-                chartType="molecular"
-                comingSoonLink={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
-                title="Molecular Data Summary"
-              />
+              <ClinicalChart chartType="molecular" title="Molecular Data Summary" />
             </Col>
           )}
         />
