@@ -48,13 +48,31 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
+import { useState, useEffect, useMemo, createRef, RefObject, PropsWithChildren } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ModalPortal from './Modal';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
+
+const TransparentButton = ({
+  children,
+  onClick,
+}: PropsWithChildren<{ onClick: (e: any) => void }>) => (
+  <button
+    css={css`
+      background: transparent;
+      border: 0 none;
+      margin: 0;
+      padding: 0;
+    `}
+    onClick={onClick}
+    type="button"
+  >
+    {children}
+  </button>
+);
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
@@ -272,8 +290,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {!userModel && <NavBarLoginButton />}
 
             {userModel && (
-              <div
-                onClick={() => {
+              <TransparentButton
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (isMobileLayout) {
                     setUsingProfileOptions(true);
                     setMobileDropdownOpen(!isMobileDropdownOpen);
@@ -292,7 +311,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             {...element}
                             isDropdown={true}
                             LinkComp={NextLink}
-                          ></NavBarElement>
+                          />
                         ))}
                       </DropdownMenu>
                     ) : (
@@ -311,11 +330,12 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     />
                   )}
                 </AppBarMenuItem>
-              </div>
+              </TransparentButton>
             )}
             {isMobileLayout && (
-              <div
-                onClick={() => {
+              <TransparentButton
+                onClick={(e) => {
+                  e.stopPropagation();
                   setUsingProfileOptions(false);
                   setMobileDropdownOpen(!isMobileDropdownOpen);
                 }}
@@ -330,7 +350,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     }
                   ></Icon>
                 </AppBarMenuItem>
-              </div>
+              </TransparentButton>
             )}
           </MenuGroup>
         </Section>
