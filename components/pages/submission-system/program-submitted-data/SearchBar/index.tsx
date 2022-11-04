@@ -138,7 +138,7 @@ export default function SearchBar({
   const titleText =
     keyword && searchResultItems.length === 1
       ? `${searchResultItems[0].resultId}`
-      : keyword && searchResults.length > 1
+      : keyword
       ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 

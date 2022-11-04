@@ -128,6 +128,16 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
           dataSubmitted
           noDataSubmitted
         }
+        dnaTNRegisteredStatus {
+          tumorAndNormal
+          tumorOrNormal
+          noData
+        }
+        dnaTNMatchedPairStatus {
+          tumorNormalMatchedPair
+          tumorNormalNoMatchedPair
+          noData
+        }
       }
     }
   }

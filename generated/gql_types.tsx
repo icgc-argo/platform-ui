@@ -368,7 +368,7 @@ export type CompletionStats = {
   __typename?: 'CompletionStats';
   coreCompletion?: Maybe<CoreCompletionFields>;
   coreCompletionDate?: Maybe<Scalars['String']>;
-  coreCompletionPercentage?: Maybe<Scalars['Int']>;
+  coreCompletionPercentage?: Maybe<Scalars['Float']>;
   donorId?: Maybe<Scalars['Int']>;
   overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
@@ -838,6 +838,20 @@ export enum ProgramDonorSummaryEntryField {
    */
   CoreDataPercentAggregation = 'coreDataPercentAggregation',
   CreatedAt = 'createdAt',
+  /**
+   * use this field to filter donor entries by 4 enum values: TUMOR_NORMAL_MATCHED_PAIR, TUMOR_NORMAL_NO_MATCHED_PAIR, NO_DATA.
+   * TUMOR_NORMAL_MATCHED_PAIR = donor has at least 1 tumor/normal matched pair.
+   * TUMOR_NORMAL_NO_MATCHED_PAIR = donor has at least 1 registered tumour or 1 normal DNA sample, but no matched pairs.
+   * NO_DATA = donor has not registered any tumour or normal DNA samples.
+   */
+  DnaTnMatchedPair = 'dnaTNMatchedPair',
+  /**
+   * use this field to filter donor entries by 3 enum values: TUMOR_AND_NORMAL, TUMOR_OR_NORMAL, NO_DATA.
+   * TUMOR_AND_NORMAL = donor has at least 1 registered tumour and 1 normal DNA sample.
+   * TUMOR_OR_NORMAL = donor has at least 1 registered tumour or 1 normal DNA sample, but not both.
+   * NO_DATA = donor has not registered any tumour or normal DNA samples.
+   */
+  DnaTnRegistered = 'dnaTNRegistered',
   DonorId = 'donorId',
   MatchedTnPairsDna = 'matchedTNPairsDNA',
   MutectCompleted = 'mutectCompleted',
@@ -942,6 +956,10 @@ export type ProgramDonorSummaryStats = {
   completedWorkflowRuns: Scalars['Int'];
   /** Number of donors that are clinically completed/incomplete/no core fields */
   coreCompletion: CoreCompletionStatusCount;
+  /** Number of donors that have tumor & normal matched pairs submitted */
+  dnaTNMatchedPairStatus: TumorNormalMatchedPairStatusCount;
+  /** Number of donors that have tumor and normal data registered */
+  dnaTNRegisteredStatus: TumorNormalStatusCount;
   /** Number of donors invalidated with current data dictionary version */
   donorsInvalidWithCurrentDictionaryCount: Scalars['Int'];
   /** Number of donors whose molecular data is being processed */
@@ -1220,6 +1238,20 @@ export type TicketCreationResponse = {
 export type TicketLink = {
   __typename?: 'TicketLink';
   web?: Maybe<Scalars['String']>;
+};
+
+export type TumorNormalMatchedPairStatusCount = {
+  __typename?: 'TumorNormalMatchedPairStatusCount';
+  noData: Scalars['Int'];
+  tumorNormalMatchedPair: Scalars['Int'];
+  tumorNormalNoMatchedPair: Scalars['Int'];
+};
+
+export type TumorNormalStatusCount = {
+  __typename?: 'TumorNormalStatusCount';
+  noData: Scalars['Int'];
+  tumorAndNormal: Scalars['Int'];
+  tumorOrNormal: Scalars['Int'];
 };
 
 export type UpdateProgramInput = {
