@@ -111,6 +111,16 @@ export const FILTER_OPTIONS = {
       value: 'No samples registered',
     },
   ],
+  validWithCurrentDictionary: [
+    {
+      key: 'INVALID',
+      value: 'Requires Clinical Updates',
+    },
+    {
+      key: 'VALID',
+      value: 'No Alerts',
+    },
+  ],
   tnRegisteredTnNotRegistered: [
     {
       key: 'TUMOR_AND_NORMAL',

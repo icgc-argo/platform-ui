@@ -28,7 +28,6 @@ import DonorSummaryTable from './DonorSummaryTable';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
-import { InvalidDonorsNotification } from './InvalidDonorsNotification';
 import {
   DonorSummaryEntrySort,
   DonorSummaryEntrySortField,
@@ -137,15 +136,6 @@ const DonorDataSummary = () => {
           </Col>
         )}
       </Row>
-      {isDataValid && (
-        <Row>
-          <Col>
-            <InvalidDonorsNotification
-              numInvalidDonors={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
-            />
-          </Col>
-        </Row>
-      )}
       {!isCardLoading && programDonorsSummaryQueryError ? (
         <ContentError />
       ) : !isCardLoading && isDonorSummaryEntriesEmpty ? (
