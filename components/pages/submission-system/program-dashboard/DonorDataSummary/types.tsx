@@ -28,11 +28,28 @@ export type ValidInvalidFilterCounts = {
   invalid: number;
 };
 
+export type TumorNormalStatusCounts = {
+  tumorAndNormal: number;
+  tumorOrNormal: number;
+  noData: number;
+};
+
+export type TumorNormalMatchedPairStatusCounts = {
+  tumorNormalMatchedPair: number;
+  tumorNormalNoMatchedPair: number;
+  noData: number;
+};
+
 export type CompletedInProgressFailedFilterCounts = {
   completed: number;
   inProgress: number;
   failed: number;
   noData: number;
+};
+
+export type DataSubmittedDataNotSubmittedFilterCounts = {
+  dataSubmitted: number;
+  noDataSubmitted: number;
 };
 
 export type DonorSummaryRecord = {
@@ -80,6 +97,11 @@ export type ProgramDonorReleaseStats = {
   completedWorkflowRuns?: number;
   inProgressWorkflowRuns?: number;
   failedWorkflowRuns?: number;
+  rnaRawReadStatus?: DataSubmittedDataNotSubmittedFilterCounts;
+  rnaSampleStatus?: DataSubmittedDataNotSubmittedFilterCounts;
+  rnaAlignmentStatusCount?: CompletedInProgressFailedFilterCounts;
+  dnaTNRegisteredStatus?: TumorNormalStatusCounts;
+  dnaTNMatchedPairStatus?: TumorNormalMatchedPairStatusCounts;
 };
 
 export enum DonorDataReleaseState {
@@ -151,7 +173,12 @@ export type ProgramDonorSummaryEntryField =
   | 'openAccessFailed'
   | 'processingStatus'
   | 'updatedAt'
-  | 'createdAt';
+  | 'createdAt'
+  | 'rnaRawReads'
+  | 'rnaRegisteredSample'
+  | 'rnaAlignmentStatus'
+  | 'dnaTNRegistered'
+  | 'dnaTNMatchedPair';
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;

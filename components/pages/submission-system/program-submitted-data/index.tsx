@@ -101,7 +101,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   const { clinicalData: sideMenuData } =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
-  const noData = sideMenuData.clinicalEntities.length === 0;
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item
       key={entity}
@@ -118,16 +117,24 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     </VerticalTabs.Item>
   ));
 
-  // Matches Digits preceded by DO or by Comma
+  // Matches sequential Digits not followed by other chars, or Digits preceded by DO or by Comma/Space
+  // Example: DO259138, 2579137, DASH-7 will match first 2 Donor IDs, but not 3rd Submitter ID
   const searchDonorIds = selectedDonors
     ? [parseDonorIdString(selectedDonors)]
     : keyword
-        .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+        .match(/(\d*(?!\d*\D+))|((?<=,|, )|(?<=DO))\d*/gi)
         ?.filter((match) => !!match)
         .map((idString) => parseInt(idString)) || [];
-  const searchSubmitterIds = [keyword].filter((word) => !!word);
+
+  // Matches 'D' or 'DO' exactly (case insensitive)
+  const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
+
+  const searchSubmitterIds = donorPrefixSearch
+    ? []
+    : keyword.split(/, |,/).filter((word) => !!word);
   const useDefaultQuery =
-    searchDonorIds.length === 0 && searchSubmitterIds.length === 0 && completionState === 'all';
+    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+    completionState === 'all';
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
@@ -145,10 +152,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
-  const searchResults =
-    searchResultData === null || searchResultData === undefined
-      ? emptySearchResponse
-      : searchResultData;
+  const noSearchData = searchResultData === null || searchResultData === undefined;
+  const searchResults = noSearchData ? emptySearchResponse : searchResultData;
+  const noData = sideMenuData.clinicalEntities.length === 0 || noSearchData;
 
   return (
     <SubmissionLayout

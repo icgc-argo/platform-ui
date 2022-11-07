@@ -60,7 +60,7 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'NO_DATA',
-      value: 'No Data Submitted',
+      value: 'No data submitted',
     },
   ],
   validInvalid: [
@@ -80,7 +80,7 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'IN_PROGRESS',
-      value: 'In Progress',
+      value: 'In progress',
     },
     {
       key: 'FAILED',
@@ -88,7 +88,65 @@ export const FILTER_OPTIONS = {
     },
     {
       key: 'NO_DATA',
-      value: 'No Data',
+      value: 'No data',
+    },
+  ],
+  dataSubmittedNoData: [
+    {
+      key: 'DATA_SUBMITTED',
+      value: 'Data submitted',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No data submitted',
+    },
+  ],
+  samplesRegisteredNoSamplesRegistered: [
+    {
+      key: 'SAMPLES_REGISTERED',
+      value: 'Samples registered',
+    },
+    {
+      key: 'NO_SAMPLES_REGISTERED',
+      value: 'No samples registered',
+    },
+  ],
+  validWithCurrentDictionary: [
+    {
+      key: 'INVALID',
+      value: 'Requires Clinical Updates',
+    },
+    {
+      key: 'VALID',
+      value: 'No Alerts',
+    },
+  ],
+  tnRegisteredTnNotRegistered: [
+    {
+      key: 'TUMOR_AND_NORMAL',
+      value: 'T and N registered',
+    },
+    {
+      key: 'TUMOR_OR_NORMAL',
+      value: 'T or N not registered',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No samples registered',
+    },
+  ],
+  tnMatchedPairSubmittedTnMatchedPairNotSubmitted: [
+    {
+      key: 'TUMOR_NORMAL_MATCHED_PAIR',
+      value: 'T|N matched pair submitted',
+    },
+    {
+      key: 'TUMOR_NORMAL_NO_MATCHED_PAIR',
+      value: 'T|N matched pair not submitted',
+    },
+    {
+      key: 'NO_DATA',
+      value: 'No data submitted',
     },
   ],
 };
@@ -109,6 +167,16 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   sampleStatus: {
     valid: 0,
     invalid: 0,
+  },
+  dnaTNRegisteredStatus: {
+    tumorAndNormal: 0,
+    tumorOrNormal: 0,
+    noData: 0,
+  },
+  dnaTNMatchedPairStatus: {
+    tumorNormalMatchedPair: 0,
+    tumorNormalNoMatchedPair: 0,
+    noData: 0,
   },
   rawReadsStatus: {
     valid: 0,
@@ -141,4 +209,18 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   completedWorkflowRuns: 0,
   inProgressWorkflowRuns: 0,
   failedWorkflowRuns: 0,
+  rnaRawReadStatus: {
+    dataSubmitted: 0,
+    noDataSubmitted: 0,
+  },
+  rnaSampleStatus: {
+    dataSubmitted: 0,
+    noDataSubmitted: 0,
+  },
+  rnaAlignmentStatusCount: {
+    completed: 0,
+    inProgress: 0,
+    failed: 0,
+    noData: 0,
+  },
 };

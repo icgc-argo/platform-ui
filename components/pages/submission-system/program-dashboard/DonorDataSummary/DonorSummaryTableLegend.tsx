@@ -115,7 +115,7 @@ const DonorSummaryTableLegend = ({
                   <b>
                     {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
                   </b>
-                  &nbsp;Invalid donors
+                  &nbsp;require clinical updates
                 </TableLegendEntry>
               </TableLegendSection>
             )}
