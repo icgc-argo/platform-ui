@@ -135,7 +135,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const searchSubmitterIds = donorPrefixSearch
     ? []
     : keyword.split(/, |,/).filter((word) => !!word);
-  const useDefaultQuery =
+  let useDefaultQuery =
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
 

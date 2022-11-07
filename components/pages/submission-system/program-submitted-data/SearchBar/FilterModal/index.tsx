@@ -58,7 +58,6 @@ export default function FilterModal({
       .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
       ?.filter((match) => !!match)
       .map((idString) => parseInt(idString)) || [];
-  console.log('filterTextBox', filterTextBox);
   const filterSubmitterIds =
     filterTextBox
       .split(',')
@@ -166,7 +165,7 @@ export default function FilterModal({
             id="id_list"
             value={filterTextBox}
             onChange={(e) => setFilterTextBox(e.target.value)}
-          ></Textarea>
+          />
           <br></br>
           <div>
             Choose a file to upload <b>&#40;.txt/.csv/.tsv&#41;</b>
