@@ -2,7 +2,7 @@
   "name": "argo-platform-ui",
   "version": "1.114.0",
   "scripts": {
-    "dev": "concurrently -n w: npm:watch-*",
+    "dev": "concurrently -n w: npm:watch-* -s",
     "start": "npm run dev",
     "watch-gql": "graphql-codegen -r dotenv/config --watch",
     "watch-next": "next -p 8080",

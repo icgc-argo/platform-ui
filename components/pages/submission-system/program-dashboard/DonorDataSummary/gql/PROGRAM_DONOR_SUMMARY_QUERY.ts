@@ -138,6 +138,7 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
           tumorNormalNoMatchedPair
           noData
         }
+        beep
       }
     }
   }
