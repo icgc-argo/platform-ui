@@ -23,6 +23,7 @@ import {
   Button,
   css,
   DropdownMenu,
+  FocusWrapper,
   Icon,
   MenuGroup,
   NavBarElement,
@@ -48,7 +49,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
+import { useState, useEffect, useMemo, createRef, RefObject, PropsWithChildren } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -215,11 +216,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       >
         <DropdownMenu>
           {mobileDropDownOptions.map((element, idx) => (
-            <NavBarElement
-              isDropdown={true}
-              key={`hamburgerElement_${idx}`}
-              {...element}
-            ></NavBarElement>
+            <NavBarElement isDropdown={true} key={`hamburgerElement_${idx}`} {...element} />
           ))}
         </DropdownMenu>
       </div>
@@ -272,8 +269,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {!userModel && <NavBarLoginButton />}
 
             {userModel && (
-              <div
-                onClick={() => {
+              <FocusWrapper
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (isMobileLayout) {
                     setUsingProfileOptions(true);
                     setMobileDropdownOpen(!isMobileDropdownOpen);
@@ -292,7 +290,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             {...element}
                             isDropdown={true}
                             LinkComp={NextLink}
-                          ></NavBarElement>
+                          />
                         ))}
                       </DropdownMenu>
                     ) : (
@@ -301,7 +299,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   }
                 >
                   {usingProfileOptions && isMobileDropdownOpen ? (
-                    <Icon name={'hamburger_close'} fill="accent1_dimmed"></Icon>
+                    <Icon name={'hamburger_close'} fill="accent1_dimmed" />
                   ) : (
                     <UserBadge
                       showGreeting={!isMobileLayout}
@@ -311,11 +309,12 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     />
                   )}
                 </AppBarMenuItem>
-              </div>
+              </FocusWrapper>
             )}
             {isMobileLayout && (
-              <div
-                onClick={() => {
+              <FocusWrapper
+                onClick={(e) => {
+                  e.stopPropagation();
                   setUsingProfileOptions(false);
                   setMobileDropdownOpen(!isMobileDropdownOpen);
                 }}
@@ -328,9 +327,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     fill={
                       isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
                     }
-                  ></Icon>
+                  />
                 </AppBarMenuItem>
-              </div>
+              </FocusWrapper>
             )}
           </MenuGroup>
         </Section>
