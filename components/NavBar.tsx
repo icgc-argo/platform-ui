@@ -23,6 +23,7 @@ import {
   Button,
   css,
   DropdownMenu,
+  FocusWrapper,
   Icon,
   MenuGroup,
   NavBarElement,
@@ -55,24 +56,6 @@ import urlJoin from 'url-join';
 import ModalPortal from './Modal';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
-
-const TransparentButton = ({
-  children,
-  onClick,
-}: PropsWithChildren<{ onClick: (e: any) => void }>) => (
-  <button
-    css={css`
-      background: transparent;
-      border: 0 none;
-      margin: 0;
-      padding: 0;
-    `}
-    onClick={onClick}
-    type="button"
-  >
-    {children}
-  </button>
-);
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
@@ -233,11 +216,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       >
         <DropdownMenu>
           {mobileDropDownOptions.map((element, idx) => (
-            <NavBarElement
-              isDropdown={true}
-              key={`hamburgerElement_${idx}`}
-              {...element}
-            ></NavBarElement>
+            <NavBarElement isDropdown={true} key={`hamburgerElement_${idx}`} {...element} />
           ))}
         </DropdownMenu>
       </div>
@@ -290,7 +269,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {!userModel && <NavBarLoginButton />}
 
             {userModel && (
-              <TransparentButton
+              <FocusWrapper
                 onClick={(e) => {
                   e.stopPropagation();
                   if (isMobileLayout) {
@@ -320,7 +299,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   }
                 >
                   {usingProfileOptions && isMobileDropdownOpen ? (
-                    <Icon name={'hamburger_close'} fill="accent1_dimmed"></Icon>
+                    <Icon name={'hamburger_close'} fill="accent1_dimmed" />
                   ) : (
                     <UserBadge
                       showGreeting={!isMobileLayout}
@@ -330,10 +309,10 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     />
                   )}
                 </AppBarMenuItem>
-              </TransparentButton>
+              </FocusWrapper>
             )}
             {isMobileLayout && (
-              <TransparentButton
+              <FocusWrapper
                 onClick={(e) => {
                   e.stopPropagation();
                   setUsingProfileOptions(false);
@@ -348,9 +327,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     fill={
                       isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
                     }
-                  ></Icon>
+                  />
                 </AppBarMenuItem>
-              </TransparentButton>
+              </FocusWrapper>
             )}
           </MenuGroup>
         </Section>
