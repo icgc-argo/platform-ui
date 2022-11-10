@@ -53,6 +53,7 @@ import {
   searchRightSideGroupStyle,
   searchTitleParentStyle,
 } from './style';
+import { isNonNullType } from 'graphql';
 
 const COMPLETION_OPTIONS = {
   all: {
@@ -131,6 +132,18 @@ export default function SearchBar({
 
   const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
 
+  const handleOnEnter = (e) => {
+    setKeyword(e.target.value);
+    if (keyword && keyword.length >= 1) setSearchOpen(true);
+    const input = document.getElementById('search_input');
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault;
+        setSearchOpen(false);
+      }
+    });
+  };
+
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
@@ -176,18 +189,18 @@ export default function SearchBar({
         {/* Third item - search bar */}
         <div css={searchBarParentStyle}>
           <Input
+            id="search_input"
             aria-label="search-for-files"
             size="sm"
             placeholder={'Donor ID/Submitter Donor ID'}
             preset="search"
             showClear={true}
             value={keyword}
-            onChange={(e) => {
-              setKeyword(e.target.value);
-              if (keyword && keyword.length >= 1) setSearchOpen(true);
-            }}
+            onChange={handleOnEnter}
             getOverrideCss={() => searchInputFieldStyle}
           />
+          {/* </form> */}
+
           {keyword && keyword.length >= 1 && searchOpen ? (
             <>
               <div
