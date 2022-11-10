@@ -31,7 +31,7 @@ import {
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 import { Dispatch, SetStateAction, useState, createRef, RefObject } from 'react';
-
+import FilterModal from './FilterModal';
 import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,
@@ -76,22 +76,32 @@ const COMPLETION_OPTIONS = {
 const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 export default function SearchBar({
+  setModalVisible,
   noData,
   onChange,
   completionState,
+  programShortName,
   loading,
   keyword,
   setKeyword,
   donorSearchResults,
+  modalVisible,
+  setFilterTextBox,
+  filterTextBox,
   setUrlDonorIds,
 }: {
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
   onChange: Dispatch<SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  programShortName: string;
   loading: boolean;
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  modalVisible: boolean;
+  setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
+  filterTextBox: string;
   setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
@@ -113,6 +123,7 @@ export default function SearchBar({
   const {
     clinicalSearchResults: { searchResults },
   } = donorSearchResults || emptySearchResponse;
+
   const searchResultItems =
     searchResults
       .map((result) => {
@@ -133,6 +144,14 @@ export default function SearchBar({
 
   return (
     <Container css={searchBackgroundStyle}>
+      {modalVisible && (
+        <FilterModal
+          setModalVisible={setModalVisible}
+          setFilterTextBox={setFilterTextBox}
+          filterTextBox={filterTextBox}
+          programShortName={programShortName}
+        />
+      )}
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
         Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
@@ -210,7 +229,11 @@ export default function SearchBar({
               />
             </>
           ) : null}
-          <Button css={searchFilterButtonStyle} variant="secondary">
+          <Button
+            css={searchFilterButtonStyle}
+            variant="secondary"
+            onClick={() => setModalVisible(true)}
+          >
             <span css={searchFilterContainerStyle}>
               <Icon name="filter" fill="accent2_dark" height="12px" css={searchFilterIconStyle} />{' '}
               List
