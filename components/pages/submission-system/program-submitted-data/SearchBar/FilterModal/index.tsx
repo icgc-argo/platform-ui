@@ -23,7 +23,6 @@ import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import ModalPortal from 'components/Modal';
 import MatchResults from './MatchResults';
 import UploadButton from './UploadButton';
-import { fileOpen, supported } from 'browser-fs-access';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import { useQuery } from '@apollo/client';
@@ -113,60 +112,13 @@ export default function FilterModal({
     setNumUnmatched(unmatchedCount);
   }, [searchResultData]);
 
-  let fileHandle;
-
-  // Refer to File System Access API. Restrict conditions when doing file uploads
-  const ifSupportedPickerOpts = {
-    types: [
-      {
-        accept: {
-          'text/*': ['.txt', '.csv', '.tsv'],
-        },
-      },
-    ],
-    excludeAcceptAllOption: true,
-    multiple: true,
-  };
-
-  async function handleOnClick() {
-    //upload button will use showOpenFilePicker (file system access API )method when supported by browser ie. Chrome and Edge, then fall back to legacy method if unsupported ie. FireFox.
-    let results = '';
-    if (supported) {
-      try {
-        fileHandle = await window.showOpenFilePicker(ifSupportedPickerOpts);
-        const files = await Promise.all(fileHandle.map(async (file) => await file.getFile()));
-        const texts = await Promise.all(files.map(async (text) => await text.text()));
-        // format results so each id has ', ' in between
-        results = texts.join().replace(/\s/g, '').replace(/,/g, ', ');
-        if (filterTextBox) {
-          setFilterTextBox(filterTextBox + ', ' + results);
-        } else {
-          setFilterTextBox(results);
-        }
-      } catch (err) {
-        return;
-      }
+  const handleResults = (results) => {
+    if (filterTextBox) {
+      setFilterTextBox(filterTextBox + ', ' + results);
     } else {
-      //if browser doesn't support File System Access API, then use legacy method
-      const unsupportedFiles = await fileOpen([
-        {
-          description: 'Text files',
-          mimeTypes: ['text/*'],
-          extensions: ['.txt', '.csv', '.tsv'],
-          multiple: true,
-        },
-      ]);
-
-      const unsupportedText = await Promise.all(
-        unsupportedFiles.map((file) => {
-          return file.text();
-        }),
-      );
-      // format results so each id has ', ' in between
-      results = unsupportedText.join().replace(/\s/g, '').replace(/,/g, ', ');
-      filterTextBox ? setFilterTextBox(filterTextBox + ', ' + results) : setFilterTextBox(results);
+      setFilterTextBox(results);
     }
-  }
+  };
 
   return (
     <ModalPortal>
@@ -201,7 +153,7 @@ export default function FilterModal({
           <div>
             Choose a file to upload <b>&#40;.txt/.csv/.tsv&#41;</b>
           </div>
-          <UploadButton onClick={handleOnClick} />
+          <UploadButton onUpload={handleResults} />
 
           {/* parent <div> of the bottom four items, title, match ID, unmatched ID and clear button */}
           <div
