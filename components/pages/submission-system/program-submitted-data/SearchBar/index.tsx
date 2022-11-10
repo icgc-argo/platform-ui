@@ -53,7 +53,6 @@ import {
   searchRightSideGroupStyle,
   searchTitleParentStyle,
 } from './style';
-import { isNonNullType } from 'graphql';
 
 const COMPLETION_OPTIONS = {
   all: {
