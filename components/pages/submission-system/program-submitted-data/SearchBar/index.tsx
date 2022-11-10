@@ -86,7 +86,6 @@ export default function SearchBar({
   setKeyword,
   donorSearchResults,
   modalVisible,
-  setFilterUsed,
   setFilterTextBox,
   filterTextBox,
   setUrlDonorIds,
@@ -101,7 +100,6 @@ export default function SearchBar({
   setKeyword: Dispatch<SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   modalVisible: boolean;
-  setFilterUsed: React.Dispatch<React.SetStateAction<boolean>>;
   setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
   filterTextBox: string;
   setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
@@ -149,7 +147,6 @@ export default function SearchBar({
       {modalVisible && (
         <FilterModal
           setModalVisible={setModalVisible}
-          setFilterUsed={setFilterUsed}
           setFilterTextBox={setFilterTextBox}
           filterTextBox={filterTextBox}
           programShortName={programShortName}
