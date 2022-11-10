@@ -199,7 +199,6 @@ export default function SearchBar({
             onChange={handleOnEnter}
             getOverrideCss={() => searchInputFieldStyle}
           />
-          {/* </form> */}
 
           {keyword && keyword.length >= 1 && searchOpen ? (
             <>
