@@ -4,9 +4,9 @@
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
-    "watch-gql": "graphql-codegen -r dotenv/config --watch",
+    "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
-    "graphql-codegen": "graphql-codegen -r dotenv/config",
+    "graphql-codegen": "graphql-codegen -r dotenv/config --config graphql.config.yaml",
     "serve": "npm run build && next start",
     "build": "rm -rf .next && next build",
     "clean": "rm -rf .next && rm -rf node_modules && npm i --legacy-peer-deps",
