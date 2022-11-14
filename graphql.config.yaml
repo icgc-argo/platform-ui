@@ -4,10 +4,12 @@ schema:
   # local
   - ./generated/gql_schema.json
 documents: [./**/gql/*.ts]
-generates:
-  generated/gql_schema.json:
-    plugins:
-      - introspection
-  generated/gql_types.tsx:
-    plugins:
-      - typescript
+extensions:
+  codegen:
+    generates:
+      ./generated/gql_schema.json:
+        plugins:
+          - introspection
+      ./generated/gql_types.tsx:
+        plugins:
+          - typescript
