@@ -2,4 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm run graphql-codegen
+. "$(dirname -- "$0")/pre-commit"
 npm run type-check
