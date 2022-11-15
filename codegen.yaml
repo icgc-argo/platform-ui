@@ -1,6 +1,8 @@
-# this is used by graphql-codegen
-# - use remote schema if you're developing the API and UI together
-# - otherwise use the local schema
+# This is used by graphql-codegen
+# - Use remote schema if you're developing the API and UI together
+# - Otherwise use the local schema
+# - In order to use the local schema, you have to run npm run graphql-codegen
+#   once with the remote schema option selected.
 schema:
   # remote
   - ${GATEWAY_API_ROOT}/graphql
