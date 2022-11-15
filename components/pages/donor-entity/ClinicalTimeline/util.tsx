@@ -181,7 +181,7 @@ export const formatTableDisplayNames = (data: any[]) =>
       let displayValue;
       switch (key) {
         case 'age_at_diagnosis':
-          displayValue = `${value} years`;
+          displayValue = `${value > 90 ? 90 : value} years`;
           break;
         case 'survival_time':
           displayValue = `${value} days`;
