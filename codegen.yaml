@@ -1,0 +1,16 @@
+# this is used by graphql-codegen
+# - use remote schema if you're developing the API and UI together
+# - otherwise use the local schema
+schema:
+  # remote
+  - ${GATEWAY_API_ROOT}/graphql
+  # local
+  # - ./generated/gql_schema.json
+documents: [./**/gql/*.ts]
+generates:
+  ./generated/gql_schema.json:
+    plugins:
+      - introspection
+  ./generated/gql_types.tsx:
+    plugins:
+      - typescript

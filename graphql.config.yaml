@@ -1,8 +1,5 @@
-schema:
-  # remote
-  # - ${GATEWAY_API_ROOT}/graphql
-  # local
-  - ./generated/gql_schema.json
+# this is used by the VS Code extension "GraphQL: Language Feature Support"
+schema: ./generated/gql_schema.json
 documents: [./**/gql/*.ts]
 extensions:
   codegen:
