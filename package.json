@@ -6,7 +6,7 @@
     "start": "npm run dev",
     "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
-    "graphql-codegen": "graphql-codegen -r dotenv/config --config graphql.config.yaml",
+    "graphql-codegen": "graphql-codegen -r dotenv/config",
     "serve": "npm run build && next start",
     "build": "rm -rf .next && next build",
     "clean": "rm -rf .next && rm -rf node_modules && npm i --legacy-peer-deps",
