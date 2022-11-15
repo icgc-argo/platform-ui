@@ -46,8 +46,13 @@ To keep commit messages consistent, we use [gitmoji](https://gitmoji.dev). To ea
 - We use [GraphQL Code Generator](https://www.graphql-code-generator.com/) to generate an introspection schema and types.
 - Install the [GraphQL VSCode plugin](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) for code suggestions based on the schema as well as syntax highlighting.
 
-- On first build, comment out the `schema` item in `graphql.config.yaml`, because the schema hasn't been generated yet. After building once, uncomment that line.
-- Modify `./codegen.yml` to get the schema either from your configured API or a local file.
+- On first build, `generated/graphql_schema.json` hasn't been generated yet, so follow these steps:
+  - Comment out the `schema` item in `graphql.config.yaml`.
+  - In `codegen.yaml` use the remote schema option.
+  - Run `npm run graphql-codegen`.
+  - Uncomment the `schema` item in `graphql.config.yaml`.
+  - Optional: use the local schema option in `codegen.yaml`, if you're not working on the API.
+- Modify `./codegen.yaml` to get the schema either from your configured API or a local file.
 - `npm run gql-check` to check your GraphQL files and run a build.
 - `npm run dev` will also watch for GraphQL changes.
 - Name your GraphQL documents appropriately: They need to go in a `gql` folder and have `_QUERY` `_MUTATION` `_FRAGMENT` at the end of the filename. They also need to be `*.ts` files.
