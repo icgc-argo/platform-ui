@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
-    "watch-gql": "graphql-codegen -r dotenv/config --watch",
+    "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
     "serve": "npm run build && next start",
@@ -105,6 +105,10 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.6.4"
+  },
+  "engines": {
+    "npm": ">=8.19.2 <9.0.0",
+    "node": ">=18.12.1 <19.0.0"
   },
   "prettier": {
     "printWidth": 100,

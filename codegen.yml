@@ -1,13 +1,18 @@
+# This is used by graphql-codegen
+# - Use remote schema if you're developing the API and UI together
+# - Otherwise use the local schema
+# - In order to use the local schema, you have to generate it:
+#   run npm run graphql-codegen once with the remote schema option selected.
 schema:
   # remote
   - ${GATEWAY_API_ROOT}/graphql
   # local
-  # - generated/gql_schema.json
+  # - ./generated/gql_schema.json
 documents: [./**/gql/*.ts]
 generates:
-  generated/gql_schema.json:
+  ./generated/gql_schema.json:
     plugins:
       - introspection
-  generated/gql_types.tsx:
+  ./generated/gql_types.tsx:
     plugins:
       - typescript
