@@ -191,7 +191,6 @@ export default function SearchBar({
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
-
           {keyword && keyword.length >= 1 && searchOpen ? (
             <>
               <div
