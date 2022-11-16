@@ -24,7 +24,6 @@ import { chunk, isEmpty } from 'lodash';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
-import { formatAgeLTE90 } from 'global/utils/common';
 
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
@@ -182,7 +181,7 @@ export const formatTableDisplayNames = (data: any[]) =>
       let displayValue;
       switch (key) {
         case 'age_at_diagnosis':
-          displayValue = `${formatAgeLTE90(value)} years`;
+          displayValue = `${value} years`;
           break;
         case 'survival_time':
           displayValue = `${value} days`;
