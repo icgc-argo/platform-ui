@@ -147,3 +147,7 @@ export const reactGridBreakpoints = {
   lg: 992,
   xl: 1200,
 };
+
+// don't show ages over 90
+export const formatAgeLTE90 = (age: string | number): string | number =>
+  age > 90 ? (typeof age === 'string' ? '90' : 90) : age;

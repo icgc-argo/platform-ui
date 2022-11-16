@@ -23,6 +23,7 @@ import { useMemo } from 'react';
 import { Entity, EntityType } from '../types';
 import { InvalidIcon } from './common';
 import { getDonorAge, getTimelineStyles } from './util';
+import { formatAgeLTE90 } from 'global/utils/common';
 
 const DayCount = ({
   days,
@@ -173,7 +174,7 @@ const Timeline = ({
         ? getDonorAge(data).ageAtDiagnosis
         : `~ ${getDonorAge(data).ageAtDeath}`;
 
-    return age >= 90 ? `age: >= 90` : `age: ${age}`;
+    return `age: ${formatAgeLTE90(age)}`;
   };
 
   return (
