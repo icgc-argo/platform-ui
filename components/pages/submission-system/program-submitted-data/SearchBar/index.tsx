@@ -176,7 +176,6 @@ export default function SearchBar({
         {/* Third item - search bar */}
         <div css={searchBarParentStyle}>
           <Input
-            id="search_input"
             aria-label="search-for-files"
             size="sm"
             placeholder={'Donor ID/Submitter Donor ID'}
