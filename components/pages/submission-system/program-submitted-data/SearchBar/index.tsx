@@ -131,16 +131,6 @@ export default function SearchBar({
 
   const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
 
-  // const handleOnEnter = (e) => {
-  //   const input = document.getElementById('search_input');
-  //   input.addEventListener('keypress', (e) => {
-  //     if (e.key === 'Enter') {
-  //       e.preventDefault;
-  //       setSearchOpen(false);
-  //     }
-  //   });
-  // };
-
   return (
     <Container css={searchBackgroundStyle}>
       {/* First Item - title */}
@@ -194,16 +184,11 @@ export default function SearchBar({
             showClear={true}
             value={keyword}
             onKeyDown={(e) => {
-              console.log('event', e.target);
-              if (e.key === 'Enter') console.log('Enter Pressed');
+              if (e.key === 'Enter') setSearchOpen(false);
             }}
             onChange={(e) => {
-              console.log(e.target.onkeydown({key: 'Enter'});
-
               setKeyword(e.target.value);
               if (keyword && keyword.length >= 1) setSearchOpen(true);
-              // if (e.keyCode === 'Enter') setSearchOpen(false);
-              // console.log('event', e);
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
