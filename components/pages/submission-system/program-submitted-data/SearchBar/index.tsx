@@ -168,7 +168,7 @@ export default function SearchBar({
         )}
       </Typography>
 
-      {/* Grouping second to forth item together */}
+      {/* Grouping second to fourth item together */}
       <div css={searchRightSideGroupStyle}>
         {/* Second item - filter */}
         <div css={searchFilterParentStyle}>
@@ -202,8 +202,12 @@ export default function SearchBar({
             showClear={true}
             value={keyword}
             onChange={(e) => {
-              setKeyword(e.target.value);
-              if (keyword && keyword.length >= 1) setSearchOpen(true);
+              if (e.target.value.length === 0) {
+                setSearchValue('');
+              } else {
+                setKeyword(e.target.value);
+                setSearchOpen(true);
+              }
             }}
             getOverrideCss={() => searchInputFieldStyle}
           />
