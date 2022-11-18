@@ -136,7 +136,7 @@ export default function SearchBar({
       .slice(0, 20) || [];
 
   const titleText =
-    keyword && searchResultItems.length === 1
+    searchResultItems.length === 1
       ? `${searchResultItems[0].resultId}`
       : keyword
       ? `${searchResultItems.length} Donors`
