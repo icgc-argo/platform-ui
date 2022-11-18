@@ -30,7 +30,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { Dispatch, SetStateAction, useState, createRef, RefObject } from 'react';
+import { Dispatch, SetStateAction, useState, createRef, RefObject, useEffect } from 'react';
 import FilterModal from './FilterModal';
 import {
   ClinicalEntitySearchResultResponse,
@@ -78,12 +78,13 @@ const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 export default function SearchBar({
   setModalVisible,
   noData,
-  onChange,
   completionState,
+  setCompletionState,
   programShortName,
   loading,
   keyword,
   setKeyword,
+  useDefaultQuery,
   donorSearchResults,
   modalVisible,
   setFilterTextBox,
@@ -92,12 +93,13 @@ export default function SearchBar({
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
-  onChange: Dispatch<SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  setCompletionState: Dispatch<SetStateAction<CompletionStates>>;
   programShortName: string;
   loading: boolean;
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
+  useDefaultQuery: boolean;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   modalVisible: boolean;
   setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
@@ -140,6 +142,14 @@ export default function SearchBar({
       ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 
+  useEffect(() => {
+    const completionDisplayText = COMPLETION_OPTIONS[completionState]
+      ? `Show ${COMPLETION_OPTIONS[completionState].display}`
+      : '- Select an option -';
+
+    setDisplayText(completionDisplayText);
+  }, [completionState]);
+
   const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
 
   return (
@@ -155,10 +165,11 @@ export default function SearchBar({
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
         Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
-        {keyword && (
+        {!useDefaultQuery && (
           <Button
             onClick={() => {
               setSearchValue('');
+              setCompletionState(CompletionStates.all);
             }}
             css={searchClearFilterStyle}
             variant="secondary"
@@ -179,11 +190,7 @@ export default function SearchBar({
             variant="secondary"
             size="sm"
             onItemClick={(e) => {
-              onChange(e.value);
-              const completionDisplayText = COMPLETION_OPTIONS[e.value]
-                ? `Show ${COMPLETION_OPTIONS[e.value].display}`
-                : '- Select an option -';
-              setDisplayText(completionDisplayText);
+              setCompletionState(e.value);
             }}
             menuItems={MENU_ITEMS}
           >

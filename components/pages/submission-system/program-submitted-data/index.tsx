@@ -135,10 +135,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const searchSubmitterIds = donorPrefixSearch
     ? []
     : keyword.split(/, |,/).filter((word) => !!word);
-  const useDefaultQuery = isFilterUsed
-    ? false
-    : (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
-      completionState === 'all';
+
+  const useDefaultQuery =
+    !isFilterUsed &&
+    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+    completionState === 'all';
 
   // Format text coming from filter
   const filterDonorIds =
@@ -219,11 +220,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         setFilterTextBox={setFilterTextBox}
         filterTextBox={filterTextBox}
         completionState={completionState}
+        setCompletionState={setCompletionState}
         programShortName={programShortName}
         keyword={keyword}
         loading={searchResultsLoading}
         noData={noData}
-        onChange={setCompletionState}
+        useDefaultQuery={useDefaultQuery}
         donorSearchResults={searchResults}
         setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
