@@ -527,8 +527,7 @@ const DonorSummaryTable = ({
             const linkUrl = urlJoin(
               `/submission/program/`,
               programShortName,
-              `/clinical-data/?donorId=${original.donorId}`,
-              errorTab && `&tab=${errorTab}`,
+              `/clinical-data/?donorId=${original.donorId}&tab=${errorTab ? errorTab : 'donor'}`,
             );
             return (
               <NextLink href={linkUrl}>
