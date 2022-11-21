@@ -103,8 +103,8 @@ const ClinicalDownloadButton = ({
       GATEWAY_API_ROOT,
       `/clinical/program/`,
       programShortName,
-      `/clinical-data-tsv?`,
-      query,
+      `/clinical-data-tsv`,
+      `?${query}`,
     );
 
     setButtonLoadingState(true);
