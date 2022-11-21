@@ -87,39 +87,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   });
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 
-  // Side Menu Query
-  const { data: sideMenuQuery, loading: sideMenuLoading } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
-    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName,
-        filters: defaultClinicalEntityFilters,
-      },
-    });
-
-  useEffect(() => {
-    setGlobalLoading(sideMenuLoading);
-  }, [sideMenuLoading]);
-
-  const { clinicalData: sideMenuData } =
-    sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
-  const menuItems = clinicalEntityFields.map((entity) => (
-    <VerticalTabs.Item
-      key={entity}
-      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
-      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
-      disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
-      }
-    >
-      {clinicalEntityDisplayNames[entity]}
-      {hasClinicalErrors(sideMenuData, entity) && (
-        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-      )}
-    </VerticalTabs.Item>
-  ));
-
   // Matches sequential Digits not followed by other chars, or Digits preceded by DO or by Comma/Space
   // Example: DO259138, 2579137, DASH-7 will match first 2 Donor IDs, but not 3rd Submitter ID
   const searchDonorIds = selectedDonors
@@ -154,6 +121,29 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       .map((str) => str.trim())
       .filter((word) => !!word) || [];
 
+  // Side Menu Query
+  const { data: sideMenuQuery, loading: sideMenuLoading } =
+    FEATURE_SUBMITTED_DATA_ENABLED &&
+    useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds: isFilterUsed ? filterDonorIds : searchDonorIds,
+          submitterDonorIds: isFilterUsed ? filterSubmitterIds : searchSubmitterIds,
+        },
+      },
+    });
+
+  useEffect(() => {
+    setGlobalLoading(sideMenuLoading);
+  }, [sideMenuLoading]);
+
+  const { clinicalData: sideMenuData } =
+    sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
+
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
     useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
@@ -169,6 +159,22 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         },
       },
     });
+
+  const menuItems = clinicalEntityFields.map((entity) => (
+    <VerticalTabs.Item
+      key={entity}
+      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
+      disabled={
+        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
+      }
+    >
+      {clinicalEntityDisplayNames[entity]}
+      {hasClinicalErrors(sideMenuData, entity) && (
+        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+      )}
+    </VerticalTabs.Item>
+  ));
 
   const noSearchData = searchResultData === null || searchResultData === undefined;
   const searchResults = noSearchData ? emptySearchResponse : searchResultData;
