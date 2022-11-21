@@ -135,12 +135,12 @@ export default function SearchBar({
       .filter((result) => !!result)
       .slice(0, 20) || [];
 
-  const titleText =
-    searchResultItems.length === 1
-      ? `${searchResultItems[0].resultId}`
-      : keyword
-      ? `${searchResultItems.length} Donors`
-      : COMPLETION_OPTIONS[completionState].display;
+  const singleResult = searchResultItems.length === 1;
+  const titleText = singleResult
+    ? `${searchResultItems[0].resultId}`
+    : keyword
+    ? `${searchResultItems.length} Donors`
+    : COMPLETION_OPTIONS[completionState].display;
 
   useEffect(() => {
     const completionDisplayText = COMPLETION_OPTIONS[completionState]
@@ -186,6 +186,7 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
+            disabled={singleResult}
             value={completionState}
             variant="secondary"
             size="sm"
@@ -203,11 +204,7 @@ export default function SearchBar({
         <div css={searchBarParentStyle}>
           <Input
             aria-label="search-for-files"
-            size="sm"
-            placeholder={'Donor ID/Submitter Donor ID'}
-            preset="search"
-            showClear={true}
-            value={keyword}
+            getOverrideCss={() => searchInputFieldStyle}
             onChange={(e) => {
               if (e.target.value.length === 0) {
                 setSearchValue('');
@@ -216,7 +213,11 @@ export default function SearchBar({
                 setSearchOpen(true);
               }
             }}
-            getOverrideCss={() => searchInputFieldStyle}
+            placeholder={'Donor ID/Submitter Donor ID'}
+            preset="search"
+            showClear={true}
+            size="sm"
+            value={keyword}
           />
           {keyword && keyword.length >= 1 && searchOpen ? (
             <>
