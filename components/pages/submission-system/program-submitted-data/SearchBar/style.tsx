@@ -43,7 +43,7 @@ export const searchBoldTextStyle = css`
 export const searchClearFilterStyle = css`
   background-color: inherit;
   border: none;
-  margin: 0px 10px;
+  margin: 0px 5px;
 `;
 
 export const searchRightSideGroupStyle = css`
