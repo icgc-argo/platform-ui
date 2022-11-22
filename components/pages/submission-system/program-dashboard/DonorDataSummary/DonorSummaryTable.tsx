@@ -117,7 +117,6 @@ const DonorSummaryTable = ({
       });
     }
     setFilterState(newFilters);
-    console.log({ newFilters });
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
     const newFilters = filterState.filter((x) => x.field !== field);
