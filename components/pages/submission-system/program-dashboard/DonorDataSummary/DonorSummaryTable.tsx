@@ -453,6 +453,7 @@ const DonorSummaryTable = ({
         const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
         setPagingState({
           ...pagingState,
+          // stay on current page, unless that page is no longer available
           page: pagingState.page < nextPages ? pagingState.page : 0,
           pages: nextPages,
         });
