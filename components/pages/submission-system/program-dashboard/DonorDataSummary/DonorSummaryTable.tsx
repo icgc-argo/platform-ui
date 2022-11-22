@@ -108,6 +108,11 @@ const DonorSummaryTable = ({
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
   const [filterState, setFilterState] = useState([]);
+
+  const handleFilterStateChange = (filters) => {
+    setFilterState(filters);
+    handlePagingStateChange({ ...pagingState, page: 0 });
+  };
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
@@ -116,11 +121,11 @@ const DonorSummaryTable = ({
         values: typeof value === 'string' ? [value] : value,
       });
     }
-    setFilterState(newFilters);
+    handleFilterStateChange(newFilters);
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
     const newFilters = filterState.filter((x) => x.field !== field);
-    setFilterState(newFilters);
+    handleFilterStateChange(newFilters);
   };
   const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
     filterState.find((x) => x.field === field)?.values;
@@ -918,7 +923,7 @@ const DonorSummaryTable = ({
           size="sm"
           variant="text"
           type="button"
-          onClick={() => setFilterState([])}
+          onClick={() => handleFilterStateChange([])}
         >
           Clear Filters
         </FilterClearButton>
