@@ -117,6 +117,7 @@ const DonorSummaryTable = ({
       });
     }
     setFilterState(newFilters);
+    console.log({ newFilters });
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
     const newFilters = filterState.filter((x) => x.field !== field);
@@ -1028,6 +1029,15 @@ const DonorSummaryTable = ({
     );
     handlePagingStateChange({ ...pagingState, sorts });
   };
+
+  useEffect(() => {
+    // update pagination when filters are changed
+    handlePagingStateChange({
+      ...pagingState,
+      page: 0,
+      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pagingState.pageSize),
+    });
+  }, [programDonorSummaryStats.registeredDonorsCount]);
 
   return (
     <div
