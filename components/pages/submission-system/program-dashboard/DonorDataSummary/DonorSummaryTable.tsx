@@ -88,6 +88,7 @@ const DonorSummaryTable = ({
   initialSorts: DonorSummaryEntrySort[];
   isCardLoading?: boolean;
 }) => {
+  const theme = useTheme();
   const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = getConfig();
   const { activePipeline, setActivePipeline } = usePipelines();
 
@@ -162,7 +163,6 @@ const DonorSummaryTable = ({
   };
 
   const DesignationCell = ({ left, right }: { left: number; right: number }) => {
-    const theme = useTheme();
     const isValid = (num: number) => num > 0;
     const DesignationContainer = styled('div')`
       display: flex;
@@ -247,8 +247,6 @@ const DonorSummaryTable = ({
     handleBlur?: (event?: any) => void;
     active?: boolean;
   }>) => {
-    const theme = useTheme();
-
     return (
       <Row
         css={css`
@@ -489,7 +487,7 @@ const DonorSummaryTable = ({
     {
       Header: 'CLINICAL DATA STATUS',
       headerStyle: {
-        background: useTheme().colors.secondary_4,
+        background: theme.colors.secondary_4,
       },
       columns: [
         {
@@ -577,7 +575,7 @@ const DonorSummaryTable = ({
     {
       Header: `${activePipeline}-SEQ PIPELINE`,
       headerStyle: {
-        background: useTheme().colors[PIPELINE_COLORS[activePipeline]],
+        background: theme.colors[PIPELINE_COLORS[activePipeline]],
       },
       columns: [
         ...(activePipeline === PipelineNames.DNA
@@ -955,8 +953,6 @@ const DonorSummaryTable = ({
           ),
           accessor: 'validWithCurrentDictionary',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            const theme = useTheme();
-
             const errorTab =
               errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
                 ?.entity || '';
