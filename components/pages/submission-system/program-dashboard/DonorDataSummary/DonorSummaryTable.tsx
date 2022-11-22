@@ -1031,11 +1031,13 @@ const DonorSummaryTable = ({
 
   useEffect(() => {
     // update pagination when filters are changed
-    handlePagingStateChange({
-      ...pagingState,
-      page: 0,
-      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pagingState.pageSize),
-    });
+    if (programDonorSummaryStats.registeredDonorsCount) {
+      handlePagingStateChange({
+        ...pagingState,
+        page: 0,
+        pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pagingState.pageSize),
+      });
+    }
   }, [programDonorSummaryStats.registeredDonorsCount]);
 
   return (
