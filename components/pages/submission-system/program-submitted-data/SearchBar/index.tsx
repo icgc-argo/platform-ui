@@ -204,6 +204,7 @@ export default function SearchBar({
         <div css={searchBarParentStyle}>
           <Input
             aria-label="search-for-files"
+            disabled={singleResult}
             getOverrideCss={() => searchInputFieldStyle}
             onChange={(e) => {
               if (e.target.value.length === 0) {
