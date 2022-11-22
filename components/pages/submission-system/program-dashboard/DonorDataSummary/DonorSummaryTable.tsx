@@ -72,6 +72,13 @@ import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 import { getConfig } from 'global/config';
 
+type PagingState = {
+  pages: number;
+  pageSize: number;
+  page: number;
+  sorts: DonorSummaryEntrySort[];
+};
+
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
 
@@ -83,9 +90,9 @@ const DonorSummaryTable = ({
   isCardLoading = true,
 }: {
   programShortName: string;
-  initialPages: number;
-  initialPageSize: number;
-  initialSorts: DonorSummaryEntrySort[];
+  initialPages: PagingState['pages'];
+  initialPageSize: PagingState['pageSize'];
+  initialSorts: PagingState['sorts'];
   isCardLoading?: boolean;
 }) => {
   const theme = useTheme();
@@ -112,7 +119,7 @@ const DonorSummaryTable = ({
 
   const handleFilterStateChange = (filters) => {
     setFilterState(filters);
-    handlePagingStateChange({ ...pagingState, page: 0 });
+    setPagingState({ ...pagingState, page: 0 });
   };
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
@@ -410,7 +417,7 @@ const DonorSummaryTable = ({
     );
   };
 
-  const [pagingState, setPagingState] = useState({
+  const [pagingState, setPagingState] = useState<PagingState>({
     pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
@@ -441,8 +448,14 @@ const DonorSummaryTable = ({
     sorts,
     filters: filterState,
     options: {
-      onCompleted: () => {
-        clearTimeout(loaderTimeout);
+      onCompleted: (result) => {
+        const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
+        const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
+        setPagingState({
+          ...pagingState,
+          page: pagingState.page < nextPages ? pagingState.page : 0,
+          pages: nextPages,
+        });
         setLoaderTimeout(
           setTimeout(() => {
             setIsTableLoading(false);
@@ -996,16 +1009,12 @@ const DonorSummaryTable = ({
     }
   }, [loading]);
 
-  const handlePagingStateChange = (state: typeof pagingState) => {
-    setPagingState(state);
-  };
-
   const onPageChange = async (newPageNum: number) => {
-    handlePagingStateChange({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
+    setPagingState({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
   };
 
   const onPageSizeChange = async (newPageSize: number, newPage: number) => {
-    handlePagingStateChange({
+    setPagingState({
       ...pagingState,
       page: 0,
       pageSize: newPageSize,
@@ -1027,19 +1036,8 @@ const DonorSummaryTable = ({
       },
       [],
     );
-    handlePagingStateChange({ ...pagingState, sorts });
+    setPagingState({ ...pagingState, sorts });
   };
-
-  useEffect(() => {
-    // update pagination when filters are changed
-    if (programDonorSummaryStats.registeredDonorsCount) {
-      handlePagingStateChange({
-        ...pagingState,
-        page: 0,
-        pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pagingState.pageSize),
-      });
-    }
-  }, [programDonorSummaryStats.registeredDonorsCount]);
 
   return (
     <div
