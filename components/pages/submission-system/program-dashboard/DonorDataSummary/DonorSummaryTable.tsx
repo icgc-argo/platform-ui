@@ -165,9 +165,13 @@ const DonorSummaryTable = ({
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      height: 100%;
+      margin-left: -8px;
+      position: absolute;
     `;
     const DesignationEntry = styled('div')`
       text-align: center;
+      line-height: 28px;
       flex: 1;
       background: ${(props: { num: number }) =>
         isValid(props.num) ? 'transparent' : theme.colors.error_4};
@@ -1036,6 +1040,9 @@ const DonorSummaryTable = ({
       css={css`
         z-index: 2;
         padding-top: 10px;
+        .rt-td {
+          position: relative !important;
+        }
       `}
     >
       {programDonorsSummaryQueryError ? (
