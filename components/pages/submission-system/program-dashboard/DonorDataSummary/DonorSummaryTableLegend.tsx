@@ -18,7 +18,7 @@
  */
 
 import { css, Icon, Typography, useTheme } from '@icgc-argo/uikit';
-import { Col, Row } from 'react-grid-system';
+import { ClearFix, Col, Row } from 'react-grid-system';
 import {
   StatArea,
   TableLegendContainer,
@@ -47,25 +47,6 @@ const DonorSummaryTableLegend = ({
             <TableLegendSection>
               <b>{programDonorSummaryStats.registeredDonorsCount.toLocaleString()} donors</b>
             </TableLegendSection>
-            {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount === 0 && (
-              <TableLegendSection>
-                <TableLegendEntry>
-                  <Icon
-                    name="warning"
-                    fill={theme.colors.error}
-                    width="16px"
-                    height="15px"
-                    css={css`
-                      padding-right: 6px;
-                    `}
-                  />
-                  <b>
-                    {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
-                  </b>
-                  &nbsp;require clinical updates
-                </TableLegendEntry>
-              </TableLegendSection>
-            )}
           </Col>
           <Col sm={12} md={4} lg={4} xl={3}>
             <TableLegendSection>
@@ -137,6 +118,28 @@ const DonorSummaryTableLegend = ({
               </TableLegendEntry>
             </TableLegendSection>
           </Col>
+          {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
+            <Col sm={12}>
+              <TableLegendSection>
+                <TableLegendEntry>
+                  <Icon
+                    name="warning"
+                    fill={theme.colors.error}
+                    width="16px"
+                    height="15px"
+                    css={css`
+                      padding-right: 6px;
+                      flex-shrink: 0;
+                    `}
+                  />
+                  <b>
+                    {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
+                  </b>
+                  &nbsp;require clinical updates
+                </TableLegendEntry>
+              </TableLegendSection>
+            </Col>
+          )}
         </Row>
       </Typography>
     </TableLegendContainer>
