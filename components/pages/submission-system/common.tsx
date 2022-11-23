@@ -94,18 +94,26 @@ export const TableLegendContainer = ({ children }) => {
   );
 };
 
-export const TableLegendStatusIcon = ({ fill }: { fill: keyof ThemeColorNames }) => {
+export const TableLegendStatusIcon = ({
+  fill,
+  type,
+}: {
+  fill: keyof ThemeColorNames;
+  type: 'pill' | 'box';
+}) => {
   const theme = useTheme();
 
   return (
-    <span
+    <div
       css={css`
+        flex-shrink: 0;
         display: block;
         width: 18px;
         height: 12px;
-        border-radius: 7px;
+        border-radius: ${type === 'box' ? '0' : '7px'};
         margin-right: 5px;
         background-color: ${theme.colors[fill]};
+        border: ${type === 'box' ? `1px solid ${theme.colors.grey_1}` : 'none'};
       `}
     />
   );

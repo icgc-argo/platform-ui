@@ -43,12 +43,31 @@ const DonorSummaryTableLegend = ({
     <TableLegendContainer>
       <Typography variant="data" component="div" color="grey">
         <Row>
-          <Col sm={12} md={12} lg={1}>
+          <Col sm={12} xl={2}>
             <TableLegendSection>
               <b>{programDonorSummaryStats.registeredDonorsCount.toLocaleString()} donors</b>
             </TableLegendSection>
+            {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount === 0 && (
+              <TableLegendSection>
+                <TableLegendEntry>
+                  <Icon
+                    name="warning"
+                    fill={theme.colors.error}
+                    width="16px"
+                    height="15px"
+                    css={css`
+                      padding-right: 6px;
+                    `}
+                  />
+                  <b>
+                    {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
+                  </b>
+                  &nbsp;require clinical updates
+                </TableLegendEntry>
+              </TableLegendSection>
+            )}
           </Col>
-          <Col sm={12} md={6} lg={4}>
+          <Col sm={12} md={4} lg={4} xl={3}>
             <TableLegendSection>
               <TableLegendEntry>
                 <StatArea.StarIcon
@@ -78,47 +97,45 @@ const DonorSummaryTableLegend = ({
               </TableLegendEntry>
             </TableLegendSection>
           </Col>
-          <Col sm={12} md={6} lg={4}>
+          <Col sm={12} md={4} lg={4} xl={3}>
             <TableLegendSection>
               <TableLegendEntry>
-                <TableLegendStatusIcon fill={'accent1_dimmed'} />
+                <TableLegendStatusIcon fill={'accent1_dimmed'} type="pill" />
                 completed workflow runs
               </TableLegendEntry>
             </TableLegendSection>
             <TableLegendSection>
               <TableLegendEntry>
-                <TableLegendStatusIcon fill={'warning_dark'} />
+                <TableLegendStatusIcon fill={'warning_dark'} type="pill" />
                 in progress workflow runs
               </TableLegendEntry>
             </TableLegendSection>
             <TableLegendSection>
               <TableLegendEntry>
-                <TableLegendStatusIcon fill={'error'} />
+                <TableLegendStatusIcon fill={'error'} type="pill" />
                 failed workflow runs
               </TableLegendEntry>
             </TableLegendSection>
           </Col>
-          <Col sm={12} md={12} lg={3}>
-            {/* TODO: add stats for pending program QC and require updated clinical data */}
-            {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
-              <TableLegendSection>
-                <TableLegendEntry>
-                  <Icon
-                    name="warning"
-                    fill={theme.colors.error}
-                    width="16px"
-                    height="15px"
-                    css={css`
-                      padding-right: 6px;
-                    `}
-                  />
-                  <b>
-                    {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
-                  </b>
-                  &nbsp;require clinical updates
-                </TableLegendEntry>
-              </TableLegendSection>
-            )}
+          <Col sm={12} md={4} lg={4} xl={4}>
+            <TableLegendSection>
+              <TableLegendEntry>
+                <TableLegendStatusIcon fill={'error_2'} type="box" />
+                missing samples
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
+                <TableLegendStatusIcon fill={'warning_2'} type="box" />
+                missing DNA T|N matched pair
+              </TableLegendEntry>
+            </TableLegendSection>
+            <TableLegendSection>
+              <TableLegendEntry>
+                <TableLegendStatusIcon fill={'error_4'} type="box" />
+                missing raw reads
+              </TableLegendEntry>
+            </TableLegendSection>
           </Col>
         </Row>
       </Typography>
