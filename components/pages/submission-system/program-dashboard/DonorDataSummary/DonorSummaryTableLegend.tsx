@@ -18,7 +18,8 @@
  */
 
 import { css, Icon, Typography, useTheme } from '@icgc-argo/uikit';
-import { ClearFix, Col, Row } from 'react-grid-system';
+import { getConfig } from 'global/config';
+import { Col, Row } from 'react-grid-system';
 import {
   StatArea,
   TableLegendContainer,
@@ -38,7 +39,18 @@ const DonorSummaryTableLegend = ({
 }: {
   programDonorSummaryStats: ProgramDonorReleaseStats;
 }) => {
+  const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = getConfig();
   const theme = useTheme();
+
+  const missingMatchedPairsCount =
+    programDonorSummaryStats.dnaTNMatchedPairStatus?.tumorNormalNoMatchedPair || 0;
+  const missingSamplesCount =
+    (programDonorSummaryStats.dnaTNRegisteredStatus?.tumorOrNormal || 0) +
+    (programDonorSummaryStats.dnaTNRegisteredStatus?.noData || 0);
+  const missingRawReadsCount = programDonorSummaryStats.dnaTNMatchedPairStatus?.noData || 0;
+  const showMissingDNAErrors =
+    missingMatchedPairsCount || missingSamplesCount || missingRawReadsCount;
+
   return (
     <TableLegendContainer>
       <Typography variant="data" component="div" color="grey">
@@ -50,93 +62,110 @@ const DonorSummaryTableLegend = ({
           </Col>
           <Col sm={12} md={4} lg={4} xl={3}>
             <TableLegendSection>
-              <TableLegendEntry>
-                <StatArea.StarIcon
-                  fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.FULLY]}
-                />
-                <b>{programDonorSummaryStats.fullyReleasedDonorsCount.toLocaleString()}</b>
-                &nbsp;with fully released files
-              </TableLegendEntry>
+              <TableLegendEntry
+                count={programDonorSummaryStats.fullyReleasedDonorsCount}
+                icon={
+                  <StatArea.StarIcon
+                    fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.FULLY]}
+                  />
+                }
+                text="with fully released files"
+              />
             </TableLegendSection>
             <TableLegendSection>
-              <TableLegendEntry>
-                <StatArea.StarIcon
-                  fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.PARTIALLY]}
-                />
-                <b>{programDonorSummaryStats.partiallyReleasedDonorsCount.toLocaleString()}</b>
-                &nbsp;with partially released files
-              </TableLegendEntry>
+              <TableLegendEntry
+                count={programDonorSummaryStats.partiallyReleasedDonorsCount}
+                icon={
+                  <StatArea.StarIcon
+                    fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.PARTIALLY]}
+                  />
+                }
+                text="with partially released files"
+              />
             </TableLegendSection>
             <TableLegendSection>
-              <TableLegendEntry>
-                <StatArea.StarIcon
-                  fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.NO]}
-                  outline={RELEASED_STATE_STROKE_COLOURS[DonorDataReleaseState.NO]}
-                />
-                <b>{programDonorSummaryStats.noReleaseDonorsCount.toLocaleString()}</b>&nbsp;with no
-                released files
-              </TableLegendEntry>
+              <TableLegendEntry
+                count={programDonorSummaryStats.noReleaseDonorsCount}
+                icon={
+                  <StatArea.StarIcon
+                    fill={RELEASED_STATE_FILL_COLOURS[DonorDataReleaseState.NO]}
+                    outline={RELEASED_STATE_STROKE_COLOURS[DonorDataReleaseState.NO]}
+                  />
+                }
+                text="with no released files"
+              />
             </TableLegendSection>
           </Col>
           <Col sm={12} md={4} lg={4} xl={3}>
             <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'accent1_dimmed'} type="pill" />
-                completed workflow runs
-              </TableLegendEntry>
+              <TableLegendEntry
+                icon={<TableLegendStatusIcon fill={'accent1_dimmed'} type="pill" />}
+                text="completed workflow runs"
+              />
             </TableLegendSection>
             <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'warning_dark'} type="pill" />
-                in progress workflow runs
-              </TableLegendEntry>
+              <TableLegendEntry
+                icon={<TableLegendStatusIcon fill={'warning_dark'} type="pill" />}
+                text="in progress workflow runs"
+              />
             </TableLegendSection>
             <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'error'} type="pill" />
-                failed workflow runs
-              </TableLegendEntry>
+              <TableLegendEntry
+                icon={<TableLegendStatusIcon fill={'error'} type="pill" />}
+                text="failed workflow runs"
+              />
             </TableLegendSection>
           </Col>
-          <Col sm={12} md={4} lg={4} xl={4}>
-            <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'error_2'} type="box" />
-                missing samples
-              </TableLegendEntry>
-            </TableLegendSection>
-            <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'warning_2'} type="box" />
-                missing DNA T|N matched pair
-              </TableLegendEntry>
-            </TableLegendSection>
-            <TableLegendSection>
-              <TableLegendEntry>
-                <TableLegendStatusIcon fill={'error_4'} type="box" />
-                missing raw reads
-              </TableLegendEntry>
-            </TableLegendSection>
-          </Col>
+          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && showMissingDNAErrors && (
+            <Col sm={12} md={4} lg={4} xl={4}>
+              {missingSamplesCount && (
+                <TableLegendSection>
+                  <TableLegendEntry
+                    count={missingSamplesCount}
+                    icon={<TableLegendStatusIcon fill={'error_2'} type="box" />}
+                    text={'missing samples'}
+                  />
+                </TableLegendSection>
+              )}
+              {missingMatchedPairsCount && (
+                <TableLegendSection>
+                  <TableLegendEntry
+                    count={missingMatchedPairsCount}
+                    icon={<TableLegendStatusIcon fill={'warning_2'} type="box" />}
+                    text={'missing DNA T|N matched pair'}
+                  />
+                </TableLegendSection>
+              )}
+              {missingRawReadsCount && (
+                <TableLegendSection>
+                  <TableLegendEntry
+                    count={missingRawReadsCount}
+                    icon={<TableLegendStatusIcon fill={'error_4'} type="box" />}
+                    text="missing raw reads"
+                  />
+                </TableLegendSection>
+              )}
+            </Col>
+          )}
           {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount > 0 && (
             <Col sm={12}>
               <TableLegendSection>
-                <TableLegendEntry>
-                  <Icon
-                    name="warning"
-                    fill={theme.colors.error}
-                    width="16px"
-                    height="15px"
-                    css={css`
-                      padding-right: 6px;
-                      flex-shrink: 0;
-                    `}
-                  />
-                  <b>
-                    {programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount.toLocaleString()}
-                  </b>
-                  &nbsp;require clinical updates
-                </TableLegendEntry>
+                <TableLegendEntry
+                  count={programDonorSummaryStats.donorsInvalidWithCurrentDictionaryCount}
+                  icon={
+                    <Icon
+                      name="warning"
+                      fill={theme.colors.error}
+                      width="16px"
+                      height="15px"
+                      css={css`
+                        padding-right: 6px;
+                        flex-shrink: 0;
+                      `}
+                    />
+                  }
+                  text="require clinical updates"
+                />
               </TableLegendSection>
             </Col>
           )}

@@ -30,7 +30,7 @@ import {
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';
 import { displayDateAndTime } from 'global/utils/common';
-import { ComponentType, HtmlHTMLAttributes, ReactNode } from 'react';
+import { ComponentType, HtmlHTMLAttributes, PropsWithChildren, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import { formatFileName } from './program-sample-registration/util';
@@ -126,11 +126,30 @@ export const TableLegendSection = styled('div')`
   margin-bottom: 10px;
 `;
 
-export const TableLegendEntry = styled('div')`
+export const TableLegendEntryComp = styled('div')`
   margin-right: 5px;
   display: flex;
   align-items: flex-start;
+  width: 100%;
 `;
+
+export const TableLegendEntry = ({
+  count,
+  icon,
+  text,
+}: PropsWithChildren<{ count?: number; icon: ReactNode; text: string }>) => (
+  <TableLegendEntryComp>
+    {icon}
+    <span>
+      {count !== undefined && (
+        <>
+          <b>{count.toLocaleString()}</b>&nbsp;
+        </>
+      )}
+      {text}
+    </span>
+  </TableLegendEntryComp>
+);
 
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (
   <Icon name="star" width="16px" height="16px" {...props} />
