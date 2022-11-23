@@ -23,6 +23,7 @@ import {
   Button,
   css,
   DropdownMenu,
+  FocusWrapper,
   Icon,
   MenuGroup,
   NavBarElement,
@@ -272,8 +273,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {!userModel && <NavBarLoginButton />}
 
             {userModel && (
-              <div
-                onClick={() => {
+              <FocusWrapper
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (isMobileLayout) {
                     setUsingProfileOptions(true);
                     setMobileDropdownOpen(!isMobileDropdownOpen);
@@ -311,11 +313,12 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     />
                   )}
                 </AppBarMenuItem>
-              </div>
+              </FocusWrapper>
             )}
             {isMobileLayout && (
-              <div
-                onClick={() => {
+              <FocusWrapper
+                onClick={(e) => {
+                  e.stopPropagation();
                   setUsingProfileOptions(false);
                   setMobileDropdownOpen(!isMobileDropdownOpen);
                 }}
@@ -330,7 +333,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     }
                   ></Icon>
                 </AppBarMenuItem>
-              </div>
+              </FocusWrapper>
             )}
           </MenuGroup>
         </Section>
