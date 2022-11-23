@@ -33,10 +33,12 @@ const DownloadButton = ({
   text,
   onClick,
   isLoading = false,
+  disabled = false,
 }: {
   text: string;
   onClick?: any;
   isLoading?: boolean;
+  disabled?: boolean;
 }) => (
   <Button
     isLoading={isLoading}
@@ -45,6 +47,7 @@ const DownloadButton = ({
     `}
     variant="secondary"
     onClick={onClick}
+    disabled={disabled}
   >
     <Icon
       css={css`
@@ -63,11 +66,13 @@ const ClinicalDownloadButton = ({
   searchResults = [],
   entityTypes = [],
   completionState,
+  disabled = false,
 }: {
   text?: string;
   searchResults: ClinicalSearchResults[];
   entityTypes: string[];
   completionState: CompletionStates;
+  disabled?: boolean;
 }) => {
   const toaster = useToaster();
 
@@ -123,6 +128,7 @@ const ClinicalDownloadButton = ({
           text={text || 'All Clinical Data'}
           onClick={onClickDownloadAll}
           isLoading={buttonLoadingState}
+          disabled={disabled}
         />
       </Col>
     </Row>

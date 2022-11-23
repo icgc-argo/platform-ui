@@ -289,6 +289,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
                   entityTypes={[currentEntity]}
                   completionState={completionState}
+                  disabled={noData}
                 />
               </div>
               {/* DataTable */}

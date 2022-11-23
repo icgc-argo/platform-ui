@@ -204,7 +204,6 @@ export default function SearchBar({
         <div css={searchBarParentStyle}>
           <Input
             aria-label="search-for-files"
-            disabled={singleResult}
             getOverrideCss={() => searchInputFieldStyle}
             onChange={(e) => {
               if (e.target.value.length === 0) {
@@ -260,6 +259,7 @@ export default function SearchBar({
           text="Clinical Data"
           entityTypes={clinicalEntityFields}
           completionState={completionState}
+          disabled={noData}
         />
       </div>
     </Container>
