@@ -81,20 +81,20 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       deSerialize: (v) => v,
     },
   );
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
   const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
     serialize: (v) => v,
     deSerialize: (v) => v,
   });
-  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
-
-  // Matches sequential Digits not followed by other chars, or Digits preceded by DO or by Comma/Space
-  // Example: DO259138, 2579137, DASH-7 will match first 2 Donor IDs, but not 3rd Submitter ID
-  const searchDonorIds = selectedDonors
-    ? [parseDonorIdString(selectedDonors)]
-    : keyword
-        .match(/(\d*(?!\d*\D+))|((?<=,|, )|(?<=DO))\d*/gi)
-        ?.filter((match) => !!match)
-        .map((idString) => parseInt(idString)) || [];
+  const currentDonor = selectedDonors && [parseDonorIdString(selectedDonors)];
+  // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
+  // Example: DO259138, 2579137, DASH-7, DO253290abcdef
+  // Regex will match first 2 Donor IDs, but not 3rd Submitter ID or 4th case w/ random text
+  const searchDonorIds =
+    keyword
+      .match(/(?=DO|\d)\d+(?=,| |$)/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
 
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
@@ -105,6 +105,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   const useDefaultQuery =
     !isFilterUsed &&
+    !currentDonor &&
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
 
