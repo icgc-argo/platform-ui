@@ -103,12 +103,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     ? []
     : keyword.split(/, |,/).filter((word) => !!word);
 
-  const useDefaultQuery =
-    !isFilterUsed &&
-    !currentDonor &&
-    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
-    completionState === 'all';
-
   // Format text coming from filter
   const filterDonorIds =
     filterTextBox
@@ -122,7 +116,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       .map((str) => str.trim())
       .filter((word) => !!word) || [];
 
-  // Side Menu Query
+  // Side Menu Query (Populates Clinical Entity Table)
   const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
@@ -132,7 +126,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: isFilterUsed ? filterDonorIds : searchDonorIds,
+          donorIds: isFilterUsed
+            ? filterDonorIds
+            : currentDonor && !searchDonorIds.length
+            ? currentDonor
+            : searchDonorIds,
           submitterDonorIds: isFilterUsed ? filterSubmitterIds : searchSubmitterIds,
         },
       },
@@ -177,9 +175,15 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     </VerticalTabs.Item>
   ));
 
+  const useDefaultQuery =
+    !isFilterUsed &&
+    !currentDonor &&
+    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+    completionState === 'all';
+
   const noSearchData = searchResultData === null || searchResultData === undefined;
   const searchResults = noSearchData ? emptySearchResponse : searchResultData;
-  const noData = sideMenuData.clinicalEntities.length === 0 || noSearchData;
+  const noData = sideMenuData.clinicalEntities.length === 0 && noSearchData && !currentDonor;
 
   return (
     <SubmissionLayout
@@ -233,6 +237,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         loading={searchResultsLoading}
         noData={noData}
         useDefaultQuery={useDefaultQuery}
+        currentDonor={currentDonor}
         donorSearchResults={searchResults}
         setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
@@ -299,8 +304,10 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
+                  currentDonor={currentDonor}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
+                  noData={noData}
                 />
               </div>
             </div>

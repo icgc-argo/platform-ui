@@ -85,6 +85,7 @@ export default function SearchBar({
   keyword,
   setKeyword,
   useDefaultQuery,
+  currentDonor,
   donorSearchResults,
   modalVisible,
   setFilterTextBox,
@@ -100,6 +101,7 @@ export default function SearchBar({
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
   useDefaultQuery: boolean;
+  currentDonor: number[];
   donorSearchResults: ClinicalEntitySearchResultResponse;
   modalVisible: boolean;
   setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
@@ -135,9 +137,10 @@ export default function SearchBar({
       .filter((result) => !!result)
       .slice(0, 20) || [];
 
-  const singleResult = searchResultItems.length === 1;
-  const titleText = singleResult
-    ? `${searchResultItems[0].resultId}`
+  const selectedDonor = currentDonor && searchResults.length <= 1;
+
+  const titleText = selectedDonor
+    ? `DO${currentDonor[0]}`
     : keyword
     ? `${searchResultItems.length} Donors`
     : COMPLETION_OPTIONS[completionState].display;
@@ -186,7 +189,7 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
-            disabled={singleResult}
+            disabled={selectedDonor}
             value={completionState}
             variant="secondary"
             size="sm"
