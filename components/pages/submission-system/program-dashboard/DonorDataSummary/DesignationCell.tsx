@@ -20,11 +20,7 @@
 import { styled, useTheme } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
 
-type DesignationCellTypes =
-  | 'dnaTNMatchedPair'
-  | 'dnaTNRegistered'
-  | 'rnaRegisteredSample'
-  | 'rnaRawReads';
+type DesignationCellTypes = 'dnaTNMatchedPair' | 'dnaTNRegistered';
 
 const DesignationContainer = styled('div')`
   display: flex;
@@ -37,35 +33,41 @@ const DesignationContainer = styled('div')`
   position: absolute;
 `;
 
-const DesignationCell = ({
+const DesignationEntry = styled('div')`
+  &:nth-of-type(2) {
+    border-left: solid 1px ${({ theme }) => theme.colors.grey_2};
+  }
+  text-align: center;
+  line-height: 28px;
+  flex: 1;
+  background: ${({ background = 'transparent' }: { background?: string }) => background};
+`;
+
+export const DesignationCell = ({
   left,
-  original,
+  leftBg,
   right,
-  type,
+  rightBg,
 }: {
   left: number;
-  original: DonorSummaryEntry;
+  leftBg?: string;
   right: number;
-  type: DesignationCellTypes;
+  rightBg?: string;
 }) => {
-  const theme = useTheme();
-  const isValidMatchedPairs = original.matchedTNPairsDNA > 0;
-  const DesignationEntry = styled('div')`
-    &:nth-of-type(2) {
-      border-left: solid 1px ${theme.colors.grey_2};
-    }
-    text-align: center;
-    line-height: 28px;
-    flex: 1;
-    background: ${!isValidMatchedPairs ? theme.colors.warning_3 : theme.colors.error_4};
-  `;
-
   return (
     <DesignationContainer>
-      <DesignationEntry>{left}N</DesignationEntry>
-      <DesignationEntry>{right}T</DesignationEntry>
+      <DesignationEntry background={leftBg}>{left}N</DesignationEntry>
+      <DesignationEntry background={rightBg}>{right}T</DesignationEntry>
     </DesignationContainer>
   );
 };
 
-export default DesignationCell;
+export const DesignationCellWithErrors = ({
+  original,
+  type,
+}: {
+  original: DonorSummaryEntry;
+  type: DesignationCellTypes;
+}) => {
+  return <DesignationCell left={0} right={0} />;
+};
