@@ -275,8 +275,8 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {userModel && (
               <FocusWrapper
                 onClick={(e) => {
-                  e.stopPropagation();
                   if (isMobileLayout) {
+                    e.stopPropagation();
                     setUsingProfileOptions(true);
                     setMobileDropdownOpen(!isMobileDropdownOpen);
                   }
