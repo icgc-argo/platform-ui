@@ -71,6 +71,7 @@ import {
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 import { getConfig } from 'global/config';
+import DesignationCell from './DesignationCell';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -156,7 +157,8 @@ const DonorSummaryTable = ({
     );
   };
 
-  const DesignationCell = ({ left, right }: { left: number; right: number }) => {
+  // FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
+  const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
     const theme = useTheme();
     const isValid = (num: number) => num > 0;
     const DesignationContainer = styled('div')`
@@ -173,8 +175,8 @@ const DonorSummaryTable = ({
       text-align: center;
       line-height: 28px;
       flex: 1;
-      background: ${(props: { num: number }) =>
-        isValid(props.num) ? 'transparent' : theme.colors.error_4};
+      color: ${(props: { num: number }) =>
+        isValid(props.num) ? theme.colors.primary : theme.colors.error};
     `;
 
     return (
@@ -626,12 +628,20 @@ const DonorSummaryTable = ({
                   />
                 ),
                 id: REGISTERED_SAMPLE_COLUMN_ID,
-                Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.registeredNormalSamples}
-                    right={original.registeredTumourSamples}
-                  />
-                ),
+                Cell: ({ original }) =>
+                  FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
+                    <DesignationCell
+                      left={original.registeredNormalSamples}
+                      original={original}
+                      right={original.registeredTumourSamples}
+                      type={'dnaTNMatchedPair'}
+                    />
+                  ) : (
+                    <DesignationCellLegacy
+                      left={original.registeredNormalSamples}
+                      right={original.registeredTumourSamples}
+                    />
+                  ),
               },
               {
                 Header: (
@@ -676,12 +686,20 @@ const DonorSummaryTable = ({
                   />
                 ),
                 id: RAW_READS_COLUMN_ID,
-                Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.publishedNormalAnalysis}
-                    right={original.publishedTumourAnalysis}
-                  />
-                ),
+                Cell: ({ original }) =>
+                  FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
+                    <DesignationCell
+                      left={original.publishedNormalAnalysis}
+                      original={original}
+                      right={original.publishedTumourAnalysis}
+                      type={'dnaTNMatchedPair'}
+                    />
+                  ) : (
+                    <DesignationCellLegacy
+                      left={original.publishedNormalAnalysis}
+                      right={original.publishedTumourAnalysis}
+                    />
+                  ),
               },
               {
                 Header: (
@@ -846,7 +864,9 @@ const DonorSummaryTable = ({
                 Cell: ({ original }) => (
                   <DesignationCell
                     left={original.rnaRegisteredNormalSamples}
+                    original={original}
                     right={original.rnaRegisteredTumourSamples}
+                    type={'rnaRegisteredSample'}
                   />
                 ),
               },
@@ -875,7 +895,9 @@ const DonorSummaryTable = ({
                 Cell: ({ original }) => (
                   <DesignationCell
                     left={original.rnaPublishedNormalAnalysis}
+                    original={original}
                     right={original.rnaPublishedTumourAnalysis}
+                    type="rnaRawReads"
                   />
                 ),
               },
