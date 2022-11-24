@@ -402,7 +402,7 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
+    totalDocs = !useDefaultQuery && !currentDonor ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
