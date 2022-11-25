@@ -17,10 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, useTheme } from '@icgc-argo/uikit';
+import { css, styled, useTheme } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
-
-type DesignationCellTypes = 'dnaTNMatchedPair' | 'dnaTNRegistered';
+import { ProgramDonorSummaryEntryField } from './types';
 
 const DesignationContainer = styled('div')`
   display: flex;
@@ -40,34 +39,99 @@ const DesignationEntry = styled('div')`
   text-align: center;
   line-height: 28px;
   flex: 1;
-  background: ${({ background = 'transparent' }: { background?: string }) => background};
+  background: ${({ background }: { background: string }) => background};
 `;
 
 export const DesignationCell = ({
-  left,
-  leftBg,
-  right,
-  rightBg,
+  normalCount,
+  original,
+  tumourCount,
+  type,
 }: {
-  left: number;
-  leftBg?: string;
-  right: number;
-  rightBg?: string;
+  normalCount: number;
+  original?: DonorSummaryEntry;
+  tumourCount: number;
+  type?: ProgramDonorSummaryEntryField;
 }) => {
+  const theme = useTheme();
+  const errorColors = {
+    default: 'transparent',
+    matchedPairError: theme.colors.warning_3,
+    rawReadsError: theme.colors.error_4,
+    samplesError: theme.colors.error_2,
+  };
+
+  const registeredSamplesNormalError =
+    type === 'dnaTNRegistered' && original.registeredNormalSamples === 0;
+  const registeredSamplesTumourError =
+    type === 'dnaTNRegistered' && original.registeredTumourSamples === 0;
+
+  const matchedPairError = type === 'dnaTNMatchedPair' && original.matchedTNPairsDNA === 0;
+  const rawReadsNormalError =
+    type === 'dnaTNMatchedPair' &&
+    !matchedPairError &&
+    original.registeredNormalSamples > original.publishedNormalAnalysis;
+  const rawReadsTumourError =
+    type === 'dnaTNMatchedPair' &&
+    !matchedPairError &&
+    original.registeredTumourSamples > original.publishedTumourAnalysis;
+
+  const normalBg = matchedPairError
+    ? errorColors.matchedPairError
+    : rawReadsNormalError
+    ? errorColors.rawReadsError
+    : registeredSamplesNormalError
+    ? errorColors.samplesError
+    : errorColors.default;
+  const tumourBg = matchedPairError
+    ? errorColors.matchedPairError
+    : rawReadsTumourError
+    ? errorColors.rawReadsError
+    : registeredSamplesTumourError
+    ? errorColors.samplesError
+    : errorColors.default;
+
   return (
     <DesignationContainer>
-      <DesignationEntry background={leftBg}>{left}N</DesignationEntry>
-      <DesignationEntry background={rightBg}>{right}T</DesignationEntry>
+      <DesignationEntry background={normalBg}>{normalCount}N</DesignationEntry>
+      <DesignationEntry background={tumourBg}>{tumourCount}T</DesignationEntry>
     </DesignationContainer>
   );
 };
 
-export const DesignationCellWithErrors = ({
-  original,
-  type,
-}: {
-  original: DonorSummaryEntry;
-  type: DesignationCellTypes;
-}) => {
-  return <DesignationCell left={0} right={0} />;
+// FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
+export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
+  const theme = useTheme();
+  const isValid = (num: number) => num > 0;
+  const DesignationContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-left: -8px;
+    position: absolute;
+  `;
+  const DesignationEntry = styled('div')`
+    text-align: center;
+    line-height: 28px;
+    flex: 1;
+    color: ${(props: { num: number }) =>
+      isValid(props.num) ? theme.colors.primary : theme.colors.error};
+  `;
+
+  return (
+    <DesignationContainer>
+      <DesignationEntry num={left}>{left}N</DesignationEntry>
+      <DesignationEntry
+        num={right}
+        css={css`
+          border-left: solid 1px ${theme.colors.grey_2};
+        `}
+      >
+        {right}T
+      </DesignationEntry>
+    </DesignationContainer>
+  );
 };

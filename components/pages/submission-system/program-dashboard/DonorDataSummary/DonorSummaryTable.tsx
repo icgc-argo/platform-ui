@@ -71,7 +71,7 @@ import {
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 import { getConfig } from 'global/config';
-import { DesignationCell, DesignationCellWithErrors } from './DesignationCell';
+import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
 
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
@@ -154,43 +154,6 @@ const DonorSummaryTable = ({
       >
         {cellContent}
       </div>
-    );
-  };
-
-  // FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
-  const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
-    const theme = useTheme();
-    const isValid = (num: number) => num > 0;
-    const DesignationContainer = styled('div')`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      margin-left: -8px;
-      position: absolute;
-    `;
-    const DesignationEntry = styled('div')`
-      text-align: center;
-      line-height: 28px;
-      flex: 1;
-      color: ${(props: { num: number }) =>
-        isValid(props.num) ? theme.colors.primary : theme.colors.error};
-    `;
-
-    return (
-      <DesignationContainer>
-        <DesignationEntry num={left}>{left}N</DesignationEntry>
-        <DesignationEntry
-          num={right}
-          css={css`
-            border-left: solid 1px ${theme.colors.grey_2};
-          `}
-        >
-          {right}T
-        </DesignationEntry>
-      </DesignationContainer>
     );
   };
 
@@ -630,7 +593,12 @@ const DonorSummaryTable = ({
                 id: REGISTERED_SAMPLE_COLUMN_ID,
                 Cell: ({ original }) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
-                    <DesignationCellWithErrors original={original} type={'dnaTNMatchedPair'} />
+                    <DesignationCell
+                      normalCount={original.registeredNormalSamples}
+                      original={original}
+                      tumourCount={original.registeredTumourSamples}
+                      type={'dnaTNRegistered'}
+                    />
                   ) : (
                     <DesignationCellLegacy
                       left={original.registeredNormalSamples}
@@ -683,7 +651,12 @@ const DonorSummaryTable = ({
                 id: RAW_READS_COLUMN_ID,
                 Cell: ({ original }) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
-                    <DesignationCellWithErrors original={original} type={'dnaTNMatchedPair'} />
+                    <DesignationCell
+                      normalCount={original.publishedNormalAnalysis}
+                      original={original}
+                      tumourCount={original.publishedTumourAnalysis}
+                      type={'dnaTNMatchedPair'}
+                    />
                   ) : (
                     <DesignationCellLegacy
                       left={original.publishedNormalAnalysis}
@@ -853,8 +826,8 @@ const DonorSummaryTable = ({
                 id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
                 Cell: ({ original }) => (
                   <DesignationCell
-                    left={original.rnaRegisteredNormalSamples}
-                    right={original.rnaRegisteredTumourSamples}
+                    normalCount={original.rnaRegisteredNormalSamples}
+                    tumourCount={original.rnaRegisteredTumourSamples}
                   />
                 ),
               },
@@ -882,8 +855,8 @@ const DonorSummaryTable = ({
                 id: RNA_RAW_READS_COLUMN_ID,
                 Cell: ({ original }) => (
                   <DesignationCell
-                    left={original.rnaPublishedNormalAnalysis}
-                    right={original.rnaPublishedTumourAnalysis}
+                    normalCount={original.rnaPublishedNormalAnalysis}
+                    tumourCount={original.rnaPublishedTumourAnalysis}
                   />
                 ),
               },

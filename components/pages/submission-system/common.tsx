@@ -104,7 +104,7 @@ export const TableLegendStatusIcon = ({
   const theme = useTheme();
 
   return (
-    <div
+    <span
       css={css`
         flex-shrink: 0;
         display: block;
@@ -126,29 +126,25 @@ export const TableLegendSection = styled('div')`
   margin-bottom: 10px;
 `;
 
-export const TableLegendEntryComp = styled('div')`
-  margin-right: 5px;
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-`;
-
 export const TableLegendEntry = ({
   count,
   icon,
   text,
 }: PropsWithChildren<{ count?: number; icon: ReactNode; text: string }>) => (
-  <TableLegendEntryComp>
+  <div
+    css={css`
+      margin-right: 5px;
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
+    `}
+  >
     {icon}
     <span>
-      {count !== undefined && (
-        <>
-          <b>{count.toLocaleString()}</b>&nbsp;
-        </>
-      )}
+      {count !== undefined && <b>{count.toLocaleString()}&nbsp;</b>}
       {text}
     </span>
-  </TableLegendEntryComp>
+  </div>
 );
 
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (

@@ -118,7 +118,7 @@ const DonorSummaryTableLegend = ({
           </Col>
           {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && showMissingDNAErrors && (
             <Col sm={12} md={4} lg={4} xl={4}>
-              {missingSamplesCount && (
+              {!!missingSamplesCount && (
                 <TableLegendSection>
                   <TableLegendEntry
                     count={missingSamplesCount}
@@ -127,7 +127,7 @@ const DonorSummaryTableLegend = ({
                   />
                 </TableLegendSection>
               )}
-              {missingMatchedPairsCount && (
+              {!!missingMatchedPairsCount && (
                 <TableLegendSection>
                   <TableLegendEntry
                     count={missingMatchedPairsCount}
@@ -136,7 +136,7 @@ const DonorSummaryTableLegend = ({
                   />
                 </TableLegendSection>
               )}
-              {missingRawReadsCount && (
+              {!!missingRawReadsCount && (
                 <TableLegendSection>
                   <TableLegendEntry
                     count={missingRawReadsCount}
