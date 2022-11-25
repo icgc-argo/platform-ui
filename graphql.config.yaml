@@ -1,5 +1,8 @@
+# This is used by the VS Code extension "GraphQL: Language Feature Support"
+# for validation and auto-complete suggestions.
+# The generated schema file is created by graphql-codegen.
 schema: ./generated/gql_schema.json
-documents: ./**/gql/*.ts
+documents: [./**/gql/*.ts]
 extensions:
   codegen:
     generates:

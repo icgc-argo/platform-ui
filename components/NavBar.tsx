@@ -216,11 +216,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       >
         <DropdownMenu>
           {mobileDropDownOptions.map((element, idx) => (
-            <NavBarElement
-              isDropdown={true}
-              key={`hamburgerElement_${idx}`}
-              {...element}
-            ></NavBarElement>
+            <NavBarElement isDropdown={true} key={`hamburgerElement_${idx}`} {...element} />
           ))}
         </DropdownMenu>
       </div>
@@ -294,7 +290,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                             {...element}
                             isDropdown={true}
                             LinkComp={NextLink}
-                          ></NavBarElement>
+                          />
                         ))}
                       </DropdownMenu>
                     ) : (
@@ -303,7 +299,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                   }
                 >
                   {usingProfileOptions && isMobileDropdownOpen ? (
-                    <Icon name={'hamburger_close'} fill="accent1_dimmed"></Icon>
+                    <Icon name={'hamburger_close'} fill="accent1_dimmed" />
                   ) : (
                     <UserBadge
                       showGreeting={!isMobileLayout}
@@ -331,7 +327,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
                     fill={
                       isMobileDropdownOpen && !usingProfileOptions ? 'accent1_dimmed' : 'accent1_1'
                     }
-                  ></Icon>
+                  />
                 </AppBarMenuItem>
               </FocusWrapper>
             )}

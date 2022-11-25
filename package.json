@@ -1,10 +1,10 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.115.2",
+  "version": "1.116.0",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
-    "watch-gql": "graphql-codegen -r dotenv/config --watch",
+    "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
     "serve": "npm run build && next start",
@@ -19,7 +19,8 @@
     "force-resolutions": "npx npm-force-resolutions",
     "e2e": "npx playwright test",
     "e2e-debug": "npx playwright test --debug",
-    "e2e-report": "npx playwright show-report"
+    "e2e-report": "npx playwright show-report",
+    "prepare": "husky install"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -35,6 +36,7 @@
     "@icgc-argo/uikit": "^2.1.2",
     "@overture-stack/arranger-components": "3.0.0-beta.11",
     "apollo-upload-client": "^11.0.0",
+    "browser-fs-access": "^0.31.1",
     "clsx": "^1.1.1",
     "color": "^4.2.3",
     "concurrently": "^7.4.0",
@@ -93,7 +95,7 @@
     "chai": "^4.3.6",
     "core-js": "^3.25.0",
     "file-regex": "^3.1.0",
-    "husky": "^4.3.8",
+    "husky": "^8.0.0",
     "mocha": "^10.0.0",
     "next-global-css": "^1.3.1",
     "next-transpile-modules": "^9.0.0",
@@ -103,6 +105,10 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.6.4"
+  },
+  "engines": {
+    "npm": ">=8.19.2 <9.0.0",
+    "node": ">=18.12.1 <19.0.0"
   },
   "prettier": {
     "printWidth": 100,
