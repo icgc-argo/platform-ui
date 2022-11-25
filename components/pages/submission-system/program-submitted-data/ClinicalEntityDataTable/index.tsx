@@ -384,6 +384,8 @@ const ClinicalEntityDataTable = ({
     return sortVal;
   };
 
+  console.log('test commit');
+
   // Map Completion Stats + Entity Data
   if (noData) {
     showCompletionStats = true;
