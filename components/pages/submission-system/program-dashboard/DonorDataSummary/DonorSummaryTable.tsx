@@ -1022,7 +1022,7 @@ const DonorSummaryTable = ({
         z-index: 2;
         padding-top: 10px;
         .rt-td {
-          position: relative !important;
+          position: relative; // helps DesignationCell styling
         }
       `}
     >

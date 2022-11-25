@@ -56,7 +56,7 @@ export const DesignationCell = ({
   const theme = useTheme();
   const errorColors = {
     default: 'transparent',
-    matchedPairError: theme.colors.warning_3,
+    matchedPairError: theme.colors.warning_2,
     rawReadsError: theme.colors.error_4,
     samplesError: theme.colors.error_2,
   };
@@ -103,19 +103,9 @@ export const DesignationCell = ({
 export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
   const theme = useTheme();
   const isValid = (num: number) => num > 0;
-  const DesignationContainer = styled('div')`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin-left: -8px;
-    position: absolute;
-  `;
+
   const DesignationEntry = styled('div')`
     text-align: center;
-    line-height: 28px;
     flex: 1;
     color: ${(props: { num: number }) =>
       isValid(props.num) ? theme.colors.primary : theme.colors.error};
