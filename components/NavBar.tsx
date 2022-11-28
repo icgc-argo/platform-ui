@@ -49,7 +49,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import { useState, useEffect, useMemo, createRef, RefObject, PropsWithChildren } from 'react';
+import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -271,8 +271,8 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             {userModel && (
               <FocusWrapper
                 onClick={(e) => {
-                  e.stopPropagation();
                   if (isMobileLayout) {
+                    e.stopPropagation();
                     setUsingProfileOptions(true);
                     setMobileDropdownOpen(!isMobileDropdownOpen);
                   }
