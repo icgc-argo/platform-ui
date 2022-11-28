@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+npm run graphql-codegen
 npx --no pretty-quick@^2.0.1 --staged
