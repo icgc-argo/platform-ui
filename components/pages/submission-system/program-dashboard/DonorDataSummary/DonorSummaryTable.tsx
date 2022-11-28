@@ -72,6 +72,13 @@ import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 import { getConfig } from 'global/config';
 
+type PagingState = {
+  pages: number;
+  pageSize: number;
+  page: number;
+  sorts: DonorSummaryEntrySort[];
+};
+
 const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
   donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
 
@@ -83,11 +90,12 @@ const DonorSummaryTable = ({
   isCardLoading = true,
 }: {
   programShortName: string;
-  initialPages: number;
-  initialPageSize: number;
-  initialSorts: DonorSummaryEntrySort[];
+  initialPages: PagingState['pages'];
+  initialPageSize: PagingState['pageSize'];
+  initialSorts: PagingState['sorts'];
   isCardLoading?: boolean;
 }) => {
+  const theme = useTheme();
   const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const { activePipeline, setActivePipeline } = usePipelines();
 
@@ -108,6 +116,11 @@ const DonorSummaryTable = ({
   const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
 
   const [filterState, setFilterState] = useState([]);
+
+  const handleFilterStateChange = (filters) => {
+    setFilterState(filters);
+    setPagingState({ ...pagingState, page: 0 });
+  };
   const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
     const newFilters = filterState.filter((x) => x.field !== field);
     if (value.length) {
@@ -116,11 +129,11 @@ const DonorSummaryTable = ({
         values: typeof value === 'string' ? [value] : value,
       });
     }
-    setFilterState(newFilters);
+    handleFilterStateChange(newFilters);
   };
   const clearFilter = (field: ProgramDonorSummaryEntryField) => {
     const newFilters = filterState.filter((x) => x.field !== field);
-    setFilterState(newFilters);
+    handleFilterStateChange(newFilters);
   };
   const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
     filterState.find((x) => x.field === field)?.values;
@@ -161,7 +174,6 @@ const DonorSummaryTable = ({
   };
 
   const DesignationCell = ({ left, right }: { left: number; right: number }) => {
-    const theme = useTheme();
     const isValid = (num: number) => num > 0;
     const DesignationContainer = styled('div')`
       display: flex;
@@ -246,8 +258,6 @@ const DonorSummaryTable = ({
     handleBlur?: (event?: any) => void;
     active?: boolean;
   }>) => {
-    const theme = useTheme();
-
     return (
       <Row
         css={css`
@@ -411,7 +421,7 @@ const DonorSummaryTable = ({
     );
   };
 
-  const [pagingState, setPagingState] = useState({
+  const [pagingState, setPagingState] = useState<PagingState>({
     pages: initialPages,
     pageSize: initialPageSize,
     page: 0,
@@ -442,8 +452,15 @@ const DonorSummaryTable = ({
     sorts,
     filters: filterState,
     options: {
-      onCompleted: () => {
-        clearTimeout(loaderTimeout);
+      onCompleted: (result) => {
+        const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
+        const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
+        setPagingState({
+          ...pagingState,
+          // stay on current page, unless that page is no longer available
+          page: pagingState.page < nextPages ? pagingState.page : 0,
+          pages: nextPages,
+        });
         setLoaderTimeout(
           setTimeout(() => {
             setIsTableLoading(false);
@@ -488,7 +505,7 @@ const DonorSummaryTable = ({
     {
       Header: 'CLINICAL DATA STATUS',
       headerStyle: {
-        background: useTheme().colors.secondary_4,
+        background: theme.colors.secondary_4,
       },
       columns: [
         {
@@ -578,7 +595,7 @@ const DonorSummaryTable = ({
     {
       Header: `${activePipeline}-SEQ PIPELINE`,
       headerStyle: {
-        background: useTheme().colors[PIPELINE_COLORS[activePipeline]],
+        background: theme.colors[PIPELINE_COLORS[activePipeline]],
       },
       columns: [
         ...(activePipeline === PipelineNames.DNA
@@ -924,7 +941,7 @@ const DonorSummaryTable = ({
           size="sm"
           variant="text"
           type="button"
-          onClick={() => setFilterState([])}
+          onClick={() => handleFilterStateChange([])}
         >
           Clear Filters
         </FilterClearButton>
@@ -956,8 +973,6 @@ const DonorSummaryTable = ({
           ),
           accessor: 'validWithCurrentDictionary',
           Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            const theme = useTheme();
-
             const errorTab =
               errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
                 ?.entity || '';
@@ -1001,16 +1016,12 @@ const DonorSummaryTable = ({
     }
   }, [loading]);
 
-  const handlePagingStateChange = (state: typeof pagingState) => {
-    setPagingState(state);
-  };
-
   const onPageChange = async (newPageNum: number) => {
-    handlePagingStateChange({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
+    setPagingState({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
   };
 
   const onPageSizeChange = async (newPageSize: number, newPage: number) => {
-    handlePagingStateChange({
+    setPagingState({
       ...pagingState,
       page: 0,
       pageSize: newPageSize,
@@ -1032,7 +1043,7 @@ const DonorSummaryTable = ({
       },
       [],
     );
-    handlePagingStateChange({ ...pagingState, sorts });
+    setPagingState({ ...pagingState, sorts });
   };
 
   return (

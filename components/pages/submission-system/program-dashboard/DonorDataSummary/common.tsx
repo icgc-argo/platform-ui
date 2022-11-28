@@ -103,11 +103,11 @@ export const FILTER_OPTIONS = {
   ],
   samplesRegisteredNoSamplesRegistered: [
     {
-      key: 'SAMPLES_REGISTERED',
+      key: 'DATA_SUBMITTED',
       value: 'Samples registered',
     },
     {
-      key: 'NO_SAMPLES_REGISTERED',
+      key: 'NO_DATA',
       value: 'No samples registered',
     },
   ],
