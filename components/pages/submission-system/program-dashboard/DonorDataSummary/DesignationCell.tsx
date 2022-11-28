@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled, useTheme } from '@icgc-argo/uikit';
+import { css, styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
 import { ProgramDonorSummaryEntryField } from './types';
 
@@ -99,29 +99,31 @@ export const DesignationCell = ({
   );
 };
 
+const isValid = (num: number) => num > 0;
+const DesignationEntryStyled = styled('div')`
+  text-align: center;
+  flex: 1;
+  color: ${({ num, theme }: { num: number; theme: UikitTheme }) =>
+    isValid(num) ? theme.colors.primary : theme.colors.error};
+`;
+
 // FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
 export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
   const theme = useTheme();
-  const isValid = (num: number) => num > 0;
-
-  const DesignationEntry = styled('div')`
-    text-align: center;
-    flex: 1;
-    color: ${(props: { num: number }) =>
-      isValid(props.num) ? theme.colors.primary : theme.colors.error};
-  `;
-
   return (
     <DesignationContainer>
-      <DesignationEntry num={left}>{left}N</DesignationEntry>
-      <DesignationEntry
+      <DesignationEntryStyled theme={theme} num={left}>
+        {left}N
+      </DesignationEntryStyled>
+      <DesignationEntryStyled
+        theme={theme}
         num={right}
         css={css`
           border-left: solid 1px ${theme.colors.grey_2};
         `}
       >
         {right}T
-      </DesignationEntry>
+      </DesignationEntryStyled>
     </DesignationContainer>
   );
 };
