@@ -202,7 +202,7 @@ const PageContent = () => {
     return files.length ? fileToFocusOn.clinicalType : defaultType;
   };
 
-  const [tabFromData, setTabFromData] = useState<string | null>('donor');
+  const [tabFromData, setTabFromData] = useState<string>('donor');
 
   const [selectedClinicalEntityType, setSelectedClinicalEntityType] = useUrlParamState(
     'tab',
