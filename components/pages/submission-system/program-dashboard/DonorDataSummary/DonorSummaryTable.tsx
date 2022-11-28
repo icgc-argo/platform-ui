@@ -96,7 +96,7 @@ const DonorSummaryTable = ({
   isCardLoading?: boolean;
 }) => {
   const theme = useTheme();
-  const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = getConfig();
+  const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const { activePipeline, setActivePipeline } = usePipelines();
 
   // These are used to sort columns with multiple fields
@@ -140,10 +140,14 @@ const DonorSummaryTable = ({
 
   const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => (
     <CellContentCenter>
-      <StarIcon
-        fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
-        outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
-      />
+      {original.validWithCurrentDictionary || FEATURE_SUBMITTED_DATA_ENABLED ? (
+        <StarIcon
+          fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
+          outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
+        />
+      ) : (
+        <Icon name="warning" fill={useTheme().colors.error} width="16px" height="15px" />
+      )}
     </CellContentCenter>
   );
 
@@ -181,8 +185,8 @@ const DonorSummaryTable = ({
     const DesignationEntry = styled('div')`
       text-align: center;
       flex: 1;
-      background: ${(props: { num: number }) =>
-        isValid(props.num) ? 'transparent' : theme.colors.error_4};
+      color: ${(props: { num: number }) =>
+        isValid(props.num) ? theme.colors.primary : theme.colors.error};
     `;
 
     return (
@@ -547,10 +551,12 @@ const DonorSummaryTable = ({
               `/clinical-data/?donorId=${original.donorId}`,
               errorTab && `&tab=${errorTab}`,
             );
-            return (
+            return FEATURE_SUBMITTED_DATA_ENABLED ? (
               <NextLink href={linkUrl}>
                 <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
               </NextLink>
+            ) : (
+              `${original.donorId} (${original.submitterDonorId})`
             );
           },
           width: 135,
@@ -943,7 +949,7 @@ const DonorSummaryTable = ({
         <></>
       ),
       columns: [
-        {
+        FEATURE_SUBMITTED_DATA_ENABLED && {
           Header: (
             <ListFilterHeader
               header={'Alerts'}
@@ -999,7 +1005,7 @@ const DonorSummaryTable = ({
           },
           width: 95,
         },
-      ],
+      ].filter(Boolean),
     },
   ];
 

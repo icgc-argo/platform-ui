@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.115.0",
+  "version": "1.115.2",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
@@ -33,7 +33,7 @@
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.5.1",
     "@icgc-argo/ego-token-utils": "^8.1.1",
-    "@icgc-argo/uikit": "^2.1.0",
+    "@icgc-argo/uikit": "^2.1.2",
     "@overture-stack/arranger-components": "3.0.0-beta.11",
     "apollo-upload-client": "^11.0.0",
     "browser-fs-access": "^0.31.1",
