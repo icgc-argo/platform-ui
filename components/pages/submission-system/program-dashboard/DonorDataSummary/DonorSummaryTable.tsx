@@ -71,6 +71,7 @@ import {
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
 import { getConfig } from 'global/config';
+import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
 
 type PagingState = {
   pages: number;
@@ -170,37 +171,6 @@ const DonorSummaryTable = ({
       >
         {cellContent}
       </div>
-    );
-  };
-
-  const DesignationCell = ({ left, right }: { left: number; right: number }) => {
-    const isValid = (num: number) => num > 0;
-    const DesignationContainer = styled('div')`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    `;
-    const DesignationEntry = styled('div')`
-      text-align: center;
-      flex: 1;
-      color: ${(props: { num: number }) =>
-        isValid(props.num) ? theme.colors.primary : theme.colors.error};
-    `;
-
-    return (
-      <DesignationContainer>
-        <DesignationEntry num={left}>{left}N</DesignationEntry>
-        <DesignationEntry
-          num={right}
-          css={css`
-            border-left: solid 1px ${theme.colors.grey_2};
-          `}
-        >
-          {right}T
-        </DesignationEntry>
-      </DesignationContainer>
     );
   };
 
@@ -645,12 +615,20 @@ const DonorSummaryTable = ({
                   />
                 ),
                 id: REGISTERED_SAMPLE_COLUMN_ID,
-                Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.registeredNormalSamples}
-                    right={original.registeredTumourSamples}
-                  />
-                ),
+                Cell: ({ original }) =>
+                  FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
+                    <DesignationCell
+                      normalCount={original.registeredNormalSamples}
+                      original={original}
+                      tumourCount={original.registeredTumourSamples}
+                      type={'dnaTNRegistered'}
+                    />
+                  ) : (
+                    <DesignationCellLegacy
+                      left={original.registeredNormalSamples}
+                      right={original.registeredTumourSamples}
+                    />
+                  ),
               },
               {
                 Header: (
@@ -695,12 +673,20 @@ const DonorSummaryTable = ({
                   />
                 ),
                 id: RAW_READS_COLUMN_ID,
-                Cell: ({ original }) => (
-                  <DesignationCell
-                    left={original.publishedNormalAnalysis}
-                    right={original.publishedTumourAnalysis}
-                  />
-                ),
+                Cell: ({ original }) =>
+                  FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
+                    <DesignationCell
+                      normalCount={original.publishedNormalAnalysis}
+                      original={original}
+                      tumourCount={original.publishedTumourAnalysis}
+                      type={'dnaTNMatchedPair'}
+                    />
+                  ) : (
+                    <DesignationCellLegacy
+                      left={original.publishedNormalAnalysis}
+                      right={original.publishedTumourAnalysis}
+                    />
+                  ),
               },
               {
                 Header: (
@@ -864,8 +850,8 @@ const DonorSummaryTable = ({
                 id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
                 Cell: ({ original }) => (
                   <DesignationCell
-                    left={original.rnaRegisteredNormalSamples}
-                    right={original.rnaRegisteredTumourSamples}
+                    normalCount={original.rnaRegisteredNormalSamples}
+                    tumourCount={original.rnaRegisteredTumourSamples}
                   />
                 ),
               },
@@ -893,8 +879,8 @@ const DonorSummaryTable = ({
                 id: RNA_RAW_READS_COLUMN_ID,
                 Cell: ({ original }) => (
                   <DesignationCell
-                    left={original.rnaPublishedNormalAnalysis}
-                    right={original.rnaPublishedTumourAnalysis}
+                    normalCount={original.rnaPublishedNormalAnalysis}
+                    tumourCount={original.rnaPublishedTumourAnalysis}
                   />
                 ),
               },
@@ -1053,6 +1039,9 @@ const DonorSummaryTable = ({
       css={css`
         z-index: 2;
         padding-top: 10px;
+        .rt-td {
+          position: relative; // helps DesignationCell styling
+        }
       `}
     >
       {programDonorsSummaryQueryError ? (

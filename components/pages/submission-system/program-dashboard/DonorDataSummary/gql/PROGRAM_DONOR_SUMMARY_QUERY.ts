@@ -67,6 +67,7 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         rnaAlignmentsCompleted
         rnaAlignmentsRunning
         rnaAlignmentFailed
+        matchedTNPairsDNA
       }
       stats {
         registeredDonorsCount
