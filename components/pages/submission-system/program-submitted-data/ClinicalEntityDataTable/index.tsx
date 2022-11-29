@@ -223,7 +223,7 @@ const ClinicalEntityDataTable = ({
 
   const donorIds = useDefaultQuery
     ? []
-    : currentDonor
+    : currentDonor.length
     ? currentDonor
     : searchResults
         .map(({ donorId }: ClinicalSearchResults) => donorId)
@@ -402,7 +402,7 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    totalDocs = !useDefaultQuery && !currentDonor ? totalResults : entityData.totalDocs;
+    totalDocs = !useDefaultQuery && !currentDonor.length ? totalResults : entityData.totalDocs;
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
