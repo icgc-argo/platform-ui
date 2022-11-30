@@ -406,7 +406,14 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    totalDocs = useDefaultQuery ? totalResults : entityData.totalDocs;
+
+    // totalDocs affects pagination and display text
+    // If using default query, or using search but not filtering by donor in URL, then we display total number of search results
+    // Else we use the total number of results that match our query
+    totalDocs =
+      useDefaultQuery || (!currentDonor.length && totalResults > entityData.totalDocs)
+        ? totalResults
+        : entityData.totalDocs;
 
     entityData.records.forEach((record) => {
       record.forEach((r) => {

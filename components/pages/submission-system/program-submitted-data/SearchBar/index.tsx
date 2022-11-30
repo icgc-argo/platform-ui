@@ -137,9 +137,7 @@ export default function SearchBar({
       .filter((result) => !!result)
       .slice(0, 20) || [];
 
-  const selectedDonor = currentDonor.length && searchResults.length <= 1;
-
-  const titleText = selectedDonor
+  const titleText = currentDonor.length
     ? `DO${currentDonor[0]}`
     : keyword
     ? `${searchResultItems.length} Donors`
@@ -189,7 +187,7 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
-            disabled={selectedDonor}
+            disabled={!!currentDonor.length}
             value={completionState}
             variant="secondary"
             size="sm"
