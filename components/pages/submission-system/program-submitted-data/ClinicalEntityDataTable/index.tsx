@@ -79,9 +79,9 @@ const errorColumns = [
     maxWidth: 215,
   },
   {
-    accessor: 'message',
+    accessor: 'errorMessage',
     Header: `Error Description`,
-    id: 'message',
+    id: 'errorMessage',
   },
 ];
 
@@ -309,6 +309,11 @@ const ClinicalEntityDataTable = ({
     // Counts Number of Records affected for each Error Object
     const { fieldName, entityName, message, errorType } = errorGroup[0];
 
+    const errorMessage =
+      errorType === 'UNRECOGNIZED_FIELD'
+        ? `${fieldName} is not a field within the latest dictionary. Please remove this from the ${entityName}.tsv file before submitting.`
+        : message;
+
     const entries = errorGroup
       .map((error) => error.donorId)
       .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
@@ -333,7 +338,7 @@ const ClinicalEntityDataTable = ({
       entries,
       fieldName,
       entityName,
-      message,
+      errorMessage,
     };
   });
 

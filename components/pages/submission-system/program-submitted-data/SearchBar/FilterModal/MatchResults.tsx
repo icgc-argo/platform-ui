@@ -17,12 +17,51 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import NextHead from 'next/head';
+import React from 'react';
+import { css } from '@icgc-argo/uikit';
 
-export default function Head() {
+export default function MatchResults({
+  numMatched,
+  numUnmatched,
+}: {
+  numMatched: number;
+  numUnmatched: number;
+}) {
   return (
-    <NextHead>
-      <link rel="icon" href="/favicon.ico" />
-    </NextHead>
+    <>
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        Matched IDs:
+        <b
+          css={css`
+            margin-left: 4px;
+            color: #0774d3;
+          `}
+        >
+          {numMatched}
+        </b>
+      </div>
+      {/* <div> of unmatched ID */}
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        Unmatched IDs:
+        <b
+          css={css`
+            margin-left: 4px;
+            color: #0774d3;
+          `}
+        >
+          {numUnmatched}
+        </b>
+      </div>
+    </>
   );
 }

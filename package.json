@@ -1,10 +1,10 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.114.0",
+  "version": "1.116.0",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
-    "watch-gql": "graphql-codegen -r dotenv/config --watch",
+    "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
     "serve": "npm run build && next start",
@@ -36,6 +36,7 @@
     "@icgc-argo/uikit": "^2.2.0",
     "@overture-stack/arranger-components": "3.0.0-beta.11",
     "apollo-upload-client": "^11.0.0",
+    "browser-fs-access": "^0.31.1",
     "clsx": "^1.1.1",
     "color": "^4.2.3",
     "concurrently": "^7.4.0",
@@ -104,6 +105,10 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.6.4"
+  },
+  "engines": {
+    "npm": ">=8.19.2 <9.0.0",
+    "node": ">=18.12.1 <19.0.0"
   },
   "prettier": {
     "printWidth": 100,

@@ -114,7 +114,8 @@ spec:
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git tag ${version}"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags --no-verify"
+                        // added --no-verify to skip husky checks. see issue #2483
                     }
                     withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
