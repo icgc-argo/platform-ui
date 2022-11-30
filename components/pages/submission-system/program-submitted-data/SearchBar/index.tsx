@@ -207,6 +207,9 @@ export default function SearchBar({
           <Input
             aria-label="search-for-files"
             getOverrideCss={() => searchInputFieldStyle}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setSearchOpen(false);
+            }}
             onChange={(e) => {
               if (e.target.value.length === 0) {
                 setSearchValue('');
