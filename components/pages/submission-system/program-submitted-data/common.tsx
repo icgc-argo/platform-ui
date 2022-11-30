@@ -210,3 +210,5 @@ export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
     totalResults: 0,
   },
 };
+
+export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds?: string[] };

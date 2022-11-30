@@ -19,11 +19,9 @@
 
 import { useQuery } from '@apollo/client';
 import {
-  Button,
   Container,
   css,
   DnaLoader,
-  Icon,
   Link,
   TitleBar,
   Typography,
@@ -54,6 +52,7 @@ import {
   hasClinicalErrors,
   parseDonorIdString,
   reverseLookUpEntityAlias,
+  TsvDownloadIds,
 } from './common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
@@ -147,7 +146,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const { clinicalData } = sideMenuData;
 
   // Search Result Query
-  const { data: searchResultData, loading: searchResultsLoading } =
+  const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } =
     useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
       errorPolicy: 'all',
       variables: {
@@ -185,8 +184,23 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     completionState === 'all';
 
   const noSearchData = searchResultData === null || searchResultData === undefined;
-  const searchResults = noSearchData ? emptySearchResponse : searchResultData;
   const noData = clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonor.length;
+
+  const downloadDonorIds = currentDonor.length
+    ? currentDonor
+    : searchResultData?.clinicalSearchResults?.searchResults.length
+    ? searchResultData.clinicalSearchResults.searchResults.map((result) => result.donorId)
+    : [];
+
+  const downloadSubmitterDonorIds =
+    searchResultData?.clinicalSearchResults?.searchResults
+      .map(({ submitterDonorId }) => submitterDonorId)
+      .filter(Boolean) || [];
+
+  const tsvDownloadIds: TsvDownloadIds = {
+    donorIds: downloadDonorIds,
+    submitterDonorIds: downloadSubmitterDonorIds,
+  };
 
   return (
     <SubmissionLayout
@@ -241,8 +255,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         noData={noData}
         useDefaultQuery={useDefaultQuery}
         currentDonor={currentDonor}
-        currentPageData={sideMenuData}
-        donorSearchResults={searchResults}
+        tsvDownloadIds={tsvDownloadIds}
+        donorSearchResults={searchResultData}
         setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />
@@ -295,7 +309,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                 </Typography>
 
                 <ClinicalDownloadButton
-                  searchResults={searchResultData?.clinicalSearchResults?.searchResults || []}
+                  tsvDownloadIds={tsvDownloadIds}
                   text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
                   entityTypes={[currentEntity]}
                   completionState={completionState}

@@ -63,13 +63,13 @@ const DownloadButton = ({
 
 const ClinicalDownloadButton = ({
   text,
-  searchResults = [],
+  tsvDownloadIds = { donorIds: [] },
   entityTypes = [],
   completionState,
   disabled = false,
 }: {
   text?: string;
-  searchResults: ClinicalSearchResults[];
+  tsvDownloadIds: { donorIds: number[]; submitterDonorIds?: string[] };
   entityTypes: string[];
   completionState: CompletionStates;
   disabled?: boolean;
@@ -80,11 +80,7 @@ const ClinicalDownloadButton = ({
   const { downloadFileWithEgoToken } = useAuthContext();
 
   const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
-
-  const donorIds = searchResults.map(({ donorId }) => donorId);
-  const submitterDonorIds = searchResults
-    .map(({ submitterDonorId }) => submitterDonorId)
-    .filter(Boolean);
+  const { donorIds, submitterDonorIds } = tsvDownloadIds;
 
   const query = queryString.stringify(
     { donorIds, submitterDonorIds, entityTypes, completionState },

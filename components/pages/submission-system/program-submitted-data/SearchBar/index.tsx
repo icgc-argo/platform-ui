@@ -37,7 +37,7 @@ import {
   CompletionStates,
   emptySearchResponse,
   clinicalEntityFields,
-  ClinicalEntityQueryResponse,
+  TsvDownloadIds,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -88,6 +88,7 @@ export default function SearchBar({
   useDefaultQuery,
   currentDonor,
   donorSearchResults,
+  tsvDownloadIds,
   modalVisible,
   setFilterTextBox,
   filterTextBox,
@@ -104,6 +105,7 @@ export default function SearchBar({
   useDefaultQuery: boolean;
   currentDonor: number[];
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  tsvDownloadIds: TsvDownloadIds;
   modalVisible: boolean;
   setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
   filterTextBox: string;
@@ -151,15 +153,6 @@ export default function SearchBar({
 
     setDisplayText(completionDisplayText);
   }, [completionState]);
-
-  const downloadIds =
-    keyword.length === 0 && completionState === 'all' && !currentDonor.length
-      ? []
-      : currentDonor.length
-      ? currentDonor.map((id) => ({
-          donorId: id,
-        }))
-      : searchResults;
 
   return (
     <Container css={searchBackgroundStyle}>
@@ -264,7 +257,7 @@ export default function SearchBar({
 
         {/* Fourth item - download button*/}
         <ClinicalDownloadButton
-          searchResults={downloadIds}
+          tsvDownloadIds={tsvDownloadIds}
           text="Clinical Data"
           entityTypes={clinicalEntityFields}
           completionState={completionState}
