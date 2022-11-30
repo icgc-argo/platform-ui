@@ -37,6 +37,7 @@ import {
   CompletionStates,
   emptySearchResponse,
   clinicalEntityFields,
+  ClinicalEntityQueryResponse,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -151,7 +152,14 @@ export default function SearchBar({
     setDisplayText(completionDisplayText);
   }, [completionState]);
 
-  const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
+  const downloadIds =
+    keyword.length === 0 && completionState === 'all' && !currentDonor.length
+      ? []
+      : currentDonor.length
+      ? currentDonor.map((id) => ({
+          donorId: id,
+        }))
+      : searchResults;
 
   return (
     <Container css={searchBackgroundStyle}>
