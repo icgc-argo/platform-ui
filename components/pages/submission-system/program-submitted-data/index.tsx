@@ -87,6 +87,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   });
 
   const currentDonor = selectedDonors ? [parseDonorIdString(selectedDonors)] : [];
+
   // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
   // Example: DO259138, 2579137, DASH-7, DO253290abcdef
   // Regex will match first 2 Donor IDs, but not 3rd Submitter ID or 4th case w/ random text
@@ -116,6 +117,14 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       .map((str) => str.trim())
       .filter((word) => !!word) || [];
 
+  const sideMenuQueryDonorIds = isFilterUsed
+    ? filterDonorIds
+    : currentDonor.length && !searchDonorIds.length
+    ? currentDonor
+    : searchDonorIds;
+
+  const sideMenuQuerySubmitterDonorIds = isFilterUsed ? filterSubmitterIds : searchSubmitterIds;
+
   // Side Menu Query (Populates Clinical Entity Table)
   const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
@@ -126,12 +135,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: isFilterUsed
-            ? filterDonorIds
-            : currentDonor.length && !searchDonorIds.length
-            ? currentDonor
-            : searchDonorIds,
-          submitterDonorIds: isFilterUsed ? filterSubmitterIds : searchSubmitterIds,
+          donorIds: sideMenuQueryDonorIds,
+          submitterDonorIds: sideMenuQuerySubmitterDonorIds,
         },
       },
     });
