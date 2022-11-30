@@ -156,7 +156,8 @@ export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) => {
   return findAlias ? findAlias[0] : 'donor';
 };
 
-export const parseDonorIdString = (donorId: string) => parseInt(donorId.split('DO')[1]);
+export const parseDonorIdString = (donorId: string) =>
+  donorId.match(/do/i) ? parseInt(donorId.split('DO')[1]) : parseInt(donorId);
 
 export const aliasSortNames = {
   donor_id: 'donorId',

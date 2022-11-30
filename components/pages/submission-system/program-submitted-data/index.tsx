@@ -86,6 +86,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     serialize: (v) => v,
     deSerialize: (v) => v,
   });
+
   const currentDonor = selectedDonors ? [parseDonorIdString(selectedDonors)] : [];
   // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
   // Example: DO259138, 2579137, DASH-7, DO253290abcdef
@@ -140,8 +141,10 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
 
-  const { clinicalData: sideMenuData } =
+  const sideMenuData =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
+
+  const { clinicalData } = sideMenuData;
 
   // Search Result Query
   const { data: searchResultData, loading: searchResultsLoading } =
@@ -165,11 +168,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
       onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
       disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
+        !clinicalData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
       }
     >
       {clinicalEntityDisplayNames[entity]}
-      {hasClinicalErrors(sideMenuData, entity) && (
+      {hasClinicalErrors(clinicalData, entity) && (
         <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
       )}
     </VerticalTabs.Item>
@@ -183,7 +186,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   const noSearchData = searchResultData === null || searchResultData === undefined;
   const searchResults = noSearchData ? emptySearchResponse : searchResultData;
-  const noData = sideMenuData.clinicalEntities.length === 0 && noSearchData && !currentDonor.length;
+  const noData = clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonor.length;
 
   return (
     <SubmissionLayout
@@ -238,6 +241,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         noData={noData}
         useDefaultQuery={useDefaultQuery}
         currentDonor={currentDonor}
+        currentPageData={sideMenuData}
         donorSearchResults={searchResults}
         setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
@@ -291,7 +295,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                 </Typography>
 
                 <ClinicalDownloadButton
-                  searchResults={searchResultData.clinicalSearchResults.searchResults}
+                  searchResults={searchResultData?.clinicalSearchResults?.searchResults || []}
                   text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
                   entityTypes={[currentEntity]}
                   completionState={completionState}
@@ -305,6 +309,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   program={programShortName}
                   completionState={completionState}
                   currentDonor={currentDonor}
+                  currentPageData={sideMenuData}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
                   noData={noData}

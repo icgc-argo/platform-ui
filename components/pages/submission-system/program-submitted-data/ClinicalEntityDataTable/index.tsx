@@ -188,6 +188,7 @@ const ClinicalEntityDataTable = ({
   program,
   completionState = CompletionStates['all'],
   currentDonor,
+  currentPageData,
   donorSearchResults = emptySearchResponse,
   useDefaultQuery,
   noData,
@@ -196,6 +197,7 @@ const ClinicalEntityDataTable = ({
   program: string;
   completionState: CompletionStates;
   currentDonor: number[];
+  currentPageData: ClinicalEntityQueryResponse;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   useDefaultQuery: boolean;
   noData: boolean;
@@ -228,12 +230,14 @@ const ClinicalEntityDataTable = ({
     : searchResults
         .map(({ donorId }: ClinicalSearchResults) => donorId)
         .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
-  const submitterDonorIds = useDefaultQuery
-    ? []
-    : searchResults
-        .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-        .filter((id) => !!id)
-        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+
+  const submitterDonorIds =
+    useDefaultQuery || currentDonor
+      ? []
+      : searchResults
+          .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+          .filter((id) => !!id)
+          .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -402,7 +406,8 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    totalDocs = !useDefaultQuery && !currentDonor.length ? totalResults : entityData.totalDocs;
+    totalDocs = useDefaultQuery ? totalResults : entityData.totalDocs;
+
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
