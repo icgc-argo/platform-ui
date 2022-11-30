@@ -30,7 +30,7 @@ import {
 import { getConfig } from 'global/config';
 import { CLINICAL_TEMPLATE_PATH } from 'global/constants/gatewayApiPaths';
 import { displayDateAndTime } from 'global/utils/common';
-import { ComponentType, HtmlHTMLAttributes, ReactNode } from 'react';
+import { ComponentType, HtmlHTMLAttributes, PropsWithChildren, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import { formatFileName } from './program-sample-registration/util';
@@ -94,18 +94,26 @@ export const TableLegendContainer = ({ children }) => {
   );
 };
 
-export const TableLegendStatusIcon = ({ fill }: { fill: keyof ThemeColorNames }) => {
+export const TableLegendStatusIcon = ({
+  fill,
+  type,
+}: {
+  fill: keyof ThemeColorNames;
+  type: 'pill' | 'box';
+}) => {
   const theme = useTheme();
 
   return (
     <span
       css={css`
+        flex-shrink: 0;
         display: block;
         width: 18px;
         height: 12px;
-        border-radius: 7px;
+        border-radius: ${type === 'box' ? '0' : '7px'};
         margin-right: 5px;
         background-color: ${theme.colors[fill]};
+        border: ${type === 'box' ? `1px solid ${theme.colors.grey_1}` : 'none'};
       `}
     />
   );
@@ -118,11 +126,26 @@ export const TableLegendSection = styled('div')`
   margin-bottom: 10px;
 `;
 
-export const TableLegendEntry = styled('div')`
-  margin-right: 5px;
-  display: flex;
-  align-items: flex-start;
-`;
+export const TableLegendEntry = ({
+  count,
+  icon,
+  text,
+}: PropsWithChildren<{ count?: number; icon: ReactNode; text: string }>) => (
+  <div
+    css={css`
+      margin-right: 5px;
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
+    `}
+  >
+    {icon}
+    <span>
+      {count !== undefined && <b>{count.toLocaleString()}&nbsp;</b>}
+      {text}
+    </span>
+  </div>
+);
 
 export const DataTableStarIcon = (props: { fill: keyof ThemeColorNames; outline?: Outline }) => (
   <Icon name="star" width="16px" height="16px" {...props} />
