@@ -125,7 +125,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   const sideMenuQuerySubmitterDonorIds = isFilterUsed ? filterSubmitterIds : searchSubmitterIds;
 
-  // Side Menu Query (Populates Clinical Entity Table)
+  // Side Menu Query
+  // Populates Clinical Entity Table, Side Menu, Title Bar
   const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
@@ -151,6 +152,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const { clinicalData } = sideMenuData;
 
   // Search Result Query
+  // Populates dropdown menu; Search query populates data table if there are no URL params
   const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } =
     useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
       errorPolicy: 'all',
