@@ -111,11 +111,13 @@ spec:
                 branch "master"
             }
             steps {
-                container('docker') {
+                container('node') {
                     withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git tag ${version}"
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags --no-verify"
                     }
+                }
+                container('docker') {
                     withCredentials([usernamePassword(credentialsId:'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
                     }
