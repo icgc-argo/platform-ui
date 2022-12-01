@@ -232,7 +232,7 @@ const ClinicalEntityDataTable = ({
         .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const submitterDonorIds =
-    useDefaultQuery || currentDonor
+    useDefaultQuery || currentDonor.length
       ? []
       : searchResults
           .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
