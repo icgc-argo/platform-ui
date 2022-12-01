@@ -199,10 +199,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     ? searchResultData.clinicalSearchResults.searchResults.map((result) => result.donorId)
     : [];
 
-  const downloadSubmitterDonorIds =
-    searchResultData?.clinicalSearchResults?.searchResults
-      .map(({ submitterDonorId }) => submitterDonorId)
-      .filter(Boolean) || [];
+  const downloadSubmitterDonorIds = (searchResultData?.clinicalSearchResults?.searchResults || [])
+    .map(({ submitterDonorId }) => submitterDonorId)
+    .filter(Boolean);
 
   const tsvDownloadIds: TsvDownloadIds = {
     donorIds: downloadDonorIds,
