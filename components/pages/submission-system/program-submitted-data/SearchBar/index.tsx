@@ -201,6 +201,9 @@ export default function SearchBar({
             preset="search"
             showClear={true}
             value={keyword}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setSearchOpen(false);
+            }}
             onChange={(e) => {
               setKeyword(e.target.value);
               if (keyword && keyword.length >= 1) setSearchOpen(true);
