@@ -261,9 +261,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         noData={noData}
         useDefaultQuery={useDefaultQuery}
         currentDonor={currentDonor}
+        setSelectedDonors={setSelectedDonors}
         tsvDownloadIds={tsvDownloadIds}
         donorSearchResults={searchResultData}
-        setUrlDonorIds={setSelectedDonors}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
@@ -329,7 +329,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   program={programShortName}
                   completionState={completionState}
                   currentDonor={currentDonor}
-                  currentPageData={sideMenuData}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
                   noData={noData}

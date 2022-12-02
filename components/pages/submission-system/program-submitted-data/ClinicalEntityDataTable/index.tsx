@@ -188,7 +188,6 @@ const ClinicalEntityDataTable = ({
   program,
   completionState = CompletionStates['all'],
   currentDonor,
-  currentPageData,
   donorSearchResults = emptySearchResponse,
   useDefaultQuery,
   noData,
@@ -197,7 +196,6 @@ const ClinicalEntityDataTable = ({
   program: string;
   completionState: CompletionStates;
   currentDonor: number[];
-  currentPageData: ClinicalEntityQueryResponse;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   useDefaultQuery: boolean;
   noData: boolean;

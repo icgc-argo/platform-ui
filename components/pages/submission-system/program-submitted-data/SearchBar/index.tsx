@@ -87,12 +87,12 @@ export default function SearchBar({
   setKeyword,
   useDefaultQuery,
   currentDonor,
+  setSelectedDonors,
   donorSearchResults,
   tsvDownloadIds,
   modalVisible,
   setFilterTextBox,
   filterTextBox,
-  setUrlDonorIds,
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
@@ -104,26 +104,26 @@ export default function SearchBar({
   setKeyword: Dispatch<SetStateAction<string>>;
   useDefaultQuery: boolean;
   currentDonor: number[];
+  setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   tsvDownloadIds: TsvDownloadIds;
   modalVisible: boolean;
   setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
   filterTextBox: string;
-  setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
   const [searchOpen, setSearchOpen] = useState(false);
-  const setSearchValue = (value) => {
+  const setFilterValue = (value) => {
     setKeyword(value);
-    setUrlDonorIds(value);
+    setSelectedDonors(value);
     setSearchOpen(false);
   };
 
   const menuItemDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: menuItemDropdownRef,
-    onElementClick: setSearchValue,
+    onElementClick: setFilterValue,
     onClickAway: () => setSearchOpen(false),
   });
 
@@ -170,7 +170,7 @@ export default function SearchBar({
         {!useDefaultQuery && (
           <Button
             onClick={() => {
-              setSearchValue('');
+              setFilterValue('');
               setCompletionState(CompletionStates.all);
             }}
             css={searchClearFilterStyle}
@@ -212,7 +212,7 @@ export default function SearchBar({
             }}
             onChange={(e) => {
               if (e.target.value.length === 0) {
-                setSearchValue('');
+                setFilterValue('');
               } else {
                 setKeyword(e.target.value);
                 setSearchOpen(true);
@@ -242,7 +242,7 @@ export default function SearchBar({
               <SearchResultsMenu
                 searchData={searchResultItems}
                 isLoading={loading}
-                onSelect={setSearchValue}
+                onSelect={setFilterValue}
               />
             </>
           ) : null}
