@@ -66,8 +66,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
-  const [filterTextBox, setFilterTextBox] = useState('');
-  const isFilterUsed = !!filterTextBox;
   const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
@@ -100,30 +98,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
 
+  const sideMenuQueryDonorIds =
+    currentDonor.length && !searchDonorIds.length ? currentDonor : searchDonorIds;
+
   const searchSubmitterIds = donorPrefixSearch
     ? []
     : keyword.split(/, |,/).filter((word) => !!word);
-
-  // Format text coming from filter
-  const filterDonorIds =
-    filterTextBox
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
-
-  const filterSubmitterIds =
-    filterTextBox
-      .split(',')
-      .map((str) => str.trim())
-      .filter((word) => !!word) || [];
-
-  const sideMenuQueryDonorIds = isFilterUsed
-    ? filterDonorIds
-    : currentDonor.length && !searchDonorIds.length
-    ? currentDonor
-    : searchDonorIds;
-
-  const sideMenuQuerySubmitterDonorIds = isFilterUsed ? filterSubmitterIds : searchSubmitterIds;
 
   // Side Menu Query
   // Populates Clinical Entity Table, Side Menu, Title Bar
@@ -137,7 +117,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
           ...defaultClinicalEntityFilters,
           completionState,
           donorIds: sideMenuQueryDonorIds,
-          submitterDonorIds: sideMenuQuerySubmitterDonorIds,
+          submitterDonorIds: sideMenuQueryDonorIds,
         },
       },
     });
@@ -161,8 +141,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: isFilterUsed ? filterDonorIds : searchDonorIds,
-          submitterDonorIds: isFilterUsed ? filterSubmitterIds : searchSubmitterIds,
+          donorIds: searchDonorIds,
+          submitterDonorIds: searchSubmitterIds,
           entityTypes: ['donor'],
         },
       },
@@ -185,7 +165,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   ));
 
   const useDefaultQuery =
-    !isFilterUsed &&
     !currentDonor.length &&
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
@@ -251,8 +230,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       <SearchBar
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
-        setFilterTextBox={setFilterTextBox}
-        filterTextBox={filterTextBox}
         completionState={completionState}
         setCompletionState={setCompletionState}
         programShortName={programShortName}

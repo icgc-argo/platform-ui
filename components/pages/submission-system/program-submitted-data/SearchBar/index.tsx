@@ -91,8 +91,6 @@ export default function SearchBar({
   donorSearchResults,
   tsvDownloadIds,
   modalVisible,
-  setFilterTextBox,
-  filterTextBox,
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
@@ -108,8 +106,6 @@ export default function SearchBar({
   donorSearchResults: ClinicalEntitySearchResultResponse;
   tsvDownloadIds: TsvDownloadIds;
   modalVisible: boolean;
-  setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
-  filterTextBox: string;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
@@ -159,8 +155,7 @@ export default function SearchBar({
       {modalVisible && (
         <FilterModal
           setModalVisible={setModalVisible}
-          setFilterTextBox={setFilterTextBox}
-          filterTextBox={filterTextBox}
+          setSelectedDonors={setSelectedDonors}
           programShortName={programShortName}
         />
       )}
