@@ -19,14 +19,13 @@
 
 import React from 'react';
 import { Row, Col } from 'react-grid-system';
-import { ClinicalSearchResults } from 'generated/gql_types';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
-import { CompletionStates } from './common';
+import { CompletionStates, TsvDownloadIds } from './common';
 import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
 
 const DownloadButton = ({
@@ -69,7 +68,7 @@ const ClinicalDownloadButton = ({
   disabled = false,
 }: {
   text?: string;
-  tsvDownloadIds: { donorIds: number[]; submitterDonorIds?: string[] };
+  tsvDownloadIds: TsvDownloadIds;
   entityTypes: string[];
   completionState: CompletionStates;
   disabled?: boolean;
