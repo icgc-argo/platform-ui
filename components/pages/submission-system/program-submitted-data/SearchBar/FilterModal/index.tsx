@@ -115,8 +115,8 @@ export default function FilterModal({
       if (donorIdMatch || submitterIdMatch) {
         filteredTextAreaIDs.delete(result.donorId);
         filteredTextAreaIDs.delete(result.submitterDonorId);
-        const newMatchedId = donorIdMatch ? result.donorId : result.submitterDonorId;
-        setMatchedIds([...matchedIds, newMatchedId]);
+
+        setMatchedIds([...matchedIds, result.donorId]);
       }
     });
 
@@ -136,8 +136,9 @@ export default function FilterModal({
     }
   };
 
-  const matchedDonorIds = matchedIds.filter((ID) => typeof ID === 'number').toString();
-  const matchedSubmitterDonorIds = matchedIds.filter((ID) => typeof ID === 'string');
+  const matchedDonorIds = matchedIds
+    .filter((ID, index, self) => typeof ID === 'number' && !!ID && self.indexOf(ID) == index)
+    .join();
 
   return (
     <ModalPortal>

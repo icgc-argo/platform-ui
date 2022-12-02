@@ -84,7 +84,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     deSerialize: (v) => v,
   });
 
-  const currentDonor = selectedDonors ? [parseDonorIdString(selectedDonors)] : [];
+  const currentDonors = selectedDonors
+    ? selectedDonors.split(',').map((donorId) => parseDonorIdString(donorId))
+    : [];
 
   // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
   // Example: DO259138, 2579137, DASH-7, DO253290abcdef
@@ -99,7 +101,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
 
   const sideMenuQueryDonorIds =
-    currentDonor.length && !searchDonorIds.length ? currentDonor : searchDonorIds;
+    currentDonors.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
@@ -165,15 +167,16 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   ));
 
   const useDefaultQuery =
-    !currentDonor.length &&
+    !currentDonors.length &&
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
 
   const noSearchData = searchResultData === null || searchResultData === undefined;
-  const noData = clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonor.length;
+  const noData =
+    clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonors.length;
 
-  const downloadDonorIds = currentDonor.length
-    ? currentDonor
+  const downloadDonorIds = currentDonors.length
+    ? currentDonors
     : searchResultData?.clinicalSearchResults?.searchResults.length
     ? searchResultData.clinicalSearchResults.searchResults.map((result) => result.donorId)
     : [];
@@ -237,7 +240,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         loading={searchResultsLoading}
         noData={noData}
         useDefaultQuery={useDefaultQuery}
-        currentDonor={currentDonor}
+        currentDonors={currentDonors}
         setSelectedDonors={setSelectedDonors}
         tsvDownloadIds={tsvDownloadIds}
         donorSearchResults={searchResultData}
@@ -305,7 +308,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
-                  currentDonor={currentDonor}
+                  currentDonors={currentDonors}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
                   noData={noData}

@@ -86,7 +86,7 @@ export default function SearchBar({
   keyword,
   setKeyword,
   useDefaultQuery,
-  currentDonor,
+  currentDonors,
   setSelectedDonors,
   donorSearchResults,
   tsvDownloadIds,
@@ -101,7 +101,7 @@ export default function SearchBar({
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
   useDefaultQuery: boolean;
-  currentDonor: number[];
+  currentDonors: number[];
   setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
   tsvDownloadIds: TsvDownloadIds;
@@ -136,11 +136,14 @@ export default function SearchBar({
       .filter((result) => !!result)
       .slice(0, 20) || [];
 
-  const titleText = currentDonor.length
-    ? `DO${currentDonor[0]}`
-    : keyword
-    ? `${searchResultItems.length} Donors`
-    : COMPLETION_OPTIONS[completionState].display;
+  const titleText =
+    currentDonors.length === 1
+      ? `DO${currentDonors[0]}`
+      : currentDonors.length > 1
+      ? `${currentDonors.length} Donors`
+      : keyword
+      ? `${searchResultItems.length} Donors`
+      : COMPLETION_OPTIONS[completionState].display;
 
   useEffect(() => {
     const completionDisplayText = COMPLETION_OPTIONS[completionState]
@@ -183,7 +186,7 @@ export default function SearchBar({
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
-            disabled={!!currentDonor.length}
+            disabled={!!currentDonors.length}
             value={completionState}
             variant="secondary"
             size="sm"

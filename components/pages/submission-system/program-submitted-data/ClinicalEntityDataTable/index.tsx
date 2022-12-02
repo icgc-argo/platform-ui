@@ -187,7 +187,7 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
-  currentDonor,
+  currentDonors,
   donorSearchResults = emptySearchResponse,
   useDefaultQuery,
   noData,
@@ -195,7 +195,7 @@ const ClinicalEntityDataTable = ({
   entityType: string;
   program: string;
   completionState: CompletionStates;
-  currentDonor: number[];
+  currentDonors: number[];
   donorSearchResults: ClinicalEntitySearchResultResponse;
   useDefaultQuery: boolean;
   noData: boolean;
@@ -223,14 +223,14 @@ const ClinicalEntityDataTable = ({
 
   const donorIds = useDefaultQuery
     ? []
-    : currentDonor.length
-    ? currentDonor
+    : currentDonors.length
+    ? currentDonors
     : searchResults
         .map(({ donorId }: ClinicalSearchResults) => donorId)
         .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const submitterDonorIds =
-    useDefaultQuery || currentDonor.length
+    useDefaultQuery || currentDonors.length
       ? []
       : searchResults
           .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
@@ -409,7 +409,7 @@ const ClinicalEntityDataTable = ({
     // If using default query, or using search but not filtering by donor in URL, then we display total number of search results
     // Else we use the total number of results that match our query
     totalDocs =
-      useDefaultQuery || (!currentDonor.length && totalResults > entityData.totalDocs)
+      useDefaultQuery || (!currentDonors.length && totalResults > entityData.totalDocs)
         ? totalResults
         : entityData.totalDocs;
 
