@@ -186,8 +186,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     .filter(Boolean);
 
   const tsvDownloadIds: TsvDownloadIds = {
-    donorIds: downloadDonorIds,
-    submitterDonorIds: downloadSubmitterDonorIds,
+    donorIds: useDefaultQuery ? [] : downloadDonorIds,
+    submitterDonorIds: useDefaultQuery ? [] : downloadSubmitterDonorIds,
   };
 
   return (

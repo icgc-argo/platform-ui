@@ -211,4 +211,4 @@ export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
   },
 };
 
-export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds?: string[] };
+export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds: string[] };
