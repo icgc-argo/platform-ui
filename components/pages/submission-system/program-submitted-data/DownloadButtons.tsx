@@ -62,7 +62,7 @@ const DownloadButton = ({
 
 const ClinicalDownloadButton = ({
   text,
-  tsvDownloadIds = { donorIds: [] },
+  tsvDownloadIds = { donorIds: [], submitterDonorIds: [] },
   entityTypes = [],
   completionState,
   disabled = false,
