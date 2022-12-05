@@ -99,7 +99,7 @@ function Instructions({
         steps={[
           <>
             <Typography variant="data" component="span">
-              1. Download the registration template and format it using{' '}
+              BEFORE YOU START: Download the registration template and format it using{' '}
               <Link target="_blank" href={DOCS_DICTIONARY_PAGE} bold>
                 Data&nbsp;Dictionary&nbsp;
                 {!latestDictionaryResponse.loading &&
@@ -126,7 +126,7 @@ function Instructions({
           </>,
           <>
             <Typography variant="data" component="span">
-              2. Upload your formatted registration TSV file.
+              1. Upload your formatted registration TSV file.
             </Typography>
             <FileSelectButton
               isAsync
@@ -153,7 +153,7 @@ function Instructions({
           </>,
           <>
             <Typography variant="data" component="span">
-              3. When your sample list is valid and QC is complete, submit your registration.
+              2. When your sample list is valid and QC is complete, submit your registration.
             </Typography>
             <Button
               id="button-register-samples-commit"

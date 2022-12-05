@@ -112,7 +112,7 @@ const Instruction = ({
       steps={[
         <>
           <Typography variant="data" component="span">
-            1. Download the clinical file templates and format them using{' '}
+            BEFORE YOU START: Download the clinical file templates and format them using{' '}
             <Link target="_blank" bold href={DOCS_DICTIONARY_PAGE}>
               Data&nbsp;Dictionary&nbsp;
               {!latestDictionaryResponse.loading &&
@@ -123,7 +123,7 @@ const Instruction = ({
         </>,
         <>
           <Typography variant="data" component="span">
-            2. Upload your formatted clinical TSV files.
+            1. Upload your formatted clinical TSV files.
           </Typography>
           <FileSelectButton
             id="button-submission-file-select" // For Selenium
@@ -153,7 +153,7 @@ const Instruction = ({
         </>,
         <>
           <Typography variant="data" component="span">
-            3. Validate your entire submission workspace.
+            2. Validate your entire submission workspace.
           </Typography>
           <Button
             id="button-validate-submission" // For Selenium
@@ -171,7 +171,7 @@ const Instruction = ({
         </>,
         <>
           <Typography variant="data" component="span">
-            4. When your clinical data is valid and QC is complete, sign off your submission:
+            3. When your clinical data is valid and QC is complete, sign off your submission:
           </Typography>
           <Button
             id="button-submission-sign-off" // For Selenium
