@@ -19,24 +19,25 @@
 
 import React from 'react';
 import { Row, Col } from 'react-grid-system';
-import { ClinicalSearchResults } from 'generated/gql_types';
 import queryString from 'query-string';
 import urlJoin from 'url-join';
 import { useToaster } from 'global/hooks/toaster';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { getConfig } from 'global/config';
-import { CompletionStates } from './common';
+import { CompletionStates, TsvDownloadIds } from './common';
 import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
 
 const DownloadButton = ({
   text,
   onClick,
   isLoading = false,
+  disabled = false,
 }: {
   text: string;
   onClick?: any;
   isLoading?: boolean;
+  disabled?: boolean;
 }) => (
   <Button
     isLoading={isLoading}
@@ -45,6 +46,7 @@ const DownloadButton = ({
     `}
     variant="secondary"
     onClick={onClick}
+    disabled={disabled}
   >
     <Icon
       css={css`
@@ -60,14 +62,16 @@ const DownloadButton = ({
 
 const ClinicalDownloadButton = ({
   text,
-  searchResults = [],
+  tsvDownloadIds = { donorIds: [], submitterDonorIds: [] },
   entityTypes = [],
   completionState,
+  disabled = false,
 }: {
   text?: string;
-  searchResults: ClinicalSearchResults[];
+  tsvDownloadIds: TsvDownloadIds;
   entityTypes: string[];
   completionState: CompletionStates;
+  disabled?: boolean;
 }) => {
   const toaster = useToaster();
 
@@ -75,11 +79,7 @@ const ClinicalDownloadButton = ({
   const { downloadFileWithEgoToken } = useAuthContext();
 
   const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
-
-  const donorIds = searchResults.map(({ donorId }) => donorId);
-  const submitterDonorIds = searchResults
-    .map(({ submitterDonorId }) => submitterDonorId)
-    .filter(Boolean);
+  const { donorIds, submitterDonorIds } = tsvDownloadIds;
 
   const query = queryString.stringify(
     { donorIds, submitterDonorIds, entityTypes, completionState },
@@ -103,8 +103,8 @@ const ClinicalDownloadButton = ({
       GATEWAY_API_ROOT,
       `/clinical/program/`,
       programShortName,
-      `/clinical-data-tsv?`,
-      query,
+      `/clinical-data-tsv`,
+      `?${query}`,
     );
 
     setButtonLoadingState(true);
@@ -123,6 +123,7 @@ const ClinicalDownloadButton = ({
           text={text || 'All Clinical Data'}
           onClick={onClickDownloadAll}
           isLoading={buttonLoadingState}
+          disabled={disabled}
         />
       </Col>
     </Row>

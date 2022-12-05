@@ -187,14 +187,18 @@ const ClinicalEntityDataTable = ({
   entityType,
   program,
   completionState = CompletionStates['all'],
+  currentDonors,
   donorSearchResults = emptySearchResponse,
   useDefaultQuery,
+  noData,
 }: {
   entityType: string;
   program: string;
   completionState: CompletionStates;
+  currentDonors: number[];
   donorSearchResults: ClinicalEntitySearchResultResponse;
   useDefaultQuery: boolean;
+  noData: boolean;
 }) => {
   // Init + Page Settings
   let totalDocs = 0;
@@ -216,17 +220,22 @@ const ClinicalEntityDataTable = ({
   } = donorSearchResults || emptySearchResponse;
 
   const nextSearchPage = (page + 1) * pageSize;
+
   const donorIds = useDefaultQuery
     ? []
+    : currentDonors.length
+    ? currentDonors
     : searchResults
         .map(({ donorId }: ClinicalSearchResults) => donorId)
         .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
-  const submitterDonorIds = useDefaultQuery
-    ? []
-    : searchResults
-        .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-        .filter((id) => !!id)
-        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+
+  const submitterDonorIds =
+    useDefaultQuery || currentDonors.length
+      ? []
+      : searchResults
+          .map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+          .filter((id) => !!id)
+          .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
   const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
   const Subtitle = ({ program = '' }) => (
@@ -277,7 +286,7 @@ const ClinicalEntityDataTable = ({
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
-  const noData = clinicalData.clinicalEntities.length === 0 || totalResults === 0;
+  const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
   // Collect Error Data
   const { clinicalErrors = [] } = clinicalData;
@@ -385,7 +394,7 @@ const ClinicalEntityDataTable = ({
   };
 
   // Map Completion Stats + Entity Data
-  if (noData) {
+  if (noTableData) {
     showCompletionStats = true;
     records = noDataCompletionStats;
   } else {
@@ -395,7 +404,15 @@ const ClinicalEntityDataTable = ({
     columns = [...entityData.entityFields];
     const { completionStats, entityName } = entityData;
     showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
-    totalDocs = !useDefaultQuery ? totalResults : entityData.totalDocs;
+
+    // totalDocs affects pagination and display text
+    // If using default query, or using search but not filtering by donor in URL, then we display total number of search results
+    // Else we use the total number of results that match our query
+    totalDocs =
+      useDefaultQuery || (!currentDonors.length && totalResults > entityData.totalDocs)
+        ? totalResults
+        : entityData.totalDocs;
+
     entityData.records.forEach((record) => {
       record.forEach((r) => {
         if (!columns.includes(r.name)) columns.push(r.name);
@@ -523,7 +540,7 @@ const ClinicalEntityDataTable = ({
             marginLeft: stickyDonorIDColumnsWidth,
           }),
       },
-      minWidth: getColumnWidth(key, showCompletionStats, noData),
+      minWidth: getColumnWidth(key, showCompletionStats, noTableData),
     };
   });
 
@@ -580,8 +597,8 @@ const ClinicalEntityDataTable = ({
         headerStyle: completionHeaderStyle,
         columns: columns.slice(0, 7).map((column) => ({
           ...column,
-          maxWidth: noData ? 50 : 250,
-          style: noData ? noDataCellStyle : {},
+          maxWidth: noTableData ? 50 : 250,
+          style: noTableData ? noDataCellStyle : {},
           Cell: ({ value }) =>
             value === 1 ? (
               <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
@@ -611,7 +628,7 @@ const ClinicalEntityDataTable = ({
         width: 100%;
       `}
     />
-  ) : noData ? (
+  ) : noTableData ? (
     <NoDataCell />
   ) : (
     <div

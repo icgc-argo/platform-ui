@@ -33,33 +33,41 @@ declare global {
   }
 }
 
+const matchDonorIds = (text) =>
+  text
+    .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+    // Remove empty strings and duplicate matches
+    ?.filter((match, index, self) => !!match && self.indexOf(match) == index)
+    .map((idString) => parseInt(idString)) || [];
+
+const matchSubmitterDonorIds = (text) =>
+  text
+    .split(',')
+    ?.filter((match, index, self) => !!match && self.indexOf(match) == index)
+    .map((str) => str.trim()) || [];
+
 //searchResults prop is an array of Object contatining donor and submitter id
 export default function FilterModal({
   setModalVisible,
-  setFilterTextBox,
-  filterTextBox,
+  setSelectedDonors,
   programShortName,
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
-  filterTextBox: string;
+  setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
   programShortName: string;
 }) {
+  const [filterTextBox, setFilterTextBox] = useState('');
+
   //make matchID dynamic using useState
   const [numMatched, setNumMatched] = useState(0);
   const [numUnmatched, setNumUnmatched] = useState(0);
+  const [matchedIds, setMatchedIds] = useState([]);
+
+  // Match text area contents for Donor ID #s
+  const filterDonorIds = matchDonorIds(filterTextBox);
 
   // format text from text area of the filter modal from string to an array of strings
-  const filterDonorIds =
-    filterTextBox
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
-  const filterSubmitterIds =
-    filterTextBox
-      .split(',')
-      ?.filter((match) => !!match)
-      .map((str) => str.trim()) || [];
+  const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox);
 
   // enter the formatted array of string to query and return the matched strings
   const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
@@ -83,11 +91,17 @@ export default function FilterModal({
     //format the string from text area of the modal to create an set of IDs, so we know the total number
     const filteredTextAreaIDs = new Set();
 
-    filterTextBox
-      .split(',')
-      ?.filter((match) => !!match)
-      .map((str) => str.trim())
-      .forEach((str) => filteredTextAreaIDs.add(str));
+    // Match text area contents for Donor ID #s
+    const updatedDonorIds = matchDonorIds(filterTextBox);
+
+    // format text from text area of the filter modal from string to an array of strings
+    const updatedSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
+      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(parseInt(id)),
+    );
+
+    updatedDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
+
+    updatedSubmitterIds.forEach((str) => filteredTextAreaIDs.add(str));
 
     const initialIdsCount = filteredTextAreaIDs.size;
 
@@ -95,12 +109,14 @@ export default function FilterModal({
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
 
     queryResults.forEach((result) => {
-      const donorId = `DO${result.donorId}`;
+      const donorIdMatch = filteredTextAreaIDs.has(result.donorId);
+      const submitterIdMatch = filteredTextAreaIDs.has(result.submitterDonorId);
 
-      if (filteredTextAreaIDs.has(donorId)) {
-        filteredTextAreaIDs.delete(donorId);
-      } else if (filteredTextAreaIDs.has(result.submitterDonorId)) {
+      if (donorIdMatch || submitterIdMatch) {
+        filteredTextAreaIDs.delete(result.donorId);
         filteredTextAreaIDs.delete(result.submitterDonorId);
+
+        setMatchedIds([...matchedIds, result.donorId]);
       }
     });
 
@@ -120,6 +136,10 @@ export default function FilterModal({
     }
   };
 
+  const matchedDonorIds = matchedIds
+    .filter((ID, index, self) => typeof ID === 'number' && !!ID && self.indexOf(ID) == index)
+    .join();
+
   return (
     <ModalPortal>
       <Modal
@@ -128,6 +148,7 @@ export default function FilterModal({
         actionDisabled={filterTextBox ? false : true}
         cancelText="Cancel"
         onActionClick={() => {
+          setSelectedDonors(matchedDonorIds);
           setModalVisible(false);
         }}
         onCancelClick={() => setModalVisible(false)}

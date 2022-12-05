@@ -518,8 +518,7 @@ const DonorSummaryTable = ({
             const linkUrl = urlJoin(
               `/submission/program/`,
               programShortName,
-              `/clinical-data/?donorId=${original.donorId}`,
-              errorTab && `&tab=${errorTab}`,
+              `/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
             );
             return FEATURE_SUBMITTED_DATA_ENABLED ? (
               <NextLink href={linkUrl}>
