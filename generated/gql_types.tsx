@@ -48,9 +48,11 @@ export type Aggregations = {
   cardinality?: Maybe<Scalars['Int']>;
 };
 
+
 export type AggregationsBucketsArgs = {
   max?: InputMaybe<Scalars['Int']>;
 };
+
 
 export type AggregationsCardinalityArgs = {
   precision_threshold?: InputMaybe<Scalars['Int']>;
@@ -78,9 +80,11 @@ export type Bucket = {
   top_hits?: Maybe<Scalars['JSON']>;
 };
 
+
 export type BucketFilter_By_TermArgs = {
   filter?: InputMaybe<Scalars['JSON']>;
 };
+
 
 export type BucketTop_HitsArgs = {
   _source?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -423,19 +427,19 @@ export enum DonorField {
   /** Timestamp of when this donor first had RNA raw reads data published */
   RnaRawReadsFirstPublishedDate = 'rnaRawReadsFirstPublishedDate',
   /** Timestamp of when this donor first had Sanger VC data published */
-  SangerVcsFirstPublishedDate = 'sangerVcsFirstPublishedDate',
+  SangerVcsFirstPublishedDate = 'sangerVcsFirstPublishedDate'
 }
 
 export enum DonorMolecularDataProcessingStatus {
   Complete = 'COMPLETE',
   Processing = 'PROCESSING',
-  Registered = 'REGISTERED',
+  Registered = 'REGISTERED'
 }
 
 export enum DonorMolecularDataReleaseStatus {
   FullyReleased = 'FULLY_RELEASED',
   NoRelease = 'NO_RELEASE',
-  PartiallyReleased = 'PARTIALLY_RELEASED',
+  PartiallyReleased = 'PARTIALLY_RELEASED'
 }
 
 export type DonorSummary = {
@@ -526,7 +530,7 @@ export type DonorSummaryEntrySort = {
 export enum EsRefresh {
   False = 'FALSE',
   True = 'TRUE',
-  WaitFor = 'WAIT_FOR',
+  WaitFor = 'WAIT_FOR'
 }
 
 export type FileSize = {
@@ -538,7 +542,7 @@ export enum InviteStatus {
   Accepted = 'ACCEPTED',
   Expired = 'EXPIRED',
   Pending = 'PENDING',
-  Revoked = 'REVOKED',
+  Revoked = 'REVOKED'
 }
 
 export type InviteUserInput = {
@@ -556,7 +560,7 @@ export enum JiraTicketCategory {
   DataSubmission = 'DATA_SUBMISSION',
   MediaQuery = 'MEDIA_QUERY',
   Other = 'OTHER',
-  PublicationQuery = 'PUBLICATION_QUERY',
+  PublicationQuery = 'PUBLICATION_QUERY'
 }
 
 export type JoinProgramInput = {
@@ -602,19 +606,19 @@ export type MatchBoxStates = {
 
 export enum MembershipType {
   Associate = 'ASSOCIATE',
-  Full = 'FULL',
+  Full = 'FULL'
 }
 
 export enum Missing {
   First = 'first',
-  Last = 'last',
+  Last = 'last'
 }
 
 export enum Mode {
   Avg = 'avg',
   Max = 'max',
   Min = 'min',
-  Sum = 'sum',
+  Sum = 'sum'
 }
 
 export type Mutation = {
@@ -684,15 +688,18 @@ export type Mutation = {
   validateClinicalSubmissions: ClinicalSubmissionData;
 };
 
+
 export type MutationApproveClinicalSubmissionArgs = {
   programShortName: Scalars['String'];
   version: Scalars['String'];
 };
 
+
 export type MutationClearClinicalRegistrationArgs = {
   registrationId: Scalars['String'];
   shortName: Scalars['String'];
 };
+
 
 export type MutationClearClinicalSubmissionArgs = {
   fileType?: InputMaybe<Scalars['String']>;
@@ -700,15 +707,18 @@ export type MutationClearClinicalSubmissionArgs = {
   version: Scalars['String'];
 };
 
+
 export type MutationCommitClinicalRegistrationArgs = {
   registrationId: Scalars['String'];
   shortName: Scalars['String'];
 };
 
+
 export type MutationCommitClinicalSubmissionArgs = {
   programShortName: Scalars['String'];
   version: Scalars['String'];
 };
+
 
 export type MutationCreateJiraTicketWithReCaptchaArgs = {
   displayName?: InputMaybe<Scalars['String']>;
@@ -718,27 +728,33 @@ export type MutationCreateJiraTicketWithReCaptchaArgs = {
   requestText: Scalars['String'];
 };
 
+
 export type MutationCreateProgramArgs = {
   program: ProgramInput;
 };
+
 
 export type MutationInviteUserArgs = {
   invite: InviteUserInput;
 };
 
+
 export type MutationJoinProgramArgs = {
   join: JoinProgramInput;
 };
+
 
 export type MutationRemoveUserArgs = {
   programShortName: Scalars['String'];
   userEmail: Scalars['String'];
 };
 
+
 export type MutationReopenClinicalSubmissionArgs = {
   programShortName: Scalars['String'];
   version: Scalars['String'];
 };
+
 
 export type MutationSaveSetArgs = {
   path: Scalars['String'];
@@ -749,10 +765,12 @@ export type MutationSaveSetArgs = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+
 export type MutationUpdateProgramArgs = {
   shortName: Scalars['String'];
   updates: UpdateProgramInput;
 };
+
 
 export type MutationUpdateUserArgs = {
   programShortName: Scalars['String'];
@@ -760,15 +778,18 @@ export type MutationUpdateUserArgs = {
   userRole: UserRole;
 };
 
+
 export type MutationUploadClinicalRegistrationArgs = {
   registrationFile: Scalars['Upload'];
   shortName: Scalars['String'];
 };
 
+
 export type MutationUploadClinicalSubmissionsArgs = {
   clinicalFiles?: InputMaybe<Array<Scalars['Upload']>>;
   programShortName: Scalars['String'];
 };
+
 
 export type MutationValidateClinicalSubmissionsArgs = {
   programShortName: Scalars['String'];
@@ -785,13 +806,14 @@ export type NumericAggregations = {
   stats?: Maybe<Stats>;
 };
 
+
 export type NumericAggregationsHistogramArgs = {
   interval?: InputMaybe<Scalars['Float']>;
 };
 
 export enum Order {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type Profile = {
@@ -937,7 +959,7 @@ export enum ProgramDonorSummaryEntryField {
   SubmittedExtendedDataPercent = 'submittedExtendedDataPercent',
   SubmitterDonorId = 'submitterDonorId',
   UpdatedAt = 'updatedAt',
-  ValidWithCurrentDictionary = 'validWithCurrentDictionary',
+  ValidWithCurrentDictionary = 'validWithCurrentDictionary'
 }
 
 export type ProgramDonorSummaryFilter = {
@@ -1052,7 +1074,7 @@ export type ProgramUserInput = {
 
 export enum ProjectType {
   File = 'file',
-  Sets = 'sets',
+  Sets = 'sets'
 }
 
 export type Query = {
@@ -1098,40 +1120,49 @@ export type Query = {
   users?: Maybe<Array<Maybe<User>>>;
 };
 
+
 export type QueryClinicalDataArgs = {
   filters: ClinicalInput;
   programShortName: Scalars['String'];
 };
+
 
 export type QueryClinicalErrorsArgs = {
   filters: ClinicalInput;
   programShortName: Scalars['String'];
 };
 
+
 export type QueryClinicalRegistrationArgs = {
   shortName: Scalars['String'];
 };
+
 
 export type QueryClinicalSearchResultsArgs = {
   filters: ClinicalInput;
   programShortName: Scalars['String'];
 };
 
+
 export type QueryClinicalSubmissionsArgs = {
   programShortName: Scalars['String'];
 };
+
 
 export type QueryJoinProgramInviteArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryNodeArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryProgramArgs = {
   shortName: Scalars['String'];
 };
+
 
 export type QueryProgramDonorPublishedAnalysisByDateRangeArgs = {
   bucketCount?: InputMaybe<Scalars['Int']>;
@@ -1141,6 +1172,7 @@ export type QueryProgramDonorPublishedAnalysisByDateRangeArgs = {
   programShortName: Scalars['String'];
 };
 
+
 export type QueryProgramDonorSummaryArgs = {
   filters?: InputMaybe<Array<ProgramDonorSummaryFilter>>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1149,14 +1181,17 @@ export type QueryProgramDonorSummaryArgs = {
   sorts?: InputMaybe<Array<InputMaybe<DonorSummaryEntrySort>>>;
 };
 
+
 export type QueryQueryArgs = {
   query?: InputMaybe<Scalars['String']>;
   types?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+
 export type QueryUserArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryUsersArgs = {
   groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -1199,7 +1234,7 @@ export type Sort = {
 
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type Stats = {
@@ -1216,7 +1251,7 @@ export enum SubmissionState {
   InvalidByMigration = 'INVALID_BY_MIGRATION',
   Open = 'OPEN',
   PendingApproval = 'PENDING_APPROVAL',
-  Valid = 'VALID',
+  Valid = 'VALID'
 }
 
 export type SystemAlert = {
@@ -1291,7 +1326,7 @@ export enum UserRole {
   Banned = 'BANNED',
   Collaborator = 'COLLABORATOR',
   Curator = 'CURATOR',
-  Submitter = 'SUBMITTER',
+  Submitter = 'SUBMITTER'
 }
 
 export type WorkflowStatusCount = {
@@ -1313,15 +1348,18 @@ export type File = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -1573,15 +1611,18 @@ export type FileClinicalFollow_Ups = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileClinicalFollow_UpsAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileClinicalFollow_UpsExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileClinicalFollow_UpsHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -1679,15 +1720,18 @@ export type FileClinicalPrimary_Diagnosis = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileClinicalPrimary_DiagnosisAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileClinicalPrimary_DiagnosisExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileClinicalPrimary_DiagnosisHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -1765,15 +1809,18 @@ export type FileClinicalSpecimens = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileClinicalSpecimensAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileClinicalSpecimensExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileClinicalSpecimensHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -1865,15 +1912,18 @@ export type FileClinicalTreatments = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileClinicalTreatmentsAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileClinicalTreatmentsExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileClinicalTreatmentsHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -1987,15 +2037,18 @@ export type FileDonors = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileDonorsAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileDonorsExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileDonorsHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -2059,15 +2112,18 @@ export type FileDonorsSpecimens = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileDonorsSpecimensAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileDonorsSpecimensExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileDonorsSpecimensHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -2130,15 +2186,18 @@ export type FileDonorsSpecimensSamples = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileDonorsSpecimensSamplesAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileDonorsSpecimensSamplesExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileDonorsSpecimensSamplesHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -2266,15 +2325,18 @@ export type FileRepositories = {
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
+
 export type FileRepositoriesAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type FileRepositoriesExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type FileRepositoriesHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -2329,15 +2391,18 @@ export type Sets = {
   mapping?: Maybe<Scalars['JSON']>;
 };
 
+
 export type SetsAggregationsArgs = {
   aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']>;
   filters?: InputMaybe<Scalars['JSON']>;
   include_missing?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type SetsExtendedArgs = {
   fields?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type SetsHitsArgs = {
   after?: InputMaybe<Scalars['String']>;
