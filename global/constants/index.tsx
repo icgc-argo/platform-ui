@@ -370,6 +370,7 @@ export const WORKFLOW_NAMES = {
   sangerWxs: 'Sanger WXS Variant Calling',
   mutect2: 'GATK Mutect2 Variant Calling',
   openAccess: 'Open Access Variant Filtering',
+  rnaSeq: 'RNA Seq Alignment',
 };
 
 export const WORKFLOW_NAME_URLS = {
@@ -378,6 +379,7 @@ export const WORKFLOW_NAME_URLS = {
   sangerWxs: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-sanger-wxs-vc',
   mutect2: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-gatk-mutect2-vc',
   openAccess: 'https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering',
+  rnaSeq: 'https://docs.icgc-argo.org/docs/analysis-workflows/rna-alignment',
 };
 
 export const WORKFLOW_VERSION_URLS = {
@@ -386,4 +388,25 @@ export const WORKFLOW_VERSION_URLS = {
   sangerWxs: 'https://github.com/icgc-argo-workflows/sanger-wxs-variant-calling/releases/tag/',
   mutect2: 'https://github.com/icgc-argo-workflows/gatk-mutect2-variant-calling/releases/tag/',
   openAccess: 'https://github.com/icgc-argo-workflows/open-access-variant-filtering/releases/tag/',
+  //RNA-SEQ Page doesn't exist as of Dec. 6th 2022.
+  rnaSeq: 'https://github.com/icgc-argo-workflows/rna-seq-alignment/releases/tag/',
+};
+
+export const GENOME_BUILD = {
+  default: 'GRCh38DH',
+  rnaSeq: 'GRCh38_Verily_v1',
+};
+
+export const GENOME_BUILD_URL = {
+  default: 'http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome',
+  rnaSeq:
+    'https://console.cloud.google.com/storage/browser/genomics-public-data/references/GRCh38_Verily',
+};
+
+export const GENOME_ANNOTATION = {
+  rnaSeq: 'GENCODE v40',
+};
+export const GENOME_ANNOTATION_URL = {
+  rnaSeq:
+    'https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_40/gencode.v40.chr_patch_hapl_scaff.annotation.gtf.gz',
 };

@@ -18,7 +18,15 @@
  */
 
 import { css, Link, SimpleTable, useTheme } from '@icgc-argo/uikit';
-import { WORKFLOW_NAMES, WORKFLOW_NAME_URLS, WORKFLOW_VERSION_URLS } from 'global/constants';
+import {
+  WORKFLOW_NAMES,
+  WORKFLOW_NAME_URLS,
+  WORKFLOW_VERSION_URLS,
+  GENOME_BUILD,
+  GENOME_BUILD_URL,
+  GENOME_ANNOTATION,
+  GENOME_ANNOTATION_URL,
+} from 'global/constants';
 import { FileCard, TableDiv } from '../common';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';
 
@@ -60,6 +68,13 @@ const getWorkflowNameLink = (workflowType: DataAnalysisWorkflowType) => {
           {workflowType.workflow_name}
         </Link>
       );
+    // case for rnaseq worlflow url. url not ready yet.
+    // case WORKFLOW_NAMES.rnaSeq:
+    //   return (
+    //     <Link href={WORKFLOW_NAME_URLS.rnaSeq} target="_blank">
+    //       {workflowType.workflow_name}
+    //     </Link>
+    //   );
     default:
       return workflowType.workflow_name;
   }
@@ -114,15 +129,63 @@ const getWorkflowVersionLink = (workflowType: DataAnalysisWorkflowType) => {
           {workflowType.workflow_version}
         </Link>
       );
+    case WORKFLOW_NAMES.rnaSeq:
+      return (
+        <Link
+          href={`${WORKFLOW_VERSION_URLS.rnaSeq}${workflowType.workflow_version}`}
+          target="_blank"
+        >
+          {workflowType.workflow_version}
+        </Link>
+      );
     default:
       return workflowType.workflow_version;
   }
 };
 
-// Hard-coded Genome Build as per: https://github.com/icgc-argo/platform-ui/issues/2105
-const GENOME_BUILD = 'GRCh38DH';
-const GENOME_BUILD_URL =
-  'http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome';
+const getGenomeBuild = (workflowType: DataAnalysisWorkflowType) => {
+  if (!workflowType || !workflowType.workflow_name) return null;
+
+  switch (workflowType.workflow_name) {
+    case WORKFLOW_NAMES.rnaSeq:
+      return (
+        <Link href={GENOME_BUILD_URL.rnaSeq} target="_blank">
+          {GENOME_BUILD.rnaSeq}
+        </Link>
+      );
+    default:
+      return (
+        <Link href={GENOME_BUILD_URL.default} target="_blank">
+          {GENOME_BUILD.default}
+        </Link>
+      );
+  }
+};
+
+const getGenomeAnnotation = (workflowType: DataAnalysisWorkflowType) => {
+  if (!workflowType || !workflowType.workflow_name) return null;
+
+  switch (workflowType.workflow_name) {
+    case WORKFLOW_NAMES.rnaSeq:
+      return (
+        <Link href={GENOME_ANNOTATION_URL.rnaSeq} target="_blank">
+          {GENOME_ANNOTATION.rnaSeq}
+        </Link>
+      );
+    default:
+      const theme = useTheme();
+      return (
+        <div
+          css={css`
+            font-style: italic;
+            color: ${theme.colors.grey};
+          `}
+        >
+          N/A
+        </div>
+      );
+  }
+};
 
 const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
   const theme = useTheme();
@@ -132,21 +195,8 @@ const DataAndAnalysis = ({ data }: { data: DataAnalysisInfo }) => {
     'Data Category': data.dataCategory,
     'Data Type': data.dataType,
     Platform: data.platform,
-    'Genome Build': (
-      <Link href={GENOME_BUILD_URL} target="_blank">
-        {GENOME_BUILD}
-      </Link>
-    ),
-    'Genome Annotation': (
-      <div
-        css={css`
-          font-style: italic;
-          color: ${theme.colors.grey};
-        `}
-      >
-        N/A
-      </div>
-    ),
+    'Genome Build': getGenomeBuild(data.workflowType),
+    'Genome Annotation': getGenomeAnnotation(data.workflowType),
     'Workflow Name': getWorkflowNameLink(data.workflowType),
     'Workflow Version': getWorkflowVersionLink(data.workflowType),
     'Analysis Tools':
