@@ -105,7 +105,10 @@ const LineChart = ({
     font-size: ${options.fontSize}px;
   `;
   // setup Y axis
-  const maxY = Math.max(yAxisThreshold, getMaxY(data));
+  // round up max Y value so it's a multiple of numberOfHorizontalGuides
+  const roundForHorizontalGuides = (x: number) =>
+    Math.ceil(x / numberOfHorizontalGuides) * numberOfHorizontalGuides;
+  const maxY = roundForHorizontalGuides(Math.max(yAxisThreshold, getMaxY(data)));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
 
   // setup chart dimensions
