@@ -156,9 +156,15 @@ const LineChart = ({
         points: dataItem.buckets
           .map((dataBucket: DataBucket, i: number) => {
             const xCoordinate = getX(i);
-            const yCoordinate = Math.floor(
-              chartHeight - topPadding / 2 - (dataBucket.donors / maxY) * chartHeight + padding / 2,
-            );
+            const yCoordinate =
+              Math.floor(
+                chartHeight -
+                  topPadding / 2 -
+                  (dataBucket.donors / maxY) * chartHeight +
+                  padding / 2 +
+                  3,
+              ) + 0.5;
+            // add 0.5 to make line sharp
             return `${xCoordinate},${yCoordinate}`;
           })
           .join(' '),
@@ -197,9 +203,8 @@ const LineChart = ({
   );
 
   const YAxisThresholdLine = () => {
-    const yCoordinate = Math.floor(
-      topPadding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight,
-    );
+    const yCoordinate =
+      Math.floor(topPadding + ((maxY - yAxisThreshold || 0) / maxY) * chartHeight) + 1;
 
     return (
       <TextStyleGroup>
@@ -306,7 +311,7 @@ const LineChart = ({
       <g fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth}>
         {new Array(numberOfHorizontalGuides).fill(0).map((guidesValue: number, index: number) => {
           const ratio = (index + 1) / numberOfHorizontalGuides;
-          const yCoordinate = chartHeight - chartHeight * ratio + topPadding;
+          const yCoordinate = Math.floor(chartHeight - chartHeight * ratio + topPadding) + 1;
           return (
             <polyline
               key={yCoordinate}
