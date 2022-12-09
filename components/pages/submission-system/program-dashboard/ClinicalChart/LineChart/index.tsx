@@ -110,6 +110,10 @@ const LineChart = ({
     Math.ceil(x / numberOfHorizontalGuides) * numberOfHorizontalGuides;
   const maxY = roundForHorizontalGuides(Math.max(yAxisThreshold, getMaxY(data)));
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
+  // 4-digit Y axis values push the chart lines down by 2 pixels.
+  // this value adjusts their positioning.
+  const maxYLength = maxY.toString().length;
+  const yAxisAdjustment = maxYLength > 3 ? maxYLength - 2 : 0;
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
@@ -162,7 +166,8 @@ const LineChart = ({
                   topPadding / 2 -
                   (dataBucket.donors / maxY) * chartHeight +
                   padding / 2 +
-                  3,
+                  3 -
+                  yAxisAdjustment,
               ) + 0.5;
             // add 0.5 to make line sharp
             return `${xCoordinate},${yCoordinate}`;
