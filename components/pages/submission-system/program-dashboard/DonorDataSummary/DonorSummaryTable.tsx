@@ -466,7 +466,7 @@ const DonorSummaryTable = ({
         const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
           (donor) => donorId === donor.donorId,
         );
-        const entity = currentDonor.errors[0].entityName;
+        const entity = currentDonor?.errors[0].entityName;
         return { donorId, entity };
       })
     : [];
