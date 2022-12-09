@@ -112,7 +112,7 @@ const LineChart = ({
   const yAxisDigits = parseFloat(maxY.toString()).toFixed(precision).length + 1;
   // 4-digit Y axis values push the chart lines down by 2 pixels.
   // this value adjusts their positioning.
-  const yAxisAdjustment = maxY.toString().length > 3 ? 2 : 0;
+  const yAxisAdjustment = maxY.toString().length > 3 ? maxY.toString().length - 2 : 0;
 
   // setup chart dimensions
   const padding = (options.fontSize + yAxisDigits) * 3;
