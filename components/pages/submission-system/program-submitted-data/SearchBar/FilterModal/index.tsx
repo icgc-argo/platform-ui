@@ -96,7 +96,7 @@ export default function FilterModal({
 
     // format text from text area of the filter modal from string to an array of strings
     const updatedSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
-      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(parseInt(id)),
+      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(matchDonorIds(id)[0]),
     );
 
     updatedDonorIds.forEach((num) => filteredTextAreaIDs.add(num));

@@ -84,8 +84,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     deSerialize: (v) => v,
   });
 
-  const currentDonors = selectedDonors
-    ? selectedDonors.split(',').map((donorId) => parseDonorIdString(donorId))
+  const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
+  const currentDonors = urlDonorQueryStrings.length
+    ? urlDonorQueryStrings.map((donorId) => parseDonorIdString(donorId))
     : [];
 
   // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
@@ -101,10 +102,12 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
 
   const sideMenuQueryDonorIds =
-    currentDonors.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
+    urlDonorQueryStrings.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
+    : urlDonorQueryStrings.length
+    ? urlDonorQueryStrings
     : keyword.split(/, |,/).filter((word) => !!word);
 
   // Side Menu Query
