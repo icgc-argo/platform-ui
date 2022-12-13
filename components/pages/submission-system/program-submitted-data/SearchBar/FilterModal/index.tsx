@@ -119,8 +119,7 @@ export default function FilterModal({
         setMatchedIds([...matchedIds, result.donorId]);
       }
     });
-    console.log('updatedDonorIds', updatedDonorIds);
-    console.log('updatedSubmitterIds', updatedSubmitterIds);
+
     // Update MatchResults Component with the matched and unmatched number
     const unmatchedCount = filterTextBox ? filteredTextAreaIDs.size : 0;
     const matchedCount = filterTextBox ? initialIdsCount - unmatchedCount : 0;
