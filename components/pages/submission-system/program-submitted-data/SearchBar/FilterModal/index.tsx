@@ -96,7 +96,7 @@ export default function FilterModal({
 
     // format text from text area of the filter modal from string to an array of strings
     const updatedSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
-      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(matchDonorIds(id)[0]),
+      (id) => (id && parseInt(id) === NaN) || !updatedDonorIds.includes(matchDonorIds(id)[0]),
     );
 
     updatedDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
@@ -119,7 +119,8 @@ export default function FilterModal({
         setMatchedIds([...matchedIds, result.donorId]);
       }
     });
-
+    console.log('updatedDonorIds', updatedDonorIds);
+    console.log('updatedSubmitterIds', updatedSubmitterIds);
     // Update MatchResults Component with the matched and unmatched number
     const unmatchedCount = filterTextBox ? filteredTextAreaIDs.size : 0;
     const matchedCount = filterTextBox ? initialIdsCount - unmatchedCount : 0;
