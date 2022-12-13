@@ -61,7 +61,7 @@ export default function FilterModal({
   //make matchID dynamic using useState
   const [numMatched, setNumMatched] = useState(0);
   const [numUnmatched, setNumUnmatched] = useState(0);
-  const [matchedDonors, setMatchedDonors] = useState('');
+  const [matchedIds, setMatchedIds] = useState('');
 
   // Match text area contents for Donor ID #s
   const filterDonorIds = matchDonorIds(filterTextBox);
@@ -113,7 +113,7 @@ export default function FilterModal({
 
     setNumMatched(matchedCount);
     setNumUnmatched(unmatchedCount);
-    setMatchedDonors(Array.from(filteredTextAreaIDs).join(','));
+    setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
   }, [searchResultData]);
 
   const handleResults = (results) => {
@@ -132,7 +132,7 @@ export default function FilterModal({
         actionDisabled={filterTextBox ? false : true}
         cancelText="Cancel"
         onActionClick={() => {
-          setSelectedDonors(matchedDonors);
+          setSelectedDonors(matchedIds);
           setModalVisible(false);
         }}
         onCancelClick={() => setModalVisible(false)}
