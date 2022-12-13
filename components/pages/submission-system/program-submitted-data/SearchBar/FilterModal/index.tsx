@@ -69,6 +69,8 @@ export default function FilterModal({
   // format text from text area of the filter modal from string to an array of strings
   const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox);
 
+  console.log('filterSubmitterIds', filterSubmitterIds);
+
   // enter the formatted array of string to query and return the matched strings
   const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
     CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
@@ -96,12 +98,19 @@ export default function FilterModal({
 
     // format text from text area of the filter modal from string to an array of strings
     const updatedSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
-      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(parseInt(id)),
+      (id) => parseInt(id) === NaN || !updatedDonorIds.includes(matchDonorIds(id)[0]),
     );
 
     updatedDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
 
     updatedSubmitterIds.forEach((str) => filteredTextAreaIDs.add(str));
+    console.log('updatedDonorIds', updatedDonorIds, 'updatedSubmitterIds', updatedSubmitterIds);
+
+    // filterTextBox
+    //   .split(',')
+    //   ?.filter((match) => !!match)
+    //   .map((str) => str.trim())
+    //   .forEach((str) => filteredTextAreaIDs.add(str));
 
     const initialIdsCount = filteredTextAreaIDs.size;
 
@@ -109,6 +118,14 @@ export default function FilterModal({
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
 
     queryResults.forEach((result) => {
+      // const donorId = `DO${result.donorId}`;
+
+      // if (filteredTextAreaIDs.has(donorId)) {
+      //   filteredTextAreaIDs.delete(donorId);
+      // } else if (filteredTextAreaIDs.has(result.submitterDonorId)) {
+      //   filteredTextAreaIDs.delete(result.submitterDonorId);
+      // }
+
       const donorIdMatch = filteredTextAreaIDs.has(result.donorId);
       const submitterIdMatch = filteredTextAreaIDs.has(result.submitterDonorId);
 

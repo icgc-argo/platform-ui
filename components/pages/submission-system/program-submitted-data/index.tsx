@@ -100,8 +100,9 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
 
-  const sideMenuQueryDonorIds =
-    currentDonors.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
+  const sideMenuQueryDonorIds = (
+    currentDonors.length && !searchDonorIds.length ? currentDonors : searchDonorIds
+  ).map((id) => new String(id));
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
