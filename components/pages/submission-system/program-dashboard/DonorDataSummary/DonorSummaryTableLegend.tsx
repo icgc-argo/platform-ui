@@ -47,7 +47,8 @@ const DonorSummaryTableLegend = ({
   const missingSamplesCount =
     (programDonorSummaryStats.dnaTNRegisteredStatus?.tumorOrNormal || 0) +
     (programDonorSummaryStats.dnaTNRegisteredStatus?.noData || 0);
-  const missingRawReadsCount = programDonorSummaryStats.dnaTNMatchedPairStatus?.noData || 0;
+  const missingRawReadsCount =
+    programDonorSummaryStats.dnaTNMatchedPairStatus?.tumorNormalMatchedPairMissingRawReads || 0;
   const showMissingDNAErrors =
     missingMatchedPairsCount || missingSamplesCount || missingRawReadsCount;
 
@@ -123,7 +124,7 @@ const DonorSummaryTableLegend = ({
                   <TableLegendEntry
                     count={missingSamplesCount}
                     icon={<TableLegendStatusIcon fill={'error_2'} type="box" />}
-                    text={'missing samples'}
+                    text={'missing DNA samples'}
                   />
                 </TableLegendSection>
               )}
@@ -141,7 +142,7 @@ const DonorSummaryTableLegend = ({
                   <TableLegendEntry
                     count={missingRawReadsCount}
                     icon={<TableLegendStatusIcon fill={'error_4'} type="box" />}
-                    text="missing raw reads"
+                    text="missing DNA raw reads"
                   />
                 </TableLegendSection>
               )}

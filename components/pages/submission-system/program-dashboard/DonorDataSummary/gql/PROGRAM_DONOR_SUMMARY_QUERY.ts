@@ -137,6 +137,7 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         dnaTNMatchedPairStatus {
           tumorNormalMatchedPair
           tumorNormalNoMatchedPair
+          tumorNormalMatchedPairMissingRawReads
           noData
         }
       }

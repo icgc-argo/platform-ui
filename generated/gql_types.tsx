@@ -1280,6 +1280,7 @@ export type TumorNormalMatchedPairStatusCount = {
   noData: Scalars['Int'];
   tumorNormalMatchedPair: Scalars['Int'];
   tumorNormalNoMatchedPair: Scalars['Int'];
+  tumorNormalMatchedPairMissingRawReads: Scalars['Int'];
 };
 
 export type TumorNormalStatusCount = {
