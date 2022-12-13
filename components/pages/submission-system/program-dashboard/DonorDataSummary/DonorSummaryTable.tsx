@@ -657,6 +657,9 @@ const DonorSummaryTable = ({
                               programDonorSummaryStats?.dnaTNMatchedPairStatus
                                 ?.tumorNormalNoMatchedPair,
                             [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
+                              programDonorSummaryStats?.dnaTNMatchedPairStatus
+                                ?.tumorNormalMatchedPairMissingRawReads,
+                            [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[3].key]:
                               programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
                           }
                         : {

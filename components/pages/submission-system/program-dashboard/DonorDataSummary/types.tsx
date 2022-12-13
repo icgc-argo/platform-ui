@@ -37,6 +37,7 @@ export type TumorNormalStatusCounts = {
 export type TumorNormalMatchedPairStatusCounts = {
   tumorNormalMatchedPair: number;
   tumorNormalNoMatchedPair: number;
+  tumorNormalMatchedPairMissingRawReads: number;
   noData: number;
 };
 
@@ -85,7 +86,6 @@ export type ProgramDonorReleaseStats = {
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
   donorsInvalidWithCurrentDictionaryCount: number;
-  incompleteDNARawReads?: number;
   percentageCoreClinical?: number;
   percentageTumourAndNormal?: number;
   coreCompletion?: CompleteIncompleteFilterCounts;

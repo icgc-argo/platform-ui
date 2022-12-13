@@ -145,6 +145,10 @@ export const FILTER_OPTIONS = {
       value: 'T|N matched pair not submitted',
     },
     {
+      key: 'TUMOR_NORMAL_MATCHED_PAIR_MISSING_RAW_READS',
+      value: 'Missing raw reads',
+    },
+    {
       key: 'NO_DATA',
       value: 'No data submitted',
     },
@@ -159,7 +163,6 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   donorsInvalidWithCurrentDictionaryCount: 0,
   percentageCoreClinical: 0,
   percentageTumourAndNormal: 0,
-  incompleteDNARawReads: 0,
   coreCompletion: {
     completed: 0,
     incomplete: 0,
@@ -177,6 +180,7 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   dnaTNMatchedPairStatus: {
     tumorNormalMatchedPair: 0,
     tumorNormalNoMatchedPair: 0,
+    tumorNormalMatchedPairMissingRawReads: 0,
     noData: 0,
   },
   rawReadsStatus: {

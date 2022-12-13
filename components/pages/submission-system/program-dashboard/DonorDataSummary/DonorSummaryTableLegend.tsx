@@ -47,7 +47,8 @@ const DonorSummaryTableLegend = ({
   const missingSamplesCount =
     (programDonorSummaryStats.dnaTNRegisteredStatus?.tumorOrNormal || 0) +
     (programDonorSummaryStats.dnaTNRegisteredStatus?.noData || 0);
-  const missingRawReadsCount = programDonorSummaryStats.incompleteDNARawReads || 0;
+  const missingRawReadsCount =
+    programDonorSummaryStats.dnaTNMatchedPairStatus?.tumorNormalMatchedPairMissingRawReads || 0;
   const showMissingDNAErrors =
     missingMatchedPairsCount || missingSamplesCount || missingRawReadsCount;
 

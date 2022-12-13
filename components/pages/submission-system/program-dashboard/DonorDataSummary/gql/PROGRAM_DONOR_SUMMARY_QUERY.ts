@@ -78,7 +78,6 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         completedWorkflowRuns
         inProgressWorkflowRuns
         failedWorkflowRuns
-        incompleteDNARawReads
         coreCompletion {
           completed
           incomplete
@@ -138,6 +137,7 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         dnaTNMatchedPairStatus {
           tumorNormalMatchedPair
           tumorNormalNoMatchedPair
+          tumorNormalMatchedPairMissingRawReads
           noData
         }
       }
