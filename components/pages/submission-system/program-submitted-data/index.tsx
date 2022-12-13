@@ -100,14 +100,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
-
   const sideMenuQueryDonorIds =
     urlDonorQueryStrings.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
-    : urlDonorQueryStrings.length
-    ? urlDonorQueryStrings
     : keyword.split(/, |,/).filter((word) => !!word);
 
   // Side Menu Query
@@ -122,7 +119,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
           ...defaultClinicalEntityFilters,
           completionState,
           donorIds: sideMenuQueryDonorIds,
-          submitterDonorIds: sideMenuQueryDonorIds,
         },
       },
     });
