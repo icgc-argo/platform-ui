@@ -35,7 +35,7 @@ declare global {
 
 const matchDonorIds = (text) =>
   text
-    .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
+    .match(/(^\d)\d*|((?<=,|, )|(?<=DO))\d*/gi)
     // Remove empty strings and duplicate matches
     ?.filter((match, index, self) => !!match && self.indexOf(match) == index)
     .map((idString) => parseInt(idString)) || [];
@@ -119,7 +119,8 @@ export default function FilterModal({
         setMatchedIds([...matchedIds, result.donorId]);
       }
     });
-
+    console.log('updatedDonorIds', updatedDonorIds);
+    console.log('updatedSubmitterIds', updatedSubmitterIds);
     // Update MatchResults Component with the matched and unmatched number
     const unmatchedCount = filterTextBox ? filteredTextAreaIDs.size : 0;
     const matchedCount = filterTextBox ? initialIdsCount - unmatchedCount : 0;
