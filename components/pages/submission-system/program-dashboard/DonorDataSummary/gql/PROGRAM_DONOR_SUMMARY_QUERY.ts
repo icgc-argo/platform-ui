@@ -78,6 +78,7 @@ const PROGRAM_DONOR_SUMMARY_QUERY = gql`
         completedWorkflowRuns
         inProgressWorkflowRuns
         failedWorkflowRuns
+        incompleteDNARawReads
         coreCompletion {
           completed
           incomplete

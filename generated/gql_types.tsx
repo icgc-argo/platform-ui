@@ -998,6 +998,8 @@ export type ProgramDonorSummaryStats = {
   id: Scalars['ID'];
   /** Number of donors with workflow runs that are currently running */
   inProgressWorkflowRuns: Scalars['Int'];
+  /** Temporary update to types file */
+  incompleteDNARawReads: Scalars['Int'];
   /** Date of the most recent update to the donor summary index for this program. Can be null if no documents for this program */
   lastUpdate?: Maybe<Scalars['DateTime']>;
   /** Number of donors that have COMPLETED/IN_PROGRESS/FAILED/NO_DATA as mutect2 workflow status */

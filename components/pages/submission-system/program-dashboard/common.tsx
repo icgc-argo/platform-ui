@@ -52,6 +52,7 @@ type ProgramDonorSummaryStats = {
   fullyReleasedDonorsCount: number;
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
+  incompleteDNARawReads: number;
 };
 
 type Program = {

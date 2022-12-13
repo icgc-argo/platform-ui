@@ -159,6 +159,7 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   donorsInvalidWithCurrentDictionaryCount: 0,
   percentageCoreClinical: 0,
   percentageTumourAndNormal: 0,
+  incompleteDNARawReads: 0,
   coreCompletion: {
     completed: 0,
     incomplete: 0,

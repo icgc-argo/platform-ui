@@ -85,6 +85,7 @@ export type ProgramDonorReleaseStats = {
   partiallyReleasedDonorsCount: number;
   noReleaseDonorsCount: number;
   donorsInvalidWithCurrentDictionaryCount: number;
+  incompleteDNARawReads?: number;
   percentageCoreClinical?: number;
   percentageTumourAndNormal?: number;
   coreCompletion?: CompleteIncompleteFilterCounts;
