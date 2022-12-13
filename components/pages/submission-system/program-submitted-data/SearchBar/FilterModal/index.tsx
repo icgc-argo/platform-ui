@@ -67,7 +67,9 @@ export default function FilterModal({
   const filterDonorIds = matchDonorIds(filterTextBox);
 
   // format text from text area of the filter modal from string to an array of strings
-  const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox);
+  const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
+    (id) => (id && parseInt(id) === NaN) || !filterDonorIds.includes(matchDonorIds(id)[0]),
+  );
 
   // enter the formatted array of string to query and return the matched strings
   const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
@@ -91,17 +93,9 @@ export default function FilterModal({
     //format the string from text area of the modal to create an set of IDs, so we know the total number
     const filteredTextAreaIDs = new Set();
 
-    // Match text area contents for Donor ID #s
-    const updatedDonorIds = matchDonorIds(filterTextBox);
+    filterDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
 
-    // format text from text area of the filter modal from string to an array of strings
-    const updatedSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
-      (id) => (id && parseInt(id) === NaN) || !updatedDonorIds.includes(matchDonorIds(id)[0]),
-    );
-
-    updatedDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
-
-    updatedSubmitterIds.forEach((str) => filteredTextAreaIDs.add(str));
+    filterSubmitterIds.forEach((str) => filteredTextAreaIDs.add(str));
 
     const initialIdsCount = filteredTextAreaIDs.size;
 
@@ -119,8 +113,7 @@ export default function FilterModal({
         setMatchedIds([...matchedIds, result.donorId]);
       }
     });
-    console.log('updatedDonorIds', updatedDonorIds);
-    console.log('updatedSubmitterIds', updatedSubmitterIds);
+
     // Update MatchResults Component with the matched and unmatched number
     const unmatchedCount = filterTextBox ? filteredTextAreaIDs.size : 0;
     const matchedCount = filterTextBox ? initialIdsCount - unmatchedCount : 0;
@@ -137,10 +130,6 @@ export default function FilterModal({
     }
   };
 
-  const matchedDonorIds = matchedIds
-    .filter((ID, index, self) => typeof ID === 'number' && !!ID && self.indexOf(ID) == index)
-    .join();
-
   return (
     <ModalPortal>
       <Modal
@@ -149,7 +138,7 @@ export default function FilterModal({
         actionDisabled={filterTextBox ? false : true}
         cancelText="Cancel"
         onActionClick={() => {
-          setSelectedDonors(matchedDonorIds);
+          setSelectedDonors(filterDonorIds);
           setModalVisible(false);
         }}
         onCancelClick={() => setModalVisible(false)}
