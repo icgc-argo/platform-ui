@@ -61,15 +61,15 @@ export default function FilterModal({
   //make matchID dynamic using useState
   const [numMatched, setNumMatched] = useState(0);
   const [numUnmatched, setNumUnmatched] = useState(0);
-  const [matchedIds, setMatchedIds] = useState([]);
+  const [matchedDonors, setMatchedDonors] = useState('');
 
   // Match text area contents for Donor ID #s
   const filterDonorIds = matchDonorIds(filterTextBox);
 
   // format text from text area of the filter modal from string to an array of strings
-  const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox).filter(
-    (id) => (id && parseInt(id) === NaN) || !filterDonorIds.includes(matchDonorIds(id)[0]),
-  );
+  const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox)
+    .filter((id) => parseInt(id) === NaN || !filterDonorIds.includes(matchDonorIds(id)[0]))
+    .filter(Boolean);
 
   // enter the formatted array of string to query and return the matched strings
   const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
@@ -93,33 +93,27 @@ export default function FilterModal({
     //format the string from text area of the modal to create an set of IDs, so we know the total number
     const filteredTextAreaIDs = new Set();
 
-    filterDonorIds.forEach((num) => filteredTextAreaIDs.add(num));
-
-    filterSubmitterIds.forEach((str) => filteredTextAreaIDs.add(str));
-
-    const initialIdsCount = filteredTextAreaIDs.size;
+    const initialIdsCount = filterDonorIds.length + filterSubmitterIds.length;
 
     // remove the IDs in each result from the set. to then use the set size as the unmatched IDs count
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
 
     queryResults.forEach((result) => {
-      const donorIdMatch = filteredTextAreaIDs.has(result.donorId);
-      const submitterIdMatch = filteredTextAreaIDs.has(result.submitterDonorId);
+      const donorIdMatch = filterDonorIds.includes(result.donorId);
+      const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
 
       if (donorIdMatch || submitterIdMatch) {
-        filteredTextAreaIDs.delete(result.donorId);
-        filteredTextAreaIDs.delete(result.submitterDonorId);
-
-        setMatchedIds([...matchedIds, result.donorId]);
+        filteredTextAreaIDs.add(result.donorId);
       }
     });
 
     // Update MatchResults Component with the matched and unmatched number
-    const unmatchedCount = filterTextBox ? filteredTextAreaIDs.size : 0;
-    const matchedCount = filterTextBox ? initialIdsCount - unmatchedCount : 0;
+    const matchedCount = filteredTextAreaIDs.size;
+    const unmatchedCount = initialIdsCount - filteredTextAreaIDs.size;
 
     setNumMatched(matchedCount);
     setNumUnmatched(unmatchedCount);
+    setMatchedDonors(Array.from(filteredTextAreaIDs).join(','));
   }, [searchResultData]);
 
   const handleResults = (results) => {
@@ -138,7 +132,7 @@ export default function FilterModal({
         actionDisabled={filterTextBox ? false : true}
         cancelText="Cancel"
         onActionClick={() => {
-          setSelectedDonors(filterDonorIds);
+          setSelectedDonors(matchedDonors);
           setModalVisible(false);
         }}
         onCancelClick={() => setModalVisible(false)}
