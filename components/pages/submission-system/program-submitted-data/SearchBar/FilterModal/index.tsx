@@ -35,7 +35,7 @@ declare global {
 
 const matchDonorIds = (text) =>
   text
-    .match(/(^\d)\d*|((?<=,|, )|(?<=DO))\d*/gi)
+    .match(/(^\d)\d*|((?<=,| )|(?<=DO))\d*/gi)
     // Remove empty strings and duplicate matches
     ?.filter((match, index, self) => !!match && self.indexOf(match) == index)
     .map((idString) => parseInt(idString)) || [];
