@@ -140,7 +140,7 @@ export default function FilterModal({
       >
         <div>
           <div>
-            Type or copy-and-paste a list of <b>donor ids or submitter donor ids,</b> separated by a
+            Type or copy-and-paste a list of <b>donor ids or submitter donor ids,</b> separated by
             comma:
           </div>
           <br></br>
@@ -156,7 +156,7 @@ export default function FilterModal({
           />
           <br></br>
           <div>
-            Choose a file to upload <b>&#40;.txt/.csv/.tsv&#41;</b>
+            Or choose a file to upload <b>&#40;.txt/.csv/.tsv&#41;</b>
           </div>
           <UploadButton onUpload={handleResults} />
 
