@@ -117,7 +117,7 @@ const DonorSummaryTableLegend = ({
               />
             </TableLegendSection>
           </Col>
-          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && showMissingDNAErrors && (
+          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && !!showMissingDNAErrors && (
             <Col sm={12} md={4} lg={4} xl={4}>
               {!!missingSamplesCount && (
                 <TableLegendSection>

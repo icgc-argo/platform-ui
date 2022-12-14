@@ -1279,8 +1279,8 @@ export type TumorNormalMatchedPairStatusCount = {
   __typename?: 'TumorNormalMatchedPairStatusCount';
   noData: Scalars['Int'];
   tumorNormalMatchedPair: Scalars['Int'];
-  tumorNormalNoMatchedPair: Scalars['Int'];
   tumorNormalMatchedPairMissingRawReads: Scalars['Int'];
+  tumorNormalNoMatchedPair: Scalars['Int'];
 };
 
 export type TumorNormalStatusCount = {
