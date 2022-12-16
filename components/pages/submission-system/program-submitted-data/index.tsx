@@ -19,11 +19,9 @@
 
 import { useQuery } from '@apollo/client';
 import {
-  Button,
   Container,
   css,
   DnaLoader,
-  Icon,
   Link,
   TitleBar,
   Typography,
@@ -54,6 +52,7 @@ import {
   hasClinicalErrors,
   parseDonorIdString,
   reverseLookUpEntityAlias,
+  TsvDownloadIds,
 } from './common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
@@ -67,8 +66,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const programShortName = useRouter().query.shortName as string;
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
-  const [filterTextBox, setFilterTextBox] = useState('');
-  const isFilterUsed = !!filterTextBox;
   const [completionState, setCompletionState] = useState(CompletionStates['all']);
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
@@ -81,20 +78,48 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       deSerialize: (v) => v,
     },
   );
+  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
   const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
     serialize: (v) => v,
     deSerialize: (v) => v,
   });
-  const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
+
+  const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
+  const currentDonors = urlDonorQueryStrings.length
+    ? urlDonorQueryStrings.map((donorId) => parseDonorIdString(donorId))
+    : [];
+
+  // Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
+  // Example: DO259138, 2579137, DASH-7, DO253290abcdef
+  // Regex will match first 2 Donor IDs, but not 3rd Submitter ID or 4th case w/ random text
+  const searchDonorIds =
+    keyword
+      .match(/(?=DO|\d)\d+(?=,| |$)/gi)
+      ?.filter((match) => !!match)
+      .map((idString) => parseInt(idString)) || [];
+
+  // Matches 'D' or 'DO' exactly (case insensitive)
+  const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
+  const sideMenuQueryDonorIds =
+    urlDonorQueryStrings.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
+
+  const searchSubmitterIds = donorPrefixSearch
+    ? []
+    : keyword.split(/, |,/).filter((word) => !!word);
 
   // Side Menu Query
+  // Populates Clinical Entity Table, Side Menu, Title Bar
   const { data: sideMenuQuery, loading: sideMenuLoading } =
     FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName,
-        filters: defaultClinicalEntityFilters,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds: sideMenuQueryDonorIds,
+        },
       },
     });
 
@@ -102,59 +127,14 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     setGlobalLoading(sideMenuLoading);
   }, [sideMenuLoading]);
 
-  const { clinicalData: sideMenuData } =
+  const sideMenuData =
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
-  const menuItems = clinicalEntityFields.map((entity) => (
-    <VerticalTabs.Item
-      key={entity}
-      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
-      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
-      disabled={
-        !sideMenuData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
-      }
-    >
-      {clinicalEntityDisplayNames[entity]}
-      {hasClinicalErrors(sideMenuData, entity) && (
-        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-      )}
-    </VerticalTabs.Item>
-  ));
 
-  // Matches sequential Digits not followed by other chars, or Digits preceded by DO or by Comma/Space
-  // Example: DO259138, 2579137, DASH-7 will match first 2 Donor IDs, but not 3rd Submitter ID
-  const searchDonorIds = selectedDonors
-    ? [parseDonorIdString(selectedDonors)]
-    : keyword
-        .match(/(\d*(?!\d*\D+))|((?<=,|, )|(?<=DO))\d*/gi)
-        ?.filter((match) => !!match)
-        .map((idString) => parseInt(idString)) || [];
-
-  // Matches 'D' or 'DO' exactly (case insensitive)
-  const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
-
-  const searchSubmitterIds = donorPrefixSearch
-    ? []
-    : keyword.split(/, |,/).filter((word) => !!word);
-  const useDefaultQuery = isFilterUsed
-    ? false
-    : (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
-      completionState === 'all';
-
-  // Format text coming from filter
-  const filterDonorIds =
-    filterTextBox
-      .match(/(^\d)\d*|((?<=,)|(?<=DO))\d*/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
-
-  const filterSubmitterIds =
-    filterTextBox
-      .split(',')
-      .map((str) => str.trim())
-      .filter((word) => !!word) || [];
+  const { clinicalData } = sideMenuData;
 
   // Search Result Query
-  const { data: searchResultData, loading: searchResultsLoading } =
+  // Populates dropdown menu; Search query populates data table if there are no URL params
+  const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } =
     useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
       errorPolicy: 'all',
       variables: {
@@ -162,16 +142,52 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
-          donorIds: isFilterUsed ? filterDonorIds : searchDonorIds,
-          submitterDonorIds: isFilterUsed ? filterSubmitterIds : searchSubmitterIds,
+          donorIds: searchDonorIds,
+          submitterDonorIds: searchSubmitterIds,
           entityTypes: ['donor'],
         },
       },
     });
 
+  const menuItems = clinicalEntityFields.map((entity) => (
+    <VerticalTabs.Item
+      key={entity}
+      active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+      onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
+      disabled={
+        !clinicalData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
+      }
+    >
+      {clinicalEntityDisplayNames[entity]}
+      {hasClinicalErrors(clinicalData, entity) && (
+        <VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+      )}
+    </VerticalTabs.Item>
+  ));
+
+  const useDefaultQuery =
+    !currentDonors.length &&
+    (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+    completionState === 'all';
+
   const noSearchData = searchResultData === null || searchResultData === undefined;
-  const searchResults = noSearchData ? emptySearchResponse : searchResultData;
-  const noData = sideMenuData.clinicalEntities.length === 0 || noSearchData;
+  const noData =
+    clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonors.length;
+
+  const downloadDonorIds = currentDonors.length
+    ? currentDonors
+    : searchResultData?.clinicalSearchResults?.searchResults.length
+    ? searchResultData.clinicalSearchResults.searchResults.map((result) => result.donorId)
+    : [];
+
+  const downloadSubmitterDonorIds = (searchResultData?.clinicalSearchResults?.searchResults || [])
+    .map(({ submitterDonorId }) => submitterDonorId)
+    .filter(Boolean);
+
+  const tsvDownloadIds: TsvDownloadIds = {
+    donorIds: useDefaultQuery ? [] : downloadDonorIds,
+    submitterDonorIds: useDefaultQuery ? [] : downloadSubmitterDonorIds,
+  };
 
   return (
     <SubmissionLayout
@@ -216,16 +232,17 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       <SearchBar
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
-        setFilterTextBox={setFilterTextBox}
-        filterTextBox={filterTextBox}
         completionState={completionState}
+        setCompletionState={setCompletionState}
         programShortName={programShortName}
         keyword={keyword}
         loading={searchResultsLoading}
         noData={noData}
-        onChange={setCompletionState}
-        donorSearchResults={searchResults}
-        setUrlDonorIds={setSelectedDonors}
+        useDefaultQuery={useDefaultQuery}
+        currentDonors={currentDonors}
+        setSelectedDonors={setSelectedDonors}
+        tsvDownloadIds={tsvDownloadIds}
+        donorSearchResults={searchResultData}
         setKeyword={setKeyword}
       />
       {searchResultsLoading ? (
@@ -277,10 +294,11 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                 </Typography>
 
                 <ClinicalDownloadButton
-                  searchResults={searchResultData.clinicalSearchResults.searchResults}
+                  tsvDownloadIds={tsvDownloadIds}
                   text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
                   entityTypes={[currentEntity]}
                   completionState={completionState}
+                  disabled={noData}
                 />
               </div>
               {/* DataTable */}
@@ -289,8 +307,10 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
+                  currentDonors={currentDonors}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
+                  noData={noData}
                 />
               </div>
             </div>

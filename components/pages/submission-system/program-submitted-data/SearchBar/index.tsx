@@ -30,13 +30,14 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { Dispatch, SetStateAction, useState, createRef, RefObject } from 'react';
+import { Dispatch, SetStateAction, useState, createRef, RefObject, useEffect } from 'react';
 import FilterModal from './FilterModal';
 import {
   ClinicalEntitySearchResultResponse,
   CompletionStates,
   emptySearchResponse,
   clinicalEntityFields,
+  TsvDownloadIds,
 } from '../common';
 import {
   searchBackgroundStyle,
@@ -78,45 +79,47 @@ const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 export default function SearchBar({
   setModalVisible,
   noData,
-  onChange,
   completionState,
+  setCompletionState,
   programShortName,
   loading,
   keyword,
   setKeyword,
+  useDefaultQuery,
+  currentDonors,
+  setSelectedDonors,
   donorSearchResults,
+  tsvDownloadIds,
   modalVisible,
-  setFilterTextBox,
-  filterTextBox,
-  setUrlDonorIds,
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
-  onChange: Dispatch<SetStateAction<CompletionStates>>;
   completionState: CompletionStates;
+  setCompletionState: Dispatch<SetStateAction<CompletionStates>>;
   programShortName: string;
   loading: boolean;
   keyword: string;
   setKeyword: Dispatch<SetStateAction<string>>;
+  useDefaultQuery: boolean;
+  currentDonors: number[];
+  setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
   donorSearchResults: ClinicalEntitySearchResultResponse;
+  tsvDownloadIds: TsvDownloadIds;
   modalVisible: boolean;
-  setFilterTextBox: React.Dispatch<React.SetStateAction<string>>;
-  filterTextBox: string;
-  setUrlDonorIds: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
   const [searchOpen, setSearchOpen] = useState(false);
-  const setSearchValue = (value) => {
+  const setFilterValue = (value) => {
     setKeyword(value);
-    setUrlDonorIds(value);
+    setSelectedDonors(value);
     setSearchOpen(false);
   };
 
   const menuItemDropdownRef = createRef() as RefObject<HTMLDivElement>;
   useClickAway({
     domElementRef: menuItemDropdownRef,
-    onElementClick: setSearchValue,
+    onElementClick: setFilterValue,
     onClickAway: () => setSearchOpen(false),
   });
 
@@ -134,31 +137,39 @@ export default function SearchBar({
       .slice(0, 20) || [];
 
   const titleText =
-    keyword && searchResultItems.length === 1
-      ? `${searchResultItems[0].resultId}`
+    currentDonors.length === 1
+      ? `DO${currentDonors[0]}`
+      : currentDonors.length > 1
+      ? `${currentDonors.length} Donors`
       : keyword
       ? `${searchResultItems.length} Donors`
       : COMPLETION_OPTIONS[completionState].display;
 
-  const downloadIds = keyword.length === 0 && completionState === 'all' ? [] : searchResults;
+  useEffect(() => {
+    const completionDisplayText = COMPLETION_OPTIONS[completionState]
+      ? `Show ${COMPLETION_OPTIONS[completionState].display}`
+      : '- Select an option -';
+
+    setDisplayText(completionDisplayText);
+  }, [completionState]);
 
   return (
     <Container css={searchBackgroundStyle}>
       {modalVisible && (
         <FilterModal
           setModalVisible={setModalVisible}
-          setFilterTextBox={setFilterTextBox}
-          filterTextBox={filterTextBox}
+          setSelectedDonors={setSelectedDonors}
           programShortName={programShortName}
         />
       )}
       {/* First Item - title */}
       <Typography css={searchTitleParentStyle} variant="subtitle2">
         Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
-        {keyword && (
+        {!useDefaultQuery && (
           <Button
             onClick={() => {
-              setSearchValue('');
+              setFilterValue('');
+              setCompletionState(CompletionStates.all);
             }}
             css={searchClearFilterStyle}
             variant="secondary"
@@ -168,22 +179,19 @@ export default function SearchBar({
         )}
       </Typography>
 
-      {/* Grouping second to forth item together */}
+      {/* Grouping second to fourth item together */}
       <div css={searchRightSideGroupStyle}>
         {/* Second item - filter */}
         <div css={searchFilterParentStyle}>
           <Typography variant="subtitle2">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
+            disabled={!!currentDonors.length}
             value={completionState}
             variant="secondary"
             size="sm"
             onItemClick={(e) => {
-              onChange(e.value);
-              const completionDisplayText = COMPLETION_OPTIONS[e.value]
-                ? `Show ${COMPLETION_OPTIONS[e.value].display}`
-                : '- Select an option -';
-              setDisplayText(completionDisplayText);
+              setCompletionState(e.value);
             }}
             menuItems={MENU_ITEMS}
           >
@@ -196,19 +204,23 @@ export default function SearchBar({
         <div css={searchBarParentStyle}>
           <Input
             aria-label="search-for-files"
-            size="sm"
-            placeholder={'Donor ID/Submitter Donor ID'}
-            preset="search"
-            showClear={true}
-            value={keyword}
+            getOverrideCss={() => searchInputFieldStyle}
             onKeyDown={(e) => {
               if (e.key === 'Enter') setSearchOpen(false);
             }}
             onChange={(e) => {
-              setKeyword(e.target.value);
-              if (keyword && keyword.length >= 1) setSearchOpen(true);
+              if (e.target.value.length === 0) {
+                setFilterValue('');
+              } else {
+                setKeyword(e.target.value);
+                setSearchOpen(true);
+              }
             }}
-            getOverrideCss={() => searchInputFieldStyle}
+            placeholder={'Donor ID/Submitter Donor ID'}
+            preset="search"
+            showClear={true}
+            size="sm"
+            value={keyword}
           />
           {keyword && keyword.length >= 1 && searchOpen ? (
             <>
@@ -228,7 +240,7 @@ export default function SearchBar({
               <SearchResultsMenu
                 searchData={searchResultItems}
                 isLoading={loading}
-                onSelect={setSearchValue}
+                onSelect={setFilterValue}
               />
             </>
           ) : null}
@@ -246,10 +258,11 @@ export default function SearchBar({
 
         {/* Fourth item - download button*/}
         <ClinicalDownloadButton
-          searchResults={downloadIds}
+          tsvDownloadIds={tsvDownloadIds}
           text="Clinical Data"
           entityTypes={clinicalEntityFields}
           completionState={completionState}
+          disabled={noData}
         />
       </div>
     </Container>

@@ -5,9 +5,9 @@
 #   run npm run graphql-codegen once with the remote schema option selected.
 schema:
   # remote
-  - ${GATEWAY_API_ROOT}/graphql
+  # - ${GATEWAY_API_ROOT}/graphql
   # local
-  # - ./generated/gql_schema.json
+  - ./generated/gql_schema.json
 documents: [./**/gql/*.ts]
 generates:
   ./generated/gql_schema.json:

@@ -466,7 +466,7 @@ const DonorSummaryTable = ({
         const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
           (donor) => donorId === donor.donorId,
         );
-        const entity = currentDonor.errors[0].entityName;
+        const entity = currentDonor?.errors[0].entityName;
         return { donorId, entity };
       })
     : [];
@@ -518,8 +518,7 @@ const DonorSummaryTable = ({
             const linkUrl = urlJoin(
               `/submission/program/`,
               programShortName,
-              `/clinical-data/?donorId=${original.donorId}`,
-              errorTab && `&tab=${errorTab}`,
+              `/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
             );
             return FEATURE_SUBMITTED_DATA_ENABLED ? (
               <NextLink href={linkUrl}>
@@ -658,6 +657,9 @@ const DonorSummaryTable = ({
                               programDonorSummaryStats?.dnaTNMatchedPairStatus
                                 ?.tumorNormalNoMatchedPair,
                             [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
+                              programDonorSummaryStats?.dnaTNMatchedPairStatus
+                                ?.tumorNormalMatchedPairMissingRawReads,
+                            [FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[3].key]:
                               programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
                           }
                         : {

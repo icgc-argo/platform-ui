@@ -37,6 +37,7 @@ export type TumorNormalStatusCounts = {
 export type TumorNormalMatchedPairStatusCounts = {
   tumorNormalMatchedPair: number;
   tumorNormalNoMatchedPair: number;
+  tumorNormalMatchedPairMissingRawReads: number;
   noData: number;
 };
 
