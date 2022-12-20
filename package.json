@@ -35,6 +35,7 @@
     "@icgc-argo/ego-token-utils": "^8.1.1",
     "@icgc-argo/uikit": "^2.2.0",
     "@overture-stack/arranger-components": "3.0.0-beta.11",
+    "@tippyjs/react": "^4.2.6",
     "apollo-upload-client": "^11.0.0",
     "browser-fs-access": "^0.31.1",
     "clsx": "^1.1.1",

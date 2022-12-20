@@ -39,6 +39,8 @@ import {
 } from '../types';
 import { makeChartLineMeta } from '../utils';
 import { getMaxY } from './utils';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 const getOptions = (theme: UikitTheme) => ({
   colors: {
@@ -421,12 +423,14 @@ const LineChart = ({
               key={chartLine.field}
             >
               {pointsCoordinates.map((point) => (
-                <circle
-                  cx={point.xCoordinate}
-                  cy={point.yCoordinate}
-                  key={point.xCoordinate}
-                  r={options.pointRadius}
-                />
+                <Tippy content="test: #donor here">
+                  <circle
+                    cx={point.xCoordinate}
+                    cy={point.yCoordinate}
+                    key={point.xCoordinate}
+                    r={options.pointRadius}
+                  />
+                </Tippy>
               ))}
             </g>
           );
