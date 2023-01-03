@@ -22,6 +22,7 @@ import { compose, withState, withProps, withHandlers, defaultProps } from 'recom
 
 import Row from './Row';
 import { toggleSQON, replaceFilterSQON } from './utils';
+
 export const Bubble = ({ className = '', children, ...props }) => (
   <div className={`${className} sqon-bubble`} {...props}>
     <div>{children}</div>
