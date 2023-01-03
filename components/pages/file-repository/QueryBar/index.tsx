@@ -172,7 +172,6 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
     <Content>
       <SQONView
         sqon={filters}
-        setSQON={setFilterFromFieldAndValue}
         Clear={() => (
           <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
