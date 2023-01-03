@@ -19,38 +19,17 @@
 
 import { CSSProperties, PropsWithChildren } from 'react';
 
-/*----------------------------------------------------------------------------*/
-
-const baseStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  boxSizing: 'border-box',
-  position: 'relative',
-  outline: 'none',
+const Col = ({
+  children,
+  spacing,
+  style = {},
+  ...props
+}: PropsWithChildren<{ spacing?: number; style?: CSSProperties }>) => {
+  return (
+    <div style={{ ...(spacing ? { marginLeft: spacing } : {}), ...style }} {...props}>
+      {children}
+    </div>
+  );
 };
 
-const Row = ({
-  children,
-  className = '',
-  style = {},
-  wrap = false,
-  ...props
-}: PropsWithChildren<{ className?: string; style?: CSSProperties; wrap?: boolean }>) => (
-  <div
-    style={
-      {
-        ...baseStyle,
-        ...(wrap ? { flexWrap: 'wrap' } : {}),
-        ...style,
-      } as CSSProperties
-    }
-    className={className}
-    {...props}
-  >
-    {children}
-  </div>
-);
-
-/*----------------------------------------------------------------------------*/
-
-export default Row;
+export default Col;
