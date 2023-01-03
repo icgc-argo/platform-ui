@@ -18,7 +18,8 @@
  */
 
 import { take, xor } from 'lodash';
-import { compose, withState, withProps, withHandlers, defaultProps } from 'recompose';
+import { useState } from 'react';
+import { compose, defaultProps } from 'recompose';
 
 import Row from './Row';
 import { toggleSQON, replaceFilterSQON } from './utils';
@@ -62,17 +63,6 @@ const enhance = compose(
       </Bubble>
     ),
   }),
-  withState('expanded', 'setExpanded', []),
-  withProps(({ expanded }) => ({
-    isExpanded: (valueSQON) => expanded.includes(valueSQON),
-  })),
-  withHandlers({
-    onLessClicked:
-      ({ expanded, setExpanded }) =>
-      (valueSQON) => {
-        setExpanded(xor(expanded, [valueSQON]));
-      },
-  }),
 );
 
 const SQON = ({
@@ -81,10 +71,6 @@ const SQON = ({
   FieldCrumb,
   ValueCrumb,
   Clear,
-  isExpanded,
-  expanded,
-  setExpanded,
-  onLessClicked,
 }) =>
   // : {
   //   emptyMessage: String,
@@ -92,14 +78,16 @@ const SQON = ({
   //   FieldCrumb: (props: TFieldCrumbArg) => any,
   //   ValueCrumb: (props: TValueCrumbArg) => any,
   //   Clear: (props: TClearArg) => any,
-  //   isExpanded: (valueSQON: TValueSQON) => boolean,
-  //   expanded: Array<TValueSQON>,
-  //   setExpanded: () => void,
   //   onLessClicked: Function,
   // }
   {
     const sqonContent = sqon?.content || [];
     const isEmpty = sqonContent.length === 0;
+
+    const [expandedState, setExpandedState] = useState([]);
+    const onExpandClick = (valueSQON) => setExpandedState(xor(expandedState, [valueSQON]));
+    const checkExpanded = (valueSQON) => expandedState.includes(valueSQON);
+
     return (
       <div className={`sqon-view ${isEmpty ? 'sqon-view-empty' : ''}`}>
         {isEmpty && (
@@ -140,7 +128,7 @@ const SQON = ({
                   {value.length > 1 && (
                     <span className="sqon-value-group sqon-value-group-start">(</span>
                   )}
-                  {(isExpanded(valueSQON) ? value : take(value, 2)).map((value, i) =>
+                  {(checkExpanded(valueSQON) ? value : take(value, 2)).map((value, i) =>
                     ValueCrumb({
                       field,
                       key: value,
@@ -179,15 +167,10 @@ const SQON = ({
                             ),
                     }),
                   )}
-                  {value.length > 2 && !isExpanded(valueSQON) && (
-                    <span className="sqon-more" onClick={() => onLessClicked(valueSQON)}>
-                      {'\u2026'}
-                    </span>
-                  )}
-                  {isExpanded(valueSQON) && (
-                    <div className="sqon-less" onClick={() => onLessClicked(valueSQON)}>
-                      Less
-                    </div>
+                  {value.length > 2 && (
+                    <button className="sqon-expand" onClick={() => onExpandClick(valueSQON)}>
+                      {checkExpanded(valueSQON) ? 'Less' : '\u2026'}
+                    </button>
                   )}
                   {value.length > 1 && (
                     <span className="sqon-value-group sqon-value-group-end">)</span>

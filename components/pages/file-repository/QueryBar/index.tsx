@@ -103,7 +103,8 @@ const Content = styled('div')`
       cursor: pointer;
     }
     & .sqon-less,
-    .sqon-more {
+    .sqon-more,
+    .sqon-expand {
       background-color: ${({ theme }) => theme.colors.secondary_1};
       color: ${({ theme }) => theme.colors.white};
       padding: 0 12px;
@@ -121,13 +122,8 @@ const Content = styled('div')`
       flex: none;
       font-weight: 500;
       font-family: Work Sans, sans-serif;
-    }
-    & .sqon-more {
-      width: 20px;
-      padding: 0 5px;
+      border: 0 none;
       justify-content: center;
-    }
-    & .sqon-less {
       padding: 0 10px;
     }
     & .sqon-value-group {
