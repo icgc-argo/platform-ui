@@ -101,7 +101,8 @@ const Content = styled('div')`
       font-weight: bold;
       cursor: pointer;
     }
-    & .sqon-expand {
+    & .sqon-less,
+    .sqon-more {
       background-color: ${({ theme }) => theme.colors.secondary_1};
       color: ${({ theme }) => theme.colors.white};
       padding: 0 12px;
@@ -119,8 +120,13 @@ const Content = styled('div')`
       flex: none;
       font-weight: 500;
       font-family: Work Sans, sans-serif;
-      border: 0 none;
+    }
+    & .sqon-more {
+      width: 20px;
+      padding: 0 5px;
       justify-content: center;
+    }
+    & .sqon-less {
       padding: 0 10px;
     }
     & .sqon-value-group {
@@ -169,6 +175,7 @@ const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
     <Content>
       <SQONView
         sqon={filters}
+        setSQON={setFilterFromFieldAndValue}
         Clear={() => (
           <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
