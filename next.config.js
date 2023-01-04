@@ -27,11 +27,12 @@ const urlJoin = require('url-join');
 const path = require('path');
 
 const withPlugins = require('next-compose-plugins');
+const withImages = require('next-images');
 const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
 
 const { patchWebpackConfig: patchForGlobalCSS } = require('next-global-css');
 
-const nextConfig = withPlugins([withTM], {
+const nextConfig = withPlugins([withImages, withTM], {
   exportPathMap: async (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
