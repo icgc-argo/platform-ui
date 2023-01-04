@@ -68,7 +68,6 @@
     "react-grid-system": "^8.1.4",
     "react-json-view": "^1.21.3",
     "react-transition-group": "^4.4.2",
-    "recompose": "^0.30.0",
     "resize-sensor": "0.0.6",
     "sqon-builder": "^1.0.0",
     "url-join": "^4.0.0",
