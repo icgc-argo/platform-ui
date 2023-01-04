@@ -18,10 +18,11 @@
  */
 
 import { take, xor } from 'lodash';
-import { compose, withState, withProps, withHandlers, defaultProps } from 'recompose';
+import { useState } from 'react';
 
 import Row from './Row';
 import { toggleSQON, replaceFilterSQON } from './utils';
+
 export const Bubble = ({ className = '', children, ...props }) => (
   <div className={`${className} sqon-bubble`} {...props}>
     <div>{children}</div>
@@ -46,45 +47,12 @@ export const Value = ({ children, className = '', ...props }) => (
   </Bubble>
 );
 
-const enhance = compose(
-  defaultProps({
-    FieldCrumb: ({ field, nextSQON }) => (
-      <Field onClick={() => console.log(nextSQON)}>{field}</Field>
-    ),
-    ValueCrumb: ({ value, nextSQON, ...props }) => (
-      <Value onClick={() => console.log(nextSQON)} {...props}>
-        {value}
-      </Value>
-    ),
-    Clear: ({ nextSQON }) => (
-      <Bubble className="sqon-clear" onClick={() => console.log(nextSQON)}>
-        Clear
-      </Bubble>
-    ),
-  }),
-  withState('expanded', 'setExpanded', []),
-  withProps(({ expanded }) => ({
-    isExpanded: (valueSQON) => expanded.includes(valueSQON),
-  })),
-  withHandlers({
-    onLessClicked:
-      ({ expanded, setExpanded }) =>
-      (valueSQON) => {
-        setExpanded(xor(expanded, [valueSQON]));
-      },
-  }),
-);
-
-const SQON = ({
+const SQONView = ({
   emptyMessage = 'Start by selecting filters',
   sqon,
   FieldCrumb,
   ValueCrumb,
   Clear,
-  isExpanded,
-  expanded,
-  setExpanded,
-  onLessClicked,
 }) =>
   // : {
   //   emptyMessage: String,
@@ -100,6 +68,11 @@ const SQON = ({
   {
     const sqonContent = sqon?.content || [];
     const isEmpty = sqonContent.length === 0;
+
+    const [expanded, setExpanded] = useState([]);
+    const onLessClicked = (valueSQON) => setExpanded(xor(expanded, [valueSQON]));
+    const isExpanded = (valueSQON) => expanded.includes(valueSQON);
+
     return (
       <div className={`sqon-view ${isEmpty ? 'sqon-view-empty' : ''}`}>
         {isEmpty && (
@@ -202,4 +175,4 @@ const SQON = ({
     );
   };
 
-export default enhance(SQON);
+export default SQONView;

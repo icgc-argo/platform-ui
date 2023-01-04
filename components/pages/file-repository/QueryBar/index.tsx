@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
+import { Button, css, styled, Typography } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
-import dynamic from 'next/dynamic';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';
@@ -171,12 +170,11 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
 };
 
 const QueryBar = ({ filters }: { filters: FileRepoFiltersType }) => {
-  const { clearFilters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+  const { clearFilters, replaceAllFilters } = useFiltersContext();
   return (
     <Content>
       <SQONView
         sqon={filters}
-        setSQON={setFilterFromFieldAndValue}
         Clear={() => (
           <Button className="sqon-bubble sqon-clear" onClick={() => clearFilters()}>
             Clear
