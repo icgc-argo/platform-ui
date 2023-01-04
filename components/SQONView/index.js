@@ -109,9 +109,7 @@ const SQONView = ({
                       sqon,
                     ),
                   })}
-                  <div className="sqon-bubble sqon-op">
-                    {(op === 'in' && isSingleValue) || op === 'filter' ? 'is' : op}
-                  </div>
+                  <Op>{(op === 'in' && isSingleValue) || op === 'filter' ? 'is' : op}</Op>
                   {value.length > 1 && (
                     <span className="sqon-value-group sqon-value-group-start">(</span>
                   )}
@@ -167,9 +165,7 @@ const SQONView = ({
                   {value.length > 1 && (
                     <span className="sqon-value-group sqon-value-group-end">)</span>
                   )}
-                  {i < sqonContent.length - 1 && (
-                    <div className="sqon-bubble sqon-op">{sqon.op}</div>
-                  )}
+                  {i < sqonContent.length - 1 && <Op>{sqon.op}</Op>}
                 </Row>
               );
             })}
