@@ -26,9 +26,12 @@ require('dotenv').config();
 const urlJoin = require('url-join');
 const path = require('path');
 
+const withPlugins = require('next-compose-plugins');
+const withTM = require('next-transpile-modules')(['@icgc-argo/uikit']);
+
 const { patchWebpackConfig: patchForGlobalCSS } = require('next-global-css');
 
-const nextConfig = {
+const nextConfig = withPlugins([withTM], {
   exportPathMap: async (defaultPathMap) =>
     process.env.EXPORT_PATH
       ? {
@@ -85,6 +88,6 @@ const nextConfig = {
     FEATURE_SUBMITTED_DATA_ENABLED: process.env.FEATURE_SUBMITTED_DATA_ENABLED,
     FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED: process.env.FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED,
   },
-};
+});
 
 module.exports = nextConfig;
