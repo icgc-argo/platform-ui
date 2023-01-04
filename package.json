@@ -55,6 +55,7 @@
     "next": "^12.3.4",
     "next-compose-plugins": "^2.2.1",
     "next-cookies": "^1.1.2",
+    "next-images": "^1.8.4",
     "next-transpile-modules": "^10.0.0",
     "npm-force-resolutions": "^0.0.10",
     "pluralize": "^8.0.0",
