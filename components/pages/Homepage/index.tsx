@@ -50,6 +50,44 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'January 19, 2023',
+    text: (
+      <>
+        We are excited to announce{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+          Dictionary 1.16
+        </Link>
+        . Dictionary Release Notes available{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-116"
+        >
+          here
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    title: 'New Features',
+    text: (
+      <>
+        A brand new Submitted Data Page is now available for data submitters to review the submitted
+        clinical data. Program dashboards have been updated with new features to view the submitted
+        RNA Sequencing data.
+        <br />
+        <br />
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
+        >
+          Software Release 1.119.0 - API 3.38.1
+        </Link>{' '}
+        are now available.
+      </>
+    ),
+  },
+  {
     title: 'June 8, 2022',
     text: (
       <>
@@ -98,36 +136,6 @@ const newsItems: NewsItem[] = [
           LUCA-KR
         </Link>
         .
-      </>
-    ),
-  },
-  {
-    title: 'New Features',
-    text: (
-      <>
-        Program dashboards and the File Repository have been updated with new features to filter on{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          Open Access Variant Filtered
-        </Link>{' '}
-        data, and new file detail pages are now accessible from the{' '}
-        <Link href="https://platform.icgc-argo.org/repository">File Repository</Link> table.
-        <br />
-        <br />
-        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-          ARGO Data Dictionary 1.14
-        </Link>
-        ,{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
-          Data Release 5.0
-        </Link>{' '}
-        and{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
-        >
-          Software Release 1.110.1 - API 3.32.0
-        </Link>{' '}
-        are now available.
       </>
     ),
   },
