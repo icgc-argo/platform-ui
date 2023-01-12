@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.118.0",
+  "version": "1.119.0",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
@@ -52,7 +52,7 @@
     "js-cookie": "^3.0.1",
     "jsdom": "^19.0.0",
     "lodash": "^4.17.21",
-    "next": "^12.1.6",
+    "next": "^12.3.4",
     "next-compose-plugins": "^2.2.1",
     "next-cookies": "^1.1.2",
     "next-images": "^1.8.4",
@@ -60,7 +60,7 @@
     "pluralize": "^8.0.0",
     "promise-queue": "^2.2.5",
     "prop-types": "^15.8.1",
-    "query-string": "^7.1.1",
+    "query-string": "^8.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-ga": "^3.3.0",
@@ -68,7 +68,6 @@
     "react-grid-system": "^8.1.4",
     "react-json-view": "^1.21.3",
     "react-transition-group": "^4.4.2",
-    "recompose": "^0.30.0",
     "resize-sensor": "0.0.6",
     "sqon-builder": "^1.0.0",
     "url-join": "^4.0.0",
