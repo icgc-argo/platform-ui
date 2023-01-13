@@ -56,6 +56,7 @@ const getOptions = (theme: UikitTheme) => ({
   strokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
+  toolTipTextSize: 11,
 });
 
 const makePointsString = (points: PointsCoordinates) => {
@@ -104,6 +105,13 @@ const LineChart = ({
     font-family: ${options.fontFamily};
     font-size: ${options.fontSize}px;
   `;
+
+  const ToolTipStyleGroup = styled(TextStyleGroup)`
+    fill: ${theme.colors.white};
+    font-size: ${options.toolTipTextSize}px
+    letter-spacing: 0.5px;
+  `;
+
   // setup Y axis
   // round up max Y value so it's a multiple of numberOfHorizontalGuides
   const roundForHorizontalGuides = (x: number) =>
@@ -435,6 +443,35 @@ const LineChart = ({
     );
   };
 
+  const fakeTitle = 'fakeTitle';
+  const fakeList = [
+    { name: 'fakeName', color: 'red', count: 2 },
+    { name: 'RNA', color: 'blue', count: 8 },
+    { name: 'DNA', color: 'yellow', count: 4 },
+  ];
+
+  const InfoBox = ({ title, list }) => {
+    const yStart = 20;
+    const xStart = 10;
+    const lineHeight = options.toolTipTextSize + 1;
+    const boxHeight = yStart * 2 + options.toolTipTextSize * list.length;
+    return (
+      <g fill={theme.colors.grey}>
+        <rect rx="5" ry="5" height={boxHeight} width={`100`} />
+        <ToolTipStyleGroup>
+          <text x={xStart} y={yStart}>
+            {title}
+            {list.map((ele, idx) => (
+              <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
+                {ele.name}: {ele.count}
+              </tspan>
+            ))}
+          </text>
+        </ToolTipStyleGroup>
+      </g>
+    );
+  };
+
   return (
     width && (
       <>
@@ -449,6 +486,7 @@ const LineChart = ({
           <HorizontalGuides />
           <ChartLines />
           <ChartPoints />
+          <InfoBox title={fakeTitle} list={fakeList} />
         </svg>
       </>
     )
