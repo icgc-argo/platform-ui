@@ -518,8 +518,6 @@ const LineChart = ({
     );
   };
 
-  console.log(toolTipState);
-
   return (
     width && (
       <>
