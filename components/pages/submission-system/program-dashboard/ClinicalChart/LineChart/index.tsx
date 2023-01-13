@@ -111,7 +111,7 @@ const LineChart = ({
       data.map((datum) => {
         const datumMeta = find(chartMeta, { field: datum.title });
         return {
-          title: datumMeta.title,
+          name: datumMeta.title,
           count: find(datum.buckets, { date: date }).donors,
           color: datumMeta.color,
           dataType: datumMeta.dataType,
@@ -475,23 +475,36 @@ const LineChart = ({
 
   const [toolTipState, setToolTipState] = useState([]);
 
-  const InfoBox = ({ title, list }) => {
+  const InfoBox = () => {
     const yStart = 20;
     const xStart = 10;
     const lineHeight = options.toolTipTextSize + 1;
-    const boxHeight = yStart * 2 + options.toolTipTextSize * list.length;
+    const boxHeight = yStart * 2 + options.toolTipTextSize * toolTipState.length;
+    const tooltipList = toolTipState.reduce((acc, curr) => {
+      const { name, color, count, dataType } = curr;
+      return { ...acc, [dataType]: [...(acc[dataType] || []), { name, color, count }] };
+    }, {});
     return (
       <g fill={theme.colors.grey}>
         <rect rx="5" ry="5" height={boxHeight} width={`100`} />
         <ToolTipStyleGroup>
-          <text x={xStart} y={yStart}>
-            {title}
-            {list.map((ele, idx) => (
-              <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
-                {ele.name}: {ele.count}
-              </tspan>
-            ))}
-          </text>
+          {Object.entries(tooltipList).map(([key, value]) => {
+            return (
+              <text x={xStart} y={yStart}>
+                {key !== 'null' ? key : 'clinical'}
+                {value.map((ele, idx) => (
+                  <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
+                    {ele.name}: {ele.count}
+                  </tspan>
+                ))}
+              </text>
+            );
+          })}
+          {/* {list.map((ele, idx) => (
+            <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
+              {ele.name}: {ele.count}
+            </tspan>
+          ))} */}
         </ToolTipStyleGroup>
       </g>
     );
@@ -533,7 +546,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          <InfoBox title={fakeTitle} list={fakeList} />
+          <InfoBox />
         </svg>
       </>
     )
