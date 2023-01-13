@@ -489,10 +489,11 @@ const LineChart = ({
         <rect rx="5" ry="5" height={boxHeight} width={`100`} />
         <ToolTipStyleGroup>
           {Object.entries(tooltipList).map(([key, value]) => {
+            const newArray: any = value;
             return (
               <text x={xStart} y={yStart}>
                 {key !== 'null' ? key : 'clinical'}
-                {value.map((ele, idx) => (
+                {newArray.map((ele, idx) => (
                   <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
                     {ele.name}: {ele.count}
                   </tspan>
