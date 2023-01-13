@@ -29,6 +29,7 @@ import {
   isBefore,
 } from 'date-fns';
 import { find } from 'lodash';
+import { useState } from 'react';
 import {
   ChartLine,
   ChartType,
@@ -97,10 +98,28 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
-  console.log('data', data);
-
   const theme = useTheme();
   const options = getOptions(theme);
+
+  const dataBuckets = data[0].buckets;
+  const chartMeta = makeChartLineMeta(theme);
+  const tooltipData = dataBuckets.reduce((acc, { date }) => {
+    // array with title, count, colour
+    // for each date
+    const result = [
+      ...acc,
+      data.map((datum) => {
+        const datumMeta = find(chartMeta, { field: datum.title });
+        return {
+          title: datumMeta.title,
+          count: find(datum.buckets, { date: date }).donors,
+          color: datumMeta.color,
+          dataType: datumMeta.dataType,
+        };
+      }),
+    ];
+    return result;
+  }, []);
 
   const TextStyleGroup = styled.g`
     fill: ${options.colors.text};
@@ -136,7 +155,6 @@ const LineChart = ({
   // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataBuckets = data[0].buckets;
   const xTicksCount = dataBuckets.length;
   // distance between 2 ticks
   const xTickDistance = chartWidth / xTicksCount;
@@ -455,6 +473,8 @@ const LineChart = ({
     { name: 'DNA', color: 'yellow', count: 4 },
   ];
 
+  const [toolTipState, setToolTipState] = useState([]);
+
   const InfoBox = ({ title, list }) => {
     const yStart = 20;
     const xStart = 10;
@@ -483,10 +503,10 @@ const LineChart = ({
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
-              console.log('mouse enter');
+              setToolTipState(tooltipData[idx]);
             }}
             onMouseLeave={() => {
-              console.log('mouse leave');
+              setToolTipState([]);
             }}
             y={verticalLineStart}
             height={verticalLineEnd - verticalLineStart}
@@ -497,6 +517,8 @@ const LineChart = ({
       </g>
     );
   };
+
+  console.log(toolTipState);
 
   return (
     width && (
