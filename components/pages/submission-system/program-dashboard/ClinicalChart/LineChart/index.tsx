@@ -97,6 +97,8 @@ const LineChart = ({
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
 }) => {
+  console.log('data', data);
+
   const theme = useTheme();
   const options = getOptions(theme);
 
@@ -143,6 +145,10 @@ const LineChart = ({
   const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + xTickDistance * index);
+  const xCoordinates = new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
+    const tickX = getX(index);
+    return tickX;
+  });
 
   const horizontalLineStart = padding;
   const horizontalLineEnd = chartWidth + padding;
@@ -301,8 +307,7 @@ const LineChart = ({
     const yEnd = yStart + options.xTickHeight;
     return (
       <g fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth}>
-        {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
-          const tickX = getX(index);
+        {xCoordinates.map((tickX) => {
           return (
             <polyline
               key={tickX}
@@ -472,6 +477,27 @@ const LineChart = ({
     );
   };
 
+  const HoverDetector = () => {
+    return (
+      <g fill-opacity="0" stroke="purple">
+        {xCoordinates.map((xCoordinate, idx) => (
+          <rect
+            onMouseEnter={() => {
+              console.log('mouse enter');
+            }}
+            onMouseLeave={() => {
+              console.log('mouse leave');
+            }}
+            y={verticalLineStart}
+            height={verticalLineEnd - verticalLineStart}
+            x={horizontalLineStart + xTickDistance * idx}
+            width={xTickDistance}
+          />
+        ))}
+      </g>
+    );
+  };
+
   return (
     width && (
       <>
@@ -486,6 +512,7 @@ const LineChart = ({
           <HorizontalGuides />
           <ChartLines />
           <ChartPoints />
+          <HoverDetector />
           <InfoBox title={fakeTitle} list={fakeList} />
         </svg>
       </>
