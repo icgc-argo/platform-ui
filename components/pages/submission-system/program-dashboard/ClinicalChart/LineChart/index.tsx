@@ -467,6 +467,7 @@ const LineChart = ({
   };
 
   const [toolTipState, setToolTipState] = useState([]);
+  const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
   const organizeTooltipText = () => {
     // TODO clean this up
@@ -509,23 +510,36 @@ const LineChart = ({
   };
 
   const InfoBox = () => {
-    const yPadding = 20;
-    const xStart = 10;
-    const lineHeight = options.toolTipTextSize + 1;
     const tooltipList = organizeTooltipText();
+
+    const xPadding = 10;
+    const yPadding = 20;
+    const xStart = xCoordinates[toolTipIndex];
+    const xIsLeft = toolTipIndex > Math.floor(toolTipState.length / 2);
+    const lineHeight = options.toolTipTextSize + 1;
+    const boxWidth = 135;
+    const xArrowPadding = 10;
+    const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
+    const xText = xPosition + xPadding;
     const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
+    // vertically center the box
     const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
     const yText = yStart + yPadding;
 
+    console.log(tooltipList);
+
     return (
-      <g fill={theme.colors.grey} x={30}>
-        <rect rx="5" ry="5" y={yStart} height={boxHeight} width={`135`} />
+      <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
+        <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
         <ToolTipStyleGroup>
-          <text x={xStart} y={yText}>
+          <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
-              <tspan x={xStart} y={yText + idx * lineHeight}>
-                {tooltipItem.name}: {tooltipItem.count}
-              </tspan>
+              <>
+                <circle cx={xText} cy={yText + idx * lineHeight} r={10} fill={tooltipItem.color} />
+                <tspan x={xText} y={yText + idx * lineHeight}>
+                  {tooltipItem.name}: {tooltipItem.count}
+                </tspan>
+              </>
             ))}
           </text>
         </ToolTipStyleGroup>
@@ -540,9 +554,11 @@ const LineChart = ({
           <rect
             onMouseEnter={() => {
               setToolTipState(tooltipData[idx]);
+              setToolTipIndex(idx);
             }}
             onMouseLeave={() => {
               setToolTipState([]);
+              setToolTipIndex(null);
             }}
             y={verticalLineStart}
             height={verticalLineEnd - verticalLineStart}
