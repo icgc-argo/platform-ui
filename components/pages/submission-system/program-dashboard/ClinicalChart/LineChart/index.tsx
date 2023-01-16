@@ -509,16 +509,6 @@ const LineChart = ({
     return result;
   };
 
-  type TooltipListItem = {
-    name: string;
-    count: number | null;
-    color: string | null;
-  };
-
-  type TooltipListByDataType = {
-    [key: string]: TooltipListItem[];
-  };
-
   const InfoBox = () => {
     const tooltipList = organizeTooltipText();
 
@@ -536,20 +526,26 @@ const LineChart = ({
     const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
     const yText = yStart + yPadding;
 
-    console.log(tooltipList);
+    // arrow pointer
+    const arrowWidth = 5;
+    const polyPtOne = `${xIsLeft ? xStart : xPosition - xArrowPadding},${yStart + boxHeight / 2} `;
+    const polyPtTwo = `${xIsLeft ? xStart - xArrowPadding : xPosition},${
+      yStart + boxHeight / 2 + arrowWidth
+    } `;
+    const polyPtThree = `${xIsLeft ? xStart - xArrowPadding : xPosition},${
+      yStart + boxHeight / 2 - arrowWidth
+    }`;
 
     return (
-      <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
+      <g fill={theme.colors.grey_1} x={30} style={{ pointerEvents: 'none' }}>
+        <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
         <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
         <ToolTipStyleGroup>
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
-              <>
-                <circle cx={xText} cy={yText + idx * lineHeight} r={10} fill={tooltipItem.color} />
-                <tspan x={xText} y={yText + idx * lineHeight}>
-                  {tooltipItem.name}: {tooltipItem.count}
-                </tspan>
-              </>
+              <tspan x={xText} y={yText + idx * lineHeight} fill={tooltipItem.color}>
+                {tooltipItem.name}: {tooltipItem.count}
+              </tspan>
             ))}
           </text>
         </ToolTipStyleGroup>
@@ -579,6 +575,8 @@ const LineChart = ({
       </g>
     );
   };
+
+  console.log('toolTipState', toolTipState);
 
   return (
     width && (
