@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { find } from 'lodash';
+import { filter, find } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -475,20 +475,52 @@ const LineChart = ({
 
   const [toolTipState, setToolTipState] = useState([]);
 
+  type TooltipListItem = {
+    name: string;
+    count: number | null;
+    color: string | null;
+  };
+
+  type TooltipListByDataType = {
+    [key: string]: TooltipListItem[];
+  };
+
+  const organizeTooltipList = () => {
+    const tooltipDataTypes = ['RNA', 'DNA'];
+
+    const rnaItems = filter(toolTipState, { dataType: 'RNA' }).length;
+
+    const result = [
+      ...(rnaItems.length
+        ? [
+            {
+              name: 'RNA',
+              color: null,
+              count: null,
+            },
+            ...rnaItems,
+          ]
+        : []),
+    ];
+  };
+
   const InfoBox = () => {
     const yStart = 20;
     const xStart = 10;
     const lineHeight = options.toolTipTextSize + 1;
     const boxHeight = yStart * 2 + options.toolTipTextSize * toolTipState.length;
-    const tooltipList = toolTipState.reduce((acc, curr) => {
+    const tooltipListByDataType = toolTipState.reduce((acc, curr) => {
       const { name, color, count, dataType } = curr;
       return { ...acc, [dataType]: [...(acc[dataType] || []), { name, color, count }] };
-    }, {});
+    }, {} as TooltipListItem);
+
+    const tooltipList = toolTipState.reduce((acc, curr) => {}, []);
+
     return (
       <g fill={theme.colors.grey}>
         <rect rx="5" ry="5" height={boxHeight} width={`100`} />
         <ToolTipStyleGroup>
-          {Object.entries(tooltipList).map(([key, value]) => {
+          {Object.entries(tooltipListByDataType).map(([key, value]) => {
             const newArray: any = value;
             return (
               <text x={xStart} y={yStart}>
