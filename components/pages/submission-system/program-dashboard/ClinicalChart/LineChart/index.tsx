@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { filter, find } from 'lodash';
+import { filter, find, result } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -466,29 +466,14 @@ const LineChart = ({
     );
   };
 
-  const fakeTitle = 'fakeTitle';
-  const fakeList = [
-    { name: 'fakeName', color: 'red', count: 2 },
-    { name: 'RNA', color: 'blue', count: 8 },
-    { name: 'DNA', color: 'yellow', count: 4 },
-  ];
-
   const [toolTipState, setToolTipState] = useState([]);
+  const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
-  type TooltipListItem = {
-    name: string;
-    count: number | null;
-    color: string | null;
-  };
-
-  type TooltipListByDataType = {
-    [key: string]: TooltipListItem[];
-  };
-
-  const organizeTooltipList = () => {
-    const tooltipDataTypes = ['RNA', 'DNA'];
-
-    const rnaItems = filter(toolTipState, { dataType: 'RNA' }).length;
+  const organizeTooltipText = () => {
+    // TODO clean this up
+    const rnaItems = filter(toolTipState, { dataType: 'RNA' });
+    const dnaItems = filter(toolTipState, { dataType: 'DNA' });
+    const clinicalItems = filter(toolTipState, { dataType: null });
 
     const result = [
       ...(rnaItems.length
@@ -501,43 +486,72 @@ const LineChart = ({
             ...rnaItems,
           ]
         : []),
+      ...(dnaItems.length
+        ? [
+            {
+              name: 'DNA',
+              color: null,
+              count: null,
+            },
+            ...dnaItems,
+          ]
+        : []),
+      ...(clinicalItems.length
+        ? [
+            {
+              ...clinicalItems[0], // clinical only has 1 item
+              name: 'clinical',
+            },
+          ]
+        : []),
     ];
+
+    return result;
+  };
+
+  type TooltipListItem = {
+    name: string;
+    count: number | null;
+    color: string | null;
+  };
+
+  type TooltipListByDataType = {
+    [key: string]: TooltipListItem[];
   };
 
   const InfoBox = () => {
-    const yStart = 20;
-    const xStart = 10;
-    const lineHeight = options.toolTipTextSize + 1;
-    const boxHeight = yStart * 2 + options.toolTipTextSize * toolTipState.length;
-    const tooltipListByDataType = toolTipState.reduce((acc, curr) => {
-      const { name, color, count, dataType } = curr;
-      return { ...acc, [dataType]: [...(acc[dataType] || []), { name, color, count }] };
-    }, {} as TooltipListItem);
+    const tooltipList = organizeTooltipText();
 
-    const tooltipList = toolTipState.reduce((acc, curr) => {}, []);
+    const xPadding = 10;
+    const yPadding = 20;
+    const xStart = xCoordinates[toolTipIndex];
+    const xIsLeft = toolTipIndex > Math.floor(toolTipState.length / 2);
+    const lineHeight = options.toolTipTextSize + 1;
+    const boxWidth = 135;
+    const xArrowPadding = 10;
+    const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
+    const xText = xPosition + xPadding;
+    const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
+    // vertically center the box
+    const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
+    const yText = yStart + yPadding;
+
+    console.log(tooltipList);
 
     return (
-      <g fill={theme.colors.grey}>
-        <rect rx="5" ry="5" height={boxHeight} width={`100`} />
+      <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
+        <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
         <ToolTipStyleGroup>
-          {Object.entries(tooltipListByDataType).map(([key, value]) => {
-            const newArray: any = value;
-            return (
-              <text x={xStart} y={yStart}>
-                {key !== 'null' ? key : 'clinical'}
-                {newArray.map((ele, idx) => (
-                  <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
-                    {ele.name}: {ele.count}
-                  </tspan>
-                ))}
-              </text>
-            );
-          })}
-          {/* {list.map((ele, idx) => (
-            <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
-              {ele.name}: {ele.count}
-            </tspan>
-          ))} */}
+          <text x={xText} y={yText}>
+            {tooltipList.map((tooltipItem, idx) => (
+              <>
+                <circle cx={xText} cy={yText + idx * lineHeight} r={10} fill={tooltipItem.color} />
+                <tspan x={xText} y={yText + idx * lineHeight}>
+                  {tooltipItem.name}: {tooltipItem.count}
+                </tspan>
+              </>
+            ))}
+          </text>
         </ToolTipStyleGroup>
       </g>
     );
@@ -550,9 +564,11 @@ const LineChart = ({
           <rect
             onMouseEnter={() => {
               setToolTipState(tooltipData[idx]);
+              setToolTipIndex(idx);
             }}
             onMouseLeave={() => {
               setToolTipState([]);
+              setToolTipIndex(null);
             }}
             y={verticalLineStart}
             height={verticalLineEnd - verticalLineStart}
