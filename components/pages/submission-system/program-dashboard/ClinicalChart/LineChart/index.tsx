@@ -509,19 +509,21 @@ const LineChart = ({
   };
 
   const InfoBox = () => {
-    const yStart = 20;
+    const yPadding = 20;
     const xStart = 10;
     const lineHeight = options.toolTipTextSize + 1;
     const tooltipList = organizeTooltipText();
-    const boxHeight = yStart * 1.5 + options.toolTipTextSize * tooltipList.length;
+    const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
+    const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
+    const yText = yStart + yPadding;
 
     return (
-      <g fill={theme.colors.grey}>
-        <rect rx="5" ry="5" height={boxHeight} width={`135`} />
+      <g fill={theme.colors.grey} x={30}>
+        <rect rx="5" ry="5" y={yStart} height={boxHeight} width={`135`} />
         <ToolTipStyleGroup>
-          <text x={xStart} y={yStart}>
+          <text x={xStart} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
-              <tspan x={xStart} y={yStart + idx * lineHeight}>
+              <tspan x={xStart} y={yText + idx * lineHeight}>
                 {tooltipItem.name}: {tooltipItem.count}
               </tspan>
             ))}
