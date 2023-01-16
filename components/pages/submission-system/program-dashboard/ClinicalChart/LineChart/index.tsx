@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { find } from 'lodash';
+import { filter, find, result } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -466,46 +466,66 @@ const LineChart = ({
     );
   };
 
-  const fakeTitle = 'fakeTitle';
-  const fakeList = [
-    { name: 'fakeName', color: 'red', count: 2 },
-    { name: 'RNA', color: 'blue', count: 8 },
-    { name: 'DNA', color: 'yellow', count: 4 },
-  ];
-
   const [toolTipState, setToolTipState] = useState([]);
+
+  const organizeTooltipText = () => {
+    // TODO clean this up
+    const rnaItems = filter(toolTipState, { dataType: 'RNA' });
+    const dnaItems = filter(toolTipState, { dataType: 'DNA' });
+    const clinicalItems = filter(toolTipState, { dataType: null });
+
+    const result = [
+      ...(rnaItems.length
+        ? [
+            {
+              name: 'RNA',
+              color: null,
+              count: null,
+            },
+            ...rnaItems,
+          ]
+        : []),
+      ...(dnaItems.length
+        ? [
+            {
+              name: 'DNA',
+              color: null,
+              count: null,
+            },
+            ...dnaItems,
+          ]
+        : []),
+      ...(clinicalItems.length
+        ? [
+            {
+              ...clinicalItems[0], // clinical only has 1 item
+              name: 'clinical',
+            },
+          ]
+        : []),
+    ];
+
+    return result;
+  };
 
   const InfoBox = () => {
     const yStart = 20;
     const xStart = 10;
     const lineHeight = options.toolTipTextSize + 1;
-    const boxHeight = yStart * 2 + options.toolTipTextSize * toolTipState.length;
-    const tooltipList = toolTipState.reduce((acc, curr) => {
-      const { name, color, count, dataType } = curr;
-      return { ...acc, [dataType]: [...(acc[dataType] || []), { name, color, count }] };
-    }, {});
+    const tooltipList = organizeTooltipText();
+    const boxHeight = yStart * 1.5 + options.toolTipTextSize * tooltipList.length;
+
     return (
       <g fill={theme.colors.grey}>
-        <rect rx="5" ry="5" height={boxHeight} width={`100`} />
+        <rect rx="5" ry="5" height={boxHeight} width={`135`} />
         <ToolTipStyleGroup>
-          {Object.entries(tooltipList).map(([key, value]) => {
-            const newArray: any = value;
-            return (
-              <text x={xStart} y={yStart}>
-                {key !== 'null' ? key : 'clinical'}
-                {newArray.map((ele, idx) => (
-                  <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
-                    {ele.name}: {ele.count}
-                  </tspan>
-                ))}
-              </text>
-            );
-          })}
-          {/* {list.map((ele, idx) => (
-            <tspan x={xStart} y={yStart + (idx + 1) * lineHeight}>
-              {ele.name}: {ele.count}
-            </tspan>
-          ))} */}
+          <text x={xStart} y={yStart}>
+            {tooltipList.map((tooltipItem, idx) => (
+              <tspan x={xStart} y={yStart + idx * lineHeight}>
+                {tooltipItem.name}: {tooltipItem.count}
+              </tspan>
+            ))}
+          </text>
         </ToolTipStyleGroup>
       </g>
     );
