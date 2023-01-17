@@ -538,13 +538,23 @@ const LineChart = ({
 
     return (
       <g fill={theme.colors.grey_1} x={30} style={{ pointerEvents: 'none' }}>
+        <line
+          x1={xStart}
+          y1={verticalLineEnd}
+          x2={xStart}
+          y2={verticalLineStart}
+          stroke="black"
+          stroke-dasharray="4"
+        />
         <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
+
         <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
+
         <ToolTipStyleGroup>
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
               <tspan x={xText} y={yText + idx * lineHeight} fill={tooltipItem.color}>
-                {tooltipItem.name}: {tooltipItem.count}
+                {`\u25CF${tooltipItem.name}`}: {tooltipItem.count}
               </tspan>
             ))}
           </text>
@@ -576,8 +586,6 @@ const LineChart = ({
     );
   };
 
-  console.log('toolTipState', toolTipState);
-
   return (
     width && (
       <>
@@ -593,7 +601,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          <InfoBox />
+          {!!toolTipState.length && <InfoBox />}
         </svg>
       </>
     )
