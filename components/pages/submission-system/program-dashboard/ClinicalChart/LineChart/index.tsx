@@ -550,29 +550,31 @@ const LineChart = ({
         {/* tooltip text */}
         <ToolTipStyleGroup>
           <text x={xText} y={yText}>
-            {tooltipList.map((tooltipItem, idx) => (
-              <>
-                {/* circles, DNA RNA has null as color */}
-                <tspan
-                  x={xText}
-                  y={yText + idx * lineHeight}
-                  stroke="white"
-                  strokeWidth={0.5}
-                  fill={tooltipItem.color}
-                  fontSize={'12px'}
-                >
-                  {tooltipItem.color && '\u25CF'}
-                </tspan>
-                {/* DNA/RNA text */}
-                <tspan x={xText} y={yText + idx * lineHeight} fontWeight="bold">
-                  {!tooltipItem.color && tooltipItem.name}
-                </tspan>
-                {/* text */}
-                <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
-                  {tooltipItem.color && `${tooltipItem.name}: ${tooltipItem.count}`}
-                </tspan>
-              </>
-            ))}
+            {tooltipList.map((tooltipItem, idx) => {
+              const isHeader = !tooltipItem.color;
+              return (
+                <>
+                  {/* circles, DNA RNA has null as color */}
+                  <tspan
+                    x={xText}
+                    y={yText + idx * lineHeight}
+                    stroke="white"
+                    strokeWidth={0.5}
+                    fill={tooltipItem.color}
+                    fontSize={'12px'}
+                  >
+                    {tooltipItem.color && '\u25CF'}
+                  </tspan>
+                  {/* text */}
+                  <tspan x={xText} y={yText + idx * lineHeight} fontWeight="bold">
+                    {isHeader && tooltipItem.name}
+                  </tspan>
+                  <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
+                    {!isHeader && `${tooltipItem.name}: ${tooltipItem.count}`}
+                  </tspan>
+                </>
+              );
+            })}
           </text>
         </ToolTipStyleGroup>
       </g>
