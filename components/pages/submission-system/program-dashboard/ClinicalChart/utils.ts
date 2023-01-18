@@ -55,7 +55,7 @@ export const makeChartLineMeta = (theme: UikitTheme) => [
     color: theme.colors.accent4_dark,
     dataType: 'DNA',
     field: 'rawReadsFirstPublishedDate',
-    title: 'DNA Raw Reads',
+    title: 'Raw Reads',
   },
   {
     chartType: 'molecular',
@@ -90,7 +90,7 @@ export const makeChartLineMeta = (theme: UikitTheme) => [
     color: theme.colors.accent2_1,
     dataType: 'RNA',
     field: 'rnaRawReadsFirstPublishedDate',
-    title: 'RNA Raw Reads',
+    title: 'Raw Reads',
   },
   {
     chartType: 'molecular',

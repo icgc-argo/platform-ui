@@ -516,10 +516,7 @@ const LineChart = ({
     const xPadding = 10;
     const yPadding = 20;
     const xStart = xCoordinates[toolTipIndex];
-    const xIsLeft =
-      toolTipState.length > 1
-        ? toolTipIndex >= Math.floor(toolTipState.length / 2)
-        : toolTipIndex >= 3; //clinical chart only has 1 item: temp solution to make clinical chart flip properly
+    const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
     const lineHeight = options.toolTipTextSize + 1;
     const boxWidth = 135;
     const xArrowPadding = 10;
@@ -527,6 +524,7 @@ const LineChart = ({
     const xText = xPosition + xPadding;
     const xCircleTextGap = 10;
     const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
+
     // vertically center the box
     const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
     const yText = yStart + yPadding;
@@ -544,14 +542,7 @@ const LineChart = ({
     return (
       <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
         {/* vertical dotted guiding line */}
-        <line
-          x1={xStart}
-          y1={verticalLineEnd}
-          x2={xStart}
-          y2={verticalLineStart}
-          stroke="black"
-          stroke-dasharray="4"
-        />
+        <line x1={xStart} y1={verticalLineEnd} x2={xStart} y2={verticalLineStart} stroke="black" />
         {/* arrow of tooltip */}
         <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
         {/* tooltip box */}
@@ -561,13 +552,24 @@ const LineChart = ({
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
               <>
-                {/* circles */}
-                <tspan x={xText} y={yText + idx * lineHeight} fill={tooltipItem.color}>
+                {/* circles, DNA RNA has null as color */}
+                <tspan
+                  x={xText}
+                  y={yText + idx * lineHeight}
+                  stroke="white"
+                  strokeWidth={0.5}
+                  fill={tooltipItem.color}
+                  fontSize={'12px'}
+                >
                   {tooltipItem.color && '\u25CF'}
+                </tspan>
+                {/* DNA/RNA text */}
+                <tspan x={xText} y={yText + idx * lineHeight} fontWeight="bold">
+                  {!tooltipItem.color && tooltipItem.name}
                 </tspan>
                 {/* text */}
                 <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
-                  {`${tooltipItem.name}`}: {tooltipItem.count}
+                  {tooltipItem.color && `${tooltipItem.name}: ${tooltipItem.count}`}
                 </tspan>
               </>
             ))}
