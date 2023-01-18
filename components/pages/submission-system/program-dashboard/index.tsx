@@ -143,17 +143,17 @@ export default function ProgramDashboard() {
         />
       )}
       {<SubmissionSystemLockedNotification marginBottom={20} canClose={true} />}
-      {/* {
+      {
         <SchemaInvalidSubmissionNotification
           marginBottom={20}
           programShortName={programShortName as string}
         />
-      } */}
-      {/* <PaddedRow justify="around">
+      }
+      <PaddedRow justify="around">
         <Col xs={12}>
           <StatsBar />
         </Col>
-      </PaddedRow> */}
+      </PaddedRow>
 
       <PaddedRow justify="between">
         <Col xl={4} lg={12}>
