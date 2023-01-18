@@ -156,7 +156,7 @@ export default function ProgramDashboard() {
       </PaddedRow> */}
 
       <PaddedRow justify="between">
-        {/* <Col xl={4} lg={12}>
+        <Col xl={4} lg={12}>
           <PaddedRow>
             <Col xs={12}>
               <DonorReleaseSummary />
@@ -171,7 +171,7 @@ export default function ProgramDashboard() {
               )}
             />
           </Row>
-        </Col> */}
+        </Col>
         <ScreenClassRender
           render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') => (
             <Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>

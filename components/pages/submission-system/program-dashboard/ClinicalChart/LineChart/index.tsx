@@ -18,6 +18,7 @@
  */
 
 import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
+import { Box } from 'components/pages/user/common';
 import {
   compareAsc,
   differenceInDays,
@@ -515,12 +516,16 @@ const LineChart = ({
     const xPadding = 10;
     const yPadding = 20;
     const xStart = xCoordinates[toolTipIndex];
-    const xIsLeft = toolTipIndex > Math.floor(toolTipState.length / 2);
+    const xIsLeft =
+      toolTipState.length > 1
+        ? toolTipIndex >= Math.floor(toolTipState.length / 2)
+        : toolTipIndex >= 3; //clinical chart only has 1 item: temp solution to make clinical chart flip properly
     const lineHeight = options.toolTipTextSize + 1;
     const boxWidth = 135;
     const xArrowPadding = 10;
     const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
     const xText = xPosition + xPadding;
+    const xCircleTextGap = 10;
     const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
     // vertically center the box
     const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
@@ -537,7 +542,8 @@ const LineChart = ({
     }`;
 
     return (
-      <g fill={theme.colors.grey_1} x={30} style={{ pointerEvents: 'none' }}>
+      <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
+        {/* vertical dotted guiding line */}
         <line
           x1={xStart}
           y1={verticalLineEnd}
@@ -546,16 +552,24 @@ const LineChart = ({
           stroke="black"
           stroke-dasharray="4"
         />
+        {/* arrow of tooltip */}
         <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
-
+        {/* tooltip box */}
         <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
-
+        {/* tooltip text */}
         <ToolTipStyleGroup>
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => (
-              <tspan x={xText} y={yText + idx * lineHeight} fill={tooltipItem.color}>
-                {`\u25CF${tooltipItem.name}`}: {tooltipItem.count}
-              </tspan>
+              <>
+                {/* circles */}
+                <tspan x={xText} y={yText + idx * lineHeight} fill={tooltipItem.color}>
+                  {tooltipItem.color && '\u25CF'}
+                </tspan>
+                {/* text */}
+                <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
+                  {`${tooltipItem.name}`}: {tooltipItem.count}
+                </tspan>
+              </>
             ))}
           </text>
         </ToolTipStyleGroup>
@@ -563,9 +577,10 @@ const LineChart = ({
     );
   };
 
+  // invisible box (keep track of mouse hovering)
   const HoverDetector = () => {
     return (
-      <g fill-opacity="0" stroke="purple">
+      <g fill-opacity="0" stroke="none">
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
