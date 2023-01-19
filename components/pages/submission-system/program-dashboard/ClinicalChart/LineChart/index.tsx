@@ -541,7 +541,7 @@ const LineChart = ({
 
     return (
       <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
-        {/* vertical dotted guiding line */}
+        {/* vertical guiding line */}
         <line x1={xStart} y1={verticalLineEnd} x2={xStart} y2={verticalLineStart} stroke="black" />
         {/* arrow of tooltip */}
         <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
