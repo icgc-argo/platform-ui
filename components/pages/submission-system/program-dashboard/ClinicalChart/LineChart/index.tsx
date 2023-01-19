@@ -18,7 +18,6 @@
  */
 
 import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
-import { Box } from 'components/pages/user/common';
 import {
   compareAsc,
   differenceInDays,
@@ -29,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { filter, find, result } from 'lodash';
+import { filter, find } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -41,6 +40,13 @@ import {
 } from '../types';
 import { makeChartLineMeta } from '../utils';
 import { getMaxY } from './utils';
+
+type TooltipData = {
+  name: string; // display text
+  color: null | string; // null for headers
+  count: null | number; // null for headers
+  chartLine: string; // what line on the chart does this item correspond to
+}[];
 
 const getOptions = (theme: UikitTheme) => ({
   colors: {
@@ -85,6 +91,7 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
+  tooltipData = [],
 }: {
   activeLines: string[];
   chartType: ChartType;
@@ -98,13 +105,14 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
+  tooltipData: TooltipData;
 }) => {
   const theme = useTheme();
   const options = getOptions(theme);
 
   const dataBuckets = data[0].buckets;
   const chartMeta = makeChartLineMeta(theme);
-  const tooltipData = dataBuckets.reduce((acc, { date }) => {
+  const tooltipDataCurrent = dataBuckets.reduce((acc, { date }) => {
     // array with title, count, colour
     // for each date
     const result = [
@@ -471,7 +479,7 @@ const LineChart = ({
 
   const organizeTooltipText = () => {
     // TODO clean this up
-    const toolTipState = tooltipData[toolTipIndex];
+    const toolTipState = tooltipDataCurrent[toolTipIndex];
     const rnaItems = filter(toolTipState, { dataType: 'RNA' });
     const dnaItems = filter(toolTipState, { dataType: 'DNA' });
     const clinicalItems = filter(toolTipState, { dataType: null });
