@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { filter, find } from 'lodash';
+import { find } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -105,30 +105,12 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
-  tooltipData: TooltipData;
+  tooltipData: TooltipData[];
 }) => {
   const theme = useTheme();
   const options = getOptions(theme);
 
   const dataBuckets = data[0].buckets;
-  const chartMeta = makeChartLineMeta(theme);
-  const tooltipDataCurrent = dataBuckets.reduce((acc, { date }) => {
-    // array with title, count, colour
-    // for each date
-    const result = [
-      ...acc,
-      data.map((datum) => {
-        const datumMeta = find(chartMeta, { field: datum.title });
-        return {
-          name: datumMeta.title,
-          count: find(datum.buckets, { date: date }).donors,
-          color: datumMeta.color,
-          dataType: datumMeta.dataType,
-        };
-      }),
-    ];
-    return result;
-  }, []);
 
   const TextStyleGroup = styled.g`
     fill: ${options.colors.text};
@@ -477,49 +459,10 @@ const LineChart = ({
 
   const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
-  const organizeTooltipText = () => {
-    // TODO clean this up
-    const toolTipState = tooltipDataCurrent[toolTipIndex];
-    const rnaItems = filter(toolTipState, { dataType: 'RNA' });
-    const dnaItems = filter(toolTipState, { dataType: 'DNA' });
-    const clinicalItems = filter(toolTipState, { dataType: null });
-
-    const result = [
-      ...(rnaItems.length
-        ? [
-            {
-              name: 'RNA',
-              color: null,
-              count: null,
-            },
-            ...rnaItems,
-          ]
-        : []),
-      ...(dnaItems.length
-        ? [
-            {
-              name: 'DNA',
-              color: null,
-              count: null,
-            },
-            ...dnaItems,
-          ]
-        : []),
-      ...(clinicalItems.length
-        ? [
-            {
-              ...clinicalItems[0], // clinical only has 1 item
-              name: 'clinical',
-            },
-          ]
-        : []),
-    ];
-
-    return result;
-  };
-
   const InfoBox = () => {
-    const tooltipList = organizeTooltipText();
+    if (toolTipIndex === null) return;
+
+    const tooltipList = tooltipData[toolTipIndex];
 
     const xPadding = 10;
     const yPadding = 20;

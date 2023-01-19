@@ -115,7 +115,7 @@ export const makeChartLineMeta = (theme: UikitTheme): ChartMeta[] => [
 export const getTooltipData = (
   data: ProgramDonorPublishedAnalysisByDateRange[],
   chartMeta: ChartMeta[],
-): TooltipData => {
+): TooltipData[] => {
   if (data.length === 0) return [];
 
   // get a list of buckets. these are the same for each series in the data.
@@ -166,7 +166,7 @@ export const getTooltipData = (
       ],
       [],
     );
-  }) as TooltipData;
+  }) as TooltipData[];
 
   return dataSortedByType;
 };

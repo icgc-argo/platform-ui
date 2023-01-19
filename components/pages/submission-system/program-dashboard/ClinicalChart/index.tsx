@@ -35,7 +35,7 @@ import { useTimeout } from '../DonorDataSummary/common';
 import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
 import Legend from './Legend';
-import LineChart from './LineChart';
+import LineChart, { TooltipData } from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
@@ -160,7 +160,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
 
   // handle tooltip text
   const chartMeta = makeChartLineMeta(theme);
-  const tooltipData = getTooltipData(rangeQueryData, chartMeta);
+  const tooltipData: TooltipData[] = getTooltipData(rangeQueryData, chartMeta);
 
   return (
     <DashboardCard>
