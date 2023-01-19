@@ -467,11 +467,11 @@ const LineChart = ({
     );
   };
 
-  const [toolTipState, setToolTipState] = useState([]);
   const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
   const organizeTooltipText = () => {
     // TODO clean this up
+    const toolTipState = tooltipData[toolTipIndex];
     const rnaItems = filter(toolTipState, { dataType: 'RNA' });
     const dnaItems = filter(toolTipState, { dataType: 'DNA' });
     const clinicalItems = filter(toolTipState, { dataType: null });
@@ -588,11 +588,9 @@ const LineChart = ({
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
-              setToolTipState(tooltipData[idx]);
               setToolTipIndex(idx);
             }}
             onMouseLeave={() => {
-              setToolTipState([]);
               setToolTipIndex(null);
             }}
             y={verticalLineStart}
@@ -620,7 +618,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          {!!toolTipState.length && <InfoBox />}
+          {toolTipIndex !== null && <InfoBox />}
         </svg>
       </>
     )
