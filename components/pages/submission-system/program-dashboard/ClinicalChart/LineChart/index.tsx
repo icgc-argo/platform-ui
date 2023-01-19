@@ -41,11 +41,11 @@ import {
 import { makeChartLineMeta } from '../utils';
 import { getMaxY } from './utils';
 
-type TooltipData = {
+export type TooltipData = {
   name: string; // display text
-  color: null | string; // null for headers
-  count: null | number; // null for headers
-  chartLine: string; // what line on the chart does this item correspond to
+  color?: string;
+  count?: number;
+  field?: string;
 }[];
 
 const getOptions = (theme: UikitTheme) => ({

@@ -44,7 +44,7 @@ import {
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
   RangeButtons,
 } from './types';
-import { makeChartLineMeta, rangeButtons } from './utils';
+import { makeChartLineMeta, rangeButtons, getTooltipData } from './utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
@@ -158,6 +158,10 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
   const isLoading = rangeQueryData.length === 0 || rangeQueryLoading || programQueryLoading;
   const showLegend = chartType === 'molecular' && !isLoading && !hasError;
 
+  // handle tooltip text
+  const chartMeta = makeChartLineMeta(theme);
+  const tooltipData = getTooltipData(rangeQueryData, chartMeta);
+
   return (
     <DashboardCard>
       <div
@@ -220,6 +224,7 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
                 yAxisThreshold={programQueryData.program.commitmentDonors}
                 yAxisThresholdLabel="Committed"
                 yAxisTitle="donors"
+                tooltipData={tooltipData}
               />
             </div>
           </>
