@@ -552,25 +552,28 @@ const LineChart = ({
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => {
               const isHeader = !tooltipItem.color;
+              const lineY = yText + idx * lineHeight;
               return (
                 <>
-                  {/* circles, DNA RNA has null as color */}
+                  {!isHeader && (
+                    <tspan
+                      x={xText}
+                      y={lineY}
+                      stroke="white"
+                      strokeWidth={0.5}
+                      fill={tooltipItem.color}
+                      fontSize={'12px'}
+                    >
+                      {'\u25CF'} {/* circle */}
+                    </tspan>
+                  )}
                   <tspan
-                    x={xText}
-                    y={yText + idx * lineHeight}
-                    stroke="white"
-                    strokeWidth={0.5}
-                    fill={tooltipItem.color}
-                    fontSize={'12px'}
+                    x={xText + (isHeader ? 0 : xCircleTextGap)}
+                    y={lineY}
+                    fontWeight={isHeader ? 'bold' : 'normal'}
                   >
-                    {tooltipItem.color && '\u25CF'}
-                  </tspan>
-                  {/* text */}
-                  <tspan x={xText} y={yText + idx * lineHeight} fontWeight="bold">
-                    {isHeader && tooltipItem.name}
-                  </tspan>
-                  <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
-                    {!isHeader && `${tooltipItem.name}: ${tooltipItem.count}`}
+                    {tooltipItem.name}
+                    {!isHeader && `: ${tooltipItem.count}`}
                   </tspan>
                 </>
               );
