@@ -18,7 +18,6 @@
  */
 
 import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
-import { Box } from 'components/pages/user/common';
 import {
   compareAsc,
   differenceInDays,
@@ -29,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
-import { filter, find, result } from 'lodash';
+import { find } from 'lodash';
 import { useState } from 'react';
 import {
   ChartLine,
@@ -41,6 +40,13 @@ import {
 } from '../types';
 import { makeChartLineMeta } from '../utils';
 import { getMaxY } from './utils';
+
+export type TooltipData = {
+  name: string; // display text
+  color?: string;
+  count?: number;
+  field?: string;
+}[];
 
 const getOptions = (theme: UikitTheme) => ({
   colors: {
@@ -86,6 +92,7 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
+  tooltipData = [],
 }: {
   activeLines: string[];
   chartType: ChartType;
@@ -100,29 +107,12 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
+  tooltipData: TooltipData[];
 }) => {
   const theme = useTheme();
   const options = getOptions(theme);
 
   const dataBuckets = data[0].buckets;
-  const chartMeta = makeChartLineMeta(theme);
-  const tooltipData = dataBuckets.reduce((acc, { date }) => {
-    // array with title, count, colour
-    // for each date
-    const result = [
-      ...acc,
-      data.map((datum) => {
-        const datumMeta = find(chartMeta, { field: datum.title });
-        return {
-          name: datumMeta.title,
-          count: find(datum.buckets, { date: date }).donors,
-          color: datumMeta.color,
-          dataType: datumMeta.dataType,
-        };
-      }),
-    ];
-    return result;
-  }, []);
 
   const TextStyleGroup = styled.g`
     fill: ${options.colors.text};
@@ -469,51 +459,12 @@ const LineChart = ({
     );
   };
 
-  const [toolTipState, setToolTipState] = useState([]);
   const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
-  const organizeTooltipText = () => {
-    // TODO clean this up
-    const rnaItems = filter(toolTipState, { dataType: 'RNA' });
-    const dnaItems = filter(toolTipState, { dataType: 'DNA' });
-    const clinicalItems = filter(toolTipState, { dataType: null });
-
-    const result = [
-      ...(rnaItems.length
-        ? [
-            {
-              name: 'RNA',
-              color: null,
-              count: null,
-            },
-            ...rnaItems,
-          ]
-        : []),
-      ...(dnaItems.length
-        ? [
-            {
-              name: 'DNA',
-              color: null,
-              count: null,
-            },
-            ...dnaItems,
-          ]
-        : []),
-      ...(clinicalItems.length
-        ? [
-            {
-              ...clinicalItems[0], // clinical only has 1 item
-              name: 'clinical',
-            },
-          ]
-        : []),
-    ];
-
-    return result;
-  };
-
   const InfoBox = ({ width }: { width?: number }) => {
-    const tooltipList = organizeTooltipText();
+    if (toolTipIndex === null) return;
+
+    const tooltipList = tooltipData[toolTipIndex];
 
     const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
 
@@ -556,29 +507,28 @@ const LineChart = ({
           <text x={xText} y={yText}>
             {tooltipList.map((tooltipItem, idx) => {
               const isHeader = !tooltipItem.color;
+              const lineY = yText + idx * lineHeight;
               return (
                 <>
-                  {/* circles, DNA RNA has null as color */}
+                  {!isHeader && (
+                    <tspan
+                      x={xText}
+                      y={lineY}
+                      stroke="white"
+                      strokeWidth={0.5}
+                      fill={tooltipItem.color}
+                      fontSize={'12px'}
+                    >
+                      {'\u25CF'} {/* circle */}
+                    </tspan>
+                  )}
                   <tspan
-                    x={xText}
-                    y={yText + idx * lineHeight}
-                    stroke="white"
-                    strokeWidth={0.5}
-                    fill={tooltipItem.color}
-                    fontSize={'12px'}
+                    x={xText + (isHeader ? 0 : xCircleTextGap)}
+                    y={lineY}
+                    fontWeight={isHeader ? 'bold' : 'normal'}
                   >
-                    {tooltipItem.color && '\u25CF'}
-                  </tspan>
-                  {/* text */}
-                  <tspan x={xText} y={yText + idx * lineHeight} fontWeight="bold">
-                    {isHeader && tooltipItem.name}
-                  </tspan>
-                  <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
-                    {isOneItem
-                      ? `${tooltipItem.count}`
-                      : !isHeader
-                      ? `${tooltipItem.name}: ${tooltipItem.count}`
-                      : null}
+                    {!isOneItem && tooltipItem.name}
+                    {!isHeader && `: ${tooltipItem.count}`}
                   </tspan>
                 </>
               );
@@ -596,11 +546,9 @@ const LineChart = ({
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
-              setToolTipState(tooltipData[idx]);
               setToolTipIndex(idx);
             }}
             onMouseLeave={() => {
-              setToolTipState([]);
               setToolTipIndex(null);
             }}
             y={verticalLineStart}
@@ -628,7 +576,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          {!!toolTipState.length && <InfoBox width={infoBoxWidth} />}
+          {toolTipIndex !== null && <InfoBox width={infoBoxWidth} />}
         </svg>
       </>
     )

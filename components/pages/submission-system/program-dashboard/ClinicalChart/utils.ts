@@ -18,6 +18,9 @@
  */
 
 import { UikitTheme } from '@icgc-argo/uikit';
+import { filter, find, uniq } from 'lodash';
+import { TooltipData } from './LineChart';
+import { ProgramDonorPublishedAnalysisByDateRange } from './types';
 
 export const rangeButtons = [
   {
@@ -42,13 +45,21 @@ export const rangeButtons = [
   },
 ];
 
-export const makeChartLineMeta = (theme: UikitTheme) => [
+export type ChartMeta = {
+  chartType: string;
+  color: string;
+  dataType: null | string;
+  field: string;
+  title: null | string;
+};
+
+export const makeChartLineMeta = (theme: UikitTheme): ChartMeta[] => [
   {
     chartType: 'clinical',
     color: theme.colors.accent2_dark,
     dataType: null,
     field: 'coreCompletionDate',
-    title: null,
+    title: 'Clinical',
   },
   {
     chartType: 'molecular',
@@ -100,3 +111,62 @@ export const makeChartLineMeta = (theme: UikitTheme) => [
     title: 'Alignment',
   },
 ];
+
+export const getTooltipData = (
+  data: ProgramDonorPublishedAnalysisByDateRange[],
+  chartMeta: ChartMeta[],
+): TooltipData[] => {
+  if (data.length === 0) return [];
+
+  // get a list of buckets. these are the same for each series in the data.
+  const dataDateBuckets = data[0].buckets.map((bucket) => bucket.date);
+
+  const dataSortedByDate = dataDateBuckets.reduce(
+    (acc, date) => [
+      ...acc,
+      data.map((datum) => {
+        // add color, display text, and data type.
+        // this info is shared with the legend.
+        const field = datum.title;
+        const { title: name, color, dataType } = find(chartMeta, { field });
+        return {
+          color,
+          count: find(datum.buckets, { date }).donors,
+          dataType,
+          field,
+          name,
+        };
+      }),
+    ],
+    [],
+  );
+
+  const dataTypes = uniq(dataSortedByDate[0].map((dataBucket) => dataBucket.dataType)).sort();
+
+  const dataSortedByType = dataSortedByDate.map((dataSeries) => {
+    // organize tooltip list items by type & add headers if applicable
+    return dataTypes.reduce(
+      (acc: TooltipData, dataType: null | string) => [
+        ...acc,
+        ...(dataType === null // no header
+          ? []
+          : [
+              // add header
+              {
+                name: dataType,
+              },
+            ]),
+        ...filter(dataSeries, { dataType }).map(({ color, count, field, name }) => ({
+          // remove dataType property
+          color,
+          count,
+          field,
+          name,
+        })),
+      ],
+      [],
+    );
+  }) as TooltipData[];
+
+  return dataSortedByType;
+};
