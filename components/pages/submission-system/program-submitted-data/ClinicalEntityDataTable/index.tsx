@@ -168,6 +168,7 @@ export const getEntityData = (
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
     variables: {
       programShortName: program,
       filters: {
@@ -283,6 +284,7 @@ const ClinicalEntityDataTable = ({
     donorIds,
     submitterDonorIds,
   );
+
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
