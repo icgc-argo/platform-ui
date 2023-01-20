@@ -80,6 +80,7 @@ const LineChart = ({
   hasYAxisThresholdLine = false,
   height,
   horizontalGuides: numberOfHorizontalGuides,
+  infoBoxWidth = 135,
   precision,
   width,
   yAxisThreshold = 0,
@@ -93,6 +94,7 @@ const LineChart = ({
   hasYAxisThresholdLine?: boolean;
   height: number;
   horizontalGuides: number;
+  infoBoxWidth?: number;
   precision: number;
   width: number;
   yAxisThreshold?: number;
@@ -510,21 +512,23 @@ const LineChart = ({
     return result;
   };
 
-  const InfoBox = () => {
+  const InfoBox = ({ width }: { width?: number }) => {
     const tooltipList = organizeTooltipText();
+
+    const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
 
     const xPadding = 10;
     const yPadding = 20;
     const xStart = xCoordinates[toolTipIndex];
     const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
     const lineHeight = options.toolTipTextSize + 1;
-    const boxWidth = 135;
+    const boxWidth = width;
     const xArrowPadding = 10;
     const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
     const xText = xPosition + xPadding;
     const xCircleTextGap = 10;
-    const boxHeight = yPadding * 1.5 + options.toolTipTextSize * tooltipList.length;
-
+    const boxHeight =
+      options.toolTipTextSize * tooltipList.length + yPadding * (isOneItem ? 1.2 : 1.5);
     // vertically center the box
     const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
     const yText = yStart + yPadding;
@@ -541,7 +545,7 @@ const LineChart = ({
 
     return (
       <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
-        {/* vertical dotted guiding line */}
+        {/* vertical guiding line */}
         <line x1={xStart} y1={verticalLineEnd} x2={xStart} y2={verticalLineStart} stroke="black" />
         {/* arrow of tooltip */}
         <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
@@ -570,7 +574,11 @@ const LineChart = ({
                     {isHeader && tooltipItem.name}
                   </tspan>
                   <tspan x={xText + xCircleTextGap} y={yText + idx * lineHeight}>
-                    {!isHeader && `${tooltipItem.name}: ${tooltipItem.count}`}
+                    {isOneItem
+                      ? `${tooltipItem.count}`
+                      : !isHeader
+                      ? `${tooltipItem.name}: ${tooltipItem.count}`
+                      : null}
                   </tspan>
                 </>
               );
@@ -620,7 +628,7 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          {!!toolTipState.length && <InfoBox />}
+          {!!toolTipState.length && <InfoBox width={infoBoxWidth} />}
         </svg>
       </>
     )
