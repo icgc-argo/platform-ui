@@ -473,7 +473,7 @@ const LineChart = ({
     const xStart = xCoordinates[toolTipIndex];
     const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
     const lineHeight = options.toolTipTextSize + 1;
-    const boxWidth = width;
+    const boxWidth = isOneItem ? 56 : width;
     const xArrowPadding = 10;
     const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
     const xText = xPosition + xPadding;
