@@ -46,14 +46,14 @@ const DonorCardsLayout: ComponentType<{
       margin: 0 5%;
     `}
   >
-    <PaddedRow>
+    {/* <PaddedRow>
       <PaddedColumn md={8} sm={12}>
         <DonorDataTable data={donorData.summary} />
       </PaddedColumn>
       <PaddedColumn md={4} sm={12}>
         <DonorFileCard files={donorData.data} />
       </PaddedColumn>
-    </PaddedRow>
+    </PaddedRow> */}
     <PaddedRow>
       <PaddedColumn>
         <ClinicalTimeline data={donorData.data} />

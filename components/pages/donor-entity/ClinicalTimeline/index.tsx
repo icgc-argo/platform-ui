@@ -70,14 +70,14 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 
     return (
       <>
-        <Row>
+        {/* <Row>
           <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
           <Col>
             {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
           </Col>
-        </Row>
+        </Row> */}
         <Row
           css={css`
             margin-top: 20px;
@@ -134,7 +134,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
     EntityType.TREATMENT,
   ]);
 
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(1);
   const filteredData = entities.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );
