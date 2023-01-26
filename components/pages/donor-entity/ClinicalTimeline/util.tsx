@@ -310,3 +310,34 @@ export const formatTimelineEntityData = (donorData) => {
     specimens,
   };
 };
+
+// new for react-table v8
+export const formatTableHeader = (columnKey: string) =>
+  donorCentricDisplayNames[columnKey] || columnKey;
+
+export const formatTableData = (key: string, value: string | number | React.ReactNode) => {
+  let displayValue: any;
+  switch (key) {
+    case 'age_at_diagnosis':
+      displayValue = `${value} years`;
+      break;
+    case 'survival_time':
+      displayValue = `${value} days`;
+      break;
+    case 'specimen_acquisition_interval':
+      displayValue = `${value} days`;
+      break;
+    case 'height':
+      displayValue = `${value} cm`;
+      break;
+    case 'weight':
+      displayValue = `${value} kg`;
+      break;
+    case 'bmi':
+      displayValue = `${value} kg/m²`;
+      break;
+    default:
+      displayValue = value;
+  }
+  return { [key]: displayValue };
+};

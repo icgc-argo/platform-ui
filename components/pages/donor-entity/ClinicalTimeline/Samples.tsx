@@ -17,10 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, TableColumnConfig, TableDataBase, Typography } from '@icgc-argo/uikit';
+import {
+  css,
+  Table,
+  TableColumnConfig,
+  TableDataBase,
+  TableV8,
+  Typography,
+} from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { SampleNode } from '../types';
-import { formatTableDisplayNames } from './util';
+import { formatTableHeader, formatTableDisplayNames, formatTableData } from './util';
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const tableData: TableDataBase = formatTableDisplayNames(samples);
@@ -30,6 +37,24 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
     Cell: tableData[key],
   }));
   const containerRef = createRef<HTMLDivElement>();
+
+  const columns = !!samples.length
+    ? Object.keys(samples[0]).map((sampleKey) => ({
+        accessorKey: sampleKey,
+        header: () => formatTableHeader(sampleKey),
+        id: sampleKey,
+      }))
+    : [];
+
+  const data = samples.map((sample) =>
+    Object.entries(sample).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        ...formatTableData(key, value),
+      }),
+      {},
+    ),
+  );
 
   return (
     <div
@@ -58,6 +83,8 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
           showPagination={false}
           sortable={false}
         />
+        <p />
+        <TableV8 data={data} columns={columns} />
       </div>
     </div>
   );
