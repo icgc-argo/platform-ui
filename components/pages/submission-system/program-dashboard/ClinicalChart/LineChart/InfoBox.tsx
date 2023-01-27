@@ -22,7 +22,8 @@ import { DataBucket } from '../types';
 import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
 
 const InfoBox = ({
-  width,
+  infoBoxWidth,
+  oneItemBoxWidth,
   toolTipIndex,
   tooltipData,
   xCoordinates,
@@ -32,7 +33,8 @@ const InfoBox = ({
   verticalLineStart,
   TextStyleGroup,
 }: {
-  width?: number;
+  infoBoxWidth: number;
+  oneItemBoxWidth: number;
   toolTipIndex: number | null;
   tooltipData: TooltipData[];
   xCoordinates: number[];
@@ -59,7 +61,7 @@ const InfoBox = ({
   const xStart = xCoordinates[toolTipIndex];
   const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
   const lineHeight = toolTipTextSize + 1;
-  const boxWidth = isOneItem ? 56 : width;
+  const boxWidth = isOneItem ? oneItemBoxWidth : infoBoxWidth;
   const xArrowPadding = 10;
   const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
   const xText = xPosition + xPadding;
