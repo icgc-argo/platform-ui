@@ -470,11 +470,14 @@ const ClinicalEntityDataTable = ({
         : originalDonorId,
     );
 
-    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+    const donorErrorData = clinicalErrors
+      .filter((donor) => donor.donorId === cellDonorId)
+      .map((donor) => donor.errors)
+      .flat();
 
     const columnErrorData =
-      donorErrorData &&
-      donorErrorData.errors.filter(
+      donorErrorData.length &&
+      donorErrorData.filter(
         (error) =>
           error &&
           (error.entityName === entityType ||
@@ -489,15 +492,25 @@ const ClinicalEntityDataTable = ({
       hasClinicalErrors &&
       columnErrorData.filter(
         (error) =>
-          error.info?.value === original[id] ||
-          (error.info?.value && error.info.value[0] === original[id]),
+          (error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
+          (error.info?.value === original[id] ||
+            (error.info?.value && error.info.value[0] === original[id]) ||
+            (error.info.value === null && !Boolean(original[id]))),
       );
 
-    // TODO: Only highlight specificErrors; requires update to clinical service
+    const fieldError =
+      hasClinicalErrors &&
+      columnErrorData.filter(
+        (error) =>
+          (error.errorType === 'UNRECOGNIZED_FIELD' ||
+            error.errorType === 'MISSING_REQUIRED_FIELD') &&
+          error.fieldName === id,
+      );
+
     const errorState =
       (isCompletionCell && original[id] === 0) ||
       specificErrorValue?.length > 0 ||
-      hasClinicalErrors;
+      fieldError?.length > 0;
 
     const border = getHeaderBorder(id);
 
