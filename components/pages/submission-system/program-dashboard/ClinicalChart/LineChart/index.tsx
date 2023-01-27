@@ -173,6 +173,13 @@ const LineChart = ({
   };
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
+  // props for InfoBox (tooltip)
+  const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
+  const xStart = xCoordinates[toolTipIndex];
+  const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
+
+  // Getting tooltipData from data
+
   const makeChartLines = (theme: UikitTheme) =>
     data
       .filter((dataItem: DataItem) => activeLines.includes(dataItem.title) || data.length === 1)
@@ -456,8 +463,6 @@ const LineChart = ({
     );
   };
 
-  const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
-
   // invisible box (keep track of mouse hovering)
   const HoverDetector = () => {
     return (
@@ -501,12 +506,12 @@ const LineChart = ({
               oneItemBoxWidth={oneItemBoxWidth}
               toolTipIndex={toolTipIndex}
               tooltipData={tooltipData}
-              xCoordinates={xCoordinates}
-              dataBuckets={dataBuckets}
               toolTipTextSize={options.toolTipTextSize}
               verticalLineEnd={verticalLineEnd}
               verticalLineStart={verticalLineStart}
               TextStyleGroup={TextStyleGroup}
+              xStart={xStart}
+              xIsLeft={xIsLeft}
             />
           )}
         </svg>

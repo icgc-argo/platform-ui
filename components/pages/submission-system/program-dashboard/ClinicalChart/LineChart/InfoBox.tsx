@@ -18,31 +18,30 @@
  */
 
 import { TooltipData } from '.';
-import { DataBucket } from '../types';
-import { styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
+import { styled, useTheme } from '@icgc-argo/uikit';
 
 const InfoBox = ({
   infoBoxWidth,
   oneItemBoxWidth,
   toolTipIndex,
   tooltipData,
-  xCoordinates,
-  dataBuckets,
   toolTipTextSize,
   verticalLineEnd,
   verticalLineStart,
   TextStyleGroup,
+  xStart,
+  xIsLeft,
 }: {
   infoBoxWidth: number;
   oneItemBoxWidth: number;
   toolTipIndex: number | null;
   tooltipData: TooltipData[];
-  xCoordinates: number[];
-  dataBuckets: DataBucket[];
   toolTipTextSize: number;
   verticalLineEnd: number;
   verticalLineStart: number | 0;
   TextStyleGroup;
+  xStart: number;
+  xIsLeft: boolean;
 }) => {
   const theme = useTheme();
 
@@ -51,15 +50,10 @@ const InfoBox = ({
     font-size: ${toolTipTextSize}px
     letter-spacing: 0.5px;
   `;
-
   const tooltipList = tooltipData[toolTipIndex];
-
   const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
-
   const xPadding = 10;
   const yPadding = 20;
-  const xStart = xCoordinates[toolTipIndex];
-  const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
   const lineHeight = toolTipTextSize + 1;
   const boxWidth = isOneItem ? oneItemBoxWidth : infoBoxWidth;
   const xArrowPadding = 10;
