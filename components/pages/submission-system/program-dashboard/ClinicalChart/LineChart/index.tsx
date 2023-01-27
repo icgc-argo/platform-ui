@@ -38,7 +38,8 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { makeChartLineMeta } from '../utils';
+import { makeChartLineMeta, getTooltipData } from '../utils';
+import InfoBox from './InfoBox';
 import { getMaxY } from './utils';
 
 export type TooltipData = {
@@ -118,12 +119,6 @@ const LineChart = ({
     fill: ${options.colors.text};
     font-family: ${options.fontFamily};
     font-size: ${options.fontSize}px;
-  `;
-
-  const ToolTipStyleGroup = styled(TextStyleGroup)`
-    fill: ${theme.colors.white};
-    font-size: ${options.toolTipTextSize}px
-    letter-spacing: 0.5px;
   `;
 
   // setup Y axis
@@ -461,84 +456,6 @@ const LineChart = ({
 
   const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
 
-  const InfoBox = ({ width }: { width?: number }) => {
-    if (toolTipIndex === null) return;
-
-    const tooltipList = tooltipData[toolTipIndex];
-
-    const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
-
-    const xPadding = 10;
-    const yPadding = 20;
-    const xStart = xCoordinates[toolTipIndex];
-    const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
-    const lineHeight = options.toolTipTextSize + 1;
-    const boxWidth = isOneItem ? 56 : width;
-    const xArrowPadding = 10;
-    const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
-    const xText = xPosition + xPadding;
-    const xCircleTextGap = 10;
-    const boxHeight =
-      options.toolTipTextSize * tooltipList.length + yPadding * (isOneItem ? 1.2 : 1.5);
-    // vertically center the box
-    const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
-    const yText = yStart + yPadding;
-
-    // arrow pointer
-    const arrowWidth = 5;
-    const polyPtOne = `${xIsLeft ? xStart : xPosition - xArrowPadding},${yStart + boxHeight / 2} `;
-    const polyPtTwo = `${xIsLeft ? xStart - xArrowPadding : xPosition},${
-      yStart + boxHeight / 2 + arrowWidth
-    } `;
-    const polyPtThree = `${xIsLeft ? xStart - xArrowPadding : xPosition},${
-      yStart + boxHeight / 2 - arrowWidth
-    }`;
-
-    return (
-      <g fill={theme.colors.grey} x={30} style={{ pointerEvents: 'none' }}>
-        {/* vertical guiding line */}
-        <line x1={xStart} y1={verticalLineEnd} x2={xStart} y2={verticalLineStart} stroke="black" />
-        {/* arrow of tooltip */}
-        <polygon points={polyPtOne + polyPtTwo + polyPtThree} />
-        {/* tooltip box */}
-        <rect rx="5" ry="5" x={xPosition} y={yStart} height={boxHeight} width={boxWidth} />
-        {/* tooltip text */}
-        <ToolTipStyleGroup>
-          <text x={xText} y={yText}>
-            {tooltipList.map((tooltipItem, idx) => {
-              const isHeader = !tooltipItem.color;
-              const lineY = yText + idx * lineHeight;
-              return (
-                <>
-                  {!isHeader && (
-                    <tspan
-                      x={xText}
-                      y={lineY}
-                      stroke="white"
-                      strokeWidth={0.5}
-                      fill={tooltipItem.color}
-                      fontSize={'12px'}
-                    >
-                      {'\u25CF'} {/* circle */}
-                    </tspan>
-                  )}
-                  <tspan
-                    x={xText + (isHeader ? 0 : xCircleTextGap)}
-                    y={lineY}
-                    fontWeight={isHeader ? 'bold' : 'normal'}
-                  >
-                    {!isOneItem && tooltipItem.name}
-                    {!isHeader && `: ${tooltipItem.count}`}
-                  </tspan>
-                </>
-              );
-            })}
-          </text>
-        </ToolTipStyleGroup>
-      </g>
-    );
-  };
-
   // invisible box (keep track of mouse hovering)
   const HoverDetector = () => {
     return (
@@ -576,7 +493,19 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          {toolTipIndex !== null && <InfoBox width={infoBoxWidth} />}
+          {toolTipIndex !== null && (
+            <InfoBox
+              width={infoBoxWidth}
+              toolTipIndex={toolTipIndex}
+              tooltipData={tooltipData}
+              xCoordinates={xCoordinates}
+              dataBuckets={dataBuckets}
+              toolTipTextSize={options.toolTipTextSize}
+              verticalLineEnd={verticalLineEnd}
+              verticalLineStart={verticalLineStart}
+              TextStyleGroup={TextStyleGroup}
+            />
+          )}
         </svg>
       </>
     )
