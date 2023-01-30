@@ -32,6 +32,7 @@ import Head from '../head';
 
 import clsx from 'clsx';
 import { ProgramTitleBar } from './ProgramTitleBar';
+import ProgramCardsLayout from './ProgramCardsLayout';
 
 const Program = () => {
   const loading = false;
@@ -59,7 +60,9 @@ const Program = () => {
                 <ProgramTitleBar />
               </ContentHeader>
 
-              <ContentBody>{/* <DonorCardsLayout donorData={donor} /> */}</ContentBody>
+              <ContentBody>
+                <ProgramCardsLayout />
+              </ContentBody>
             </>
           )}
           <Footer />
