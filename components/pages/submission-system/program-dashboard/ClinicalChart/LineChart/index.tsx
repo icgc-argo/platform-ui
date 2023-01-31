@@ -38,7 +38,7 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { makeChartLineMeta } from './utils';
+import { getTooltipData, makeChartLineMeta } from './utils';
 import InfoBox from './InfoBox';
 import { getMaxY } from './utils';
 
@@ -65,7 +65,7 @@ const getOptions = (theme: UikitTheme) => ({
   strokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
-  toolTipTextSize: 11,
+  tooltipTextSize: 11,
 });
 
 const makePointsString = (points: PointsCoordinates) => {
@@ -172,9 +172,12 @@ const LineChart = ({
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
 
   // props for InfoBox (tooltip)
-  const [toolTipIndex, setToolTipIndex] = useState<number | null>(null);
-  const xStart = xCoordinates[toolTipIndex];
-  const xIsLeft = toolTipIndex >= Math.floor(dataBuckets.length / 2);
+  const chartMeta = makeChartLineMeta(theme);
+  const tooltipData: TooltipData[] = getTooltipData(data, chartMeta);
+  const [tooltipIndex, setTooltipIndex] = useState<number | null>(null);
+  const tooltipList = tooltipData[tooltipIndex];
+  const xStart = xCoordinates[tooltipIndex];
+  const xIsLeft = tooltipIndex >= Math.floor(dataBuckets.length / 2);
 
   // Getting tooltipData from data
 
@@ -468,10 +471,10 @@ const LineChart = ({
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
-              setToolTipIndex(idx);
+              setTooltipIndex(idx);
             }}
             onMouseLeave={() => {
-              setToolTipIndex(null);
+              setTooltipIndex(null);
             }}
             y={verticalLineStart}
             height={verticalLineEnd - verticalLineStart}
@@ -498,18 +501,18 @@ const LineChart = ({
           <ChartLines />
           <ChartPoints />
           <HoverDetector />
-          {toolTipIndex !== null && (
+          {tooltipIndex !== null && (
             <InfoBox
               multiItemWidth={multiItemWidth}
               singleItemWidth={singleItemWidth}
-              toolTipIndex={toolTipIndex}
-              toolTipTextSize={options.toolTipTextSize}
+              tooltipIndex={tooltipIndex}
+              tooltipTextSize={options.tooltipTextSize}
               verticalLineEnd={verticalLineEnd}
               verticalLineStart={verticalLineStart}
               TextStyleGroup={TextStyleGroup}
               xStart={xStart}
               xIsLeft={xIsLeft}
-              data={data}
+              tooltipList={tooltipList}
             />
           )}
         </svg>

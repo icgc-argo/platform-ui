@@ -17,56 +17,50 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { TooltipData } from '.';
 import { styled, useTheme } from '@icgc-argo/uikit';
-import { getTooltipData, makeChartLineMeta } from './utils';
-import { DataItem } from '../types';
+import { TooltipData } from '.';
 
 const InfoBox = ({
   multiItemWidth,
   singleItemWidth,
-  toolTipIndex,
-  toolTipTextSize,
+  tooltipIndex,
+  tooltipTextSize,
   verticalLineEnd,
   verticalLineStart,
   TextStyleGroup,
   xStart,
   xIsLeft,
-  data,
+  tooltipList,
 }: {
   multiItemWidth: number;
   singleItemWidth: number;
-  toolTipIndex: number | null;
-  toolTipTextSize: number;
+  tooltipIndex: number | null;
+  tooltipTextSize: number;
   verticalLineEnd: number;
   verticalLineStart: number | 0;
   TextStyleGroup;
   xStart: number;
   xIsLeft: boolean;
-  data: DataItem[];
+  tooltipList: TooltipData;
 }) => {
   const theme = useTheme();
 
   const ToolTipStyleGroup = styled(TextStyleGroup)`
     fill: ${theme.colors.white};
-    font-size: ${toolTipTextSize}px
+    font-size: ${tooltipTextSize}px
     letter-spacing: 0.5px;
   `;
 
-  const chartMeta = makeChartLineMeta(theme);
-  const tooltipData: TooltipData[] = getTooltipData(data, chartMeta);
-
-  const tooltipList = tooltipData[toolTipIndex];
   const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
   const xPadding = 10;
   const yPadding = 20;
-  const lineHeight = toolTipTextSize + 1;
+  const lineHeight = tooltipTextSize + 1;
   const boxWidth = isOneItem ? singleItemWidth : multiItemWidth;
   const xArrowPadding = 10;
   const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
   const xText = xPosition + xPadding;
   const xCircleTextGap = 10;
-  const boxHeight = toolTipTextSize * tooltipList.length + yPadding * (isOneItem ? 1.2 : 1.5);
+  const boxHeight = tooltipTextSize * tooltipList.length + yPadding * (isOneItem ? 1.2 : 1.5);
   // vertically center the box
   const yStart = (verticalLineEnd - verticalLineStart - boxHeight) / 2;
   const yText = yStart + yPadding;
