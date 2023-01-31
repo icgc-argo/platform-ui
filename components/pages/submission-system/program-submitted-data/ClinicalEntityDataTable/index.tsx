@@ -226,9 +226,7 @@ const ClinicalEntityDataTable = ({
     ? []
     : currentDonors.length
     ? currentDonors
-    : searchResults
-        .map(({ donorId }: ClinicalSearchResults) => donorId)
-        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
 
   const submitterDonorIds =
     useDefaultQuery || currentDonors.length
