@@ -19,29 +19,31 @@
 
 import { TooltipData } from '.';
 import { styled, useTheme } from '@icgc-argo/uikit';
+import { getTooltipData, makeChartLineMeta } from './utils';
+import { DataItem } from '../types';
 
 const InfoBox = ({
   infoBoxWidth,
   oneItemBoxWidth,
   toolTipIndex,
-  tooltipData,
   toolTipTextSize,
   verticalLineEnd,
   verticalLineStart,
   TextStyleGroup,
   xStart,
   xIsLeft,
+  data,
 }: {
   infoBoxWidth: number;
   oneItemBoxWidth: number;
   toolTipIndex: number | null;
-  tooltipData: TooltipData[];
   toolTipTextSize: number;
   verticalLineEnd: number;
   verticalLineStart: number | 0;
   TextStyleGroup;
   xStart: number;
   xIsLeft: boolean;
+  data: DataItem[];
 }) => {
   const theme = useTheme();
 
@@ -50,6 +52,10 @@ const InfoBox = ({
     font-size: ${toolTipTextSize}px
     letter-spacing: 0.5px;
   `;
+
+  const chartMeta = makeChartLineMeta(theme);
+  const tooltipData: TooltipData[] = getTooltipData(data, chartMeta);
+
   const tooltipList = tooltipData[toolTipIndex];
   const isOneItem = tooltipList.length === 1; //size tooltip box for charts with single item
   const xPadding = 10;

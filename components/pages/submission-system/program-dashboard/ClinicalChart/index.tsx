@@ -35,7 +35,7 @@ import { useTimeout } from '../DonorDataSummary/common';
 import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
 import Legend from './Legend';
-import LineChart, { TooltipData } from './LineChart';
+import LineChart from './LineChart';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
@@ -44,7 +44,8 @@ import {
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
   RangeButtons,
 } from './types';
-import { makeChartLineMeta, rangeButtons, getTooltipData } from './utils';
+import { rangeButtons } from './utils';
+import { makeChartLineMeta } from './LineChart/utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
@@ -158,10 +159,6 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
   const isLoading = rangeQueryData.length === 0 || rangeQueryLoading || programQueryLoading;
   const showLegend = chartType === 'molecular' && !isLoading && !hasError;
 
-  // handle tooltip text
-  const chartMeta = makeChartLineMeta(theme);
-  const tooltipData: TooltipData[] = getTooltipData(rangeQueryData, chartMeta);
-
   return (
     <DashboardCard>
       <div
@@ -224,7 +221,6 @@ const ClinicalChart = ({ chartType, title }: { chartType: ChartType; title: stri
                 yAxisThreshold={programQueryData.program.commitmentDonors}
                 yAxisThresholdLabel="Committed"
                 yAxisTitle="donors"
-                tooltipData={tooltipData}
               />
             </div>
           </>

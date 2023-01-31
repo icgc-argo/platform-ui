@@ -38,7 +38,7 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { makeChartLineMeta, getTooltipData } from '../utils';
+import { makeChartLineMeta } from './utils';
 import InfoBox from './InfoBox';
 import { getMaxY } from './utils';
 
@@ -94,7 +94,6 @@ const LineChart = ({
   yAxisThreshold = 0,
   yAxisThresholdLabel,
   yAxisTitle,
-  tooltipData = [],
 }: {
   activeLines: string[];
   chartType: ChartType;
@@ -110,7 +109,6 @@ const LineChart = ({
   yAxisThreshold?: number;
   yAxisThresholdLabel?: string;
   yAxisTitle: string;
-  tooltipData: TooltipData[];
 }) => {
   const theme = useTheme();
   const options = getOptions(theme);
@@ -505,13 +503,13 @@ const LineChart = ({
               infoBoxWidth={infoBoxWidth}
               oneItemBoxWidth={oneItemBoxWidth}
               toolTipIndex={toolTipIndex}
-              tooltipData={tooltipData}
               toolTipTextSize={options.toolTipTextSize}
               verticalLineEnd={verticalLineEnd}
               verticalLineStart={verticalLineStart}
               TextStyleGroup={TextStyleGroup}
               xStart={xStart}
               xIsLeft={xIsLeft}
+              data={data}
             />
           )}
         </svg>
