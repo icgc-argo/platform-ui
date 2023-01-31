@@ -87,8 +87,8 @@ const LineChart = ({
   hasYAxisThresholdLine = false,
   height,
   horizontalGuides: numberOfHorizontalGuides,
-  infoBoxWidth = 135,
-  oneItemBoxWidth = 56,
+  multiItemWidth = 135,
+  singleItemWidth = 56,
   precision,
   width,
   yAxisThreshold = 0,
@@ -102,8 +102,8 @@ const LineChart = ({
   hasYAxisThresholdLine?: boolean;
   height: number;
   horizontalGuides: number;
-  infoBoxWidth?: number;
-  oneItemBoxWidth?: number;
+  multiItemWidth?: number;
+  singleItemWidth?: number;
   precision: number;
   width: number;
   yAxisThreshold?: number;
@@ -500,8 +500,8 @@ const LineChart = ({
           <HoverDetector />
           {toolTipIndex !== null && (
             <InfoBox
-              infoBoxWidth={infoBoxWidth}
-              oneItemBoxWidth={oneItemBoxWidth}
+              multiItemWidth={multiItemWidth}
+              singleItemWidth={singleItemWidth}
               toolTipIndex={toolTipIndex}
               toolTipTextSize={options.toolTipTextSize}
               verticalLineEnd={verticalLineEnd}

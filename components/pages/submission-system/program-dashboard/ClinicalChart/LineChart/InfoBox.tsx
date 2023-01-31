@@ -23,8 +23,8 @@ import { getTooltipData, makeChartLineMeta } from './utils';
 import { DataItem } from '../types';
 
 const InfoBox = ({
-  infoBoxWidth,
-  oneItemBoxWidth,
+  multiItemWidth,
+  singleItemWidth,
   toolTipIndex,
   toolTipTextSize,
   verticalLineEnd,
@@ -34,8 +34,8 @@ const InfoBox = ({
   xIsLeft,
   data,
 }: {
-  infoBoxWidth: number;
-  oneItemBoxWidth: number;
+  multiItemWidth: number;
+  singleItemWidth: number;
   toolTipIndex: number | null;
   toolTipTextSize: number;
   verticalLineEnd: number;
@@ -61,7 +61,7 @@ const InfoBox = ({
   const xPadding = 10;
   const yPadding = 20;
   const lineHeight = toolTipTextSize + 1;
-  const boxWidth = isOneItem ? oneItemBoxWidth : infoBoxWidth;
+  const boxWidth = isOneItem ? singleItemWidth : multiItemWidth;
   const xArrowPadding = 10;
   const xPosition = xIsLeft ? xStart - boxWidth - xArrowPadding : xStart + xArrowPadding;
   const xText = xPosition + xPadding;
