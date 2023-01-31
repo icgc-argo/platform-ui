@@ -22,7 +22,7 @@ import { find } from 'lodash';
 import { useState } from 'react';
 
 import { ChartType, DonorField } from './types';
-import { makeChartLineMeta } from './utils';
+import { makeChartLineMeta } from './LineChart/utils';
 
 const StyledLegend = styled('div')`
   background: ${({ theme }: { theme?: UikitTheme }) => theme.colors.white};
