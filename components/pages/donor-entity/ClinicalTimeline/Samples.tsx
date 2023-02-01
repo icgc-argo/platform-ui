@@ -84,7 +84,7 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
           sortable={false}
         />
         <p />
-        <TableV8 data={data} columns={columns} withOutsideBorder />
+        <TableV8 data={data} columns={columns} withOutsideBorder withStripes withHeaders />
       </div>
     </div>
   );
