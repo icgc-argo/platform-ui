@@ -28,6 +28,9 @@ import {
 import { createRef } from 'react';
 import { SampleNode } from '../types';
 import { formatTableHeader, formatTableDisplayNames, formatTableData } from './util';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const tableData: TableDataBase = formatTableDisplayNames(samples);
@@ -73,18 +76,20 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
         Samples from this Specimen ({samples.length.toLocaleString()})
       </Typography>
       <div ref={containerRef}>
-        <Table
-          parentRef={containerRef}
-          columns={tableCols}
-          data={samples}
-          withOutsideBorder
-          stripped
-          highlight={false}
-          showPagination={false}
-          sortable={false}
-        />
-        <p />
-        <TableV8 data={data} columns={columns} withOutsideBorder withStripes withHeaders />
+        {FEATURE_REACT_TABLE_V8_ENABLED ? (
+          <TableV8 data={data} columns={columns} withOutsideBorder withStripes withHeaders />
+        ) : (
+          <Table
+            parentRef={containerRef}
+            columns={tableCols}
+            data={samples}
+            withOutsideBorder
+            stripped
+            highlight={false}
+            showPagination={false}
+            sortable={false}
+          />
+        )}
       </div>
     </div>
   );

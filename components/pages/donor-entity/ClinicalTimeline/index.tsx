@@ -70,14 +70,14 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 
     return (
       <>
-        {/* <Row>
+        <Row>
           <Col>
             <SimpleTable data={formatTableDisplayNames(dataCols[0])} />
           </Col>
           <Col>
             {!isEmpty(dataCols[1]) && <SimpleTable data={formatTableDisplayNames(dataCols[1])} />}
           </Col>
-        </Row> */}
+        </Row>
         <Row
           css={css`
             margin-top: 20px;
@@ -203,7 +203,6 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
               setActiveTab(idx);
             }}
           />
-
           <Row
             style={{
               flex: 1,
