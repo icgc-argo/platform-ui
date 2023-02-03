@@ -33,16 +33,18 @@ import { getConfig } from 'global/config';
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const Samples = ({ samples }: { samples: SampleNode[] }) => {
-  const tableData: TableDataBase = formatTableDisplayNames(samples);
-
-  const tableCols: TableColumnConfig<TableDataBase>[] = Object.keys(tableData).map((key) => ({
-    Header: key,
-    Cell: tableData[key],
-  }));
+  // react table v6
+  const tableData_legacy: TableDataBase = formatTableDisplayNames(samples);
+  const tableColumns_legacy: TableColumnConfig<TableDataBase>[] = Object.keys(tableData_legacy).map(
+    (key) => ({
+      Header: key,
+      Cell: tableData_legacy[key],
+    }),
+  );
   const containerRef = createRef<HTMLDivElement>();
 
-  // new columns and data for v8 table
-  const columns = !!samples.length
+  // react table v8
+  const tableColumns = !!samples.length
     ? Object.keys(samples[0]).map((sampleKey) => ({
         accessorKey: sampleKey,
         header: () => formatTableHeader(sampleKey),
@@ -50,7 +52,7 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
       }))
     : [];
 
-  const data = samples.map((sample) =>
+  const tableData = samples.map((sample) =>
     Object.entries(sample).reduce(
       (acc, [key, value]) => ({
         ...acc,
@@ -78,11 +80,17 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
       </Typography>
       <div ref={containerRef}>
         {FEATURE_REACT_TABLE_V8_ENABLED ? (
-          <TableV8 data={data} columns={columns} withOutsideBorder withStripes withHeaders />
+          <TableV8
+            columns={tableColumns}
+            data={tableData}
+            withHeaders
+            withOutsideBorder
+            withStripes
+          />
         ) : (
           <Table
             parentRef={containerRef}
-            columns={tableCols}
+            columns={tableColumns_legacy}
             data={samples}
             withOutsideBorder
             stripped
