@@ -120,11 +120,8 @@ const renderSelectedDataRow = (selectedData, selectedSamples) => {
 const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
   // TODO: Remove test values
   const entityData = formatTimelineEntityData(data);
-  const entities = [
-    entityData.primary_diagnosis,
-    ...entityData.specimens,
-    ...mockTimelineData.slice(1),
-  ];
+  const entities = [entityData.primary_diagnosis, ...entityData.specimens, ...mockTimelineData];
+
   const theme = useTheme();
   const [activeEntities, setActiveEntities] = useState<Array<EntityType>>([
     EntityType.FOLLOW_UP,
