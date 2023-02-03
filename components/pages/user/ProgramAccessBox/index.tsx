@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Link, Table, Typography } from '@icgc-argo/uikit';
+import { css, Icon, Link, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -37,6 +37,9 @@ import { createRef } from 'react';
 
 import { Box } from '../common';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 type T_ProgramTableProgram = {
   shortName: string;
@@ -54,6 +57,18 @@ interface Column {
 
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
+  const ProgramNameCellOld = ({ original }: { original: T_ProgramTableProgram }) => (
+    <NextLink
+      href={
+        !isDccMember(permissions)
+          ? PROGRAMS_LIST_PATH
+          : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
+      }
+    >
+      <Link>{original.shortName}</Link>
+    </NextLink>
+  );
+
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <NextLink
       href={
@@ -65,6 +80,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       <Link>{original.shortName}</Link>
     </NextLink>
   );
+
   const containerRef = createRef<HTMLDivElement>();
 
   const baseCols: Column[] = [
@@ -90,6 +106,43 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       ]
     : baseCols;
 
+  // new columns and data for v8 table
+  const columns = [
+    {
+      accessorKey: 'shortName',
+      cell: (info) => (
+        <NextLink
+          href={
+            !isDccMember(permissions)
+              ? PROGRAMS_LIST_PATH
+              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, info.getValue())
+          }
+        >
+          <Link>{info.getValue()}</Link>
+        </NextLink>
+      ),
+      header: () => 'Program Name',
+      id: 'shortName',
+      // maxWidth: 150,
+    },
+    ...(isDccMember
+      ? []
+      : [
+          {
+            accessorKey: 'membershipType',
+            cell: (info) => capitalize(info.renderValue()),
+            header: () => 'Membership Type',
+          },
+        ]),
+    {
+      accessorKey: 'role',
+      header: () => 'Role',
+      id: 'role',
+      // maxWidth: 170
+    },
+    { accessorKey: 'permissions', header: () => 'Permissions', id: 'permissions' },
+  ];
+
   return (
     <div
       css={css`
@@ -97,15 +150,19 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       `}
       ref={containerRef}
     >
-      <Table
-        withOutsideBorder
-        parentRef={containerRef}
-        sortable={false}
-        showPagination={false}
-        data={props.programs}
-        columns={allCols}
-        getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8 withOutsideBorder withHeaders data={props.programs} columns={columns} />
+      ) : (
+        <Table
+          withOutsideBorder
+          parentRef={containerRef}
+          sortable={false}
+          showPagination={false}
+          data={props.programs}
+          columns={allCols}
+          getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
+        />
+      )}
     </div>
   );
 };

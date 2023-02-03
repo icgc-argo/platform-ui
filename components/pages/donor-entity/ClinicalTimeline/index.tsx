@@ -134,7 +134,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
     EntityType.TREATMENT,
   ]);
 
-  const [activeTab, setActiveTab] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const filteredData = entities.filter(
     ({ type }) => activeEntities.includes(type) || type === EntityType.DECEASED,
   );

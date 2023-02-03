@@ -41,6 +41,7 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
   }));
   const containerRef = createRef<HTMLDivElement>();
 
+  // new columns and data for v8 table
   const columns = !!samples.length
     ? Object.keys(samples[0]).map((sampleKey) => ({
         accessorKey: sampleKey,
