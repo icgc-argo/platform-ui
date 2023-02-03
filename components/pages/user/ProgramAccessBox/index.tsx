@@ -83,7 +83,8 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
 
   const containerRef = createRef<HTMLDivElement>();
 
-  const baseCols: Column[] = [
+  // react table v6
+  const baseColumns: Column[] = [
     {
       Header: 'Program Name',
       accessor: 'shortName',
@@ -94,20 +95,20 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     { Header: 'Permissions', accessor: 'permissions' },
   ];
 
-  const allCols = !isDccMember(permissions)
+  const tableColumns_legacy = !isDccMember(permissions)
     ? [
-        ...baseCols.slice(0, 1),
+        ...baseColumns.slice(0, 1),
         {
           Header: 'Membership Type',
           accessor: 'membershipType',
           Cell: (props) => capitalize(props.value),
         },
-        ...baseCols.slice(1),
+        ...baseColumns.slice(1),
       ]
-    : baseCols;
+    : baseColumns;
 
-  // new columns and data for v8 table
-  const columns = [
+  // react table v8
+  const tableColumns = [
     {
       accessorKey: 'shortName',
       cell: (info) => (
@@ -151,7 +152,13 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       ref={containerRef}
     >
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
-        <TableV8 withOutsideBorder withHeaders data={props.programs} columns={columns} />
+        <TableV8
+          columns={tableColumns}
+          data={props.programs}
+          withHeaders
+          withOutsideBorder
+          withStripes
+        />
       ) : (
         <Table
           withOutsideBorder
@@ -159,7 +166,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           sortable={false}
           showPagination={false}
           data={props.programs}
-          columns={allCols}
+          columns={tableColumns_legacy}
           getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
         />
       )}
