@@ -44,7 +44,7 @@ const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => 
             columns={tableColumns}
             data={tableData}
             withHeaders
-            withOutsideBorder
+            withSideBorders
             withStripes
           />
         ) : (

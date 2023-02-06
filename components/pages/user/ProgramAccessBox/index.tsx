@@ -156,7 +156,8 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           columns={tableColumns}
           data={props.programs}
           withHeaders
-          withOutsideBorder
+          withSideBorders
+          withRowHighlight
           withStripes
         />
       ) : (
