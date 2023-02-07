@@ -17,7 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, Container, css, Icon, Link, Table, Typography, useTheme } from '@icgc-argo/uikit';
+import {
+  Button,
+  Container,
+  css,
+  Icon,
+  Link,
+  Table,
+  TableV8,
+  Typography,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
@@ -102,6 +112,7 @@ const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> 
 
 const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
   const theme = useTheme();
+
   return (
     <Col xs={12}>
       <Table
@@ -120,6 +131,27 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
             style: { whiteSpace: 'unset' },
           },
         ]}
+      />
+      <TableV8
+        css={css`
+          .rt-th {
+            background: ${theme.colors.secondary_4};
+            text-transform: uppercase;
+          }
+          .rt-td {
+            white-space: unset;
+          }
+        `}
+        data={data}
+        columns={[
+          {
+            accessorKey: 'id',
+            id: 'id',
+            header,
+            cell: (info) => info.renderValue(),
+          },
+        ]}
+        withHeaders
       />
     </Col>
   );
