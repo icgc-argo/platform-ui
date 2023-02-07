@@ -30,6 +30,9 @@ import {
 } from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,
@@ -115,44 +118,48 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
 
   return (
     <Col xs={12}>
-      <Table
-        variant="STATIC"
-        parentRef={{ current: null }}
-        showPagination={false}
-        data={data}
-        columns={[
-          {
-            sortable: false,
-            Header: header.toUpperCase(),
-            headerStyle: {
-              background: theme.colors.secondary_4,
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          css={css`
+            .rt-th {
+              background: ${theme.colors.secondary_4};
+              text-transform: uppercase;
+            }
+            .rt-td {
+              white-space: unset;
+            }
+          `}
+          data={data}
+          columns={[
+            {
+              accessorKey: 'id',
+              id: 'id',
+              header,
+              cell: (info) => info.renderValue(),
             },
-            accessor: 'id',
-            style: { whiteSpace: 'unset' },
-          },
-        ]}
-      />
-      <TableV8
-        css={css`
-          .rt-th {
-            background: ${theme.colors.secondary_4};
-            text-transform: uppercase;
-          }
-          .rt-td {
-            white-space: unset;
-          }
-        `}
-        data={data}
-        columns={[
-          {
-            accessorKey: 'id',
-            id: 'id',
-            header,
-            cell: (info) => info.renderValue(),
-          },
-        ]}
-        withHeaders
-      />
+          ]}
+          withHeaders
+          withRowBorder
+        />
+      ) : (
+        <Table
+          variant="STATIC"
+          parentRef={{ current: null }}
+          showPagination={false}
+          data={data}
+          columns={[
+            {
+              sortable: false,
+              Header: header.toUpperCase(),
+              headerStyle: {
+                background: theme.colors.secondary_4,
+              },
+              accessor: 'id',
+              style: { whiteSpace: 'unset' },
+            },
+          ]}
+        />
+      )}
     </Col>
   );
 };
