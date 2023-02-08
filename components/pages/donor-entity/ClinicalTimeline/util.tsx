@@ -170,6 +170,7 @@ type AliasedDisplayData = {
 };
 
 // format for display
+// react table v6
 export const formatTableDisplayNames = (data: any[]) =>
   data &&
   data.length > 0 &&
@@ -311,7 +312,7 @@ export const formatTimelineEntityData = (donorData) => {
   };
 };
 
-// new for react-table v8
+// react table v8
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
