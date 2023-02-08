@@ -57,17 +57,6 @@ interface Column {
 
 const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
-  const ProgramNameCellOld = ({ original }: { original: T_ProgramTableProgram }) => (
-    <NextLink
-      href={
-        !isDccMember(permissions)
-          ? PROGRAMS_LIST_PATH
-          : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)
-      }
-    >
-      <Link>{original.shortName}</Link>
-    </NextLink>
-  );
 
   const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
     <NextLink
