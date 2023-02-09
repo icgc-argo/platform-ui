@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { UikitTheme } from '@icgc-argo/uikit';
-
 export const rangeButtons = [
   {
     days: null,
@@ -39,64 +37,5 @@ export const rangeButtons = [
     days: 7,
     label: 'One week',
     title: '1W',
-  },
-];
-
-export const makeChartLineMeta = (theme: UikitTheme) => [
-  {
-    chartType: 'clinical',
-    color: theme.colors.accent2_dark,
-    dataType: null,
-    field: 'coreCompletionDate',
-    title: null,
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.accent4_dark,
-    dataType: 'DNA',
-    field: 'rawReadsFirstPublishedDate',
-    title: 'DNA Raw Reads',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.accent1_dark,
-    dataType: 'DNA',
-    field: 'alignmentFirstPublishedDate',
-    title: 'Alignment',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.error_dark,
-    dataType: 'DNA',
-    field: 'mutectFirstPublishedDate',
-    title: 'Mutect2',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.warning_dark,
-    dataType: 'DNA',
-    field: 'sangerVcsFirstPublishedDate',
-    title: 'Sanger VC',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.secondary_1,
-    dataType: 'DNA',
-    field: 'openAccessFirstPublishedDate',
-    title: 'Open Access VF',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.accent2_1,
-    dataType: 'RNA',
-    field: 'rnaRawReadsFirstPublishedDate',
-    title: 'RNA Raw Reads',
-  },
-  {
-    chartType: 'molecular',
-    color: theme.colors.secondary_dark,
-    dataType: 'RNA',
-    field: 'rnaAlignmentFirstPublishedDate',
-    title: 'Alignment',
   },
 ];
