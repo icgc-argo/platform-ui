@@ -113,7 +113,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       ),
       header: () => 'Program Name',
       id: 'shortName',
-      // maxWidth: 150,
+      size: 150,
     },
     ...(isDccMember
       ? []
@@ -128,7 +128,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       accessorKey: 'role',
       header: () => 'Role',
       id: 'role',
-      // maxWidth: 170
+      size: 170,
     },
     { accessorKey: 'permissions', header: () => 'Permissions', id: 'permissions' },
   ];
