@@ -17,41 +17,45 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, css } from '@icgc-argo/uikit';
-import { ComponentType } from 'react';
-import { Col, Row } from 'react-grid-system';
+import { css, Table, Typography } from '@icgc-argo/uikit';
+import { createRef } from 'react';
 
-const PaddedRow = styled(Row)`
-  padding-bottom: 8px;
-`;
+const ProgramDonorAndFileCountsTable = ({ data, title }: { data: Object[]; title: string }) => {
+  const containerRef = createRef<HTMLDivElement>();
+  const tableCol = Object.keys(data[0]).map((ele) => ({
+    Header: ele,
+    accessor: ele,
+  }));
 
-const PaddedColumn = styled(Col)`
-  padding-left: 8px !important;
-  padding-right: 8px !important;
-  padding-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-`;
+  return (
+    <div
+      css={css`
+        margin: 14px 0 4px 0;
+      `}
+    >
+      <Typography
+        variant="navigation"
+        as="div"
+        css={css`
+          margin-bottom: 14px;
+        `}
+      >
+        {title}
+      </Typography>
+      <div ref={containerRef}>
+        <Table
+          parentRef={containerRef}
+          data={data}
+          columns={tableCol}
+          withOutsideBorder
+          stripped
+          highlight={false}
+          showPagination={false}
+          sortable={false}
+        />
+      </div>
+    </div>
+  );
+};
 
-const DonorCardsLayout: ComponentType<{}> = () => (
-  <div
-    css={css`
-      margin: 0 5%;
-    `}
-  >
-    <PaddedRow>
-      <PaddedColumn md={8} sm={12}>
-        hi
-      </PaddedColumn>
-      <PaddedColumn md={4} sm={12}>
-        hi2
-      </PaddedColumn>
-    </PaddedRow>
-    <PaddedRow>
-      <PaddedColumn>hi3</PaddedColumn>
-    </PaddedRow>
-  </div>
-);
-
-export default DonorCardsLayout;
+export default ProgramDonorAndFileCountsTable;
