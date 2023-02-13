@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
-import { ComponentType } from 'react';
+import { css, TitleBar, useTheme } from '@icgc-argo/uikit';
 
 export const ProgramTitleBar = () => {
   const theme = useTheme();

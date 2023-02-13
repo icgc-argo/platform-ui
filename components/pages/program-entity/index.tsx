@@ -17,22 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  ContentBody,
-  ContentHeader,
-  DnaLoader,
-  PageBody,
-  PageContainer,
-  PageContent,
-} from '@icgc-argo/uikit';
+import { ContentBody, ContentHeader, PageBody, PageContainer, PageContent } from '@icgc-argo/uikit';
 
 import Footer from '../../Footer';
 import NavBar from '../../NavBar';
 import Head from '../head';
 
 import clsx from 'clsx';
-import { ProgramTitleBar } from './ProgramTitleBar';
 import ProgramCardsLayout from './ProgramCardsLayout';
+import { ProgramTitleBar } from './ProgramTitleBar';
 
 const ProgramEntity = () => {
   return (

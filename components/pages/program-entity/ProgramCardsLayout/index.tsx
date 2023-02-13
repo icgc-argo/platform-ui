@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, css, Table, useTheme, Container } from '@icgc-argo/uikit';
+import { Container, css, styled, useTheme } from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
-import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
+import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
 import {

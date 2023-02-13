@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container, css, Link, SimpleTable, Typography } from '@icgc-argo/uikit';
+import { css, SimpleTable, Typography } from '@icgc-argo/uikit';
 
 const ProgramSummaryTable = ({ data, title }) => {
   return (
