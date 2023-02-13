@@ -33,7 +33,6 @@ const tableColumns_legacy = [
   {
     Header: 'Program',
     accessor: 'shortName',
-
     Cell: ({ original }) => <ProgramDashboardLink program={original.shortName} />,
   },
   {
@@ -147,7 +146,15 @@ const DonorAggregationIndexTable = ({
       <br />
       <br />
       <br />
-      <TableV8 columns={tableColumns} data={tableData} withHeaders withSideBorders withStripes />
+      <TableV8
+        columns={tableColumns}
+        data={tableData}
+        loading={loading || someQueriesLoading}
+        withHeaders
+        withLoader
+        withSideBorders
+        withStripes
+      />
     </div>
   );
 };
