@@ -40,6 +40,8 @@ const PaddedColumn = styled(Col)`
 
 const ProgramCardsLayout: ComponentType<{}> = () => {
   const theme = useTheme();
+
+  //the following three variables are mock data
   const programSummaryData = {
     'Program Shortname': 'PACA-CA',
     'Full Program Name': 'Pancreatic Cancer - CA',
