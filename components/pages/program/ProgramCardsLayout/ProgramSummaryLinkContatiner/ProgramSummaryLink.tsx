@@ -46,6 +46,7 @@ const ProgramSummaryLink = ({
         css={css`
           display: flex;
           flex-direction: column;
+          width: 70%;
         `}
       >
         <Typography

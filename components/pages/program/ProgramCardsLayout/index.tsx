@@ -61,9 +61,9 @@ const ProgramCardsLayout: ComponentType<{}> = () => {
   ];
 
   const donorAndFileCountsByExperimentalStrategy = [
-    { Stragegies: 'WXS', Donors: 245, Files: 245 },
-    { Stragegies: 'WGS', Donors: 245, Files: 245 },
-    { Stragegies: 'RNA-Seq', Donors: 245, Files: 245 },
+    { Strategies: 'WXS', Donors: 245, Files: 245 },
+    { Strategies: 'WGS', Donors: 245, Files: 245 },
+    { Strategies: 'RNA-Seq', Donors: 245, Files: 245 },
   ];
   return (
     <div
