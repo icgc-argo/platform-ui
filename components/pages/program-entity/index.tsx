@@ -34,7 +34,7 @@ import clsx from 'clsx';
 import { ProgramTitleBar } from './ProgramTitleBar';
 import ProgramCardsLayout from './ProgramCardsLayout';
 
-const Program = () => {
+const ProgramEntity = () => {
   const loading = false;
 
   return (
@@ -72,4 +72,4 @@ const Program = () => {
   );
 };
 
-export default Program;
+export default ProgramEntity;

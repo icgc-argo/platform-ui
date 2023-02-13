@@ -18,10 +18,10 @@
  */
 
 import { createPage } from 'global/utils/pages';
-import Program from 'components/pages/program';
+import ProgramEntity from 'components/pages/program-entity';
 
 export default createPage<{ egoJwt: string }>({
   isPublic: true,
 })(() => {
-  return <Program />;
+  return <ProgramEntity />;
 });
