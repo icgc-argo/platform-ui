@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Typography, UikitIconNames } from '@icgc-argo/uikit';
+import { css, Icon, ThemeColorNames, Typography, UikitIconNames } from '@icgc-argo/uikit';
 import { CircleContainer } from 'components/pages/Homepage/common';
 
 const ProgramSummaryLink = ({
@@ -27,8 +27,8 @@ const ProgramSummaryLink = ({
   totalNum,
   subtitle,
 }: {
-  circleFill: any;
-  iconFill: string;
+  circleFill: keyof ThemeColorNames;
+  iconFill: keyof ThemeColorNames;
   iconName: UikitIconNames;
   totalNum: number;
   subtitle: string;
