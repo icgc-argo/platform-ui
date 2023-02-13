@@ -35,37 +35,18 @@ import { ProgramTitleBar } from './ProgramTitleBar';
 import ProgramCardsLayout from './ProgramCardsLayout';
 
 const ProgramEntity = () => {
-  //please implement loading when working on API. see examples in file and donor-entity
-  const loading = false;
-
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
       <NavBar />
       <PageBody className={clsx({ noSidebar: true })}>
         <PageContent>
-          {loading ? (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-              }}
-            >
-              <DnaLoader />
-            </div>
-          ) : (
-            <>
-              <ContentHeader>
-                <ProgramTitleBar />
-              </ContentHeader>
-
-              <ContentBody>
-                <ProgramCardsLayout />
-              </ContentBody>
-            </>
-          )}
+          <ContentHeader>
+            <ProgramTitleBar />
+          </ContentHeader>
+          <ContentBody>
+            <ProgramCardsLayout />
+          </ContentBody>
           <Footer />
         </PageContent>
       </PageBody>
