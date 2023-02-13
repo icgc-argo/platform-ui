@@ -25,6 +25,12 @@ import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
+import {
+  donorAndFileCountsByDataCategory,
+  donorAndFileCountsByExperimentalStrategy,
+  programSummaryData,
+} from './util';
+
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
 `;
@@ -41,32 +47,6 @@ const PaddedColumn = styled(Col)`
 const ProgramCardsLayout: ComponentType<{}> = () => {
   const theme = useTheme();
 
-  //the following three variables are mock data
-  const programSummaryData = {
-    'Program Shortname': 'PACA-CA',
-    'Full Program Name': 'Pancreatic Cancer - CA',
-    Description: 'Preventative research and treatment',
-    Countries: 'Canada',
-    'Primary Sites': 'Pancreas',
-    Website: 'https://pancreaticcancercanada.ca/',
-    Institutions: 'Pancretic Cancer Canada',
-    'Processing Regions': 'Collaboratory - Toronto, Montreal, Vancouver',
-    'Cancer Types': ' Pancreatic Cancer',
-  };
-
-  const donorAndFileCountsByDataCategory = [
-    { Category: 'Quality Control Metrics', Donors: 245, Files: 245 },
-    { Category: 'Simple Nucleotide Variation', Donors: 245, Files: 245 },
-    { Category: 'Copy Number Variation', Donors: 245, Files: 245 },
-    { Category: 'Structural Variation', Donors: 245, Files: 245 },
-    { Category: 'Transciptome Profiling', Donors: 245, Files: 245 },
-  ];
-
-  const donorAndFileCountsByExperimentalStrategy = [
-    { Strategies: 'WXS', Donors: 245, Files: 245 },
-    { Strategies: 'WGS', Donors: 245, Files: 245 },
-    { Strategies: 'RNA-Seq', Donors: 245, Files: 245 },
-  ];
   return (
     <div
       css={css`
