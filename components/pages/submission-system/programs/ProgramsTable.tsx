@@ -31,6 +31,10 @@ import get from 'lodash/get';
 import NextLink from 'next/link';
 import { ComponentType, createRef, ElementType, useMemo } from 'react';
 
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
   shortName: string;
@@ -330,7 +334,7 @@ export default function ProgramsTable(tableProps: {
     },
     {
       header: 'Actions',
-      // sortable: false,
+      enableSorting: false,
       size: 100,
       cell: ({ row: { original } }) => (
         <FormattedCell
@@ -370,30 +374,27 @@ export default function ProgramsTable(tableProps: {
     },
   ];
 
-  return (
-    <>
-      <Table
-        parentRef={createRef()}
-        data={tableData.slice(0, 4)}
-        columns={tableColumns_legacy}
-        showPagination={false}
-        loading={tableProps.loading}
-        pageSize={tableProps.programs.length}
-        LoadingComponent={tableProps.LoadingComponent}
-      />
-      <br />
-      <br />
-      <br />
-      <TableV8
-        columns={tableColumns}
-        data={tableData.slice(0, 4)}
-        LoaderComponent={tableProps.LoadingComponent}
-        loading={tableProps.loading}
-        withHeaders
-        withResize
-        withRowHighlight
-        withStripes
-      />
-    </>
+  return FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8
+      columns={tableColumns}
+      data={tableData}
+      LoaderComponent={tableProps.LoadingComponent}
+      loading={tableProps.loading}
+      withHeaders
+      withResize
+      withRowHighlight
+      withSorting
+      withStripes
+    />
+  ) : (
+    <Table
+      parentRef={createRef()}
+      data={tableData}
+      columns={tableColumns_legacy}
+      showPagination={false}
+      loading={tableProps.loading}
+      pageSize={tableProps.programs.length}
+      LoadingComponent={tableProps.LoadingComponent}
+    />
   );
 }

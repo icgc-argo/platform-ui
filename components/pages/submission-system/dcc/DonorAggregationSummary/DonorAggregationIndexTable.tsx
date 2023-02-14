@@ -100,7 +100,7 @@ const tableColumns = [
   {
     header: 'Sync Donor Index',
     accessorKey: 'action',
-    sortable: false,
+    enableSorting: false,
     cell: ({ row }) => <SyncIndexButton program={row.original.shortName} />,
   },
 ];
@@ -142,7 +142,9 @@ const DonorAggregationIndexTable = ({
           data={tableData}
           loading={loading || someQueriesLoading}
           withHeaders
+          withResize
           withSideBorders
+          withSorting
           withStripes
         />
       ) : (

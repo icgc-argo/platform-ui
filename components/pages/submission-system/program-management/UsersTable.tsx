@@ -25,6 +25,10 @@ import { createRef } from 'react';
 import { RoleDisplayName, RoleKey } from '../modals/common';
 import { adminRestrictionText } from './Users';
 
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
 type StatusKey = 'ACCEPTED' | 'PENDING' | 'EXPIRED';
 
 type UsersTableUser = {
@@ -193,8 +197,7 @@ const UsersTable = (tableProps: {
     },
     {
       header: 'Actions',
-      sortable: false,
-      headerStyle: { display: 'flex', justifyContent: 'center' },
+      enableSorting: false,
       width: 125,
       cell: ({ row: { original } }) => (
         <div
@@ -254,30 +257,31 @@ const UsersTable = (tableProps: {
       `}
       ref={containerRef}
     >
-      <Table
-        parentRef={containerRef}
-        data={tableProps.users}
-        loading={tableProps.loading}
-        columns={tableColumns_legacy}
-        pageSize={Number.MAX_SAFE_INTEGER}
-        showPagination={false}
-        style={{ maxHeight: '500px' }}
-      />
-      <br />
-      <br />
-      <br />
-      <TableV8
-        columns={tableColumns}
-        css={css`
-          max-height: 500px;
-          overflow-y: auto;
-        `}
-        data={tableProps.users}
-        loading={tableProps.loading}
-        withHeaders
-        withResize
-        withStripes
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          columns={tableColumns}
+          css={css`
+            max-height: 500px;
+            overflow-y: auto;
+          `}
+          data={tableProps.users}
+          loading={tableProps.loading}
+          withHeaders
+          withResize
+          withSorting
+          withStripes
+        />
+      ) : (
+        <Table
+          parentRef={containerRef}
+          data={tableProps.users}
+          loading={tableProps.loading}
+          columns={tableColumns_legacy}
+          pageSize={Number.MAX_SAFE_INTEGER}
+          showPagination={false}
+          style={{ maxHeight: '500px' }}
+        />
+      )}
     </div>
   );
 };

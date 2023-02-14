@@ -31,6 +31,10 @@ import {
   TableInfoHeaderContainer,
 } from '../../common';
 
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
   IS_NEW: 'isNew',
@@ -186,24 +190,25 @@ const FileTable = (props: {
       <TableInfoHeaderContainer
         left={<StatsArea stats={stats} />}
         right={<SubmissionInfoArea {...submissionInfo} />}
-      />{' '}
-      <Table
-        parentRef={containerRef}
-        showPagination={false}
-        pageSize={Number.MAX_SAFE_INTEGER}
-        columns={tableColumns_legacy}
-        data={tableData.slice(0, 4)}
       />
-      <br />
-      <br />
-      <br />
-      <TableV8
-        columns={tableColumns}
-        data={tableData.slice(0, 4)}
-        withHeaders
-        withResize
-        withStripes
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          withHeaders
+          withResize
+          withSorting
+          withStripes
+        />
+      ) : (
+        <Table
+          parentRef={containerRef}
+          showPagination={false}
+          pageSize={Number.MAX_SAFE_INTEGER}
+          columns={tableColumns_legacy}
+          data={tableData}
+        />
+      )}
     </div>
   );
 };
