@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, InteractiveIcon, MailTo, Table, TableColumnConfig } from '@icgc-argo/uikit';
+import { css, InteractiveIcon, MailTo, Table, TableColumnConfig, TableV8 } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import { createRef } from 'react';
@@ -59,7 +59,9 @@ const UsersTable = (tableProps: {
   const isUserThemselves = (user: UsersTableUser) => user.email === userEmail;
   const isUserTheLastAdmin = (user: UsersTableUser) =>
     tableProps.isOnlyOneAdminLeft && user.role === 'ADMIN';
-  const columns: Array<TableColumnConfig<UsersTableUser>> = [
+
+  // for react table v6
+  const tableColumns_legacy: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
       accessor: 'firstName',
@@ -153,6 +155,98 @@ const UsersTable = (tableProps: {
   ];
   const containerRef = createRef<HTMLDivElement>();
 
+  // for react table v8
+  const tableColumns = [
+    {
+      header: 'Name',
+      accessorKey: 'firstName',
+      cell: ({ row: { original } }) => `${original.firstName} ${original.lastName}`,
+    },
+    {
+      header: 'Email',
+      accessorKey: 'email',
+      cell: ({ row: { original } }) =>
+        original.email ? <MailTo link={original.email}>{original.email}</MailTo> : '',
+    },
+    {
+      header: 'Role',
+      accessorKey: 'role',
+      cell: ({ row: { original } }) => (original.role ? RoleDisplayName[original.role] : ''),
+    },
+    {
+      header: 'Daco Approved',
+      accessorKey: 'isDacoApproved',
+      cell: ({ row: { original } }) => (original.isDacoApproved ? 'Yes' : 'No'),
+      headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
+    },
+    {
+      header: 'Status',
+      accessorKey: 'inviteStatus',
+      cell: ({ row: { original } }) =>
+        original.inviteStatus ? StatusDisplayName[original.inviteStatus] : APPROVED_DISPLAY_STATUS,
+    },
+    {
+      header: 'Joined On',
+      accessorKey: 'inviteAcceptedAt',
+      cell: ({ row: { original } }) =>
+        original.inviteAcceptedAt ? displayDate(original.inviteAcceptedAt) : '',
+    },
+    {
+      header: 'Actions',
+      sortable: false,
+      headerStyle: { display: 'flex', justifyContent: 'center' },
+      width: 125,
+      cell: ({ row: { original } }) => (
+        <div
+          css={css`
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+          `}
+        >
+          <InteractiveIcon
+            position="left"
+            html={<span>Resend invitation</span>}
+            height="20px"
+            width="20px"
+            name="mail"
+            onClick={() => tableProps.onUserResendInviteClick({ user: original })}
+            disabled={
+              // Disable if:
+              // already accepted
+              original.inviteStatus === 'ACCEPTED' ||
+              // OR added without invitation (shows as Accepted)
+              original.inviteStatus === null ||
+              // OR the site user is the user in this row
+              isUserThemselves(original)
+            }
+          />
+          <InteractiveIcon
+            disabled={false}
+            html={<span>Edit User</span>}
+            position="left"
+            height="20px"
+            width="20px"
+            name="edit"
+            onClick={() => tableProps.onUserEditClick({ user: original })}
+          />
+          <InteractiveIcon
+            unmountHTMLWhenHide
+            position="left"
+            html={
+              <span>{isUserTheLastAdmin(original) ? adminRestrictionText : 'Remove User'}</span>
+            }
+            disabled={isUserTheLastAdmin(original) || isUserThemselves(original)}
+            height="20px"
+            width="20px"
+            name="trash"
+            onClick={() => tableProps.onUserDeleteClick({ user: original })}
+          />
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div
       css={css`
@@ -164,10 +258,25 @@ const UsersTable = (tableProps: {
         parentRef={containerRef}
         data={tableProps.users}
         loading={tableProps.loading}
-        columns={columns}
+        columns={tableColumns_legacy}
         pageSize={Number.MAX_SAFE_INTEGER}
         showPagination={false}
         style={{ maxHeight: '500px' }}
+      />
+      <br />
+      <br />
+      <br />
+      <TableV8
+        columns={tableColumns}
+        css={css`
+          max-height: 500px;
+          overflow-y: auto;
+        `}
+        data={tableProps.users}
+        loading={tableProps.loading}
+        withHeaders
+        withResize
+        withStripes
       />
     </div>
   );

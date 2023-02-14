@@ -28,6 +28,10 @@ import { useQuery } from '@apollo/client';
 import { createRef } from 'react';
 import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
 // for react table v6
 const tableColumns_legacy = [
   {
@@ -132,29 +136,28 @@ const DonorAggregationIndexTable = ({
         margin-top: 15px;
       `}
     >
-      <Table
-        loading={loading || someQueriesLoading}
-        highlight={false}
-        parentRef={containerRef}
-        showPagination={false}
-        withOutsideBorder
-        data={tableData}
-        columns={tableColumns_legacy}
-        pageSize={programs.length}
-        defaultSorted={[{ id: 'shortName', desc: false }]}
-      />
-      <br />
-      <br />
-      <br />
-      <TableV8
-        columns={tableColumns}
-        data={tableData}
-        loading={loading || someQueriesLoading}
-        withHeaders
-        withLoader
-        withSideBorders
-        withStripes
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          loading={loading || someQueriesLoading}
+          withHeaders
+          withSideBorders
+          withStripes
+        />
+      ) : (
+        <Table
+          loading={loading || someQueriesLoading}
+          highlight={false}
+          parentRef={containerRef}
+          showPagination={false}
+          withOutsideBorder
+          data={tableData}
+          columns={tableColumns_legacy}
+          pageSize={programs.length}
+          defaultSorted={[{ id: 'shortName', desc: false }]}
+        />
+      )}
     </div>
   );
 };

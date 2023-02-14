@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
+import { css, Table, TableColumnConfig, TableV8, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
 import { createRef, CSSProperties } from 'react';
 
@@ -65,7 +65,7 @@ const SubmissionSummaryTable = ({
     [FIRST_COLUMN_ACCESSOR]: (
       <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-        Updated
+        &nbsp;Updated
       </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
@@ -77,7 +77,10 @@ const SubmissionSummaryTable = ({
     ),
   };
 
-  const columns: TableColumnConfig<Entry>[] = [
+  const tableData = [newDataRow, updatedDataRow];
+
+  // for react table v6
+  const tableColumns_legacy: TableColumnConfig<Entry>[] = [
     // this is the first column
     {
       accessor: FIRST_COLUMN_ACCESSOR,
@@ -92,6 +95,38 @@ const SubmissionSummaryTable = ({
     ),
   ];
   const containerRef = createRef<HTMLDivElement>();
+
+  // for react table v8
+  const tableColumns = [
+    {
+      accessorKey: FIRST_COLUMN_ACCESSOR,
+      size: 100,
+      cell: ({ cell, column, row }) => {
+        const isUpdateRow = row.index === 1;
+        return (
+          <span
+            css={css`
+              background: ${row.original[column.id] > 0
+                ? isUpdateRow
+                  ? theme.colors.accent3_3
+                  : theme.colors.accent2_4
+                : 'transparent'};
+            `}
+          >
+            {cell.renderValue()}
+          </span>
+        );
+      },
+    },
+    ...clinicalSubmissions.clinicalEntities.map(
+      (entity) =>
+        ({
+          accessorKey: entity.clinicalType,
+          header: capitalize(entity.clinicalType.split('_').join(' ')),
+        } as TableColumnConfig<Entry>),
+    ),
+  ];
+
   return (
     <div
       css={css`
@@ -116,10 +151,14 @@ const SubmissionSummaryTable = ({
             } as CSSProperties,
           };
         }}
-        columns={columns}
-        data={[newDataRow, updatedDataRow]}
+        columns={tableColumns_legacy}
+        data={tableData}
         resizable
       />
+      <br />
+      <br />
+      <br />
+      <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
     </div>
   );
 };
