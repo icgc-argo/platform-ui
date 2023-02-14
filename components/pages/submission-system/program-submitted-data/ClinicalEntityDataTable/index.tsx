@@ -139,10 +139,16 @@ const getColumnWidth = memoize<
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const defaultPageSettings = {
+const defaultEntityPageSettings = {
   page: defaultClinicalEntityFilters.page,
   pageSize: defaultClinicalEntityFilters.pageSize,
   sorted: [{ id: 'donorId', desc: true }],
+};
+
+const defaultDonorSettings = {
+  page: defaultClinicalEntityFilters.page,
+  pageSize: defaultClinicalEntityFilters.pageSize,
+  sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
 };
 
 const defaultErrorPageSettings = {
@@ -208,6 +214,8 @@ const ClinicalEntityDataTable = ({
   let columns = [];
   const theme = useTheme();
   const containerRef = createRef<HTMLDivElement>();
+  const defaultPageSettings =
+    useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
