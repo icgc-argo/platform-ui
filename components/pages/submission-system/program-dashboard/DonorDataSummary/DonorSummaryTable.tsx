@@ -262,6 +262,10 @@ const DonorSummaryTable = ({
           css={css`
             ${['DNA Raw Reads Status'].includes(panelLegend) &&
             `
+            // occasionally, some dropdown panels need to be wider, or longer.
+            // this customization was added instead of making the panel elastic
+            // to prevent panels from running off the side of the page
+            // or the bottom of the table.
               width: 275px;
             `}
           `}
