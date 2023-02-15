@@ -266,6 +266,7 @@ const DonorSummaryTable = ({
             // this customization was added instead of making the panel elastic
             // to prevent panels from running off the side of the page
             // or the bottom of the table.
+            // panelLegend indicates which dropdown panel is affected
               width: 275px;
             `}
           `}
