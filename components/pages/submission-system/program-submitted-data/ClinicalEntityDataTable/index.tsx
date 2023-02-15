@@ -146,8 +146,7 @@ const defaultEntityPageSettings = {
 };
 
 const defaultDonorSettings = {
-  page: defaultClinicalEntityFilters.page,
-  pageSize: defaultClinicalEntityFilters.pageSize,
+  ...defaultEntityPageSettings,
   sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
 };
 
