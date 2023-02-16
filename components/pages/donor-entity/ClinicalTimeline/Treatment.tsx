@@ -1,16 +1,27 @@
-import { css, Table, Typography } from '@icgc-argo/uikit';
+import { css, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { TreatmentNode } from '../types';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => {
   const {
     node: { treatment_type: title, data: tableData },
   } = treatment;
-  const tableCols = Object.keys(tableData[0]).map((k) => ({
+
+  // react table v6
+  const tableColumns_legacy = Object.keys(tableData[0]).map((k) => ({
     Header: k,
     accessor: k,
   }));
   const containerRef = createRef<HTMLDivElement>();
+
+  // react table v8
+  const tableColumns = Object.keys(tableData[0]).map((k) => ({
+    header: () => k,
+    accessorKey: k,
+  }));
 
   return (
     <div
@@ -28,15 +39,25 @@ const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => 
         {title}
       </Typography>
       <div ref={containerRef}>
-        <Table
-          parentRef={containerRef}
-          columns={tableCols}
-          data={tableData}
-          withOutsideBorder
-          stripped
-          showPagination={false}
-          sortable={false}
-        />
+        {FEATURE_REACT_TABLE_V8_ENABLED ? (
+          <TableV8
+            columns={tableColumns}
+            data={tableData}
+            withHeaders
+            withSideBorders
+            withStripes
+          />
+        ) : (
+          <Table
+            parentRef={containerRef}
+            columns={tableColumns_legacy}
+            data={tableData}
+            withOutsideBorder
+            stripped
+            showPagination={false}
+            sortable={false}
+          />
+        )}
       </div>
     </div>
   );

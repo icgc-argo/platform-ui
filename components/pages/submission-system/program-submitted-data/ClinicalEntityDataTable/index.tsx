@@ -139,10 +139,15 @@ const getColumnWidth = memoize<
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const defaultPageSettings = {
+const defaultEntityPageSettings = {
   page: defaultClinicalEntityFilters.page,
   pageSize: defaultClinicalEntityFilters.pageSize,
   sorted: [{ id: 'donorId', desc: true }],
+};
+
+const defaultDonorSettings = {
+  ...defaultEntityPageSettings,
+  sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
 };
 
 const defaultErrorPageSettings = {
@@ -168,6 +173,7 @@ export const getEntityData = (
 ) =>
   useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
     errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
     variables: {
       programShortName: program,
       filters: {
@@ -207,6 +213,8 @@ const ClinicalEntityDataTable = ({
   let columns = [];
   const theme = useTheme();
   const containerRef = createRef<HTMLDivElement>();
+  const defaultPageSettings =
+    useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
   const [pageSettings, setPageSettings] = useState(defaultPageSettings);
   const { page, pageSize, sorted } = pageSettings;
   const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
@@ -225,9 +233,7 @@ const ClinicalEntityDataTable = ({
     ? []
     : currentDonors.length
     ? currentDonors
-    : searchResults
-        .map(({ donorId }: ClinicalSearchResults) => donorId)
-        .slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+    : searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
 
   const submitterDonorIds =
     useDefaultQuery || currentDonors.length
@@ -283,6 +289,7 @@ const ClinicalEntityDataTable = ({
     donorIds,
     submitterDonorIds,
   );
+
   const { clinicalData } =
     clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
 
@@ -299,10 +306,12 @@ const ClinicalEntityDataTable = ({
 
     relatedErrors.forEach((error) => {
       const { donorId } = donor;
-      const { errorType, fieldName } = error;
+      const { errorType, message, fieldName } = error;
       const relatedErrorGroup = tableErrorGroups.find(
         (tableErrorGroup) =>
-          tableErrorGroup[0].errorType === errorType && tableErrorGroup[0].fieldName === fieldName,
+          tableErrorGroup[0].errorType === errorType &&
+          tableErrorGroup[0].message === message &&
+          tableErrorGroup[0].fieldName === fieldName,
       );
       const tableError = { ...error, donorId };
 
@@ -323,25 +332,7 @@ const ClinicalEntityDataTable = ({
         ? `${fieldName} is not a field within the latest dictionary. Please remove this from the ${entityName}.tsv file before submitting.`
         : message;
 
-    const entries = errorGroup
-      .map((error) => error.donorId)
-      .filter((donorId, i, originalArray) => originalArray.indexOf(donorId) === i)
-      .reduce((totalRecordCount, currentDonorId) => {
-        const currentEntityRecords =
-          clinicalData.clinicalEntities.find(
-            (entity) => reverseLookUpEntityAlias(entity.entityName) === entityType,
-          )?.records || [];
-
-        const currentDonorRecords = currentEntityRecords.filter(
-          (tableRecords) =>
-            tableRecords.some((record) => record.value === `${currentDonorId}`) &&
-            (tableRecords.some((record) => record.name === fieldName) ||
-              ((errorType === 'MISSING_REQUIRED_FIELD' || errorType === 'INVALID_BY_SCRIPT') &&
-                !tableRecords.some((record) => record.name === fieldName))),
-        );
-
-        return totalRecordCount + currentDonorRecords.length;
-      }, 0);
+    const entries = errorGroup.length;
 
     return {
       entries,
@@ -409,7 +400,8 @@ const ClinicalEntityDataTable = ({
     // If using default query, or using search but not filtering by donor in URL, then we display total number of search results
     // Else we use the total number of results that match our query
     totalDocs =
-      useDefaultQuery || (!currentDonors.length && totalResults > entityData.totalDocs)
+      (useDefaultQuery && entityType === 'donor') ||
+      (!currentDonors.length && totalResults > entityData.totalDocs)
         ? totalResults
         : entityData.totalDocs;
 
@@ -468,11 +460,14 @@ const ClinicalEntityDataTable = ({
         : originalDonorId,
     );
 
-    const donorErrorData = clinicalErrors.find((donor) => donor.donorId === cellDonorId);
+    const donorErrorData = clinicalErrors
+      .filter((donor) => donor.donorId === cellDonorId)
+      .map((donor) => donor.errors)
+      .flat();
 
     const columnErrorData =
-      donorErrorData &&
-      donorErrorData.errors.filter(
+      donorErrorData.length &&
+      donorErrorData.filter(
         (error) =>
           error &&
           (error.entityName === entityType ||
@@ -487,15 +482,25 @@ const ClinicalEntityDataTable = ({
       hasClinicalErrors &&
       columnErrorData.filter(
         (error) =>
-          error.info?.value === original[id] ||
-          (error.info?.value && error.info.value[0] === original[id]),
+          (error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
+          (error.info?.value === original[id] ||
+            (error.info?.value && error.info.value[0] === original[id]) ||
+            (error.info.value === null && !Boolean(original[id]))),
       );
 
-    // TODO: Only highlight specificErrors; requires update to clinical service
+    const fieldError =
+      hasClinicalErrors &&
+      columnErrorData.filter(
+        (error) =>
+          (error.errorType === 'UNRECOGNIZED_FIELD' ||
+            error.errorType === 'MISSING_REQUIRED_FIELD') &&
+          error.fieldName === id,
+      );
+
     const errorState =
       (isCompletionCell && original[id] === 0) ||
       specificErrorValue?.length > 0 ||
-      hasClinicalErrors;
+      fieldError?.length > 0;
 
     const border = getHeaderBorder(id);
 
