@@ -50,21 +50,14 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
-    title: 'January 19, 2023',
+    title: 'January 30, 2023',
     text: (
       <>
         We are excited to announce{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
           Dictionary 1.16
-        </Link>
-        . Dictionary Release Notes available{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-116"
-        >
-          here
-        </Link>
-        .
+        </Link>{' '}
+        is now available.
       </>
     ),
   },
@@ -72,16 +65,26 @@ const newsItems: NewsItem[] = [
     title: 'New Features',
     text: (
       <>
-        A brand new Submitted Data Page is now available for data submitters to review the submitted
-        clinical data. Program dashboards have been updated with new features to view the submitted
-        RNA Sequencing data.
+        Program dashboards have been updated with new features to view the submitted RNA Sequencing
+        data.
         <br />
         <br />
         <Link
           target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-116"
+        >
+          ARGO Data Dictionary 1.16
+        </Link>
+        ,{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
+          Data Release 5.0
+        </Link>
+        , and{' '}
+        <Link
+          target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
         >
-          Software Release 1.119.0 - API 3.38.1
+          Software Release UI 1.119.1 - API 3.38.1
         </Link>{' '}
         are now available.
       </>

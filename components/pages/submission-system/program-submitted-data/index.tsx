@@ -100,12 +100,35 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
 
   // Matches 'D' or 'DO' exactly (case insensitive)
   const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
-  const sideMenuQueryDonorIds =
-    urlDonorQueryStrings.length && !searchDonorIds.length ? currentDonors : searchDonorIds;
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
     : keyword.split(/, |,/).filter((word) => !!word);
+
+  // Search Result Query
+  // Populates dropdown menu; Search query populates data table if there are no URL params
+  const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } =
+    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          completionState,
+          donorIds: searchDonorIds,
+          submitterDonorIds: searchSubmitterIds,
+        },
+      },
+    });
+
+  const searchResultIds =
+    searchResultData?.clinicalSearchResults.searchResults.map((result) => result.donorId) || [];
+
+  const sideMenuQueryDonorIds = urlDonorQueryStrings.length
+    ? currentDonors
+    : searchResultIds.length
+    ? searchResultIds
+    : [];
 
   // Side Menu Query
   // Populates Clinical Entity Table, Side Menu, Title Bar
@@ -131,23 +154,6 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
     sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
 
   const { clinicalData } = sideMenuData;
-
-  // Search Result Query
-  // Populates dropdown menu; Search query populates data table if there are no URL params
-  const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } =
-    useQuery<ClinicalEntitySearchResultResponse>(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
-      errorPolicy: 'all',
-      variables: {
-        programShortName,
-        filters: {
-          ...defaultClinicalEntityFilters,
-          completionState,
-          donorIds: searchDonorIds,
-          submitterDonorIds: searchSubmitterIds,
-          entityTypes: ['donor'],
-        },
-      },
-    });
 
   const menuItems = clinicalEntityFields.map((entity) => (
     <VerticalTabs.Item

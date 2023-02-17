@@ -29,6 +29,7 @@ import {
   isBefore,
 } from 'date-fns';
 import { find } from 'lodash';
+import { useState } from 'react';
 import {
   ChartLine,
   ChartType,
@@ -37,8 +38,16 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { makeChartLineMeta } from '../utils';
+import { getTooltipData, makeChartLineMeta } from './utils';
+import InfoBox from './InfoBox';
 import { getMaxY } from './utils';
+
+export type TooltipData = {
+  name: string; // display text
+  color?: string;
+  count?: number;
+  field?: string;
+}[];
 
 const getOptions = (theme: UikitTheme) => ({
   colors: {
@@ -56,6 +65,7 @@ const getOptions = (theme: UikitTheme) => ({
   strokeWidth: 0.5,
   xTickHeight: 5,
   yAxisThresholdDashArray: '8, 3',
+  tooltipTextSize: 11,
 });
 
 const makePointsString = (points: PointsCoordinates) => {
@@ -77,6 +87,8 @@ const LineChart = ({
   hasYAxisThresholdLine = false,
   height,
   horizontalGuides: numberOfHorizontalGuides,
+  multiItemWidth = 135,
+  singleItemWidth = 56,
   precision,
   width,
   yAxisThreshold = 0,
@@ -90,6 +102,8 @@ const LineChart = ({
   hasYAxisThresholdLine?: boolean;
   height: number;
   horizontalGuides: number;
+  multiItemWidth?: number;
+  singleItemWidth?: number;
   precision: number;
   width: number;
   yAxisThreshold?: number;
@@ -99,11 +113,14 @@ const LineChart = ({
   const theme = useTheme();
   const options = getOptions(theme);
 
+  const dataBuckets = data[0].buckets;
+
   const TextStyleGroup = styled.g`
     fill: ${options.colors.text};
     font-family: ${options.fontFamily};
     font-size: ${options.fontSize}px;
   `;
+
   // setup Y axis
   // round up max Y value so it's a multiple of numberOfHorizontalGuides
   const roundForHorizontalGuides = (x: number) =>
@@ -126,7 +143,6 @@ const LineChart = ({
   // setup X axis
   // X axis ticks, labels, and line/point positions
   // are 1/2 tick distance from the left and right
-  const dataBuckets = data[0].buckets;
   const xTicksCount = dataBuckets.length;
   // distance between 2 ticks
   const xTickDistance = chartWidth / xTicksCount;
@@ -135,6 +151,10 @@ const LineChart = ({
   const xChartPadding = xTickDistance / 2;
   const xTicksStart = padding + xChartPadding;
   const getX = (index: number) => Math.floor(xTicksStart + xTickDistance * index);
+  const xCoordinates = new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
+    const tickX = getX(index);
+    return tickX;
+  });
 
   const horizontalLineStart = padding;
   const horizontalLineEnd = chartWidth + padding;
@@ -150,6 +170,16 @@ const LineChart = ({
     end: dataDates[dataDates.length - 1],
   };
   const daysInData = differenceInDays(dataDayRange.end, dataDayRange.start);
+
+  // props for InfoBox (tooltip)
+  const chartMeta = makeChartLineMeta(theme);
+  const tooltipData: TooltipData[] = getTooltipData(data, chartMeta);
+  const [tooltipIndex, setTooltipIndex] = useState<number | null>(null);
+  const tooltipList = tooltipData[tooltipIndex];
+  const xStart = xCoordinates[tooltipIndex];
+  const xIsLeft = tooltipIndex >= Math.floor(dataBuckets.length / 2);
+
+  // Getting tooltipData from data
 
   const makeChartLines = (theme: UikitTheme) =>
     data
@@ -293,8 +323,7 @@ const LineChart = ({
     const yEnd = yStart + options.xTickHeight;
     return (
       <g fill="none" stroke={options.colors.axisBorder} strokeWidth={options.strokeWidth}>
-        {new Array(xTicksCount).fill(0).map((ticksValue: number, index: number) => {
-          const tickX = getX(index);
+        {xCoordinates.map((tickX) => {
           return (
             <polyline
               key={tickX}
@@ -435,6 +464,28 @@ const LineChart = ({
     );
   };
 
+  // invisible box (keep track of mouse hovering)
+  const HoverDetector = () => {
+    return (
+      <g fill-opacity="0" stroke="none">
+        {xCoordinates.map((xCoordinate, idx) => (
+          <rect
+            onMouseEnter={() => {
+              setTooltipIndex(idx);
+            }}
+            onMouseLeave={() => {
+              setTooltipIndex(null);
+            }}
+            y={verticalLineStart}
+            height={verticalLineEnd - verticalLineStart}
+            x={horizontalLineStart + xTickDistance * idx}
+            width={xTickDistance}
+          />
+        ))}
+      </g>
+    );
+  };
+
   return (
     width && (
       <>
@@ -449,6 +500,21 @@ const LineChart = ({
           <HorizontalGuides />
           <ChartLines />
           <ChartPoints />
+          <HoverDetector />
+          {tooltipIndex !== null && (
+            <InfoBox
+              multiItemWidth={multiItemWidth}
+              singleItemWidth={singleItemWidth}
+              tooltipIndex={tooltipIndex}
+              tooltipTextSize={options.tooltipTextSize}
+              verticalLineEnd={verticalLineEnd}
+              verticalLineStart={verticalLineStart}
+              TextStyleGroup={TextStyleGroup}
+              xStart={xStart}
+              xIsLeft={xIsLeft}
+              tooltipList={tooltipList}
+            />
+          )}
         </svg>
       </>
     )
