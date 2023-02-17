@@ -89,11 +89,27 @@ export default function FilterModal({
     },
   );
 
+  //number of instances users entered donor id and submitter id that represent the same entry
+  const numOfDoubleCountedId = () => {
+    const doubleCountedResult = {};
+    searchResultData?.clinicalSearchResults?.searchResults.forEach((ele) => {
+      doubleCountedResult[ele.donorId] = ele.submitterDonorId;
+    });
+    let counter = 0;
+    filterDonorIds.forEach((ele) => {
+      if (filterSubmitterIds.includes(doubleCountedResult[ele])) {
+        counter++;
+      }
+    });
+    return counter;
+  };
+
   useEffect(() => {
     //format the string from text area of the modal to create an set of IDs, so we know the total number
     const filteredTextAreaIDs = new Set();
 
-    const initialIdsCount = filterDonorIds.length + filterSubmitterIds.length;
+    const initialIdsCount =
+      filterDonorIds.length + filterSubmitterIds.length - numOfDoubleCountedId();
 
     // remove the IDs in each result from the set. to then use the set size as the unmatched IDs count
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
