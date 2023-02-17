@@ -89,6 +89,8 @@ export default function FilterModal({
     },
   );
 
+  console.log(filterDonorIds, filterSubmitterIds);
+
   useEffect(() => {
     //format the string from text area of the modal to create an set of IDs, so we know the total number
     const filteredTextAreaIDs = new Set();
