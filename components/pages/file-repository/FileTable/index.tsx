@@ -35,6 +35,8 @@ import {
   DONOR_ENTITY_PATH,
   FILE_ENTITY_ID_PATH,
   FILE_ENTITY_PATH,
+  PROGRAM_ENTITY_ID_PATH,
+  PROGRAM_ENTITY_PATH,
 } from 'global/constants/pages';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
@@ -156,7 +158,7 @@ const useFileRepoPaginationState = () => {
 };
 
 const FileTable = () => {
-  const { FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
+  const { FEATURE_DONOR_ENTITY_ENABLED, FEATURE_PROGRAM_ENTITY_ENABLED } = getConfig();
 
   const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
@@ -242,6 +244,19 @@ const FileTable = () => {
       Header: fieldDisplayNames['study_id'],
       id: FileCentricDocumentField['study_id'],
       accessor: 'programId',
+      Cell: ({ original }: { original: FileRepositoryRecord }) => {
+        return FEATURE_PROGRAM_ENTITY_ENABLED ? (
+          <NextLink
+            href={PROGRAM_ENTITY_PATH}
+            as={PROGRAM_ENTITY_PATH.replace(PROGRAM_ENTITY_ID_PATH, original.programId)}
+            passHref
+          >
+            <Link>{original.programId}</Link>
+          </NextLink>
+        ) : (
+          original.programId
+        );
+      },
     },
     {
       Header: fieldDisplayNames['data_type'],
