@@ -100,15 +100,15 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const tableColumns = [
     {
       accessorKey: 'shortName',
-      cell: (info) => (
+      cell: ({ getValue }) => (
         <NextLink
           href={
             !isDccMember(permissions)
               ? PROGRAMS_LIST_PATH
-              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, info.getValue())
+              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, getValue())
           }
         >
-          <Link>{info.getValue()}</Link>
+          <Link>{getValue()}</Link>
         </NextLink>
       ),
       header: () => 'Program Name',
@@ -120,7 +120,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       : [
           {
             accessorKey: 'membershipType',
-            cell: (info) => capitalize(info.renderValue()),
+            cell: ({ renderValue }) => capitalize(renderValue()),
             header: () => 'Membership Type',
           },
         ]),
