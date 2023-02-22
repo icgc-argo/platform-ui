@@ -119,7 +119,7 @@ const DonorAggregationIndexTable = ({
     }),
   }));
 
-  const tableData = (queries || []).slice(0, 4).map(({ shortName, query: { data } }) => ({
+  const tableData = (queries || []).map(({ shortName, query: { data } }) => ({
     donors: data?.programDonorSummary?.stats?.registeredDonorsCount,
     files: data?.programDonorSummary?.stats?.allFilesCount,
     lastUpdate: data?.programDonorSummary?.stats?.lastUpdate,
