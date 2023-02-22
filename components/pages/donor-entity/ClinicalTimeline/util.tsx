@@ -313,11 +313,15 @@ export const formatTimelineEntityData = (donorData) => {
 };
 
 // react table v8
+// don't keep this type here once v6 is removed.
+// move it to the top of the file.
+type TableDataValue = string | number | React.ReactNode;
+
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
-export const formatTableData = (key: string, value: string | number | React.ReactNode) => {
-  let displayValue: any;
+export const formatTableData = (key: string, value: TableDataValue) => {
+  let displayValue: TableDataValue;
   switch (key) {
     case 'age_at_diagnosis':
       displayValue = `${value} years`;

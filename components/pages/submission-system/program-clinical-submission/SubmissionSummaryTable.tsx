@@ -17,13 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, TableColumnConfig, TableV8, useTheme } from '@icgc-argo/uikit';
+import {
+  css,
+  Table,
+  TableCellWrapper,
+  TableColumnConfig,
+  TableV8,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
 import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
   errorsFound: [],
@@ -96,26 +106,28 @@ const SubmissionSummaryTable = ({
   ];
   const containerRef = createRef<HTMLDivElement>();
 
+  const BACKGROUND_COLORS = {
+    NEW: theme.colors.accent3_3,
+    UPDATED: theme.colors.accent2_4,
+  };
+
   // for react table v8
   const tableColumns = [
     {
+      header: '',
       accessorKey: FIRST_COLUMN_ACCESSOR,
       size: 100,
-      cell: ({ cell, column, row }) => {
-        const isUpdateRow = row.index === 1;
-        return (
-          <span
-            css={css`
-              background: ${row.original[column.id] > 0
-                ? isUpdateRow
-                  ? theme.colors.accent3_3
-                  : theme.colors.accent2_4
-                : 'transparent'};
-            `}
-          >
-            {cell.renderValue()}
-          </span>
-        );
+      cell: ({ cell, row }) => (
+        <TableCellWrapper
+          css={css`
+            background: ${!!row.index ? BACKGROUND_COLORS.NEW : BACKGROUND_COLORS.UPDATED};
+          `}
+        >
+          {cell.getValue()}
+        </TableCellWrapper>
+      ),
+      meta: {
+        customCell: true,
       },
     },
     ...clinicalSubmissions.clinicalEntities.map(
@@ -123,6 +135,22 @@ const SubmissionSummaryTable = ({
         ({
           accessorKey: entity.clinicalType,
           header: capitalize(entity.clinicalType.split('_').join(' ')),
+          cell: ({ cell, row }) => (
+            <TableCellWrapper
+              css={css`
+                background: ${!!Number(cell.getValue())
+                  ? !!row.index
+                    ? BACKGROUND_COLORS.NEW
+                    : BACKGROUND_COLORS.UPDATED
+                  : 'transparent'};
+              `}
+            >
+              {cell.getValue()}
+            </TableCellWrapper>
+          ),
+          meta: {
+            customCell: true,
+          },
         } as TableColumnConfig<Entry>),
     ),
   ];
@@ -134,31 +162,31 @@ const SubmissionSummaryTable = ({
       `}
       ref={containerRef}
     >
-      <Table
-        parentRef={containerRef}
-        variant="STATIC"
-        getTdProps={(_, row, column) => {
-          const isUpdateRow = row.index === 1;
-          const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
-          return {
-            style: {
-              background:
-                row.original[column.id] > 0 || isFirstColumn
-                  ? isUpdateRow
-                    ? theme.colors.accent3_3
-                    : theme.colors.accent2_4
-                  : null,
-            } as CSSProperties,
-          };
-        }}
-        columns={tableColumns_legacy}
-        data={tableData}
-        resizable
-      />
-      <br />
-      <br />
-      <br />
-      <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
+      ) : (
+        <Table
+          parentRef={containerRef}
+          variant="STATIC"
+          getTdProps={(_, row, column) => {
+            const isUpdateRow = row.index === 1;
+            const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
+            return {
+              style: {
+                background:
+                  row.original[column.id] > 0 || isFirstColumn
+                    ? isUpdateRow
+                      ? theme.colors.accent3_3
+                      : theme.colors.accent2_4
+                    : null,
+              } as CSSProperties,
+            };
+          }}
+          columns={tableColumns_legacy}
+          data={tableData}
+          resizable
+        />
+      )}
     </div>
   );
 };
