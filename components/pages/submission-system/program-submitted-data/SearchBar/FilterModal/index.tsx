@@ -26,6 +26,7 @@ import UploadButton from './UploadButton';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import { useQuery } from '@apollo/client';
+import { filter } from 'lodash';
 
 declare global {
   interface Window {
@@ -68,7 +69,7 @@ export default function FilterModal({
 
   // format text from text area of the filter modal from string to an array of strings
   const filterSubmitterIds = matchSubmitterDonorIds(filterTextBox)
-    .filter((id) => parseInt(id) === NaN || !filterDonorIds.includes(matchDonorIds(id)[0]))
+    .filter((id) => !filterDonorIds.includes(matchDonorIds(id)[0]))
     .filter(Boolean);
 
   // enter the formatted array of string to query and return the matched strings
@@ -88,20 +89,21 @@ export default function FilterModal({
       },
     },
   );
+  // console.log('filterDonorIds', filterDonorIds, 'filterSubmitterIds', filterSubmitterIds);
 
   //number of instances users entered donor id and submitter id that represent the same entry
   const numOfDoubleCountedId = () => {
-    const doubleCountedResult = {};
-    searchResultData?.clinicalSearchResults?.searchResults.forEach((ele) => {
-      doubleCountedResult[ele.donorId] = ele.submitterDonorId;
-    });
-    let counter = 0;
-    filterDonorIds.forEach((ele) => {
-      if (filterSubmitterIds.includes(doubleCountedResult[ele])) {
-        counter++;
-      }
-    });
-    return counter;
+    const doubleCountedResult = searchResultData?.clinicalSearchResults?.searchResults.map(
+      ({ donorId, submitterDonorId }) => ({
+        [donorId]: submitterDonorId,
+      }),
+    ) || [{}];
+
+    const counter = filterDonorIds.filter((donorId) =>
+      filterSubmitterIds.includes(doubleCountedResult[0][donorId]),
+    );
+
+    return counter.length;
   };
 
   useEffect(() => {
