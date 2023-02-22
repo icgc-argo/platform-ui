@@ -44,7 +44,8 @@ import {
   ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
   RangeButtons,
 } from './types';
-import { makeChartLineMeta, rangeButtons } from './utils';
+import { rangeButtons } from './utils';
+import { makeChartLineMeta } from './LineChart/utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;

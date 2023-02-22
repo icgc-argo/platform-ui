@@ -218,6 +218,7 @@ const DonorSummaryTable = ({
     handleBlur,
     active,
     children,
+    panelLegend,
   }: PropsWithChildren<{
     header: string;
     open: boolean;
@@ -227,6 +228,7 @@ const DonorSummaryTable = ({
     panelRef?: Ref<HTMLElement>;
     handleBlur?: (event?: any) => void;
     active?: boolean;
+    panelLegend?: string;
   }>) => {
     return (
       <Row
@@ -257,6 +259,17 @@ const DonorSummaryTable = ({
           panelRef={panelRef}
           handleBlur={handleBlur}
           active={active}
+          // occasionally, some dropdown panels need to be wider, or longer.
+          // this customization was added instead of making the panel elastic
+          // to prevent panels from running off the side of the page
+          // or the bottom of the table.
+          // panelLegend indicates which dropdown panel is affected
+          css={css`
+            ${['DNA Raw Reads Status'].includes(panelLegend) &&
+            `
+              width: 275px;
+            `}
+          `}
         >
           {children}
         </DropdownPanel>
@@ -317,6 +330,7 @@ const DonorSummaryTable = ({
         panelRef={panelRef}
         handleBlur={handleBlur}
         active={filterValue?.length > 0}
+        panelLegend={panelLegend}
       >
         <TextInputFilter
           onConfirmClick={onFilter}
@@ -377,6 +391,7 @@ const DonorSummaryTable = ({
         buttonRef={buttonRef}
         panelRef={panelRef}
         handleBlur={handleBlur}
+        panelLegend={panelLegend}
         active={activeFilters.length > 0}
       >
         <ListFilter

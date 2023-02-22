@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,25 +17,37 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const rangeButtons = [
-  {
-    days: null,
-    label: 'All',
-    title: 'All',
-  },
-  {
-    days: 365,
-    label: 'One year',
-    title: '1Y',
-  },
-  {
-    days: 30,
-    label: 'One month',
-    title: '1M',
-  },
-  {
-    days: 7,
-    label: 'One week',
-    title: '1W',
-  },
-];
+import { css, TitleBar, useTheme } from '@icgc-argo/uikit';
+
+export const ProgramTitleBar = () => {
+  const theme = useTheme();
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: ${theme.colors.primary};
+        width: 100%;
+      `}
+    >
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <TitleBar
+          css={css`
+            display: inline-flex;
+            padding-right: 18px;
+          `}
+        >
+          <div>ProgramId</div>
+          <div>Overview</div>
+        </TitleBar>
+      </div>
+    </div>
+  );
+};
