@@ -651,9 +651,9 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
-            title={`${totalErrors.toLocaleString()} error(s) found in ${clinicalEntityDisplayNames[
+            title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
               entityType
-            ].toLowerCase()} data`}
+            ].toLowerCase()} table`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
             columnConfig={errorColumns}
