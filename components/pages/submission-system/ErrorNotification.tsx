@@ -25,6 +25,7 @@ import {
   NotificationVariant,
   NOTIFICATION_VARIANTS,
   Table,
+  TableV8,
   TableColumnConfig,
 } from '@icgc-argo/uikit';
 import { TableProps } from 'global/types/table';
@@ -33,33 +34,32 @@ import union from 'lodash/union';
 import { ReactNode, ComponentProps, createRef } from 'react';
 
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
   return [
     {
-      accessor: 'row' as 'row',
-      Header: 'Line #',
-      maxWidth: 70,
+      accessorKey: 'row' as 'row',
+      header: 'Line #',
     },
     {
-      accessor: 'donorId' as 'donorId',
-      Header: 'Submitter Donor ID',
-      maxWidth: 160,
+      accessorKey: 'donorId' as 'donorId',
+      header: 'Submitter Donor ID',
     },
     {
-      accessor: 'field' as 'field',
-      Header: `Field with ${variant}`,
-      maxWidth: 200,
+      accessorKey: 'field' as 'field',
+      header: `Field with ${variant}`,
     },
     {
-      accessor: 'value' as 'value',
-      Header: `${variant} Value`,
-      maxWidth: 130,
+      accessorKey: 'value' as 'value',
+      header: `${variant} Value`,
     },
     {
-      accessor: 'message' as 'message',
-      Header: `${variant} Description`,
+      accessorKey: 'message' as 'message',
+      header: `${variant} Description`,
     },
   ];
 };
@@ -69,7 +69,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   title,
   errors,
   subtitle,
-  columnConfig,
+  tableColumns,
   onClearClick,
   tsvExcludeCols = [],
   tableProps,
@@ -77,9 +77,9 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   level: NotificationVariant;
   title: string;
   subtitle: ReactNode;
-  columnConfig: Array<
+  tableColumns: Array<
     TableColumnConfig<Error> & {
-      accessor: keyof Error | string;
+      accessorKey: keyof Error | string;
     }
   >;
   errors: Array<Error>;
@@ -90,12 +90,12 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   const onDownloadClick = () => {
     exportToTsv(errors, {
       exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
-      order: columnConfig.map((entry) => entry.accessor),
+      order: tableColumns.map((entry) => entry['accessorkey']),
       fileName: `${level}_report.tsv`,
-      headerDisplays: columnConfig.reduce<{}>(
-        (acc, { accessor, Header }) => ({
+      headerDisplays: tableColumns.reduce<{}>(
+        (acc, { accessorKey, header }) => ({
           ...acc,
-          [accessor]: Header as string,
+          [accessorKey]: header as string,
         }),
         {},
       ),
@@ -160,20 +160,36 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
             `}
           >
             <div>{subtitle}</div>
-            <Table
-              parentRef={containerRef}
-              NoDataComponent={() => null}
-              columns={columnConfig.map((col) => ({
-                ...col,
-                style: {
-                  whiteSpace: 'pre-line',
-                  ...(col.style || {}),
-                },
-              }))}
-              data={errors}
-              showPagination
-              {...tableProps}
-            />
+            {FEATURE_REACT_TABLE_V8_ENABLED ? (
+              <TableV8
+                columns={tableColumns}
+                data={errors}
+                withHeaders
+                withResize
+                withSorting
+                withStripes
+                withRowHighlight
+              />
+            ) : (
+              <Table
+                parentRef={containerRef}
+                NoDataComponent={() => null}
+                columns={tableColumns.map((col) => ({
+                  ...col,
+                  style: {
+                    whiteSpace: 'pre-line',
+                    ...(col.style || {}),
+                  },
+                  // react table v6 property name conversion
+                  accessor: col.accessorKey,
+                  Header: col.header,
+                  width: col.size,
+                }))}
+                data={errors}
+                showPagination
+                {...tableProps}
+              />
+            )}
           </div>
         );
       })()}

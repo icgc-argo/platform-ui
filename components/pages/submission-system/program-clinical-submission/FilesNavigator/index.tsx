@@ -180,7 +180,7 @@ const FilesNavigator = ({
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              tableColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
             />
           </div>
         ) : !!selectedFile.records.length ? (

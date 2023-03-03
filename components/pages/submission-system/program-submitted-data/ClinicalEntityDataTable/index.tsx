@@ -67,20 +67,20 @@ export type DonorEntry = {
 
 const errorColumns = [
   {
-    accessor: 'entries',
-    Header: '# Affected Records',
+    accessorKey: 'entries',
+    header: '# Affected Records',
     id: 'entries',
-    maxWidth: 135,
+    maxSize: 135,
   },
   {
-    accessor: 'fieldName',
-    Header: `Field with Error`,
+    accessorKey: 'fieldName',
+    header: `Field with Error`,
     id: 'fieldName',
-    maxWidth: 215,
+    maxSize: 215,
   },
   {
-    accessor: 'errorMessage',
-    Header: `Error Description`,
+    accessorKey: 'errorMessage',
+    header: `Error Description`,
     id: 'errorMessage',
   },
 ];
@@ -656,7 +656,7 @@ const ClinicalEntityDataTable = ({
             ].toLowerCase()} table`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
-            columnConfig={errorColumns}
+            tableColumns={errorColumns}
             tableProps={{
               page: errorPage,
               pages: numErrorPages,

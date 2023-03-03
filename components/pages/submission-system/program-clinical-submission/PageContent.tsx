@@ -530,11 +530,11 @@ const PageContent = () => {
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors.map(toDisplayError)}
-            columnConfig={[
+            tableColumns={[
               {
-                accessor: 'fileName',
-                Header: 'File',
-                maxWidth: 150,
+                accessorKey: 'fileName',
+                header: 'File',
+                maxSize: 150,
               },
               ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
             ]}
@@ -553,11 +553,11 @@ const PageContent = () => {
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
             errors={allDataWarnings.map(toDisplayError)}
-            columnConfig={[
+            tableColumns={[
               {
-                accessor: 'fileName',
-                Header: 'File',
-                maxWidth: 150,
+                accessorKey: 'fileName',
+                header: 'File',
+                maxSize: 150,
               },
               ...getDefaultColumns(NOTIFICATION_VARIANTS.WARNING),
             ]}
