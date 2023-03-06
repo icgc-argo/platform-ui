@@ -107,7 +107,9 @@ export default function ProgramsTable(tableProps: {
     {
       Header: 'Program Name',
       accessor: 'name',
-      Cell: ({ original }) => <FormattedCell cellInfo={original}>{original.name}</FormattedCell>,
+      Cell: ({ original }) => (
+        <FormattedCell cellInfo={original}>{original.name || ''}</FormattedCell>
+      ),
     },
     {
       Header: 'Cancer Types',
