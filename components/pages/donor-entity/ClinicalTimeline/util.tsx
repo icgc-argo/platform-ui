@@ -25,6 +25,8 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
 
+type TableDataValue = string | number | React.ReactNode;
+
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
   return {
@@ -313,10 +315,6 @@ export const formatTimelineEntityData = (donorData) => {
 };
 
 // react table v8
-// don't keep this type here once v6 is removed.
-// move it to the top of the file.
-type TableDataValue = string | number | React.ReactNode;
-
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
