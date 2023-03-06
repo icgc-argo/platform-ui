@@ -252,7 +252,7 @@ export default function ProgramsTable(tableProps: {
       header: 'Program Name',
       accessorKey: 'name',
       cell: ({ row: { original } }) => (
-        <FormattedCell cellInfo={original}>{original.name}</FormattedCell>
+        <FormattedCell cellInfo={original}>{original.name || ''}</FormattedCell>
       ),
     },
     {
