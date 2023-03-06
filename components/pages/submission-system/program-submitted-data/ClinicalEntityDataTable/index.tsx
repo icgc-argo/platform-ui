@@ -498,7 +498,7 @@ const ClinicalEntityDataTable = ({
       );
 
     const errorState =
-      (isCompletionCell && original[id] === 0) ||
+      (isCompletionCell && (original[id] === 0 || original[id] > 1)) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;
 
