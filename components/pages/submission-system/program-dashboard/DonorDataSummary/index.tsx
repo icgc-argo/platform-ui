@@ -25,7 +25,7 @@ import ContentError from '../../../../placeholders/ContentError';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from './common';
 import DonorSummaryTable from './DonorSummaryTable';
-import DonorSummaryTableV8 from './DonorSummaryTableV8';
+import DonorSummaryTableV8, { SortingState, formatSortingRequest } from './DonorSummaryTableV8';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
@@ -78,10 +78,16 @@ export const useProgramDonorsSummaryQuery = ({
 const DonorDataSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const DEFAULT_PAGE_SIZE = 20;
-  const DEFAULT_SORTS = [
+  const DEFAULT_SORTS_V6 = [
     {
       field: 'updatedAt' as DonorSummaryEntrySortField,
       order: 'desc' as DonorSummaryEntrySortOrder,
+    },
+  ];
+  const DEFAULT_SORTS: SortingState = [
+    {
+      id: 'updatedAt',
+      desc: true,
     },
   ];
   const DEFAULT_OFFSET = 0;
@@ -97,7 +103,7 @@ const DonorDataSummary = () => {
     programShortName,
     first: DEFAULT_PAGE_SIZE,
     offset: DEFAULT_OFFSET,
-    sorts: DEFAULT_SORTS,
+    sorts: formatSortingRequest(DEFAULT_SORTS),
   });
 
   const isDonorSummaryEntriesEmpty =
@@ -147,10 +153,19 @@ const DonorDataSummary = () => {
             programShortName={programShortName}
             initialPages={initialPages}
             initialPageSize={DEFAULT_PAGE_SIZE}
+            initialSorts={DEFAULT_SORTS_V6}
+            isCardLoading={isCardLoading}
+          />
+          <br />
+          <br />
+          <br />
+          <DonorSummaryTableV8
+            programShortName={programShortName}
+            initialPages={initialPages}
+            initialPageSize={DEFAULT_PAGE_SIZE}
             initialSorts={DEFAULT_SORTS}
             isCardLoading={isCardLoading}
           />
-          <DonorSummaryTableV8 />
         </>
       )}
     </DashboardCard>
