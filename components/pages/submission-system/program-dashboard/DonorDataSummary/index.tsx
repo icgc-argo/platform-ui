@@ -25,6 +25,7 @@ import ContentError from '../../../../placeholders/ContentError';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
 import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from './common';
 import DonorSummaryTable from './DonorSummaryTable';
+import DonorSummaryTableV8 from './DonorSummaryTableV8';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
@@ -141,13 +142,16 @@ const DonorDataSummary = () => {
       ) : !isCardLoading && isDonorSummaryEntriesEmpty ? (
         <EmptyDonorSummaryState />
       ) : (
-        <DonorSummaryTable
-          programShortName={programShortName}
-          initialPages={initialPages}
-          initialPageSize={DEFAULT_PAGE_SIZE}
-          initialSorts={DEFAULT_SORTS}
-          isCardLoading={isCardLoading}
-        />
+        <>
+          <DonorSummaryTable
+            programShortName={programShortName}
+            initialPages={initialPages}
+            initialPageSize={DEFAULT_PAGE_SIZE}
+            initialSorts={DEFAULT_SORTS}
+            isCardLoading={isCardLoading}
+          />
+          <DonorSummaryTableV8 />
+        </>
       )}
     </DashboardCard>
   );
