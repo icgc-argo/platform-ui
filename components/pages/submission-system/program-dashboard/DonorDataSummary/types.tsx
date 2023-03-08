@@ -183,5 +183,5 @@ export type ProgramDonorSummaryEntryField =
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;
-  values: [String];
+  values: string[];
 };

@@ -17,18 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, Ref, useEffect, useRef, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import NextLink from 'next/link';
 import {
   css,
+  Icon,
+  Link,
+  TableColumnConfig,
   TableHeaderWrapper,
   TableV8,
-  useTheme,
-  Icon,
   ThemeColorNames,
-  TableColumnConfig,
+  useTheme,
+  FilterableHeader,
+  TextFilterHeader,
+  FilterClearButton,
 } from '@icgc-argo/uikit';
+import { Row } from 'react-grid-system';
 import { getConfig } from 'global/config';
+import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
+import { displayDate } from 'global/utils/common';
+import {
+  ClinicalEntityQueryResponse,
+  defaultClinicalEntityFilters,
+  parseDonorIdString,
+} from 'components/pages/submission-system/program-submitted-data/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon } from '../../common';
 import {
   DonorDataReleaseState,
@@ -45,12 +59,17 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import { useProgramDonorsSummaryQuery } from '.';
+import urlJoin from 'url-join';
 
 type PagingState = {
   pages: number;
   pageSize: number;
   page: number;
 };
+
+type DonorSummaryCell = { row: { original: DonorSummaryRecord } };
+
+type DonorSummaryFilter = { field: ProgramDonorSummaryEntryField; values: string[] };
 
 export type SortingState = Array<{ id: DonorSummaryEntrySortField; desc: boolean }>;
 type SortingRequest = DonorSummaryEntrySort[];
@@ -85,8 +104,30 @@ const DonorSummaryTableV8 = ({
     page: 0,
   });
   const [sortingState, setSortingState] = useState<SortingState>(initialSorts);
-  const [filterState, setFilterState] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(isCardLoading);
+
+  // filter state handling
+  const [filterState, setFilterState] = useState<DonorSummaryFilter[]>([]);
+  const handleFilterStateChange = (filters: DonorSummaryFilter[]) => {
+    setFilterState(filters);
+    setPagingState({ ...pagingState, page: 0 });
+  };
+  const updateFilter = ({ field, values }: DonorSummaryFilter) => {
+    const newFilters = filterState.filter((filter) => filter.field !== field);
+    if (values.length) {
+      newFilters.push({
+        field,
+        values: [].concat(values),
+      });
+    }
+    handleFilterStateChange(newFilters);
+  };
+  const clearFilter = (field: ProgramDonorSummaryEntryField) => {
+    const newFilters = filterState.filter((x) => x.field !== field);
+    handleFilterStateChange(newFilters);
+  };
+  const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
+    filterState.find((x) => x.field === field)?.values;
 
   // query
   const {
@@ -161,6 +202,37 @@ const DonorSummaryTableV8 = ({
     </TableHeaderWrapper>
   );
 
+  const donorsWithErrors = programDonorSummaryEntries
+    .filter((entry) => !entry.validWithCurrentDictionary)
+    .map((entry) => {
+      const { donorId } = entry;
+      const ID = parseDonorIdString(donorId);
+      return ID;
+    });
+
+  // Search Result Query
+  const { data: clinicalErrorData, loading: errorDataLoading } =
+    useQuery<ClinicalEntityQueryResponse>(CLINICAL_ERRORS_QUERY, {
+      errorPolicy: 'all',
+      variables: {
+        programShortName,
+        filters: {
+          ...defaultClinicalEntityFilters,
+          donorIds: donorsWithErrors,
+        },
+      },
+    });
+
+  const errorLinkData = clinicalErrorData
+    ? donorsWithErrors.map((donorId) => {
+        const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
+          (donor) => donorId === donor.donorId,
+        );
+        const entity = currentDonor?.errors[0].entityName;
+        return { donorId, entity };
+      })
+    : [];
+
   // table info
   const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
     {
@@ -186,10 +258,68 @@ const DonorSummaryTableV8 = ({
             return priorities[a] - priorities[b];
           },
         },
+        {
+          header: (
+            <TextFilterHeader
+              header={'Donor ID'}
+              onFilter={(text) =>
+                text?.length
+                  ? updateFilter({ field: 'combinedDonorId', values: [].concat(text) })
+                  : clearFilter('combinedDonorId')
+              }
+              filterValue={getFilterValue('combinedDonorId')}
+            />
+          ),
+          accessorKey: 'donorId',
+          cell: ({ row: { original } }: DonorSummaryCell) => {
+            const errorTab =
+              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+                ?.entity || '';
+
+            const linkUrl = urlJoin(
+              `/submission/program/`,
+              programShortName,
+              `/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
+            );
+            return FEATURE_SUBMITTED_DATA_ENABLED ? (
+              <NextLink href={linkUrl}>
+                <Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+              </NextLink>
+            ) : (
+              `${original.donorId} (${original.submitterDonorId})`
+            );
+          },
+          size: 135,
+        },
       ],
       meta: {
         customHeader: true,
       },
+    },
+    {
+      header: filterState.length ? (
+        <FilterClearButton
+          size="sm"
+          variant="text"
+          type="button"
+          onClick={() => handleFilterStateChange([])}
+        >
+          Clear Filters
+        </FilterClearButton>
+      ) : (
+        <></>
+      ),
+      id: 'updated',
+      columns: [
+        {
+          header: 'Last Updated',
+          accessorKey: 'updatedAt',
+          cell: ({ row: { original } }: DonorSummaryCell) => {
+            return <div>{displayDate(original.updatedAt)}</div>;
+          },
+          size: 95,
+        },
+      ],
     },
   ];
 

@@ -438,6 +438,7 @@ const DonorSummaryTable = ({
     filters: filterState,
     options: {
       onCompleted: (result) => {
+        console.log('v6 - query complete');
         const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
         const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
         setPagingState({
