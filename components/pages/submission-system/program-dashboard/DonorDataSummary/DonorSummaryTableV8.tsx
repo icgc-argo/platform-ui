@@ -61,8 +61,10 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import { useProgramDonorsSummaryQuery } from '.';
-import { PipelineNames, PIPELINE_COLORS, usePipelines } from './PipelineTabs';
+import { PipelineNames, PIPELINE_COLORS, usePipelines, PipelineTabs } from './PipelineTabs';
 import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
+import { ContentError } from 'components/placeholders';
 
 // These are used to sort columns with multiple fields
 // the order of the fields is how its is order in asc or desc
@@ -782,18 +784,44 @@ const DonorSummaryTableV8 = ({
   ];
 
   return (
-    <TableV8
-      columns={tableColumns}
-      data={programDonorSummaryEntries}
-      enableColumnResizing
-      enableSorting
-      loading={isCardLoading || isTableLoading}
-      manualSorting
-      onSortingChange={setSortingState}
-      state={{ sorting: sortingState }}
-      withHeaders
-      withStripes
-    />
+    <div
+      css={css`
+        padding-top: 10px;
+      `}
+    >
+      {programDonorsSummaryQueryError ? (
+        <ContentError />
+      ) : (
+        <>
+          <DonorSummaryTableLegend
+            css={css`
+              opacity: ${isTableLoading ? 0.5 : 1};
+            `}
+            programDonorSummaryStats={programDonorSummaryStats}
+          />
+          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && (
+            <PipelineTabs
+              activePipeline={activePipeline}
+              handlePipelineTabs={(e, value) => {
+                setActivePipeline(value);
+              }}
+            />
+          )}
+          <TableV8
+            columns={tableColumns}
+            data={programDonorSummaryEntries}
+            enableColumnResizing
+            enableSorting
+            loading={isCardLoading || isTableLoading}
+            manualSorting
+            onSortingChange={setSortingState}
+            state={{ sorting: sortingState }}
+            withHeaders
+            withStripes
+          />
+        </>
+      )}
+    </div>
   );
 };
 
